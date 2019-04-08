@@ -1,0 +1,16 @@
+; Definition file for API language bindings to generate with Swagger code-gen
+; The syntax for the lines in this file are:
+;   language:api path name:optional generator arguments
+;
+;   (the optional arguments in this file are used to rename the default Swagger client package name to Looker|looker)
+;
+csharp:csharp:-DapiPackage=Looker  -DpackageName=looker
+java:java:-DinvokerPackage=com.looker.sdk -DmodelPackage=com.looker.sdk.model -DapiPackage=com.looker.sdk.api -DgroupId=com.looker.sdk -DartifactId=looker-sdk -DartifactVersion=0.5.0  -DpackageName=looker
+kotlin:kotlin:-DapiPackage=com.looker.sdk  -DpackageName=com.looker.sdk
+python:python:-DapiPackage=looker -DpackageName=looker
+r:r:-DapiPackage=looker  -DpackageName=looker
+ruby:ruby:-DgemName=looker -DmoduleName=Looker -DpackageName=looker
+rust:rust:-DapiPackage=Looker  -DpackageName=looker
+typescript-node:typescript_node:-DapiPackage=looker -DpackageName=looker
+swift4:swift:-DapiPackage=looker -DpackageName=looker
+; typescript-fetch:typescript_fetch:-DapiPackage=looker -DpackageName=looker
