@@ -27,6 +27,85 @@ The Looker SDK has several parts:
 
 [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185) describes the manual steps for generating an API language binding.
 
+By using the yarn/node app included in this project, you now have three steps to generate language bindings:
+
+* configure a `looker.ini` file so the specification can be retrieved from your server
+
+* specify the client language(s) you want to generate in either [`targetLanguages.ts`](targetLanguages.ts) (for Node) or [`target_languages.txt`](target_languages.txt) for bash.
+
+* run the generator
+
+The deprecated bash scripts are still provided if you're unable to use npm or yarn in your environment, but future enhancements will only be made to the yarn application.
+
+## Configuring `looker.ini`
+
+The API configuration values should be stored in a file called `looker.ini`. By default, the configuration file needs to be in the same folder as generation script.
+
+To create `looker.ini`, copy [`looker-sample.ini`](looker-sample.ini) to `looker.ini` and fill in the required values. You can find `client_id` and `client_secret` by following the instructions in [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185).
+
+For your own source code repositories, be sure to configure your version control system to ignore your configuration `.ini` file so it doesn't accidentally get checked in somewhere unauthorized people can see it.
+
+To simplify configuration tasks (and to help ensure you *never* commit your credentials into a source code repository) future SDKs provided by Looker will use an `.ini` format to save/retrieve their API configuration settings.
+
+### Using the yarn/node-based generator
+
+If you don't have `yarn` installed already, you'll need to [install](https://yarnpkg.com/en/docs/install) it.
+
+After yarn is installed, just run `yarn` from your terminal window/command line, and it will download or update all the packages required to run the code generator. You can look at [package.json](package.json) to see what resources are required to run the code generator.
+
+Run the generator with the command:
+
+```bash
+yarn generate
+```
+
+The generator will:
+
+* read the Looker API configuration(s) from the `looker.ini` file.
+
+  * **Note**: There should be at most 2 entries in `looker.ini`: one for API version 3.1. and one for 3.0. Because 3.1 is a superset of 3.0, you really only need 3.1
+
+* download (if the file is not already present) the Looker API specification file(s) from the configured Looker server(s)
+
+* convert (if the converted file is not already present) the downloaded Swagger 2 specification file(s) to OpenAPI 3.x
+
+* lint check the OpenAPI 3.x file(s)
+
+* call the OpenAPI code generator for each active language configured in [`targetLanguages.ts`](targetLanguages.ts)
+
+  * Comment out any language you don't want to generate, or uncomment or add the languages you do want to generate.
+
+When the generator completes successfully, the output will be similar to:
+
+```plain-text
+api (created by the generator. This and its subfolders can be recreated with the script on demand.)
+  3.1 (api version in the configuration file)
+    csharp
+    kotlin
+    python
+    r
+```
+
+If you have the OpenAPI 3.x file available locally, you can use Speccy from the command line to search and explore the specification file. For example:
+
+```bash
+yarn speccy serve Looker.3.1.oas.json
+```
+
+will start a web server on `http://localhost:5000` that allows you do browse and search the local specification file for API 3.1.
+
+**Tip**: search for `query` in the UI and see what you get!
+
+**Note:** If you're unable to download the API specification file because you're using an instance of Looker that is not secured and errors are being thrown, you can explicitly turn off TLS verification in Node with a command like:
+
+```bash
+NODE_TLS_REJECT_UNAUTHORIZED="0" yarn generate
+```
+
+### Using the bash script generators
+
+**Note:** The yarn/node version of the generator is the recommended and more reliable option.
+
 In this repository, [`prepare.sh`](prepare.sh) automates these steps for the OpenAPI generator. For people who still wish to use the deprecated swagger-based code generator, [`swagger.sh`](swagger.sh) is also provided.
 
 If the language you use isn't provided in this repository, you can modify the [`target_languages.txt`](target_languages.txt) file to add it as a generation target, or follow the manual steps in [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185).
@@ -35,21 +114,13 @@ If the language you use isn't provided in this repository, you can modify the [`
 
 Both [`prepare.sh`](prepare.sh) and [`swagger.sh`](swagger.sh) follow the same general steps:
 
-* `download` the Looker OpenAPI specification from the Looker server using the settings in the `.ini` configuration file (if it is not present)
+* download the Looker API specification from the Looker server using the settings in the `.ini` configuration file (if it is not present)
 
 * `git` the required source code generator for the script (either OpenAPI or swagger)
 
 * build the downloaded code generator (this is one of the places malware could affect your machine)
 
 * invoke the source code generator for each active language in [`target_languages.txt`](target_languages.txt) (another area malware could affect your machine)
-
-The script will read the API configuration values from a file called `looker.ini`. By default, the configuration file needs to be in the same folder as generation script.
-
-To create `looker.ini`, copy [`looker-sample.ini`](looker-sample.ini) to `looker.ini` and fill in the required values. You can find `client_id` and `client_secret` by following the instructions in [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185).
-
-To simplify configuration tasks (and to help ensure you *never* commit your credentials into a source code repository) future SDKs provided by Looker will use an `.ini` format to save/retrieve their API configuration settings.
-
-For your own source code repositories, be sure to configure your version control system to ignore your configuration `.ini` file so it doesn't accidentally get checked in somewhere public.
 
 ### Generation script parameters
 
@@ -105,8 +176,6 @@ See the official documentation for [API Troubleshooting](https://docs.looker.com
 
 ## Notes
 
-The original version of [`prepare.sh`](prepare.sh) script upgraded Looker's [Swagger 2.0 API specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) to [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) after fetching the [OAS Kit](https://github.com/Mermade/oas-kit). After upgrading, the `*.v3.json` specification is lint checked. If there are no errors, client language code generation as defined in [`target_languages.txt`](target_languages.txt) continues. The OAS Kit has been unreliable, so the current version of `prepare.sh` has the sections that reference it commencted out.
+The original version of the [`prepare.sh`](prepare.sh) script upgraded Looker's [Swagger 2.0 API specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) to [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) after fetching the [OAS Kit](https://github.com/Mermade/oas-kit). After upgrading, the `*.v3.json` specification is lint checked. If there are no errors, client language code generation as defined in [`target_languages.txt`](target_languages.txt) continues. The OAS Kit has been unreliable, so the current version of `prepare.sh` has the sections that reference it commented out.
 
-When it becomes reliable again, we plan to re-enable it. The 3.0 version of the specification has better tooling and community support. This [visual guide](https://blog.readme.io/an-example-filled-guide-to-swagger-3-2/) shows why 3.x is preferred.
-
-While we haven't found an official `DefinitelyTyped` version of the OpenAPI 3.0 type definitions for Typescript, [openapi3-ts](https://github.com/metadevpro/openapi3-ts/blob/master/src/model/OpenApi.ts) is a reasonable draft.
+When it becomes reliable again, we plan to re-enable it. The 3.0 version of the specification has better tooling and community support. This [visual guide](https://blog.readme.io/an-example-filled-guide-to-swagger-3-2/) shows why OpenAPI 3.x is preferred to Swagger 2.x.
