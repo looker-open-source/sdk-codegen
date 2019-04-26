@@ -105,7 +105,7 @@ See the official documentation for [API Troubleshooting](https://docs.looker.com
 
 ## Notes
 
-The original version of [`prepare.sh`](prepare.sh) script upgraded Looker's [Swagger 2.0 API specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) to [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) after fetching the [OAS Kit](https://github.com/Mermade/oas-kit). After upgrading, the `*.v3.json` specification is lint checked. If there are no errors, client language code generation as defined in [`target_languages.txt`](target_languages.txt) continues. The OAS Kit has been unreliable, so the current version of `prepare.sh` has the sections that reference it commencted out.
+The original version of [`prepare.sh`](prepare.sh) script upgraded Looker's [Swagger 2.0 API specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) to [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) after fetching the [OAS Kit](https://github.com/Mermade/oas-kit). After upgrading, the `*.v3.json` specification is lint checked. If there are no errors, client language code generation as defined in [`target_languages.txt`](target_languages.txt) continues. The OAS Kit has been unreliable, so the current version of `prepare.sh` has the sections that reference it commented out.
 
 When it becomes reliable again, we plan to re-enable it. The 3.0 version of the specification has better tooling and community support. This [visual guide](https://blog.readme.io/an-example-filled-guide-to-swagger-3-2/) shows why 3.x is preferred.
 
