@@ -3,17 +3,17 @@
 // TODO: license?
 
 // NOTE: If you're using an instance that fails SSL verification, you will need to run this process
-// with an override for Node to turn off TLS verification. Something like this will work.
+// with an override for Node to turn off TLS verification. Something like this will work:
 // export NODE_TLS_REJECT_UNAUTHORIZED="0" && yarn ts-node generate.ts
 
 import * as fs from 'fs'
 import * as path from 'path'
 import * as swagger2openapi from 'swagger2openapi'
-// import * as openapigenerator from '@openapitools/openapi-generator-cli'
 import { TargetLanguages, IGeneratorSpec as ILanguageSpec } from './targetLanguages'
 import { ISDKConfigProps, SDKConfig} from './sdkConfig'
 import { fetchSpecFile } from './fetchSpec'
-import { exec } from 'child_process';
+import { exec } from 'child_process'
+
 
 const upgradeSpec = async (fileName: string) => {
   const v3File = fileName.replace('.json', '.v3.json')
@@ -28,6 +28,8 @@ const upgradeSpec = async (fileName: string) => {
     console.error(e)
   }
 }
+
+const log = (message?: any, ...optionalParams: any) => console.log(message, optionalParams)
 
 // TODO create async version of this since it blocks I/O or does it not matter for our generator?
 const getAllFiles = (dir: string) => {
@@ -52,14 +54,14 @@ const generate = async (fileName: string, spec: ILanguageSpec, name: string, pro
 }
 
 const runConfig = async (name: string, props: ISDKConfigProps) => {
-  console.log(`processing ${name} configuration ...`)
+  log(`processing ${name} configuration ...`)
   const specFile = await fetchSpecFile(name, props)
-  console.log(`${specFile} exists.`)
+  log(`${specFile} exists.`)
   const v3File = await upgradeSpec(specFile)
-  console.log(`${v3File} upgrade is complete.`)
+  log(`${v3File} upgrade is complete.`)
   TargetLanguages.forEach(async language => {
     const tag = `${language.language} ${name} API version ${props.api_version}`
-    console.log(`generating ${tag} ...`)
+    log(`generating ${tag} ...`)
     await generate(v3File, language, name, props)
     // const files = await generate(v3File, language, name, props)
     // console.log(`${files.length} files generated for ${tag}.`)

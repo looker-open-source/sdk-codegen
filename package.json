@@ -3,7 +3,13 @@
     "version": "0.1-alpha-1",
     "description": "This Looker Open Source repository is released under the MIT license. By using this repository, you agree to the terms of that license, and acknowledge that you are doing so at your own risk.",
     "main": "index.js",
+    "devDependencies": {
+        "tslint": "^5.15.0",
+        "tslint-config-prettier": "^1.18.0",
+        "tslint-config-standard": "8.0.1"
+    },
     "scripts": {
+        "lint:ts": "tslint -p tsconfig.test.json --format stylish",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
