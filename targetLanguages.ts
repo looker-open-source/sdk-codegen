@@ -8,18 +8,18 @@ export interface IGeneratorSpec {
 // To add a language, find its name at https://openapi-generator.tech/docs/generators
 export const TargetLanguages:Array<IGeneratorSpec> =
 [
-  {
-    language: 'csharp',
-    options: '-DapiPackage=Looker -DpackageName=looker'
-  },
-  {
-    language: 'java',
-    options: '-DinvokerPackage=com.looker.sdk -DmodelPackage=com.looker.sdk.model -DapiPackage=com.looker.sdk.api -DgroupId=com.looker.sdk -DartifactId=looker-sdk -DartifactVersion=0.5.0 -DpackageName=looker'
-  },
-  {
-    language: 'kotlin',
-    options: '-DapiPackage=com.looker.sdk  -DpackageName=com.looker.sdk'
-  },
+  // {
+  //   language: 'csharp',
+  //   options: '-DapiPackage=Looker -DpackageName=looker'
+  // },
+  // {
+  //   language: 'java',
+  //   options: '-DinvokerPackage=com.looker.sdk -DmodelPackage=com.looker.sdk.model -DapiPackage=com.looker.sdk.api -DgroupId=com.looker.sdk -DartifactId=looker-sdk -DartifactVersion=0.5.0 -DpackageName=looker'
+  // },
+  // {
+  //   language: 'kotlin',
+  //   options: '-DapiPackage=com.looker.sdk -DpackageName=com.looker.sdk'
+  // },
   {
     language: 'python',
     options: '-DapiPackage=Looker -DpackageName=looker'

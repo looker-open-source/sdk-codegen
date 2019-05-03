@@ -27,7 +27,7 @@ const login = async (config: ISDKConfigProps) => {
 }
 
 const specFileName = (name: string, config: ISDKConfigProps) =>
-  `${name}.${config.api_version}.json`
+  `./${name}.${config.api_version}.json`
 
 export const fetchSpecFile = async (name: string, config: ISDKConfigProps) => {
   const fileName = specFileName(name, config)
