@@ -20,6 +20,17 @@ export const TargetLanguages:Array<IGeneratorSpec> =
   //   language: 'kotlin',
   //   options: '-DapiPackage=com.looker.sdk -DpackageName=com.looker.sdk'
   // },
+  // TODO figure out why swift aborts with an error and non of the other languages do
+  // {
+  //   language: 'swift4',
+  //   path: 'swift',
+  //   options: '-DapiPackage=Looker -DpackageName=looker'
+  // },
+  // {
+  //   language: 'php',
+  //   path: 'php',
+  //   options: '-DapiPackage=Looker -DpackageName=looker'
+  // },
   {
     language: 'python',
     options: '-DapiPackage=Looker -DpackageName=looker'
@@ -36,16 +47,11 @@ export const TargetLanguages:Array<IGeneratorSpec> =
   //   language: 'rust',
   //   options: '-DapiPackage=Looker -DpackageName=looker'
   // },
-  {
-    language: 'typescript-node',
-    path: 'ts_node',
-    options: '-DapiPackage=Looker -DpackageName=looker'
-  },
-  {
-    language: 'swift4',
-    path: 'swift',
-    options: '-DapiPackage=Looker -DpackageName=looker'
-  },
+  // {
+  //   language: 'typescript-node',
+  //   path: 'ts_node',
+  //   options: '-DapiPackage=Looker -DpackageName=looker'
+  // },
   // {
   //   language: 'typescript-fetch',
   //   path: 'ts_fetch',
