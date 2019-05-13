@@ -8,7 +8,7 @@ Our goal is to lower barriers to entry for customers who want use Looker as a pl
 
 The Looker API is defined with the [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification), formerly known as "swagger." This specification is used to produce both Looker's interactive API Explorer, and the Looker API language bindings via a JSON file that describes the Looker REST API.
 
-With the [`prepare.sh`](prepare.sh) script in this repository, the Looker API bindings for a specific programmin language are generated with [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator).
+With the [`prepare.sh`](prepare.sh) script in this repository, the Looker API bindings for a specific programming language are generated with [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator).
 
 ## The parts of the Looker SDK
 
