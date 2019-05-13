@@ -1,4 +1,4 @@
-export interface IGeneratorSpec {
+export interface GeneratorSpec {
   language: string // name of Open API Generator language to produce
   path?: string // if not provided, defaults to the same value as language
   options: string // generator options
@@ -6,7 +6,7 @@ export interface IGeneratorSpec {
 
 // To disable generation of any language specification, you can just comment it out
 // To add a language, find its name at https://openapi-generator.tech/docs/generators
-export const TargetLanguages:Array<IGeneratorSpec> =
+export const TargetLanguages:Array<GeneratorSpec> =
 [
   // {
   //   language: 'csharp',

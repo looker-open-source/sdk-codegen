@@ -56,7 +56,7 @@ After yarn is installed, just run `yarn` from your terminal window/command line,
 Run the generator with the command:
 
 ```bash
-yarn ts-node generate.ts
+yarn generate
 ```
 
 The generator will:

@@ -4,12 +4,14 @@
     "description": "This Looker Open Source repository is released under the MIT license. By using this repository, you agree to the terms of that license, and acknowledge that you are doing so at your own risk.",
     "main": "index.js",
     "devDependencies": {
+        "@types/node-fetch": "^2.3.3",
         "tslint": "^5.15.0",
         "tslint-config-prettier": "^1.18.0",
         "tslint-config-standard": "8.0.1"
     },
     "scripts": {
-        "lint:ts": "tslint -p tsconfig.test.json --format stylish",
+        "generate": "ts-node generate.ts",
+        "lint": "tslint -p tsconfig.json --format stylish",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
@@ -21,6 +23,9 @@
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/looker-open-source/sdk_codegen/issues"
+    },
+    "engines": {
+        "node": ">=10"
     },
     "homepage": "https://github.com/looker-open-source/sdk_codegen#readme",
     "dependencies": {
