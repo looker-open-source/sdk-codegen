@@ -99,10 +99,12 @@ will start a web server on `http://localhost:5000` that allows you do browse and
 **Note:** If you're unable to download the API specification file because you're using an instance of Looker that is not secured and errors are being thrown, you can explicitly turn off TLS verification in Node with a command like:
 
 ```bash
-export NODE_TLS_REJECT_UNAUTHORIZED="0" && yarn ts-node generate.ts
+NODE_TLS_REJECT_UNAUTHORIZED="0" yarn generate
 ```
 
 ### Using the bash script generators
+
+**Note:** The yarn/node version of the generator is the recommended and more reliable option.
 
 In this repository, [`prepare.sh`](prepare.sh) automates these steps for the OpenAPI generator. For people who still wish to use the deprecated swagger-based code generator, [`swagger.sh`](swagger.sh) is also provided.
 
