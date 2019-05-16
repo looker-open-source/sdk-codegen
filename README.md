@@ -86,21 +86,33 @@ api (created by the generator. This and its subfolders can be recreated with the
     r
 ```
 
-If you have the OpenAPI 3.x file available locally, you can use Speccy from the command line to search and explore the specification file. For example:
-
-```bash
-yarn speccy serve Looker.3.1.oas.json
-```
-
-will start a web server on `http://localhost:5000` that allows you do browse and search the local specification file for API 3.1.
-
-**Tip**: search for `query` in the UI and see what you get!
-
 **Note:** If you're unable to download the API specification file because you're using an instance of Looker that is not secured and errors are being thrown, you can explicitly turn off TLS verification in Node with a command like:
 
 ```bash
 NODE_TLS_REJECT_UNAUTHORIZED="0" yarn generate
 ```
+
+#### View the specification interactively
+
+After `yarn generate` completes successfully, the OpenAPI 3.x specification file is available locally, so you can search and explore the api a command similar to the following:
+
+```bash
+yarn view Looker.3.1.oas.json
+```
+
+This command will start a web server on `http://localhost:5000` that allows you do browse and search the local specification file for API 3.1.
+
+**Tip**: search for `query` or `dashboard` in the UI and see what you get!
+
+#### Additional scripts
+
+Use
+
+```bash
+yarn run
+```
+
+to see the list of all scripts that can be run.
 
 ### Using the bash script generators
 
