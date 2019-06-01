@@ -22,26 +22,40 @@
  * THE SOFTWARE.
  */
 
-import * as fs from 'fs'
-import * as ini from 'ini'
-import { utf8 } from './utils'
+import { execSync } from 'child_process'
 
-export interface SDKConfigProps {
-  api_version: string
-  base_url: string
-  client_id: string
-  client_secret: string
-  embed_secret: string
-  user_id: string
-  verbose: boolean
-  verify_ssl: boolean
+export const utf8 = 'utf-8'
+
+ // Abstraction of log so it can be skipped when quiet mode is enabled
+export const log = (message?: any) => console.log(message)
+
+export const quit = (err: Error) => {
+  console.error(`Error: ${err.name}, ${err.message}`)
+  console.error(err.stack)
+  process.exit(1)
+  return '' // spoof return type for TypeScript to not complain
 }
 
-export interface SDKConfigSection {
-  [key: string]: SDKConfigProps
+export const fail = (name: string, message: string) => {
+  const err = new Error(message)
+  err.name = name
+  return quit(err)
 }
 
-export const SDKConfig = (fileName = './looker.ini') => {
-  const config = ini.parse(fs.readFileSync(fileName, utf8)) as SDKConfigSection
-  return config
+export const run = async (command: string, args: string[]) => {
+  // https://nodejs.org/api/child_process.html#child_process_child_process_execsync_command_options
+  const options = {
+    maxBuffer: 1024 * 2048,
+    timeout: 300 * 1000,
+    windowsHide: true,
+    encoding: 'utf8',
+  }
+  try {
+    // const result = await spawnSync(command, args, options)
+    command += ' ' + args.join(' ')
+    const result = execSync(command, options)
+    return result
+  } catch (e) {
+    return quit(e)
+  }
 }

@@ -3,4 +3,6 @@ lookerapi*.json
 Looker*.json
 node_modules/*
 .idea/*
+.vscode/*
 api/*
+sdk_generated.*

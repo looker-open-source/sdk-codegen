@@ -45,7 +45,7 @@ To create `looker.ini`, copy [`looker-sample.ini`](looker-sample.ini) to `looker
 
 For your own source code repositories, be sure to configure your version control system to ignore your configuration `.ini` file so it doesn't accidentally get checked in somewhere unauthorized people can see it.
 
-To simplify configuration tasks (and to help ensure you *never* commit your credentials into a source code repository) future SDKs provided by Looker will use an `.ini` format to save/retrieve their API configuration settings.
+To simplify configuration tasks (and to help ensure you *never* commit your credentials into a source code repository) future SDKs provided by Looker will use a configuration file to save/retrieve their API configuration settings, so no credentials end up being stored in the source code.
 
 ### Using the yarn/node-based generator
 
@@ -114,80 +114,10 @@ yarn run
 
 to see the list of all scripts that can be run.
 
-### Using the bash script generators
-
-**Note:** The yarn/node version of the generator is the recommended and more reliable option.
-
-In this repository, [`prepare.sh`](prepare.sh) automates these steps for the OpenAPI generator. For people who still wish to use the deprecated swagger-based code generator, [`swagger.sh`](swagger.sh) is also provided.
-
-If the language you use isn't provided in this repository, you can modify the [`target_languages.txt`](target_languages.txt) file to add it as a generation target, or follow the manual steps in [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185).
-
-## The API source code generation process
-
-Both [`prepare.sh`](prepare.sh) and [`swagger.sh`](swagger.sh) follow the same general steps:
-
-* download the Looker API specification from the Looker server using the settings in the `.ini` configuration file (if it is not present)
-
-* `git` the required source code generator for the script (either OpenAPI or swagger)
-
-* build the downloaded code generator (this is one of the places malware could affect your machine)
-
-* invoke the source code generator for each active language in [`target_languages.txt`](target_languages.txt) (another area malware could affect your machine)
-
-### Generation script parameters
-
-**Note**: Because [`swagger.sh`](swagger.sh) is deprecated, the remainder of this document will focus on [`prepare.sh`](prepare.sh).
-
-You can invoke [`prepare.sh`](prepare.sh) with:
-
-```bash
-sh prepare.sh [option]
-```
-
-where `option` is:
-
-* `clean`: remove generated `api/*` folders
-* `wipe`: `clean`, and also remove the `openapi-generator` and `oas-kit` folders (if oas-kit is used)
-* `file`: configuration file name to use instead of `looker.ini`
-
-Example:
-
-```bash
-sh prepare.sh ~/myconfig.ini
-```
-
-Will read API configuration values from `~/myconfig.ini` rather than `looker.ini`
-
-### Automated script processing
-
-[`prepare.sh`](prepare.sh) is a bash shell script that:
-
-1. Retrieves the Looker API specification file from the Looker server if it's missing. The location and version of the API is defined in the configuration file usually named `looker.ini`.
-
-1. If the code generator isn't found in the current path, `git` clones the code generator and builds it
-
-1. Reads [`target_languages.txt`](target_languages.txt) to determine which languages to process, including special generation flags for those languages. (Please refer to the [Swagger Code-gen](https://github.com/swagger-api/swagger-codegen) homepage for the list of supported languages.)
-
-1. Generates each active language binding defined in [`target_languages.txt`](target_languages.txt) into `api/[language_path]`.
-
-When [`prepare.sh`](prepare.sh) completes successfully, the directory structure will look similar to:
-
-```plain-text
-api (created by `prepare.sh`. This and its subfolders can be recreated with the script on demand.)
-  csharp
-  java
-  python
-  r
-openapi-generator (git cloned by [`prepare.sh`](prepare.sh))
-oas-kit (git cloned by [`prepare.sh`](prepare.sh) if enabled)
-```
-
 ## API Troubleshooting
 
 See the official documentation for [API Troubleshooting](https://docs.looker.com/reference/api-and-integration/api-troubleshooting) suggestions.
 
 ## Notes
 
-The original version of the [`prepare.sh`](prepare.sh) script upgraded Looker's [Swagger 2.0 API specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) to [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) after fetching the [OAS Kit](https://github.com/Mermade/oas-kit). After upgrading, the `*.v3.json` specification is lint checked. If there are no errors, client language code generation as defined in [`target_languages.txt`](target_languages.txt) continues. The OAS Kit has been unreliable, so the current version of `prepare.sh` has the sections that reference it commented out.
-
-When it becomes reliable again, we plan to re-enable it. The 3.0 version of the specification has better tooling and community support. This [visual guide](https://blog.readme.io/an-example-filled-guide-to-swagger-3-2/) shows why OpenAPI 3.x is preferred to Swagger 2.x.
+In addition to swagger being deprecated, this [visual guide](https://blog.readme.io/an-example-filled-guide-to-swagger-3-2/) shows why OpenAPI 3.x is preferred to Swagger 2.x.
