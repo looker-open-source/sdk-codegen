@@ -16,11 +16,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es6",
-    "lib": [
-      "es6",
-      "es2017.object"
-    ],
+    "lib": ["es6", "es2017.object"],
     "noImplicitAny": true
   },
-  "include": ["./generate.ts" ]
+  "include": ["./*.ts"]
 }
