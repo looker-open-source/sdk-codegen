@@ -36,6 +36,7 @@
     "dependencies": {
         "@openapitools/openapi-generator-cli": "^0.0.9-4.0.0-beta3",
         "@types/ini": "^1.3.30",
+        "@types/js-yaml": "^3.12.1",
         "@types/mustache": "^0.8.32",
         "@types/node": "^11.13.7",
         "ini": "^1.3.5",

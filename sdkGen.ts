@@ -27,10 +27,20 @@
 import * as fs from 'fs'
 // import { TargetLanguages, GeneratorSpec as LanguageSpec } from './targetLanguages'
 import { SDKConfig, SDKConfigProps } from './sdkConfig'
-import { OpenAPIObject, OpenApiBuilder, PathItemObject, PathsObject, ParameterObject, SchemaObject } from 'openapi3-ts'
+import { OpenAPIObject, OpenApiBuilder, PathItemObject, PathsObject, ParameterObject, SchemaObject, OperationObject, RequestBodyObject, ReferenceObject } from 'openapi3-ts'
 import { logConvert } from './convert'
 import { fail, quit, utf8 } from './utils'
 import * as Mustache from 'mustache'
+import * as yaml from 'js-yaml'
+
+export interface ITypeMapItem {
+  type: string,
+  default: string
+}
+
+export interface ITypeMap {
+  [typeformat: string] : ITypeMapItem
+}
 
 export interface ICodePattern {
   commentString : string,
@@ -43,24 +53,17 @@ export interface ICodePattern {
   argEmptyList: string,
   argSeparator: string,
   argOpenList: string,
-  argCloseList: string
+  argCloseList: string,
+  typeMap: ITypeMap[]
 }
+
+let api: OpenAPIObject
 
 const methodTemplate = fs.readFileSync('./method.mst', utf8)
 
-const code = {
-  commentString : '# ',
-  paramIndent: '    ',
-  paramSeparator: ",",
-  paramDeclaration: '{{paramIndent}}{{name}} : {{type}}',
-  paramEmptyList: "():",
-  paramOpenList: "(",
-  paramCloseList: "):",
-  argEmptyList: "()",
-  argSeparator: ", ",
-  argOpenList: "(",
-  argCloseList: ")"
-} as ICodePattern
+const code = yaml.safeLoad(fs.readFileSync('./python.yml', utf8)) as ICodePattern
+// console.log(JSON.stringify(code, null, 2))
+// quit(new Error('none'))
 
 // const httpMethod = (props: PathItemObject) => {
 //   if (props.get) return 'get'
@@ -82,53 +85,37 @@ const commentBlock = (text: string | undefined, indent: string = '') => {
 // handy refs
 // https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schema-object
 // https://swagger.io/docs/specification/data-models/data-types/
-// this:
-// - needs to be expanded if we think more types are necessary
-// - abstracted into a typemap declaration system for each language we'll support
-// - the values in the ICodePattern interface should also be part of the yaml config for each language
 const typeMap = (type?: string, format?: string) => {
   if (!type) return fail('typeMap', 'Schema type was not defined')
-  const typeFormat = type + (format ? `.${format}` : '')
-  switch (typeFormat) {
-    case 'number': return 'double'
-    case 'number.float': return 'float'
-    case 'number.double': return 'double'
-    case 'integer': return 'int'
-    case 'integer.int32': return 'int'
-    case 'integer.int64': return 'long'
-    case 'string': return 'str'
-    case 'string.date': return 'date'
-    case 'string.date-time': return 'datetime'
-    case 'string.password': return 'password'
-    case 'string.byte': return 'base64'
-    case 'string.binary': return 'binary'
-    case 'string.email': return 'email'
-    case 'string.uuid': return 'uuid'
-    case 'string.uri': return 'uri'
-    case 'string.hostname': return 'hostname'
-    case 'string.ipv4': return 'ipv4'
-    case 'string.ipv6': return 'ipv6'
-    case 'boolean': return 'boolean'
-    case 'array': return 'array'
-    case 'object': return 'object'
-    default: return type
+  const typeFormat : keyof ITypeMap = type + (format ? `.${format}` : '')
+  // @ts-ignore
+  const result = code.typeMap[typeFormat]
+  if (!result) {
+    return type
   }
+  return result
 }
 
 // const isParam = (ambiguous : ParameterObject | ReferenceObject) => {
 //   return ambiguous.hasOwnProperty('name')
 // }
 
+// omit read-only values
+// list all required params first
+// list optional params second with default values for languages that support default named params
 const paramList = (params: ParameterObject[]) => {
   if (!params) return code.paramEmptyList
+  // this should use a partial?
   const paramTemplate = `{{#description}}{{{description}}}\n{{/description}}${code.paramDeclaration}`
   const declarations: any[] = []
   params.forEach(param => {
     const schema = param.schema as SchemaObject
+    const typeDef = typeMap(schema.type, schema.format)
     const view = {
       name: param.name,
       paramIndent: code.paramIndent,
-      type: typeMap(schema.type, schema.format),
+      type: typeDef.type,
+      default: typeDef.default,
       description: commentBlock(param.description, code.paramIndent)
     }
     declarations.push(Mustache.render(paramTemplate, view))
@@ -143,10 +130,213 @@ const argList = (params: ParameterObject[]) => {
   return `${code.argOpenList}${names.join(code.argSeparator)}${code.argCloseList}`
 }
 
-// need to process body, query, and path requests
-const declareMethod = (endpoint: string, http: string, props: PathItemObject) => {
-  const params = props.parameters as ParameterObject[]
-  const view = {
+// order parameters in location priority
+const locationSorter = (p1: ParameterObject, p2: ParameterObject) => {
+  const remain = 0
+  const before = -1
+  // const after = 1
+  // note: "body" is an injected location for simplifying method declarations
+  // parameters should be sorted in the following location order:
+  const locations = ['path', 'body', 'query', 'header', 'cookie']
+  if (p1.in === p2.in) return remain // no need to re-order
+
+  for (let location of locations) {
+    if (p1.in === location) {
+      return remain // first parameter should stay first
+    }
+    if (p2.in === location) {
+      return before // second parameter should move up
+    }
+  }
+  return remain
+}
+
+// Retrieve an api object from the JSON path
+const jsonPath = (path: string, item: any = api, splitter: string = "/") => {
+  const keys = path.split(splitter)
+  for (let key of keys) {
+    if (key === '#') continue
+    item = item[key]
+    if (item == null) return null
+  }
+  return item
+}
+
+const isRefObject = (obj: any) => obj && obj.hasOwnProperty('$ref')
+
+// there's gotta be a better way to code this mess
+const getRequestSchema = (op: OperationObject) => {
+  if (!op || !op.requestBody) return null
+  let req : RequestBodyObject = {} as RequestBodyObject
+  if (isRefObject(op.requestBody)) {
+    let ref = (op.requestBody as ReferenceObject).$ref
+    const reference = jsonPath(ref)
+    console.log({ref})
+    console.log(JSON.stringify(reference, null, 2))
+    if (!reference) return null
+    let req = jsonPath("content\\application/json\\schema", reference, "\\")
+    console.log({req})
+    if (req) {
+      console.log({req})
+      req = jsonPath(req.$ref) as unknown as RequestBodyObject
+    }
+  } else {
+    req = op.requestBody as RequestBodyObject
+  }
+  if (req.content) {
+    Object.entries(req.content).forEach(([_, value]) => {
+      console.log(JSON.stringify(value.schema, null, 2))
+      return value.schema
+    })
+  }
+  return null
+}
+
+/*
+export interface BaseParameterObject extends ISpecificationExtension {
+    description?: string;
+    required?: boolean;
+    deprecated?: boolean;
+    allowEmptyValue?: boolean;
+    style?: ParameterStyle;
+    explode?: boolean;
+    allowReserved?: boolean;
+    schema?: SchemaObject | ReferenceObject;
+    examples?: {
+        [param: string]: ExampleObject | ReferenceObject;
+    };
+    example?: any;
+    content?: ContentObject;
+}
+export interface ParameterObject extends BaseParameterObject {
+    name: string;
+    in: ParameterLocation;
+}
+export interface SchemaObject extends ISpecificationExtension {
+    nullable?: boolean;
+    discriminator?: DiscriminatorObject;
+    readOnly?: boolean;
+    writeOnly?: boolean;
+    xml?: XmlObject;
+    externalDocs?: ExternalDocumentationObject;
+    example?: any;
+    examples?: any[];
+    deprecated?: boolean;
+    type?: string;
+    allOf?: (SchemaObject | ReferenceObject)[];
+    oneOf?: (SchemaObject | ReferenceObject)[];
+    anyOf?: (SchemaObject | ReferenceObject)[];
+    not?: SchemaObject | ReferenceObject;
+    items?: SchemaObject | ReferenceObject;
+    properties?: {
+        [propertyName: string]: (SchemaObject | ReferenceObject);
+    };
+    additionalProperties?: (SchemaObject | ReferenceObject | boolean);
+    description?: string;
+    format?: string;
+    default?: any;
+    title?: string;
+    multipleOf?: number;
+    maximum?: number;
+    exclusiveMaximum?: boolean;
+    minimum?: number;
+    exclusiveMinimum?: boolean;
+    maxLength?: number;
+    minLength?: number;
+    pattern?: string;
+    maxItems?: number;
+    minItems?: number;
+    uniqueItems?: boolean;
+    maxProperties?: number;
+    minProperties?: number;
+    required?: string[];
+    enum?: any[];
+}
+*/
+const asParams = (list : any[] | undefined) : ParameterObject[] => {
+  let results : ParameterObject[] = []
+  if (!list) return results
+  let propNames = ['name', 'description', 'required', 'in', 'readOnly', 'required', 'schema']
+  for (let item of list) {
+    let value : ParameterObject = {
+      name: '',
+      in: 'query'
+    }
+    let defined = false
+    for (let propName of propNames) {
+      const val = item.hasOwnProperty(propName) ? item[propName] : null
+      if (val) {
+        value[propName] = val
+        defined = true
+      }
+    }
+    if (defined) {
+      results.push(value)
+    }
+  }
+  return results
+}
+
+// coerce a SchemaObject to a ParameterObject
+const schemaToParam = (name: string, schema: SchemaObject) : ParameterObject => {
+  if (!schema) return {} as ParameterObject
+  return {
+    schema: {
+      type: schema.type,
+      format: schema.format
+    },
+    // @ts-ignore
+    in: 'body',
+    name: name,
+    readOnly : schema.readOnly,
+    description: schema.description,
+    default: schema.default,
+    "x-looker-nullable": schema["x-looker-nullable"]
+  }
+}
+
+// - list params in precedence order as defined in paramSorter
+// - inject body parameters from request object
+// - exclude readOnly parameters
+const writeParams = (props: PathItemObject, requestSchema: SchemaObject | null = null) => {
+  const params = asParams(props.parameters)
+  if (requestSchema && requestSchema.properties) {
+    Object
+      .entries(requestSchema.properties)
+      .forEach(([name, param]) => {
+        if (param) {
+          const schema = param as SchemaObject
+          if (schema) {
+            params.push(schemaToParam(name, schema))
+          }
+        }
+      })
+  }
+  const writers = params
+    .filter(p => !p.readOnly)
+    .sort((p1, p2) => locationSorter(p1, p2))
+  return writers
+}
+
+// - generate parameter declarations, including default named values for optional parameters
+// - group method signature parameters into prioritized locations:
+//  - required:
+//    - path
+//    - body
+//    - query
+//    - header
+//    - cookie
+//  - optional (should include default annotation values for default named parameters):
+//    - path
+//    - body
+//    - query
+//    - header
+//    - cookie
+// - invoke API method with provided param groups
+// - return result
+const processMethod = (endpoint: string, http: string, props: PathItemObject, requestSchema: SchemaObject | null) => {
+  const params = writeParams(props, requestSchema)
+  const data = {
     endpoint: endpoint,
     http: http,
     operationId: props.operationId,
@@ -155,23 +345,29 @@ const declareMethod = (endpoint: string, http: string, props: PathItemObject) =>
     params: paramList(params),
     args: argList(params)
   }
-  return Mustache.render(methodTemplate, view)
+  return data
 }
 
 const processEndpoint = (endpoint: string, path: PathsObject) => {
-  let result = ''
-  Object.entries(path).forEach(([http, props]) => result += declareMethod(endpoint, http, props))
-  return result
+  let methods: any[] = []
+  Object.entries(path).forEach(([http, props]) => {
+    const body = getRequestSchema(path[http])
+    methods.push(processMethod(endpoint, http, props, body))
+  })
+  return methods
 }
 
 const processSpec = async (name: string, props: SDKConfigProps) => {
   const specFile = await logConvert(name, props)
   const specContent = fs.readFileSync(specFile, utf8)
   const json = JSON.parse(specContent)
-  const api: OpenAPIObject = new OpenApiBuilder(json).getSpec()
-  let result = ''
-  Object.entries(api.paths).forEach(([endpoint, path]) => result += processEndpoint(endpoint, path))
-  return result
+  api = new OpenApiBuilder(json).getSpec()
+  let methods: any[] = []
+  Object.entries(api.paths).forEach(([endpoint, path]) => methods.push(processEndpoint(endpoint, path)))
+  const view = {
+    methods: methods
+  }
+  return Mustache.render(methodTemplate, view)
 }
 
 

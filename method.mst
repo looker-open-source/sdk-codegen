@@ -1,8 +1,10 @@
 
-# {{http}} {{{endpoint}}}
-{{{description}}}
-def {{operationId}}{{#params}}{{params}}{{/params}}
-  {{#summary}}
-  """{{{summary}}}"""
-  {{/summary}}
-  return {{http}}{{args}}
+{{#methods}}
+  # {{http}} {{{endpoint}}}
+  {{{description}}}
+  def {{operationId}}{{#params}}{{params}}{{/params}}
+    {{#summary}}
+    """{{{summary}}}"""
+    {{/summary}}
+    return {{http}}{{args}}
+{{/methods}}

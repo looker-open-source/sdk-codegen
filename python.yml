@@ -1,0 +1,112 @@
+# Python language definitions for Looker SDK Code Generator
+# EOL comment sequence that can be used for BOL comment
+commentString: '# '
+# Number of spaces to indent parameters from the method definition.
+# Parameters are always listed 1 per line, with their comment text appearing on the line above the declaration
+paramIndent: '    '
+# Separator sequence for parameter declarations. In most languages, either , or ;
+paramSeparator: ","
+# Syntax for declaring an individual parameter. If the parameter is an optional parameter,
+# the default value should be defined for the parameter based on its type -- if it can be defined.
+paramDeclaration: "{{paramIndent}}{{name}} : {{type}}{{#default}} = {{{default}}}{{/default}}"
+# Annotation for a method with no parameters
+paramEmptyList: "():"
+# Opening sequence for parameters in a method signature
+paramOpenList: "("
+# Closing sequence for parameters in a method signature
+paramCloseList: "):"
+# Method invocation sequence for calling a function without parameters
+argEmptyList: "()"
+# Separator between function call arguments
+argSeparator: ", "
+# Opening for function call arguments
+argOpenList: "("
+# Closing for function call arguments
+argCloseList: ")"
+
+# mapping of OpenApi schema type.format to language-specific types and defaults
+# syntax:
+#  openapitype.format string:
+#    type: LanguageType
+#    default: LanguageDefaultValue
+typeMap:
+  number:
+    type: double
+    default: 0
+
+  number.float:
+    type: float
+    default: 0
+
+  number.double:
+    type: double
+    default: 0
+
+  integer:
+    type: int
+    default: 0
+
+  integer.int32:
+    type: int
+    default: 0
+
+  integer.int64:
+    type: long
+    default: 0
+
+  string:
+    type: string
+    default: ''
+
+  string.date:
+    type: date
+    default: ''
+
+  string.date-time:
+    type: datetime
+    default: ''
+
+  string.password:
+    type: Password
+    default: ''
+
+  string.byte:
+    type: base64
+    default: ''
+
+  string.binary:
+    type: binary
+    default: ''
+
+  string.email:
+    type: Email
+    default: ''
+
+  string.uuid:
+    type: uuid
+    default: ''
+
+  string.uri:
+    type: uri
+    default: ''
+
+  string.hostname:
+    type: hostname
+    default: ''
+
+  string.ipv4:
+    type: ipv4
+    default: ''
+
+  string.ipv6:
+    type: ipv6
+    default: ''
+
+  boolean:
+    type: boolean
+    default: ''
+
+  array:
+    type: array
+    default: []
+
