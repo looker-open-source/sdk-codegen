@@ -2,6 +2,27 @@ import { ParameterStyle, SchemaObject, ExampleObject, ContentObject, PathItemObj
 
 export declare type MethodParameterLocation = 'path' | 'body' | 'query' | 'header' | 'cookie'
 
+export interface IMethodParameter {
+  [ key: string ]: any
+  schema: SchemaObject
+  name: string
+  in: MethodParameterLocation
+
+  default? : string
+  readOnly?: boolean
+  description?: string
+  required?: boolean
+  deprecated?: boolean
+  allowEmptyValue?: boolean
+  style?: ParameterStyle
+  explode?: boolean
+  allowReserved?: boolean
+  examples?: {
+      [param: string]: ExampleObject
+  }
+  example?: any
+  content?: ContentObject
+}
 /*
 export interface SchemaObject extends ISpecificationExtension {
     nullable?: boolean;
@@ -45,12 +66,12 @@ export interface SchemaObject extends ISpecificationExtension {
 }
 */
 
-export const asParams = (list : any[] | undefined) : MethodParameter[] => {
-  let results : MethodParameter[] = []
+export const asParams = (list : any[] | undefined) : IMethodParameter[] => {
+  let results : IMethodParameter[] = []
   if (!list) return results
   let propNames = ['name', 'description', 'required', 'in', 'readOnly', 'required', 'schema']
   for (let item of list) {
-    let value : MethodParameter = {
+    let value : IMethodParameter = {
       name: '',
       in: 'query',
       schema: {}
@@ -59,7 +80,6 @@ export const asParams = (list : any[] | undefined) : MethodParameter[] => {
     for (let propName of propNames) {
       const val = item.hasOwnProperty(propName) ? item[propName] : null
       if (val) {
-        // @ts-ignore
         value[propName] = val
         defined = true
       }
@@ -73,15 +93,14 @@ export const asParams = (list : any[] | undefined) : MethodParameter[] => {
 }
 
 // coerce a SchemaObject to a ParameterObject
-export const schemaToParam = (name: string, schema: SchemaObject) : MethodParameter => {
-  let result = new MethodParameter()
+export const schemaToParam = (name: string, schema: SchemaObject) : IMethodParameter | null => {
+  let result : IMethodParameter | null = null
   if (schema) {
     result = {
       schema: {
         type: schema.type,
         format: schema.format
       },
-      // @ts-ignore
       in: 'body',
       name: name,
       readOnly : schema.readOnly,
@@ -138,7 +157,7 @@ export const writeParams = (props: PathItemObject, requestSchema: SchemaObject |
   return writers
 }
 
-export class MethodParameter {
+export class MethodParameter implements IMethodParameter {
   static propNames = Object.getOwnPropertyNames(new MethodParameter())
   schema: SchemaObject = {}
   name: string = '';
@@ -163,6 +182,10 @@ export class MethodParameter {
     this.name = ''
     this.schema = {} as SchemaObject
     this.in = 'query'
+    this.assignProps(param)
+  }
+
+  assignProps = (param?: any) => {
     if (param) {
       for (let name of MethodParameter.propNames) {
         if (param.hasOwnProperty(name)) {
@@ -172,5 +195,4 @@ export class MethodParameter {
       }
     }
   }
-
 }
