@@ -152,8 +152,11 @@ const locationSorter = (p1: ParameterObject, p2: ParameterObject) => {
 }
 
 // Retrieve an api object from the JSON path
-const jsonPath = (path: string, item: any = api, splitter: string = "/") => {
-  const keys = path.split(splitter)
+const jsonPath = (path: string | string[], item: any = api, splitter: string = "/") => {
+  let keys = path
+  if (!(path instanceof Array)) {
+    keys = path.split(splitter)
+  }
   for (let key of keys) {
     if (key === '#') continue
     item = item[key]
@@ -164,30 +167,37 @@ const jsonPath = (path: string, item: any = api, splitter: string = "/") => {
 
 const isRefObject = (obj: any) => obj && obj.hasOwnProperty('$ref')
 
+const getSchemaRef = (path: string) : SchemaObject => {
+  let result = {} as SchemaObject
+  let reference = jsonPath(path)
+  if (!reference) return result
+  // Is this a ContentObject?
+  if (reference.content) {
+    reference = jsonPath(["application/json", "schema"], reference.content)
+    if (reference) {
+      reference = jsonPath(reference.$ref)
+      return reference
+    }
+  } else {
+    result = reference
+  }
+  return result
+}
+
 // there's gotta be a better way to code this mess
 const getRequestSchema = (op: OperationObject) => {
   if (!op || !op.requestBody) return null
-  let req : RequestBodyObject = {} as RequestBodyObject
+  let req = {} as RequestBodyObject
   if (isRefObject(op.requestBody)) {
-    let ref = (op.requestBody as ReferenceObject).$ref
-    const reference = jsonPath(ref)
-    console.log({ref})
-    console.log(JSON.stringify(reference, null, 2))
-    if (!reference) return null
-    let req = jsonPath("content\\application/json\\schema", reference, "\\")
-    console.log({req})
-    if (req) {
-      console.log({req})
-      req = jsonPath(req.$ref) as unknown as RequestBodyObject
-    }
+    return getSchemaRef((op.requestBody as ReferenceObject).$ref)
   } else {
     req = op.requestBody as RequestBodyObject
-  }
-  if (req.content) {
-    Object.entries(req.content).forEach(([_, value]) => {
-      console.log(JSON.stringify(value.schema, null, 2))
-      return value.schema
-    })
+    if (req.content) {
+      Object.entries(req.content).forEach(([_, value]) => {
+        console.log(JSON.stringify(value.schema, null, 2))
+        return value.schema
+      })
+    }
   }
   return null
 }
