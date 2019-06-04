@@ -27,11 +27,12 @@
 import * as fs from 'fs'
 // import { TargetLanguages, GeneratorSpec as LanguageSpec } from './targetLanguages'
 import { SDKConfig, SDKConfigProps } from './sdkConfig'
-import { OpenAPIObject, OpenApiBuilder, PathItemObject, PathsObject, ParameterObject, SchemaObject, OperationObject, RequestBodyObject, ReferenceObject } from 'openapi3-ts'
+import { OpenAPIObject, OpenApiBuilder, PathItemObject, PathsObject, SchemaObject, OperationObject, RequestBodyObject, ReferenceObject } from 'openapi3-ts'
 import { logConvert } from './convert'
 import { fail, quit, utf8 } from './utils'
 import * as Mustache from 'mustache'
 import * as yaml from 'js-yaml'
+import { MethodParameter, writeParams } from './methodParam';
 
 export interface ITypeMapItem {
   type: string,
@@ -58,21 +59,11 @@ export interface ICodePattern {
 }
 
 let api: OpenAPIObject
+let typeDict: { [name: string]: SchemaObject } = {}
 
 const methodTemplate = fs.readFileSync('./method.mst', utf8)
 
 const code = yaml.safeLoad(fs.readFileSync('./python.yml', utf8)) as ICodePattern
-// console.log(JSON.stringify(code, null, 2))
-// quit(new Error('none'))
-
-// const httpMethod = (props: PathItemObject) => {
-//   if (props.get) return 'get'
-//   else if (props.post) return 'post'
-//   else if (props.put) return 'put'
-//   else if (props.patch) return 'patch'
-//   else if (props.delete) return 'delete'
-//   return fail('httpMethod', 'Unrecognized http method')
-// }
 
 const commentBlock = (text: string | undefined, indent: string = '') => {
   if (!text) return ''
@@ -103,13 +94,17 @@ const typeMap = (type?: string, format?: string) => {
 // omit read-only values
 // list all required params first
 // list optional params second with default values for languages that support default named params
-const paramList = (params: ParameterObject[]) => {
+const paramList = (params: MethodParameter[]) => {
   if (!params) return code.paramEmptyList
   // this should use a partial?
   const paramTemplate = `{{#description}}{{{description}}}\n{{/description}}${code.paramDeclaration}`
   const declarations: any[] = []
   params.forEach(param => {
-    const schema = param.schema as SchemaObject
+    const schema = param.schema // as SchemaObject
+    if (!schema.type) {
+      console.log("** not found **",JSON.stringify(param, null, 2))
+      console.log("**debug**", JSON.stringify(params, null, 2))
+    }
     const typeDef = typeMap(schema.type, schema.format)
     const view = {
       name: param.name,
@@ -123,32 +118,11 @@ const paramList = (params: ParameterObject[]) => {
   return `${code.paramOpenList}\n${declarations.join(code.paramSeparator + "\n")}\n${code.paramCloseList}`
 }
 
-const argList = (params: ParameterObject[]) => {
+const argList = (params: MethodParameter[]) => {
   if (!params) return code.argEmptyList
   const names = params
-    .map((p: ParameterObject) => p.name)
+    .map((p) => p.name)
   return `${code.argOpenList}${names.join(code.argSeparator)}${code.argCloseList}`
-}
-
-// order parameters in location priority
-const locationSorter = (p1: ParameterObject, p2: ParameterObject) => {
-  const remain = 0
-  const before = -1
-  // const after = 1
-  // note: "body" is an injected location for simplifying method declarations
-  // parameters should be sorted in the following location order:
-  const locations = ['path', 'body', 'query', 'header', 'cookie']
-  if (p1.in === p2.in) return remain // no need to re-order
-
-  for (let location of locations) {
-    if (p1.in === location) {
-      return remain // first parameter should stay first
-    }
-    if (p2.in === location) {
-      return before // second parameter should move up
-    }
-  }
-  return remain
 }
 
 // Retrieve an api object from the JSON path
@@ -167,19 +141,24 @@ const jsonPath = (path: string | string[], item: any = api, splitter: string = "
 
 const isRefObject = (obj: any) => obj && obj.hasOwnProperty('$ref')
 
-const getSchemaRef = (path: string) : SchemaObject => {
-  let result = {} as SchemaObject
+const getSchemaRef = (path: string | string[], splitter: string = "/") : SchemaObject | null => {
   let reference = jsonPath(path)
-  if (!reference) return result
+  if (!reference) return null
   // Is this a ContentObject?
   if (reference.content) {
     reference = jsonPath(["application/json", "schema"], reference.content)
     if (reference) {
-      reference = jsonPath(reference.$ref)
-      return reference
+      path = reference.$ref
     }
-  } else {
-    result = reference
+  }
+  let keys = path
+  if (!(path instanceof Array)) {
+    keys = path.split(splitter)
+  }
+  let name = keys[keys.length - 1]
+  const result = typeDict[name]
+  if (!result) {
+    console.log(path, "not found")
   }
   return result
 }
@@ -194,138 +173,11 @@ const getRequestSchema = (op: OperationObject) => {
     req = op.requestBody as RequestBodyObject
     if (req.content) {
       Object.entries(req.content).forEach(([_, value]) => {
-        console.log(JSON.stringify(value.schema, null, 2))
         return value.schema
       })
     }
   }
   return null
-}
-
-/*
-export interface BaseParameterObject extends ISpecificationExtension {
-    description?: string;
-    required?: boolean;
-    deprecated?: boolean;
-    allowEmptyValue?: boolean;
-    style?: ParameterStyle;
-    explode?: boolean;
-    allowReserved?: boolean;
-    schema?: SchemaObject | ReferenceObject;
-    examples?: {
-        [param: string]: ExampleObject | ReferenceObject;
-    };
-    example?: any;
-    content?: ContentObject;
-}
-export interface ParameterObject extends BaseParameterObject {
-    name: string;
-    in: ParameterLocation;
-}
-export interface SchemaObject extends ISpecificationExtension {
-    nullable?: boolean;
-    discriminator?: DiscriminatorObject;
-    readOnly?: boolean;
-    writeOnly?: boolean;
-    xml?: XmlObject;
-    externalDocs?: ExternalDocumentationObject;
-    example?: any;
-    examples?: any[];
-    deprecated?: boolean;
-    type?: string;
-    allOf?: (SchemaObject | ReferenceObject)[];
-    oneOf?: (SchemaObject | ReferenceObject)[];
-    anyOf?: (SchemaObject | ReferenceObject)[];
-    not?: SchemaObject | ReferenceObject;
-    items?: SchemaObject | ReferenceObject;
-    properties?: {
-        [propertyName: string]: (SchemaObject | ReferenceObject);
-    };
-    additionalProperties?: (SchemaObject | ReferenceObject | boolean);
-    description?: string;
-    format?: string;
-    default?: any;
-    title?: string;
-    multipleOf?: number;
-    maximum?: number;
-    exclusiveMaximum?: boolean;
-    minimum?: number;
-    exclusiveMinimum?: boolean;
-    maxLength?: number;
-    minLength?: number;
-    pattern?: string;
-    maxItems?: number;
-    minItems?: number;
-    uniqueItems?: boolean;
-    maxProperties?: number;
-    minProperties?: number;
-    required?: string[];
-    enum?: any[];
-}
-*/
-const asParams = (list : any[] | undefined) : ParameterObject[] => {
-  let results : ParameterObject[] = []
-  if (!list) return results
-  let propNames = ['name', 'description', 'required', 'in', 'readOnly', 'required', 'schema']
-  for (let item of list) {
-    let value : ParameterObject = {
-      name: '',
-      in: 'query'
-    }
-    let defined = false
-    for (let propName of propNames) {
-      const val = item.hasOwnProperty(propName) ? item[propName] : null
-      if (val) {
-        value[propName] = val
-        defined = true
-      }
-    }
-    if (defined) {
-      results.push(value)
-    }
-  }
-  return results
-}
-
-// coerce a SchemaObject to a ParameterObject
-const schemaToParam = (name: string, schema: SchemaObject) : ParameterObject => {
-  if (!schema) return {} as ParameterObject
-  return {
-    schema: {
-      type: schema.type,
-      format: schema.format
-    },
-    // @ts-ignore
-    in: 'body',
-    name: name,
-    readOnly : schema.readOnly,
-    description: schema.description,
-    default: schema.default,
-    "x-looker-nullable": schema["x-looker-nullable"]
-  }
-}
-
-// - list params in precedence order as defined in paramSorter
-// - inject body parameters from request object
-// - exclude readOnly parameters
-const writeParams = (props: PathItemObject, requestSchema: SchemaObject | null = null) => {
-  const params = asParams(props.parameters)
-  if (requestSchema && requestSchema.properties) {
-    Object
-      .entries(requestSchema.properties)
-      .forEach(([name, param]) => {
-        if (param) {
-          const schema = param as SchemaObject
-          if (schema) {
-            params.push(schemaToParam(name, schema))
-          }
-        }
-      })
-  }
-  const writers = params
-    .filter(p => !p.readOnly)
-    .sort((p1, p2) => locationSorter(p1, p2))
-  return writers
 }
 
 // - generate parameter declarations, including default named values for optional parameters
@@ -367,11 +219,22 @@ const processEndpoint = (endpoint: string, path: PathsObject) => {
   return methods
 }
 
+// Put all schema types into a dictionary for quick retrieval during generation
+const loadSchema = (spec: OpenAPIObject = api) => {
+  if (!spec.components) return
+  if (!spec.components.schemas) return
+  Object.entries(spec.components.schemas).forEach(([name, item]) => {
+    let schema = item as SchemaObject
+    typeDict[name] = schema
+  })
+}
+
 const processSpec = async (name: string, props: SDKConfigProps) => {
   const specFile = await logConvert(name, props)
   const specContent = fs.readFileSync(specFile, utf8)
   const json = JSON.parse(specContent)
   api = new OpenApiBuilder(json).getSpec()
+  loadSchema(api)
   let methods: any[] = []
   Object.entries(api.paths).forEach(([endpoint, path]) => methods.push(processEndpoint(endpoint, path)))
   const view = {
