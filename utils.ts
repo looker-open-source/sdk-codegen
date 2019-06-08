@@ -22,6 +22,8 @@
  * THE SOFTWARE.
  */
 
+import * as fs from 'fs'
+import * as yaml from 'js-yaml'
 import { execSync } from 'child_process'
 
 export const utf8 = 'utf-8'
@@ -29,10 +31,16 @@ export const utf8 = 'utf-8'
  // Abstraction of log so it can be skipped when quiet mode is enabled
 export const log = (message?: any) => console.log(message)
 
-export const quit = (err: Error) => {
-  console.error(`Error: ${err.name}, ${err.message}`)
-  console.error(err.stack)
-  process.exit(1)
+export const dump = (value: any) => console.log(JSON.stringify(value, null, 2))
+
+export const quit = (err?: Error) => {
+  if (err) {
+    console.error(`Error: ${err.name}, ${err.message}`)
+    console.error(err.stack)
+    process.exit(1)
+  } else {
+    process.exit(0)
+  }
   return '' // spoof return type for TypeScript to not complain
 }
 
@@ -58,4 +66,55 @@ export const run = async (command: string, args: string[]) => {
   } catch (e) {
     return quit(e)
   }
+}
+
+export const code = yaml.safeLoad(fs.readFileSync('./python.yml', utf8)) as ICodePattern
+
+export const commentBlock = (text: string | undefined, indent: string = '') => {
+  if (!text) return ''
+  text = text.trim()
+  if (!text) return
+  const indenter = indent + code.commentString
+  return indenter + text.split("\n").join("\n" + indenter)
+}
+
+export interface ITypeMapItem {
+  type: string,
+  default: string
+}
+
+export interface ITypeMap {
+  [typeformat: string] : ITypeMapItem
+}
+
+export interface ICodePattern {
+  commentString : string,
+  paramIndent: string,
+  paramSeparator: string,
+  paramDeclaration: string,
+  paramEmptyList: string,
+  paramOpenList: string,
+  paramCloseList: string,
+  argEmptyList: string,
+  argSeparator: string,
+  argOpenList: string,
+  argCloseList: string,
+  typeMap: ITypeMap[]
+}
+
+// handy refs
+// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schema-object
+// https://swagger.io/docs/specification/data-models/data-types/
+export const typeMap = (type?: string, format?: string) => {
+  if (!type) {
+    console.error({type, format})
+    return '' // fail('typeMap', 'Schema type was not defined')
+  }
+  const typeFormat : keyof ITypeMap = type + (format ? `.${format}` : '')
+  // @ts-ignore
+  const result = code.typeMap[typeFormat]
+  if (!result) {
+    return type
+  }
+  return result
 }

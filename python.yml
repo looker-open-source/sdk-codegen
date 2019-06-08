@@ -8,7 +8,7 @@ paramIndent: '    '
 paramSeparator: ","
 # Syntax for declaring an individual parameter. If the parameter is an optional parameter,
 # the default value should be defined for the parameter based on its type -- if it can be defined.
-paramDeclaration: "{{paramIndent}}{{name}} : {{type}}{{#default}} = {{{default}}}{{/default}}"
+paramDeclaration: "{{code.paramIndent}}{{name}}: {{type}}{{#if default}} = {{{default}}}{{/if}}"
 # Annotation for a method with no parameters
 paramEmptyList: "():"
 # Opening sequence for parameters in a method signature
