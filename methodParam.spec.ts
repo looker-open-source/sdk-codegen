@@ -9,9 +9,9 @@ describe('basic', () => {
   })
 
   it('create query', () => {
-    const path = jsonPath(['paths', '/queries', 'post']) as OperationObject
-    expect(path).not.toBeUndefined()
-    const p = new MethodParameters(path)
+    const op = jsonPath(['paths', '/queries', 'post']) as OperationObject
+    expect(op).not.toBeUndefined()
+    const p = new MethodParameters(op)
     expect(p.allParams.length).toBe(2)
     expect(p.requiredParams.length).toBe(0)
     expect(p.optionalParams.length).toBe(2)
@@ -25,9 +25,9 @@ describe('basic', () => {
   })
 
   it('create query task', () => {
-    const path = jsonPath(['paths', '/query_tasks', 'post']) as OperationObject
-    expect(path).not.toBeUndefined()
-    const p = new MethodParameters(path)
+    const op = jsonPath(['paths', '/query_tasks', 'post']) as OperationObject
+    expect(op).not.toBeUndefined()
+    const p = new MethodParameters(op)
     const count = 14
     expect(p.allParams.length).toBe(count)
     expect(p.requiredParams.length).toBe(1)
@@ -43,10 +43,29 @@ describe('basic', () => {
     expect(body.schema.type).toBe('WriteCreateQueryTask')
   })
 
+  it('request data action', () => {
+    const op = jsonPath(['paths', '/data_actions/form', 'post']) as OperationObject
+    expect(op).not.toBeUndefined()
+    const p = new MethodParameters(op)
+    const count = 1
+    expect(p.allParams.length).toBe(count)
+    expect(p.requiredParams.length).toBe(1)
+    expect(p.optionalParams.length).toBe(count-1)
+    expect(p.pathParams.length).toBe(0)
+    expect(p.bodyParams.length).toBe(1)
+    expect(p.queryParams.length).toBe(count-1)
+    expect(p.headerParams.length).toBe(0)
+    expect(p.cookieParams.length).toBe(0)
+    expect(p.bodyArgs).toBe('body')
+    expect(p.queryArgs).toBe('')
+    const body = p.bodyParams[0]
+    expect(body.schema.type).toBe('str[]')
+  })
+
   it('get request', () => {
-    const path = jsonPath(['paths', '/queries/{query_id}', 'get']) as OperationObject
-    expect(path).not.toBeUndefined()
-    const p = new MethodParameters(path)
+    const op = jsonPath(['paths', '/queries/{query_id}', 'get']) as OperationObject
+    expect(op).not.toBeUndefined()
+    const p = new MethodParameters(op)
     expect(p.allParams.length).toBe(2)
     expect(p.requiredParams.length).toBe(1)
     const id = p.requiredParams[0]

@@ -27,6 +27,7 @@
 import * as fs from 'fs'
 import { SDKConfig } from './sdkConfig'
 import { quit } from './utils'
+import { processSpec } from './specSupport';
 
 (async () => {
   try {

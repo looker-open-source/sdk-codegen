@@ -25,7 +25,7 @@
  */
 
 import { ParameterStyle, SchemaObject, ExampleObject, ContentObject, OperationObject, ReferenceObject, RequestBodyObject } from "openapi3-ts"
-import { code, typeMap, commentBlock } from "./utils"
+import { code, typeMap, commentBlock, dump, quit } from "./utils"
 
 export declare type MethodParameterLocation = 'path' | 'body' | 'query' | 'header' | 'cookie'
 
@@ -202,7 +202,6 @@ export class MethodParameter implements IMethodParameter {
         this.comment = commentBlock(this.description || param.description, code.paramIndent)
       }
     }
-
   }
 }
 
@@ -217,9 +216,36 @@ const getRequestParam = (op: OperationObject) => {
     const request = op.requestBody as RequestBodyObject
     const key = Object.keys(request.content)[0]
     const media = request.content[key]
-    path = (media.schema as ReferenceObject).$ref
+    if (media.schema && media.schema.hasOwnProperty('$ref')) {
+      path = (media.schema as ReferenceObject).$ref
+    } else {
+      const schema = media.schema as SchemaObject
+      let newType = typeMap(schema.type)
+      if (schema.additionalProperties && schema.additionalProperties.hasOwnProperty('type')) {
+        const addSchema = schema.additionalProperties as SchemaObject
+        newType = typeMap(addSchema.type, addSchema.format)
+      }
+      return {
+        name: 'body',
+        // @ts-ignore
+        required: !!op.requestBody.required,
+        schema: {
+          type: newType
+        },
+        in: 'body',
+        // @ts-ignore
+        description: op.requestBody.description || newType
+      } as IMethodParameter
+    }
   }
-  const typeName = path.substr(path.lastIndexOf("/")+1)
+  let typeName
+  try {
+    typeName = path.substr(path.lastIndexOf("/")+1)
+  } catch (e) {
+    console.log(dump(op))
+    quit(e)
+  }
+
   const result : IMethodParameter = {
     name: 'body',
     // @ts-ignore
