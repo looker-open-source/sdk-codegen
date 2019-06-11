@@ -26,6 +26,7 @@
 
 import { ParameterStyle, SchemaObject, ExampleObject, ContentObject, OperationObject, ReferenceObject, RequestBodyObject } from "openapi3-ts"
 import { code, typeMap, commentBlock, dump, quit } from "./utils"
+import { getSchemaRef, isRefObject, jsonPath } from "./specSupport";
 
 export declare type MethodParameterLocation = 'path' | 'body' | 'query' | 'header' | 'cookie'
 
@@ -209,14 +210,14 @@ const getRequestParam = (op: OperationObject) => {
   const upPrefix = 'Write'
   if (!op.requestBody) return null
   let path
-  if (op.requestBody.hasOwnProperty('$ref')) {
+  if (isRefObject(op.requestBody)) {
     path = (op.requestBody as ReferenceObject).$ref
   }
   else {
     const request = op.requestBody as RequestBodyObject
     const key = Object.keys(request.content)[0]
     const media = request.content[key]
-    if (media.schema && media.schema.hasOwnProperty('$ref')) {
+    if (isRefObject(media.schema)) {
       path = (media.schema as ReferenceObject).$ref
     } else {
       const schema = media.schema as SchemaObject
@@ -260,29 +261,45 @@ const getRequestParam = (op: OperationObject) => {
   return result
 }
 
+const getResponse = (op: OperationObject) => {
+  if (!op.responses) {
+    dump(op)
+    quit(new Error('responses not found'))
+  }
+  const responses = op.responses
+  let obj
+  let path
+  if (responses.default) {
+    obj = responses.default
+  } else {
+    obj = responses["200"]
+  }
+  if (isRefObject(obj)) {
+    path = obj.$ref
+  } else {
+    path = jsonPath(['application/json', 'schema', '$ref'], obj.content)
+    if (!path) {
+      dump(op)
+      quit(new Error('response path not found'))
+    }
+  }
+  const schema = getSchemaRef(path)
+  return schema
+}
+
 // - list items in precedence order as defined in paramSorter
 // - inject body parameter from request object if it exists
 // - exclude readOnly parameters
 export class MethodParameters {
 
   items: IMethodParameter[] = []
+  response: SchemaObject | null;
 
   constructor(op: OperationObject) {
     const list = asParams(op.parameters)
     const request = getRequestParam(op)
-    // if (requestSchema && requestSchema.properties) {
-    //   Object
-    //     .entries(requestSchema.properties)
-    //     .forEach(([name, param]) => {
-    //       if (param) {
-    //         const schema = param as SchemaObject
-    //         if (schema) {
-    //           list.push(schemaToParam(name, schema))
-    //         }
-    //       }
-    //     })
-    // }
     if (request) list.push(request)
+    this.response = getResponse(op)
     this.items = list
       .filter(p => !p.readOnly)
       .sort((p1, p2) => locationSorter(p1, p2))

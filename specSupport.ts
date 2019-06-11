@@ -55,7 +55,7 @@ export const jsonPath = (path: string | string[], item: any = api, splitter: str
   return item
 }
 
-const isRefObject = (obj: any) => obj && obj.hasOwnProperty('$ref')
+export const isRefObject = (obj: any) => obj && obj.hasOwnProperty('$ref')
 
 export const getSchemaRef = (path: string | string[], splitter: string = "/") : SchemaObject | null => {
   let reference = jsonPath(path)
@@ -99,7 +99,7 @@ export const getRequestSchema = (op: OperationObject) => {
 // omit read-only values
 // list all required items first
 // list optional items second with default values for languages that support default named items
-// - generate parameter declarations, including default named values for optional parameters
+// - determine parameter declarations, including default named values for optional parameters
 // - group method signature parameters into prioritized locations:
 //  - required:
 //    - path
@@ -114,7 +114,8 @@ export const getRequestSchema = (op: OperationObject) => {
 //    - header
 //    - cookie
 // - invoke API method with provided param groups
-// - return result
+// - determine return type for method
+// - support async and generic syntax for those languages supporting it
 const processMethod = (endpoint: string, http: string, op: OperationObject) => {
   const params = new MethodParameters(op)
   const data = {
