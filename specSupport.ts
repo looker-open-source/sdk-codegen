@@ -37,7 +37,7 @@ export let api: OpenAPIObject
 export let typeDict: { [name: string]: SchemaObject } = {}
 
 const methodTemplate = fs.readFileSync('./method.hbs', utf8)
-const template = Handlebars.compile(methodTemplate)
+export const template = Handlebars.compile(methodTemplate)
 // template({methods:null})
 
 // Retrieve an api object via its JSON path
@@ -96,6 +96,15 @@ export const getRequestSchema = (op: OperationObject) => {
   return null
 }
 
+export interface IRestMethod {
+  endpoint: string,
+  httpMethod: string,
+  operationId: string,
+  description: string,
+  summary: string,
+  params: MethodParameters
+}
+
 // omit read-only values
 // list all required items first
 // list optional items second with default values for languages that support default named items
@@ -116,29 +125,34 @@ export const getRequestSchema = (op: OperationObject) => {
 // - invoke API method with provided param groups
 // - determine return type for method
 // - support async and generic syntax for those languages supporting it
-const processMethod = (endpoint: string, http: string, op: OperationObject) => {
-  const params = new MethodParameters(op)
+export const processMethod = (endpoint: string, httpMethod: string, op: OperationObject) => {
   const data = {
     endpoint: endpoint,
-    http: http,
+    httpMethod: httpMethod,
     operationId: op.operationId,
     description: commentBlock(op.description || ''),
     summary: op.summary,
-    params: params,
-  }
+    params: new MethodParameters(op),
+  } as IRestMethod
   return data
 }
 
-const processEndpoint = (endpoint: string, path: PathsObject) => {
+export interface IRestEndpoint {
+  methods: IRestMethod[]
+}
+
+export const processEndpoint = (endpoint: string, path: PathsObject) => {
   let methods: any[] = []
-  Object.entries(path).forEach(([http, op]) => {
-    methods.push(processMethod(endpoint, http, op))
+  Object.entries(path).forEach(([httpMethod, op]) => {
+    methods.push(processMethod(endpoint, httpMethod, op))
   })
-  return methods
+  return {
+    methods: methods
+  } as IRestEndpoint
 }
 
 // Put all schema types into a dictionary for quick retrieval during generation
-const loadSchema = (spec: OpenAPIObject = api) => {
+export const loadSchema = (spec: OpenAPIObject = api) => {
   if (!spec.components) return
   if (!spec.components.schemas) return
   Object.entries(spec.components.schemas).forEach(([name, item]) => {

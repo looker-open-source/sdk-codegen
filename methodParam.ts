@@ -294,8 +294,10 @@ export class MethodParameters {
 
   items: IMethodParameter[] = []
   response: SchemaObject | null;
+  operation: OperationObject
 
   constructor(op: OperationObject) {
+    this.operation = op
     const list = asParams(op.parameters)
     const request = getRequestParam(op)
     if (request) list.push(request)

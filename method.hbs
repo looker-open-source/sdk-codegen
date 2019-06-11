@@ -1,8 +1,9 @@
 
 {{#each methods}}
-  # {{http}} {{{endpoint}}}
-  {{{description}}}
-  def {{operationId}}{{#if params.allParams}}{{#each params.allParams}}{{#if comment}}{{{comment}}}/n{{/if}}{{code.paramIndent}}{{name}}: {{type}}{{#if default}} = {{{default}}}{{/if}}{{/each}}{{else}}{{{code.paramEmptyList}}}{{/if}}
-    {{#summary}}"""{{{summary}}}"""{{/summary}}
-    return {{http}}{{{code.argOpenList}}}'{{{endpoint}}}'{{#params.allArgs}},{{params.allArgs}}{{/params.allArgs}}{{{code.argCloseList}}}
+code.argOpenList={{{code.argOpenList}}}foo{{{code.argCloseList}}}
+# {{http}} {{{endpoint}}}
+{{{description}}}
+def {{operationId}}{{#if params.allParams}}{{#each params.allParams}}{{#if comment}}{{{comment}}}/n{{/if}}{{code.paramIndent}}{{name}}: {{type}}{{#if default}} = {{{default}}}{{/if}}{{/each}}{{else}}{{{code.paramEmptyList}}}{{/if}}
+  {{#summary}}"""{{{summary}}}"""{{/summary}}
+  return {{httpMethod}}{{{code.argOpenList}}}'{{{endpoint}}}'{{#params.allArgs}},{{params.allArgs}}{{/params.allArgs}}{{{code.argCloseList}}}
 {{/each}}

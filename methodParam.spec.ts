@@ -2,7 +2,7 @@ import { MethodParameters } from './methodParam'
 import { loadSpec, jsonPath } from './specSupport'
 import { OperationObject } from 'openapi3-ts'
 
-describe('basic', () => {
+describe('method params', () => {
 
   beforeAll( ()=> {
     loadSpec('./Looker.3.1.oas.json')
@@ -63,7 +63,8 @@ describe('basic', () => {
   })
 
   it('get request', () => {
-    const op = jsonPath(['paths', '/queries/{query_id}', 'get']) as OperationObject
+    const endpoint = '/queries/{query_id}'
+    const op = jsonPath(['paths', endpoint, 'get']) as OperationObject
     expect(op).not.toBeUndefined()
     const p = new MethodParameters(op)
     expect(p.allParams.length).toBe(2)
