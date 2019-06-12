@@ -24,9 +24,9 @@
  * THE SOFTWARE.
  */
 
-import { ParameterStyle, SchemaObject, ExampleObject, ContentObject, OperationObject, ReferenceObject, RequestBodyObject } from "openapi3-ts"
-import { code, typeMap, commentBlock, dump, quit } from "./utils"
-import { isRefObject, getResponseSchema } from "./specSupport"
+import { ParameterStyle, SchemaObject, ExampleObject, ContentObject, OperationObject } from "openapi3-ts"
+import { code, typeMap, commentBlock } from "./utils"
+import { getResponseSchema, getRequestBodySchema } from "./specSupport"
 
 export declare type MethodParameterLocation = 'path' | 'body' | 'query' | 'header' | 'cookie'
 
@@ -172,45 +172,9 @@ export class MethodParameter implements IMethodParameter {
 const getRequestParam = (op: OperationObject) => {
   const upPrefix = 'Write'
   if (!op.requestBody) return null
-  let path
-  if (isRefObject(op.requestBody)) {
-    path = (op.requestBody as ReferenceObject).$ref
-  }
-  else {
-    const request = op.requestBody as RequestBodyObject
-    const key = Object.keys(request.content)[0]
-    const media = request.content[key]
-    if (isRefObject(media.schema)) {
-      path = (media.schema as ReferenceObject).$ref
-    } else {
-      const schema = media.schema as SchemaObject
-      let newType = typeMap(schema.type)
-      if (schema.additionalProperties && schema.additionalProperties.hasOwnProperty('type')) {
-        const addSchema = schema.additionalProperties as SchemaObject
-        newType = typeMap(addSchema.type, addSchema.format)
-      }
-      return {
-        name: 'body',
-        // @ts-ignore
-        required: !!op.requestBody.required,
-        schema: {
-          type: newType,
-          default: code.noBody
-        },
-        in: 'body',
-        // @ts-ignore
-        description: op.requestBody.description || newType
-      } as IMethodParameter
-    }
-  }
-  let typeName
-  try {
-    typeName = path.substr(path.lastIndexOf("/")+1)
-  } catch (e) {
-    dump(op)
-    quit(e)
-  }
-
+  const responses = getRequestBodySchema(op.requestBody)
+  const schema = responses[0].schema
+  const typeName = schema.type
   const result : IMethodParameter = {
     name: 'body',
     // @ts-ignore

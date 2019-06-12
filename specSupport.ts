@@ -65,6 +65,10 @@ export const isResponseObject = (obj: any) => {
     )
 }
 
+export const isRequestBodyObject = (obj: any) => {
+  return obj && obj.hasOwnProperty('content')
+}
+
 export const schemaType = (schema: SchemaObject) => {
   const typeDef = typeMap(schema.type, schema.format)
   let itemSchema = null
@@ -109,8 +113,28 @@ export const getSchemasFromMedia = (type: string, obj: MediaTypeObject) => {
   }
 }
 
+export const getRequestBodySchema = (obj: RequestBodyObject | ReferenceObject) => {
+  let responses: IResponseSchema[] = []
+  if (isRefObject(obj)) {
+    responses.push(getSchemaRef((obj as ReferenceObject).$ref) as IResponseSchema)
+  } else if (isRequestBodyObject(obj) && (obj as RequestBodyObject).content) {
+    const content = obj as RequestBodyObject
+    // TODO need to understand headers or links
+    Object.keys(content).forEach(key => {
+      let schema = resolveSchema(content[key])
+      schema.required = schema.required || content.required
+      if (schema) {
+        responses.push({name: content.description, schema: schema } as IResponseSchema)
+      }
+    })
+  } else {
+    // must be "any", cast to schema
+  }
+  return responses
+}
+
 export const getResponseSchema = (obj: ResponseObject | ReferenceObject | any) => {
-  // TODO need to populate description for all paths
+  // TODO need to populate description for all schema
   let responses: IResponseSchema[] = []
   if (isRefObject(obj)) {
     responses.push(getSchemaRef(obj.$ref) as IResponseSchema)
