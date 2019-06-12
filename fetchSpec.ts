@@ -72,12 +72,25 @@ export const fetchSpecFile = async (name: string, props: SDKConfigProps) => {
   if (fs.existsSync(fileName)) return fileName
 
   try {
-    const token = await login(props)
-    const response = await fetch(specFileUrl(props), { headers: { 'Authorization': `token ${token}` } })
+    let response = null
+    let token = null
+    try {
+      // Try first without login. Most Looker instances don't require auth for metadata
+      response = await fetch(specFileUrl(props))
+    } catch (err) {
+      // Woops!  Ok, try again with login
+      token = await login(props)
+      response = await fetch(specFileUrl(props), { headers: { 'Authorization': `token ${token}` } })
+    }
     const content = await response.text()
     fs.writeFileSync(fileName, content)
-    await logout(props, token)
+
+    if (token) {
+      await logout(props, token)
+    }
+
     return fileName
+
   } catch (err) {
     console.log(err)
     return
