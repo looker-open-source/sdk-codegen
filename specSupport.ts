@@ -29,7 +29,7 @@ import * as fs from 'fs'
 import { SDKConfigProps } from './sdkConfig'
 import { OpenAPIObject, OpenApiBuilder, PathsObject, SchemaObject, OperationObject, RequestBodyObject, ReferenceObject } from 'openapi3-ts'
 import { logConvert } from './convert'
-import { utf8, commentBlock, code } from './utils'
+import { utf8, commentBlock, code, ICodePattern } from './utils'
 import { MethodParameters } from './methodParam'
 import * as Handlebars from 'handlebars'
 
@@ -102,6 +102,7 @@ export interface IRestMethod {
   operationId: string,
   description: string,
   summary: string,
+  code: ICodePattern,
   params: MethodParameters
 }
 
@@ -132,6 +133,7 @@ export const processMethod = (endpoint: string, httpMethod: string, op: Operatio
     operationId: op.operationId,
     description: commentBlock(op.description || ''),
     summary: op.summary,
+    code: code,
     params: new MethodParameters(op),
   } as IRestMethod
   return data

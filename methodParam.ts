@@ -256,7 +256,9 @@ const getRequestParam = (op: OperationObject) => {
     },
     in: 'body',
     // @ts-ignore
-    description: op.requestBody.description || typeName
+    description: op.requestBody.description || typeName,
+    // @ts-ignore
+    comment: commentBlock(op.requestBody.description || typeName, code.paramIndent)
   }
   return result
 }

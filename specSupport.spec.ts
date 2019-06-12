@@ -1,6 +1,6 @@
 import { loadSpec, jsonPath, processEndpoint, template } from "./specSupport"
 import { PathsObject } from "openapi3-ts"
-import { code, log } from "./utils"
+import { log } from "./utils"
 
 describe('spec support', () => {
 
@@ -15,9 +15,9 @@ describe('spec support', () => {
     expect(ep.methods.length).toBe(1)
     const params = ep.methods[0].params
     expect(params.allParams.length).toBe(2)
-    const output = template({methods: ep.methods, code: code})
+    const data = { methods: ep.methods }
+    const output = template(data)
     expect(output).not.toBeFalsy()
-    console.log({code})
     log(output)
   })
 
