@@ -51,48 +51,10 @@ export interface IMethodParameter {
   content?: ContentObject
 }
 
-/*
-export interface SchemaObject extends ISpecificationExtension {
-    nullable?: boolean;
-    discriminator?: DiscriminatorObject;
-    readOnly?: boolean;
-    writeOnly?: boolean;
-    xml?: XmlObject;
-    externalDocs?: ExternalDocumentationObject;
-    example?: any;
-    examples?: any[];
-    deprecated?: boolean;
-    type?: string;
-    allOf?: (SchemaObject | ReferenceObject)[];
-    oneOf?: (SchemaObject | ReferenceObject)[];
-    anyOf?: (SchemaObject | ReferenceObject)[];
-    not?: SchemaObject | ReferenceObject;
-    items?: SchemaObject | ReferenceObject;
-    properties?: {
-        [propertyName: string]: (SchemaObject | ReferenceObject);
-    };
-    additionalProperties?: (SchemaObject | ReferenceObject | boolean);
-    description?: string;
-    format?: string;
-    default?: any;
-    title?: string;
-    multipleOf?: number;
-    maximum?: number;
-    exclusiveMaximum?: boolean;
-    minimum?: number;
-    exclusiveMinimum?: boolean;
-    maxLength?: number;
-    minLength?: number;
-    pattern?: string;
-    maxItems?: number;
-    minItems?: number;
-    uniqueItems?: boolean;
-    maxProperties?: number;
-    minProperties?: number;
-    required?: string[];
-    enum?: any[];
+export interface IResponseSchema {
+  name: string
+  schema: SchemaObject
 }
-*/
 
 const noMeth = () => {
   return {
@@ -231,7 +193,8 @@ const getRequestParam = (op: OperationObject) => {
         // @ts-ignore
         required: !!op.requestBody.required,
         schema: {
-          type: newType
+          type: newType,
+          default: code.noBody
         },
         in: 'body',
         // @ts-ignore
@@ -243,7 +206,7 @@ const getRequestParam = (op: OperationObject) => {
   try {
     typeName = path.substr(path.lastIndexOf("/")+1)
   } catch (e) {
-    console.log(dump(op))
+    dump(op)
     quit(e)
   }
 
@@ -252,7 +215,8 @@ const getRequestParam = (op: OperationObject) => {
     // @ts-ignore
     required: !!op.requestBody.required,
     schema: {
-      type: `${upPrefix}${typeName}`
+      type: `${upPrefix}${typeName}`,
+      default: code.noBody
     },
     in: 'body',
     // @ts-ignore
@@ -274,19 +238,44 @@ const getResponse = (op: OperationObject) => {
   if (responses.default) {
     obj = responses.default
   } else {
-    obj = responses["200"]
+    const keys = Object.keys(responses).sort()
+    for (let key of keys) {
+      const code = parseInt(key, 10)
+      if ((200 <= code) && (code <= 208)) {
+        obj = responses[key]
+        break
+      }
+    }
+    if (!obj) {
+      dump(op)
+      quit(new Error('No 2xx response found'))
+    }
   }
   if (isRefObject(obj)) {
     path = obj.$ref
   } else {
-    path = jsonPath(['application/json', 'schema', '$ref'], obj.content)
+    const schema = jsonPath(['application/json', 'schema'], obj.content) as SchemaObject
+    if (schema.type === "array") {
+      // TODO we need to process/resolve arrays correctly
+      if (isRefObject(schema.items!)) {
+        // @ts-ignore
+        path = schema.items!.$ref
+      }
+    } else {
+      path = schema.$ref
+    }
     if (!path) {
       dump(op)
       quit(new Error('response path not found'))
     }
   }
-  const schema = getSchemaRef(path)
-  return schema
+  const schemaName = path.substr(path.lastIndexOf("/")+1)
+  let schema = getSchemaRef(path)
+  if (schema) schema.default = schema.default || code.noBody
+  return {
+    name: schemaName,
+    schema: schema
+  } as IResponseSchema
 }
 
 // - list items in precedence order as defined in paramSorter
@@ -295,7 +284,7 @@ const getResponse = (op: OperationObject) => {
 export class MethodParameters {
 
   items: IMethodParameter[] = []
-  response: SchemaObject | null;
+  response: IResponseSchema
   operation: OperationObject
 
   constructor(op: OperationObject) {

@@ -23,6 +23,8 @@ argSeparator: ", "
 argOpenList: "("
 # Closing for function call arguments
 argCloseList: ")"
+# Type for default body parameter assignment
+noBody: "None"
 
 # mapping of OpenApi schema type.format to language-specific types and defaults
 # syntax:
@@ -32,81 +34,81 @@ argCloseList: ")"
 typeMap:
   number:
     type: double
-    default: 0
+    default: None
 
   number.float:
     type: float
-    default: 0
+    default: None
 
   number.double:
     type: double
-    default: 0
+    default: None
 
   integer:
     type: int
-    default: 0
+    default: None
 
   integer.int32:
     type: int
-    default: 0
+    default: None
 
   integer.int64:
     type: long
-    default: 0
+    default: None
 
   string:
     type: string
-    default: ''
+    default: None
 
   string.date:
     type: date
-    default: ''
+    default: None
 
   string.date-time:
     type: datetime
-    default: ''
+    default: None
 
   string.password:
     type: Password
-    default: ''
+    default: None
 
   string.byte:
     type: base64
-    default: ''
+    default: None
 
   string.binary:
     type: binary
-    default: ''
+    default: None
 
   string.email:
     type: Email
-    default: ''
+    default: None
 
   string.uuid:
     type: uuid
-    default: ''
+    default: None
 
   string.uri:
     type: uri
-    default: ''
+    default: None
 
   string.hostname:
     type: hostname
-    default: ''
+    default: None
 
   string.ipv4:
     type: ipv4
-    default: ''
+    default: None
 
   string.ipv6:
     type: ipv6
-    default: ''
+    default: None
 
   boolean:
     type: boolean
-    default: ''
+    default: None
 
   array:
     type: array
-    default: []
+    default: None
 

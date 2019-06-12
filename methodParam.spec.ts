@@ -41,6 +41,8 @@ describe('method params', () => {
     expect(p.queryArgs).toBe('force_production, limit, apply_vis, cache, image_width, image_height, generate_drill_links, apply_formatting, cache_only, path_prefix, rebuild_pdts, server_table_calcs, fields')
     const body = p.bodyParams[0]
     expect(body.schema.type).toBe('WriteCreateQueryTask')
+    expect(p.response).not.toBeFalsy()
+    expect(p.response!.name).toBe('QueryTask')
   })
 
   it('request data action', () => {
@@ -79,4 +81,16 @@ describe('method params', () => {
     expect(p.queryArgs).toBe('fields')
   })
 
+  it('get users', () => {
+    // TODO make this process array types correctly
+    const endpoint = '/users'
+    const op = jsonPath(['paths', endpoint, 'get']) as OperationObject
+    expect(op).not.toBeUndefined()
+    const p = new MethodParameters(op)
+    expect(p.allParams.length).toBe(5)
+    expect(p.requiredParams.length).toBe(0)
+    expect(p.optionalParams.length).toBe(5)
+    expect(p.pathParams.length).toBe(0)
+    expect(p.queryArgs).toBe('fields, page, per_page, sorts, ids')
+  })
 })

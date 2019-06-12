@@ -99,6 +99,7 @@ export interface ICodePattern {
   argSeparator: string,
   argOpenList: string,
   argCloseList: string,
+  noBody: string,
   typeMap: ITypeMap[]
 }
 

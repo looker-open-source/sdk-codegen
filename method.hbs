@@ -1,10 +1,16 @@
 
 {{#each methods}}
-# {{http}} {{{endpoint}}}
+# {{httpMethod}} {{{endpoint}}}
 {{{description}}}
 def {{operationId}}{{#if params.allParams}}{{{code.paramOpenList}}}{{#each params.allParams}}{{#if @index}},{{/if}}{{#if comment}}
 {{{comment}}}{{/if}}
-    {{name}}: {{schema.type}}{{#if schema.default}} = {{{schema.default}}}{{/if}}{{/each}}{{else}}{{{code.paramEmptyList}}}{{/if}}{{#if summary}}
+    {{name}}: {{schema.type}}{{#if required}}{{else}} = {{{schema.default}}}{{/if}}{{/each}}){{#if params.response}} -> {{{params.response.name}}}{{/if}}:{{else}}{{{code.paramEmptyList}}}{{/if}}{{#if summary}}
     """{{{summary}}}"""{{/if}}
-    return {{httpMethod}}{{{code.argOpenList}}}'{{{endpoint}}}'{{#if params.allArgs}},{{params.allArgs}}{{/if}}{{{code.argCloseList}}}
+    return api.{{httpMethod}}{{{code.argOpenList}}}'{{{endpoint}}}'{{#if params.pathArgs}},
+      path=[{{{params.pathArgs}}}]{{/if}}{{#if params.bodyArgs}},
+      body={{{params.bodyArgs}}}{{/if}}{{#if params.queryArgs}},
+      query=[{{{params.queryArgs}}}]{{/if}}{{#if params.headerArgs}},
+      header=[{{{params.headerArgs}}}]{{/if}}{{#if params.cookieArgs}},
+      cookie=[{{{params.cookieArgs}}}]{{/if}}
+    {{{code.argCloseList}}}
 {{/each}}
