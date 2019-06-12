@@ -31,10 +31,21 @@ export const utf8 = 'utf-8'
  // Abstraction of log so it can be skipped when quiet mode is enabled
 export const log = (message?: any) => console.log(message)
 
+export const debug = (message: any, value?: any) => {
+  if (value !== undefined) console.log(message, '=>', JSON.stringify(value, null, 2))
+  else console.log(message)
+  return ''
+}
+
 export const dump = (value: any) => console.log(JSON.stringify(value, null, 2))
 
-export const quit = (err?: Error) => {
+export const quit = (err?: Error | string) => {
   if (err) {
+    if (typeof err === "string") {
+      const message = err
+      err = new Error('Failure')
+      err.message = message
+    }
     console.error(`Error: ${err.name}, ${err.message}`)
     console.error(err.stack)
     process.exit(1)
@@ -115,7 +126,7 @@ export const typeMap = (type?: string, format?: string) => {
   // @ts-ignore
   const result = code.typeMap[typeFormat]
   if (!result) {
-    return type
+    return {type: type}
   }
   return result
 }

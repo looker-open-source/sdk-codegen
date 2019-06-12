@@ -27,10 +27,10 @@
 import * as fs from 'fs'
 // import { TargetLanguages, GeneratorSpec as LanguageSpec } from './targetLanguages'
 import { SDKConfigProps } from './sdkConfig'
-import { OpenAPIObject, OpenApiBuilder, PathsObject, SchemaObject, OperationObject, RequestBodyObject, ReferenceObject } from 'openapi3-ts'
+import { OpenAPIObject, OpenApiBuilder, PathsObject, SchemaObject, OperationObject, RequestBodyObject, ReferenceObject, ResponseObject, MediaTypeObject } from 'openapi3-ts'
 import { logConvert } from './convert'
-import { utf8, commentBlock, code, ICodePattern } from './utils'
-import { MethodParameters } from './methodParam'
+import { utf8, commentBlock, code, ICodePattern, dump, debug, quit, typeMap } from './utils'
+import { MethodParameters, IResponseSchema } from './methodParam'
 import * as Handlebars from 'handlebars'
 
 export let api: OpenAPIObject
@@ -57,11 +57,104 @@ export const jsonPath = (path: string | string[], item: any = api, splitter: str
 
 export const isRefObject = (obj: any) => obj && obj.hasOwnProperty('$ref')
 
+export const isResponseObject = (obj: any) => {
+  return obj && obj.hasOwnProperty('description') &&
+    (obj.hasOwnProperty('headers')
+    ||obj.hasOwnProperty('content')
+    ||obj.hasOwnProperty('links')
+    )
+}
+
+export const schemaType = (schema: SchemaObject) => {
+  const typeDef = typeMap(schema.type, schema.format)
+  let itemSchema = null
+  let itemType = ''
+  if (schema.items) {
+    // This can probably reuse some other code
+    itemSchema = resolveSchema(schema.items)
+  } else if (schema.additionalProperties) {
+    itemSchema = resolveSchema(schema.additionalProperties)
+  }
+  if (itemSchema) {
+    const itemDef = typeMap(itemSchema.type, itemSchema.format)
+    itemType = itemDef.type
+    // TODO need to handle more reference types?
+    switch (typeDef.type) {
+      case "array": typeDef.type = itemType + '[]'; break
+      case "object": typeDef.type = `Dict[${itemType}]`; break
+    }
+  }
+  return typeDef
+}
+
+export const resolveSchema = (schema: SchemaObject | ReferenceObject | any) => {
+  if (isRefObject(schema)) {
+    return getSchemaRef(schema.$ref)
+  }
+  if (schema.type) {
+    return schemaType(schema)
+  }
+  return schemaType({
+    type: schema.type,
+    format: schema.format,
+    items: schema.items,
+    additionalProperties: schema.additionalProperties
+  })
+}
+
+export const getSchemasFromMedia = (type: string, obj: MediaTypeObject) => {
+  return {
+    name: `_as${type.substr(type.lastIndexOf("/")+1)}`,
+    schema: resolveSchema(obj.schema)
+  }
+}
+
+export const getResponseSchema = (obj: ResponseObject | ReferenceObject | any) => {
+  // TODO need to populate description for all paths
+  let responses: IResponseSchema[] = []
+  if (isRefObject(obj)) {
+    responses.push(getSchemaRef(obj.$ref) as IResponseSchema)
+  } else if (isResponseObject(obj) && obj.content) {
+    // TODO need to understand headers or links
+    Object.keys(obj.content).forEach(key => {
+      const media = obj.content[key]
+      const response = getSchemasFromMedia(key, media)
+      responses.push(response)
+    })
+  } else {
+    // must be "any", cast to schema
+  }
+  return responses
+}
+
+// responses are a http code-keyed collection that can be:
+// - ResponseObject
+// - ReferenceObject
+// - any (directly defined type)
+export const getResponses = (op: OperationObject) => {
+  if (!op.responses) {
+    dump(op)
+    quit('No responses found for operation')
+  }
+  let responses : IResponseSchema[] = []
+  Object.entries(op.responses).forEach(([key, response]) => {
+    const code = parseInt(key, 10)
+    if (code >= 200 && code <= 208) {
+      const responseSchema = getResponseSchema(response)
+      for (let rs of responseSchema) {
+        responses.push(rs)
+      }
+    }
+  })
+  return responses
+}
+
 export const getSchemaRef = (path: string | string[], splitter: string = "/") : SchemaObject | null => {
   let reference = jsonPath(path)
   if (!reference) return null
   // Is this a ContentObject?
   if (reference.content) {
+    // may not be able to assume application/json
     reference = jsonPath(["application/json", "schema"], reference.content)
     if (reference) {
       path = reference.$ref
@@ -74,7 +167,7 @@ export const getSchemaRef = (path: string | string[], splitter: string = "/") : 
   let name = keys[keys.length - 1]
   const result = typeDict[name]
   if (!result) {
-    console.log(path, "not found")
+    debug(`${path} not found`)
   }
   return result
 }
@@ -174,7 +267,10 @@ export const processSpec = async (name: string, props: SDKConfigProps) => {
   const specFile = await logConvert(name, props)
   loadSpec(specFile)
   let methods: any[] = []
-  Object.entries(api.paths).forEach(([endpoint, path]) => methods.push(processEndpoint(endpoint, path)))
+  Object.entries(api.paths).forEach(([endpoint, path]) => {
+    for (let method of processEndpoint(endpoint, path).methods) methods.push(method)
+  })
+  // debug('methods[0]', methods[0])
   const view = {
     methods: methods,
     code: code

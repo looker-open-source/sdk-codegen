@@ -26,7 +26,7 @@
 
 import { ParameterStyle, SchemaObject, ExampleObject, ContentObject, OperationObject, ReferenceObject, RequestBodyObject } from "openapi3-ts"
 import { code, typeMap, commentBlock, dump, quit } from "./utils"
-import { getSchemaRef, isRefObject, jsonPath } from "./specSupport";
+import { isRefObject, getResponseSchema } from "./specSupport"
 
 export declare type MethodParameterLocation = 'path' | 'body' | 'query' | 'header' | 'cookie'
 
@@ -45,7 +45,7 @@ export interface IMethodParameter {
   explode?: boolean
   allowReserved?: boolean
   examples?: {
-      [param: string]: ExampleObject
+    [param: string]: ExampleObject
   }
   example?: any
   content?: ContentObject
@@ -120,7 +120,7 @@ export class MethodParameter implements IMethodParameter {
   static propNames = ['name','schema','in','readOnly','description','comment','required','deprecated',
     'allowEmptyValue', 'style','explode', 'allowReserved','examples','example','content']
 
-  name: string = '';
+  name: string = ''
   schema: SchemaObject = {};
   in: MethodParameterLocation = 'query'
 
@@ -168,6 +168,7 @@ export class MethodParameter implements IMethodParameter {
   }
 }
 
+// TODO replace this with a cleaner version modeled after getResponseSchema
 const getRequestParam = (op: OperationObject) => {
   const upPrefix = 'Write'
   if (!op.requestBody) return null
@@ -227,64 +228,13 @@ const getRequestParam = (op: OperationObject) => {
   return result
 }
 
-const getResponse = (op: OperationObject) => {
-  if (!op.responses) {
-    dump(op)
-    quit(new Error('responses not found'))
-  }
-  const responses = op.responses
-  let obj
-  let path
-  if (responses.default) {
-    obj = responses.default
-  } else {
-    const keys = Object.keys(responses).sort()
-    for (let key of keys) {
-      const code = parseInt(key, 10)
-      if ((200 <= code) && (code <= 208)) {
-        obj = responses[key]
-        break
-      }
-    }
-    if (!obj) {
-      dump(op)
-      quit(new Error('No 2xx response found'))
-    }
-  }
-  if (isRefObject(obj)) {
-    path = obj.$ref
-  } else {
-    const schema = jsonPath(['application/json', 'schema'], obj.content) as SchemaObject
-    if (schema.type === "array") {
-      // TODO we need to process/resolve arrays correctly
-      if (isRefObject(schema.items!)) {
-        // @ts-ignore
-        path = schema.items!.$ref
-      }
-    } else {
-      path = schema.$ref
-    }
-    if (!path) {
-      dump(op)
-      quit(new Error('response path not found'))
-    }
-  }
-  const schemaName = path.substr(path.lastIndexOf("/")+1)
-  let schema = getSchemaRef(path)
-  if (schema) schema.default = schema.default || code.noBody
-  return {
-    name: schemaName,
-    schema: schema
-  } as IResponseSchema
-}
-
 // - list items in precedence order as defined in paramSorter
 // - inject body parameter from request object if it exists
 // - exclude readOnly parameters
 export class MethodParameters {
 
   items: IMethodParameter[] = []
-  response: IResponseSchema
+  responses: IResponseSchema[]
   operation: OperationObject
 
   constructor(op: OperationObject) {
@@ -292,7 +242,7 @@ export class MethodParameters {
     const list = asParams(op.parameters)
     const request = getRequestParam(op)
     if (request) list.push(request)
-    this.response = getResponse(op)
+    this.responses = getResponseSchema(op)
     this.items = list
       .filter(p => !p.readOnly)
       .sort((p1, p2) => locationSorter(p1, p2))

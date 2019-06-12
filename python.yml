@@ -57,7 +57,7 @@ typeMap:
     default: None
 
   string:
-    type: string
+    type: str
     default: None
 
   string.date:

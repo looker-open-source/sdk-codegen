@@ -41,8 +41,8 @@ describe('method params', () => {
     expect(p.queryArgs).toBe('force_production, limit, apply_vis, cache, image_width, image_height, generate_drill_links, apply_formatting, cache_only, path_prefix, rebuild_pdts, server_table_calcs, fields')
     const body = p.bodyParams[0]
     expect(body.schema.type).toBe('WriteCreateQueryTask')
-    expect(p.response).not.toBeFalsy()
-    expect(p.response!.name).toBe('QueryTask')
+    expect(p.responses.length).toBe(2)
+    expect(p.responses[0].name).toBe('QueryTask')
   })
 
   it('request data action', () => {
