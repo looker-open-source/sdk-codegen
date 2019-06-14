@@ -25,8 +25,8 @@
  */
 
 import { ParameterStyle, SchemaObject, ExampleObject, ContentObject, OperationObject } from "openapi3-ts"
-import { code, typeMap, commentBlock } from "./utils"
-import { getResponseSchema, getRequestBodySchema } from "./specSupport"
+import { code, debug, typeMap, commentBlock } from "./utils"
+import { getRequestBodySchema, getResponses} from "./specSupport"
 
 export declare type MethodParameterLocation = 'path' | 'body' | 'query' | 'header' | 'cookie'
 
@@ -174,13 +174,16 @@ const getRequestParam = (op: OperationObject) => {
   if (!op.requestBody) return null
   const responses = getRequestBodySchema(op.requestBody)
   const schema = responses[0].schema
-  const typeName = schema.type
+  if (!schema.type) {
+    debug("no schema type", op.requestBody)
+  }
+  const typeName = schema.type || ""
   const result : IMethodParameter = {
     name: 'body',
     // @ts-ignore
     required: !!op.requestBody.required,
     schema: {
-      type: `${upPrefix}${typeName}`,
+      type: typeName.indexOf('[') < 0 ? `${upPrefix}${typeName}` : typeName,
       default: code.noBody
     },
     in: 'body',
@@ -206,7 +209,7 @@ export class MethodParameters {
     const list = asParams(op.parameters)
     const request = getRequestParam(op)
     if (request) list.push(request)
-    this.responses = getResponseSchema(op)
+    this.responses = getResponses(op)
     this.items = list
       .filter(p => !p.readOnly)
       .sort((p1, p2) => locationSorter(p1, p2))

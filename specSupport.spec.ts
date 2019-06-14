@@ -1,4 +1,4 @@
-import { loadSpec, jsonPath, processEndpoint, template, getResponses } from "./specSupport"
+import {loadSpec, jsonPath, processEndpoint, template, getResponses, getRequestBodySchema} from "./specSupport"
 import { PathsObject, OperationObject } from "openapi3-ts"
 import { log, debug } from "./utils"
 
@@ -8,6 +8,7 @@ describe('spec support', () => {
     loadSpec('./Looker.3.1.oas.json')
   })
 
+  // TODO object type (hash/dict) determination
   describe('array type determination', () => {
 
     it('/query_tasks/multi_results', () => {
@@ -26,6 +27,17 @@ describe('spec support', () => {
       debug('responses', responses)
     })
 
+  })
+
+  describe('request types', () => {
+    it('/query_tasks', () => {
+      const endpoint = '/query_tasks'
+      const oo = jsonPath(['paths', endpoint, 'post']) as OperationObject
+      expect(oo.requestBody).not.toBeFalsy()
+      const schemas = getRequestBodySchema(oo.requestBody!)
+      debug('schemas', schemas)
+      expect(schemas.length).toBe(1)
+    })
   })
 
   it('/queries', () => {
