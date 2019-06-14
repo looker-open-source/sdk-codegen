@@ -118,17 +118,19 @@ export const getRequestBodySchema = (obj: RequestBodyObject | ReferenceObject) =
   if (isRefObject(obj)) {
     responses.push(getSchemaRef((obj as ReferenceObject).$ref) as IResponseSchema)
   } else if (isRequestBodyObject(obj) && (obj as RequestBodyObject).content) {
-    const content = obj as RequestBodyObject
+    const req = (obj as RequestBodyObject)
+    const content = req.content
     // TODO need to understand headers or links
     Object.keys(content).forEach(key => {
-      let schema = resolveSchema(content[key])
+      const media = content[key]
+      let schema = resolveSchema(media.schema)
       schema.required = schema.required || content.required
       if (schema) {
-        responses.push({name: content.description, schema: schema } as IResponseSchema)
+        responses.push({name: req.description, schema: schema } as IResponseSchema)
       }
     })
   } else {
-    // must be "any", cast to schema
+    // TODO must be "any", cast to schema
   }
   return responses
 }

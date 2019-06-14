@@ -62,6 +62,8 @@ const convertSpec = async (fileName: string, openApiFile: string) => {
 
 // generate all languages for the specified configuration
 export const logConvert = async (name: string, props: SDKConfigProps) => {
+  const oaFile = openApiFileName(name, props)
+  if (fs.existsSync(oaFile)) return oaFile
   const specFile = await logFetch(name, props)
   const openApiFile = await convertSpec(specFile, openApiFileName(name, props))
   if (!openApiFile) {

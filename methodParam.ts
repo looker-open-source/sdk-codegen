@@ -244,6 +244,11 @@ export class MethodParameters {
     return list
   }
 
+  get response() {
+    if (this.responses) return this.responses[0]
+    return null
+  }
+
   // all required parameters ordered by location declaration order
   get requiredParams() {
     return this.required('path')
