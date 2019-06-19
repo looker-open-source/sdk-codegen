@@ -3,10 +3,10 @@ import { SdkGenerator } from "./sdkGenerator";
 
 describe('ts template test', () => {
   it ('outputs source with interpolations', () => {
-    const model: Models.ILookerApi = {
+    const model: Models.IApi = {
       methods: [
         {
-          httpMethod: "GET",
+          httpMethod: "get",
           endpoint: "queries/{id}/run",
           operationId: "run_query",
           type: { name: "string" },
@@ -22,7 +22,7 @@ describe('ts template test', () => {
           ],
         },
         {
-          httpMethod: "POST",
+          httpMethod: "post",
           endpoint: "queries/run/inline",
           operationId: "run_inline_query",
           type: { name: "string" },

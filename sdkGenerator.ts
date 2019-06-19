@@ -14,9 +14,9 @@ export abstract class Generator<T extends Models.IModel> {
 
   // convenience function that calls render for each item in the list
   // and collects their output in the buffer
-  each<K extends Models.IModel>(list: Array<K>, ctor: IGeneratorCtor<K>, delimiter?: string): this {
+  each<K extends Models.IModel>(list: Array<K>, ctor: IGeneratorCtor<K>, indent: string = '', delimiter?: string): this {
     const strs = list.map((model) => {
-      return new ctor(model).render()
+      return new ctor(model).render(indent)
     })
     if (delimiter) {
       this.p(strs.join(delimiter))
@@ -27,7 +27,7 @@ export abstract class Generator<T extends Models.IModel> {
     return this;
   }
 
-  abstract render(): string
+  abstract render(indent: string): string
 
   // Add one or more strings to the internal buffer
   // if the string is not empty or undefined
@@ -45,8 +45,8 @@ export abstract class Generator<T extends Models.IModel> {
     return this
   }
 
-  to_string(): string {
-    return this.buf.join('\n')
+  toString(indent: string): string {
+    return indent + this.buf.join('\n' + indent)
   }
 }
 
@@ -57,21 +57,27 @@ class ParamGenerator extends Generator<Models.IParameter> {
 }
 
 class List {
-  list: string[] = [];
+  list: string[] = []
+  indent: string = '  '
 
-  constructor(str: string | string[]) {
-    this.list = this.list.concat(str)
+  constructor(str: string | string[], indent: string) {
+    this.indent = indent
+    this.list = this.list.concat(indent+str)
   }
 
   pIf(expr: any, str: string | string[]): this {
     if (expr) {
-      this.list = this.list.concat(str)
+      this.list = this.list.concat(this.indent+str)
     }
     return this
   }
 
+  paramGroup = (section: string, args: string[] | undefined) => this.pIf(args, `${section}=[${args ? args.join(', ') : ''}]`)
+
+  paramSection = (section: string, args: string | undefined) => this.pIf(args, `${section}=${args}`)
+
   add(str: string): this {
-    this.list.push(str)
+    this.list.push(this.indent+str)
     return this
   }
 
@@ -80,15 +86,16 @@ class List {
   }
 }
 
-function each<K extends Models.IModel>(list: Array<K>, ctor: IGeneratorCtor<K>, delimiter?: string): string {
-  const strs = list.map((model) => {
-    return new ctor(model).render()
+function each<K extends Models.IModel>(
+    list: Array<K>, ctor: IGeneratorCtor<K>,
+    indent: string = '', delimiter?: string): string {
+  const values = list.map((model) => {
+    return new ctor(model).render(indent)
   })
-  return strs.join(delimiter)
+  return values.join(delimiter)
 }
 
 class MethodGenerator extends Generator<Models.IMethod> {
-
   prologue(): this {
     return this.p(`# ${this.model.httpMethod} ${this.model.endpoint}`)
     .p(this.model.description);
@@ -99,11 +106,15 @@ class MethodGenerator extends Generator<Models.IMethod> {
     return this.p(`def ${this.model.operationId}${this.paramList()}${this.returnType()}`)
   }
 
+  indent() {
+    return '  '
+  }
+
   // responsible for outputting parens or other delimiters, if needed,
   // and the list of param names and types
   paramList() : string {
-      // "Wall of params" code style
-    return `(${each(this.model.params || [], ParamGenerator, ',\n')})`
+    // "Wall of params" code style
+    return `(\n${each(this.model.params || [], ParamGenerator, this.indent(),',\n')})`
   }
 
   returnType() : string {
@@ -115,16 +126,16 @@ class MethodGenerator extends Generator<Models.IMethod> {
   }
 
   body(): this {
-    return this.p(`return http.${this.model.httpMethod}(`)
-    .p(new List(`'${this.model.endpoint}'`)
-      .pIf(this.model.pathArgs, `path=[${this.model.pathArgs}]`)
-      .pIf(this.model.bodyArg, `body=${this.model.bodyArg}`)
-      .pIf(this.model.queryArgs, `query=${this.model.queryArgs}`)
-      .pIf(this.model.headerArgs, `header=${this.model.headerArgs}`)
-      .pIf(this.model.cookieArgs, `cookie=${this.model.cookieArgs}`)
+    return this.p(`${this.indent()}return session.${this.model.httpMethod}(`)
+    .p(new List(`'${this.model.endpoint}'`, this.indent()+this.indent())
+        .paramGroup('path', this.model.pathArgs)
+        .paramSection('body',this.model.bodyArg)
+        .paramGroup( 'query', this.model.queryArgs)
+        .paramGroup('header', this.model.headerArgs)
+        .paramGroup('cookie', this.model.cookieArgs)
       .toString(',\n')
     )
-    .p(')\n')
+    .p(`${this.indent()})\n`)
   }
 
   epilogue(): this {
@@ -137,15 +148,15 @@ class MethodGenerator extends Generator<Models.IMethod> {
     .docComment()  // this ordering appears to be unique to Python?
     .body()
     .epilogue()
-    .to_string()
+    .toString(this.indent())
   }
 }
 
-export class SdkGenerator extends Generator<Models.ILookerApi> {
+export class SdkGenerator extends Generator<Models.IApi> {
   render(): string {
     return this.p(`# total API methods:${this.model.methods.length}`)
     .each(this.model.methods, MethodGenerator)
-    .to_string()
+    .toString('')
   }
 }
 
