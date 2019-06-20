@@ -1,22 +1,52 @@
-import * as Models from "./sdkModels";
+#!/usr/bin/env node
+
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2019 Looker Data Sciences, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+import * as Models from "./sdkModels"
+import {ICodeFormatter} from "./sdkModels"
+import {CodeFormatter} from "./codeFormatter"
 
 export interface IGeneratorCtor<T extends Models.IModel> {
-  new (model: T): Generator<T>
+  new (model: T, formatter: ICodeFormatter): Generator<T>
 }
 
 export abstract class Generator<T extends Models.IModel> {
+  codeFormatter: ICodeFormatter
   model: T;
   buf: string[] = [];
 
-  constructor (model: T) {
+  constructor (model: T, formatter: ICodeFormatter = new CodeFormatter()) {
     this.model = model;
+    this.codeFormatter = formatter
   }
 
   // convenience function that calls render for each item in the list
   // and collects their output in the buffer
   each<K extends Models.IModel>(list: Array<K>, ctor: IGeneratorCtor<K>, indent: string = '', delimiter?: string): this {
     const strs = list.map((model) => {
-      return new ctor(model).render(indent)
+      return new ctor(model, this.codeFormatter).render(indent)
     })
     if (delimiter) {
       this.p(strs.join(delimiter))
@@ -50,9 +80,10 @@ export abstract class Generator<T extends Models.IModel> {
   }
 }
 
+/*
 class ParamGenerator extends Generator<Models.IParameter> {
-  render(): string {
-    return `${this.model.name}: ${this.model.type.name}`;
+  render(indent: string): string {
+    return this.codeFormatter.declareParameter(indent, this.model)
   }
 }
 
@@ -88,7 +119,9 @@ class List {
 
 function each<K extends Models.IModel>(
     list: Array<K>, ctor: IGeneratorCtor<K>,
-    indent: string = '', delimiter?: string): string {
+    formatter: ICodeFormatter,
+    indent: string = '',
+    delimiter?: string): string {
   const values = list.map((model) => {
     return new ctor(model).render(indent)
   })
@@ -106,15 +139,11 @@ class MethodGenerator extends Generator<Models.IMethod> {
     return this.p(`def ${this.model.operationId}${this.paramList()}${this.returnType()}`)
   }
 
-  indent() {
-    return '  '
-  }
-
   // responsible for outputting parens or other delimiters, if needed,
   // and the list of param names and types
-  paramList() : string {
+  paramList(indent: string) : string {
     // "Wall of params" code style
-    return `(\n${each(this.model.params || [], ParamGenerator, this.indent(),',\n')})`
+    return `(\n${each(this.model.params || [], ParamGenerator, this.codeFormatter, indent,',\n')})`
   }
 
   returnType() : string {
@@ -126,7 +155,7 @@ class MethodGenerator extends Generator<Models.IMethod> {
   }
 
   body(): this {
-    return this.p(`${this.indent()}return session.${this.model.httpMethod}(`)
+    return this.p(`${this.indent}return session.${this.model.httpMethod}(`)
     .p(new List(`'${this.model.endpoint}'`, this.indent()+this.indent())
         .paramGroup('path', this.model.pathArgs)
         .paramSection('body',this.model.bodyArg)
@@ -135,28 +164,47 @@ class MethodGenerator extends Generator<Models.IMethod> {
         .paramGroup('cookie', this.model.cookieArgs)
       .toString(',\n')
     )
-    .p(`${this.indent()})\n`)
+    .p(`${this.indent})\n`)
   }
 
   epilogue(): this {
     return this.p(`# epilogue goes here, if needed\n`)
   }
 
-  render(): string {
+  render(indent: string): string {
     return this.prologue()
     .decl()
     .docComment()  // this ordering appears to be unique to Python?
     .body()
     .epilogue()
-    .toString(this.indent())
+    .toString(indent)
   }
 }
 
-export class SdkGenerator extends Generator<Models.IApi> {
-  render(): string {
-    return this.p(`# total API methods:${this.model.methods.length}`)
-    .each(this.model.methods, MethodGenerator)
-    .toString('')
+*/
+
+export class SdkGenerator extends Generator<Models.IApi>{
+  constructor(api: Models.IApi, formatter: ICodeFormatter = new CodeFormatter()) {
+    super(api)
+    this.codeFormatter = formatter
+  }
+
+  render(indent: string) {
+    let methods : string[] = []
+    this.model.methods.forEach(m => methods.push(this.codeFormatter.declareMethod(indent, m)))
+    return this
+        .p(`${indent}# total API methods: ${this.model.methods.length}`)
+        .p(methods.join('\n\n'))
+        // .each(this.model.methods, MethodGenerator)
+        .toString(indent)
   }
 }
+
+// export class SdkGenerator extends Generator<Models.IApi> {
+//   render(): string {
+//     return this.p(`# total API methods:${this.model.methods.length}`)
+//     .each(this.model.methods, MethodGenerator)
+//     .toString('')
+//   }
+// }
 
