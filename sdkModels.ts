@@ -26,6 +26,9 @@
 
 import {MethodParameterLocation} from "./methodParam";
 
+export declare type IHttpMethod = 'get' | 'put' | 'post' | 'patch' | 'delete'
+export declare type IArg = string | undefined
+
 export interface IModel {
   name?: string
 }
@@ -42,19 +45,19 @@ export interface IParameter extends IModel {
 }
 
 export interface IMethod extends IModel {
-  operationId: string // maps internally to name
-  httpMethod: string
+  operationId: string // Method constructor assigns this to method name
+  httpMethod: IHttpMethod
   endpoint: string
   type: IType
 
   description?: string
   params?: IParameter[]
   summary?: string
-  pathArgs?: string[]
+  pathArgs?: IArg[]
   bodyArg?: string
-  queryArgs?: string[]
-  headerArgs?: string[]
-  cookieArgs?: string[]
+  queryArgs?: IArg[]
+  headerArgs?: IArg[]
+  cookieArgs?: IArg[]
 }
 
 export interface IStruct extends IModel {
@@ -95,12 +98,12 @@ export interface ICodeFormatter {
   // group argument names together
   // e.g.
   //   [ row_size, page_offset ]
-  argGroup(indent: string, args: string[] ): string
+  argGroup(indent: string, args: IArg[] ): string
 
   // list arguments by name
   // e.g.
   //   row_size, page_offset
-  argList(indent: string, args: string[]): string
+  argList(indent: string, args: IArg[]): string
 
   // generate a comment block
   // e.g.
@@ -152,4 +155,5 @@ export interface ICodeFormatter {
   // generates type property
   declareProperty(indent: string, property: IParameter): string
 
+  convertType(type: IType) : IType
 }

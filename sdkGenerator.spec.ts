@@ -1,6 +1,6 @@
-import * as Models from "./sdkModels";
-import { SdkGenerator } from "./sdkGenerator";
-import {PythonFormatter} from "./python.fmt";
+import * as Models from "./sdkModels"
+import { SdkGenerator } from "./sdkGenerator"
+import {PythonFormatter} from "./python.fmt"
 
 describe('ts template test', () => {
   it ('outputs source with interpolations', () => {
@@ -10,6 +10,7 @@ describe('ts template test', () => {
           httpMethod: "get",
           endpoint: "queries/{id}/run",
             description:"run a query",
+            summary: "run query",
           operationId: "run_query",
           type: { name: "string" },
           params: [
@@ -30,6 +31,7 @@ describe('ts template test', () => {
           httpMethod: "post",
           endpoint: "queries/run/inline",
             description: "run inline query",
+            summary: "inline query",
           operationId: "run_inline_query",
           type: { name: "string" },
           params: [
