@@ -81,11 +81,12 @@ export const run = async (command: string, args: string[]) => {
 
 export const code = yaml.safeLoad(fs.readFileSync('./python.yml', utf8)) as ICodePattern
 
-export const commentBlock = (text: string | undefined, indent: string = '') => {
+export const commentBlock = (text: string | undefined, indent: string = '', commentStr: string = '') => {
   if (!text) return ''
   text = text.trim()
-  if (!text) return
-  const indenter = indent + code.commentString
+  if (!text) return ''
+  if (!commentStr) commentStr = code.commentString
+  const indenter = indent + commentStr
   return indenter + text.split("\n").join("\n" + indenter)
 }
 
