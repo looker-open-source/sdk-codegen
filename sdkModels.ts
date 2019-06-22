@@ -26,7 +26,9 @@ import * as OAS from "openapi3-ts"
 import * as fs from "fs";
 import {utf8} from "./utils";
 import {MethodParameterLocation} from "./methodParam";
-// import {getResponses} from "./specSupport";
+
+export declare type HttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
+export declare type Arg = string
 
 export interface IModel {
 }
@@ -37,14 +39,15 @@ export interface ISymbol {
 }
 
 export interface IType {
-  name?: string
+  name: string
   properties: Record<string, IProperty>
   status: string
   elementType?: IType
 
-  deprecated: boolean;
-  description: string;
-  title: string;
+  deprecated: boolean
+  description: string
+  title: string
+  default?: string
 }
 
 export interface IParameter extends ISymbol {
@@ -70,7 +73,6 @@ class MethodResponse implements IMethodResponse {
     this.type = type
   }
 }
-
 
 export interface IProperty extends ISymbol {
   nullable: boolean
@@ -131,7 +133,7 @@ class Property extends SchemadSymbol implements IProperty {
 
 export interface IMethod extends ISymbol {
   operationId: string // alias of ISymbol.name
-  httpMethod: string
+  httpMethod: HttpMethod
   endpoint: string
   resultType: IType   // alias of ISymbol.type
   primaryResponse: IMethodResponse
@@ -148,12 +150,13 @@ export interface IMethod extends ISymbol {
 }
 
 class Method extends SchemadSymbol implements IMethod {
-  readonly httpMethod: string
+  readonly httpMethod: HttpMethod
   readonly endpoint: string
   readonly primaryResponse: IMethodResponse
   responses: IMethodResponse[]
+  readonly params: IParameter[]
 
-  constructor (httpMethod: string, endpoint: string, schema: OAS.OperationObject, responses: IMethodResponse[]) {
+  constructor (httpMethod: HttpMethod, endpoint: string, schema: OAS.OperationObject, responses: IMethodResponse[]) {
     if (!schema.operationId) {
       throw new Error('Missing operationId')
     }
@@ -176,6 +179,7 @@ class Method extends SchemadSymbol implements IMethod {
     this.endpoint = endpoint
     this.responses = responses
     this.primaryResponse = primaryResponse
+    this.params = []
   }
 
   get resultType(): IType {
@@ -186,41 +190,72 @@ class Method extends SchemadSymbol implements IMethod {
     return this.name
   }
 
-  get params(): IParameter[] {
-    return []
-  }
-
-  get bodyArg(): string {
-    return ''
-  }
-
-  get cookieArgs(): string[] {
-    return []
-  }
-
-  get headerArgs(): string[] {
-    return []
-  }
-
-  get pathArgs(): string[] {
-    return []
-  }
-
-  get queryArgs(): string[] {
-    return []
-  }
-
   get summary(): string {
     return this.schema.summary || ''
+  }
+
+  private getParams(location?: MethodParameterLocation): IParameter[] {
+    if (location) {
+      return this.params.filter((p) => p.location === location)
+    }
+    return this.params
+  }
+
+  get pathParams(){
+    return this.getParams('path')
+  }
+
+  get bodyParams() {
+    return this.getParams('body')
+  }
+
+  get queryParams() {
+    return this.getParams('query')
+  }
+
+  get headerParams() {
+    return this.getParams('header')
+  }
+
+  get cookieParams() {
+    return this.getParams('cookie')
+  }
+
+  private argumentNames(location?: MethodParameterLocation): string[] {
+    return this
+    .getParams(location)
+    .map(p => p.name)
+  }
+
+  get pathArgs(){
+    return this.argumentNames('path')
+  }
+
+  get bodyArg() {
+    const body = this.argumentNames('body')
+    if (body.length === 0) return ''
+    return body[0]
+  }
+
+  get queryArgs() {
+    return this.argumentNames('query')
+  }
+
+  get headerArgs() {
+    return this.argumentNames('header')
+  }
+
+  get cookieArgs() {
+    return this.argumentNames('cookie')
   }
 }
 
 class Type implements IType {
-  readonly name?: string
+  readonly name: string
   readonly schema: OAS.SchemaObject
   readonly properties: Record<string, IProperty> = {}
 
-  constructor (schema: OAS.SchemaObject, name?: string) {
+  constructor (schema: OAS.SchemaObject, name: string) {
     this.schema = schema
     this.name = name
   }
@@ -246,13 +281,17 @@ class Type implements IType {
   get title(): string {
     return this.schema.title || ''
   }
+
+  get default(): string | undefined {
+    return this.schema.default || ''
+  }
 }
 
 class ArrayType extends Type{
   elementType: IType
 
   constructor(elementType: IType, schema: OAS.SchemaObject) {
-    super(schema)
+    super(schema, `${elementType.name}[]`)
     this.elementType = elementType
   }
 }
@@ -270,22 +309,16 @@ export interface IApiModel extends IModel {
 }
 
 export class ApiModel implements ISymbolTable, IApiModel {
-  readonly schema: OAS.OpenAPIObject | null
+  readonly schema: OAS.OpenAPIObject | undefined
   readonly methods: Record<string, IMethod> = {}
   readonly types: Record<string, IType> = {}
   private refs: Record<string, IType> = {}
 
   constructor(spec: OAS.OpenAPIObject) {
-    this.types['string'] = new IntrinsicType('string')
-    this.types['integer'] = new IntrinsicType('integer')
-    this.types['int64'] = new IntrinsicType('int64')
-    this.types['boolean'] = new IntrinsicType('boolean')
-    this.types['object'] = new IntrinsicType('object')
-    this.types['uri'] = new IntrinsicType('uri')
-    this.types['float'] = new IntrinsicType('float')
-    this.types['double'] = new IntrinsicType('double')
-    this.types['object'] = new IntrinsicType('object')
-    this.types['void'] = new IntrinsicType('void')
+    [ 'string', 'integer', 'int64', 'boolean', 'object',
+      'uri', 'float', 'double', 'void', 'datetime', 'email',
+      'uuid', 'uri', 'hostname', 'ipv4', 'ipv6',
+    ].forEach((name) => this.types[name] = new IntrinsicType(name))
 
     this.schema = spec
     this.load()
@@ -352,6 +385,12 @@ export class ApiModel implements ISymbolTable, IApiModel {
       if (schema.type === 'array' && schema.items) {
         return new ArrayType(this.resolveType(schema.items), schema)
       }
+      if (schema.format === 'date-time') {
+        return this.types['datetime']
+      }
+      if (schema.format && this.types[schema.format]) {
+        return this.types[schema.format]
+      }
       if (this.types[schema.type]) {
         return this.types[schema.type]
       }
@@ -362,7 +401,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   private loadMethods(endpoint: string, schema: OAS.PathItemObject): Method[] {
     const methods: Method[] = []
 
-    const addIfPresent = (httpMethod: string, opSchema: OAS.OperationObject | undefined) => {
+    const addIfPresent = (httpMethod: HttpMethod, opSchema: OAS.OperationObject | undefined) => {
       if (opSchema) {
         const responses = this.methodResponses(opSchema)
         methods.push(new Method(httpMethod, endpoint, opSchema, responses))
@@ -425,18 +464,18 @@ export interface ICodeFormatter {
   // group argument names together
   // e.g.
   //   [ row_size, page_offset ]
-  argGroup(indent: string, args: string[] ): string
+  argGroup(indent: string, args: Arg[] ): string
 
   // list arguments by name
   // e.g.
   //   row_size, page_offset
-  argList(indent: string, args: string[]): string
+  argList(indent: string, args: Arg[]): string
 
   // generate a comment block
   // e.g.
   //   # this is a
   //   # multi-line comment block
-  comment(indent: string, description: string | undefined): string
+  comment(indent: string, description: string): string
 
   // generates the method signature including parameter list and return type.
   // supports
@@ -482,4 +521,5 @@ export interface ICodeFormatter {
   // generates type property
   declareProperty(indent: string, property: IProperty): string
 
+  typeName(type: IType) : string
 }

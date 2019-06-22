@@ -1,15 +1,18 @@
-import * as Models from "./sdkModels";
-import { SdkGenerator } from "./sdkGenerator";
-import {PythonFormatter} from "./python.fmt";
+import * as Models from "./sdkModels"
+import { SdkGenerator } from "./sdkGenerator"
+import {PythonFormatter} from "./python.fmt"
 
 
 describe('ts template test', () => {
   it ('outputs a method in Python', () => {
-
     const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
     const gen = new SdkGenerator(apiModel, new PythonFormatter())
     const result = gen.codeFormatter.declareMethod('  ', apiModel.methods['create_look'])
-    expect(result).toBeDefined()
+    expect(result).toEqual(`  # POST /looks
+  def create_look(
+) -> LookWithQuery:
+    """Create Look"""
+    return session.POST()`)
   })
 
   it('resolves OAS schemas into types', () => {

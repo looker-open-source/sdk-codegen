@@ -24,43 +24,77 @@
 
 // Python codeFormatter
 
-import {IMethod, IParameter, IProperty, IType} from "./sdkModels"
+import {Arg, IMethod, IParameter, IProperty, IType} from "./sdkModels"
 import {CodeFormatter} from "./codeFormatter"
 
 export class PythonFormatter extends CodeFormatter {
-    argDelimiter = ', '
-    paramDelimiter = ',\n'
-    commentStr = '# '
-    nullStr = 'None'
+  commentStr = '# '
+  nullStr = 'None'
 
-    declareProperty = (indent: string, property: IProperty) =>
-        this.commentHeader(indent, property.description)
-            + `${indent}${property.name} : ${property.type.name}`
+  argDelimiter = ', '
+  paramDelimiter = ',\n'
+  propDelimiter = ',\n'
 
-    methodSignature = (indent: string, method: IMethod) => {
-        let bump = indent + this.indentStr
-        let params: string[] = []
-        if (method.params) method.params.forEach(p => params.push(this.declareParameter(bump, p)))
-        return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint}`)
-            + `${indent}def ${method.name || method.operationId}(${params.join(this.paramDelimiter)}$) -> ${method.type.name}:`
+  indentStr = '  '
+  endTypeStr = ''
+
+  // @ts-ignore
+  argGroup = (indent: string, args: Arg[]) => args && args.length !== 0 ? `[${args.join(this.argDelimiter)}]` : this.nullStr
+  // @ts-ignore
+  argList = (indent: string, args: Arg[]) => args && args.length !== 0 ? `${args.join(this.argDelimiter)}` : this.nullStr
+
+  declareProperty = (indent: string, property: IProperty) =>
+  this.commentHeader(indent, property.description)
+  + `${indent}${property.name} : ${property.type.name}`
+
+  methodSignature = (indent: string, method: IMethod) => {
+    let bump = indent + this.indentStr
+    let params: string[] = []
+    if (method.params) method.params.forEach(p => params.push(this.declareParameter(bump, p)))
+    return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint}`)
+    + `${indent}def ${method.name}(\n${params.join(this.paramDelimiter)}) -> ${this.typeName(method.type)}:\n`
+  }
+
+  declareParameter = (indent: string, param: IParameter) => {
+    return this.commentHeader(indent, param.description)
+    + `${indent}${param.name}: ${this.typeName(param.type)}`
+    + (param.required ? '' : (param.type.default ? ` = ${param.type.default}` : ''))
+  }
+
+  declareMethod = (indent: string, method: IMethod) => {
+    const bump = indent + this.indentStr
+    return this.methodSignature(indent, method)
+    + this.summary(bump, method.summary)
+    + this.httpCall(bump, method)
+  }
+
+  typeSignature = (indent: string, type: IType) =>
+  this.commentHeader(indent, type.description)
+  + `${indent}class ${type.name}:\n`
+
+  summary = (indent: string, text: string | undefined) => text ? `${indent}"""${text}"""\n` : ''
+
+  typeName = (type: IType): string => {
+    const pythonTypes: Record<string, string> = {
+      'number': 'double',
+      'integer': 'int',
+      'int32': 'int',
+      'int64': 'long',
+      'string': 'str',
+      'password': 'Password',
+      'byte': 'binary',
     }
 
-    declareParameter = (indent: string, param: IParameter) =>
-        this.commentHeader(indent, param.description)
-            + `${indent}${param.name}: ${param.type.name}`
-//            + (param.required ? '' : (param.type.default ? `= ${param.type.default}` : ''))
-
-    declareMethod = (indent: string, method: IMethod) => {
-        const bump = indent + this.indentStr
-        return this.methodSignature(indent, method)
-            + this.declareParameters(bump, method.params)
-            + this.summary(bump, method.summary)
-            + this.httpCall(bump, method)
+    if (type.elementType) {
+      // provisional typed list new in Python 3.5
+      // https://docs.python.org/3/library/typing.html
+      return `List[${this.typeName(type.elementType)}]`
     }
 
-    typeSignature = (indent: string, type: IType) =>
-        this.commentHeader(indent, type.description)
-            + `${indent}class ${type.name}:\n`
-
-    summary = (indent: string, text: string | undefined) => text ? `${indent}"""{$summary}"""` : ''
+    if (type.name) {
+      return pythonTypes[type.name] || type.name
+    } else {
+      throw new Error('Cannot output a nameless type.')
+    }
+  }
 }

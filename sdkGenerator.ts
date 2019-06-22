@@ -25,19 +25,18 @@
  */
 
 import * as Models from "./sdkModels"
-import {ICodeFormatter} from "./sdkModels"
 import {CodeFormatter} from "./codeFormatter"
 
 export interface IGeneratorCtor<T extends Models.IModel> {
-  new (model: T, formatter: ICodeFormatter): Generator<T>
+  new (model: T, formatter: Models.ICodeFormatter): Generator<T>
 }
 
 export abstract class Generator<T extends Models.IModel> {
-  codeFormatter: ICodeFormatter
+  codeFormatter: Models.ICodeFormatter
   model: T;
   buf: string[] = [];
 
-  constructor (model: T, formatter: ICodeFormatter = new CodeFormatter()) {
+  constructor (model: T, formatter: Models.ICodeFormatter = new CodeFormatter()) {
     this.model = model;
     this.codeFormatter = formatter
   }
@@ -184,7 +183,7 @@ class MethodGenerator extends Generator<Models.IMethod> {
 */
 
 export class SdkGenerator extends Generator<Models.IApiModel>{
-  constructor(api: Models.IApiModel, formatter: ICodeFormatter) {
+  constructor(api: Models.IApiModel, formatter: Models.ICodeFormatter) {
     super(api)
     this.codeFormatter = formatter
   }
