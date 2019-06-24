@@ -2,51 +2,45 @@ import * as Models from "./sdkModels"
 import { SdkGenerator } from "./sdkGenerator"
 import {PythonFormatter} from "./python.fmt"
 
+
 describe('ts template test', () => {
-  it ('outputs source with interpolations', () => {
-    const model: Models.IApi = {
-      methods: [
-        {
-          httpMethod: "get",
-          endpoint: "queries/{id}/run",
-            description:"run a query",
-            summary: "run query",
-          operationId: "run_query",
-          type: { name: "string" },
-          params: [
-            {
-              name: "query_id",
-                description: "id of query to run",
-              type: { name: "integer"},
-                location: 'path',
-            },
-            {
-              name: "limit",
-              type: { name: "integer"},
-                location: 'query'
-            },
-          ],
-        },
-        {
-          httpMethod: "post",
-          endpoint: "queries/run/inline",
-            description: "run inline query",
-            summary: "inline query",
-          operationId: "run_inline_query",
-          type: { name: "string" },
-          params: [
-            {
-              name: "query",
-                description:"query to create",
-              type: { name: "CreateQuery" },
-                location: 'body'
-            },
-          ],
-        }]
+  it ('outputs a method in Python', () => {
+    const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
+    const gen = new SdkGenerator(apiModel, new PythonFormatter())
+    const result = gen.codeFormatter.declareMethod('  ', apiModel.methods['create_look'])
+    expect(result).toEqual(`  # POST /looks
+  def create_look(
+) -> LookWithQuery:
+    """Create Look"""
+    return session.POST()`)
+  })
+
+  it('resolves OAS schemas into types', () => {
+    const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
+    expect(typeof apiModel.types['ValidationError'].elementType).toEqual('undefined')
+
+    const test = apiModel.types.ValidationError.properties.errors.type.elementType
+    expect(test && test.name).toEqual('ValidationErrorDetail')
+  })
+
+  it('loads a method with a ref type response', () => {
+    const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
+    const method = apiModel.methods['user']
+    expect(method.primaryResponse.statusCode).toEqual('200')
+    expect(method.primaryResponse.type.name).toEqual('User')
+    expect(method.type.name).toEqual('User')
+    expect(method.endpoint).toEqual('/users/{user_id}')
+    const response = method.responses.find((a) => a.statusCode === '400')
+    expect(response).toBeDefined()
+    if (response) {
+      expect(response.type.name).toEqual('Error')
     }
+  })
 
-    const result = new SdkGenerator(model, new PythonFormatter()).render('  ')
-
-    console.log(result)
+  it('loads 204 methods with void response type', () => {
+    const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
+    const method = apiModel.methods['delete_group_user']
+    expect(method.primaryResponse.statusCode).toEqual('204')
+    expect(method.primaryResponse.type.name).toEqual('void')
   })
 })

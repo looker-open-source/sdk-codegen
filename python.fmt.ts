@@ -24,79 +24,77 @@
 
 // Python codeFormatter
 
-import {IArg, IMethod, IParameter, IStruct, IType} from "./sdkModels"
+import {Arg, IMethod, IParameter, IProperty, IType} from "./sdkModels"
 import {CodeFormatter} from "./codeFormatter"
 
 export class PythonFormatter extends CodeFormatter {
-    commentStr = '# '
-    nullStr = 'None'
+  commentStr = '# '
+  nullStr = 'None'
 
-    argDelimiter = ', '
-    paramDelimiter = ',\n'
-    propDelimiter = ',\n'
+  argDelimiter = ', '
+  paramDelimiter = ',\n'
+  propDelimiter = ',\n'
 
-    indentStr = '  '
-    endTypeStr = ''
+  indentStr = '  '
+  endTypeStr = ''
 
-    // @ts-ignore
-    argGroup = (indent: string, args: IArg[]) => args && args.length !== 0 ? `[${args.join(this.argDelimiter)}]` : this.nullStr
-    // @ts-ignore
-    argList = (indent: string, args: IArg[]) => args && args.length !== 0 ? `${args.join(this.argDelimiter)}` : this.nullStr
+  // @ts-ignore
+  argGroup = (indent: string, args: Arg[]) => args && args.length !== 0 ? `[${args.join(this.argDelimiter)}]` : this.nullStr
+  // @ts-ignore
+  argList = (indent: string, args: Arg[]) => args && args.length !== 0 ? `${args.join(this.argDelimiter)}` : this.nullStr
 
-    declareProperty = (indent: string, property: IParameter) =>
-        this.commentHeader(indent, property.description)
-            + `${indent}${property.name} : ${property.type.name}`
+  declareProperty = (indent: string, property: IProperty) =>
+  this.commentHeader(indent, property.description)
+  + `${indent}${property.name} : ${property.type.name}`
 
-    methodSignature = (indent: string, method: IMethod) => {
-        let bump = indent + this.indentStr
-        let params: string[] = []
-        if (method.params) method.params.forEach(p => params.push(this.declareParameter(bump, p)))
-        return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint}`)
-            + `${indent}def ${method.name || method.operationId}(\n${params.join(this.paramDelimiter)}) -> ${method.type.name}:\n`
+  methodSignature = (indent: string, method: IMethod) => {
+    let bump = indent + this.indentStr
+    let params: string[] = []
+    if (method.params) method.params.forEach(p => params.push(this.declareParameter(bump, p)))
+    return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint}`)
+    + `${indent}def ${method.name}(\n${params.join(this.paramDelimiter)}) -> ${this.typeName(method.type)}:\n`
+  }
+
+  declareParameter = (indent: string, param: IParameter) => {
+    return this.commentHeader(indent, param.description)
+    + `${indent}${param.name}: ${this.typeName(param.type)}`
+    + (param.required ? '' : (param.type.default ? ` = ${param.type.default}` : ''))
+  }
+
+  declareMethod = (indent: string, method: IMethod) => {
+    const bump = indent + this.indentStr
+    return this.methodSignature(indent, method)
+    + this.summary(bump, method.summary)
+    + this.httpCall(bump, method)
+  }
+
+  typeSignature = (indent: string, type: IType) =>
+  this.commentHeader(indent, type.description)
+  + `${indent}class ${type.name}:\n`
+
+  summary = (indent: string, text: string | undefined) => text ? `${indent}"""${text}"""\n` : ''
+
+  typeName = (type: IType): string => {
+    const pythonTypes: Record<string, string> = {
+      'number': 'double',
+      'integer': 'int',
+      'int32': 'int',
+      'int64': 'long',
+      'string': 'str',
+      'password': 'Password',
+      'byte': 'binary',
     }
 
-    declareParameter = (indent: string, param: IParameter) => {
-        const type = this.convertType(param.type)
-        return this.commentHeader(indent, param.description)
-            + `${indent}${param.name}: ${type.name}`
-            + (param.required ? '' : (type.default ? ` = ${type.default}` : ''))
+    if (type.elementType) {
+      // provisional typed list new in Python 3.5
+      // https://docs.python.org/3/library/typing.html
+      return `List[${this.typeName(type.elementType)}]`
     }
 
-    declareMethod = (indent: string, method: IMethod) => {
-        const bump = indent + this.indentStr
-        return this.methodSignature(indent, method)
-            + this.summary(bump, method.summary)
-            + this.httpCall(bump, method)
+    if (type.name) {
+      return pythonTypes[type.name] || type.name
+    } else {
+      throw new Error('Cannot output a nameless type.')
     }
-
-    typeSignature = (indent: string, type: IStruct) =>
-        this.commentHeader(indent, type.description)
-            + `${indent}class ${type.name}:\n`
-
-    summary = (indent: string, text: string | undefined) => text ? `${indent}"""${text}"""\n` : ''
-
-    convertType = (type: IType): IType => {
-        const none = 'None'
-        switch (type.name!) {
-            case 'number': return { name: 'double', default: none}
-            case 'number.float': return { name: 'float', default: none}
-            case 'number.double': return { name: 'double', default: none}
-            case 'integer': return { name: 'int', default: none}
-            case 'integer.int32': return { name: 'int', default: none}
-            case 'integer.int64': return { name: 'long', default: none}
-            case 'string': return { name: 'str', default: none}
-            case 'string.date': return { name: 'date', default: none}
-            case 'string.date-time': return { name: 'datetime', default: none}
-            case 'string.password': return { name: 'Password', default: none}
-            case 'string.byte': return { name: 'binary', default: none}
-            case 'string.email': return { name: 'email', default: none}
-            case 'string.uuid': return { name: 'uuid', default: none}
-            case 'string.uri': return { name: 'uri', default: none}
-            case 'string.hostname': return { name: 'hostname', default: none}
-            case 'string.ipv4': return { name: 'ipv4', default: none}
-            case 'string.ipv6': return { name: 'ipv6', default: none}
-            case 'boolean': return { name: 'boolean', default: none}
-            default: return type
-        }
-    }
+  }
 }

@@ -22,54 +22,420 @@
  * THE SOFTWARE.
  */
 
-// import { ParameterObject, PathsObject, OperationObject } from "openapi3-ts"
-
+import * as OAS from "openapi3-ts"
+import * as fs from "fs";
+import {utf8} from "./utils";
 import {MethodParameterLocation} from "./methodParam";
 
-export declare type IHttpMethod = 'get' | 'put' | 'post' | 'patch' | 'delete'
-export declare type IArg = string | undefined
+export declare type HttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
+export declare type Arg = string
 
 export interface IModel {
-  name?: string
 }
 
-export interface IType extends IModel {
+export interface ISymbol {
+  name: string
+  type: IType
+}
+
+export interface IType {
+  name: string
+  properties: Record<string, IProperty>
+  status: string
+  elementType?: IType
+
+  deprecated: boolean
+  description: string
+  title: string
   default?: string
 }
 
-export interface IParameter extends IModel {
+export interface IParameter extends ISymbol {
   type: IType
   location: MethodParameterLocation
-  required?: boolean
-  description?: string
+  required: boolean
+  description: string
 }
 
-export interface IMethod extends IModel {
-  operationId: string // Method constructor assigns this to method name
-  httpMethod: IHttpMethod
-  endpoint: string
+export interface IMethodResponse {
+  statusCode: string
+  mediaType: string
   type: IType
-
-  description?: string
-  params?: IParameter[]
-  summary?: string
-  pathArgs?: IArg[]
-  bodyArg?: string
-  queryArgs?: IArg[]
-  headerArgs?: IArg[]
-  cookieArgs?: IArg[]
 }
 
-export interface IStruct extends IModel {
-  description?: string
-  properties: IParameter[]
+class MethodResponse implements IMethodResponse {
+  mediaType: string;
+  statusCode: string;
+  type: IType;
+  constructor (statusCode: string, mediaType: string, type: IType) {
+    this.statusCode = statusCode
+    this.mediaType = mediaType
+    this.type = type
+  }
 }
 
-export interface IApi extends IModel {
-  version?: string
-  description?: string
-  methods: Array<IMethod>
-  structures?: Array<IStruct>
+export interface IProperty extends ISymbol {
+  nullable: boolean
+  description: string
+  readOnly: boolean
+  writeOnly: boolean
+  deprecated: boolean
+}
+
+export interface ISymbolTable {
+  methods: Record<string, IMethod>
+  types: Record<string, IType>
+
+  resolveType(schema: OAS.SchemaObject): IType
+}
+
+class Symbol implements ISymbol {
+  name: string
+  type: IType
+  constructor (name: string, type: IType) {
+    this.name = name
+    this.type = type
+  }
+}
+
+class SchemadSymbol extends Symbol {
+  schema: OAS.SchemaObject
+
+  constructor (name: string, type: IType, schema: OAS.SchemaObject) {
+    super(name, type)
+    this.schema = schema
+  }
+
+  get description(): string {
+    return this.schema.description || ''
+  }
+
+  get deprecated(): boolean {
+    return this.schema.deprecated || this.schema['x-looker-deprecated'] || false
+  }
+}
+
+class Property extends SchemadSymbol implements IProperty {
+  required: boolean = false
+
+  get nullable(): boolean {
+    return this.schema.nullable || this.schema['x-looker-nullable'] || true
+  }
+
+  get readOnly(): boolean {
+    return this.schema.readOnly || false
+  }
+
+  get writeOnly(): boolean {
+    return this.schema.writeOnly || false
+  }
+}
+
+export interface IMethod extends ISymbol {
+  operationId: string // alias of ISymbol.name
+  httpMethod: HttpMethod
+  endpoint: string
+  resultType: IType   // alias of ISymbol.type
+  primaryResponse: IMethodResponse
+  responses: IMethodResponse[]
+
+  description: string
+  params: IParameter[]
+  summary: string
+  pathArgs: string[]
+  bodyArg: string
+  queryArgs: string[]
+  headerArgs: string[]
+  cookieArgs: string[]
+}
+
+class Method extends SchemadSymbol implements IMethod {
+  readonly httpMethod: HttpMethod
+  readonly endpoint: string
+  readonly primaryResponse: IMethodResponse
+  responses: IMethodResponse[]
+  readonly params: IParameter[]
+
+  constructor (httpMethod: HttpMethod, endpoint: string, schema: OAS.OperationObject, responses: IMethodResponse[]) {
+    if (!schema.operationId) {
+      throw new Error('Missing operationId')
+    }
+
+    const primaryResponse = responses.find((response) => {
+      // prefer json response over all other 200s
+      return response.statusCode === '200' && response.mediaType === 'application/json'
+    }) || responses.find((response) => {
+      return response.statusCode === '200' // accept any mediaType for 200 if none are json
+    }) || responses.find((response) => {
+      return response.statusCode === '204' // No Content
+    })
+
+    if (!primaryResponse) {
+      throw new Error(`Missing 2xx + application/json response in ${endpoint}`)
+    }
+
+    super(schema.operationId, primaryResponse.type, schema)
+    this.httpMethod = httpMethod
+    this.endpoint = endpoint
+    this.responses = responses
+    this.primaryResponse = primaryResponse
+    this.params = []
+  }
+
+  get resultType(): IType {
+    return this.type
+  }
+
+  get operationId(): string {
+    return this.name
+  }
+
+  get summary(): string {
+    return this.schema.summary || ''
+  }
+
+  private getParams(location?: MethodParameterLocation): IParameter[] {
+    if (location) {
+      return this.params.filter((p) => p.location === location)
+    }
+    return this.params
+  }
+
+  get pathParams(){
+    return this.getParams('path')
+  }
+
+  get bodyParams() {
+    return this.getParams('body')
+  }
+
+  get queryParams() {
+    return this.getParams('query')
+  }
+
+  get headerParams() {
+    return this.getParams('header')
+  }
+
+  get cookieParams() {
+    return this.getParams('cookie')
+  }
+
+  private argumentNames(location?: MethodParameterLocation): string[] {
+    return this
+    .getParams(location)
+    .map(p => p.name)
+  }
+
+  get pathArgs(){
+    return this.argumentNames('path')
+  }
+
+  get bodyArg() {
+    const body = this.argumentNames('body')
+    if (body.length === 0) return ''
+    return body[0]
+  }
+
+  get queryArgs() {
+    return this.argumentNames('query')
+  }
+
+  get headerArgs() {
+    return this.argumentNames('header')
+  }
+
+  get cookieArgs() {
+    return this.argumentNames('cookie')
+  }
+}
+
+class Type implements IType {
+  readonly name: string
+  readonly schema: OAS.SchemaObject
+  readonly properties: Record<string, IProperty> = {}
+
+  constructor (schema: OAS.SchemaObject, name: string) {
+    this.schema = schema
+    this.name = name
+  }
+
+  load(symbols: ISymbolTable): void {
+    Object.entries(this.schema.properties || {}).forEach(([propName, propSchema]) => {
+      this.properties[propName] = new Property(propName, symbols.resolveType(propSchema), propSchema)
+    })
+  }
+
+  get status(): string {
+    return this.schema['x-looker-status'] || ''
+  }
+
+  get deprecated(): boolean {
+    return this.schema.deprecated || this.schema['x-looker-deprecated'] || false
+  }
+
+  get description(): string {
+    return this.schema.description || ''
+  }
+
+  get title(): string {
+    return this.schema.title || ''
+  }
+
+  get default(): string | undefined {
+    return this.schema.default || ''
+  }
+}
+
+class ArrayType extends Type{
+  elementType: IType
+
+  constructor(elementType: IType, schema: OAS.SchemaObject) {
+    super(schema, `${elementType.name}[]`)
+    this.elementType = elementType
+  }
+}
+
+class IntrinsicType extends Type {
+  constructor (name: string) {
+    super({}, name)
+  }
+}
+
+export interface IApiModel extends IModel {
+  version: string
+  description: string
+  methods: Record<string, IMethod>
+}
+
+export class ApiModel implements ISymbolTable, IApiModel {
+  readonly schema: OAS.OpenAPIObject | undefined
+  readonly methods: Record<string, IMethod> = {}
+  readonly types: Record<string, IType> = {}
+  private refs: Record<string, IType> = {}
+
+  constructor(spec: OAS.OpenAPIObject) {
+    [ 'string', 'integer', 'int64', 'boolean', 'object',
+      'uri', 'float', 'double', 'void', 'datetime', 'email',
+      'uuid', 'uri', 'hostname', 'ipv4', 'ipv6',
+    ].forEach((name) => this.types[name] = new IntrinsicType(name))
+
+    this.schema = spec
+    this.load()
+  }
+
+  static fromFile(specFile: string): ApiModel {
+    const specContent = fs.readFileSync(specFile, utf8)
+    return this.fromString(specContent)
+  }
+
+  static fromString(specContent: string): ApiModel {
+    const json = JSON.parse(specContent)
+    return this.fromJson(json)
+  }
+
+  static fromJson(json: any): ApiModel {
+    const spec = new OAS.OpenApiBuilder(json).getSpec()
+    return new ApiModel(spec)
+  }
+
+  get version(): string {
+    return (this.schema && this.schema.version) || ''
+  }
+
+  get description(): string {
+    return (this.schema && this.schema.description) || ''
+  }
+
+  private load(): void {
+    if (this.schema && this.schema.components && this.schema.components.schemas) {
+      Object.entries(this.schema.components.schemas).forEach(([name, schema]) => {
+        const t = new Type(schema, name)
+        // types[n] and corresponding refs[ref] MUST reference the same type instance!
+        this.types[name] = t
+        this.refs[`#/components/schemas/${name}`] = t
+      })
+      Object.keys(this.schema.components.schemas).forEach((name) => {
+        (this.resolveType(name) as Type).load(this)
+      })
+    }
+
+    if (this.schema && this.schema.paths) {
+      Object.entries(this.schema.paths).forEach(([path, schema]) => {
+        const methods = this.loadMethods(path, schema)
+        methods.forEach((method) => {
+          this.methods[method.name] = method
+        })
+      })
+    }
+  }
+
+  resolveType(schema: string | OAS.SchemaObject | OAS.ReferenceObject): IType {
+    if (typeof schema === 'string') {
+      return this.types[schema]
+    } else if (OAS.isReferenceObject(schema)) {
+      return this.refs[schema.$ref]
+    } else if (schema.type) {
+      if (schema.type === 'integer' && schema.format === 'int64') {
+        return this.types['int64']
+      }
+      if (schema.type === 'number' && schema.format) {
+        return this.types[schema.format]
+      }
+      if (schema.type === 'array' && schema.items) {
+        return new ArrayType(this.resolveType(schema.items), schema)
+      }
+      if (schema.format === 'date-time') {
+        return this.types['datetime']
+      }
+      if (schema.format && this.types[schema.format]) {
+        return this.types[schema.format]
+      }
+      if (this.types[schema.type]) {
+        return this.types[schema.type]
+      }
+    }
+    throw new Error("Schema must have a ref or a type")
+  }
+
+  private loadMethods(endpoint: string, schema: OAS.PathItemObject): Method[] {
+    const methods: Method[] = []
+
+    const addIfPresent = (httpMethod: HttpMethod, opSchema: OAS.OperationObject | undefined) => {
+      if (opSchema) {
+        const responses = this.methodResponses(opSchema)
+        methods.push(new Method(httpMethod, endpoint, opSchema, responses))
+      }
+    }
+
+    addIfPresent('GET', schema.get)
+    addIfPresent('PUT', schema.put)
+    addIfPresent('POST', schema.post)
+    addIfPresent('PATCH', schema.patch)
+    addIfPresent('DELETE', schema.delete)
+    // options?: OperationObject;
+    // head?: OperationObject;
+    // trace?: OperationObject;
+    return methods
+  }
+
+  private methodResponses(schema: OAS.OperationObject): IMethodResponse[] {
+    const responses: IMethodResponse[] = []
+    Object.entries(schema.responses).forEach(([statusCode, contentSchema]) => {
+      if (contentSchema.content) {
+        Object.entries(contentSchema.content).forEach(([mediaType, response]) => {
+          responses.push(new MethodResponse(statusCode, mediaType,
+          this.resolveType((response as OAS.MediaTypeObject).schema || {})))
+        })
+      } else if (statusCode === '204') {
+        // no content - returns void
+        responses.push(new MethodResponse(statusCode, '', this.types['void']))
+      }
+    })
+    return responses
+  }
+
+
 }
 
 export interface ICodeFormatter {
@@ -98,18 +464,18 @@ export interface ICodeFormatter {
   // group argument names together
   // e.g.
   //   [ row_size, page_offset ]
-  argGroup(indent: string, args: IArg[] ): string
+  argGroup(indent: string, args: Arg[] ): string
 
   // list arguments by name
   // e.g.
   //   row_size, page_offset
-  argList(indent: string, args: IArg[]): string
+  argList(indent: string, args: Arg[]): string
 
   // generate a comment block
   // e.g.
   //   # this is a
   //   # multi-line comment block
-  comment(indent: string, description: string | undefined): string
+  comment(indent: string, description: string): string
 
   // generates the method signature including parameter list and return type.
   // supports
@@ -120,12 +486,12 @@ export interface ICodeFormatter {
   httpCall(indent: string, method: IMethod): string
 
   // generates the type declaration signature for the start of the type definition
-  typeSignature(indent: string, type: IStruct): string
+  typeSignature(indent: string, type: IType): string
 
   // generates summary text
   // e.g, for Python:
   //    '''This is the method summary'''
-  summary(indent: string, text: string | undefined): string
+  summary(indent: string, text: string): string
 
   // produces the declaration block for a parameter
   // e.g.
@@ -150,10 +516,10 @@ export interface ICodeFormatter {
   declareParameters(indent: string, params: IParameter[] | undefined): string
 
   // generates entire type declaration
-  declareType(indent: string, type: IStruct): string
+  declareType(indent: string, type: IType): string
 
   // generates type property
-  declareProperty(indent: string, property: IParameter): string
+  declareProperty(indent: string, property: IProperty): string
 
-  convertType(type: IType) : IType
+  typeName(type: IType) : string
 }
