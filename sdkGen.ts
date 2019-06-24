@@ -25,15 +25,21 @@
  */
 
 import * as fs from 'fs'
+import * as Models from './sdkModels'
 import { SDKConfig } from './sdkConfig'
 import { quit } from './utils'
-import { processSpec } from './specSupport';
+import {openApiFileName} from "./fetchSpec";
+import {SdkGenerator} from "./sdkGenerator";
+import {PythonFormatter} from "./python.fmt";
 
 (async () => {
   try {
     const config = SDKConfig()
     for (let [name, props] of Object.entries(config) ) {
-      const sdk = await processSpec(name, props)
+      const oasFile = openApiFileName(name, props)
+      const apiModel = Models.ApiModel.fromFile(oasFile)
+      const gen = new SdkGenerator(apiModel, new PythonFormatter())
+      const sdk = gen.render('  ')
       await fs.writeFileSync('./sdk_generated.py', sdk)
       break
     }

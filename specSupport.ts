@@ -31,14 +31,9 @@ import { OpenAPIObject, OpenApiBuilder, PathsObject, SchemaObject, OperationObje
 import { logConvert } from './convert'
 import { utf8, commentBlock, code, ICodePattern, dump, debug, quit, typeMap } from './utils'
 import { MethodParameters, IResponseSchema } from './methodParam'
-import * as Handlebars from 'handlebars'
 
 export let api: OpenAPIObject
 export let typeDict: { [name: string]: SchemaObject } = {}
-
-const methodTemplate = fs.readFileSync('./method.hbs', utf8)
-export const template = Handlebars.compile(methodTemplate)
-// template({methods:null})
 
 // Retrieve an api object via its JSON path
 // TODO replace this with get from underscore?
@@ -225,6 +220,8 @@ export interface IRestMethod {
   params: MethodParameters
 }
 
+// MSREF# 1475653273
+
 // omit read-only values
 // list all required items first
 // list optional items second with default values for languages that support default named items
@@ -296,10 +293,11 @@ export const processSpec = async (name: string, props: SDKConfigProps) => {
   Object.entries(api.paths).forEach(([endpoint, path]) => {
     for (let method of processEndpoint(endpoint, path).methods) methods.push(method)
   })
+  return methods
   // debug('methods[0]', methods[0])
-  const view = {
-    methods: methods,
-    code: code
-  }
-  return template(view)
+  // const view = {
+  //   methods: methods,
+  //   code: code
+  // }
+  // TODO need to replace all this with the new generator
 }

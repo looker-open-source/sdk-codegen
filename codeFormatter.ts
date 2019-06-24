@@ -83,7 +83,7 @@ export class CodeFormatter implements ICodeFormatter {
 
     httpCall = (indent: string, method: IMethod) => {
         const args = this.httpArgs(indent, method)
-        return `${indent}return session.${method.httpMethod}(${args})`
+        return `${indent}return session.${method.httpMethod}("${method.endpoint}"${args ? ", " +args: ""})`
     }
 
     typeSignature = (indent: string, type: IType) => this.debug('typeSignature', type, indent)
