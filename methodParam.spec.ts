@@ -44,9 +44,9 @@ describe('method params', () => {
     // TODO change this test to a "toContain()"
     // expect(p.queryArgs).toBe('limit, apply_formatting, apply_vis, cache, image_width, image_height, generate_drill_links, force_production, cache_only, path_prefix, rebuild_pdts, server_table_calcs, fields')
     const body = p.bodyParams[0]
-    expect(body.schema.type).toBe('WriteCreateQueryTask')
-    expect(p.responses.length).toBe(2)
-    expect(p.response!.name).toBe('QueryTask')
+    expect(body.schema.type).toBe('Write')
+    expect(p.responses.length).toBe(1)
+    expect(p.response!.name).toBe('_asjson')
   })
 
   it('request data action', () => {
@@ -65,7 +65,7 @@ describe('method params', () => {
     expect(p.bodyArgs).toBe('body')
     expect(p.queryArgs).toBe('')
     const body = p.bodyParams[0]
-    expect(body.schema.type).toBe('str[]')
+    expect(body.schema.type).toBe('Dict[str]')
   })
 
   it('get request', () => {

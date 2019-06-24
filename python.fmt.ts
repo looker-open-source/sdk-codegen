@@ -44,8 +44,8 @@ export class PythonFormatter extends CodeFormatter {
   argList = (indent: string, args: Arg[]) => args && args.length !== 0 ? `${args.join(this.argDelimiter)}` : this.nullStr
 
   declareProperty = (indent: string, property: IProperty) =>
-  this.commentHeader(indent, property.description)
-  + `${indent}${property.name} : ${property.type.name}`
+      this.commentHeader(indent, property.description)
+      + `${indent}${property.name} : ${property.type.name}`
 
   methodSignature = (indent: string, method: IMethod) => {
     let bump = indent + this.indentStr

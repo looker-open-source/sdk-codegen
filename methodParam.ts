@@ -117,8 +117,8 @@ const locationSorter = (p1: IMethodParameter, p2: IMethodParameter) => {
 }
 
 export class MethodParameter implements IMethodParameter {
-  static propNames = ['name','schema','in','readOnly','description','comment','required','deprecated',
-    'allowEmptyValue', 'style','explode', 'allowReserved','examples','example','content']
+  static propNames = ['name', 'schema', 'in', 'readOnly', 'description', 'comment', 'required', 'deprecated',
+    'allowEmptyValue', 'style', 'explode', 'allowReserved', 'examples', 'example', 'content']
 
   name: string = ''
   schema: SchemaObject = {};

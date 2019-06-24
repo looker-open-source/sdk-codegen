@@ -23,9 +23,9 @@
  */
 
 import * as OAS from "openapi3-ts"
-import * as fs from "fs";
-import {utf8} from "./utils";
-import {MethodParameterLocation} from "./methodParam";
+import * as fs from "fs"
+import {utf8} from "./utils"
+import {MethodParameterLocation} from "./methodParam"
 
 export declare type HttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
 export declare type Arg = string
@@ -131,6 +131,23 @@ class Property extends SchemadSymbol implements IProperty {
   }
 }
 
+export class Parameter implements IParameter {
+  description: string = ''
+  location: MethodParameterLocation = 'query'
+  name: string
+  required: boolean = false
+  type: IType
+
+  constructor (param: OAS.ParameterObject, type: IType) {
+    this.name = param.name
+    this.type = type
+    this.description = param.description || ''
+    this.location = param.in
+    // TODO deal with the required value being the names of the columns that are required
+    this.required = param.required || false
+  }
+}
+
 export interface IMethod extends ISymbol {
   operationId: string // alias of ISymbol.name
   httpMethod: HttpMethod
@@ -149,14 +166,14 @@ export interface IMethod extends ISymbol {
   cookieArgs: string[]
 }
 
-class Method extends SchemadSymbol implements IMethod {
+export class Method extends SchemadSymbol implements IMethod {
   readonly httpMethod: HttpMethod
   readonly endpoint: string
   readonly primaryResponse: IMethodResponse
   responses: IMethodResponse[]
   readonly params: IParameter[]
 
-  constructor (httpMethod: HttpMethod, endpoint: string, schema: OAS.OperationObject, responses: IMethodResponse[]) {
+  constructor (httpMethod: HttpMethod, endpoint: string, schema: OAS.OperationObject, params: IParameter[], responses: IMethodResponse[]) {
     if (!schema.operationId) {
       throw new Error('Missing operationId')
     }
@@ -179,7 +196,7 @@ class Method extends SchemadSymbol implements IMethod {
     this.endpoint = endpoint
     this.responses = responses
     this.primaryResponse = primaryResponse
-    this.params = []
+    this.params = params
   }
 
   get resultType(): IType {
@@ -404,7 +421,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
     const addIfPresent = (httpMethod: HttpMethod, opSchema: OAS.OperationObject | undefined) => {
       if (opSchema) {
         const responses = this.methodResponses(opSchema)
-        methods.push(new Method(httpMethod, endpoint, opSchema, responses))
+        const params = this.methodParameters(opSchema)
+        methods.push(new Method(httpMethod, endpoint, opSchema, params, responses))
       }
     }
 
@@ -435,6 +453,29 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return responses
   }
 
+  private methodParameters(schema: OAS.OperationObject): IParameter[] {
+    const params: IParameter[] = []
+    if (schema.parameters) {
+      for (let p of schema.parameters) {
+        let type: IType
+        let param: OAS.ParameterObject
+        if (OAS.isReferenceObject(p)) {
+          // TODO make this work correctly for reference objects at the parameter level
+          type = this.resolveType(p)
+          param = {
+            name: type.name,
+            in: "query",
+          }
+        } else {
+          param = p as OAS.ParameterObject
+          const schema = param.schema
+          type = this.resolveType(schema || {})
+        }
+        params.push(new Parameter(param, type))
+      }
+    }
+    return params
+  }
 
 }
 

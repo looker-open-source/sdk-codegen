@@ -24,50 +24,8 @@
 
 import * as Models from "./sdkModels"
 import {PythonFormatter} from "./python.fmt"
-import {Method} from "./codeFormatter"
 
-const model: Models.IApi = {
-    methods: [
-        {
-            httpMethod: "get",
-            endpoint: "queries/{id}/run",
-            description:"run a query",
-            summary: "run query",
-            operationId: "run_query",
-            type: { name: "string" },
-            params: [
-                {
-                    name: "query_id",
-                    description: "id of query to run",
-                    type: { name: "integer"},
-                    location: 'path',
-                    required: true,
-                },
-                {
-                    name: "limit",
-                    type: { name: "integer"},
-                    location: 'query',
-                },
-            ],
-        },
-        {
-            httpMethod: "post",
-            endpoint: "queries/run/inline",
-            description: "run inline query",
-            summary: "inline query",
-            operationId: "run_inline_query",
-            type: { name: "string" },
-            params: [
-                {
-                    name: "query",
-                    description:"query to create",
-                    type: { name: "CreateQuery" },
-                    required: true,
-                    location: 'body'
-                },
-            ],
-        }]
-}
+const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
 
 const python = new PythonFormatter()
 const indent = ''
@@ -75,36 +33,51 @@ const indent = ''
 describe('python formatter', () => {
     describe('parameter declarations', () => {
         it ('required parameter', () => {
-            const param = model.methods[0].params![0]
+            const param = apiModel.methods['run_query'].params[0]
             const actual =  python.declareParameter(indent, param)
-            expect(actual).toEqual("# id of query to run\nquery_id: int")
+            expect(actual).toEqual("# Id of query\nquery_id: long")
         })
         it ('optional parameter', () => {
-            const param = model.methods![0].params![1]
+            const param = apiModel.methods['run_query'].params[2]
             const actual =  python.declareParameter(indent, param)
-            expect(actual).toEqual("limit: int = None")
+            expect(actual).toEqual("# Row limit (may override the limit in the saved query).\n" +
+                "limit: long")
         })
         it ('required typed parameter', () => {
-            const param = model.methods![1].params![0]
+            const param = apiModel.methods['create_query'].params[0]
             const actual =  python.declareParameter(indent, param)
-            expect(actual).toEqual("# query to create\nquery: CreateQuery")
+            expect(actual).toEqual("# Requested fields.\nfields: str")
         })
     })
 
     describe('args locations', () => {
         it ('path and query args', () => {
-            const method = new Method(model.methods[0])
-            expect(method.pathArgs).toEqual(['query_id'])
+            const method = apiModel.methods['run_query']
+            expect(method.pathArgs).toEqual(['query_id','result_format'])
             expect(method.bodyArg).toEqual('')
-            expect(method.queryArgs).toEqual(['limit'])
+            expect(method.queryArgs).toEqual([
+                "limit",
+                "apply_formatting",
+                "apply_vis",
+                "cache",
+                "image_width",
+                "image_height",
+                "generate_drill_links",
+                "force_production",
+                "cache_only",
+                "path_prefix",
+                "rebuild_pdts",
+                "server_table_calcs",
+                ])
             expect(method.headerArgs).toEqual([])
             expect(method.cookieArgs).toEqual([])
         })
         it ('body', () => {
-            const method = new Method(model.methods[1])
+            // TODO get resolution working correctly
+            const method = apiModel.methods['create_query']
             expect(method.pathArgs).toEqual([])
-            expect(method.bodyArg).toEqual('query')
-            expect(method.queryArgs).toEqual([])
+            expect(method.bodyArg).toEqual("")
+            expect(method.queryArgs).toEqual(["fields"])
             expect(method.headerArgs).toEqual([])
             expect(method.cookieArgs).toEqual([])
         })
