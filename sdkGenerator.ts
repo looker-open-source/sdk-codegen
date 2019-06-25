@@ -192,7 +192,7 @@ export class SdkGenerator extends Generator<Models.IApiModel>{
     let methods : string[] = []
     Object.values(this.model.methods).forEach((method) => methods.push(this.codeFormatter.declareMethod(indent, method)))
     return this
-        .p(`${indent}# total API methods: ${this.model.methods.length}`)
+        .p(`${indent}# total API methods: ${methods.length}`)
         .p(methods.join('\n\n'))
         // .each(this.model.methods, MethodGenerator)
         .toString(indent)

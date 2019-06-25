@@ -82,7 +82,8 @@ export class CodeFormatter implements ICodeFormatter {
     }
 
     httpCall = (indent: string, method: IMethod) => {
-        const args = this.httpArgs(indent, method)
+        const bump = indent + this.indentStr
+        const args = this.httpArgs(bump, method)
         return `${indent}return session.${method.httpMethod}("${method.endpoint}"${args ? ", " +args: ""})`
     }
 

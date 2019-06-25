@@ -39,9 +39,9 @@ export class PythonFormatter extends CodeFormatter {
   endTypeStr = ''
 
   // @ts-ignore
-  argGroup = (indent: string, args: Arg[]) => args && args.length !== 0 ? `[${args.join(this.argDelimiter)}]` : this.nullStr
+  argGroup = (indent: string, args: Arg[]) => args && args.length !== 0 ? `\n${indent}[${args.join(this.argDelimiter)}]` : this.nullStr
   // @ts-ignore
-  argList = (indent: string, args: Arg[]) => args && args.length !== 0 ? `${args.join(this.argDelimiter)}` : this.nullStr
+  argList = (indent: string, args: Arg[]) => args && args.length !== 0 ? `\n${indent}${args.join(this.argDelimiter)}` : this.nullStr
 
   declareProperty = (indent: string, property: IProperty) =>
       this.commentHeader(indent, property.description)
