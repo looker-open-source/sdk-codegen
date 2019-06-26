@@ -82,4 +82,17 @@ describe('python formatter', () => {
             expect(method.cookieArgs).toEqual([])
         })
     })
+
+    describe('type creation', () => {
+        it ('with arrays and hashes', () => {
+            const type = apiModel.types['Workspace']
+            const actual =  python.declareType(indent, type)
+            expect(actual).toEqual("# Id of query\nquery_id: long")
+        })
+        it ('with refs, arrays and nullable', () => {
+            const type = apiModel.types['ApiVersion']
+            const actual =  python.declareType(indent, type)
+            expect(actual).toEqual("# Id of query\nquery_id: long")
+        })
+    })
 })

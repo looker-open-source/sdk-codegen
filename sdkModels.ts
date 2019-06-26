@@ -313,7 +313,7 @@ class ArrayType extends Type{
   }
 }
 
-class IntrinsicType extends Type {
+export class IntrinsicType extends Type {
   constructor (name: string) {
     super({}, name)
   }
@@ -323,6 +323,7 @@ export interface IApiModel extends IModel {
   version: string
   description: string
   methods: Record<string, IMethod>
+  types: Record<string, IType>
 }
 
 export class ApiModel implements ISymbolTable, IApiModel {
@@ -481,6 +482,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
 export interface ICodeFormatter {
 
+  // reference to self. e.g self, this, it, etc.
+  itself : string
+
+  // file extension for generated files
+  fileExtension: string
   // comment string
   // e.g. Python=# C#=// TypeScript=//
   commentStr: string
@@ -498,6 +504,9 @@ export interface ICodeFormatter {
   paramDelimiter: string
   // property delimiter. Typically, ",\n"
   propDelimiter: string
+
+  // provide the name for a file with the appropriate language code extension
+  fileName(base: string) : string
 
   // generate an optional comment header if the comment is not empty
   commentHeader(indent: string, text: string | undefined): string
@@ -548,13 +557,19 @@ export interface ICodeFormatter {
   // generates the entire method
   declareMethod(indent: string, method: IMethod): string
 
-  // produces the list of parameters for a method signature
+  // generates the list of parameters for a method signature
   // e.g.
   //   # ID of the query to run
   //   query_id: str,
   //   # size description of parameter
   //   row_limit: int = None
   declareParameters(indent: string, params: IParameter[] | undefined): string
+
+  // generates the syntax for a constructor argument
+  declareConstructorArg(indent: string, property: IProperty): string
+
+  // produces the code for the type constructor
+  construct(indent: string, properties: Record<string, IProperty>): string
 
   // generates entire type declaration
   declareType(indent: string, type: IType): string

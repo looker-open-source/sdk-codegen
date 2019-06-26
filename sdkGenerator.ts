@@ -189,16 +189,35 @@ export class SdkGenerator extends Generator<Models.IApiModel>{
   }
 
   render(indent: string) {
-    let methods : string[] = []
-    Object.values(this.model.methods).forEach((method) => methods.push(this.codeFormatter.declareMethod(indent, method)))
+    let items : string[] = []
+    Object.values(this.model.methods).forEach((method) => items.push(this.codeFormatter.declareMethod(indent, method)))
     return this
-        .p(`${indent}# total API methods: ${methods.length}`)
-        .p(methods.join('\n\n'))
+        .p('import sdktypes')
+        .p(`${indent}# total API methods: ${items.length}`)
+        .p(items.join('\n\n'))
         // .each(this.model.methods, MethodGenerator)
         .toString(indent)
   }
 }
 
+export class TypeGenerator extends Generator<Models.IApiModel>{
+  constructor(api: Models.IApiModel, formatter: Models.ICodeFormatter) {
+    super(api)
+    this.codeFormatter = formatter
+  }
+
+  render(indent: string) {
+    let items : string[] = []
+    Object.values(this.model.types)
+        .filter((type) => ! (type instanceof Models.IntrinsicType))
+        .forEach((type) => items.push(this.codeFormatter.declareType(indent, type)))
+    return this
+        .p(`${indent}# total API types: ${items.length}`)
+        .p(items.join('\n\n'))
+        // .each(this.model.methods, MethodGenerator)
+        .toString(indent)
+  }
+}
 // export class SdkGenerator extends Generator<Models.IApiModel> {
 //   render(): string {
 //     return this.p(`# total API methods:${this.model.methods.length}`)

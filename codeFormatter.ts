@@ -29,6 +29,8 @@ export class CodeFormatter implements ICodeFormatter {
     dump = (value: any) => JSON.stringify(value, null, 2)
     debug = (tag: string, value: any, indent: string = '') => `${indent}${tag}:${this.dump(value)}`
 
+    itself = ''
+    fileExtension = '.code'
     argDelimiter = ', '
     paramDelimiter = ',\n'
     propDelimiter = ',\n'
@@ -38,6 +40,9 @@ export class CodeFormatter implements ICodeFormatter {
     nullStr = 'null'
     endTypeStr = ''
 
+    bumper = (indent: string) => indent + this.indentStr
+
+    fileName = (base: string ) => `${base}${this.fileExtension}`
     argGroup = (indent: string, args: Arg[]) => args && args.length !== 0 ? `${indent}[${args.join(this.argDelimiter)}]` : this.nullStr
     argList = (indent: string, args: Arg[]) => args && args.length !== 0 ? `${indent}${args.join(this.argDelimiter)}` : this.nullStr
 
@@ -54,13 +59,47 @@ export class CodeFormatter implements ICodeFormatter {
 
     declareProperty = (indent: string, property: IProperty) => this.debug('declareProperty', property, indent)
 
+    declareConstructorArg = (indent: string, property: IProperty) =>
+        `${indent}${property.name}${property.nullable  ? " = " + this.nullStr: ''}`
+
+    it = (id: string) => this.itself ? `${this.itself}.${id}` : id
+
+    initArg = (indent: string, property: IProperty) => {
+        let bump = this.bumper(indent)
+        let assign = `${this.it('_' + property.name)} = ${property.name}\n`
+        if (property.nullable) {
+            return `${indent}if ${property.name} is not None:\n` +
+                `${bump}${assign}`
+        }
+        return assign
+    }
+
+    // Omit read-only parameters
+    construct = (indent: string, properties: Record<string, IProperty>) => {
+        indent = this.bumper(indent)
+        const bump = this.bumper(indent)
+        let result = `${indent}def __init__(self, `
+        let args: string[] = []
+        let inits: string[] = []
+        Object.values(properties)
+            // .filter((prop) => !prop.readOnly)
+            .forEach((prop) => {
+                args.push(this.declareConstructorArg('', prop))
+                inits.push(this.initArg(bump, prop))
+            })
+        result += `${args.join(this.argDelimiter)}):\n`
+            + inits.join('\n')
+        return result + "\n"
+    }
+
     declareType = (indent: string, type: IType) => {
         let props: string[] = []
         Object.values(type.properties).forEach((prop) => props.push(this.declareProperty(indent + this.indentStr, prop)))
         return this.commentHeader(indent, type.description)
             + this.typeSignature(indent, type)
+            + this.construct(indent, type.properties)
             + props.join(this.propDelimiter)
-            + `$(indent}${this.endTypeStr}`
+            + `${this.endTypeStr? indent : ''}${this.endTypeStr}`
     }
 
     // this is a builder function to produce arguments with optional null place holders but no extra required optional arguments

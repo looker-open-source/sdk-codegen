@@ -29,7 +29,7 @@ import * as Models from './sdkModels'
 import { SDKConfig } from './sdkConfig'
 import { quit } from './utils'
 import {openApiFileName} from "./fetchSpec";
-import {SdkGenerator} from "./sdkGenerator";
+import {SdkGenerator, TypeGenerator} from "./sdkGenerator";
 import {PythonFormatter} from "./python.fmt";
 
 (async () => {
@@ -38,9 +38,13 @@ import {PythonFormatter} from "./python.fmt";
     for (let [name, props] of Object.entries(config) ) {
       const oasFile = openApiFileName(name, props)
       const apiModel = Models.ApiModel.fromFile(oasFile)
-      const gen = new SdkGenerator(apiModel, new PythonFormatter())
-      const sdk = gen.render('  ')
-      await fs.writeFileSync('./sdk_generated.py', sdk)
+      const formatter = new PythonFormatter()
+      const sdk = new SdkGenerator(apiModel, formatter)
+      let output = sdk.render('  ')
+      await fs.writeFileSync(formatter.fileName('sdkmethods'), output)
+      const types = new TypeGenerator(apiModel, formatter)
+      output = types.render('  ')
+      await fs.writeFileSync(formatter.fileName('sdktypes'), output)
       break
     }
     } catch (e) {
