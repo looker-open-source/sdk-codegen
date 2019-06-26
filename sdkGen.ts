@@ -28,9 +28,9 @@ import * as fs from 'fs'
 import * as Models from './sdkModels'
 import { SDKConfig } from './sdkConfig'
 import { quit } from './utils'
-import {openApiFileName} from "./fetchSpec";
-import {SdkGenerator, TypeGenerator} from "./sdkGenerator";
-import {PythonFormatter} from "./python.fmt";
+import {openApiFileName} from "./fetchSpec"
+import {SdkGenerator, TypeGenerator} from "./sdkGenerator"
+import {PythonFormatter} from "./python.fmt"
 
 (async () => {
   try {
