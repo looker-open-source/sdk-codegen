@@ -1,3 +1,4 @@
+; TODO remove this file
 ; Definition file for API language bindings to generate with Swagger code-gen
 ; The syntax for the lines in this file are:
 ;   language:api path name:optional generator arguments

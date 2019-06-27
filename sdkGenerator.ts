@@ -192,11 +192,12 @@ export class SdkGenerator extends Generator<Models.IApiModel>{
     let items : string[] = []
     Object.values(this.model.methods).forEach((method) => items.push(this.codeFormatter.declareMethod(indent, method)))
     return this
-        .p('import sdktypes')
-        .p(`${indent}# total API methods: ${items.length}`)
+        .p(this.codeFormatter.methodsPrologue)
+        .p(`# total API methods: ${items.length}`)
         .p(items.join('\n\n'))
+        .p(this.codeFormatter.methodsEpilogue)
         // .each(this.model.methods, MethodGenerator)
-        .toString(indent)
+        .toString('')
   }
 }
 
@@ -212,10 +213,12 @@ export class TypeGenerator extends Generator<Models.IApiModel>{
         .filter((type) => ! (type instanceof Models.IntrinsicType))
         .forEach((type) => items.push(this.codeFormatter.declareType(indent, type)))
     return this
-        .p(`${indent}# total API types: ${items.length}`)
+        .p(this.codeFormatter.modelsPrologue)
+        .p(`# total API types: ${items.length}`)
         .p(items.join('\n\n'))
+        .p(this.codeFormatter.modelsEpilogue)
         // .each(this.model.methods, MethodGenerator)
-        .toString(indent)
+        .toString('')
   }
 }
 // export class SdkGenerator extends Generator<Models.IApiModel> {

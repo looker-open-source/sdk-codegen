@@ -29,6 +29,7 @@ import { SDKConfigProps, SDKConfig} from './sdkConfig'
 import { log, quit, run } from './utils'
 import { logConvert } from './convert'
 
+// TODO replace with sdkGen.ts and remove `yarn sdk` command
 // perform the generation for specific API version, configuration, and language
 const generate = async (fileName: string, spec: LanguageSpec, props: SDKConfigProps) => {
   const path = spec.path ? spec.path : spec.language

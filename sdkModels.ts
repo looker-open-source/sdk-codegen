@@ -480,7 +480,15 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
 }
 
+export interface IMappedType {
+  name: string
+  default: string
+}
+
 export interface ICodeFormatter {
+
+  // path for generated source code files
+  codePath: string
 
   // reference to self. e.g self, this, it, etc.
   itself : string
@@ -504,6 +512,18 @@ export interface ICodeFormatter {
   paramDelimiter: string
   // property delimiter. Typically, ",\n"
   propDelimiter: string
+
+  // standard code to insert at the top of the generated "methods" file(s)
+  methodsPrologue : string
+
+  // standard code to append to the bottom of the generated "methods" file(s)
+  methodsEpilogue : string
+
+  // standard code to insert at the top of the generated "models" file(s)
+  modelsPrologue : string
+
+  // standard code to append to the bottom of the generated "models" file(s)
+  modelsEpilogue : string
 
   // provide the name for a file with the appropriate language code extension
   fileName(base: string) : string
@@ -577,5 +597,5 @@ export interface ICodeFormatter {
   // generates type property
   declareProperty(indent: string, property: IProperty): string
 
-  typeName(type: IType) : string
+  typeMap(type: IType) : IMappedType
 }

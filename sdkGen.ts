@@ -41,13 +41,13 @@ import {PythonFormatter} from "./python.fmt"
       const formatter = new PythonFormatter()
       const sdk = new SdkGenerator(apiModel, formatter)
       let output = sdk.render('  ')
-      await fs.writeFileSync(formatter.fileName('sdkmethods'), output)
+      await fs.writeFileSync(formatter.fileName('sdk/methods'), output)
       const types = new TypeGenerator(apiModel, formatter)
-      output = types.render('  ')
-      await fs.writeFileSync(formatter.fileName('sdktypes'), output)
+      output = types.render('')
+      await fs.writeFileSync(formatter.fileName('sdk/models'), output)
       break
     }
-    } catch (e) {
+  } catch (e) {
     quit(e)
   }
-  })()
+})()
