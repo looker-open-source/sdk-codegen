@@ -213,8 +213,8 @@ export class TypeGenerator extends Generator<Models.IApiModel>{
         .filter((type) => ! (type instanceof Models.IntrinsicType))
         .forEach((type) => items.push(this.codeFormatter.declareType(indent, type)))
     return this
+        .p(`${this.codeFormatter.comment('','total API models: ' + items.length)}`)
         .p(this.codeFormatter.modelsPrologue)
-        .p(`# total API types: ${items.length}`)
         .p(items.join('\n\n'))
         .p(this.codeFormatter.modelsEpilogue)
         // .each(this.model.methods, MethodGenerator)

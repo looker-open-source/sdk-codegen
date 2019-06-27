@@ -41,8 +41,18 @@ export class PythonFormatter extends CodeFormatter {
   indentStr = '  '
   endTypeStr = ''
 
-  methodsPrologue = `# ${warnEditing}\nimport typing\nimport models\nimport rtl\ndef LookerSDK(object):\n` +
-`
+  methodsPrologue = `
+# ${warnEditing}
+import json
+import typing
+from models import *
+from rtl.api_settings import ApiSettings
+from rtl.user_session import UserSession
+# from rtl.sdk_error import SDKError
+# from rtl.sdk_utils import *
+
+def LookerSDK(object):\n
+
   def __init__(
     self,
     settings: ApiSettings = None,
@@ -85,7 +95,11 @@ export class PythonFormatter extends CodeFormatter {
         
 `
   methodsEpilogue = ''
-  modelsPrologue = `# ${warnEditing}\nimport attr\nimport typing\n`
+  modelsPrologue = `
+# ${warnEditing}
+import attr
+import typing
+`
   modelsEpilogue = ''
 
 
