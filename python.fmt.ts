@@ -41,7 +41,49 @@ export class PythonFormatter extends CodeFormatter {
   indentStr = '  '
   endTypeStr = ''
 
-  methodsPrologue = `# ${warnEditing}\nimport typing\nimport models\ndef LookerSDK(object):\n`
+  methodsPrologue = `# ${warnEditing}\nimport typing\nimport models\nimport rtl\ndef LookerSDK(object):\n` +
+`
+  def __init__(
+    self,
+    settings: ApiSettings = None,
+    file_name: str = "looker.ini",
+    user_session: UserSession = None,
+    base_url: str = None,
+    client_id: str = None,
+    client_secret: str = None,
+    api_version: str = None):
+    # cascade through settings initialization options
+    self.settings: ApiSettings = ApiSettings(file_name) if settings is None else settings
+    if api_version is not None:
+        self.settings.api_version = api_version
+    if base_url is not None:
+        self.settings.base_url = base_url
+    if client_id is not None:
+        self.settings.client_id = client_id
+    if client_secret is not None:
+        self.client_secret = client_secret
+
+    self.manage_user: bool = user_session is None
+    self.user_session: UserSession = UserSession(self.settings) if user_session is None else user_session
+      
+  # Implement destructor support
+  def __enter__(self):
+      if self.manage_user:
+          self.user_session.login()
+      return self
+
+  # Implement destructor support
+  def __exit__(self, exc_type, exc_value, traceback):
+      if self.manage_user:
+          self.logout()
+
+  def login(self) -> AccessToken:
+      return self.user_session.login()
+
+  def logout(self):
+      self.user_session.logout()
+        
+`
   methodsEpilogue = ''
   modelsPrologue = `# ${warnEditing}\nimport attr\nimport typing\n`
   modelsEpilogue = ''
@@ -75,7 +117,7 @@ export class PythonFormatter extends CodeFormatter {
     let params: string[] = []
     if (method.params) method.params.forEach(p => params.push(this.declareParameter(bump, p)))
     return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint}`)
-      + `${indent}def ${method.name}(\n${params.join(this.paramDelimiter)}) -> ${type.name}:\n`
+      + `${indent}def ${method.name}(self,\n${params.join(this.paramDelimiter)}) -> ${type.name}:\n`
   }
 
   declareParameter = (indent: string, param: IParameter) => {
