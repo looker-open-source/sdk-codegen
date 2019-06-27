@@ -35,10 +35,12 @@ import {PythonFormatter} from "./python.fmt"
 (async () => {
   try {
     const config = SDKConfig()
+    const formatter = new PythonFormatter()
+    const sdkPath = `${formatter.codePath}/sdk`
+    if (!fs.existsSync(sdkPath)) fs.mkdirSync(sdkPath, { recursive: true })
     for (let [name, props] of Object.entries(config) ) {
       const oasFile = openApiFileName(name, props)
       const apiModel = Models.ApiModel.fromFile(oasFile)
-      const formatter = new PythonFormatter()
       const sdk = new SdkGenerator(apiModel, formatter)
       let output = sdk.render('  ')
       await fs.writeFileSync(formatter.fileName('sdk/methods'), output)
