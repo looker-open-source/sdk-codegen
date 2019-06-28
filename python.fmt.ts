@@ -131,10 +131,11 @@ from typing import *
       'number': { name: 'double', default: '0.0' },
       'integer': { name: 'int', default: '0' },
       'int32': { name: 'int', default: '0' },
-      'int64': { name: 'long', default: '0' },
+      'int64': { name: 'int', default: '0' },
       'string': { name: 'str', default: '""' },
       'password': {name: 'Password', default: this.nullStr},
-      'byte': {name: 'binary', default: this.nullStr}
+      'byte': {name: 'binary', default: this.nullStr},
+      'boolean': {name: 'bool', default: this.nullStr}
     }
 
     if (type.elementType) {
