@@ -1,7 +1,7 @@
-import typing
+from typing import *
 import looker
-from rtl.api_settings import ApiSettings
-from rtl.user_session import UserSession
+from api_settings import ApiSettings
+from user_session import UserSession
 
 class SDKBase(object):
     def __init__(
@@ -34,14 +34,14 @@ class SDKBase(object):
         if self.manager_user:
             self.user_session.login()
         return self
-    
+
     # Implement destructor support
     def __exit__(self, exc_type, exc_value, traceback):
         if self.manage_user:
             self.logout()
-    
+
     def login(self) -> looker.models.access_token:
         return self.user_session.login()
-    
+
     def logout(self):
         self.user_session.logout()
