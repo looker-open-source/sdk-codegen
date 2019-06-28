@@ -23,15 +23,16 @@ Paragraphs are separated by blank lines. *Italics*, **bold**,
 and ``monospace`` look like this.
 
 
-A Section
-=========
+Configuring the SDK
+===================
 
-Lists look like this:
+There is only one configuration step required to use the API with default connection information. The
+Looker SDK uses a ``looker.ini`` file. This can be created by copying ``looker-sample.ini`` and setting
+the values::
 
-* First
-
-* Second. Can be multiple lines
-  but must be indented properly.
+* ``base_url`` is the URL of the Looker server, like **https://mycompany.looker.com:19999**
+* ``client_id`` is your API3 client id
+* ``client_secret`` is your API3 client secret
 
 A Sub-Section
 -------------

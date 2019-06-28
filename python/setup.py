@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages  # noqa: H301
 
-NAME = "looker"
+NAME = "LookerSDK"
 VERSION = "0.5.0"
 
 # To install the library, run the following
@@ -18,13 +18,13 @@ setup(
     name=NAME,
     version=VERSION,
     description="Looker API 3.1",
+    author="Looker Data Sciences, Inc.",
     author_email="support@looker.com",
-    url="",
+    url="https://pypi.python.org/pypi/LookerSDK",
+    license="LICENSE.txt",
     keywords=["LookerSDK", "Looker API 3.1"],
     install_requires=REQUIRES,
     packages=find_packages(),
     include_package_data=True,
-    long_description="""\
-    This is the preferred API version for Looker    # noqa: E501
-    """
+    long_description=open("README.txt").read(),
 )
