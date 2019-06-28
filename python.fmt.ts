@@ -43,15 +43,15 @@ export class PythonFormatter extends CodeFormatter {
 
   methodsPrologue = `
 # ${warnEditing}
-import json
-import typing
+# import json
+from typing import *
 from models import *
 from rtl.api_settings import ApiSettings
 from rtl.user_session import UserSession
 # from rtl.sdk_error import SDKError
 # from rtl.sdk_utils import *
 
-def LookerSDK(object):\n
+def LookerSDK(object):
 
   def __init__(
     self,
@@ -98,7 +98,7 @@ def LookerSDK(object):\n
   modelsPrologue = `
 # ${warnEditing}
 import attr
-import typing
+from typing import *
 `
   modelsEpilogue = ''
 

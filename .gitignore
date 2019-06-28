@@ -8,3 +8,5 @@ api/*
 sdk_generated.*
 python/sdk/methods.py
 python/sdk/models.py
+python/venv/*
+venv/*
