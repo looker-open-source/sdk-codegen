@@ -66,6 +66,8 @@ export const specFileName = (name: string, props: SDKConfigProps) =>
 export const openApiFileName = (name: string, props: SDKConfigProps) =>
 `./${name}.${props.api_version}.oas.json`
 
+const badAuth = (content: string) => content.indexOf('Requires authentication') > 0
+
 export const fetchSpecFile = async (name: string, props: SDKConfigProps) => {
   const fileName = specFileName(name, props)
   // TODO make switch for "always fetch"
@@ -74,15 +76,27 @@ export const fetchSpecFile = async (name: string, props: SDKConfigProps) => {
   try {
     let response = null
     let token = null
+    let content = null
     try {
       // Try first without login. Most Looker instances don't require auth for metadata
       response = await fetch(specFileUrl(props))
+      content = await response.text()
+      if (badAuth(content)) {
+        token = await login(props)
+        response = await fetch(specFileUrl(props), { headers: { 'Authorization': `token ${token}` } })
+        content = await response.text()
+      }
     } catch (err) {
       // Woops!  Ok, try again with login
       token = await login(props)
       response = await fetch(specFileUrl(props), { headers: { 'Authorization': `token ${token}` } })
+      content = await response.text()
     }
-    const content = await response.text()
+
+    if (badAuth(content)) {
+      return quit("Authentication failed")
+    }
+
     fs.writeFileSync(fileName, content)
 
     if (token) {
@@ -92,8 +106,7 @@ export const fetchSpecFile = async (name: string, props: SDKConfigProps) => {
     return fileName
 
   } catch (err) {
-    console.log(err)
-    return
+    return quit(err)
   }
 }
 
