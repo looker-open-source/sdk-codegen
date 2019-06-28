@@ -70,7 +70,7 @@ export class CodeFormatter implements ICodeFormatter {
     declareConstructorArg = (indent: string, property: IProperty) =>
         `${indent}${property.name}${property.nullable  ? " = " + this.nullStr: ''}`
 
-    it = (id: string) => this.itself ? `${this.itself}.${id}` : id
+    it = (value: string) => this.itself ? `${this.itself}.${value}` : value
 
     initArg = (indent: string, property: IProperty) => {
         let bump = this.bumper(indent)
@@ -132,7 +132,7 @@ export class CodeFormatter implements ICodeFormatter {
     httpCall = (indent: string, method: IMethod) => {
         const bump = indent + this.indentStr
         const args = this.httpArgs(bump, method)
-        return `${indent}return self.session.${method.httpMethod.toLowerCase()}("${method.endpoint}"${args ? ", " +args: ""})`
+        return `${indent}return ${this.it('_rtl')}.${method.httpMethod.toLowerCase()}("${method.endpoint}"${args ? ", " +args: ""})`
     }
 
     typeSignature = (indent: string, type: IType) => this.debug('typeSignature', type, indent)

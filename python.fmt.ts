@@ -64,9 +64,20 @@ from typing import *
 
 
   // @ts-ignore
-  argGroup = (indent: string, args: Arg[]) => args && args.length !== 0 ? `\n${indent}[${args.join(this.argDelimiter)}]` : this.nullStr
+  argGroup = (indent: string, args: Arg[]) => {
+    if ((!args) || args.length === 0) return this.nullStr
+    let hash: string[] = []
+    for (let arg of args) {
+      hash.push(`'${arg}': ${arg}`)
+    }
+    return `\n${indent}{${hash.join(this.argDelimiter)}}`
+  }
+
   // @ts-ignore
-  argList = (indent: string, args: Arg[]) => args && args.length !== 0 ? `\n${indent}${args.join(this.argDelimiter)}` : this.nullStr
+  argList = (indent: string, args: Arg[]) =>
+      args && args.length !== 0
+          ? `\n${indent}${args.join(this.argDelimiter)}`
+          : this.nullStr
 
   // declareProperty = (indent: string, property: IProperty) => {
   //   const bump = indent + this.indentStr
