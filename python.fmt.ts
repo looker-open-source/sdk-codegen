@@ -38,7 +38,7 @@ export class PythonFormatter extends CodeFormatter {
   paramDelimiter = ',\n'
   propDelimiter = '\n'
 
-  indentStr = '  '
+  indentStr = '    '
   endTypeStr = ''
 
   methodsPrologue = `

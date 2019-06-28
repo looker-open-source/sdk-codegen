@@ -42,7 +42,7 @@ import {PythonFormatter} from "./python.fmt"
       const oasFile = openApiFileName(name, props)
       const apiModel = Models.ApiModel.fromFile(oasFile)
       const sdk = new SdkGenerator(apiModel, formatter)
-      let output = sdk.render('  ')
+      let output = sdk.render(formatter.indentStr)
       await fs.writeFileSync(formatter.fileName('sdk/methods'), output)
       const types = new TypeGenerator(apiModel, formatter)
       output = types.render('')
