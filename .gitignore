@@ -6,7 +6,7 @@ node_modules/*
 .vscode/*
 api/*
 sdk_generated.*
-python/sdk/methods.py
-python/sdk/models.py
+python/looker/sdk/methods.py
+python/looker/sdk/models.py
 python/venv/*
 venv/*

@@ -36,7 +36,7 @@ import {PythonFormatter} from "./python.fmt"
   try {
     const config = SDKConfig()
     const formatter = new PythonFormatter()
-    const sdkPath = `${formatter.codePath}/sdk`
+    const sdkPath = `${formatter.codePath}/${formatter.library}/sdk`
     if (!fs.existsSync(sdkPath)) fs.mkdirSync(sdkPath, { recursive: true })
     for (let [name, props] of Object.entries(config) ) {
       const oasFile = openApiFileName(name, props)

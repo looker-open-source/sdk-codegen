@@ -487,8 +487,13 @@ export interface IMappedType {
 
 export interface ICodeFormatter {
 
-  // path for generated source code files
+  // root path for generated source code files
+  // e.g. 'python' for Python
   codePath: string
+
+  // namespace/folder for the Looker SDK reference
+  // e.g. 'looker' for Python. All python source would end up under `python/looker`
+  library: string
 
   // reference to self. e.g self, this, it, etc.
   itself : string

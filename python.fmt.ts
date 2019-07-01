@@ -29,6 +29,7 @@ import {CodeFormatter, warnEditing} from "./codeFormatter"
 
 export class PythonFormatter extends CodeFormatter {
   codePath = './python/'
+  library = 'looker'
   itself = 'self'
   fileExtension = '.py'
   commentStr = '# '
@@ -43,16 +44,14 @@ export class PythonFormatter extends CodeFormatter {
 
   methodsPrologue = `
 # ${warnEditing}
-# import json
 from typing import *
-from models import *
-from rtl.api_settings import ApiSettings
-from rtl.user_session import UserSession
-from rtl.sdk_base import SDKBase
-# from rtl.sdk_error import SDKError
-# from rtl.sdk_utils import *
+from looker.sdk.models import *
+from looker.rtl.api_request import ApiRequest
+from looker.rtl.api_settings import ApiSettings
+from looker.rtl.user_session import UserSession
+from looker.rtl.sdk_base import SDKBase
 
-class LookerSDK(SDKBase):        
+class LookerSDK(SDKBase):
 `
   methodsEpilogue = ''
   modelsPrologue = `

@@ -32,6 +32,7 @@ export class CodeFormatter implements ICodeFormatter {
     debug = (tag: string, value: any, indent: string = '') => `${indent}${tag}:${this.dump(value)}`
 
     codePath = './'
+    library = 'looker'
     itself = ''
     fileExtension = '.code'
     argDelimiter = ', '
@@ -50,7 +51,7 @@ export class CodeFormatter implements ICodeFormatter {
 
     bumper = (indent: string) => indent + this.indentStr
 
-    fileName = (base: string ) => `${this.codePath}${base}${this.fileExtension}`
+    fileName = (base: string ) => `${this.codePath}${this.library}/${base}${this.fileExtension}`
     argGroup = (indent: string, args: Arg[]) => args && args.length !== 0 ? `${indent}[${args.join(this.argDelimiter)}]` : this.nullStr
     argList = (indent: string, args: Arg[]) => args && args.length !== 0 ? `${indent}${args.join(this.argDelimiter)}` : this.nullStr
 
