@@ -30,17 +30,20 @@ import { SDKConfig } from './sdkConfig'
 import { quit } from './utils'
 import {openApiFileName} from "./fetchSpec"
 import {SdkGenerator, TypeGenerator} from "./sdkGenerator"
-import {PythonFormatter} from "./python.fmt"
+import { getFormatter } from './targetLanguages'
 
 (async () => {
+  const args = await process.argv.slice(2)
+  let language = 'python' // default to the Python SDK generation
+  if (args.length > 0) language = args[0]
   try {
     const config = SDKConfig()
-    const formatter = new PythonFormatter()
-    const sdkPath = `${formatter.codePath}/${formatter.library}/sdk`
-    if (!fs.existsSync(sdkPath)) fs.mkdirSync(sdkPath, { recursive: true })
     for (let [name, props] of Object.entries(config) ) {
       const oasFile = openApiFileName(name, props)
       const apiModel = Models.ApiModel.fromFile(oasFile)
+      const formatter = getFormatter(language, apiModel)
+      const sdkPath = `${formatter.codePath}/${formatter.package}/sdk`
+      if (!fs.existsSync(sdkPath)) fs.mkdirSync(sdkPath, { recursive: true })
       const sdk = new SdkGenerator(apiModel, formatter)
       let output = sdk.render(formatter.indentStr)
       await fs.writeFileSync(formatter.fileName('sdk/methods'), output)

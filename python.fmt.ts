@@ -29,7 +29,7 @@ import {CodeFormatter, warnEditing} from "./codeFormatter"
 
 export class PythonFormatter extends CodeFormatter {
   codePath = './python/'
-  library = 'looker'
+  package = 'looker'
   itself = 'self'
   fileExtension = '.py'
   commentStr = '# '
@@ -151,7 +151,7 @@ from typing import *
     if (type.elementType) {
       const map  = this.typeMap(type.elementType)
       // provisional typed list new in Python 3.5
-      // https://docs.python.org/3/library/typing.html
+      // https://docs.python.org/3/package/typing.html
       return {name: `List[${map.name}]`, default: 'attr.ib(factory=list)'}
     }
 

@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-import { TargetLanguages, GeneratorSpec as LanguageSpec } from './targetLanguages'
+import { TargetLanguages, IGeneratorSpec as LanguageSpec } from './targetLanguages'
 import { SDKConfigProps, SDKConfig} from './sdkConfig'
 import { log, quit, run } from './utils'
 import { logConvert } from './convert'

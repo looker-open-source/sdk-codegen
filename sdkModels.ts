@@ -493,7 +493,11 @@ export interface ICodeFormatter {
 
   // namespace/folder for the Looker SDK reference
   // e.g. 'looker' for Python. All python source would end up under `python/looker`
-  library: string
+  package: string
+
+  // name of api request instance variable
+  // e.g. _rtl for Python, transport for TypeScript
+  transport: string
 
   // reference to self. e.g self, this, it, etc.
   itself : string
@@ -601,6 +605,8 @@ export interface ICodeFormatter {
 
   // generates type property
   declareProperty(indent: string, property: IProperty): string
+
+  typeNames() : string[]
 
   typeMap(type: IType) : IMappedType
 }

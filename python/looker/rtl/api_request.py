@@ -1,17 +1,18 @@
 import requests
 from typing import TypeVar
 
-from python.rtl.user_session import UserSession
+from looker.rtl.user_session import UserSession
 
 T = TypeVar('T')
 
 class ApiRequest(Request):
   def __init__(self, *args, **kwargs):
+    # TODO figure out how this stuff composes
     self._session = UserSession()
     return super().__init__(*args, **kwargs)
 
   def authHeader(self):
-    return self.session.to
+    return self.session.authHeader
 
   def get(self,
     responseType: T,
