@@ -27,21 +27,22 @@ class SDKBase(object):
 
         self.manage_user: bool = user_session is None
         self.user_session: UserSession = UserSession(self.settings) if user_session is None else user_session
+        self.rtl: ApiRequest(self.user_session)
    )
 
     # Implement destructor support
     def __enter__(self):
         if self.manager_user:
-            self.user_session.login()
+            self.rtl.login()
         return self
 
     # Implement destructor support
     def __exit__(self, exc_type, exc_value, traceback):
         if self.manage_user:
-            self.logout()
+            self.rtl.logout()
 
     def login(self) -> looker.models.access_token:
-        return self.user_session.login()
+        return self.rtl.login()
 
     def logout(self):
-        self.user_session.logout()
+        self.rtl.logout()

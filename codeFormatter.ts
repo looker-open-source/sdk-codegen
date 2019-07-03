@@ -42,7 +42,7 @@ export class CodeFormatter implements ICodeFormatter {
     commentStr = '// '
     nullStr = 'null'
     endTypeStr = ''
-    transport = '_rtl'
+    transport = 'rtl'
 
     methodsPrologue = ''
     methodsEpilogue = ''

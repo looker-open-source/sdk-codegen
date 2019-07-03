@@ -11,13 +11,13 @@ class UserSession(object):
         """Authenticate and (optionally) Login user"""
         self._settings: ApiSettings = ApiSettings() if settings is None else settings
         self._client_config: looker.Configuration = None
-        self._api_client: looker.ApiClient = None
+        self._api_client: looker.ApiClient = None # APIRequest
         self._auth_api: looker.ApiAuthApi = None
-        self._dashboard_api: looker.DashboardApi = None
-        self._look_api: looker.LookApi = None
-        self._user_api: looker.UserApi = None
-        self._space_api: looker.SpaceApi = None
-        self._query_api: looker.QueryApi = None
+        # self._dashboard_api: looker.DashboardApi = None
+        # self._look_api: looker.LookApi = None
+        # self._user_api: looker.UserApi = None
+        # self._space_api: looker.SpaceApi = None
+        # self._query_api: looker.QueryApi = None
         self._user_id: str = None
         self._token_expires_at: datetime = None
         self._token: looker.models.access_token = None

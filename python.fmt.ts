@@ -61,7 +61,6 @@ from typing import *
 `
   modelsEpilogue = ''
 
-
   // @ts-ignore
   argGroup = (indent: string, args: Arg[]) => {
     if ((!args) || args.length === 0) return this.nullStr
