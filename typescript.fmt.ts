@@ -92,25 +92,28 @@ export class APIMethods {
   /** Make a GET request */
   async get<TSuccess, TError> (
     path: string,
-    queryParams?: any
+    queryParams?: any,
+    body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('GET', path, queryParams)
+    return this.transport.request<TSuccess, TError>('GET', path, queryParams, body)
   }
 
   /** Make a HEAD request */
   async head<TSuccess, TError> (
     path: string,
-    queryParams?: any
+    queryParams?: any,
+    body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('HEAD', path, queryParams)
+    return this.transport.request<TSuccess, TError>('HEAD', path, queryParams, body)
   }
 
   /** Make a DELETE request */
   async delete<TSuccess, TError> (
     path: string,
-    queryParams?: any
+    queryParams?: any,
+    body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('DELETE', path, queryParams)
+    return this.transport.request<TSuccess, TError>('DELETE', path, queryParams, body)
   }
 
   /** Make a POST request */

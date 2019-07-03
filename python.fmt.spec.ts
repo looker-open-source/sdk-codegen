@@ -72,16 +72,31 @@ describe('python formatter', () => {
             expect(method.headerArgs).toEqual([])
             expect(method.cookieArgs).toEqual([])
         })
-        it ('body', () => {
+        it ('body for create_query', () => {
             // TODO get resolution working correctly
             const method = apiModel.methods['create_query']
             expect(method.pathArgs).toEqual([])
-            expect(method.bodyArg).toEqual("")
+            const body = method.getParams('body')
+            expect(body.length).toEqual(1)
+            expect(body[0].type.name).toEqual('Query')
+            expect(method.bodyArg).toEqual("body")
             expect(method.queryArgs).toEqual(["fields"])
             expect(method.headerArgs).toEqual([])
             expect(method.cookieArgs).toEqual([])
         })
-    })
+        it ('body for create_dashboard', () => {
+          // TODO get resolution working correctly
+          const method = apiModel.methods['create_dashboard']
+          expect(method.pathArgs).toEqual([])
+          const body = method.getParams('body')
+          expect(body.length).toEqual(1)
+          expect(body[0].type.name).toEqual('Dashboard')
+          expect(method.bodyArg).toEqual("body")
+          expect(method.queryArgs).toEqual([])
+          expect(method.headerArgs).toEqual([])
+          expect(method.cookieArgs).toEqual([])
+      })
+  })
 
     describe('type creation', () => {
         it ('with arrays and hashes', () => {

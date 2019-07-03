@@ -155,6 +155,7 @@ export interface IMethod extends ISymbol {
   resultType: IType   // alias of ISymbol.type
   primaryResponse: IMethodResponse
   responses: IMethodResponse[]
+  getParams(location?: MethodParameterLocation): IParameter[]
 
   description: string
   params: IParameter[]
@@ -173,7 +174,8 @@ export class Method extends SchemadSymbol implements IMethod {
   responses: IMethodResponse[]
   readonly params: IParameter[]
 
-  constructor (httpMethod: HttpMethod, endpoint: string, schema: OAS.OperationObject, params: IParameter[], responses: IMethodResponse[]) {
+  constructor (httpMethod: HttpMethod, endpoint: string, schema: OAS.OperationObject, params: IParameter[],
+    responses: IMethodResponse[], body? : IParameter) {
     if (!schema.operationId) {
       throw new Error('Missing operationId')
     }
@@ -197,6 +199,9 @@ export class Method extends SchemadSymbol implements IMethod {
     this.responses = responses
     this.primaryResponse = primaryResponse
     this.params = params
+    if (body) {
+      this.params.push(body)
+    }
   }
 
   get resultType(): IType {
@@ -211,7 +216,7 @@ export class Method extends SchemadSymbol implements IMethod {
     return this.schema.summary || ''
   }
 
-  private getParams(location?: MethodParameterLocation): IParameter[] {
+  getParams(location?: MethodParameterLocation): IParameter[] {
     if (location) {
       return this.params.filter((p) => p.location === location)
     }
@@ -313,6 +318,15 @@ class ArrayType extends Type{
   }
 }
 
+class ListType extends Type {
+  elementType: IType
+
+  constructor(elementType: IType, schema: OAS.SchemaObject) {
+    super(schema, `List[${elementType.name}`)
+    this.elementType = elementType
+  }
+}
+
 export class IntrinsicType extends Type {
   constructor (name: string) {
     super({}, name)
@@ -388,9 +402,30 @@ export class ApiModel implements ISymbolTable, IApiModel {
     }
   }
 
+  // Retrieve an api object via its JSON path
+  // TODO replace this with get from underscore?
+  jsonPath(path: string | string[], item: any = this.schema, splitter: string = "/") {
+    let keys = path
+    if (!(path instanceof Array)) {
+      keys = path.split(splitter)
+    }
+    for (let key of keys) {
+      if (key === '#') continue
+      item = item[key]
+      if (item == null) return null
+    }
+    return item
+  }
+
   resolveType(schema: string | OAS.SchemaObject | OAS.ReferenceObject): IType {
     if (typeof schema === 'string') {
-      return this.types[schema]
+      if (schema.indexOf("/requestBodies/") < 0) return this.types[schema.substr(schema.lastIndexOf('/')+1)]
+      // dereference the request body schema reference
+      const deref = this.jsonPath(schema)
+      if (deref) {
+        const ref = this.jsonPath(["content", "application/json", "schema", "$ref"], deref)
+        if (ref) return this.resolveType(ref)
+      }
     } else if (OAS.isReferenceObject(schema)) {
       return this.refs[schema.$ref]
     } else if (schema.type) {
@@ -402,6 +437,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
       }
       if (schema.type === 'array' && schema.items) {
         return new ArrayType(this.resolveType(schema.items), schema)
+      }
+      if (schema.type === 'object' && schema.additionalProperties) {
+        if (schema.additionalProperties !== true) {
+          return new ListType(this.resolveType(schema.additionalProperties), schema)
+        }
       }
       if (schema.format === 'date-time') {
         return this.types['datetime']
@@ -423,7 +463,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
       if (opSchema) {
         const responses = this.methodResponses(opSchema)
         const params = this.methodParameters(opSchema)
-        methods.push(new Method(httpMethod, endpoint, opSchema, params, responses))
+        const body = this.requestBody(opSchema.requestBody)
+        methods.push(new Method(httpMethod, endpoint, opSchema, params, responses, body))
       }
     }
 
@@ -468,14 +509,145 @@ export class ApiModel implements ISymbolTable, IApiModel {
             in: "query",
           }
         } else {
-          param = p as OAS.ParameterObject
-          const schema = param.schema
+          param = p
+          const schema = p.schema
           type = this.resolveType(schema || {})
         }
         params.push(new Parameter(param, type))
       }
     }
     return params
+  }
+
+  /*
+  "requestBody": {
+    "$ref": "#/components/requestBodies/Dashboard2"
+  },
+
+  "Dashboard2": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/Dashboard"
+        }
+      }
+    },
+    "description": "Dashboard"
+  },
+
+  "requestBody": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/UserAttributeGroupValue"
+          }
+        }
+      }
+    },
+    "description": "Array of group values.",
+    "required": true
+  },
+
+  "requestBody": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      }
+    },
+    "description": "array of roles ids for user",
+    "required": true
+  },
+
+  "requestBody": {
+    "$ref": "#/components/requestBodies/Dashboard"
+  },
+
+  "requestBody": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "description": "Data Action Request",
+    "required": true
+  },
+
+  "requestBody": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/DataActionRequest"
+        }
+      }
+    },
+    "description": "Data Action Request",
+    "required": true
+  },
+  "requestBody": {
+    "content": {
+      "text/plain": {
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "description": "SAML IdP metadata xml",
+    "required": true
+  },
+
+  */
+  private requestBody(obj: OAS.RequestBodyObject | OAS.ReferenceObject | undefined) {
+    if (!obj) return undefined
+    let type: IType = {
+      default: '',
+      status: '',
+      description: '',
+      deprecated: false,
+      name: '',
+      title: 'body parameter',
+      properties:{}
+    }
+    let result : IParameter = {
+      name: 'body',
+      location: 'body',
+      required: true,
+      description: '', // TODO capture description
+      type: type,
+    } as IParameter
+
+    if (OAS.isReferenceObject(obj)) {
+      type = this.resolveType(obj.$ref)
+    } else if (obj.content) {
+      const content = obj.content
+      // TODO need to understand headers or links
+      Object.keys(content).forEach(key => {
+        const media = content[key]
+        const schema = media.schema!
+        if (OAS.isReferenceObject(schema)) {
+          type = this.resolveType(schema.$ref)
+        } else {
+          type = this.resolveType(schema)
+        }
+      })
+    } else {
+      // TODO must be "any", cast to schema
+    }
+    result.type = type
+
+    return result
   }
 
 }

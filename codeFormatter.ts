@@ -130,8 +130,8 @@ export class CodeFormatter implements ICodeFormatter {
     httpArgs = (indent: string, method: IMethod) => {
         let result = this.argFill('', this.argGroup(indent, method.cookieArgs))
         result = this.argFill(result, this.argGroup(indent, method.headerArgs))
-        result = this.argFill(result, method.bodyArg ? method.bodyArg : this.nullStr)
         result = this.argFill(result, this.argGroup(indent, method.queryArgs))
+        result = this.argFill(result, method.bodyArg ? method.bodyArg : this.nullStr)
         result = this.argFill(result, this.argGroup(indent, method.pathArgs))
         return result
     }

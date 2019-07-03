@@ -190,7 +190,12 @@ export class SdkGenerator extends Generator<Models.IApiModel>{
 
   render(indent: string) {
     let items : string[] = []
-    Object.values(this.model.methods).forEach((method) => items.push(this.codeFormatter.declareMethod(indent, method)))
+    Object.values(this.model.methods)
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .forEach((method) => {
+      // console.log(method.operationId)
+      items.push(this.codeFormatter.declareMethod(indent, method))
+    })
     return this
         .p(`${this.codeFormatter.comment('','total API methods: ' + items.length)}`)
         .p(this.codeFormatter.methodsPrologue)
@@ -211,6 +216,7 @@ export class TypeGenerator extends Generator<Models.IApiModel>{
     let items : string[] = []
     Object.values(this.model.types)
         .filter((type) => ! (type instanceof Models.IntrinsicType))
+        .sort((a , b) => a.name.localeCompare(b.name))
         .forEach((type) => items.push(this.codeFormatter.declareType(indent, type)))
     return this
         .p(`${this.codeFormatter.comment('','total API models: ' + items.length)}`)

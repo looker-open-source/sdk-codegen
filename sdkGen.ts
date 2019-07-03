@@ -44,12 +44,12 @@ import { getFormatter } from './targetLanguages'
       const formatter = getFormatter(language, apiModel)
       const sdkPath = `${formatter.codePath}/${formatter.package}/sdk`
       if (!fs.existsSync(sdkPath)) fs.mkdirSync(sdkPath, { recursive: true })
-      const sdk = new SdkGenerator(apiModel, formatter)
-      let output = sdk.render(formatter.indentStr)
-      await fs.writeFileSync(formatter.fileName('sdk/methods'), output)
       const types = new TypeGenerator(apiModel, formatter)
-      output = types.render('')
+      let output = types.render('')
       await fs.writeFileSync(formatter.fileName('sdk/models'), output)
+      const sdk = new SdkGenerator(apiModel, formatter)
+      output = sdk.render(formatter.indentStr)
+      await fs.writeFileSync(formatter.fileName('sdk/methods'), output)
       break
     }
   } catch (e) {
