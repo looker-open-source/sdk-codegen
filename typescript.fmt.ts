@@ -45,104 +45,11 @@ export class TypescriptFormatter extends CodeFormatter {
 
   methodsPrologue = `
 // ${warnEditing}
+import { APIMethods } from '../rtl/api_methods'
 import { SDKResponse, Transport } from '../rtl/transport'
 import { ${this.typeNames().join(', ')} } from './models'
 
-export class APIMethods {
-  constructor (private transport: Transport) {
-    this.transport = transport
-  }
-  /** A helper method for simplifying error handling of SDK responses.
-   *
-   * Pass in a promise returned by any SDK method, and it will return a promise
-   * that rejects if the \`SDKResponse\` is not \`ok\`. This will swallow the type
-   * information in the error case, but allows you to route all the error cases
-   * into a single promise rejection.
-   *
-   * The promise will have a \`Error\` rejection reason with a string \`message\`.
-   * If the server error contains a \`message\` field, it will be provided, otherwise a
-   * generic message will occur.
-   *
-   * \`\`\`ts
-   * const sdk = LookerBrowserSDK({...})
-   * let look
-   * try {
-   *    look = await sdk.ok(sdk.create_look({...}))
-   *    // do something with look
-   * }
-   * catch(e) {
-   *    // handle error case
-   * }
-   * \`\`\`
-   */
-  async ok<TSuccess, TError> (promise: Promise<SDKResponse<TSuccess, TError>>) {
-    const result = await promise
-    if (result.ok) {
-      return result.value
-    } else {
-      const anyResult = result as any
-      if (typeof anyResult.message === 'string') {
-        throw new Error(anyResult.message)
-      } else {
-        throw new Error('An unknown error occurred with the SDK method.')
-      }
-    }
-  }
-
-  /** Make a GET request */
-  async get<TSuccess, TError> (
-    path: string,
-    queryParams?: any,
-    body?: any
-  ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('GET', path, queryParams, body)
-  }
-
-  /** Make a HEAD request */
-  async head<TSuccess, TError> (
-    path: string,
-    queryParams?: any,
-    body?: any
-  ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('HEAD', path, queryParams, body)
-  }
-
-  /** Make a DELETE request */
-  async delete<TSuccess, TError> (
-    path: string,
-    queryParams?: any,
-    body?: any
-  ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('DELETE', path, queryParams, body)
-  }
-
-  /** Make a POST request */
-  async post<TSuccess, TError> (
-    path: string,
-    queryParams?: any,
-    body?: any
-  ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('POST', path, queryParams, body)
-  }
-
-  /** Make a PUT request */
-  async put<TSuccess, TError> (
-    path: string,
-    queryParams?: any,
-    body?: any
-  ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('PUT', path, queryParams, body)
-  }
-
-  /** Make a PATCH request */
-  async patch<TSuccess, TError> (
-    path: string,
-    queryParams?: any,
-    body?: any
-  ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('PATCH', path, queryParams, body)
-  }
-
+export class LookerSDK extends APIMethods {
 `
   methodsEpilogue = ''
   modelsPrologue = `
@@ -212,7 +119,7 @@ import { URL } from 'url'
     const type = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
-    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}, IError>("${method.endpoint}"${args ? ", " +args: ""})`
+    return `${indent}return ${this.it('ok')}(${this.it(method.httpMethod.toLowerCase())}<${type.name}, IError>("${method.endpoint}"${args ? ", " +args: ""}))`
   }
 
   summary = (indent: string, text: string | undefined) => this.commentHeader(indent, text)

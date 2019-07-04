@@ -27,26 +27,26 @@ import {PythonFormatter} from "./python.fmt"
 
 const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
 
-const python = new PythonFormatter()
+const fmt = new PythonFormatter()
 const indent = ''
 
 describe('python formatter', () => {
     describe('parameter declarations', () => {
         it ('required parameter', () => {
             const param = apiModel.methods['run_query'].params[0]
-            const actual =  python.declareParameter(indent, param)
-            expect(actual).toEqual("# Id of query\nquery_id: long")
+            const actual =  fmt.declareParameter(indent, param)
+            expect(actual).toEqual("# Id of query\nquery_id: int")
         })
         it ('optional parameter', () => {
             const param = apiModel.methods['run_query'].params[2]
-            const actual =  python.declareParameter(indent, param)
+            const actual =  fmt.declareParameter(indent, param)
             expect(actual).toEqual("# Row limit (may override the limit in the saved query).\n" +
-                "limit: long")
+                "limit: int = 0")
         })
         it ('required typed parameter', () => {
             const param = apiModel.methods['create_query'].params[0]
-            const actual =  python.declareParameter(indent, param)
-            expect(actual).toEqual("# Requested fields.\nfields: str")
+            const actual =  fmt.declareParameter(indent, param)
+            expect(actual).toEqual(`# Requested fields.\nfields: str = ""`)
         })
     })
 
@@ -96,17 +96,37 @@ describe('python formatter', () => {
           expect(method.headerArgs).toEqual([])
           expect(method.cookieArgs).toEqual([])
       })
+    })
+
+    describe('httpArgs', () => {
+      it ('add_group_group', () => {
+          const method = apiModel.methods['add_group_group']
+          const args = fmt.httpArgs('', method).trim()
+          expect(args).toEqual("{'group_id': group_id}, None, body")
+      })
+      it ('create_query', () => {
+          // TODO get resolution working correctly
+          const method = apiModel.methods['create_query']
+          const args = fmt.httpArgs('', method).trim()
+          expect(args).toEqual("None, \n{'fields': fields}, body")
+      })
+      it ('create_dashboard', () => {
+        // TODO get resolution working correctly
+        const method = apiModel.methods['create_dashboard']
+        const args = fmt.httpArgs('', method).trim()
+        expect(args).toEqual("None, None, body")
+      })
   })
 
-    describe('type creation', () => {
+  describe('type creation', () => {
         it ('with arrays and hashes', () => {
             const type = apiModel.types['Workspace']
-            const actual =  python.declareType(indent, type)
+            const actual =  fmt.declareType(indent, type)
             expect(actual).toEqual("# Id of query\nquery_id: long")
         })
         it ('with refs, arrays and nullable', () => {
             const type = apiModel.types['ApiVersion']
-            const actual =  python.declareType(indent, type)
+            const actual =  fmt.declareType(indent, type)
             expect(actual).toEqual("# Id of query\nquery_id: long")
         })
     })
