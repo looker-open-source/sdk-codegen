@@ -49,19 +49,19 @@ class ApiClient(object):
             self,
             resource_path: str,
             method: Literal['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE'],
-            path_params=Optional[],
-            query_params=None,
+            path_params=Optional[str, int],
+            query_params=Optional[Dict],
             header_params=Optional[Dict[str, str]]: None,
-            body=None,
-            post_params=None,
+            body=Optional[Dict],
+            post_params=Optional[Dict],
             files=None,
             response_type: str,
             auth_settings=None,
             _return_http_data_only: bool = False,
             collection_formats=None,
-            _preload_content=True,
-            _request_timeout=None,
-            _host=None):
+            #_preload_content=True,
+            _request_timeout=Optional[int, Tuple[int, int]],
+            _host: str = None):
 
         # header parameters
         header_params = header_params or {}
