@@ -51,7 +51,8 @@ import { ${this.typeNames().join(', ')} } from './models'
 
 export class LookerSDK extends APIMethods {
 `
-  methodsEpilogue = ''
+  methodsEpilogue = '\n}'
+
   modelsPrologue = `
 // ${warnEditing}
 
@@ -147,6 +148,7 @@ import { URL } from 'url'
       'datetime': {name: 'Date', default: ''},
       'date': {name: 'Date', default: ''},
       'object': {name: 'any', default: ''},
+      'void': {name: 'void', default: ''}
     }
 
     if (type.elementType) {
