@@ -9,13 +9,14 @@ from typing import Dict, Tuple, Sequence
 
 from looker.configuration import Configuration
 from sdk_error import SDKError
+from sdk_utils import *
 
 # https://mypy.readthedocs.io/en/latest/literal_types.html
 from typing import Union, Tuple, Optional
 from typing_extensions import Literal
 
 
-class ApiClient(object):
+class ApiClient(SDKBase): # might need to inherit from SDKBase
     def __init__(
         self,
         configuration: Configuration,
@@ -53,7 +54,6 @@ class ApiClient(object):
             query_params=Optional[Dict],
             header_params=Optional[Dict[str, str]]: None,
             body=Optional[Dict],
-            post_params=Optional[Dict],
             files=None,
             response_type: str,
             auth_settings=None,
@@ -140,62 +140,35 @@ class ApiClient(object):
             return (return_data, response_data.status_code,
                     response_data.headers)
 
+# Other possible arguments here could be:
+#   files, auth, allow_redirects, stream, verify, cert, json.
+#   from https://github.com/kennethreitz/requests/blob/4983a9bde39c6320aa4f3e34e50dac6e263dab6f/requests/sessions.py#L466
 def request(self,
             method: Literal['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE'],
             url: str,
-            query_params=Optional[Dict, List[Tuple], bytes],          
+            params=Optional[Dict, List[Tuple], bytes] = None,
+            data=Optional[Dict, List[Tuple], bytes] = None,
             headers: Dict[str, str],
-            post_params=Optional[Dict, List[Tuple], bytes],
-            body=Optional[Dict, List[Tuple], bytes],                 
-            # _preload_content=True
-            _request_timeout: Optional[int, Tuple[int, int]]):
+            cookies = Optional[str] = None,
+            timeout: Optional[int, Tuple[int, int]] = None):
+
+        kwargs = selfLess(locals(), exclude=['method', 'url'])
         if method == "GET":
-            return self.api_request.get(url,
-                                        query_params=query_params,
-                                        timeout=_request_timeout,
-                                        headers=headers)
+            return self.api_request.get(url, **kwargs)
         elif method == "HEAD":
-            return self.api_request.HEAD(url,
-                                         query_params=query_params,
-                                         timeout=_request_timeout,
-                                         headers=headers)
+            return self.api_request.HEAD(url, **kwargs)
         elif method == "OPTIONS":
-            return self.api_request.OPTIONS(url,
-                                            query_params=query_params,
-                                            headers=headers,
-                                            post_params=post_params,
-                                            timeout=_request_timeout,
-                                            body=body)
+            return self.api_request.OPTIONS(url, **kwargs)
         elif method == "POST":
-            return self.api_request.POST(url,
-                                         query_params=query_params,
-                                         headers=headers,
-                                         post_params=post_params,
-                                         timeout=_request_timeout,
-                                         body=body)
+            return self.api_request.POST(url, **kwargs)
         elif method == "PUT":
-            return self.api_request.PUT(url,
-                                        query_params=query_params,
-                                        headers=headers,
-                                        post_params=post_params,
-                                        timeout=_request_timeout,
-                                        body=body)
+            return self.api_request.PUT(url, **kwargs)
         elif method == "PATCH":
-            return self.api_request.PATCH(url,
-                                          query_params=query_params,
-                                          headers=headers,
-                                          post_params=post_params,
-                                          timeout=_request_timeout,
-                                          body=body)
+            return self.api_request.PATCH(url, **kwargs)
         elif method == "DELETE":
-            return self.api_request.DELETE(url,
-                                           query_params=query_params,
-                                           headers=headers,
-                                           timeout=_request_timeout,
-                                           body=body)
-        # Can we do without this given that typing is implemented?
+            return self.api_request.DELETE(url, **kwargs)
         else:
-            raise SDKError(f'{method} request failed.'
+            raise SDKError(f"{method} request failed."
                 " HTTP method must be `GET`, `HEAD`, `OPTIONS`,"
                 " `POST`, `PATCH`, `PUT` or `DELETE`."
             )
