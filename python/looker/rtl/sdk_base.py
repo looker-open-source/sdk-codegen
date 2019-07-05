@@ -1,7 +1,7 @@
 from typing import *
-import looker
-from api_settings import ApiSettings
-from user_session import UserSession
+from python.looker.rtl.transport import Transport
+from python.looker.rtl.api_settings import ApiSettings
+from python.looker.rtl.user_session import UserSession
 
 class SDKBase(object):
     def __init__(
@@ -27,8 +27,7 @@ class SDKBase(object):
 
         self.manage_user: bool = user_session is None
         self.user_session: UserSession = UserSession(self.settings) if user_session is None else user_session
-        self.rtl: ApiRequest(self.user_session)
-   )
+        self.rtl: Transport(self.user_session)
 
     # Implement destructor support
     def __enter__(self):

@@ -25,7 +25,7 @@
  */
 
 import * as Models from "./sdkModels"
-import {CodeFormatter} from "./codeFormatter"
+import { log } from "./utils"
 
 export interface IGeneratorCtor<T extends Models.IModel> {
   new (model: T, formatter: Models.ICodeFormatter): Generator<T>
@@ -36,7 +36,7 @@ export abstract class Generator<T extends Models.IModel> {
   model: T;
   buf: string[] = [];
 
-  constructor (model: T, formatter: Models.ICodeFormatter = new CodeFormatter()) {
+  constructor (model: T, formatter: Models.ICodeFormatter) {
     this.model = model;
     this.codeFormatter = formatter
   }
@@ -79,159 +79,39 @@ export abstract class Generator<T extends Models.IModel> {
   }
 }
 
-/*
-class ParamGenerator extends Generator<Models.IParameter> {
-  render(indent: string): string {
-    return this.codeFormatter.declareParameter(indent, this.model)
-  }
-}
-
-class List {
-  list: string[] = []
-  indent: string = '  '
-
-  constructor(str: string | string[], indent: string) {
-    this.indent = indent
-    this.list = this.list.concat(indent+str)
-  }
-
-  pIf(expr: any, str: string | string[]): this {
-    if (expr) {
-      this.list = this.list.concat(this.indent+str)
-    }
-    return this
-  }
-
-  paramGroup = (section: string, args: string[] | undefined) => this.pIf(args, `${section}=[${args ? args.join(', ') : ''}]`)
-
-  paramSection = (section: string, args: string | undefined) => this.pIf(args, `${section}=${args}`)
-
-  add(str: string): this {
-    this.list.push(this.indent+str)
-    return this
-  }
-
-  toString(delimiter: string): string {
-    return this.list.join(delimiter);
-  }
-}
-
-function each<K extends Models.IModel>(
-    list: Array<K>, ctor: IGeneratorCtor<K>,
-    formatter: ICodeFormatter,
-    indent: string = '',
-    delimiter?: string): string {
-  const values = list.map((model) => {
-    return new ctor(model).render(indent)
-  })
-  return values.join(delimiter)
-}
-
-class MethodGenerator extends Generator<Models.IMethod> {
-  prologue(): this {
-    return this.p(`# ${this.model.httpMethod} ${this.model.endpoint}`)
-    .p(this.model.description);
-  }
-
-  decl(): this {
-    // composition of functions
-    return this.p(`def ${this.model.operationId}${this.paramList()}${this.returnType()}`)
-  }
-
-  // responsible for outputting parens or other delimiters, if needed,
-  // and the list of param names and types
-  paramList(indent: string) : string {
-    // "Wall of params" code style
-    return `(\n${each(this.model.params || [], ParamGenerator, this.codeFormatter, indent,',\n')})`
-  }
-
-  returnType() : string {
-    return ` -> ${this.model.type.name}:`
-  }
-
-  docComment(): this {
-    return this.pIf(this.model.summary, `"""${this.model.summary}"""`)
-  }
-
-  body(): this {
-    return this.p(`${this.indent}return session.${this.model.httpMethod}(`)
-    .p(new List(`'${this.model.endpoint}'`, this.indent()+this.indent())
-        .paramGroup('path', this.model.pathArgs)
-        .paramSection('body',this.model.bodyArg)
-        .paramGroup( 'query', this.model.queryArgs)
-        .paramGroup('header', this.model.headerArgs)
-        .paramGroup('cookie', this.model.cookieArgs)
-      .toString(',\n')
-    )
-    .p(`${this.indent})\n`)
-  }
-
-  epilogue(): this {
-    return this.p(`# epilogue goes here, if needed\n`)
-  }
-
-  render(indent: string): string {
-    return this.prologue()
-    .decl()
-    .docComment()  // this ordering appears to be unique to Python?
-    .body()
-    .epilogue()
-    .toString(indent)
-  }
-}
-
-*/
-
 export class SdkGenerator extends Generator<Models.IApiModel>{
-  constructor(api: Models.IApiModel, formatter: Models.ICodeFormatter) {
-    super(api)
-    this.codeFormatter = formatter
-  }
-
   render(indent: string) {
     let items : string[] = []
-    Object.values(this.model.methods)
-      .sort((a, b) => a.name.localeCompare(b.name))
+    // reset refcounts for all types
+    Object.entries(this.model.types).forEach(([_, type]) => type.refCount = 0)
+    Object.values(this.model.sortedMethods())
       .forEach((method) => {
-      // console.log(method.operationId)
       items.push(this.codeFormatter.declareMethod(indent, method))
     })
+    const tally = `${items.length} total API methods`
+    log(tally)
     return this
-        .p(`${this.codeFormatter.comment('','total API methods: ' + items.length)}`)
-        .p(this.codeFormatter.methodsPrologue)
+        .p(`${this.codeFormatter.comment('', tally)}`)
+        .p(this.codeFormatter.methodsPrologue(indent))
         .p(items.join('\n\n'))
-        .p(this.codeFormatter.methodsEpilogue)
-        // .each(this.model.methods, MethodGenerator)
+        .p(this.codeFormatter.methodsEpilogue(indent))
         .toString('')
   }
 }
 
 export class TypeGenerator extends Generator<Models.IApiModel>{
-  constructor(api: Models.IApiModel, formatter: Models.ICodeFormatter) {
-    super(api)
-    this.codeFormatter = formatter
-  }
-
   render(indent: string) {
     let items : string[] = []
-    Object.values(this.model.types)
-        .filter((type) => ! (type instanceof Models.IntrinsicType))
-        .sort((a , b) => a.name.localeCompare(b.name))
-        .forEach((type) => items.push(this.codeFormatter.declareType(indent, type)))
+    Object.values(this.model.sortedTypes())
+      .filter((type) => ! (type instanceof Models.IntrinsicType))
+      .forEach((type) => items.push(this.codeFormatter.declareType(indent, type)))
+    const tally = `${items.length} total API models`
+    log(tally)
     return this
-        .p(`${this.codeFormatter.comment('','total API models: ' + items.length)}`)
-        .p(this.codeFormatter.modelsPrologue)
-        .p(items.join('\n\n'))
-        .p(this.codeFormatter.modelsEpilogue)
-        // .each(this.model.methods, MethodGenerator)
-        .toString('')
+      .p(`${this.codeFormatter.comment('', tally)}`)
+      .p(this.codeFormatter.modelsPrologue(indent))
+      .p(items.join('\n\n'))
+      .p(this.codeFormatter.modelsEpilogue(indent))
+      .toString(indent)
   }
 }
-// export class SdkGenerator extends Generator<Models.IApiModel> {
-//   render(): string {
-//     return this.p(`# total API methods:${this.model.methods.length}`)
-//     .each(this.model.methods, MethodGenerator)
-//     .toString('')
-//   }
-// }
-

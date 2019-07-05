@@ -24,7 +24,7 @@
 
 // Python codeFormatter
 
-import {Arg, IMappedType, IMethod, IParameter, IProperty, IType} from "./sdkModels"
+import {Arg, IMappedType, IMethod, IParameter, IProperty, IType, IntrinsicType} from "./sdkModels"
 import {CodeFormatter, warnEditing} from "./codeFormatter"
 
 export class TypescriptFormatter extends CodeFormatter {
@@ -43,25 +43,38 @@ export class TypescriptFormatter extends CodeFormatter {
   indentStr = '  '
   endTypeStr = '\n}'
 
-  methodsPrologue = `
+  // @ts-ignore
+  methodsPrologue(indent: string) {
+    return `
 // ${warnEditing}
 import { APIMethods } from '../rtl/api_methods'
-import { SDKResponse, Transport } from '../rtl/transport'
 import { ${this.typeNames().join(', ')} } from './models'
 
 export class LookerSDK extends APIMethods {
 `
-  methodsEpilogue = '\n}'
+  }
 
-  modelsPrologue = `
+  // @ts-ignore
+  methodsEpilogue(indent: string) {
+    return '\n}'
+  }
+
+  // @ts-ignore
+  modelsPrologue(indent: string) {
+    return `
 // ${warnEditing}
 
 import { URL } from 'url'
 `
-  modelsEpilogue = ''
+  }
 
   // @ts-ignore
-  argGroup = (indent: string, args: Arg[]) => {
+  modelsEpilogue(indent: string) {
+    return ''
+  }
+
+  // @ts-ignore
+  argGroup(indent: string, args: Arg[]) {
     if ((!args) || args.length === 0) return this.nullStr
     let hash: string[] = []
     for (let arg of args) {
@@ -71,41 +84,51 @@ import { URL } from 'url'
   }
 
   // @ts-ignore
-  argList = (indent: string, args: Arg[]) =>
-      args && args.length !== 0
+  argList(indent: string, args: Arg[]) {
+    return args && args.length !== 0
           ? `\n${indent}${args.join(this.argDelimiter)}`
           : this.nullStr
+  }
 
-  declareProperty = (indent: string, property: IProperty) => {
+  declareProperty(indent: string, property: IProperty) {
     const type = this.typeMap(property.type)
     return this.commentHeader(indent, property.description)
       + `${indent}${property.name}: ${type.name}`
   }
 
-  methodSignature = (indent: string, method: IMethod) => {
+  methodSignature(indent: string, method: IMethod) {
     const type = this.typeMap(method.type)
     let bump = indent + this.indentStr
     let params: string[] = []
     if (method.params) method.params.forEach(p => params.push(this.declareParameter(bump, p)))
-    return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint}`)
-      + `${indent}async ${method.name}(\n${params.join(this.paramDelimiter)}) : Promise<${type.name}> {\n`
+    return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${type.name}`)
+      + `${indent}async ${method.name}(\n${params.join(this.paramDelimiter)}) {\n`
   }
 
-  declareParameter = (indent: string, param: IParameter) => {
+  declareParameter(indent: string, param: IParameter) {
     const type = this.typeMap(param.type)
     return this.commentHeader(indent, param.description)
       + `${indent}${param.name}: ${type.name}`
       + (param.required ? '' : (type.default ? ` = ${type.default}` : ''))
   }
 
-  declareMethod = (indent: string, method: IMethod) => {
-    const bump = this.bumper(indent)
+  // @ts-ignore
+  initArg(indent: string, property: IProperty) {
+    return ''
+  }
+
+  // @ts-ignore
+  construct(indent: string, properties: Record<string, IProperty>) {
+    return ''
+  }
+
+  declareMethod(indent: string, method: IMethod) {
     return this.methodSignature(indent, method)
-      + this.httpCall(bump, method)
+      + this.httpCall(this.bumper(indent), method)
       + `\n${indent}}`
   }
 
-  typeSignature = (indent: string, type: IType) => {
+  typeSignature(indent: string, type: IType) {
     const bump = this.bumper(indent)
     const b2 = this.bumper(bump)
     const attrs: string[] = []
@@ -116,22 +139,43 @@ import { URL } from 'url'
       `${indent}export interface I${type.name}{\n`
   }
 
-  httpCall = (indent: string, method: IMethod) => {
+  // @ts-ignore
+  errorResponses(indent: string, method: IMethod) {
+    const results: string[] = method.errorResponses
+      .map(r => `I${r.type.name}`)
+    return results.join(' | ')
+  }
+
+  httpCall(indent: string, method: IMethod) {
     const type = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
-    return `${indent}return ${this.it('ok')}(${this.it(method.httpMethod.toLowerCase())}<${type.name}, IError>("${method.endpoint}"${args ? ", " +args: ""}))`
+    const errors = this.errorResponses(indent, method)
+    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}, ${errors}>("${method.endpoint}"${args ? ", " +args: ""})`
   }
 
-  summary = (indent: string, text: string | undefined) => this.commentHeader(indent, text)
-
-  typeNames = () => {
-    const names = super.typeNames()
-    console.log({names})
-    return names.map(n => `I${n}`)
+  summary(indent: string, text: string | undefined) {
+    return this.commentHeader(indent, text)
   }
 
-  typeMap = (type: IType): IMappedType => {
+  typeNames() {
+    // TODO why doesn't `super.typeNames()` work?
+    // const names = super.typeNames()
+    let names : string[] = []
+    if (!this.api) return names
+    // include Error in the import
+    this.api.types['Error'].refCount++
+    Object.values(this.api.sortedTypes())
+      .filter((type) => (type.refCount > 0) && ! (type instanceof IntrinsicType))
+      .forEach((type) => names.push(`I${type.name}`))
+    return names
+  }
+
+  typeMap(type: IType): IMappedType {
+    // TODO why doesn't this work?
+    super.typeMap(type)
+    // type.refCount++
+
     const tsTypes: Record<string, IMappedType> = {
       'number': { name: 'number', default: '0.0' },
       'float': { name: 'number', default: '0.0' },

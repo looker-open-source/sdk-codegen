@@ -116,9 +116,18 @@ describe('python formatter', () => {
         const args = fmt.httpArgs('', method).trim()
         expect(args).toEqual("None, None, body")
       })
+    })
+
+    describe('method signature', () => {
+      it ('no params with all_datagroups', () => {
+          const method = apiModel.methods['all_datagroups']
+          const expected = "# GET /datagroups -> List[Datagroup]\ndef all_datagroups(self) -> List[Datagroup]:\n"
+          const actual = fmt.methodSignature('', method)
+          expect(actual).toEqual(expected)
+      })
   })
 
-  describe('type creation', () => {
+    describe('type creation', () => {
         it ('with arrays and hashes', () => {
             const type = apiModel.types['Workspace']
             const actual =  fmt.declareType(indent, type)

@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
- import { BrowserTransport, BrowserTransportOptions } from './browser_transport'
-import { APIMethods } from '../sdk/methods'
+import { BrowserTransport, BrowserTransportOptions } from './browser_transport'
+import { LookerSDK } from '../sdk/methods'
 
-export function LookerBrowserSDK (options: BrowserTransportOptions): APIMethods {
-  return new APIMethods(new BrowserTransport(options))
+export function LookerBrowserSDK (options: BrowserTransportOptions): LookerSDK {
+  return new LookerSDK(new BrowserTransport(options))
 }

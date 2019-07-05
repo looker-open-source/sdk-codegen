@@ -29,6 +29,68 @@ import {MethodParameterLocation} from "./methodParam"
 
 export declare type HttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
 export declare type Arg = string
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for reference
+export enum StatusCode {
+  OK = 200,
+  Created,
+  Accepted,
+  NonAuthoritative,
+  NoContent,
+  ResetContent,
+  PartialContent,
+  MultiStatus,
+  MultiStatusDav,
+  IMUsed = 226,
+  MultipleChoice = 300,
+  MovedPermanently,
+  Found,
+  SeeOther,
+  NotModified,
+  UseProxy,
+  UnusedRedirect,
+  TemporaryRedirect,
+  PermanentRedirect,
+  BadRequest = 400,
+  Unauthorized,
+  PaymentRequired,
+  Forbidden,
+  NotFound,
+  MethodNotAllowed,
+  NotAcceptable,
+  ProxyAuthRequired,
+  RequestTimeout,
+  Conflict,
+  Gone,
+  LengthRequired,
+  PreconditionFailed,
+  PayloadTooLarge,
+  UriTooLong,
+  UnsupportedMediaType,
+  RequestedRangeNotSatisifable,
+  ExpecatationFailed,
+  ImATeapot,
+  MisdirectedRequest = 421,
+  UnprocessableEntity,
+  Locked,
+  FailedDependency,
+  TooEarly,
+  UpgradeRequired,
+  PreconditionRequired,
+  TooManyRequests,
+  RequestHeaderFieldsTooLarge,
+  UnavailableForLegalReasons,
+  InternalServerError = 500,
+  NotImplemented,
+  BadGateway,
+  ServiceUnavailable,
+  GatewayTimeout,
+  HttpVersionNotSupported,
+  VariantAlsoNegotiates,
+  InsufficientStorage,
+  LoopDetected,
+  NotExtended = 510,
+  NetworkAuthRequired
+}
 
 export interface IModel {
 }
@@ -48,6 +110,7 @@ export interface IType {
   description: string
   title: string
   default?: string
+  refCount: number // if it works for Delphi, it works for TypeScript
 }
 
 export interface IParameter extends ISymbol {
@@ -58,17 +121,17 @@ export interface IParameter extends ISymbol {
 }
 
 export interface IMethodResponse {
-  statusCode: string
+  statusCode: number
   mediaType: string
   type: IType
 }
 
 class MethodResponse implements IMethodResponse {
-  mediaType: string;
-  statusCode: string;
-  type: IType;
+  mediaType: string
+  statusCode: number
+  type: IType
   constructor (statusCode: string, mediaType: string, type: IType) {
-    this.statusCode = statusCode
+    this.statusCode = parseInt(statusCode, 10)
     this.mediaType = mediaType
     this.type = type
   }
@@ -165,7 +228,11 @@ export interface IMethod extends ISymbol {
   queryArgs: string[]
   headerArgs: string[]
   cookieArgs: string[]
+  errorResponses : IMethodResponse[]
+  // All parameters in the correct, sorted order for the method call
+  allParams : IParameter[]
 }
+
 
 export class Method extends SchemadSymbol implements IMethod {
   readonly httpMethod: HttpMethod
@@ -182,11 +249,11 @@ export class Method extends SchemadSymbol implements IMethod {
 
     const primaryResponse = responses.find((response) => {
       // prefer json response over all other 200s
-      return response.statusCode === '200' && response.mediaType === 'application/json'
+      return response.statusCode === StatusCode.OK && response.mediaType === 'application/json'
     }) || responses.find((response) => {
-      return response.statusCode === '200' // accept any mediaType for 200 if none are json
+      return response.statusCode === StatusCode.OK // accept any mediaType for 200 if none are json
     }) || responses.find((response) => {
-      return response.statusCode === '204' // No Content
+      return response.statusCode === StatusCode.NoContent
     })
 
     if (!primaryResponse) {
@@ -221,6 +288,80 @@ export class Method extends SchemadSymbol implements IMethod {
       return this.params.filter((p) => p.location === location)
     }
     return this.params
+  }
+
+  // order parameters in location priority
+  locationSorter(p1: IParameter, p2: IParameter) {
+    const remain = 0
+    const before = -1
+    // const after = 1
+    // note: "body" is an injected location for simplifying method declarations
+    // parameters should be sorted in the following location order:
+    const locations = ['path', 'body', 'query', 'header', 'cookie']
+    if (p1.location === p2.location) return remain // no need to re-order
+
+    for (let location of locations) {
+      if (p1.location === location) {
+        return remain // first parameter should stay first
+      }
+      if (p2.location === location) {
+        return before // second parameter should move up
+      }
+    }
+    return remain
+  }
+
+  sort(list? : IParameter[]) {
+    if (!list) list = this.params
+    return list
+      .sort((p1, p2) => this.locationSorter(p1, p2))
+  }
+
+  // return the list of required, writeable parameters, optionally for a specific location
+  required(location?: MethodParameterLocation) {
+    let list = this.params
+      .filter((i) => i.required)
+    if (location) {
+      list = list.filter((i) => i.location === location)
+    }
+    return list
+  }
+
+  // return the list of optional, writeable parameters, optionally for a specific location
+  optional(location?: MethodParameterLocation) {
+    let list = this.params
+      .filter((i) => !i.required)
+    if (location) {
+      list = list.filter((i) => i.location === location)
+    }
+    return list
+  }
+
+  // all required parameters ordered by location declaration order
+  get requiredParams() {
+    return this.required('path')
+      .concat(
+        this.required('body'),
+        this.required('query'),
+        this.required('header'),
+        this.required('cookie')
+      )
+  }
+
+  // all required parameters ordered by location declaration order
+  get optionalParams() {
+    return this.optional('path')
+      .concat(
+        this.optional('body'),
+        this.optional('query'),
+        this.optional('header'),
+        this.optional('cookie')
+      )
+  }
+
+  // all parameters ordered by required, then optional, location declaration order
+  get allParams() {
+    return this.requiredParams.concat(this.optionalParams)
   }
 
   get pathParams(){
@@ -270,12 +411,27 @@ export class Method extends SchemadSymbol implements IMethod {
   get cookieArgs() {
     return this.argumentNames('cookie')
   }
+
+  get errorResponses() {
+    // TODO use lodash or underscore
+    const result = [];
+    const map = new Map();
+    for (const item of this.responses.filter(r => r.statusCode >= 400)) {
+        if (!map.has(item.type.name)) {
+            map.set(item.type.name, true)
+            result.push(item)
+        }
+    }
+    return result
+  }
+
 }
 
 class Type implements IType {
   readonly name: string
   readonly schema: OAS.SchemaObject
   readonly properties: Record<string, IProperty> = {}
+  refCount = 0
 
   constructor (schema: OAS.SchemaObject, name: string) {
     this.schema = schema
@@ -338,6 +494,8 @@ export interface IApiModel extends IModel {
   description: string
   methods: Record<string, IMethod>
   types: Record<string, IType>
+  sortedTypes(): IType[]
+  sortedMethods(): IMethod[]
 }
 
 export class ApiModel implements ISymbolTable, IApiModel {
@@ -454,6 +612,16 @@ export class ApiModel implements ISymbolTable, IApiModel {
       }
     }
     throw new Error("Schema must have a ref or a type")
+  }
+
+  sortedTypes() {
+    return Object.values(this.types)
+      .sort((a, b) => a.name.localeCompare(b.name))
+  }
+
+  sortedMethods() {
+    return Object.values(this.methods)
+      .sort((a, b) => a.name.localeCompare(b.name))
   }
 
   private loadMethods(endpoint: string, schema: OAS.PathItemObject): Method[] {
@@ -611,6 +779,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   */
   private requestBody(obj: OAS.RequestBodyObject | OAS.ReferenceObject | undefined) {
     if (!obj) return undefined
+    // TODO replace with new Type()
     let type: IType = {
       default: '',
       status: '',
@@ -618,7 +787,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
       deprecated: false,
       name: '',
       title: 'body parameter',
-      properties:{}
+      properties:{},
+      refCount: 0
     }
     let result : IParameter = {
       name: 'body',
@@ -643,7 +813,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
         }
       })
     } else {
-      // TODO must be "any", cast to schema
+      // TODO must be dynamic, create type
     }
     result.type = type
 
@@ -695,16 +865,16 @@ export interface ICodeFormatter {
   propDelimiter: string
 
   // standard code to insert at the top of the generated "methods" file(s)
-  methodsPrologue : string
+  methodsPrologue(indent: string): string
 
   // standard code to append to the bottom of the generated "methods" file(s)
-  methodsEpilogue : string
+  methodsEpilogue(indent: string): string
 
   // standard code to insert at the top of the generated "models" file(s)
-  modelsPrologue : string
+  modelsPrologue(indent: string): string
 
   // standard code to append to the bottom of the generated "models" file(s)
-  modelsEpilogue : string
+  modelsEpilogue(indent: string): string
 
   // provide the name for a file with the appropriate language code extension
   fileName(base: string) : string

@@ -42,27 +42,29 @@ export class PythonFormatter extends CodeFormatter {
   indentStr = '    '
   endTypeStr = ''
 
-  methodsPrologue = `
+  // @ts-ignore
+  methodsPrologue = (indent: string) => `
 # ${warnEditing}
 from typing import *
-from looker.sdk.models import *
-from looker.rtl.api_request import ApiRequest
-from looker.rtl.api_settings import ApiSettings
-from looker.rtl.user_session import UserSession
-from looker.rtl.sdk_base import SDKBase
+# TODO why do we need "python.looker" for the imports?
+from python.looker.sdk.models import *
+from python.looker.rtl.sdk_base import SDKBase
 
 class LookerSDK(SDKBase):
 `
-  methodsEpilogue = ''
-  modelsPrologue = `
+  // @ts-ignore
+  methodsEpilogue = (indent: string) => ''
+  // @ts-ignore
+  modelsPrologue = (indent: string) => `
 # ${warnEditing}
 import attr
 from typing import *
 `
-  modelsEpilogue = ''
+  // @ts-ignore
+  modelsEpilogue = (indent: string) => ''
 
   // @ts-ignore
-  argGroup = (indent: string, args: Arg[]) => {
+  argGroup(indent: string, args: Arg[]) {
     if ((!args) || args.length === 0) return this.nullStr
     let hash: string[] = []
     for (let arg of args) {
@@ -72,52 +74,71 @@ from typing import *
   }
 
   // @ts-ignore
-  argList = (indent: string, args: Arg[]) =>
-      args && args.length !== 0
+  argList(indent: string, args: Arg[]) {
+    return args && args.length !== 0
           ? `\n${indent}${args.join(this.argDelimiter)}`
           : this.nullStr
+  }
 
-  // declareProperty = (indent: string, property: IProperty) => {
-  //   const bump = indent + this.indentStr
-  //   const p = property.name
-  //   const t = this.typeMap(property.type)
-  //   return `${indent}def set_${p}(self) -> ${t}:\n` +
-  //     `${bump}return self._${p}\n\n` +
-  //     `${indent}def get_${p}(self, value: ${t}):\n` +
-  //     `${bump}self._${p} = value\n\n` +
-  //     `${indent}${p} = property(set_${p}, get_${p}, None, "${property.description}")\n`
-  // }
-
-  declareProperty = (indent: string, property: IProperty) => {
+  declareProperty(indent: string, property: IProperty) {
     const type = this.typeMap(property.type)
     return this.commentHeader(indent, property.description)
       + `${indent}${property.name}: ${type.name} = ${type.default}`
   }
 
-  methodSignature = (indent: string, method: IMethod) => {
+  methodSignature(indent: string, method: IMethod) {
     const type = this.typeMap(method.type)
     let bump = indent + this.indentStr
     let params: string[] = []
-    if (method.params) method.params.forEach(p => params.push(this.declareParameter(bump, p)))
-    return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint}`)
-      + `${indent}def ${method.name}(self,\n${params.join(this.paramDelimiter)}) -> ${type.name}:\n`
+    if (method.params) method.allParams.forEach(p => params.push(this.declareParameter(bump, p)))
+    return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${type.name}`)
+      + `${indent}def ${method.name}(self${params.length > 0?",\n":''}${params.join(this.paramDelimiter)}) -> ${type.name}:\n`
   }
 
-  declareParameter = (indent: string, param: IParameter) => {
+  declareParameter(indent: string, param: IParameter) {
     const type = this.typeMap(param.type)
     return this.commentHeader(indent, param.description)
       + `${indent}${param.name}: ${type.name}`
       + (param.required ? '' : ` = ${type.default}`)
   }
 
-  declareMethod = (indent: string, method: IMethod) => {
+  initArg(indent: string, property: IProperty) {
+    let bump = this.bumper(indent)
+    let assign = `${this.it('_' + property.name)} = ${property.name}\n`
+    if (property.nullable) {
+      return `${indent}if ${property.name} is not None:\n` +
+          `${bump}${assign}`
+    }
+    return assign
+  }
+
+  // Omit read-only parameters
+  construct(indent: string, properties: Record<string, IProperty>) {
+    indent = this.bumper(indent)
+    const bump = this.bumper(indent)
+    let result = `${indent}def __init__(self, `
+    let args: string[] = []
+    let inits: string[] = []
+    Object.values(properties)
+    // .filter((prop) => !prop.readOnly)
+        .forEach((prop) => {
+          args.push(this.declareConstructorArg('', prop))
+          inits.push(this.initArg(bump, prop))
+        })
+    result += `${args.join(this.argDelimiter)}):\n`
+        + inits.join('\n')
+    return result + "\n"
+  }
+
+
+  declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
     return this.methodSignature(indent, method)
       + this.summary(bump, method.summary)
       + this.httpCall(bump, method)
   }
 
-  typeSignature = (indent: string, type: IType) => {
+  typeSignature(indent: string, type: IType) {
     const bump = this.bumper(indent)
     const b2 = this.bumper(bump)
     const attrs: string[] = []
@@ -133,9 +154,14 @@ from typing import *
         `${bump}"""\n`
   }
 
-  summary = (indent: string, text: string | undefined) => text ? `${indent}"""${text}"""\n` : ''
+  summary(indent: string, text: string | undefined){
+    return text ? `${indent}"""${text}"""\n` : ''
+  }
 
-  typeMap = (type: IType): IMappedType => {
+  typeMap(type: IType): IMappedType {
+    // TODO why doesn't this work?
+    super.typeMap(type)
+    // type.refCount++
     const pythonTypes: Record<string, IMappedType> = {
       'number': { name: 'double', default: '0.0' },
       'integer': { name: 'int', default: '0' },

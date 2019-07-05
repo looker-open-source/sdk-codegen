@@ -1,9 +1,8 @@
 import requests
-from typing import TypeVar
+from typing import TypeVar, Generic
 
 from looker.rtl.user_session import UserSession
 from looker.rtl.transport import Transport
-import 
 
 T = TypeVar('T')
 
@@ -31,7 +30,7 @@ class APIMethods(object):
   #   - submit request
   #   - retrieve response
   #   - deserialize to requested type
-  def get(self, 
+  def get(self,
           url: str,
           params=Optional[Dict, List[Tuple], bytes] = None,
           data=Optional[Dict, List[Tuple], bytes] = None,
