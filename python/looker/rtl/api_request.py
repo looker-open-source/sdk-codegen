@@ -25,13 +25,23 @@ class ApiRequest(Request):
   #   - submit request
   #   - retrieve response
   #   - deserialize to requested type
-  def get(self,
-    responseType: T,
-    endpoint: str,
-    path: Dict[any],
-    query: Dict[any],
-    body: any,
-    headers: Dict[any],
-    cookies: Dict[any]) -> T:
-    return requests.get(T,path,query,body,headers,cookies)
+  def get(self, url: str, **kwargs) -> T:
+    return self.session.get(url, **kwargs)
 
+  def head(self, url: str, **kwargs) -> T:
+    return self.session.post(url, **kwargs)
+
+  def options(self, url: str, **kwargs) -> T:
+    return self.session.post(url, **kwargs)
+
+  def post(self, url: str, **kwargs) -> T:
+    return self.session.post(url, **kwargs)
+
+  def put(self, url: str, **kwargs) -> T:
+    return self.session.post(url, **kwargs)
+
+  def patch(self, url: str, **kwargs) -> T:
+    return self.session.post(url, **kwargs)
+
+  def delete(self, url: str, **kwargs) -> T:
+    return self.session.post(url, **kwargs)
