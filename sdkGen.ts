@@ -27,30 +27,45 @@
 import * as fs from 'fs'
 import * as Models from './sdkModels'
 import { SDKConfig } from './sdkConfig'
-import { quit } from './utils'
+import { log, quit } from './utils'
 import {openApiFileName} from "./fetchSpec"
 import {SdkGenerator, TypeGenerator} from "./sdkGenerator"
-import { getFormatter } from './targetLanguages'
+import { getFormatter, TargetLanguages } from './targetLanguages'
+import { logConvert } from './convert'
 
+// tslint:disable-next-line: no-floating-promises
 (async () => {
-  const args = await process.argv.slice(2)
-  let language = 'python' // default to the Python SDK generation
-  if (args.length > 0) language = args[0]
+  let args = process.argv.slice(2)
+  let languages = TargetLanguages.map(l => l.language)
+  if (args.length > 0) {
+    if (args.toString().toLowerCase() !== "all") {
+      languages = []
+      for (let arg of args) {
+        const values = arg.toString().split(',')
+        values.forEach(v => v.trim() ? languages.push(v.trim()) : null)
+      }
+    }
+  }
+
   try {
     const config = SDKConfig()
-    for (let [name, props] of Object.entries(config) ) {
-      const oasFile = openApiFileName(name, props)
-      const apiModel = Models.ApiModel.fromFile(oasFile)
-      const formatter = getFormatter(language, apiModel)
-      const sdkPath = `${formatter.codePath}/${formatter.package}/sdk`
-      if (!fs.existsSync(sdkPath)) fs.mkdirSync(sdkPath, { recursive: true })
-      const types = new TypeGenerator(apiModel, formatter)
-      let output = types.render('')
-      await fs.writeFileSync(formatter.fileName('sdk/models'), output)
-      const sdk = new SdkGenerator(apiModel, formatter)
-      output = sdk.render(formatter.indentStr)
-      await fs.writeFileSync(formatter.fileName('sdk/methods'), output)
-      break
+    for (let language of languages) {
+      log(`generating ${language} ...`)
+      for (let [name, props] of Object.entries(config) ) {
+        await logConvert(name, props)
+        const oasFile = openApiFileName(name, props)
+        const apiModel = Models.ApiModel.fromFile(oasFile)
+        const formatter = getFormatter(language, apiModel)
+        const sdkPath = `${formatter.codePath}/${formatter.package}/sdk`
+        if (!fs.existsSync(sdkPath)) fs.mkdirSync(sdkPath, { recursive: true })
+        const types = new TypeGenerator(apiModel, formatter)
+        let output = types.render('')
+        fs.writeFileSync(formatter.fileName('sdk/models'), output)
+        const sdk = new SdkGenerator(apiModel, formatter)
+        output = sdk.render(formatter.indentStr)
+        fs.writeFileSync(formatter.fileName('sdk/methods'), output)
+        break
+      }
     }
   } catch (e) {
     quit(e)

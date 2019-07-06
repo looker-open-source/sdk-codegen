@@ -4,11 +4,9 @@ This Looker Open Source repository is released under the MIT license. By using t
 
 While Looker has developed and tested these scripts internally, we cannot guarantee that the open-source tools used by the scripts in this repository have not been modified with malicious code.
 
-Our goal is to lower barriers to entry for customers who want use Looker as a platform, largely by providing pre-built client SDKs in the most popular languages, and curating consistency across all languages and platforms.
+Our goal is to help people who want use Looker as a platform, get up and running quickly, largely by providing pre-built client SDKs in the most popular languages, and curating consistency across all languages and platforms.
 
 The Looker API is defined with the [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification), formerly known as "swagger." This specification is used to produce both Looker's interactive API Explorer, and the Looker API language bindings via a JSON file that describes the Looker REST API.
-
-With the [`prepare.sh`](prepare.sh) script in this repository, the Looker API bindings for a specific programming language are generated with [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator).
 
 ## The parts of the Looker SDK
 
@@ -17,15 +15,13 @@ The Looker SDK has several parts:
 * **Looker API** OpenAPI specification (e.g., found at
   `https://<your-looker-endpoint>:19999/api/3.1/swagger.json`)
 
-* The **Looker API Explorer**, generated in the Looker web app directly from our version-specific OpenAPI specification provided with each Looker server instance.
+* The **Looker API Explorer**, generated in the Looker web app directly from our version-specific OpenAPI specification, provided with each Looker server instance.
 
 * **API bindings**, generated for each language from the versioned OpenAPI specification via [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator). This process converts the API specification to language-specific code. Most of these template-based generators are written by different language enthusiasts, so the pattern and quality of the generated code varies widely, even though most generated code tends to work acceptably.
 
-* **Language SDKs**, "smarter" client language classes and methods to improve usability of the API binding. (These are not yet available.)
+* **Language SDKs**, "smarter" client language classes and methods to improve usability of the API binding. (These are under development.)
 
 ## Generating an API language binding
-
-[Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185) describes the manual steps for generating an API language binding.
 
 By using the yarn/node app included in this project, you now have three steps to generate language bindings:
 
@@ -35,7 +31,7 @@ By using the yarn/node app included in this project, you now have three steps to
 
 * run the generator
 
-The deprecated bash scripts are still provided if you're unable to use npm or yarn in your environment, but future enhancements will only be made to the yarn application.
+* **Note**: [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185) describes the manual steps for generating an API language binding. This project replaces these manual steps with automated tools.
 
 ## Configuring `looker.ini`
 
@@ -45,13 +41,13 @@ To create `looker.ini`, copy [`looker-sample.ini`](looker-sample.ini) to `looker
 
 For your own source code repositories, be sure to configure your version control system to ignore your configuration `.ini` file so it doesn't accidentally get checked in somewhere unauthorized people can see it.
 
-To simplify configuration tasks (and to help ensure you *never* commit your credentials into a source code repository) future SDKs provided by Looker will use a configuration file to save/retrieve their API configuration settings, so no credentials end up being stored in the source code.
+To simplify configuration tasks (and to help ensure you *never* commit your credentials into a source code repository) the SDKs provided by Looker use a configuration file to save/retrieve their API configuration settings, so no credentials should end up being stored in the source code.
 
 ### Using the yarn/node-based generator
 
 If you don't have `yarn` installed already, you'll need to [install](https://yarnpkg.com/en/docs/install) it.
 
-After yarn is installed, just run `yarn` from your terminal window/command line, and it will download or update all the packages required to run the code generator. You can look at [package.json](package.json) to see what resources are required to run the code generator.
+After yarn is installed, just run `yarn` from your terminal window/command line, and it will download or update all the packages required to run the code generator. If you are curious, you can look at [package.json](package.json) to see what resources are required to run the code generator.
 
 Run the generator with the command:
 
@@ -69,24 +65,25 @@ The generator will:
 
 * convert (if the converted file is not already present) the downloaded Swagger 2 specification file(s) to OpenAPI 3.x
 
-* lint check the OpenAPI 3.x file(s)
+* validate the OpenAPI 3.x file(s)
 
-* call the OpenAPI code generator for each active language configured in [`targetLanguages.ts`](targetLanguages.ts)
+* by default, call the code generator for each active language configured in [`targetLanguages.ts`](targetLanguages.ts)
 
   * Comment out any language you don't want to generate, or uncomment or add the languages you do want to generate.
 
 When the generator completes successfully, the output will be similar to:
 
 ```plain-text
-api (created by the generator. This and its subfolders can be recreated with the script on demand.)
-  3.1 (api version in the configuration file)
-    csharp
-    kotlin
-    python
-    r
+python
+  looker
+    rtl
+      (run-time library hand-written files here)
+    sdk
+      methods.py (automatically generated)
+      models.py (automatically generated)
 ```
 
-**Note:** If you're unable to download the API specification file because you're using an instance of Looker that is not secured and errors are being thrown, you can explicitly turn off TLS verification in Node with a command like:
+**Note:** If you're unable to download the API specification file because you're using an instance of Looker that is not secured and errors are being thrown, you can explicitly turn off TLS verification with a command like:
 
 ```bash
 NODE_TLS_REJECT_UNAUTHORIZED="0" yarn generate
@@ -94,13 +91,13 @@ NODE_TLS_REJECT_UNAUTHORIZED="0" yarn generate
 
 #### View the specification interactively
 
-After `yarn generate` completes successfully, the OpenAPI 3.x specification file is available locally, so you can search and explore the api a command similar to the following:
+When `yarn generate` completes successfully, the OpenAPI 3.x specification file is available locally, so you can search and explore the api using a command similar to the following:
 
 ```bash
 yarn view Looker.3.1.oas.json
 ```
 
-This command will start a web server on `http://localhost:5000` that allows you do browse and search the local specification file for API 3.1.
+This command will start a web server on `http://localhost:5000` that allows you to browse and search the local specification file for API 3.1.
 
 **Tip**: search for `query` or `dashboard` in the UI and see what you get!
 
@@ -112,7 +109,7 @@ Use
 yarn run
 ```
 
-to see the list of all scripts that can be run.
+to see the list of all scripts that can be run by the code generator.
 
 ## API Troubleshooting
 

@@ -26,7 +26,7 @@ import fetch from 'node-fetch'
 import { SDKConfig, SDKConfigProps } from './sdkConfig'
 import { URLSearchParams } from 'url'
 import * as fs from 'fs'
-import { fail, log, quit } from './utils';
+import { fail, quit } from './utils'
 
 const specFileUrl = (props: SDKConfigProps) => `${props.base_url}/api/${props.api_version}/swagger.json`
 
@@ -115,7 +115,6 @@ export const logFetch = async (name: string, props: SDKConfigProps) => {
   if (!specFile) {
     return fail('fetchSpecFile', 'No specification file name returned')
   }
-  log(`${specFile} exists.`)
   return specFile
 }
 

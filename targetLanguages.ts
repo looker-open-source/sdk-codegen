@@ -98,7 +98,7 @@ export const getFormatter = (format: string, api: ApiModel) : ICodeFormatter => 
   const language = TargetLanguages.find((item) => item.language.toLowerCase() === format.toLowerCase())
   if (!language) {
     const langs = TargetLanguages.map((item) => item.language)
-    quit(`"${format}" is not a recognized language. Supported languages are: ${langs.join(', ')}`)
+    quit(`"${format}" is not a recognized language. Supported languages are: all, ${langs.join(', ')}`)
   }
   return language!.factory(api)
 }

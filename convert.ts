@@ -34,7 +34,7 @@ const lintCheck = async (fileName: string) => {
   try {
     const linter = await run('speccy', ['lint', fileName])
     if (!linter) return fail('Lint', 'no response')
-    if (linter.indexOf('Specification is valid, with 0 lint errors') >= 0) return
+    if (linter.toString().indexOf('Specification is valid, with 0 lint errors') >= 0) return
     return fail('Lint', linter.toString())
   } catch(e) {
     return quit(e)
@@ -60,20 +60,18 @@ const convertSpec = async (fileName: string, openApiFile: string) => {
   }
 }
 
-// generate all languages for the specified configuration
+// convert the swagger specification to OpenApi
 export const logConvert = async (name: string, props: SDKConfigProps) => {
   const oaFile = openApiFileName(name, props)
   if (fs.existsSync(oaFile)) return oaFile
+
   const specFile = await logFetch(name, props)
-  const openApiFile = await convertSpec(specFile, openApiFileName(name, props))
+  const openApiFile = await convertSpec(specFile, oaFile)
   if (!openApiFile) {
     return fail('logConvert', 'No file name returned for openAPI upgrade')
   }
-  log(`${openApiFile} conversion is complete.`)
 
   await lintCheck(openApiFile)
-  log(`${openApiFile} lint check passed.`)
-
   return openApiFile
 }
 

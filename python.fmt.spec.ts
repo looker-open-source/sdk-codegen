@@ -131,12 +131,12 @@ describe('python formatter', () => {
         it ('with arrays and hashes', () => {
             const type = apiModel.types['Workspace']
             const actual =  fmt.declareType(indent, type)
-            expect(actual).toEqual("# Id of query\nquery_id: long")
+            expect(actual).toEqual("# Id of query\nquery_id: int")
         })
         it ('with refs, arrays and nullable', () => {
             const type = apiModel.types['ApiVersion']
             const actual =  fmt.declareType(indent, type)
-            expect(actual).toEqual("# Id of query\nquery_id: long")
+            expect(actual).toEqual("# Id of query\nquery_id: int")
         })
     })
 })
