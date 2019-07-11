@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-// Python codeFormatter
+// TypeScript codeFormatter
 
 import {Arg, IMappedType, IMethod, IParameter, IProperty, IType, IntrinsicType} from "./sdkModels"
 import {CodeFormatter, warnEditing} from "./codeFormatter"
@@ -146,12 +146,17 @@ import { URL } from 'url'
     return results.join(' | ')
   }
 
+  httpPath(path : string) {
+    if (path.indexOf('{') >= 0) return '`' + path.replace(/{/gi, '${') + '`'
+    return `'${path}'`
+  }
+
   httpCall(indent: string, method: IMethod) {
     const type = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     const errors = this.errorResponses(indent, method)
-    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}, ${errors}>("${method.endpoint}"${args ? ", " +args: ""})`
+    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}, ${errors}>(${this.httpPath(method.endpoint)}${args ? ", " +args: ""})`
   }
 
   summary(indent: string, text: string | undefined) {
@@ -159,8 +164,6 @@ import { URL } from 'url'
   }
 
   typeNames() {
-    // TODO why doesn't `super.typeNames()` work?
-    // const names = super.typeNames()
     let names : string[] = []
     if (!this.api) return names
     // include Error in the import

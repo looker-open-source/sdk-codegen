@@ -22,9 +22,10 @@
  * THE SOFTWARE.
  */
 
-import { SDKError, SDKResponse, Transport } from './transport'
+import fetch, { Headers, Response } from 'node-fetch'
+import { ISDKError, SDKResponse, ITransport } from './transport'
 
-export interface BrowserTransportOptions {
+export interface ITransportSettings {
   baseUrl: string
   headers?: Headers
 }
@@ -60,9 +61,9 @@ async function parseResponse (contentType: string, res: Response) {
   }
 }
 
-export class BrowserTransport implements Transport {
+export class BrowserTransport implements ITransport {
 
-  constructor (private options: BrowserTransportOptions) {
+  constructor (private options: ITransportSettings) {
     this.options = options
   }
 
@@ -92,7 +93,7 @@ export class BrowserTransport implements Transport {
         return { ok: false, error: parsed }
       }
     } catch (e) {
-      const error: SDKError = {
+      const error: ISDKError = {
         type: 'sdk_error',
         message: typeof e.message === 'string' ? e.message : `The SDK call was not successful. The error was '${e}'.`
       }

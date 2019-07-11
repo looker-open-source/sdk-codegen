@@ -902,6 +902,9 @@ export interface ICodeFormatter {
   // supports
   methodSignature(indent: string, method: IMethod): string
 
+  // convert endpoint pattern to platform-specific string template
+  httpPath(path: string): string
+
   // generate a call to the http API abstraction
   // includes http method, path, body, query, headers, cookie arguments
   httpCall(indent: string, method: IMethod): string

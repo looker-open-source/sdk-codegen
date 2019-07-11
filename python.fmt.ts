@@ -130,6 +130,11 @@ from typing import *
     return result + "\n"
   }
 
+  httpArgs(indent: string, method: IMethod) {
+    let result = super.httpArgs(indent, method)
+    result = this.argFill(result, this.argGroup(indent, method.pathArgs))
+    return result
+  }
 
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)

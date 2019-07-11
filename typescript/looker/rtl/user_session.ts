@@ -22,36 +22,33 @@
  * THE SOFTWARE.
  */
 
-/** A transport is a generic way to make HTTP requests. */
-export interface ITransport {
-  request<TSuccess, TError> (
-    method: string,
-    path: string,
-    queryParams?: any,
-    body?: any
-  ): Promise<SDKResponse<TSuccess, TError>>
-}
+import { ITransport } from "./transport"
+import { IApiSettings } from "./api_settings"
+import { Request } from "node-fetch"
 
-/** A successful SDK call. */
-interface ISDKSuccessResponse<T> {
-  /** Whether the SDK call was successful. */
-  ok: true
-  /** The object returned by the SDK call. */
-  value: T
-}
+export interface IUserSession {
+  // Authentication token
+  auth_token: string
+  // ID of currently logged in user
+  user_id: string
+  authenticate: (request: Request) => Request
+  login: (request: Request) => string
+  logout: (request: Request) => boolean
+ }
 
-/** An erroring SDK call. */
-interface ISDKErrorResponse<T> {
-  /** Whether the SDK call was successful. */
-  ok: false
-  /** The error object returned by the SDK call. */
-  error: T
-}
+export class UserSession implements IUserSession {
+  auth_token: string = ''
+  user_id: string = ''
+  authenticate(request: Request) {
+    request.headers.has('auth-token')
+    return request
+  }
+  login: () => string
+  logout: () => true
 
-/** An error representing an issue in the SDK, like a network or parsing error. */
-export interface ISDKError {
-  type: 'sdk_error'
-  message: string
-}
 
-export type SDKResponse<TSuccess, TError> = ISDKSuccessResponse<TSuccess> | ISDKErrorResponse<TError | ISDKError>
+  constructor (private transport: ITransport, private settings: IApiSettings) {
+    this.transport = transport
+    this.settings = settings
+  }
+ }

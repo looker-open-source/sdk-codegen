@@ -22,11 +22,12 @@
  * THE SOFTWARE.
  */
 
-import { SDKResponse, Transport } from './transport'
+import { SDKResponse, ITransport } from './transport'
 
 export class APIMethods {
-  constructor (private transport: Transport) {
+  constructor (private transport: ITransport, private session: IUserSession) {
     this.transport = transport
+    this.session = session
   }
 
   /** A helper method for simplifying error handling of SDK responses.
@@ -36,7 +37,7 @@ export class APIMethods {
    * information in the error case, but allows you to route all the error cases
    * into a single promise rejection.
    *
-   * The promise will have a `Error` rejection reason with a string `message`.
+   * The promise will have an `Error` rejection reason with a string `message`.
    * If the server error contains a `message` field, it will be provided, otherwise a
    * generic message will occur.
    *
@@ -69,8 +70,8 @@ export class APIMethods {
   // dynamically evaluate a template string
   macro(template: string, vars: any) {
     // replace {foo} from spec path with ${foo} for template string
-    template = template.replace('{', '${')
-    return new Function("return `+template +`;").call(vars)
+    template = template.replace(/{/gi, '${')
+    return new Function("return `+ template +`;").call(vars)
   }
 
   pathify(path: string, pathParams?: any) {
@@ -82,60 +83,54 @@ export class APIMethods {
   /** Make a GET request */
   async get<TSuccess, TError> (
     path: string,
-    pathParams?: any,
     queryParams?: any,
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('GET', this.pathify(path, pathParams), queryParams, body)
+    return this.transport.request<TSuccess, TError>('GET', path, queryParams, body)
   }
 
   /** Make a HEAD request */
   async head<TSuccess, TError> (
     path: string,
-    pathParams?: any,
     queryParams?: any,
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('HEAD', this.pathify(path, pathParams), queryParams, body)
+    return this.transport.request<TSuccess, TError>('HEAD', path, queryParams, body)
   }
 
   /** Make a DELETE request */
   async delete<TSuccess, TError> (
     path: string,
-    pathParams?: any,
     queryParams?: any,
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('DELETE', this.pathify(path, pathParams), queryParams, body)
+    return this.transport.request<TSuccess, TError>('DELETE', path, queryParams, body)
   }
 
   /** Make a POST request */
   async post<TSuccess, TError> (
     path: string,
-    pathParams?: any,
     queryParams?: any,
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('POST', this.pathify(path, pathParams), queryParams, body)
+    return this.transport.request<TSuccess, TError>('POST', path, queryParams, body)
   }
 
   /** Make a PUT request */
   async put<TSuccess, TError> (
     path: string,
-    pathParams?: any,
     queryParams?: any,
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('PUT', this.pathify(path, pathParams), queryParams, body)
+    return this.transport.request<TSuccess, TError>('PUT', path, queryParams, body)
   }
 
   /** Make a PATCH request */
   async patch<TSuccess, TError> (
     path: string,
-    pathParams?: any,
     queryParams?: any,
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('PATCH', this.pathify(path, pathParams), queryParams, body)
+    return this.transport.request<TSuccess, TError>('PATCH', path, queryParams, body)
   }
 }

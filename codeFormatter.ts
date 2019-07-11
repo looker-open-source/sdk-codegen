@@ -128,19 +128,23 @@ export abstract class CodeFormatter implements ICodeFormatter {
         return `${args}${current ? this.argDelimiter : ''}${current}`
     }
 
+    httpPath(path: string) {
+      return path
+    }
+
     // build the http argument list from back to front, so trailing undefined arguments
     // can be omitted.
     // e.g.
-    //   {pathArgs..}, {queryArgs...}, bodyArg, {headerArgs...}, {cookieArgs...}
-    //   {pathArgs..}, {queryArgs...}, null, null, {cookieArgs...}
-    //   {pathArgs..}, null, bodyArg
-    //   null, {queryArgs...}
+    //   {queryArgs...}, bodyArg, {headerArgs...}, {cookieArgs...}
+    //   {queryArgs...}, null, null, {cookieArgs...}
+    //   null, bodyArg
+    //   {queryArgs...}
     httpArgs(indent: string, method: IMethod) {
         let result = this.argFill('', this.argGroup(indent, method.cookieArgs))
         result = this.argFill(result, this.argGroup(indent, method.headerArgs))
         result = this.argFill(result, method.bodyArg ? method.bodyArg : this.nullStr)
         result = this.argFill(result, this.argGroup(indent, method.queryArgs))
-        result = this.argFill(result, this.argGroup(indent, method.pathArgs))
+        // result = this.argFill(result, this.argGroup(indent, method.pathArgs))
         return result
     }
 

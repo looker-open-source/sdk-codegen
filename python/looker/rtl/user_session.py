@@ -1,4 +1,4 @@
-from looker.sdk.models import
+from looker.sdk.models import *
 import datetime
 # import urllib3
 from api_settings import ApiSettings

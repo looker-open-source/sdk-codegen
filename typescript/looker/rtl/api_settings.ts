@@ -22,36 +22,40 @@
  * THE SOFTWARE.
  */
 
-/** A transport is a generic way to make HTTP requests. */
-export interface ITransport {
-  request<TSuccess, TError> (
-    method: string,
-    path: string,
-    queryParams?: any,
-    body?: any
-  ): Promise<SDKResponse<TSuccess, TError>>
+import * as fs from 'fs'
+import * as ini from 'ini'
+
+export interface IApiSettings {
+  api_version: string
+  base_url: string
+  client_id: string
+  client_secret: string
+  embed_secret: string
+  user_id: string
 }
 
-/** A successful SDK call. */
-interface ISDKSuccessResponse<T> {
-  /** Whether the SDK call was successful. */
-  ok: true
-  /** The object returned by the SDK call. */
-  value: T
+export interface IApiSections {
+  [key: string]: IApiSettings
 }
 
-/** An erroring SDK call. */
-interface ISDKErrorResponse<T> {
-  /** Whether the SDK call was successful. */
-  ok: false
-  /** The error object returned by the SDK call. */
-  error: T
-}
+// Strongly-typed Api configuration
+export const ApiConfig = (fileName = './looker.ini') : IApiSections =>
+  ini.parse(fs.readFileSync(fileName, 'utf-8'))
 
-/** An error representing an issue in the SDK, like a network or parsing error. */
-export interface ISDKError {
-  type: 'sdk_error'
-  message: string
-}
+export class ApiSettings implements IApiSettings {
+  api_version!: string
+  base_url!: string
+  client_id!: string
+  client_secret!: string
+  embed_secret!: string
+  user_id!: string
+  constructor (fileName = './looker.ini', section? : string) {
+    const config = ApiConfig(fileName)
+    if (!section) {
+      // default the section if not specified
+      section = Object.keys(config)[0]
+    }
+    Object.assign(this, config[section])
+  }
 
-export type SDKResponse<TSuccess, TError> = ISDKSuccessResponse<TSuccess> | ISDKErrorResponse<TError | ISDKError>
+}
