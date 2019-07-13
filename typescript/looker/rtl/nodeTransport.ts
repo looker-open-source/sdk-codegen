@@ -22,10 +22,11 @@
  * THE SOFTWARE.
  */
 
- // TODO need to abstract the fetch plug-in
-// import fetch, { Headers } from 'node-fetch'
 import { ISDKError, SDKResponse, ITransport, addQueryParams, parseResponse, ITransportSettings, Authenticator } from './transport'
+// TODO need to abstract the fetch plug-in
 import fetch, { Headers, RequestInit } from 'node-fetch'
+// TODO abstract and make insecure agent injectable
+import { Agent } from 'https'
 
 export class NodeTransport implements ITransport {
 
@@ -43,6 +44,7 @@ export class NodeTransport implements ITransport {
     let init = {
       body: body ? JSON.stringify(body) : undefined,
       headers: this.options.headers || new Headers(),
+      agent: new Agent({rejectUnauthorized: false}),
       method
     } as RequestInit
 

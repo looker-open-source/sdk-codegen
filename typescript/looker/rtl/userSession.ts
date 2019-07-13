@@ -26,15 +26,14 @@ import { ITransport, SDKResponse, IRequestInit } from "./transport"
 import { IApiSettings } from "./apiSettings"
 import { IAccessToken, IError } from "../sdk/models"
 
-
 // TODO support impersonation and reporting user id of logged in user?
 export interface IUserSession {
   // Authentication token
   token: IAccessToken
-  isAuthenticated: () => boolean
-  authenticate: (init: IRequestInit) => IRequestInit
-  login: () => IAccessToken
-  logout: () => boolean
+  isAuthenticated(): boolean
+  authenticate(init: IRequestInit): IRequestInit
+  login(): IAccessToken
+  logout(): boolean
   transport: ITransport
   settings: IApiSettings
  }
@@ -49,20 +48,26 @@ export class UserSession implements IUserSession {
     this.transport = transport
   }
 
-  private setTokenExpiration(authToken: IAccessToken) {
+  setToken(authToken: IAccessToken) {
+    this._token = authToken
     let exp = new Date()
-    if (authToken) {
+    if (authToken.access_token) {
       exp.setSeconds(exp.getSeconds() + authToken.expires_in)
+    } else {
+      exp.setSeconds(exp.getSeconds() - 10) // set to expire right now
     }
     this.tokenExpiresAt = exp
-    return this.tokenExpiresAt
+    return this._token
   }
 
   // Determines if the authentication token exists and has not expired
   isAuthenticated() {
     if (!this._token) return false
     if (!this.tokenExpiresAt) return false
-    return this.tokenExpiresAt <= new Date()
+    const now = new Date()
+    const exp = this.tokenExpiresAt
+    console.log({exp, now})
+    return this.tokenExpiresAt > now
   }
 
   authenticate(init: IRequestInit) {
@@ -72,15 +77,10 @@ export class UserSession implements IUserSession {
 
   get token() {
     if (!this.isAuthenticated()) {
-      this._token = this.login()
+      console.log('getting token')
+      this.login()
     }
     return this._token
-  }
-
-  set token(value: IAccessToken) {
-    if (this._token === value) return
-    this._token = value
-    this.setTokenExpiration(value)
   }
 
   // Reset the user session
@@ -92,6 +92,7 @@ export class UserSession implements IUserSession {
   private async ok<TSuccess, TError> (promise: Promise<SDKResponse<TSuccess, TError>>) {
     const result = await promise
     if (result.ok) {
+      console.log({result})
       return result.value
     } else {
       const anyResult = result as any
@@ -109,17 +110,30 @@ export class UserSession implements IUserSession {
     // authenticate client
     const result = await this.ok(this.transport.request<IAccessToken, IError>('POST','/login',
       { client_id: this.settings.client_id, client_secret: this.settings.client_secret }))
-    this.token = result
-    return this.token
+    console.log({result})
+    return result
   }
 
   login() {
-    // TODO unwrap this sync/async confusion
-    this._login()
-      .then()
-      .catch(e => { throw e})
-    return this.token
+    if (!this.isAuthenticated()) {
+      this._login()
+        .catch(e => { throw e})
+        .then(value => this.setToken(value))
+        .catch(e => {throw e})
+    }
+    return this._token
   }
+
+  // login() {
+  //   if (!this.isAuthenticated()) {
+  //     // TODO unwrap this sync/async confusion
+  //     this._login()
+  //       .catch(e => { throw e})
+  //       .then()
+  //       .catch(e => { throw e})
+  //   }
+  //   return this.token
+  // }
 
   private async _logout() {
     await this.ok(this.transport.request<string, IError>('DELETE', '/logout'))
@@ -130,6 +144,7 @@ export class UserSession implements IUserSession {
     let result = false
     if (this.isAuthenticated()) {
       this._logout()
+        .catch(e => { throw e})
         .then(value => result = value)
         .catch(e => {throw e})
     }

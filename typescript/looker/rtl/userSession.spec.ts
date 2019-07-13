@@ -37,17 +37,37 @@ describe('User session', () => {
   const localIni = '/Users/looker/sdk_codegen/looker.ini'
   const settings = new ApiSettingsIniFile(localIni, 'Looker')
 
+  describe('expiration determination', () => {
+    it ('sets expiration correctly', () => {
+      const session = new UserSession(settings, new NodeTransport(settings))
+      session.setToken({
+        access_token: 'accesstoken',
+        token_type: 'Bearer',
+        expires_in: 3600
+      })
+      expect(session.isAuthenticated()).toEqual(true)
+      session.setToken({
+        access_token: '',
+        token_type: 'Bearer',
+        expires_in: 3600
+      })
+      expect(session.isAuthenticated()).toEqual(false)
+    })
+  })
   describe('integration tests', () => {
     it ('initializes', () => {
       const session = new UserSession(settings, new NodeTransport(settings))
       expect(session.settings).toEqual(settings)
+      expect(session.isAuthenticated()).toEqual(false)
     })
 
-    it ('logs in with good credentials', () => {
+    it ('logs in with good credentials', async () => {
       const session = new UserSession(settings, new NodeTransport(settings))
+      expect(session.isAuthenticated()).toEqual(false)
       const token = session.login()
       expect(token).toBeDefined()
-      expect(token.access_token).not.toBeFalsy()
+      expect(token.access_token).toBeDefined()
+      expect(session.isAuthenticated()).toEqual(true)
     })
 
   })

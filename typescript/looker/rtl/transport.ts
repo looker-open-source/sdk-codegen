@@ -26,6 +26,8 @@
 
 // TODO create generic Headers and Request interfaces that are not transport-specific
 import { Headers, Response } from "node-fetch"
+// TODO create generic Agent not transport-specific
+import { Agent } from "https"
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'TRACE' | 'HEAD'
 
@@ -70,7 +72,7 @@ export interface IRequestInit {
   redirect?: any
 
   // node-fetch extensions
-  // agent?: Agent; // =null http.Agent instance, allows custom proxy, certificate etc.
+  agent?: Agent; // =null http.Agent instance, allows custom proxy, certificate etc.
   compress?: boolean; // =true support gzip/deflate content encoding. false to disable
   follow?: number; // =20 maximum redirect count. 0 to not follow redirect
   size?: number; // =0 maximum response body size in bytes. 0 to disable
