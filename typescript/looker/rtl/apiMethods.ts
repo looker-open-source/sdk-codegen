@@ -22,11 +22,11 @@
  * THE SOFTWARE.
  */
 
-import { SDKResponse, ITransport } from './transport'
+import { SDKResponse, HttpMethod } from './transport'
+import { IUserSession } from './userSession'
 
 export class APIMethods {
-  constructor (private transport: ITransport, private session: IUserSession) {
-    this.transport = transport
+  constructor (private session: IUserSession) {
     this.session = session
   }
 
@@ -67,6 +67,25 @@ export class APIMethods {
     }
   }
 
+  authenticator(init: any) {
+    return this.session.authenticate(init)
+  }
+
+  // automatically authenticate the request
+  async authRequest<TSuccess, TError>(
+    method: HttpMethod,
+    path: string,
+    queryParams?: any,
+    body?: any
+  ): Promise<SDKResponse<TSuccess, TError>> {
+    return this.session.transport.request<TSuccess, TError>(
+      method,
+      path,
+      queryParams,
+      body,
+      this.authenticator)
+  }
+
   // dynamically evaluate a template string
   macro(template: string, vars: any) {
     // replace {foo} from spec path with ${foo} for template string
@@ -86,7 +105,7 @@ export class APIMethods {
     queryParams?: any,
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('GET', path, queryParams, body)
+    return this.authRequest<TSuccess, TError>('GET', path, queryParams, body)
   }
 
   /** Make a HEAD request */
@@ -95,7 +114,7 @@ export class APIMethods {
     queryParams?: any,
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('HEAD', path, queryParams, body)
+    return this.authRequest<TSuccess, TError>('HEAD', path, queryParams, body)
   }
 
   /** Make a DELETE request */
@@ -104,7 +123,7 @@ export class APIMethods {
     queryParams?: any,
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('DELETE', path, queryParams, body)
+    return this.authRequest<TSuccess, TError>('DELETE', path, queryParams, body)
   }
 
   /** Make a POST request */
@@ -113,7 +132,7 @@ export class APIMethods {
     queryParams?: any,
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('POST', path, queryParams, body)
+    return this.authRequest<TSuccess, TError>('POST', path, queryParams, body)
   }
 
   /** Make a PUT request */
@@ -122,7 +141,7 @@ export class APIMethods {
     queryParams?: any,
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('PUT', path, queryParams, body)
+    return this.authRequest<TSuccess, TError>('PUT', path, queryParams, body)
   }
 
   /** Make a PATCH request */
@@ -131,6 +150,6 @@ export class APIMethods {
     queryParams?: any,
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.transport.request<TSuccess, TError>('PATCH', path, queryParams, body)
+    return this.authRequest<TSuccess, TError>('PATCH', path, queryParams, body)
   }
 }

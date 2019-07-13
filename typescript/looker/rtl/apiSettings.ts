@@ -24,10 +24,10 @@
 
 import * as fs from 'fs'
 import * as ini from 'ini'
+import { ITransportSettings } from './transport'
 
-export interface IApiSettings {
+export interface IApiSettings extends ITransportSettings {
   api_version: string
-  base_url: string
   client_id: string
   client_secret: string
   embed_secret: string
@@ -38,24 +38,39 @@ export interface IApiSections {
   [key: string]: IApiSettings
 }
 
-// Strongly-typed Api configuration
-export const ApiConfig = (fileName = './looker.ini') : IApiSections =>
-  ini.parse(fs.readFileSync(fileName, 'utf-8'))
+export const ApiConfig = (contents: string) : IApiSections => ini.parse(contents)
 
 export class ApiSettings implements IApiSettings {
+  // tslint:disable-next-line: variable-name
   api_version!: string
+  // tslint:disable-next-line: variable-name
   base_url!: string
+  // tslint:disable-next-line: variable-name
   client_id!: string
+  // tslint:disable-next-line: variable-name
   client_secret!: string
+  // tslint:disable-next-line: variable-name
   embed_secret!: string
+  // tslint:disable-next-line: variable-name
   user_id!: string
-  constructor (fileName = './looker.ini', section? : string) {
-    const config = ApiConfig(fileName)
+  constructor (contents: string, section? : string) {
+    const config = ApiConfig(contents)
     if (!section) {
       // default the section if not specified
       section = Object.keys(config)[0]
     }
-    Object.assign(this, config[section])
+    const settings = config[section]
+    if (!settings) {
+      throw new Error(`No section named "${section}" was found`)
+    }
+    Object.assign(this, settings)
   }
 
+}
+
+// Parse an INI file, read the settings
+export class ApiSettingsIniFile extends ApiSettings {
+  constructor (fileName = './looker.ini', section? : string) {
+    super(fs.readFileSync(fileName, 'utf-8'), section)
+  }
 }

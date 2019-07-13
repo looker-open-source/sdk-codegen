@@ -1,3 +1,6 @@
+import { ApiSettingsIniFile } from "./apiSettings";
+import { UserSession } from "./userSession";
+
 /*
  * The MIT License (MIT)
  *
@@ -22,33 +25,31 @@
  * THE SOFTWARE.
  */
 
-import { ITransport } from "./transport"
-import { IApiSettings } from "./api_settings"
-import { Request } from "node-fetch"
+import * as process from 'process'
+import { NodeTransport } from "./nodeTransport"
 
-export interface IUserSession {
-  // Authentication token
-  auth_token: string
-  // ID of currently logged in user
-  user_id: string
-  authenticate: (request: Request) => Request
-  login: (request: Request) => string
-  logout: (request: Request) => boolean
- }
+// TODO figure out a way to ignore self-signed certs
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-export class UserSession implements IUserSession {
-  auth_token: string = ''
-  user_id: string = ''
-  authenticate(request: Request) {
-    request.headers.has('auth-token')
-    return request
-  }
-  login: () => string
-  logout: () => true
+describe('User session', () => {
+  // TODO get file test paths configured
+  // const localIni = '../../../looker.ini'
+  const localIni = '/Users/looker/sdk_codegen/looker.ini'
+  const settings = new ApiSettingsIniFile(localIni, 'Looker')
 
+  describe('integration tests', () => {
+    it ('initializes', () => {
+      const session = new UserSession(settings, new NodeTransport(settings))
+      expect(session.settings).toEqual(settings)
+    })
 
-  constructor (private transport: ITransport, private settings: IApiSettings) {
-    this.transport = transport
-    this.settings = settings
-  }
- }
+    it ('logs in with good credentials', () => {
+      const session = new UserSession(settings, new NodeTransport(settings))
+      const token = session.login()
+      expect(token).toBeDefined()
+      expect(token.access_token).not.toBeFalsy()
+    })
+
+  })
+
+})

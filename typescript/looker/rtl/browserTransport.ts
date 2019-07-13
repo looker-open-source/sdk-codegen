@@ -22,44 +22,9 @@
  * THE SOFTWARE.
  */
 
-import fetch, { Headers, Response } from 'node-fetch'
-import { ISDKError, SDKResponse, ITransport } from './transport'
-
-export interface ITransportSettings {
-  baseUrl: string
-  headers?: Headers
-}
-
-function addQueryParams (path: string, obj?: { [key: string]: string }) {
-  if (!obj) {
-    return path
-  }
-  const keys = Object.keys(obj)
-  if (keys.length === 0) {
-    return path
-  } else {
-    const qp = keys.map((k) => k + '=' + encodeURIComponent(obj[k])).join('&')
-    return `${path}?${qp}`
-  }
-}
-
-async function parseResponse (contentType: string, res: Response) {
-  if (contentType.match(/application\/json/g)) {
-    try {
-      return await res.json()
-    } catch (error) {
-      return Promise.reject(error)
-    }
-  } else if (contentType === 'text' || contentType.startsWith('text/')) {
-    return res.text()
-  } else {
-    try {
-      return await res.blob()
-    } catch (error) {
-      return Promise.reject(error)
-    }
-  }
-}
+ // TODO need to abstract the fetch plug-in
+import fetch, { Headers } from 'node-fetch'
+import { ISDKError, SDKResponse, ITransport, addQueryParams, parseResponse, ITransportSettings } from './transport'
 
 export class BrowserTransport implements ITransport {
 
@@ -74,11 +39,11 @@ export class BrowserTransport implements ITransport {
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
     const req = fetch(
-      this.options.baseUrl + addQueryParams(path, queryParams),
+      this.options.base_url + addQueryParams(path, queryParams),
       {
         body: body ? JSON.stringify(body) : undefined,
         headers: this.options.headers || new Headers(),
-        credentials: 'same-origin',
+        // credentials: 'same-origin',
         method
       }
     )

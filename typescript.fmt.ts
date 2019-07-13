@@ -47,7 +47,7 @@ export class TypescriptFormatter extends CodeFormatter {
   methodsPrologue(indent: string) {
     return `
 // ${warnEditing}
-import { APIMethods } from '../rtl/api_methods'
+import { APIMethods } from '../rtl/apiMethods'
 import { ${this.typeNames().join(', ')} } from './models'
 
 export class LookerSDK extends APIMethods {
