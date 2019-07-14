@@ -25,49 +25,51 @@ import { UserSession } from "./userSession";
  * THE SOFTWARE.
  */
 
-import * as process from 'process'
 import { NodeTransport } from "./nodeTransport"
 
-// TODO figure out a way to ignore self-signed certs
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
-describe('User session', () => {
+describe('UserSession', () => {
   // TODO get file test paths configured
   // const localIni = '../../../looker.ini'
   const localIni = '/Users/looker/sdk_codegen/looker.ini'
   const settings = new ApiSettingsIniFile(localIni, 'Looker')
 
-  describe('expiration determination', () => {
-    it ('sets expiration correctly', () => {
+  describe('isAuthenticated', () => {
+    it ('unauthenticated logout returns false', async () => {
       const session = new UserSession(settings, new NodeTransport(settings))
-      session.setToken({
-        access_token: 'accesstoken',
-        token_type: 'Bearer',
-        expires_in: 3600
-      })
-      expect(session.isAuthenticated()).toEqual(true)
-      session.setToken({
-        access_token: '',
-        token_type: 'Bearer',
-        expires_in: 3600
-      })
       expect(session.isAuthenticated()).toEqual(false)
+      const actual = await session.logout()
+      expect(actual).toEqual(false)
     })
+
   })
+
   describe('integration tests', () => {
     it ('initializes', () => {
       const session = new UserSession(settings, new NodeTransport(settings))
       expect(session.settings).toEqual(settings)
       expect(session.isAuthenticated()).toEqual(false)
+      expect(session.isImpersonating()).toEqual(false)
     })
 
-    it ('logs in with good credentials', async () => {
+    it ('default auth logs in with good credentials', async () => {
       const session = new UserSession(settings, new NodeTransport(settings))
       expect(session.isAuthenticated()).toEqual(false)
-      const token = session.login()
+      const token = await session.login()
       expect(token).toBeDefined()
       expect(token.access_token).toBeDefined()
       expect(session.isAuthenticated()).toEqual(true)
+    })
+
+    it ('default auth logs in and out with good credentials', async () => {
+      const session = new UserSession(settings, new NodeTransport(settings))
+      expect(session.isAuthenticated()).toEqual(false)
+      const token = await session.login()
+      expect(token).toBeDefined()
+      expect(token.access_token).toBeDefined()
+      expect(session.isAuthenticated()).toEqual(true)
+      const result = await session.logout()
+      expect(result).toEqual(true)
+      expect(session.isAuthenticated()).toEqual(false)
     })
 
   })

@@ -22,77 +22,66 @@
  * THE SOFTWARE.
  */
 
-import { ITransport, SDKResponse, IRequestInit } from "./transport"
-import { IApiSettings } from "./apiSettings"
 import { IAccessToken, IError } from "../sdk/models"
+import { IApiSettings } from "./apiSettings"
+import { IRequestInit, ITransport, SDKResponse } from "./transport"
+import { AccessToken } from "./accessToken"
 
 // TODO support impersonation and reporting user id of logged in user?
 export interface IUserSession {
   // Authentication token
-  token: IAccessToken
+  getToken(): Promise<IAccessToken>
+  userId: string
+  isImpersonating(): boolean
   isAuthenticated(): boolean
-  authenticate(init: IRequestInit): IRequestInit
-  login(): IAccessToken
-  logout(): boolean
+  authenticate(init: IRequestInit): Promise<IRequestInit>
+  login(userId?: string): Promise<IAccessToken>
+  logout(): Promise<boolean>
   transport: ITransport
   settings: IApiSettings
  }
 
 export class UserSession implements IUserSession {
-  _token: IAccessToken = {} as IAccessToken
+  // TODO track both default auth token and user auth token, extract out token expiration logic to new class
+  _token: AccessToken = new AccessToken()
   userId: string = ''
-  tokenExpiresAt: Date = new Date()
 
   constructor (public settings: IApiSettings, public transport: ITransport) {
     this.settings = settings
     this.transport = transport
   }
 
-  setToken(authToken: IAccessToken) {
-    this._token = authToken
-    let exp = new Date()
-    if (authToken.access_token) {
-      exp.setSeconds(exp.getSeconds() + authToken.expires_in)
-    } else {
-      exp.setSeconds(exp.getSeconds() - 10) // set to expire right now
-    }
-    this.tokenExpiresAt = exp
-    return this._token
-  }
-
   // Determines if the authentication token exists and has not expired
   isAuthenticated() {
-    if (!this._token) return false
-    if (!this.tokenExpiresAt) return false
-    const now = new Date()
-    const exp = this.tokenExpiresAt
-    console.log({exp, now})
-    return this.tokenExpiresAt > now
+    if (!(this._token && this._token.access_token)) return false
+    return this._token.isActive()
   }
 
-  authenticate(init: IRequestInit) {
-    init.headers.Authorization = this.token.access_token
+  isImpersonating() {
+    return !!(this.userId && this.isAuthenticated())
+  }
+
+  async authenticate(init: IRequestInit) {
+    const token = await this.getToken()
+    if (token && token.access_token) init.headers.Authorization = `token ${token.access_token}`
     return init
   }
 
-  get token() {
+  async getToken() {
     if (!this.isAuthenticated()) {
-      console.log('getting token')
-      this.login()
+      await this.login()
     }
     return this._token
   }
 
   // Reset the user session
   private reset() {
-    this._token = {} as IAccessToken
-    this.tokenExpiresAt = new Date()
+    this._token = new AccessToken()
   }
 
   private async ok<TSuccess, TError> (promise: Promise<SDKResponse<TSuccess, TError>>) {
     const result = await promise
     if (result.ok) {
-      console.log({result})
       return result.value
     } else {
       const anyResult = result as any
@@ -105,48 +94,64 @@ export class UserSession implements IUserSession {
   }
 
   // internal login method
-  private async _login() {
+  private async _login(userId?: string) {
+    if (userId && this.userId && this.userId !== userId) {
+      // We're switching user ids
+      await this.logout() // Logout the current user
+
+    }
     this.reset()
     // authenticate client
     const result = await this.ok(this.transport.request<IAccessToken, IError>('POST','/login',
       { client_id: this.settings.client_id, client_secret: this.settings.client_secret }))
-    console.log({result})
     return result
   }
 
-  login() {
+  async login(userId? : string) {
     if (!this.isAuthenticated()) {
-      this._login()
-        .catch(e => { throw e})
-        .then(value => this.setToken(value))
-        .catch(e => {throw e})
+      const token = await this._login(userId)
+      this._token = new AccessToken(token)
+      return token
     }
     return this._token
   }
 
-  // login() {
-  //   if (!this.isAuthenticated()) {
-  //     // TODO unwrap this sync/async confusion
-  //     this._login()
-  //       .catch(e => { throw e})
-  //       .then()
-  //       .catch(e => { throw e})
-  //   }
-  //   return this.token
-  // }
-
   private async _logout() {
-    await this.ok(this.transport.request<string, IError>('DELETE', '/logout'))
+    // TODO verify this closure variable is required with a local block
+    const token = this._token
+    const promise = this.transport.request<string, IError>(
+      'DELETE',
+      '/logout',
+      null,
+      null,
+      // ensure the auth token is included in the logout promise
+      (init: IRequestInit) => {
+        if (token.access_token) {
+          init.headers.Authorization = `token ${token.access_token}`
+          console.log({init})
+        }
+        return init
+      }
+    )
+
+    await this.ok(promise)
+
+    // If no error was thrown, logout was successful
+    if (this.userId) {
+      // User was logged out, so set auth back to default
+      this.userId = ''
+      await this.login()
+    } else {
+      // completely logged out
+      this.reset()
+    }
     return true
   }
 
-  logout() {
+  async logout() {
     let result = false
     if (this.isAuthenticated()) {
-      this._logout()
-        .catch(e => { throw e})
-        .then(value => result = value)
-        .catch(e => {throw e})
+      result = await this._logout()
     }
     return result
   }

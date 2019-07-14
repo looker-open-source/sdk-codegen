@@ -25,7 +25,7 @@
 import { ISDKError, SDKResponse, ITransport, addQueryParams, parseResponse, ITransportSettings, Authenticator } from './transport'
 // TODO need to abstract the fetch plug-in
 import fetch, { Headers, RequestInit } from 'node-fetch'
-// TODO abstract and make insecure agent injectable
+// TODO abstract and make insecure agent injectable for testing
 import { Agent } from 'https'
 
 export class NodeTransport implements ITransport {
@@ -49,7 +49,8 @@ export class NodeTransport implements ITransport {
     } as RequestInit
 
     if (authenticator) {
-      init = authenticator(init)
+      // Automatic authentication process for the request
+      init = await authenticator(init)
     }
 
     const req = fetch(
