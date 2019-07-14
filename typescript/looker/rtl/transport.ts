@@ -85,6 +85,7 @@ export type Authenticator = (init: any) => any
 
 export interface ITransportSettings {
   base_url: string
+  api_version: string
   headers?: Headers
 }
 

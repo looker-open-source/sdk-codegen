@@ -29,9 +29,10 @@ import fetch, { Headers, RequestInit } from 'node-fetch'
 import { Agent } from 'https'
 
 export class NodeTransport implements ITransport {
-
+  apiPath = ''
   constructor (private options: ITransportSettings) {
     this.options = options
+    this.apiPath = `${options.base_url}/${options.api_version}`
   }
 
   async request<TSuccess, TError> (
@@ -48,13 +49,16 @@ export class NodeTransport implements ITransport {
       method
     } as RequestInit
 
+    let requestPath = this.options.base_url
     if (authenticator) {
       // Automatic authentication process for the request
       init = await authenticator(init)
+      // this must be an API-versioned call
+      requestPath = this.apiPath
     }
 
     const req = fetch(
-      this.options.base_url + addQueryParams(path, queryParams),
+      requestPath + addQueryParams(path, queryParams),
       init
     )
 

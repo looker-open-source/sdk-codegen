@@ -27,7 +27,6 @@ import * as ini from 'ini'
 import { ITransportSettings } from './transport'
 
 export interface IApiSettings extends ITransportSettings {
-  api_version: string
   client_id: string
   client_secret: string
   embed_secret: string
