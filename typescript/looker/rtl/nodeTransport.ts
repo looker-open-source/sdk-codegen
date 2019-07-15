@@ -42,12 +42,12 @@ export class NodeTransport implements ITransport {
     body?: any,
     authenticator?: Authenticator
   ): Promise<SDKResponse<TSuccess, TError>> {
-    let init = {
+    let init : RequestInit = {
       body: body ? JSON.stringify(body) : undefined,
       headers: this.options.headers || new Headers(),
       agent: new Agent({rejectUnauthorized: false}),
       method
-    } as RequestInit
+    }
 
     let requestPath = this.options.base_url
     if (authenticator) {
