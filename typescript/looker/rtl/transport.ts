@@ -25,11 +25,74 @@
 /** A transport is a generic way to make HTTP requests. */
 
 // TODO create generic Headers and Request interfaces that are not transport-specific
-import { Headers, Response } from "node-fetch"
+// import { Headers, Response } from "node-fetch"
 // TODO create generic Agent not transport-specific
 import { Agent } from "https"
+import { Headers, Response } from "request"
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'TRACE' | 'HEAD'
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for reference
+export enum StatusCode {
+  OK = 200,
+  Created,
+  Accepted,
+  NonAuthoritative,
+  NoContent,
+  ResetContent,
+  PartialContent,
+  MultiStatus,
+  MultiStatusDav,
+  IMUsed = 226,
+  MultipleChoice = 300,
+  MovedPermanently,
+  Found,
+  SeeOther,
+  NotModified,
+  UseProxy,
+  UnusedRedirect,
+  TemporaryRedirect,
+  PermanentRedirect,
+  BadRequest = 400,
+  Unauthorized,
+  PaymentRequired,
+  Forbidden,
+  NotFound,
+  MethodNotAllowed,
+  NotAcceptable,
+  ProxyAuthRequired,
+  RequestTimeout,
+  Conflict,
+  Gone,
+  LengthRequired,
+  PreconditionFailed,
+  PayloadTooLarge,
+  UriTooLong,
+  UnsupportedMediaType,
+  RequestedRangeNotSatisifable,
+  ExpectationFailed,
+  ImATeapot,
+  MisdirectedRequest = 421,
+  UnprocessableEntity,
+  Locked,
+  FailedDependency,
+  TooEarly,
+  UpgradeRequired,
+  PreconditionRequired,
+  TooManyRequests,
+  RequestHeaderFieldsTooLarge,
+  UnavailableForLegalReasons,
+  InternalServerError = 500,
+  NotImplemented,
+  BadGateway,
+  ServiceUnavailable,
+  GatewayTimeout,
+  HttpVersionNotSupported,
+  VariantAlsoNegotiates,
+  InsufficientStorage,
+  LoopDetected,
+  NotExtended = 510,
+  NetworkAuthRequired
+}
 
 export interface ITransport {
   request<TSuccess, TError> (
@@ -105,15 +168,19 @@ export function addQueryParams (path: string, obj?: { [key: string]: string }) {
 export async function parseResponse (contentType: string, res: Response) {
   if (contentType.match(/application\/json/g)) {
     try {
-      return await res.json()
+      // return await res.json()
+      return await JSON.parse(res.body)
     } catch (error) {
       return Promise.reject(error)
     }
   } else if (contentType === 'text' || contentType.startsWith('text/')) {
-    return res.text()
+    return res.body
+    // return res.text()
   } else {
     try {
-      return await res.blob()
+      // TODO figure out streaming? Or provide different method for streaming?
+      return await res.body
+      // return await res.blob()
     } catch (error) {
       return Promise.reject(error)
     }

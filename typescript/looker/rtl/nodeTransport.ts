@@ -22,17 +22,21 @@
  * THE SOFTWARE.
  */
 
-import { ISDKError, SDKResponse, ITransport, addQueryParams, parseResponse, ITransportSettings, Authenticator } from './transport'
-// TODO need to abstract the fetch plug-in
-import fetch, { Headers, RequestInit } from 'node-fetch'
-// TODO abstract and make insecure agent injectable for testing
-import { Agent } from 'https'
+import { ISDKError, SDKResponse, ITransport, addQueryParams, parseResponse, ITransportSettings, Authenticator, StatusCode } from './transport'
+
+import * as rq from 'request'
+import * as rp from 'request-promise-native'
+type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
 
 export class NodeTransport implements ITransport {
   apiPath = ''
   constructor (private options: ITransportSettings) {
     this.options = options
-    this.apiPath = `${options.base_url}/${options.api_version}`
+    this.apiPath = `${options.base_url}/api/${options.api_version}`
+  }
+
+  private ok(res: rq.Response) {
+    return res.statusCode >= StatusCode.OK && (res.statusCode <= StatusCode.IMUsed)
   }
 
   async request<TSuccess, TError> (
@@ -42,32 +46,45 @@ export class NodeTransport implements ITransport {
     body?: any,
     authenticator?: Authenticator
   ): Promise<SDKResponse<TSuccess, TError>> {
-    let init : RequestInit = {
-      body: body ? JSON.stringify(body) : undefined,
-      headers: this.options.headers || new Headers(),
-      agent: new Agent({rejectUnauthorized: false}),
+    const agentTag = `LookerSDK JS ${this.options.api_version}`
+    let headers : any = {
+      // TODO use version info for the Typescript package
+      'User-Agent': agentTag,
+      ...this.options.headers
+    }
+    if (body) {
+      headers = {
+        'User-Agent': agentTag,
+        'Content-Length': Buffer.byteLength(body),
+        ...this.options.headers
+      }
+    }
+    // is this an API-versioned call
+    let requestPath = (authenticator ? this.apiPath : this.options.base_url) + addQueryParams(path, queryParams)
+    let init : RequestOptions = {
+      url: requestPath,
+      qs: queryParams,
+      rejectUnauthorized : false, // TODO make this configurable for tests. Should default to True
+      headers : headers,
+      body: body ? body : undefined,
+      json: body ? true : false,
+      resolveWithFullResponse: true,
       method
     }
 
-    let requestPath = this.options.base_url
     if (authenticator) {
       // Automatic authentication process for the request
       init = await authenticator(init)
-      // this must be an API-versioned call
-      requestPath = this.apiPath
     }
-
-    const req = fetch(
-      requestPath + addQueryParams(path, queryParams),
-      init
-    )
+    const req = rp(init).promise()
 
     try {
       const res = await req
-      const contentType = String(res.headers.get('content-type'))
+      const resTyped = res as rq.Response
+      const contentType = String(resTyped.headers['content-type'])
       // @ts-ignore have to resolve missing properties of response promise
       const parsed = await parseResponse(contentType, res)
-      if (res.ok) {
+      if (this.ok(resTyped)) {
         return { ok: true, value: parsed }
       } else {
         return { ok: false, error: parsed }

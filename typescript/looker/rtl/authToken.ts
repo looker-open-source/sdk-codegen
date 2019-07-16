@@ -25,7 +25,7 @@
 
 import { IAccessToken } from "../sdk/models"
 
- export class AccessToken implements IAccessToken {
+ export class AuthToken implements IAccessToken {
   // tslint:disable-next-line: variable-name
   access_token: string = ''
   // tslint:disable-next-line: variable-name

@@ -22,75 +22,13 @@
  * THE SOFTWARE.
  */
 
-import * as OAS from "openapi3-ts"
+import * as OAS from 'openapi3-ts'
 import * as fs from "fs"
-import {utf8} from "./utils"
-import {MethodParameterLocation} from "./methodParam"
+import { utf8 } from "./utils"
+import { MethodParameterLocation } from "./methodParam"
+import { HttpMethod, StatusCode } from "./typescript/looker/rtl/transport"
 
-export declare type HttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
 export declare type Arg = string
-// https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for reference
-export enum StatusCode {
-  OK = 200,
-  Created,
-  Accepted,
-  NonAuthoritative,
-  NoContent,
-  ResetContent,
-  PartialContent,
-  MultiStatus,
-  MultiStatusDav,
-  IMUsed = 226,
-  MultipleChoice = 300,
-  MovedPermanently,
-  Found,
-  SeeOther,
-  NotModified,
-  UseProxy,
-  UnusedRedirect,
-  TemporaryRedirect,
-  PermanentRedirect,
-  BadRequest = 400,
-  Unauthorized,
-  PaymentRequired,
-  Forbidden,
-  NotFound,
-  MethodNotAllowed,
-  NotAcceptable,
-  ProxyAuthRequired,
-  RequestTimeout,
-  Conflict,
-  Gone,
-  LengthRequired,
-  PreconditionFailed,
-  PayloadTooLarge,
-  UriTooLong,
-  UnsupportedMediaType,
-  RequestedRangeNotSatisifable,
-  ExpecatationFailed,
-  ImATeapot,
-  MisdirectedRequest = 421,
-  UnprocessableEntity,
-  Locked,
-  FailedDependency,
-  TooEarly,
-  UpgradeRequired,
-  PreconditionRequired,
-  TooManyRequests,
-  RequestHeaderFieldsTooLarge,
-  UnavailableForLegalReasons,
-  InternalServerError = 500,
-  NotImplemented,
-  BadGateway,
-  ServiceUnavailable,
-  GatewayTimeout,
-  HttpVersionNotSupported,
-  VariantAlsoNegotiates,
-  InsufficientStorage,
-  LoopDetected,
-  NotExtended = 510,
-  NetworkAuthRequired
-}
 
 export interface IModel {
 }

@@ -25,7 +25,7 @@
 import { IAccessToken, IError } from "../sdk/models"
 import { IApiSettings } from "./apiSettings"
 import { IRequestInit, ITransport, SDKResponse } from "./transport"
-import { AccessToken } from "./accessToken"
+import { AuthToken } from "./authToken"
 
 // TODO support impersonation and reporting user id of logged in user?
 export interface IUserSession {
@@ -43,7 +43,7 @@ export interface IUserSession {
 
 export class UserSession implements IUserSession {
   // TODO track both default auth token and user auth token, extract out token expiration logic to new class
-  _token: AccessToken = new AccessToken()
+  _token: AuthToken = new AuthToken()
   userId: string = ''
 
   constructor (public settings: IApiSettings, public transport: ITransport) {
@@ -76,7 +76,7 @@ export class UserSession implements IUserSession {
 
   // Reset the user session
   private reset() {
-    this._token = new AccessToken()
+    this._token = new AuthToken()
   }
 
   private async ok<TSuccess, TError> (promise: Promise<SDKResponse<TSuccess, TError>>) {
@@ -110,7 +110,7 @@ export class UserSession implements IUserSession {
   async login(userId? : string) {
     if (!this.isAuthenticated()) {
       const token = await this._login(userId)
-      this._token = new AccessToken(token)
+      this._token = new AuthToken(token)
       return token
     }
     return this._token
@@ -128,7 +128,6 @@ export class UserSession implements IUserSession {
       (init: IRequestInit) => {
         if (token.access_token) {
           init.headers.Authorization = `token ${token.access_token}`
-          console.log({init})
         }
         return init
       }
