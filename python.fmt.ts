@@ -74,6 +74,11 @@ from typing import *
   }
 
   // @ts-ignore
+  createRequester(indent: string, method: IMethod) {
+    return ''
+  }
+
+  // @ts-ignore
   argList(indent: string, args: Arg[]) {
     return args && args.length !== 0
           ? `\n${indent}${args.join(this.argDelimiter)}`
@@ -90,7 +95,8 @@ from typing import *
     const type = this.typeMap(method.type)
     let bump = indent + this.indentStr
     let params: string[] = []
-    if (method.params) method.allParams.forEach(p => params.push(this.declareParameter(bump, p)))
+    const args = method.allParams
+    if (args && args.length > 0) method.allParams.forEach(p => params.push(this.declareParameter(bump, p)))
     return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${type.name}`)
       + `${indent}def ${method.name}(self${params.length > 0?",\n":''}${params.join(this.paramDelimiter)}) -> ${type.name}:\n`
   }

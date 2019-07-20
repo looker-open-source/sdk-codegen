@@ -85,7 +85,7 @@ export class SdkGenerator extends Generator<Models.IApiModel>{
     // reset refcounts for all types
     Object.entries(this.model.types).forEach(([_, type]) => type.refCount = 0)
     Object.values(this.model.sortedMethods())
-      .forEach((method) => {
+      .forEach(method => {
       items.push(this.codeFormatter.declareMethod(indent, method))
     })
     const tally = `${items.length} total API methods`
@@ -103,8 +103,16 @@ export class TypeGenerator extends Generator<Models.IApiModel>{
   render(indent: string) {
     let items : string[] = []
     Object.values(this.model.sortedTypes())
-      .filter((type) => ! (type instanceof Models.IntrinsicType))
-      .forEach((type) => items.push(this.codeFormatter.declareType(indent, type)))
+      .filter(type => ! (type instanceof Models.IntrinsicType))
+      .forEach(type => items.push(this.codeFormatter.declareType(indent, type)))
+    // TODO implement requester generation, but commit current work to keep Brian unblocked
+    // for hack week/2
+    // let requests: string[] = []
+    // if (false && this.codeFormatter.needsRequestTypes) {
+    //   Object.values(this.model.sortedMethods())
+    //     .filter(method => method.hasOptionalParams())
+    //     .forEach(method => requests.push(this.codeFormatter.createRequester(indent, method))
+    // }
     const tally = `${items.length} total API models`
     log(tally)
     return this
@@ -112,6 +120,7 @@ export class TypeGenerator extends Generator<Models.IApiModel>{
       .p(this.codeFormatter.modelsPrologue(indent))
       .p(items.join('\n\n'))
       .p(this.codeFormatter.modelsEpilogue(indent))
+      // .p(requests.join(`\n`))
       .toString(indent)
   }
 }

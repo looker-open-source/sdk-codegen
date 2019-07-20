@@ -30,6 +30,7 @@ export const warnEditing = 'NOTE: Do not edit this source code file. It is gener
 export abstract class CodeFormatter implements ICodeFormatter {
 
     api: ApiModel | undefined
+    needsRequestTypes = false
     codePath = './'
     package = 'looker'
     itself = ''
@@ -61,6 +62,7 @@ export abstract class CodeFormatter implements ICodeFormatter {
     abstract summary(indent: string, text: string | undefined) : string
     abstract initArg(indent: string, property: IProperty) : string
     abstract construct(indent: string, properties: Record<string, IProperty>) : string
+    abstract createRequester(indent: string, method: IMethod): string
 
     dump(value: any) {
       return JSON.stringify(value, null, 2)

@@ -157,6 +157,8 @@ export interface IMethod extends ISymbol {
   primaryResponse: IMethodResponse
   responses: IMethodResponse[]
   getParams(location?: MethodParameterLocation): IParameter[]
+  optional(location?: MethodParameterLocation): IParameter[]
+  hasOptionalParams(): boolean
 
   description: string
   params: IParameter[]
@@ -273,6 +275,10 @@ export class Method extends SchemadSymbol implements IMethod {
       list = list.filter((i) => i.location === location)
     }
     return list
+  }
+
+  hasOptionalParams() {
+    return this.optional().length > 0
   }
 
   // all required parameters ordered by location declaration order
@@ -802,6 +808,10 @@ export interface ICodeFormatter {
   // property delimiter. Typically, ",\n"
   propDelimiter: string
 
+  // Does this language require request types to be generated because it doesn't
+  // conveniently support named default parameters?
+  needsRequestTypes: boolean
+
   // standard code to insert at the top of the generated "methods" file(s)
   methodsPrologue(indent: string): string
 
@@ -849,6 +859,9 @@ export interface ICodeFormatter {
 
   // generates the type declaration signature for the start of the type definition
   typeSignature(indent: string, type: IType): string
+
+  // creates the requester type and defaulter for those languages requiring them
+  createRequester(indent: string, method: IMethod): string
 
   // generates summary text
   // e.g, for Python:

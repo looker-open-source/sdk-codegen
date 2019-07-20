@@ -42,6 +42,7 @@ export class TypescriptFormatter extends CodeFormatter {
 
   indentStr = '  '
   endTypeStr = '\n}'
+  needsRequestTypes = true
 
   // @ts-ignore
   methodsPrologue(indent: string) {
@@ -96,20 +97,54 @@ import { URL } from 'url'
       + `${indent}${property.name}: ${type.name}`
   }
 
+  // Looks like Partial<> is the way to go https://www.typescriptlang.org/docs/handbook/utility-types.html#partialt
+  // but for now https://stackoverflow.com/a/54474807/74137 is the approach
+  createRequester(indent: string, method: IMethod) {
+    const bump = indent + this.indentStr
+    const args = method.allParams // get the params in signature order
+    let props: string[] = []
+    let defaults: string[] = []
+    if (args && args.length > 0) args.forEach(p => props.push(this.declareParameter(bump, p)))
+    method.optional()
+      .forEach(arg => {
+        const type = this.typeMap(arg.type)
+        defaults.push(`${bump}${arg.name}: ${type.default}`)
+    })
+    return this.commentHeader(indent, 'Request initialization for ${method.name}')
+      + `${indent}export interface IRequest_${method.name} {\n`
+      + props.join(this.propDelimiter)
+      + `${indent}}\n\n`
+      + `${indent}export class Request_${method.name} {\n`
+      + defaults.join(this.propDelimiter)
+      + `${indent}}\n\n`
+  }
+
   methodSignature(indent: string, method: IMethod) {
     const type = this.typeMap(method.type)
-    let bump = indent + this.indentStr
-    let params: string[] = []
-    if (method.params) method.params.forEach(p => params.push(this.declareParameter(bump, p)))
-    return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${type.name}`)
-      + `${indent}async ${method.name}(\n${params.join(this.paramDelimiter)}) {\n`
+    const header = this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${type.name}`)
+      + `${indent}async ${method.name}(`
+    let fragment = ''
+
+    // TODO unblock Brian for now
+    // if (method.hasOptionalParams()) {
+    //   // use the request type generated in models.ts
+    //   fragment = `request: IRequest_${method.name}`
+    // } else {
+      const bump = indent + this.indentStr
+      let params: string[] = []
+      const args = method.allParams // get the params in signature order
+      if (args && args.length > 0) args.forEach(p => params.push(this.declareParameter(bump, p)))
+        fragment = `\n${params.join(this.paramDelimiter)}`
+    // }
+    return header + fragment + ') {\n'
   }
 
   declareParameter(indent: string, param: IParameter) {
     const type = this.typeMap(param.type)
+    const optional = param.required ? '' : '?'
     return this.commentHeader(indent, param.description)
-      + `${indent}${param.name}: ${type.name}`
-      + (param.required ? '' : (type.default ? ` = ${type.default}` : ''))
+      + `${indent}${param.name}${optional}: ${type.name}`
+      // + (param.required ? '' : (type.default ? ` = ${type.default}` : ''))
   }
 
   // @ts-ignore

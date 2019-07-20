@@ -186,3 +186,13 @@ export async function parseResponse (contentType: string, res: Response) {
     }
   }
 }
+
+export function sdkError(result: any) {
+  if (typeof result.error.message === 'string') {
+    return new Error(result.error.message)
+  } else if (typeof result.message === 'string') {
+    return new Error(result.message)
+  }
+  const error = JSON.stringify(result)
+  return new Error(`Unknown error with SDK method ${error}`)
+}

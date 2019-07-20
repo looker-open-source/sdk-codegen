@@ -24,8 +24,9 @@
 
 import { IAccessToken, IError } from "../sdk/models"
 import { IApiSettings } from "./apiSettings"
-import { IRequestInit, ITransport, SDKResponse } from "./transport"
+import { IRequestInit, ITransport, SDKResponse, sdkError } from "./transport"
 import { AuthToken } from "./authToken"
+import { NodeTransport } from "./nodeTransport";
 
 // TODO support impersonation and reporting user id of logged in user?
 export interface IUserSession {
@@ -37,18 +38,20 @@ export interface IUserSession {
   authenticate(init: IRequestInit): Promise<IRequestInit>
   login(userId?: string): Promise<IAccessToken>
   logout(): Promise<boolean>
-  transport: ITransport
   settings: IApiSettings
+  transport: ITransport
  }
+
 
 export class UserSession implements IUserSession {
   // TODO track both default auth token and user auth token, extract out token expiration logic to new class
   _token: AuthToken = new AuthToken()
   userId: string = ''
+  transport: ITransport
 
-  constructor (public settings: IApiSettings, public transport: ITransport) {
+  constructor (public settings: IApiSettings, transport?: ITransport) {
     this.settings = settings
-    this.transport = transport
+    this.transport = transport || new NodeTransport(settings)
   }
 
   // Determines if the authentication token exists and has not expired
@@ -84,12 +87,7 @@ export class UserSession implements IUserSession {
     if (result.ok) {
       return result.value
     } else {
-      const anyResult = result as any
-      if (typeof anyResult.error.message === 'string') {
-        throw new Error(anyResult.error.message)
-      } else {
-        throw new Error('An unknown error occurred with the SDK method.')
-      }
+      throw sdkError(result as any)
     }
   }
 

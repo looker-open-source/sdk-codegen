@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 
-import { SDKResponse, HttpMethod } from './transport'
+import { SDKResponse, HttpMethod, sdkError } from './transport'
 import { IUserSession } from './userSession'
 
 export class APIMethods {
-  constructor (private session: IUserSession) {
-    this.session = session
+  constructor (public userSession: IUserSession) {
+    this.userSession = userSession
   }
 
   /** A helper method for simplifying error handling of SDK responses.
@@ -58,17 +58,8 @@ export class APIMethods {
     if (result.ok) {
       return result.value
     } else {
-      const anyResult = result as any
-      if (typeof anyResult.message === 'string') {
-        throw new Error(anyResult.message)
-      } else {
-        throw new Error('An unknown error occurred with the SDK method.')
-      }
+      throw sdkError(result as any)
     }
-  }
-
-  authenticator(init: any) {
-    return this.session.authenticate(init)
   }
 
   // automatically authenticate the request
@@ -78,12 +69,15 @@ export class APIMethods {
     queryParams?: any,
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.session.transport.request<TSuccess, TError>(
+    return this.userSession.transport.request<TSuccess, TError>(
       method,
       path,
       queryParams,
       body,
-      this.authenticator)
+      (init: any) => {
+        return this.userSession.authenticate(init)
+      }
+    )
   }
 
   // dynamically evaluate a template string
