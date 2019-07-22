@@ -3,6 +3,7 @@ from looker.sdk.models import AccessToken
 
 
 def test_defaults_with_empty_token():
+    """Confirm the defaults when initializing AuthToken without arguments."""
     actual = AuthToken()
 
     assert actual.access_token == ''
@@ -12,6 +13,7 @@ def test_defaults_with_empty_token():
 
 
 def test_is_active_with_full_token():
+    """Confirm active token when AuthToken is initialized properly."""
     actual = AuthToken(AccessToken('all-access', 'backstage', 3600))
 
     assert actual.access_token == 'all-access'
