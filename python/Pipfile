@@ -7,6 +7,9 @@ verify_ssl = true
 pytest = "*"
 pylint = "*"
 yapf = "*"
+ptpython = "*"
+ipython = "*"
+mypy = "*"
 
 [packages]
 requests = "*"

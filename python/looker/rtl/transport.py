@@ -1,37 +1,80 @@
-import requests
-from api_settings import ApiSettings
+"""Types and abstract base class for transport implementations.
+"""
 
-class Transport(requests.Session):
-    def __init__(self):
-        # figure out how this plugs into requests.Session
-        
-    def http_method(self,
-                method: Literal['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE'],
-                url: str,
-                params=Optional[Dict, List[Tuple], bytes] = None,
-                data=Optional[Dict, List[Tuple], bytes] = None,
-                headers: Dict[str, str],
-                cookies = Optional[str] = None,
-                timeout: Optional[int, Tuple[int, int]] = None):
+import abc
+import dataclasses
+import enum
+from typing import Any, Callable, Generic, MutableMapping, Optional, TypeVar, Union
 
-            kwargs = selfLess(locals(), exclude=['method'])
-            if method == "GET":
-                return self.session.get(**kwargs)
-            elif method == "HEAD":
-                return self.session.head(**kwargs)
-            elif method == "OPTIONS":
-                return self.session..OPTIONS(**kwargs)
-            elif method == "POST":
-                return self.session.POST(**kwargs)
-            elif method == "PUT":
-                return self.session.PUT(**kwargs)
-            elif method == "PATCH":
-                return self.session.PATCH(**kwargs)
-            elif method == "DELETE":
-                return self.session.DELETE(**kwargs)
-            else:
-                raise SDKError(f"{method} request failed."
-                    " HTTP method must be `GET`, `HEAD`, `OPTIONS`,"
-                    " `POST`, `PATCH`, `PUT` or `DELETE`."
-                )
+# pylint: disable=too-few-public-methods
 
+
+class HttpMethod(enum.Enum):
+    """Supported HTTP verbs.
+    """
+    GET = 1
+    POST = 2
+    PUT = 3
+    DELETE = 4
+    PATCH = 5
+    TRACE = 6
+    HEAD = 7
+
+
+@dataclasses.dataclass(frozen=True)
+class TransportSettings:
+    """Basic transport settings.
+    """
+    base_url: str
+    api_version: str
+    headers: Optional[MutableMapping[str, str]] = None
+
+
+T = TypeVar('T')  # pylint: disable=invalid-name
+
+
+@dataclasses.dataclass(frozen=True)
+class SDKSuccessResponse(Generic[T]):
+    """Success Response object.
+    """
+    value: T
+    ok: bool = True
+
+
+@dataclasses.dataclass(frozen=True)
+class SDKErrorResponse(Generic[T]):
+    """Error Response object.
+    """
+    error: T
+    ok: bool = False
+
+
+@dataclasses.dataclass(frozen=True)
+class SDKError(Generic[T]):
+    """Network/Infrastructure Error object.
+    """
+    message: str
+    type: str = 'sdk_error'
+
+
+class Transport(abc.ABC):
+    """Transport base class.
+    """
+    @classmethod
+    @abc.abstractmethod
+    def configure(cls, settings: TransportSettings):
+        """Configure and return an instance of Transport
+        """
+
+    # pylint: disable=too-many-arguments
+    @abc.abstractmethod
+    def request(
+            self,
+            method: HttpMethod,
+            path: str,
+            query_params: Any = None,
+            body: Any = None,
+            authenticator: Callable[[Any], Any] = None
+    ) -> Union[SDKSuccessResponse, Union[SDKErrorResponse, SDKError]]:
+        """Send API request.
+        """
