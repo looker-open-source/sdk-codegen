@@ -72,9 +72,9 @@ class Transport(abc.ABC):
             self,
             method: HttpMethod,
             path: str,
-            query_params: Any = None,
+            query_params: Optional[MutableMapping[str, str]] = None,
             body: Any = None,
-            authenticator: Callable[[Any], Any] = None
+            authenticator: Callable = None
     ) -> Union[SDKSuccessResponse, Union[SDKErrorResponse, SDKError]]:
         """Send API request.
         """
