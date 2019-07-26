@@ -1,7 +1,8 @@
 """Transport implementation using requests package.
 """
 
-from typing import Any, Callable, MutableMapping, Optional, Union
+from typing import (AnyStr, Callable, Dict, IO, MutableMapping, Optional,
+                    Union)
 
 import requests
 
@@ -13,7 +14,7 @@ class RequestsTransport(tp.Transport):
     """
     def __init__(self, settings: tp.TransportSettings,
                  session: requests.Session):
-        headers: dict = {
+        headers: Dict[str, str] = {
             'User-Agent': f'LookerSDK Python {settings.api_version}'
         }
         if settings.headers:
@@ -26,18 +27,18 @@ class RequestsTransport(tp.Transport):
         self.agent: str = f'LookerSDK Python {settings.api_version}'
 
     @classmethod
-    def configure(cls, settings: tp.TransportSettings):
+    def configure(cls, settings: tp.TransportSettings) -> tp.Transport:
         return cls(settings, requests.Session())
 
     # pylint: disable=too-many-arguments
-    def request(
-            self,
-            method: tp.HttpMethod,
-            path: str,
-            query_params: Optional[MutableMapping[str, str]] = None,
-            body: Any = None,
-            authenticator: Callable = None
-    ) -> Union[tp.SDKSuccessResponse, Union[tp.SDKErrorResponse, tp.SDKError]]:
+    def request(self,
+                method: tp.HttpMethod,
+                path: str,
+                query_params: Optional[MutableMapping[str, str]] = None,
+                body: Optional[
+                    Union[bytes, MutableMapping[str, str], IO[AnyStr]]] = None,
+                authenticator: Optional[Callable[[], Dict[str, str]]] = None
+                ) -> tp.Response:
         url = f'{self.api_path}/path'
         headers = authenticator() if authenticator else {}
         resp = self.session.request(method.name,
@@ -45,4 +46,5 @@ class RequestsTransport(tp.Transport):
                                     params=query_params,
                                     data=body,
                                     headers=headers)
-        return tp.SDKSuccessResponse(resp.text)
+        # TODO - determine when to return resp.text vs resp.content
+        return tp.Response(resp.text)

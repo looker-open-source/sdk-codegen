@@ -30,5 +30,5 @@ def test_request_minimal(requests_session):
     settings = tp.TransportSettings(base_url='/some/path', api_version='3.1')
     test = rtp.RequestsTransport(settings, requests_session)
     resp = test.request(tp.HttpMethod.GET, '/some/path')
-    assert isinstance(resp, tp.SDKSuccessResponse)
+    assert isinstance(resp, tp.Response)
     assert resp.value == 'yay!'

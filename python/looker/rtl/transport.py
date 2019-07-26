@@ -1,10 +1,12 @@
 """Types and abstract base class for transport implementations.
 """
+from __future__ import annotations
 
 import abc
 import dataclasses
 import enum
-from typing import Any, Callable, Generic, MutableMapping, Optional, TypeVar, Union
+from typing import (AnyStr, Callable, Dict, IO, MutableMapping, Optional,
+                    Union)
 
 # pylint: disable=too-few-public-methods
 
@@ -30,31 +32,12 @@ class TransportSettings:
     headers: Optional[MutableMapping[str, str]] = None
 
 
-T = TypeVar('T')  # pylint: disable=invalid-name
-
-
 @dataclasses.dataclass(frozen=True)
-class SDKSuccessResponse(Generic[T]):
+class Response:
     """Success Response object.
     """
-    value: T
+    value: Union[str, bytes, IO]
     ok: bool = True
-
-
-@dataclasses.dataclass(frozen=True)
-class SDKErrorResponse(Generic[T]):
-    """Error Response object.
-    """
-    error: T
-    ok: bool = False
-
-
-@dataclasses.dataclass(frozen=True)
-class SDKError(Generic[T]):
-    """Network/Infrastructure Error object.
-    """
-    message: str
-    type: str = 'sdk_error'
 
 
 class Transport(abc.ABC):
@@ -62,19 +45,19 @@ class Transport(abc.ABC):
     """
     @classmethod
     @abc.abstractmethod
-    def configure(cls, settings: TransportSettings):
+    def configure(cls, settings: TransportSettings) -> Transport:
         """Configure and return an instance of Transport
         """
 
     # pylint: disable=too-many-arguments
     @abc.abstractmethod
-    def request(
-            self,
-            method: HttpMethod,
-            path: str,
-            query_params: Optional[MutableMapping[str, str]] = None,
-            body: Any = None,
-            authenticator: Callable = None
-    ) -> Union[SDKSuccessResponse, Union[SDKErrorResponse, SDKError]]:
+    def request(self,
+                method: HttpMethod,
+                path: str,
+                query_params: Optional[MutableMapping[str, str]] = None,
+                body: Optional[
+                    Union[bytes, MutableMapping[str, str], IO[AnyStr]]] = None,
+                authenticator: Optional[Callable[[], Dict[str, str]]] = None
+                ) -> Response:
         """Send API request.
         """
