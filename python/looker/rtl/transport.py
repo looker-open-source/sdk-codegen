@@ -36,8 +36,8 @@ class TransportSettings:
 class Response:
     """Success Response object.
     """
-    value: Union[str, bytes, IO]
-    ok: bool = True
+    ok: bool
+    value: Union[str, bytes]
 
 
 class Transport(abc.ABC):
