@@ -14,9 +14,7 @@ class RequestsTransport(tp.Transport):
     """
     def __init__(self, settings: tp.TransportSettings,
                  session: requests.Session):
-        headers: Dict[str, str] = {
-            'User-Agent': f'LookerSDK Python {settings.api_version}'
-        }
+        headers: Dict[str, str] = {}
         if settings.headers:
             headers.update(settings.headers)
         session.headers.update(headers)

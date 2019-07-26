@@ -1,94 +1,46 @@
-import requests
-from typing import TypeVar, Generic
+"""Functionality for making authenticated API calls
+"""
+from __future__ import annotations
 
-from looker.rtl.user_session import UserSession
-from looker.rtl.transport import Transport
+from typing import MutableMapping, Optional
 
-T = TypeVar('T')
+from looker.rtl import (api_settings, user_session as us, transport as tp,
+                        serialize as sr, requests_transport as rtp)
 
-class APIMethods(object):
-  def __init__(self, *args, **kwargs):
-    # TODO figure out how this stuff composes
-    # self._session = UserSession()
-    # return super().__init__(*args, **kwargs)
-    self.transport = Transport()
 
-  def authHeader(self):
-    return self.session.authHeader
+class APIMethods:
+    """Functionality for making authenticated API calls
+    """
+    def __init__(self, user_session: us.UserSession,
+                 deserialize: sr.TDeserializeFunc, transport: tp.Transport):
+        self.user_session = user_session
+        self.deserialize = deserialize
+        self.transport = transport
 
-  # get auth header and make sure it's valid
-  # pass down to the transport layer
+    @classmethod
+    def configure(cls, settings_file: str = 'looker.ini') -> APIMethods:
+        """Default dependency configuration
+        """
+        settings = api_settings.ApiSettings(settings_file)
+        transport_settings = tp.TransportSettings(
+            settings.base_url, settings.api_version,
+            {'User-Agent': f'LookerSDK Python {settings.api_version}'})
+        transport = rtp.RequestsTransport.configure(transport_settings)
+        user_session = us.UserSession(settings, transport)
+        return cls(user_session, sr.deserialize, transport)
 
-  # async get<TSuccess, TError>()
-  # SDKResponse(TSuccess) -> TSuccess | TError
-  # request wrapper
-  # get(T,...) -> request('get',...)
-  # request(T, httpmethod, path, query, body, headers, cookie)
-  # - retain config settings
-  #   - base URL to append endpoint path to
-  #   - auth token handling
-  #   - submit request
-  #   - retrieve response
-  #   - deserialize to requested type
-  def get(self,
-          url: str,
-          params=Optional[Dict, List[Tuple], bytes] = None,
-          data=Optional[Dict, List[Tuple], bytes] = None,
-          headers: Dict[str, str],
-          cookies = Optional[str] = None,
-          timeout: Optional[int, Tuple[int, int]] = None) -> T:
-    return self.transport('GET', url, params, data, headers, cookies, timeout)
-
-  def head(self,
-          url: str,
-          params=Optional[Dict, List[Tuple], bytes] = None,
-          data=Optional[Dict, List[Tuple], bytes] = None,
-          headers: Dict[str, str],
-          cookies = Optional[str] = None,
-          timeout: Optional[int, Tuple[int, int]] = None) -> T:
-    return self.transport('HEAD', url, params, data, headers, cookies, timeout)
-
-  def options(self,
-          url: str,
-          params=Optional[Dict, List[Tuple], bytes] = None,
-          data=Optional[Dict, List[Tuple], bytes] = None,
-          headers: Dict[str, str],
-          cookies = Optional[str] = None,
-          timeout: Optional[int, Tuple[int, int]] = None) -> T:
-    return self.transport('OPTIONS', url, params, data, headers, cookies, timeout)
-
-  def post(self,
-          url: str,
-          params=Optional[Dict, List[Tuple], bytes] = None,
-          data=Optional[Dict, List[Tuple], bytes] = None,
-          headers: Dict[str, str],
-          cookies = Optional[str] = None,
-          timeout: Optional[int, Tuple[int, int]] = None) -> T:
-    return self.transport('POST', url, params, data, headers, cookies, timeout)
-
-  def put(self,
-          url: str,
-          params=Optional[Dict, List[Tuple], bytes] = None,
-          data=Optional[Dict, List[Tuple], bytes] = None,
-          headers: Dict[str, str],
-          cookies = Optional[str] = None,
-          timeout: Optional[int, Tuple[int, int]] = None) -> T:
-    return self.transport('PUT', url, params, data, headers, cookies, timeout)
-
-  def patch(self,
-          url: str,
-          params=Optional[Dict, List[Tuple], bytes] = None,
-          data=Optional[Dict, List[Tuple], bytes] = None,
-          headers: Dict[str, str],
-          cookies = Optional[str] = None,
-          timeout: Optional[int, Tuple[int, int]] = None) -> T:
-    return self.transport('PATCH', url, params, data, headers, cookies, timeout)
-
-  def delete((self,
-          url: str,
-          params=Optional[Dict, List[Tuple], bytes] = None,
-          data=Optional[Dict, List[Tuple], bytes] = None,
-          headers: Dict[str, str],
-          cookies = Optional[str] = None,
-          timeout: Optional[int, Tuple[int, int]] = None) -> T:
-    return self.transport('DELETE', url, params, data, headers, cookies, timeout)
+    def get(self,
+            model: sr.SDKModel,
+            many: bool,
+            path: str,
+            query_params: Optional[MutableMapping[str, str]] = None
+            ) -> sr.TDeserializeReturn:
+        """GET method
+        """
+        response = self.transport.request(
+            tp.HttpMethod.GET,
+            path,
+            query_params=query_params,
+            body=None,
+            authenticator=self.user_session.authenticate)
+        return self.deserialize(response.value, model, many)
