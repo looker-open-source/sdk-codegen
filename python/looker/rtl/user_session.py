@@ -6,6 +6,7 @@ from looker.rtl import auth_token as at
 from looker.rtl import transport as tp
 from looker.rtl import sdk_error as se
 
+
 class BaseUserSession(abc.ABC):
     """UserSession base class"""
     @property
@@ -65,7 +66,7 @@ class UserSession(BaseUserSession):
             self._token = at.AuthToken(token)
         return self._token
 
-    def _login(self, user_id: Optional[str]) -> tp.Response.value:
+    def _login(self, user_id: Optional[str]) -> tp.TResponseValue:
         if (user_id and self.user_id != user_id):
             # We are switching user ids
             self._logout()
@@ -88,7 +89,7 @@ class UserSession(BaseUserSession):
             result = self._logout()
         return bool(result)
 
-    def _logout(self) -> tp.Response.value:
+    def _logout(self) -> tp.TResponseValue:
         token = self._token
         result = self._ok(
             self.transport.request(
@@ -103,7 +104,7 @@ class UserSession(BaseUserSession):
         self._token = at.AuthToken()
 
     def _ok(self,
-            response: tp.Response) -> Union[tp.Response.value, se.SDKError]:
+            response: tp.Response) -> Union[tp.TResponseValue, se.SDKError]:
         if response.ok:
             return response.value
         raise se.SDKError(response.status_code, response.value)

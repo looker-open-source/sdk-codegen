@@ -14,14 +14,11 @@ class RequestsTransport(tp.Transport):
     """
     def __init__(self, settings: tp.TransportSettings,
                  session: requests.Session):
-        headers: Dict[str, str] = {
-            'User-Agent': f'LookerSDK Python {settings.api_version}'
-        }
+        headers: Dict[str, str] = {}
         if settings.headers:
             headers.update(settings.headers)
         session.headers.update(headers)
 
-        #self.settings = settings
         self.session = session
         self.api_path: str = f'{settings.base_url}/api/{settings.api_version}'
         self.agent: str = f'LookerSDK Python {settings.api_version}'
@@ -39,6 +36,7 @@ class RequestsTransport(tp.Transport):
                     Union[bytes, MutableMapping[str, str], IO[AnyStr]]] = None,
                 authenticator: Optional[Callable[[], Dict[str, str]]] = None
                 ) -> tp.Response:
+
         url = f'{self.api_path}/path'
         headers = authenticator() if authenticator else {}
         resp = self.session.request(method.name,
@@ -46,5 +44,6 @@ class RequestsTransport(tp.Transport):
                                     params=query_params,
                                     data=body,
                                     headers=headers)
+
         # TODO - determine when to return resp.text vs resp.content
-        return tp.Response(resp.text)
+        return tp.Response(True, resp.text)
