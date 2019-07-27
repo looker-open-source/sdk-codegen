@@ -32,12 +32,15 @@ class TransportSettings:
     headers: Optional[MutableMapping[str, str]] = None
 
 
+TResponseValue = Union[str, bytes]
+
+
 @dataclasses.dataclass(frozen=True)
 class Response:
     """Success Response object.
     """
     ok: bool
-    value: Union[str, bytes]
+    value: TResponseValue
 
 
 class Transport(abc.ABC):
