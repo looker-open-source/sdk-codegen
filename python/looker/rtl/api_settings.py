@@ -1,12 +1,16 @@
 import configparser
 import sys
 
-Config = configparser.ConfigParser()
+from typing import Dict
 
-class ApiSettings(object):
+CONFIG = configparser.ConfigParser()
+
+
+# TODO: Determine if this is going to be available through command line
+class ApiSettings():
     """API settings uses `looker.ini`"""
-    def __init__(self, filename: str="looker.ini"):
-        self._api_version: str = "3.1"
+    def __init__(self, filename: str = 'looker.ini', section: str = 'Looker'):
+        self._api_version: str = '3.1'
         self.verbose: bool = False
         """Configuration file name"""
         self.config_file: str = filename
@@ -24,34 +28,24 @@ class ApiSettings(object):
         self._url: str = None
         """SSL certificate verification. Should always be true unless developing locally"""
         self.verify_ssl: bool = True
-        self.read(self.config_file)
+        self.read(self.config_file, section)
 
-    @staticmethod
-    def configSectionMap(section: str):
-        """Create a dictionary (map) for settings in the specified section"""
-        dict1 = {}
-        items = Config.options(section)
-        for item in items:
-            try:
-                dict1[item] = Config.get(section, item)
-            except:
-                dict1[item] = None
-        return dict1
-
-    def read(self, filename: str="looker.ini"):
+    def read(self, filename: str = "looker.ini", section: str = "Looker"):
         """Read the specified configuration file and load its values"""
         self.config_file = filename
-        Config.read(self.config_file)
-        section = "Looker"
-        config_map = ApiSettings.configSectionMap(section)
-        self.api_version = config_map["api_version"]
-        self.base_url = config_map["base_url"]
-        self.client_id = config_map["client_id"]
-        self.client_secret = config_map["client_secret"]
-        self.embed_secret = config_map["embed_secret"]
-        self.user_id = config_map["user_id"]
-        self.verbose = Config.getboolean(section, "verbose")
-        self.verify_ssl = Config.getboolean(section, "verify_ssl")
+        with open(self.config_file):
+            CONFIG.read(self.config_file)
+
+        self.api_version = CONFIG.get(section, "api_version", fallback='3.1')
+        self.base_url = CONFIG.get(section, "base_url")
+        self.client_id = CONFIG.get(section, "client_id")
+        self.client_secret = CONFIG.get(section, "client_secret")
+        self.embed_secret = CONFIG.get(section, "embed_secret", fallback='')
+        self.user_id = CONFIG.get(section, "user_id", fallback='')
+        self.verbose = CONFIG.getboolean(section, "verbose", fallback=False)
+        self.verify_ssl = CONFIG.getboolean(section,
+                                            "verify_ssl",
+                                            fallback=True)
 
     @property
     def api_version(self) -> str:
@@ -68,7 +62,7 @@ class ApiSettings(object):
         return self._base_url
 
     @base_url.setter
-    def base_url(self, value: str) -> str:
+    def base_url(self, value: str):
         self._base_url = value
         self._url = None
 
@@ -76,7 +70,9 @@ class ApiSettings(object):
     def url(self) -> str:
         """API-versioned base endpoint"""
         if self._url is None:
-            self._url = "{}{}api/{}".format(self.base_url, "" if self.base_url.endswith("/") else "/", self.api_version)
+            self._url = "{}{}api/{}".format(
+                self.base_url, "" if self.base_url.endswith("/") else "/",
+                self.api_version)
         return self._url
 
     def assign(self, options):
