@@ -5,7 +5,7 @@ from looker.rtl import requests_transport as rtp
 from looker.rtl import auth_token as at
 from looker.rtl import transport as tp
 from looker.rtl import sdk_error as se
-
+from looker.rtl import api_settings as st
 
 class BaseUserSession(abc.ABC):
     """UserSession base class"""
@@ -32,7 +32,7 @@ class BaseUserSession(abc.ABC):
 
 
 class UserSession(BaseUserSession):
-    def __init__(self, settings, transport: Optional[tp.Transport]):
+    def __init__(self, settings: st.ApiSettings, transport: Optional[tp.Transport] = None):
         self._token: at.AuthToken = at.AuthToken()
         self.user_id: str = ''
         self.settings = settings
@@ -85,19 +85,18 @@ class UserSession(BaseUserSession):
         return result
 
     def logout(self) -> bool:
+        result = False
         if self.is_authenticated:
             result = self._logout()
         return bool(result)
 
     def _logout(self) -> tp.TResponseValue:
-        token = self._token
         result = self._ok(
             self.transport.request(
                 tp.HttpMethod.DELETE,
                 '/logout',
-                authenticator=(lambda: {
-                    'Authorization': f'token {token.access_token}'
-                }) if token else None))
+                authenticator={'Authorization': f'token {self._token.access_token}'}
+                ))
         return result
 
     def _reset(self):
