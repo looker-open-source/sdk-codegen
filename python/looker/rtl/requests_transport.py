@@ -1,6 +1,7 @@
 """Transport implementation using requests package.
 """
 
+import logging
 from typing import (AnyStr, Callable, Dict, IO, MutableMapping, Optional,
                     Union)
 
@@ -14,14 +15,17 @@ class RequestsTransport(tp.Transport):
     """
     def __init__(self, settings: tp.TransportSettings,
                  session: requests.Session):
+
         headers: Dict[str, str] = {}
         if settings.headers:
             headers.update(settings.headers)
         session.headers.update(headers)
-
+        session.verify = settings.verify_ssl
         self.session = session
+
         self.api_path: str = f'{settings.base_url}/api/{settings.api_version}'
         self.agent: str = f'LookerSDK Python {settings.api_version}'
+        self.logger = logging.getLogger(__name__)
 
     @classmethod
     def configure(cls, settings: tp.TransportSettings) -> tp.Transport:
@@ -37,13 +41,21 @@ class RequestsTransport(tp.Transport):
                 authenticator: Optional[Callable[[], Dict[str, str]]] = None
                 ) -> tp.Response:
 
-        url = f'{self.api_path}/path'
+        url = f'{self.api_path}{path}'
         headers = authenticator() if authenticator else {}
-        resp = self.session.request(method.name,
-                                    url,
-                                    params=query_params,
-                                    data=body,
-                                    headers=headers)
+        logging.info('%s(%s)', method.name, url)
+        try:
+            resp = self.session.request(method.name,
+                                        url,
+                                        params=query_params,
+                                        data=body,
+                                        headers=headers)
+        except IOError as exc:
+            ret = tp.Response(False, str(exc))
+        else:
+            if resp.ok:
+                ret = tp.Response(True, resp.text)
+            else:
+                ret = tp.Response(False, resp.text)
 
-        # TODO - determine when to return resp.text vs resp.content
-        return tp.Response(True, resp.text)
+        return ret
