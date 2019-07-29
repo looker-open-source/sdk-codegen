@@ -7,6 +7,7 @@ from looker.rtl import transport as tp
 from looker.rtl import sdk_error as se
 from looker.rtl import api_settings as st
 
+
 class BaseUserSession(abc.ABC):
     """UserSession base class"""
     @property
@@ -32,7 +33,9 @@ class BaseUserSession(abc.ABC):
 
 
 class UserSession(BaseUserSession):
-    def __init__(self, settings: st.ApiSettings, transport: Optional[tp.Transport] = None):
+    def __init__(self,
+                 settings: st.ApiSettings,
+                 transport: Optional[tp.Transport] = None):
         self._token: at.AuthToken = at.AuthToken()
         self.user_id: str = ''
         self.settings = settings
@@ -67,16 +70,19 @@ class UserSession(BaseUserSession):
         return self._token
 
     def _login(self, user_id: Optional[str]) -> tp.TResponseValue:
+        path = '/login'
         if (user_id and self.user_id != user_id):
             # We are switching user ids
             self._logout()
+            self.user_id = user_id
+            path += f'/{user_id}'
 
         self._reset()
 
         # pylint: disable=too-many-function-args
         result = self._ok(
             self.transport.request(tp.HttpMethod.POST,
-                                   '/login',
+                                   path,
                                    body={
                                        'client_id': self.settings.client_id,
                                        'client_secret':
@@ -92,11 +98,21 @@ class UserSession(BaseUserSession):
 
     def _logout(self) -> tp.TResponseValue:
         result = self._ok(
-            self.transport.request(
-                tp.HttpMethod.DELETE,
-                '/logout',
-                authenticator={'Authorization': f'token {self._token.access_token}'}
-                ))
+            self.transport.request(tp.HttpMethod.DELETE,
+                                   '/logout',
+                                   authenticator={
+                                       'Authorization':
+                                       f'token {self._token.access_token}'
+                                   }))
+
+        # if no error was thrown, logout was successful
+        if self.user_id:
+            # Impersonated user was logged out, so set auth back to default
+            self.user_id = ''
+            self.login()
+        else:
+            self._reset()
+
         return result
 
     def _reset(self):
