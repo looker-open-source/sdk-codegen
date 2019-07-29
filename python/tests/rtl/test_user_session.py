@@ -99,7 +99,7 @@ def test_is_impersonating_returns_true_when_impersonating(config_file):
     assert user_session.is_authenticated
     assert user_session.is_impersonating
 
-    # After loging out the impersonated user, user_session logs back in as the original user
+    # After logging out the impersonated user, user_session logs back in as the original user
     user_session.logout()
     assert user_session.is_authenticated
     assert not user_session.is_impersonating

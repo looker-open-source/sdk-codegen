@@ -97,7 +97,7 @@ def test_it_fails_with_a_bad_filename():
                            'https://host1.looker.com:19999/api/3.1')])
 def test_versioned_api_url_is_built_properly(config_file, test_url,
                                              expected_url):
-    """ApiSettings.url should append the api version unless specified in base url when necessary."""
+    """ApiSettings.url should append the api version to the base url"""
     settings = api_settings.ApiSettings(config_file)
     settings.base_url = test_url
     assert settings.url == expected_url
