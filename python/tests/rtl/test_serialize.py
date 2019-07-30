@@ -16,8 +16,8 @@ from looker.rtl import serialize as sr
 @ud.type_checked_constructor(convert=True)
 @dc.dataclass
 class ChildModel(sr.SDKModel):
-    name: str
     id: int
+    name: str
 
 
 @ud.type_checked_constructor(convert=True)
@@ -79,3 +79,31 @@ def test_deserialize_expected_dict():
     with pytest.raises(sr.DeserializeError) as excinfo:
         sr.deserialize(data, Model, many=False)
     excinfo.match('^Require dict data$')
+
+
+def test_serialize():
+    model = Model(name='model-name',
+                  children=[
+                      ChildModel(id=1, name='child1'),
+                      ChildModel(id=2, name='child2'),
+                  ])
+    # yapf: disable
+    # pylint: disable=bad-continuation
+    expected = (
+        '{'
+            '"name": '
+            '"model-name", '
+            '"children": ['
+                '{'
+                    '"id": 1, '
+                    '"name": "child1"'
+                '}, '
+                '{'
+                    '"id": 2, '
+                    '"name": "child2"'
+                '}'
+            ']'
+        '}'
+    )
+    # yapf: enable
+    assert sr.serialize(model) == expected

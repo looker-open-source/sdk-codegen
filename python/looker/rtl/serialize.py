@@ -1,8 +1,9 @@
 """Deserialize API response into models
 """
 
+import dataclasses
 import json
-from typing import Callable, List, Union
+from typing import Callable, Dict, List, Union
 
 from looker.rtl import transport as tp
 
@@ -20,7 +21,7 @@ class DeserializeError(Exception):
 
 
 TDeserializeFunc = Callable[[tp.TResponseValue, SDKModel, bool],
-                           Union[str, bytes, List[SDKModel], SDKModel]]
+                            Union[str, bytes, List[SDKModel], SDKModel]]
 TDeserializeReturn = Union[str, bytes, List[SDKModel], SDKModel]
 
 
@@ -46,3 +47,14 @@ def deserialize(data: tp.TResponseValue, model: SDKModel,
         response = model(**data)
 
     return response
+
+
+TSerializeFunc = Callable[[SDKModel], str]
+
+
+def serialize(model: SDKModel) -> str:
+    """Translate model into json string
+    """
+    data: Dict[str, Union[str, int, bool, SDKModel, List[
+        Union[str, int, bool, SDKModel]]]] = dataclasses.asdict(model)
+    return json.dumps(data)

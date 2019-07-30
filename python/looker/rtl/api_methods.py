@@ -12,9 +12,11 @@ class APIMethods:
     """Functionality for making authenticated API calls
     """
     def __init__(self, user_session: us.UserSession,
-                 deserialize: sr.TDeserializeFunc, transport: tp.Transport):
+                 deserialize: sr.TDeserializeFunc,
+                 serialize: sr.TSerializeFunc, transport: tp.Transport):
         self.user_session = user_session
         self.deserialize = deserialize
+        self.serialize = serialize
         self.transport = transport
 
     @classmethod
@@ -27,7 +29,7 @@ class APIMethods:
             {'User-Agent': f'LookerSDK Python {settings.api_version}'})
         transport = rtp.RequestsTransport.configure(transport_settings)
         user_session = us.UserSession(settings, transport)
-        return cls(user_session, sr.deserialize, transport)
+        return cls(user_session, sr.deserialize, sr.serialize, transport)
 
     def get(self,
             model: sr.SDKModel,
@@ -44,3 +46,32 @@ class APIMethods:
             body=None,
             authenticator=self.user_session.authenticate)
         return self.deserialize(response.value, model, many)
+
+    def post(self, path: str, body: sr.SDKModel) -> sr.TDeserializeReturn:
+        """POST method
+        """
+        serialized_body = self.serialize(body)
+        response = self.transport.request(
+            tp.HttpMethod.POST,
+            path,
+            body=serialized_body,
+            authenticator=self.user_session.authenticate)
+        return self.deserialize(response.value, body.__class__)
+
+    def patch(self, path: str, body: sr.SDKModel) -> sr.TDeserializeReturn:
+        """PATCH method
+        """
+        serialized_body = self.serialize(body)
+        response = self.transport.request(
+            tp.HttpMethod.PATCH,
+            path,
+            body=serialized_body,
+            authenticator=self.user_session.authenticate)
+        return self.deserialize(response.value, body.__class__)
+
+    def delete(self, path: str) -> None:
+        """DELETE method
+        """
+        self.transport.request(tp.HttpMethod.DELETE,
+                               path,
+                               authenticator=self.user_session.authenticate)
