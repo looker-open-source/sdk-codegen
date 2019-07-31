@@ -1,38 +1,13 @@
 import abc
 from typing import Optional, Union, Dict
 
-from looker.rtl import requests_transport as rtp
-from looker.rtl import auth_token as at
-from looker.rtl import transport as tp
-from looker.rtl import sdk_error as se
-from looker.rtl import api_settings as st
+from looker.rtl import (api_settings as st, auth_token as at,
+                        requests_transport as rtp, transport as tp, sdk_error
+                        as se, serialize as sr)
+from looker.sdk import models as ml
 
 
-class BaseUserSession(abc.ABC):
-    """UserSession base class"""
-    @property
-    @abc.abstractmethod
-    def is_impersonating(self) -> bool:
-        """Determines if user is impersonating another user"""
-    @property
-    @abc.abstractmethod
-    def is_authenticated(self) -> bool:
-        """Determines if current token is active"""
-    @abc.abstractmethod
-    def get_token(self) -> at.AuthToken:
-        """Returns an active token"""
-    @abc.abstractmethod
-    def login(self, user_id: Optional[str] = None) -> at.AuthToken:
-        """Logs in a user or allows an already logged in user to sudo as another user"""
-    @abc.abstractmethod
-    def authenticate(self) -> Dict[str, str]:
-        """Create a dictionary with the current token to be used as a header"""
-    @abc.abstractmethod
-    def logout(self) -> bool:
-        """Logs out current user"""
-
-
-class UserSession(BaseUserSession):
+class UserSession():
     def __init__(self,
                  settings: st.ApiSettings,
                  transport: Optional[tp.Transport] = None):
@@ -43,20 +18,24 @@ class UserSession(BaseUserSession):
 
     @property
     def is_authenticated(self) -> bool:
+        """Determines if current token is active."""
         if not (self._token and self._token.access_token):
             return False
         return self._token.is_active
 
     @property
     def is_impersonating(self) -> bool:
+        """Determines if user is impersonating another user."""
         return bool(self.user_id) and self.is_authenticated
 
-    def get_token(self):
+    def get_token(self) -> at.AuthToken:
+        """Returns an active token."""
         if not self.is_authenticated:
             self.login()
         return self._token
 
     def authenticate(self) -> Dict[str, str]:
+        """Create a dictionary with the current token to be used as a header."""
         token = self.get_token()
         header = {}
         if token and token.access_token:
@@ -64,6 +43,7 @@ class UserSession(BaseUserSession):
         return header
 
     def login(self, user_id: Optional[str] = None) -> at.AuthToken:
+        """Logs in a user or allows an already logged in user to sudo as another user."""
         if not self.is_authenticated:
             token = self._login(user_id)
             self._token = at.AuthToken(token)
@@ -87,23 +67,22 @@ class UserSession(BaseUserSession):
                                        'client_id': self.settings.client_id,
                                        'client_secret':
                                        self.settings.client_secret
-                                   }))
+                                   }), ml.AccessToken)
         return result
 
     def logout(self) -> bool:
-        result = False
+        """Logs out current active user."""
         if self.is_authenticated:
-            result = self._logout()
-        return bool(result)
+            self._logout()
+        return True
 
     def _logout(self) -> tp.TResponseValue:
         result = self._ok(
-            self.transport.request(tp.HttpMethod.DELETE,
-                                   '/logout',
-                                   authenticator={
-                                       'Authorization':
-                                       f'token {self._token.access_token}'
-                                   }))
+            self.transport.request(
+                tp.HttpMethod.DELETE,
+                '/logout',
+                authenticator=lambda:
+                {'Authorization': f'token {self._token.access_token}'}))
 
         # if no error was thrown, logout was successful
         if self.user_id:
@@ -118,8 +97,13 @@ class UserSession(BaseUserSession):
     def _reset(self):
         self._token = at.AuthToken()
 
-    def _ok(self,
-            response: tp.Response) -> Union[tp.TResponseValue, se.SDKError]:
+    def _ok(
+            self,
+            response: tp.Response,
+            model: sr.SDKModel = None,
+    ) -> Union[tp.TResponseValue, se.SDKError]:
         if response.ok:
-            return response.value
+            result = sr.deserialize(response.value,
+                                    model) if model else response.value
+            return result
         raise se.SDKError(response.status_code, response.value)
