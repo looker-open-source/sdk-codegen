@@ -30,7 +30,18 @@ class TransportSettings:
     base_url: str
     api_version: str
     headers: Optional[MutableMapping[str, str]] = None
+    """API-versioned base endpoint"""
+    _url: str = None
 
+    @property
+    def url(self) -> str:
+        """Create and return an API-versioned base endpoint."""
+        if not self._url:
+            self._url = "{}{}api/{}".format(
+                self.base_url, "" if self.base_url.endswith("/") else "",
+                self.api_version
+            )
+        return self._url
 
 TResponseValue = Union[str, bytes]
 
