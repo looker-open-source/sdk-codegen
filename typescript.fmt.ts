@@ -24,9 +24,13 @@
 
 // TypeScript codeFormatter
 
-import {Arg, IMappedType, IMethod, IParameter, IProperty, IType, IntrinsicType} from "./sdkModels"
+import {Arg, IMappedType, IMethod, IParameter, IProperty, IType, IntrinsicType, RequestType} from "./sdkModels"
 import {CodeFormatter, warnEditing} from "./codeFormatter"
 
+// tslint:disable-next-line: variable-name
+const Request_ = 'Request_'
+// tslint:disable-next-line: variable-name
+const Default_ = 'Default_'
 export class TypescriptFormatter extends CodeFormatter {
   codePath = './typescript/'
   package = 'looker'
@@ -74,27 +78,11 @@ import { URL } from 'url'
     return ''
   }
 
-  // @ts-ignore
-  argGroup(indent: string, args: Arg[]) {
-    if ((!args) || args.length === 0) return this.nullStr
-    let hash: string[] = []
-    for (let arg of args) {
-      hash.push(`${arg}`)
-    }
-    return `\n${indent}{${hash.join(this.argDelimiter)}}`
-  }
-
-  // @ts-ignore
-  argList(indent: string, args: Arg[]) {
-    return args && args.length !== 0
-          ? `\n${indent}${args.join(this.argDelimiter)}`
-          : this.nullStr
-  }
-
   declareProperty(indent: string, property: IProperty) {
     const type = this.typeMap(property.type)
+    const optional = property.nullable ? '?' : ''
     return this.commentHeader(indent, property.description)
-      + `${indent}${property.name}: ${type.name}`
+      + `${indent}${property.name}${optional}: ${type.name}`
   }
 
   // Looks like Partial<> is the way to go https://www.typescriptlang.org/docs/handbook/utility-types.html#partialt
@@ -114,7 +102,7 @@ import { URL } from 'url'
       + `${indent}export interface IRequest_${method.name} {\n`
       + props.join(this.propDelimiter)
       + `${indent}}\n\n`
-      + `${indent}export class Request_${method.name} {\n`
+      + `${indent}export class ${Request_}${method.name} {\n`
       + defaults.join(this.propDelimiter)
       + `${indent}}\n\n`
   }
@@ -124,27 +112,26 @@ import { URL } from 'url'
     const header = this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${type.name}`)
       + `${indent}async ${method.name}(`
     let fragment = ''
+    const requestType = this.requestTypeName(method)
 
-    // TODO unblock Brian for now
-    // if (method.hasOptionalParams()) {
-    //   // use the request type generated in models.ts
-    //   fragment = `request: IRequest_${method.name}`
-    // } else {
+    if (requestType) {
+      // use the request type that will be generated in models.ts
+      fragment = `request: I${requestType}`
+    } else {
       const bump = indent + this.indentStr
       let params: string[] = []
       const args = method.allParams // get the params in signature order
       if (args && args.length > 0) args.forEach(p => params.push(this.declareParameter(bump, p)))
         fragment = `\n${params.join(this.paramDelimiter)}`
-    // }
+    }
     return header + fragment + ') {\n'
   }
 
   declareParameter(indent: string, param: IParameter) {
     const type = this.typeMap(param.type)
-    const optional = param.required ? '' : '?'
     return this.commentHeader(indent, param.description)
-      + `${indent}${param.name}${optional}: ${type.name}`
-      // + (param.required ? '' : (type.default ? ` = ${type.default}` : ''))
+      + `${indent}${param.name}: ${type.name}`
+      + (param.required ? '' : (type.default ? ` = ${type.default}` : ''))
   }
 
   // @ts-ignore
@@ -158,19 +145,38 @@ import { URL } from 'url'
   }
 
   declareMethod(indent: string, method: IMethod) {
+    const bump = this.bumper(indent)
+    const request = this.requestTypeName(method)
+    const defaultName = request ? `${Default_}${request.substring(Request_.length)}` : ''
+    const defaulter = defaultName? `${bump}request = { ...${defaultName}, ...request}\n` : ''
     return this.methodSignature(indent, method)
-      + this.httpCall(this.bumper(indent), method)
+      + defaulter
+      + this.httpCall(bump, method)
       + `\n${indent}}`
   }
 
-  typeSignature(indent: string, type: IType) {
+  generateDefaults(indent: string, type: IType) {
+    let result = ''
+    if (!(type instanceof RequestType)) return result
     const bump = this.bumper(indent)
-    const b2 = this.bumper(bump)
-    const attrs: string[] = []
-    Object.values(type.properties)
-        .forEach((prop) => attrs.push(`${b2}${prop.name} : ${prop.description}`))
+    result += this.commentHeader(indent, `Default constants for optional properties of I${type.name}`)
+    const name = `${Default_}${type.name.substring(Request_.length)}`
+    result += `${indent}export const ${name} = {\n`
+    let options: string[] = []
+    Object.entries(type.properties).forEach(([name, prop]) => {
+      const mapped = this.typeMap(prop.type)
+      if (prop.nullable && mapped.default) {
+        options.push(`${bump}${name}: ${mapped.default}`)
+      }
+    })
+    return result
+      + options.join(this.paramDelimiter)
+      + `${indent}}\n\n`
+  }
 
-    return this.commentHeader(indent, type.description) +
+  typeSignature(indent: string, type: IType) {
+    return this.generateDefaults(indent, type) +
+      this.commentHeader(indent, type.description) +
       `${indent}export interface I${type.name}{\n`
   }
 
@@ -181,17 +187,71 @@ import { URL } from 'url'
     return results.join(' | ')
   }
 
-  httpPath(path : string) {
-    if (path.indexOf('{') >= 0) return '`' + path.replace(/{/gi, '${') + '`'
+  httpPath(path : string, prefix?: string) {
+    prefix = prefix || ''
+    if (path.indexOf('{') >= 0) return '`' + path.replace(/{/gi, '${'+prefix) + '`'
     return `'${path}'`
   }
 
+  // @ts-ignore
+  argGroup(indent: string, args: Arg[], prefix?: string) {
+    if ((!args) || args.length === 0) return this.nullStr
+    let hash: string[] = []
+    for (let arg of args) {
+      if (prefix) {
+        hash.push(`${arg}: ${prefix}${arg}`)
+      } else {
+        hash.push(arg)
+      }
+    }
+    return `\n${indent}{${hash.join(this.argDelimiter)}}`
+  }
+
+  // @ts-ignore
+  argList(indent: string, args: Arg[], prefix?: string) {
+    prefix = prefix || ''
+    return args && args.length !== 0
+          ? `\n${indent}${prefix}${args.join(this.argDelimiter+prefix)}`
+          : this.nullStr
+  }
+
+  // this is a builder function to produce arguments with optional null place holders but no extra required optional arguments
+  argFill(current: string, args: string) {
+      if ((!current) && args.trim() === this.nullStr) {
+          // Don't append trailing optional arguments if none have been set yet
+          return ''
+      }
+      return `${args}${current ? this.argDelimiter : ''}${current}`
+  }
+
+  useRequest(method: IMethod) {
+    return method.optionalParams.length > 1
+  }
+
+  // build the http argument list from back to front, so trailing undefined arguments
+  // can be omitted. Path arguments are resolved as part of the path parameter to general
+  // purpose API method call
+  // e.g.
+  //   {queryArgs...}, bodyArg, {headerArgs...}, {cookieArgs...}
+  //   {queryArgs...}, null, null, {cookieArgs...}
+  //   null, bodyArg
+  //   {queryArgs...}
+  httpArgs(indent: string, method: IMethod) {
+      const request = this.useRequest(method) ? 'request.' : ''
+      let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
+      result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
+      result = this.argFill(result, method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr)
+      result = this.argFill(result, this.argGroup(indent, method.queryArgs, request))
+      return result
+  }
+
   httpCall(indent: string, method: IMethod) {
+    const request = this.useRequest(method) ? 'request.' : ''
     const type = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     const errors = this.errorResponses(indent, method)
-    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}, ${errors}>(${this.httpPath(method.endpoint)}${args ? ", " +args: ""})`
+    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}, ${errors}>(${this.httpPath(method.endpoint, request)}${args ? ", " +args: ""})`
   }
 
   summary(indent: string, text: string | undefined) {
@@ -203,14 +263,19 @@ import { URL } from 'url'
     if (!this.api) return names
     // include Error in the import
     this.api.types['Error'].refCount++
-    Object.values(this.api.sortedTypes())
-      .filter((type) => (type.refCount > 0) && ! (type instanceof IntrinsicType))
-      .forEach((type) => names.push(`I${type.name}`))
+    const types = this.api.sortedTypes()
+    Object.values(types)
+      .filter(type => (type.refCount > 0) && ! (type instanceof IntrinsicType))
+      .forEach(type => names.push(`I${type.name}`))
+    // import default constants
+    Object.values(types)
+      .filter(type => type instanceof RequestType)
+      .forEach(type => names.push(`${Default_}${type.name.substring(Request_.length)}`))
     return names
   }
 
   typeMap(type: IType): IMappedType {
-    // TODO why doesn't this work?
+    // TODO why doesn't this work? Or does it now?
     super.typeMap(type)
     // type.refCount++
 
@@ -227,8 +292,8 @@ import { URL } from 'url'
       'boolean': {name: 'boolean', default: ''},
       'uri': {name: 'URL', default: this.nullStr},
       'url': {name: 'URL', default: this.nullStr},
-      'datetime': {name: 'Date', default: ''},
-      'date': {name: 'Date', default: ''},
+      'datetime': {name: 'Date', default: ''}, // TODO is there a default expression for datetime?
+      'date': {name: 'Date', default: ''}, // TODO is there a default expression for date?
       'object': {name: 'any', default: ''},
       'void': {name: 'void', default: ''}
     }
@@ -239,7 +304,7 @@ import { URL } from 'url'
     }
 
     if (type.name) {
-      return tsTypes[type.name] || {name: `I${type.name}`, default: this.nullStr }
+      return tsTypes[type.name] || {name: `I${type.name}`, default: '' } // No null default for complex types
     } else {
       throw new Error('Cannot output a nameless type.')
     }

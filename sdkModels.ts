@@ -23,11 +23,13 @@
  */
 
 import * as OAS from 'openapi3-ts'
-import * as fs from "fs"
+import * as fs from 'fs'
+import md5 from 'blueimp-md5'
 import { utf8 } from "./utils"
 import { MethodParameterLocation } from "./methodParam"
 import { HttpMethod, StatusCode } from "./typescript/looker/rtl/transport"
 
+const strBody = 'body'
 export declare type Arg = string
 
 export interface IModel {
@@ -36,6 +38,7 @@ export interface IModel {
 export interface ISymbol {
   name: string
   type: IType
+  asHashString(): string
 }
 
 export interface IType {
@@ -49,6 +52,7 @@ export interface IType {
   title: string
   default?: string
   refCount: number // if it works for Delphi, it works for TypeScript
+  asHashString(): string
 }
 
 export interface IParameter extends ISymbol {
@@ -56,6 +60,8 @@ export interface IParameter extends ISymbol {
   location: MethodParameterLocation
   required: boolean
   description: string
+  asProperty() : IProperty
+  asHashString(): string
 }
 
 export interface IMethodResponse {
@@ -97,6 +103,9 @@ class Symbol implements ISymbol {
     this.name = name
     this.type = type
   }
+  asHashString() {
+    return `${this.name}:${this.type.name}`
+  }
 }
 
 class SchemadSymbol extends Symbol {
@@ -120,7 +129,8 @@ class Property extends SchemadSymbol implements IProperty {
   required: boolean = false
 
   get nullable(): boolean {
-    return this.schema.nullable || this.schema['x-looker-nullable'] || true
+    // TODO determine cascading nullable options
+    return this.schema.nullable || this.schema['x-looker-nullable'] || false
   }
 
   get readOnly(): boolean {
@@ -129,6 +139,14 @@ class Property extends SchemadSymbol implements IProperty {
 
   get writeOnly(): boolean {
     return this.schema.writeOnly || false
+  }
+
+  asHashString() {
+    return super.asHashString()
+    + this.nullable ? '?' : ''
+    + this.readOnly ? ' ro' : ''
+    + this.required ? ' req' : ''
+    + this.writeOnly ? ' wo' : ''
   }
 }
 
@@ -139,13 +157,37 @@ export class Parameter implements IParameter {
   required: boolean = false
   type: IType
 
-  constructor (param: OAS.ParameterObject, type: IType) {
-    this.name = param.name
+  constructor (param: OAS.ParameterObject | Partial<IParameter>, type: IType) {
+    this.name = param.name!
     this.type = type
     this.description = param.description || ''
-    this.location = param.in
+    if (param.hasOwnProperty('in')) {
+      this.location = (param as OAS.ParameterObject).in
+    } else {
+      this.location = (param as Partial<IParameter>).location || strBody
+    }
     // TODO deal with the required value being the names of the columns that are required
     this.required = param.required || false
+  }
+
+  asSchemaObject() {
+    return {
+      nullable: !(this.required || this.location === strBody),
+      required: this.required ? [this.name] : undefined,
+      readOnly: false,
+      writeOnly: false,
+      deprecated: false,
+      description: this.description,
+      type: this.type.name
+    } as OAS.SchemaObject
+  }
+
+  asProperty() {
+    return new Property(this.name, this.type, this.asSchemaObject())
+  }
+
+  asHashString() {
+    return `${this.name}:${this.type.name}${this.required?'':'?'}${this.location}`
   }
 }
 
@@ -171,6 +213,8 @@ export interface IMethod extends ISymbol {
   errorResponses : IMethodResponse[]
   // All parameters in the correct, sorted order for the method call
   allParams : IParameter[]
+  // All optional parameters
+  optionalParams: IParameter[]
 }
 
 
@@ -235,9 +279,9 @@ export class Method extends SchemadSymbol implements IMethod {
     const remain = 0
     const before = -1
     // const after = 1
-    // note: "body" is an injected location for simplifying method declarations
+    // note: "strBody" is an injected location for simplifying method declarations
     // parameters should be sorted in the following location order:
-    const locations = ['path', 'body', 'query', 'header', 'cookie']
+    const locations = ['path', strBody, 'query', 'header', 'cookie']
     if (p1.location === p2.location) return remain // no need to re-order
 
     for (let location of locations) {
@@ -285,7 +329,7 @@ export class Method extends SchemadSymbol implements IMethod {
   get requiredParams() {
     return this.required('path')
       .concat(
-        this.required('body'),
+        this.required(strBody),
         this.required('query'),
         this.required('header'),
         this.required('cookie')
@@ -296,7 +340,7 @@ export class Method extends SchemadSymbol implements IMethod {
   get optionalParams() {
     return this.optional('path')
       .concat(
-        this.optional('body'),
+        this.optional(strBody),
         this.optional('query'),
         this.optional('header'),
         this.optional('cookie')
@@ -313,7 +357,7 @@ export class Method extends SchemadSymbol implements IMethod {
   }
 
   get bodyParams() {
-    return this.getParams('body')
+    return this.getParams(strBody)
   }
 
   get queryParams() {
@@ -339,7 +383,7 @@ export class Method extends SchemadSymbol implements IMethod {
   }
 
   get bodyArg() {
-    const body = this.argumentNames('body')
+    const body = this.argumentNames(strBody)
     if (body.length === 0) return ''
     return body[0]
   }
@@ -388,6 +432,16 @@ class Type implements IType {
     })
   }
 
+  asHashString() {
+    let result = `${this.name}:`
+    Object.entries(this.properties)
+      // put properties in alphabetical order first
+      .sort(([a,_],[b,__]) => a.localeCompare(b))
+      .forEach(([_, prop]) => {
+        result += prop.asHashString() + ':'
+      })
+    return result
+  }
   get status(): string {
     return this.schema['x-looker-status'] || ''
   }
@@ -433,6 +487,13 @@ export class IntrinsicType extends Type {
   }
 }
 
+export class RequestType extends Type {
+  constructor (name: string, params: IParameter[], description: string = '') {
+    super({ description }, name)
+    params.forEach(p => this.properties[p.name] = p.asProperty())
+  }
+}
+
 export interface IApiModel extends IModel {
   version: string
   description: string
@@ -440,12 +501,14 @@ export interface IApiModel extends IModel {
   types: Record<string, IType>
   sortedTypes(): IType[]
   sortedMethods(): IMethod[]
+  getRequestType(method: IMethod): IType | undefined
 }
 
 export class ApiModel implements ISymbolTable, IApiModel {
   readonly schema: OAS.OpenAPIObject | undefined
   readonly methods: Record<string, IMethod> = {}
   readonly types: Record<string, IType> = {}
+  readonly requestTypes: Record<string, IType> = {}
   private refs: Record<string, IType> = {}
 
   constructor(spec: OAS.OpenAPIObject) {
@@ -522,7 +585,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   resolveType(schema: string | OAS.SchemaObject | OAS.ReferenceObject): IType {
     if (typeof schema === 'string') {
       if (schema.indexOf("/requestBodies/") < 0) return this.types[schema.substr(schema.lastIndexOf('/')+1)]
-      // dereference the request body schema reference
+      // dereference the request strBody schema reference
       const deref = this.jsonPath(schema)
       if (deref) {
         const ref = this.jsonPath(["content", "application/json", "schema", "$ref"], deref)
@@ -556,6 +619,33 @@ export class ApiModel implements ISymbolTable, IApiModel {
       }
     }
     throw new Error("Schema must have a ref or a type")
+  }
+
+  // create request type from method parameters
+  // add to this.types collection with name as key
+  // add to this.requestTypes collection with hash as key
+  makeRequestType(hash: string, method: IMethod) {
+    const name = `Request_${method.name}`
+    const request = new RequestType(name, method.allParams,
+      `Dynamically generated request type for ${method.name}`)
+    this.types[name] = request
+    this.requestTypes[hash] = request
+    return request
+  }
+
+  // only gets the request type if more than one method parameter is optional
+  getRequestType(method: IMethod) {
+    if (method.optionalParams.length <= 1) return undefined
+    // matches method params hash against current request types
+    let paramHash = ''
+    method.allParams.forEach(p => paramHash += p.asHashString())
+    const hash = md5(paramHash)
+    // if no match, creates the request type and increments its refCount for inclusion
+    // in generated imports
+    let result = this.requestTypes[hash]
+    if (!result) result = this.makeRequestType(hash, method)
+    if (result) result.refCount++
+    return result
   }
 
   sortedTypes() {
@@ -632,6 +722,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   }
 
   /*
+  some sample request strBody patterns
   "requestBody": {
     "$ref": "#/components/requestBodies/Dashboard2"
   },
@@ -723,24 +814,23 @@ export class ApiModel implements ISymbolTable, IApiModel {
   */
   private requestBody(obj: OAS.RequestBodyObject | OAS.ReferenceObject | undefined) {
     if (!obj) return undefined
-    // TODO replace with new Type()
-    let type: IType = {
-      default: '',
-      status: '',
-      description: '',
+    // TODO create a schema factory function and use that where SchemaObject is directly created
+    const typeSchema: OAS.SchemaObject = {
+      nullable: false,
+      required: [strBody],
+      readOnly: false,
+      writeOnly: false,
       deprecated: false,
-      name: '',
-      title: 'body parameter',
-      properties:{},
-      refCount: 0
+      description: ''
     }
-    let result : IParameter = {
-      name: 'body',
-      location: 'body',
+    // TODO create a BodyType descendant of Type?
+    let type : IType = new Type(typeSchema, strBody)
+    let result = new Parameter({
+      name: strBody,
+      location: strBody,
       required: true,
       description: '', // TODO capture description
-      type: type,
-    } as IParameter
+    } as Partial<IParameter>, type)
 
     if (OAS.isReferenceObject(obj)) {
       type = this.resolveType(obj.$ref)
@@ -812,6 +902,16 @@ export interface ICodeFormatter {
   // conveniently support named default parameters?
   needsRequestTypes: boolean
 
+  // Returns the name of the RequestType if this language AND method require it.
+  // Otherwise return empty string.
+  // If RequestType is required, this method should:
+  // - look for an existing RequestType matching the parameter list signature
+  // - if not found, create and register the RequestType in the symbol dictionary
+  // - if creating, the name of the RequestType will be Request_[method.name]
+  // - increment the refCount for the RequestType
+  // - return the name of the RequestType
+  requestTypeName(method: IMethod) : string
+
   // standard code to insert at the top of the generated "methods" file(s)
   methodsPrologue(indent: string): string
 
@@ -833,12 +933,12 @@ export interface ICodeFormatter {
   // group argument names together
   // e.g.
   //   [ row_size, page_offset ]
-  argGroup(indent: string, args: Arg[] ): string
+  argGroup(indent: string, args: Arg[], prefix?: string): string
 
   // list arguments by name
   // e.g.
   //   row_size, page_offset
-  argList(indent: string, args: Arg[]): string
+  argList(indent: string, args: Arg[], prefix?: string): string
 
   // generate a comment block
   // e.g.
@@ -851,10 +951,10 @@ export interface ICodeFormatter {
   methodSignature(indent: string, method: IMethod): string
 
   // convert endpoint pattern to platform-specific string template
-  httpPath(path: string): string
+  httpPath(path: string, prefix?: string): string
 
   // generate a call to the http API abstraction
-  // includes http method, path, body, query, headers, cookie arguments
+  // includes http method, path, strBody, query, headers, cookie arguments
   httpCall(indent: string, method: IMethod): string
 
   // generates the type declaration signature for the start of the type definition

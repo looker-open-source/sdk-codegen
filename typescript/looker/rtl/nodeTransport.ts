@@ -25,7 +25,7 @@
 import { ISDKError, SDKResponse, ITransport, addQueryParams, parseResponse, ITransportSettings, Authenticator, StatusCode } from './transport'
 
 import * as rq from 'request'
-import * as rp from 'request-promise-native'
+import rp from 'request-promise-native'
 type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
 
 export class NodeTransport implements ITransport {
@@ -63,7 +63,6 @@ export class NodeTransport implements ITransport {
     let requestPath = (authenticator ? this.apiPath : this.options.base_url) + addQueryParams(path, queryParams)
     let init : RequestOptions = {
       url: requestPath,
-      qs: queryParams,
       rejectUnauthorized : false, // TODO make this configurable for tests. Should default to True
       headers : headers,
       body: body ? body : undefined,

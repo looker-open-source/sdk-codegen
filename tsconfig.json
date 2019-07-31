@@ -5,6 +5,7 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "esModuleInterop": true,
     "plugins": [
       {
         "name": "tslint-language-service",

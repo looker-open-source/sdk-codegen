@@ -13,3 +13,4 @@ venv/*
 *.pyc
 *.pyo
 *.mypy_cache
+package-lock.json

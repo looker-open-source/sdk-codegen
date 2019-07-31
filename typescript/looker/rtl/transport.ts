@@ -160,12 +160,15 @@ export function addQueryParams (path: string, obj?: { [key: string]: string }) {
   if (keys.length === 0) {
     return path
   } else {
-    const qp = keys.map((k) => k + '=' + encodeURIComponent(obj[k])).join('&')
-    return `${path}?${qp}`
+    const qp = keys
+      .filter(k => obj[k]) // TODO test for "undefined" or omitted parameters
+      .map(k => k + '=' + encodeURIComponent(obj[k])).join('&')
+    return `${path}${qp ? '?' + qp : ''}`
   }
 }
 
 export async function parseResponse (contentType: string, res: Response) {
+  console.log({contentType, res})
   if (contentType.match(/application\/json/g)) {
     try {
       // return await res.json()

@@ -25,6 +25,7 @@
 import { ApiSettingsIniFile } from "../rtl/apiSettings"
 import { UserSession } from "../rtl/userSession"
 import { LookerSDK } from "../sdk/methods"
+import { IRequest_search_looks } from "../sdk/models";
 
 describe('LookerSDK', () => {
   // TODO get file test paths configured
@@ -36,9 +37,10 @@ describe('LookerSDK', () => {
   describe('automatic authentication for API calls', () => {
     it ('me returns the correct result', async () => {
       const sdk = new LookerSDK(userSession)
-      const actual = await sdk.ok(sdk.me(""))
+      const actual = await sdk.ok(sdk.me())
       expect(actual).toBeDefined()
-      expect(actual.credentials_api3.length).toBeGreaterThan(0)
+      expect(actual.credentials_api3).toBeDefined()
+      expect(actual.credentials_api3!.length).toBeGreaterThan(0)
       await sdk.userSession.logout()
       expect(sdk.userSession.isAuthenticated()).toBeFalsy()
     })
@@ -61,26 +63,23 @@ describe('LookerSDK', () => {
   describe('retrieves collections', () => {
     it ('search_looks returns looks', async () => {
       const sdk = new LookerSDK(userSession)
-      const actual = await sdk.ok(sdk.search_looks())
+      const actual = await sdk.ok(sdk.search_looks({}))
       expect(actual).toBeDefined()
       expect(actual.length).toBeGreaterThan(0)
       const look = actual[0]
       expect(look.title).toBeDefined()
-      expect(look.title.trim()).not.toBe("")
       await sdk.userSession.logout()
       expect(sdk.userSession.isAuthenticated()).toBeFalsy()
     })
 
     it ('search_looks fields filter', async () => {
       const sdk = new LookerSDK(userSession)
-      const actual = await sdk.ok(sdk.search_looks(undefined, undefined, undefined,
-        undefined, undefined, undefined, undefined, undefined, 'id,title,description'))
+      const actual = await sdk.ok(sdk.search_looks({ fields: 'id,title,description'} as IRequest_search_looks))
       expect(actual).toBeDefined()
       expect(actual.length).toBeGreaterThan(0)
       const look = actual[0]
       expect(look.id).toBeDefined()
       expect(look.title).toBeDefined()
-      expect(look.title.trim()).not.toBe("")
       expect(look.description).toBeDefined()
       expect(look.created_at).not.toBeDefined()
       await sdk.userSession.logout()

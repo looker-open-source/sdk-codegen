@@ -82,7 +82,7 @@ export abstract class Generator<T extends Models.IModel> {
 export class SdkGenerator extends Generator<Models.IApiModel>{
   render(indent: string) {
     let items : string[] = []
-    // reset refcounts for all types
+    // reset refcounts for ALL types so dynamic import statement will work
     Object.entries(this.model.types).forEach(([_, type]) => type.refCount = 0)
     Object.values(this.model.sortedMethods())
       .forEach(method => {

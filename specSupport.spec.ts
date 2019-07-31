@@ -1,4 +1,4 @@
-import {loadSpec, jsonPath, processEndpoint, template, getResponses, getRequestBodySchema} from "./specSupport"
+import {loadSpec, jsonPath, processEndpoint, getResponses, getRequestBodySchema} from "./specSupport"
 import { PathsObject, OperationObject } from "openapi3-ts"
 import { log, debug } from "./utils"
 
