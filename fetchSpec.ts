@@ -26,7 +26,7 @@ import fetch from 'node-fetch'
 import { SDKConfig, SDKConfigProps } from './sdkConfig'
 import { URLSearchParams } from 'url'
 import * as fs from 'fs'
-import { fail, quit } from './utils'
+import { fail, quit, log } from './utils'
 
 const specFileUrl = (props: SDKConfigProps) => `${props.base_url}/api/${props.api_version}/swagger.json`
 
@@ -51,7 +51,7 @@ const login = async (props: SDKConfigProps) => {
     if (accessToken) {
       return accessToken
     } else {
-      console.log("Server Response: ", body)
+      log("Server Response: " + JSON.stringify(body))
       throw new Error("Access token could not be retrieved.")
     }
 

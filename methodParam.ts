@@ -90,7 +90,6 @@ export const schemaToParam = (name: string, schema: SchemaObject | null) : IMeth
       description: schema.description,
       // "x-looker-nullable": schema["x-looker-nullable"]
     }
-    // console.log({name, schema, result})
   }
   return result
 }

@@ -25,7 +25,6 @@
 import { ApiSettingsIniFile } from "../rtl/apiSettings"
 import { UserSession } from "../rtl/userSession"
 import { LookerSDK } from "../sdk/methods"
-import { IRequest_search_looks } from "../sdk/models";
 
 describe('LookerSDK', () => {
   // TODO get file test paths configured
@@ -74,7 +73,7 @@ describe('LookerSDK', () => {
 
     it ('search_looks fields filter', async () => {
       const sdk = new LookerSDK(userSession)
-      const actual = await sdk.ok(sdk.search_looks({ fields: 'id,title,description'} as IRequest_search_looks))
+      const actual = await sdk.ok(sdk.search_looks({ fields: 'id,title,description'}))
       expect(actual).toBeDefined()
       expect(actual.length).toBeGreaterThan(0)
       const look = actual[0]
@@ -82,6 +81,24 @@ describe('LookerSDK', () => {
       expect(look.title).toBeDefined()
       expect(look.description).toBeDefined()
       expect(look.created_at).not.toBeDefined()
+      await sdk.userSession.logout()
+      expect(sdk.userSession.isAuthenticated()).toBeFalsy()
+    })
+
+    it ('search_looks fields filter', async () => {
+      const sdk = new LookerSDK(userSession)
+      const actual = await sdk.ok(sdk.search_looks(
+        {
+          title: 'Order%',
+          fields: 'id,title'
+        }))
+      expect(actual).toBeDefined()
+      expect(actual.length).toBeGreaterThan(1)
+      const look = actual[0]
+      expect(look.id).toBeDefined()
+      expect(look.title).toBeDefined()
+      expect(look.title).toContain('Order')
+      expect(look.description).not.toBeDefined()
       await sdk.userSession.logout()
       expect(sdk.userSession.isAuthenticated()).toBeFalsy()
     })

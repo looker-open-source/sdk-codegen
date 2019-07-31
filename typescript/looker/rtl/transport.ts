@@ -168,7 +168,6 @@ export function addQueryParams (path: string, obj?: { [key: string]: string }) {
 }
 
 export async function parseResponse (contentType: string, res: Response) {
-  console.log({contentType, res})
   if (contentType.match(/application\/json/g)) {
     try {
       // return await res.json()

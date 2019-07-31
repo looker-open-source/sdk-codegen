@@ -116,7 +116,7 @@ import { URL } from 'url'
 
     if (requestType) {
       // use the request type that will be generated in models.ts
-      fragment = `request: I${requestType}`
+      fragment = `request: Partial<I${requestType}>`
     } else {
       const bump = indent + this.indentStr
       let params: string[] = []
@@ -146,9 +146,10 @@ import { URL } from 'url'
 
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
-    const request = this.requestTypeName(method)
-    const defaultName = request ? `${Default_}${request.substring(Request_.length)}` : ''
-    const defaulter = defaultName? `${bump}request = { ...${defaultName}, ...request}\n` : ''
+    // const request = this.requestTypeName(method)
+    // const defaultName = request ? `${Default_}${request.substring(Request_.length)}` : ''
+    // const defaulter = defaultName? `${bump}request = { ...${defaultName}, ...request}\n` : ''
+    const defaulter = ''
     return this.methodSignature(indent, method)
       + defaulter
       + this.httpCall(bump, method)
@@ -175,8 +176,8 @@ import { URL } from 'url'
   }
 
   typeSignature(indent: string, type: IType) {
-    return this.generateDefaults(indent, type) +
-      this.commentHeader(indent, type.description) +
+    // return this.generateDefaults(indent, type) +
+    return this.commentHeader(indent, type.description) +
       `${indent}export interface I${type.name}{\n`
   }
 
@@ -267,10 +268,10 @@ import { URL } from 'url'
     Object.values(types)
       .filter(type => (type.refCount > 0) && ! (type instanceof IntrinsicType))
       .forEach(type => names.push(`I${type.name}`))
-    // import default constants
-    Object.values(types)
-      .filter(type => type instanceof RequestType)
-      .forEach(type => names.push(`${Default_}${type.name.substring(Request_.length)}`))
+    // TODO import default constants if necessary
+    // Object.values(types)
+    //   .filter(type => type instanceof RequestType)
+    //   .forEach(type => names.push(`${Default_}${type.name.substring(Request_.length)}`))
     return names
   }
 
