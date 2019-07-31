@@ -3,8 +3,7 @@
 
 import json
 import keyword
-from typing import Callable, Dict, List, Type, TypeVar, Union
-import urllib.parse
+from typing import Callable, Dict, List, Sequence, Type, Union
 
 import cattr
 
@@ -17,10 +16,11 @@ class DeserializeError(Exception):
     """
 
 
-T = TypeVar("T", ml.Model, List[ml.Model])
-TStructure = Type[T]
-TDeserializeReturn = Union[str, bytes, ml.Model, List[ml.Model]]
+TModelOrSequence = Union[ml.Model, Sequence[ml.Model]]
+TDeserializeReturn = TModelOrSequence
+TStructure = Union[Type[Sequence[int]], Type[Sequence[str]], Type[TDeserializeReturn]]
 TDeserialize = Callable[[tp.TResponseValue, TStructure], TDeserializeReturn]
+TSerialize = Callable[[TModelOrSequence], bytes]
 
 
 def deserialize(data: tp.TResponseValue, structure: TStructure) -> TDeserializeReturn:
@@ -29,27 +29,24 @@ def deserialize(data: tp.TResponseValue, structure: TStructure) -> TDeserializeR
     try:
         data = json.loads(data)
     except json.JSONDecodeError:
-        return data
+        raise DeserializeError("Bad data")
     try:
-        response: Union[List[ml.Model], ml.Model] = cattr.structure(data, structure)
+        response: TDeserializeReturn = cattr.structure(data, structure)  # type: ignore
     except (TypeError, AttributeError):
         raise DeserializeError("Bad data")
     return response
 
 
-TSerialize = Callable[[ml.Model], bytes]
-
-
-def serialize(model: ml.Model) -> bytes:
+def serialize(model: TModelOrSequence) -> bytes:
     """Translate model into formdata encoded json bytes
     """
     data: Dict[
         str, Union[str, int, bool, ml.Model, List[Union[str, int, bool, ml.Model]]]
     ] = cattr.unstructure(model)
-    return urllib.parse.urlencode(data).encode("utf-8")
+    return json.dumps(data).encode("utf-8")
 
 
-def keyword_field_structure_hook(data: Dict, type_: Union[ml.Model, List[ml.Model]]):
+def keyword_field_structure_hook(data: Dict, type_: TDeserializeReturn):
     """cattr structure hook
 
     Map reserved words in json keys to approriate (safe) names in model.

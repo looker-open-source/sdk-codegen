@@ -1,7 +1,6 @@
 import copy
 import json
 from typing import List
-import urllib.parse
 
 import attr
 import cattr
@@ -77,7 +76,7 @@ def test_deserialize_data_structure_mismatch(data, structure):
         sr.deserialize(data, structure)
 
 
-def test_serialize():
+def test_serialize_single():
     model = Model(
         class_="model-name",
         finally_=[
@@ -85,5 +84,17 @@ def test_serialize():
             ChildModel(id=2, import_="child2"),
         ],
     )
-    expected = urllib.parse.urlencode(MODEL_DATA).encode("utf-8")
+    expected = json.dumps(MODEL_DATA).encode("utf-8")
     assert sr.serialize(model) == expected
+
+
+def test_serialize_sequence():
+    model = Model(
+        class_="model-name",
+        finally_=[
+            ChildModel(id=1, import_="child1"),
+            ChildModel(id=2, import_="child2"),
+        ],
+    )
+    expected = json.dumps([MODEL_DATA]).encode("utf-8")
+    assert sr.serialize([model]) == expected
