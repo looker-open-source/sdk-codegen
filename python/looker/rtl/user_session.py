@@ -1,11 +1,10 @@
 import abc
 from typing import Optional, Union, Dict
 
-from looker.rtl import requests_transport as rtp
-from looker.rtl import auth_token as at
-from looker.rtl import transport as tp
-from looker.rtl import sdk_error as se
-from looker.rtl import api_settings as st
+from looker.rtl import (api_settings as st, auth_token as at,
+                        requests_transport as rtp, transport as tp, sdk_error
+                        as se, serialize as sr)
+from looker.sdk import models as ml
 
 
 class UserSession():
@@ -68,7 +67,7 @@ class UserSession():
                                        'client_id': self.settings.client_id,
                                        'client_secret':
                                        self.settings.client_secret
-                                   }))
+                                   }), ml.AccessToken)
         return result
 
     def logout(self) -> bool:
@@ -98,8 +97,13 @@ class UserSession():
     def _reset(self):
         self._token = at.AuthToken()
 
-    def _ok(self,
-            response: tp.Response) -> Union[tp.TResponseValue, se.SDKError]:
+    def _ok(
+            self,
+            response: tp.Response,
+            model: sr.SDKModel = None,
+    ) -> Union[tp.TResponseValue, se.SDKError]:
         if response.ok:
-            return response.value
+            result = sr.deserialize(response.value,
+                                    model) if model else response.value
+            return result
         raise se.SDKError(response.status_code, response.value)
