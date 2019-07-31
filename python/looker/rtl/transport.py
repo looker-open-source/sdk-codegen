@@ -43,7 +43,7 @@ class TransportSettings:
             )
         return self._url
 
-TResponseValue = Union[str, bytes]
+TResponseValue = Optional[Union[str, bytes]]
 
 
 @dataclasses.dataclass(frozen=True)
