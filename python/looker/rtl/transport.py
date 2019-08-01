@@ -39,7 +39,7 @@ class TransportSettings:
         return f'{self.base_url.rstrip("/")}/api/{self.api_version}'
 
 
-TResponseValue = Optional[Union[str, bytes]]
+TResponseValue = Union[str, bytes]
 
 
 @attr.s(auto_attribs=True)
@@ -53,6 +53,7 @@ class Response:
 class Transport(abc.ABC):
     """Transport base class.
     """
+
     @classmethod
     @abc.abstractmethod
     def configure(cls, settings: TransportSettings) -> Transport:
@@ -67,6 +68,6 @@ class Transport(abc.ABC):
                 query_params: Optional[MutableMapping[str, str]] = None,
                 body: Optional[bytes] = None,
                 authenticator: Optional[Callable[[], Dict[str, str]]] = None
-                ) -> Response:
+               ) -> Response:
         """Send API request.
         """
