@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import abc
-import dataclasses
 import enum
-from typing import (AnyStr, Callable, Dict, IO, MutableMapping, Optional,
-                    Union)
+from typing import Callable, Dict, MutableMapping, Optional, Union
+
+import attr
 
 # pylint: disable=too-few-public-methods
 
@@ -23,7 +23,7 @@ class HttpMethod(enum.Enum):
     HEAD = 7
 
 
-@dataclasses.dataclass(frozen=True)
+@attr.s(auto_attribs=True)
 class TransportSettings:
     """Basic transport settings.
     """
@@ -42,7 +42,7 @@ class TransportSettings:
 TResponseValue = Optional[Union[str, bytes]]
 
 
-@dataclasses.dataclass(frozen=True)
+@attr.s(auto_attribs=True)
 class Response:
     """Success Response object.
     """
@@ -65,8 +65,7 @@ class Transport(abc.ABC):
                 method: HttpMethod,
                 path: str,
                 query_params: Optional[MutableMapping[str, str]] = None,
-                body: Optional[
-                    Union[bytes, MutableMapping[str, str], IO[AnyStr]]] = None,
+                body: Optional[bytes] = None,
                 authenticator: Optional[Callable[[], Dict[str, str]]] = None
                 ) -> Response:
         """Send API request.

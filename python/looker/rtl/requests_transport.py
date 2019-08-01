@@ -2,8 +2,7 @@
 """
 
 import logging
-from typing import (AnyStr, Callable, Dict, IO, MutableMapping, Optional,
-                    Union)
+from typing import Callable, Dict, MutableMapping, Optional
 
 import requests
 
@@ -36,8 +35,7 @@ class RequestsTransport(tp.Transport):
                 method: tp.HttpMethod,
                 path: str,
                 query_params: Optional[MutableMapping[str, str]] = None,
-                body: Optional[
-                    Union[bytes, MutableMapping[str, str], IO[AnyStr]]] = None,
+                body: Optional[bytes] = None,
                 authenticator: Optional[Callable[[], Dict[str, str]]] = None
                 ) -> tp.Response:
 

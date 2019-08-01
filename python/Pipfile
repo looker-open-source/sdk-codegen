@@ -13,7 +13,6 @@ mypy = "*"
 
 [packages]
 requests = "*"
-undictify = "*"
 attrs = "*"
 cattrs = "*"
 

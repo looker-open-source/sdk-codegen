@@ -1,18 +1,22 @@
 """Test the requests transport.
 """
-import dataclasses
+import attr
+import pytest  # type: ignore
 
 from looker.rtl import transport as tp
 from looker.rtl import requests_transport as rtp
 
-
 # pylint: disable=too-few-public-methods
-@dataclasses.dataclass(frozen=True)
+# pylint: disable=redefined-outer-name
+# pylint: disable=missing-docstring
+
+
+@attr.s(auto_attribs=True)
 class Response:
     """Fake requests.Response
     """
-    text: str
     ok: bool
+    text: str
 
 
 class Session:
@@ -32,19 +36,26 @@ class Session:
         return self.ret_val
 
 
-def test_configure():
+@pytest.fixture
+def settings():
+    return tp.TransportSettings(base_url='/some/path',
+                                api_version='3.1',
+                                headers=None,
+                                verify_ssl=True)
+
+
+def test_configure(settings):
     """Test configuration creates instance.
     """
-    settings = tp.TransportSettings(base_url='/some/path', api_version='3.1')
+
     test = rtp.RequestsTransport.configure(settings)
     assert isinstance(test, rtp.RequestsTransport)
 
 
-def test_request_ok():
+def test_request_ok(settings):
     """Test basic successful round trip
     """
-    settings = tp.TransportSettings(base_url='/some/path', api_version='3.1')
-    ret_val = Response('yay!', True)
+    ret_val = Response(ok=True, text='yay!')
     session = Session(ret_val)
     test = rtp.RequestsTransport(settings, session)
     resp = test.request(tp.HttpMethod.GET, '/some/path')
@@ -53,11 +64,10 @@ def test_request_ok():
     assert resp.ok is True
 
 
-def test_request_not_ok():
+def test_request_not_ok(settings):
     """Test API error response
     """
-    settings = tp.TransportSettings(base_url='/some/path', api_version='3.1')
-    ret_val = Response('Some API error', False)
+    ret_val = Response(ok=False, text='Some API error')
     session = Session(ret_val)
     test = rtp.RequestsTransport(settings, session)
     resp = test.request(tp.HttpMethod.GET, '/some/path')
@@ -66,10 +76,9 @@ def test_request_not_ok():
     assert resp.ok is False
 
 
-def test_request_error():
+def test_request_error(settings):
     """Test network error response
     """
-    settings = tp.TransportSettings(base_url='/some/path', api_version='3.1')
     session = Session(None, True)
     test = rtp.RequestsTransport(settings, session)
     resp = test.request(tp.HttpMethod.GET, '/some/path')
