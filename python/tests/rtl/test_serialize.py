@@ -1,11 +1,13 @@
 """Test the requests transport.
 """
-import dataclasses as dc
+import copy
 import json
 from typing import List
+import urllib.parse
 
-import pytest
-import undictify as ud
+import attr
+import cattr
+import pytest  # type: ignore
 
 from looker.rtl import serialize as sr
 
@@ -13,69 +15,67 @@ from looker.rtl import serialize as sr
 # pylint: disable=missing-docstring
 
 
-@ud.type_checked_constructor(convert=True)
-@dc.dataclass
+@attr.s(auto_attribs=True)
 class ChildModel(sr.SDKModel):
-    name: str
     id: int
+    import_: str
 
 
-@ud.type_checked_constructor(convert=True)
-@dc.dataclass
+@attr.s(auto_attribs=True)
 class Model(sr.SDKModel):
-    name: str
-    children: List[ChildModel]
+    class_: str
+    finally_: List[ChildModel]
+
+
+cattr.register_structure_hook(Model, sr.keyword_field_structure_hook)
+cattr.register_unstructure_hook(Model, sr.keyword_field_unstructure_hook)
+cattr.register_structure_hook(ChildModel, sr.keyword_field_structure_hook)
+cattr.register_unstructure_hook(ChildModel, sr.keyword_field_unstructure_hook)
+
+MODEL_DATA = {
+    'class': 'model-name',
+    'finally': [{
+        'id': 1,
+        'import': 'child1'
+    }, {
+        'id': 2,
+        'import': 'child2'
+    }]
+}
 
 
 def test_deserialize():
-    data = json.dumps({
-        'name':
-        'model-name',
-        'children': [
-            {
-                'id': 1,
-                'name': 'child1'
-            },
-            {
-                # check "convert" param on type_checked_constructor
-                'id': "2",
-                'name': 'child2'
-            }
-        ]
-    })
+    """Deserialize functionality
 
-    model = sr.deserialize(data, Model)
+    Should handle python reserved keywords as well as attempting to
+    convert field values to proper type.
+    """
+    # check that type conversion happens
+    data = copy.deepcopy(MODEL_DATA)
+    data['finally'][0]['id'] = '1'
+
+    model = sr.deserialize(json.dumps(data), Model)
     assert isinstance(model, Model)
-    assert isinstance(model.children, list)
-    assert len(model.children) == 2
-    for child in model.children:
+    assert isinstance(model.finally_, list)
+    assert len(model.finally_) == 2
+    for child in model.finally_:
         assert isinstance(child, ChildModel)
         assert isinstance(child.id, int)
 
 
-def test_deserialize_expected_list():
-    data = json.dumps({
-        'name': 'model-name',
-        'children': [{
-            'name': 'child1'
-        }, {
-            'name': 'child2'
-        }]
-    })
-    with pytest.raises(sr.DeserializeError) as excinfo:
-        sr.deserialize(data, Model, many=True)
-    excinfo.match('^Require list data$')
+@pytest.mark.parametrize('data, structure', [(MODEL_DATA, List[Model]),
+                                             ([MODEL_DATA], Model)])
+def test_deserialize_data_structure_mismatch(data, structure):
+    data = json.dumps(data)
+    with pytest.raises(sr.DeserializeError):
+        sr.deserialize(data, structure)
 
 
-def test_deserialize_expected_dict():
-    data = json.dumps([{
-        'name': 'model-name',
-        'children': [{
-            'name': 'child1'
-        }, {
-            'name': 'child2'
-        }]
-    }])
-    with pytest.raises(sr.DeserializeError) as excinfo:
-        sr.deserialize(data, Model, many=False)
-    excinfo.match('^Require dict data$')
+def test_serialize():
+    model = Model(class_='model-name',
+                  finally_=[
+                      ChildModel(id=1, import_='child1'),
+                      ChildModel(id=2, import_='child2'),
+                  ])
+    expected = urllib.parse.urlencode(MODEL_DATA).encode('utf-8')
+    assert sr.serialize(model) == expected

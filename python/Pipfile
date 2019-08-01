@@ -13,7 +13,8 @@ mypy = "*"
 
 [packages]
 requests = "*"
-undictify = "*"
+attrs = "*"
+cattrs = "*"
 
 [requires]
 python_version = "3.7"
