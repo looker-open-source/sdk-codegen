@@ -13,14 +13,14 @@ from looker.rtl import transport as tp
 @attr.s(auto_attribs=True)
 class ApiSettings(tp.TransportSettings):
     """API 3 Client ID from Admin|Users"""
-    client_id: str
+    client_id: str = attr.ib(kw_only=True)
     """API 3 Client Secret from Admin|Users"""
-    client_secret: str
+    client_secret: str = attr.ib(kw_only=True)
     """SSO Embed secret"""
-    embed_secret: str = ''
+    embed_secret: str = attr.ib(default='', kw_only=True)
     """User ID to impersonate (optional)"""
-    user_id: str = ''
-    verbose: bool = False
+    user_id: str = attr.ib(default='', kw_only=True)
+    verbose: bool = attr.ib(default=False, kw_only=True)
 
     @classmethod
     def configure(cls,

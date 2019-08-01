@@ -28,15 +28,15 @@ class TransportSettings:
     """Basic transport settings.
     """
     base_url: str
-    api_version: str
-    headers: Optional[MutableMapping[str, str]]
-    verify_ssl: bool
+    api_version: str = '3.1'
+    verify_ssl: bool = True
+    headers: Optional[MutableMapping[str, str]] = None
 
     @property
     def url(self) -> str:
         """Create and return an API-versioned base endpoint.
         """
-        return f'{self.base_url.rstrip("/")}api/{self.api_version}'
+        return f'{self.base_url.rstrip("/")}/api/{self.api_version}'
 
 
 TResponseValue = Optional[Union[str, bytes]]

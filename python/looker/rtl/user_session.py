@@ -114,10 +114,12 @@ class UserSession():
             self,
             response: tp.Response,
             structure: Optional[sr.TStructure] = None,
-            ) -> Optional[ml.AccessToken]:
+    ) -> Union[tp.TResponseValue, ml.AccessToken]:
         if response.ok:
             result = self.deserialize(
                 response.value, structure) if structure else response.value
             # don't have this return type quite right yet...
+            # Incompatible return value type (got "Union[str, bytes, SDKModel, List[SDKModel], None]", expected "Union[str, bytes, None, AccessToken]")
+            # need to think about how to type this correctly
             return result
         raise se.SDKError(response.status_code, response.value)

@@ -58,13 +58,13 @@ def test_settings_defaults_to_looker_section(config_file):
                          ids=['section=Looker', 'section=Looker2'])
 def test_it_retrieves_section_by_name(config_file, test_section, expected_url):
     """ApiSettings should return settings of specified section."""
-    settings = api_settings.ApiSetting.configure(config_file, test_section)
+    settings = api_settings.ApiSettings.configure(config_file, test_section)
     assert settings.base_url == expected_url
 
 
 def test_it_assigns_defaults_to_empty_settings(config_file):
     """ApiSettings assigns Nones to optional settings that are empty in the config file"""
-    settings = api_settings.ApiSetting.configure(config_file, 'Looker3')
+    settings = api_settings.ApiSettings.configure(config_file, 'Looker3')
     assert settings.api_version == '3.1'
     assert settings.base_url == 'https://host3.looker.com:19999/'
     assert settings.client_id == 'myclientid'
@@ -77,9 +77,9 @@ def test_it_assigns_defaults_to_empty_settings(config_file):
 
 def test_it_fails_with_a_bad_section_name(config_file):
     """ApiSettings should raise an error if section is not found."""
-    with pytest.raises(configparser.NoSectionError) as exc_info:
+    with pytest.raises(KeyError) as exc_info:
         api_settings.ApiSettings.configure(config_file, 'NotAGoodLookForYou')
-    assert exc_info.value.message == "No section: 'NotAGoodLookForYou'"
+    assert exc_info.match('NotAGoodLookForYou')
 
 
 def test_it_fails_with_a_bad_filename():
