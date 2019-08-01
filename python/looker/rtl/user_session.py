@@ -1,5 +1,6 @@
 import abc
 from typing import Optional, Union, Dict
+import urllib.parse
 
 from looker.rtl import (api_settings as st, auth_token as at,
                         requests_transport as rtp, transport as tp, sdk_error
@@ -10,11 +11,16 @@ from looker.sdk import models as ml
 class UserSession():
     def __init__(self,
                  settings: st.ApiSettings,
-                 transport: Optional[tp.Transport] = None):
+                 transport: Optional[tp.Transport] = None,
+                 deserialize: Optional[sr.TDeserialize] = None):
         self._token: at.AuthToken = at.AuthToken()
         self.user_id: str = ''
         self.settings = settings
+        # TODO Argument 1 to "configure" of "RequestsTransport" has incompatible type "ApiSettings"; expected "TransportSettings"
+        # we should create a tp.TransportSettings instance from settings to pass to
+        # rtp.RequestsTransport.configure()
         self.transport = transport or rtp.RequestsTransport.configure(settings)
+        self.deserialize = deserialize or sr.deserialize
 
     @property
     def is_authenticated(self) -> bool:
@@ -46,10 +52,11 @@ class UserSession():
         """Logs in a user or allows an already logged in user to sudo as another user."""
         if not self.is_authenticated:
             token = self._login(user_id)
+            # Argument 1 to "AuthToken" has incompatible type "Union[str, bytes, None]"; expected "Optional[AccessToken]"
             self._token = at.AuthToken(token)
         return self._token
 
-    def _login(self, user_id: Optional[str]) -> tp.TResponseValue:
+    def _login(self, user_id: Optional[str]) -> ml.AccessToken:
         path = '/login'
         if (user_id and self.user_id != user_id):
             # We are switching user ids
@@ -59,15 +66,21 @@ class UserSession():
 
         self._reset()
 
+        # why isn't {client_id, client_secret} an sdk model that the
+        # POST /login takes as body like most of the other POST methods?
+        # hacky to manually formdata encode it here... would rather
+        # sr.serialize() it
+        serialized_body = urllib.parse.urlencode({
+            'client_id':
+            self.settings.client_id,
+            'client_secret':
+            self.settings.client_secret
+        }).encode('utf-8')
         # pylint: disable=too-many-function-args
         result = self._ok(
             self.transport.request(tp.HttpMethod.POST,
                                    path,
-                                   body={
-                                       'client_id': self.settings.client_id,
-                                       'client_secret':
-                                       self.settings.client_secret
-                                   }), ml.AccessToken)
+                                   body=serialized_body), ml.AccessToken)
         return result
 
     def logout(self) -> bool:
@@ -100,10 +113,11 @@ class UserSession():
     def _ok(
             self,
             response: tp.Response,
-            model: sr.SDKModel = None,
-    ) -> Union[tp.TResponseValue, se.SDKError]:
+            structure: Optional[sr.TStructure] = None,
+            ) -> Optional[ml.AccessToken]:
         if response.ok:
-            result = sr.deserialize(response.value,
-                                    model) if model else response.value
+            result = self.deserialize(
+                response.value, structure) if structure else response.value
+            # don't have this return type quite right yet...
             return result
         raise se.SDKError(response.status_code, response.value)
