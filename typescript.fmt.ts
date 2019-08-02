@@ -24,13 +24,11 @@
 
 // TypeScript codeFormatter
 
-import {Arg, IMappedType, IMethod, IParameter, IProperty, IType, IntrinsicType, RequestType} from "./sdkModels"
+import {Arg, IMappedType, IMethod, IParameter, IProperty, IType, IntrinsicType, RequestType, strBody, strRequest} from "./sdkModels"
 import {CodeFormatter, warnEditing} from "./codeFormatter"
 
-// tslint:disable-next-line: variable-name
-const Request_ = 'Request_'
-// tslint:disable-next-line: variable-name
-const Default_ = 'Default_'
+const strDefault = 'Default'
+
 export class TypescriptFormatter extends CodeFormatter {
   codePath = './typescript/'
   package = 'looker'
@@ -86,26 +84,26 @@ import { URL } from 'url'
   }
 
   // Looks like Partial<> is the way to go https://www.typescriptlang.org/docs/handbook/utility-types.html#partialt
-  // but for now https://stackoverflow.com/a/54474807/74137 is the approach
-  createRequester(indent: string, method: IMethod) {
-    const bump = indent + this.indentStr
-    const args = method.allParams // get the params in signature order
-    let props: string[] = []
-    let defaults: string[] = []
-    if (args && args.length > 0) args.forEach(p => props.push(this.declareParameter(bump, p)))
-    method.optional()
-      .forEach(arg => {
-        const type = this.typeMap(arg.type)
-        defaults.push(`${bump}${arg.name}: ${type.default}`)
-    })
-    return this.commentHeader(indent, 'Request initialization for ${method.name}')
-      + `${indent}export interface IRequest_${method.name} {\n`
-      + props.join(this.propDelimiter)
-      + `${indent}}\n\n`
-      + `${indent}export class ${Request_}${method.name} {\n`
-      + defaults.join(this.propDelimiter)
-      + `${indent}}\n\n`
-  }
+  // rather than https://stackoverflow.com/a/54474807/74137
+  // createRequester(indent: string, method: IMethod) {
+  //   const bump = indent + this.indentStr
+  //   const args = method.allParams // get the params in signature order
+  //   let props: string[] = []
+  //   let defaults: string[] = []
+  //   if (args && args.length > 0) args.forEach(p => props.push(this.declareParameter(bump, p)))
+  //   method.optional()
+  //     .forEach(arg => {
+  //       const type = this.typeMap(arg.type)
+  //       defaults.push(`${bump}${arg.name}: ${type.default}`)
+  //   })
+  //   return this.commentHeader(indent, 'Request parameter declarations for ${method.name}')
+  //     + `${indent}export interface IRequest_${method.name} {\n`
+  //     + props.join(this.propDelimiter)
+  //     + `${indent}}\n\n`
+  //     + `${indent}export class ${strRequest}${method.name} {\n`
+  //     + defaults.join(this.propDelimiter)
+  //     + `${indent}}\n\n`
+  // }
 
   methodSignature(indent: string, method: IMethod) {
     const type = this.typeMap(method.type)
@@ -128,10 +126,13 @@ import { URL } from 'url'
   }
 
   declareParameter(indent: string, param: IParameter) {
-    const type = this.typeMap(param.type)
+    let type = (param.location === strBody)
+      ? this.writeableType(param.type) || param.type
+      : param.type
+    const mapped = this.typeMap(type)
     return this.commentHeader(indent, param.description)
-      + `${indent}${param.name}: ${type.name}`
-      + (param.required ? '' : (type.default ? ` = ${type.default}` : ''))
+      + `${indent}${param.name}: ${mapped.name}`
+      + (param.required ? '' : (mapped.default ? ` = ${mapped.default}` : ''))
   }
 
   // @ts-ignore
@@ -147,7 +148,7 @@ import { URL } from 'url'
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
     // const request = this.requestTypeName(method)
-    // const defaultName = request ? `${Default_}${request.substring(Request_.length)}` : ''
+    // const defaultName = request ? `${strDefault}${request.substring(strRequest.length)}` : ''
     // const defaulter = defaultName? `${bump}request = { ...${defaultName}, ...request}\n` : ''
     const defaulter = ''
     return this.methodSignature(indent, method)
@@ -161,7 +162,7 @@ import { URL } from 'url'
     if (!(type instanceof RequestType)) return result
     const bump = this.bumper(indent)
     result += this.commentHeader(indent, `Default constants for optional properties of I${type.name}`)
-    const name = `${Default_}${type.name.substring(Request_.length)}`
+    const name = `${strDefault}${type.name.substring(strRequest.length)}`
     result += `${indent}export const ${name} = {\n`
     let options: string[] = []
     Object.entries(type.properties).forEach(([name, prop]) => {
@@ -271,7 +272,7 @@ import { URL } from 'url'
     // TODO import default constants if necessary
     // Object.values(types)
     //   .filter(type => type instanceof RequestType)
-    //   .forEach(type => names.push(`${Default_}${type.name.substring(Request_.length)}`))
+    //   .forEach(type => names.push(`${strDefault}${type.name.substring(strRequest.length)}`))
     return names
   }
 

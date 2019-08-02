@@ -29,7 +29,9 @@ import { utf8 } from "./utils"
 import { MethodParameterLocation } from "./methodParam"
 import { HttpMethod, StatusCode } from "./typescript/looker/rtl/transport"
 
-const strBody = 'body'
+export const strBody = 'body'
+export const strRequest = 'Request'
+export const strWrite = 'Write'
 export declare type Arg = string
 
 export interface IModel {
@@ -44,6 +46,7 @@ export interface ISymbol {
 export interface IType {
   name: string
   properties: Record<string, IProperty>
+  writeable: IProperty[]
   status: string
   elementType?: IType
 
@@ -51,6 +54,7 @@ export interface IType {
   description: string
   title: string
   default?: string
+  readOnly: boolean
   refCount: number // if it works for Delphi, it works for TypeScript
   asHashString(): string
 }
@@ -172,7 +176,7 @@ export class Parameter implements IParameter {
 
   asSchemaObject() {
     return {
-      nullable: !(this.required || this.location === strBody),
+      nullable: !(this.required), // || this.location === strBody),
       required: this.required ? [this.name] : undefined,
       readOnly: false,
       writeOnly: false,
@@ -216,7 +220,6 @@ export interface IMethod extends ISymbol {
   // All optional parameters
   optionalParams: IParameter[]
 }
-
 
 export class Method extends SchemadSymbol implements IMethod {
   readonly httpMethod: HttpMethod
@@ -442,6 +445,15 @@ class Type implements IType {
       })
     return result
   }
+
+  get writeable(): IProperty[] {
+    let result : IProperty[] = []
+    Object.entries(this.properties)
+      .filter(([_, prop]) => !(prop.readOnly || prop.type.readOnly))
+      .forEach(([_, prop]) => result.push(prop))
+    return result
+  }
+
   get status(): string {
     return this.schema['x-looker-status'] || ''
   }
@@ -461,6 +473,10 @@ class Type implements IType {
   get default(): string | undefined {
     return this.schema.default || ''
   }
+
+  get readOnly(): boolean {
+    return Object.entries(this.properties).every(([_, prop]) => prop.readOnly && prop.readOnly === true)
+  }
 }
 
 class ArrayType extends Type{
@@ -469,6 +485,10 @@ class ArrayType extends Type{
   constructor(elementType: IType, schema: OAS.SchemaObject) {
     super(schema, `${elementType.name}[]`)
     this.elementType = elementType
+  }
+
+  get readOnly() {
+    return this.elementType.readOnly
   }
 }
 
@@ -479,18 +499,50 @@ class ListType extends Type {
     super(schema, `List[${elementType.name}`)
     this.elementType = elementType
   }
+
+  get readOnly() {
+    return this.elementType.readOnly
+  }
 }
 
 export class IntrinsicType extends Type {
   constructor (name: string) {
     super({}, name)
   }
+
+  get readOnly(): boolean {
+    return false
+  }
 }
 
 export class RequestType extends Type {
-  constructor (name: string, params: IParameter[], description: string = '') {
+  constructor (api: IApiModel, name: string, params: IParameter[], description: string = '') {
     super({ description }, name)
-    params.forEach(p => this.properties[p.name] = p.asProperty())
+    // params.forEach(p => this.properties[p.name] = p.asProperty())
+    params.forEach(p => {
+      let writeProp = p.asProperty()
+      const typeWriter = api.getWriteableType(p.type)
+      if (typeWriter) writeProp.type = typeWriter
+      this.properties[p.name] = writeProp
+    })
+  }
+}
+
+export class WriteType extends Type {
+  constructor (api: IApiModel, name: string, properties: IProperty[], description: string = '') {
+    super({ description }, name)
+    properties
+      .filter(p => (!p.readOnly) && (!p.type.readOnly))
+      .forEach(p => {
+        let writeProp = new Property(p.name, p.type,
+          { description: p.description,
+            // nullable/optional if property is nullable or property is complex type
+            nullable: p.nullable || !(p.type instanceof IntrinsicType)
+          })
+        const typeWriter = api.getWriteableType(p.type)
+        if (typeWriter) writeProp.type = typeWriter
+        this.properties[p.name] = writeProp
+      })
   }
 }
 
@@ -502,6 +554,7 @@ export interface IApiModel extends IModel {
   sortedTypes(): IType[]
   sortedMethods(): IMethod[]
   getRequestType(method: IMethod): IType | undefined
+  getWriteableType(type: IType): IType | undefined
 }
 
 export class ApiModel implements ISymbolTable, IApiModel {
@@ -625,8 +678,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
   // add to this.types collection with name as key
   // add to this.requestTypes collection with hash as key
   makeRequestType(hash: string, method: IMethod) {
-    const name = `Request_${method.name}`
-    const request = new RequestType(name, method.allParams,
+    const name = `${strRequest}${method.name}`
+    const request = new RequestType(this, name, method.allParams,
       `Dynamically generated request type for ${method.name}`)
     this.types[name] = request
     this.requestTypes[hash] = request
@@ -645,6 +698,29 @@ export class ApiModel implements ISymbolTable, IApiModel {
     let result = this.requestTypes[hash]
     if (!result) result = this.makeRequestType(hash, method)
     if (result) result.refCount++
+    return result
+  }
+
+  makeWriteableType(hash: string, type: IType, writeProps?: IProperty[]) {
+    writeProps = writeProps || type.writeable
+    const name = `${strWrite}${type.name}`
+    const writer = new WriteType(this, name, writeProps,
+      `Dynamically generated writeable type for ${type.name}`)
+    this.types[name] = writer
+    this.requestTypes[hash] = writer
+    return writer
+  }
+
+  // if any properties of the parameter type are readOnly (including in subtypes)
+  // a writeable type will need to be found or created
+  getWriteableType(type: IType) {
+    const props = Object.entries(type.properties).map(([_,prop]) => prop)
+    const writes = type.writeable
+    // do we have any readOnly properties?
+    if (writes.length === 0 || writes.length === props.length) return undefined
+    const hash = md5(type.asHashString())
+    let result = this.requestTypes[hash]
+    if (!result) result = this.makeWriteableType(hash, type, writes)
     return result
   }
 
@@ -904,13 +980,10 @@ export interface ICodeFormatter {
 
   // Returns the name of the RequestType if this language AND method require it.
   // Otherwise return empty string.
-  // If RequestType is required, this method should:
-  // - look for an existing RequestType matching the parameter list signature
-  // - if not found, create and register the RequestType in the symbol dictionary
-  // - if creating, the name of the RequestType will be Request_[method.name]
-  // - increment the refCount for the RequestType
-  // - return the name of the RequestType
-  requestTypeName(method: IMethod) : string
+  requestTypeName(method: IMethod): string
+
+  // Returns the WriteType if the passed type has any readOnly properties or types
+  writeableType(type: IType): IType | undefined
 
   // standard code to insert at the top of the generated "methods" file(s)
   methodsPrologue(indent: string): string
@@ -960,8 +1033,8 @@ export interface ICodeFormatter {
   // generates the type declaration signature for the start of the type definition
   typeSignature(indent: string, type: IType): string
 
-  // creates the requester type and defaulter for those languages requiring them
-  createRequester(indent: string, method: IMethod): string
+  // // creates the requester type and defaulter for those languages requiring them
+  // createRequester(indent: string, method: IMethod): string
 
   // generates summary text
   // e.g, for Python:

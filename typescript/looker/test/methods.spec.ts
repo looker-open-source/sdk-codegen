@@ -104,4 +104,31 @@ describe('LookerSDK', () => {
     })
   })
 
+  describe('CRUD it checks', () => {
+    it ('create and delete user', async () => {
+      const sdk = new LookerSDK(userSession)
+      let user = await sdk.ok(sdk.create_user({
+        first_name: 'Lloyd',
+        last_name: 'Llookicorn',
+        is_disabled: true,
+        locale: 'fr'
+      }))
+      expect(user).toBeDefined()
+      expect(user.first_name).toEqual('Lloyd')
+      expect(user.last_name).toEqual('Llookicorn')
+      expect(user.is_disabled).toEqual(true)
+      expect(user.locale).toEqual('fr')
+      user = await sdk.ok(sdk.update_user(user.id, {
+        is_disabled: false,
+        locale: 'en'
+      }))
+      expect(user.is_disabled).toEqual(false)
+      expect(user.locale).toEqual('en')
+      const result = await sdk.ok(sdk.delete_user(user.id))
+      expect(result).toEqual('')
+      await sdk.userSession.logout()
+      expect(sdk.userSession.isAuthenticated()).toBeFalsy()
+    })
+
+  })
 })

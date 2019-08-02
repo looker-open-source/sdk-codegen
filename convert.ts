@@ -52,6 +52,7 @@ const convertSpec = async (fileName: string, openApiFile: string) => {
     // patch to fix up small errors in source definition (not required, just to ensure smooth process)
     // indent 2 spaces
     // output to openApiFile
+    // await run('swagger2openapi', [fileName, '--resolveInternal', '-p', '-i', '"  "', '-o', openApiFile])
     await run('swagger2openapi', [fileName, '-p', '-i', '"  "', '-o', openApiFile])
     if (!fs.existsSync(openApiFile)) return fail('convertSpec', `creating ${openApiFile} failed`)
     return openApiFile

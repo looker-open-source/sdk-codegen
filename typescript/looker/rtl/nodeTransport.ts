@@ -46,20 +46,24 @@ export class NodeTransport implements ITransport {
     body?: any,
     authenticator?: Authenticator
   ): Promise<SDKResponse<TSuccess, TError>> {
+    // TODO use version info for the Typescript package
     const agentTag = `LookerSDK JS ${this.options.api_version}`
     let headers : any = {
-      // TODO use version info for the Typescript package
       'User-Agent': agentTag,
       ...this.options.headers
     }
     if (body) {
+      // if (body instanceof Object) {
+      //   // TODO figure out this ugliness
+      //   body = JSON.parse(JSON.stringify(body))
+      // }
       headers = {
         'User-Agent': agentTag,
-        'Content-Length': Buffer.byteLength(body),
+        // 'Content-Length': Buffer.byteLength(body),
         ...this.options.headers
       }
     }
-    // is this an API-versioned call
+    // is this an API-versioned call?
     let requestPath = (authenticator ? this.apiPath : this.options.base_url) + addQueryParams(path, queryParams)
     let init : RequestOptions = {
       url: requestPath,

@@ -171,8 +171,10 @@ export async function parseResponse (contentType: string, res: Response) {
   if (contentType.match(/application\/json/g)) {
     try {
       // return await res.json()
-      return await JSON.parse(res.body)
+      const result = await res.body
+      return result instanceof Object ? result : JSON.parse(result)
     } catch (error) {
+      console.log(res.body)
       return Promise.reject(error)
     }
   } else if (contentType === 'text' || contentType.startsWith('text/')) {
