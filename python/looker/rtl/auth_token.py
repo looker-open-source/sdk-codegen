@@ -6,6 +6,7 @@ from looker.sdk import models as ml
 
 class AuthToken():
     """Used to instantiate or check expiry of an AccessToken object"""
+
     def __init__(self, token: Optional[ml.AccessToken] = None):
         self.access_token: str = ''
         self.token_type: str = ''

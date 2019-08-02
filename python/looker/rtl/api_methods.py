@@ -12,6 +12,7 @@ from looker.rtl import user_session as us
 class APIMethods:
     """Functionality for making authenticated API calls
     """
+
     def __init__(self, user_session: us.UserSession,
                  deserialize: sr.TDeserialize, serialize: sr.TSerialize,
                  transport: tp.Transport):
@@ -33,7 +34,7 @@ class APIMethods:
             structure: sr.TStructure,
             path: str,
             query_params: Optional[MutableMapping[str, str]] = None
-            ) -> sr.TDeserializeReturn:
+           ) -> sr.TDeserializeReturn:
         """GET method
         """
         response = self.transport.request(
