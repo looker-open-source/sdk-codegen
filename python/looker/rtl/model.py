@@ -4,9 +4,6 @@
 import attr
 
 
-# pylint: disable=too-few-public-methods
-
-
 class Model:
     """Base model for all API models.
     """
@@ -21,6 +18,7 @@ class AccessToken(Model):
         token_type : Type of Token
         expires_in : Number of seconds before the token expires
     """
+
     # Access Token used for API calls
     access_token: str = ""
     # Type of Token

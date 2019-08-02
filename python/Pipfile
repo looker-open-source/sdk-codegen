@@ -5,12 +5,13 @@ verify_ssl = true
 
 [dev-packages]
 pytest = "*"
-pylint = "*"
-yapf = "*"
 ptpython = "*"
 ipython = "*"
 mypy = "*"
 pytest-cov = "*"
+black = "*"
+flake8 = "*"
+flake8-bugbear = "*"
 
 [packages]
 requests = "*"
@@ -19,3 +20,6 @@ cattrs = "*"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
