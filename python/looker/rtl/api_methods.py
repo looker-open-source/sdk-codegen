@@ -1,11 +1,12 @@
 """Functionality for making authenticated API calls
 """
-from __future__ import annotations
-
 from typing import MutableMapping, Optional
 
-from looker.rtl import (api_settings, user_session as us, transport as tp,
-                        serialize as sr, requests_transport as rtp)
+from looker.rtl import api_settings as st
+from looker.rtl import serialize as sr
+from looker.rtl import requests_transport as rtp
+from looker.rtl import transport as tp
+from looker.rtl import user_session as us
 
 
 class APIMethods:
@@ -20,16 +21,11 @@ class APIMethods:
         self.transport = transport
 
     @classmethod
-    def configure(cls, settings_file: str = 'looker.ini') -> APIMethods:
+    def configure(cls, settings_file: str = 'looker.ini') -> 'APIMethods':
         """Default dependency configuration
         """
-        settings = api_settings.ApiSettings(settings_file)
-        transport_settings = tp.TransportSettings(
-            base_url=settings.base_url,
-            api_version=settings.api_version,
-            headers={'User-Agent': f'LookerSDK Python {settings.api_version}'},
-            verify_ssl=True)
-        transport = rtp.RequestsTransport.configure(transport_settings)
+        settings = st.ApiSettings.configure(settings_file)
+        transport = rtp.RequestsTransport.configure(settings)
         user_session = us.UserSession(settings, transport)
         return cls(user_session, sr.deserialize, sr.serialize, transport)
 

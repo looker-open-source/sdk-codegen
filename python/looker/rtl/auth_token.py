@@ -9,7 +9,7 @@ class AuthToken():
     def __init__(self, token: Optional[ml.AccessToken] = None):
         self.access_token: str = ''
         self.token_type: str = ''
-        self.expires_in: int = ''
+        self.expires_in: int = 0
         self.expires_at = datetime.datetime.now()
         if token is None:
             token = ml.AccessToken()

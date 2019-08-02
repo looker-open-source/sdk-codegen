@@ -1,8 +1,7 @@
 """Types and abstract base class for transport implementations.
 """
-from __future__ import annotations
-
 import abc
+import distutils
 import enum
 from typing import Callable, Dict, MutableMapping, Optional, Union
 
@@ -23,13 +22,24 @@ class HttpMethod(enum.Enum):
     HEAD = 7
 
 
+def _convert_bool(val: Union[str, bool]) -> bool:
+    converted: bool
+    if isinstance(val, str):
+        converted = distutils.util.strtobool(val)  # pylint: disable=no-member
+    else:
+        converted = bool(val)
+    return converted
+
+
 @attr.s(auto_attribs=True)
 class TransportSettings:
     """Basic transport settings.
     """
     base_url: str
     api_version: str = '3.1'
-    verify_ssl: bool = True
+    # TODO: this isn't working ... we want "False" to be False
+    # the only way to get false now is leave "verify_ssl" blank
+    verify_ssl: bool = attr.ib(converter=_convert_bool, default=True)
     headers: Optional[MutableMapping[str, str]] = None
 
     @property
@@ -53,10 +63,9 @@ class Response:
 class Transport(abc.ABC):
     """Transport base class.
     """
-
     @classmethod
     @abc.abstractmethod
-    def configure(cls, settings: TransportSettings) -> Transport:
+    def configure(cls, settings: TransportSettings) -> 'Transport':
         """Configure and return an instance of Transport
         """
 
@@ -68,6 +77,6 @@ class Transport(abc.ABC):
                 query_params: Optional[MutableMapping[str, str]] = None,
                 body: Optional[bytes] = None,
                 authenticator: Optional[Callable[[], Dict[str, str]]] = None
-               ) -> Response:
+                ) -> Response:
         """Send API request.
         """
