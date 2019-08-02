@@ -1,12 +1,11 @@
 """Types and abstract base class for transport implementations.
 """
-from __future__ import annotations
-
 import abc
-import dataclasses
+import distutils
 import enum
-from typing import (AnyStr, Callable, Dict, IO, MutableMapping, Optional,
-                    Union)
+from typing import Callable, Dict, MutableMapping, Optional, Union
+
+import attr
 
 # pylint: disable=too-few-public-methods
 
@@ -23,30 +22,37 @@ class HttpMethod(enum.Enum):
     HEAD = 7
 
 
-@dataclasses.dataclass(frozen=True)
+def _convert_bool(val: Union[str, bool]) -> bool:
+    converted: bool
+    if isinstance(val, str):
+        converted = distutils.util.strtobool(val)  # pylint: disable=no-member
+    else:
+        converted = bool(val)
+    return converted
+
+
+@attr.s(auto_attribs=True)
 class TransportSettings:
     """Basic transport settings.
     """
     base_url: str
-    api_version: str
+    api_version: str = '3.1'
+    # TODO: this isn't working ... we want "False" to be False
+    # the only way to get false now is leave "verify_ssl" blank
+    verify_ssl: bool = attr.ib(converter=_convert_bool, default=True)
     headers: Optional[MutableMapping[str, str]] = None
-    """API-versioned base endpoint"""
-    _url: str = None
 
     @property
     def url(self) -> str:
-        """Create and return an API-versioned base endpoint."""
-        if not self._url:
-            self._url = "{}{}api/{}".format(
-                self.base_url, "" if self.base_url.endswith("/") else "",
-                self.api_version
-            )
-        return self._url
-
-TResponseValue = Optional[Union[str, bytes]]
+        """Create and return an API-versioned base endpoint.
+        """
+        return f'{self.base_url.rstrip("/")}/api/{self.api_version}'
 
 
-@dataclasses.dataclass(frozen=True)
+TResponseValue = Union[str, bytes]
+
+
+@attr.s(auto_attribs=True)
 class Response:
     """Success Response object.
     """
@@ -59,7 +65,7 @@ class Transport(abc.ABC):
     """
     @classmethod
     @abc.abstractmethod
-    def configure(cls, settings: TransportSettings) -> Transport:
+    def configure(cls, settings: TransportSettings) -> 'Transport':
         """Configure and return an instance of Transport
         """
 
@@ -69,8 +75,7 @@ class Transport(abc.ABC):
                 method: HttpMethod,
                 path: str,
                 query_params: Optional[MutableMapping[str, str]] = None,
-                body: Optional[
-                    Union[bytes, MutableMapping[str, str], IO[AnyStr]]] = None,
+                body: Optional[bytes] = None,
                 authenticator: Optional[Callable[[], Dict[str, str]]] = None
                 ) -> Response:
         """Send API request.
