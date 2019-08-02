@@ -3,8 +3,9 @@
 from typing import MutableMapping, Optional
 
 from looker.rtl import api_settings as st
-from looker.rtl import serialize as sr
+from looker.rtl import model as ml
 from looker.rtl import requests_transport as rtp
+from looker.rtl import serialize as sr
 from looker.rtl import transport as tp
 from looker.rtl import user_session as us
 
@@ -45,7 +46,7 @@ class APIMethods:
             authenticator=self.user_session.authenticate)
         return self.deserialize(response.value, structure)
 
-    def post(self, path: str, body: sr.SDKModel) -> sr.TDeserializeReturn:
+    def post(self, path: str, body: ml.Model) -> sr.TDeserializeReturn:
         """POST method
         """
         serialized_body = self.serialize(body)
@@ -56,7 +57,7 @@ class APIMethods:
             authenticator=self.user_session.authenticate)
         return self.deserialize(response.value, body.__class__)
 
-    def patch(self, path: str, body: sr.SDKModel) -> sr.TDeserializeReturn:
+    def patch(self, path: str, body: ml.Model) -> sr.TDeserializeReturn:
         """PATCH method
         """
         serialized_body = self.serialize(body)

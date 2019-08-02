@@ -8,7 +8,7 @@ from looker.rtl import auth_token as at
 from looker.rtl import requests_transport as rtp
 from looker.rtl import transport as tp
 from looker.rtl import serialize as sr
-from looker.sdk import models as ml
+from looker.rtl import model as ml
 
 
 class UserSessionError(Exception):

@@ -1,5 +1,5 @@
-"""Test the requests transport.
-"""
+# pylint: disable=C,R
+
 import copy
 import json
 from typing import List
@@ -9,6 +9,7 @@ import attr
 import cattr
 import pytest  # type: ignore
 
+from looker.rtl import model as ml
 from looker.rtl import serialize as sr
 
 # pylint: disable=too-few-public-methods
@@ -16,13 +17,13 @@ from looker.rtl import serialize as sr
 
 
 @attr.s(auto_attribs=True)
-class ChildModel(sr.SDKModel):
+class ChildModel(ml.Model):
     id: int
     import_: str
 
 
 @attr.s(auto_attribs=True)
-class Model(sr.SDKModel):
+class Model(ml.Model):
     class_: str
     finally_: List[ChildModel]
 

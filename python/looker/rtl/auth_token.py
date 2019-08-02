@@ -1,7 +1,9 @@
+"""AuthToken
+"""
 from typing import Optional
 import datetime
 
-from looker.sdk import models as ml
+from looker.rtl import model as ml
 
 
 class AuthToken():

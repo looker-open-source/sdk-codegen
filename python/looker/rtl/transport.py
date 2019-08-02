@@ -51,7 +51,6 @@ class Response:
 class Transport(abc.ABC):
     """Transport base class.
     """
-
     @classmethod
     @abc.abstractmethod
     def configure(cls, settings: TransportSettings) -> 'Transport':
@@ -66,6 +65,6 @@ class Transport(abc.ABC):
                 query_params: Optional[MutableMapping[str, str]] = None,
                 body: Optional[bytes] = None,
                 authenticator: Optional[Callable[[], Dict[str, str]]] = None
-               ) -> Response:
+                ) -> Response:
         """Send API request.
         """
