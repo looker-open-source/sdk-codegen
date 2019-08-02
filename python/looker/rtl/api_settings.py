@@ -10,6 +10,17 @@ import cattr
 from looker.rtl import transport as tp
 
 
+def _convert_bool(val: str) -> bool:
+    converted: bool
+    if val.lower() in ('yes', 'y', 'true', 't', '1'):
+        converted = True
+    elif val.lower() in ('no', 'n', 'false', 'f', '0'):
+        converted = False
+    else:
+        raise TypeError
+    return converted
+
+
 @attr.s(auto_attribs=True)
 class ApiSettings(tp.TransportSettings):
     """API Configuration Settings.
@@ -33,5 +44,9 @@ class ApiSettings(tp.TransportSettings):
         section = section or cfg_parser.sections()[0]
 
         cfg = dict(cfg_parser[section])
-        settings: ApiSettings = cattr.structure(cfg, cls)
+
+        converter = cattr.Converter()
+        converter.register_structure_hook(
+            bool, lambda string, _: _convert_bool(string))
+        settings: ApiSettings = converter.structure(cfg, cls)
         return settings

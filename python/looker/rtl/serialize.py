@@ -7,7 +7,6 @@ import keyword
 from typing import Callable, Dict, List, Type, Union
 
 import cattr
-
 from looker.rtl import transport as tp
 
 

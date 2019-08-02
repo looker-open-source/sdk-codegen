@@ -12,6 +12,7 @@ from looker.rtl import transport as tp
 class RequestsTransport(tp.Transport):
     """RequestsTransport implementation of Transport.
     """
+
     def __init__(self, settings: tp.TransportSettings,
                  session: requests.Session):
 
@@ -37,7 +38,7 @@ class RequestsTransport(tp.Transport):
                 query_params: Optional[MutableMapping[str, str]] = None,
                 body: Optional[bytes] = None,
                 authenticator: Optional[Callable[[], Dict[str, str]]] = None
-                ) -> tp.Response:
+               ) -> tp.Response:
 
         url = f'{self.api_path}{path}'
         headers = authenticator() if authenticator else {}
