@@ -1,5 +1,3 @@
-"""Test user session.
-"""
 # pylint: disable=C,R
 # pylint: disable=redefined-outer-name
 

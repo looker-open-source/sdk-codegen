@@ -1,20 +1,15 @@
 """Deserialize API response into models
 """
 
-import urllib.parse
 import json
 import keyword
-from typing import Callable, Dict, List, Type, Union
+from typing import Callable, Dict, List, Type, TypeVar, Union
+import urllib.parse
 
 import cattr
+
+from looker.rtl import model as ml
 from looker.rtl import transport as tp
-
-
-class SDKModel:  # pylint: disable=too-few-public-methods
-    """Base SDK model
-
-    TODO move into looker.sdk code
-    """
 
 
 class DeserializeError(Exception):
@@ -22,13 +17,13 @@ class DeserializeError(Exception):
     """
 
 
-TStructure = Union[Type[SDKModel], List[Type[SDKModel]]]
-TDeserializeReturn = Union[str, bytes, SDKModel, List[SDKModel]]
+T = TypeVar("T", ml.Model, List[ml.Model])
+TStructure = Type[T]
+TDeserializeReturn = Union[str, bytes, ml.Model, List[ml.Model]]
 TDeserialize = Callable[[tp.TResponseValue, TStructure], TDeserializeReturn]
 
 
-def deserialize(data: tp.TResponseValue,
-                structure: TStructure) -> TDeserializeReturn:
+def deserialize(data: tp.TResponseValue, structure: TStructure) -> TDeserializeReturn:
     """Translate API data into models.
     """
     try:
@@ -36,26 +31,25 @@ def deserialize(data: tp.TResponseValue,
     except json.JSONDecodeError:
         return data
     try:
-        response: Union[List[SDKModel], SDKModel] = cattr.structure(
-            data, structure)
+        response: Union[List[ml.Model], ml.Model] = cattr.structure(data, structure)
     except (TypeError, AttributeError):
-        raise DeserializeError('Bad data')
+        raise DeserializeError("Bad data")
     return response
 
 
-TSerialize = Callable[[SDKModel], bytes]
+TSerialize = Callable[[ml.Model], bytes]
 
 
-def serialize(model: SDKModel) -> bytes:
+def serialize(model: ml.Model) -> bytes:
     """Translate model into formdata encoded json bytes
     """
-    data: Dict[str, Union[str, int, bool, SDKModel, List[
-        Union[str, int, bool, SDKModel]]]] = cattr.unstructure(model)
-    return urllib.parse.urlencode(data).encode('utf-8')
+    data: Dict[
+        str, Union[str, int, bool, ml.Model, List[Union[str, int, bool, ml.Model]]]
+    ] = cattr.unstructure(model)
+    return urllib.parse.urlencode(data).encode("utf-8")
 
 
-def keyword_field_structure_hook(data: Dict,
-                                 type_: Union[SDKModel, List[SDKModel]]):
+def keyword_field_structure_hook(data: Dict, type_: Union[ml.Model, List[ml.Model]]):
     """cattr structure hook
 
     Map reserved words in json keys to approriate (safe) names in model.
@@ -63,18 +57,19 @@ def keyword_field_structure_hook(data: Dict,
     for reserved in keyword.kwlist:
 
         if reserved in data:  # type: ignore
-            data[f'{reserved}_'] = data.pop(reserved)  # type: ignore
+            data[f"{reserved}_"] = data.pop(reserved)  # type: ignore
     return cattr.structure_attrs_fromdict(data, type_)  # type: ignore
 
 
-def keyword_field_unstructure_hook(model: SDKModel):
+def keyword_field_unstructure_hook(model: ml.Model):
     """cattr unstructure hook
 
     Map reserved_ words in models to correct json field names.
     """
     data = cattr.global_converter.unstructure_attrs_asdict(  # type: ignore
-        model)
+        model
+    )
     for reserved in keyword.kwlist:
-        if f'{reserved}_' in data:  # type: ignore
-            data[reserved] = data.pop(f'{reserved}_')  # type: ignore
+        if f"{reserved}_" in data:  # type: ignore
+            data[reserved] = data.pop(f"{reserved}_")  # type: ignore
     return data  # type: ignore

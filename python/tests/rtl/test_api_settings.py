@@ -1,5 +1,6 @@
+# pylint: disable=C,R
 # pylint: disable=redefined-outer-name
-import configparser
+
 import pytest  # type: ignore
 
 from looker.rtl import api_settings

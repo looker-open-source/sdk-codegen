@@ -1,14 +1,12 @@
-"""Test the requests transport.
-"""
+# pylint: disable=C,R
+# pylint: disable=redefined-outer-name
+
 import attr
 import pytest  # type: ignore
 
 from looker.rtl import transport as tp
 from looker.rtl import requests_transport as rtp
 
-# pylint: disable=too-few-public-methods
-# pylint: disable=redefined-outer-name
-# pylint: disable=missing-docstring
 
 
 @attr.s(auto_attribs=True)
