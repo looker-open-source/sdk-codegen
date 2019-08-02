@@ -19,6 +19,7 @@ class UserSessionError(Exception):
 class UserSession():
     """UserSession to provid automatic authentication
     """
+
     def __init__(self,
                  settings: st.ApiSettings,
                  transport: Optional[tp.Transport] = None,
@@ -70,10 +71,8 @@ class UserSession():
         self._reset()
 
         serialized = urllib.parse.urlencode({
-            'client_id':
-            self.settings.client_id,
-            'client_secret':
-            self.settings.client_secret
+            'client_id': self.settings.client_id,
+            'client_secret': self.settings.client_secret
         }).encode('utf-8')
         response = self.transport.request(tp.HttpMethod.POST,
                                           path,
