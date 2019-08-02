@@ -24,7 +24,7 @@
 
 // Python codeFormatter
 
-import {Arg, IMappedType, IMethod, IParameter, IProperty, IType} from "./sdkModels"
+import {Arg, IMappedType, IMethod, IParameter, IProperty, IType, strBody} from "./sdkModels"
 import {CodeFormatter, warnEditing} from "./codeFormatter"
 
 export class PythonFormatter extends CodeFormatter {
@@ -91,6 +91,7 @@ from typing import *
       + `${indent}${property.name}: ${type.name} = ${type.default}`
   }
 
+  // because Python has named default parameters
   methodSignature(indent: string, method: IMethod) {
     const type = this.typeMap(method.type)
     let bump = indent + this.indentStr
@@ -102,10 +103,13 @@ from typing import *
   }
 
   declareParameter(indent: string, param: IParameter) {
-    const type = this.typeMap(param.type)
+    let type = (param.location === strBody)
+      ? this.writeableType(param.type) || param.type
+      : param.type
+    const mapped = this.typeMap(type)
     return this.commentHeader(indent, param.description)
-      + `${indent}${param.name}: ${type.name}`
-      + (param.required ? '' : ` = ${type.default}`)
+      + `${indent}${param.name}: ${mapped.name}`
+      + (param.required ? '' : ` = ${mapped.default}`)
   }
 
   initArg(indent: string, property: IProperty) {

@@ -88,7 +88,7 @@ export class SdkGenerator extends Generator<Models.IApiModel>{
       .forEach(method => {
       items.push(this.codeFormatter.declareMethod(indent, method))
     })
-    const tally = `${items.length} total API methods`
+    const tally = `${items.length} API methods`
     log(tally)
     return this
         .p(`${this.codeFormatter.comment('', tally)}`)
@@ -99,21 +99,15 @@ export class SdkGenerator extends Generator<Models.IApiModel>{
   }
 }
 
+
 export class TypeGenerator extends Generator<Models.IApiModel>{
   render(indent: string) {
     let items : string[] = []
     Object.values(this.model.sortedTypes())
       .filter(type => ! (type instanceof Models.IntrinsicType))
       .forEach(type => items.push(this.codeFormatter.declareType(indent, type)))
-    // TODO implement requester generation, but commit current work to keep Brian unblocked
-    // for hack week/2
-    // let requests: string[] = []
-    // if (false && this.codeFormatter.needsRequestTypes) {
-    //   Object.values(this.model.sortedMethods())
-    //     .filter(method => method.hasOptionalParams())
-    //     .forEach(method => requests.push(this.codeFormatter.createRequester(indent, method))
-    // }
-    const tally = `${items.length} total API models`
+    const counts = this.typeTally(this.model.types)
+    const tally = `${counts.total} API models: ${counts.standard} Spec, ${counts.request} Request, ${counts.write} Write`
     log(tally)
     return this
       .p(`${this.codeFormatter.comment('', tally)}`)
@@ -122,5 +116,23 @@ export class TypeGenerator extends Generator<Models.IApiModel>{
       .p(this.codeFormatter.modelsEpilogue(indent))
       // .p(requests.join(`\n`))
       .toString(indent)
+  }
+
+  typeTally(types: Record<string,Models.IType>) {
+    let request = 0
+    let write = 0
+    let standard = 0
+    Object.values(types)
+      .filter(type => !(type instanceof Models.IntrinsicType))
+      .forEach(type => {
+        if (type instanceof Models.RequestType) {
+          if (type.refCount > 0) request++
+        } else if (type instanceof Models.WriteType) {
+          if (type.refCount > 0) write++
+        } else {
+          standard++
+        }
+      })
+    return { standard, write, request, total: standard + write + request }
   }
 }
