@@ -171,7 +171,7 @@ from looker.rtl import serialize as sr
   // because Python has named default parameters
   methodSignature(indent: string, method: IMethod) {
     const type = this.typeMapMethods(method.type)
-    let bump = indent + this.indentStr
+    const bump = this.bumper(indent)
     let params: string[] = []
     const args = method.allParams
     if (args && args.length > 0) method.allParams.forEach(p => params.push(this.declareParameter(bump, p)))
