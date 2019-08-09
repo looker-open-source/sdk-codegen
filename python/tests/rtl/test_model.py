@@ -10,6 +10,6 @@ def test_access_token_extends_model():
 
 def test_access_token_defaults():
     token = ml.AccessToken()
-    assert token.access_token == ''
-    assert token.token_type == ''
+    assert token.access_token == ""
+    assert token.token_type == ""
     assert token.expires_in == 0
