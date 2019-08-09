@@ -14,7 +14,7 @@ def _convert_bool(val: str, _: bool) -> bool:
     converted: bool
     if val.lower() in ("yes", "y", "true", "t", "1"):
         converted = True
-    elif val.lower() in ("no", "n", "false", "f", "0"):
+    elif val.lower() in ("", "no", "n", "false", "f", "0"):
         converted = False
     else:
         raise TypeError

@@ -5,7 +5,6 @@ import urllib.parse
 
 from looker.rtl import api_settings as st
 from looker.rtl import auth_token as at
-from looker.rtl import requests_transport as rtp
 from looker.rtl import transport as tp
 from looker.rtl import serialize as sr
 from looker.rtl import model as ml
@@ -23,14 +22,14 @@ class UserSession:
     def __init__(
         self,
         settings: st.ApiSettings,
-        transport: Optional[tp.Transport] = None,
-        deserialize: Optional[sr.TDeserialize] = None,
+        transport: tp.Transport,
+        deserialize: sr.TDeserialize,
     ):
         self._token: at.AuthToken = at.AuthToken()
         self.user_id: str = ""
         self.settings = settings
-        self.transport = transport or rtp.RequestsTransport.configure(settings)
-        self.deserialize = deserialize or sr.deserialize
+        self.transport = transport
+        self.deserialize = deserialize
 
     @property
     def is_authenticated(self) -> bool:
