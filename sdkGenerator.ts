@@ -99,7 +99,6 @@ export class SdkGenerator extends Generator<Models.IApiModel>{
   }
 }
 
-
 export class TypeGenerator extends Generator<Models.IApiModel>{
   render(indent: string) {
     let items : string[] = []

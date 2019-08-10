@@ -104,8 +104,8 @@ describe('LookerSDK', () => {
     })
   })
 
-  describe('CRUD it checks', () => {
-    it ('create and delete user', async () => {
+  describe('User CRUD-it checks', () => {
+    it ('create, update, and delete user', async () => {
       const sdk = new LookerSDK(userSession)
       let user = await sdk.ok(sdk.create_user({
         first_name: 'Lloyd',
@@ -124,6 +124,10 @@ describe('LookerSDK', () => {
       }))
       expect(user.is_disabled).toEqual(false)
       expect(user.locale).toEqual('en')
+      const creds = await sdk.ok(sdk.create_user_credentials_email(user.id,
+        { email : 'lloyd@example.com'}
+      ))
+      expect(creds.email).toEqual('lloyd@example.com')
       const result = await sdk.ok(sdk.delete_user(user.id))
       expect(result).toEqual('')
       await sdk.userSession.logout()
@@ -131,4 +135,47 @@ describe('LookerSDK', () => {
     })
 
   })
+
+  describe('Query calls', () => {
+    it ('create and run query', async () => {
+      const sdk = new LookerSDK(userSession)
+      const query = await sdk.ok(sdk.create_query({
+        model:'thelook',
+        view:'users',
+        fields: [
+          'users.id', 'users.age', 'users.city', 'users.email', 'users.first_name',
+          'users.last_name', 'users.zip', 'users.state', 'users.country'
+        ],
+        limit:'10',
+        }))
+      // console.log({query})
+      const json = await sdk.ok(sdk.run_query({query_id: query.id, result_format: 'json'}))
+      // console.log({json})
+      const csv = await sdk.ok(sdk.run_query({query_id: query.id, result_format: 'csv'}))
+      // console.log({csv})
+      expect(query).toBeDefined()
+      expect(query.id).toBeDefined()
+      expect(query.id).toBeGreaterThan(0)
+      expect(json).toBeDefined()
+      expect(json.length).toEqual(10)
+      const row = json[0] as any
+      expect(row.hasOwnProperty('users.id')).toBeTruthy()
+      expect(row.hasOwnProperty('users.age')).toBeTruthy()
+      expect(row.hasOwnProperty('users.city')).toBeTruthy()
+      expect(row.hasOwnProperty('users.email')).toBeTruthy()
+      expect(row.hasOwnProperty('users.first_name')).toBeTruthy()
+      expect(row.hasOwnProperty('users.last_name')).toBeTruthy()
+      expect(row.hasOwnProperty('users.zip')).toBeTruthy()
+      expect(row.hasOwnProperty('users.state')).toBeTruthy()
+      expect(row.hasOwnProperty('users.country')).toBeTruthy()
+      expect(row.hasOwnProperty('users.gender')).toBeFalsy()
+      expect(csv).toBeDefined()
+      expect(csv).toContain('Users ID,Users Age,Users City,Users Email,Users First Name,Users Last Name,Users Zip,Users State,Users Country')
+      expect((csv.match(/\n/g) || []).length).toEqual(11)
+      await sdk.userSession.logout()
+      expect(sdk.userSession.isAuthenticated()).toBeFalsy()
+    })
+
+  })
+
 })

@@ -83,28 +83,6 @@ import { URL } from 'url'
       + `${indent}${property.name}${optional}: ${type.name}`
   }
 
-  // Looks like Partial<> is the way to go https://www.typescriptlang.org/docs/handbook/utility-types.html#partialt
-  // rather than https://stackoverflow.com/a/54474807/74137
-  // createRequester(indent: string, method: IMethod) {
-  //   const bump = indent + this.indentStr
-  //   const args = method.allParams // get the params in signature order
-  //   let props: string[] = []
-  //   let defaults: string[] = []
-  //   if (args && args.length > 0) args.forEach(p => props.push(this.declareParameter(bump, p)))
-  //   method.optional()
-  //     .forEach(arg => {
-  //       const type = this.typeMap(arg.type)
-  //       defaults.push(`${bump}${arg.name}: ${type.default}`)
-  //   })
-  //   return this.commentHeader(indent, 'Request parameter declarations for ${method.name}')
-  //     + `${indent}export interface IRequest_${method.name} {\n`
-  //     + props.join(this.propDelimiter)
-  //     + `${indent}}\n\n`
-  //     + `${indent}export class ${strRequest}${method.name} {\n`
-  //     + defaults.join(this.propDelimiter)
-  //     + `${indent}}\n\n`
-  // }
-
   methodSignature(indent: string, method: IMethod) {
     const type = this.typeMap(method.type)
     const header = this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${type.name}`)
@@ -130,6 +108,7 @@ import { URL } from 'url'
       ? this.writeableType(param.type) || param.type
       : param.type
     const mapped = this.typeMap(type)
+    if (param.location === strBody) mapped.name = `Partial<${mapped.name}>`
     return this.commentHeader(indent, param.description)
       + `${indent}${param.name}: ${mapped.name}`
       + (param.required ? '' : (mapped.default ? ` = ${mapped.default}` : ''))
