@@ -112,9 +112,22 @@ from typing import Optional, Sequence
 
 from looker.sdk import models
 from looker.rtl import api_methods
+from looker.rtl import api_settings
+from looker.rtl import requests_transport
+from looker.rtl import serialize
+from looker.rtl import user_session
 
 
 class LookerSDK(api_methods.APIMethods):
+
+    @classmethod
+    def configure(cls, settings_file: str = "looker.ini") -> "LookerSDK":
+        """Default dependency configuration
+        """
+        settings = api_settings.ApiSettings.configure(settings_file)
+        transport = requests_transport.RequestsTransport.configure(settings)
+        usr_session = user_session.UserSession(settings, transport, serialize.deserialize)
+        return cls(usr_session, serialize.deserialize, serialize.serialize, transport)
 `
   // @ts-ignore
   methodsEpilogue = (indent: string) => ''

@@ -41,15 +41,6 @@ class APIMethods:
         self.serialize = serialize
         self.transport = transport
 
-    @classmethod
-    def configure(cls, settings_file: str = "looker.ini") -> "APIMethods":
-        """Default dependency configuration
-        """
-        settings = st.ApiSettings.configure(settings_file)
-        transport = rtp.RequestsTransport.configure(settings)
-        usr_session = us.UserSession(settings, transport, sr.deserialize)
-        return cls(usr_session, sr.deserialize, sr.serialize, transport)
-
     def _return(self, response: tp.Response, structure: TStructure) -> TReturn:
         if not response.ok:
             raise APIError(response.value)
