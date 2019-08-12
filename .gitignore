@@ -10,7 +10,4 @@ sdk_generated.*
 */looker/sdk/models.*
 python/venv/*
 venv/*
-*.pyc
-*.pyo
-*.mypy_cache
 package-lock.json

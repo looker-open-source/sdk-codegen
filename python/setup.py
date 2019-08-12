@@ -5,12 +5,9 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "LookerSDK"
-VERSION = "0.1.0"
-REQUIRES = ["requests >= 2.22", "attr", "cattr"]
+VERSION = "0.1.3"
+REQUIRES = ["requests >= 2.22", "attrs", "cattrs"]
 
-setup_requirements = ["pytest-runner"]
-
-test_requirements = ["pytest"]
 
 setup(
     author="Looker Data Sciences, Inc.",
@@ -21,10 +18,8 @@ setup(
     long_description=open("README.txt").read(),
     keywords=["LookerSDK", "Looker API 3.1"],
     name=NAME,
-    packages=find_packages(include=["looker"]),
-    setup_requires=setup_requirements,
-    test_suite="tests",
-    tests_require=test_requirements,
+    package_data={"looker": ["py.typed"]},
+    packages=find_packages(),
     url="https://pypi.python.org/pypi/LookerSDK",
     version=VERSION,
 )
