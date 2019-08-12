@@ -60,6 +60,8 @@ class APIMethods:
                 continue
             if isinstance(v, datetime.datetime):
                 params[k] = f'{v.isoformat(timespec="minutes")}Z'
+            elif isinstance(v, str):
+                params[k] = v
             else:
                 params[k] = json.dumps(v)
         return params
