@@ -4,9 +4,7 @@ import datetime
 import json
 from typing import MutableMapping, Optional, Sequence, Type, Union
 
-from looker.rtl import api_settings as st
 from looker.rtl import model as ml
-from looker.rtl import requests_transport as rtp
 from looker.rtl import serialize as sr
 from looker.rtl import transport as tp
 from looker.rtl import user_session as us
@@ -47,7 +45,7 @@ class APIMethods:
         ret: TReturn
         if structure is None:
             ret = None
-        elif structure is Type[str]:
+        elif structure is str:
             ret = response.value
         else:
             ret = self.deserialize(response.value, structure)
@@ -62,6 +60,8 @@ class APIMethods:
                 continue
             if isinstance(v, datetime.datetime):
                 params[k] = f'{v.isoformat(timespec="minutes")}Z'
+            elif isinstance(v, str):
+                params[k] = v
             else:
                 params[k] = json.dumps(v)
         return params
