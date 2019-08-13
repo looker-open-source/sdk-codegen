@@ -1,7 +1,7 @@
 import * as Models from "./sdkModels"
 import { debug } from "./utils"
 
-const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
+const apiModel = Models.ApiModel.fromFile('Looker.3.1.oas.json')
 
 describe('sdkModels', () => {
 

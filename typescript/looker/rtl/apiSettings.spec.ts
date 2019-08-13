@@ -25,9 +25,7 @@
 import { ApiConfig, ApiSettings, ApiSettingsIniFile } from "./apiSettings"
 
 describe('API settings parser', () => {
-  // TODO get file test paths configured
-  // const localIni = '../../../looker.ini'
-  const localIni = '/Users/looker/sdk_codegen/looker.ini'
+  const localIni = 'test/looker.ini'
   const contents = `
 [Looker]
 # API version is required

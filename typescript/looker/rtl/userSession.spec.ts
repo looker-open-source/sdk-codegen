@@ -28,9 +28,7 @@ import { UserSession } from "./userSession";
 import { NodeTransport } from "./nodeTransport"
 
 describe('UserSession', () => {
-  // TODO get file test paths configured
-  // const localIni = '../../../looker.ini'
-  const localIni = '/Users/looker/sdk_codegen/looker.ini'
+  const localIni = 'test/looker.ini'
   const settings = new ApiSettingsIniFile(localIni, 'Looker')
 
   describe('isAuthenticated', () => {

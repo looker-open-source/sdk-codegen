@@ -1,0 +1,13 @@
+# common test data for the Looker SDKs
+iniFile: test/looker.ini
+users:
+  - first_name: Lloyd
+    last_name: Lookicorn
+  - first_name: Zachary
+    last_name: Zoomify
+  - first_name: Balthazar
+    last_name: Bombastic
+  - first_name: Aaron
+    last_name: Aardvark
+  - first_name: Amanda
+    last_name: Aardvark
