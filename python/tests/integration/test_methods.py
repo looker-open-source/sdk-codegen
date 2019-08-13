@@ -1,4 +1,3 @@
-# mypy
 import pytest
 from typing import Dict, List, Union
 
