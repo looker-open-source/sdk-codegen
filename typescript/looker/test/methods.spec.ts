@@ -25,18 +25,88 @@
 import { ApiSettingsIniFile } from '../rtl/apiSettings'
 import { UserSession } from '../rtl/userSession'
 import { LookerSDK } from '../sdk/methods'
-import { IWriteUser, IUser } from '../sdk/models'
+import { IUser } from '../sdk/models'
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 
 const testData = yaml.safeLoad(fs.readFileSync('test/data.yml', 'utf-8'))
 const users = testData['users']
-const emailDomain = '@testfoo.com'
+const emailDomain = '@foo.com'
+const debugTimeout = 36000000 // 1 hour
 
 describe('LookerSDK', () => {
   const localIni = testData['iniFile']
   const settings = new ApiSettingsIniFile(localIni, 'Looker')
   const userSession = new UserSession(settings)
+
+  const createTestUsers = async () => {
+    // Ensure all test users are populated and enabled
+    let user: IUser
+    const sdk = new LookerSDK(userSession)
+    // create test users
+    for (const u of users) {
+      let searched = await sdk.ok(
+        sdk.search_users({first_name: u.first_name, last_name: u.last_name})
+      )
+      if (searched.length === 0) {
+        // Look for disabled user
+        searched = await sdk.ok(
+          sdk.search_users({first_name: u.first_name, last_name: u.last_name, is_disabled: true})
+        )
+        for (const user of searched) {
+          // enable user if found
+          await sdk.ok(sdk.update_user(user.id, {is_disabled: false}))
+        }
+      }
+      if (searched.length === 0) {
+        // create missing user record
+        user = await sdk.ok(
+          sdk.create_user({
+            first_name: u.first_name,
+            last_name: u.last_name,
+            is_disabled: false,
+            locale: 'en'
+          })
+        )
+      } else {
+        user = searched[0]
+      }
+      if (!user.credentials_email) {
+        // Ensure email credentials are created
+        const email = `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
+        await sdk.ok(
+          sdk.create_user_credentials_email(user.id, {email: email})
+        )
+        user = await sdk.ok(sdk.user(user.id))
+      }
+    }
+    await sdk.userSession.logout()
+  }
+
+  const removeTestUsers = async () => {
+    // Clean up any test users that may exist
+    const sdk = new LookerSDK(userSession)
+    for (const u of users) {
+      let searched = await sdk.ok(
+        sdk.search_users({first_name: u.first_name, last_name: u.last_name})
+      )
+      if (searched.length === 0) {
+        searched = await sdk.ok(
+          sdk.search_users({first_name: u.first_name, last_name: u.last_name, is_disabled: true})
+        )
+      }
+      if (searched.length > 0) {
+        for (const user of searched) {
+          await sdk.ok(sdk.delete_user(user.id))
+        }
+      }
+    }
+    await sdk.userSession.logout()
+  }
+
+  afterAll(async () => {
+    await removeTestUsers()
+  })
 
   describe('automatic authentication for API calls', () => {
     it('me returns the correct result', async () => {
@@ -79,7 +149,7 @@ describe('LookerSDK', () => {
     it('search_looks fields filter', async () => {
       const sdk = new LookerSDK(userSession)
       const actual = await sdk.ok(
-        sdk.search_looks({ fields: 'id,title,description' })
+        sdk.search_looks({fields: 'id,title,description'})
       )
       expect(actual).toBeDefined()
       expect(actual.length).toBeGreaterThan(0)
@@ -113,38 +183,34 @@ describe('LookerSDK', () => {
   })
 
   describe('User CRUD-it checks', () => {
-    afterAll(async () => {
-      // Clean up any test users that may exist
-      const sdk = new LookerSDK(userSession)
-      users.forEach(async (u: Partial<IWriteUser>) => {
-        let searched = await sdk.ok(
-          sdk.search_users({ first_name: u.first_name, last_name: u.last_name })
-        )
-        if (searched.length > 0) {
-          searched.forEach(async user => {
-            await sdk.ok(sdk.delete_user(user.id))
-          })
-        }
-      })
-      await sdk.userSession.logout()
-    })
+    beforeAll(async () => {
+      await removeTestUsers()
+    }, debugTimeout)
 
     it('create, update, and delete user', async () => {
       const sdk = new LookerSDK(userSession)
-      users.forEach(async (u: Partial<IWriteUser>) => {
+      for (const u of users) {
         let user = await sdk.ok(
           sdk.create_user({
             first_name: u.first_name,
             last_name: u.last_name,
-            is_disabled: true,
+            is_disabled: false,
             locale: 'fr'
           })
         )
         expect(user).toBeDefined()
         expect(user.first_name).toEqual(u.first_name)
         expect(user.last_name).toEqual(u.last_name)
-        expect(user.is_disabled).toEqual(true)
+        expect(user.is_disabled).toEqual(false)
         expect(user.locale).toEqual('fr')
+        user = await sdk.ok(
+          sdk.update_user(user.id, {
+            is_disabled: true,
+            locale: 'en'
+          })
+        )
+        expect(user.is_disabled).toEqual(true)
+        expect(user.locale).toEqual('en')
         user = await sdk.ok(
           sdk.update_user(user.id, {
             is_disabled: false,
@@ -152,20 +218,14 @@ describe('LookerSDK', () => {
           })
         )
         expect(user.is_disabled).toEqual(false)
-        expect(user.locale).toEqual('en')
-        const email1 = `${u.first_name}${emailDomain}`
-        const email2 = `${u.first_name}.${u.last_name}${emailDomain}`
+        const email = `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
         let creds = await sdk.ok(
-          sdk.create_user_credentials_email(user.id, { email: email1 })
+          sdk.create_user_credentials_email(user.id, {email: email})
         )
-        expect(creds.email).toEqual(email1)
-        creds = await sdk.ok(
-          sdk.create_user_credentials_email(user.id, { email: email2 })
-        )
-        expect(creds.email).toEqual(email2)
+        expect(creds.email).toEqual(email)
         const result = await sdk.ok(sdk.delete_user(user.id))
         expect(result).toEqual('')
-      })
+      }
       await sdk.userSession.logout()
       expect(sdk.userSession.isAuthenticated()).toBeFalsy()
     })
@@ -174,54 +234,61 @@ describe('LookerSDK', () => {
   describe('User searches', () => {
 
     beforeAll(async () => {
-      const sdk = new LookerSDK(userSession)
-      // create test users
-      users.forEach(async (u: Partial<IWriteUser>) => {
-        let user: IUser
-        let searched = await sdk.ok(
-          sdk.search_users({ first_name: u.first_name, last_name: u.last_name })
-        )
-        if (searched.length === 0) {
-          user = await sdk.ok(
-            sdk.create_user({
-              first_name: u.first_name,
-              last_name: u.last_name,
-              is_disabled: true,
-              locale: 'en'
-            })
-          )
-        } else {
-          user = searched[0]
-        }
-        const email1 = `${u.first_name}${emailDomain}`
-        const email2 = `${u.first_name}.${u.last_name}${emailDomain}`
-        await sdk.ok(
-          sdk.create_user_credentials_email(user.id, { email: email1 })
-        )
-        await sdk.ok(
-          sdk.create_user_credentials_email(user.id, { email: email2 })
-        )
-      })
-      await sdk.userSession.logout()
+      await removeTestUsers()
+      await createTestUsers()
+    }, debugTimeout)
 
-    })
     it('bad search returns no results', async () => {
       const sdk = new LookerSDK(userSession)
       let actual = await sdk.ok(
-        sdk.search_users({ first_name: 'Bad', last_name: 'News' })
+        sdk.search_users({first_name: 'Bad', last_name: 'News'})
       )
       expect(actual.length).toEqual(0)
       await sdk.userSession.logout()
     })
 
-    it('searches and sorts users', async () => {
+    it('matches email domain', async () => {
       const sdk = new LookerSDK(userSession)
       let actual = await sdk.ok(
-        sdk.search_users({ email: `%${emailDomain}` })
+        sdk.search_users_names({
+          pattern: `%${emailDomain}`
+        })
       )
       expect(actual.length).toEqual(users.length)
       await sdk.userSession.logout()
-    })
+    }, debugTimeout)
+
+    it('matches email domain and returns sorted', async () => {
+      const lastFirst = users.sort((a: Partial<IUser>, b: Partial<IUser>) =>
+        (`${a.last_name} ${a.first_name}`.localeCompare(`${b.last_name} ${b.first_name}`)))
+      const firstLast = users.sort((a: Partial<IUser>, b: Partial<IUser>) =>
+        (`${a.first_name} ${a.last_name}`.localeCompare(`${b.first_name} ${b.last_name}`)))
+      const sdk = new LookerSDK(userSession)
+      let actual = await sdk.ok(
+        sdk.search_users_names({
+          pattern: `%${emailDomain}`,
+          sorts: 'last_name,first_name'
+        })
+      )
+      expect(actual.length).toEqual(users.length)
+      for (let i = 0; i < users.length; i++) {
+        expect(actual[i].first_name).toEqual(lastFirst[i].first_name)
+        expect(actual[i].last_name).toEqual(lastFirst[i].last_name)
+      }
+      actual = await sdk.ok(
+        sdk.search_users_names({
+          pattern: `%${emailDomain}`,
+          sorts: 'first_name,last_name'
+        })
+      )
+      expect(actual.length).toEqual(users.length)
+      for (let i = 0; i < users.length; i++) {
+        expect(actual[i].first_name).toEqual(firstLast[i].first_name)
+        expect(actual[i].last_name).toEqual(firstLast[i].last_name)
+      }
+
+      await sdk.userSession.logout()
+    }, debugTimeout)
   })
 
   describe('Query calls', () => {
@@ -246,10 +313,10 @@ describe('LookerSDK', () => {
         })
       )
       const json = await sdk.ok(
-        sdk.run_query({ query_id: query.id, result_format: 'json' })
+        sdk.run_query({query_id: query.id, result_format: 'json'})
       )
       const csv = await sdk.ok(
-        sdk.run_query({ query_id: query.id, result_format: 'csv' })
+        sdk.run_query({query_id: query.id, result_format: 'csv'})
       )
       expect(query).toBeDefined()
       expect(query.id).toBeDefined()

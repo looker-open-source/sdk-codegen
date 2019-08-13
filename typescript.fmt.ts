@@ -24,10 +24,21 @@
 
 // TypeScript codeFormatter
 
-import {Arg, IMappedType, IMethod, IParameter, IProperty, IType, IntrinsicType, RequestType, strBody, strRequest} from "./sdkModels"
-import {CodeFormatter, warnEditing} from "./codeFormatter"
+import {
+  Arg,
+  IMappedType,
+  IMethod,
+  IParameter,
+  IProperty,
+  IType,
+  IntrinsicType,
+  // RequestType,
+  strBody,
+  // strRequest
+} from "./sdkModels"
+import { CodeFormatter, warnEditing } from "./codeFormatter"
 
-const strDefault = 'Default'
+// const strDefault = 'Default'
 
 export class TypescriptFormatter extends CodeFormatter {
   codePath = './typescript/'
@@ -98,7 +109,7 @@ import { URL } from 'url'
       let params: string[] = []
       const args = method.allParams // get the params in signature order
       if (args && args.length > 0) args.forEach(p => params.push(this.declareParameter(bump, p)))
-        fragment = `\n${params.join(this.paramDelimiter)}`
+      fragment = `\n${params.join(this.paramDelimiter)}`
     }
     return header + fragment + ') {\n'
   }
@@ -136,6 +147,8 @@ import { URL } from 'url'
       + `\n${indent}}`
   }
 
+  /*
+  TODO get rid of this when we're sure we don't need it
   generateDefaults(indent: string, type: IType) {
     let result = ''
     if (!(type instanceof RequestType)) return result
@@ -154,6 +167,7 @@ import { URL } from 'url'
       + options.join(this.paramDelimiter)
       + `${indent}}\n\n`
   }
+  */
 
   typeSignature(indent: string, type: IType) {
     // return this.generateDefaults(indent, type) +
@@ -168,9 +182,9 @@ import { URL } from 'url'
     return results.join(' | ')
   }
 
-  httpPath(path : string, prefix?: string) {
+  httpPath(path: string, prefix?: string) {
     prefix = prefix || ''
-    if (path.indexOf('{') >= 0) return '`' + path.replace(/{/gi, '${'+prefix) + '`'
+    if (path.indexOf('{') >= 0) return 'encodeURI(`' + path.replace(/{/gi, '${' + prefix) + '`)'
     return `'${path}'`
   }
 
@@ -192,20 +206,20 @@ import { URL } from 'url'
   argList(indent: string, args: Arg[], prefix?: string) {
     prefix = prefix || ''
     return args && args.length !== 0
-          ? `\n${indent}${prefix}${args.join(this.argDelimiter+prefix)}`
-          : this.nullStr
+      ? `\n${indent}${prefix}${args.join(this.argDelimiter + prefix)}`
+      : this.nullStr
   }
 
   // this is a builder function to produce arguments with optional null place holders but no extra required optional arguments
   argFill(current: string, args: string) {
-      if ((!current) && args.trim() === this.nullStr) {
-          // Don't append trailing optional arguments if none have been set yet
-          return ''
-      }
-      return `${args}${current ? this.argDelimiter : ''}${current}`
+    if ((!current) && args.trim() === this.nullStr) {
+      // Don't append trailing optional arguments if none have been set yet
+      return ''
+    }
+    return `${args}${current ? this.argDelimiter : ''}${current}`
   }
 
-  useRequest(method: IMethod) {
+  static useRequest(method: IMethod) {
     return method.optionalParams.length > 1
   }
 
@@ -218,21 +232,21 @@ import { URL } from 'url'
   //   null, bodyArg
   //   {queryArgs...}
   httpArgs(indent: string, method: IMethod) {
-      const request = this.useRequest(method) ? 'request.' : ''
-      let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
-      result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
-      result = this.argFill(result, method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr)
-      result = this.argFill(result, this.argGroup(indent, method.queryArgs, request))
-      return result
+    const request = TypescriptFormatter.useRequest(method) ? 'request.' : ''
+    let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
+    result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
+    result = this.argFill(result, method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr)
+    result = this.argFill(result, this.argGroup(indent, method.queryArgs, request))
+    return result
   }
 
   httpCall(indent: string, method: IMethod) {
-    const request = this.useRequest(method) ? 'request.' : ''
+    const request = TypescriptFormatter.useRequest(method) ? 'request.' : ''
     const type = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     const errors = this.errorResponses(indent, method)
-    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}, ${errors}>(${this.httpPath(method.endpoint, request)}${args ? ", " +args: ""})`
+    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}, ${errors}>(${this.httpPath(method.endpoint, request)}${args ? ", " + args : ""})`
   }
 
   summary(indent: string, text: string | undefined) {
@@ -240,13 +254,13 @@ import { URL } from 'url'
   }
 
   typeNames() {
-    let names : string[] = []
+    let names: string[] = []
     if (!this.api) return names
     // include Error in the import
     this.api.types['Error'].refCount++
     const types = this.api.sortedTypes()
     Object.values(types)
-      .filter(type => (type.refCount > 0) && ! (type instanceof IntrinsicType))
+      .filter(type => (type.refCount > 0) && !(type instanceof IntrinsicType))
       .forEach(type => names.push(`I${type.name}`))
     // TODO import default constants if necessary
     // Object.values(types)
@@ -261,13 +275,13 @@ import { URL } from 'url'
     // type.refCount++
 
     const tsTypes: Record<string, IMappedType> = {
-      'number': { name: 'number', default: '0.0' },
-      'float': { name: 'number', default: '0.0' },
-      'double': { name: 'number', default: '0.0' },
-      'integer': { name: 'number', default: '0' },
-      'int32': { name: 'number', default: '0' },
-      'int64': { name: 'number', default: '0' },
-      'string': { name: 'string', default: '""' },
+      'number': {name: 'number', default: '0.0'},
+      'float': {name: 'number', default: '0.0'},
+      'double': {name: 'number', default: '0.0'},
+      'integer': {name: 'number', default: '0'},
+      'int32': {name: 'number', default: '0'},
+      'int64': {name: 'number', default: '0'},
+      'string': {name: 'string', default: '""'},
       'password': {name: 'Password', default: this.nullStr},
       'byte': {name: 'binary', default: this.nullStr},
       'boolean': {name: 'boolean', default: ''},
@@ -280,12 +294,12 @@ import { URL } from 'url'
     }
 
     if (type.elementType) {
-      const map  = this.typeMap(type.elementType)
+      const map = this.typeMap(type.elementType)
       return {name: `${map.name}[]`, default: '[]'}
     }
 
     if (type.name) {
-      return tsTypes[type.name] || {name: `I${type.name}`, default: '' } // No null default for complex types
+      return tsTypes[type.name] || {name: `I${type.name}`, default: ''} // No null default for complex types
     } else {
       throw new Error('Cannot output a nameless type.')
     }

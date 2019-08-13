@@ -2,7 +2,7 @@
 iniFile: test/looker.ini
 users:
   - first_name: Lloyd
-    last_name: Lookicorn
+    last_name: Llookicorn
   - first_name: Zachary
     last_name: Zoomify
   - first_name: Balthazar
