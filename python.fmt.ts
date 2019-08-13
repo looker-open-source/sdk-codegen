@@ -29,7 +29,7 @@ import {CodeFormatter, warnEditing} from "./codeFormatter"
 
 export class PythonFormatter extends CodeFormatter {
   codePath = './python/'
-  package = 'looker'
+  package = 'looker_sdk'
   itself = 'self'
   fileExtension = '.py'
   commentStr = '# '
@@ -110,12 +110,12 @@ export class PythonFormatter extends CodeFormatter {
 import datetime
 from typing import Optional, Sequence
 
-from looker.sdk import models
-from looker.rtl import api_methods
-from looker.rtl import api_settings
-from looker.rtl import requests_transport
-from looker.rtl import serialize
-from looker.rtl import user_session
+from ${this.package}.sdk import models
+from ${this.package}.rtl import api_methods
+from ${this.package}.rtl import api_settings
+from ${this.package}.rtl import requests_transport
+from ${this.package}.rtl import serialize
+from ${this.package}.rtl import user_session
 
 
 class LookerSDK(api_methods.APIMethods):
@@ -140,8 +140,8 @@ from typing import Optional, Sequence
 import attr
 import cattr
 
-from looker.rtl import model
-from looker.rtl import serialize as sr
+from ${this.package}.rtl import model
+from ${this.package}.rtl import serialize as sr
 `
   // @ts-ignore
   modelsEpilogue = (indent: string) => {

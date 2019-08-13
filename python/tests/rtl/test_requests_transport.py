@@ -4,9 +4,8 @@
 import attr
 import pytest  # type: ignore
 
-from looker.rtl import transport as tp
-from looker.rtl import requests_transport as rtp
-
+from looker_sdk.rtl import transport as tp
+from looker_sdk.rtl import requests_transport as rtp
 
 @attr.s(auto_attribs=True)
 class Response:

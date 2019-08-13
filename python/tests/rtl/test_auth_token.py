@@ -1,7 +1,7 @@
 # pylint: disable=C,R
 
-from looker.rtl import auth_token
-from looker.rtl import model
+from looker_sdk.rtl import auth_token
+from looker_sdk.rtl import model
 
 
 def test_defaults_with_empty_token():

@@ -4,10 +4,10 @@ import datetime
 import json
 from typing import MutableMapping, Optional, Sequence, Type, Union
 
-from looker.rtl import model as ml
-from looker.rtl import serialize as sr
-from looker.rtl import transport as tp
-from looker.rtl import user_session as us
+from looker_sdk.rtl import model as ml
+from looker_sdk.rtl import serialize as sr
+from looker_sdk.rtl import transport as tp
+from looker_sdk.rtl import user_session as us
 
 
 TBody = Optional[Union[str, Sequence[str], Sequence[int], ml.Model, Sequence[ml.Model]]]

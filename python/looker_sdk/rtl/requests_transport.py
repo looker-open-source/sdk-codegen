@@ -6,7 +6,7 @@ from typing import Callable, Dict, MutableMapping, Optional
 
 import requests
 
-from looker.rtl import transport as tp
+from looker_sdk.rtl import transport as tp
 
 
 class RequestsTransport(tp.Transport):

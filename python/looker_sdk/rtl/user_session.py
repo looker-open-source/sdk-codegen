@@ -3,11 +3,11 @@
 from typing import Dict, Optional
 import urllib.parse
 
-from looker.rtl import api_settings as st
-from looker.rtl import auth_token as at
-from looker.rtl import transport as tp
-from looker.rtl import serialize as sr
-from looker.rtl import model as ml
+from looker_sdk.rtl import api_settings as st
+from looker_sdk.rtl import auth_token as at
+from looker_sdk.rtl import transport as tp
+from looker_sdk.rtl import serialize as sr
+from looker_sdk.rtl import model as ml
 
 
 class UserSessionError(Exception):

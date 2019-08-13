@@ -3,7 +3,7 @@
 from typing import Optional
 import datetime
 
-from looker.rtl import model as ml
+from looker_sdk.rtl import model as ml
 
 
 class AuthToken():
