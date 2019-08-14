@@ -50,8 +50,8 @@ def test_me_returns_correct_result(client: mtds.LookerSDK):
     me = client.me()
     assert isinstance(me, ml.User)
     assert isinstance(me.credentials_api3, list)
-    assert isinstance(me.credentials_api3[0], ml.CredentialsApi3)
     assert len(me.credentials_api3) > 0
+    assert isinstance(me.credentials_api3[0], ml.CredentialsApi3)
 
 
 def test_me_field_filters(client: mtds.LookerSDK):

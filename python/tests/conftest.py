@@ -2,7 +2,7 @@ import os.path
 import pytest
 import sys
 import yaml
-from typing import Dict, List, Union
+from typing import cast, Dict, List, Union
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -28,9 +28,8 @@ def get_test_data() -> Dict[str, Union[List[Dict[str, str]], str]]:
 def create_users(
     client: mtds.LookerSDK, test_data: Dict[str, Union[List[Dict[str, str]], str]]
 ) -> None:
-    # TODO: fix mypy type error on 'u'
     # Create some users
-    users = test_data["users"]
+    users = cast(List[Dict[str, str]], test_data["users"])
     email_domain = test_data["email_domain"]
     user_ids: List[int] = []
 
