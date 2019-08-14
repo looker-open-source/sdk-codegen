@@ -27,11 +27,11 @@ By using the yarn/node app included in this project, you now have three steps to
 
 * configure a `looker.ini` file so the specification can be retrieved from your server
 
-* specify the client language(s) you want to generate in either [`targetLanguages.ts`](targetLanguages.ts) (for Node) or [`target_languages.txt`](target_languages.txt) for bash.
+* run the specification converter with `yarn convert`
 
-* run the generator
+* run the SDK generator with `yarn sdk`
 
-* **Note**: [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185) describes the manual steps for generating an API language binding. This project replaces these manual steps with automated tools.
+* **Note**: [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185) describes the manual steps for generating an API language binding. This project automates these manual steps and uses an improved code generator.
 
 ## Configuring `looker.ini`
 
@@ -52,8 +52,10 @@ After yarn is installed, just run `yarn` from your terminal window/command line,
 Run the generator with the command:
 
 ```bash
-yarn generate
+yarn convert && yarn sdk
 ```
+
+**Note**: Before public beta, this statement will probably be `yarn generate` instead.
 
 The generator will:
 
@@ -61,7 +63,7 @@ The generator will:
 
   * **Note**: There should be at most 2 entries in `looker.ini`: one for API version 3.1. and one for 3.0. Because 3.1 is a superset of 3.0, you really only need 3.1
 
-* download (if the file is not already present) the Looker API specification file(s) from the configured Looker server(s)
+* download (if the specification file is not already present) the Looker API specification file(s) from the configured Looker server(s)
 
 * convert (if the converted file is not already present) the downloaded Swagger 2 specification file(s) to OpenAPI 3.x
 
@@ -69,8 +71,8 @@ The generator will:
 
 * by default, call the code generator for each active language configured in [`targetLanguages.ts`](targetLanguages.ts)
 
-  * Comment out any language you don't want to generate, or uncomment or add the languages you do want to generate.
-
+  * If you want to generate for one specific language, use `yarn sdk {language}`. Currently, supported `{language}` values are `python` and `typescript`
+  
 When the generator completes successfully, the output will be similar to:
 
 ```plain-text
@@ -81,17 +83,24 @@ python
     sdk
       methods.py (automatically generated)
       models.py (automatically generated)
+typescript
+  looker
+    rtl
+      (run-time library hand-written files here)
+    sdk
+      methods.ts (automatically generated)
+      models.ts (automatically generated)
 ```
 
 **Note:** If you're unable to download the API specification file because you're using an instance of Looker that is not secured and errors are being thrown, you can explicitly turn off TLS verification with a command like:
 
 ```bash
-NODE_TLS_REJECT_UNAUTHORIZED="0" yarn generate
+NODE_TLS_REJECT_UNAUTHORIZED="0" yarn convert && yarn sdk
 ```
 
 #### View the specification interactively
 
-When `yarn generate` completes successfully, the OpenAPI 3.x specification file is available locally, so you can search and explore the api using a command similar to the following:
+When the specification conversion completes successfully, the OpenAPI 3.x specification file is available locally, so you can search and explore the api using a command similar to the following:
 
 ```bash
 yarn view Looker.3.1.oas.json
