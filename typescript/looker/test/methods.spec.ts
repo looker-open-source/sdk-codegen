@@ -25,7 +25,7 @@
 import { ApiSettingsIniFile } from '../rtl/apiSettings'
 import { UserSession } from '../rtl/userSession'
 import { LookerSDK } from '../sdk/methods'
-import { IUser, IQuery } from '../sdk/models'
+import { IUser, IQuery, IRequestrun_inline_query } from '../sdk/models'
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 
@@ -340,7 +340,53 @@ describe('LookerSDK', () => {
         }
         expect(csv).toBeDefined()
         expect((csv.match(/\n/g) || []).length).toEqual(limit + 1)
+      }
+      await sdk.userSession.logout()
+      expect(sdk.userSession.isAuthenticated()).toBeFalsy()
+    })
 
+    it('run_inline_query', async () => {
+      const sdk = new LookerSDK(userSession)
+      for (const q of queries) {
+        // default the result limit to 10
+        const limit = q.limit ? parseInt(q.limit) : 10
+        const request : IRequestrun_inline_query = {
+          body: {
+            model: q.model,
+            view: q.view,
+            limit: limit.toString(10),
+            fields: q.fields || undefined,
+            pivots: q.pivots || undefined,
+            fill_fields: q.fill_fields || [],
+            filters: q.filters || [],
+            filter_expression: q.filter_expression || undefined,
+            sorts: q.sorts || [],
+            column_limit: q.column_limit || undefined,
+            total: typeof q.total !== 'undefined' ? q.total : false,
+            row_total: q.row_total || undefined,
+            subtotals: q.subtotals || undefined,
+            vis_config: q.vis_config || undefined,
+            filter_config: q.filter_config || undefined,
+            visible_ui_sections: q.visible_ui_sections || undefined,
+            dynamic_fields: q.dynamic_fields || undefined,
+            client_id: q.client_id || undefined,
+            query_timezone: q.query_timezone || undefined
+          },
+          result_format: 'json'
+        }
+        const json = await sdk.ok(sdk.run_inline_query(request))
+        request.result_format = 'csv'
+        const csv = await sdk.ok(sdk.run_inline_query(request))
+        expect(json).toBeDefined()
+        expect(json.length).toEqual(10)
+        const row = json[0] as any
+        if (q.fields) {
+          q.fields.forEach(field => {
+            expect(row.hasOwnProperty(field)).toBeTruthy()
+          })
+        }
+        expect(csv).toBeDefined()
+        expect((csv.match(/\n/g) || []).length).toEqual(limit + 1)
       }
       await sdk.userSession.logout()
       expect(sdk.userSession.isAuthenticated()).toBeFalsy()

@@ -88,8 +88,13 @@ import { URL } from 'url'
   }
 
   declareProperty(indent: string, property: IProperty) {
-    const type = this.typeMap(property.type)
     const optional = property.nullable ? '?' : ''
+    if (property.name === strBody) {
+      // TODO refactor this hack to track context when the body parameter is created for the request type
+      return this.commentHeader(indent, property.description || 'body parameter for dynamically created request type')
+        + `${indent}${property.name}${optional}: Partial<I${property.type.name}>`
+    }
+    const type = this.typeMap(property.type)
     return this.commentHeader(indent, property.description)
       + `${indent}${property.name}${optional}: ${type.name}`
   }
@@ -270,9 +275,7 @@ import { URL } from 'url'
   }
 
   typeMap(type: IType): IMappedType {
-    // TODO why doesn't this work? Or does it now?
     super.typeMap(type)
-    // type.refCount++
 
     const tsTypes: Record<string, IMappedType> = {
       'number': {name: 'number', default: '0.0'},
