@@ -350,7 +350,7 @@ describe('LookerSDK', () => {
       for (const q of queries) {
         // default the result limit to 10
         const limit = q.limit ? parseInt(q.limit) : 10
-        const request : IRequestrun_inline_query = {
+        const request: IRequestrun_inline_query = {
           body: {
             model: q.model,
             view: q.view,

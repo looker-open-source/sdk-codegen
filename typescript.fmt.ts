@@ -91,6 +91,7 @@ import { URL } from 'url'
     const optional = property.nullable ? '?' : ''
     if (property.name === strBody) {
       // TODO refactor this hack to track context when the body parameter is created for the request type
+      property.type.refCount++
       return this.commentHeader(indent, property.description || 'body parameter for dynamically created request type')
         + `${indent}${property.name}${optional}: Partial<I${property.type.name}>`
     }
