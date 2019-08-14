@@ -81,7 +81,7 @@ def test_is_authenticated_returns_true_when_authenticated(config_file):
 
 
 def test_is_impersonating_returns_false_when_not_impersonating(config_file):
-    """is_impersonating should return false when session is not authenticated 
+    """is_impersonating should return false when session is not authenticated
     or is authenticated but not as another user"""
     # Given a user session that is not authenticated
     settings = st.ApiSettings.configure(config_file)
