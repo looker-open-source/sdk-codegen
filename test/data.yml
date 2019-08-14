@@ -1,5 +1,5 @@
 # common test data for the Looker SDKs
-iniFile: test/looker.ini
+iniFile: looker.ini
 users:
   - first_name: Lloyd
     last_name: Llookicorn
@@ -11,3 +11,17 @@ users:
     last_name: Aardvark
   - first_name: Amanda
     last_name: Aardvark
+queries:
+  - model: thelook
+    view: users
+    fields:
+      - 'users.id'
+      - 'users.age'
+      - 'users.city'
+      - 'users.email'
+      - 'users.first_name'
+      - 'users.last_name'
+      - 'users.zip'
+      - 'users.state'
+      - 'users.country'
+    limit: '10'

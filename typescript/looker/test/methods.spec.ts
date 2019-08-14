@@ -25,17 +25,18 @@
 import { ApiSettingsIniFile } from '../rtl/apiSettings'
 import { UserSession } from '../rtl/userSession'
 import { LookerSDK } from '../sdk/methods'
-import { IUser } from '../sdk/models'
+import { IUser, IQuery } from '../sdk/models'
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 
 const testData = yaml.safeLoad(fs.readFileSync('test/data.yml', 'utf-8'))
-const users = testData['users']
+const localIni = testData['iniFile']
+const users: Partial<IUser>[] = testData['users']
+const queries: Partial<IQuery>[] = testData['queries']
 const emailDomain = '@foo.com'
 const debugTimeout = 36000000 // 1 hour
 
 describe('LookerSDK', () => {
-  const localIni = testData['iniFile']
   const settings = new ApiSettingsIniFile(localIni, 'Looker')
   const userSession = new UserSession(settings)
 
@@ -294,51 +295,53 @@ describe('LookerSDK', () => {
   describe('Query calls', () => {
     it('create and run query', async () => {
       const sdk = new LookerSDK(userSession)
-      const query = await sdk.ok(
-        sdk.create_query({
-          model: 'thelook',
-          view: 'users',
-          fields: [
-            'users.id',
-            'users.age',
-            'users.city',
-            'users.email',
-            'users.first_name',
-            'users.last_name',
-            'users.zip',
-            'users.state',
-            'users.country'
-          ],
-          limit: '10'
-        })
-      )
-      const json = await sdk.ok(
-        sdk.run_query({query_id: query.id, result_format: 'json'})
-      )
-      const csv = await sdk.ok(
-        sdk.run_query({query_id: query.id, result_format: 'csv'})
-      )
-      expect(query).toBeDefined()
-      expect(query.id).toBeDefined()
-      expect(query.id).toBeGreaterThan(0)
-      expect(json).toBeDefined()
-      expect(json.length).toEqual(10)
-      const row = json[0] as any
-      expect(row.hasOwnProperty('users.id')).toBeTruthy()
-      expect(row.hasOwnProperty('users.age')).toBeTruthy()
-      expect(row.hasOwnProperty('users.city')).toBeTruthy()
-      expect(row.hasOwnProperty('users.email')).toBeTruthy()
-      expect(row.hasOwnProperty('users.first_name')).toBeTruthy()
-      expect(row.hasOwnProperty('users.last_name')).toBeTruthy()
-      expect(row.hasOwnProperty('users.zip')).toBeTruthy()
-      expect(row.hasOwnProperty('users.state')).toBeTruthy()
-      expect(row.hasOwnProperty('users.country')).toBeTruthy()
-      expect(row.hasOwnProperty('users.gender')).toBeFalsy()
-      expect(csv).toBeDefined()
-      expect(csv).toContain(
-        'Users ID,Users Age,Users City,Users Email,Users First Name,Users Last Name,Users Zip,Users State,Users Country'
-      )
-      expect((csv.match(/\n/g) || []).length).toEqual(11)
+      for (const q of queries) {
+        // default the result limit to 10
+        const limit = q.limit ? parseInt(q.limit) : 10
+        const query = await sdk.ok(
+          sdk.create_query({
+            model: q.model,
+            view: q.view,
+            fields: q.fields || undefined,
+            pivots: q.pivots || undefined,
+            fill_fields: q.fill_fields || [],
+            filters: q.filters || [],
+            filter_expression: q.filter_expression || undefined,
+            sorts: q.sorts || [],
+            limit: limit.toString(10),
+            column_limit: q.column_limit || undefined,
+            total: typeof q.total !== 'undefined' ? q.total : false,
+            row_total: q.row_total || undefined,
+            subtotals: q.subtotals || undefined,
+            vis_config: q.vis_config || undefined,
+            filter_config: q.filter_config || undefined,
+            visible_ui_sections: q.visible_ui_sections || undefined,
+            dynamic_fields: q.dynamic_fields || undefined,
+            client_id: q.client_id || undefined,
+            query_timezone: q.query_timezone || undefined
+          })
+        )
+        const json = await sdk.ok(
+          sdk.run_query({query_id: query.id, result_format: 'json'})
+        )
+        const csv = await sdk.ok(
+          sdk.run_query({query_id: query.id, result_format: 'csv'})
+        )
+        expect(query).toBeDefined()
+        expect(query.id).toBeDefined()
+        expect(query.id).toBeGreaterThan(0)
+        expect(json).toBeDefined()
+        expect(json.length).toEqual(10)
+        const row = json[0] as any
+        if (query.fields) {
+          query.fields.forEach(field => {
+            expect(row.hasOwnProperty(field)).toBeTruthy()
+          })
+        }
+        expect(csv).toBeDefined()
+        expect((csv.match(/\n/g) || []).length).toEqual(limit + 1)
+
+      }
       await sdk.userSession.logout()
       expect(sdk.userSession.isAuthenticated()).toBeFalsy()
     })
