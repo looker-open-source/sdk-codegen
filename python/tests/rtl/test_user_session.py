@@ -5,10 +5,10 @@ import json
 
 import pytest  # type: ignore
 
-from looker.rtl.user_session import UserSession
-from looker.rtl import api_settings as st
-from looker.rtl import serialize as sr
-from looker.rtl import transport as tp
+from looker_sdk.rtl.user_session import UserSession
+from looker_sdk.rtl import api_settings as st
+from looker_sdk.rtl import serialize as sr
+from looker_sdk.rtl import transport as tp
 
 
 @pytest.fixture(scope="session")

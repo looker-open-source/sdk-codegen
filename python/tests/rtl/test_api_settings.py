@@ -3,7 +3,7 @@
 
 import pytest  # type: ignore
 
-from looker.rtl import api_settings
+from looker_sdk.rtl import api_settings
 
 
 @pytest.fixture(scope="session")

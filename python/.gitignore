@@ -1,0 +1,9 @@
+looker_sdk/sdk/methods.*
+looker_sdk/sdk/models.*
+dist/
+build/
+looker_sdk.egg-info/
+.eggs/
+*.pyc
+*.pyo
+*.mypy_cache

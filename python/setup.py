@@ -4,8 +4,8 @@
 
 from setuptools import setup, find_packages  # noqa: H301
 
-NAME = "LookerSDK"
-VERSION = "0.1.3"
+NAME = "looker_sdk"
+VERSION = "0.1.0"
 REQUIRES = ["requests >= 2.22", "attrs", "cattrs"]
 
 
@@ -14,12 +14,12 @@ setup(
     author_email="support@looker.com",
     description="Looker API 3.1",
     install_requires=REQUIRES,
-    license="LICENSE.txt",
-    long_description=open("README.txt").read(),
-    keywords=["LookerSDK", "Looker API 3.1"],
+    license="MIT",
+    long_description=open("README.rst").read(),
+    keywords=["looker_sdk", "Looker API 3.1"],
     name=NAME,
-    package_data={"looker": ["py.typed"]},
+    package_data={"looker": ["py.typed", "looker_sdk/looker-sample.ini"]},
     packages=find_packages(),
-    url="https://pypi.python.org/pypi/LookerSDK",
+    url="https://pypi.python.org/pypi/looker_sdk",
     version=VERSION,
 )

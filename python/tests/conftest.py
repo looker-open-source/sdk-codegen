@@ -1,22 +1,22 @@
 import os.path
-import pytest
+import pytest  # type: ignore
 import sys
 import yaml
 from typing import cast, Dict, List, Union
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from looker.sdk import methods as mtds  # noqa: E402
-from looker.sdk import models as ml  # noqa: E402
+from looker_sdk.sdk import methods as mtds  # noqa: E402
+from looker_sdk.sdk import models as ml  # noqa: E402
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="session")  # type: ignore
 def client() -> mtds.LookerSDK:
     client = mtds.LookerSDK.configure("../looker.ini")
     return client
 
 
-@pytest.fixture(name="test_data")
+@pytest.fixture(name="test_data")  # type: ignore
 def get_test_data() -> Dict[str, Union[List[Dict[str, str]], str]]:
     with open("../test/data.yml") as f:
         test_data: Dict[str, Union[str, List[Dict[str, str]]]] = yaml.safe_load(f)
@@ -24,7 +24,7 @@ def get_test_data() -> Dict[str, Union[List[Dict[str, str]], str]]:
     return {"users": test_data["users"], "email_domain": "@testfoo.com"}
 
 
-@pytest.fixture()
+@pytest.fixture()  # type: ignore
 def create_users(
     client: mtds.LookerSDK, test_data: Dict[str, Union[List[Dict[str, str]], str]]
 ) -> None:

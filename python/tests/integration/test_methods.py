@@ -1,13 +1,10 @@
-import pytest
+import pytest  # type: ignore
 from typing import Dict, List, Union
 
-from looker.sdk import methods as mtds
-from looker.sdk import models as ml
+from looker_sdk.sdk import methods as mtds
+from looker_sdk.sdk import models as ml
 
 
-@pytest.mark.skip(
-    reason="Currently fails because update_user assigns Nones to arguments that are not passed through."
-)
 def test_crud_user(client: mtds.LookerSDK):
     """Test creating, retrieving, updating and deleting a user.
     """
@@ -23,21 +20,33 @@ def test_crud_user(client: mtds.LookerSDK):
     assert user.is_disabled
     assert user.locale == "fr"
 
-    # Update user
+    # Update user and check fields we didn't intend to change didn't change
     user_id = user.id
-    client.update_user(user_id, ml.WriteUser(is_disabled=False, locale="uk"))
+    update_user = ml.WriteUser(is_disabled=False, locale="uk")
+    client.update_user(user_id, update_user)
+    user = client.user(user_id)
+    assert user.first_name == "John"
+    assert user.last_name == "Doe"
+    assert user.locale == "uk"
+    assert not user.is_disabled
+
+    # Update user and check fields we intended to wipe out are now None
+    # first way to specify nulling out a field
+    update_user = ml.WriteUser(first_name=ml.EXPLICIT_NULL)
+    # second way
+    update_user.last_name = None
+    client.update_user(user_id, update_user)
+    user = client.user(user_id)
+    assert user.first_name is None
+    assert user.last_name is None
+
+    # Try adding email creds
     client.create_user_credentials_email(
         user_id, ml.WriteCredentialsEmail(email="john.doe@looker.com")
     )
-
-    # Retrieve user details
     user = client.user(user_id)
-    assert user.locale == "uk"
-    assert not user.is_disabled
     assert isinstance(user.credentials_email, ml.CredentialsEmail)
     assert user.credentials_email.email == "john.doe@looker.com"
-    assert user.first_name == "John"
-    assert user.last_name == "Doe"
 
     # Delete user
     resp = client.delete_user(user_id)
@@ -69,7 +78,7 @@ def test_me_field_filters(client: mtds.LookerSDK):
     assert not me.personal_space_id
 
 
-@pytest.mark.usefixtures("create_users")
+@pytest.mark.usefixtures("create_users")  # type: ignore
 def test_bad_user_search_returns_no_results(client: mtds.LookerSDK):
     """search_users() should return an empty list when no match is found.
     """
@@ -78,7 +87,7 @@ def test_bad_user_search_returns_no_results(client: mtds.LookerSDK):
     assert len(resp) == 0
 
 
-@pytest.mark.usefixtures("create_users")
+@pytest.mark.usefixtures("create_users")  # type: ignore
 def test_it_searches_and_sorts_users(
     client: mtds.LookerSDK, test_data: Dict[str, Union[List[Dict[str, str]], str]]
 ):

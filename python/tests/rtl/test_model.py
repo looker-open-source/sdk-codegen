@@ -1,6 +1,6 @@
 # pylint: disable=C,R
 
-from looker.rtl import model as ml
+from looker_sdk.rtl import model as ml
 
 
 def test_access_token_extends_model():

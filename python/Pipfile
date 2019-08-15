@@ -16,6 +16,8 @@ prettyprinter = "*"
 twine = "*"
 setuptools = "*"
 wheel = "*"
+pyyaml = "*"
+pytest-pudb = "*"
 
 [packages]
 requests = "*"

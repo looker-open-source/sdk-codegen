@@ -7,7 +7,7 @@ from typing import Optional
 import attr
 import cattr
 
-from looker.rtl import transport as tp
+from looker_sdk.rtl import transport as tp
 
 
 def _convert_bool(val: str, _: bool) -> bool:
