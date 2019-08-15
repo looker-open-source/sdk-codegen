@@ -1,6 +1,6 @@
 """Client entry point
 """
-from looker.sdk import methods
+from looker_sdk.sdk import methods
 
 
 def setup(config_file: str = "Looker.ini") -> methods.LookerSDK:

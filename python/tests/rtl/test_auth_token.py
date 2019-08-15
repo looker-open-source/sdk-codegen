@@ -16,7 +16,11 @@ def test_defaults_with_empty_token():
 
 def test_is_active_with_full_token():
     """Confirm active token when AuthToken is initialized properly."""
-    actual = auth_token.AuthToken(model.AccessToken("all-access", "backstage", 3600))
+    actual = auth_token.AuthToken(
+        model.AccessToken(
+            access_token="all-access", token_type="backstage", expires_in=3600
+        )
+    )
 
     assert actual.access_token == "all-access"
     assert actual.token_type == "backstage"

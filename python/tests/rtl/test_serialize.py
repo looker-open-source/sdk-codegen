@@ -1,6 +1,9 @@
 import copy
+import functools
 import json
-from typing import Optional, Sequence
+
+# ignoring "Module 'typing' has no attribute 'ForwardRef'"
+from typing import ForwardRef, Optional, Sequence  # type: ignore
 
 import attr
 import cattr
@@ -11,29 +14,22 @@ from looker_sdk.rtl import serialize as sr
 
 
 @attr.s(auto_attribs=True, kw_only=True)
+class Model(ml.Model):
+    id: Optional[int] = None
+    name: Optional[str] = None
+    class_: Optional[str] = None
+    finally_: Optional[Sequence["ChildModel"]] = None
+
+
+@attr.s(auto_attribs=True, kw_only=True)
 class ChildModel(ml.Model):
     id: Optional[int] = None
     import_: Optional[str] = None
 
 
-@attr.s(auto_attribs=True, kw_only=True)
-class Model(ml.Model):
-    id: Optional[int] = None
-    name: Optional[str] = None
-    class_: Optional[str] = None
-    # TODO switch this to ForwardRef for testing that hook
-    finally_: Optional[Sequence[ChildModel]] = None
-
-
-cattr.register_structure_hook(Model, sr.structure_hook)  # type: ignore
-cattr.register_unstructure_hook(
-    Model, sr.unstructure_hook  # type: ignore
-)
+structure_hook = functools.partial(sr.structure_hook, globals())  # type: ignore
 cattr.register_structure_hook(
-    ChildModel, sr.structure_hook  # type: ignore
-)
-cattr.register_unstructure_hook(
-    ChildModel, sr.unstructure_hook  # type: ignore
+    ForwardRef("ChildModel"), structure_hook  # type: ignore
 )
 
 MODEL_DATA = {
@@ -140,4 +136,24 @@ def test_serialize_partial():
     expected = json.dumps({"class": "model-name", "finally": [{"id": 1}]}).encode(
         "utf-8"
     )
+    assert sr.serialize(model) == expected
+
+
+def test_serialize_explict_null():
+    model = Model(
+        id=1,
+        name=ml.EXPLICIT_NULL,  # testing in constructor
+        finally_=[
+            ChildModel(id=1, import_="child1"),
+            ChildModel(id=2, import_="child2"),
+        ],
+    )
+    model.class_ = None  # testing on instance
+    model.finally_[0].id = ml.EXPLICIT_NULL  # testing EXPLICIT_NULL on instance
+
+    data = copy.deepcopy(MODEL_DATA)
+    data["name"] = None
+    data["class"] = None
+    data["finally"][0]["id"] = None
+    expected = json.dumps(data).encode("utf-8")
     assert sr.serialize(model) == expected

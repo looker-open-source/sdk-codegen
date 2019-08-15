@@ -95,15 +95,6 @@ export class PythonFormatter extends CodeFormatter {
     'datetime': {name: 'datetime.datetime', default: this.nullStr }
   }
 
-  // Classes requiring custom structure/unstructure
-  reservedKeywordHooks: string[] = [
-    `\n\n# Custom converters for reserved keyword attribute classes`
-  ]
-  forwardRefHooks: string[] = [
-    `\n\n# Custom hooks for type induced forward references\n` +
-    `from typing import ForwardRef  # type: ignore  # noqa:E402\n`
-  ]
-
   // @ts-ignore
   methodsPrologue = (indent: string) => `
 # ${warnEditing}
@@ -143,10 +134,25 @@ import cattr
 from ${this.package}.rtl import model
 from ${this.package}.rtl import serialize as sr
 `
+
+  // cattrs [un]structure hooks for model [de]serialization
+  hooks: string[] = []
+  structure_hook: string = 'structure_hook'
+
   // @ts-ignore
-  modelsEpilogue = (indent: string) => {
-    return this.forwardRefHooks.join('\n') + this.reservedKeywordHooks.join('\n')
-  }
+  modelsEpilogue = (indent: string) => `
+
+# The following cattrs structure hook registrations are a workaround
+# for https://github.com/Tinche/cattrs/pull/42 Once this issue is resolved
+# these calls will be removed.
+
+import functools  # noqa:E402
+from typing import ForwardRef  # type: ignore  # noqa:E402
+
+${this.structure_hook} = functools.partial(sr.structure_hook, globals())  # type: ignore
+${this.hooks.join('\n')}
+`
+
 
   // @ts-ignore
   argGroup(indent: string, args: Arg[]) {
@@ -276,12 +282,10 @@ from ${this.package}.rtl import serialize as sr
     const bump = this.bumper(indent)
     const b2 = this.bumper(bump)
     const attrs: string[] = []
-    let hasReservedWord = false
     for (const prop of Object.values(type.properties)) {
       let propName = prop.name
       if (this.pythonKeywords.includes(propName)) {
         propName = propName + '_'
-        hasReservedWord = true
       }
       let attr = `${b2}${propName} :`
       if (prop.description) {
@@ -290,14 +294,10 @@ from ${this.package}.rtl import serialize as sr
       attrs.push(attr)
     }
 
-    if (hasReservedWord) {
-      this.reservedKeywordHooks.push(
-        `cattr.register_structure_hook(${type.name}, sr.keyword_field_structure_hook)  # type: ignore`,
-        `cattr.register_unstructure_hook(${type.name}, sr.keyword_field_unstructure_hook)  # type: ignore\n`)
-    }
-    const refHandler = `lambda data, _: cattr.structure_attrs_fromdict(data, ${type.name})`
-    const register = `cattr.register_structure_hook(ForwardRef("${type.name}"), ${refHandler})  # type: ignore`
-    this.forwardRefHooks.push(register)
+    const forwardRef = `ForwardRef("${type.name}")`
+    this.hooks.push(
+      `cattr.register_structure_hook(\n${bump}${forwardRef},  # type: ignore\n${bump}${this.structure_hook}  # type:ignore\n)`
+    )
     return `\n` +
         `${indent}@attr.s(auto_attribs=True, kw_only=True)\n` +  // TODO: make "response" types frozen while "write" types are mutable
         `${indent}class ${type.name}(model.Model):\n` +

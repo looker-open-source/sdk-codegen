@@ -1,9 +1,20 @@
 """Deserialize API response into models
 """
 
+import functools
 import json
 import keyword
-from typing import Callable, Dict, List, Sequence, Type, Union
+
+# ignoring "Module 'typing' has no attribute 'ForwardRef'"
+from typing import (  # type: ignore
+    Callable,
+    Dict,
+    ForwardRef,
+    List,
+    Sequence,
+    Type,
+    Union,
+)
 
 import cattr
 
@@ -46,35 +57,50 @@ def serialize(model: TModelOrSequence) -> bytes:
     return json.dumps(data).encode("utf-8")
 
 
-def structure_hook(data: Dict, type_: TDeserializeReturn):
+def structure_hook(context, data, type_):
     """cattr structure hook
 
-    Map reserved words in json keys to approriate (safe) names in model.
-    Also convert _NULL_INIT fields to None.
+    1/ Map reserved words in json keys to approriate (safe) names in model.
+    2/ convert _NULL_INIT fields to None: a side effect of cattr.structure
+       instantiating the model object we set everything _NULL_INIT and None
+       is a cleaner value for the "null"/"non-present" fields in these
+       returned objects
+    3/ handle ForwardRef types until github.com/Tinche/cattrs/pull/42/ is fixed
+       Note: this is the reason we need a "context" param and have to use a
+       partial func to register the hook. Once the issue is resolved we can
+       remove "context" and the partial.
     """
     for reserved in keyword.kwlist:
-        if reserved in data:  # type: ignore
-            data[f"{reserved}_"] = data.pop(reserved)  # type: ignore
-    instance = cattr.structure_attrs_fromdict(data, type_)  # type: ignore
-    for key, value in instance.__dict__.copy().items():  # type: ignore
-        if value == ml._NULL_INIT:  # type: ignore
-            setattr(instance, key, None)  # type: ignore
-    return instance  # type: ignore
+        if reserved in data:
+            data[f"{reserved}_"] = data.pop(reserved)
+    if isinstance(type_, ForwardRef):
+        type_ = eval(type_.__forward_arg__, context, locals())
+    instance = cattr.structure_attrs_fromdict(data, type_)
+    for key, value in instance.__dict__.copy().items():
+        if value == ml._NULL_INIT:
+            setattr(instance, key, None)
+    return instance
 
 
-def unstructure_hook(model: ml.Model):
+def unstructure_hook(model):
     """cattr unstructure hook
 
     Map reserved_ words in models to correct json field names.
-    Also handle stripping _NULL_INIT fields from json
+    Also handle stripping _NULL_INIT fields from json while setting
+    EXPLICIT_NULL fields to None
     """
-    data = cattr.global_converter.unstructure_attrs_asdict(  # type: ignore
-        model
-    )
-    for key, value in data.copy().items():  # type: ignore
-        if value == ml._NULL_INIT:  # type: ignore
-            del data[key]  # type: ignore
+    data = cattr.global_converter.unstructure_attrs_asdict(model)
+    for key, value in data.copy().items():
+        if value == ml._NULL_INIT:
+            del data[key]
+        elif value == ml.EXPLICIT_NULL:
+            data[key] = None
     for reserved in keyword.kwlist:
-        if f"{reserved}_" in data:  # type: ignore
-            data[reserved] = data.pop(f"{reserved}_")  # type: ignore
-    return data  # type: ignore
+        if f"{reserved}_" in data:
+            data[reserved] = data.pop(f"{reserved}_")
+    return data
+
+
+structure_hook_func = functools.partial(structure_hook, globals())  # type: ignore
+cattr.register_structure_hook(ml.Model, structure_hook_func)  # type: ignore
+cattr.register_unstructure_hook(ml.Model, unstructure_hook)  # type: ignore
