@@ -22,8 +22,8 @@
  * THE SOFTWARE.
  */
 
-import * as Models from "./sdkModels"
-import { TypescriptFormatter } from "./typescript.fmt"
+import * as Models from './sdkModels'
+import { TypescriptFormatter } from './typescript.fmt'
 
 const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
 
@@ -35,7 +35,7 @@ describe('typescript formatter', () => {
     it('required parameter', () => {
       const param = apiModel.methods['run_query'].params[0]
       const actual = fmt.declareParameter(indent, param)
-      expect(actual).toEqual("// Id of query\nquery_id: number")
+      expect(actual).toEqual('// Id of query\nquery_id: number')
     })
     it('optional parameter', () => {
       const param = apiModel.methods['run_query'].params[2]
@@ -56,18 +56,18 @@ limit: number = 0`)
       expect(method.pathArgs).toEqual(['query_id', 'result_format'])
       expect(method.bodyArg).toEqual('')
       expect(method.queryArgs).toEqual([
-        "limit",
-        "apply_formatting",
-        "apply_vis",
-        "cache",
-        "image_width",
-        "image_height",
-        "generate_drill_links",
-        "force_production",
-        "cache_only",
-        "path_prefix",
-        "rebuild_pdts",
-        "server_table_calcs",
+        'limit',
+        'apply_formatting',
+        'apply_vis',
+        'cache',
+        'image_width',
+        'image_height',
+        'generate_drill_links',
+        'force_production',
+        'cache_only',
+        'path_prefix',
+        'rebuild_pdts',
+        'server_table_calcs',
       ])
       expect(method.headerArgs).toEqual([])
       expect(method.cookieArgs).toEqual([])
@@ -80,8 +80,8 @@ limit: number = 0`)
       expect(body[0].type.name).toEqual('Query')
       const param = fmt.declareParameter(indent, body[0])
       expect(param).toEqual('body: Partial<IWriteQuery>')
-      expect(method.bodyArg).toEqual("body")
-      expect(method.queryArgs).toEqual(["fields"])
+      expect(method.bodyArg).toEqual('body')
+      expect(method.queryArgs).toEqual(['fields'])
       expect(method.headerArgs).toEqual([])
       expect(method.cookieArgs).toEqual([])
     })
@@ -93,7 +93,7 @@ limit: number = 0`)
       expect(body[0].type.name).toEqual('Dashboard')
       const param = fmt.declareParameter(indent, body[0])
       expect(param).toEqual('body: Partial<IWriteDashboard>')
-      expect(method.bodyArg).toEqual("body")
+      expect(method.bodyArg).toEqual('body')
       expect(method.queryArgs).toEqual([])
       expect(method.headerArgs).toEqual([])
       expect(method.cookieArgs).toEqual([])
@@ -104,7 +104,7 @@ limit: number = 0`)
     it('add_group_group', () => {
       const method = apiModel.methods['add_group_group']
       const args = fmt.httpArgs('', method).trim()
-      expect(args).toEqual("null, body")
+      expect(args).toEqual('null, body')
     })
     it('create_query', () => {
       const method = apiModel.methods['create_query']
@@ -114,7 +114,7 @@ limit: number = 0`)
     it('create_dashboard', () => {
       const method = apiModel.methods['create_dashboard']
       const args = fmt.httpArgs('', method).trim()
-      expect(args).toEqual("null, body")
+      expect(args).toEqual('null, body')
     })
   })
 

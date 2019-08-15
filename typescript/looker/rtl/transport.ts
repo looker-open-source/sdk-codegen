@@ -27,10 +27,11 @@
 // TODO create generic Headers and Request interfaces that are not transport-specific
 // import { Headers, Response } from "node-fetch"
 // TODO create generic Agent not transport-specific
-import { Agent } from "https"
-import { Headers, Response } from "request"
+import { Agent } from 'https'
+import { Headers, Response } from 'request'
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'TRACE' | 'HEAD'
+
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for reference
 export enum StatusCode {
   OK = 200,
@@ -95,7 +96,7 @@ export enum StatusCode {
 }
 
 export interface ITransport {
-  request<TSuccess, TError> (
+  request<TSuccess, TError>(
     method: HttpMethod,
     path: string,
     queryParams?: any,
@@ -152,7 +153,7 @@ export interface ITransportSettings {
   headers?: Headers
 }
 
-export function addQueryParams (path: string, obj?: { [key: string]: string }) {
+export function addQueryParams(path: string, obj?: { [key: string]: string }) {
   if (!obj) {
     return path
   }
@@ -167,7 +168,7 @@ export function addQueryParams (path: string, obj?: { [key: string]: string }) {
   }
 }
 
-export async function parseResponse (contentType: string, res: Response) {
+export async function parseResponse(contentType: string, res: Response) {
   if (contentType.match(/application\/json/g)) {
     try {
       // return await res.json()

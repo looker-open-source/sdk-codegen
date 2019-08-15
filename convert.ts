@@ -25,7 +25,7 @@
  */
 
 import * as fs from 'fs'
-import { SDKConfigProps, SDKConfig} from './sdkConfig'
+import { SDKConfigProps, SDKConfig } from './sdkConfig'
 import { openApiFileName, logFetch } from './fetchSpec'
 import { fail, log, quit, run } from './utils'
 
@@ -36,7 +36,7 @@ const lintCheck = async (fileName: string) => {
     if (!linter) return fail('Lint', 'no response')
     if (linter.toString().indexOf('Specification is valid, with 0 lint errors') >= 0) return
     return fail('Lint', linter.toString())
-  } catch(e) {
+  } catch (e) {
     return quit(e)
   }
 

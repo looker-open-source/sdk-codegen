@@ -24,20 +24,20 @@
  * THE SOFTWARE.
  */
 
-import * as Models from "./sdkModels"
-import { log } from "./utils"
+import * as Models from './sdkModels'
+import { log } from './utils'
 
 export interface IGeneratorCtor<T extends Models.IModel> {
-  new (model: T, formatter: Models.ICodeFormatter): Generator<T>
+  new(model: T, formatter: Models.ICodeFormatter): Generator<T>
 }
 
 export abstract class Generator<T extends Models.IModel> {
   codeFormatter: Models.ICodeFormatter
-  model: T;
-  buf: string[] = [];
+  model: T
+  buf: string[] = []
 
-  constructor (model: T, formatter: Models.ICodeFormatter) {
-    this.model = model;
+  constructor(model: T, formatter: Models.ICodeFormatter) {
+    this.model = model
     this.codeFormatter = formatter
   }
 
@@ -49,11 +49,10 @@ export abstract class Generator<T extends Models.IModel> {
     })
     if (delimiter) {
       this.p(strs.join(delimiter))
-    }
-    else {
+    } else {
       this.p(strs)
     }
-    return this;
+    return this
   }
 
   abstract render(indent: string): string
@@ -79,31 +78,31 @@ export abstract class Generator<T extends Models.IModel> {
   }
 }
 
-export class SdkGenerator extends Generator<Models.IApiModel>{
+export class SdkGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
-    let items : string[] = []
+    let items: string[] = []
     // reset refcounts for ALL types so dynamic import statement will work
     Object.entries(this.model.types).forEach(([_, type]) => type.refCount = 0)
     Object.values(this.model.sortedMethods())
       .forEach(method => {
-      items.push(this.codeFormatter.declareMethod(indent, method))
-    })
+        items.push(this.codeFormatter.declareMethod(indent, method))
+      })
     const tally = `${items.length} API methods`
     log(tally)
     return this
-        .p(`${this.codeFormatter.comment('', tally)}`)
-        .p(this.codeFormatter.methodsPrologue(indent))
-        .p(items.join('\n\n'))
-        .p(this.codeFormatter.methodsEpilogue(indent))
-        .toString('')
+      .p(`${this.codeFormatter.comment('', tally)}`)
+      .p(this.codeFormatter.methodsPrologue(indent))
+      .p(items.join('\n\n'))
+      .p(this.codeFormatter.methodsEpilogue(indent))
+      .toString('')
   }
 }
 
-export class TypeGenerator extends Generator<Models.IApiModel>{
+export class TypeGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
-    let items : string[] = []
+    let items: string[] = []
     Object.values(this.model.sortedTypes())
-      .filter(type => ! (type instanceof Models.IntrinsicType))
+      .filter(type => !(type instanceof Models.IntrinsicType))
       .forEach(type => items.push(this.codeFormatter.declareType(indent, type)))
     const counts = this.typeTally(this.model.types)
     const tally = `${counts.total} API models: ${counts.standard} Spec, ${counts.request} Request, ${counts.write} Write`
@@ -117,7 +116,7 @@ export class TypeGenerator extends Generator<Models.IApiModel>{
       .toString(indent)
   }
 
-  typeTally(types: Record<string,Models.IType>) {
+  typeTally(types: Record<string, Models.IType>) {
     let request = 0
     let write = 0
     let standard = 0
@@ -132,6 +131,6 @@ export class TypeGenerator extends Generator<Models.IApiModel>{
           standard++
         }
       })
-    return { standard, write, request, total: standard + write + request }
+    return {standard, write, request, total: standard + write + request}
   }
 }

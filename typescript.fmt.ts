@@ -35,14 +35,17 @@ import {
   // RequestType,
   strBody,
   // strRequest
-} from "./sdkModels"
-import { CodeFormatter, warnEditing } from "./codeFormatter"
+} from './sdkModels'
+import { CodeFormatter, warnEditing } from './codeFormatter'
+import * as fs from 'fs'
+import * as prettier from 'prettier'
+import { utf8 } from './utils'
 
 // const strDefault = 'Default'
 
 export class TypescriptFormatter extends CodeFormatter {
   codePath = './typescript/'
-  package = 'looker'
+  packagePath = 'looker'
   itself = 'this'
   fileExtension = '.ts'
   commentStr = '// '
@@ -64,7 +67,7 @@ export class TypescriptFormatter extends CodeFormatter {
 import { APIMethods } from '../rtl/apiMethods'
 import { ${this.typeNames().join(', ')} } from './models'
 
-export class LookerSDK extends APIMethods {
+export class ${this.packageName} extends APIMethods {
 `
   }
 
@@ -252,7 +255,7 @@ import { URL } from 'url'
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     const errors = this.errorResponses(indent, method)
-    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}, ${errors}>(${this.httpPath(method.endpoint, request)}${args ? ", " + args : ""})`
+    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}, ${errors}>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
   }
 
   summary(indent: string, text: string | undefined) {
@@ -307,5 +310,27 @@ import { URL } from 'url'
     } else {
       throw new Error('Cannot output a nameless type.')
     }
+  }
+
+  reformatFile(fileName: string) {
+    const formatOptions : prettier.Options = {
+      semi: false,
+      trailingComma: 'all',
+      bracketSpacing: true,
+      parser: 'typescript',
+      singleQuote: true,
+      proseWrap: 'preserve',
+      quoteProps: 'as-needed',
+      endOfLine: 'auto'
+    }
+    const name = super.reformatFile(fileName)
+    if (name) {
+      const source = prettier.format(fs.readFileSync(name, utf8), formatOptions)
+      if (source) {
+        fs.writeFileSync(name, source, {encoding: utf8})
+        return name
+      }
+    }
+    return ''
   }
 }

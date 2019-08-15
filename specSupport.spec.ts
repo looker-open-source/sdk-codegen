@@ -1,10 +1,10 @@
-import {loadSpec, jsonPath, processEndpoint, getResponses, getRequestBodySchema} from "./specSupport"
-import { PathsObject, OperationObject } from "openapi3-ts"
-import { log, debug } from "./utils"
+import { loadSpec, jsonPath, processEndpoint, getResponses, getRequestBodySchema } from './specSupport'
+import { PathsObject, OperationObject } from 'openapi3-ts'
+import { log, debug } from './utils'
 
 describe('spec support', () => {
 
-  beforeAll( ()=> {
+  beforeAll(() => {
     loadSpec('./Looker.3.1.oas.json')
   })
 
@@ -50,7 +50,7 @@ describe('spec support', () => {
     expect(params.allParams.length).toBe(2)
     expect(params.bodyArgs).toBe('body')
     expect(params.queryArgs).toBe('fields')
-    const data = { methods: ep.methods }
+    const data = {methods: ep.methods}
     const output = template(data)
     expect(output).not.toBeFalsy()
     log(output)
@@ -62,7 +62,7 @@ describe('spec support', () => {
     const ep = processEndpoint(endpoint, po)
     expect(ep).not.toBeUndefined()
     expect(ep.methods.length).toBe(2)
-    const data = { methods: ep.methods }
+    const data = {methods: ep.methods}
     const output = template(data)
     expect(output).not.toBeFalsy()
     log(output)
@@ -74,7 +74,7 @@ describe('spec support', () => {
     const ep = processEndpoint(endpoint, po)
     expect(ep).not.toBeUndefined()
     expect(ep.methods.length).toBe(1)
-    const data = { methods: ep.methods }
+    const data = {methods: ep.methods}
     const output = template(data)
     expect(output).not.toBeFalsy()
     log(output)

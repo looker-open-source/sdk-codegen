@@ -22,15 +22,26 @@
  * THE SOFTWARE.
  */
 
-import { ISDKError, SDKResponse, ITransport, addQueryParams, parseResponse, ITransportSettings, Authenticator, StatusCode } from './transport'
+import {
+  ISDKError,
+  SDKResponse,
+  ITransport,
+  addQueryParams,
+  parseResponse,
+  ITransportSettings,
+  Authenticator,
+  StatusCode
+} from './transport'
 
 import * as rq from 'request'
 import rp from 'request-promise-native'
+
 type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
 
 export class NodeTransport implements ITransport {
   apiPath = ''
-  constructor (private options: ITransportSettings) {
+
+  constructor(private options: ITransportSettings) {
     this.options = options
     this.apiPath = `${options.base_url}/api/${options.api_version}`
   }
@@ -39,16 +50,16 @@ export class NodeTransport implements ITransport {
     return res.statusCode >= StatusCode.OK && (res.statusCode <= StatusCode.IMUsed)
   }
 
-  async request<TSuccess, TError> (
+  async request<TSuccess, TError>(
     method: string,
     path: string,
     queryParams?: any,
     body?: any,
     authenticator?: Authenticator
   ): Promise<SDKResponse<TSuccess, TError>> {
-    // TODO use version info for the Typescript package
+    // TODO use version info for the Typescript packagePath
     const agentTag = `LookerSDK JS ${this.options.api_version}`
-    let headers : any = {
+    let headers: any = {
       'User-Agent': agentTag,
       ...this.options.headers
     }
@@ -65,10 +76,10 @@ export class NodeTransport implements ITransport {
     }
     // is this an API-versioned call?
     let requestPath = (authenticator ? this.apiPath : this.options.base_url) + addQueryParams(path, queryParams)
-    let init : RequestOptions = {
+    let init: RequestOptions = {
       url: requestPath,
-      rejectUnauthorized : false, // TODO make this configurable for tests. Should default to True
-      headers : headers,
+      rejectUnauthorized: false, // TODO make this configurable for tests. Should default to True
+      headers: headers,
       body: body ? body : undefined,
       json: body ? true : false,
       resolveWithFullResponse: true,
@@ -88,16 +99,16 @@ export class NodeTransport implements ITransport {
       // @ts-ignore have to resolve missing properties of response promise
       const parsed = await parseResponse(contentType, res)
       if (this.ok(resTyped)) {
-        return { ok: true, value: parsed }
+        return {ok: true, value: parsed}
       } else {
-        return { ok: false, error: parsed }
+        return {ok: false, error: parsed}
       }
     } catch (e) {
       const error: ISDKError = {
         type: 'sdk_error',
         message: typeof e.message === 'string' ? e.message : `The SDK call was not successful. The error was '${e}'.`
       }
-      return { ok: false, error }
+      return {ok: false, error}
     }
   }
 }

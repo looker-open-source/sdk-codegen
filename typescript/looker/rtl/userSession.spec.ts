@@ -1,5 +1,5 @@
-import { ApiSettingsIniFile } from "./apiSettings";
-import { UserSession } from "./userSession";
+import { ApiSettingsIniFile } from './apiSettings'
+import { UserSession } from './userSession'
 
 /*
  * The MIT License (MIT)
@@ -25,14 +25,14 @@ import { UserSession } from "./userSession";
  * THE SOFTWARE.
  */
 
-import { NodeTransport } from "./nodeTransport"
+import { NodeTransport } from './nodeTransport'
 
 describe('UserSession', () => {
   const localIni = 'test/looker.ini'
   const settings = new ApiSettingsIniFile(localIni, 'Looker')
 
   describe('isAuthenticated', () => {
-    it ('unauthenticated logout returns false', async () => {
+    it('unauthenticated logout returns false', async () => {
       const session = new UserSession(settings, new NodeTransport(settings))
       expect(session.isAuthenticated()).toEqual(false)
       const actual = await session.logout()
@@ -42,14 +42,14 @@ describe('UserSession', () => {
   })
 
   describe('integration tests', () => {
-    it ('initializes', () => {
+    it('initializes', () => {
       const session = new UserSession(settings, new NodeTransport(settings))
       expect(session.settings).toEqual(settings)
       expect(session.isAuthenticated()).toEqual(false)
       expect(session.isImpersonating()).toEqual(false)
     })
 
-    it ('default auth logs in with good credentials', async () => {
+    it('default auth logs in with good credentials', async () => {
       const session = new UserSession(settings, new NodeTransport(settings))
       expect(session.isAuthenticated()).toEqual(false)
       const token = await session.login()
@@ -58,7 +58,7 @@ describe('UserSession', () => {
       expect(session.isAuthenticated()).toEqual(true)
     })
 
-    it ('default auth logs in and out with good credentials', async () => {
+    it('default auth logs in and out with good credentials', async () => {
       const session = new UserSession(settings, new NodeTransport(settings))
       expect(session.isAuthenticated()).toEqual(false)
       const token = await session.login()

@@ -5,7 +5,7 @@ import { OperationObject } from 'openapi3-ts'
 
 describe('method params', () => {
 
-  beforeAll( ()=> {
+  beforeAll(() => {
     loadSpec('./Looker.3.1.oas.json')
   })
 
@@ -34,10 +34,10 @@ describe('method params', () => {
     const count = 14
     expect(p.allParams.length).toBe(count)
     expect(p.requiredParams.length).toBe(1)
-    expect(p.optionalParams.length).toBe(count-1)
+    expect(p.optionalParams.length).toBe(count - 1)
     expect(p.pathParams.length).toBe(0)
     expect(p.bodyParams.length).toBe(1)
-    expect(p.queryParams.length).toBe(count-1)
+    expect(p.queryParams.length).toBe(count - 1)
     expect(p.headerParams.length).toBe(0)
     expect(p.cookieParams.length).toBe(0)
     expect(p.bodyArgs).toBe('body')
@@ -56,10 +56,10 @@ describe('method params', () => {
     const count = 1
     expect(p.allParams.length).toBe(count)
     expect(p.requiredParams.length).toBe(1)
-    expect(p.optionalParams.length).toBe(count-1)
+    expect(p.optionalParams.length).toBe(count - 1)
     expect(p.pathParams.length).toBe(0)
     expect(p.bodyParams.length).toBe(1)
-    expect(p.queryParams.length).toBe(count-1)
+    expect(p.queryParams.length).toBe(count - 1)
     expect(p.headerParams.length).toBe(0)
     expect(p.cookieParams.length).toBe(0)
     expect(p.bodyArgs).toBe('body')

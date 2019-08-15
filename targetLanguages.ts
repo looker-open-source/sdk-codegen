@@ -1,7 +1,7 @@
-import { PythonFormatter } from "./python.fmt"
-import { ICodeFormatter, ApiModel } from "./sdkModels"
-import { TypescriptFormatter } from "./typescript.fmt"
-import { quit } from "./utils"
+import { PythonFormatter } from './python.fmt'
+import { ICodeFormatter, ApiModel } from './sdkModels'
+import { TypescriptFormatter } from './typescript.fmt'
+import { quit } from './utils'
 
 /*
  * The MIT License (MIT)
@@ -35,66 +35,66 @@ export interface IGeneratorSpec {
 }
 
 // To disable generation of any language specification, you can just comment it out
-export const TargetLanguages:Array<IGeneratorSpec> =
-[
-  // {
-  //   language: 'csharp',
-  //   options: '-DapiPackage=Looker -DpackageName=looker'
-  // },
-  // {
-  //   language: 'java',
-  //   options: '-DinvokerPackage=com.looker.sdk -DmodelPackage=com.looker.sdk.model -DapiPackage=com.looker.sdk.api -DgroupId=com.looker.sdk -DartifactId=looker-sdk -DartifactVersion=0.5.0 -DpackageName=looker'
-  // },
-  // {
-  //   language: 'kotlin',
-  //   options: '-DapiPackage=com.looker.sdk -DpackageName=com.looker.sdk'
-  // },
-  // TODO figure out why swift aborts with an error and non of the other languages do
-  // {
-  //   language: 'swift4',
-  //   path: 'swift',
-  //   options: '-DapiPackage=Looker -DpackageName=looker'
-  // },
-  // {
-  //   language: 'php',
-  //   path: 'php',
-  //   options: '-DapiPackage=Looker -DpackageName=looker'
-  // },
-  {
-    language: 'python',
-    factory: (api: ApiModel) => new PythonFormatter(api),
-    options: '-DapiPackage=Looker -DpackageName=looker'
-  },
-  {
-    language: 'typescript',
-    factory: (api: ApiModel) => new TypescriptFormatter(api),
-    options: '-DapiPackage=Looker -DpackageName=looker'
-  },
-  // {
-  //   language: 'r',
-  //   options: '-DapiPackage=Looker -DpackageName=looker'
-  // },
-  // {
-  //   language: 'ruby',
-  //   options: '-DapiPackage=Looker -DpackageName=looker'
-  // },
-  // {
-  //   language: 'rust',
-  //   options: '-DapiPackage=Looker -DpackageName=looker'
-  // },
-  // {
-  //   language: 'typescript-node',
-  //   path: 'ts_node',
-  //   options: '-DapiPackage=Looker -DpackageName=looker'
-  // },
-  // {
-  //   language: 'typescript-fetch',
-  //   path: 'ts_fetch',
-  //   options: '-DapiPackage=looker -DpackageName=looker'
-  // },
-]
+export const TargetLanguages: Array<IGeneratorSpec> =
+  [
+    // {
+    //   language: 'csharp',
+    //   options: '-DapiPackage=Looker -DpackageName=looker'
+    // },
+    // {
+    //   language: 'java',
+    //   options: '-DinvokerPackage=com.looker.sdk -DmodelPackage=com.looker.sdk.model -DapiPackage=com.looker.sdk.api -DgroupId=com.looker.sdk -DartifactId=looker-sdk -DartifactVersion=0.5.0 -DpackageName=looker'
+    // },
+    // {
+    //   language: 'kotlin',
+    //   options: '-DapiPackage=com.looker.sdk -DpackageName=com.looker.sdk'
+    // },
+    // TODO figure out why swift aborts with an error and non of the other languages do
+    // {
+    //   language: 'swift4',
+    //   path: 'swift',
+    //   options: '-DapiPackage=Looker -DpackageName=looker'
+    // },
+    // {
+    //   language: 'php',
+    //   path: 'php',
+    //   options: '-DapiPackage=Looker -DpackageName=looker'
+    // },
+    {
+      language: 'python',
+      factory: (api: ApiModel) => new PythonFormatter(api),
+      options: '-DapiPackage=Looker -DpackageName=looker'
+    },
+    {
+      language: 'typescript',
+      factory: (api: ApiModel) => new TypescriptFormatter(api),
+      options: '-DapiPackage=Looker -DpackageName=looker'
+    },
+    // {
+    //   language: 'r',
+    //   options: '-DapiPackage=Looker -DpackageName=looker'
+    // },
+    // {
+    //   language: 'ruby',
+    //   options: '-DapiPackage=Looker -DpackageName=looker'
+    // },
+    // {
+    //   language: 'rust',
+    //   options: '-DapiPackage=Looker -DpackageName=looker'
+    // },
+    // {
+    //   language: 'typescript-node',
+    //   path: 'ts_node',
+    //   options: '-DapiPackage=Looker -DpackageName=looker'
+    // },
+    // {
+    //   language: 'typescript-fetch',
+    //   path: 'ts_fetch',
+    //   options: '-DapiPackage=looker -DpackageName=looker'
+    // },
+  ]
 
-export const getFormatter = (format: string, api: ApiModel) : ICodeFormatter => {
+export const getFormatter = (format: string, api: ApiModel): ICodeFormatter => {
   const language = TargetLanguages.find((item) => item.language.toLowerCase() === format.toLowerCase())
   if (!language) {
     const langs = TargetLanguages.map((item) => item.language)

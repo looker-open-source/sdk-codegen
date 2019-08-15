@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import { ApiConfig, ApiSettings, ApiSettingsIniFile } from "./apiSettings"
+import { ApiConfig, ApiSettings, ApiSettingsIniFile } from './apiSettings'
 
 describe('API settings parser', () => {
   const localIni = 'test/looker.ini'
@@ -64,53 +64,53 @@ verify_ssl=True
 verbose=false
 `
   describe('ApiConfig', () => {
-    it ('discovers multiple sections', () => {
+    it('discovers multiple sections', () => {
       const config = ApiConfig(contents)
       expect(Object.keys(config)).toEqual(['Looker', 'Looker30'])
     })
   })
 
   describe('ApiSettings', () => {
-    it ('settings default to the first section', () => {
+    it('settings default to the first section', () => {
       const settings = new ApiSettings(contents)
       expect(settings.api_version).toEqual('3.1')
     })
 
-    it ('retrieves the first section by name', () => {
+    it('retrieves the first section by name', () => {
       const settings = new ApiSettings(contents, 'Looker')
       expect(settings.api_version).toEqual('3.1')
     })
 
-    it ('retrieves the second section by name', () => {
+    it('retrieves the second section by name', () => {
       const settings = new ApiSettings(contents, 'Looker30')
       expect(settings.api_version).toEqual('3.0')
     })
 
-    it ('fails with a bad section name', () => {
+    it('fails with a bad section name', () => {
       expect(() => new ApiSettings(contents, 'NotAGoodLookForYou'))
         .toThrow(/No section named "NotAGoodLookForYou"/)
     })
   })
 
   describe('ApiSettingsIniFile', () => {
-    it ('settings default to the first section', () => {
+    it('settings default to the first section', () => {
       const settings = new ApiSettingsIniFile(localIni)
       expect(settings.api_version).toEqual('3.1')
       expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
     })
 
-    it ('retrieves the first section by name', () => {
+    it('retrieves the first section by name', () => {
       const settings = new ApiSettingsIniFile(localIni, 'Looker')
       expect(settings.api_version).toEqual('3.1')
       expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
     })
 
-    it ('retrieves the second section by name', () => {
+    it('retrieves the second section by name', () => {
       const settings = new ApiSettingsIniFile(localIni, 'Looker30')
       expect(settings.api_version).toEqual('3.0')
     })
 
-    it ('fails with a bad section name', () => {
+    it('fails with a bad section name', () => {
       expect(() => new ApiSettingsIniFile(localIni, 'NotAGoodLookForYou'))
         .toThrow(/No section named "NotAGoodLookForYou"/)
     })

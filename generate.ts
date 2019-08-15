@@ -25,17 +25,18 @@
  */
 
 import { TargetLanguages, IGeneratorSpec as LanguageSpec } from './targetLanguages'
-import { SDKConfigProps, SDKConfig} from './sdkConfig'
+import { SDKConfigProps, SDKConfig } from './sdkConfig'
 import { log, quit, run } from './utils'
 import { logConvert } from './convert'
 
 // TODO replace with sdkGen.ts and remove `yarn sdk` command
+// TODO deprecated
 // perform the generation for specific API version, configuration, and language
 const generate = async (fileName: string, spec: LanguageSpec, props: SDKConfigProps) => {
   const path = spec.path ? spec.path : spec.language
   const apiPath = `./api/${props.api_version}/${path}`
   return run('openapi-generator',
-    ['generate','-i', fileName, '-g', spec.language, '-o', apiPath, '--enable-post-process-file', spec.options])
+    ['generate', '-i', fileName, '-g', spec.language, '-o', apiPath, '--enable-post-process-file', spec.options])
 }
 
 // generate all languages for the specified configuration
@@ -45,11 +46,11 @@ const runConfig = async (name: string, props: SDKConfigProps) => {
   const openApiFile = await logConvert(name, props)
 
   let results: any[] = []
-  TargetLanguages.forEach(async language => {
+  for (const language of TargetLanguages) {
     const tag = `${name} API ${language.language} version ${props.api_version}`
     log(`generating ${tag} ...`)
     results.push(await generate(openApiFile, language, props))
-  })
+  }
 
   return results
 }

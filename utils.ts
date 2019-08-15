@@ -28,7 +28,7 @@ import { execSync } from 'child_process'
 
 export const utf8 = 'utf-8'
 
- // Abstraction of log so it can be skipped when quiet mode is enabled
+// Abstraction of log so it can be skipped when quiet mode is enabled
 export const log = (message?: any) => console.log(message)
 
 export const debug = (message: any, value?: any) => {
@@ -41,7 +41,7 @@ export const dump = (value: any) => console.log(JSON.stringify(value, null, 2))
 
 export const quit = (err?: Error | string) => {
   if (err) {
-    if (typeof err === "string") {
+    if (typeof err === 'string') {
       const message = err
       err = new Error('Failure')
       err.message = message
@@ -87,7 +87,7 @@ export const commentBlock = (text: string | undefined, indent: string = '', comm
   if (!text) return ''
   if (!commentStr) commentStr = code.commentString
   const indenter = indent + commentStr
-  return indenter + text.split("\n").join("\n" + indenter)
+  return indenter + text.split('\n').join('\n' + indenter)
 }
 
 export interface ITypeMapItem {
@@ -96,11 +96,11 @@ export interface ITypeMapItem {
 }
 
 export interface ITypeMap {
-  [typeformat: string] : ITypeMapItem
+  [typeformat: string]: ITypeMapItem
 }
 
 export interface ICodePattern {
-  commentString : string,
+  commentString: string,
   paramIndent: string,
   paramSeparator: string,
   paramDeclaration: string,
@@ -123,11 +123,35 @@ export const typeMap = (type?: string, format?: string) => {
     console.error({type, format})
     return '' // fail('typeMap', 'Schema type was not defined')
   }
-  const typeFormat : keyof ITypeMap = type + (format ? `.${format}` : '')
+  const typeFormat: keyof ITypeMap = type + (format ? `.${format}` : '')
   // @ts-ignore
   const result = code.typeMap[typeFormat]
   if (!result) {
     return {type: type}
   }
   return result
+}
+
+export const isDirSync = (filePath: string) => {
+  try {
+    return fs.statSync(filePath).isDirectory()
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      return false
+    } else {
+      throw e
+    }
+  }
+}
+
+export const isFileSync = (filePath: string) => {
+  try {
+    return fs.statSync(filePath).isFile()
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      return false
+    } else {
+      throw e
+    }
+  }
 }

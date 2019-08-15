@@ -37,7 +37,7 @@ export interface IApiSections {
   [key: string]: IApiSettings
 }
 
-export const ApiConfig = (contents: string) : IApiSections => ini.parse(contents)
+export const ApiConfig = (contents: string): IApiSections => ini.parse(contents)
 
 export class ApiSettings implements IApiSettings {
   // tslint:disable-next-line: variable-name
@@ -52,7 +52,8 @@ export class ApiSettings implements IApiSettings {
   embed_secret!: string
   // tslint:disable-next-line: variable-name
   user_id!: string
-  constructor (contents: string, section? : string) {
+
+  constructor(contents: string, section?: string) {
     const config = ApiConfig(contents)
     if (!section) {
       // default the section if not specified
@@ -69,7 +70,7 @@ export class ApiSettings implements IApiSettings {
 
 // Parse an INI file, read the settings
 export class ApiSettingsIniFile extends ApiSettings {
-  constructor (fileName = './looker.ini', section? : string) {
+  constructor(fileName = './looker.ini', section?: string) {
     super(fs.readFileSync(fileName, 'utf-8'), section)
   }
 }

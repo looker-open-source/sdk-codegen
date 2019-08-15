@@ -27,7 +27,17 @@
 import * as fs from 'fs'
 // import { TargetLanguages, GeneratorSpec as LanguageSpec } from './targetLanguages'
 import { SDKConfigProps } from './sdkConfig'
-import { OpenAPIObject, OpenApiBuilder, PathsObject, SchemaObject, OperationObject, RequestBodyObject, ReferenceObject, ResponseObject, MediaTypeObject } from 'openapi3-ts'
+import {
+  OpenAPIObject,
+  OpenApiBuilder,
+  PathsObject,
+  SchemaObject,
+  OperationObject,
+  RequestBodyObject,
+  ReferenceObject,
+  ResponseObject,
+  MediaTypeObject
+} from 'openapi3-ts'
 import { logConvert } from './convert'
 import { utf8, commentBlock, code, ICodePattern, dump, debug, quit, typeMap } from './utils'
 import { MethodParameters, IResponseSchema } from './methodParam'
@@ -37,7 +47,7 @@ export let typeDict: { [name: string]: SchemaObject } = {}
 
 // Retrieve an api object via its JSON path
 // TODO replace this with get from underscore?
-export const jsonPath = (path: string | string[], item: any = api, splitter: string = "/") => {
+export const jsonPath = (path: string | string[], item: any = api, splitter: string = '/') => {
   let keys = path
   if (!(path instanceof Array)) {
     keys = path.split(splitter)
@@ -55,8 +65,8 @@ export const isRefObject = (obj: any) => obj && obj.hasOwnProperty('$ref')
 export const isResponseObject = (obj: any) => {
   return obj && obj.hasOwnProperty('description') &&
     (obj.hasOwnProperty('headers')
-    ||obj.hasOwnProperty('content')
-    ||obj.hasOwnProperty('links')
+      || obj.hasOwnProperty('content')
+      || obj.hasOwnProperty('links')
     )
 }
 
@@ -79,8 +89,12 @@ export const schemaType = (schema: SchemaObject) => {
     itemType = itemDef.type
     // TODO need to handle more reference types?
     switch (typeDef.type) {
-      case "array": typeDef.type = itemType + '[]'; break
-      case "object": typeDef.type = `Dict[${itemType}]`; break
+      case 'array':
+        typeDef.type = itemType + '[]'
+        break
+      case 'object':
+        typeDef.type = `Dict[${itemType}]`
+        break
     }
   }
   return typeDef
@@ -103,7 +117,7 @@ export const resolveSchema = (schema: SchemaObject | ReferenceObject | any) => {
 
 export const getSchemasFromMedia = (type: string, obj: MediaTypeObject) => {
   return {
-    name: `_as${type.substr(type.lastIndexOf("/")+1)}`,
+    name: `_as${type.substr(type.lastIndexOf('/') + 1)}`,
     schema: resolveSchema(obj.schema)
   }
 }
@@ -121,7 +135,7 @@ export const getRequestBodySchema = (obj: RequestBodyObject | ReferenceObject) =
       let schema = resolveSchema(media.schema)
       schema.required = schema.required || content.required
       if (schema) {
-        responses.push({name: req.description, schema: schema } as IResponseSchema)
+        responses.push({name: req.description, schema: schema} as IResponseSchema)
       }
     })
   } else {
@@ -157,7 +171,7 @@ export const getResponses = (op: OperationObject) => {
     dump(op)
     quit('No responses found for operation')
   }
-  let responses : IResponseSchema[] = []
+  let responses: IResponseSchema[] = []
   Object.entries(op.responses).forEach(([key, response]) => {
     const code = parseInt(key, 10)
     if (code >= 200 && code <= 208) {
@@ -170,13 +184,13 @@ export const getResponses = (op: OperationObject) => {
   return responses
 }
 
-export const getSchemaRef = (path: string | string[], splitter: string = "/") : SchemaObject | null => {
+export const getSchemaRef = (path: string | string[], splitter: string = '/'): SchemaObject | null => {
   let reference = jsonPath(path)
   if (!reference) return null
   // Is this a ContentObject?
   if (reference.content) {
     // may not be able to assume application/json
-    reference = jsonPath(["application/json", "schema"], reference.content)
+    reference = jsonPath(['application/json', 'schema'], reference.content)
     if (reference) {
       path = reference.$ref
     }

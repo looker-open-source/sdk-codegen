@@ -28,8 +28,8 @@ import * as fs from 'fs'
 import * as Models from './sdkModels'
 import { SDKConfig } from './sdkConfig'
 import { log, quit } from './utils'
-import {openApiFileName} from "./fetchSpec"
-import {SdkGenerator, TypeGenerator} from "./sdkGenerator"
+import { openApiFileName } from './fetchSpec'
+import { SdkGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, TargetLanguages } from './targetLanguages'
 import { logConvert } from './convert'
 
@@ -38,7 +38,7 @@ import { logConvert } from './convert'
   let args = process.argv.slice(2)
   let languages = TargetLanguages.map(l => l.language)
   if (args.length > 0) {
-    if (args.toString().toLowerCase() !== "all") {
+    if (args.toString().toLowerCase() !== 'all') {
       languages = []
       for (let arg of args) {
         const values = arg.toString().split(',')
@@ -51,19 +51,23 @@ import { logConvert } from './convert'
     const config = SDKConfig()
     for (let language of languages) {
       log(`generating ${language} ...`)
-      for (let [name, props] of Object.entries(config) ) {
+      for (let [name, props] of Object.entries(config)) {
         await logConvert(name, props)
         const oasFile = openApiFileName(name, props)
         const apiModel = Models.ApiModel.fromFile(oasFile)
         const formatter = getFormatter(language, apiModel)
-        const sdkPath = `${formatter.codePath}/${formatter.package}/sdk`
-        if (!fs.existsSync(sdkPath)) fs.mkdirSync(sdkPath, { recursive: true })
+        const sdkPath = `${formatter.codePath}/${formatter.packagePath}/sdk`
+        if (!fs.existsSync(sdkPath)) fs.mkdirSync(sdkPath, {recursive: true})
         const sdk = new SdkGenerator(apiModel, formatter)
         let output = sdk.render(formatter.indentStr)
         fs.writeFileSync(formatter.fileName('sdk/methods'), output)
         const types = new TypeGenerator(apiModel, formatter)
         output = types.render('')
         fs.writeFileSync(formatter.fileName('sdk/models'), output)
+        const reformatted = formatter.reformat()
+        if (reformatted.length > 0) {
+          log(`reformatted ${reformatted.join(',')}`)
+        }
         break
       }
     }

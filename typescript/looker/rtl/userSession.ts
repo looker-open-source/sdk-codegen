@@ -22,25 +22,32 @@
  * THE SOFTWARE.
  */
 
-import { IAccessToken, IError } from "../sdk/models"
-import { IApiSettings } from "./apiSettings"
-import { IRequestInit, ITransport, SDKResponse, sdkError } from "./transport"
-import { AuthToken } from "./authToken"
-import { NodeTransport } from "./nodeTransport";
+import { IAccessToken, IError } from '../sdk/models'
+import { IApiSettings } from './apiSettings'
+import { IRequestInit, ITransport, SDKResponse, sdkError } from './transport'
+import { AuthToken } from './authToken'
+import { NodeTransport } from './nodeTransport'
 
 // TODO support impersonation and reporting user id of logged in user?
 export interface IUserSession {
   // Authentication token
   getToken(): Promise<IAccessToken>
+
   userId: string
+
   isImpersonating(): boolean
+
   isAuthenticated(): boolean
+
   authenticate(init: IRequestInit): Promise<IRequestInit>
+
   login(userId?: string): Promise<IAccessToken>
+
   logout(): Promise<boolean>
+
   settings: IApiSettings
   transport: ITransport
- }
+}
 
 
 export class UserSession implements IUserSession {
@@ -49,7 +56,7 @@ export class UserSession implements IUserSession {
   userId: string = ''
   transport: ITransport
 
-  constructor (public settings: IApiSettings, transport?: ITransport) {
+  constructor(public settings: IApiSettings, transport?: ITransport) {
     this.settings = settings
     this.transport = transport || new NodeTransport(settings)
   }
@@ -82,7 +89,7 @@ export class UserSession implements IUserSession {
     this._token = new AuthToken()
   }
 
-  private async ok<TSuccess, TError> (promise: Promise<SDKResponse<TSuccess, TError>>) {
+  private async ok<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
     const result = await promise
     if (result.ok) {
       return result.value
@@ -100,12 +107,12 @@ export class UserSession implements IUserSession {
     }
     this.reset()
     // authenticate client
-    const result = await this.ok(this.transport.request<IAccessToken, IError>('POST','/login',
-      { client_id: this.settings.client_id, client_secret: this.settings.client_secret }))
+    const result = await this.ok(this.transport.request<IAccessToken, IError>('POST', '/login',
+      {client_id: this.settings.client_id, client_secret: this.settings.client_secret}))
     return result
   }
 
-  async login(userId? : string) {
+  async login(userId?: string) {
     if (!this.isAuthenticated()) {
       const token = await this._login(userId)
       this._token = new AuthToken(token)
@@ -153,4 +160,4 @@ export class UserSession implements IUserSession {
     return result
   }
 
- }
+}

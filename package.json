@@ -17,7 +17,10 @@
         "sdk": "ts-node sdkGen.ts",
         "lint": "tslint -p tsconfig.json --format stylish",
         "view": "speccy serve",
-        "test": "yarn jest"
+        "test": "yarn jest",
+        "prettier:base": "prettier --parser typescript --single-quote",
+        "prettier:check": "npm run prettier:base -- --list-different \"**/*.{ts,tsx}\"",
+        "prettier:write": "npm run prettier:base -- --write \"**/*.{ts,tsx}\""
     },
     "repository": {
         "type": "git",
@@ -43,6 +46,7 @@
         "@types/lodash": "^4.14.133",
         "@types/mustache": "^0.8.32",
         "@types/node": "^11.13.7",
+        "@types/prettier": "^1.18.2",
         "@types/request": "^2.48.2",
         "@types/request-promise-native": "^1.0.16",
         "@types/yargs": "^13.0.0",
@@ -53,6 +57,7 @@
         "lodash": "^4.17.11",
         "node-fetch": "^2.3.0",
         "openapi3-ts": "^1.2.0",
+        "prettier": "^1.18.2",
         "request": "^2.88.0",
         "request-promise-native": "^1.0.7",
         "speccy": "^0.9.0",

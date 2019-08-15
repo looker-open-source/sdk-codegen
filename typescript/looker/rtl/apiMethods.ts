@@ -26,7 +26,7 @@ import { SDKResponse, HttpMethod, sdkError } from './transport'
 import { IUserSession } from './userSession'
 
 export class APIMethods {
-  constructor (public userSession: IUserSession) {
+  constructor(public userSession: IUserSession) {
     this.userSession = userSession
   }
 
@@ -53,7 +53,7 @@ export class APIMethods {
    * }
    * ```
    */
-  async ok<TSuccess, TError> (promise: Promise<SDKResponse<TSuccess, TError>>) {
+  async ok<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
     const result = await promise
     if (result.ok) {
       return result.value
@@ -84,17 +84,17 @@ export class APIMethods {
   macro(template: string, vars: any) {
     // replace {foo} from spec path with ${foo} for template string
     template = template.replace(/{/gi, '${')
-    return new Function("return `+ template +`;").call(vars)
+    return new Function('return `+ template +`;').call(vars)
   }
 
   pathify(path: string, pathParams?: any) {
     if (!pathParams) return path
-    if (path.indexOf("{") < 0) return path
+    if (path.indexOf('{') < 0) return path
     return this.macro(path, pathParams)
   }
 
   /** Make a GET request */
-  async get<TSuccess, TError> (
+  async get<TSuccess, TError>(
     path: string,
     queryParams?: any,
     body?: any
@@ -103,7 +103,7 @@ export class APIMethods {
   }
 
   /** Make a HEAD request */
-  async head<TSuccess, TError> (
+  async head<TSuccess, TError>(
     path: string,
     queryParams?: any,
     body?: any
@@ -112,7 +112,7 @@ export class APIMethods {
   }
 
   /** Make a DELETE request */
-  async delete<TSuccess, TError> (
+  async delete<TSuccess, TError>(
     path: string,
     queryParams?: any,
     body?: any
@@ -121,7 +121,7 @@ export class APIMethods {
   }
 
   /** Make a POST request */
-  async post<TSuccess, TError> (
+  async post<TSuccess, TError>(
     path: string,
     queryParams?: any,
     body?: any
@@ -130,7 +130,7 @@ export class APIMethods {
   }
 
   /** Make a PUT request */
-  async put<TSuccess, TError> (
+  async put<TSuccess, TError>(
     path: string,
     queryParams?: any,
     body?: any
@@ -139,7 +139,7 @@ export class APIMethods {
   }
 
   /** Make a PATCH request */
-  async patch<TSuccess, TError> (
+  async patch<TSuccess, TError>(
     path: string,
     queryParams?: any,
     body?: any

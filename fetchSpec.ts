@@ -35,24 +35,24 @@ const loginUrl = (props: SDKConfigProps) => `${props.base_url}/login`
 const logoutUrl = (props: SDKConfigProps) => `${props.base_url}/logout`
 
 const logout = async (props: SDKConfigProps, token: string) =>
-  fetch(logoutUrl(props), { method: 'DELETE', headers: { 'Authorization': `token ${token}` } })
+  fetch(logoutUrl(props), {method: 'DELETE', headers: {'Authorization': `token ${token}`}})
 
 const login = async (props: SDKConfigProps) => {
 
   const params = new URLSearchParams()
-  params.append('client_id', props.client_id);
-  params.append('client_secret', props.client_secret);
+  params.append('client_id', props.client_id)
+  params.append('client_secret', props.client_secret)
 
   try {
-    const response = await fetch(loginUrl(props), { method: 'POST', body: params })
+    const response = await fetch(loginUrl(props), {method: 'POST', body: params})
     const body = await response.json()
     const accessToken = await body.access_token
 
     if (accessToken) {
       return accessToken
     } else {
-      log("Server Response: " + JSON.stringify(body))
-      throw new Error("Access token could not be retrieved.")
+      log('Server Response: ' + JSON.stringify(body))
+      throw new Error('Access token could not be retrieved.')
     }
 
   } catch (err) {
@@ -64,13 +64,13 @@ export const specFileName = (name: string, props: SDKConfigProps) =>
   `./${name}.${props.api_version}.json`
 
 export const openApiFileName = (name: string, props: SDKConfigProps) =>
-`./${name}.${props.api_version}.oas.json`
+  `./${name}.${props.api_version}.oas.json`
 
 const badAuth = (content: string) => content.indexOf('Requires authentication') > 0
 
 export const fetchSpecFile = async (name: string, props: SDKConfigProps) => {
   const fileName = specFileName(name, props)
-  // TODO make switch for "always fetch"
+  // TODO make switch for "always fetch" -- or just instruct users to delete previous spec files?
   if (fs.existsSync(fileName)) return fileName
 
   try {
@@ -83,18 +83,18 @@ export const fetchSpecFile = async (name: string, props: SDKConfigProps) => {
       content = await response.text()
       if (badAuth(content)) {
         token = await login(props)
-        response = await fetch(specFileUrl(props), { headers: { 'Authorization': `token ${token}` } })
+        response = await fetch(specFileUrl(props), {headers: {'Authorization': `token ${token}`}})
         content = await response.text()
       }
     } catch (err) {
       // Woops!  Ok, try again with login
       token = await login(props)
-      response = await fetch(specFileUrl(props), { headers: { 'Authorization': `token ${token}` } })
+      response = await fetch(specFileUrl(props), {headers: {'Authorization': `token ${token}`}})
       content = await response.text()
     }
 
     if (badAuth(content)) {
-      return quit("Authentication failed")
+      return quit('Authentication failed')
     }
 
     fs.writeFileSync(fileName, content)

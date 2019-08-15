@@ -24,12 +24,12 @@
 
 // Python codeFormatter
 
-import {Arg, IMappedType, IMethod, IParameter, IProperty, IType, strBody} from "./sdkModels"
-import {CodeFormatter, warnEditing} from "./codeFormatter"
+import { Arg, IMappedType, IMethod, IParameter, IProperty, IType, strBody } from './sdkModels'
+import { CodeFormatter, warnEditing } from './codeFormatter'
 
 export class PythonFormatter extends CodeFormatter {
   codePath = './python/'
-  package = 'looker_sdk'
+  packagePath = 'looker_sdk'
   itself = 'self'
   fileExtension = '.py'
   commentStr = '# '
@@ -81,18 +81,18 @@ export class PythonFormatter extends CodeFormatter {
     'yield'
   ]
   pythonTypes: Record<string, IMappedType> = {
-    'number': { name: 'float', default: this.nullStr },
-    'double': { name: 'float', default: this.nullStr },
-    'integer': { name: 'int', default: this.nullStr },
-    'int32': { name: 'int', default: this.nullStr },
-    'int64': { name: 'int', default: this.nullStr },
-    'string': { name: 'str', default: this.nullStr },
-    'password': {name: 'str', default: this.nullStr },
-    'byte': {name: 'bytes', default: this.nullStr },
-    'boolean': {name: 'bool', default: this.nullStr },
-    'void': {name: 'None', default: this.nullStr },
-    'uri': {name: 'str', default: this.nullStr },
-    'datetime': {name: 'datetime.datetime', default: this.nullStr }
+    'number': {name: 'float', default: this.nullStr},
+    'double': {name: 'float', default: this.nullStr},
+    'integer': {name: 'int', default: this.nullStr},
+    'int32': {name: 'int', default: this.nullStr},
+    'int64': {name: 'int', default: this.nullStr},
+    'string': {name: 'str', default: this.nullStr},
+    'password': {name: 'str', default: this.nullStr},
+    'byte': {name: 'bytes', default: this.nullStr},
+    'boolean': {name: 'bool', default: this.nullStr},
+    'void': {name: 'None', default: this.nullStr},
+    'uri': {name: 'str', default: this.nullStr},
+    'datetime': {name: 'datetime.datetime', default: this.nullStr}
   }
 
   // @ts-ignore
@@ -101,15 +101,15 @@ export class PythonFormatter extends CodeFormatter {
 import datetime
 from typing import Optional, Sequence
 
-from ${this.package}.sdk import models
-from ${this.package}.rtl import api_methods
-from ${this.package}.rtl import api_settings
-from ${this.package}.rtl import requests_transport
-from ${this.package}.rtl import serialize
-from ${this.package}.rtl import user_session
+from ${this.packagePath}.sdk import models
+from ${this.packagePath}.rtl import api_methods
+from ${this.packagePath}.rtl import api_settings
+from ${this.packagePath}.rtl import requests_transport
+from ${this.packagePath}.rtl import serialize
+from ${this.packagePath}.rtl import user_session
 
 
-class LookerSDK(api_methods.APIMethods):
+class ${this.packageName}(api_methods.APIMethods):
 
     @classmethod
     def configure(cls, settings_file: str = "looker.ini") -> "LookerSDK":
@@ -131,8 +131,8 @@ from typing import Optional, Sequence
 import attr
 import cattr
 
-from ${this.package}.rtl import model
-from ${this.package}.rtl import serialize as sr
+from ${this.packagePath}.rtl import model
+from ${this.packagePath}.rtl import serialize as sr
 `
 
   // cattrs [un]structure hooks for model [de]serialization
@@ -172,8 +172,8 @@ ${this.hooks.join('\n')}
   // @ts-ignore
   argList(indent: string, args: Arg[]) {
     return args && args.length !== 0
-          ? `\n${indent}${args.join(this.argDelimiter)}`
-          : this.nullStr
+      ? `\n${indent}${args.join(this.argDelimiter)}`
+      : this.nullStr
   }
 
   declareProperty(indent: string, property: IProperty) {
@@ -187,7 +187,8 @@ ${this.hooks.join('\n')}
     return this.commentHeader(indent, property.description) + propDef
   }
 
-  // because Python has named default parameters
+  // because Python has named default parameters, Request types are not required like
+  // they are for Typescript
   methodSignature(indent: string, method: IMethod) {
     const type = this.typeMapMethods(method.type)
     const bump = this.bumper(indent)
@@ -195,7 +196,7 @@ ${this.hooks.join('\n')}
     const args = method.allParams
     if (args && args.length > 0) method.allParams.forEach(p => params.push(this.declareParameter(bump, p)))
     return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${type.name}`)
-      + `${indent}def ${method.name}(\n${bump}self${params.length > 0?",\n":''}${params.join(this.paramDelimiter)}\n${indent}) -> ${type.name}:\n`
+      + `${indent}def ${method.name}(\n${bump}self${params.length > 0 ? ',\n' : ''}${params.join(this.paramDelimiter)}\n${indent}) -> ${type.name}:\n`
   }
 
   declareParameter(indent: string, param: IParameter) {
@@ -214,12 +215,12 @@ ${this.hooks.join('\n')}
     let assign = `${this.it('_' + property.name)} = ${property.name}\n`
     if (property.nullable) {
       return `${indent}if ${property.name} is not None:\n` +
-          `${bump}${assign}`
+        `${bump}${assign}`
     }
     return assign
   }
 
-  // Omit read-only parameters
+  // Skip read-only parameters
   construct(indent: string, properties: Record<string, IProperty>) {
     indent = this.bumper(indent)
     const bump = this.bumper(indent)
@@ -228,47 +229,47 @@ ${this.hooks.join('\n')}
     let inits: string[] = []
     Object.values(properties)
     // .filter((prop) => !prop.readOnly)
-        .forEach((prop) => {
-          args.push(this.declareConstructorArg('', prop))
-          inits.push(this.initArg(bump, prop))
-        })
+      .forEach((prop) => {
+        args.push(this.declareConstructorArg('', prop))
+        inits.push(this.initArg(bump, prop))
+      })
     result += `${args.join(this.argDelimiter)}):\n`
-        + inits.join('\n')
-    return result + "\n"
+      + inits.join('\n')
+    return result + '\n'
   }
 
   httpArgs(indent: string, method: IMethod) {
-      let result = this.argFill('', this.argGroup(indent, method.cookieArgs))
-      result = this.argFill(result, this.argGroup(indent, method.headerArgs))
-      if (method.bodyArg) {
-        result = this.argFill(result, `body=${method.bodyArg}`)
-      }
-      if (method.queryArgs.length) {
-        const queryParams = this.argGroup(indent, method.queryArgs)
-        result = this.argFill(result, `query_params=${queryParams}`)
-      }
-      const type = this.typeMapMethods(method.type)
-      result = this.argFill(result, type.name)
-      return result
+    let result = this.argFill('', this.argGroup(indent, method.cookieArgs))
+    result = this.argFill(result, this.argGroup(indent, method.headerArgs))
+    if (method.bodyArg) {
+      result = this.argFill(result, `body=${method.bodyArg}`)
+    }
+    if (method.queryArgs.length) {
+      const queryParams = this.argGroup(indent, method.queryArgs)
+      result = this.argFill(result, `query_params=${queryParams}`)
+    }
+    const type = this.typeMapMethods(method.type)
+    result = this.argFill(result, type.name)
+    return result
   }
 
   httpCall(indent: string, method: IMethod) {
-      const bump = indent + this.indentStr
-      const args = this.httpArgs(bump, method)
-      const methodCall = `${indent}response = ${this.it(method.httpMethod.toLowerCase())}`
-      const callArgs = `f"${method.endpoint}"${args ? ", " +args: ""}`
-      let type = this.typeMapMethods(method.type).name
-      if (type.startsWith('Sequence')) {
-        type = 'list'
-      }
-      let assertion = `${indent}assert `
-      if (type == this.nullStr) {
-        assertion += `response is ${this.nullStr}`
-      } else {
-        assertion += `isinstance(response, ${type})`
-      }
-      const returnStmt = `${indent}return response`
-      return `${methodCall}(${callArgs})\n${assertion}\n${returnStmt}`
+    const bump = indent + this.indentStr
+    const args = this.httpArgs(bump, method)
+    const methodCall = `${indent}response = ${this.it(method.httpMethod.toLowerCase())}`
+    const callArgs = `f"${method.endpoint}"${args ? ', ' + args : ''}`
+    let type = this.typeMapMethods(method.type).name
+    if (type.startsWith('Sequence')) {
+      type = 'list'
+    }
+    let assertion = `${indent}assert `
+    if (type == this.nullStr) {
+      assertion += `response is ${this.nullStr}`
+    } else {
+      assertion += `isinstance(response, ${type})`
+    }
+    const returnStmt = `${indent}return response`
+    return `${methodCall}(${callArgs})\n${assertion}\n${returnStmt}`
   }
 
   declareMethod(indent: string, method: IMethod) {
@@ -299,23 +300,23 @@ ${this.hooks.join('\n')}
       `cattr.register_structure_hook(\n${bump}${forwardRef},  # type: ignore\n${bump}${this.structure_hook}  # type:ignore\n)`
     )
     return `\n` +
-        `${indent}@attr.s(auto_attribs=True, kw_only=True)\n` +  // TODO: make "response" types frozen while "write" types are mutable
-        `${indent}class ${type.name}(model.Model):\n` +
-        `${bump}"""\n` +
-        (type.description ? `${bump}${type.description}\n\n` : '') +
-        `${bump}Attributes:\n` +
-        `${attrs.join("\n")}\n` +
-        `${bump}"""\n`
+      `${indent}@attr.s(auto_attribs=True, kw_only=True)\n` +  // TODO: make "response" types frozen while "write" types are mutable
+      `${indent}class ${type.name}(model.Model):\n` +
+      `${bump}"""\n` +
+      (type.description ? `${bump}${type.description}\n\n` : '') +
+      `${bump}Attributes:\n` +
+      `${attrs.join('\n')}\n` +
+      `${bump}"""\n`
   }
 
-  summary(indent: string, text: string | undefined){
+  summary(indent: string, text: string | undefined) {
     return text ? `${indent}"""${text}"""\n` : ''
   }
 
   _typeMap(type: IType, format: 'models' | 'methods'): IMappedType {
     super.typeMap(type)
     if (type.elementType) {
-      const map  = this._typeMap(type.elementType, format)
+      const map = this._typeMap(type.elementType, format)
       return {name: `Sequence[${map.name}]`, default: this.nullStr}
     }
     if (type.name) {
@@ -327,7 +328,7 @@ ${this.hooks.join('\n')}
       } else {
         throw new Error('format must be "models" or "methods"')
       }
-      return this.pythonTypes[type.name] || {name: name, default: this.nullStr }
+      return this.pythonTypes[type.name] || {name: name, default: this.nullStr}
     } else {
       throw new Error('Cannot output a nameless type.')
     }
@@ -340,4 +341,19 @@ ${this.hooks.join('\n')}
   typeMapModels(type: IType) {
     return this._typeMap(type, 'models')
   }
+
+  // TODO add support for calling black to format the python file
+  // @ts-ignore
+  reformatFile(fileName: string) {
+    // const name = super.reformatFile(fileName)
+    // if (name) {
+    //   const source = prettier.format(fs.readFileSync(name, utf8))
+    //   if (source) {
+    //     fs.writeFileSync(name, source, {encoding: utf8})
+    //     return name
+    //   }
+    // }
+    return ''
+  }
+
 }

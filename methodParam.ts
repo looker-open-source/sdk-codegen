@@ -24,14 +24,15 @@
  * THE SOFTWARE.
  */
 
-import { ParameterStyle, SchemaObject, ExampleObject, ContentObject, OperationObject } from "openapi3-ts"
-import { code, debug, typeMap, commentBlock } from "./utils"
-import { getRequestBodySchema, getResponses} from "./specSupport"
+import { ParameterStyle, SchemaObject, ExampleObject, ContentObject, OperationObject } from 'openapi3-ts'
+import { code, debug, typeMap, commentBlock } from './utils'
+import { getRequestBodySchema, getResponses } from './specSupport'
 
 export declare type MethodParameterLocation = 'path' | 'body' | 'query' | 'header' | 'cookie'
 
 export interface IMethodParameter {
-  [ key: string ]: any
+  [key: string]: any
+
   name: string
   in: MethodParameterLocation
   schema: SchemaObject
@@ -57,12 +58,11 @@ export interface IResponseSchema {
 }
 
 const noMeth = () => {
-  return {
-  } as IMethodParameter
+  return {} as IMethodParameter
 }
 
-export const asParams = (list : any[] | undefined) : IMethodParameter[] => {
-  let results : IMethodParameter[] = []
+export const asParams = (list: any[] | undefined): IMethodParameter[] => {
+  let results: IMethodParameter[] = []
   if (!list) return results
   for (let item of list) {
     let value = new MethodParameter(item)
@@ -75,7 +75,7 @@ export const asParams = (list : any[] | undefined) : IMethodParameter[] => {
 }
 
 // coerce a SchemaObject to a ParameterObject
-export const schemaToParam = (name: string, schema: SchemaObject | null) : IMethodParameter => {
+export const schemaToParam = (name: string, schema: SchemaObject | null): IMethodParameter => {
   let result = noMeth()
   if (schema) {
     result = {
@@ -86,7 +86,7 @@ export const schemaToParam = (name: string, schema: SchemaObject | null) : IMeth
         format: schema.format,
         default: schema.default
       },
-      readOnly : schema.readOnly,
+      readOnly: schema.readOnly,
       description: schema.description,
       // "x-looker-nullable": schema["x-looker-nullable"]
     }
@@ -120,7 +120,7 @@ export class MethodParameter implements IMethodParameter {
     'allowEmptyValue', 'style', 'explode', 'allowReserved', 'examples', 'example', 'content']
 
   name: string = ''
-  schema: SchemaObject = {};
+  schema: SchemaObject = {}
   in: MethodParameterLocation = 'query'
 
   readOnly?: boolean
@@ -133,12 +133,12 @@ export class MethodParameter implements IMethodParameter {
   explode?: boolean
   allowReserved?: boolean
   examples?: {
-      [param: string]: ExampleObject
+    [param: string]: ExampleObject
   }
   example?: any
   content?: ContentObject
 
-  constructor (param?: any) {
+  constructor(param?: any) {
     this.name = ''
     this.schema = {} as SchemaObject
     this.in = 'query'
@@ -157,10 +157,10 @@ export class MethodParameter implements IMethodParameter {
         const schema = param.schema as SchemaObject
         const typeDef = typeMap(schema.type, schema.format)
 
-        this.name = this.name || param.name;
+        this.name = this.name || param.name
         this.schema = schema
         this.schema.type = typeDef.type
-        this.schema.default = this.schema.default || typeDef.default;
+        this.schema.default = this.schema.default || typeDef.default
         this.comment = commentBlock(this.description || param.description, code.paramIndent)
       }
     }
@@ -174,10 +174,10 @@ const getRequestParam = (op: OperationObject) => {
   const responses = getRequestBodySchema(op.requestBody)
   const schema = responses[0].schema
   if (!schema.type) {
-    debug("no schema type", op.requestBody)
+    debug('no schema type', op.requestBody)
   }
-  const typeName = schema.type || ""
-  const result : IMethodParameter = {
+  const typeName = schema.type || ''
+  const result: IMethodParameter = {
     name: 'body',
     // @ts-ignore
     required: !!op.requestBody.required,
@@ -214,13 +214,13 @@ export class MethodParameters {
       .sort((p1, p2) => locationSorter(p1, p2))
   }
 
-  writeable = (list? : IMethodParameter[]) => {
+  writeable = (list?: IMethodParameter[]) => {
     if (!list) list = this.items
     return list
       .filter(p => !p.readOnly)
   }
 
-  sort = (list? : IMethodParameter[]) => {
+  sort = (list?: IMethodParameter[]) => {
     if (!list) list = this.items
     return list
       .sort((p1, p2) => locationSorter(p1, p2))
@@ -285,7 +285,7 @@ export class MethodParameters {
     return this.items
   }
 
-  get pathParams(){
+  get pathParams() {
     return this.params('path')
   }
 
@@ -317,7 +317,7 @@ export class MethodParameters {
       .join(code.argSeparator)
   }
 
-  get pathArgs(){
+  get pathArgs() {
     return this.args('path')
   }
 

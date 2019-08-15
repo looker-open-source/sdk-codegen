@@ -22,10 +22,10 @@
  * THE SOFTWARE.
  */
 
-import { AuthToken } from "./authToken"
+import { AuthToken } from './authToken'
 
 describe('AccessToken', () => {
-  it ('defaults with empty token', () => {
+  it('defaults with empty token', () => {
     const actual = new AuthToken()
     expect(actual.access_token).toEqual('')
     expect(actual.token_type).toEqual('')
@@ -33,7 +33,7 @@ describe('AccessToken', () => {
     expect(actual.isActive()).toEqual(false)
   })
 
-  it ('is active with full token', () => {
+  it('is active with full token', () => {
     const actual = new AuthToken({
       access_token: 'all-access',
       token_type: 'backstage',

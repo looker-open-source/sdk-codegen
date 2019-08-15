@@ -25,6 +25,6 @@
 import { LookerSDK } from '../sdk/methods'
 import { IUserSession } from './userSession'
 
-export function LookerNodeSDK (session: IUserSession): LookerSDK {
+export function LookerNodeSDK(session: IUserSession): LookerSDK {
   return new LookerSDK(session)
 }

@@ -1,18 +1,18 @@
-import * as Models from "./sdkModels"
-import { SdkGenerator } from "./sdkGenerator"
-import {PythonFormatter} from "./python.fmt"
+import * as Models from './sdkModels'
+import { SdkGenerator } from './sdkGenerator'
+import { PythonFormatter } from './python.fmt'
 
 const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
 
 describe('ts template test', () => {
-  beforeAll( ()=>{
+  beforeAll(() => {
 
   })
-  it ('outputs a method in Python', () => {
+  it('outputs a method in Python', () => {
     const gen = new SdkGenerator(apiModel, new PythonFormatter())
     const result = gen.codeFormatter.declareMethod('  ', apiModel.methods['create_look'])
     expect(result).toEqual(
-`  # POST /looks
+      `  # POST /looks
   def create_look(
     # Requested fields.
     fields: str) -> LookWithQuery:

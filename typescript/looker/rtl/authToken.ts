@@ -1,4 +1,3 @@
-
 /*
  * The MIT License (MIT)
  *
@@ -23,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-import { IAccessToken } from "../sdk/models"
+import { IAccessToken } from '../sdk/models'
 
- export class AuthToken implements IAccessToken {
+export class AuthToken implements IAccessToken {
   // tslint:disable-next-line: variable-name
   access_token: string = ''
   // tslint:disable-next-line: variable-name
@@ -35,7 +34,7 @@ import { IAccessToken } from "../sdk/models"
   // tslint:disable-next-line: variable-name
   expiresAt = new Date()
 
-  constructor (token?: IAccessToken) {
+  constructor(token?: IAccessToken) {
     if (!token) token = {} as IAccessToken
     this.setToken(token)
   }
@@ -62,4 +61,4 @@ import { IAccessToken } from "../sdk/models"
     return this
   }
 
- }
+}
