@@ -26,6 +26,7 @@
 
 import { Arg, IMappedType, IMethod, IParameter, IProperty, IType, strBody } from './sdkModels'
 import { CodeFormatter, warnEditing } from './codeFormatter'
+import { run } from './utils'
 
 export class PythonFormatter extends CodeFormatter {
   codePath = './python/'
@@ -342,17 +343,14 @@ ${this.hooks.join('\n')}
     return this._typeMap(type, 'models')
   }
 
-  // TODO add support for calling black to format the python file
   // @ts-ignore
   reformatFile(fileName: string) {
-    // const name = super.reformatFile(fileName)
-    // if (name) {
-    //   const source = prettier.format(fs.readFileSync(name, utf8))
-    //   if (source) {
-    //     fs.writeFileSync(name, source, {encoding: utf8})
-    //     return name
-    //   }
-    // }
+    const name = super.reformatFile(fileName)
+    if (name) {
+      run('command', ['-v', 'pipenv'], 'please install pipenv: https://docs.pipenv.org/en/latest/install/#installing-pipenv')
+      run('pipenv', ['update'])
+      run('pipenv',  ['run', 'black', `${this.codePath}/${this.packagePath}/sdk/`])
+    }
     return ''
   }
 

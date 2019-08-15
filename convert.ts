@@ -32,7 +32,7 @@ import { fail, log, quit, run } from './utils'
 const lintCheck = async (fileName: string) => {
   // TODO skip if flag to ignore lint errors is specified
   try {
-    const linter = await run('speccy', ['lint', fileName])
+    const linter = run('speccy', ['lint', fileName])
     if (!linter) return fail('Lint', 'no response')
     if (linter.toString().indexOf('Specification is valid, with 0 lint errors') >= 0) return
     return fail('Lint', linter.toString())
@@ -52,8 +52,8 @@ const convertSpec = async (fileName: string, openApiFile: string) => {
     // patch to fix up small errors in source definition (not required, just to ensure smooth process)
     // indent 2 spaces
     // output to openApiFile
-    // await run('swagger2openapi', [fileName, '--resolveInternal', '-p', '-i', '"  "', '-o', openApiFile])
-    await run('swagger2openapi', [fileName, '-p', '-i', '"  "', '-o', openApiFile])
+    // run('swagger2openapi', [fileName, '--resolveInternal', '-p', '-i', '"  "', '-o', openApiFile])
+    run('swagger2openapi', [fileName, '-p', '-i', '"  "', '-o', openApiFile])
     if (!fs.existsSync(openApiFile)) return fail('convertSpec', `creating ${openApiFile} failed`)
     return openApiFile
   } catch (e) {
