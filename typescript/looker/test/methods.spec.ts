@@ -204,14 +204,17 @@ describe('LookerSDK', () => {
         expect(user.last_name).toEqual(u.last_name)
         expect(user.is_disabled).toEqual(false)
         expect(user.locale).toEqual('fr')
-        user = await sdk.ok(
+        let actual = await sdk.ok(
           sdk.update_user(user.id, {
             is_disabled: true,
             locale: 'en'
           })
         )
-        expect(user.is_disabled).toEqual(true)
-        expect(user.locale).toEqual('en')
+        expect(actual.is_disabled).toEqual(true)
+        expect(actual.locale).toEqual('en')
+        // Ensure update *only* updates what it's supposed to
+        expect(actual.last_name).toEqual(user.last_name)
+        expect(actual.first_name).toEqual(user.first_name)
         user = await sdk.ok(
           sdk.update_user(user.id, {
             is_disabled: false,
