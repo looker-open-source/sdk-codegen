@@ -29,7 +29,10 @@ import { execSync } from 'child_process'
 export const utf8 = 'utf-8'
 
 // Abstraction of log so it can be skipped when quiet mode is enabled
-export const log = (message?: any) => console.log(message)
+export const log = (message?: any) => {
+  console.log(message)
+  return message
+}
 
 export const debug = (message: any, value?: any) => {
   if (value !== undefined) console.log(message, '=>', JSON.stringify(value, null, 2))
@@ -61,7 +64,7 @@ export const fail = (name: string, message: string) => {
   return quit(err)
 }
 
-export const run = (command: string, args: string[], errMsg?: string) => {
+export const run = (command: string, args: string[], errMsg?: string, warning: boolean = false) => {
   // https://nodejs.org/api/child_process.html#child_process_child_process_execsync_command_options
   const options = {
     maxBuffer: 1024 * 2048,
@@ -75,7 +78,11 @@ export const run = (command: string, args: string[], errMsg?: string) => {
     const result = execSync(command, options)
     return result
   } catch (e) {
-    return quit(errMsg || e)
+    if (warning) {
+      return log(errMsg)
+    } else {
+      return quit(errMsg || e)
+    }
   }
 }
 

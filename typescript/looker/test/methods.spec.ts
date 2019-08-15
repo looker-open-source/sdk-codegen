@@ -324,6 +324,16 @@ describe('LookerSDK', () => {
             query_timezone: q.query_timezone || undefined
           })
         )
+        const sql = await sdk.ok(
+          sdk.run_query({query_id: query.id, result_format: 'sql'})
+        )
+        expect(sql).toContain('SELECT')
+        if (query.fields) {
+          query.fields.forEach(field => {
+            expect(sql).toContain(field)
+          })
+        }
+
         const json = await sdk.ok(
           sdk.run_query({query_id: query.id, result_format: 'json'})
         )

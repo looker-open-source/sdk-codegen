@@ -347,9 +347,12 @@ ${this.hooks.join('\n')}
   reformatFile(fileName: string) {
     const name = super.reformatFile(fileName)
     if (name) {
-      run('command', ['-v', 'pipenv'], 'please install pipenv: https://docs.pipenv.org/en/latest/install/#installing-pipenv')
-      run('pipenv', ['update'])
-      run('pipenv',  ['run', 'black', `${this.codePath}/${this.packagePath}/sdk/`])
+      if (run('command', ['-v', 'pipenv'],
+        `To reformat ${fileName}, please install pipenv: https://docs.pipenv.org/en/latest/install/#installing-pipenv`, true) === '') {
+        // pipenv check completed without error
+        run('pipenv', ['update'])
+        run('pipenv',  ['run', 'black', `${this.codePath}/${this.packagePath}/sdk/`])
+      }
     }
     return ''
   }

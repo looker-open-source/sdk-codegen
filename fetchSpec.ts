@@ -87,7 +87,7 @@ export const fetchSpecFile = async (name: string, props: SDKConfigProps) => {
         content = await response.text()
       }
     } catch (err) {
-      // Woops!  Ok, try again with login
+      // Whoops!  Ok, try again with login
       token = await login(props)
       response = await fetch(specFileUrl(props), {headers: {'Authorization': `token ${token}`}})
       content = await response.text()
@@ -106,6 +106,12 @@ export const fetchSpecFile = async (name: string, props: SDKConfigProps) => {
     return fileName
 
   } catch (err) {
+    if (err.message && err.message.match(/self signed certificate/gi)) {
+      log(`
+NOTE! Certificate validation can be disabled with:
+  NODE_TLS_REJECT_UNAUTHORIZED="0" yarn {command}
+`)
+    }
     return quit(err)
   }
 }
