@@ -61,7 +61,7 @@ export const fail = (name: string, message: string) => {
   return quit(err)
 }
 
-export const run = async (command: string, args: string[]) => {
+export const run = (command: string, args: string[], errMsg?: string) => {
   // https://nodejs.org/api/child_process.html#child_process_child_process_execsync_command_options
   const options = {
     maxBuffer: 1024 * 2048,
@@ -75,7 +75,7 @@ export const run = async (command: string, args: string[]) => {
     const result = execSync(command, options)
     return result
   } catch (e) {
-    return quit(e)
+    return quit(errMsg || e)
   }
 }
 
