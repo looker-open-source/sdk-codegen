@@ -38,6 +38,7 @@ class TransportSettings:
 
 
 TResponseValue = Union[str, bytes]
+TAuthenticator = Optional[Callable[[], Dict[str, str]]]
 
 
 @attr.s(auto_attribs=True)
@@ -67,7 +68,7 @@ class Transport(abc.ABC):
         path: str,
         query_params: Optional[MutableMapping[str, str]] = None,
         body: Optional[bytes] = None,
-        authenticator: Optional[Callable[[], Dict[str, str]]] = None,
+        authenticator: TAuthenticator = None,
     ) -> Response:
         """Send API request.
         """

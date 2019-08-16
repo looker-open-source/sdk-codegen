@@ -1,6 +1,6 @@
 """UserSession to provid automatic authentication
 """
-from typing import Dict, Optional
+from typing import Dict
 import urllib.parse
 
 from looker_sdk.rtl import api_settings as st
@@ -25,97 +25,140 @@ class UserSession:
         transport: tp.Transport,
         deserialize: sr.TDeserialize,
     ):
-        self._token: at.AuthToken = at.AuthToken()
+        self.user_token: at.AuthToken = at.AuthToken()
+        self.admin_token: at.AuthToken = at.AuthToken()
         self.user_id: str = ""
         self.settings = settings
         self.transport = transport
         self.deserialize = deserialize
 
-    @property
-    def is_authenticated(self) -> bool:
+    def is_authenticated(self, token: at.AuthToken) -> bool:
         """Determines if current token is active."""
-        if not (self._token and self._token.access_token):
+        if not (token.access_token):
             return False
-        return self._token.is_active
+        return token.is_active
+
+    @property
+    def is_user_authenticated(self) -> bool:
+        return self.is_authenticated(self.user_token)
+
+    @property
+    def is_admin_authenticated(self) -> bool:
+        return self.is_authenticated(self.admin_token)
 
     @property
     def is_impersonating(self) -> bool:
         """Determines if user is impersonating another user."""
-        return bool(self.user_id) and self.is_authenticated
+        return bool(self.user_id) and self.is_user_authenticated
 
-    def get_token(self) -> at.AuthToken:
-        """Returns an active token."""
-        if not self.is_authenticated:
-            self.login()
-        return self._token
+    def get_user_token(self) -> at.AuthToken:
+        """Returns an active user token."""
+        if not self.is_user_authenticated:
+            self.login_user()
+        return self.user_token
+
+    def get_admin_token(self) -> at.AuthToken:
+        """Returns an active admin token."""
+        if not self.is_admin_authenticated:
+            self.login_admin()
+        return self.admin_token
 
     def authenticate(self) -> Dict[str, str]:
         """Create a dictionary with the current token to be used as a header."""
-        token = self.get_token()
+        if self.user_id:
+            token = self.get_user_token()
+        else:
+            token = self.get_admin_token()
+
         return {"Authorization": f"token {token.access_token}"}
 
-    def login(self, user_id: Optional[str] = None) -> at.AuthToken:
+    def login_user(self) -> at.AuthToken:
         """Log into API
 
         Authenticate using settings credentials. If user_id, sudo as
         that user making API calls as if authenticated as user_id
         """
-        if not self.is_authenticated:
-            token = self._login(user_id)
-            self._token = at.AuthToken(token)
-        return self._token
+        if not self.is_user_authenticated:
+            user_token = self._login_user()
+            self.user_token = at.AuthToken(user_token)
+        return self.user_token
 
-    def _login(self, user_id: Optional[str]) -> ml.AccessToken:
-        path = "/login"
-        if user_id and self.user_id != user_id:
-            # We are switching user ids
-            self._logout()
-            self.user_id = user_id
-            path += f"/{user_id}"
+    def login_admin(self) -> at.AuthToken:
+        if not self.is_admin_authenticated:
+            admin_token = self._login_admin()
+            self.admin_token = at.AuthToken(admin_token)
+        return self.admin_token
 
-        self._reset()
-
+    def _login_admin(self) -> ml.AccessToken:
         serialized = urllib.parse.urlencode(
             {
                 "client_id": self.settings.client_id,
                 "client_secret": self.settings.client_secret,
             }
         ).encode("utf-8")
-        response = self.transport.request(tp.HttpMethod.POST, path, body=serialized)
-        if not response.ok:
-            raise UserSessionError(str(response.value))
-        token = self.deserialize(response.value, ml.AccessToken)
-        if not isinstance(token, ml.AccessToken):
-            raise UserSessionError(str(response.value))
-        return token
 
-    def logout(self) -> bool:
-        """Logs out current active user.
-
-        Returns true if the current user was logged in, False if not.
-        """
-        was_logged_in = False
-        if self.is_authenticated:
-            was_logged_in = True
-            self._logout()
-        return was_logged_in
-
-    def _logout(self) -> bool:
-        response = self.transport.request(
-            tp.HttpMethod.DELETE, "/logout", authenticator=self.authenticate
+        response = self._ok(
+            self.transport.request(tp.HttpMethod.POST, "/login", body=serialized)
         )
 
+        admin_token = self.deserialize(response, ml.AccessToken)
+
+        return admin_token
+
+    def _login_user(self) -> ml.AccessToken:
+        response = self._ok(
+            self.transport.request(
+                tp.HttpMethod.POST,
+                f"/login/{self.user_id}",
+                authenticator=lambda: {
+                    "Authorization": f"token {self.get_admin_token().access_token}"
+                },
+            )
+        )
+        user_token = self.deserialize(response, ml.AccessToken)
+        return user_token
+
+    def logout(self) -> None:
+        """Logs out all current active users
+        """
+        if self.is_user_authenticated:
+            self._logout_user()
+        if self.is_admin_authenticated:
+            self._logout_admin()
+
+    def _logout_user(self) -> None:
+        self._ok(
+            self.transport.request(
+                tp.HttpMethod.DELETE,
+                "/logout",
+                authenticator=lambda: {
+                    "Authorization": f"token {self.user_token.access_token}"
+                },
+            )
+        )
+
+        self._reset_user_token()
+
+    def _logout_admin(self) -> None:
+        self._ok(
+            self.transport.request(
+                tp.HttpMethod.DELETE,
+                "/logout",
+                authenticator=lambda: {
+                    "Authorization": f"token {self.admin_token.access_token}"
+                },
+            )
+        )
+
+        self._reset_admin_token()
+
+    def _reset_admin_token(self) -> None:
+        self.admin_token = at.AuthToken()
+
+    def _reset_user_token(self) -> None:
+        self.user_token = at.AuthToken()
+
+    def _ok(self, response: tp.Response) -> tp.TResponseValue:
         if not response.ok:
-            raise UserSessionError(str(response.value))
-
-        if self.user_id:
-            # Impersonated user was logged out, so set auth back to default
-            self.user_id = ""
-            self.login()
-        else:
-            self._reset()
-
-        return True
-
-    def _reset(self):
-        self._token = at.AuthToken()
+            raise UserSessionError(response.value)
+        return response.value
