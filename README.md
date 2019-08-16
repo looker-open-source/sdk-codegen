@@ -120,6 +120,30 @@ yarn run
 
 to see the list of all scripts that can be run by the code generator.
 
+## Running Integration Tests
+
+In order to run the integration tests you will need:
+
+ * [docker](https://docs.docker.com/install/#support)
+ * [docker-compose](https://docs.docker.com/compose/install/)
+
+Which we use to isolate the various supporting libraries required to test the SDK in a given language.
+
+You will also need to copy the `looker-sample.ini` to `looker.ini` and fill out
+the necessary details so it can reach your running *Looker* instance.
+
+To build a specific language integration testing image you simply execute:
+
+```bash
+docker-compose build [language]
+```
+
+Where language comes from the directories `sdk_codegen/docker/*` and we'd build the docker image to support running those tests. At this point you can run the existing tests from inside that container pointed at the instance you identified in `looker.ini` like so:
+
+```bash
+docker-compose run [language]
+```
+
 ## API Troubleshooting
 
 See the official documentation for [API Troubleshooting](https://docs.looker.com/reference/api-and-integration/api-troubleshooting) suggestions.
