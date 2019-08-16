@@ -1,24 +1,25 @@
 import datetime
-import pytest
+import pytest  # type: ignore
 from typing import MutableMapping, Optional
 
+from looker_sdk.rtl import api_settings as api_settings
 from looker_sdk.rtl import api_methods as am
 from looker_sdk.rtl import requests_transport as rtp
 from looker_sdk.rtl import serialize as sr
 from looker_sdk.rtl import transport as tp
 from looker_sdk.rtl import user_session as us
-from looker_sdk.rtl import model
 from looker_sdk.sdk import models as ml
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="module")  # type: ignore
 def api_methods() -> am.APIMethods:
-    return am.APIMethods(
-        us.UserSession, sr.deserialize, sr.serialize, rtp.RequestsTransport
-    )
+    settings = api_settings.ApiSettings.configure("../looker.ini")
+    transport = rtp.RequestsTransport.configure(settings)
+    usr_session = us.UserSession(settings, transport, sr.deserialize)
+    return am.APIMethods(usr_session, sr.deserialize, sr.serialize, transport)
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # type: ignore
     "input, expected",
     [
         ({"a": None}, {}),
@@ -39,7 +40,8 @@ def test_convert_query_params(
     assert actual == expected
 
 
-@pytest.mark.parametrize(
+# TODO: add more tests that cover all the types specified by TBody
+@pytest.mark.parametrize(  # type: ignore
     "input, expected",
     [
         ("some body text", b"some body text"),
@@ -61,7 +63,7 @@ def test_convert_query_params(
                 current_version=ml.ApiVersionElement(
                     full_version="6.18.4", status="fully functional"
                 ),
-                supported_versions=model.EXPLICIT_NULL,
+                supported_versions=ml.EXPLICIT_NULL,
             ),
             b'{"looker_release_version": "6.18", "current_version": {"full_version": "6.18.4", "status": "fully functional"}, "supported_versions": null}',  # noqa: B950
         ),
@@ -74,7 +76,7 @@ def test_get_serialized(
     assert actual == expected
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # type: ignore
     "test_response, test_structure, expected",
     [
         (tp.Response(ok=True, value="some response text"), str, "some response text"),
@@ -88,18 +90,13 @@ def test_get_serialized(
             ml.ApiVersion(
                 looker_release_version="6.18",
                 current_version=ml.ApiVersionElement(
-                    version=model.EXPLICIT_NULL,
+                    version=ml.EXPLICIT_NULL,
                     full_version="6.18.4",
                     status="fully functional",
-                    swagger_url=model.EXPLICIT_NULL,
+                    swagger_url=ml.EXPLICIT_NULL,
                 ),
-                supported_versions=model.EXPLICIT_NULL,
+                supported_versions=ml.EXPLICIT_NULL,
             ),
-        ),
-        (
-            tp.Response(ok=True, value='{"workspace_id": "dev"}'),
-            ml.WriteApiSession,
-            ml.WriteApiSession(workspace_id="dev"),
         ),
     ],
 )
