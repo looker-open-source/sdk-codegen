@@ -94,6 +94,24 @@ def test_deserialize_partial():
     assert model.finally_[1].id == 2
 
 
+def test_deserialize_with_null():
+    data = copy.deepcopy(MODEL_DATA)
+
+    # json.dumps sets these to null
+    data["id"] = None
+    data["finally"][0]["id"] = None
+
+    model = sr.deserialize(json.dumps(data), Model)
+    assert isinstance(model, Model)
+    assert model.id is None
+    assert isinstance(model.name, str)
+    assert model.name == "my-name"
+    assert isinstance(model.finally_, list)
+    assert len(model.finally_) == 2
+    assert model.finally_[0].id is None
+    assert model.finally_[1].id == 2
+
+
 @pytest.mark.parametrize(  # type: ignore
     "data, structure", [(MODEL_DATA, Sequence[Model]), ([MODEL_DATA], Model)]
 )
@@ -152,6 +170,7 @@ def test_serialize_explict_null():
     model.finally_[0].id = ml.EXPLICIT_NULL  # testing EXPLICIT_NULL on instance
 
     data = copy.deepcopy(MODEL_DATA)
+    # json.dumps sets these to null
     data["name"] = None
     data["class"] = None
     data["finally"][0]["id"] = None
