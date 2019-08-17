@@ -12,7 +12,7 @@ users:
   - first_name: Amanda
     last_name: Aardvark
 queries:
-  - id: user_query
+  - id: '#user_query'
     model: thelook
     view: users
     fields:
@@ -28,7 +28,7 @@ queries:
     vis_config:
       type: looker_column
     limit: '10'
-  - id: brand_query
+  - id: '#brand_query'
     model: thelook
     view: products
     fields:
@@ -39,6 +39,7 @@ queries:
     limit: 100
 dashboards:
   - title: An SDK dashboard
+    background_color: green
     filters:
       - name: "Brand Match"
         title: "Brand Match"
@@ -47,7 +48,7 @@ dashboards:
         model: "thelook"
         explore: "products"
         dimension: "products.brand"
-        allow_multiple_values: True,
+        allow_multiple_values: true
         default_value: "A%,B%,C%,D%"
     tiles:
       - type: text
@@ -60,13 +61,16 @@ dashboards:
         title: "Brand Count Title"
         subtitle_text: "Vis Subtitle"
         body_text: "Vis Body"
+        # this is a test data convention to reference the query by some identifying tag
         query_id: "#brand_query"
-        listen:
-          - "Brand Match"
-          - "products.brand"
+        result_maker:
+          filterables:
+            listen:
+              "Brand Match": "products.brand"
       - type: data
         title_text: "Users Data"
         title: "Users Data Title"
         subtitle_text: "Data Subtitle"
         body_text: "Data Body"
-        query_id: "#userquery"
+        # this is a test data convention to reference the query by some identifying tag
+        query_id: "#user_query"

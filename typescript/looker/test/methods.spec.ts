@@ -25,7 +25,7 @@
 import { ApiSettingsIniFile } from '../rtl/apiSettings'
 import { UserSession } from '../rtl/userSession'
 import { LookerSDK } from '../sdk/methods'
-import { IUser, IQuery, IRequestrun_inline_query, IWriteQuery } from '../sdk/models'
+import { IQuery, IRequestrun_inline_query, IUser, IWriteQuery, } from '../sdk/models'
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 
@@ -33,12 +33,38 @@ const testData = yaml.safeLoad(fs.readFileSync('test/data.yml', 'utf-8'))
 const localIni = testData['iniFile']
 const users: Partial<IUser>[] = testData['users']
 const queries: Partial<IQuery>[] = testData['queries']
+const dashboards: any[] = testData['dashboards']
 const emailDomain = '@foo.com'
-const debugTimeout = 36000000 // 1 hour
+const testTimeout = 36000000 // 1 hour
 
 describe('LookerSDK', () => {
   const settings = new ApiSettingsIniFile(localIni, 'Looker')
   const userSession = new UserSession(settings)
+
+  const createQueryRequest = (q: any, limit: number) => {
+    const result: Partial<IWriteQuery> = {
+      model: q.model,
+      view: q.view,
+      fields: q.fields || undefined,
+      pivots: q.pivots || undefined,
+      fill_fields: q.fill_fields || [],
+      filters: q.filters || [],
+      filter_expression: q.filter_expression || undefined,
+      sorts: q.sorts || [],
+      limit: limit.toString(10),
+      column_limit: q.column_limit || undefined,
+      total: typeof q.total !== 'undefined' ? q.total : false,
+      row_total: q.row_total || undefined,
+      subtotals: q.subtotals || undefined,
+      vis_config: q.vis_config || undefined,
+      filter_config: q.filter_config || undefined,
+      visible_ui_sections: q.visible_ui_sections || undefined,
+      dynamic_fields: q.dynamic_fields || undefined,
+      client_id: q.client_id || undefined,
+      query_timezone: q.query_timezone || undefined
+    }
+    return result
+  }
 
   const createTestUsers = async () => {
     // Ensure all test users are populated and enabled
@@ -105,33 +131,25 @@ describe('LookerSDK', () => {
     await sdk.userSession.logout()
   }
 
-  const queryRequest = (q: any, limit: number)  => {
-    const result : Partial<IWriteQuery> = {
-      model: q.model,
-      view: q.view,
-      fields: q.fields || undefined,
-      pivots: q.pivots || undefined,
-      fill_fields: q.fill_fields || [],
-      filters: q.filters || [],
-      filter_expression: q.filter_expression || undefined,
-      sorts: q.sorts || [],
-      limit: limit.toString(10),
-      column_limit: q.column_limit || undefined,
-      total: typeof q.total !== 'undefined' ? q.total : false,
-      row_total: q.row_total || undefined,
-      subtotals: q.subtotals || undefined,
-      vis_config: q.vis_config || undefined,
-      filter_config: q.filter_config || undefined,
-      visible_ui_sections: q.visible_ui_sections || undefined,
-      dynamic_fields: q.dynamic_fields || undefined,
-      client_id: q.client_id || undefined,
-      query_timezone: q.query_timezone || undefined
+  const removeTestDashboards = async () => {
+    // Clean up any test users that may exist
+    const sdk = new LookerSDK(userSession)
+    for (const d of dashboards) {
+      let searched = await sdk.ok(
+        sdk.search_dashboards({title: d.title})
+      )
+      if (searched.length > 0) {
+        for (const dashboard of searched) {
+          await sdk.ok(sdk.delete_dashboard(dashboard.id))
+        }
+      }
     }
-    return result
+    await sdk.userSession.logout()
   }
 
   afterAll(async () => {
     await removeTestUsers()
+    // await removeTestQueries()
   })
 
   describe('automatic authentication for API calls', () => {
@@ -211,7 +229,7 @@ describe('LookerSDK', () => {
   describe('User CRUD-it checks', () => {
     beforeAll(async () => {
       await removeTestUsers()
-    }, debugTimeout)
+    }, testTimeout)
 
     it('create, update, and delete user', async () => {
       const sdk = new LookerSDK(userSession)
@@ -257,7 +275,7 @@ describe('LookerSDK', () => {
       }
       await sdk.userSession.logout()
       expect(sdk.userSession.isAuthenticated()).toBeFalsy()
-    })
+    }, testTimeout)
   })
 
   describe('User searches', () => {
@@ -265,7 +283,7 @@ describe('LookerSDK', () => {
     beforeAll(async () => {
       await removeTestUsers()
       await createTestUsers()
-    }, debugTimeout)
+    }, testTimeout)
 
     it('bad search returns no results', async () => {
       const sdk = new LookerSDK(userSession)
@@ -285,7 +303,7 @@ describe('LookerSDK', () => {
       )
       expect(actual.length).toEqual(users.length)
       await sdk.userSession.logout()
-    }, debugTimeout)
+    }, testTimeout)
 
     it('matches email domain and returns sorted', async () => {
       const lastFirst = users.sort((a: Partial<IUser>, b: Partial<IUser>) =>
@@ -317,7 +335,7 @@ describe('LookerSDK', () => {
       }
 
       await sdk.userSession.logout()
-    }, debugTimeout)
+    }, testTimeout)
   })
 
   describe('Query calls', () => {
@@ -326,7 +344,7 @@ describe('LookerSDK', () => {
       for (const q of queries) {
         // default the result limit to 10
         const limit = q.limit ? parseInt(q.limit) : 10
-        const request = queryRequest(q, limit)
+        const request = createQueryRequest(q, limit)
         const query = await sdk.ok(
           sdk.create_query(request)
         )
@@ -362,7 +380,7 @@ describe('LookerSDK', () => {
       }
       await sdk.userSession.logout()
       expect(sdk.userSession.isAuthenticated()).toBeFalsy()
-    }, debugTimeout)
+    }, testTimeout)
 
     it('run_inline_query', async () => {
       const sdk = new LookerSDK(userSession)
@@ -400,7 +418,7 @@ describe('LookerSDK', () => {
         expect(json.length).toEqual(limit)
         const row = json[0] as any
         if (q.fields) {
-          q.fields.forEach(field => {
+          q.fields.forEach((field: string) => {
             expect(row.hasOwnProperty(field)).toBeTruthy()
           })
         }
@@ -409,6 +427,142 @@ describe('LookerSDK', () => {
       }
       await sdk.userSession.logout()
       expect(sdk.userSession.isAuthenticated()).toBeFalsy()
-    }, debugTimeout)
+    }, testTimeout)
   })
+
+  describe('Dashboard CRUD-it checks', () => {
+
+    const getQueryId = (qhash:{ [id: string]: IQuery }, id: any ) : number | undefined => {
+      if (!id) return id
+      if (id.startsWith('#')) id = id.substr(1)
+      else return id ? parseInt(id) : undefined
+      const result = qhash[id]
+      if (result) return result.id
+      // default to first query. test data is bad
+      return qhash[Object.keys(qhash)[0]].id
+    }
+
+    beforeAll(async () => {
+      // test dashboards are removed here, but not in top-level tear-down because
+      // we may want to view them after the test
+      await removeTestDashboards()
+    }, testTimeout)
+
+    it('create and update dashboard', async () => {
+      const sdk = new LookerSDK(userSession)
+      const me = await sdk.ok(sdk.me())
+      const qhash: { [id: string]: IQuery } = {}
+      let qcount = 0
+      // create query hash
+      for (const q of queries) {
+        qcount++
+        const limit = q.limit ? parseInt(q.limit) : 10
+        const request = createQueryRequest(q, limit)
+        qhash[q.id || qcount.toString()] = await sdk.ok(
+          sdk.create_query(request)
+        )
+      }
+      for (const d of dashboards) {
+        let dashboard = await sdk.ok(
+          sdk.create_dashboard({
+            description: d.description || undefined,
+            hidden: typeof d.hidden === 'undefined' ? undefined : d.hidden,
+            query_timezone: d.query_timezone || undefined,
+            refresh_interval: d.refresh_interval || undefined,
+            space: d.space || undefined,
+            title: d.title || undefined,
+            background_color: d.background_color || undefined,
+            load_configuration: d.load_configuration || undefined,
+            lookml_link_id: d.lookml_link_id || undefined,
+            show_filters_bar: typeof d.show_filters_bar === 'undefined' ? undefined : d.show_filters_bar,
+            show_title: typeof d.show_title === 'undefined' ? undefined : d.show_title,
+            slug: d.slug || undefined,
+            // assign the space if it's not specified
+            space_id: d.space_id || (d.space ? undefined : me.home_space_id),
+            text_tile_text_color: d.text_tile_text_color || undefined,
+            tile_background_color: d.tile_background_color || undefined,
+            tile_text_color: d.tile_text_color || undefined,
+            title_color: d.title_color || undefined,
+          })
+        )
+        expect(dashboard).toBeDefined()
+        expect(dashboard.title).toEqual(d.title)
+        if (d.background_color) expect(dashboard.background_color).toEqual(d.background_color)
+        if (d.text_tile_text_color) expect(dashboard.text_tile_text_color).toEqual(d.text_tile_text_color)
+        if (d.tile_background_color) expect(dashboard.tile_background_color).toEqual(d.tile_background_color)
+        if (d.tile_text_color) expect(dashboard.tile_text_color).toEqual(d.tile_text_color)
+        if (d.title_color) expect(dashboard.title_color).toEqual(d.title_color)
+        let actual = await sdk.ok(
+          sdk.update_dashboard(dashboard.id, {
+            deleted: true,
+          })
+        )
+        expect(actual.deleted).toEqual(true)
+        // Ensure update *only* updates what it's supposed to
+        expect(actual.title).toEqual(dashboard.title)
+        dashboard = await sdk.ok(
+          sdk.update_dashboard(dashboard.id, {
+            deleted: false,
+          })
+        )
+        expect(dashboard.deleted).toEqual(false)
+        for (const f of d.filters) {
+          const filter = await sdk.ok(sdk.create_dashboard_filter({
+            dashboard_id: dashboard.id,
+            name: f.name,
+            title: f.title,
+            row: f.row,
+            type: f.type,
+            model: f.model,
+            explore: f.explore,
+            dimension: f.dimension,
+            allow_multiple_values: f.allow_multiple_values,
+            default_value: f.default_value
+          }))
+          expect(filter).toBeDefined()
+          expect(filter.name).toEqual(f.name)
+          expect(filter.title).toEqual(f.title)
+          expect(filter.row).toEqual(f.row)
+          expect(filter.type).toEqual(f.type)
+          expect(filter.model).toEqual(f.model)
+          expect(filter.explore).toEqual(f.explore)
+          expect(filter.dimension).toEqual(f.dimension)
+          expect(filter.allow_multiple_values).toEqual(f.allow_multiple_values)
+          expect(filter.default_value).toEqual(f.default_value)
+        }
+
+      for (const t of d.tiles) {
+        const tile = await sdk.ok(sdk.create_dashboard_element({
+          body_text: t.body_text,
+          dashboard_id: dashboard.id,
+          look: t.look,
+          look_id: t.look_id,
+          merge_result_id: t.merge_result_id,
+          note_display: t.note_display,
+          note_state: t.note_state,
+          note_text: t.note_text,
+          query: t.query,
+          query_id: getQueryId(qhash, t.query_id),
+          refresh_interval: t.refresh_interval,
+          // result_maker: {
+          //    t.result_maker
+          // },
+          subtitle_text: t.subtitle_text,
+          title: t.title,
+          title_hidden: t.title_hidden,
+          title_text: t.title_text,
+          type: t.type,
+        }))
+        expect(tile).toBeDefined()
+        expect(tile.dashboard_id).toEqual(dashboard.id)
+        expect(tile.title).toEqual(t.title)
+        expect(tile.type).toEqual(t.type)
+      }
+      }
+      await sdk.userSession.logout()
+      expect(sdk.userSession.isAuthenticated()).toBeFalsy()
+    }, testTimeout)
+  })
+
+
 })

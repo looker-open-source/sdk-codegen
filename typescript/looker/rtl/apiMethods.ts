@@ -80,18 +80,18 @@ export class APIMethods {
     )
   }
 
-  // dynamically evaluate a template string
-  macro(template: string, vars: any) {
-    // replace {foo} from spec path with ${foo} for template string
-    template = template.replace(/{/gi, '${')
-    return new Function('return `+ template +`;').call(vars)
-  }
-
-  pathify(path: string, pathParams?: any) {
-    if (!pathParams) return path
-    if (path.indexOf('{') < 0) return path
-    return this.macro(path, pathParams)
-  }
+  // // dynamically evaluate a template string
+  // macro(template: string, vars: any) {
+  //   // replace {foo} from spec path with ${foo} for template string
+  //   template = template.replace(/{/gi, '${')
+  //   return new Function('return `+ template +`;').call(vars)
+  // }
+  //
+  // pathify(path: string, pathParams?: any) {
+  //   if (!pathParams) return path
+  //   if (path.indexOf('{') < 0) return path
+  //   return this.macro(path, pathParams)
+  // }
 
   /** Make a GET request */
   async get<TSuccess, TError>(
