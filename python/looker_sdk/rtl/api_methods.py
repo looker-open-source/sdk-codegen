@@ -66,6 +66,13 @@ class APIMethods:
                 params[k] = json.dumps(v)
         return params
 
+    def login_user(self, user_id: int) -> bool:
+        self.usr_session.login_user(user_id)
+        return True
+
+    def logout(self) -> None:
+        self.usr_session.logout()
+
     def get(
         self,
         path: str,

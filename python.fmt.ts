@@ -134,6 +134,8 @@ import cattr
 
 from ${this.packagePath}.rtl import model
 from ${this.packagePath}.rtl import serialize as sr
+
+EXPLICIT_NULL = model.EXPLICIT_NULL
 `
 
   // cattrs [un]structure hooks for model [de]serialization
@@ -275,6 +277,16 @@ ${this.hooks.join('\n')}
 
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
+
+    // APIMethods/UserSession handle auth
+    if (method.name === 'login') {
+      return `${indent}# login() using api3credentials is automated in the client`
+    } else if (method.name === 'login_user') {
+      return `${indent}def login_user(self, user_id: int) -> bool:\n${bump}return super().login_user(user_id)`
+    } else if (method.name === 'logout') {
+      return `${indent}def logout(self) -> None:\n${bump}super().logout()`
+    }
+
     return this.methodSignature(indent, method)
       + this.summary(bump, method.summary)
       + this.httpCall(bump, method)

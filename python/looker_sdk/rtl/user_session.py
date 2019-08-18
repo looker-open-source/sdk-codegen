@@ -1,6 +1,6 @@
 """UserSession to provid automatic authentication
 """
-from typing import Dict
+from typing import Dict, Optional
 import urllib.parse
 
 from looker_sdk.rtl import api_settings as st
@@ -27,12 +27,12 @@ class UserSession:
     ):
         self.user_token: at.AuthToken = at.AuthToken()
         self.admin_token: at.AuthToken = at.AuthToken()
-        self.user_id: str = ""
+        self._sudo_id: Optional[int] = None
         self.settings = settings
         self.transport = transport
         self.deserialize = deserialize
 
-    def is_authenticated(self, token: at.AuthToken) -> bool:
+    def _is_authenticated(self, token: at.AuthToken) -> bool:
         """Determines if current token is active."""
         if not (token.access_token):
             return False
@@ -40,56 +40,65 @@ class UserSession:
 
     @property
     def is_user_authenticated(self) -> bool:
-        return self.is_authenticated(self.user_token)
+        return self._is_authenticated(self.user_token)
 
     @property
     def is_admin_authenticated(self) -> bool:
-        return self.is_authenticated(self.admin_token)
+        return self._is_authenticated(self.admin_token)
 
     @property
-    def is_impersonating(self) -> bool:
-        """Determines if user is impersonating another user."""
-        return bool(self.user_id) and self.is_user_authenticated
+    def is_sudo(self) -> Optional[int]:
+        return self._sudo_id
 
-    def get_user_token(self) -> at.AuthToken:
+    def _get_user_token(self) -> at.AuthToken:
         """Returns an active user token."""
         if not self.is_user_authenticated:
-            self.login_user()
+            self._login_user()
         return self.user_token
 
-    def get_admin_token(self) -> at.AuthToken:
+    def _get_admin_token(self) -> at.AuthToken:
         """Returns an active admin token."""
         if not self.is_admin_authenticated:
-            self.login_admin()
+            self._login_admin()
         return self.admin_token
 
     def authenticate(self) -> Dict[str, str]:
-        """Create a dictionary with the current token to be used as a header."""
-        if self.user_id:
-            token = self.get_user_token()
+        """Return the Authorization header to authenticate each API call.
+
+        Expired token renewal happens automatically.
+        """
+        if self._sudo_id:
+            token = self._get_user_token()
         else:
-            token = self.get_admin_token()
+            token = self._get_admin_token()
 
         return {"Authorization": f"token {token.access_token}"}
 
-    def login_user(self) -> at.AuthToken:
-        """Log into API
+    def login_user(self, sudo_id: int) -> None:
+        """Authenticate using settings credentials and sudo as sudo_id.
 
-        Authenticate using settings credentials. If user_id, sudo as
-        that user making API calls as if authenticated as user_id
+        Make API calls as if authenticated as sudo_id. The sudo_id
+        token is automatically renewed when it expires. In order to
+        subsequently login_user() as another user you must first logout()
         """
-        if not self.is_user_authenticated:
-            user_token = self._login_user()
-            self.user_token = at.AuthToken(user_token)
-        return self.user_token
+        if self._sudo_id is None:
+            self._sudo_id = sudo_id
+            try:
+                self._login_user()
+            except UserSessionError as ex:
+                self._sudo_id = None
+                raise ex
 
-    def login_admin(self) -> at.AuthToken:
-        if not self.is_admin_authenticated:
-            admin_token = self._login_admin()
-            self.admin_token = at.AuthToken(admin_token)
-        return self.admin_token
+        else:
+            if self._sudo_id != sudo_id:
+                raise UserSessionError(
+                    f"Another user ({self._sudo_id}) "
+                    "is already logged in. Log them out first."
+                )
+            elif not self.is_user_authenticated:
+                self._login_user()
 
-    def _login_admin(self) -> ml.AccessToken:
+    def _login_admin(self) -> None:
         serialized = urllib.parse.urlencode(
             {
                 "client_id": self.settings.client_id,
@@ -101,29 +110,42 @@ class UserSession:
             self.transport.request(tp.HttpMethod.POST, "/login", body=serialized)
         )
 
-        admin_token = self.deserialize(response, ml.AccessToken)
+        access_token = self.deserialize(response, ml.AccessToken)
+        assert isinstance(access_token, ml.AccessToken)
+        self.admin_token = at.AuthToken(access_token)
 
-        return admin_token
-
-    def _login_user(self) -> ml.AccessToken:
+    def _login_user(self) -> None:
         response = self._ok(
             self.transport.request(
                 tp.HttpMethod.POST,
-                f"/login/{self.user_id}",
+                f"/login/{self._sudo_id}",
                 authenticator=lambda: {
-                    "Authorization": f"token {self.get_admin_token().access_token}"
+                    "Authorization": f"token {self._get_admin_token().access_token}"
                 },
             )
         )
-        user_token = self.deserialize(response, ml.AccessToken)
-        return user_token
+        access_token = self.deserialize(response, ml.AccessToken)
+        assert isinstance(access_token, ml.AccessToken)
+        self.user_token = at.AuthToken(access_token)
 
-    def logout(self) -> None:
-        """Logs out all current active users
+    def logout(self, full: bool = False) -> None:
+        """Logout cuurent session or all.
+
+        If the session is authenticated as sudo_id, logoout() "undoes"
+        the sudo and deactivates that sudo_id's current token. By default
+        the current admin/api3credential session is active at which point
+        you can continue to make API calls as the admin/api3credential user
+        or logout(). If you want to logout completely in one step pass
+        full=True
         """
-        if self.is_user_authenticated:
-            self._logout_user()
-        if self.is_admin_authenticated:
+        if self._sudo_id:
+            self._sudo_id = None
+            if self.is_user_authenticated:
+                self._logout_user()
+                if full:
+                    self._logout_admin()
+
+        elif self.is_admin_authenticated:
             self._logout_admin()
 
     def _logout_user(self) -> None:
@@ -136,7 +158,6 @@ class UserSession:
                 },
             )
         )
-
         self._reset_user_token()
 
     def _logout_admin(self) -> None:

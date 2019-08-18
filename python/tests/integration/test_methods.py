@@ -20,8 +20,18 @@ def test_crud_user(client: mtds.LookerSDK):
     assert user.is_disabled
     assert user.locale == "fr"
 
-    # Update user and check fields we didn't intend to change didn't change
+    # sudo checks
     user_id = user.id
+    client.login_user(user_id)
+    user = client.me()
+    assert user.first_name == "John"
+    assert user.last_name == "Doe"
+    client.logout()
+    user = client.me()
+    assert user.first_name != "John"
+    assert user.last_name != "Doe"
+
+    # Update user and check fields we didn't intend to change didn't change
     update_user = ml.WriteUser(is_disabled=False, locale="uk")
     client.update_user(user_id, update_user)
     user = client.user(user_id)
@@ -47,7 +57,6 @@ def test_crud_user(client: mtds.LookerSDK):
     user = client.user(user_id)
     assert isinstance(user.credentials_email, ml.CredentialsEmail)
     assert user.credentials_email.email == "john.doe@looker.com"
-
     # Delete user
     resp = client.delete_user(user_id)
     assert resp == ""
