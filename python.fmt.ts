@@ -99,6 +99,7 @@ export class PythonFormatter extends CodeFormatter {
   // @ts-ignore
   methodsPrologue = (indent: string) => `
 # ${warnEditing}
+import datetime
 from typing import Optional, Sequence
 
 from ${this.packagePath}.sdk import models
@@ -345,8 +346,9 @@ ${this.hooks.join('\n')}
   reformatFile(fileName: string) {
     const name = super.reformatFile(fileName)
     if (name) {
-      if (run('command', ['-v', 'pipenv'],
-        `To reformat ${fileName}, please install pipenv: https://docs.pipenv.org/en/latest/install/#installing-pipenv`, true) === '') {
+      const pipEnvExists = run('command', ['-v', 'pipenv'],
+        `To reformat ${fileName}, please install pipenv: https://docs.pipenv.org/en/latest/install/#installing-pipenv`, true)
+      if (pipEnvExists.includes('pipenv')) {
         // pipenv check completed without error
         run('pipenv', ['update'])
         run('pipenv',  ['run', 'black', `${this.codePath}/${this.packagePath}/sdk/`])

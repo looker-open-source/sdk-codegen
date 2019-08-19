@@ -5,6 +5,7 @@ import json
 
 import pytest  # type: ignore
 
+from looker_sdk import error
 from looker_sdk.rtl import user_session as us
 from looker_sdk.rtl import api_settings as st
 from looker_sdk.rtl import serialize as sr
@@ -103,7 +104,7 @@ def test_user_logout_leaves_admin_logged_in(user_session: us.UserSession):
 
 def test_login_user_login_user(user_session: us.UserSession):
     user_session.login_user(5)
-    with pytest.raises(us.UserSessionError):  # type: ignore
+    with pytest.raises(error.SDKError):  # type: ignore
         user_session.login_user(10)
 
 
