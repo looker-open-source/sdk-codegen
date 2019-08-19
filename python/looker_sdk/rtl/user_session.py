@@ -25,97 +25,161 @@ class UserSession:
         transport: tp.Transport,
         deserialize: sr.TDeserialize,
     ):
-        self._token: at.AuthToken = at.AuthToken()
-        self.user_id: str = ""
+        self.user_token: at.AuthToken = at.AuthToken()
+        self.admin_token: at.AuthToken = at.AuthToken()
+        self._sudo_id: Optional[int] = None
         self.settings = settings
         self.transport = transport
         self.deserialize = deserialize
 
-    @property
-    def is_authenticated(self) -> bool:
+    def _is_authenticated(self, token: at.AuthToken) -> bool:
         """Determines if current token is active."""
-        if not (self._token and self._token.access_token):
+        if not (token.access_token):
             return False
-        return self._token.is_active
+        return token.is_active
 
     @property
-    def is_impersonating(self) -> bool:
-        """Determines if user is impersonating another user."""
-        return bool(self.user_id) and self.is_authenticated
+    def is_user_authenticated(self) -> bool:
+        return self._is_authenticated(self.user_token)
 
-    def get_token(self) -> at.AuthToken:
-        """Returns an active token."""
-        if not self.is_authenticated:
-            self.login()
-        return self._token
+    @property
+    def is_admin_authenticated(self) -> bool:
+        return self._is_authenticated(self.admin_token)
+
+    @property
+    def is_sudo(self) -> Optional[int]:
+        return self._sudo_id
+
+    def _get_user_token(self) -> at.AuthToken:
+        """Returns an active user token."""
+        if not self.is_user_authenticated:
+            self._login_user()
+        return self.user_token
+
+    def _get_admin_token(self) -> at.AuthToken:
+        """Returns an active admin token."""
+        if not self.is_admin_authenticated:
+            self._login_admin()
+        return self.admin_token
 
     def authenticate(self) -> Dict[str, str]:
-        """Create a dictionary with the current token to be used as a header."""
-        token = self.get_token()
+        """Return the Authorization header to authenticate each API call.
+
+        Expired token renewal happens automatically.
+        """
+        if self._sudo_id:
+            token = self._get_user_token()
+        else:
+            token = self._get_admin_token()
+
         return {"Authorization": f"token {token.access_token}"}
 
-    def login(self, user_id: Optional[str] = None) -> at.AuthToken:
-        """Log into API
+    def login_user(self, sudo_id: int) -> None:
+        """Authenticate using settings credentials and sudo as sudo_id.
 
-        Authenticate using settings credentials. If user_id, sudo as
-        that user making API calls as if authenticated as user_id
+        Make API calls as if authenticated as sudo_id. The sudo_id
+        token is automatically renewed when it expires. In order to
+        subsequently login_user() as another user you must first logout()
         """
-        if not self.is_authenticated:
-            token = self._login(user_id)
-            self._token = at.AuthToken(token)
-        return self._token
+        if self._sudo_id is None:
+            self._sudo_id = sudo_id
+            try:
+                self._login_user()
+            except UserSessionError as ex:
+                self._sudo_id = None
+                raise ex
 
-    def _login(self, user_id: Optional[str]) -> ml.AccessToken:
-        path = "/login"
-        if user_id and self.user_id != user_id:
-            # We are switching user ids
-            self._logout()
-            self.user_id = user_id
-            path += f"/{user_id}"
+        else:
+            if self._sudo_id != sudo_id:
+                raise UserSessionError(
+                    f"Another user ({self._sudo_id}) "
+                    "is already logged in. Log them out first."
+                )
+            elif not self.is_user_authenticated:
+                self._login_user()
 
-        self._reset()
-
+    def _login_admin(self) -> None:
         serialized = urllib.parse.urlencode(
             {
                 "client_id": self.settings.client_id,
                 "client_secret": self.settings.client_secret,
             }
         ).encode("utf-8")
-        response = self.transport.request(tp.HttpMethod.POST, path, body=serialized)
-        if not response.ok:
-            raise UserSessionError(str(response.value))
-        token = self.deserialize(response.value, ml.AccessToken)
-        if not isinstance(token, ml.AccessToken):
-            raise UserSessionError(str(response.value))
-        return token
 
-    def logout(self) -> bool:
-        """Logs out current active user.
-
-        Returns true if the current user was logged in, False if not.
-        """
-        was_logged_in = False
-        if self.is_authenticated:
-            was_logged_in = True
-            self._logout()
-        return was_logged_in
-
-    def _logout(self) -> bool:
-        response = self.transport.request(
-            tp.HttpMethod.DELETE, "/logout", authenticator=self.authenticate
+        response = self._ok(
+            self.transport.request(tp.HttpMethod.POST, "/login", body=serialized)
         )
 
+        access_token = self.deserialize(response, ml.AccessToken)
+        assert isinstance(access_token, ml.AccessToken)
+        self.admin_token = at.AuthToken(access_token)
+
+    def _login_user(self) -> None:
+        response = self._ok(
+            self.transport.request(
+                tp.HttpMethod.POST,
+                f"/login/{self._sudo_id}",
+                authenticator=lambda: {
+                    "Authorization": f"token {self._get_admin_token().access_token}"
+                },
+            )
+        )
+        access_token = self.deserialize(response, ml.AccessToken)
+        assert isinstance(access_token, ml.AccessToken)
+        self.user_token = at.AuthToken(access_token)
+
+    def logout(self, full: bool = False) -> None:
+        """Logout cuurent session or all.
+
+        If the session is authenticated as sudo_id, logoout() "undoes"
+        the sudo and deactivates that sudo_id's current token. By default
+        the current admin/api3credential session is active at which point
+        you can continue to make API calls as the admin/api3credential user
+        or logout(). If you want to logout completely in one step pass
+        full=True
+        """
+        if self._sudo_id:
+            self._sudo_id = None
+            if self.is_user_authenticated:
+                self._logout_user()
+                if full:
+                    self._logout_admin()
+
+        elif self.is_admin_authenticated:
+            self._logout_admin()
+
+    def _logout_user(self) -> None:
+        self._ok(
+            self.transport.request(
+                tp.HttpMethod.DELETE,
+                "/logout",
+                authenticator=lambda: {
+                    "Authorization": f"token {self.user_token.access_token}"
+                },
+            )
+        )
+        self._reset_user_token()
+
+    def _logout_admin(self) -> None:
+        self._ok(
+            self.transport.request(
+                tp.HttpMethod.DELETE,
+                "/logout",
+                authenticator=lambda: {
+                    "Authorization": f"token {self.admin_token.access_token}"
+                },
+            )
+        )
+
+        self._reset_admin_token()
+
+    def _reset_admin_token(self) -> None:
+        self.admin_token = at.AuthToken()
+
+    def _reset_user_token(self) -> None:
+        self.user_token = at.AuthToken()
+
+    def _ok(self, response: tp.Response) -> tp.TResponseValue:
         if not response.ok:
-            raise UserSessionError(str(response.value))
-
-        if self.user_id:
-            # Impersonated user was logged out, so set auth back to default
-            self.user_id = ""
-            self.login()
-        else:
-            self._reset()
-
-        return True
-
-    def _reset(self):
-        self._token = at.AuthToken()
+            raise UserSessionError(response.value)
+        return response.value

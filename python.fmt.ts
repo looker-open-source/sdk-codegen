@@ -99,27 +99,13 @@ export class PythonFormatter extends CodeFormatter {
   // @ts-ignore
   methodsPrologue = (indent: string) => `
 # ${warnEditing}
-import datetime
 from typing import Optional, Sequence
 
 from ${this.packagePath}.sdk import models
 from ${this.packagePath}.rtl import api_methods
-from ${this.packagePath}.rtl import api_settings
-from ${this.packagePath}.rtl import requests_transport
-from ${this.packagePath}.rtl import serialize
-from ${this.packagePath}.rtl import user_session
 
 
 class ${this.packageName}(api_methods.APIMethods):
-
-    @classmethod
-    def configure(cls, settings_file: str = "looker.ini") -> "LookerSDK":
-        """Default dependency configuration
-        """
-        settings = api_settings.ApiSettings.configure(settings_file)
-        transport = requests_transport.RequestsTransport.configure(settings)
-        usr_session = user_session.UserSession(settings, transport, serialize.deserialize)
-        return cls(usr_session, serialize.deserialize, serialize.serialize, transport)
 `
   // @ts-ignore
   methodsEpilogue = (indent: string) => ''
@@ -134,6 +120,8 @@ import cattr
 
 from ${this.packagePath}.rtl import model
 from ${this.packagePath}.rtl import serialize as sr
+
+EXPLICIT_NULL = model.EXPLICIT_NULL
 `
 
   // cattrs [un]structure hooks for model [de]serialization
@@ -275,6 +263,16 @@ ${this.hooks.join('\n')}
 
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
+
+    // APIMethods/UserSession handle auth
+    if (method.name === 'login') {
+      return `${indent}# login() using api3credentials is automated in the client`
+    } else if (method.name === 'login_user') {
+      return `${indent}def login_user(self, user_id: int) -> api_methods.APIMethods:\n${bump}return super().login_user(user_id)`
+    } else if (method.name === 'logout') {
+      return `${indent}def logout(self) -> None:\n${bump}super().logout()`
+    }
+
     return this.methodSignature(indent, method)
       + this.summary(bump, method.summary)
       + this.httpCall(bump, method)
