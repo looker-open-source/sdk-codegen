@@ -2,7 +2,8 @@ import datetime
 import pytest  # type: ignore
 from typing import MutableMapping, Optional
 
-from looker_sdk.rtl import api_settings as api_settings
+from looker_sdk import error
+from looker_sdk.rtl import api_settings
 from looker_sdk.rtl import api_methods as am
 from looker_sdk.rtl import requests_transport as rtp
 from looker_sdk.rtl import serialize as sr
@@ -110,7 +111,7 @@ def test_return(
     assert actual == expected
 
 
-def test_return_raises_an_APIError_for_bad_responses(api_methods):
-    with pytest.raises(am.APIError) as exc:
+def test_return_raises_an_SDKError_for_bad_responses(api_methods):
+    with pytest.raises(error.SDKError) as exc:
         api_methods._return(tp.Response(ok=False, value="some error message"), str)
     assert "some error message" in str(exc.value)

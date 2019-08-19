@@ -3,16 +3,12 @@
 from typing import Dict, Optional
 import urllib.parse
 
+from looker_sdk import error
 from looker_sdk.rtl import api_settings as st
 from looker_sdk.rtl import auth_token as at
 from looker_sdk.rtl import transport as tp
 from looker_sdk.rtl import serialize as sr
 from looker_sdk.rtl import model as ml
-
-
-class UserSessionError(Exception):
-    """Authentication problems.
-    """
 
 
 class UserSession:
@@ -85,13 +81,13 @@ class UserSession:
             self._sudo_id = sudo_id
             try:
                 self._login_user()
-            except UserSessionError as ex:
+            except error.SDKError:
                 self._sudo_id = None
-                raise ex
+                raise
 
         else:
             if self._sudo_id != sudo_id:
-                raise UserSessionError(
+                raise error.SDKError(
                     f"Another user ({self._sudo_id}) "
                     "is already logged in. Log them out first."
                 )
@@ -181,5 +177,5 @@ class UserSession:
 
     def _ok(self, response: tp.Response) -> tp.TResponseValue:
         if not response.ok:
-            raise UserSessionError(response.value)
+            raise error.SDKError(response.value)
         return response.value
