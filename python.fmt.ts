@@ -99,27 +99,13 @@ export class PythonFormatter extends CodeFormatter {
   // @ts-ignore
   methodsPrologue = (indent: string) => `
 # ${warnEditing}
-import datetime
 from typing import Optional, Sequence
 
 from ${this.packagePath}.sdk import models
 from ${this.packagePath}.rtl import api_methods
-from ${this.packagePath}.rtl import api_settings
-from ${this.packagePath}.rtl import requests_transport
-from ${this.packagePath}.rtl import serialize
-from ${this.packagePath}.rtl import user_session
 
 
 class ${this.packageName}(api_methods.APIMethods):
-
-    @classmethod
-    def configure(cls, settings_file: str = "looker.ini") -> "LookerSDK":
-        """Default dependency configuration
-        """
-        settings = api_settings.ApiSettings.configure(settings_file)
-        transport = requests_transport.RequestsTransport.configure(settings)
-        usr_session = user_session.UserSession(settings, transport, serialize.deserialize)
-        return cls(usr_session, serialize.deserialize, serialize.serialize, transport)
 `
   // @ts-ignore
   methodsEpilogue = (indent: string) => ''
@@ -282,7 +268,7 @@ ${this.hooks.join('\n')}
     if (method.name === 'login') {
       return `${indent}# login() using api3credentials is automated in the client`
     } else if (method.name === 'login_user') {
-      return `${indent}def login_user(self, user_id: int) -> bool:\n${bump}return super().login_user(user_id)`
+      return `${indent}def login_user(self, user_id: int) -> api_methods.APIMethods:\n${bump}return super().login_user(user_id)`
     } else if (method.name === 'logout') {
       return `${indent}def logout(self) -> None:\n${bump}super().logout()`
     }

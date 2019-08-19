@@ -39,6 +39,12 @@ class APIMethods:
         self.serialize = serialize
         self.transport = transport
 
+    def __enter__(self) -> "APIMethods":
+        return self
+
+    def __exit__(self, *exc) -> None:
+        self.usr_session.logout()
+
     def _return(self, response: tp.Response, structure: TStructure) -> TReturn:
         if not response.ok:
             raise APIError(response.value)
@@ -66,9 +72,9 @@ class APIMethods:
                 params[k] = json.dumps(v)
         return params
 
-    def login_user(self, user_id: int) -> bool:
+    def login_user(self, user_id: int) -> "APIMethods":
         self.usr_session.login_user(user_id)
-        return True
+        return self
 
     def logout(self) -> None:
         self.usr_session.logout()
