@@ -1,7 +1,7 @@
 {
     "name": "sdk_codegen",
     "version": "0.1-alpha-1",
-    "description": "This Looker Open Source repository is released under the MIT license. By using this repository, you agree to the terms of that license, and acknowledge that you are doing so at your own risk.",
+    "description": "A utility for generating SDKs for various languages from an OpenApi specification",
     "main": "index.js",
     "devDependencies": {
         "@types/node-fetch": "^2.3.3",
@@ -27,8 +27,8 @@
         "url": "git+https://github.com/looker-open-source/sdk_codegen.git"
     },
     "keywords": [],
-    "author": "",
-    "license": "ISC",
+    "author": "Looker",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/looker-open-source/sdk_codegen/issues"
     },
