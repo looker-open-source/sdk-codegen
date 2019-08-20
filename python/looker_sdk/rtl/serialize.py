@@ -8,9 +8,7 @@ import keyword
 # ignoring "Module 'typing' has no attribute 'ForwardRef'"
 from typing import (  # type: ignore
     Callable,
-    Dict,
     ForwardRef,
-    List,
     Sequence,
     Type,
     Union,
