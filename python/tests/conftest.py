@@ -40,8 +40,10 @@ def queries(test_data):
 def remove_test_dashboards(looker_client: mtds.LookerSDK, dashboards):
     # Clean up any test dashboards that may exist. We do this here instead at the end of
     # tests in case we want to view the dashboards after the test
-    for d in dashboards:
-        searched = looker_client.search_dashboards(title=d.get("title", None))
+    for d in dashboards:  # type: ignore
+        searched = looker_client.search_dashboards(
+            title=d.get("title", None)  # type: ignore
+        )
         if len(searched) > 0:
             for dashboard in searched:
                 looker_client.delete_dashboard(cast(str, dashboard.id))

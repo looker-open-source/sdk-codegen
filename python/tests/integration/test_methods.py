@@ -286,7 +286,7 @@ def get_query_id(qhash: Dict[str, ml.Query], id: Any) -> Optional[int]:
     return list(qhash.values())[0].id
 
 
-@pytest.mark.usefixtures("remove_test_dashboards")  # type: ignore
+@pytest.mark.usefixtures("remove_test_dashboards")
 def test_crud_dashboard(looker_client: mtds.LookerSDK, queries, dashboards):
     """Test creating, retrieving, updating and deleting a user.
     """
