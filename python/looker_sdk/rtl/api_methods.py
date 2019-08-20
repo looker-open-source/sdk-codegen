@@ -4,6 +4,7 @@ import datetime
 import json
 from typing import MutableMapping, Optional, Sequence, Type, Union
 
+from looker_sdk import error
 from looker_sdk.rtl import model as ml
 from looker_sdk.rtl import serialize as sr
 from looker_sdk.rtl import transport as tp
@@ -16,11 +17,6 @@ TReturn = Optional[Union[tp.TResponseValue, sr.TDeserializeReturn]]
 TQueryParams = MutableMapping[
     str, Union[None, bool, str, int, Sequence[int], Sequence[str], datetime.datetime]
 ]
-
-
-class APIError(Exception):
-    """Error calling API.
-    """
 
 
 class APIMethods:
@@ -39,9 +35,15 @@ class APIMethods:
         self.serialize = serialize
         self.transport = transport
 
+    def __enter__(self) -> "APIMethods":
+        return self
+
+    def __exit__(self, *exc) -> None:
+        self.usr_session.logout()
+
     def _return(self, response: tp.Response, structure: TStructure) -> TReturn:
         if not response.ok:
-            raise APIError(response.value)
+            raise error.SDKError(response.value)
         ret: TReturn
         if structure is None:
             ret = None
@@ -65,6 +67,13 @@ class APIMethods:
             else:
                 params[k] = json.dumps(v)
         return params
+
+    def login_user(self, user_id: int) -> "APIMethods":
+        self.usr_session.login_user(user_id)
+        return self
+
+    def logout(self) -> None:
+        self.usr_session.logout()
 
     def get(
         self,

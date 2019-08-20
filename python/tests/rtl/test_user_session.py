@@ -5,13 +5,14 @@ import json
 
 import pytest  # type: ignore
 
-from looker_sdk.rtl.user_session import UserSession
+from looker_sdk import error
+from looker_sdk.rtl import user_session as us
 from looker_sdk.rtl import api_settings as st
 from looker_sdk.rtl import serialize as sr
 from looker_sdk.rtl import transport as tp
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")  # type: ignore
 def config_file(tmpdir_factory):
     """Creates a sample looker.ini file and returns it"""
     filename = tmpdir_factory.mktemp("settings").join("looker.ini")
@@ -28,8 +29,6 @@ client_id=your_API3_client_id
 client_secret=your_API3_client_secret
 # Optional embed secret for SSO embedding
 embed_secret=your_embed_SSO_secret
-# Optional user_id to impersonate
-user_id=
 # Set to false if testing locally against self-signed certs. Otherwise leave True
 verify_ssl=True
 # leave verbose off by default
@@ -39,7 +38,12 @@ verbose=false
     return filename
 
 
-# pylasdfint: disable=no-method-argument
+@pytest.fixture(scope="function")  # type: ignore
+def user_session(config_file):
+    settings = st.ApiSettings.configure(config_file)
+    return us.UserSession(settings, MockTransport.configure(settings), sr.deserialize)
+
+
 class MockTransport(tp.Transport):
     """A mock transport layer used for testing purposes"""
 
@@ -48,13 +52,15 @@ class MockTransport(tp.Transport):
         return cls()
 
     def request(self, method, path, query_params=None, body=None, authenticator=None):
-        if method == tp.HttpMethod.POST and path.startswith("/login"):
+        if authenticator:
+            authenticator()
+        if method == tp.HttpMethod.POST:
+            if path == "/login":
+                token = "AdminAccessToken"
+            elif path == "/login/5":
+                token = "UserAccessToken"
             access_token = json.dumps(
-                {
-                    "access_token": "myACCESStokEN",
-                    "token_type": "Bearer",
-                    "expires_in": 3600,
-                }
+                {"access_token": token, "token_type": "Bearer", "expires_in": 3600}
             )
             response = tp.Response(ok=True, value=access_token)
         elif (method == tp.HttpMethod.DELETE) and (path == "/logout"):
@@ -64,79 +70,49 @@ class MockTransport(tp.Transport):
         return response
 
 
-def test_is_authenticated_returns_true_when_authenticated(config_file):
-    """is_authenticated should return true when session is authenticated"""
-    # Given a user session that is not authenticated
-    settings = st.ApiSettings.configure(config_file)
-    user_session = UserSession(
-        settings, MockTransport.configure(settings), sr.deserialize
-    )
+def test_auto_admin_login(user_session: us.UserSession):
+    assert not user_session.is_admin_authenticated
+    auth_header = user_session.authenticate()
+    assert auth_header["Authorization"] == "token AdminAccessToken"
+    assert user_session.is_admin_authenticated
 
-    # On instantiation, user_session should not be authenticated
-    assert not user_session.is_authenticated
-
-    # After logging in, user_session should be authenticated
-    user_session.login()
-    assert user_session.is_authenticated
-
-
-def test_is_impersonating_returns_false_when_not_impersonating(config_file):
-    """is_impersonating should return false when session is not authenticated
-    or is authenticated but not as another user"""
-    # Given a user session that is not authenticated
-    settings = st.ApiSettings.configure(config_file)
-    user_session = UserSession(
-        settings, MockTransport.configure(settings), sr.deserialize
-    )
-
-    # On instantiation, user_session should not be impersonating
-    assert not user_session.is_impersonating
-
-    # After logging in without impersonating, user_session should not be impersonating
-    user_session.login()
-    assert not user_session.is_impersonating
-
-
-def test_is_impersonating_returns_true_when_impersonating(config_file):
-    """is_impersonating should return true when session is authenticated
-    with a specific user_id"""
-    # Given a user session that is not authenticated
-    settings = st.ApiSettings.configure(config_file)
-    user_session = UserSession(
-        settings, MockTransport.configure(settings), sr.deserialize
-    )
-
-    # On instantiation, user_session should not be impersonating
-    assert not user_session.is_impersonating
-
-    # After logging in without impersonating, user_session should not be impersonating
-    user_session.login("5")
-    assert user_session.is_authenticated
-    assert user_session.is_impersonating
-
-    # After logging out the impersonated user, user_session logs back in as the original user
+    # even after explicit logout
     user_session.logout()
-    assert user_session.is_authenticated
-    assert not user_session.is_impersonating
+    assert not user_session.is_admin_authenticated
+    auth_header = user_session.authenticate()
+    assert isinstance(auth_header, dict)
+    assert auth_header["Authorization"] == "token AdminAccessToken"
+    assert user_session.is_admin_authenticated
 
 
-def test_unauthenticated_logout_returns_false():
-    """logout() should return false when current session is unauthenticated."""
-    user_session = UserSession(object, object, sr.deserialize)
-
-    # Default state should be unauthenticated
-    assert not user_session.is_authenticated
-
-    # Session should remain unauthenticated after logout
-    actual = user_session.logout()
-    assert not actual
+def test_user_login_auto_logs_in_admin(user_session: us.UserSession):
+    assert not user_session.is_admin_authenticated
+    assert not user_session.is_user_authenticated
+    user_session.login_user(5)
+    assert user_session.is_admin_authenticated
+    assert user_session.is_user_authenticated
+    auth_header = user_session.authenticate()
+    assert auth_header["Authorization"] == "token UserAccessToken"
 
 
-def test_authenticated_logout_returns_true(config_file):
-    """logout() should return true when current session is authenticated."""
-    settings = st.ApiSettings.configure(config_file)
-    user_session = UserSession(
-        settings, MockTransport.configure(settings), sr.deserialize
-    )
-    user_session.login()
-    assert user_session.logout()
+def test_user_logout_leaves_admin_logged_in(user_session: us.UserSession):
+    user_session.login_user(5)
+    user_session.logout()
+    assert not user_session.is_user_authenticated
+    assert user_session.is_admin_authenticated
+
+
+def test_login_user_login_user(user_session: us.UserSession):
+    user_session.login_user(5)
+    with pytest.raises(error.SDKError):  # type: ignore
+        user_session.login_user(10)
+
+
+def test_is_sudo(user_session: us.UserSession):
+    assert user_session.is_sudo is None
+    user_session.authenticate()  # auto-login admin
+    assert user_session.is_sudo is None
+    user_session.login_user(5)
+    assert user_session.is_sudo == 5
+    user_session.logout()
+    assert user_session.is_sudo is None

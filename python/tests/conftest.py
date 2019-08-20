@@ -8,12 +8,12 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from looker_sdk.sdk import methods as mtds  # noqa: E402
 from looker_sdk.sdk import models as ml  # noqa: E402
+from looker_sdk import client  # noqa: E402
 
 
 @pytest.fixture(scope="session")  # type: ignore
-def client() -> mtds.LookerSDK:
-    client = mtds.LookerSDK.configure("../looker.ini")
-    return client
+def looker_client() -> mtds.LookerSDK:
+    return client.setup("../looker.ini")
 
 
 @pytest.fixture(name="test_data")  # type: ignore
@@ -26,7 +26,8 @@ def get_test_data() -> Dict[str, Union[List[Dict[str, str]], str]]:
 
 @pytest.fixture()  # type: ignore
 def create_users(
-    client: mtds.LookerSDK, test_data: Dict[str, Union[List[Dict[str, str]], str]]
+    looker_client: mtds.LookerSDK,
+    test_data: Dict[str, Union[List[Dict[str, str]], str]],
 ) -> None:
     # Create some users
     users = cast(List[Dict[str, str]], test_data["users"])
@@ -34,14 +35,14 @@ def create_users(
     user_ids: List[int] = []
 
     for u in users:
-        user = client.create_user(
+        user = looker_client.create_user(
             ml.WriteUser(first_name=u["first_name"], last_name=u["last_name"])
         )
 
         if user.id:
             user_ids.append(user.id)
             email = f"{u['first_name']}.{u['last_name']}{email_domain}"
-            client.create_user_credentials_email(
+            looker_client.create_user_credentials_email(
                 user.id, ml.WriteCredentialsEmail(email=email)
             )
 
@@ -49,4 +50,4 @@ def create_users(
 
     # Clean up
     for user_id in user_ids:
-        client.delete_user(user_id)
+        looker_client.delete_user(user_id)

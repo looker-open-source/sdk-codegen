@@ -18,7 +18,7 @@ setup(
     long_description=open("README.rst").read(),
     keywords=["looker_sdk", "Looker API 3.1"],
     name=NAME,
-    package_data={"looker": ["py.typed", "looker_sdk/looker-sample.ini"]},
+    package_data={"looker_sdk": ["py.typed", "looker_sdk/looker-sample.ini"]},
     packages=find_packages(),
     url="https://pypi.python.org/pypi/looker_sdk",
     version=VERSION,
