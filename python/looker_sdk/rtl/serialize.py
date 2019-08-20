@@ -1,6 +1,6 @@
 """Deserialize API response into models
 """
-
+import datetime
 import functools
 import json
 import keyword
@@ -103,4 +103,8 @@ def unstructure_hook(model):
 
 structure_hook_func = functools.partial(structure_hook, globals())  # type: ignore
 cattr.register_structure_hook(ml.Model, structure_hook_func)  # type: ignore
+cattr.register_structure_hook(
+    datetime.datetime,
+    lambda d, _: datetime.datetime.strptime(d, "%Y-%m-%dT%H:%M:%S.%f%z"),
+)
 cattr.register_unstructure_hook(ml.Model, unstructure_hook)  # type: ignore
