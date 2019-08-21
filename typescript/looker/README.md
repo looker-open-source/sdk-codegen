@@ -6,7 +6,13 @@ Looker server. The SDK is written in Typescript and uses the Node [request](http
 
 ## Getting started
 
-* Install the Looker SDK into your node application
+The Looker SDK can be used in a node application in 3 steps:
+
+* install
+* configure
+* use
+
+### Install the Looker SDK into your node application
 
 Using `npm`:
 
@@ -14,13 +20,13 @@ Using `npm`:
 npm install @looker/sdk
 ```
 
-Using 'yarn':
+Using `yarn`:
 
 ```bash
 yarn add @looker/sdk
 ```
 
-* Configure the SDK for your Looker server
+### Configure the SDK for your Looker server
 
 Create a `looker.ini` file with your server location and API credentials assigned as shown in this example.
 
@@ -41,7 +47,11 @@ embed_secret=your_embed_SSO_secret
 **Note**: If the application using the Looker SDK is going to be committed to a version control system, be sure to 
 **ignore** the `looker.ini` file so the API credentials aren't unintentionally published.
 
-* Initialize the SDK
+### Use the SDK in your code
+
+When the SDK is installed and the server API credentials are configured, it's ready to be used.
+
+#### Initialize the SDK
 
 Initialize the Looker SDK in Typescript with code similar to the following:
 
@@ -59,9 +69,9 @@ const userSession = new UserSession(settings)
 ```
 
 
-* Make SDK method requests
+#### Make SDK method requests
 
-Verify authentication works and API calls will succeed with code similar to the following:
+Verify authentication works and that API calls will succeed with code similar to the following:
 
 ```typescript
 // Create an SDK instance for the configured userSession
