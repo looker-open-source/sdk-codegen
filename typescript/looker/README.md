@@ -4,6 +4,10 @@ The Looker SDK for Typescript/Javascript provides a convenient way to communicat
 Looker server. The SDK is written in Typescript and uses the Node [request](https://www.npmjs.com/package/request) and 
 [request promise native](https://www.npmjs.com/package/request-promise-native) modules for processing HTTP requests.
 
+**DISCLAIMER**: This is an _experimental_ version of the Looker SDK, using a new code generator developed by Looker. 
+You should expect some things to just not work, and foresee drastic changes to the SDK source code until an official
+beta begins. 
+ 
 ## Getting started
 
 The Looker SDK can be used in a node application in 3 steps:
@@ -28,7 +32,7 @@ yarn add @looker/sdk
 
 ### Configure the SDK for your Looker server
 
-Create a `looker.ini` file with your server location and API credentials assigned as shown in this example.
+Create a `looker.ini` file with your server URL and API credentials assigned as shown in this example.
 
 ```ini
 [Looker]
@@ -56,27 +60,38 @@ When the SDK is installed and the server API credentials are configured, it's re
 Initialize the Looker SDK in Typescript with code similar to the following:
 
 ```typescript
-import { ApiSettingsIniFile } from '../rtl/apiSettings'
-import { UserSession } from '../rtl/userSession'
-import { LookerSDK } from '../sdk/methods'
-
-...
-
 // Retrieve the configuration settings from the `looker.ini` file
 const settings = new ApiSettingsIniFile('looker.ini')
 // UserSession handles authentication automatically
 const userSession = new UserSession(settings)
 ```
 
-
 #### Make SDK method requests
 
 Verify authentication works and that API calls will succeed with code similar to the following:
 
 ```typescript
-// Create an SDK instance for the configured userSession
-const sdk = new LookerSDK(userSession)
-// retrieve your user record to verify correct credentials
-const me = await sdk.ok(sdk.me()) 
-// make any other calls to the Looker SDK
+(async () => {
+  // Create an SDK instance for the configured userSession
+  const sdk = new LookerSDK(userSession)
+  // retrieve your user account to verify correct credentials
+  const me = await sdk.ok(sdk.me()) 
+  // make any other calls to the Looker SDK
+  const dashboards = await sdk.ok(
+    sdk.search_dashboards({title: 'My SDK dashboard'})
+  )
+  if (dashboards.length === 0) {
+    console.log('Dashboard not found')
+  }
+  const dashboard = dashboards[0]
+  // do stuff with dashboard
+
+  ...
+
+  await sdk.userSession.logout()
+  if (!sdk.userSession.isAuthenticated()) {
+    console.log('Logout successful')
+  }
+
+})
 ```
