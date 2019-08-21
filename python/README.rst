@@ -98,7 +98,9 @@ as an alternative):: bash
 
     $ mkdir looker-sdk-example
 
-Install python3.7 and use it for this directory:: bash
+Install python3.7 and use it for this directory
+
+.. code-block:: bash
 
     $ cd looker-sdk-example/
     $ pyenv install 3.7.4  # pyenv install --list to see latest 3.7
