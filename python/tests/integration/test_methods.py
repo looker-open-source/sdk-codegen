@@ -1,8 +1,9 @@
 import json
 from operator import itemgetter
-import pytest  # type: ignore
 import re
-from typing import Dict, List, Union
+from typing import Any, cast, Dict, List, Optional, Union
+
+import pytest  # type: ignore
 
 from looker_sdk.sdk import methods as mtds
 from looker_sdk import models as ml
@@ -14,7 +15,7 @@ def test_crud_user(looker_client: mtds.LookerSDK):
 
     # Create user
     user = looker_client.create_user(
-        ml.WriteUser(first_name="John", last_name="Doe", is_disabled=True, locale="fr")
+        ml.WriteUser(first_name="John", last_name="Doe", is_disabled=False, locale="fr")
     )
     assert isinstance(user, ml.User)
     assert isinstance(user.id, int)
@@ -45,7 +46,7 @@ def test_crud_user(looker_client: mtds.LookerSDK):
 
     # Update user and check fields we intended to wipe out are now None
     # first way to specify nulling out a field
-    update_user = ml.WriteUser(first_name=ml.EXPLICIT_NULL)  # type: ignore
+    update_user = ml.WriteUser(first_name=ml.EXPLICIT_NULL)
     # second way
     update_user.last_name = None
     looker_client.update_user(user_id, update_user)
@@ -90,7 +91,7 @@ def test_me_field_filters(looker_client: mtds.LookerSDK):
     assert not me.personal_space_id
 
 
-@pytest.mark.usefixtures("test_users")  # type: ignore
+@pytest.mark.usefixtures("test_users")
 def test_bad_user_search_returns_no_results(looker_client: mtds.LookerSDK):
     """search_users() should return an empty list when no match is found.
     """
@@ -99,7 +100,7 @@ def test_bad_user_search_returns_no_results(looker_client: mtds.LookerSDK):
     assert len(resp) == 0
 
 
-@pytest.mark.usefixtures("test_users")  # type: ignore
+@pytest.mark.usefixtures("test_users")
 def test_search_users_matches_email_dmain(
     looker_client: mtds.LookerSDK,
     test_data: Dict[str, Union[List[Dict[str, str]], str]],
@@ -110,7 +111,7 @@ def test_search_users_matches_email_dmain(
     assert len(actual) == len(test_data["users"])
 
 
-@pytest.mark.usefixtures("test_users")  # type: ignore
+@pytest.mark.usefixtures("test_users")
 def test_it_matches_email_domain_and_returns_sorted(
     looker_client: mtds.LookerSDK,
     test_data: Dict[str, Union[List[Dict[str, str]], str]],
@@ -118,9 +119,10 @@ def test_it_matches_email_domain_and_returns_sorted(
     resp = looker_client.search_users_names(
         pattern=f"%{test_data['email_domain']}", sorts="last_name, first_name"
     )
-    assert len(resp) == len(test_data["users"])
-    sorted_test_data = sorted(
-        test_data["users"], key=itemgetter("last_name", "first_name")
+    test_data_users = cast(List[Dict[str, str]], test_data["users"])
+    assert len(resp) == len(test_data_users)
+    sorted_test_data: List[Dict[str, str]] = sorted(
+        test_data_users, key=itemgetter("last_name", "first_name")
     )
     for actual, expected in zip(resp, sorted_test_data):
         assert actual.first_name == expected["first_name"]
@@ -151,10 +153,13 @@ def test_it_updates_session(looker_client: mtds.LookerSDK):
     assert resp.workspace_id == "production"
 
 
-def test_it_creates_and_runs_query(looker_client: mtds.LookerSDK, queries):
+TQueries = List[Dict[str, Union[str, List[str]]]]
+
+
+def test_it_creates_and_runs_query(looker_client: mtds.LookerSDK, queries: TQueries):
     # Create query hash
     for q in queries:
-        limit = q["limit"] or "10"
+        limit = cast(str, q["limit"]) or "10"
         request = create_query_request(q, limit)
         query = looker_client.create_query(request)
         assert isinstance(query, ml.Query)
@@ -180,14 +185,14 @@ def test_it_creates_and_runs_query(looker_client: mtds.LookerSDK, queries):
         assert len(re.findall(r"\n", csv)) == int(limit) + 1
 
 
-def test_it_runs_inline_query(looker_client: mtds.LookerSDK, queries):
+def test_it_runs_inline_query(looker_client: mtds.LookerSDK, queries: TQueries):
     for q in queries:
-        limit = q["limit"] or "10"
+        limit = cast(str, q["limit"]) or "10"
         request = create_query_request(q, limit)
 
-        json_ = looker_client.run_inline_query("json", request)
-        assert isinstance(json_, str)
-        json_ = json.loads(json_)
+        json_resp = looker_client.run_inline_query("json", request)
+        assert isinstance(json_resp, str)
+        json_: List[Dict[str, Any]] = json.loads(json_resp)
         assert len(json_) == int(limit)
 
         row = json_[0]
@@ -221,7 +226,7 @@ def test_search_looks_fields_filter(looker_client: mtds.LookerSDK):
     assert look.created_at is None
 
 
-def test_search_looks_fields_filter(looker_client: mtds.LookerSDK):
+def test_search_looks_title_fields_filter(looker_client: mtds.LookerSDK):
     actual = looker_client.search_looks(title="Order%", fields="id, title")
     assert isinstance(actual, list)
     assert len(actual) > 0
@@ -232,7 +237,7 @@ def test_search_looks_fields_filter(looker_client: mtds.LookerSDK):
     assert look.description is None
 
 
-def create_query_request(q, limit=None):
+def create_query_request(q, limit: Optional[str] = None) -> ml.WriteQuery:
     result = ml.WriteQuery(
         model=q.get("model", None),
         view=q.get("view", None),
@@ -299,6 +304,7 @@ def test_crud_dashboard(looker_client: mtds.LookerSDK, dashboards):
             assert d["title_color"] == dashboard.title_color
 
         # Update dashboard
+        assert isinstance(dashboard.id, str)
         actual = looker_client.update_dashboard(
             dashboard.id, ml.WriteDashboard(deleted=True)
         )
@@ -308,6 +314,7 @@ def test_crud_dashboard(looker_client: mtds.LookerSDK, dashboards):
         dashboard = looker_client.update_dashboard(
             dashboard.id, ml.WriteDashboard(deleted=False)
         )
+        assert isinstance(dashboard.id, str)
         assert not dashboard.deleted
 
         if d.get("filters"):
