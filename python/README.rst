@@ -94,24 +94,24 @@ to manage project dependencies. Once you have them installed follow these steps
 
 Create a project directory (consider
 `cookiecutter <https://github.com/audreyr/cookiecutter-pypackage#quickstart>`_
-as an alternative)::
+as an alternative) .. code-block:: bash
 
     $ mkdir looker-sdk-example
 
-Install python3.7 and use it for this directory::
+Install python3.7 and use it for this directory .. code-block:: bash
 
     $ cd looker-sdk-example/
     $ pyenv install 3.7.4  # pyenv install --list to see latest 3.7
     $ pyenv local 3.7.4
 
 
-Install looker_sdk using pipenv::
+Install looker_sdk using pipenv .. code-block:: bash
 
     $ pipenv install --pre looker_sdk
 
 Now you should be able to copy the example code above into a `example.py` file
 and execute it. Caution the example code will actually create and delete
-a user in your looker instance::
+a user in your looker instance .. code-block:: bash
 
     $ python example.py
 
