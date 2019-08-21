@@ -97,7 +97,7 @@ class APIMethods:
         serialized: Optional[bytes]
         if isinstance(body, str):
             serialized = body.encode("utf-8")
-        elif isinstance(body, ml.Model):
+        elif isinstance(body, (list, ml.Model)):
             serialized = self.serialize(body)
         else:
             serialized = None

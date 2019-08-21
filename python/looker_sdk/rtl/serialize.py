@@ -27,7 +27,7 @@ class DeserializeError(Exception):
     """
 
 
-TModelOrSequence = Union[ml.Model, Sequence[ml.Model]]
+TModelOrSequence = Union[Sequence[int], Sequence[str], ml.Model, Sequence[ml.Model]]
 TDeserializeReturn = TModelOrSequence
 TStructure = Union[Type[Sequence[int]], Type[Sequence[str]], Type[TDeserializeReturn]]
 TDeserialize = Callable[[tp.TResponseValue, TStructure], TDeserializeReturn]
@@ -51,9 +51,7 @@ def deserialize(data: tp.TResponseValue, structure: TStructure) -> TDeserializeR
 def serialize(model: TModelOrSequence) -> bytes:
     """Translate model into formdata encoded json bytes
     """
-    data: Dict[
-        str, Union[str, int, bool, ml.Model, List[Union[str, int, bool, ml.Model]]]
-    ] = cattr.unstructure(model)
+    data = cattr.unstructure(model)  # type: ignore
     return json.dumps(data).encode("utf-8")
 
 
