@@ -130,14 +130,14 @@ def test_it_matches_email_domain_and_returns_sorted(
 
 
 def test_it_retrieves_session(looker_client: mtds.LookerSDK):
-    """session() should return the current session
+    """session() should return the current session.
     """
     resp = looker_client.session()
     assert resp.workspace_id == "production"
 
 
 def test_it_updates_session(looker_client: mtds.LookerSDK):
-    """update_session() should allow us to change the current workspace
+    """update_session() should allow us to change the current workspace.
     """
     # Switch workspace to dev mode
     looker_client.update_session(ml.WriteApiSession(workspace_id="dev"))
@@ -157,6 +157,8 @@ TQueries = List[Dict[str, Union[str, List[str]]]]
 
 
 def test_it_creates_and_runs_query(looker_client: mtds.LookerSDK, queries: TQueries):
+    """create_query() creates a query and run_query() returns its result.
+    """
     # Create query hash
     for q in queries:
         limit = cast(str, q["limit"]) or "10"
@@ -186,6 +188,8 @@ def test_it_creates_and_runs_query(looker_client: mtds.LookerSDK, queries: TQuer
 
 
 def test_it_runs_inline_query(looker_client: mtds.LookerSDK, queries: TQueries):
+    """run_inline_query() should run a query and return its results.
+    """
     for q in queries:
         limit = cast(str, q["limit"]) or "10"
         request = create_query_request(q, limit)
@@ -206,6 +210,8 @@ def test_it_runs_inline_query(looker_client: mtds.LookerSDK, queries: TQueries):
 
 
 def test_search_looks_returns_looks(looker_client: mtds.LookerSDK):
+    """search_looks() should return a list of looks.
+    """
     actual = looker_client.search_looks()
     assert isinstance(actual, list)
     assert len(actual) > 0
@@ -216,17 +222,21 @@ def test_search_looks_returns_looks(looker_client: mtds.LookerSDK):
 
 
 def test_search_looks_fields_filter(looker_client: mtds.LookerSDK):
+    """search_looks() should only return the requested fields passed in the fields
+    argument of the request.
+    """
     actual = looker_client.search_looks(fields="id, title, description")
     assert isinstance(actual, list)
     assert len(actual) > 0
     look = actual[0]
     assert isinstance(look, ml.Look)
     assert look.title is not None
-    assert look.description is not None
     assert look.created_at is None
 
 
 def test_search_looks_title_fields_filter(looker_client: mtds.LookerSDK):
+    """search_looks() should be able to filter on title.
+    """
     actual = looker_client.search_looks(title="Order%", fields="id, title")
     assert isinstance(actual, list)
     assert len(actual) > 0
@@ -263,29 +273,53 @@ def create_query_request(q, limit: Optional[str] = None) -> ml.WriteQuery:
     return result
 
 
-def test_crud_dashboard(looker_client: mtds.LookerSDK, dashboards):
+def get_query_id(qhash: Dict[str, ml.Query], id: Any) -> Optional[int]:
+    if not id:
+        return id
+    if id.startswith("#"):
+        id = id[1:]
+    else:
+        return id if id.isdigit() else None
+    result = qhash.get(id, None)
+    if result:
+        return result.id
+    return list(qhash.values())[0].id
+
+
+@pytest.mark.usefixtures("remove_test_dashboards")  # type: ignore
+def test_crud_dashboard(looker_client: mtds.LookerSDK, queries, dashboards):
+    """Test creating, retrieving, updating and deleting a user.
+    """
+    qhash: Dict[str, ml.Query] = {}
+    for idx, q in enumerate(queries):
+        limit = cast(str, q["limit"]) or "10"
+        request = create_query_request(q, limit)
+        key = q.get("id", None) or str(idx)
+        qhash[key] = looker_client.create_query(request)
 
     for d in dashboards:
         d.setdefault("default")
-        request = ml.WriteDashboard(
-            description=d.get("description"),
-            hidden=d.get("hidden"),
-            query_timezone=d.get("query_timezone"),
-            refresh_interval=d.get("refresh_interval"),
-            title=d.get("title"),
-            background_color=d.get("background_color"),
-            load_configuration=d.get("load_configuration"),
-            lookml_link_id=d.get("lookml_link_id"),
-            show_filters_bar=d.get("show_filters_bar"),
-            show_title=d.get("show_title"),
-            slug=d.get("slug"),
-            space_id=d.get("space_id") or looker_client.me().home_space_id,
-            text_tile_text_color=d.get("text_tile_text_color"),
-            tile_background_color=d.get("tile_background_color"),
-            tile_text_color=d.get("tile_text_color"),
-            title_color=d.get("title_color"),
+        dashboard = looker_client.create_dashboard(
+            ml.WriteDashboard(
+                description=d.get("description"),
+                hidden=d.get("hidden"),
+                query_timezone=d.get("query_timezone"),
+                refresh_interval=d.get("refresh_interval"),
+                title=d.get("title"),
+                background_color=d.get("background_color"),
+                load_configuration=d.get("load_configuration"),
+                lookml_link_id=d.get("lookml_link_id"),
+                show_filters_bar=d.get("show_filters_bar"),
+                show_title=d.get("show_title"),
+                slug=d.get("slug"),
+                space_id=d.get("space_id") or looker_client.me().home_space_id,
+                text_tile_text_color=d.get("text_tile_text_color"),
+                tile_background_color=d.get("tile_background_color"),
+                tile_text_color=d.get("tile_text_color"),
+                title_color=d.get("title_color"),
+            )
         )
-        dashboard = looker_client.create_dashboard(request)
+
         assert isinstance(dashboard, ml.Dashboard)
 
         if d.get("background_color"):
@@ -345,10 +379,35 @@ def test_crud_dashboard(looker_client: mtds.LookerSDK, dashboards):
                 assert filter.explore == f.get("explore")
                 assert filter.dimension == f.get("dimension")
                 assert filter.row == f.get("row")
-                assert filter.listens_to_filters == f.get("listens_to_filters")
-                assert filter.allow_multiple_values == f.get("allow_multiple_values")
-                assert filter.required == f.get("required")
+                assert filter.allow_multiple_values == f.get(
+                    "allow_multiple_values", False
+                )
+                assert filter.required == f.get("required", False)
 
-        # Delete dashboard
-        resp = looker_client.delete_dashboard(dashboard.id)
-        assert resp == ""
+        if d.get("tiles"):
+            for t in d["tiles"]:
+                t.setdefault("default")
+                tile = looker_client.create_dashboard_element(
+                    ml.WriteDashboardElement(
+                        body_text=t.get("body_text"),
+                        dashboard_id=dashboard.id,
+                        look=t.get("look"),
+                        look_id=t.get("look_id"),
+                        merge_result_id=t.get("merge_result_id"),
+                        note_display=t.get("note_display"),
+                        note_state=t.get("note_state"),
+                        note_text=t.get("note_text"),
+                        query=t.get("query"),
+                        query_id=get_query_id(qhash, t.get("query_id")),
+                        refresh_interval=t.get("refresh_interval"),
+                        subtitle_text=t.get("subtitle_text"),
+                        title=t.get("title"),
+                        title_hidden=t.get("title_hidden"),
+                        type=t.get("type"),
+                    )
+                )
+
+                assert isinstance(tile, ml.DashboardElement)
+                assert tile.dashboard_id == dashboard.id
+                assert tile.title == t.get("title")
+                assert tile.type == t.get("type")
