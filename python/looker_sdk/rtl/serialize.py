@@ -1,6 +1,6 @@
 """Deserialize API response into models
 """
-
+import datetime
 import functools
 import json
 import keyword
@@ -27,7 +27,7 @@ class DeserializeError(Exception):
     """
 
 
-TModelOrSequence = Union[ml.Model, Sequence[ml.Model]]
+TModelOrSequence = Union[Sequence[int], Sequence[str], ml.Model, Sequence[ml.Model]]
 TDeserializeReturn = TModelOrSequence
 TStructure = Union[Type[Sequence[int]], Type[Sequence[str]], Type[TDeserializeReturn]]
 TDeserialize = Callable[[tp.TResponseValue, TStructure], TDeserializeReturn]
@@ -51,9 +51,7 @@ def deserialize(data: tp.TResponseValue, structure: TStructure) -> TDeserializeR
 def serialize(model: TModelOrSequence) -> bytes:
     """Translate model into formdata encoded json bytes
     """
-    data: Dict[
-        str, Union[str, int, bool, ml.Model, List[Union[str, int, bool, ml.Model]]]
-    ] = cattr.unstructure(model)
+    data = cattr.unstructure(model)  # type: ignore
     return json.dumps(data).encode("utf-8")
 
 
@@ -103,4 +101,10 @@ def unstructure_hook(model):
 
 structure_hook_func = functools.partial(structure_hook, globals())  # type: ignore
 cattr.register_structure_hook(ml.Model, structure_hook_func)  # type: ignore
+cattr.register_structure_hook(
+    datetime.datetime,
+    lambda d, _: datetime.datetime.strptime(  # type: ignore
+        d, "%Y-%m-%dT%H:%M:%S.%f%z"
+    ),
+)
 cattr.register_unstructure_hook(ml.Model, unstructure_hook)  # type: ignore

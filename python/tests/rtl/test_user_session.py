@@ -51,12 +51,23 @@ class MockTransport(tp.Transport):
     def configure(cls, settings):
         return cls()
 
-    def request(self, method, path, query_params=None, body=None, authenticator=None):
+    def request(
+        self,
+        method,
+        path,
+        query_params=None,
+        body=None,
+        authenticator=None,
+        headers=None,
+    ):
         if authenticator:
             authenticator()
         if method == tp.HttpMethod.POST:
             if path == "/login":
                 token = "AdminAccessToken"
+                expected_header = {"Content-Type": "application/x-www-form-urlencoded"}
+                if headers != expected_header:
+                    raise TypeError(f"Must send {expected_header}")
             elif path == "/login/5":
                 token = "UserAccessToken"
             access_token = json.dumps(

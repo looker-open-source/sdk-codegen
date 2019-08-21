@@ -37,10 +37,14 @@ class RequestsTransport(tp.Transport):
         query_params: Optional[MutableMapping[str, str]] = None,
         body: Optional[bytes] = None,
         authenticator: Optional[Callable[[], Dict[str, str]]] = None,
+        headers: Optional[MutableMapping[str, str]] = None,
     ) -> tp.Response:
 
         url = f"{self.api_path}{path}"
-        headers = authenticator() if authenticator else {}
+        if headers is None:
+            headers = {}
+        if authenticator:
+            headers.update(authenticator())
         logging.info("%s(%s)", method.name, url)
         try:
             resp = self.session.request(

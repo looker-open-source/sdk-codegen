@@ -41,32 +41,22 @@ def test_convert_query_params(
     assert actual == expected
 
 
-# TODO: add more tests that cover all the types specified by TBody
 @pytest.mark.parametrize(  # type: ignore
     "input, expected",
     [
         ("some body text", b"some body text"),
         ("", b""),
+        ([1, 2, 3], b"[1, 2, 3]"),
+        (["a", "b", "c"], b'["a", "b", "c"]'),
         ({}, None),
+        (None, None),
         (ml.WriteApiSession(workspace_id="dev"), b'{"workspace_id": "dev"}'),
         (
-            ml.ApiVersion(
-                looker_release_version="6.18",
-                current_version=ml.ApiVersionElement(
-                    full_version="6.18.4", status="fully functional"
-                ),
-            ),
-            b'{"looker_release_version": "6.18", "current_version": {"full_version": "6.18.4", "status": "fully functional"}}',  # noqa: B950
-        ),
-        (
-            ml.ApiVersion(
-                looker_release_version="6.18",
-                current_version=ml.ApiVersionElement(
-                    full_version="6.18.4", status="fully functional"
-                ),
-                supported_versions=ml.EXPLICIT_NULL,
-            ),
-            b'{"looker_release_version": "6.18", "current_version": {"full_version": "6.18.4", "status": "fully functional"}, "supported_versions": null}',  # noqa: B950
+            [
+                ml.WriteApiSession(workspace_id="dev"),
+                ml.WriteApiSession(workspace_id="dev"),
+            ],
+            b'[{"workspace_id": "dev"}, {"workspace_id": "dev"}]',
         ),
     ],
 )
