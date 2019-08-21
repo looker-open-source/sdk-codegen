@@ -326,7 +326,7 @@ def test_crud_dashboard(looker_client: mtds.LookerSDK, dashboards):
                         name=f.get("name"),
                         title=f.get("title"),
                         type=f.get("type"),
-                        default_value="foo",
+                        default_value=f.get("default_value"),
                         model=f.get("model"),
                         explore=f.get("explore"),
                         dimension=f.get("dimension"),

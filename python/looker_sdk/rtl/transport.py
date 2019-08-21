@@ -69,6 +69,7 @@ class Transport(abc.ABC):
         query_params: Optional[MutableMapping[str, str]] = None,
         body: Optional[bytes] = None,
         authenticator: TAuthenticator = None,
+        headers: Optional[MutableMapping[str, str]] = None,
     ) -> Response:
         """Send API request.
         """

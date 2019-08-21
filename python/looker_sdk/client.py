@@ -11,6 +11,7 @@ def setup(config_file: str = "Looker.ini") -> methods.LookerSDK:
     """Default dependency configuration
     """
     settings = api_settings.ApiSettings.configure(config_file)
+    settings.headers = {"Content-Type": "application/json"}
     transport = requests_transport.RequestsTransport.configure(settings)
     usr_session = user_session.UserSession(settings, transport, serialize.deserialize)
     return methods.LookerSDK(
