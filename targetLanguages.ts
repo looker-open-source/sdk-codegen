@@ -32,6 +32,7 @@ export interface IGeneratorSpec {
   path?: string
   factory: (api: ApiModel) => ICodeFormatter
   options: string // generator options
+  legacy?: string // legacy language tag
 }
 
 // To disable generation of any language specification, you can just comment it out
@@ -49,7 +50,7 @@ export const TargetLanguages: Array<IGeneratorSpec> =
     //   language: 'kotlin',
     //   options: '-DapiPackage=com.looker.sdk -DpackageName=com.looker.sdk'
     // },
-    // TODO figure out why swift aborts with an error and non of the other languages do
+    // TODO figure out why swift aborts with an error and none of the other languages do
     // {
     //   language: 'swift4',
     //   path: 'swift',
@@ -67,6 +68,7 @@ export const TargetLanguages: Array<IGeneratorSpec> =
     },
     {
       language: 'typescript',
+      legacy: 'typescript-node', // OpenAPI generate uses this for the language
       factory: (api: ApiModel) => new TypescriptFormatter(api),
       options: '-DapiPackage=Looker -DpackageName=looker'
     },

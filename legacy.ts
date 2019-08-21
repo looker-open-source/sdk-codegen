@@ -30,16 +30,17 @@ import { log, quit, run } from './utils'
 import { logConvert } from './convert'
 
 // TODO replace with sdkGen.ts and remove `yarn sdk` command
-// TODO deprecated
+// TODO deprecated. This is using the legacy code generator
 // perform the generation for specific API version, configuration, and language
 const generate = async (fileName: string, spec: LanguageSpec, props: SDKConfigProps) => {
   const path = spec.path ? spec.path : spec.language
+  const language = spec.legacy ? spec.legacy : spec.language
   const apiPath = `./api/${props.api_version}/${path}`
   return run('openapi-generator',
-    ['generate', '-i', fileName, '-g', spec.language, '-o', apiPath, '--enable-post-process-file', spec.options])
+    ['generate', '-i', fileName, '-g', language, '-o', apiPath, '--enable-post-process-file', spec.options])
 }
 
-// generate all languages for the specified configuration
+// legacy all languages for the specified configuration
 const runConfig = async (name: string, props: SDKConfigProps) => {
   log(`processing ${name} configuration ...`)
 

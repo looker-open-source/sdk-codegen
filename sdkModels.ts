@@ -26,7 +26,6 @@ import * as OAS from 'openapi3-ts'
 import * as fs from 'fs'
 import md5 from 'blueimp-md5'
 import { utf8 } from './utils'
-import { MethodParameterLocation } from './methodParam'
 import { HttpMethod, StatusCode } from './typescript/looker/rtl/transport'
 
 export const strBody = 'body'
@@ -59,6 +58,8 @@ export interface IType {
   refCount: number // if it works for Delphi, it works for TypeScript
   asHashString(): string
 }
+
+export declare type MethodParameterLocation = 'path' | 'body' | 'query' | 'header' | 'cookie'
 
 export interface IParameter extends ISymbol {
   type: IType

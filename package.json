@@ -13,7 +13,7 @@
         "clean": "rm -rf api/ && rm *.3.?.json && rm *.3.?.oas.json",
         "fetch": "ts-node fetchSpec.ts",
         "convert": "ts-node convert.ts",
-        "generate": "ts-node generate.ts",
+        "legacy": "ts-node legacy.ts",
         "sdk": "ts-node sdkGen.ts",
         "lint": "tslint -p tsconfig.json --format stylish",
         "view": "speccy serve",

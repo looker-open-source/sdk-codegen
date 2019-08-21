@@ -23,7 +23,7 @@ The Looker SDK has several parts:
 
 ## Generating an API language binding
 
-By using the yarn/node app included in this project, you now have three steps to generate language bindings:
+By using the yarn/node app included in this project, you now have three steps to legacy language bindings:
 
 * configure a `looker.ini` file so the specification can be retrieved from your server
 
@@ -55,8 +55,6 @@ Run the generator with the command:
 yarn convert && yarn sdk
 ```
 
-**Note**: Before public beta, this statement will probably be `yarn generate` instead.
-
 The generator will:
 
 * read the Looker API configuration(s) from the `looker.ini` file.
@@ -71,7 +69,7 @@ The generator will:
 
 * by default, call the code generator for each active language configured in [`targetLanguages.ts`](targetLanguages.ts)
 
-  * If you want to generate for one specific language, use `yarn sdk {language}`. Currently, supported `{language}` values are `python` and `typescript`
+  * If you want to legacy for one specific language, use `yarn sdk {language}`. Currently, supported `{language}` values are `python` and `typescript`
   
 When the generator completes successfully, the output will be similar to:
 
@@ -109,6 +107,14 @@ yarn view Looker.3.1.oas.json
 This command will start a web server on `http://localhost:5000` that allows you to browse and search the local specification file for API 3.1.
 
 **Tip**: search for `query` or `dashboard` in the UI and see what you get!
+
+### Using the Legacy generator
+
+To use a language currently not supported by Looker's SDK code generator with the OpenAPI generator:
+
+* configure the desired language in [`targetLanguages.ts`](targetLanguages.ts)
+
+* use `yarn legacy` to call the OpenAPI generator
 
 #### Additional scripts
 
