@@ -103,7 +103,12 @@ class UserSession:
         ).encode("utf-8")
 
         response = self._ok(
-            self.transport.request(tp.HttpMethod.POST, "/login", body=serialized)
+            self.transport.request(
+                tp.HttpMethod.POST,
+                "/login",
+                body=serialized,
+                headers={"Content-Type": "application/x-www-form-urlencoded"},
+            )
         )
 
         access_token = self.deserialize(response, ml.AccessToken)

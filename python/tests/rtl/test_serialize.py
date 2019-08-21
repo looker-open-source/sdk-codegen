@@ -145,8 +145,8 @@ def test_serialize_sequence():
             ChildModel(id=2, import_="child2"),
         ],
     )
-    expected = json.dumps([MODEL_DATA]).encode("utf-8")
-    assert sr.serialize([model]) == expected
+    expected = json.dumps([MODEL_DATA, MODEL_DATA]).encode("utf-8")
+    assert sr.serialize([model, model]) == expected
 
 
 def test_serialize_partial():
