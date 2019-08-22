@@ -1,5 +1,3 @@
-.. highlight:: python
-
 ===========
 Looker SDK
 ===========
@@ -12,78 +10,6 @@ and is annotated using the typing module.
 a new code generator developed by Looker. You should expect some things to
 just not work, and foresee drastic changes to the SDK source code until an
 official beta begins.
-
-
-Introduction in code
---------------------
-
-::
-
-    from looker_sdk import client, models, error
-
-    # client calls will now automatically authenticate using the
-    # api3credentials specified in 'Looker.ini'
-    looker_client = client.setup('Looker.ini')
-    looker_ini_user = looker_client.me()
-
-    # models can be passed named parameters to the constructor
-    new_user = models.WriteUser(first_name="John", last_name="Doe")
-
-    # as well as have fields set on the instance
-    new_user.is_disabled = True
-    new_user.locale = "fr"
-
-    # create the user with the client
-    created_user = looker_client.create_user(new_user)
-
-    # see typing explanation below for why this line is helpfull
-    assert isinstance(created_user.id, int)
-    user_id = created_user.id
-
-    # Updating the user: change locale and explicitly nullify
-    # first_name via the constructor
-    update_user = models.WriteUser(
-        locale="uk", first_name=models.EXPLICIT_NULL  # do not use None
-    )
-
-    # we can also nullify last_name on the instance
-    update_user.last_name = models.EXPLICIT_NULL
-
-    # update the user with the client
-    updated_user = looker_client.update_user(
-        user_id=created_user.id, body=update_user
-    )
-
-    # perform API calls on behalf of the user: "sudo"
-    try:
-        looker_client.login_user(user_id)
-    except error.SDKError:
-        # oops, we need to set the user as enabled first
-        pass
-
-    looker_client.update_user(
-        user_id=user_id, body=models.WriteUser(is_disabled=False)
-    )
-    looker_client.login_user(user_id)
-    sudo_user = looker_client.me()
-    assert sudo_user.id == user_id
-    assert sudo_user.id != looker_ini_user.id
-
-    # logout to switch back to authenticating per 'Looker.ini'
-    looker_client.logout()
-    assert looker_client.me().id == looker_ini_user.id
-
-    # "sudo" using a context manager
-    with looker_client.login_user(user_id):
-        assert looker_client.me().id == sudo_user.id
-
-    # exiting context manager is the same as
-    # calling looker_client.logout()
-    assert looker_client.me() == looker_ini_user.id
-
-    # cleanup
-    looker_client.delete_user(user_id)
-
 
 Sample project setup
 --------------------
@@ -146,6 +72,68 @@ example file:
     # Set to false if testing locally against self-signed certs. Otherwise leave True
     verify_ssl=True
 
+
+Code examples
+-------------
+
+.. code-block:: python
+
+    from looker_sdk import client, models, error
+
+    # client calls will now automatically authenticate using the
+    # api3credentials specified in 'Looker.ini'
+    looker_client = client.setup('Looker.ini')
+    looker_api_user = looker_client.me()
+
+    # models can be passed named parameters to the constructor
+    new_user = models.WriteUser(first_name="John", last_name="Doe")
+
+    # as well as have fields set on the instance
+    new_user.is_disabled = True
+    new_user.locale = "fr"
+
+    # create the user with the client
+    created_user = looker_client.create_user(new_user)
+
+    # Updating the user: change first_name and explicitly nullify
+    # locale via the constructor
+    update_user = models.WriteUser(
+        first_name="Jane", locale=models.EXPLICIT_NULL  # do not use None
+    )
+
+    # update the user with the client
+    updated_user = looker_client.update_user(user_id, body=update_user)
+
+    # perform API calls on behalf of the user: "sudo"
+    try:
+        looker_client.login_user(user_id)
+    except error.SDKError:
+        # oops, we need to set the user as enabled first
+        looker_client.update_user(
+            user_id, body=models.WriteUser(is_disabled=False)
+        )
+        looker_client.login_user(user_id)
+
+    sudo_user = looker_client.me()
+    assert sudo_user.id == user_id
+    assert sudo_user.id != looker_api_user.id
+
+    # logout to switch back to authenticating per 'Looker.ini'
+    looker_client.logout()
+    assert looker_client.me().id == looker_api_user.id
+
+    # "sudo" using a context manager
+    with looker_client.login_user(user_id):
+        assert looker_client.me().id == user_id
+
+    # exiting context manager is the same as
+    # calling looker_client.logout()
+    assert looker_client.me().id == looker_api_user.id
+
+    # cleanup
+    looker_client.delete_user(user_id)
+
+
 Typing
 ------
 
@@ -155,19 +143,25 @@ from the API to the specified fields. For this reason, the fields on the
 model are all typed as `Optional[]`. The effect is that static code analysis
 (`mypy <https://mypy.readthedocs.io/en/latest/>`_ for example) will complain
 if you try to use a field from a model instance in a place that
-requires the value not be `Optional`. From the example above::
+requires the value not be `Optional`. From the example above
+
+.. code-block:: python
 
     created_user = looker_client.create_user(new_user)
 
 Here, `created_user.id` has type `Optional[int]`. We want to use that value
-in the `update_user()` call but we see this mypy error::
+in the `update_user()` call but we see this mypy error
+
+.. code-block:: python
 
     user_id = created_user.id
     # Argument "user_id" to "update_user" of "LookerSDK"
     # has incompatible type "Optional[int]"; expected "int"
     looker_client.update_user(user_id, ...)
 
-This is because `update_user` is annotated like this::
+This is because `update_user` is annotated like this
+
+.. code-block:: python
 
     def update_user(
         self,
@@ -179,7 +173,9 @@ This is because `update_user` is annotated like this::
 *We* know we didn't exclude `id` from the response by passing in something like
 `fields='first_name,last_name'`. We *know* that `created_user.id` will be
 populated with an `int`. However, mypy does not so we must guide it in one
-of the following ways::
+of the following ways
+
+.. code-block:: python
 
     # assert about the type
     assert isinstance(user_id, int)

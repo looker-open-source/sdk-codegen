@@ -122,7 +122,7 @@ import cattr
 from ${this.packagePath}.rtl import model
 from ${this.packagePath}.rtl import serialize as sr
 
-EXPLICIT_NULL = model.EXPLICIT_NULL
+EXPLICIT_NULL = model.EXPLICIT_NULL  # type: ignore
 `
 
   // cattrs [un]structure hooks for model [de]serialization

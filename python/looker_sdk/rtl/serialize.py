@@ -52,7 +52,7 @@ def serialize(model: TModelOrSequence) -> bytes:
     """Translate model into formdata encoded json bytes
     """
     data = cattr.unstructure(model)  # type: ignore
-    return json.dumps(data).encode("utf-8")
+    return json.dumps(data).encode("utf-8")  # type: ignore
 
 
 def structure_hook(context, data, type_):
