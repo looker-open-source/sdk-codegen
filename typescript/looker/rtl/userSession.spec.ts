@@ -28,7 +28,7 @@ import { UserSession } from './userSession'
 import { NodeTransport } from './nodeTransport'
 
 describe('UserSession', () => {
-  const localIni = 'test/looker.ini'
+  const localIni = 'looker.ini'
   const settings = new ApiSettingsIniFile(localIni, 'Looker')
 
   describe('isAuthenticated', () => {

@@ -25,7 +25,7 @@
 import { ApiConfig, ApiSettings, ApiSettingsIniFile } from './apiSettings'
 
 describe('API settings parser', () => {
-  const localIni = 'test/looker.ini'
+  const localIni = 'looker.ini'
   const contents = `
 [Looker]
 # API version is required

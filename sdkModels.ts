@@ -489,7 +489,7 @@ class Type implements IType {
   }
 }
 
-class ArrayType extends Type {
+export class ArrayType extends Type {
   elementType: IType
 
   constructor(elementType: IType, schema: OAS.SchemaObject) {
@@ -502,11 +502,11 @@ class ArrayType extends Type {
   }
 }
 
-class ListType extends Type {
+export class HashType extends Type {
   elementType: IType
 
   constructor(elementType: IType, schema: OAS.SchemaObject) {
-    super(schema, `List[${elementType.name}`)
+    super(schema, `Hash[${elementType.name}`)
     this.elementType = elementType
   }
 
@@ -673,7 +673,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       }
       if (schema.type === 'object' && schema.additionalProperties) {
         if (schema.additionalProperties !== true) {
-          return new ListType(this.resolveType(schema.additionalProperties), schema)
+          return new HashType(this.resolveType(schema.additionalProperties), schema)
         }
       }
       if (schema.format === 'date-time') {

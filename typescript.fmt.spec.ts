@@ -193,7 +193,7 @@ body: Partial<ICreateDashboardRenderTask>`)
   // The local state of each project in the workspace
   projects?: IProject[]
   // Operations the current user is able to perform on this object
-  can: boolean[]
+  can: IDictionary<boolean>
 }`)
     })
     it('with refs, arrays and nullable', () => {

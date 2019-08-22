@@ -32,6 +32,8 @@ import {
   IProperty,
   IType,
   IntrinsicType,
+  ArrayType,
+  HashType,
   // RequestType,
   strBody,
   // strRequest
@@ -65,7 +67,7 @@ export class TypescriptFormatter extends CodeFormatter {
     return `
 // ${warnEditing}
 import { APIMethods } from '../rtl/apiMethods'
-import { ${this.typeNames().join(', ')} } from './models'
+import { IDictionary, ${this.typeNames().join(', ')} } from './models'
 
 export class ${this.packageName} extends APIMethods {
 `
@@ -82,6 +84,11 @@ export class ${this.packageName} extends APIMethods {
 // ${warnEditing}
 
 import { URL } from 'url'
+
+export interface IDictionary<T> {
+  [key: string]: T
+}
+
 `
   }
 
@@ -301,8 +308,15 @@ import { URL } from 'url'
     }
 
     if (type.elementType) {
+      // This is a structure with nested types
       const map = this.typeMap(type.elementType)
-      return {name: `${map.name}[]`, default: '[]'}
+      if (type instanceof ArrayType) {
+        return {name: `${map.name}[]`, default: '[]'}
+      } else if (type instanceof HashType) {
+        // must be HashType
+        return {name: `IDictionary<${map.name}>`, default: '{}'}
+      }
+      throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
 
     if (type.name) {

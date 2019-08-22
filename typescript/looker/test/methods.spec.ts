@@ -395,7 +395,7 @@ describe('LookerSDK', () => {
             fields: q.fields || undefined,
             pivots: q.pivots || undefined,
             fill_fields: q.fill_fields || [],
-            filters: q.filters || [],
+            filters: q.filters,
             filter_expression: q.filter_expression || undefined,
             sorts: q.sorts || [],
             column_limit: q.column_limit || undefined,

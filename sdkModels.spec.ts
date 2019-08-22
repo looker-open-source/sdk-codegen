@@ -1,5 +1,4 @@
 import * as Models from './sdkModels'
-import { debug } from './utils'
 
 const apiModel = Models.ApiModel.fromFile('Looker.3.1.oas.json')
 
@@ -14,7 +13,6 @@ describe('sdkModels', () => {
       if (actual) {
         expect(actual.properties['title']).toBeDefined()
       }
-      debug('requestType', actual)
     })
 
     it('search_spaces', () => {
@@ -24,7 +22,6 @@ describe('sdkModels', () => {
       if (actual) {
         expect(actual.properties['fields']).toBeDefined()
       }
-      debug('requestType', actual)
     })
 
   })
@@ -38,19 +35,12 @@ describe('sdkModels', () => {
       expect(writeable.length).toEqual(0)
     })
 
-    it('CredentialsApi3[]', () => {
-      const type = apiModel.types['CredentialsApi3[]']
-      const writeable = type.writeable
-      expect(type.readOnly).toEqual(true)
-      expect(writeable.length).toEqual(0)
-    })
-
     describe('DashboardElement', () => {
       it('writeable', () => {
         const type = apiModel.types['DashboardElement']
         const writeable = type.writeable
         expect(type.readOnly).toEqual(false)
-        expect(writeable.length).toEqual(14)
+        expect(writeable.length).toEqual(17)
       })
 
       it('writeableType', () => {
@@ -59,12 +49,11 @@ describe('sdkModels', () => {
         expect(actual).toBeDefined()
         if (actual) {
           expect(actual.properties['body_text']).toBeDefined()
-          expect(actual.properties['body_text_as_html']).toBeDefined()
+          expect(actual.properties['body_text_as_html']).not.toBeDefined()
           expect(actual.properties['dashboard_id']).toBeDefined()
-          expect(actual.properties['edit_uri']).toBeDefined()
+          expect(actual.properties['edit_uri']).not.toBeDefined()
           expect(actual.properties['look_id']).toBeDefined()
         }
-        debug('writeType', actual)
       })
 
     })
