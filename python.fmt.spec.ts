@@ -119,7 +119,12 @@ describe('python formatter', () => {
   describe('method signature', () => {
     it('no params with all_datagroups', () => {
       const method = apiModel.methods['all_datagroups']
-      const expected = '# GET /datagroups -> Sequence[models.Datagroup]\ndef all_datagroups(\n    self\n) -> Sequence[models.Datagroup]:\n'
+      const expected =
+`# GET /datagroups -> Sequence[models.Datagroup]
+def all_datagroups(
+    self
+) -> Sequence[models.Datagroup]:
+`
       const actual = fmt.methodSignature('', method)
       expect(actual).toEqual(expected)
     })
@@ -128,19 +133,37 @@ describe('python formatter', () => {
   describe('method body', () => {
     it('assert response is model add_group_group', () => {
       const method = apiModel.methods['add_group_group']
-      const expected = 'response = self.post(f"/groups/{group_id}/groups", models.Group, body=body)\nassert isinstance(response, models.Group)\nreturn response'
+      const expected =
+`response = self.post(f"/groups/{group_id}/groups", models.Group, body=body)
+assert isinstance(response, models.Group)
+return response`
       const actual = fmt.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
     it('assert response is None delete_group_from_group', () => {
       const method = apiModel.methods['delete_group_from_group']
-      const expected = 'response = self.delete(f"/groups/{group_id}/groups/{deleting_group_id}")\nassert response is None\nreturn response'
+      const expected =
+`response = self.delete(f"/groups/{group_id}/groups/{deleting_group_id}")
+assert response is None
+return response`
       const actual = fmt.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
     it('assert response is list active_themes', () => {
       const method = apiModel.methods['active_themes']
-      const expected = 'response = self.get(f"/themes/active", Sequence[models.Theme], query_params={"name": name, "ts": ts, "fields": fields})\nassert isinstance(response, list)\nreturn response'
+      const expected =
+`response = self.get(f"/themes/active", Sequence[models.Theme], query_params={"name": name, "ts": ts, "fields": fields})
+assert isinstance(response, list)
+return response`
+      const actual = fmt.httpCall(indent, method)
+      expect(actual).toEqual(expected)
+    })
+    it('assert response is dict query_task_results', () => {
+      const method = apiModel.methods['query_task_results']
+      const expected =
+`response = self.get(f"/query_tasks/{query_task_id}/results", MutableMapping[str, str])
+assert isinstance(response, dict)
+return response`
       const actual = fmt.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
@@ -150,12 +173,39 @@ describe('python formatter', () => {
     it('with arrays and hashes', () => {
       const type = apiModel.types['Workspace']
       const actual = fmt.declareType(indent, type)
-      expect(actual).toEqual('\n@attr.s(auto_attribs=True, kw_only=True)\nclass Workspace(model.Model):\n    """\n    Attributes:\n        id : The unique id of this user workspace. Predefined workspace ids include "production" and "dev"\n        projects : The local state of each project in the workspace\n        can : Operations the current user is able to perform on this object\n    """\n    # The unique id of this user workspace. Predefined workspace ids include "production" and "dev"\n    id: Optional[str] = None\n    # The local state of each project in the workspace\n    projects: Optional[Sequence["Project"]] = None\n    # Operations the current user is able to perform on this object\n    can: Optional[Sequence[bool]] = None')
+      expect(actual).toEqual(`
+@attr.s(auto_attribs=True, kw_only=True)
+class Workspace(model.Model):
+    """
+    Attributes:
+        id : The unique id of this user workspace. Predefined workspace ids include "production" and "dev"
+        projects : The local state of each project in the workspace
+        can : Operations the current user is able to perform on this object
+    """
+    # The unique id of this user workspace. Predefined workspace ids include "production" and "dev"
+    id: Optional[str] = None
+    # The local state of each project in the workspace
+    projects: Optional[Sequence["Project"]] = None
+    # Operations the current user is able to perform on this object
+    can: Optional[MutableMapping[str, bool]] = None`)
     })
     it('with refs, arrays and nullable', () => {
       const type = apiModel.types['ApiVersion']
       const actual = fmt.declareType(indent, type)
-      expect(actual).toEqual('\n@attr.s(auto_attribs=True, kw_only=True)\nclass ApiVersion(model.Model):\n    """\n    Attributes:\n        looker_release_version : Current Looker release version number\n        current_version :\n        supported_versions : Array of versions supported by this Looker instance\n    """\n    # Current Looker release version number\n    looker_release_version: Optional[str] = None\n    current_version: Optional["ApiVersionElement"] = None\n    # Array of versions supported by this Looker instance\n    supported_versions: Optional[Sequence["ApiVersionElement"]] = None')
+      expect(actual).toEqual(`
+@attr.s(auto_attribs=True, kw_only=True)
+class ApiVersion(model.Model):
+    """
+    Attributes:
+        looker_release_version : Current Looker release version number
+        current_version :
+        supported_versions : Array of versions supported by this Looker instance
+    """
+    # Current Looker release version number
+    looker_release_version: Optional[str] = None
+    current_version: Optional["ApiVersionElement"] = None
+    # Array of versions supported by this Looker instance
+    supported_versions: Optional[Sequence["ApiVersionElement"]] = None`)
     })
   })
 })

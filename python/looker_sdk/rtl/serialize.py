@@ -9,6 +9,7 @@ import keyword
 from typing import (  # type: ignore
     Callable,
     ForwardRef,
+    MutableMapping,
     Sequence,
     Type,
     Union,
@@ -25,7 +26,9 @@ class DeserializeError(Exception):
     """
 
 
-TModelOrSequence = Union[Sequence[int], Sequence[str], ml.Model, Sequence[ml.Model]]
+TModelOrSequence = Union[
+    MutableMapping[str, str], Sequence[int], Sequence[str], ml.Model, Sequence[ml.Model]
+]
 TDeserializeReturn = TModelOrSequence
 TStructure = Union[Type[Sequence[int]], Type[Sequence[str]], Type[TDeserializeReturn]]
 TDeserialize = Callable[[tp.TResponseValue, TStructure], TDeserializeReturn]
