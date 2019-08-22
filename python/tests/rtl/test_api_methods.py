@@ -48,7 +48,7 @@ def test_convert_query_params(
         ("", b""),
         ([1, 2, 3], b"[1, 2, 3]"),
         (["a", "b", "c"], b'["a", "b", "c"]'),
-        ({}, None),
+        ({"foo": "bar"}, {"foo": "bar"}),
         (None, None),
         (ml.WriteApiSession(workspace_id="dev"), b'{"workspace_id": "dev"}'),
         (
@@ -81,12 +81,12 @@ def test_get_serialized(
             ml.ApiVersion(
                 looker_release_version="6.18",
                 current_version=ml.ApiVersionElement(
-                    version=ml.EXPLICIT_NULL,
+                    version=ml.EXPLICIT_NULL,  # type: ignore
                     full_version="6.18.4",
                     status="fully functional",
-                    swagger_url=ml.EXPLICIT_NULL,
+                    swagger_url=ml.EXPLICIT_NULL,  # type: ignore
                 ),
-                supported_versions=ml.EXPLICIT_NULL,
+                supported_versions=ml.EXPLICIT_NULL,  # type: ignore
             ),
         ),
     ],

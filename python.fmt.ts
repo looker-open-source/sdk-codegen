@@ -24,7 +24,17 @@
 
 // Python codeFormatter
 
-import { Arg, IMappedType, IMethod, IParameter, IProperty, IType, strBody } from './sdkModels'
+import {
+  Arg,
+  ArrayType,
+  HashType,
+  IMappedType,
+  IMethod,
+  IParameter,
+  IProperty,
+  IType,
+  strBody,
+  } from './sdkModels'
 import { CodeFormatter, warnEditing } from './codeFormatter'
 import { run } from './utils'
 
@@ -100,7 +110,7 @@ export class PythonFormatter extends CodeFormatter {
   methodsPrologue = (indent: string) => `
 # ${warnEditing}
 import datetime
-from typing import Optional, Sequence
+from typing import MutableMapping, Optional, Sequence
 
 from ${this.packagePath}.sdk import models
 from ${this.packagePath}.rtl import api_methods
@@ -114,7 +124,7 @@ class ${this.packageName}(api_methods.APIMethods):
   modelsPrologue = (indent: string) => `
 # ${warnEditing}
 import datetime
-from typing import Optional, Sequence
+from typing import MutableMapping, Optional, Sequence
 
 import attr
 import cattr
@@ -248,15 +258,17 @@ ${this.hooks.join('\n')}
     const args = this.httpArgs(bump, method)
     const methodCall = `${indent}response = ${this.it(method.httpMethod.toLowerCase())}`
     const callArgs = `f"${method.endpoint}"${args ? ', ' + args : ''}`
-    let type = this.typeMapMethods(method.type).name
-    if (type.startsWith('Sequence')) {
-      type = 'list'
+    let assertTypeName = this.typeMapMethods(method.type).name
+    if (method.type instanceof ArrayType) {
+      assertTypeName = 'list'
+    } else if (method.type instanceof HashType) {
+      assertTypeName = 'dict'
     }
     let assertion = `${indent}assert `
-    if (type == this.nullStr) {
+    if (assertTypeName === this.nullStr) {
       assertion += `response is ${this.nullStr}`
     } else {
-      assertion += `isinstance(response, ${type})`
+      assertion += `isinstance(response, ${assertTypeName})`
     }
     const returnStmt = `${indent}return response`
     return `${methodCall}(${callArgs})\n${assertion}\n${returnStmt}`
@@ -317,7 +329,12 @@ ${this.hooks.join('\n')}
     super.typeMap(type)
     if (type.elementType) {
       const map = this._typeMap(type.elementType, format)
-      return {name: `Sequence[${map.name}]`, default: this.nullStr}
+      if (type instanceof ArrayType) {
+        return {name: `Sequence[${map.name}]`, default: this.nullStr}
+      } else if (type instanceof HashType) {
+        return {name: `MutableMapping[str, ${map.name}]`, default: this.nullStr}
+      }
+      throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
     if (type.name) {
       let name: string
@@ -348,7 +365,6 @@ ${this.hooks.join('\n')}
     if (name) {
       const pipEnvExists = run('command', ['-v', 'pipenv'],
         `To reformat ${fileName}, please install pipenv: https://docs.pipenv.org/en/latest/install/#installing-pipenv`, true)
-      console.log(pipEnvExists)
       if (pipEnvExists.includes('pipenv')) {
         // pipenv check completed without error
         run('pipenv', ['update'])

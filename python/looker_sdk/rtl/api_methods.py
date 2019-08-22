@@ -11,7 +11,16 @@ from looker_sdk.rtl import transport as tp
 from looker_sdk.rtl import user_session as us
 
 
-TBody = Optional[Union[str, Sequence[str], Sequence[int], ml.Model, Sequence[ml.Model]]]
+TBody = Optional[
+    Union[
+        str,
+        MutableMapping[str, str],
+        Sequence[str],
+        Sequence[int],
+        ml.Model,
+        Sequence[ml.Model],
+    ]
+]
 TStructure = Optional[Union[Type[str], sr.TStructure]]
 TReturn = Optional[Union[tp.TResponseValue, sr.TDeserializeReturn]]
 TQueryParams = MutableMapping[
@@ -97,7 +106,7 @@ class APIMethods:
         serialized: Optional[bytes]
         if isinstance(body, str):
             serialized = body.encode("utf-8")
-        elif isinstance(body, (list, ml.Model)):
+        elif isinstance(body, (list, dict, ml.Model)):
             serialized = self.serialize(body)
         else:
             serialized = None
