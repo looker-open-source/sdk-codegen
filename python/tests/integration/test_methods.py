@@ -101,14 +101,42 @@ def test_bad_user_search_returns_no_results(looker_client: mtds.LookerSDK):
 
 
 @pytest.mark.usefixtures("test_users")
-def test_search_users_matches_email_dmain(
+def test_search_users_matches_pattern(
     looker_client: mtds.LookerSDK,
-    test_data: Dict[str, Union[List[Dict[str, str]], str]],
+    users: List[Dict[str, str]],
+    email_domain: str
+    # test_data: Dict[str, Union[List[Dict[str, str]], str]],
 ):
     """search_users should return a list of all matches.
     """
-    actual = looker_client.search_users_names(pattern=f"%{test_data['email_domain']}")
-    assert len(actual) == len(test_data["users"])
+    user = users[0]
+
+    # Search by full email
+    result = looker_client.search_users_names(
+        pattern=f'{user["first_name"]}.{user["last_name"]}{email_domain}'
+    )
+    assert len(result) == 1
+    assert result[0].first_name == user["first_name"]
+    assert result[0].last_name == user["last_name"]
+    assert result[0].email == f'{user["first_name"]}.{user["last_name"]}{email_domain}'
+
+    # Search by first name
+    result = looker_client.search_users_names(pattern=user["first_name"])
+    assert len(result) > 0
+    assert result[0].first_name == user["first_name"]
+
+    # First name with spaces
+    u = looker_client.create_user(
+        ml.WriteUser(first_name="John Allen", last_name="Smith")
+    )
+    if u.id:
+        result = looker_client.search_users_names(pattern="John Allen")
+        assert len(result) == 1
+        assert result[0].first_name == "John Allen"
+        assert result[0].last_name == "Smith"
+
+        # Clean
+        looker_client.delete_user(u.id)
 
 
 @pytest.mark.usefixtures("test_users")
@@ -286,7 +314,7 @@ def get_query_id(qhash: Dict[str, ml.Query], id: Any) -> Optional[int]:
     return list(qhash.values())[0].id
 
 
-@pytest.mark.usefixtures("remove_test_dashboards")  # type: ignore
+@pytest.mark.usefixtures("remove_test_dashboards")
 def test_crud_dashboard(looker_client: mtds.LookerSDK, queries, dashboards):
     """Test creating, retrieving, updating and deleting a user.
     """
