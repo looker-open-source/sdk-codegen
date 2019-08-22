@@ -79,7 +79,8 @@ export const run = (command: string, args: string[], errMsg?: string, warning: b
     return result
   } catch (e) {
     if (warning) {
-      return log(errMsg)
+      log(errMsg)
+      return ''
     } else {
       return quit(errMsg || e)
     }

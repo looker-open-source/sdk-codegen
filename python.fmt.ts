@@ -348,6 +348,7 @@ ${this.hooks.join('\n')}
     if (name) {
       const pipEnvExists = run('command', ['-v', 'pipenv'],
         `To reformat ${fileName}, please install pipenv: https://docs.pipenv.org/en/latest/install/#installing-pipenv`, true)
+      console.log(pipEnvExists)
       if (pipEnvExists.includes('pipenv')) {
         // pipenv check completed without error
         run('pipenv', ['update'])
