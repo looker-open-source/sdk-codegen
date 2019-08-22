@@ -36,6 +36,16 @@ def queries(test_data):
     return test_data["queries"]
 
 
+@pytest.fixture(scope="session")  # type: ignore
+def users(test_data):
+    return test_data["users"]
+
+
+@pytest.fixture(scope="session")
+def email_domain(test_data):
+    return test_data["email_domain"]
+
+
 @pytest.fixture(scope="function")  # type: ignore
 def remove_test_dashboards(looker_client: mtds.LookerSDK, dashboards):
     # Clean up any test dashboards that may exist. We do this here instead at the end of
