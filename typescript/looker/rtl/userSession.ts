@@ -102,6 +102,15 @@ export class UserSession implements IUserSession {
     this._sudoToken.reset()
   }
 
+  private async ok<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
+    const result = await promise
+    if (result.ok) {
+      return result.value
+    } else {
+      throw sdkError(result as any)
+    }
+  }
+
   async login(sudoId?: string) {
     if (sudoId || (sudoId !== this.sudoId) || (!this.isAuthenticated())) {
       await this._login(sudoId)
@@ -117,15 +126,6 @@ export class UserSession implements IUserSession {
     return result
   }
 
-  private async ok<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
-    const result = await promise
-    if (result.ok) {
-      return result.value
-    } else {
-      throw sdkError(result as any)
-    }
-  }
-
   private async sudoLogout() {
     let result = false
     if (this.isSudo()) {
@@ -136,14 +136,14 @@ export class UserSession implements IUserSession {
   }
 
   // internal login method that manages default auth token and sudo workflow
-  private async _login(sudoId?: string) {
-    if (!!sudoId) {
-      // Assign new requested sudo id
-      this.sudoId = sudoId
-    }
-
-    // for linty freshness, logout sudo if set
+  private async _login(newId?: string) {
+    // for linty freshness, always logout sudo if set
     await this.sudoLogout()
+
+    if (newId !== this.sudoId) {
+      // Assign new requested sudo id
+      this.sudoId = newId || ''
+    }
 
     if (!this._authToken.isActive()) {
       this.reset()
@@ -162,7 +162,7 @@ export class UserSession implements IUserSession {
       let token = this.activeToken
       const promise = this.transport.request<IAccessToken, IError>(
         strPost,
-        encodeURI(`/login/${sudoId}`),
+        encodeURI(`/login/${newId}`),
         null,
         null,
         // ensure the auth token is included in the sudo request
@@ -205,7 +205,9 @@ export class UserSession implements IUserSession {
       // User was logged out, so set auth back to default
       this.sudoId = ''
       this._sudoToken.reset()
-      await this.login()
+      if (!this._authToken.isActive()) {
+        await this.login()
+      }
     } else {
       // completely logged out
       this.reset()
