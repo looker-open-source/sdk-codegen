@@ -30,7 +30,7 @@ import {
   parseResponse,
   ITransportSettings,
   Authenticator,
-  StatusCode
+  StatusCode, agentTag
 } from './transport'
 
 import * as rq from 'request'
@@ -57,8 +57,6 @@ export class NodeTransport implements ITransport {
     body?: any,
     authenticator?: Authenticator
   ): Promise<SDKResponse<TSuccess, TError>> {
-    // TODO use version info for the Typescript packagePath
-    const agentTag = `LookerSDK JS ${this.options.api_version}`
     let headers: any = {
       'User-Agent': agentTag,
       ...this.options.headers
@@ -81,7 +79,7 @@ export class NodeTransport implements ITransport {
       rejectUnauthorized: false, // TODO make this configurable for tests. Should default to True
       headers: headers,
       body: body ? body : undefined,
-      json: body ? true : false,
+      json: !!body,
       resolveWithFullResponse: true,
       method
     }

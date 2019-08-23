@@ -30,6 +30,11 @@
 import { Agent } from 'https'
 import { Headers, Response } from 'request'
 
+// TODO generate version and build dynamically
+const lookerBuild = '6.18'
+const apiVersion = '3.31'
+export const agentTag = `TS-SDK ${apiVersion}.${lookerBuild}`
+
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'TRACE' | 'HEAD'
 
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for reference
@@ -176,7 +181,7 @@ export async function parseResponse(contentType: string, res: Response) {
       return result instanceof Object ? result : JSON.parse(result)
     } catch (error) {
       console.log(res.body)
-      return Promise.reject(error)
+      return await Promise.reject(error)
     }
   } else if (contentType === 'text' || contentType.startsWith('text/')) {
     return res.body
@@ -187,7 +192,7 @@ export async function parseResponse(contentType: string, res: Response) {
       return await res.body
       // return await res.blob()
     } catch (error) {
-      return Promise.reject(error)
+      return await Promise.reject(error)
     }
   }
 }
