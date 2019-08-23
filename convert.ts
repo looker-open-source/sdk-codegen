@@ -24,10 +24,9 @@
  * THE SOFTWARE.
  */
 
-import * as fs from 'fs'
 import { SDKConfigProps, SDKConfig } from './sdkConfig'
 import { openApiFileName, logFetch } from './fetchSpec'
-import { fail, log, quit, run } from './utils'
+import { fail, isFileSync, log, quit, run } from './utils'
 
 const lintCheck = async (fileName: string) => {
   // TODO skip if flag to ignore lint errors is specified
@@ -43,7 +42,7 @@ const lintCheck = async (fileName: string) => {
 }
 
 const convertSpec = async (fileName: string, openApiFile: string) => {
-  if (fs.existsSync(openApiFile)) {
+  if (isFileSync(openApiFile)) {
     log(`${openApiFile} already exists.`)
     return openApiFile
   }
@@ -54,7 +53,7 @@ const convertSpec = async (fileName: string, openApiFile: string) => {
     // output to openApiFile
     // run('swagger2openapi', [fileName, '--resolveInternal', '-p', '-i', '"  "', '-o', openApiFile])
     run('swagger2openapi', [fileName, '-p', '-i', '"  "', '-o', openApiFile])
-    if (!fs.existsSync(openApiFile)) return fail('convertSpec', `creating ${openApiFile} failed`)
+    if (!isFileSync(openApiFile)) return fail('convertSpec', `creating ${openApiFile} failed`)
     return openApiFile
   } catch (e) {
     return quit(e)
@@ -64,7 +63,7 @@ const convertSpec = async (fileName: string, openApiFile: string) => {
 // convert the swagger specification to OpenApi
 export const logConvert = async (name: string, props: SDKConfigProps) => {
   const oaFile = openApiFileName(name, props)
-  if (fs.existsSync(oaFile)) return oaFile
+  if (isFileSync(oaFile)) return oaFile
 
   const specFile = await logFetch(name, props)
   const openApiFile = await convertSpec(specFile, oaFile)

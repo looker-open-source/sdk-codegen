@@ -29,8 +29,11 @@ import { IQuery, IRequestrun_inline_query, IUser, IWriteQuery, } from '../sdk/mo
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 
-const testData = yaml.safeLoad(fs.readFileSync('test/data.yml', 'utf-8'))
-const localIni = testData['iniFile']
+const dataFile = 'test/data.yml'
+// slightly hackish data path determination for tests
+const root = fs.existsSync(dataFile) ? '' : '../../'
+const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, 'utf-8'))
+const localIni = `${root}${testData['iniFile']}`
 const users: Partial<IUser>[] = testData['users']
 const queries: Partial<IQuery>[] = testData['queries']
 const dashboards: any[] = testData['dashboards']
@@ -147,11 +150,6 @@ describe('LookerSDK', () => {
     await sdk.userSession.logout()
   }
 
-  afterAll(async () => {
-    await removeTestUsers()
-    // await removeTestQueries()
-  })
-
   describe('automatic authentication for API calls', () => {
     it('me returns the correct result', async () => {
       const sdk = new LookerSDK(userSession)
@@ -176,6 +174,49 @@ describe('LookerSDK', () => {
       await sdk.userSession.logout()
       expect(sdk.userSession.isAuthenticated()).toBeFalsy()
     })
+  })
+
+  describe('sudo', () => {
+    it('login/logout', async () => {
+      const sdk = new LookerSDK(userSession)
+      const apiUser = await sdk.ok(sdk.me())
+      let all = await sdk.ok(
+        sdk.all_users({
+          fields: 'id'
+        })
+      )
+
+      // find an enabled user who isn't the API user
+      const sudoer = all.find(u => u.id !== apiUser.id && (!u.is_disabled))
+      expect(sudoer).toBeDefined()
+      if (sudoer) {
+        const sudoId = sudoer.id.toString()
+        const token = await sdk.userSession.login(sudoId)
+        expect(token).toBeDefined()
+        let sudo = await sdk.ok(sdk.me())
+        expect(sudo.id).not.toEqual(apiUser.id)
+        expect(sudo.id.toString()).toEqual(sudoId)
+
+        // logging out sudo resets to API user
+        await sdk.userSession.logout()
+        let user = await sdk.ok(sdk.me())
+        expect(sdk.userSession.isAuthenticated()).toEqual(true)
+        expect(user).toEqual(apiUser)
+
+        // login() without a sudo ID also logs in API user
+        await sdk.userSession.login(sudoId)
+        sudo = await sdk.ok(sdk.me())
+        expect(sudo.id.toString()).toEqual(sudoId)
+
+        await sdk.userSession.login()
+        user = await sdk.ok(sdk.me())
+        expect(sdk.userSession.isAuthenticated()).toEqual(true)
+        expect(user.id).toEqual(apiUser.id)
+      }
+      await sdk.userSession.logout()
+      expect(sdk.userSession.isAuthenticated()).toEqual(false)
+    }, testTimeout)
+
   })
 
   describe('retrieves collections', () => {
@@ -230,6 +271,11 @@ describe('LookerSDK', () => {
     beforeAll(async () => {
       await removeTestUsers()
     }, testTimeout)
+
+    afterAll(async () => {
+      await removeTestUsers()
+      // await removeTestQueries()
+    })
 
     it('create, update, and delete user', async () => {
       const sdk = new LookerSDK(userSession)
@@ -336,6 +382,7 @@ describe('LookerSDK', () => {
 
       await sdk.userSession.logout()
     }, testTimeout)
+
   })
 
   describe('Query calls', () => {

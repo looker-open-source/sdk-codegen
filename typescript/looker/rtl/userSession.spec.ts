@@ -46,7 +46,7 @@ describe('UserSession', () => {
       const session = new UserSession(settings, new NodeTransport(settings))
       expect(session.settings).toEqual(settings)
       expect(session.isAuthenticated()).toEqual(false)
-      expect(session.isImpersonating()).toEqual(false)
+      expect(session.isSudo()).toEqual(false)
     })
 
     it('default auth logs in with good credentials', async () => {

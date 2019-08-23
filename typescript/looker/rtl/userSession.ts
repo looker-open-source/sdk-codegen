@@ -28,32 +28,35 @@ import { IRequestInit, ITransport, SDKResponse, sdkError } from './transport'
 import { AuthToken } from './authToken'
 import { NodeTransport } from './nodeTransport'
 
-// TODO support impersonation and reporting user id of logged in user?
+const strPost = 'POST'
+const strDelete = 'DELETE'
+
 export interface IUserSession {
+  sudoId: string
+  settings: IApiSettings
+  transport: ITransport
+
   // Authentication token
   getToken(): Promise<IAccessToken>
 
-  userId: string
-
-  isImpersonating(): boolean
+  isSudo(): boolean
 
   isAuthenticated(): boolean
 
   authenticate(init: IRequestInit): Promise<IRequestInit>
 
-  login(userId?: string): Promise<IAccessToken>
+  login(sudoId?: string): Promise<IAccessToken>
 
   logout(): Promise<boolean>
 
-  settings: IApiSettings
-  transport: ITransport
+  reset(): void
 }
 
 
 export class UserSession implements IUserSession {
-  // TODO track both default auth token and user auth token, extract out token expiration logic to new class
-  _token: AuthToken = new AuthToken()
-  userId: string = ''
+  _authToken: AuthToken = new AuthToken()
+  _sudoToken: AuthToken = new AuthToken()
+  sudoId: string = ''
   transport: ITransport
 
   constructor(public settings: IApiSettings, transport?: ITransport) {
@@ -61,14 +64,18 @@ export class UserSession implements IUserSession {
     this.transport = transport || new NodeTransport(settings)
   }
 
-  // Determines if the authentication token exists and has not expired
-  isAuthenticated() {
-    if (!(this._token && this._token.access_token)) return false
-    return this._token.isActive()
+  get activeToken() {
+    if (this._sudoToken.access_token) {
+      return this._sudoToken
+    }
+    return this._authToken
   }
 
-  isImpersonating() {
-    return !!(this.userId && this.isAuthenticated())
+  // Determines if the authentication token exists and has not expired
+  isAuthenticated() {
+    const token = this.activeToken
+    if (!(token && token.access_token)) return false
+    return token.isActive()
   }
 
   async authenticate(init: IRequestInit) {
@@ -77,16 +84,37 @@ export class UserSession implements IUserSession {
     return init
   }
 
+  isSudo() {
+    return (!!this.sudoId) && (this._sudoToken.isActive())
+  }
+
   async getToken() {
     if (!this.isAuthenticated()) {
       await this.login()
     }
-    return this._token
+    return this.activeToken
   }
 
   // Reset the user session
-  private reset() {
-    this._token = new AuthToken()
+  reset() {
+    this.sudoId = ''
+    this._authToken.reset()
+    this._sudoToken.reset()
+  }
+
+  async login(sudoId?: string) {
+    if (sudoId || (sudoId !== this.sudoId) || (!this.isAuthenticated())) {
+      await this._login(sudoId)
+    }
+    return this.activeToken
+  }
+
+  async logout() {
+    let result = false
+    if (this.isAuthenticated()) {
+      result = await this._logout()
+    }
+    return result
   }
 
   private async ok<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
@@ -98,34 +126,66 @@ export class UserSession implements IUserSession {
     }
   }
 
-  // internal login method
-  private async _login(userId?: string) {
-    if (userId && this.userId && this.userId !== userId) {
-      // We're switching user ids
-      await this.logout() // Logout the current user
-
+  private async sudoLogout() {
+    let result = false
+    if (this.isSudo()) {
+      result = await this.logout() // Logout the current sudo
+      this._sudoToken.reset()
     }
-    this.reset()
-    // authenticate client
-    const result = await this.ok(this.transport.request<IAccessToken, IError>('POST', '/login',
-      {client_id: this.settings.client_id, client_secret: this.settings.client_secret}))
     return result
   }
 
-  async login(userId?: string) {
-    if (!this.isAuthenticated()) {
-      const token = await this._login(userId)
-      this._token = new AuthToken(token)
-      return token
+  // internal login method that manages default auth token and sudo workflow
+  private async _login(sudoId?: string) {
+    if (!!sudoId) {
+      // Assign new requested sudo id
+      this.sudoId = sudoId
     }
-    return this._token
+
+    // for linty freshness, logout sudo if set
+    await this.sudoLogout()
+
+    if (!this._authToken.isActive()) {
+      this.reset()
+      // authenticate client
+      const token = await this.ok(
+        this.transport.request<IAccessToken, IError>(strPost, '/login',
+          {
+            client_id: this.settings.client_id,
+            client_secret: this.settings.client_secret
+          }))
+      this._authToken.setToken(token)
+    }
+
+    if (this.sudoId) {
+      // Use the API user auth to sudo
+      let token = this.activeToken
+      const promise = this.transport.request<IAccessToken, IError>(
+        strPost,
+        encodeURI(`/login/${sudoId}`),
+        null,
+        null,
+        // ensure the auth token is included in the sudo request
+        (init: IRequestInit) => {
+          if (token.access_token) {
+            init.headers.Authorization = `token ${token.access_token}`
+          }
+          return init
+        }
+      )
+
+      const accessToken = await this.ok(promise)
+
+      this._sudoToken.setToken(accessToken)
+    }
+
+    return this.activeToken
   }
 
   private async _logout() {
-    // TODO verify this closure variable is required with a local block
-    const token = this._token
+    const token = this.activeToken
     const promise = this.transport.request<string, IError>(
-      'DELETE',
+      strDelete,
       '/logout',
       null,
       null,
@@ -141,23 +201,16 @@ export class UserSession implements IUserSession {
     await this.ok(promise)
 
     // If no error was thrown, logout was successful
-    if (this.userId) {
+    if (this.sudoId) {
       // User was logged out, so set auth back to default
-      this.userId = ''
+      this.sudoId = ''
+      this._sudoToken.reset()
       await this.login()
     } else {
       // completely logged out
       this.reset()
     }
     return true
-  }
-
-  async logout() {
-    let result = false
-    if (this.isAuthenticated()) {
-      result = await this._logout()
-    }
-    return result
   }
 
 }

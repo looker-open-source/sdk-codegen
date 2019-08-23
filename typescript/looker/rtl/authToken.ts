@@ -39,8 +39,9 @@ export class AuthToken implements IAccessToken {
     this.setToken(token)
   }
 
-  // true if the authentication token has not timed out
+  // true if the authentication token is set and has not timed out
   isActive() {
+    if (!this.access_token) return false
     if (!this.expiresAt) return false
     const now = new Date()
     return this.expiresAt > now
@@ -59,6 +60,11 @@ export class AuthToken implements IAccessToken {
     }
     this.expiresAt = exp
     return this
+  }
+
+  reset() {
+    this.access_token = ''
+    this.expires_in = 0
   }
 
 }

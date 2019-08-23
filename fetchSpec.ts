@@ -26,7 +26,7 @@ import fetch from 'node-fetch'
 import { SDKConfig, SDKConfigProps } from './sdkConfig'
 import { URLSearchParams } from 'url'
 import * as fs from 'fs'
-import { fail, quit, log } from './utils'
+import { fail, quit, log, isFileSync } from './utils'
 
 const specFileUrl = (props: SDKConfigProps) => `${props.base_url}/api/${props.api_version}/swagger.json`
 
@@ -70,8 +70,7 @@ const badAuth = (content: string) => content.indexOf('Requires authentication') 
 
 export const fetchSpecFile = async (name: string, props: SDKConfigProps) => {
   const fileName = specFileName(name, props)
-  // TODO make switch for "always fetch" -- or just instruct users to delete previous spec files?
-  if (fs.existsSync(fileName)) return fileName
+  if (isFileSync(fileName)) return fileName
 
   try {
     let response = null

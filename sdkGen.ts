@@ -27,7 +27,7 @@
 import * as fs from 'fs'
 import * as Models from './sdkModels'
 import { SDKConfig } from './sdkConfig'
-import { log, quit } from './utils'
+import { isFileSync, log, quit } from './utils'
 import { openApiFileName } from './fetchSpec'
 import { SdkGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, TargetLanguages } from './targetLanguages'
@@ -57,7 +57,7 @@ import { logConvert } from './convert'
         const apiModel = Models.ApiModel.fromFile(oasFile)
         const formatter = getFormatter(language, apiModel)
         const sdkPath = `${formatter.codePath}/${formatter.packagePath}/sdk`
-        if (!fs.existsSync(sdkPath)) fs.mkdirSync(sdkPath, {recursive: true})
+        if (!isFileSync(sdkPath)) fs.mkdirSync(sdkPath, {recursive: true})
         const sdk = new SdkGenerator(apiModel, formatter)
         let output = sdk.render(formatter.indentStr)
         fs.writeFileSync(formatter.fileName('sdk/methods'), output)
