@@ -56,6 +56,7 @@ export interface IType {
   default?: string
   readOnly: boolean
   refCount: number // if it works for Delphi, it works for TypeScript
+  schema: OAS.SchemaObject
   asHashString(): string
 }
 
@@ -91,6 +92,7 @@ class MethodResponse implements IMethodResponse {
 }
 
 export interface IProperty extends ISymbol {
+  required: boolean
   nullable: boolean
   description: string
   readOnly: boolean
@@ -138,6 +140,11 @@ class SchemadSymbol extends Symbol {
 
 class Property extends SchemadSymbol implements IProperty {
   required: boolean = false
+
+  constructor(name: string, type: IType, schema: OAS.SchemaObject, required: string[] = []) {
+    super(name, type, schema)
+    this.required = required.includes(name)
+  }
 
   get nullable(): boolean {
     // TODO determine cascading nullable options
@@ -441,7 +448,7 @@ class Type implements IType {
 
   load(symbols: ISymbolTable): void {
     Object.entries(this.schema.properties || {}).forEach(([propName, propSchema]) => {
-      this.properties[propName] = new Property(propName, symbols.resolveType(propSchema), propSchema)
+      this.properties[propName] = new Property(propName, symbols.resolveType(propSchema), propSchema, this.schema.required)
     })
   }
 
@@ -539,9 +546,11 @@ export class RequestType extends Type {
 }
 
 export class WriteType extends Type {
-  constructor(api: IApiModel, name: string, properties: IProperty[], description: string = '') {
+  constructor(api: IApiModel, type: IType) {
+    const name = `${strWrite}${type.name}`
+    const description = `Dynamically generated writeable type for ${type.name}`
     super({description}, name)
-    properties
+    type.writeable
       .filter(p => (!p.readOnly) && (!p.type.readOnly))
       .forEach(p => {
         let writeProp = new Property(p.name, p.type,
@@ -549,7 +558,7 @@ export class WriteType extends Type {
             description: p.description,
             // nullable/optional if property is nullable or property is complex type
             nullable: p.nullable || !(p.type instanceof IntrinsicType)
-          })
+          }, type.schema.required)
         const typeWriter = api.getWriteableType(p.type)
         if (typeWriter) writeProp.type = typeWriter
         this.properties[p.name] = writeProp
@@ -716,12 +725,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return result
   }
 
-  makeWriteableType(hash: string, type: IType, writeProps?: IProperty[]) {
-    writeProps = writeProps || type.writeable
-    const name = `${strWrite}${type.name}`
-    const writer = new WriteType(this, name, writeProps,
-      `Dynamically generated writeable type for ${type.name}`)
-    this.types[name] = writer
+  makeWriteableType(hash: string, type: IType) {
+    const writer = new WriteType(this, type)
+    this.types[writer.name] = writer
     this.requestTypes[hash] = writer
     return writer
   }
@@ -735,7 +741,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     if (writes.length === 0 || writes.length === props.length) return undefined
     const hash = md5(type.asHashString())
     let result = this.requestTypes[hash]
-    if (!result) result = this.makeWriteableType(hash, type, writes)
+    if (!result) result = this.makeWriteableType(hash, type)
     return result
   }
 
