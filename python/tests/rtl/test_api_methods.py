@@ -48,7 +48,7 @@ def test_convert_query_params(
         ("", b""),
         ([1, 2, 3], b"[1, 2, 3]"),
         (["a", "b", "c"], b'["a", "b", "c"]'),
-        ({"foo": "bar"}, {"foo": "bar"}),
+        ({"foo": "bar"}, b'{"foo": "bar"}'),
         (None, None),
         (ml.WriteApiSession(workspace_id="dev"), b'{"workspace_id": "dev"}'),
         (

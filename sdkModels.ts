@@ -236,6 +236,7 @@ export interface IMethod extends ISymbol {
   allParams: IParameter[]
   // All optional parameters
   optionalParams: IParameter[]
+  bodyParams: IParameter[]
 }
 
 export class Method extends SchemadSymbol implements IMethod {
@@ -1092,7 +1093,7 @@ export interface ICodeFormatter {
   declareConstructorArg(indent: string, property: IProperty): string
 
   // produces the code for the type constructor
-  construct(indent: string, properties: Record<string, IProperty>): string
+  construct(indent: string, type: IType): string
 
   // generates entire type declaration
   declareType(indent: string, type: IType): string

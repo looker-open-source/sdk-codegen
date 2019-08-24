@@ -27,7 +27,7 @@ import { PythonFormatter } from './python.fmt'
 
 const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
 
-const fmt = new PythonFormatter()
+const fmt = new PythonFormatter(apiModel)
 const indent = ''
 
 describe('python formatter', () => {
@@ -206,6 +206,50 @@ class ApiVersion(model.Model):
     current_version: Optional["ApiVersionElement"] = None
     # Array of versions supported by this Looker instance
     supported_versions: Optional[Sequence["ApiVersionElement"]] = None`)
+    })
+    it('write model', () => {
+      // cause dynamic WriteApiSession
+      const method = apiModel.methods['create_query_task']
+      const param = method.bodyParams[0]
+      fmt.declareParameter(indent, param)
+
+      const writeType = apiModel.types['WriteCreateQueryTask']
+      const actual = fmt.declareType(indent, writeType)
+      expect(actual).toEqual(`
+@attr.s(auto_attribs=True, kw_only=True, init=False)
+class WriteCreateQueryTask(model.Model):
+    """
+    Dynamically generated writeable type for CreateQueryTask
+
+    Attributes:
+        query_id : Id of query to run
+        result_format : Desired result format
+        source : Source of query task
+        deferred : Create the task but defer execution
+        look_id : Id of look associated with query.
+        dashboard_id : Id of dashboard associated with query.
+    """
+    # Id of query to run
+    query_id: int
+    # Desired result format
+    result_format: str
+    # Source of query task
+    source: Optional[str] = None
+    # Create the task but defer execution
+    deferred: Optional[bool] = None
+    # Id of look associated with query.
+    look_id: Optional[int] = None
+    # Id of dashboard associated with query.
+    dashboard_id: Optional[str] = None
+
+    def __init__(self, *, query_id: int, result_format: str, source: Optional[str] = None, deferred: Optional[bool] = None, look_id: Optional[int] = None, dashboard_id: Optional[str] = None):
+        self.query_id = query_id
+        self.result_format = result_format
+        self.source = source
+        self.deferred = deferred
+        self.look_id = look_id
+        self.dashboard_id = dashboard_id
+        self.__attrs_post_init__()`)
     })
   })
 })

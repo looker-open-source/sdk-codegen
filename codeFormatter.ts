@@ -82,7 +82,7 @@ export abstract class CodeFormatter implements ICodeFormatter {
 
   abstract initArg(indent: string, property: IProperty): string
 
-  abstract construct(indent: string, properties: Record<string, IProperty>): string
+  abstract construct(indent: string, type: IType): string
 
   // abstract createRequester(indent: string, method: IMethod): string
 
@@ -131,8 +131,8 @@ export abstract class CodeFormatter implements ICodeFormatter {
     Object.values(type.properties)
       .forEach((prop) => props.push(this.declareProperty(bump, prop)))
     return this.typeSignature(indent, type)
-      // + this.construct(indent, type.properties)
       + props.join(this.propDelimiter)
+      + this.construct(indent, type)
       + `${this.endTypeStr ? indent : ''}${this.endTypeStr}`
   }
 
