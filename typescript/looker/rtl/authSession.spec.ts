@@ -1,5 +1,5 @@
 import { ApiSettingsIniFile } from './apiSettings'
-import { UserSession } from './userSession'
+import { AuthSession } from './authSession'
 
 /*
  * The MIT License (MIT)
@@ -27,13 +27,13 @@ import { UserSession } from './userSession'
 
 import { NodeTransport } from './nodeTransport'
 
-describe('UserSession', () => {
+describe('AuthSession', () => {
   const localIni = 'looker.ini'
   const settings = new ApiSettingsIniFile(localIni, 'Looker')
 
   describe('isAuthenticated', () => {
     it('unauthenticated logout returns false', async () => {
-      const session = new UserSession(settings, new NodeTransport(settings))
+      const session = new AuthSession(settings, new NodeTransport(settings))
       expect(session.isAuthenticated()).toEqual(false)
       const actual = await session.logout()
       expect(actual).toEqual(false)
@@ -43,14 +43,14 @@ describe('UserSession', () => {
 
   describe('integration tests', () => {
     it('initializes', () => {
-      const session = new UserSession(settings, new NodeTransport(settings))
+      const session = new AuthSession(settings, new NodeTransport(settings))
       expect(session.settings).toEqual(settings)
       expect(session.isAuthenticated()).toEqual(false)
       expect(session.isSudo()).toEqual(false)
     })
 
     it('default auth logs in with good credentials', async () => {
-      const session = new UserSession(settings, new NodeTransport(settings))
+      const session = new AuthSession(settings, new NodeTransport(settings))
       expect(session.isAuthenticated()).toEqual(false)
       const token = await session.login()
       expect(token).toBeDefined()
@@ -59,7 +59,7 @@ describe('UserSession', () => {
     })
 
     it('default auth logs in and out with good credentials', async () => {
-      const session = new UserSession(settings, new NodeTransport(settings))
+      const session = new AuthSession(settings, new NodeTransport(settings))
       expect(session.isAuthenticated()).toEqual(false)
       const token = await session.login()
       expect(token).toBeDefined()

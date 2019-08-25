@@ -277,7 +277,7 @@ ${this.hooks.join('\n')}
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
 
-    // APIMethods/UserSession handle auth
+    // APIMethods/AuthSession handle auth
     if (method.name === 'login') {
       return `${indent}# login() using api3credentials is automated in the client`
     } else if (method.name === 'login_user') {

@@ -62,8 +62,7 @@ Initialize the Looker SDK in Typescript with code similar to the following:
 ```typescript
 // Retrieve the configuration settings from the `looker.ini` file
 const settings = new ApiSettingsIniFile('looker.ini')
-// UserSession handles authentication automatically
-const userSession = new UserSession(settings)
+const session = new AuthSession(settings)
 ```
 
 #### Make SDK method requests
@@ -72,8 +71,8 @@ Verify authentication works and that API calls will succeed with code similar to
 
 ```typescript
 (async () => {
-  // Create an SDK instance for the configured userSession
-  const sdk = new LookerSDK(userSession)
+  authSession
+  const sdk = new LookerSDK(session)
   // retrieve your user account to verify correct credentials
   const me = await sdk.ok(sdk.me()) 
   // make any other calls to the Looker SDK
@@ -88,8 +87,8 @@ Verify authentication works and that API calls will succeed with code similar to
 
   ...
 
-  await sdk.userSession.logout()
-  if (!sdk.userSession.isAuthenticated()) {
+  await sdk.authSession.logout()
+  if (!sdk.authSession.isAuthenticated()) {
     console.log('Logout successful')
   }
 

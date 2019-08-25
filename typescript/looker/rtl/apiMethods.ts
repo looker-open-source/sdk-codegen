@@ -23,11 +23,11 @@
  */
 
 import { SDKResponse, HttpMethod, sdkError } from './transport'
-import { IUserSession } from './userSession'
+import { IAuthSession } from './authSession'
 
 export class APIMethods {
-  constructor(public userSession: IUserSession) {
-    this.userSession = userSession
+  constructor(public authSession: IAuthSession) {
+    this.authSession = authSession
   }
 
   /** A helper method for simplifying error handling of SDK responses.
@@ -69,13 +69,13 @@ export class APIMethods {
     queryParams?: any,
     body?: any
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.userSession.transport.request<TSuccess, TError>(
+    return this.authSession.transport.request<TSuccess, TError>(
       method,
       path,
       queryParams,
       body,
       (init: any) => {
-        return this.userSession.authenticate(init)
+        return this.authSession.authenticate(init)
       }
     )
   }

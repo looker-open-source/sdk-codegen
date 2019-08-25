@@ -1,4 +1,4 @@
-"""UserSession to provid automatic authentication
+"""AuthSession to provide automatic authentication
 """
 from typing import Dict, Optional
 import urllib.parse
@@ -11,8 +11,8 @@ from looker_sdk.rtl import serialize as sr
 from looker_sdk.rtl import model as ml
 
 
-class UserSession:
-    """UserSession to provid automatic authentication
+class AuthSession:
+    """AuthSession to provide automatic authentication
     """
 
     def __init__(

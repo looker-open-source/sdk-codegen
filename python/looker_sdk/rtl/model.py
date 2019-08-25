@@ -45,7 +45,7 @@ class Model:
 
 @attr.s(auto_attribs=True, kw_only=True)
 class AccessToken(Model):
-    """API Model used by RTL UserSession
+    """API Model used by RTL AuthSession
 
     Attributes:
         access_token : Access Token used for API calls

@@ -23,7 +23,7 @@
  */
 
 import { ApiSettingsIniFile } from '../rtl/apiSettings'
-import { UserSession } from '../rtl/userSession'
+import { AuthSession } from '../rtl/authSession'
 import { LookerSDK } from '../sdk/methods'
 import { IQuery, IRequestrun_inline_query, IUser, IWriteQuery, } from '../sdk/models'
 import * as yaml from 'js-yaml'
@@ -42,7 +42,7 @@ const testTimeout = 36000000 // 1 hour
 
 describe('LookerSDK', () => {
   const settings = new ApiSettingsIniFile(localIni, 'Looker')
-  const userSession = new UserSession(settings)
+  const session = new AuthSession(settings)
 
   const createQueryRequest = (q: any, limit: number) => {
     const result: Partial<IWriteQuery> = {
@@ -72,7 +72,7 @@ describe('LookerSDK', () => {
   const createTestUsers = async () => {
     // Ensure all test users are populated and enabled
     let user: IUser
-    const sdk = new LookerSDK(userSession)
+    const sdk = new LookerSDK(session)
     // create test users
     for (const u of users) {
       let searched = await sdk.ok(
@@ -110,12 +110,12 @@ describe('LookerSDK', () => {
         user = await sdk.ok(sdk.user(user.id))
       }
     }
-    await sdk.userSession.logout()
+    await sdk.authSession.logout()
   }
 
   const removeTestUsers = async () => {
     // Clean up any test users that may exist
-    const sdk = new LookerSDK(userSession)
+    const sdk = new LookerSDK(session)
     for (const u of users) {
       let searched = await sdk.ok(
         sdk.search_users({first_name: u.first_name, last_name: u.last_name})
@@ -131,12 +131,12 @@ describe('LookerSDK', () => {
         }
       }
     }
-    await sdk.userSession.logout()
+    await sdk.authSession.logout()
   }
 
   const removeTestDashboards = async () => {
     // Clean up any test users that may exist
-    const sdk = new LookerSDK(userSession)
+    const sdk = new LookerSDK(session)
     for (const d of dashboards) {
       let searched = await sdk.ok(
         sdk.search_dashboards({title: d.title})
@@ -147,22 +147,22 @@ describe('LookerSDK', () => {
         }
       }
     }
-    await sdk.userSession.logout()
+    await sdk.authSession.logout()
   }
 
   describe('automatic authentication for API calls', () => {
     it('me returns the correct result', async () => {
-      const sdk = new LookerSDK(userSession)
+      const sdk = new LookerSDK(session)
       const actual = await sdk.ok(sdk.me())
       expect(actual).toBeDefined()
       expect(actual.credentials_api3).toBeDefined()
       expect(actual.credentials_api3!.length).toBeGreaterThan(0)
-      await sdk.userSession.logout()
-      expect(sdk.userSession.isAuthenticated()).toBeFalsy()
+      await sdk.authSession.logout()
+      expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     })
 
     it('me fields filter', async () => {
-      const sdk = new LookerSDK(userSession)
+      const sdk = new LookerSDK(session)
       const actual = await sdk.ok(sdk.me('id,first_name,last_name'))
       expect(actual).toBeDefined()
       expect(actual.id).toBeDefined()
@@ -171,14 +171,14 @@ describe('LookerSDK', () => {
       expect(actual.display_name).toBeUndefined()
       expect(actual.email).toBeUndefined()
       expect(actual.personal_space_id).toBeUndefined()
-      await sdk.userSession.logout()
-      expect(sdk.userSession.isAuthenticated()).toBeFalsy()
+      await sdk.authSession.logout()
+      expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     })
   })
 
   describe('sudo', () => {
     it('login/logout', async () => {
-      const sdk = new LookerSDK(userSession)
+      const sdk = new LookerSDK(session)
       const apiUser = await sdk.ok(sdk.me())
       let all = await sdk.ok(
         sdk.all_users({
@@ -195,52 +195,52 @@ describe('LookerSDK', () => {
         const [ sudoA, sudoB ] = others
 
         // login as sudoA
-        await sdk.userSession.login(sudoA.id.toString())
+        await sdk.authSession.login(sudoA.id.toString())
         let sudo = await sdk.ok(sdk.me())
         expect(sudo.id).not.toEqual(apiUser.id)
         expect(sudo.id).toEqual(sudoA.id)
 
         // login as sudoB directly from sudoA
-        await sdk.userSession.login(sudoB.id.toString())
+        await sdk.authSession.login(sudoB.id.toString())
         sudo = await sdk.ok(sdk.me())
         expect(sudo.id).toEqual(sudoB.id)
 
         // logging out sudo resets to API user
-        await sdk.userSession.logout()
+        await sdk.authSession.logout()
         let user = await sdk.ok(sdk.me())
-        expect(sdk.userSession.isAuthenticated()).toEqual(true)
+        expect(sdk.authSession.isAuthenticated()).toEqual(true)
         expect(user).toEqual(apiUser)
 
         // login() without a sudo ID also logs in API user
-        await sdk.userSession.login(sudoA.id.toString())
+        await sdk.authSession.login(sudoA.id.toString())
         sudo = await sdk.ok(sdk.me())
         expect(sudo.id).toEqual(sudoA.id)
 
-        await sdk.userSession.login()
+        await sdk.authSession.login()
         user = await sdk.ok(sdk.me())
-        expect(sdk.userSession.isAuthenticated()).toEqual(true)
+        expect(sdk.authSession.isAuthenticated()).toEqual(true)
         expect(user.id).toEqual(apiUser.id)
       }
-      await sdk.userSession.logout()
-      expect(sdk.userSession.isAuthenticated()).toEqual(false)
+      await sdk.authSession.logout()
+      expect(sdk.authSession.isAuthenticated()).toEqual(false)
     }, testTimeout)
 
   })
 
   describe('retrieves collections', () => {
     it('search_looks returns looks', async () => {
-      const sdk = new LookerSDK(userSession)
+      const sdk = new LookerSDK(session)
       const actual = await sdk.ok(sdk.search_looks({}))
       expect(actual).toBeDefined()
       expect(actual.length).toBeGreaterThan(0)
       const look = actual[0]
       expect(look.title).toBeDefined()
-      await sdk.userSession.logout()
-      expect(sdk.userSession.isAuthenticated()).toBeFalsy()
+      await sdk.authSession.logout()
+      expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     })
 
     it('search_looks fields filter', async () => {
-      const sdk = new LookerSDK(userSession)
+      const sdk = new LookerSDK(session)
       const actual = await sdk.ok(
         sdk.search_looks({fields: 'id,title,description'})
       )
@@ -251,12 +251,12 @@ describe('LookerSDK', () => {
       expect(look.title).toBeDefined()
       expect(look.description).toBeDefined()
       expect(look.created_at).not.toBeDefined()
-      await sdk.userSession.logout()
-      expect(sdk.userSession.isAuthenticated()).toBeFalsy()
+      await sdk.authSession.logout()
+      expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     })
 
     it('search_looks fields filter', async () => {
-      const sdk = new LookerSDK(userSession)
+      const sdk = new LookerSDK(session)
       const actual = await sdk.ok(
         sdk.search_looks({
           title: 'Order%',
@@ -270,8 +270,8 @@ describe('LookerSDK', () => {
       expect(look.title).toBeDefined()
       expect(look.title).toContain('Order')
       expect(look.description).not.toBeDefined()
-      await sdk.userSession.logout()
-      expect(sdk.userSession.isAuthenticated()).toBeFalsy()
+      await sdk.authSession.logout()
+      expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     })
   })
 
@@ -286,7 +286,7 @@ describe('LookerSDK', () => {
     })
 
     it('create, update, and delete user', async () => {
-      const sdk = new LookerSDK(userSession)
+      const sdk = new LookerSDK(session)
       for (const u of users) {
         let user = await sdk.ok(
           sdk.create_user({
@@ -327,8 +327,8 @@ describe('LookerSDK', () => {
         const result = await sdk.ok(sdk.delete_user(user.id))
         expect(result).toEqual('')
       }
-      await sdk.userSession.logout()
-      expect(sdk.userSession.isAuthenticated()).toBeFalsy()
+      await sdk.authSession.logout()
+      expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     }, testTimeout)
   })
 
@@ -340,23 +340,23 @@ describe('LookerSDK', () => {
     }, testTimeout)
 
     it('bad search returns no results', async () => {
-      const sdk = new LookerSDK(userSession)
+      const sdk = new LookerSDK(session)
       let actual = await sdk.ok(
         sdk.search_users({first_name: 'Bad', last_name: 'News'})
       )
       expect(actual.length).toEqual(0)
-      await sdk.userSession.logout()
+      await sdk.authSession.logout()
     })
 
     it('matches email domain', async () => {
-      const sdk = new LookerSDK(userSession)
+      const sdk = new LookerSDK(session)
       let actual = await sdk.ok(
         sdk.search_users_names({
           pattern: `%${emailDomain}`
         })
       )
       expect(actual.length).toEqual(users.length)
-      await sdk.userSession.logout()
+      await sdk.authSession.logout()
     }, testTimeout)
 
     it('matches email domain and returns sorted', async () => {
@@ -364,7 +364,7 @@ describe('LookerSDK', () => {
         (`${a.last_name} ${a.first_name}`.localeCompare(`${b.last_name} ${b.first_name}`)))
       const firstLast = users.sort((a: Partial<IUser>, b: Partial<IUser>) =>
         (`${a.first_name} ${a.last_name}`.localeCompare(`${b.first_name} ${b.last_name}`)))
-      const sdk = new LookerSDK(userSession)
+      const sdk = new LookerSDK(session)
       let actual = await sdk.ok(
         sdk.search_users_names({
           pattern: `%${emailDomain}`,
@@ -388,14 +388,14 @@ describe('LookerSDK', () => {
         expect(actual[i].last_name).toEqual(firstLast[i].last_name)
       }
 
-      await sdk.userSession.logout()
+      await sdk.authSession.logout()
     }, testTimeout)
 
   })
 
   describe('Query calls', () => {
     it('create and run query', async () => {
-      const sdk = new LookerSDK(userSession)
+      const sdk = new LookerSDK(session)
       for (const q of queries) {
         // default the result limit to 10
         const limit = q.limit ? parseInt(q.limit) : 10
@@ -433,12 +433,12 @@ describe('LookerSDK', () => {
         expect(csv).toBeDefined()
         expect((csv.match(/\n/g) || []).length).toEqual(limit + 1)
       }
-      await sdk.userSession.logout()
-      expect(sdk.userSession.isAuthenticated()).toBeFalsy()
+      await sdk.authSession.logout()
+      expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     }, testTimeout)
 
     it('run_inline_query', async () => {
-      const sdk = new LookerSDK(userSession)
+      const sdk = new LookerSDK(session)
       for (const q of queries) {
         // default the result limit to 10
         const limit = q.limit ? parseInt(q.limit) : 10
@@ -480,8 +480,8 @@ describe('LookerSDK', () => {
         expect(csv).toBeDefined()
         expect((csv.match(/\n/g) || []).length).toEqual(limit + 1)
       }
-      await sdk.userSession.logout()
-      expect(sdk.userSession.isAuthenticated()).toBeFalsy()
+      await sdk.authSession.logout()
+      expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     }, testTimeout)
   })
 
@@ -504,7 +504,7 @@ describe('LookerSDK', () => {
     }, testTimeout)
 
     it('create and update dashboard', async () => {
-      const sdk = new LookerSDK(userSession)
+      const sdk = new LookerSDK(session)
       const me = await sdk.ok(sdk.me())
       const qhash: { [id: string]: IQuery } = {}
       let qcount = 0
@@ -614,8 +614,8 @@ describe('LookerSDK', () => {
         expect(tile.type).toEqual(t.type)
       }
       }
-      await sdk.userSession.logout()
-      expect(sdk.userSession.isAuthenticated()).toBeFalsy()
+      await sdk.authSession.logout()
+      expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     }, testTimeout)
   })
 

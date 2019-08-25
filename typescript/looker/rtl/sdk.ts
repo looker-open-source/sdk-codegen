@@ -23,8 +23,8 @@
  */
 
 import { LookerSDK } from '../sdk/methods'
-import { IUserSession } from './userSession'
+import { IAuthSession } from './authSession'
 
-export function LookerNodeSDK(session: IUserSession): LookerSDK {
+export function LookerNodeSDK(session: IAuthSession): LookerSDK {
   return new LookerSDK(session)
 }

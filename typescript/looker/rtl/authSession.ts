@@ -31,7 +31,7 @@ import { NodeTransport } from './nodeTransport'
 const strPost = 'POST'
 const strDelete = 'DELETE'
 
-export interface IUserSession {
+export interface IAuthSession {
   sudoId: string
   settings: IApiSettings
   transport: ITransport
@@ -53,7 +53,7 @@ export interface IUserSession {
 }
 
 
-export class UserSession implements IUserSession {
+export class AuthSession implements IAuthSession {
   _authToken: AuthToken = new AuthToken()
   _sudoToken: AuthToken = new AuthToken()
   sudoId: string = ''
