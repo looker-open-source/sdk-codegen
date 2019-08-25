@@ -26,6 +26,26 @@ describe('sdkModels', () => {
 
   })
 
+  describe('required properties', () => {
+
+    it('CreateQueryTask', () => {
+      const type = apiModel.types['CreateQueryTask']
+      const actual = apiModel.getWriteableType(type)
+      expect(actual).toBeDefined()
+      expect(type.properties['query_id'].required).toEqual(true)
+      expect(type.properties['result_format'].required).toEqual(true)
+      expect(type.properties['source'].required).toEqual(false)
+    })
+
+    it('WriteCreateQueryTask', () => {
+      const type = apiModel.getWriteableType(apiModel.types['CreateQueryTask'])
+      expect(type).toBeDefined()
+      expect(type!.properties['query_id'].required).toEqual(true)
+      expect(type!.properties['result_format'].required).toEqual(true)
+      expect(type!.properties['source'].required).toEqual(false)
+    })
+  })
+
   describe('writeable logic', () => {
 
     it('CredentialsApi3', () => {
