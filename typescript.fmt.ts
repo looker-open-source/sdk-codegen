@@ -147,7 +147,7 @@ export interface IDictionary<T> {
   }
 
   // @ts-ignore
-  construct(indent: string, properties: Record<string, IProperty>) {
+  construct(indent: string, type: IType) {
     return ''
   }
 

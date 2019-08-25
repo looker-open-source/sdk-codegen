@@ -27,9 +27,45 @@ class ChildModel(ml.Model):
     import_: Optional[str] = None
 
 
+@attr.s(auto_attribs=True, kw_only=True, init=False)
+class WriteModel(ml.Model):
+    id: int
+    name: Optional[str] = None
+    class_: Optional[str] = None
+    finally_: Optional[Sequence["ChildModel"]] = None
+
+    def __init__(
+        self,
+        *,
+        id: int,
+        name: Optional[str] = None,
+        class_: Optional[str] = None,
+        finally_: Optional[Sequence["ChildModel"]] = None
+    ):
+        self.id = id
+        self.name = name
+        self.class_ = class_
+        self.finally_ = finally_
+        self.__attrs_post_init__()
+
+
+@attr.s(auto_attribs=True, kw_only=True, init=False)
+class WriteChildModel(ml.Model):
+    id: int
+    import_: Optional[str] = None
+
+    def __init__(self, *, id: int, import_: Optional[str] = None):
+        self.id = id
+        self.import_ = import_
+        self.__attrs_post_init__()
+
+
 structure_hook = functools.partial(sr.structure_hook, globals())  # type: ignore
 cattr.register_structure_hook(
     ForwardRef("ChildModel"), structure_hook  # type: ignore
+)
+cattr.register_structure_hook(
+    ForwardRef("WriteChildModel"), structure_hook  # type: ignore
 )
 
 MODEL_DATA = {
@@ -122,13 +158,13 @@ def test_deserialize_data_structure_mismatch(data, structure):
 
 
 def test_serialize_single():
-    model = Model(
+    model = WriteModel(
         id=1,
         name="my-name",
         class_="model-name",
         finally_=[
-            ChildModel(id=1, import_="child1"),
-            ChildModel(id=2, import_="child2"),
+            WriteChildModel(id=1, import_="child1"),
+            WriteChildModel(id=2, import_="child2"),
         ],
     )
     expected = json.dumps(MODEL_DATA).encode("utf-8")
@@ -136,13 +172,13 @@ def test_serialize_single():
 
 
 def test_serialize_sequence():
-    model = Model(
+    model = WriteModel(
         id=1,
         name="my-name",
         class_="model-name",
         finally_=[
-            ChildModel(id=1, import_="child1"),
-            ChildModel(id=2, import_="child2"),
+            WriteChildModel(id=1, import_="child1"),
+            WriteChildModel(id=2, import_="child2"),
         ],
     )
     expected = json.dumps([MODEL_DATA, MODEL_DATA]).encode("utf-8")
@@ -150,29 +186,27 @@ def test_serialize_sequence():
 
 
 def test_serialize_partial():
-    model = Model(class_="model-name", finally_=[ChildModel(id=1)])
-    expected = json.dumps({"class": "model-name", "finally": [{"id": 1}]}).encode(
-        "utf-8"
-    )
+    model = WriteModel(id=1, finally_=[WriteChildModel(id=1)])
+    expected = json.dumps({"id": 1, "finally": [{"id": 1}]}).encode("utf-8")
     assert sr.serialize(model) == expected
 
 
 def test_serialize_explict_null():
-    model = Model(
+    model = WriteModel(
         id=1,
         name=ml.EXPLICIT_NULL,  # testing in constructor
         finally_=[
-            ChildModel(id=1, import_="child1"),
-            ChildModel(id=2, import_="child2"),
+            WriteChildModel(id=1, import_="child1"),
+            WriteChildModel(id=2, import_="child2"),
         ],
     )
     model.class_ = None  # testing on instance
-    model.finally_[0].id = ml.EXPLICIT_NULL  # testing EXPLICIT_NULL on instance
+    model.finally_[0].import_ = ml.EXPLICIT_NULL  # testing EXPLICIT_NULL on instance
 
     data = copy.deepcopy(MODEL_DATA)
     # json.dumps sets these to null
     data["name"] = None
     data["class"] = None
-    data["finally"][0]["id"] = None
+    data["finally"][0]["import"] = None
     expected = json.dumps(data).encode("utf-8")
     assert sr.serialize(model) == expected
