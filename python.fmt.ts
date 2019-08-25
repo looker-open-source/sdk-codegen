@@ -34,6 +34,7 @@ import {
   IProperty,
   IType,
   strBody,
+  WriteType,
   } from './sdkModels'
 import { CodeFormatter, warnEditing } from './codeFormatter'
 import { run } from './utils'
@@ -177,13 +178,16 @@ ${this.hooks.join('\n')}
   }
 
   declareProperty(indent: string, property: IProperty) {
-    const propType = this.typeMapModels(property.type)
+    const mappedType = this.typeMapModels(property.type)
     let propName = property.name
     if (this.pythonKeywords.includes(propName)) {
       propName = propName + '_'
     }
-    const propTypeNameAndDefault = `Optional[${propType.name}] = ${propType.default}`
-    const propDef = `${indent}${propName}: ${propTypeNameAndDefault}`
+    let propType = mappedType.name
+    if (!property.required) {
+        propType = `Optional[${mappedType.name}] = ${this.nullStr}`
+    }
+    const propDef = `${indent}${propName}: ${propType}`
     return this.commentHeader(indent, property.description) + propDef
   }
 
@@ -211,31 +215,46 @@ ${this.hooks.join('\n')}
   }
 
   initArg(indent: string, property: IProperty) {
-    let bump = this.bumper(indent)
-    let assign = `${this.it('_' + property.name)} = ${property.name}\n`
-    if (property.nullable) {
-      return `${indent}if ${property.name} is not None:\n` +
-        `${bump}${assign}`
-    }
-    return assign
+    return `${indent}self.${property.name} = ${property.name}`
   }
 
-  // Skip read-only parameters
-  construct(indent: string, properties: Record<string, IProperty>) {
+  /**
+   * Ideally we'd rely on @attr.s to generate the constructor for us
+   * However, neither Jedi (https://github.com/davidhalter/jedi-vim/issues/816)
+   * nor microsoft/python-language-server
+   * (https://github.com/microsoft/python-language-server/issues/399)
+   * display good tooltips for these auto-generated __init__ methods. So for
+   * now we'll generate them ourselves following the functionality of
+   * @attr.s(kw_only=True) we'll only allow kw_args.
+   */
+  construct(indent: string, type: IType) {
+    // Skip read-only parameters
+    if (!(type instanceof WriteType)) return ''
     indent = this.bumper(indent)
     const bump = this.bumper(indent)
-    let result = `${indent}def __init__(self, `
+    let result = `\n\n${indent}def __init__(self, *, `
     let args: string[] = []
     let inits: string[] = []
-    Object.values(properties)
-    // .filter((prop) => !prop.readOnly)
+    Object.values(type.properties)
       .forEach((prop) => {
         args.push(this.declareConstructorArg('', prop))
         inits.push(this.initArg(bump, prop))
       })
     result += `${args.join(this.argDelimiter)}):\n`
       + inits.join('\n')
-    return result + '\n'
+      + `\n${bump}self.__attrs_post_init__()`
+    return result
+  }
+
+  declareConstructorArg(indent: string, property: IProperty) {
+    const mappedType = this.typeMapModels(property.type)
+    let propType: string
+    if (property.required) {
+      propType = mappedType.name
+    } else {
+      propType = `Optional[${mappedType.name}] = ${this.nullStr}`
+    }
+    return `${indent}${property.name}: ${propType}`
   }
 
   httpArgs(indent: string, method: IMethod) {
@@ -307,12 +326,17 @@ ${this.hooks.join('\n')}
       attrs.push(attr)
     }
 
+    let attrsArgs = 'auto_attribs=True, kw_only=True'
+    if (type instanceof WriteType) {
+      attrsArgs += ', init=False'
+    }
+
     const forwardRef = `ForwardRef("${type.name}")`
     this.hooks.push(
       `cattr.register_structure_hook(\n${bump}${forwardRef},  # type: ignore\n${bump}${this.structure_hook}  # type:ignore\n)`
     )
     return `\n` +
-      `${indent}@attr.s(auto_attribs=True, kw_only=True)\n` +  // TODO: make "response" types frozen while "write" types are mutable
+      `${indent}@attr.s(${attrsArgs})\n` +
       `${indent}class ${type.name}(model.Model):\n` +
       `${bump}"""\n` +
       (type.description ? `${bump}${type.description}\n\n` : '') +

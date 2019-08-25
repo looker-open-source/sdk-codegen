@@ -182,7 +182,7 @@ describe('LookerSDK', () => {
       const apiUser = await sdk.ok(sdk.me())
       let all = await sdk.ok(
         sdk.all_users({
-          fields: 'id'
+          fields: 'id,is_disabled'
         })
       )
 
