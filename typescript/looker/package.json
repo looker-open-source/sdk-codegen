@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk",
-  "version": "0.1.0-experimental.1",
+  "version": "0.1.0-experimental.2",
   "description": "Looker SDK",
   "main": "index.js",
   "repository": {
@@ -18,7 +18,7 @@
   "engines": {
     "node": ">=10"
   },
-  "homepage": "https://github.com/looker-open-source/typescript/looker/README.md",
+  "homepage": "https://github.com/looker-open-source/sdk_codegen/tree/jk/generator_poc/typescript/looker",
   "devDependencies": {
     "@types/jest": "^24.0.13",
     "ts-jest": "^24.0.2",
