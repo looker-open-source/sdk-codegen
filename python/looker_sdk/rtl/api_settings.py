@@ -7,7 +7,7 @@ from typing import Optional
 import attr
 import cattr
 
-from looker_sdk.rtl import transport as tp
+from looker_sdk.rtl import transport
 
 
 def _convert_bool(val: str, _: bool) -> bool:
@@ -22,7 +22,7 @@ def _convert_bool(val: str, _: bool) -> bool:
 
 
 @attr.s(auto_attribs=True)
-class ApiSettings(tp.TransportSettings):
+class ApiSettings(transport.TransportSettings):
     """API Configuration Settings.
     """
 

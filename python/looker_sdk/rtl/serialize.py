@@ -17,8 +17,8 @@ from typing import (  # type: ignore
 
 import cattr
 
-from looker_sdk.rtl import model as ml
-from looker_sdk.rtl import transport as tp
+from looker_sdk.rtl import model
+from looker_sdk.rtl import transport
 
 
 class DeserializeError(Exception):
@@ -27,15 +27,21 @@ class DeserializeError(Exception):
 
 
 TModelOrSequence = Union[
-    MutableMapping[str, str], Sequence[int], Sequence[str], ml.Model, Sequence[ml.Model]
+    MutableMapping[str, str],
+    Sequence[int],
+    Sequence[str],
+    model.Model,
+    Sequence[model.Model],
 ]
 TDeserializeReturn = TModelOrSequence
 TStructure = Union[Type[Sequence[int]], Type[Sequence[str]], Type[TDeserializeReturn]]
-TDeserialize = Callable[[tp.TResponseValue, TStructure], TDeserializeReturn]
+TDeserialize = Callable[[transport.TResponseValue, TStructure], TDeserializeReturn]
 TSerialize = Callable[[TModelOrSequence], bytes]
 
 
-def deserialize(data: tp.TResponseValue, structure: TStructure) -> TDeserializeReturn:
+def deserialize(
+    data: transport.TResponseValue, structure: TStructure
+) -> TDeserializeReturn:
     """Translate API data into models.
     """
     try:
@@ -49,10 +55,10 @@ def deserialize(data: tp.TResponseValue, structure: TStructure) -> TDeserializeR
     return response
 
 
-def serialize(model: TModelOrSequence) -> bytes:
-    """Translate model into formdata encoded json bytes
+def serialize(api_model: TModelOrSequence) -> bytes:
+    """Translate api_model into formdata encoded json bytes
     """
-    data = cattr.unstructure(model)  # type: ignore
+    data = cattr.unstructure(api_model)  # type: ignore
     return json.dumps(data).encode("utf-8")  # type: ignore
 
 
@@ -74,7 +80,7 @@ def structure_hook(context, data, type_):
     return instance
 
 
-def unstructure_hook(model):
+def unstructure_hook(api_model):
     """cattr unstructure hook
 
     Map reserved_ words in models to correct json field names.
@@ -82,11 +88,11 @@ def unstructure_hook(model):
     EXPLICIT_NULL fields to None so that we only send null
     in the json for fields the caller set EXPLICIT_NULL on.
     """
-    data = cattr.global_converter.unstructure_attrs_asdict(model)
+    data = cattr.global_converter.unstructure_attrs_asdict(api_model)
     for key, value in data.copy().items():
         if value is None:
             del data[key]
-        elif value == ml.EXPLICIT_NULL:
+        elif value == model.EXPLICIT_NULL:
             data[key] = None
     for reserved in keyword.kwlist:
         if f"{reserved}_" in data:
@@ -95,11 +101,11 @@ def unstructure_hook(model):
 
 
 structure_hook_func = functools.partial(structure_hook, globals())  # type: ignore
-cattr.register_structure_hook(ml.Model, structure_hook_func)  # type: ignore
+cattr.register_structure_hook(model.Model, structure_hook_func)  # type: ignore
 cattr.register_structure_hook(
     datetime.datetime,
     lambda d, _: datetime.datetime.strptime(  # type: ignore
         d, "%Y-%m-%dT%H:%M:%S.%f%z"
     ),
 )
-cattr.register_unstructure_hook(ml.Model, unstructure_hook)  # type: ignore
+cattr.register_unstructure_hook(model.Model, unstructure_hook)  # type: ignore

@@ -4,11 +4,11 @@ from typing import Dict, Optional
 import urllib.parse
 
 from looker_sdk import error
-from looker_sdk.rtl import api_settings as st
-from looker_sdk.rtl import auth_token as at
-from looker_sdk.rtl import transport as tp
-from looker_sdk.rtl import serialize as sr
-from looker_sdk.sdk import models as ml
+from looker_sdk.rtl import api_settings
+from looker_sdk.rtl import auth_token
+from looker_sdk.rtl import transport
+from looker_sdk.rtl import serialize
+from looker_sdk.sdk import models
 
 
 class AuthSession:
@@ -17,18 +17,18 @@ class AuthSession:
 
     def __init__(
         self,
-        settings: st.ApiSettings,
-        transport: tp.Transport,
-        deserialize: sr.TDeserialize,
+        settings: api_settings.ApiSettings,
+        transport: transport.Transport,
+        deserialize: serialize.TDeserialize,
     ):
-        self.user_token: at.AuthToken = at.AuthToken()
-        self.admin_token: at.AuthToken = at.AuthToken()
+        self.user_token: auth_token.AuthToken = auth_token.AuthToken()
+        self.admin_token: auth_token.AuthToken = auth_token.AuthToken()
         self._sudo_id: Optional[int] = None
         self.settings = settings
         self.transport = transport
         self.deserialize = deserialize
 
-    def _is_authenticated(self, token: at.AuthToken) -> bool:
+    def _is_authenticated(self, token: auth_token.AuthToken) -> bool:
         """Determines if current token is active."""
         if not (token.access_token):
             return False
@@ -46,13 +46,13 @@ class AuthSession:
     def is_sudo(self) -> Optional[int]:
         return self._sudo_id
 
-    def _get_user_token(self) -> at.AuthToken:
+    def _get_user_token(self) -> auth_token.AuthToken:
         """Returns an active user token."""
         if not self.is_user_authenticated:
             self._login_user()
         return self.user_token
 
-    def _get_admin_token(self) -> at.AuthToken:
+    def _get_admin_token(self) -> auth_token.AuthToken:
         """Returns an active admin token."""
         if not self.is_admin_authenticated:
             self._login_admin()
@@ -104,30 +104,30 @@ class AuthSession:
 
         response = self._ok(
             self.transport.request(
-                tp.HttpMethod.POST,
+                transport.HttpMethod.POST,
                 "/login",
                 body=serialized,
                 headers={"Content-Type": "application/x-www-form-urlencoded"},
             )
         )
 
-        access_token = self.deserialize(response, ml.AccessToken)
-        assert isinstance(access_token, ml.AccessToken)
-        self.admin_token = at.AuthToken(access_token)
+        access_token = self.deserialize(response, models.AccessToken)
+        assert isinstance(access_token, models.AccessToken)
+        self.admin_token = auth_token.AuthToken(access_token)
 
     def _login_user(self) -> None:
         response = self._ok(
             self.transport.request(
-                tp.HttpMethod.POST,
+                transport.HttpMethod.POST,
                 f"/login/{self._sudo_id}",
                 authenticator=lambda: {
                     "Authorization": f"token {self._get_admin_token().access_token}"
                 },
             )
         )
-        access_token = self.deserialize(response, ml.AccessToken)
-        assert isinstance(access_token, ml.AccessToken)
-        self.user_token = at.AuthToken(access_token)
+        access_token = self.deserialize(response, models.AccessToken)
+        assert isinstance(access_token, models.AccessToken)
+        self.user_token = auth_token.AuthToken(access_token)
 
     def logout(self, full: bool = False) -> None:
         """Logout cuurent session or all.
@@ -152,7 +152,7 @@ class AuthSession:
     def _logout_user(self) -> None:
         self._ok(
             self.transport.request(
-                tp.HttpMethod.DELETE,
+                transport.HttpMethod.DELETE,
                 "/logout",
                 authenticator=lambda: {
                     "Authorization": f"token {self.user_token.access_token}"
@@ -164,7 +164,7 @@ class AuthSession:
     def _logout_admin(self) -> None:
         self._ok(
             self.transport.request(
-                tp.HttpMethod.DELETE,
+                transport.HttpMethod.DELETE,
                 "/logout",
                 authenticator=lambda: {
                     "Authorization": f"token {self.admin_token.access_token}"
@@ -175,12 +175,12 @@ class AuthSession:
         self._reset_admin_token()
 
     def _reset_admin_token(self) -> None:
-        self.admin_token = at.AuthToken()
+        self.admin_token = auth_token.AuthToken()
 
     def _reset_user_token(self) -> None:
-        self.user_token = at.AuthToken()
+        self.user_token = auth_token.AuthToken()
 
-    def _ok(self, response: tp.Response) -> tp.TResponseValue:
+    def _ok(self, response: transport.Response) -> transport.TResponseValue:
         if not response.ok:
             raise error.SDKError(response.value)
         return response.value

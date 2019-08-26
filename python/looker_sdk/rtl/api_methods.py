@@ -5,10 +5,10 @@ import json
 from typing import MutableMapping, Optional, Sequence, Type, Union
 
 from looker_sdk import error
-from looker_sdk.rtl import model as ml
-from looker_sdk.rtl import serialize as sr
-from looker_sdk.rtl import transport as tp
-from looker_sdk.rtl import user_session as us
+from looker_sdk.rtl import model
+from looker_sdk.rtl import serialize
+from looker_sdk.rtl import transport
+from looker_sdk.rtl import auth_session
 
 
 TBody = Optional[
@@ -17,12 +17,12 @@ TBody = Optional[
         MutableMapping[str, str],
         Sequence[str],
         Sequence[int],
-        ml.Model,
-        Sequence[ml.Model],
+        model.Model,
+        Sequence[model.Model],
     ]
 ]
-TStructure = Optional[Union[Type[str], sr.TStructure]]
-TReturn = Optional[Union[tp.TResponseValue, sr.TDeserializeReturn]]
+TStructure = Optional[Union[Type[str], serialize.TStructure]]
+TReturn = Optional[Union[transport.TResponseValue, serialize.TDeserializeReturn]]
 TQueryParams = MutableMapping[
     str, Union[None, bool, str, int, Sequence[int], Sequence[str], datetime.datetime]
 ]
@@ -34,10 +34,10 @@ class APIMethods:
 
     def __init__(
         self,
-        usr_session: us.UserSession,
-        deserialize: sr.TDeserialize,
-        serialize: sr.TSerialize,
-        transport: tp.Transport,
+        usr_session: auth_session.AuthSession,
+        deserialize: serialize.TDeserialize,
+        serialize: serialize.TSerialize,
+        transport: transport.Transport,
     ):
         self.usr_session = usr_session
         self.deserialize = deserialize
@@ -50,7 +50,7 @@ class APIMethods:
     def __exit__(self, *exc) -> None:
         self.usr_session.logout()
 
-    def _return(self, response: tp.Response, structure: TStructure) -> TReturn:
+    def _return(self, response: transport.Response, structure: TStructure) -> TReturn:
         if not response.ok:
             raise error.SDKError(response.value)
         ret: TReturn
@@ -94,7 +94,7 @@ class APIMethods:
         """
         params = self._convert_query_params(query_params) if query_params else None
         response = self.transport.request(
-            tp.HttpMethod.GET,
+            transport.HttpMethod.GET,
             path,
             query_params=params,
             body=None,
@@ -106,7 +106,7 @@ class APIMethods:
         serialized: Optional[bytes]
         if isinstance(body, str):
             serialized = body.encode("utf-8")
-        elif isinstance(body, (list, dict, ml.Model)):
+        elif isinstance(body, (list, dict, model.Model)):
             serialized = self.serialize(body)
         else:
             serialized = None
@@ -124,7 +124,7 @@ class APIMethods:
         params = self._convert_query_params(query_params) if query_params else None
         serialized = self._get_serialized(body)
         response = self.transport.request(
-            tp.HttpMethod.POST,
+            transport.HttpMethod.POST,
             path,
             query_params=params,
             body=serialized,
@@ -144,7 +144,7 @@ class APIMethods:
         params = self._convert_query_params(query_params) if query_params else None
         serialized = self._get_serialized(body)
         response = self.transport.request(
-            tp.HttpMethod.PATCH,
+            transport.HttpMethod.PATCH,
             path,
             query_params=params,
             body=serialized,
@@ -164,7 +164,7 @@ class APIMethods:
         params = self._convert_query_params(query_params) if query_params else None
         serialized = self._get_serialized(body)
         response = self.transport.request(
-            tp.HttpMethod.PUT,
+            transport.HttpMethod.PUT,
             path,
             query_params=params,
             body=serialized,
@@ -181,7 +181,7 @@ class APIMethods:
         """DELETE method
         """
         response = self.transport.request(
-            tp.HttpMethod.DELETE,
+            transport.HttpMethod.DELETE,
             path,
             body=None,
             authenticator=self.usr_session.authenticate,
