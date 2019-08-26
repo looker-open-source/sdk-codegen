@@ -53,7 +53,7 @@ a user in your looker instance
 Configuring the SDK
 -------------------
 
-In order to configure the SDK client, create a "Looker.ini" file to reference
+In order to configure the SDK client, create a "looker.ini" file to reference
 during `client.setup()`
 
 example file:
@@ -81,8 +81,8 @@ Code examples
     from looker_sdk import client, models, error
 
     # client calls will now automatically authenticate using the
-    # api3credentials specified in 'Looker.ini'
-    looker_client = client.setup('Looker.ini')
+    # api3credentials specified in 'looker.ini'
+    looker_client = client.setup('looker.ini')
     looker_api_user = looker_client.me()
 
     # models can be passed named parameters to the constructor
@@ -118,7 +118,7 @@ Code examples
     assert sudo_user.id == user_id
     assert sudo_user.id != looker_api_user.id
 
-    # logout to switch back to authenticating per 'Looker.ini'
+    # logout to switch back to authenticating per 'looker.ini'
     looker_client.logout()
     assert looker_client.me().id == looker_api_user.id
 
