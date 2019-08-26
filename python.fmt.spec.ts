@@ -178,9 +178,9 @@ return response`
 class Workspace(model.Model):
     """
     Attributes:
-        id : The unique id of this user workspace. Predefined workspace ids include "production" and "dev"
-        projects : The local state of each project in the workspace
-        can : Operations the current user is able to perform on this object
+        id: The unique id of this user workspace. Predefined workspace ids include "production" and "dev"
+        projects: The local state of each project in the workspace
+        can: Operations the current user is able to perform on this object
     """
     # The unique id of this user workspace. Predefined workspace ids include "production" and "dev"
     id: Optional[str] = None
@@ -197,9 +197,9 @@ class Workspace(model.Model):
 class ApiVersion(model.Model):
     """
     Attributes:
-        looker_release_version : Current Looker release version number
-        current_version :
-        supported_versions : Array of versions supported by this Looker instance
+        looker_release_version: Current Looker release version number
+        current_version:
+        supported_versions: Array of versions supported by this Looker instance
     """
     # Current Looker release version number
     looker_release_version: Optional[str] = None
@@ -222,12 +222,12 @@ class WriteCreateQueryTask(model.Model):
     Dynamically generated writeable type for CreateQueryTask
 
     Attributes:
-        query_id : Id of query to run
-        result_format : Desired result format
-        source : Source of query task
-        deferred : Create the task but defer execution
-        look_id : Id of look associated with query.
-        dashboard_id : Id of dashboard associated with query.
+        query_id: Id of query to run
+        result_format: Desired result format
+        source: Source of query task
+        deferred: Create the task but defer execution
+        look_id: Id of look associated with query.
+        dashboard_id: Id of dashboard associated with query.
     """
     # Id of query to run
     query_id: int
@@ -248,8 +248,7 @@ class WriteCreateQueryTask(model.Model):
         self.source = source
         self.deferred = deferred
         self.look_id = look_id
-        self.dashboard_id = dashboard_id
-        self.__attrs_post_init__()`)
+        self.dashboard_id = dashboard_id`)
     })
   })
 })

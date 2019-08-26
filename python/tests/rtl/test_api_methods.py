@@ -1,6 +1,8 @@
 import datetime
-import pytest  # type: ignore
+import json
 from typing import MutableMapping, Optional
+
+import pytest  # type: ignore
 
 from looker_sdk import error
 from looker_sdk.rtl import api_settings
@@ -75,18 +77,31 @@ def test_get_serialized(
         (
             tp.Response(
                 ok=True,
-                value='{"looker_release_version": "6.18", "current_version": {"version": null, "full_version": "6.18.4", "status": "fully functional", "swagger_url": null}, "supported_versions": null}',  # noqa: B950
+                value=(
+                    json.dumps(
+                        {  # type: ignore
+                            "current_version": {  # type: ignore
+                                "full_version": "6.18.4",
+                                "status": "fully functional",
+                                "swagger_url": None,
+                                "version": None,
+                            },
+                            "looker_release_version": "6.18",
+                            "supported_versions": None,
+                        }
+                    )
+                ),
             ),
             ml.ApiVersion,
             ml.ApiVersion(
                 looker_release_version="6.18",
                 current_version=ml.ApiVersionElement(
-                    version=ml.EXPLICIT_NULL,  # type: ignore
+                    version=None,
                     full_version="6.18.4",
                     status="fully functional",
-                    swagger_url=ml.EXPLICIT_NULL,  # type: ignore
+                    swagger_url=None,
                 ),
-                supported_versions=ml.EXPLICIT_NULL,  # type: ignore
+                supported_versions=None,
             ),
         ),
     ],
