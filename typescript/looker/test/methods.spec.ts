@@ -186,38 +186,39 @@ describe('LookerSDK', () => {
         })
       )
 
-      // find 2 others users who are not the API users
+      // find users who are not the API user
       const others = all
         .filter(u => u.id !== apiUser.id && (!u.is_disabled))
         .slice(0,2)
       expect(others.length).toEqual(2)
       if (others.length > 1) {
+        // pick two other active users for `sudo` tests
         const [ sudoA, sudoB ] = others
 
         // login as sudoA
         await sdk.authSession.login(sudoA.id.toString())
-        let sudo = await sdk.ok(sdk.me())
-        expect(sudo.id).not.toEqual(apiUser.id)
+        let sudo = await sdk.ok(sdk.me()) // `me` returns `sudoA` user
         expect(sudo.id).toEqual(sudoA.id)
 
         // login as sudoB directly from sudoA
-        await sdk.authSession.login(sudoB.id.toString())
-        sudo = await sdk.ok(sdk.me())
+        await sdk.authSession.login(sudoB.id)
+        sudo = await sdk.ok(sdk.me()) // `me` returns `sudoB` user
         expect(sudo.id).toEqual(sudoB.id)
 
         // logging out sudo resets to API user
         await sdk.authSession.logout()
-        let user = await sdk.ok(sdk.me())
+        let user = await sdk.ok(sdk.me()) // `me` returns `apiUser` user
         expect(sdk.authSession.isAuthenticated()).toEqual(true)
         expect(user).toEqual(apiUser)
 
-        // login() without a sudo ID also logs in API user
-        await sdk.authSession.login(sudoA.id.toString())
+        // login as sudoA again to test plain `login()` later
+        await sdk.authSession.login(sudoA.id)
         sudo = await sdk.ok(sdk.me())
         expect(sudo.id).toEqual(sudoA.id)
 
+        // login() without a sudo ID logs in the API user
         await sdk.authSession.login()
-        user = await sdk.ok(sdk.me())
+        user = await sdk.ok(sdk.me()) // `me` returns `apiUser` user
         expect(sdk.authSession.isAuthenticated()).toEqual(true)
         expect(user.id).toEqual(apiUser.id)
       }

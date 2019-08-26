@@ -45,7 +45,7 @@ export interface IAuthSession {
 
   authenticate(init: IRequestInit): Promise<IRequestInit>
 
-  login(sudoId?: string): Promise<IAccessToken>
+  login(sudoId?: string | number): Promise<IAccessToken>
 
   logout(): Promise<boolean>
 
@@ -111,9 +111,13 @@ export class AuthSession implements IAuthSession {
     }
   }
 
-  async login(sudoId?: string) {
+  async login(sudoId?: string | number) {
     if (sudoId || (sudoId !== this.sudoId) || (!this.isAuthenticated())) {
-      await this._login(sudoId)
+      if (sudoId) {
+        await this._login(sudoId.toString())
+      } else {
+        await this._login()
+      }
     }
     return this.activeToken
   }

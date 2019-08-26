@@ -94,3 +94,82 @@ Verify authentication works and that API calls will succeed with code similar to
 
 })
 ```
+
+## Using AuthSession for automatic authentication
+
+Almost all requests to Looker's API require an access token. This token is established when the `login` endpoint 
+is called with correct API3 credentials for `client_id` and `client_secret`. When `login` is successful, the 
+user whose API3 credentials are provided is considered the active user. For this discussion of `AuthSession`, we'll
+call this user the **API User**. 
+
+The `settings` provided to the `AuthSession` class include the base URL for the Looker instance, and the API3 credentials.
+When API requests are made, if the auth session is not yet established, `AuthSession` will automatically authenticate
+the **API User**. The `AuthSession` also directly support logging in as another user, usually called `sudo as` another
+user in the Looker browser application.
+
+API users with appropriate permissions can `sudo` as another user by specifying a specific user ID in the 
+`AuthSession.login()` method. Only one user can be impersonated at a time via `AuthSession`. When a `sudo` session is 
+active, all SDK methods will be processed as that user.
+  
+### Sudo behavior with AuthSession
+
+The rest of this section shows sample code for typical use cases for authentication and sudo. This code sample is extracted
+directly from the sdk methods Jest tests, and assumes `apiUser` is the default authenticated user record with `sudo` abilities, 
+and `sudoA` and `sudoB` are other enabled Looker user records.
+
+```typescript
+describe('sudo', () => {
+it('login/logout', async () => {
+  const sdk = new LookerSDK(session)
+  const apiUser = await sdk.ok(sdk.me())
+  let all = await sdk.ok(
+    sdk.all_users({
+      fields: 'id,is_disabled'
+    })
+  )
+
+  // find users who are not the API user
+  const others = all
+    .filter(u => u.id !== apiUser.id && (!u.is_disabled))
+    .slice(0,2)
+  expect(others.length).toEqual(2)
+  if (others.length > 1) {
+    // pick two other active users for `sudo` tests
+    const [ sudoA, sudoB ] = others
+
+    // login as sudoA
+    await sdk.authSession.login(sudoA.id.toString())
+    let sudo = await sdk.ok(sdk.me()) // `me` returns `sudoA` user
+    expect(sudo.id).toEqual(sudoA.id)
+
+    // login as sudoB directly from sudoA
+    await sdk.authSession.login(sudoB.id)
+    sudo = await sdk.ok(sdk.me()) // `me` returns `sudoB` user
+    expect(sudo.id).toEqual(sudoB.id)
+
+    // logging out sudo resets to API user
+    await sdk.authSession.logout()
+    let user = await sdk.ok(sdk.me()) // `me` returns `apiUser` user
+    expect(sdk.authSession.isAuthenticated()).toEqual(true)
+    expect(user).toEqual(apiUser)
+
+    // login as sudoA again to test plain `login()` later
+    await sdk.authSession.login(sudoA.id)
+    sudo = await sdk.ok(sdk.me())
+    expect(sudo.id).toEqual(sudoA.id)
+
+    // login() without a sudo ID logs in the API user
+    await sdk.authSession.login()
+    user = await sdk.ok(sdk.me()) // `me` returns `apiUser` user
+    expect(sdk.authSession.isAuthenticated()).toEqual(true)
+    expect(user.id).toEqual(apiUser.id)
+  }
+  await sdk.authSession.logout()
+  expect(sdk.authSession.isAuthenticated()).toEqual(false)
+}, testTimeout)
+
+})
+```
+
+
+ 
