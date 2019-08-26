@@ -1,7 +1,7 @@
 # pylint: disable=C,R
 
 from looker_sdk.rtl import auth_token
-from looker_sdk.rtl import model
+from looker_sdk.sdk import models
 
 
 def test_defaults_with_empty_token():
@@ -17,7 +17,7 @@ def test_defaults_with_empty_token():
 def test_is_active_with_full_token():
     """Confirm active token when AuthToken is initialized properly."""
     actual = auth_token.AuthToken(
-        model.AccessToken(
+        models.AccessToken(
             access_token="all-access", token_type="backstage", expires_in=3600
         )
     )

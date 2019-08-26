@@ -59,12 +59,8 @@ def serialize(model: TModelOrSequence) -> bytes:
 def structure_hook(context, data, type_):
     """cattr structure hook
 
-    1/ Map reserved words in json keys to approriate (safe) names in model.
-    2/ convert _NULL_INIT fields to None: a side effect of cattr.structure
-       instantiating the model object we set everything _NULL_INIT and None
-       is a cleaner value for the "null"/"non-present" fields in these
-       returned objects
-    3/ handle ForwardRef types until github.com/Tinche/cattrs/pull/42/ is fixed
+    - Map reserved words in json keys to approriate (safe) names in model.
+    - handle ForwardRef types until github.com/Tinche/cattrs/pull/42/ is fixed
        Note: this is the reason we need a "context" param and have to use a
        partial func to register the hook. Once the issue is resolved we can
        remove "context" and the partial.
@@ -75,9 +71,6 @@ def structure_hook(context, data, type_):
     if isinstance(type_, ForwardRef):
         type_ = eval(type_.__forward_arg__, context, locals())
     instance = cattr.structure_attrs_fromdict(data, type_)
-    for key, value in instance.__dict__.copy().items():
-        if value == ml._NULL_INIT:
-            setattr(instance, key, None)
     return instance
 
 
@@ -85,12 +78,13 @@ def unstructure_hook(model):
     """cattr unstructure hook
 
     Map reserved_ words in models to correct json field names.
-    Also handle stripping _NULL_INIT fields from json while setting
-    EXPLICIT_NULL fields to None
+    Also handle stripping None fields from dict while setting
+    EXPLICIT_NULL fields to None so that we only send null
+    in the json for fields the caller set EXPLICIT_NULL on.
     """
     data = cattr.global_converter.unstructure_attrs_asdict(model)
     for key, value in data.copy().items():
-        if value == ml._NULL_INIT:
+        if value is None:
             del data[key]
         elif value == ml.EXPLICIT_NULL:
             data[key] = None

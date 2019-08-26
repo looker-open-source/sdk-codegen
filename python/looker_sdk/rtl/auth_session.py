@@ -8,7 +8,7 @@ from looker_sdk.rtl import api_settings as st
 from looker_sdk.rtl import auth_token as at
 from looker_sdk.rtl import transport as tp
 from looker_sdk.rtl import serialize as sr
-from looker_sdk.rtl import model as ml
+from looker_sdk.sdk import models as ml
 
 
 class AuthSession:

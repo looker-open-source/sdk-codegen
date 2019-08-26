@@ -48,7 +48,7 @@ def test_crud_user(looker_client: mtds.LookerSDK):
     # first way to specify nulling out a field
     update_user = ml.WriteUser(first_name=ml.EXPLICIT_NULL)
     # second way
-    update_user.last_name = None
+    update_user.last_name = ml.EXPLICIT_NULL
     looker_client.update_user(user_id, update_user)
     user = looker_client.user(user_id)
     assert user.first_name is None

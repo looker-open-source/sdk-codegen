@@ -46,7 +46,6 @@ class WriteModel(ml.Model):
         self.name = name
         self.class_ = class_
         self.finally_ = finally_
-        self.__attrs_post_init__()
 
 
 @attr.s(auto_attribs=True, kw_only=True, init=False)
@@ -57,7 +56,6 @@ class WriteChildModel(ml.Model):
     def __init__(self, *, id: int, import_: Optional[str] = None):
         self.id = id
         self.import_ = import_
-        self.__attrs_post_init__()
 
 
 structure_hook = functools.partial(sr.structure_hook, globals())  # type: ignore
@@ -186,22 +184,26 @@ def test_serialize_sequence():
 
 
 def test_serialize_partial():
+    """Do not send json null for model None field values.
+    """
     model = WriteModel(id=1, finally_=[WriteChildModel(id=1)])
     expected = json.dumps({"id": 1, "finally": [{"id": 1}]}).encode("utf-8")
     assert sr.serialize(model) == expected
 
 
 def test_serialize_explict_null():
+    """Send json null for model field EXPLICIT_NULL values.
+    """
     model = WriteModel(
         id=1,
-        name=ml.EXPLICIT_NULL,  # testing in constructor
+        name=ml.EXPLICIT_NULL,
+        class_=ml.EXPLICIT_NULL,
         finally_=[
             WriteChildModel(id=1, import_="child1"),
             WriteChildModel(id=2, import_="child2"),
         ],
     )
-    model.class_ = None  # testing on instance
-    model.finally_[0].import_ = ml.EXPLICIT_NULL  # testing EXPLICIT_NULL on instance
+    model.finally_[0].import_ = ml.EXPLICIT_NULL
 
     data = copy.deepcopy(MODEL_DATA)
     # json.dumps sets these to null

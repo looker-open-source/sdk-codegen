@@ -242,7 +242,6 @@ ${this.hooks.join('\n')}
       })
     result += `${args.join(this.argDelimiter)}):\n`
       + inits.join('\n')
-      + `\n${bump}self.__attrs_post_init__()`
     return result
   }
 
@@ -319,7 +318,7 @@ ${this.hooks.join('\n')}
       if (this.pythonKeywords.includes(propName)) {
         propName = propName + '_'
       }
-      let attr = `${b2}${propName} :`
+      let attr = `${b2}${propName}:`
       if (prop.description) {
         attr += ` ${prop.description}`
       }
