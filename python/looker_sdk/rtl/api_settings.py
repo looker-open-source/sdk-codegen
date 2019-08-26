@@ -2,7 +2,8 @@
 with the settings as attributes
 """
 import configparser as cp
-from typing import Optional
+import os
+from typing import cast, Optional
 
 import attr
 import cattr
@@ -46,6 +47,25 @@ class ApiSettings(transport.TransportSettings):
         section = section or cfg_parser.sections()[0]
 
         cfg = dict(cfg_parser[section])
+
+        env_base_url = cast(str, os.getenv("LOOKER_BASE_URL"))
+        env_client_id = cast(str, os.getenv("LOOKER_CLIENT_ID"))
+        env_client_secret = cast(str, os.getenv("LOOKER_CLIENT_SECRET"))
+        env_embed_secret = cast(str, os.getenv("LOOKER_EMBED_SECRET"))
+        if env_base_url:
+            cfg["base_url"] = env_base_url
+        if env_client_id:
+            cfg["client_id"] = env_client_id
+        if env_client_secret:
+            cfg["client_secret"] = env_client_secret
+        if env_embed_secret:
+            cfg["embed_secret"] = env_embed_secret
+
+        # Remove required params from config dictionary if they are empty strings
+        required_params = ["base_url", "client_id", "client_secret"]
+        for key, val in list(cfg.items()):
+            if key in required_params and not val:
+                cfg.pop(key)
 
         converter = cattr.Converter()
         converter.register_structure_hook(bool, _convert_bool)
