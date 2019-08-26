@@ -6,14 +6,16 @@ from typing import Callable, Dict, MutableMapping, Optional
 
 import requests
 
-from looker_sdk.rtl import transport as tp
+from looker_sdk.rtl import transport
 
 
-class RequestsTransport(tp.Transport):
+class RequestsTransport(transport.Transport):
     """RequestsTransport implementation of Transport.
     """
 
-    def __init__(self, settings: tp.TransportSettings, session: requests.Session):
+    def __init__(
+        self, settings: transport.TransportSettings, session: requests.Session
+    ):
 
         headers: Dict[str, str] = {}
         if settings.headers:
@@ -27,18 +29,18 @@ class RequestsTransport(tp.Transport):
         self.logger = logging.getLogger(__name__)
 
     @classmethod
-    def configure(cls, settings: tp.TransportSettings) -> tp.Transport:
+    def configure(cls, settings: transport.TransportSettings) -> transport.Transport:
         return cls(settings, requests.Session())
 
     def request(
         self,
-        method: tp.HttpMethod,
+        method: transport.HttpMethod,
         path: str,
         query_params: Optional[MutableMapping[str, str]] = None,
         body: Optional[bytes] = None,
         authenticator: Optional[Callable[[], Dict[str, str]]] = None,
         headers: Optional[MutableMapping[str, str]] = None,
-    ) -> tp.Response:
+    ) -> transport.Response:
 
         url = f"{self.api_path}{path}"
         if headers is None:
@@ -51,11 +53,11 @@ class RequestsTransport(tp.Transport):
                 method.name, url, params=query_params, data=body, headers=headers
             )
         except IOError as exc:
-            ret = tp.Response(False, str(exc))
+            ret = transport.Response(False, str(exc))
         else:
             if resp.ok:
-                ret = tp.Response(True, resp.text)
+                ret = transport.Response(True, resp.text)
             else:
-                ret = tp.Response(False, resp.text)
+                ret = transport.Response(False, resp.text)
 
         return ret

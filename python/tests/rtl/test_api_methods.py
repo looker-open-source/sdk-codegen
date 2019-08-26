@@ -1,23 +1,27 @@
 import datetime
-import pytest  # type: ignore
+import json
 from typing import MutableMapping, Optional
+
+import pytest  # type: ignore
 
 from looker_sdk import error
 from looker_sdk.rtl import api_settings
-from looker_sdk.rtl import api_methods as am
-from looker_sdk.rtl import requests_transport as rtp
-from looker_sdk.rtl import serialize as sr
-from looker_sdk.rtl import transport as tp
-from looker_sdk.rtl import user_session as us
-from looker_sdk.sdk import models as ml
+from looker_sdk.rtl import api_methods
+from looker_sdk.rtl import requests_transport
+from looker_sdk.rtl import serialize
+from looker_sdk.rtl import transport
+from looker_sdk.rtl import auth_session
+from looker_sdk.sdk import models
 
 
 @pytest.fixture(scope="module")  # type: ignore
-def api_methods() -> am.APIMethods:
+def api() -> api_methods.APIMethods:
     settings = api_settings.ApiSettings.configure("../looker.ini")
-    transport = rtp.RequestsTransport.configure(settings)
-    usr_session = us.UserSession(settings, transport, sr.deserialize)
-    return am.APIMethods(usr_session, sr.deserialize, sr.serialize, transport)
+    transport = requests_transport.RequestsTransport.configure(settings)
+    usr_session = auth_session.AuthSession(settings, transport, serialize.deserialize)
+    return api_methods.APIMethods(
+        usr_session, serialize.deserialize, serialize.serialize, transport
+    )
 
 
 @pytest.mark.parametrize(  # type: ignore
@@ -33,11 +37,11 @@ def api_methods() -> am.APIMethods:
     ],
 )
 def test_convert_query_params(
-    api_methods: am.APIMethods,
-    input: am.TQueryParams,
+    api: api_methods.APIMethods,
+    input: api_methods.TQueryParams,
     expected: MutableMapping[str, str],
 ):
-    actual = api_methods._convert_query_params(input)
+    actual = api._convert_query_params(input)
     assert actual == expected
 
 
@@ -50,58 +54,75 @@ def test_convert_query_params(
         (["a", "b", "c"], b'["a", "b", "c"]'),
         ({"foo": "bar"}, b'{"foo": "bar"}'),
         (None, None),
-        (ml.WriteApiSession(workspace_id="dev"), b'{"workspace_id": "dev"}'),
+        (models.WriteApiSession(workspace_id="dev"), b'{"workspace_id": "dev"}'),
         (
             [
-                ml.WriteApiSession(workspace_id="dev"),
-                ml.WriteApiSession(workspace_id="dev"),
+                models.WriteApiSession(workspace_id="dev"),
+                models.WriteApiSession(workspace_id="dev"),
             ],
             b'[{"workspace_id": "dev"}, {"workspace_id": "dev"}]',
         ),
     ],
 )
 def test_get_serialized(
-    api_methods: am.APIMethods, input: am.TBody, expected: Optional[bytes]
+    api: api_methods.APIMethods, input: api_methods.TBody, expected: Optional[bytes]
 ):
-    actual = api_methods._get_serialized(input)
+    actual = api._get_serialized(input)
     assert actual == expected
 
 
 @pytest.mark.parametrize(  # type: ignore
     "test_response, test_structure, expected",
     [
-        (tp.Response(ok=True, value="some response text"), str, "some response text"),
-        (tp.Response(ok=True, value=""), None, None),
         (
-            tp.Response(
+            transport.Response(ok=True, value="some response text"),
+            str,
+            "some response text",
+        ),
+        (transport.Response(ok=True, value=""), None, None),
+        (
+            transport.Response(
                 ok=True,
-                value='{"looker_release_version": "6.18", "current_version": {"version": null, "full_version": "6.18.4", "status": "fully functional", "swagger_url": null}, "supported_versions": null}',  # noqa: B950
+                value=(
+                    json.dumps(
+                        {  # type: ignore
+                            "current_version": {  # type: ignore
+                                "full_version": "6.18.4",
+                                "status": "fully functional",
+                                "swagger_url": None,
+                                "version": None,
+                            },
+                            "looker_release_version": "6.18",
+                            "supported_versions": None,
+                        }
+                    )
+                ),
             ),
-            ml.ApiVersion,
-            ml.ApiVersion(
+            models.ApiVersion,
+            models.ApiVersion(
                 looker_release_version="6.18",
-                current_version=ml.ApiVersionElement(
-                    version=ml.EXPLICIT_NULL,  # type: ignore
+                current_version=models.ApiVersionElement(
+                    version=None,
                     full_version="6.18.4",
                     status="fully functional",
-                    swagger_url=ml.EXPLICIT_NULL,  # type: ignore
+                    swagger_url=None,
                 ),
-                supported_versions=ml.EXPLICIT_NULL,  # type: ignore
+                supported_versions=None,
             ),
         ),
     ],
 )
 def test_return(
-    api_methods: am.APIMethods,
-    test_response: tp.Response,
-    test_structure: am.TStructure,
-    expected: am.TReturn,
+    api: api_methods.APIMethods,
+    test_response: transport.Response,
+    test_structure: api_methods.TStructure,
+    expected: api_methods.TReturn,
 ):
-    actual = api_methods._return(test_response, test_structure)
+    actual = api._return(test_response, test_structure)
     assert actual == expected
 
 
-def test_return_raises_an_SDKError_for_bad_responses(api_methods):
+def test_return_raises_an_SDKError_for_bad_responses(api):
     with pytest.raises(error.SDKError) as exc:
-        api_methods._return(tp.Response(ok=False, value="some error message"), str)
+        api._return(transport.Response(ok=False, value="some error message"), str)
     assert "some error message" in str(exc.value)

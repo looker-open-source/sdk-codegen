@@ -6,10 +6,10 @@ import json
 import pytest  # type: ignore
 
 from looker_sdk import error
-from looker_sdk.rtl import user_session as us
-from looker_sdk.rtl import api_settings as st
-from looker_sdk.rtl import serialize as sr
-from looker_sdk.rtl import transport as tp
+from looker_sdk.rtl import auth_session as auth
+from looker_sdk.rtl import api_settings
+from looker_sdk.rtl import serialize
+from looker_sdk.rtl import transport
 
 
 @pytest.fixture(scope="module")  # type: ignore
@@ -39,12 +39,14 @@ verbose=false
 
 
 @pytest.fixture(scope="function")  # type: ignore
-def user_session(config_file):
-    settings = st.ApiSettings.configure(config_file)
-    return us.UserSession(settings, MockTransport.configure(settings), sr.deserialize)
+def auth_session(config_file):
+    settings = api_settings.ApiSettings.configure(config_file)
+    return auth.AuthSession(
+        settings, MockTransport.configure(settings), serialize.deserialize
+    )
 
 
-class MockTransport(tp.Transport):
+class MockTransport(transport.Transport):
     """A mock transport layer used for testing purposes"""
 
     @classmethod
@@ -62,7 +64,7 @@ class MockTransport(tp.Transport):
     ):
         if authenticator:
             authenticator()
-        if method == tp.HttpMethod.POST:
+        if method == transport.HttpMethod.POST:
             if path == "/login":
                 token = "AdminAccessToken"
                 expected_header = {"Content-Type": "application/x-www-form-urlencoded"}
@@ -73,57 +75,57 @@ class MockTransport(tp.Transport):
             access_token = json.dumps(
                 {"access_token": token, "token_type": "Bearer", "expires_in": 3600}
             )
-            response = tp.Response(ok=True, value=access_token)
-        elif (method == tp.HttpMethod.DELETE) and (path == "/logout"):
-            response = tp.Response(ok=True, value="")
+            response = transport.Response(ok=True, value=access_token)
+        elif (method == transport.HttpMethod.DELETE) and (path == "/logout"):
+            response = transport.Response(ok=True, value="")
         else:
             raise TypeError("Bad transport layer call")
         return response
 
 
-def test_auto_admin_login(user_session: us.UserSession):
-    assert not user_session.is_admin_authenticated
-    auth_header = user_session.authenticate()
+def test_auto_admin_login(auth_session: auth.AuthSession):
+    assert not auth_session.is_admin_authenticated
+    auth_header = auth_session.authenticate()
     assert auth_header["Authorization"] == "token AdminAccessToken"
-    assert user_session.is_admin_authenticated
+    assert auth_session.is_admin_authenticated
 
     # even after explicit logout
-    user_session.logout()
-    assert not user_session.is_admin_authenticated
-    auth_header = user_session.authenticate()
+    auth_session.logout()
+    assert not auth_session.is_admin_authenticated
+    auth_header = auth_session.authenticate()
     assert isinstance(auth_header, dict)
     assert auth_header["Authorization"] == "token AdminAccessToken"
-    assert user_session.is_admin_authenticated
+    assert auth_session.is_admin_authenticated
 
 
-def test_user_login_auto_logs_in_admin(user_session: us.UserSession):
-    assert not user_session.is_admin_authenticated
-    assert not user_session.is_user_authenticated
-    user_session.login_user(5)
-    assert user_session.is_admin_authenticated
-    assert user_session.is_user_authenticated
-    auth_header = user_session.authenticate()
+def test_user_login_auto_logs_in_admin(auth_session: auth.AuthSession):
+    assert not auth_session.is_admin_authenticated
+    assert not auth_session.is_user_authenticated
+    auth_session.login_user(5)
+    assert auth_session.is_admin_authenticated
+    assert auth_session.is_user_authenticated
+    auth_header = auth_session.authenticate()
     assert auth_header["Authorization"] == "token UserAccessToken"
 
 
-def test_user_logout_leaves_admin_logged_in(user_session: us.UserSession):
-    user_session.login_user(5)
-    user_session.logout()
-    assert not user_session.is_user_authenticated
-    assert user_session.is_admin_authenticated
+def test_user_logout_leaves_admin_logged_in(auth_session: auth.AuthSession):
+    auth_session.login_user(5)
+    auth_session.logout()
+    assert not auth_session.is_user_authenticated
+    assert auth_session.is_admin_authenticated
 
 
-def test_login_user_login_user(user_session: us.UserSession):
-    user_session.login_user(5)
+def test_login_user_login_user(auth_session: auth.AuthSession):
+    auth_session.login_user(5)
     with pytest.raises(error.SDKError):  # type: ignore
-        user_session.login_user(10)
+        auth_session.login_user(10)
 
 
-def test_is_sudo(user_session: us.UserSession):
-    assert user_session.is_sudo is None
-    user_session.authenticate()  # auto-login admin
-    assert user_session.is_sudo is None
-    user_session.login_user(5)
-    assert user_session.is_sudo == 5
-    user_session.logout()
-    assert user_session.is_sudo is None
+def test_is_sudo(auth_session: auth.AuthSession):
+    assert auth_session.is_sudo is None
+    auth_session.authenticate()  # auto-login admin
+    assert auth_session.is_sudo is None
+    auth_session.login_user(5)
+    assert auth_session.is_sudo == 5
+    auth_session.logout()
+    assert auth_session.is_sudo is None

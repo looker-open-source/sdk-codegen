@@ -1,11 +1,9 @@
-# pylint: disable=C,R
-# pylint: disable=redefined-outer-name
-
 import attr
 import pytest  # type: ignore
 
-from looker_sdk.rtl import transport as tp
-from looker_sdk.rtl import requests_transport as rtp
+from looker_sdk.rtl import transport
+from looker_sdk.rtl import requests_transport
+
 
 @attr.s(auto_attribs=True)
 class Response:
@@ -36,7 +34,7 @@ class Session:
 
 @pytest.fixture
 def settings():
-    return tp.TransportSettings(
+    return transport.TransportSettings(
         base_url="/some/path", api_version="3.1", headers=None, verify_ssl=True
     )
 
@@ -45,8 +43,8 @@ def test_configure(settings):
     """Test configuration creates instance.
     """
 
-    test = rtp.RequestsTransport.configure(settings)
-    assert isinstance(test, rtp.RequestsTransport)
+    test = requests_transport.RequestsTransport.configure(settings)
+    assert isinstance(test, requests_transport.RequestsTransport)
 
 
 def test_request_ok(settings):
@@ -54,9 +52,9 @@ def test_request_ok(settings):
     """
     ret_val = Response(ok=True, text="yay!")
     session = Session(ret_val)
-    test = rtp.RequestsTransport(settings, session)
-    resp = test.request(tp.HttpMethod.GET, "/some/path")
-    assert isinstance(resp, tp.Response)
+    test = requests_transport.RequestsTransport(settings, session)
+    resp = test.request(transport.HttpMethod.GET, "/some/path")
+    assert isinstance(resp, transport.Response)
     assert resp.value == "yay!"
     assert resp.ok is True
 
@@ -66,9 +64,9 @@ def test_request_not_ok(settings):
     """
     ret_val = Response(ok=False, text="Some API error")
     session = Session(ret_val)
-    test = rtp.RequestsTransport(settings, session)
-    resp = test.request(tp.HttpMethod.GET, "/some/path")
-    assert isinstance(resp, tp.Response)
+    test = requests_transport.RequestsTransport(settings, session)
+    resp = test.request(transport.HttpMethod.GET, "/some/path")
+    assert isinstance(resp, transport.Response)
     assert resp.value == "Some API error"
     assert resp.ok is False
 
@@ -77,8 +75,8 @@ def test_request_error(settings):
     """Test network error response
     """
     session = Session(None, True)
-    test = rtp.RequestsTransport(settings, session)
-    resp = test.request(tp.HttpMethod.GET, "/some/path")
-    assert isinstance(resp, tp.Response)
+    test = requests_transport.RequestsTransport(settings, session)
+    resp = test.request(transport.HttpMethod.GET, "/some/path")
+    assert isinstance(resp, transport.Response)
     assert resp.value == "(54, 'Connection reset by peer')"
     assert resp.ok is False
