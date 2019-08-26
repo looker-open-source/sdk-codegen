@@ -3,12 +3,14 @@
   "version": "0.1.0-experimental.1",
   "description": "Looker SDK",
   "main": "index.js",
-  "repository": "https://github.com/looker-open-source/sdk_codegen",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/looker-open-source/sdk_codegen.git"
+  },
   "author": "Looker",
   "license": "MIT",
   "scripts": {
-    "publish": "yarn publish",
-    "test" : "yarn jest"
+    "test": "yarn jest"
   },
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk_codegen/issues"
@@ -32,6 +34,12 @@
     "request-promise-native": "^1.0.7",
     "ts-node": "^8.1.0",
     "typescript": "^3.4.5"
-  }
-
+  },
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "Looker",
+    "SDK"
+  ]
 }
