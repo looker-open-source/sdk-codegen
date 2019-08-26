@@ -14,25 +14,28 @@ official beta begins.
 Sample project setup
 --------------------
 
-We'll use `pyenv <https://github.com/pyenv/pyenv#installation>`_ to install
-python3.7 and `pipenv <https://docs.pipenv.org/en/latest/#install-pipenv-today>`_
-to manage project dependencies. Once you have them installed follow these steps
-
-Create a project directory (consider
-`cookiecutter <https://github.com/audreyr/cookiecutter-pypackage#quickstart>`_
-as an alternative)
+In these instructions we'll use `pyenv <https://github.com/pyenv/pyenv#installation>`_
+to install python3.7 and
+`pipenv <https://docs.pipenv.org/en/latest/#install-pipenv-today>`_
+to manage project dependencies. Here is how to install them on a mac
 
 .. code-block:: bash
 
-    $ mkdir looker-sdk-example
+    brew update && brew install pyenv && brew install pipenv
+
+Create a project directory
+
+.. code-block:: bash
+
+    mkdir looker-sdk-example
 
 Install python3.7 and use it for this directory
 
 .. code-block:: bash
 
-    $ cd looker-sdk-example/
-    $ pyenv install 3.7.4  # pyenv install --list to see latest 3.7
-    $ pyenv local 3.7.4
+    cd looker-sdk-example/
+    pyenv install 3.7.4
+    pyenv local 3.7.4
 
 Install looker_sdk using pipenv
 
@@ -64,8 +67,9 @@ example file:
     verify_ssl=True
 
 
-Code examples
--------------
+Code example
+------------
+Copy the following code block into `example.py`
 
 .. code-block:: python
 
@@ -136,16 +140,19 @@ Code examples
     looker_client.delete_user(user_id)
     print(f"Removed user({user_id})")
 
-You can run the example code above by copying it into an `example.py` file
-and executing it. *Caution* the example code will actually create and delete
-a user in your looker instance
-
-prepending `# PYTHONWARNINGS=ignore` is useful if you have `verify_ssl=False`
-in your looker.ini (i.e an insecure ssl connection to your looker api)
+You can run the example code above but *be aware* it will actually create and
+delete a user in your looker instance.
 
 .. code-block:: bash
 
-    $ PYTHONWARNINGS=ignore pipenv run python example.py
+    pipenv run python example.py
+
+If you see a lot of `InsecureRequestWarning` errors because you're running
+against an instance with a self-signed cert, this will clean up the output:
+
+.. code-block:: bash
+
+    PYTHONWARNINGS=ignore pipenv run python example.py
 
 
 A note on static type checking
