@@ -1,17 +1,14 @@
-"""Base model and other model(s) the RTL relies on.
+"""Base model for all generated models
 """
 
-import typing
-
-import attr
+from typing import Any, cast
 
 
-_NULL_INIT = "NULL_INIT"
-EXPLICIT_NULL = typing.cast(typing.Any, "EXPLICIT_NULL")  # type:ignore
+EXPLICIT_NULL = cast(Any, "EXPLICIT_NULL")  # type:ignore
 
 
 class Model:
-    """Base model for all API models.
+    """Base model for all generated models.
     """
 
     def __attrs_post_init__(self):
@@ -41,21 +38,3 @@ class Model:
                 setattr(self, key, _NULL_INIT)
             elif value == EXPLICIT_NULL:
                 setattr(self, key, None)
-
-
-@attr.s(auto_attribs=True, kw_only=True)
-class AccessToken(Model):
-    """API Model used by RTL AuthSession
-
-    Attributes:
-        access_token : Access Token used for API calls
-        token_type : Type of Token
-        expires_in : Number of seconds before the token expires
-    """
-
-    # Access Token used for API calls
-    access_token: str = ""
-    # Type of Token
-    token_type: str = ""
-    # Number of seconds before the token expires
-    expires_in: int = 0
