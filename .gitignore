@@ -11,3 +11,4 @@ sdk_generated.*
 python/venv/*
 venv/*
 package-lock.json
+**/lib/*
