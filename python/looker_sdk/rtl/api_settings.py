@@ -49,15 +49,18 @@ class ApiSettings(transport.TransportSettings):
         cfg = dict(cfg_parser[section])
 
         env_base_url = cast(str, os.getenv("LOOKER_BASE_URL"))
-        env_client_id = cast(str, os.getenv("LOOKER_CLIENT_ID"))
-        env_client_secret = cast(str, os.getenv("LOOKER_CLIENT_SECRET"))
-        env_embed_secret = cast(str, os.getenv("LOOKER_EMBED_SECRET"))
         if env_base_url:
             cfg["base_url"] = env_base_url
+
+        env_client_id = cast(str, os.getenv("LOOKER_CLIENT_ID"))
         if env_client_id:
             cfg["client_id"] = env_client_id
+
+        env_client_secret = cast(str, os.getenv("LOOKER_CLIENT_SECRET"))
         if env_client_secret:
             cfg["client_secret"] = env_client_secret
+
+        env_embed_secret = cast(str, os.getenv("LOOKER_EMBED_SECRET"))
         if env_embed_secret:
             cfg["embed_secret"] = env_embed_secret
 
