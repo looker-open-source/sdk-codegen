@@ -4,10 +4,7 @@ import { PythonFormatter } from './python.fmt'
 
 const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
 
-describe('ts template test', () => {
-  beforeAll(() => {
-
-  })
+describe('sdk generator test', () => {
   it('outputs a method in Python', () => {
     const gen = new SdkGenerator(apiModel, new PythonFormatter(apiModel))
     const result = gen.codeFormatter.declareMethod('  ', apiModel.methods['create_look'])

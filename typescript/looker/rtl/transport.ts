@@ -181,7 +181,7 @@ export async function parseResponse(contentType: string, res: Response) {
       return result instanceof Object ? result : JSON.parse(result)
     } catch (error) {
       console.log(res.body)
-      return await Promise.reject(error)
+      return Promise.reject(error)
     }
   } else if (contentType === 'text' || contentType.startsWith('text/')) {
     return res.body
@@ -192,7 +192,7 @@ export async function parseResponse(contentType: string, res: Response) {
       return await res.body
       // return await res.blob()
     } catch (error) {
-      return await Promise.reject(error)
+      return Promise.reject(error)
     }
   }
 }

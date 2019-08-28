@@ -70,11 +70,13 @@ const session = new AuthSession(settings)
 Verify authentication works and that API calls will succeed with code similar to the following:
 
 ```typescript
+import { SDK } from '@looker/sdk'
 (async () => {
-  authSession
-  const sdk = new LookerSDK(session)
+  const sdk = SDK.createClient()
   // retrieve your user account to verify correct credentials
-  const me = await sdk.ok(sdk.me()) 
+  const me = await sdk.ok(sdk.me(
+    "id, first_name, last_name, display_name, email, personal_space_id, home_space_id, group_ids, role_ids"))
+  console.log({me})
   // make any other calls to the Looker SDK
   const dashboards = await sdk.ok(
     sdk.search_dashboards({title: 'My SDK dashboard'})
@@ -82,7 +84,7 @@ Verify authentication works and that API calls will succeed with code similar to
   if (dashboards.length === 0) {
     console.log('Dashboard not found')
   }
-  const dashboard = dashboards[0]
+  const [ dashboard ] = dashboards
   // do stuff with dashboard
 
   ...
@@ -92,7 +94,7 @@ Verify authentication works and that API calls will succeed with code similar to
     console.log('Logout successful')
   }
 
-})
+})()
 ```
 
 ## Using AuthSession for automatic authentication
