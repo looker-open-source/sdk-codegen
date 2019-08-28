@@ -53,19 +53,8 @@ embed_secret=your_embed_SSO_secret
 
 ### Use the SDK in your code
 
-When the SDK is installed and the server API credentials are configured, it's ready to be used.
-
-#### Initialize the SDK
-
-Initialize the Looker SDK in Typescript with code similar to the following:
-
-```typescript
-// Retrieve the configuration settings from the `looker.ini` file
-const settings = new ApiSettingsIniFile('looker.ini')
-const session = new AuthSession(settings)
-```
-
-#### Make SDK method requests
+When the SDK is installed and the server location and API credentials are configured in your `looker.ini` file, 
+it's ready to be used.
 
 Verify authentication works and that API calls will succeed with code similar to the following:
 
