@@ -95,6 +95,7 @@ export class PythonFormatter extends CodeFormatter {
   pythonTypes: Record<string, IMappedType> = {
     'number': {name: 'float', default: this.nullStr},
     'double': {name: 'float', default: this.nullStr},
+    'float': {name: 'float', default: this.nullStr},
     'integer': {name: 'int', default: this.nullStr},
     'int32': {name: 'int', default: this.nullStr},
     'int64': {name: 'int', default: this.nullStr},
