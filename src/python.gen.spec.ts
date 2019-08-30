@@ -23,29 +23,29 @@
  */
 
 import * as Models from './sdkModels'
-import { PythonFormatter } from './python.fmt'
+import { PythonGen } from './python.gen'
 
 const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
 
-const fmt = new PythonFormatter(apiModel)
+const gen = new PythonGen(apiModel)
 const indent = ''
 
 describe('python formatter', () => {
   describe('parameter declarations', () => {
     it('required parameter', () => {
       const param = apiModel.methods['run_query'].params[0]
-      const actual = fmt.declareParameter(indent, param)
+      const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual('# Id of query\nquery_id: int')
     })
     it('optional parameter', () => {
       const param = apiModel.methods['run_query'].params[2]
-      const actual = fmt.declareParameter(indent, param)
+      const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual('# Row limit (may override the limit in the saved query).\n' +
         'limit: Optional[int] = None')
     })
     it('required typed parameter', () => {
       const param = apiModel.methods['create_query_render_task'].params[2]
-      const actual = fmt.declareParameter(indent, param)
+      const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`# Output width in pixels\nwidth: int`)
     })
   })
@@ -101,17 +101,17 @@ describe('python formatter', () => {
   describe('httpArgs', () => {
     it('add_group_group', () => {
       const method = apiModel.methods['add_group_group']
-      const args = fmt.httpArgs('', method).trim()
+      const args = gen.httpArgs('', method).trim()
       expect(args).toEqual('models.Group, body=body')
     })
     it('create_query', () => {
       const method = apiModel.methods['create_query']
-      const args = fmt.httpArgs('', method).trim()
+      const args = gen.httpArgs('', method).trim()
       expect(args).toEqual('models.Query, query_params={"fields": fields}, body=body')
     })
     it('create_dashboard', () => {
       const method = apiModel.methods['create_dashboard']
-      const args = fmt.httpArgs('', method).trim()
+      const args = gen.httpArgs('', method).trim()
       expect(args).toEqual('models.Dashboard, body=body')
     })
   })
@@ -120,12 +120,12 @@ describe('python formatter', () => {
     it('no params with all_datagroups', () => {
       const method = apiModel.methods['all_datagroups']
       const expected =
-`# GET /datagroups -> Sequence[models.Datagroup]
+        `# GET /datagroups -> Sequence[models.Datagroup]
 def all_datagroups(
     self
 ) -> Sequence[models.Datagroup]:
 `
-      const actual = fmt.methodSignature('', method)
+      const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
     })
   })
@@ -134,37 +134,37 @@ def all_datagroups(
     it('assert response is model add_group_group', () => {
       const method = apiModel.methods['add_group_group']
       const expected =
-`response = self.post(f"/groups/{group_id}/groups", models.Group, body=body)
+        `response = self.post(f"/groups/{group_id}/groups", models.Group, body=body)
 assert isinstance(response, models.Group)
 return response`
-      const actual = fmt.httpCall(indent, method)
+      const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
     it('assert response is None delete_group_from_group', () => {
       const method = apiModel.methods['delete_group_from_group']
       const expected =
-`response = self.delete(f"/groups/{group_id}/groups/{deleting_group_id}")
+        `response = self.delete(f"/groups/{group_id}/groups/{deleting_group_id}")
 assert response is None
 return response`
-      const actual = fmt.httpCall(indent, method)
+      const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
     it('assert response is list active_themes', () => {
       const method = apiModel.methods['active_themes']
       const expected =
-`response = self.get(f"/themes/active", Sequence[models.Theme], query_params={"name": name, "ts": ts, "fields": fields})
+        `response = self.get(f"/themes/active", Sequence[models.Theme], query_params={"name": name, "ts": ts, "fields": fields})
 assert isinstance(response, list)
 return response`
-      const actual = fmt.httpCall(indent, method)
+      const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
     it('assert response is dict query_task_results', () => {
       const method = apiModel.methods['query_task_results']
       const expected =
-`response = self.get(f"/query_tasks/{query_task_id}/results", MutableMapping[str, str])
+        `response = self.get(f"/query_tasks/{query_task_id}/results", MutableMapping[str, str])
 assert isinstance(response, dict)
 return response`
-      const actual = fmt.httpCall(indent, method)
+      const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
   })
@@ -172,7 +172,7 @@ return response`
   describe('type creation', () => {
     it('with arrays and hashes', () => {
       const type = apiModel.types['Workspace']
-      const actual = fmt.declareType(indent, type)
+      const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`
 @attr.s(auto_attribs=True, kw_only=True)
 class Workspace(model.Model):
@@ -191,7 +191,7 @@ class Workspace(model.Model):
     })
     it('with refs, arrays and nullable', () => {
       const type = apiModel.types['ApiVersion']
-      const actual = fmt.declareType(indent, type)
+      const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`
 @attr.s(auto_attribs=True, kw_only=True)
 class ApiVersion(model.Model):
@@ -211,10 +211,10 @@ class ApiVersion(model.Model):
       // cause dynamic WriteApiSession
       const method = apiModel.methods['create_query_task']
       const param = method.bodyParams[0]
-      fmt.declareParameter(indent, param)
+      gen.declareParameter(indent, param)
 
       const writeType = apiModel.types['WriteCreateQueryTask']
-      const actual = fmt.declareType(indent, writeType)
+      const actual = gen.declareType(indent, writeType)
       expect(actual).toEqual(`
 @attr.s(auto_attribs=True, kw_only=True, init=False)
 class WriteCreateQueryTask(model.Model):

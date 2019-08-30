@@ -34,18 +34,16 @@ import {
   IntrinsicType,
   ArrayType,
   HashType,
-  // RequestType,
   strBody,
-  // strRequest
 } from './sdkModels'
-import { CodeFormatter, warnEditing } from './codeFormatter'
+import { CodeGen, warnEditing } from './codeGen'
 import * as fs from 'fs'
 import * as prettier from 'prettier'
-import { utf8 } from './utils'
+import { warn, isFileSync, utf8 } from './utils'
 
 // const strDefault = 'Default'
 
-export class TypescriptFormatter extends CodeFormatter {
+export class TypescriptGen extends CodeGen {
   codePath = './typescript/'
   packagePath = 'looker'
   itself = 'this'
@@ -61,6 +59,10 @@ export class TypescriptFormatter extends CodeFormatter {
   indentStr = '  '
   endTypeStr = '\n}'
   needsRequestTypes = true
+
+  static useRequest(method: IMethod) {
+    return method.optionalParams.length > 1
+  }
 
   // @ts-ignore
   methodsPrologue(indent: string) {
@@ -151,18 +153,6 @@ export interface IDictionary<T> {
     return ''
   }
 
-  declareMethod(indent: string, method: IMethod) {
-    const bump = this.bumper(indent)
-    // const request = this.requestTypeName(method)
-    // const defaultName = request ? `${strDefault}${request.substring(strRequest.length)}` : ''
-    // const defaulter = defaultName? `${bump}request = { ...${defaultName}, ...request}\n` : ''
-    const defaulter = ''
-    return this.methodSignature(indent, method)
-      + defaulter
-      + this.httpCall(bump, method)
-      + `\n${indent}}`
-  }
-
   /*
   TODO get rid of this when we're sure we don't need it
   generateDefaults(indent: string, type: IType) {
@@ -184,6 +174,18 @@ export interface IDictionary<T> {
       + `${indent}}\n\n`
   }
   */
+
+  declareMethod(indent: string, method: IMethod) {
+    const bump = this.bumper(indent)
+    // const request = this.requestTypeName(method)
+    // const defaultName = request ? `${strDefault}${request.substring(strRequest.length)}` : ''
+    // const defaulter = defaultName? `${bump}request = { ...${defaultName}, ...request}\n` : ''
+    const defaulter = ''
+    return this.methodSignature(indent, method)
+      + defaulter
+      + this.httpCall(bump, method)
+      + `\n${indent}}`
+  }
 
   typeSignature(indent: string, type: IType) {
     // return this.generateDefaults(indent, type) +
@@ -235,10 +237,6 @@ export interface IDictionary<T> {
     return `${args}${current ? this.argDelimiter : ''}${current}`
   }
 
-  static useRequest(method: IMethod) {
-    return method.optionalParams.length > 1
-  }
-
   // build the http argument list from back to front, so trailing undefined arguments
   // can be omitted. Path arguments are resolved as part of the path parameter to general
   // purpose API method call
@@ -246,9 +244,10 @@ export interface IDictionary<T> {
   //   {queryArgs...}, bodyArg, {headerArgs...}, {cookieArgs...}
   //   {queryArgs...}, null, null, {cookieArgs...}
   //   null, bodyArg
+
   //   {queryArgs...}
   httpArgs(indent: string, method: IMethod) {
-    const request = TypescriptFormatter.useRequest(method) ? 'request.' : ''
+    const request = TypescriptGen.useRequest(method) ? 'request.' : ''
     let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
     result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
     result = this.argFill(result, method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr)
@@ -257,7 +256,7 @@ export interface IDictionary<T> {
   }
 
   httpCall(indent: string, method: IMethod) {
-    const request = TypescriptFormatter.useRequest(method) ? 'request.' : ''
+    const request = TypescriptGen.useRequest(method) ? 'request.' : ''
     const type = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
@@ -283,6 +282,24 @@ export interface IDictionary<T> {
     //   .filter(type => type instanceof RequestType)
     //   .forEach(type => names.push(`${strDefault}${type.name.substring(strRequest.length)}`))
     return names
+  }
+
+  versionStamp() {
+    if (this.versions) {
+      const stampFile = this.fileName('rtl/versions')
+      if (!isFileSync(stampFile)) {
+        warn(`${stampFile} was not found. Skipping version update to ${this.versions.apiVersion}.${this.versions.lookerVersion}`)
+      }
+      let content = fs.readFileSync(stampFile, utf8)
+      const lookerPattern = /lookerVersion = '\d+\.\d+'/i
+      const apiPattern = /apiVersion = '\d+\.\d+'/i
+      content = content.replace(lookerPattern, `lookerVersion = ${this.versions.lookerVersion}`)
+      content = content.replace(apiPattern, `apiVersion = ${this.versions.apiVersion}`)
+      fs.writeFileSync(stampFile, content, {encoding: utf8})
+    } else {
+      warn('Version information was not retrieved. Skipping SDK version updating.')
+    }
+    return this.versions
   }
 
   typeMap(type: IType): IMappedType {
@@ -327,7 +344,7 @@ export interface IDictionary<T> {
   }
 
   reformatFile(fileName: string) {
-    const formatOptions : prettier.Options = {
+    const formatOptions: prettier.Options = {
       semi: false,
       trailingComma: 'all',
       bracketSpacing: true,

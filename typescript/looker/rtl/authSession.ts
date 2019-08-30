@@ -24,34 +24,12 @@
 
 import { IAccessToken, IError } from '../sdk/models'
 import { IApiSettings } from './apiSettings'
-import { IRequestInit, ITransport, SDKResponse, sdkError } from './transport'
+import { IRequestInit, ITransport, SDKResponse, sdkError, IAuthSession } from './transport'
 import { AuthToken } from './authToken'
 import { NodeTransport } from './nodeTransport'
 
 const strPost = 'POST'
 const strDelete = 'DELETE'
-
-export interface IAuthSession {
-  sudoId: string
-  settings: IApiSettings
-  transport: ITransport
-
-  // Authentication token
-  getToken(): Promise<IAccessToken>
-
-  isSudo(): boolean
-
-  isAuthenticated(): boolean
-
-  authenticate(init: IRequestInit): Promise<IRequestInit>
-
-  login(sudoId?: string | number): Promise<IAccessToken>
-
-  logout(): Promise<boolean>
-
-  reset(): void
-}
-
 
 export class AuthSession implements IAuthSession {
   _authToken: AuthToken = new AuthToken()
@@ -102,15 +80,6 @@ export class AuthSession implements IAuthSession {
     this._sudoToken.reset()
   }
 
-  private async ok<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
-    const result = await promise
-    if (result.ok) {
-      return result.value
-    } else {
-      throw sdkError(result as any)
-    }
-  }
-
   async login(sudoId?: string | number) {
     if (sudoId || (sudoId !== this.sudoId) || (!this.isAuthenticated())) {
       if (sudoId) {
@@ -128,6 +97,15 @@ export class AuthSession implements IAuthSession {
       result = await this._logout()
     }
     return result
+  }
+
+  private async ok<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
+    const result = await promise
+    if (result.ok) {
+      return result.value
+    } else {
+      throw sdkError(result as any)
+    }
   }
 
   private async sudoLogout() {

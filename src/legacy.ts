@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-import { TargetLanguages, IGeneratorSpec as LanguageSpec } from './targetLanguages'
+import { Languages, IGeneratorSpec as LanguageSpec } from './languages'
 import { SDKConfigProps, SDKConfig } from './sdkConfig'
 import { log, quit, run } from './utils'
 import { logConvert } from './convert'
@@ -47,7 +47,7 @@ const runConfig = async (name: string, props: SDKConfigProps) => {
   const openApiFile = await logConvert(name, props)
 
   let results: any[] = []
-  for (const language of TargetLanguages) {
+  for (const language of Languages) {
     const tag = `${name} API ${language.language} version ${props.api_version}`
     log(`generating ${tag} ...`)
     results.push(await generate(openApiFile, language, props))

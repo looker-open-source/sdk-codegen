@@ -25,17 +25,23 @@
 /** A transport is a generic way to make HTTP requests. */
 
 // TODO create generic Headers and Request interfaces that are not transport-specific
-// import { Headers, Response } from "node-fetch"
-// TODO create generic Agent not transport-specific
+// TODO create generic Agent that is not transport-specific
 import { Agent } from 'https'
-import { Headers, Response } from 'request'
+import { Headers } from 'request'
+import { apiVersion, lookerVersion } from './versions'
+import { IApiSettings } from './apiSettings'
+import { IAccessToken } from '../sdk/models'
 
-// TODO generate version and build dynamically
-const lookerBuild = '6.18'
-const apiVersion = '3.31'
-export const agentTag = `TS-SDK ${apiVersion}.${lookerBuild}`
+export const agentTag = `TS-SDK ${apiVersion}.${lookerVersion}`
 
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'TRACE' | 'HEAD'
+export type HttpMethod =
+  | 'GET'
+  | 'POST'
+  | 'PUT'
+  | 'DELETE'
+  | 'PATCH'
+  | 'TRACE'
+  | 'HEAD';
 
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for reference
 export enum StatusCode {
@@ -132,32 +138,77 @@ export interface ISDKError {
   message: string
 }
 
-export type SDKResponse<TSuccess, TError> = ISDKSuccessResponse<TSuccess> | ISDKErrorResponse<TError | ISDKError>
+export type SDKResponse<TSuccess, TError> =
+  | ISDKSuccessResponse<TSuccess>
+  | ISDKErrorResponse<TError | ISDKError>
 
-export interface IRequestInit {
-  body?: any
-  headers?: any
-  method: string
-  redirect?: any
+export interface IAuthorizer {
+  settings: IApiSettings
+  transport: ITransport
 
-  // node-fetch extensions
-  agent?: Agent; // =null http.Agent instance, allows custom proxy, certificate etc.
-  compress?: boolean; // =true support gzip/deflate content encoding. false to disable
-  follow?: number; // =20 maximum redirect count. 0 to not follow redirect
-  size?: number; // =0 maximum response body size in bytes. 0 to disable
-  timeout?: number; // =0 req/res timeout in ms, it resets on redirect. 0 to disable (OS limit applies)
+  /** is the current session authenticated? */
+  isAuthenticated(): boolean;
 
+  authenticate(init: IRequestInit): Promise<IRequestInit>
 }
 
-// General purpose authentication callback
-export type Authenticator = (init: any) => any
+export interface IAuthSession extends IAuthorizer {
+  sudoId: string;
 
+  // Authentication token
+  getToken(): Promise<IAccessToken>
+
+  isSudo(): boolean
+
+  login(sudoId?: string | number): Promise<IAccessToken>
+
+  logout(): Promise<boolean>
+
+  reset(): void
+}
+
+/** Generic http request property collection */
+export interface IRequestInit {
+  /** body of request. optional */
+  body?: any
+  /** headers for request. optional */
+  headers?: any
+  /** Http method for request. required. */
+  method: HttpMethod
+  /** Redirect processing for request. optional */
+  redirect?: any
+
+  /** http.Agent instance, allows custom proxy, certificate etc. */
+  agent?: Agent
+  /** support gzip/deflate content encoding. false to disable */
+  compress?: boolean
+  /** maximum redirect count. 0 to not follow redirect */
+  follow?: number
+  /** maximum response body size in bytes. 0 to disable */
+  size?: number
+  /** req/res timeout in ms, it resets on redirect. 0 to disable (OS limit applies) */
+  timeout?: number
+}
+
+/** General purpose authentication callback */
+export type Authenticator = (init: any) => any;
+
+/** Interface for API transport values */
 export interface ITransportSettings {
+  /** base URL of host address */
   base_url: string
+  /** api version */
   api_version: string
+  /** standard headers to provide in all transport requests */
   headers?: Headers
 }
 
+/** constructs the path argument including any optional query parameters
+ @param path {string} the base path of the request
+
+ @param obj {[key: string]: string} optional collection of query parameters to encode and append to the path
+
+ */
 export function addQueryParams(path: string, obj?: { [key: string]: string }) {
   if (!obj) {
     return path
@@ -168,32 +219,9 @@ export function addQueryParams(path: string, obj?: { [key: string]: string }) {
   } else {
     const qp = keys
       .filter(k => obj[k]) // TODO test for "undefined" or omitted parameters
-      .map(k => k + '=' + encodeURIComponent(obj[k])).join('&')
+      .map(k => k + '=' + encodeURIComponent(obj[k]))
+      .join('&')
     return `${path}${qp ? '?' + qp : ''}`
-  }
-}
-
-export async function parseResponse(contentType: string, res: Response) {
-  if (contentType.match(/application\/json/g)) {
-    try {
-      // return await res.json()
-      const result = await res.body
-      return result instanceof Object ? result : JSON.parse(result)
-    } catch (error) {
-      console.log(res.body)
-      return Promise.reject(error)
-    }
-  } else if (contentType === 'text' || contentType.startsWith('text/')) {
-    return res.body
-    // return res.text()
-  } else {
-    try {
-      // TODO figure out streaming? Or provide different method for streaming?
-      return await res.body
-      // return await res.blob()
-    } catch (error) {
-      return Promise.reject(error)
-    }
   }
 }
 
@@ -205,4 +233,16 @@ export function sdkError(result: any) {
   }
   const error = JSON.stringify(result)
   return new Error(`Unknown error with SDK method ${error}`)
+}
+
+/**
+ * is the SDK running in node.js?
+ */
+export function isNodejs() {
+  return (
+    typeof 'process' !== 'undefined' &&
+    process &&
+    process.versions &&
+    process.versions.node
+  )
 }

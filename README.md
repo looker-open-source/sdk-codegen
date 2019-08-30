@@ -67,7 +67,7 @@ The generator will:
 
 * validate the OpenAPI 3.x file(s)
 
-* by default, call the code generator for each active language configured in [`targetLanguages.ts`](targetLanguages.ts)
+* by default, call the code generator for each active language configured in [`languages.ts`](src/languages.ts)
 
   * If you want to legacy for one specific language, use `yarn sdk {language}`. Currently, supported `{language}` values are `python` and `typescript`
   
@@ -112,7 +112,7 @@ This command will start a web server on `http://localhost:5000` that allows you 
 
 To use a language currently not supported by Looker's SDK code generator with the OpenAPI generator:
 
-* configure the desired language in [`targetLanguages.ts`](targetLanguages.ts)
+* configure the desired language in [`languages.ts`](src/languages.ts)
 
 * use `yarn legacy` to call the OpenAPI generator
 

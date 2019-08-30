@@ -1,8 +1,3 @@
-import { PythonFormatter } from './python.fmt'
-import { ICodeFormatter, ApiModel } from './sdkModels'
-import { TypescriptFormatter } from './typescript.fmt'
-import { quit } from './utils'
-
 /*
  * The MIT License (MIT)
  *
@@ -27,24 +22,26 @@ import { quit } from './utils'
  * THE SOFTWARE.
  */
 
+import { PythonGen } from './python.gen'
+import { ICodeGen, ApiModel } from './sdkModels'
+import { TypescriptGen } from './typescript.gen'
+import { quit } from './utils'
+import { IVersionInfo } from './codeGen'
+
 export interface IGeneratorSpec {
   language: string // name of Open API Generator language to produce
   path?: string
-  factory: (api: ApiModel) => ICodeFormatter
+  factory: (api: ApiModel, versions?: IVersionInfo) => ICodeGen
   options: string // generator options
   legacy?: string // legacy language tag
 }
 
 // To disable generation of any language specification, you can just comment it out
-export const TargetLanguages: Array<IGeneratorSpec> =
+export const Languages: Array<IGeneratorSpec> =
   [
     // {
     //   language: 'csharp',
     //   options: '-DapiPackage=Looker -DpackageName=looker'
-    // },
-    // {
-    //   language: 'java',
-    //   options: '-DinvokerPackage=com.looker.sdk -DmodelPackage=com.looker.sdk.model -DapiPackage=com.looker.sdk.api -DgroupId=com.looker.sdk -DartifactId=looker-sdk -DartifactVersion=0.5.0 -DpackageName=looker'
     // },
     // {
     //   language: 'kotlin',
@@ -63,13 +60,13 @@ export const TargetLanguages: Array<IGeneratorSpec> =
     // },
     {
       language: 'python',
-      factory: (api: ApiModel) => new PythonFormatter(api),
+      factory: (api: ApiModel, versions?: IVersionInfo) => new PythonGen(api, versions),
       options: '-DapiPackage=Looker -DpackageName=looker'
     },
     {
       language: 'typescript',
       legacy: 'typescript-node', // OpenAPI generate uses this for the language
-      factory: (api: ApiModel) => new TypescriptFormatter(api),
+      factory: (api: ApiModel, versions?: IVersionInfo) => new TypescriptGen(api, versions),
       options: '-DapiPackage=Looker -DpackageName=looker'
     },
     // {
@@ -96,11 +93,11 @@ export const TargetLanguages: Array<IGeneratorSpec> =
     // },
   ]
 
-export const getFormatter = (format: string, api: ApiModel): ICodeFormatter => {
-  const language = TargetLanguages.find((item) => item.language.toLowerCase() === format.toLowerCase())
+export const getFormatter = (format: string, api: ApiModel, versions?: IVersionInfo): ICodeGen => {
+  const language = Languages.find((item) => item.language.toLowerCase() === format.toLowerCase())
   if (!language) {
-    const langs = TargetLanguages.map((item) => item.language)
+    const langs = Languages.map((item) => item.language)
     quit(`"${format}" is not a recognized language. Supported languages are: all, ${langs.join(', ')}`)
   }
-  return language!.factory(api)
+  return language!.factory(api, versions)
 }

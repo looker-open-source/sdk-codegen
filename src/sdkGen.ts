@@ -28,15 +28,15 @@ import * as fs from 'fs'
 import * as Models from './sdkModels'
 import { SDKConfig } from './sdkConfig'
 import { isFileSync, log, quit } from './utils'
-import { openApiFileName } from './fetchSpec'
+import { getVersionInfo, openApiFileName } from './fetchSpec'
 import { SdkGenerator, TypeGenerator } from './sdkGenerator'
-import { getFormatter, TargetLanguages } from './targetLanguages'
+import { getFormatter, Languages } from './languages'
 import { logConvert } from './convert'
 
 // tslint:disable-next-line: no-floating-promises
 (async () => {
   let args = process.argv.slice(2)
-  let languages = TargetLanguages.map(l => l.language)
+  let languages = Languages.map(l => l.language)
   if (args.length > 0) {
     if (args.toString().toLowerCase() !== 'all') {
       languages = []
@@ -53,9 +53,10 @@ import { logConvert } from './convert'
       log(`generating ${language} ...`)
       for (let [name, props] of Object.entries(config)) {
         await logConvert(name, props)
+        const versions = await getVersionInfo(props)
         const oasFile = openApiFileName(name, props)
         const apiModel = Models.ApiModel.fromFile(oasFile)
-        const formatter = getFormatter(language, apiModel)
+        const formatter = getFormatter(language, apiModel, versions)
         const sdkPath = `${formatter.codePath}/${formatter.packagePath}/sdk`
         if (!isFileSync(sdkPath)) fs.mkdirSync(sdkPath, {recursive: true})
         const sdk = new SdkGenerator(apiModel, formatter)

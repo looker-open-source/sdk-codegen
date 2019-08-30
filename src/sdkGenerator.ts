@@ -28,15 +28,15 @@ import * as Models from './sdkModels'
 import { log } from './utils'
 
 export interface IGeneratorCtor<T extends Models.IModel> {
-  new(model: T, formatter: Models.ICodeFormatter): Generator<T>
+  new(model: T, formatter: Models.ICodeGen): Generator<T>
 }
 
 export abstract class Generator<T extends Models.IModel> {
-  codeFormatter: Models.ICodeFormatter
+  codeFormatter: Models.ICodeGen
   model: T
   buf: string[] = []
 
-  constructor(model: T, formatter: Models.ICodeFormatter) {
+  constructor(model: T, formatter: Models.ICodeGen) {
     this.model = model
     this.codeFormatter = formatter
   }

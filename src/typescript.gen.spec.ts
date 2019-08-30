@@ -23,29 +23,29 @@
  */
 
 import * as Models from './sdkModels'
-import { TypescriptFormatter } from './typescript.fmt'
+import { TypescriptGen } from './typescript.gen'
 
 const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
 
-const fmt = new TypescriptFormatter(apiModel)
+const gen = new TypescriptGen(apiModel)
 const indent = ''
 
 describe('typescript formatter', () => {
   describe('parameter declarations', () => {
     it('required parameter', () => {
       const param = apiModel.methods['run_query'].params[0]
-      const actual = fmt.declareParameter(indent, param)
+      const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual('// Id of query\nquery_id: number')
     })
     it('optional parameter', () => {
       const param = apiModel.methods['run_query'].params[2]
-      const actual = fmt.declareParameter(indent, param)
+      const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`// Row limit (may override the limit in the saved query).
 limit: number = 0`)
     })
     it('required typed parameter', () => {
       const param = apiModel.methods['create_query_render_task'].params[2]
-      const actual = fmt.declareParameter(indent, param)
+      const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`// Output width in pixels\nwidth: number`)
     })
   })
@@ -72,26 +72,28 @@ limit: number = 0`)
       expect(method.headerArgs).toEqual([])
       expect(method.cookieArgs).toEqual([])
     })
+
     it('body for create_query', () => {
       const method = apiModel.methods['create_query']
       expect(method.pathArgs).toEqual([])
       const body = method.getParams('body')
       expect(body.length).toEqual(1)
       expect(body[0].type.name).toEqual('Query')
-      const param = fmt.declareParameter(indent, body[0])
+      const param = gen.declareParameter(indent, body[0])
       expect(param).toEqual('body: Partial<IWriteQuery>')
       expect(method.bodyArg).toEqual('body')
       expect(method.queryArgs).toEqual(['fields'])
       expect(method.headerArgs).toEqual([])
       expect(method.cookieArgs).toEqual([])
     })
+
     it('body for create_dashboard', () => {
       const method = apiModel.methods['create_dashboard']
       expect(method.pathArgs).toEqual([])
       const body = method.getParams('body')
       expect(body.length).toEqual(1)
       expect(body[0].type.name).toEqual('Dashboard')
-      const param = fmt.declareParameter(indent, body[0])
+      const param = gen.declareParameter(indent, body[0])
       expect(param).toEqual('body: Partial<IWriteDashboard>')
       expect(method.bodyArg).toEqual('body')
       expect(method.queryArgs).toEqual([])
@@ -103,17 +105,17 @@ limit: number = 0`)
   describe('httpArgs', () => {
     it('add_group_group', () => {
       const method = apiModel.methods['add_group_group']
-      const args = fmt.httpArgs('', method).trim()
+      const args = gen.httpArgs('', method).trim()
       expect(args).toEqual('null, body')
     })
     it('create_query', () => {
       const method = apiModel.methods['create_query']
-      const args = fmt.httpArgs('', method).trim()
+      const args = gen.httpArgs('', method).trim()
       expect(args).toEqual('{fields}, body')
     })
     it('create_dashboard', () => {
       const method = apiModel.methods['create_dashboard']
-      const args = fmt.httpArgs('', method).trim()
+      const args = gen.httpArgs('', method).trim()
       expect(args).toEqual('null, body')
     })
   })
@@ -126,7 +128,7 @@ limit: number = 0`)
 async all_datagroups(
 ) {
 `
-      const actual = fmt.methodSignature('', method)
+      const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
     })
   })
@@ -135,20 +137,20 @@ async all_datagroups(
     it('assert response is model add_group_group', () => {
       const method = apiModel.methods['add_group_group']
       const expected = 'return this.post<IGroup, IError>(encodeURI(`/groups/${group_id}/groups`), null, body)'
-      const actual = fmt.httpCall(indent, method)
+      const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
     it('assert response is None delete_group_from_group', () => {
       const method = apiModel.methods['delete_group_from_group']
       const expected = 'return this.delete<void, IError>(encodeURI(`/groups/${group_id}/groups/${deleting_group_id}`))'
-      const actual = fmt.httpCall(indent, method)
+      const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
     it('assert response is list active_themes', () => {
       const method = apiModel.methods['active_themes']
       const expected = `return this.get<ITheme[], IError>('/themes/active', 
   {name: request.name, ts: request.ts, fields: request.fields})`
-      const actual = fmt.httpCall(indent, method)
+      const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
   })
@@ -160,10 +162,10 @@ async all_datagroups(
       expect(type).toBeDefined()
       if (type) {
         const property = type.properties['body']
-        const actual = fmt.declareProperty(indent, property)
+        const actual = gen.declareProperty(indent, property)
         expect(actual).toEqual(`// body parameter for dynamically created request type
 body: Partial<ICreateDashboardRenderTask>`)
-//         const actual = fmt.declareType(indent, type!)
+//         const actual = gen.declareType(indent, type!)
 //         expect(actual).toEqual(`// Dynamically generated request type for create_dashboard_render_task
 // export interface IRequestcreate_dashboard_render_task{
 //   // Id of dashboard to render
@@ -186,7 +188,7 @@ body: Partial<ICreateDashboardRenderTask>`)
     })
     it('with arrays and hashes', () => {
       const type = apiModel.types['Workspace']
-      const actual = fmt.declareType(indent, type)
+      const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface IWorkspace{
   // The unique id of this user workspace. Predefined workspace ids include "production" and "dev"
   id: string
@@ -198,7 +200,7 @@ body: Partial<ICreateDashboardRenderTask>`)
     })
     it('with refs, arrays and nullable', () => {
       const type = apiModel.types['ApiVersion']
-      const actual = fmt.declareType(indent, type)
+      const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface IApiVersion{
   // Current Looker release version number
   looker_release_version?: string

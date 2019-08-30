@@ -27,7 +27,6 @@ import {
   SDKResponse,
   ITransport,
   addQueryParams,
-  parseResponse,
   ITransportSettings,
   Authenticator,
   StatusCode, agentTag
@@ -35,6 +34,7 @@ import {
 
 import * as rq from 'request'
 import rp from 'request-promise-native'
+import { Response } from 'request'
 
 type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
 
@@ -44,10 +44,6 @@ export class NodeTransport implements ITransport {
   constructor(private options: ITransportSettings) {
     this.options = options
     this.apiPath = `${options.base_url}/api/${options.api_version}`
-  }
-
-  private ok(res: rq.Response) {
-    return res.statusCode >= StatusCode.OK && (res.statusCode <= StatusCode.IMUsed)
   }
 
   async request<TSuccess, TError>(
@@ -107,6 +103,34 @@ export class NodeTransport implements ITransport {
         message: typeof e.message === 'string' ? e.message : `The SDK call was not successful. The error was '${e}'.`
       }
       return {ok: false, error}
+    }
+  }
+
+  private ok(res: rq.Response) {
+    return res.statusCode >= StatusCode.OK && (res.statusCode <= StatusCode.IMUsed)
+  }
+}
+
+async function parseResponse(contentType: string, res: Response) {
+  if (contentType.match(/application\/json/g)) {
+    try {
+      // return await res.json()
+      const result = await res.body
+      return result instanceof Object ? result : JSON.parse(result)
+    } catch (error) {
+      console.log(res.body)
+      return Promise.reject(error)
+    }
+  } else if (contentType === 'text' || contentType.startsWith('text/')) {
+    return res.body
+    // return res.text()
+  } else {
+    try {
+      // TODO figure out streaming? Or provide different method for streaming?
+      return await res.body
+      // return await res.blob()
+    } catch (error) {
+      return Promise.reject(error)
     }
   }
 }

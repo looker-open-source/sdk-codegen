@@ -26,7 +26,8 @@ import * as OAS from 'openapi3-ts'
 import * as fs from 'fs'
 import md5 from 'blueimp-md5'
 import { utf8 } from './utils'
-import { HttpMethod, StatusCode } from './typescript/looker/rtl/transport'
+import { HttpMethod, StatusCode } from '../typescript/looker/rtl/transport'
+import { IVersionInfo } from './codeGen'
 
 export const strBody = 'body'
 export const strRequest = 'Request'
@@ -57,6 +58,7 @@ export interface IType {
   readOnly: boolean
   refCount: number // if it works for Delphi, it works for TypeScript
   schema: OAS.SchemaObject
+
   asHashString(): string
 }
 
@@ -216,13 +218,6 @@ export interface IMethod extends ISymbol {
   resultType: IType   // alias of ISymbol.type
   primaryResponse: IMethodResponse
   responses: IMethodResponse[]
-
-  getParams(location?: MethodParameterLocation): IParameter[]
-
-  optional(location?: MethodParameterLocation): IParameter[]
-
-  hasOptionalParams(): boolean
-
   description: string
   params: IParameter[]
   summary: string
@@ -237,6 +232,12 @@ export interface IMethod extends ISymbol {
   // All optional parameters
   optionalParams: IParameter[]
   bodyParams: IParameter[]
+
+  getParams(location?: MethodParameterLocation): IParameter[]
+
+  optional(location?: MethodParameterLocation): IParameter[]
+
+  hasOptionalParams(): boolean
 }
 
 export class Method extends SchemadSymbol implements IMethod {
@@ -286,6 +287,88 @@ export class Method extends SchemadSymbol implements IMethod {
 
   get summary(): string {
     return this.schema.summary || ''
+  }
+
+  // all required parameters ordered by location declaration order
+  get requiredParams() {
+    return this.required('path')
+      .concat(
+        this.required(strBody),
+        this.required('query'),
+        this.required('header'),
+        this.required('cookie')
+      )
+  }
+
+  // all required parameters ordered by location declaration order
+  get optionalParams() {
+    return this.optional('path')
+      .concat(
+        this.optional(strBody),
+        this.optional('query'),
+        this.optional('header'),
+        this.optional('cookie')
+      )
+  }
+
+  // all parameters ordered by required, then optional, location declaration order
+  get allParams() {
+    return this.requiredParams.concat(this.optionalParams)
+  }
+
+  get pathParams() {
+    return this.getParams('path')
+  }
+
+  get bodyParams() {
+    return this.getParams(strBody)
+  }
+
+  get queryParams() {
+    return this.getParams('query')
+  }
+
+  get headerParams() {
+    return this.getParams('header')
+  }
+
+  get cookieParams() {
+    return this.getParams('cookie')
+  }
+
+  get pathArgs() {
+    return this.argumentNames('path')
+  }
+
+  get bodyArg() {
+    const body = this.argumentNames(strBody)
+    if (body.length === 0) return ''
+    return body[0]
+  }
+
+  get queryArgs() {
+    return this.argumentNames('query')
+  }
+
+  get headerArgs() {
+    return this.argumentNames('header')
+  }
+
+  get cookieArgs() {
+    return this.argumentNames('cookie')
+  }
+
+  get errorResponses() {
+    // TODO use lodash or underscore
+    const result = []
+    const map = new Map()
+    for (const item of this.responses.filter(r => r.statusCode >= 400)) {
+      if (!map.has(item.type.name)) {
+        map.set(item.type.name, true)
+        result.push(item)
+      }
+    }
+    return result
   }
 
   getParams(location?: MethodParameterLocation): IParameter[] {
@@ -346,92 +429,10 @@ export class Method extends SchemadSymbol implements IMethod {
     return this.optional().length > 0
   }
 
-  // all required parameters ordered by location declaration order
-  get requiredParams() {
-    return this.required('path')
-      .concat(
-        this.required(strBody),
-        this.required('query'),
-        this.required('header'),
-        this.required('cookie')
-      )
-  }
-
-  // all required parameters ordered by location declaration order
-  get optionalParams() {
-    return this.optional('path')
-      .concat(
-        this.optional(strBody),
-        this.optional('query'),
-        this.optional('header'),
-        this.optional('cookie')
-      )
-  }
-
-  // all parameters ordered by required, then optional, location declaration order
-  get allParams() {
-    return this.requiredParams.concat(this.optionalParams)
-  }
-
-  get pathParams() {
-    return this.getParams('path')
-  }
-
-  get bodyParams() {
-    return this.getParams(strBody)
-  }
-
-  get queryParams() {
-    return this.getParams('query')
-  }
-
-  get headerParams() {
-    return this.getParams('header')
-  }
-
-  get cookieParams() {
-    return this.getParams('cookie')
-  }
-
   private argumentNames(location?: MethodParameterLocation): string[] {
     return this
       .getParams(location)
       .map(p => p.name)
-  }
-
-  get pathArgs() {
-    return this.argumentNames('path')
-  }
-
-  get bodyArg() {
-    const body = this.argumentNames(strBody)
-    if (body.length === 0) return ''
-    return body[0]
-  }
-
-  get queryArgs() {
-    return this.argumentNames('query')
-  }
-
-  get headerArgs() {
-    return this.argumentNames('header')
-  }
-
-  get cookieArgs() {
-    return this.argumentNames('cookie')
-  }
-
-  get errorResponses() {
-    // TODO use lodash or underscore
-    const result = []
-    const map = new Map()
-    for (const item of this.responses.filter(r => r.statusCode >= 400)) {
-      if (!map.has(item.type.name)) {
-        map.set(item.type.name, true)
-        result.push(item)
-      }
-    }
-    return result
   }
 
 }
@@ -445,23 +446,6 @@ class Type implements IType {
   constructor(schema: OAS.SchemaObject, name: string) {
     this.schema = schema
     this.name = name
-  }
-
-  load(symbols: ISymbolTable): void {
-    Object.entries(this.schema.properties || {}).forEach(([propName, propSchema]) => {
-      this.properties[propName] = new Property(propName, symbols.resolveType(propSchema), propSchema, this.schema.required)
-    })
-  }
-
-  asHashString() {
-    let result = `${this.name}:`
-    Object.entries(this.properties)
-    // put properties in alphabetical order first
-      .sort(([a, _], [b, __]) => a.localeCompare(b))
-      .forEach(([_, prop]) => {
-        result += prop.asHashString() + ':'
-      })
-    return result
   }
 
   get writeable(): IProperty[] {
@@ -494,6 +478,23 @@ class Type implements IType {
 
   get readOnly(): boolean {
     return Object.entries(this.properties).every(([_, prop]) => prop.readOnly && prop.readOnly === true)
+  }
+
+  load(symbols: ISymbolTable): void {
+    Object.entries(this.schema.properties || {}).forEach(([propName, propSchema]) => {
+      this.properties[propName] = new Property(propName, symbols.resolveType(propSchema), propSchema, this.schema.required)
+    })
+  }
+
+  asHashString() {
+    let result = `${this.name}:`
+    Object.entries(this.properties)
+    // put properties in alphabetical order first
+      .sort(([a, _], [b, __]) => a.localeCompare(b))
+      .forEach(([_, prop]) => {
+        result += prop.asHashString() + ':'
+      })
+    return result
   }
 }
 
@@ -599,6 +600,14 @@ export class ApiModel implements ISymbolTable, IApiModel {
     this.load()
   }
 
+  get version(): string {
+    return (this.schema && this.schema.version) || ''
+  }
+
+  get description(): string {
+    return (this.schema && this.schema.description) || ''
+  }
+
   static fromFile(specFile: string): ApiModel {
     const specContent = fs.readFileSync(specFile, utf8)
     return this.fromString(specContent)
@@ -614,38 +623,6 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return new ApiModel(spec)
   }
 
-  get version(): string {
-    return (this.schema && this.schema.version) || ''
-  }
-
-  get description(): string {
-    return (this.schema && this.schema.description) || ''
-  }
-
-  private load(): void {
-    if (this.schema && this.schema.components && this.schema.components.schemas) {
-      Object.entries(this.schema.components.schemas).forEach(([name, schema]) => {
-        const t = new Type(schema, name)
-        // types[n] and corresponding refs[ref] MUST reference the same type instance!
-        this.types[name] = t
-        this.refs[`#/components/schemas/${name}`] = t
-      })
-      Object.keys(this.schema.components.schemas).forEach((name) => {
-        (this.resolveType(name) as Type).load(this)
-      })
-    }
-
-    if (this.schema && this.schema.paths) {
-      Object.entries(this.schema.paths).forEach(([path, schema]) => {
-        const methods = this.loadMethods(path, schema)
-        methods.forEach((method) => {
-          this.methods[method.name] = method
-        })
-      })
-    }
-  }
-
-  // Retrieve an api object via its JSON path
   // TODO replace this with get from underscore?
   jsonPath(path: string | string[], item: any = this.schema, splitter: string = '/') {
     let keys = path
@@ -659,6 +636,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
     }
     return item
   }
+
+  // Retrieve an api object via its JSON path
 
   resolveType(schema: string | OAS.SchemaObject | OAS.ReferenceObject): IType {
     if (typeof schema === 'string') {
@@ -699,8 +678,6 @@ export class ApiModel implements ISymbolTable, IApiModel {
     throw new Error('Schema must have a ref or a type')
   }
 
-  // create request type from method parameters
-  // add to this.types collection with name as key
   // add to this.requestTypes collection with hash as key
   makeRequestType(hash: string, method: IMethod) {
     const name = `${strRequest}${method.name}`
@@ -710,6 +687,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
     this.requestTypes[hash] = request
     return request
   }
+
+  // create request type from method parameters
+  // add to this.types collection with name as key
 
   // only gets the request type if more than one method parameter is optional
   getRequestType(method: IMethod) {
@@ -733,7 +713,6 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return writer
   }
 
-  // if any properties of the parameter type are readOnly (including in subtypes)
   // a writeable type will need to be found or created
   getWriteableType(type: IType) {
     const props = Object.entries(type.properties).map(([_, prop]) => prop)
@@ -746,6 +725,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return result
   }
 
+  // if any properties of the parameter type are readOnly (including in subtypes)
+
   sortedTypes() {
     return Object.values(this.types)
       .sort((a, b) => a.name.localeCompare(b.name))
@@ -754,6 +735,29 @@ export class ApiModel implements ISymbolTable, IApiModel {
   sortedMethods() {
     return Object.values(this.methods)
       .sort((a, b) => a.name.localeCompare(b.name))
+  }
+
+  private load(): void {
+    if (this.schema && this.schema.components && this.schema.components.schemas) {
+      Object.entries(this.schema.components.schemas).forEach(([name, schema]) => {
+        const t = new Type(schema, name)
+        // types[n] and corresponding refs[ref] MUST reference the same type instance!
+        this.types[name] = t
+        this.refs[`#/components/schemas/${name}`] = t
+      })
+      Object.keys(this.schema.components.schemas).forEach((name) => {
+        (this.resolveType(name) as Type).load(this)
+      })
+    }
+
+    if (this.schema && this.schema.paths) {
+      Object.entries(this.schema.paths).forEach(([path, schema]) => {
+        const methods = this.loadMethods(path, schema)
+        methods.forEach((method) => {
+          this.methods[method.name] = method
+        })
+      })
+    }
   }
 
   private loadMethods(endpoint: string, schema: OAS.PathItemObject): Method[] {
@@ -959,7 +963,7 @@ export interface IMappedType {
   default: string
 }
 
-export interface ICodeFormatter {
+export interface ICodeGen {
 
   // root path for generated source code files
   // e.g. 'python' for Python
@@ -1003,6 +1007,9 @@ export interface ICodeFormatter {
   // Does this language require request types to be generated because it doesn't
   // conveniently support named default parameters?
   needsRequestTypes: boolean
+
+  // Stamps the version files with server and api version
+  versionStamp(): IVersionInfo | undefined
 
   // Returns the name of the RequestType if this language AND method require it.
   // Otherwise return empty string.
@@ -1105,6 +1112,7 @@ export interface ICodeFormatter {
 
   typeMap(type: IType): IMappedType
 
-  reformatFile(fileName: string) : string
-  reformat() : string[]
+  reformatFile(fileName: string): string
+
+  reformat(): string[]
 }

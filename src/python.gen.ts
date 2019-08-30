@@ -35,11 +35,11 @@ import {
   IType,
   strBody,
   WriteType,
-  } from './sdkModels'
-import { CodeFormatter, warnEditing } from './codeFormatter'
+} from './sdkModels'
+import { CodeGen, warnEditing } from './codeGen'
 import { run } from './utils'
 
-export class PythonFormatter extends CodeFormatter {
+export class PythonGen extends CodeGen {
   codePath = './python/'
   packagePath = 'looker_sdk'
   itself = 'self'
@@ -107,6 +107,9 @@ export class PythonFormatter extends CodeFormatter {
     'uri': {name: 'str', default: this.nullStr},
     'datetime': {name: 'datetime.datetime', default: this.nullStr}
   }
+  // cattrs [un]structure hooks for model [de]serialization
+  hooks: string[] = []
+  structure_hook: string = 'structure_hook'
 
   // @ts-ignore
   methodsPrologue = (indent: string) => `
@@ -120,8 +123,10 @@ from ${this.packagePath}.rtl import api_methods
 
 class ${this.packageName}(api_methods.APIMethods):
 `
+
   // @ts-ignore
   methodsEpilogue = (indent: string) => ''
+
   // @ts-ignore
   modelsPrologue = (indent: string) => `
 # ${warnEditing}
@@ -136,10 +141,6 @@ from ${this.packagePath}.rtl import serialize as sr
 
 EXPLICIT_NULL = model.EXPLICIT_NULL  # type: ignore
 `
-
-  // cattrs [un]structure hooks for model [de]serialization
-  hooks: string[] = []
-  structure_hook: string = 'structure_hook'
 
   // @ts-ignore
   modelsEpilogue = (indent: string) => `
@@ -186,7 +187,7 @@ ${this.hooks.join('\n')}
     }
     let propType = mappedType.name
     if (!property.required) {
-        propType = `Optional[${mappedType.name}] = ${this.nullStr}`
+      propType = `Optional[${mappedType.name}] = ${this.nullStr}`
     }
     const propDef = `${indent}${propName}: ${propType}`
     return this.commentHeader(indent, property.description) + propDef
@@ -349,6 +350,22 @@ ${this.hooks.join('\n')}
     return text ? `${indent}"""${text}"""\n` : ''
   }
 
+  versionStamp() {
+    // if (this.versions) {
+    //   const stampFile = this.fileName('rtl/versions')
+    //   if (!isFileSync(stampFile)) {
+    //     warn(`${stampFile} was not found. Skipping version update to ${this.versions.apiVersion}.${this.versions.lookerVersion}`)
+    //   }
+    //   let content = fs.readFileSync(stampFile, utf8)
+    //   const lookerPattern = /lookerVersion = '\d+\.\d+'/i
+    //   const apiPattern = /apiVersion = '\d+\.\d+'/i
+    //   content = content.replace(lookerPattern, `lookerVersion = ${this.versions.lookerVersion}`)
+    //   content = content.replace(apiPattern, `apiVersion = ${this.versions.apiVersion}`)
+    //   fs.writeFileSync(stampFile, content, {encoding: utf8})
+    // }
+    return this.versions
+  }
+
   _typeMap(type: IType, format: 'models' | 'methods'): IMappedType {
     super.typeMap(type)
     if (type.elementType) {
@@ -392,7 +409,7 @@ ${this.hooks.join('\n')}
       if (pipEnvExists.includes('pipenv')) {
         // pipenv check completed without error
         run('pipenv', ['update'])
-        run('pipenv',  ['run', 'black', `${this.codePath}/${this.packagePath}/sdk/`])
+        run('pipenv', ['run', 'black', `${this.codePath}/${this.packagePath}/sdk/`])
       }
     }
     return ''

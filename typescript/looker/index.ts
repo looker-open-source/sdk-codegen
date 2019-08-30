@@ -22,14 +22,17 @@
  * THE SOFTWARE.
  */
 
-import { AuthSession, IAuthSession } from './rtl/authSession'
+import { AuthSession } from './rtl/authSession'
 import { LookerSDK } from './sdk/methods'
 import { ApiSettingsIniFile, IApiSettings } from './rtl/apiSettings'
-import { ITransport } from './rtl/transport'
+import { IAuthSession, isNodejs, ITransport } from './rtl/transport'
 import { NodeTransport } from './rtl/nodeTransport'
+import { BrowserTransport } from './rtl/browserTransport'
+import { BrowserSession } from './rtl/browserSession'
 
 export * from './rtl/nodeTransport'
-// export * from './rtl/browserTransport' // TODO fix up the browserTransport implementation
+export * from './rtl/browserTransport'
+export * from './rtl/browserSession'
 export * from './rtl/authToken'
 export * from './rtl/apiMethods'
 export * from './rtl/authSession'
@@ -53,11 +56,11 @@ export class SDK {
    *
    * @param session Defaults to `AuthSession` which logs in the user
    */
-
   static createClient(settings?: IApiSettings, transport?: ITransport, session?: IAuthSession) {
+    const nodeMode = isNodejs()
     settings = settings || new ApiSettingsIniFile('looker.ini')
-    transport = transport || new NodeTransport(settings)
-    session = session || new AuthSession(settings, transport)
+    transport = transport || (nodeMode ? new NodeTransport(settings) : new BrowserTransport(settings))
+    session = session || (nodeMode ? new AuthSession(settings, transport) : new BrowserSession(settings, transport))
     return new LookerSDK(session)
   }
 

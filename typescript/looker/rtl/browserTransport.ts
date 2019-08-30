@@ -22,9 +22,7 @@
  * THE SOFTWARE.
  */
 
-// TODO need to abstract the fetch plug-in
-import fetch, { Headers } from 'node-fetch'
-import { ISDKError, SDKResponse, ITransport, addQueryParams, parseResponse, ITransportSettings } from './transport'
+import { ISDKError, SDKResponse, ITransport, addQueryParams, ITransportSettings } from './transport'
 
 export class BrowserTransport implements ITransport {
 
@@ -43,7 +41,7 @@ export class BrowserTransport implements ITransport {
       {
         body: body ? JSON.stringify(body) : undefined,
         headers: this.options.headers || new Headers(),
-        // credentials: 'same-origin',
+        credentials: 'same-origin',
         method
       }
     )
@@ -63,6 +61,25 @@ export class BrowserTransport implements ITransport {
         message: typeof e.message === 'string' ? e.message : `The SDK call was not successful. The error was '${e}'.`
       }
       return {ok: false, error}
+    }
+  }
+
+}
+
+async function parseResponse(contentType: string, res: Response) {
+  if (contentType.match(/application\/json/g)) {
+    try {
+      return await res.json()
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  } else if (contentType === 'text' || contentType.startsWith('text/')) {
+    return res.text()
+  } else {
+    try {
+      return await res.blob()
+    } catch (error) {
+      return Promise.reject(error)
     }
   }
 }

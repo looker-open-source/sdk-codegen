@@ -22,9 +22,5 @@
  * THE SOFTWARE.
  */
 
-import { LookerSDK } from '../sdk/methods'
-import { IAuthSession } from './authSession'
-
-export function LookerNodeSDK(session: IAuthSession): LookerSDK {
-  return new LookerSDK(session)
-}
+export const lookerVersion = '6.20'
+export const apiVersion = '3.1'

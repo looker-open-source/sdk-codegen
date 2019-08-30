@@ -1,15 +1,15 @@
 import * as Models from './sdkModels'
 import { SdkGenerator } from './sdkGenerator'
-import { PythonFormatter } from './python.fmt'
+import { PythonGen } from './python.gen'
 
 const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
 
 describe('sdk generator test', () => {
   it('outputs a method in Python', () => {
-    const gen = new SdkGenerator(apiModel, new PythonFormatter(apiModel))
+    const gen = new SdkGenerator(apiModel, new PythonGen(apiModel))
     const result = gen.codeFormatter.declareMethod('  ', apiModel.methods['create_look'])
     expect(result).toEqual(
-`  # POST /looks -> models.LookWithQuery
+      `  # POST /looks -> models.LookWithQuery
   def create_look(
       self,
       body: models.WriteLookWithQuery,

@@ -26,7 +26,8 @@ import fetch from 'node-fetch'
 import { SDKConfig, SDKConfigProps } from './sdkConfig'
 import { URLSearchParams } from 'url'
 import * as fs from 'fs'
-import { fail, quit, log, isFileSync } from './utils'
+import { fail, quit, log, isFileSync, warn } from './utils'
+import { IVersionInfo } from './codeGen'
 
 const specFileUrl = (props: SDKConfigProps) => `${props.base_url}/api/${props.api_version}/swagger.json`
 
@@ -121,6 +122,28 @@ export const logFetch = async (name: string, props: SDKConfigProps) => {
     return fail('fetchSpecFile', 'No specification file name returned')
   }
   return specFile
+}
+
+export const getVersionInfo = async (props: SDKConfigProps) : Promise<IVersionInfo | undefined> =>{
+  try {
+    const lookerVersion = await fetchLookerVersion(props.base_url)
+    return {
+      lookerVersion,
+      apiVersion: props.api_version
+    }
+  } catch (e) {
+    warn(`Could not retrieve version information. Is ${props.base_url} running?`)
+  }
+  return undefined
+}
+
+
+export const fetchLookerVersion = async (url: string) => {
+  const response = await fetch(`${url}/versions`)
+  const content = await response.text()
+  const versions = JSON.parse(content)
+  const [lookerVersion] = versions.looker_release_version.match(/^\d+\.\d+/gi)
+  return lookerVersion
 }
 
 try {
