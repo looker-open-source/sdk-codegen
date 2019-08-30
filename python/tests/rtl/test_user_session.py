@@ -31,8 +31,6 @@ client_secret=your_API3_client_secret
 embed_secret=your_embed_SSO_secret
 # Set to false if testing locally against self-signed certs. Otherwise leave True
 verify_ssl=True
-# leave verbose off by default
-verbose=false
         """
     )
     return filename

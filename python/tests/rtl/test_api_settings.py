@@ -23,12 +23,8 @@ client_id=your_API3_client_id
 client_secret=your_API3_client_secret
 # Optional embed secret for SSO embedding
 embed_secret=your_embed_SSO_secret
-# Optional user_id to impersonate
-user_id=
 # Set to false if testing locally against self-signed certs. Otherwise leave True
 verify_ssl=True
-# leave verbose off by default
-verbose=false
 
 [OLD_API]
 api_version=3.0
@@ -36,7 +32,6 @@ base_url=https://host2.looker.com:19999
 client_id=your_API3_client_id
 client_secret=your_API3_client_secret
 embed_secret=your_embed_SSO_secret
-user_id=
 verify_ssl=True
 
 [BARE_MINIMUM]
@@ -95,9 +90,7 @@ def test_it_assigns_defaults_to_empty_settings(config_file):
     assert settings.client_id == "myclientid"
     assert settings.client_secret == "myclientsecret"
     assert settings.embed_secret == ""
-    assert settings.user_id == ""
     assert settings.verify_ssl
-    assert settings.verbose is False
 
 
 def test_it_fails_with_a_bad_section_name(config_file):
@@ -105,13 +98,6 @@ def test_it_fails_with_a_bad_section_name(config_file):
     with pytest.raises(KeyError) as exc_info:
         api_settings.ApiSettings.configure(config_file, "NotAGoodLookForYou")
     assert exc_info.match("NotAGoodLookForYou")
-
-
-def test_it_fails_with_a_bad_filename():
-    """ApiSettings should error if config file is not found."""
-    with pytest.raises(FileNotFoundError) as exc_info:
-        api_settings.ApiSettings.configure("random_file.ini")
-    assert str(exc_info.value).endswith("No such file or directory: 'random_file.ini'")
 
 
 @pytest.mark.parametrize(
@@ -144,7 +130,7 @@ def test_versioned_api_url_is_built_properly(config_file, test_url, expected_url
         pytest.param("BARE_MINIMUM", id="Overriding with env variables"),
     ],
 )
-def test_credentials_are_read_from_env_variables(
+def test_credentials_from_env_variables_override_config_file(
     monkeypatch, config_file, test_section
 ):
     """ApiSettings should read settings defined as env variables.
@@ -159,6 +145,19 @@ def test_credentials_are_read_from_env_variables(
     assert settings.client_id == "id123"
     assert settings.client_secret == "secret123"
     assert settings.embed_secret == "embedsecret123"
+
+
+def test_configure_with_no_file(monkeypatch):
+    """ApiSettings should throw an error if env variables are defined but empty.
+    """
+    monkeypatch.setenv("LOOKER_BASE_URL", "https://host1.looker.com:19999")
+    monkeypatch.setenv("LOOKER_CLIENT_ID", "id123")
+    monkeypatch.setenv("LOOKER_CLIENT_SECRET", "secret123")
+
+    settings = api_settings.ApiSettings.configure('no-such-file')
+    assert settings.base_url == "https://host1.looker.com:19999"
+    assert settings.client_id == "id123"
+    assert settings.client_secret == "secret123"
 
 
 @pytest.mark.parametrize(
