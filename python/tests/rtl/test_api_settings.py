@@ -50,6 +50,10 @@ client_secret=myclientsecret
 base_url=https://host3.looker.com:19999/
 client_id=""
 client_secret=
+
+[MISSING_BASE_URL]
+client_id=your_API3_client_id
+client_secret=your_API3_client_secret
 """
     )
     return filename
@@ -162,6 +166,7 @@ def test_credentials_are_read_from_env_variables(
     [
         pytest.param("BARE", id="Empty config file"),
         pytest.param("BARE_MIN_NO_VALUES", id="Required settings are empty strings"),
+        pytest.param("MISSING_BASE_URL", id="Missing base url"),
     ],
 )
 def test_it_fails_if_required_settings_are_not_found(config_file, test_section):

@@ -22,17 +22,17 @@ def _convert_bool(val: str, _: bool) -> bool:
     return converted
 
 
-@attr.s(auto_attribs=True)
+@attr.s(auto_attribs=True, kw_only=True)
 class ApiSettings(transport.TransportSettings):
     """API Configuration Settings.
     """
 
-    client_id: str = attr.ib(kw_only=True)
-    client_secret: str = attr.ib(kw_only=True)
-    embed_secret: str = attr.ib(default="", kw_only=True)
+    client_id: str
+    client_secret: str
+    embed_secret: str = ""
     # User ID to impersonate (optional)
-    user_id: str = attr.ib(default="", kw_only=True)
-    verbose: bool = attr.ib(default=False, kw_only=True)
+    user_id: str = ""
+    verbose: bool = False
 
     @classmethod
     def configure(
