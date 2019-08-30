@@ -25,7 +25,7 @@
  */
 
 import * as Models from './sdkModels'
-import { log } from './utils'
+import { success } from './utils'
 
 export interface IGeneratorCtor<T extends Models.IModel> {
   new(model: T, formatter: Models.ICodeGen): Generator<T>
@@ -88,7 +88,7 @@ export class SdkGenerator extends Generator<Models.IApiModel> {
         items.push(this.codeFormatter.declareMethod(indent, method))
       })
     const tally = `${items.length} API methods`
-    log(tally)
+    success(tally)
     return this
       .p(`${this.codeFormatter.comment('', tally)}`)
       .p(this.codeFormatter.methodsPrologue(indent))
@@ -106,13 +106,12 @@ export class TypeGenerator extends Generator<Models.IApiModel> {
       .forEach(type => items.push(this.codeFormatter.declareType(indent, type)))
     const counts = this.typeTally(this.model.types)
     const tally = `${counts.total} API models: ${counts.standard} Spec, ${counts.request} Request, ${counts.write} Write`
-    log(tally)
+    success(tally)
     return this
       .p(`${this.codeFormatter.comment('', tally)}`)
       .p(this.codeFormatter.modelsPrologue(indent))
       .p(items.join('\n\n'))
       .p(this.codeFormatter.modelsEpilogue(indent))
-      // .p(requests.join(`\n`))
       .toString(indent)
   }
 

@@ -22,5 +22,5 @@
  * THE SOFTWARE.
  */
 
-export const lookerVersion = '6.20'
+export const lookerVersion = '6.19'
 export const apiVersion = '3.1'

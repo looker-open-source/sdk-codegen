@@ -39,7 +39,7 @@ import {
 import { CodeGen, warnEditing } from './codeGen'
 import * as fs from 'fs'
 import * as prettier from 'prettier'
-import { warn, isFileSync, utf8 } from './utils'
+import { warn, isFileSync, utf8, success } from './utils'
 
 // const strDefault = 'Default'
 
@@ -288,14 +288,15 @@ export interface IDictionary<T> {
     if (this.versions) {
       const stampFile = this.fileName('rtl/versions')
       if (!isFileSync(stampFile)) {
-        warn(`${stampFile} was not found. Skipping version update to ${this.versions.apiVersion}.${this.versions.lookerVersion}`)
+        warn(`${stampFile} was not found. Skipping version update.`)
       }
       let content = fs.readFileSync(stampFile, utf8)
-      const lookerPattern = /lookerVersion = '\d+\.\d+'/i
-      const apiPattern = /apiVersion = '\d+\.\d+'/i
-      content = content.replace(lookerPattern, `lookerVersion = ${this.versions.lookerVersion}`)
-      content = content.replace(apiPattern, `apiVersion = ${this.versions.apiVersion}`)
+      const lookerPattern = /lookerVersion = ['"]\d+\.\d+['"]/i
+      const apiPattern = /apiVersion = ['"]\d+\.\d+['"]/i
+      content = content.replace(lookerPattern, `lookerVersion = '${this.versions.lookerVersion}'`)
+      content = content.replace(apiPattern, `apiVersion = '${this.versions.apiVersion}'`)
       fs.writeFileSync(stampFile, content, {encoding: utf8})
+      success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}` )
     } else {
       warn('Version information was not retrieved. Skipping SDK version updating.')
     }

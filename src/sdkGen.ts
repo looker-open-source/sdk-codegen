@@ -27,11 +27,12 @@
 import * as fs from 'fs'
 import * as Models from './sdkModels'
 import { SDKConfig } from './sdkConfig'
-import { isFileSync, log, quit } from './utils'
+import { isFileSync, log, quit, success } from './utils'
 import { getVersionInfo, openApiFileName } from './fetchSpec'
 import { SdkGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
 import { logConvert } from './convert'
+import { IVersionInfo } from './codeGen'
 
 // tslint:disable-next-line: no-floating-promises
 (async () => {
@@ -49,26 +50,30 @@ import { logConvert } from './convert'
 
   try {
     const config = SDKConfig()
+    let versions: IVersionInfo | undefined
     for (let language of languages) {
       log(`generating ${language} ...`)
       for (let [name, props] of Object.entries(config)) {
         await logConvert(name, props)
-        const versions = await getVersionInfo(props)
+        if (!versions) {
+          versions = await getVersionInfo(props)
+        }
         const oasFile = openApiFileName(name, props)
         const apiModel = Models.ApiModel.fromFile(oasFile)
-        const formatter = getFormatter(language, apiModel, versions)
-        const sdkPath = `${formatter.codePath}/${formatter.packagePath}/sdk`
+        const gen = getFormatter(language, apiModel, versions)
+        const sdkPath = `${gen.codePath}/${gen.packagePath}/sdk`
         if (!isFileSync(sdkPath)) fs.mkdirSync(sdkPath, {recursive: true})
-        const sdk = new SdkGenerator(apiModel, formatter)
-        let output = sdk.render(formatter.indentStr)
-        fs.writeFileSync(formatter.fileName('sdk/methods'), output)
-        const types = new TypeGenerator(apiModel, formatter)
+        const sdk = new SdkGenerator(apiModel, gen)
+        let output = sdk.render(gen.indentStr)
+        fs.writeFileSync(gen.fileName('sdk/methods'), output)
+        const types = new TypeGenerator(apiModel, gen)
         output = types.render('')
-        fs.writeFileSync(formatter.fileName('sdk/models'), output)
-        const reformatted = formatter.reformat()
+        fs.writeFileSync(gen.fileName('sdk/models'), output)
+        const reformatted = gen.reformat()
         if (reformatted.length > 0) {
-          log(`reformatted ${reformatted.join(',')}`)
+          success(`reformatted ${reformatted.join(',')}`)
         }
+        gen.versionStamp()
         break
       }
     }
