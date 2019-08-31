@@ -1,9 +1,9 @@
 {
   "name": "@looker/sdk",
-  "version": "0.1.0-experimental.7",
+  "version": "0.1.0-experimental.10",
   "description": "Looker SDK",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "files": [
     "dist/**/*"
   ],
@@ -17,7 +17,7 @@
   "author": "Looker",
   "license": "MIT",
   "scripts": {
-    "build": "yarn clean && tsc && webpack",
+    "build": "yarn clean && tsc",
     "clean": "rm -rf lib dist",
     "test": "yarn jest",
     "docs": "typedoc --mode file --out docs",
