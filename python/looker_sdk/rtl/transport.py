@@ -20,7 +20,7 @@ class HttpMethod(enum.Enum):
     HEAD = 7
 
 
-@attr.s(auto_attribs=True)
+@attr.s(auto_attribs=True, kw_only=True)
 class TransportSettings:
     """Basic transport settings.
     """
