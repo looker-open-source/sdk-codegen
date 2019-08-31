@@ -22,97 +22,55 @@
  * THE SOFTWARE.
  */
 
-import { ApiConfig, ApiSettings, ApiSettingsIniFile } from './apiSettings'
+import { ApiSettings, strBadConfiguration, ValueSettings } from './apiSettings'
 
-describe('API settings parser', () => {
-  const localIni = 'looker.ini'
-  const contents = `
-[Looker]
-# API version is required
-api_version=3.1
-# Base URL for API. Do not include /api/* in the url
-base_url=https://<your-looker-endpoint>:19999
-# API 3 client id
-client_id=your_API3_client_id
-# API 3 client secret
-client_secret=your_API3_client_secret
-# Optional embed secret for SSO embedding
-embed_secret=your_embed_SSO_secret
-# Optional user_id to impersonate
-user_id=
-# Set to false if testing locally against self-signed certs. Otherwise leave True
-verify_ssl=True
-# leave verbose off by default
-verbose=false
-
-[Looker30]
-# API version is required
-api_version=3.0
-# Base URL for API. Do not include /api/* in the url
-base_url=https://<your-looker-endpoint>:19999
-# API 3 client id
-client_id=your_API3_client_id
-# API 3 client secret
-client_secret=your_API3_client_secret
-# Optional embed secret for SSO embedding
-embed_secret=your_embed_SSO_secret
-# Optional user_id to impersonate
-user_id=
-# Set to false if testing locally against self-signed certs. Otherwise leave True
-verify_ssl=True
-# leave verbose off by default
-verbose=false
-`
-  describe('ApiConfig', () => {
-    it('discovers multiple sections', () => {
-      const config = ApiConfig(contents)
-      expect(Object.keys(config)).toEqual(['Looker', 'Looker30'])
+describe('SDK configuration', () => {
+  describe('ValueSettings', () => {
+    it('initializes to defaults', () => {
+      const settings = ValueSettings({})
+      expect(settings.api_version).toEqual('3.1')
+      expect(settings.base_url).toEqual('')
+      expect(settings.client_id).toEqual('')
+      expect(settings.client_secret).toEqual('')
+      expect(settings.embed_secret).toEqual('')
     })
+
+    it('retrieves the first section by name', () => {
+      const settings = ValueSettings({
+        LOOKER_API_VERSION: '3.0',
+        LOOKER_BASE_URL: 'base',
+        LOOKER_CLIENT_ID: 'client',
+        LOOKER_CLIENT_SECRET: 'secret',
+        LOOKER_EMBED_SECRET: 'embed'
+      })
+      expect(settings.api_version).toEqual('3.0')
+      expect(settings.base_url).toEqual('base')
+      expect(settings.client_id).toEqual('client')
+      expect(settings.client_secret).toEqual('secret')
+      expect(settings.embed_secret).toEqual('embed')
+    })
+
   })
 
   describe('ApiSettings', () => {
-    it('settings default to the first section', () => {
-      const settings = new ApiSettings(contents)
+    it('initialization', () => {
+      const settings = new ApiSettings({
+        api_version: '3.1',
+        base_url: 'base',
+        embed_secret: 'embed'
+      })
       expect(settings.api_version).toEqual('3.1')
+      expect(settings.base_url).toEqual('base')
+      expect(settings.embed_secret).toEqual('embed')
     })
 
-    it('retrieves the first section by name', () => {
-      const settings = new ApiSettings(contents, 'Looker')
-      expect(settings.api_version).toEqual('3.1')
-    })
+    it('fails with missing required values', () => {
+      const values = {
+        api_version: '',
+      }
 
-    it('retrieves the second section by name', () => {
-      const settings = new ApiSettings(contents, 'Looker30')
-      expect(settings.api_version).toEqual('3.0')
-    })
-
-    it('fails with a bad section name', () => {
-      expect(() => new ApiSettings(contents, 'NotAGoodLookForYou'))
-        .toThrow(/No section named "NotAGoodLookForYou"/)
-    })
-  })
-
-  describe('ApiSettingsIniFile', () => {
-    it('settings default to the first section', () => {
-      const settings = new ApiSettingsIniFile(localIni)
-      expect(settings.api_version).toEqual('3.1')
-      expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
-    })
-
-    it('retrieves the first section by name', () => {
-      const settings = new ApiSettingsIniFile(localIni, 'Looker')
-      expect(settings.api_version).toEqual('3.1')
-      expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
-    })
-
-    it('retrieves the second section by name', () => {
-      const settings = new ApiSettingsIniFile(localIni, 'Looker30')
-      expect(settings.api_version).toEqual('3.0')
-    })
-
-    it('fails with a bad section name', () => {
-      expect(() => new ApiSettingsIniFile(localIni, 'NotAGoodLookForYou'))
-        .toThrow(/No section named "NotAGoodLookForYou"/)
+      expect(() => new ApiSettings(values))
+        .toThrow(strBadConfiguration)
     })
   })
 })

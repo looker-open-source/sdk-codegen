@@ -4,7 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitReturns": true,
-    "outDir": "lib",
+    "outDir": "dist",
     "strict": true,
     "target": "ES5",
     "esModuleInterop": true,

@@ -22,17 +22,32 @@
  * THE SOFTWARE.
  */
 
-export * from './rtl/apiMethods'
-export * from './rtl/apiSettings'
-export * from './rtl/authToken'
-export * from './rtl/browserSdk'
-export * from './rtl/browserSession'
-export * from './rtl/browserTransport'
-export * from './rtl/nodeSdk'
-export * from './rtl/nodeSession'
-export * from './rtl/nodeSettings'
-export * from './rtl/nodeTransport'
-export * from './rtl/transport'
-export * from './rtl/versions'
-export * from './sdk/methods'
-export * from './sdk/models'
+import { IApiClientSettings } from './apiSettings'
+import { IAuthSession, ITransport } from './transport'
+import { NodeSettingsIniFile } from './nodeSettings'
+import { LookerSDK, NodeSession, NodeTransport } from '..'
+
+/**
+ * @class SDK
+ *
+ * Simple factory for the Node version of the Looker SDK. Provides default connectivity for SDK methods
+ *
+ */
+export class LookerNodeSDK {
+  /**
+   * Creates an [[LookerSDK]] object.
+   *
+   * @param settings Defaults to the settings from LookerIni
+   *
+   * @param transport Defaults to a `NodeTransport` object
+   *
+   * @param session Defaults to `NodeSession` which logs in the user
+   */
+  static createClient(settings?: IApiClientSettings, transport?: ITransport, session?: IAuthSession) {
+    settings = settings || new NodeSettingsIniFile('looker.ini')
+    transport = transport || new NodeTransport(settings)
+    session = session || new NodeSession(settings, transport)
+    return new LookerSDK(session)
+  }
+
+}

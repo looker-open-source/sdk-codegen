@@ -22,17 +22,29 @@
  * THE SOFTWARE.
  */
 
-export * from './rtl/apiMethods'
-export * from './rtl/apiSettings'
-export * from './rtl/authToken'
-export * from './rtl/browserSdk'
-export * from './rtl/browserSession'
-export * from './rtl/browserTransport'
-export * from './rtl/nodeSdk'
-export * from './rtl/nodeSession'
-export * from './rtl/nodeSettings'
-export * from './rtl/nodeTransport'
-export * from './rtl/transport'
-export * from './rtl/versions'
-export * from './sdk/methods'
-export * from './sdk/models'
+import * as fs from "fs"
+import * as yaml from 'js-yaml'
+import { SDKConfig } from './sdkConfig'
+import { getVersionInfo } from './fetchSpec'
+
+const dataFile = 'test/data.yml'
+// slightly hackish data path determination for tests
+const root = fs.existsSync(dataFile) ? '' : '../../'
+const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, 'utf-8'))
+const localIni = `${root}${testData['iniFile']}`
+const config = SDKConfig(localIni)
+
+describe('fetch operations', () => {
+  describe('Version Info', () => {
+    it('talks to server', async () => {
+      const props = config['Looker']
+      expect(props).toBeDefined()
+      const version = await getVersionInfo(props)
+      expect(version).toBeDefined()
+      if (version) {
+        expect(version.lookerVersion).toBeDefined()
+        expect(version.apiVersion).toBeDefined()
+      }
+    })
+  })
+})

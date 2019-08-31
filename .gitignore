@@ -12,3 +12,4 @@ python/venv/*
 venv/*
 package-lock.json
 **/lib/*
+**/dist/*

@@ -28,11 +28,11 @@
 // TODO create generic Agent that is not transport-specific
 import { Agent } from 'https'
 import { Headers } from 'request'
-import { apiVersion, lookerVersion } from './versions'
+import { sdkVersion } from './versions'
 import { IApiSettings } from './apiSettings'
 import { IAccessToken } from '../sdk/models'
 
-export const agentTag = `TS-SDK ${apiVersion}.${lookerVersion}`
+export const agentTag = `TS-SDK ${sdkVersion}`
 
 export type HttpMethod =
   | 'GET'
@@ -80,7 +80,7 @@ export enum StatusCode {
   PayloadTooLarge,
   UriTooLong,
   UnsupportedMediaType,
-  RequestedRangeNotSatisifable,
+  RequestedRangeNotSatisfiable,
   ExpectationFailed,
   ImATeapot,
   MisdirectedRequest = 421,

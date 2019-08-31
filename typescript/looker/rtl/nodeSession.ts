@@ -23,7 +23,7 @@
  */
 
 import { IAccessToken, IError } from '../sdk/models'
-import { IApiSettings } from './apiSettings'
+import { IApiClientSettings } from './apiSettings'
 import { IRequestInit, ITransport, SDKResponse, sdkError, IAuthSession } from './transport'
 import { AuthToken } from './authToken'
 import { NodeTransport } from './nodeTransport'
@@ -31,13 +31,13 @@ import { NodeTransport } from './nodeTransport'
 const strPost = 'POST'
 const strDelete = 'DELETE'
 
-export class AuthSession implements IAuthSession {
+export class NodeSession implements IAuthSession {
   _authToken: AuthToken = new AuthToken()
   _sudoToken: AuthToken = new AuthToken()
   sudoId: string = ''
   transport: ITransport
 
-  constructor(public settings: IApiSettings, transport?: ITransport) {
+  constructor(public settings: IApiClientSettings, transport?: ITransport) {
     this.settings = settings
     this.transport = transport || new NodeTransport(settings)
   }

@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 
-import { ApiSettingsIniFile } from '../rtl/apiSettings'
-import { AuthSession } from '../rtl/authSession'
+import { NodeSession } from '../rtl/nodeSession'
 import { LookerSDK } from '../sdk/methods'
 import { IQuery, IRequestrun_inline_query, IUser, IWriteQuery, } from '../sdk/models'
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
+import { NodeSettingsIniFile } from '..'
 
 const dataFile = 'test/data.yml'
 // slightly hackish data path determination for tests
@@ -40,9 +40,9 @@ const dashboards: any[] = testData['dashboards']
 const emailDomain = '@foo.com'
 const testTimeout = 36000000 // 1 hour
 
-describe('LookerSDK', () => {
-  const settings = new ApiSettingsIniFile(localIni, 'Looker')
-  const session = new AuthSession(settings)
+describe('LookerNodeSDK', () => {
+  const settings = new NodeSettingsIniFile(localIni, 'Looker')
+  const session = new NodeSession(settings)
 
   const createQueryRequest = (q: any, limit: number) => {
     const result: Partial<IWriteQuery> = {
@@ -189,11 +189,11 @@ describe('LookerSDK', () => {
       // find users who are not the API user
       const others = all
         .filter(u => u.id !== apiUser.id && (!u.is_disabled))
-        .slice(0,2)
+        .slice(0, 2)
       expect(others.length).toEqual(2)
       if (others.length > 1) {
         // pick two other active users for `sudo` tests
-        const [ sudoA, sudoB ] = others
+        const [sudoA, sudoB] = others
 
         // login as sudoA
         await sdk.authSession.login(sudoA.id.toString())
@@ -488,7 +488,7 @@ describe('LookerSDK', () => {
 
   describe('Dashboard CRUD-it checks', () => {
 
-    const getQueryId = (qhash:{ [id: string]: IQuery }, id: any ) : number | undefined => {
+    const getQueryId = (qhash: { [id: string]: IQuery }, id: any): number | undefined => {
       if (!id) return id
       if (id.startsWith('#')) id = id.substr(1)
       else return id ? parseInt(id) : undefined
@@ -587,33 +587,33 @@ describe('LookerSDK', () => {
           expect(filter.default_value).toEqual(f.default_value)
         }
 
-      for (const t of d.tiles) {
-        const tile = await sdk.ok(sdk.create_dashboard_element({
-          body_text: t.body_text,
-          dashboard_id: dashboard.id,
-          look: t.look,
-          look_id: t.look_id,
-          merge_result_id: t.merge_result_id,
-          note_display: t.note_display,
-          note_state: t.note_state,
-          note_text: t.note_text,
-          query: t.query,
-          query_id: getQueryId(qhash, t.query_id),
-          refresh_interval: t.refresh_interval,
-          // result_maker: {
-          //    t.result_maker
-          // },
-          subtitle_text: t.subtitle_text,
-          title: t.title,
-          title_hidden: t.title_hidden,
-          title_text: t.title_text,
-          type: t.type,
-        }))
-        expect(tile).toBeDefined()
-        expect(tile.dashboard_id).toEqual(dashboard.id)
-        expect(tile.title).toEqual(t.title)
-        expect(tile.type).toEqual(t.type)
-      }
+        for (const t of d.tiles) {
+          const tile = await sdk.ok(sdk.create_dashboard_element({
+            body_text: t.body_text,
+            dashboard_id: dashboard.id,
+            look: t.look,
+            look_id: t.look_id,
+            merge_result_id: t.merge_result_id,
+            note_display: t.note_display,
+            note_state: t.note_state,
+            note_text: t.note_text,
+            query: t.query,
+            query_id: getQueryId(qhash, t.query_id),
+            refresh_interval: t.refresh_interval,
+            // result_maker: {
+            //    t.result_maker
+            // },
+            subtitle_text: t.subtitle_text,
+            title: t.title,
+            title_hidden: t.title_hidden,
+            title_text: t.title_text,
+            type: t.type,
+          }))
+          expect(tile).toBeDefined()
+          expect(tile.dashboard_id).toEqual(dashboard.id)
+          expect(tile.title).toEqual(t.title)
+          expect(tile.type).toEqual(t.type)
+        }
       }
       await sdk.authSession.logout()
       expect(sdk.authSession.isAuthenticated()).toBeFalsy()

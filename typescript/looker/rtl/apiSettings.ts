@@ -22,55 +22,84 @@
  * THE SOFTWARE.
  */
 
-import * as fs from 'fs'
-import * as ini from 'ini'
-import { ITransportSettings } from './transport'
+import { agentTag, ITransportSettings } from './transport'
+
+export const strLookerBaseUrl = 'LOOKER_BASE_URL'
+export const strLookerApiVersion = 'LOOKER_API_VERSION'
+export const strLookerClientId = 'LOOKER_CLIENT_ID'
+export const strLookerClientSecret = 'LOOKER_CLIENT_SECRET'
+export const strLookerEmbedSecret = 'LOOKER_EMBED_SECRET'
+export const strBadConfiguration = `${agentTag} configuration error:
+Missing required configuration values like base_url and api_version
+`
+
+export interface IValueSettings {
+  [name: string]: string
+}
 
 export interface IApiSettings extends ITransportSettings {
-  client_id: string
-  client_secret: string
   embed_secret: string
-  user_id: string
+  isConfigured(): boolean
 }
 
-export interface IApiSections {
-  [key: string]: IApiSettings
+export interface IApiClientSettings extends IApiSettings {
+  client_id?: string
+  client_secret?: string
 }
 
-export const ApiConfig = (contents: string): IApiSections => ini.parse(contents)
+/**
+ * default the runtime configuration settings
+ * @constructor
+ *
+ */
+export const DefaultSettings = () => ({
+  base_url: '',
+  api_version: '3.1', // default to API 3.1
+  client_id: '',
+  client_secret: '',
+  embed_secret: ''
+} as IApiClientSettings)
 
+/**
+ * Read any key/value collection for environment variable names and return as IApiSettings
+ * @constructor
+ *
+ * The values keys are:
+ *  - LOOKER_BASE_URL
+ *  - LOOKER_API_VERSION
+ *  - LOOKER_CLIENT_ID
+ *  - LOOKER_CLIENT_SECRET
+ *  - LOOKER_EMBED_SECRET
+ */
+export const ValueSettings  = (values: IValueSettings): IApiClientSettings => {
+  const settings = DefaultSettings()
+  settings.api_version = values[strLookerApiVersion] || settings.api_version
+  settings.base_url = values[strLookerBaseUrl] || settings.base_url
+  settings.client_id = values[strLookerClientId] || settings.client_id
+  settings.client_secret = values[strLookerClientSecret] || settings.client_secret
+  settings.embed_secret = values[strLookerEmbedSecret] || settings.embed_secret
+  return settings
+}
+
+/**
+ * @class ApiSettings
+ *
+ * .ini Configuration initializer
+ */
 export class ApiSettings implements IApiSettings {
   // tslint:disable-next-line: variable-name
-  api_version!: string
+  base_url: string = ''
   // tslint:disable-next-line: variable-name
-  base_url!: string
+  api_version: string = '3.1'
   // tslint:disable-next-line: variable-name
-  client_id!: string
-  // tslint:disable-next-line: variable-name
-  client_secret!: string
-  // tslint:disable-next-line: variable-name
-  embed_secret!: string
-  // tslint:disable-next-line: variable-name
-  user_id!: string
+  embed_secret: string = ''
 
-  constructor(contents: string, section?: string) {
-    const config = ApiConfig(contents)
-    if (!section) {
-      // default the section if not specified
-      section = Object.keys(config)[0]
-    }
-    const settings = config[section]
-    if (!settings) {
-      throw new Error(`No section named "${section}" was found`)
-    }
+  constructor(settings: Partial<IApiSettings>) {
     Object.assign(this, settings)
+    if (!this.isConfigured()) {
+      throw new Error(strBadConfiguration)
+    }
   }
 
-}
-
-// Parse an INI file, read the settings
-export class ApiSettingsIniFile extends ApiSettings {
-  constructor(fileName = './looker.ini', section?: string) {
-    super(fs.readFileSync(fileName, 'utf-8'), section)
-  }
+  isConfigured() { return !!(this.base_url && this.api_version) }
 }

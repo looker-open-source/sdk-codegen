@@ -22,8 +22,7 @@
  * THE SOFTWARE.
  */
 
-import { SDKResponse, HttpMethod, sdkError } from './transport'
-import { IAuthSession } from './authSession'
+import { SDKResponse, HttpMethod, sdkError, IAuthSession } from './transport'
 
 export class APIMethods {
   constructor(public authSession: IAuthSession) {

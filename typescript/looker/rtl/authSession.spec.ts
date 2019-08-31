@@ -1,6 +1,3 @@
-import { ApiSettingsIniFile } from './apiSettings'
-import { AuthSession } from './authSession'
-
 /*
  * The MIT License (MIT)
  *
@@ -26,14 +23,17 @@ import { AuthSession } from './authSession'
  */
 
 import { NodeTransport } from './nodeTransport'
+import { NodeSession } from './nodeSession'
+import { NodeSettingsIniFile } from './nodeSettings'
 
-describe('AuthSession', () => {
+
+describe('NodeSession', () => {
   const localIni = 'looker.ini'
-  const settings = new ApiSettingsIniFile(localIni, 'Looker')
+  const settings = new NodeSettingsIniFile(localIni, 'Looker')
 
   describe('isAuthenticated', () => {
     it('unauthenticated logout returns false', async () => {
-      const session = new AuthSession(settings, new NodeTransport(settings))
+      const session = new NodeSession(settings, new NodeTransport(settings))
       expect(session.isAuthenticated()).toEqual(false)
       const actual = await session.logout()
       expect(actual).toEqual(false)
@@ -43,14 +43,14 @@ describe('AuthSession', () => {
 
   describe('integration tests', () => {
     it('initializes', () => {
-      const session = new AuthSession(settings, new NodeTransport(settings))
+      const session = new NodeSession(settings, new NodeTransport(settings))
       expect(session.settings).toEqual(settings)
       expect(session.isAuthenticated()).toEqual(false)
       expect(session.isSudo()).toEqual(false)
     })
 
     it('default auth logs in with good credentials', async () => {
-      const session = new AuthSession(settings, new NodeTransport(settings))
+      const session = new NodeSession(settings, new NodeTransport(settings))
       expect(session.isAuthenticated()).toEqual(false)
       const token = await session.login()
       expect(token).toBeDefined()
@@ -59,7 +59,7 @@ describe('AuthSession', () => {
     })
 
     it('default auth logs in and out with good credentials', async () => {
-      const session = new AuthSession(settings, new NodeTransport(settings))
+      const session = new NodeSession(settings, new NodeTransport(settings))
       expect(session.isAuthenticated()).toEqual(false)
       const token = await session.login()
       expect(token).toBeDefined()

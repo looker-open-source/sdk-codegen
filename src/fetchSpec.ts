@@ -69,6 +69,17 @@ export const openApiFileName = (name: string, props: SDKConfigProps) =>
 
 const badAuth = (content: string) => content.indexOf('Requires authentication') > 0
 
+const checkCertError = (err: Error) : boolean => {
+  if (err.message && err.message.match(/self signed certificate/gi)) {
+    warn(`
+NOTE! Certificate validation can be disabled with:
+  NODE_TLS_REJECT_UNAUTHORIZED="0" yarn {command}
+`)
+    return true
+  }
+  return false
+}
+
 export const fetchSpecFile = async (name: string, props: SDKConfigProps) => {
   const fileName = specFileName(name, props)
   if (isFileSync(fileName)) return fileName
@@ -106,12 +117,7 @@ export const fetchSpecFile = async (name: string, props: SDKConfigProps) => {
     return fileName
 
   } catch (err) {
-    if (err.message && err.message.match(/self signed certificate/gi)) {
-      log(`
-NOTE! Certificate validation can be disabled with:
-  NODE_TLS_REJECT_UNAUTHORIZED="0" yarn {command}
-`)
-    }
+    checkCertError(err)
     return quit(err)
   }
 }
@@ -124,7 +130,7 @@ export const logFetch = async (name: string, props: SDKConfigProps) => {
   return specFile
 }
 
-export const getVersionInfo = async (props: SDKConfigProps) : Promise<IVersionInfo | undefined> =>{
+export const getVersionInfo = async (props: SDKConfigProps) : Promise<IVersionInfo> =>{
   try {
     const lookerVersion = await fetchLookerVersion(props.base_url)
     return {
@@ -133,8 +139,9 @@ export const getVersionInfo = async (props: SDKConfigProps) : Promise<IVersionIn
     }
   } catch (e) {
     warn(`Could not retrieve version information. Is ${props.base_url} running?`)
+    checkCertError(e)
   }
-  return undefined
+  return {} as IVersionInfo
 }
 
 

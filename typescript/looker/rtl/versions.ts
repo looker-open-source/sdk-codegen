@@ -22,5 +22,6 @@
  * THE SOFTWARE.
  */
 
-export const lookerVersion = '6.19'
-export const apiVersion = '3.1'
+export const lookerVersion = 'undefined'
+export const apiVersion = 'undefined'
+export const sdkVersion = `${lookerVersion}.${apiVersion}`

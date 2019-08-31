@@ -23,7 +23,7 @@
  */
 
 import { IApiSettings } from './apiSettings'
-import { IRequestInit, ITransport, SDKResponse, sdkError, IAuthSession } from './transport'
+import { IRequestInit, ITransport, IAuthSession } from './transport'
 import { BrowserTransport } from './browserTransport'
 import { IAccessToken } from '../sdk/models'
 
@@ -61,10 +61,14 @@ export class BrowserSession implements IAuthSession {
   }
 
   isSudo(): boolean {
-    return false
+    return !!this.sudoId
   }
 
   async login(sudoId?: string | number): Promise<IAccessToken> {
+    if (!!sudoId) {
+      throw new Error('Sudo functionality is not currently supported in BrowserSession')
+    }
+    // TODO support sudo directly in the Browser session?
     return this.getToken()
   }
 
@@ -73,15 +77,6 @@ export class BrowserSession implements IAuthSession {
   }
 
   reset(): void {
-  }
-
-  private async ok<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
-    const result = await promise
-    if (result.ok) {
-      return result.value
-    } else {
-      throw sdkError(result as any)
-    }
   }
 
 }

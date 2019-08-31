@@ -23,7 +23,6 @@
  */
 
 import * as fs from 'fs'
-import * as yaml from 'js-yaml'
 import { execSync } from 'child_process'
 
 export const utf8 = 'utf-8'
@@ -126,13 +125,10 @@ export const run = (command: string, args: string[], errMsg?: string, warning: b
   }
 }
 
-export const code = yaml.safeLoad(fs.readFileSync('./python.yml', utf8)) as ICodePattern
-
-export const commentBlock = (text: string | undefined, indent: string = '', commentStr: string = '') => {
+export const commentBlock = (text: string | undefined, indent: string = '', commentStr: string = '// ') => {
   if (!text) return ''
   text = text.trim()
   if (!text) return ''
-  if (!commentStr) commentStr = code.commentString
   const indenter = indent + commentStr
   return indenter + text.split('\n').join('\n' + indenter)
 }
