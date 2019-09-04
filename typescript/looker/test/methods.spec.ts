@@ -28,6 +28,7 @@ import { IQuery, IRequestrun_inline_query, IUser, IWriteQuery, } from '../sdk/mo
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 import { NodeSettingsIniFile } from '..'
+import { IApiSettingsIniFile } from '../rtl/nodeSettings'
 
 const dataFile = 'test/data.yml'
 // slightly hackish data path determination for tests
@@ -41,7 +42,7 @@ const emailDomain = '@foo.com'
 const testTimeout = 36000000 // 1 hour
 
 describe('LookerNodeSDK', () => {
-  const settings = new NodeSettingsIniFile(localIni, 'Looker')
+  const settings: IApiSettingsIniFile = new NodeSettingsIniFile(localIni, 'Looker')
   const session = new NodeSession(settings)
 
   const createQueryRequest = (q: any, limit: number) => {

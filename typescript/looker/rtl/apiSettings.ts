@@ -26,8 +26,6 @@ import { agentTag, ITransportSettings } from './transport'
 
 export const strLookerBaseUrl = 'LOOKER_BASE_URL'
 export const strLookerApiVersion = 'LOOKER_API_VERSION'
-export const strLookerClientId = 'LOOKER_CLIENT_ID'
-export const strLookerClientSecret = 'LOOKER_CLIENT_SECRET'
 export const strLookerEmbedSecret = 'LOOKER_EMBED_SECRET'
 export const strBadConfiguration = `${agentTag} configuration error:
 Missing required configuration values like base_url and api_version
@@ -42,11 +40,6 @@ export interface IApiSettings extends ITransportSettings {
   isConfigured(): boolean
 }
 
-export interface IApiClientSettings extends IApiSettings {
-  client_id?: string
-  client_secret?: string
-}
-
 /**
  * default the runtime configuration settings
  * @constructor
@@ -55,10 +48,8 @@ export interface IApiClientSettings extends IApiSettings {
 export const DefaultSettings = () => ({
   base_url: '',
   api_version: '3.1', // default to API 3.1
-  client_id: '',
-  client_secret: '',
   embed_secret: ''
-} as IApiClientSettings)
+} as IApiSettings)
 
 /**
  * Read any key/value collection for environment variable names and return as IApiSettings
@@ -71,12 +62,10 @@ export const DefaultSettings = () => ({
  *  - LOOKER_CLIENT_SECRET
  *  - LOOKER_EMBED_SECRET
  */
-export const ValueSettings  = (values: IValueSettings): IApiClientSettings => {
+export const ValueSettings  = (values: IValueSettings): IApiSettings => {
   const settings = DefaultSettings()
   settings.api_version = values[strLookerApiVersion] || settings.api_version
   settings.base_url = values[strLookerBaseUrl] || settings.base_url
-  settings.client_id = values[strLookerClientId] || settings.client_id
-  settings.client_secret = values[strLookerClientSecret] || settings.client_secret
   settings.embed_secret = values[strLookerEmbedSecret] || settings.embed_secret
   return settings
 }

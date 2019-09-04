@@ -30,8 +30,6 @@ describe('SDK configuration', () => {
       const settings = ValueSettings({})
       expect(settings.api_version).toEqual('3.1')
       expect(settings.base_url).toEqual('')
-      expect(settings.client_id).toEqual('')
-      expect(settings.client_secret).toEqual('')
       expect(settings.embed_secret).toEqual('')
     })
 
@@ -39,14 +37,10 @@ describe('SDK configuration', () => {
       const settings = ValueSettings({
         LOOKER_API_VERSION: '3.0',
         LOOKER_BASE_URL: 'base',
-        LOOKER_CLIENT_ID: 'client',
-        LOOKER_CLIENT_SECRET: 'secret',
         LOOKER_EMBED_SECRET: 'embed'
       })
       expect(settings.api_version).toEqual('3.0')
       expect(settings.base_url).toEqual('base')
-      expect(settings.client_id).toEqual('client')
-      expect(settings.client_secret).toEqual('secret')
       expect(settings.embed_secret).toEqual('embed')
     })
 

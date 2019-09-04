@@ -24,58 +24,58 @@
 
 import * as fs from 'fs'
 import * as ini from 'ini'
-import { ApiSettings, IApiClientSettings, IApiSettings } from './apiSettings'
+import { ApiSettings, IApiSettings } from './apiSettings'
 
-export interface IApiSections {
-  [key: string]: IApiSettings
+export interface IApiSection {
+  [key: string]: string
 }
 
-// TODO figure out spread operation for DefaultSettings ... client_id, client_secretß
 /**
- * default the runtime configuration settings
- * @constructor
+ * Interface that supports reading the API settings on demand from an .ini file
  *
  */
-export const DefaultClientSettings = () => ({
-  base_url: '',
-  api_version: '3.1', // default to API 3.1
-  client_id: '',
-  client_secret: '',
-  embed_secret: ''
-} as IApiClientSettings)
+export interface IApiSettingsIniFile extends IApiSettings {
+  readIni(section?: string): IApiSection
+}
 
 /**
  * Parse .ini formatted content
  * @param contents {string} formatted as an .ini file
  * @constructor
  */
-export const ApiConfig = (contents: string): IApiSections => ini.parse(contents)
+export const ApiConfig = (contents: string) => ini.parse(contents)
+
+/**
+ * Extract named or (default) first section from INI file
+ * @param contents {string} Parameters formatted as an INI file
+ * @param section {[key: string]: any;} Contents of INI section
+ * @constructor
+ */
+export const ApiConfigSection = (contents: string, section?: string): IApiSection => {
+  const config = ApiConfig(contents)
+  if (!section) {
+    // default to the first section if not specified
+    section = Object.keys(config)[0]
+  }
+  const settings = config[section]
+  if (!settings) {
+    throw new Error(`No section named "${section}" was found`)
+  }
+  return settings
+}
 
 /**
  * .ini Configuration initializer
  * @class NodeSettingsIni
  *
  */
-export class NodeSettingsIni extends ApiSettings implements IApiClientSettings {
-  client_id!: string
-  // tslint:disable-next-line: variable-name
-  client_secret!: string
-
+export class NodeSettingsIni extends ApiSettings {
   constructor(contents: string, section?: string) {
-    const config = ApiConfig(contents)
-    if (!section) {
-      // default to the first section if not specified
-      section = Object.keys(config)[0]
-    }
-    const settings = config[section]
-    if (!settings) {
-      throw new Error(`No section named "${section}" was found`)
-    }
+    const settings = ApiConfigSection(contents, section)
     super(settings)
   }
-
-  isConfigured() {
-    return super.isConfigured() && !!(this.client_id && this.client_secret)
+  readIni(section?: string): IApiSection {
+    return {} as IApiSection
   }
 }
 
@@ -83,11 +83,22 @@ export class NodeSettingsIni extends ApiSettings implements IApiClientSettings {
  * Example class that reads INI configuration from a file in node
  * @class NodeSettingsIniFile
  *
+ * Warning: INI files storing credentials should be secured in the run-time environment, and
+ * ignored by version control systems so credentials never get checked in to source code repositories
  */
-export class NodeSettingsIniFile extends NodeSettingsIni {
-  constructor(fileName = './looker.ini', section?: string) {
+export class NodeSettingsIniFile extends NodeSettingsIni implements IApiSettingsIniFile {
+  private readonly fileName!: string
+  constructor(fileName: string = './looker.ini', section?: string) {
     if (fs.existsSync(fileName)) {
       super(fs.readFileSync(fileName, 'utf-8'), section)
     }
+    this.fileName = fileName
   }
+
+  // readIni(section?: string): IApiSection {
+  //   if (fs.existsSync(this.fileName)) {
+  //     return ApiConfigSection(fs.readFileSync(this.fileName, 'utf-8'), section)
+  //   }
+  //   return ApiConfigSection("")
+  // }
 }

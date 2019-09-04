@@ -53,7 +53,7 @@ After yarn is installed, just run `yarn` from your terminal window/command line,
 Invoke the SDK code generator with the command:
 
 ```bash
-yarn convert && yarn sdk
+yarn sdk
 ```
 
 The generator will:
@@ -94,7 +94,7 @@ typescript
 **Note:** If you're unable to download the API specification file because you're using an instance of Looker that is not secured and errors are being thrown, you can explicitly turn off TLS verification with a command like:
 
 ```bash
-NODE_TLS_REJECT_UNAUTHORIZED="0" yarn convert && yarn sdk
+NODE_TLS_REJECT_UNAUTHORIZED="0" yarn sdk
 ```
 
 #### View the specification interactively

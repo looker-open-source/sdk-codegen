@@ -23,13 +23,16 @@
  */
 
 import { IAccessToken, IError } from '../sdk/models'
-import { IApiClientSettings } from './apiSettings'
 import { IRequestInit, ITransport, SDKResponse, sdkError, IAuthSession } from './transport'
 import { AuthToken } from './authToken'
 import { NodeTransport } from './nodeTransport'
+import { IApiSettingsIniFile } from './nodeSettings'
 
 const strPost = 'POST'
 const strDelete = 'DELETE'
+
+const strLookerClientId = 'LOOKER_CLIENT_ID'
+const strLookerClientSecret = 'LOOKER_CLIENT_SECRET'
 
 export class NodeSession implements IAuthSession {
   _authToken: AuthToken = new AuthToken()
@@ -37,11 +40,14 @@ export class NodeSession implements IAuthSession {
   sudoId: string = ''
   transport: ITransport
 
-  constructor(public settings: IApiClientSettings, transport?: ITransport) {
+  constructor(public settings: IApiSettingsIniFile, transport?: ITransport) {
     this.settings = settings
     this.transport = transport || new NodeTransport(settings)
   }
 
+  /**
+   * Abstraction of AuthToken retrieval to support sudo mode
+   */
   get activeToken() {
     if (this._sudoToken.access_token) {
       return this._sudoToken
@@ -49,13 +55,21 @@ export class NodeSession implements IAuthSession {
     return this._authToken
   }
 
-  // Determines if the authentication token exists and has not expired
+  /**
+   * Is there an active authentication token?
+   */
   isAuthenticated() {
     const token = this.activeToken
     if (!(token && token.access_token)) return false
     return token.isActive()
   }
 
+  /**
+   * Add authentication data to the pending API request
+   * @param init {IRequestInit} initialized API request properties
+   *
+   * @returns the updated request properties
+   */
   async authenticate(init: IRequestInit) {
     const token = await this.getToken()
     if (token && token.access_token) init.headers.Authorization = `token ${token.access_token}`
@@ -66,6 +80,10 @@ export class NodeSession implements IAuthSession {
     return (!!this.sudoId) && (this._sudoToken.isActive())
   }
 
+  /**
+   * retrieve the current authentication token. If there is no active token, performs default
+   * login to retrieve the token
+   */
   async getToken() {
     if (!this.isAuthenticated()) {
       await this.login()
@@ -73,13 +91,20 @@ export class NodeSession implements IAuthSession {
     return this.activeToken
   }
 
-  // Reset the user session
+  /**
+   * Reset the authentication session
+   */
   reset() {
     this.sudoId = ''
     this._authToken.reset()
     this._sudoToken.reset()
   }
 
+  /**
+   * Activate the authentication token for the API3 or sudo user
+   * @param sudoId {string | number}: optional. If provided, impersonates the user specified
+   *
+   */
   async login(sudoId?: string | number) {
     if (sudoId || (sudoId !== this.sudoId) || (!this.isAuthenticated())) {
       if (sudoId) {
@@ -91,6 +116,9 @@ export class NodeSession implements IAuthSession {
     return this.activeToken
   }
 
+  /**
+   * Logout the active user. If the active user is impersonated, the session reverts to the API3 user
+   */
   async logout() {
     let result = false
     if (this.isAuthenticated()) {
@@ -129,12 +157,16 @@ export class NodeSession implements IAuthSession {
 
     if (!this._authToken.isActive()) {
       this.reset()
+      // only retain client API3 credentials for the lifetime of the login request
+      const section = this.settings.readIni()
+      const client_id = process.env[strLookerClientId] || section['client_id']
+      const client_secret = process.env[strLookerClientSecret] || section['client_secret']
       // authenticate client
       const token = await this.ok(
         this.transport.request<IAccessToken, IError>(strPost, '/login',
           {
-            client_id: this.settings.client_id,
-            client_secret: this.settings.client_secret
+            client_id,
+            client_secret
           }))
       this._authToken.setToken(token)
     }
