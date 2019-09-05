@@ -37,7 +37,7 @@ export * from './rtl/versions'
 export * from './sdk/methods'
 export * from './sdk/models'
 
-import { IAuthSession } from './rtl/transport'
+import { IAuthorizer } from './rtl/transport'
 import { LookerSDK } from './sdk/methods'
 
 /**
@@ -52,7 +52,7 @@ export class SDK {
    *
    * @param session {IAuthSession} SDK session manager to use
    */
-  static createClient(session: IAuthSession) {
+  static createClient(session: IAuthorizer) {
     return new LookerSDK(session)
   }
 

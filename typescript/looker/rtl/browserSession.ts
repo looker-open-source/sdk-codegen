@@ -23,11 +23,11 @@
  */
 
 import { IApiSettings } from './apiSettings'
-import { IRequestInit, ITransport, IAuthSession } from './transport'
+import { IAuthorizer, IRequestInit, ITransport } from './transport'
 import { BrowserTransport } from './browserTransport'
 import { IAccessToken } from '../sdk/models'
 
-export class BrowserSession implements IAuthSession {
+export class BrowserSession implements IAuthorizer {
   sudoId: string = ''
   transport: ITransport
 
