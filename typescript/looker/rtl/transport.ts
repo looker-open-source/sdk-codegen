@@ -30,7 +30,6 @@ import { Agent } from 'https'
 import { Headers } from 'request'
 import { sdkVersion } from './versions'
 import { IApiSettings } from './apiSettings'
-import { IAccessToken } from '../sdk/models'
 
 export const agentTag = `TS-SDK ${sdkVersion}`
 
@@ -150,6 +149,26 @@ export interface IAuthorizer {
   isAuthenticated(): boolean;
 
   authenticate(init: IRequestInit): Promise<IRequestInit>
+}
+
+/**
+ * Same as the Looker API access token object
+ */
+export interface IAccessToken {
+  /**
+   * Access Token used for API calls
+   */
+  access_token?: string
+  /**
+   * Type of token
+   */
+  token_type?: string
+
+  /**
+   * Number of seconds before the token expires
+   */
+  expires_in?: number
+
 }
 
 export interface IAuthSession extends IAuthorizer {

@@ -74,9 +74,6 @@ export class NodeSettingsIni extends ApiSettings {
     const settings = ApiConfigSection(contents, section)
     super(settings)
   }
-  readIni(section?: string): IApiSection {
-    return {} as IApiSection
-  }
 }
 
 /**
@@ -95,10 +92,10 @@ export class NodeSettingsIniFile extends NodeSettingsIni implements IApiSettings
     this.fileName = fileName
   }
 
-  // readIni(section?: string): IApiSection {
-  //   if (fs.existsSync(this.fileName)) {
-  //     return ApiConfigSection(fs.readFileSync(this.fileName, 'utf-8'), section)
-  //   }
-  //   return ApiConfigSection("")
-  // }
+  readIni(section?: string): IApiSection {
+    if (fs.existsSync(this.fileName)) {
+      return ApiConfigSection(fs.readFileSync(this.fileName, 'utf-8'), section)
+    }
+    return ApiConfigSection("")
+  }
 }
