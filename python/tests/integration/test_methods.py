@@ -61,19 +61,23 @@ def test_crud_user(looker_client: mtds.LookerSDK):
     user = looker_client.user(user_id)
     assert isinstance(user.credentials_email, ml.CredentialsEmail)
     assert user.credentials_email.email == "john.doe@looker.com"
+
     # Delete user
     resp = looker_client.delete_user(user_id)
     assert resp == ""
 
+    looker_client.logout()
+
 
 def test_me_returns_correct_result(looker_client: mtds.LookerSDK):
-    """me() should return the right user
+    """me() should return the current authenticated user
     """
     me = looker_client.me()
     assert isinstance(me, ml.User)
     assert isinstance(me.credentials_api3, list)
     assert len(me.credentials_api3) > 0
     assert isinstance(me.credentials_api3[0], ml.CredentialsApi3)
+    looker_client.logout()
 
 
 def test_me_field_filters(looker_client: mtds.LookerSDK):
@@ -89,6 +93,7 @@ def test_me_field_filters(looker_client: mtds.LookerSDK):
     assert not me.display_name
     assert not me.email
     assert not me.personal_space_id
+    looker_client.logout()
 
 
 @pytest.mark.usefixtures("test_users")
@@ -98,70 +103,73 @@ def test_bad_user_search_returns_no_results(looker_client: mtds.LookerSDK):
     resp = looker_client.search_users(first_name="Bad", last_name="News")
     assert isinstance(resp, list)
     assert len(resp) == 0
+    looker_client.logout()
 
 
 @pytest.mark.usefixtures("test_users")
 def test_search_users_matches_pattern(
-    looker_client: mtds.LookerSDK,
-    users: List[Dict[str, str]],
-    email_domain: str
-    # test_data: Dict[str, Union[List[Dict[str, str]], str]],
+    looker_client: mtds.LookerSDK, users: List[Dict[str, str]], email_domain: str
 ):
     """search_users should return a list of all matches.
     """
     user = users[0]
 
     # Search by full email
-    result = looker_client.search_users_names(
-        pattern=f'{user["first_name"]}.{user["last_name"]}{email_domain}'
-    )
-    assert len(result) == 1
-    assert result[0].first_name == user["first_name"]
-    assert result[0].last_name == user["last_name"]
-    assert result[0].email == f'{user["first_name"]}.{user["last_name"]}{email_domain}'
+    search_email = f'{user["first_name"]}.{user["last_name"]}{email_domain}'
+    search_results = looker_client.search_users_names(pattern=search_email)
+    assert len(search_results) == 1
+    assert search_results[0].first_name == user["first_name"]
+    assert search_results[0].last_name == user["last_name"]
+    assert search_results[0].email == search_email
 
     # Search by first name
-    result = looker_client.search_users_names(pattern=user["first_name"])
-    assert len(result) > 0
-    assert result[0].first_name == user["first_name"]
+    search_results = looker_client.search_users_names(pattern=user["first_name"])
+    assert len(search_results) > 0
+    assert search_results[0].first_name == user["first_name"]
 
     # First name with spaces
     u = looker_client.create_user(
         ml.WriteUser(first_name="John Allen", last_name="Smith")
     )
     if u.id:
-        result = looker_client.search_users_names(pattern="John Allen")
-        assert len(result) == 1
-        assert result[0].first_name == "John Allen"
-        assert result[0].last_name == "Smith"
+        search_results = looker_client.search_users_names(pattern="John Allen")
+        assert len(search_results) == 1
+        assert search_results[0].first_name == "John Allen"
+        assert search_results[0].last_name == "Smith"
 
-        # Clean
-        looker_client.delete_user(u.id)
+        # Delete user
+        resp = looker_client.delete_user(u.id)
+        assert resp == ""
+
+    looker_client.logout()
 
 
 @pytest.mark.usefixtures("test_users")
 def test_it_matches_email_domain_and_returns_sorted(
-    looker_client: mtds.LookerSDK,
-    test_data: Dict[str, Union[List[Dict[str, str]], str]],
+    looker_client: mtds.LookerSDK, email_domain: str, users: List[Dict[str, str]]
 ):
-    resp = looker_client.search_users_names(
-        pattern=f"%{test_data['email_domain']}", sorts="last_name, first_name"
+    """search_users_names() should search users matching a given pattern and return
+    sorted results if sort fields are specified.
+    """
+    search_results = looker_client.search_users_names(
+        pattern=f"%{email_domain}", sorts="last_name, first_name"
     )
-    test_data_users = cast(List[Dict[str, str]], test_data["users"])
-    assert len(resp) == len(test_data_users)
+    assert len(search_results) == len(users)
     sorted_test_data: List[Dict[str, str]] = sorted(
-        test_data_users, key=itemgetter("last_name", "first_name")
+        users, key=itemgetter("last_name", "first_name")
     )
-    for actual, expected in zip(resp, sorted_test_data):
+    for actual, expected in zip(search_results, sorted_test_data):
         assert actual.first_name == expected["first_name"]
         assert actual.last_name == expected["last_name"]
+    looker_client.logout()
 
 
 def test_it_retrieves_session(looker_client: mtds.LookerSDK):
     """session() should return the current session.
     """
-    resp = looker_client.session()
-    assert resp.workspace_id == "production"
+    current_session = looker_client.session()
+    assert current_session.workspace_id == "production"
+    looker_client.logout()
 
 
 def test_it_updates_session(looker_client: mtds.LookerSDK):
@@ -169,25 +177,28 @@ def test_it_updates_session(looker_client: mtds.LookerSDK):
     """
     # Switch workspace to dev mode
     looker_client.update_session(ml.WriteApiSession(workspace_id="dev"))
-    resp = looker_client.session()
+    current_session = looker_client.session()
 
-    assert isinstance(resp, ml.ApiSession)
-    assert resp.workspace_id == "dev"
+    assert isinstance(current_session, ml.ApiSession)
+    assert current_session.workspace_id == "dev"
 
     # Switch workspace back to production
-    resp = looker_client.update_session(ml.WriteApiSession(workspace_id="production"))
+    current_session = looker_client.update_session(
+        ml.WriteApiSession(workspace_id="production")
+    )
 
-    assert isinstance(resp, ml.ApiSession)
-    assert resp.workspace_id == "production"
+    assert isinstance(current_session, ml.ApiSession)
+    assert current_session.workspace_id == "production"
+
+    looker_client.logout()
 
 
-TQueries = List[Dict[str, Union[str, List[str]]]]
+TQueries = List[Dict[str, Union[str, List[str], Dict[str, str]]]]
 
 
 def test_it_creates_and_runs_query(looker_client: mtds.LookerSDK, queries: TQueries):
     """create_query() creates a query and run_query() returns its result.
     """
-    # Create query hash
     for q in queries:
         limit = cast(str, q["limit"]) or "10"
         request = create_query_request(q, limit)
@@ -206,13 +217,15 @@ def test_it_creates_and_runs_query(looker_client: mtds.LookerSDK, queries: TQuer
         assert isinstance(json_, list)
         assert len(json_) == int(limit)
         row = json_[0]
-        if q.get("fields", None):
+        if q.get("fields"):
             for field in q["fields"]:
                 assert field in row.keys()
 
         csv = looker_client.run_query(query.id, "csv")
         assert isinstance(csv, str)
         assert len(re.findall(r"\n", csv)) == int(limit) + 1
+
+        looker_client.logout()
 
 
 def test_it_runs_inline_query(looker_client: mtds.LookerSDK, queries: TQueries):
@@ -228,7 +241,7 @@ def test_it_runs_inline_query(looker_client: mtds.LookerSDK, queries: TQueries):
         assert len(json_) == int(limit)
 
         row = json_[0]
-        if q.get("fields", None):
+        if q.get("fields"):
             for field in q["fields"]:
                 assert field in row.keys()
 
@@ -236,97 +249,87 @@ def test_it_runs_inline_query(looker_client: mtds.LookerSDK, queries: TQueries):
         assert isinstance(csv, str)
         assert len(re.findall(r"\n", csv)) == int(limit) + 1
 
+        looker_client.logout()
+
 
 def test_search_looks_returns_looks(looker_client: mtds.LookerSDK):
     """search_looks() should return a list of looks.
     """
-    actual = looker_client.search_looks()
-    assert isinstance(actual, list)
-    assert len(actual) > 0
-    look = actual[0]
+    search_results = looker_client.search_looks()
+    assert isinstance(search_results, list)
+    assert len(search_results) > 0
+    look = search_results[0]
     assert isinstance(look, ml.Look)
     assert look.title != ""
     assert look.created_at is not None
+    looker_client.logout()
 
 
 def test_search_looks_fields_filter(looker_client: mtds.LookerSDK):
     """search_looks() should only return the requested fields passed in the fields
     argument of the request.
     """
-    actual = looker_client.search_looks(fields="id, title, description")
-    assert isinstance(actual, list)
-    assert len(actual) > 0
-    look = actual[0]
+    search_results = looker_client.search_looks(fields="id, title, description")
+    assert isinstance(search_results, list)
+    assert len(search_results) > 0
+    look = search_results[0]
     assert isinstance(look, ml.Look)
     assert look.title is not None
     assert look.created_at is None
+    looker_client.logout()
 
 
 def test_search_looks_title_fields_filter(looker_client: mtds.LookerSDK):
     """search_looks() should be able to filter on title.
     """
-    actual = looker_client.search_looks(title="Order%", fields="id, title")
-    assert isinstance(actual, list)
-    assert len(actual) > 0
-    look = actual[0]
+    search_results = looker_client.search_looks(title="Order%", fields="id, title")
+    assert isinstance(search_results, list)
+    assert len(search_results) > 0
+    look = search_results[0]
     assert isinstance(look.id, int)
     assert look.id > 0
     assert "Order" in look.title
     assert look.description is None
+    looker_client.logout()
 
 
 def create_query_request(q, limit: Optional[str] = None) -> ml.WriteQuery:
-    result = ml.WriteQuery(
-        model=q.get("model", None),
-        view=q.get("view", None),
-        fields=q.get("fields", None),
-        pivots=q.get("pivots", None),
-        fill_fields=q.get("fill_fields", None),
-        filters=q.get("filters", None),
-        filter_expression=q.get("filter_expressions", None),
-        sorts=q.get("sorts", None),
-        limit=q.get("limit", None) or limit,
-        column_limit=q.get("column_limit", None),
-        total=q.get("total", None),
-        row_total=q.get("row_total", None),
-        subtotals=q.get("subtotal", None),
-        runtime=q.get("runtime", None),
-        vis_config=q.get("vis_config", None),
-        filter_config=q.get("filter_config", None),
-        visible_ui_sections=q.get("visible_ui_sections", None),
-        dynamic_fields=q.get("dynamic_fields", None),
-        client_id=q.get("client_id", None),
-        query_timezone=q.get("query_timezone", None),
+    return ml.WriteQuery(
+        model=q.get("model"),
+        view=q.get("view"),
+        fields=q.get("fields"),
+        pivots=q.get("pivots"),
+        fill_fields=q.get("fill_fields"),
+        filters=q.get("filters"),
+        filter_expression=q.get("filter_expressions"),
+        sorts=q.get("sorts"),
+        limit=q.get("limit") or limit,
+        column_limit=q.get("column_limit"),
+        total=q.get("total"),
+        row_total=q.get("row_total"),
+        subtotals=q.get("subtotal"),
+        runtime=q.get("runtime"),
+        vis_config=q.get("vis_config"),
+        filter_config=q.get("filter_config"),
+        visible_ui_sections=q.get("visible_ui_sections"),
+        dynamic_fields=q.get("dynamic_fields"),
+        client_id=q.get("client_id"),
+        query_timezone=q.get("query_timezone"),
     )
-    return result
-
-
-def get_query_id(qhash: Dict[str, ml.Query], id: Any) -> Optional[int]:
-    if not id:
-        return id
-    if id.startswith("#"):
-        id = id[1:]
-    else:
-        return id if id.isdigit() else None
-    result = qhash.get(id, None)
-    if result:
-        return result.id
-    return list(qhash.values())[0].id
 
 
 @pytest.mark.usefixtures("remove_test_dashboards")
 def test_crud_dashboard(looker_client: mtds.LookerSDK, queries, dashboards):
     """Test creating, retrieving, updating and deleting a user.
     """
-    qhash: Dict[str, ml.Query] = {}
+    qhash: Dict[Union[str, int], ml.Query] = {}
     for idx, q in enumerate(queries):
-        limit = cast(str, q["limit"]) or "10"
+        limit = "10"
         request = create_query_request(q, limit)
-        key = q.get("id", None) or str(idx)
+        key = q.get("id") or str(idx)
         qhash[key] = looker_client.create_query(request)
 
     for d in dashboards:
-        d.setdefault("default")
         dashboard = looker_client.create_dashboard(
             ml.WriteDashboard(
                 description=d.get("description"),
@@ -351,7 +354,7 @@ def test_crud_dashboard(looker_client: mtds.LookerSDK, queries, dashboards):
         assert isinstance(dashboard, ml.Dashboard)
 
         if d.get("background_color"):
-            assert dashboard.background_color
+            assert d["background_color"] == dashboard.background_color
 
         if d.get("text_tile_text_color"):
             assert d["text_tile_text_color"] == dashboard.text_tile_text_color
@@ -367,11 +370,11 @@ def test_crud_dashboard(looker_client: mtds.LookerSDK, queries, dashboards):
 
         # Update dashboard
         assert isinstance(dashboard.id, str)
-        actual = looker_client.update_dashboard(
+        update_response = looker_client.update_dashboard(
             dashboard.id, ml.WriteDashboard(deleted=True)
         )
-        assert actual.deleted
-        assert actual.title == dashboard.title
+        assert update_response.deleted
+        assert update_response.title == dashboard.title
 
         dashboard = looker_client.update_dashboard(
             dashboard.id, ml.WriteDashboard(deleted=False)
@@ -381,7 +384,6 @@ def test_crud_dashboard(looker_client: mtds.LookerSDK, queries, dashboards):
 
         if d.get("filters"):
             for f in d["filters"]:
-                f.setdefault("default")
                 filter = looker_client.create_dashboard_filter(
                     ml.WriteCreateDashboardFilter(
                         dashboard_id=dashboard.id,
@@ -414,7 +416,6 @@ def test_crud_dashboard(looker_client: mtds.LookerSDK, queries, dashboards):
 
         if d.get("tiles"):
             for t in d["tiles"]:
-                t.setdefault("default")
                 tile = looker_client.create_dashboard_element(
                     ml.WriteDashboardElement(
                         body_text=t.get("body_text"),
@@ -439,3 +440,17 @@ def test_crud_dashboard(looker_client: mtds.LookerSDK, queries, dashboards):
                 assert tile.dashboard_id == dashboard.id
                 assert tile.title == t.get("title")
                 assert tile.type == t.get("type")
+
+    looker_client.logout()
+
+
+def get_query_id(qhash: Dict[Union[str, int], ml.Query], id: Union[str, int]) -> Optional[int]:
+    if isinstance(id, str) and id.startswith("#"):
+        id = id[1:]
+        # if id is invalid, default to first query. test data is bad
+        query = qhash.get(id) or list(qhash.values())[0]
+        return query.id
+    elif (isinstance(id, str) and id.isdigit()) or isinstance(id, int):
+        return int(id)
+    else:
+        return None

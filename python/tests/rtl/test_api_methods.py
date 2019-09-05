@@ -25,7 +25,7 @@ def api() -> api_methods.APIMethods:
 
 
 @pytest.mark.parametrize(  # type: ignore
-    "input, expected",
+    "test_query_params, expected",
     [
         ({"a": None}, {}),
         ({"a": True}, {"a": "true"}),
@@ -38,15 +38,15 @@ def api() -> api_methods.APIMethods:
 )
 def test_convert_query_params(
     api: api_methods.APIMethods,
-    input: api_methods.TQueryParams,
+    test_query_params: api_methods.TQueryParams,
     expected: MutableMapping[str, str],
 ):
-    actual = api._convert_query_params(input)
+    actual = api._convert_query_params(test_query_params)
     assert actual == expected
 
 
 @pytest.mark.parametrize(  # type: ignore
-    "input, expected",
+    "test_body, expected",
     [
         ("some body text", b"some body text"),
         ("", b""),
@@ -65,9 +65,9 @@ def test_convert_query_params(
     ],
 )
 def test_get_serialized(
-    api: api_methods.APIMethods, input: api_methods.TBody, expected: Optional[bytes]
+    api: api_methods.APIMethods, test_body: api_methods.TBody, expected: Optional[bytes]
 ):
-    actual = api._get_serialized(input)
+    actual = api._get_serialized(test_body)
     assert actual == expected
 
 
