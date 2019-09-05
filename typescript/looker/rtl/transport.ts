@@ -149,41 +149,9 @@ export interface IAuthorizer {
   isAuthenticated(): boolean;
 
   authenticate(init: IRequestInit): Promise<IRequestInit>
-}
-
-/**
- * Same as the Looker API access token object
- */
-export interface IAccessToken {
-  /**
-   * Access Token used for API calls
-   */
-  access_token?: string
-  /**
-   * Type of token
-   */
-  token_type?: string
-
-  /**
-   * Number of seconds before the token expires
-   */
-  expires_in?: number
-
-}
-
-export interface IAuthSession extends IAuthorizer {
-  sudoId: string;
-
-  // Authentication token
-  getToken(): Promise<IAccessToken>
-
-  isSudo(): boolean
-
-  login(sudoId?: string | number): Promise<IAccessToken>
 
   logout(): Promise<boolean>
 
-  reset(): void
 }
 
 /** Generic http request property collection */

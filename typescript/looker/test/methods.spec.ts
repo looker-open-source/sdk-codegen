@@ -22,13 +22,13 @@
  * THE SOFTWARE.
  */
 
-import { NodeSession } from '../rtl/nodeSession'
+import { IAuthSession, NodeSession } from '../rtl/nodeSession'
 import { LookerSDK } from '../sdk/methods'
 import { IQuery, IRequestrun_inline_query, IUser, IWriteQuery, } from '../sdk/models'
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 import { NodeSettingsIniFile } from '..'
-import { IApiSettingsIniFile } from '../rtl/nodeSettings'
+// import { IApiSettingsIniFile } from '../rtl/nodeSettings'
 
 const dataFile = 'test/data.yml'
 // slightly hackish data path determination for tests
@@ -42,7 +42,7 @@ const emailDomain = '@foo.com'
 const testTimeout = 36000000 // 1 hour
 
 describe('LookerNodeSDK', () => {
-  const settings: IApiSettingsIniFile = new NodeSettingsIniFile(localIni, 'Looker')
+  const settings = new NodeSettingsIniFile(localIni, 'Looker')
   const session = new NodeSession(settings)
 
   const createQueryRequest = (q: any, limit: number) => {
@@ -195,30 +195,31 @@ describe('LookerNodeSDK', () => {
       if (others.length > 1) {
         // pick two other active users for `sudo` tests
         const [sudoA, sudoB] = others
+        const auth = sdk.authSession as IAuthSession
 
         // login as sudoA
-        await sdk.authSession.login(sudoA.id.toString())
+        await auth.login(sudoA.id.toString())
         let sudo = await sdk.ok(sdk.me()) // `me` returns `sudoA` user
         expect(sudo.id).toEqual(sudoA.id)
 
         // login as sudoB directly from sudoA
-        await sdk.authSession.login(sudoB.id)
+        await auth.login(sudoB.id)
         sudo = await sdk.ok(sdk.me()) // `me` returns `sudoB` user
         expect(sudo.id).toEqual(sudoB.id)
 
         // logging out sudo resets to API user
-        await sdk.authSession.logout()
+        await auth.logout()
         let user = await sdk.ok(sdk.me()) // `me` returns `apiUser` user
         expect(sdk.authSession.isAuthenticated()).toEqual(true)
         expect(user).toEqual(apiUser)
 
         // login as sudoA again to test plain `login()` later
-        await sdk.authSession.login(sudoA.id)
+        await auth.login(sudoA.id)
         sudo = await sdk.ok(sdk.me())
         expect(sudo.id).toEqual(sudoA.id)
 
         // login() without a sudo ID logs in the API user
-        await sdk.authSession.login()
+        await auth.login()
         user = await sdk.ok(sdk.me()) // `me` returns `apiUser` user
         expect(sdk.authSession.isAuthenticated()).toEqual(true)
         expect(user.id).toEqual(apiUser.id)

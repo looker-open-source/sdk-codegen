@@ -22,10 +22,10 @@
  * THE SOFTWARE.
  */
 
-import { SDKResponse, HttpMethod, sdkError, IAuthSession } from './transport'
+import { SDKResponse, HttpMethod, sdkError, IAuthorizer } from './transport'
 
 export class APIMethods {
-  constructor(public authSession: IAuthSession) {
+  constructor(public authSession: IAuthorizer) {
     this.authSession = authSession
   }
 

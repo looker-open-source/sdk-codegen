@@ -92,6 +92,10 @@ export class NodeSettingsIniFile extends NodeSettingsIni implements IApiSettings
     this.fileName = fileName
   }
 
+  /**
+   * Read an INI file section and return it as a generic keyed collection
+   * @param section {string} Name of Ini section to read. Optional. Defaults to first section.
+   */
   readIni(section?: string): IApiSection {
     if (fs.existsSync(this.fileName)) {
       return ApiConfigSection(fs.readFileSync(this.fileName, 'utf-8'), section)

@@ -22,8 +22,8 @@
  * THE SOFTWARE.
  */
 
-import { IAccessToken, IError } from '../sdk/models'
-import { IRequestInit, ITransport, SDKResponse, sdkError, IAuthSession } from './transport'
+import { IError } from '../sdk/models'
+import { IRequestInit, ITransport, SDKResponse, sdkError, IAuthorizer } from './transport'
 import { AuthToken } from './authToken'
 import { NodeTransport } from './nodeTransport'
 import { IApiSettingsIniFile } from './nodeSettings'
@@ -33,6 +33,39 @@ const strDelete = 'DELETE'
 
 const strLookerClientId = 'LOOKER_CLIENT_ID'
 const strLookerClientSecret = 'LOOKER_CLIENT_SECRET'
+
+/**
+ * Same as the Looker API access token object
+ */
+interface IAccessToken {
+  /**
+   * Access Token used for API calls
+   */
+  access_token?: string
+  /**
+   * Type of token
+   */
+  token_type?: string
+
+  /**
+   * Number of seconds before the token expires
+   */
+  expires_in?: number
+
+}
+
+export interface IAuthSession extends IAuthorizer {
+  sudoId: string;
+
+  // Authentication token
+  getToken(): Promise<IAccessToken>
+
+  isSudo(): boolean
+
+  login(sudoId?: string | number): Promise<IAccessToken>
+
+  reset(): void
+}
 
 export class NodeSession implements IAuthSession {
   _authToken: AuthToken = new AuthToken()
