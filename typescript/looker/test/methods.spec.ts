@@ -28,7 +28,6 @@ import { IQuery, IRequestrun_inline_query, IUser, IWriteQuery, } from '../sdk/mo
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 import { NodeSettingsIniFile } from '..'
-// import { IApiSettingsIniFile } from '../rtl/nodeSettings'
 
 const dataFile = 'test/data.yml'
 // slightly hackish data path determination for tests
