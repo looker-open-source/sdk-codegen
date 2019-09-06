@@ -2,11 +2,11 @@
 
 This Looker Open Source repository is released under the MIT license. By using this repository, you agree to the terms of that license, and acknowledge that you are doing so at your own risk.
 
-While Looker has developed and tested these scripts internally, we cannot guarantee that the open-source tools used by the scripts in this repository have not been modified with malicious code.
+While Looker has developed and tested this code internally, we cannot guarantee that the open-source tools used by the scripts in this repository have not been modified with malicious code.
 
-Our goal is to help people who want use Looker as a platform to get up and running quickly largely by providing pre-built client SDKs in the most popular languages, and curating consistency across all languages and platforms.
+Our goal is to help people who want use Looker as a platform to get up and running quickly, largely by providing pre-built client SDKs in the most popular languages, and implementing consistency across all languages and platforms.
 
-The Looker API is defined with the [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification), formerly known as "swagger." This specification is used to produce both Looker's interactive API Explorer, and the Looker API language bindings that describes the Looker REST API.
+The Looker API is defined with the [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification), formerly known as "swagger." This specification is used to produce both Looker's interactive API Explorer,and the Looker API language bindings that describes the Looker REST API.
 
 ## The parts of the Looker SDK
 
@@ -20,6 +20,18 @@ A Looker SDK has several parts:
 * **Language SDKs**, "smarter" client language classes and methods to improve the experience of calling the Looker API in various popular coding languages. Looker has created a code generator for specific languages in this repository, which is used by the command `yarn sdk`'
 
 * **API bindings** using the legacy [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) can also be product. This process converts the API specification to language-specific code. Most of these template-based generators are written by different language enthusiasts, so the pattern and quality of the generated code varies widely, even though most generated code tends to work acceptably.
+
+## Using existing, pre-generated SDKs
+
+When a specific language SDK has been developed, Looker will make that SDK available using the standard package manager used by that platform. Currently, there are two client language SDKs Looker has deployed to package managers.
+
+### Installing the Python SDK
+
+Information on using the Looker SDK for Python is available at <https://pypi.org/project/looker-sdk>.
+
+### Installing the Typescript/Javascript SDK
+
+Information on using the Looker SDK for Typescript/Javascript is available at <https://www.npmjs.com/package/@looker/sdk>.
 
 ## Generating an API language binding
 
@@ -41,8 +53,8 @@ To create `looker.ini`, copy [`looker-sample.ini`](looker-sample.ini) to `looker
 
 For your own source code repositories, be sure to configure your version control system to ignore your configuration `.ini` file so it doesn't accidentally get published somewhere unauthorized people can see it.
 
-Unlike some other OpenAPI code generators, the Looker SDK code generator **never** writes access information into SDK source code. 
-All SDKs provided by Looker are designed to receive the credentials required to call API methods. 
+Unlike some other OpenAPI code generators, the Looker SDK code generator **never** writes access information into SDK source code.
+All SDKs provided by Looker are designed to receive the credentials required to call API methods.
 
 ### Using the yarn/node-based generator
 
@@ -60,7 +72,7 @@ The generator will:
 
 * read the Looker API configuration(s) from the `looker.ini` file.
 
-  * **Note**: There should be at most 2 entries in `looker.ini`: one for API version 3.1. and one for 3.0. API 3.1 is a superset of 3.0, so 3.0 shouldn't be used.
+  * **Note**: There should be at most 2 entries in `looker.ini`: one for API version 3.1. and one for 3.0. API 3.1 is a superset of 3.0, so 3.0 shouldn't be used unless there is a very specific reason for it.
 
 * download (if the specification file is not already present) the Looker API specification file(s) from the configured Looker server(s)
 
@@ -71,7 +83,7 @@ The generator will:
 * by default, call the code generator for each active language configured in [`languages.ts`](src/languages.ts)
 
   * If you want to legacy for one specific language, use `yarn sdk {language}`. Currently, supported `{language}` values are `python` and `typescript`
-  
+
 When the generator completes successfully, the output will be similar to:
 
 ```plain-text

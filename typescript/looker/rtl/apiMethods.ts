@@ -61,7 +61,16 @@ export class APIMethods {
     }
   }
 
-  // automatically authenticate the request
+  /**
+   *
+   * A helper method to decorate an API request with authentication information
+   * before submitting the request to the API
+   *
+   * @param method {HttpMethod} type of HTTP method
+   * @param path {string} API endpoint path
+   * @param queryParams {any} Optional query params collection for request
+   * @param body {any} Optional body for request
+   */
   async authRequest<TSuccess, TError>(
     method: HttpMethod,
     path: string,

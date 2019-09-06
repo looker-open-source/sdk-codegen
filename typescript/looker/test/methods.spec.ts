@@ -194,6 +194,7 @@ describe('LookerNodeSDK', () => {
       if (others.length > 1) {
         // pick two other active users for `sudo` tests
         const [sudoA, sudoB] = others
+        // get auth support for login()
         const auth = sdk.authSession as IAuthSession
 
         // login as sudoA

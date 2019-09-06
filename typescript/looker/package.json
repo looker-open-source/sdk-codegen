@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk",
-  "version": "0.1.0-experimental.12",
+  "version": "0.1.0-experimental.13",
   "description": "Looker SDK",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
