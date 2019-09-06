@@ -8,6 +8,7 @@ from typing import cast, Dict, Optional
 import attr
 import cattr
 
+from looker_sdk import error
 from looker_sdk.rtl import transport
 
 
@@ -34,9 +35,8 @@ class ApiSettings(transport.TransportSettings):
     need to be supplied.
     """
 
-    client_id: str
-    client_secret: str
-    embed_secret: str = ""
+    _filename: str = ""
+    _section: Optional[str] = None
 
     @classmethod
     def configure(
@@ -49,12 +49,39 @@ class ApiSettings(transport.TransportSettings):
         instantiate ApiSettings.
 
         ENV variables map like this:
+            LOOKER_API_VERSION -> api_version
             LOOKER_BASE_URL -> base_url
             LOOKER_CLIENT_ID -> client_id
             LOOKER_CLIENT_SECRET -> client_secret
-            LOOKER_EMBED_SECRET -> embed_secret
-
         """
+
+        config_data = cls.read_ini(filename, section)
+
+        api_version = cast(str, os.getenv("LOOKER_API_VERSION"))
+        if api_version:
+            config_data["api_version"] = api_version
+
+        env_base_url = cast(str, os.getenv("LOOKER_BASE_URL"))
+        if env_base_url:
+            config_data["base_url"] = env_base_url
+
+        required = ["base_url", "client_id", "client_secret"]
+        missing = []
+        for param in required:
+            if not (config_data.get(param) or os.getenv(f"LOOKER_{param.upper()}")):
+                missing.append(param)
+        if missing:
+            raise error.SDKError(
+                f"Required parameters not found: {(', ').join(missing)}"
+            )
+
+        converter = cattr.Converter()
+        converter.register_structure_hook(bool, _convert_bool)
+        settings: ApiSettings = converter.structure(config_data, cls)
+        return settings
+
+    @staticmethod
+    def read_ini(filename: str, section: Optional[str] = None) -> Dict[str, str]:
         cfg_parser = cp.ConfigParser()
         try:
             cfg_parser.read_file(open(filename))
@@ -64,34 +91,6 @@ class ApiSettings(transport.TransportSettings):
             # If section is not specified, use first section in file
             section = section or cfg_parser.sections()[0]
             config_data = dict(cfg_parser[section])
-
-        env_base_url = cast(str, os.getenv("LOOKER_BASE_URL"))
-        if env_base_url:
-            config_data["base_url"] = env_base_url
-
-        env_client_id = cast(str, os.getenv("LOOKER_CLIENT_ID"))
-        if env_client_id:
-            config_data["client_id"] = env_client_id
-
-        env_client_secret = cast(str, os.getenv("LOOKER_CLIENT_SECRET"))
-        if env_client_secret:
-            config_data["client_secret"] = env_client_secret
-
-        env_embed_secret = cast(str, os.getenv("LOOKER_EMBED_SECRET"))
-        if env_embed_secret:
-            config_data["embed_secret"] = env_embed_secret
-
-        api_version = cast(str, os.getenv("LOOKER_API_VERSION"))
-        if api_version:
-            config_data["api_version"] = api_version
-
-        # Remove required params from config dictionary if they are empty strings
-        required_params = ["base_url", "client_id", "client_secret"]
-        for key, val in list(config_data.items()):
-            if key in required_params and not val:
-                config_data.pop(key)
-
-        converter = cattr.Converter()
-        converter.register_structure_hook(bool, _convert_bool)
-        settings: ApiSettings = converter.structure(config_data, cls)
-        return settings
+            config_data["_section"] = cast(str, section)
+            config_data["_filename"] = cast(str, filename)
+        return config_data

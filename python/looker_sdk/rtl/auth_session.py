@@ -1,6 +1,7 @@
 """AuthSession to provide automatic authentication
 """
-from typing import Dict, Optional
+import os
+from typing import cast, Dict, Optional
 import urllib.parse
 
 from looker_sdk import error
@@ -95,10 +96,17 @@ class AuthSession:
                 self._login_user()
 
     def _login_admin(self) -> None:
+        config_data = self.settings.read_ini(
+            self.settings._filename, self.settings._section
+        )
+        client_id = os.getenv("LOOKER_CLIENT_ID") or config_data.get("client_id")
+        client_secret = os.getenv("LOOKER_CLIENT_SECRET") or config_data.get(
+            "client_secret"
+        )
         serialized = urllib.parse.urlencode(
             {
-                "client_id": self.settings.client_id,
-                "client_secret": self.settings.client_secret,
+                "client_id": cast(str, client_id),
+                "client_secret": cast(str, client_secret),
             }
         ).encode("utf-8")
 
