@@ -103,6 +103,10 @@ class AuthSession:
         client_secret = os.getenv("LOOKER_CLIENT_SECRET") or config_data.get(
             "client_secret"
         )
+
+        if not (client_id or client_secret):
+            raise error.SDKError(f"Required auth credentials not found.")
+
         serialized = urllib.parse.urlencode(
             {
                 "client_id": cast(str, client_id),

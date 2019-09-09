@@ -51,29 +51,20 @@ class ApiSettings(transport.TransportSettings):
         ENV variables map like this:
             LOOKER_API_VERSION -> api_version
             LOOKER_BASE_URL -> base_url
-            LOOKER_CLIENT_ID -> client_id
-            LOOKER_CLIENT_SECRET -> client_secret
         """
 
         config_data = cls.read_ini(filename, section)
 
-        api_version = cast(str, os.getenv("LOOKER_API_VERSION"))
-        if api_version:
-            config_data["api_version"] = api_version
+        env_api_version = cast(str, os.getenv("LOOKER_API_VERSION"))
+        if env_api_version:
+            config_data["api_version"] = env_api_version
 
         env_base_url = cast(str, os.getenv("LOOKER_BASE_URL"))
         if env_base_url:
             config_data["base_url"] = env_base_url
 
-        required = ["base_url", "client_id", "client_secret"]
-        missing = []
-        for param in required:
-            if not (config_data.get(param) or os.getenv(f"LOOKER_{param.upper()}")):
-                missing.append(param)
-        if missing:
-            raise error.SDKError(
-                f"Required parameters not found: {(', ').join(missing)}"
-            )
+        if not config_data.get("base_url"):
+            raise error.SDKError(f"Required parameter base_url not found.")
 
         converter = cattr.Converter()
         converter.register_structure_hook(bool, _convert_bool)
@@ -91,6 +82,10 @@ class ApiSettings(transport.TransportSettings):
             # If section is not specified, use first section in file
             section = section or cfg_parser.sections()[0]
             config_data = dict(cfg_parser[section])
+            # If setting is an empty string, remove it
+            for setting in list(config_data):
+                if config_data[setting] in ['""', "''"]:
+                    config_data.pop(setting)
             config_data["_section"] = cast(str, section)
             config_data["_filename"] = cast(str, filename)
         return config_data
