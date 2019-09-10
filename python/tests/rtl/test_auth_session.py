@@ -2,8 +2,8 @@
 # pylint: disable=redefined-outer-name
 
 import json
-
 import pytest  # type: ignore
+import urllib
 
 from looker_sdk import error
 from looker_sdk.rtl import auth_session as auth
@@ -31,6 +31,14 @@ client_secret=your_API3_client_secret
 embed_secret=your_embed_SSO_secret
 # Set to false if testing locally against self-signed certs. Otherwise leave True
 verify_ssl=True
+
+[NO_CREDENTIALS]
+base_url=https://host1.looker.com:19999
+
+[EMPTY_STRING_CREDENTIALS]
+base_url=https://host1.looker.com:19999
+client_id=
+client_secret=
         """
     )
     return filename
@@ -127,3 +135,70 @@ def test_is_sudo(auth_session: auth.AuthSession):
     assert auth_session.is_sudo == 5
     auth_session.logout()
     assert auth_session.is_sudo is None
+
+
+@pytest.mark.parametrize(
+    "test_section, test_env_client_id, test_env_client_secret",
+    [
+        ("NO_CREDENTIALS", "", ""),
+        ("NO_CREDENTIALS", "id123", ""),
+        ("NO_CREDENTIALS", "", "secret123"),
+        ("EMPTY_STRING_CREDENTIALS", "", ""),
+        ("EMPTY_STRING_CREDENTIALS", "id123", ""),
+        ("EMPTY_STRING_CREDENTIALS", "", "secret123"),
+    ],
+)
+def test_it_fails_with_missing_credentials(
+    config_file, monkeypatch, test_section, test_env_client_id, test_env_client_secret
+):
+    monkeypatch.setenv("LOOKER_CLIENT_ID", test_env_client_id)
+    monkeypatch.setenv("LOOKER_CLIENT_SECRET", test_env_client_secret)
+
+    settings = api_settings.ApiSettings.configure(config_file, test_section)
+    auth_session = auth.AuthSession(
+        settings, MockTransport.configure(settings), serialize.deserialize
+    )
+
+    with pytest.raises(error.SDKError) as exc_info:
+        auth_session.authenticate()
+    assert "auth credentials not found" in str(exc_info.value)
+
+
+@pytest.mark.parametrize(
+    "test_env_client_id, test_env_client_secret, expected_id, expected_secret",
+    [
+        ("", "", "your_API3_client_id", "your_API3_client_secret"),
+        ("id123", "secret123", "id123", "secret123"),
+    ],
+)
+def test_env_variables_override_config_file_credentials(
+    auth_session: auth.AuthSession,
+    mocker,
+    monkeypatch,
+    test_env_client_id,
+    test_env_client_secret,
+    expected_id,
+    expected_secret,
+):
+    monkeypatch.setenv("LOOKER_CLIENT_ID", test_env_client_id)
+    monkeypatch.setenv("LOOKER_CLIENT_SECRET", test_env_client_secret)
+    mocked_request = mocker.patch.object(MockTransport, "request")
+    mocked_request.return_value = transport.Response(
+        ok=True,
+        value=json.dumps(
+            {
+                "access_token": "AdminAccessToken",
+                "token_type": "Bearer",
+                "expires_in": 3600,
+            }
+        ),
+    )
+
+    auth_session.authenticate()
+
+    expected_body = urllib.parse.urlencode(
+        {"client_id": expected_id, "client_secret": expected_secret}
+    ).encode("utf-8")
+    mocked_request.assert_called
+    actual_request_body = mocked_request.call_args[1]["body"]
+    assert actual_request_body == expected_body

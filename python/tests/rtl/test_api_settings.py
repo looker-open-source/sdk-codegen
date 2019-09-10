@@ -3,6 +3,7 @@
 
 import pytest  # type: ignore
 
+from looker_sdk import error
 from looker_sdk.rtl import api_settings
 
 
@@ -36,19 +37,12 @@ verify_ssl=True
 
 [BARE_MINIMUM]
 base_url=https://host3.looker.com:19999/
-client_id=myclientid
-client_secret=myclientsecret
 
 [BARE]
 # Empty section
-[BARE_MIN_NO_VALUES]
-base_url=https://host3.looker.com:19999/
-client_id=""
-client_secret=
 
-[MISSING_BASE_URL]
-client_id=your_API3_client_id
-client_secret=your_API3_client_secret
+[BARE_MIN_NO_VALUES]
+base_url=""
 """
     )
     return filename
@@ -60,6 +54,9 @@ def test_settings_defaults_to_looker_section(config_file):
     """
     settings = api_settings.ApiSettings.configure(config_file)
     assert settings.base_url == "https://host1.looker.com:19999"
+    # API credentials are not set as attributes in ApiSettings
+    assert not hasattr(settings, "client_id")
+    assert not hasattr(settings, "client_secret")
 
 
 @pytest.mark.parametrize(
@@ -78,19 +75,20 @@ def test_it_retrieves_section_by_name(
     settings = api_settings.ApiSettings.configure(config_file, test_section)
     assert settings.base_url == expected_url
     assert settings.api_version == expected_api_version
+    assert not hasattr(settings, "client_id")
+    assert not hasattr(settings, "client_secret")
 
 
 def test_it_assigns_defaults_to_empty_settings(config_file):
-    """ApiSettings assigns Nones to optional settings that are empty in the
+    """ApiSettings assigns defaults to optional settings that are empty in the
     config file.
     """
     settings = api_settings.ApiSettings.configure(config_file, "BARE_MINIMUM")
     assert settings.api_version == "3.1"
     assert settings.base_url == "https://host3.looker.com:19999/"
-    assert settings.client_id == "myclientid"
-    assert settings.client_secret == "myclientsecret"
-    assert settings.embed_secret == ""
     assert settings.verify_ssl
+    assert not hasattr(settings, "client_id")
+    assert not hasattr(settings, "client_secret")
 
 
 def test_it_fails_with_a_bad_section_name(config_file):
@@ -130,34 +128,36 @@ def test_versioned_api_url_is_built_properly(config_file, test_url, expected_url
         pytest.param("BARE_MINIMUM", id="Overriding with env variables"),
     ],
 )
-def test_credentials_from_env_variables_override_config_file(
+def test_settings_from_env_variables_override_config_file(
     monkeypatch, config_file, test_section
 ):
     """ApiSettings should read settings defined as env variables.
     """
     monkeypatch.setenv("LOOKER_BASE_URL", "https://host1.looker.com:19999")
+    monkeypatch.setenv("LOOKER_API_VERSION", "3.0")
     monkeypatch.setenv("LOOKER_CLIENT_ID", "id123")
     monkeypatch.setenv("LOOKER_CLIENT_SECRET", "secret123")
-    monkeypatch.setenv("LOOKER_EMBED_SECRET", "embedsecret123")
 
     settings = api_settings.ApiSettings.configure(config_file, section=test_section)
     assert settings.base_url == "https://host1.looker.com:19999"
-    assert settings.client_id == "id123"
-    assert settings.client_secret == "secret123"
-    assert settings.embed_secret == "embedsecret123"
+    assert settings.api_version == "3.0"
+    # API credentials are still not set as attributes when read from env variables
+    assert not hasattr(settings, "client_id")
+    assert not hasattr(settings, "client_secret")
 
 
 def test_configure_with_no_file(monkeypatch):
-    """ApiSettings should throw an error if env variables are defined but empty.
+    """ApiSettings should be instantiated if required parameters all exist in env
+    variables.
     """
     monkeypatch.setenv("LOOKER_BASE_URL", "https://host1.looker.com:19999")
     monkeypatch.setenv("LOOKER_CLIENT_ID", "id123")
     monkeypatch.setenv("LOOKER_CLIENT_SECRET", "secret123")
 
-    settings = api_settings.ApiSettings.configure('no-such-file')
+    settings = api_settings.ApiSettings.configure("no-such-file")
     assert settings.base_url == "https://host1.looker.com:19999"
-    assert settings.client_id == "id123"
-    assert settings.client_secret == "secret123"
+    assert not hasattr(settings, "client_id")
+    assert not hasattr(settings, "client_secret")
 
 
 @pytest.mark.parametrize(
@@ -165,21 +165,20 @@ def test_configure_with_no_file(monkeypatch):
     [
         pytest.param("BARE", id="Empty config file"),
         pytest.param("BARE_MIN_NO_VALUES", id="Required settings are empty strings"),
-        pytest.param("MISSING_BASE_URL", id="Missing base url"),
     ],
 )
 def test_it_fails_if_required_settings_are_not_found(config_file, test_section):
     """ApiSettings should throw an error if required settings are not found.
     """
-    with pytest.raises(TypeError):
+    with pytest.raises(error.SDKError):
         api_settings.ApiSettings.configure(config_file, test_section)
 
 
 def test_it_fails_when_env_variables_are_defined_but_empty(config_file, monkeypatch):
-    """ApiSettings should throw an error if env variables are defined but empty.
+    """ApiSettings should throw an error if required settings are passed as empty
+    env variables.
     """
-    monkeypatch.setenv("LOOKER_CLIENT_ID", "")
-    monkeypatch.setenv("LOOKER_CLIENT_SECRET", "")
+    monkeypatch.setenv("LOOKER_BASE_URL", "")
 
-    with pytest.raises(TypeError):
-        api_settings.ApiSettings.configure(config_file, "BARE_MIN_NO_VALUES")
+    with pytest.raises(error.SDKError):
+        api_settings.ApiSettings.configure(config_file, "BARE")
