@@ -18,6 +18,7 @@ setuptools = "*"
 wheel = "*"
 pyyaml = "*"
 pytest-pudb = "*"
+pytest-mock = "*"
 
 [packages]
 requests = "*"

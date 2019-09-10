@@ -128,7 +128,7 @@ def test_versioned_api_url_is_built_properly(config_file, test_url, expected_url
         pytest.param("BARE_MINIMUM", id="Overriding with env variables"),
     ],
 )
-def test_credentials_from_env_variables_override_config_file(
+def test_settings_from_env_variables_override_config_file(
     monkeypatch, config_file, test_section
 ):
     """ApiSettings should read settings defined as env variables.
