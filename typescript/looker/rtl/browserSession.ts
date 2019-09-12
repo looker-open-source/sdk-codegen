@@ -37,7 +37,9 @@ export class BrowserSession implements IAuthorizer {
   }
 
   get activeToken() {
-    const meta = document.head.querySelector('[name=csrf-token]') as HTMLMetaElement
+    const meta = document.head.querySelector(
+      '[name=csrf-token]',
+    ) as HTMLMetaElement
     return meta ? meta.content : ''
   }
 
@@ -66,7 +68,9 @@ export class BrowserSession implements IAuthorizer {
 
   async login(sudoId?: string | number): Promise<IAccessToken> {
     if (!!sudoId) {
-      throw new Error('Sudo functionality is not currently supported in BrowserSession')
+      throw new Error(
+        'Sudo functionality is not currently supported in BrowserSession',
+      )
     }
     // TODO support sudo directly in the Browser session?
     return this.getToken()
@@ -78,5 +82,4 @@ export class BrowserSession implements IAuthorizer {
 
   reset(): void {
   }
-
 }

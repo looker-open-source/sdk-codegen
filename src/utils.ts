@@ -28,7 +28,7 @@ import { execSync } from 'child_process'
 export const utf8 = 'utf-8'
 
 // ANSI colors
-const Reset = "\x1b[0m"
+const Reset = '\x1b[0m'
 // const Bright = "\x1b[1m"
 // const Dim = "\x1b[2m"
 // const Underscore = "\x1b[4m"

@@ -22,7 +22,13 @@
  * THE SOFTWARE.
  */
 
-import { SDKResponse, HttpMethod, sdkError, IAuthorizer } from './transport'
+import {
+  SDKResponse,
+  HttpMethod,
+  sdkError,
+  IAuthorizer,
+  ITransportSettings,
+} from './transport'
 
 export class APIMethods {
   constructor(public authSession: IAuthorizer) {
@@ -66,16 +72,18 @@ export class APIMethods {
    * A helper method to decorate an API request with authentication information
    * before submitting the request to the API
    *
-   * @param method {HttpMethod} type of HTTP method
-   * @param path {string} API endpoint path
-   * @param queryParams {any} Optional query params collection for request
-   * @param body {any} Optional body for request
+   * @param {HttpMethod} method type of HTTP method
+   * @param {string} path API endpoint path
+   * @param {any} queryParams Optional query params collection for request
+   * @param {any} body Optional body for request
+   * @param {Partial<ITransportSettings>} options Optional overrides like timeout and verify_ssl
    */
   async authRequest<TSuccess, TError>(
     method: HttpMethod,
     path: string,
     queryParams?: any,
-    body?: any
+    body?: any,
+    options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
     return this.authSession.transport.request<TSuccess, TError>(
       method,
@@ -84,7 +92,8 @@ export class APIMethods {
       body,
       (init: any) => {
         return this.authSession.authenticate(init)
-      }
+      },
+      options,
     )
   }
 
@@ -105,53 +114,95 @@ export class APIMethods {
   async get<TSuccess, TError>(
     path: string,
     queryParams?: any,
-    body?: any
+    body?: any,
+    options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.authRequest<TSuccess, TError>('GET', path, queryParams, body)
+    return this.authRequest<TSuccess, TError>(
+      'GET',
+      path,
+      queryParams,
+      body,
+      options,
+    )
   }
 
   /** Make a HEAD request */
   async head<TSuccess, TError>(
     path: string,
     queryParams?: any,
-    body?: any
+    body?: any,
+    options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.authRequest<TSuccess, TError>('HEAD', path, queryParams, body)
+    return this.authRequest<TSuccess, TError>(
+      'HEAD',
+      path,
+      queryParams,
+      body,
+      options,
+    )
   }
 
   /** Make a DELETE request */
   async delete<TSuccess, TError>(
     path: string,
     queryParams?: any,
-    body?: any
+    body?: any,
+    options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.authRequest<TSuccess, TError>('DELETE', path, queryParams, body)
+    return this.authRequest<TSuccess, TError>(
+      'DELETE',
+      path,
+      queryParams,
+      body,
+      options,
+    )
   }
 
   /** Make a POST request */
   async post<TSuccess, TError>(
     path: string,
     queryParams?: any,
-    body?: any
+    body?: any,
+    options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.authRequest<TSuccess, TError>('POST', path, queryParams, body)
+    return this.authRequest<TSuccess, TError>(
+      'POST',
+      path,
+      queryParams,
+      body,
+      options,
+    )
   }
 
   /** Make a PUT request */
   async put<TSuccess, TError>(
     path: string,
     queryParams?: any,
-    body?: any
+    body?: any,
+    options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.authRequest<TSuccess, TError>('PUT', path, queryParams, body)
+    return this.authRequest<TSuccess, TError>(
+      'PUT',
+      path,
+      queryParams,
+      body,
+      options,
+    )
   }
 
   /** Make a PATCH request */
   async patch<TSuccess, TError>(
     path: string,
     queryParams?: any,
-    body?: any
+    body?: any,
+    options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
-    return this.authRequest<TSuccess, TError>('PATCH', path, queryParams, body)
+    return this.authRequest<TSuccess, TError>(
+      'PATCH',
+      path,
+      queryParams,
+      body,
+      options,
+    )
   }
 }

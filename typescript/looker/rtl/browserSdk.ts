@@ -31,7 +31,7 @@ import { BrowserTransport } from './browserTransport'
 import { IAuthorizer, ITransport } from './transport'
 import { BrowserSession } from './browserSession'
 import { DefaultSettings, IApiSettings } from './apiSettings'
-import { LookerSDK } from '..'
+import { LookerSDK } from '../sdk/methods'
 
 export const BrowserSettings = (): IApiSettings => {
   const settings = DefaultSettings()
@@ -49,11 +49,14 @@ export class LookerBrowserSDK {
    *
    * @param session Defaults to `NodeSession` which logs in the user
    */
-  static createClient(settings?: IApiSettings, transport?: ITransport, session?: IAuthorizer) {
+  static createClient(
+    settings?: IApiSettings,
+    transport?: ITransport,
+    session?: IAuthorizer,
+  ) {
     settings = settings || BrowserSettings()
     transport = transport || new BrowserTransport(settings)
     session = session || new BrowserSession(settings, transport)
     return new LookerSDK(session)
   }
-
 }

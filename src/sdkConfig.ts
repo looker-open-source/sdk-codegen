@@ -31,10 +31,6 @@ export interface SDKConfigProps {
   base_url: string
   client_id: string
   client_secret: string
-  embed_secret: string
-  user_id: string
-  verbose: boolean
-  verify_ssl: boolean
 }
 
 export interface SDKConfigSection {

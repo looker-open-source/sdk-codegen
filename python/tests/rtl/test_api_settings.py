@@ -22,8 +22,6 @@ base_url=https://host1.looker.com:19999
 client_id=your_API3_client_id
 # API 3 client secret
 client_secret=your_API3_client_secret
-# Optional embed secret for SSO embedding
-embed_secret=your_embed_SSO_secret
 # Set to false if testing locally against self-signed certs. Otherwise leave True
 verify_ssl=True
 
@@ -32,7 +30,6 @@ api_version=3.0
 base_url=https://host2.looker.com:19999
 client_id=your_API3_client_id
 client_secret=your_API3_client_secret
-embed_secret=your_embed_SSO_secret
 verify_ssl=True
 
 [BARE_MINIMUM]

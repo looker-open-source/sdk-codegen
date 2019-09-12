@@ -55,5 +55,4 @@ export class SDK {
   static createClient(session: IAuthorizer) {
     return new LookerSDK(session)
   }
-
 }

@@ -66,5 +66,4 @@ export class AuthToken implements IAccessToken {
     this.access_token = ''
     this.expires_in = 0
   }
-
 }

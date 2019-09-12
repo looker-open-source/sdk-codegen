@@ -23,7 +23,13 @@
  */
 
 import { IError } from '../sdk/models'
-import { IRequestInit, ITransport, SDKResponse, sdkError, IAuthorizer } from './transport'
+import {
+  IRequestInit,
+  ITransport,
+  SDKResponse,
+  sdkError,
+  IAuthorizer,
+} from './transport'
 import { AuthToken } from './authToken'
 import { NodeTransport } from './nodeTransport'
 import { IApiSettingsIniFile } from './nodeSettings'
@@ -41,30 +47,29 @@ interface IAccessToken {
   /**
    * Access Token used for API calls
    */
-  access_token?: string
+  access_token?: string;
   /**
    * Type of token
    */
-  token_type?: string
+  token_type?: string;
 
   /**
    * Number of seconds before the token expires
    */
-  expires_in?: number
-
+  expires_in?: number;
 }
 
 export interface IAuthSession extends IAuthorizer {
   sudoId: string;
 
   // Authentication token
-  getToken(): Promise<IAccessToken>
+  getToken(): Promise<IAccessToken>;
 
-  isSudo(): boolean
+  isSudo(): boolean;
 
-  login(sudoId?: string | number): Promise<IAccessToken>
+  login(sudoId?: string | number): Promise<IAccessToken>;
 
-  reset(): void
+  reset(): void;
 }
 
 export class NodeSession implements IAuthSession {
@@ -105,12 +110,13 @@ export class NodeSession implements IAuthSession {
    */
   async authenticate(init: IRequestInit) {
     const token = await this.getToken()
-    if (token && token.access_token) init.headers.Authorization = `token ${token.access_token}`
+    if (token && token.access_token)
+      init.headers.Authorization = `token ${token.access_token}`
     return init
   }
 
   isSudo() {
-    return (!!this.sudoId) && (this._sudoToken.isActive())
+    return !!this.sudoId && this._sudoToken.isActive()
   }
 
   /**
@@ -139,7 +145,7 @@ export class NodeSession implements IAuthSession {
    *
    */
   async login(sudoId?: string | number) {
-    if (sudoId || (sudoId !== this.sudoId) || (!this.isAuthenticated())) {
+    if (sudoId || sudoId !== this.sudoId || !this.isAuthenticated()) {
       if (sudoId) {
         await this._login(sudoId.toString())
       } else {
@@ -160,7 +166,9 @@ export class NodeSession implements IAuthSession {
     return result
   }
 
-  private async ok<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
+  private async ok<TSuccess, TError>(
+    promise: Promise<SDKResponse<TSuccess, TError>>,
+  ) {
     const result = await promise
     if (result.ok) {
       return result.value
@@ -193,14 +201,19 @@ export class NodeSession implements IAuthSession {
       // only retain client API3 credentials for the lifetime of the login request
       const section = this.settings.readIni()
       const client_id = process.env[strLookerClientId] || section['client_id']
-      const client_secret = process.env[strLookerClientSecret] || section['client_secret']
+      const client_secret =
+        process.env[strLookerClientSecret] || section['client_secret']
       // authenticate client
       const token = await this.ok(
-        this.transport.request<IAccessToken, IError>(strPost, '/login',
+        this.transport.request<IAccessToken, IError>(
+          strPost,
+          '/login',
           {
             client_id,
-            client_secret
-          }))
+            client_secret,
+          },
+        ),
+      )
       this._authToken.setToken(token)
     }
 
@@ -218,7 +231,8 @@ export class NodeSession implements IAuthSession {
             init.headers.Authorization = `token ${token.access_token}`
           }
           return init
-        }
+        },
+        this.settings,
       )
 
       const accessToken = await this.ok(promise)
@@ -242,7 +256,8 @@ export class NodeSession implements IAuthSession {
           init.headers.Authorization = `token ${token.access_token}`
         }
         return init
-      }
+      },
+      this.settings,
     )
 
     await this.ok(promise)
@@ -261,5 +276,4 @@ export class NodeSession implements IAuthSession {
     }
     return true
   }
-
 }

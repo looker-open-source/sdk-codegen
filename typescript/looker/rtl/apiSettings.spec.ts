@@ -23,6 +23,7 @@
  */
 
 import { ApiSettings, strBadConfiguration, ValueSettings } from './apiSettings'
+import { defaultTimeout } from './transport'
 
 describe('SDK configuration', () => {
   describe('ValueSettings', () => {
@@ -30,20 +31,22 @@ describe('SDK configuration', () => {
       const settings = ValueSettings({})
       expect(settings.api_version).toEqual('3.1')
       expect(settings.base_url).toEqual('')
-      expect(settings.embed_secret).toEqual('')
+      expect(settings.verify_ssl).toEqual(true)
+      expect(settings.timeout).toEqual(defaultTimeout)
     })
 
     it('retrieves the first section by name', () => {
       const settings = ValueSettings({
         LOOKER_API_VERSION: '3.0',
         LOOKER_BASE_URL: 'base',
-        LOOKER_EMBED_SECRET: 'embed'
+        LOOKER_VERIFY_SSL: 'false',
+        LOOKER_TIMEOUT: '30',
       })
       expect(settings.api_version).toEqual('3.0')
       expect(settings.base_url).toEqual('base')
-      expect(settings.embed_secret).toEqual('embed')
+      expect(settings.verify_ssl).toEqual(false)
+      expect(settings.timeout).toEqual(30)
     })
-
   })
 
   describe('ApiSettings', () => {
@@ -51,11 +54,13 @@ describe('SDK configuration', () => {
       const settings = new ApiSettings({
         api_version: '3.1',
         base_url: 'base',
-        embed_secret: 'embed'
+        verify_ssl: false,
+        timeout: 30,
       })
       expect(settings.api_version).toEqual('3.1')
       expect(settings.base_url).toEqual('base')
-      expect(settings.embed_secret).toEqual('embed')
+      expect(settings.verify_ssl).toEqual(false)
+      expect(settings.timeout).toEqual(30)
     })
 
     it('fails with missing required values', () => {
@@ -63,8 +68,7 @@ describe('SDK configuration', () => {
         api_version: '',
       }
 
-      expect(() => new ApiSettings(values))
-        .toThrow(strBadConfiguration)
+      expect(() => new ApiSettings(values)).toThrow(strBadConfiguration)
     })
   })
 })

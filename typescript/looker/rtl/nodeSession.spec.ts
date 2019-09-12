@@ -25,41 +25,39 @@
 import { NodeTransport } from './nodeTransport'
 import { NodeSession } from './nodeSession'
 import { NodeSettingsIniFile } from './nodeSettings'
+import * as fs from 'fs'
+import * as yaml from 'js-yaml'
 
+// TODO create destructurable function for test path resolution
+const dataFile = 'test/data.yml'
+// slightly hackish data path determination for tests
+const root = fs.existsSync(dataFile) ? '' : '../../'
+const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, 'utf-8'))
+const localIni = `${root}${testData['iniFile']}`
 
 describe('NodeSession', () => {
-  const localIni = 'looker.ini'
   const settings = new NodeSettingsIniFile(localIni, 'Looker')
+  const transport = new NodeTransport(settings)
 
   describe('isAuthenticated', () => {
     it('unauthenticated logout returns false', async () => {
-      const session = new NodeSession(settings, new NodeTransport(settings))
+      const session = new NodeSession(settings, transport)
       expect(session.isAuthenticated()).toEqual(false)
       const actual = await session.logout()
       expect(actual).toEqual(false)
     })
-
   })
 
   describe('integration tests', () => {
     it('initializes', () => {
-      const session = new NodeSession(settings, new NodeTransport(settings))
+      const session = new NodeSession(settings, transport)
       expect(session.settings).toEqual(settings)
       expect(session.isAuthenticated()).toEqual(false)
       expect(session.isSudo()).toEqual(false)
     })
 
-    it('default auth logs in with good credentials', async () => {
-      const session = new NodeSession(settings, new NodeTransport(settings))
-      expect(session.isAuthenticated()).toEqual(false)
-      const token = await session.login()
-      expect(token).toBeDefined()
-      expect(token.access_token).toBeDefined()
-      expect(session.isAuthenticated()).toEqual(true)
-    })
-
     it('default auth logs in and out with good credentials', async () => {
-      const session = new NodeSession(settings, new NodeTransport(settings))
+      const session = new NodeSession(settings, transport)
       expect(session.isAuthenticated()).toEqual(false)
       const token = await session.login()
       expect(token).toBeDefined()
@@ -69,7 +67,5 @@ describe('NodeSession', () => {
       expect(result).toEqual(true)
       expect(session.isAuthenticated()).toEqual(false)
     })
-
   })
-
 })

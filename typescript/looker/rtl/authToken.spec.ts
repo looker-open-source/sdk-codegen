@@ -37,7 +37,7 @@ describe('AccessToken', () => {
     const actual = new AuthToken({
       access_token: 'all-access',
       token_type: 'backstage',
-      expires_in: 3600
+      expires_in: 3600,
     })
     expect(actual.access_token).toEqual('all-access')
     expect(actual.token_type).toEqual('backstage')

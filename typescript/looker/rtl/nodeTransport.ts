@@ -29,61 +29,42 @@ import {
   addQueryParams,
   ITransportSettings,
   Authenticator,
-  StatusCode, agentTag
+  StatusCode,
+  agentTag,
+  HttpMethod,
+  defaultTimeout,
 } from './transport'
 
-import * as rq from 'request'
+import rq from 'request'
 import rp from 'request-promise-native'
 import { Response } from 'request'
 
-type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
+type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions;
 
 export class NodeTransport implements ITransport {
   apiPath = ''
 
-  constructor(private options: ITransportSettings) {
+  constructor(private readonly options: ITransportSettings) {
     this.options = options
     this.apiPath = `${options.base_url}/api/${options.api_version}`
   }
 
   async request<TSuccess, TError>(
-    method: string,
+    method: HttpMethod,
     path: string,
     queryParams?: any,
     body?: any,
-    authenticator?: Authenticator
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
-    let headers: any = {
-      'User-Agent': agentTag,
-      ...this.options.headers
-    }
-    if (body) {
-      // if (body instanceof Object) {
-      //   // TODO figure out this ugliness
-      //   body = JSON.parse(JSON.stringify(body))
-      // }
-      headers = {
-        'User-Agent': agentTag,
-        // 'Content-Length': Buffer.byteLength(body),
-        ...this.options.headers
-      }
-    }
-    // is this an API-versioned call?
-    let requestPath = (authenticator ? this.apiPath : this.options.base_url) + addQueryParams(path, queryParams)
-    let init: RequestOptions = {
-      url: requestPath,
-      rejectUnauthorized: false, // TODO make this configurable for tests. Should default to True
-      headers: headers,
-      body: body ? body : undefined,
-      json: !!body,
-      resolveWithFullResponse: true,
-      method
-    }
-
-    if (authenticator) {
-      // Automatic authentication process for the request
-      init = await authenticator(init)
-    }
+    let init = await this.initRequest(
+      method,
+      path,
+      queryParams,
+      body,
+      authenticator,
+      options,
+    )
     const req = rp(init).promise()
 
     try {
@@ -100,14 +81,92 @@ export class NodeTransport implements ITransport {
     } catch (e) {
       const error: ISDKError = {
         type: 'sdk_error',
-        message: typeof e.message === 'string' ? e.message : `The SDK call was not successful. The error was '${e}'.`
+        message:
+          typeof e.message === 'string'
+            ? e.message
+            : `The SDK call was not successful. The error was '${e}'.`,
       }
       return {ok: false, error}
     }
   }
 
+  /**
+   * should the request verify SSL?
+   * @param {Partial<ITransportSettings>} options Defaults to the instance options values
+   * @returns {boolean} true if the request should require full SSL verification
+   */
+  verifySsl(options?: Partial<ITransportSettings>) {
+    if (!options) options = this.options
+    return 'verify_ssl' in options ? options.verify_ssl : true
+  }
+
+  /**
+   * Request timeout in seconds
+   * @param {Partial<ITransportSettings>} options Defaults to the instance options values
+   * @returns {number | undefined}
+   */
+  timeout(options?: Partial<ITransportSettings>): number {
+    if (!options) options = this.options
+    if ('timeout' in options && options.timeout) return options.timeout
+    return defaultTimeout
+  }
+
+  // async stream<TError>(
+  //   method: HttpMethod,
+  //   path: string,
+  //   queryParams?: any,
+  //   body?: any,
+  //   authenticator?: Authenticator
+  // ): Promise<SDKResponse<rq.Response, TError>> {
+  //   let init = await this.initRequest(method, path, queryParams, body, authenticator)
+  //   let req: rq.Request = rq.defaults(init)
+  // }
+
+  private async initRequest(
+    method: HttpMethod,
+    path: string,
+    queryParams?: any,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>,
+  ) {
+    options = options ? {...this.options, ...options} : this.options
+    let headers: any = {
+      'User-Agent': agentTag,
+      ...options.headers,
+    }
+    if (body) {
+      headers = {
+        'User-Agent': agentTag,
+        ...options.headers,
+      }
+    }
+    // is this an API-versioned call?
+    let requestPath =
+      (authenticator ? this.apiPath : options.base_url) +
+      addQueryParams(path, queryParams)
+    let init: RequestOptions = {
+      url: requestPath,
+      headers: headers,
+      body: body ? body : undefined,
+      json: !!body,
+      resolveWithFullResponse: true,
+      rejectUnauthorized: this.verifySsl(options),
+      timeout: this.timeout(options) * 1000,
+      method,
+    }
+
+    if (authenticator) {
+      // Automatic authentication process for the request
+      init = await authenticator(init)
+    }
+    return init
+  }
+
   private ok(res: rq.Response) {
-    return res.statusCode >= StatusCode.OK && (res.statusCode <= StatusCode.IMUsed)
+    return (
+      res.statusCode >= StatusCode.OK && res.statusCode <= StatusCode.IMUsed
+    )
   }
 }
 

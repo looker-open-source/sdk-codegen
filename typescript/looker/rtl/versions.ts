@@ -24,4 +24,5 @@
 
 export const lookerVersion = 'undefined'
 export const apiVersion = 'undefined'
-export const sdkVersion = `${lookerVersion}.${apiVersion}`
+export const sdkVersion = `${apiVersion}.${lookerVersion}`
+export const environmentPrefix = 'LOOKER'

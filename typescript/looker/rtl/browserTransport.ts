@@ -22,19 +22,25 @@
  * THE SOFTWARE.
  */
 
-import { ISDKError, SDKResponse, ITransport, addQueryParams, ITransportSettings } from './transport'
+import {
+  ISDKError,
+  SDKResponse,
+  ITransport,
+  addQueryParams,
+  ITransportSettings,
+  HttpMethod,
+} from './transport'
 
 export class BrowserTransport implements ITransport {
-
   constructor(private options: ITransportSettings) {
     this.options = options
   }
 
   async request<TSuccess, TError>(
-    method: string,
+    method: HttpMethod,
     path: string,
     queryParams?: any,
-    body?: any
+    body?: any,
   ): Promise<SDKResponse<TSuccess, TError>> {
     const req = fetch(
       this.options.base_url + addQueryParams(path, queryParams),
@@ -42,8 +48,8 @@ export class BrowserTransport implements ITransport {
         body: body ? JSON.stringify(body) : undefined,
         headers: this.options.headers || new Headers(),
         credentials: 'same-origin',
-        method
-      }
+        method,
+      },
     )
 
     try {
@@ -58,12 +64,14 @@ export class BrowserTransport implements ITransport {
     } catch (e) {
       const error: ISDKError = {
         type: 'sdk_error',
-        message: typeof e.message === 'string' ? e.message : `The SDK call was not successful. The error was '${e}'.`
+        message:
+          typeof e.message === 'string'
+            ? e.message
+            : `The SDK call was not successful. The error was '${e}'.`,
       }
       return {ok: false, error}
     }
   }
-
 }
 
 async function parseResponse(contentType: string, res: Response) {

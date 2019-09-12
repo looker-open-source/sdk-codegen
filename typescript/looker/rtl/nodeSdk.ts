@@ -24,7 +24,9 @@
 
 import { IAuthorizer, ITransport } from './transport'
 import { IApiSettingsIniFile, NodeSettingsIniFile } from './nodeSettings'
-import { LookerSDK, NodeSession, NodeTransport } from '..'
+import { LookerSDK } from '../sdk/methods'
+import { NodeSession } from './nodeSession'
+import { NodeTransport } from './nodeTransport'
 
 /**
  * @class SDK
@@ -42,11 +44,14 @@ export class LookerNodeSDK {
    *
    * @param session Defaults to `NodeSession` which logs in the user
    */
-  static createClient(settings?: IApiSettingsIniFile, transport?: ITransport, session?: IAuthorizer) {
+  static createClient(
+    settings?: IApiSettingsIniFile,
+    transport?: ITransport,
+    session?: IAuthorizer,
+  ) {
     settings = settings || new NodeSettingsIniFile('looker.ini')
     transport = transport || new NodeTransport(settings)
     session = session || new NodeSession(settings, transport)
     return new LookerSDK(session)
   }
-
 }

@@ -69,11 +69,11 @@ export const openApiFileName = (name: string, props: SDKConfigProps) =>
 
 const badAuth = (content: string) => content.indexOf('Requires authentication') > 0
 
-const checkCertError = (err: Error) : boolean => {
+const checkCertError = (err: Error): boolean => {
   if (err.message && err.message.match(/self signed certificate/gi)) {
     warn(`
 NOTE! Certificate validation can be disabled with:
-  NODE_TLS_REJECT_UNAUTHORIZED="0" yarn {command}
+  NODE_TLS_REJECT_UNAUTHORIZED="0" {original command}
 `)
     return true
   }
@@ -130,7 +130,7 @@ export const logFetch = async (name: string, props: SDKConfigProps) => {
   return specFile
 }
 
-export const getVersionInfo = async (props: SDKConfigProps) : Promise<IVersionInfo> =>{
+export const getVersionInfo = async (props: SDKConfigProps): Promise<IVersionInfo> => {
   try {
     const lookerVersion = await fetchLookerVersion(props.base_url)
     return {

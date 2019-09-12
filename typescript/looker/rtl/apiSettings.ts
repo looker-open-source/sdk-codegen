@@ -22,22 +22,23 @@
  * THE SOFTWARE.
  */
 
-import { agentTag, ITransportSettings } from './transport'
+import { agentTag, defaultTimeout, ITransportSettings } from './transport'
+import { environmentPrefix } from './versions'
 
-export const strLookerBaseUrl = 'LOOKER_BASE_URL'
-export const strLookerApiVersion = 'LOOKER_API_VERSION'
-export const strLookerEmbedSecret = 'LOOKER_EMBED_SECRET'
+export const strLookerBaseUrl = `${environmentPrefix}_BASE_URL`
+export const strLookerApiVersion = `${environmentPrefix}_API_VERSION`
+export const strLookerVerifySsl = `${environmentPrefix}_VERIFY_SSL`
+export const strLookerTimeout = `${environmentPrefix}_TIMEOUT`
 export const strBadConfiguration = `${agentTag} configuration error:
 Missing required configuration values like base_url and api_version
 `
 
 export interface IValueSettings {
-  [name: string]: string
+  [name: string]: string;
 }
 
 export interface IApiSettings extends ITransportSettings {
-  embed_secret: string
-  isConfigured(): boolean
+  isConfigured(): boolean;
 }
 
 /**
@@ -45,11 +46,13 @@ export interface IApiSettings extends ITransportSettings {
  * @constructor
  *
  */
-export const DefaultSettings = () => ({
-  base_url: '',
-  api_version: '3.1', // default to API 3.1
-  embed_secret: ''
-} as IApiSettings)
+export const DefaultSettings = () =>
+  ({
+    base_url: '',
+    api_version: '3.1', // default to API 3.1
+    verify_ssl: true,
+    timeout: defaultTimeout,
+  } as IApiSettings)
 
 /**
  * Read any key/value collection for environment variable names and return as IApiSettings
@@ -60,13 +63,19 @@ export const DefaultSettings = () => ({
  *  - LOOKER_API_VERSION
  *  - LOOKER_CLIENT_ID
  *  - LOOKER_CLIENT_SECRET
- *  - LOOKER_EMBED_SECRET
+ *  - LOOKER_VERIFY_SSL
+ *  - LOOKER_TIMEOUT
  */
-export const ValueSettings  = (values: IValueSettings): IApiSettings => {
+export const ValueSettings = (values: IValueSettings): IApiSettings => {
   const settings = DefaultSettings()
   settings.api_version = values[strLookerApiVersion] || settings.api_version
   settings.base_url = values[strLookerBaseUrl] || settings.base_url
-  settings.embed_secret = values[strLookerEmbedSecret] || settings.embed_secret
+  if (strLookerVerifySsl in values) {
+    settings.verify_ssl = /true|1/i.test(values[strLookerVerifySsl])
+  }
+  if (strLookerTimeout in values) {
+    settings.timeout = parseInt(values[strLookerTimeout], 10)
+  }
   return settings
 }
 
@@ -81,14 +90,30 @@ export class ApiSettings implements IApiSettings {
   // tslint:disable-next-line: variable-name
   api_version: string = '3.1'
   // tslint:disable-next-line: variable-name
-  embed_secret: string = ''
+  verify_ssl: boolean = true
+  timeout: number = defaultTimeout
 
   constructor(settings: Partial<IApiSettings>) {
-    Object.assign(this, settings)
+    // coerce types to declared types since some paths could have non-conforming settings values
+    this.base_url = 'base_url' in settings ? settings.base_url! : this.base_url
+    this.api_version =
+      'api_version' in settings
+        ? settings.api_version!.toString()
+        : this.api_version
+    this.verify_ssl =
+      'verify_ssl' in settings
+        ? /true|1/i.test(settings.verify_ssl!.toString())
+        : this.verify_ssl
+    this.timeout =
+      'timeout' in settings
+        ? parseInt(settings.timeout!.toString())
+        : this.timeout
     if (!this.isConfigured()) {
       throw new Error(strBadConfiguration)
     }
   }
 
-  isConfigured() { return !!(this.base_url && this.api_version) }
+  isConfigured() {
+    return !!(this.base_url && this.api_version)
+  }
 }

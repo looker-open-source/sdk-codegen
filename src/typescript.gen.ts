@@ -293,10 +293,12 @@ export interface IDictionary<T> {
       let content = fs.readFileSync(stampFile, utf8)
       const lookerPattern = /lookerVersion = ['"]\d+\.\d+['"]/i
       const apiPattern = /apiVersion = ['"]\d+\.\d+['"]/i
+      const envPattern = /environmentPrefix = ['"]\d+\.\d+['"]/i
       content = content.replace(lookerPattern, `lookerVersion = '${this.versions.lookerVersion}'`)
       content = content.replace(apiPattern, `apiVersion = '${this.versions.apiVersion}'`)
+      content = content.replace(envPattern, `environmentPrefix = '${this.packageName.toUpperCase()}'`)
       fs.writeFileSync(stampFile, content, {encoding: utf8})
-      success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}` )
+      success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}`)
     } else {
       warn('Version information was not retrieved. Skipping SDK version updating.')
     }

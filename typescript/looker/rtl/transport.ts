@@ -33,6 +33,12 @@ import { IApiSettings } from './apiSettings'
 
 export const agentTag = `TS-SDK ${sdkVersion}`
 
+/**
+ * Default request timeout
+ * @type {number} default request timeout is 120 seconds, or two minutes
+ */
+export const defaultTimeout = 120
+
 export type HttpMethod =
   | 'GET'
   | 'POST'
@@ -111,70 +117,70 @@ export interface ITransport {
     path: string,
     queryParams?: any,
     body?: any,
-    authenticator?: Authenticator
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>>
 }
 
 /** A successful SDK call. */
 interface ISDKSuccessResponse<T> {
   /** Whether the SDK call was successful. */
-  ok: true
+  ok: true;
   /** The object returned by the SDK call. */
-  value: T
+  value: T;
 }
 
 /** An erroring SDK call. */
 interface ISDKErrorResponse<T> {
   /** Whether the SDK call was successful. */
-  ok: false
+  ok: false;
   /** The error object returned by the SDK call. */
-  error: T
+  error: T;
 }
 
 /** An error representing an issue in the SDK, like a network or parsing error. */
 export interface ISDKError {
-  type: 'sdk_error'
-  message: string
+  type: 'sdk_error';
+  message: string;
 }
 
 export type SDKResponse<TSuccess, TError> =
   | ISDKSuccessResponse<TSuccess>
-  | ISDKErrorResponse<TError | ISDKError>
+  | ISDKErrorResponse<TError | ISDKError>;
 
 export interface IAuthorizer {
-  settings: IApiSettings
-  transport: ITransport
+  settings: IApiSettings;
+  transport: ITransport;
 
   /** is the current session authenticated? */
   isAuthenticated(): boolean;
 
-  authenticate(init: IRequestInit): Promise<IRequestInit>
+  authenticate(init: IRequestInit): Promise<IRequestInit>;
 
-  logout(): Promise<boolean>
-
+  logout(): Promise<boolean>;
 }
 
 /** Generic http request property collection */
 export interface IRequestInit {
   /** body of request. optional */
-  body?: any
+  body?: any;
   /** headers for request. optional */
-  headers?: any
+  headers?: any;
   /** Http method for request. required. */
-  method: HttpMethod
+  method: HttpMethod;
   /** Redirect processing for request. optional */
-  redirect?: any
+  redirect?: any;
 
   /** http.Agent instance, allows custom proxy, certificate etc. */
-  agent?: Agent
+  agent?: Agent;
   /** support gzip/deflate content encoding. false to disable */
-  compress?: boolean
+  compress?: boolean;
   /** maximum redirect count. 0 to not follow redirect */
-  follow?: number
+  follow?: number;
   /** maximum response body size in bytes. 0 to disable */
-  size?: number
+  size?: number;
   /** req/res timeout in ms, it resets on redirect. 0 to disable (OS limit applies) */
-  timeout?: number
+  timeout?: number;
 }
 
 /** General purpose authentication callback */
@@ -183,11 +189,15 @@ export type Authenticator = (init: any) => any;
 /** Interface for API transport values */
 export interface ITransportSettings {
   /** base URL of host address */
-  base_url: string
+  base_url: string;
   /** api version */
-  api_version: string
+  api_version: string;
   /** standard headers to provide in all transport requests */
-  headers?: Headers
+  headers?: Headers;
+  /** whether to verify ssl certs or not. Defaults to true */
+  verify_ssl: boolean;
+  /** request timeout in seconds. Default to 30 */
+  timeout: number;
 }
 
 /** constructs the path argument including any optional query parameters

@@ -22,17 +22,23 @@
  * THE SOFTWARE.
  */
 
-import { ApiConfig, NodeSettingsIni, NodeSettingsIniFile } from './nodeSettings'
-import * as fs from "fs"
+import {
+  ApiConfig,
+  NodeSettingsIni,
+  NodeSettingsIniFile,
+} from './nodeSettings'
+import * as fs from 'fs'
 import * as yaml from 'js-yaml'
+import { defaultTimeout } from './transport'
 
+// TODO create destructurable function for test path resolution
 const dataFile = 'test/data.yml'
 // slightly hackish data path determination for tests
 const root = fs.existsSync(dataFile) ? '' : '../../'
 const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, 'utf-8'))
 const localIni = `${root}${testData['iniFile']}`
 
-describe('API settings ini', () => {
+describe('NodeSettings', () => {
   const contents = `
 [Looker]
 # API version is required. 3.1 and 3.0 are currently supported. 3.1 is the current version. 3.0 is deprecated.
@@ -43,10 +49,6 @@ base_url=https://self-signed.looker.com:19999
 client_id=your_API3_client_id
 # API 3 client secret
 client_secret=your_API3_client_secret
-# Optional embed secret for SSO embedding
-embed_secret=your_embed_SSO_secret
-# Set to false only if testing locally against self-signed certs. This item is ignored in Typescript/Javascript
-verify_ssl=True
 [Looker30]
 # API version is required. 3.1 and 3.0 are currently supported. 3.1 is the current version. 3.0 is deprecated.
 api_version=3.0
@@ -56,10 +58,10 @@ base_url=https://self-signed.looker.com:19999
 client_id=your_API3_client_id
 # API 3 client secret
 client_secret=your_API3_client_secret
-# Optional embed secret for SSO embedding
-embed_secret=your_embed_SSO_secret
-# Set to false only if testing locally against self-signed certs. This item is ignored in Typescript/Javascript
-verify_ssl=True
+# Set to false only if testing locally against self-signed certs.
+verify_ssl=False
+# timeout in seconds
+timeout=30
 `
   describe('ApiConfig', () => {
     it('discovers multiple sections', () => {
@@ -72,6 +74,8 @@ verify_ssl=True
     it('settings default to the first section', () => {
       const settings = new NodeSettingsIni(contents)
       expect(settings.api_version).toEqual('3.1')
+      expect(settings.timeout).toEqual(defaultTimeout)
+      expect(settings.verify_ssl).toEqual(true)
     })
 
     it('retrieves the first section by name', () => {
@@ -82,11 +86,14 @@ verify_ssl=True
     it('retrieves the second section by name', () => {
       const settings = new NodeSettingsIni(contents, 'Looker30')
       expect(settings.api_version).toEqual('3.0')
+      expect(settings.timeout).toEqual(30)
+      expect(settings.verify_ssl).toEqual(false)
     })
 
     it('fails with a bad section name', () => {
-      expect(() => new NodeSettingsIni(contents, 'NotAGoodLookForYou'))
-        .toThrow(/No section named "NotAGoodLookForYou"/)
+      expect(() => new NodeSettingsIni(contents, 'NotAGoodLookForYou')).toThrow(
+        /No section named "NotAGoodLookForYou"/,
+      )
     })
   })
 
@@ -95,6 +102,8 @@ verify_ssl=True
       const settings = new NodeSettingsIniFile(localIni)
       expect(settings.api_version).toEqual('3.1')
       expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
+      expect(settings.timeout).toEqual(31)
+      expect(settings.verify_ssl).toEqual(false)
     })
 
     it('retrieves the first section by name', () => {
@@ -106,11 +115,14 @@ verify_ssl=True
     it('retrieves the second section by name', () => {
       const settings = new NodeSettingsIniFile(localIni, 'Looker30')
       expect(settings.api_version).toEqual('3.0')
+      expect(settings.timeout).toEqual(30)
+      expect(settings.verify_ssl).toEqual(false)
     })
 
     it('fails with a bad section name', () => {
-      expect(() => new NodeSettingsIniFile(localIni, 'NotAGoodLookForYou'))
-        .toThrow(/No section named "NotAGoodLookForYou"/)
+      expect(
+        () => new NodeSettingsIniFile(localIni, 'NotAGoodLookForYou'),
+      ).toThrow(/No section named "NotAGoodLookForYou"/)
     })
   })
 })

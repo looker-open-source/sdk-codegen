@@ -27,7 +27,7 @@ import * as ini from 'ini'
 import { ApiSettings, IApiSettings } from './apiSettings'
 
 export interface IApiSection {
-  [key: string]: string
+  [key: string]: string;
 }
 
 /**
@@ -35,7 +35,7 @@ export interface IApiSection {
  *
  */
 export interface IApiSettingsIniFile extends IApiSettings {
-  readIni(section?: string): IApiSection
+  readIni(section?: string): IApiSection;
 }
 
 /**
@@ -51,7 +51,10 @@ export const ApiConfig = (contents: string) => ini.parse(contents)
  * @param section {[key: string]: any;} Contents of INI section
  * @constructor
  */
-export const ApiConfigSection = (contents: string, section?: string): IApiSection => {
+export const ApiConfigSection = (
+  contents: string,
+  section?: string,
+): IApiSection => {
   const config = ApiConfig(contents)
   if (!section) {
     // default to the first section if not specified
@@ -83,8 +86,10 @@ export class NodeSettingsIni extends ApiSettings {
  * Warning: INI files storing credentials should be secured in the run-time environment, and
  * ignored by version control systems so credentials never get checked in to source code repositories
  */
-export class NodeSettingsIniFile extends NodeSettingsIni implements IApiSettingsIniFile {
+export class NodeSettingsIniFile extends NodeSettingsIni
+  implements IApiSettingsIniFile {
   private readonly fileName!: string
+
   constructor(fileName: string = './looker.ini', section?: string) {
     if (fs.existsSync(fileName)) {
       super(fs.readFileSync(fileName, 'utf-8'), section)
@@ -100,6 +105,6 @@ export class NodeSettingsIniFile extends NodeSettingsIni implements IApiSettings
     if (fs.existsSync(this.fileName)) {
       return ApiConfigSection(fs.readFileSync(this.fileName, 'utf-8'), section)
     }
-    return ApiConfigSection("")
+    return ApiConfigSection('')
   }
 }

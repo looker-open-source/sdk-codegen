@@ -42,8 +42,6 @@ base_url=https://<your-looker-server>:19999
 client_id=your_API3_client_id
 # API 3 client secret
 client_secret=your_API3_client_secret
-# Optional embed secret for SSO embedding
-embed_secret=your_embed_SSO_secret
 ```
 
 **Note**: If the application using the Looker SDK is going to be committed to a version control system, be sure to
