@@ -30,7 +30,7 @@ api_version=3.0
 base_url=https://host2.looker.com:19999
 client_id=your_API3_client_id
 client_secret=your_API3_client_secret
-verify_ssl=True
+verify_ssl=
 
 [BARE_MINIMUM]
 base_url=https://host3.looker.com:19999/
@@ -72,6 +72,7 @@ def test_it_retrieves_section_by_name(
     settings = api_settings.ApiSettings.configure(config_file, test_section)
     assert settings.base_url == expected_url
     assert settings.api_version == expected_api_version
+    assert settings.verify_ssl
     assert not hasattr(settings, "client_id")
     assert not hasattr(settings, "client_secret")
 
@@ -132,15 +133,41 @@ def test_settings_from_env_variables_override_config_file(
     """
     monkeypatch.setenv("LOOKER_BASE_URL", "https://host1.looker.com:19999")
     monkeypatch.setenv("LOOKER_API_VERSION", "3.0")
+    monkeypatch.setenv("LOOKER_VERIFY_SSL", "0")
     monkeypatch.setenv("LOOKER_CLIENT_ID", "id123")
     monkeypatch.setenv("LOOKER_CLIENT_SECRET", "secret123")
 
     settings = api_settings.ApiSettings.configure(config_file, section=test_section)
     assert settings.base_url == "https://host1.looker.com:19999"
     assert settings.api_version == "3.0"
+    assert not settings.verify_ssl
     # API credentials are still not set as attributes when read from env variables
     assert not hasattr(settings, "client_id")
     assert not hasattr(settings, "client_secret")
+
+
+@pytest.mark.parametrize(
+    "test_value, expected",
+    [
+        ("yes", True),
+        ("y", True),
+        ("true", True),
+        ("t", True),
+        ("1", True),
+        ("", True),
+        ("no", False),
+        ("n", False),
+        ("f", False),
+        ("0", False),
+    ],
+)
+def test_env_verify_ssl_maps_properly(monkeypatch, config_file, test_value, expected):
+    """ApiSettings should map the various values that VERIFY_SSL can take to True/False
+    accordingly.
+    """
+    monkeypatch.setenv("LOOKER_VERIFY_SSL", test_value)
+    settings = api_settings.ApiSettings.configure(config_file, section="BARE_MINIMUM")
+    assert settings.verify_ssl == expected
 
 
 def test_configure_with_no_file(monkeypatch):

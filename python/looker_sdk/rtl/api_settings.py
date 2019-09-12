@@ -49,19 +49,24 @@ class ApiSettings(transport.TransportSettings):
         instantiate ApiSettings.
 
         ENV variables map like this:
-            LOOKER_API_VERSION -> api_version
             LOOKER_BASE_URL -> base_url
+            LOOKER_API_VERSION -> api_version
+            LOOKER_VERIFY_SSL -> verify_ssl
         """
 
         config_data = cls.read_ini(filename, section)
+
+        env_base_url = cast(str, os.getenv("LOOKER_BASE_URL"))
+        if env_base_url:
+            config_data["base_url"] = env_base_url
 
         env_api_version = cast(str, os.getenv("LOOKER_API_VERSION"))
         if env_api_version:
             config_data["api_version"] = env_api_version
 
-        env_base_url = cast(str, os.getenv("LOOKER_BASE_URL"))
-        if env_base_url:
-            config_data["base_url"] = env_base_url
+        env_verify_ssl = cast(str, os.getenv("LOOKER_VERIFY_SSL"))
+        if env_verify_ssl:
+            config_data["verify_ssl"] = env_verify_ssl
 
         if not config_data.get("base_url"):
             raise error.SDKError(f"Required parameter base_url not found.")
@@ -84,7 +89,7 @@ class ApiSettings(transport.TransportSettings):
             config_data = dict(cfg_parser[section])
             # If setting is an empty string, remove it
             for setting in list(config_data):
-                if config_data[setting] in ['""', "''"]:
+                if config_data[setting] in ['""', "''", ""]:
                     config_data.pop(setting)
             config_data["_section"] = cast(str, section)
             config_data["_filename"] = cast(str, filename)
