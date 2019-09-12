@@ -276,7 +276,7 @@ export interface IDictionary<T> {
       let content = fs.readFileSync(stampFile, utf8)
       const lookerPattern = /lookerVersion = ['"]\d+\.\d+['"]/i
       const apiPattern = /apiVersion = ['"]\d+\.\d+['"]/i
-      const envPattern = /environmentPrefix = ['"]\d+\.\d+['"]/i
+      const envPattern = /environmentPrefix = ['"]\w+['"]/i
       content = content.replace(lookerPattern, `lookerVersion = '${this.versions.lookerVersion}'`)
       content = content.replace(apiPattern, `apiVersion = '${this.versions.apiVersion}'`)
       content = content.replace(envPattern, `environmentPrefix = '${this.packageName.toUpperCase()}'`)

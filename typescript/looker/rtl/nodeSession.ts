@@ -33,12 +33,13 @@ import {
 import { AuthToken } from './authToken'
 import { NodeTransport } from './nodeTransport'
 import { IApiSettingsIniFile } from './nodeSettings'
+import { environmentPrefix } from './versions'
 
 const strPost = 'POST'
 const strDelete = 'DELETE'
 
-const strLookerClientId = 'LOOKER_CLIENT_ID'
-const strLookerClientSecret = 'LOOKER_CLIENT_SECRET'
+const strLookerClientId = `${environmentPrefix}_CLIENT_ID`
+const strLookerClientSecret = `${environmentPrefix}_CLIENT_SECRET`
 
 /**
  * Same as the Looker API access token object

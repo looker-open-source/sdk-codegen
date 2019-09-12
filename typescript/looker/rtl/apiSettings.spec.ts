@@ -22,7 +22,15 @@
  * THE SOFTWARE.
  */
 
-import { ApiSettings, strBadConfiguration, ValueSettings } from './apiSettings'
+import {
+  ApiSettings,
+  strBadConfiguration,
+  ValueSettings,
+  strLookerApiVersion,
+  strLookerBaseUrl,
+  strLookerVerifySsl,
+  strLookerTimeout
+} from './apiSettings'
 import { defaultTimeout } from './transport'
 
 describe('SDK configuration', () => {
@@ -37,10 +45,10 @@ describe('SDK configuration', () => {
 
     it('retrieves the first section by name', () => {
       const settings = ValueSettings({
-        LOOKER_API_VERSION: '3.0',
-        LOOKER_BASE_URL: 'base',
-        LOOKER_VERIFY_SSL: 'false',
-        LOOKER_TIMEOUT: '30',
+        [strLookerApiVersion]: '3.0',
+        [strLookerBaseUrl]: 'base',
+        [strLookerVerifySsl]: 'false',
+        [strLookerTimeout]: '30',
       })
       expect(settings.api_version).toEqual('3.0')
       expect(settings.base_url).toEqual('base')
