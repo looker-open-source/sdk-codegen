@@ -360,8 +360,10 @@ ${this.hooks.join('\n')}
       let content = fs.readFileSync(stampFile, utf8)
       const lookerPattern = /looker_version = ['"]\d+\.\d+['"]/i
       const apiPattern = /api_version = ['"]\d+\.\d+['"]/i
+      const envPattern = /environment_prefix = ['"]\w+['"]/i
       content = content.replace(lookerPattern, `looker_version = "${this.versions.lookerVersion}"`)
       content = content.replace(apiPattern, `api_version = "${this.versions.apiVersion}"`)
+      content = content.replace(envPattern, `environment_prefix = "${this.packageName.toUpperCase()}"`)
       fs.writeFileSync(stampFile, content, {encoding: utf8})
       success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}` )
     } else {
