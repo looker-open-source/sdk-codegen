@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-export const lookerVersion = 'undefined'
-export const apiVersion = 'undefined'
+export const lookerVersion = '6.19'
+export const apiVersion = '3.1'
 export const sdkVersion = `${apiVersion}.${lookerVersion}`
 export const environmentPrefix = 'LOOKER'
