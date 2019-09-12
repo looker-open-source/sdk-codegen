@@ -69,6 +69,7 @@ export class TypescriptGen extends CodeGen {
     return `
 // ${warnEditing}
 import { APIMethods } from '../rtl/apiMethods'
+import { ITransportSettings } from '../rtl/transport'
 import { IDictionary, ${this.typeNames().join(', ')} } from './models'
 
 export class ${this.packageName} extends APIMethods {
@@ -118,18 +119,18 @@ export interface IDictionary<T> {
       + `${indent}async ${method.name}(`
     let fragment = ''
     const requestType = this.requestTypeName(method)
+    const bump = indent + this.indentStr
 
     if (requestType) {
       // use the request type that will be generated in models.ts
       fragment = `request: Partial<I${requestType}>`
     } else {
-      const bump = indent + this.indentStr
       let params: string[] = []
       const args = method.allParams // get the params in signature order
       if (args && args.length > 0) args.forEach(p => params.push(this.declareParameter(bump, p)))
-      fragment = `\n${params.join(this.paramDelimiter)}`
+      fragment = params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
     }
-    return header + fragment + ') {\n'
+    return header + fragment + `${fragment? ',' : ''}\n${bump}options?: Partial<ITransportSettings>) {\n`
   }
 
   declareParameter(indent: string, param: IParameter) {
@@ -152,28 +153,6 @@ export interface IDictionary<T> {
   construct(indent: string, type: IType) {
     return ''
   }
-
-  /*
-  TODO get rid of this when we're sure we don't need it
-  generateDefaults(indent: string, type: IType) {
-    let result = ''
-    if (!(type instanceof RequestType)) return result
-    const bump = this.bumper(indent)
-    result += this.commentHeader(indent, `Default constants for optional properties of I${type.name}`)
-    const name = `${strDefault}${type.name.substring(strRequest.length)}`
-    result += `${indent}export const ${name} = {\n`
-    let options: string[] = []
-    Object.entries(type.properties).forEach(([name, prop]) => {
-      const mapped = this.typeMap(prop.type)
-      if (prop.nullable && mapped.default) {
-        options.push(`${bump}${name}: ${mapped.default}`)
-      }
-    })
-    return result
-      + options.join(this.paramDelimiter)
-      + `${indent}}\n\n`
-  }
-  */
 
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
@@ -248,8 +227,12 @@ export interface IDictionary<T> {
   //   {queryArgs...}
   httpArgs(indent: string, method: IMethod) {
     const request = TypescriptGen.useRequest(method) ? 'request.' : ''
-    let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
-    result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
+    // add options at the end of the request calls. this will cause all other arguments to be
+    // filled in but there's no way to avoid this for passing in the last optional parameter.
+    // Fortunately, this code bloat is minimal and also hidden from the consumer.
+    let result = this.argFill('', 'options')
+    // let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
+    // result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
     result = this.argFill(result, method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr)
     result = this.argFill(result, this.argGroup(indent, method.queryArgs, request))
     return result

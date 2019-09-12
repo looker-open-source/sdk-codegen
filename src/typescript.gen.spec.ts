@@ -30,7 +30,7 @@ const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
 const gen = new TypescriptGen(apiModel)
 const indent = ''
 
-describe('typescript formatter', () => {
+describe('typescript generator', () => {
   describe('parameter declarations', () => {
     it('required parameter', () => {
       const param = apiModel.methods['run_query'].params[0]
@@ -106,17 +106,17 @@ limit: number = 0`)
     it('add_group_group', () => {
       const method = apiModel.methods['add_group_group']
       const args = gen.httpArgs('', method).trim()
-      expect(args).toEqual('null, body')
+      expect(args).toEqual('null, body, options')
     })
     it('create_query', () => {
       const method = apiModel.methods['create_query']
       const args = gen.httpArgs('', method).trim()
-      expect(args).toEqual('{fields}, body')
+      expect(args).toEqual('{fields}, body, options')
     })
     it('create_dashboard', () => {
       const method = apiModel.methods['create_dashboard']
       const args = gen.httpArgs('', method).trim()
-      expect(args).toEqual('null, body')
+      expect(args).toEqual('null, body, options')
     })
   })
 
@@ -126,7 +126,7 @@ limit: number = 0`)
       expect(method).toBeDefined()
       const expected = `// GET /datagroups -> IDatagroup[]
 async all_datagroups(
-) {
+  options?: Partial<ITransportSettings>) {
 `
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
@@ -136,20 +136,20 @@ async all_datagroups(
   describe('method body', () => {
     it('assert response is model add_group_group', () => {
       const method = apiModel.methods['add_group_group']
-      const expected = 'return this.post<IGroup, IError>(encodeURI(`/groups/${group_id}/groups`), null, body)'
+      const expected = 'return this.post<IGroup, IError>(encodeURI(`/groups/${group_id}/groups`), null, body, options)'
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
     it('assert response is None delete_group_from_group', () => {
       const method = apiModel.methods['delete_group_from_group']
-      const expected = 'return this.delete<void, IError>(encodeURI(`/groups/${group_id}/groups/${deleting_group_id}`))'
+      const expected = 'return this.delete<void, IError>(encodeURI(`/groups/${group_id}/groups/${deleting_group_id}`), null, null, options)'
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
     it('assert response is list active_themes', () => {
       const method = apiModel.methods['active_themes']
       const expected = `return this.get<ITheme[], IError>('/themes/active', 
-  {name: request.name, ts: request.ts, fields: request.fields})`
+  {name: request.name, ts: request.ts, fields: request.fields}, null, options)`
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
