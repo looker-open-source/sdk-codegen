@@ -130,7 +130,7 @@ export const logFetch = async (name: string, props: SDKConfigProps) => {
   return specFile
 }
 
-export const getVersionInfo = async (props: SDKConfigProps): Promise<IVersionInfo> => {
+export const getVersionInfo = async (props: SDKConfigProps): Promise<IVersionInfo | undefined> => {
   try {
     const lookerVersion = await fetchLookerVersion(props.base_url)
     return {
@@ -141,7 +141,7 @@ export const getVersionInfo = async (props: SDKConfigProps): Promise<IVersionInf
     warn(`Could not retrieve version information. Is ${props.base_url} running?`)
     checkCertError(e)
   }
-  return {} as IVersionInfo
+  return undefined
 }
 
 

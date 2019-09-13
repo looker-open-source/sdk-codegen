@@ -358,9 +358,9 @@ ${this.hooks.join('\n')}
         warn(`${stampFile} was not found. Skipping version update.`)
       }
       let content = fs.readFileSync(stampFile, utf8)
-      const lookerPattern = /looker_version = ['"]\d+\.\d+['"]/i
-      const apiPattern = /api_version = ['"]\d+\.\d+['"]/i
-      const envPattern = /environment_prefix = ['"]\w+['"]/i
+      const lookerPattern = /looker_version = ['"].*['"]/i
+      const apiPattern = /api_version = ['"].*['"]/i
+      const envPattern = /environment_prefix = ['"].*['"]/i
       content = content.replace(lookerPattern, `looker_version = "${this.versions.lookerVersion}"`)
       content = content.replace(apiPattern, `api_version = "${this.versions.apiVersion}"`)
       content = content.replace(envPattern, `environment_prefix = "${this.packageName.toUpperCase()}"`)
