@@ -190,7 +190,7 @@ ${this.hooks.join('\n')}
       propType = `Optional[${mappedType.name}] = ${this.nullStr}`
     }
     const propDef = `${indent}${propName}: ${propType}`
-    return this.commentHeader(indent, property.description) + propDef
+    return propDef
   }
 
   // because Python has named default parameters, Request types are not required like

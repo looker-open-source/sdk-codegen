@@ -444,13 +444,16 @@ def test_crud_dashboard(looker_client: mtds.LookerSDK, queries, dashboards):
     looker_client.logout()
 
 
-def get_query_id(qhash: Dict[Union[str, int], ml.Query], id: Union[str, int]) -> Optional[int]:
+def get_query_id(
+    qhash: Dict[Union[str, int], ml.Query], id: Union[str, int]
+) -> Optional[int]:
     if isinstance(id, str) and id.startswith("#"):
         id = id[1:]
         # if id is invalid, default to first query. test data is bad
         query = qhash.get(id) or list(qhash.values())[0]
-        return query.id
+        query_id = query.id
     elif (isinstance(id, str) and id.isdigit()) or isinstance(id, int):
-        return int(id)
+        query_id = int(id)
     else:
-        return None
+        query_id = None
+    return query_id
