@@ -6,6 +6,8 @@ from typing import Callable, Dict, MutableMapping, Optional, Union
 
 import attr
 
+from looker_sdk.rtl import versions
+
 
 class HttpMethod(enum.Enum):
     """Supported HTTP verbs.
@@ -35,6 +37,12 @@ class TransportSettings:
         """Create and return an API-versioned base endpoint.
         """
         return f'{self.base_url.rstrip("/")}/api/{self.api_version}'
+
+    @property
+    def agent_tag(self) -> str:
+        """User Agent value
+        """
+        return f"PY-SDK {versions.sdk_version}"
 
 
 TResponseValue = Union[str, bytes]

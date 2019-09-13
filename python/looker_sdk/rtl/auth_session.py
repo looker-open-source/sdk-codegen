@@ -9,6 +9,7 @@ from looker_sdk.rtl import api_settings
 from looker_sdk.rtl import auth_token
 from looker_sdk.rtl import transport
 from looker_sdk.rtl import serialize
+from looker_sdk.rtl import versions
 from looker_sdk.sdk import models
 
 
@@ -99,10 +100,12 @@ class AuthSession:
         config_data = self.settings.read_ini(
             self.settings._filename, self.settings._section
         )
-        client_id = os.getenv("LOOKER_CLIENT_ID") or config_data.get("client_id")
-        client_secret = os.getenv("LOOKER_CLIENT_SECRET") or config_data.get(
-            "client_secret"
-        )
+        client_id = os.getenv(
+            f"{versions.environment_prefix}_CLIENT_ID"
+        ) or config_data.get("client_id")
+        client_secret = os.getenv(
+            f"{versions.environment_prefix}_CLIENT_SECRET"
+        ) or config_data.get("client_secret")
 
         if not (client_id and client_secret):
             raise error.SDKError("Required auth credentials not found.")

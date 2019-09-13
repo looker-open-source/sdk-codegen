@@ -149,8 +149,8 @@ def test_is_sudo(auth_session: auth.AuthSession):
 def test_it_fails_with_missing_credentials(
     config_file, monkeypatch, test_section, test_env_client_id, test_env_client_secret
 ):
-    monkeypatch.setenv("LOOKER_CLIENT_ID", test_env_client_id)
-    monkeypatch.setenv("LOOKER_CLIENT_SECRET", test_env_client_secret)
+    monkeypatch.setenv("LOOKERSDK_CLIENT_ID", test_env_client_id)
+    monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", test_env_client_secret)
 
     settings = api_settings.ApiSettings.configure(config_file, test_section)
     auth_session = auth.AuthSession(
@@ -178,8 +178,8 @@ def test_env_variables_override_config_file_credentials(
     expected_id,
     expected_secret,
 ):
-    monkeypatch.setenv("LOOKER_CLIENT_ID", test_env_client_id)
-    monkeypatch.setenv("LOOKER_CLIENT_SECRET", test_env_client_secret)
+    monkeypatch.setenv("LOOKERSDK_CLIENT_ID", test_env_client_id)
+    monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", test_env_client_secret)
     mocked_request = mocker.patch.object(MockTransport, "request")
     mocked_request.return_value = transport.Response(
         ok=True,

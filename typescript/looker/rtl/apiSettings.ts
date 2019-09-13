@@ -59,12 +59,12 @@ export const DefaultSettings = () =>
  * @constructor
  *
  * The values keys are:
- *  - LOOKER_BASE_URL
- *  - LOOKER_API_VERSION
- *  - LOOKER_CLIENT_ID
- *  - LOOKER_CLIENT_SECRET
- *  - LOOKER_VERIFY_SSL
- *  - LOOKER_TIMEOUT
+ *  - <environmentPrefix>_BASE_URL
+ *  - <environmentPrefix>_API_VERSION
+ *  - <environmentPrefix>_CLIENT_ID
+ *  - <environmentPrefix>_CLIENT_SECRET
+ *  - <environmentPrefix>_VERIFY_SSL
+ *  - <environmentPrefix>_TIMEOUT
  */
 export const ValueSettings = (values: IValueSettings): IApiSettings => {
   const settings = DefaultSettings()

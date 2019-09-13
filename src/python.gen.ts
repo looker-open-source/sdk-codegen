@@ -37,7 +37,8 @@ import {
   WriteType,
 } from './sdkModels'
 import { CodeGen, warnEditing } from './codeGen'
-import { run } from './utils'
+import * as fs from 'fs'
+import { run, warn, isFileSync, utf8, success } from './utils'
 
 export class PythonGen extends CodeGen {
   codePath = './python/'
@@ -351,18 +352,23 @@ ${this.hooks.join('\n')}
   }
 
   versionStamp() {
-    // if (this.versions) {
-    //   const stampFile = this.fileName('rtl/versions')
-    //   if (!isFileSync(stampFile)) {
-    //     warn(`${stampFile} was not found. Skipping version update to ${this.versions.apiVersion}.${this.versions.lookerVersion}`)
-    //   }
-    //   let content = fs.readFileSync(stampFile, utf8)
-    //   const lookerPattern = /lookerVersion = '\d+\.\d+'/i
-    //   const apiPattern = /apiVersion = '\d+\.\d+'/i
-    //   content = content.replace(lookerPattern, `lookerVersion = ${this.versions.lookerVersion}`)
-    //   content = content.replace(apiPattern, `apiVersion = ${this.versions.apiVersion}`)
-    //   fs.writeFileSync(stampFile, content, {encoding: utf8})
-    // }
+    if (this.versions) {
+      const stampFile = this.fileName('rtl/versions')
+      if (!isFileSync(stampFile)) {
+        warn(`${stampFile} was not found. Skipping version update.`)
+      }
+      let content = fs.readFileSync(stampFile, utf8)
+      const lookerPattern = /looker_version = ['"]\d+\.\d+['"]/i
+      const apiPattern = /api_version = ['"]\d+\.\d+['"]/i
+      const envPattern = /environment_prefix = ['"]\w+['"]/i
+      content = content.replace(lookerPattern, `looker_version = "${this.versions.lookerVersion}"`)
+      content = content.replace(apiPattern, `api_version = "${this.versions.apiVersion}"`)
+      content = content.replace(envPattern, `environment_prefix = "${this.packageName.toUpperCase()}"`)
+      fs.writeFileSync(stampFile, content, {encoding: utf8})
+      success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}` )
+    } else {
+      warn('Version information was not retrieved. Skipping SDK version updating.')
+    }
     return this.versions
   }
 

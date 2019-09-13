@@ -131,11 +131,11 @@ def test_settings_from_env_variables_override_config_file(
 ):
     """ApiSettings should read settings defined as env variables.
     """
-    monkeypatch.setenv("LOOKER_BASE_URL", "https://host1.looker.com:19999")
-    monkeypatch.setenv("LOOKER_API_VERSION", "3.0")
-    monkeypatch.setenv("LOOKER_VERIFY_SSL", "0")
-    monkeypatch.setenv("LOOKER_CLIENT_ID", "id123")
-    monkeypatch.setenv("LOOKER_CLIENT_SECRET", "secret123")
+    monkeypatch.setenv("LOOKERSDK_BASE_URL", "https://host1.looker.com:19999")
+    monkeypatch.setenv("LOOKERSDK_API_VERSION", "3.0")
+    monkeypatch.setenv("LOOKERSDK_VERIFY_SSL", "0")
+    monkeypatch.setenv("LOOKERSDK_CLIENT_ID", "id123")
+    monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", "secret123")
 
     settings = api_settings.ApiSettings.configure(config_file, section=test_section)
     assert settings.base_url == "https://host1.looker.com:19999"
@@ -165,7 +165,7 @@ def test_env_verify_ssl_maps_properly(monkeypatch, config_file, test_value, expe
     """ApiSettings should map the various values that VERIFY_SSL can take to True/False
     accordingly.
     """
-    monkeypatch.setenv("LOOKER_VERIFY_SSL", test_value)
+    monkeypatch.setenv("LOOKERSDK_VERIFY_SSL", test_value)
     settings = api_settings.ApiSettings.configure(config_file, section="BARE_MINIMUM")
     assert settings.verify_ssl == expected
 
@@ -174,9 +174,9 @@ def test_configure_with_no_file(monkeypatch):
     """ApiSettings should be instantiated if required parameters all exist in env
     variables.
     """
-    monkeypatch.setenv("LOOKER_BASE_URL", "https://host1.looker.com:19999")
-    monkeypatch.setenv("LOOKER_CLIENT_ID", "id123")
-    monkeypatch.setenv("LOOKER_CLIENT_SECRET", "secret123")
+    monkeypatch.setenv("LOOKERSDK_BASE_URL", "https://host1.looker.com:19999")
+    monkeypatch.setenv("LOOKERSDK_CLIENT_ID", "id123")
+    monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", "secret123")
 
     settings = api_settings.ApiSettings.configure("no-such-file")
     assert settings.base_url == "https://host1.looker.com:19999"
@@ -202,7 +202,7 @@ def test_it_fails_when_env_variables_are_defined_but_empty(config_file, monkeypa
     """ApiSettings should throw an error if required settings are passed as empty
     env variables.
     """
-    monkeypatch.setenv("LOOKER_BASE_URL", "")
+    monkeypatch.setenv("LOOKERSDK_BASE_URL", "")
 
     with pytest.raises(error.SDKError):
         api_settings.ApiSettings.configure(config_file, "BARE")

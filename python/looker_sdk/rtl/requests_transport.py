@@ -17,7 +17,7 @@ class RequestsTransport(transport.Transport):
         self, settings: transport.TransportSettings, session: requests.Session
     ):
 
-        headers: Dict[str, str] = {}
+        headers: Dict[str, str] = {"User-Agent": settings.agent_tag}
         if settings.headers:
             headers.update(settings.headers)
         session.headers.update(headers)
