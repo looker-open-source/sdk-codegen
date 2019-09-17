@@ -18,9 +18,9 @@ from looker_sdk.sdk import models
 def api() -> api_methods.APIMethods:
     settings = api_settings.ApiSettings.configure("../looker.ini")
     transport = requests_transport.RequestsTransport.configure(settings)
-    usr_session = auth_session.AuthSession(settings, transport, serialize.deserialize)
+    auth = auth_session.AuthSession(settings, transport, serialize.deserialize)
     return api_methods.APIMethods(
-        usr_session, serialize.deserialize, serialize.serialize, transport
+        auth, serialize.deserialize, serialize.serialize, transport
     )
 
 

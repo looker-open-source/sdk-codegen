@@ -34,12 +34,12 @@ class APIMethods:
 
     def __init__(
         self,
-        usr_session: auth_session.AuthSession,
+        auth: auth_session.AuthSession,
         deserialize: serialize.TDeserialize,
         serialize: serialize.TSerialize,
         transport: transport.Transport,
     ):
-        self.usr_session = usr_session
+        self.auth = auth
         self.deserialize = deserialize
         self.serialize = serialize
         self.transport = transport
@@ -48,7 +48,7 @@ class APIMethods:
         return self
 
     def __exit__(self, *exc) -> None:
-        self.usr_session.logout()
+        self.auth.logout()
 
     def _return(self, response: transport.Response, structure: TStructure) -> TReturn:
         if not response.ok:
@@ -78,11 +78,11 @@ class APIMethods:
         return params
 
     def login_user(self, user_id: int) -> "APIMethods":
-        self.usr_session.login_user(user_id)
+        self.auth.login_user(user_id)
         return self
 
     def logout(self) -> None:
-        self.usr_session.logout()
+        self.auth.logout()
 
     def get(
         self,
@@ -98,7 +98,7 @@ class APIMethods:
             path,
             query_params=params,
             body=None,
-            authenticator=self.usr_session.authenticate,
+            authenticator=self.auth.authenticate,
         )
         return self._return(response, structure)
 
@@ -128,7 +128,7 @@ class APIMethods:
             path,
             query_params=params,
             body=serialized,
-            authenticator=self.usr_session.authenticate,
+            authenticator=self.auth.authenticate,
         )
         return self._return(response, structure)
 
@@ -148,7 +148,7 @@ class APIMethods:
             path,
             query_params=params,
             body=serialized,
-            authenticator=self.usr_session.authenticate,
+            authenticator=self.auth.authenticate,
         )
         return self._return(response, structure)
 
@@ -168,7 +168,7 @@ class APIMethods:
             path,
             query_params=params,
             body=serialized,
-            authenticator=self.usr_session.authenticate,
+            authenticator=self.auth.authenticate,
         )
         return self._return(response, structure)
 
@@ -184,6 +184,6 @@ class APIMethods:
             transport.HttpMethod.DELETE,
             path,
             body=None,
-            authenticator=self.usr_session.authenticate,
+            authenticator=self.auth.authenticate,
         )
         return self._return(response, structure)
