@@ -25,9 +25,9 @@
 import { IAuthSession, NodeSession } from '../rtl/nodeSession'
 import { LookerSDK } from '../sdk/methods'
 import {
-  IQuery, IRequestcreate_query,
+  IQuery,
   IRequestrun_inline_query,
-  IUser,
+  IUser, IWriteQuery,
 } from '../sdk/models'
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
@@ -49,7 +49,7 @@ describe('LookerNodeSDK', () => {
   const session = new NodeSession(settings)
 
   const createQueryRequest = (q: any, limit: number) => {
-    const result: Partial<IRequestcreate_query> = {body: {
+    const result: Partial<IWriteQuery> = {
       model: q.model,
       view: q.view,
       fields: q.fields || undefined,
@@ -69,7 +69,7 @@ describe('LookerNodeSDK', () => {
       dynamic_fields: q.dynamic_fields || undefined,
       client_id: q.client_id || undefined,
       query_timezone: q.query_timezone || undefined
-    }}
+    }
     return result
   }
 
@@ -99,13 +99,13 @@ describe('LookerNodeSDK', () => {
       if (searched.length === 0) {
         // create missing user record
         user = await sdk.ok(
-          sdk.create_user({ body: {
+          sdk.create_user({
               first_name: u.first_name,
                 last_name: u.last_name,
                 is_disabled: false,
                 locale: 'en'
             }
-        })
+        )
         )
       } else {
         user = searched[0]
@@ -114,7 +114,7 @@ describe('LookerNodeSDK', () => {
         // Ensure email credentials are created
         const email = `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
         await sdk.ok(
-          sdk.create_user_credentials_email({ user_id: user.id, body: {email: email}})
+          sdk.create_user_credentials_email(user.id, {email: email})
         )
         user = await sdk.ok(sdk.user(user.id))
       }
@@ -308,12 +308,12 @@ describe('LookerNodeSDK', () => {
         const sdk = new LookerSDK(session)
         for (const u of users) {
           let user = await sdk.ok(
-            sdk.create_user({ body: {
+            sdk.create_user({
               first_name: u.first_name,
               last_name: u.last_name,
               is_disabled: false,
               locale: 'fr'
-            }})
+            })
           )
           expect(user).toBeDefined()
           expect(user.first_name).toEqual(u.first_name)
@@ -340,7 +340,7 @@ describe('LookerNodeSDK', () => {
           expect(user.is_disabled).toEqual(false)
           const email = `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
           let creds = await sdk.ok(
-            sdk.create_user_credentials_email({ user_id: user.id, body:{email: email}})
+            sdk.create_user_credentials_email(user.id, {email: email})
           )
           expect(creds.email).toEqual(email)
           const result = await sdk.ok(sdk.delete_user(user.id))
@@ -648,7 +648,7 @@ describe('LookerNodeSDK', () => {
 
           for (const t of d.tiles) {
             const tile = await sdk.ok(
-              sdk.create_dashboard_element({body: {
+              sdk.create_dashboard_element({
                 body_text: t.body_text,
                 dashboard_id: dashboard.id,
                 look: t.look,
@@ -668,7 +668,7 @@ describe('LookerNodeSDK', () => {
                 title_hidden: t.title_hidden,
                 title_text: t.title_text,
                 type: t.type
-              }})
+              })
             )
             expect(tile).toBeDefined()
             expect(tile.dashboard_id).toEqual(dashboard.id)

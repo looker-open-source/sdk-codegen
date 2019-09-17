@@ -80,7 +80,7 @@ limit: number = 0`)
       expect(body.length).toEqual(1)
       expect(body[0].type.name).toEqual('Query')
       const param = gen.declareParameter(indent, body[0])
-      expect(param).toEqual('body: Partial<IWriteQuery>')
+      expect(param).toEqual('body?: Partial<IWriteQuery>')
       expect(method.bodyArg).toEqual('body')
       expect(method.queryArgs).toEqual(['fields'])
       expect(method.headerArgs).toEqual([])
@@ -94,7 +94,7 @@ limit: number = 0`)
       expect(body.length).toEqual(1)
       expect(body[0].type.name).toEqual('Dashboard')
       const param = gen.declareParameter(indent, body[0])
-      expect(param).toEqual('body: Partial<IWriteDashboard>')
+      expect(param).toEqual('body?: Partial<IWriteDashboard>')
       expect(method.bodyArg).toEqual('body')
       expect(method.queryArgs).toEqual([])
       expect(method.headerArgs).toEqual([])
@@ -111,7 +111,7 @@ limit: number = 0`)
     it('create_query', () => {
       const method = apiModel.methods['create_query']
       const args = gen.httpArgs('', method).trim()
-      expect(args).toEqual('{fields: request.fields}, request.body, options')
+      expect(args).toEqual('{fields}, body, options')
     })
     it('create_dashboard', () => {
       const method = apiModel.methods['create_dashboard']
@@ -121,7 +121,22 @@ limit: number = 0`)
   })
 
   describe('method signature', () => {
-    it('no params with all_datagroups', () => {
+    it('optional body and additional param', () => {
+      const method = apiModel.methods['create_user_credentials_email']
+      expect(method).toBeDefined()
+      const expected = `// POST /users/{user_id}/credentials_email -> ICredentialsEmail
+async create_user_credentials_email(
+  // id of user
+  user_id: number,
+  body?: Partial<IWriteCredentialsEmail>,
+  // Requested fields.
+  fields: string = '',
+  options?: Partial<ITransportSettings>) {
+`
+      const actual = gen.methodSignature('', method)
+      expect(actual).toEqual(expected)
+    })
+    it('no params', () => {
       const method = apiModel.methods['all_datagroups']
       expect(method).toBeDefined()
       const expected = `// GET /datagroups -> IDatagroup[]
@@ -164,7 +179,7 @@ async all_datagroups(
         const property = type.properties['body']
         const actual = gen.declareProperty(indent, property)
         expect(actual).toEqual(`// body parameter for dynamically created request type
-body: Partial<ICreateDashboardRenderTask>`)
+body?: Partial<ICreateDashboardRenderTask>`)
 //         const actual = gen.declareType(indent, type!)
 //         expect(actual).toEqual(`// Dynamically generated request type for create_dashboard_render_task
 // export interface IRequestcreate_dashboard_render_task{
@@ -191,11 +206,11 @@ body: Partial<ICreateDashboardRenderTask>`)
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface IWorkspace{
   // The unique id of this user workspace. Predefined workspace ids include "production" and "dev"
-  id: string
+  id?: string
   // The local state of each project in the workspace
   projects?: IProject[]
   // Operations the current user is able to perform on this object
-  can: IDictionary<boolean>
+  can?: IDictionary<boolean>
 }`)
     })
     it('with refs, arrays and nullable', () => {
@@ -204,7 +219,7 @@ body: Partial<ICreateDashboardRenderTask>`)
       expect(actual).toEqual(`export interface IApiVersion{
   // Current Looker release version number
   looker_release_version?: string
-  current_version: IApiVersionElement
+  current_version?: IApiVersionElement
   // Array of versions supported by this Looker instance
   supported_versions?: IApiVersionElement[]
 }`)

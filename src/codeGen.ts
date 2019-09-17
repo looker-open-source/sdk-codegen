@@ -195,11 +195,23 @@ export abstract class CodeGen implements ICodeGen {
     return `${indent}return ${this.it(this.transport)}.${method.httpMethod.toLowerCase()}(${errors}, "${method.endpoint}"${args ? ', ' + args : ''})`
   }
 
+  useRequest(method: IMethod) {
+    if (!this.needsRequestTypes) return false
+    const [body] = method.bodyParams
+    /**
+     *
+     * @type {number} if the body parameter is specified and is optional, at least 2 optional parameters are required
+     */
+    const offset = (body && body.required === false) ? 1 : 0
+    const result = method.optionalParams.length - offset > 1
+    return result
+  }
+
   // Looks up or dynamically creates the request type for this method based
   // on rules for creating request types at the IApiModel implementation level
   // If no request type is required, no request type is created or referenced
   requestTypeName(method: IMethod): string {
-    if (!this.needsRequestTypes) return ''
+    if (!this.useRequest(method)) return ''
     const request = this.api!.getRequestType(method)
     if (!request) return ''
     request.refCount++

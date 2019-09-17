@@ -60,18 +60,6 @@ export class TypescriptGen extends CodeGen {
   endTypeStr = '\n}'
   needsRequestTypes = true
 
-  static useRequest(method: IMethod) {
-    // const [body] = method.bodyParams
-    // /**
-    //  *
-    //  * @type {number} if the body parameter is specified and is optional, at least 2 optional parameters are required
-    //  */
-    // const offset = (body && body.required === false) ? 1 : 0
-    // const result = method.optionalParams.length - offset > 1
-    // return result
-    return method.optionalParams.length > 1
-  }
-
   // @ts-ignore
   methodsPrologue(indent: string) {
     return `
@@ -109,7 +97,7 @@ export interface IDictionary<T> {
   }
 
   declareProperty(indent: string, property: IProperty) {
-    const optional = property.nullable ? '?' : ''
+    const optional = (property.nullable || !property.required) ? '?' : ''
     if (property.name === strBody) {
       // TODO refactor this hack to track context when the body parameter is created for the request type
       property.type.refCount++
@@ -146,9 +134,15 @@ export interface IDictionary<T> {
       ? this.writeableType(param.type) || param.type
       : param.type
     const mapped = this.typeMap(type)
-    if (param.location === strBody) mapped.name = `Partial<${mapped.name}>`
+    let pOpt = ''
+    if (param.location === strBody) {
+      mapped.name = `Partial<${mapped.name}>`
+      if (!param.required) pOpt = '?'
+    } else if (mapped.name === 'boolean' && !param.required) {
+      pOpt = '?' // booleans have no default assignment, but can be optional
+    }
     return this.commentHeader(indent, param.description)
-      + `${indent}${param.name}: ${mapped.name}`
+      + `${indent}${param.name}${pOpt}: ${mapped.name}`
       + (param.required ? '' : (mapped.default ? ` = ${mapped.default}` : ''))
   }
 
@@ -234,7 +228,7 @@ export interface IDictionary<T> {
 
   //   {queryArgs...}
   httpArgs(indent: string, method: IMethod) {
-    const request = TypescriptGen.useRequest(method) ? 'request.' : ''
+    const request = this.useRequest(method) ? 'request.' : ''
     // add options at the end of the request calls. this will cause all other arguments to be
     // filled in but there's no way to avoid this for passing in the last optional parameter.
     // Fortunately, this code bloat is minimal and also hidden from the consumer.
@@ -247,7 +241,7 @@ export interface IDictionary<T> {
   }
 
   httpCall(indent: string, method: IMethod) {
-    const request = TypescriptGen.useRequest(method) ? 'request.' : ''
+    const request = this.useRequest(method) ? 'request.' : ''
     const type = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
@@ -306,7 +300,7 @@ export interface IDictionary<T> {
       'integer': {name: 'number', default: '0'},
       'int32': {name: 'number', default: '0'},
       'int64': {name: 'number', default: '0'},
-      'string': {name: 'string', default: '""'},
+      'string': {name: 'string', default: "''"},
       'password': {name: 'Password', default: this.nullStr},
       'byte': {name: 'binary', default: this.nullStr},
       'boolean': {name: 'boolean', default: ''},
