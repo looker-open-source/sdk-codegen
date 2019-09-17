@@ -28,7 +28,7 @@ import * as fs from 'fs'
 import * as Models from './sdkModels'
 import { SDKConfig } from './sdkConfig'
 import { isFileSync, log, quit, success } from './utils'
-import { getVersionInfo, openApiFileName } from './fetchSpec'
+import { getVersionInfo, openApiFileName, specFileName } from './fetchSpec'
 import { SdkGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
 import { logConvert } from './convert'
@@ -59,7 +59,8 @@ import { IVersionInfo } from './codeGen'
           versions = await getVersionInfo(props)
         }
         const oasFile = openApiFileName(name, props)
-        const apiModel = Models.ApiModel.fromFile(oasFile)
+        const swaggerFile = specFileName(name, props)
+        const apiModel = Models.ApiModel.fromFile(oasFile, swaggerFile)
         const gen = getFormatter(language, apiModel, versions)
         const sdkPath = `${gen.codePath}/${gen.packagePath}/sdk`
         if (!isFileSync(sdkPath)) fs.mkdirSync(sdkPath, {recursive: true})

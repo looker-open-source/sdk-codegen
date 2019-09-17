@@ -61,6 +61,14 @@ export class TypescriptGen extends CodeGen {
   needsRequestTypes = true
 
   static useRequest(method: IMethod) {
+    // const [body] = method.bodyParams
+    // /**
+    //  *
+    //  * @type {number} if the body parameter is specified and is optional, at least 2 optional parameters are required
+    //  */
+    // const offset = (body && body.required === false) ? 1 : 0
+    // const result = method.optionalParams.length - offset > 1
+    // return result
     return method.optionalParams.length > 1
   }
 

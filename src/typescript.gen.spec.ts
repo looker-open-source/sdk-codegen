@@ -25,7 +25,7 @@
 import * as Models from './sdkModels'
 import { TypescriptGen } from './typescript.gen'
 
-const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
+const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json', './Looker.3.1.json')
 
 const gen = new TypescriptGen(apiModel)
 const indent = ''
@@ -111,7 +111,7 @@ limit: number = 0`)
     it('create_query', () => {
       const method = apiModel.methods['create_query']
       const args = gen.httpArgs('', method).trim()
-      expect(args).toEqual('{fields}, body, options')
+      expect(args).toEqual('{fields: request.fields}, request.body, options')
     })
     it('create_dashboard', () => {
       const method = apiModel.methods['create_dashboard']

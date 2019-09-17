@@ -1,6 +1,6 @@
 import * as Models from './sdkModels'
 
-const apiModel = Models.ApiModel.fromFile('Looker.3.1.oas.json')
+const apiModel = Models.ApiModel.fromFile('Looker.3.1.oas.json', 'Looker.3.1.json')
 
 describe('sdkModels', () => {
 

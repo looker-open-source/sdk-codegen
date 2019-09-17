@@ -2,7 +2,7 @@ import * as Models from './sdkModels'
 import { SdkGenerator } from './sdkGenerator'
 import { PythonGen } from './python.gen'
 
-const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
+const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json', './Looker.3.1.json')
 
 describe('sdk generator test', () => {
   it('outputs a method in Python', () => {
@@ -12,7 +12,7 @@ describe('sdk generator test', () => {
       `  # POST /looks -> models.LookWithQuery
   def create_look(
       self,
-      body: models.WriteLookWithQuery,
+      body: Optional[models.WriteLookWithQuery] = None,
       # Requested fields.
       fields: Optional[str] = None
   ) -> models.LookWithQuery:

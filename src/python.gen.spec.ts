@@ -25,12 +25,12 @@
 import * as Models from './sdkModels'
 import { PythonGen } from './python.gen'
 
-const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json')
+const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json', './Looker.3.1.json')
 
 const gen = new PythonGen(apiModel)
 const indent = ''
 
-describe('python formatter', () => {
+describe('python generator', () => {
   describe('parameter declarations', () => {
     it('required parameter', () => {
       const param = apiModel.methods['run_query'].params[0]
@@ -182,11 +182,8 @@ class Workspace(model.Model):
         projects: The local state of each project in the workspace
         can: Operations the current user is able to perform on this object
     """
-    # The unique id of this user workspace. Predefined workspace ids include "production" and "dev"
     id: Optional[str] = None
-    # The local state of each project in the workspace
     projects: Optional[Sequence["Project"]] = None
-    # Operations the current user is able to perform on this object
     can: Optional[MutableMapping[str, bool]] = None`)
     })
     it('with refs, arrays and nullable', () => {
@@ -201,10 +198,8 @@ class ApiVersion(model.Model):
         current_version:
         supported_versions: Array of versions supported by this Looker instance
     """
-    # Current Looker release version number
     looker_release_version: Optional[str] = None
     current_version: Optional["ApiVersionElement"] = None
-    # Array of versions supported by this Looker instance
     supported_versions: Optional[Sequence["ApiVersionElement"]] = None`)
     })
     it('write model', () => {
@@ -229,17 +224,11 @@ class WriteCreateQueryTask(model.Model):
         look_id: Id of look associated with query.
         dashboard_id: Id of dashboard associated with query.
     """
-    # Id of query to run
     query_id: int
-    # Desired result format
     result_format: str
-    # Source of query task
     source: Optional[str] = None
-    # Create the task but defer execution
     deferred: Optional[bool] = None
-    # Id of look associated with query.
     look_id: Optional[int] = None
-    # Id of dashboard associated with query.
     dashboard_id: Optional[str] = None
 
     def __init__(self, *, query_id: int, result_format: str, source: Optional[str] = None, deferred: Optional[bool] = None, look_id: Optional[int] = None, dashboard_id: Optional[str] = None):

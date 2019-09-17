@@ -28,6 +28,7 @@ import md5 from 'blueimp-md5'
 import { utf8 } from './utils'
 import { HttpMethod, StatusCode } from '../typescript/looker/rtl/transport'
 import { IVersionInfo } from './codeGen'
+import { OperationObject } from 'openapi3-ts'
 
 export const strBody = 'body'
 export const strRequest = 'Request'
@@ -590,7 +591,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   readonly requestTypes: Record<string, IType> = {}
   private refs: Record<string, IType> = {}
 
-  constructor(spec: OAS.OpenAPIObject) {
+  constructor(spec: OAS.OpenAPIObject, private readonly swagger: any) {
     ['string', 'integer', 'int64', 'boolean', 'object',
       'uri', 'float', 'double', 'void', 'datetime', 'email',
       'uuid', 'uri', 'hostname', 'ipv4', 'ipv6',
@@ -608,19 +609,21 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return (this.schema && this.schema.description) || ''
   }
 
-  static fromFile(specFile: string): ApiModel {
+  static fromFile(specFile: string, swaggerFile: string): ApiModel {
     const specContent = fs.readFileSync(specFile, utf8)
-    return this.fromString(specContent)
+    const swaggerContent = fs.readFileSync(swaggerFile, utf8)
+    return this.fromString(specContent, swaggerContent)
   }
 
-  static fromString(specContent: string): ApiModel {
+  static fromString(specContent: string, swaggerContent: string): ApiModel {
     const json = JSON.parse(specContent)
-    return this.fromJson(json)
+    const swagger = JSON.parse(swaggerContent)
+    return this.fromJson(json, swagger)
   }
 
-  static fromJson(json: any): ApiModel {
+  static fromJson(json: any, swagger: any): ApiModel {
     const spec = new OAS.OpenApiBuilder(json).getSpec()
-    return new ApiModel(spec)
+    return new ApiModel(spec, swagger)
   }
 
   // TODO replace this with get from underscore?
@@ -767,7 +770,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       if (opSchema) {
         const responses = this.methodResponses(opSchema)
         const params = this.methodParameters(opSchema)
-        const body = this.requestBody(opSchema.requestBody)
+        const body = this.requestBody(opSchema.requestBody, endpoint, httpMethod)
         methods.push(new Method(httpMethod, endpoint, opSchema, params, responses, body))
       }
     }
@@ -799,7 +802,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return responses
   }
 
-  private methodParameters(schema: OAS.OperationObject): IParameter[] {
+  private methodParameters(schema: OperationObject): IParameter[] {
     const params: IParameter[] = []
     if (schema.parameters) {
       for (let p of schema.parameters) {
@@ -817,7 +820,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
           const schema = p.schema
           type = this.resolveType(schema || {})
         }
-        params.push(new Parameter(param, type))
+        const mp = new Parameter(param, type)
+        params.push(mp)
       }
     }
     return params
@@ -914,12 +918,16 @@ export class ApiModel implements ISymbolTable, IApiModel {
   },
 
   */
-  private requestBody(obj: OAS.RequestBodyObject | OAS.ReferenceObject | undefined) {
+  private requestBody(obj: OAS.RequestBodyObject | OAS.ReferenceObject | undefined, endpoint: string, httpMethod: HttpMethod) {
     if (!obj) return undefined
-    // TODO create a schema factory function and use that where SchemaObject is directly created
+    const swaggerParams = this.swagger.paths[endpoint][httpMethod.toLowerCase()]['parameters']
+    const bp = swaggerParams.find((i:any) => i.name === 'body')
+    if (!bp) bp.required = false
+
+    // TODO create a schema factory function and use that where SchemaObject is directly created?
     const typeSchema: OAS.SchemaObject = {
       nullable: false,
-      required: [strBody],
+      required: bp.required ? [strBody] : [],
       readOnly: false,
       writeOnly: false,
       deprecated: false,
@@ -930,7 +938,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     let result = new Parameter({
       name: strBody,
       location: strBody,
-      required: true,
+      required: bp.required,
       description: '', // TODO capture description
     } as Partial<IParameter>, type)
 
