@@ -1,3 +1,25 @@
+# The MIT License (MIT)
+#
+# Copyright (c) 2019 Looker Data Sciences, Inc.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
 """Functionality for making authenticated API calls
 """
 import datetime
@@ -34,12 +56,12 @@ class APIMethods:
 
     def __init__(
         self,
-        usr_session: auth_session.AuthSession,
+        auth: auth_session.AuthSession,
         deserialize: serialize.TDeserialize,
         serialize: serialize.TSerialize,
         transport: transport.Transport,
     ):
-        self.usr_session = usr_session
+        self.auth = auth
         self.deserialize = deserialize
         self.serialize = serialize
         self.transport = transport
@@ -48,7 +70,7 @@ class APIMethods:
         return self
 
     def __exit__(self, *exc) -> None:
-        self.usr_session.logout()
+        self.auth.logout()
 
     def _return(self, response: transport.Response, structure: TStructure) -> TReturn:
         if not response.ok:
@@ -78,11 +100,11 @@ class APIMethods:
         return params
 
     def login_user(self, user_id: int) -> "APIMethods":
-        self.usr_session.login_user(user_id)
+        self.auth.login_user(user_id)
         return self
 
     def logout(self) -> None:
-        self.usr_session.logout()
+        self.auth.logout()
 
     def get(
         self,
@@ -98,7 +120,7 @@ class APIMethods:
             path,
             query_params=params,
             body=None,
-            authenticator=self.usr_session.authenticate,
+            authenticator=self.auth.authenticate,
         )
         return self._return(response, structure)
 
@@ -128,7 +150,7 @@ class APIMethods:
             path,
             query_params=params,
             body=serialized,
-            authenticator=self.usr_session.authenticate,
+            authenticator=self.auth.authenticate,
         )
         return self._return(response, structure)
 
@@ -148,7 +170,7 @@ class APIMethods:
             path,
             query_params=params,
             body=serialized,
-            authenticator=self.usr_session.authenticate,
+            authenticator=self.auth.authenticate,
         )
         return self._return(response, structure)
 
@@ -168,7 +190,7 @@ class APIMethods:
             path,
             query_params=params,
             body=serialized,
-            authenticator=self.usr_session.authenticate,
+            authenticator=self.auth.authenticate,
         )
         return self._return(response, structure)
 
@@ -184,6 +206,6 @@ class APIMethods:
             transport.HttpMethod.DELETE,
             path,
             body=None,
-            authenticator=self.usr_session.authenticate,
+            authenticator=self.auth.authenticate,
         )
         return self._return(response, structure)
