@@ -32,6 +32,7 @@ import {
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 import { NodeSettingsIniFile } from '../rtl/nodeSettings'
+import { DelimArray } from '../rtl/delimArray'
 
 const dataFile = 'test/data.yml'
 // slightly hackish data path determination for tests
@@ -93,7 +94,7 @@ describe('LookerNodeSDK', () => {
         )
         for (const user of searched) {
           // enable user if found
-          await sdk.ok(sdk.update_user(user.id, {is_disabled: false}))
+          await sdk.ok(sdk.update_user(user.id!, {is_disabled: false}))
         }
       }
       if (searched.length === 0) {
@@ -114,9 +115,9 @@ describe('LookerNodeSDK', () => {
         // Ensure email credentials are created
         const email = `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
         await sdk.ok(
-          sdk.create_user_credentials_email(user.id, {email: email})
+          sdk.create_user_credentials_email(user.id!, {email: email})
         )
-        user = await sdk.ok(sdk.user(user.id))
+        user = await sdk.ok(sdk.user(user.id!))
       }
     }
     await sdk.authSession.logout()
@@ -140,7 +141,7 @@ describe('LookerNodeSDK', () => {
       }
       if (searched.length > 0) {
         for (const user of searched) {
-          await sdk.ok(sdk.delete_user(user.id))
+          await sdk.ok(sdk.delete_user(user.id!))
         }
       }
     }
@@ -154,7 +155,7 @@ describe('LookerNodeSDK', () => {
       let searched = await sdk.ok(sdk.search_dashboards({title: d.title}))
       if (searched.length > 0) {
         for (const dashboard of searched) {
-          await sdk.ok(sdk.delete_dashboard(dashboard.id))
+          await sdk.ok(sdk.delete_dashboard(dashboard.id!))
         }
       }
     }
@@ -211,7 +212,7 @@ describe('LookerNodeSDK', () => {
           const auth = sdk.authSession as IAuthSession
 
           // login as sudoA
-          await auth.login(sudoA.id.toString())
+          await auth.login(sudoA.id!.toString())
           let sudo = await sdk.ok(sdk.me()) // `me` returns `sudoA` user
           expect(sudo.id).toEqual(sudoA.id)
 
@@ -321,7 +322,7 @@ describe('LookerNodeSDK', () => {
           expect(user.is_disabled).toEqual(false)
           expect(user.locale).toEqual('fr')
           let actual = await sdk.ok(
-            sdk.update_user(user.id, {
+            sdk.update_user(user.id!, {
               is_disabled: true,
               locale: 'en'
             })
@@ -332,7 +333,7 @@ describe('LookerNodeSDK', () => {
           expect(actual.last_name).toEqual(user.last_name)
           expect(actual.first_name).toEqual(user.first_name)
           user = await sdk.ok(
-            sdk.update_user(user.id, {
+            sdk.update_user(user.id!, {
               is_disabled: false,
               locale: 'en'
             })
@@ -340,10 +341,10 @@ describe('LookerNodeSDK', () => {
           expect(user.is_disabled).toEqual(false)
           const email = `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
           let creds = await sdk.ok(
-            sdk.create_user_credentials_email(user.id, {email: email})
+            sdk.create_user_credentials_email(user.id!, {email: email})
           )
           expect(creds.email).toEqual(email)
-          const result = await sdk.ok(sdk.delete_user(user.id))
+          const result = await sdk.ok(sdk.delete_user(user.id!))
           expect(result).toEqual('')
         }
         await sdk.authSession.logout()
@@ -378,6 +379,24 @@ describe('LookerNodeSDK', () => {
           })
         )
         expect(actual.length).toEqual(users.length)
+        await sdk.authSession.logout()
+      },
+      testTimeout
+    )
+
+    it(
+      'csv user id list aka DelimArray',
+      async () => {
+        const sdk = new LookerSDK(session)
+        const searched = await sdk.ok(
+          sdk.search_users_names({
+            pattern: `%${emailDomain}`
+          })
+        )
+        expect(searched.length).toEqual(users.length)
+        const ids : DelimArray<number> = new DelimArray<number>(searched.map(u => u.id!))
+        const all = await sdk.ok(sdk.all_users({ids}))
+        expect(all.length).toEqual(users.length)
         await sdk.authSession.logout()
       },
       testTimeout
@@ -604,7 +623,7 @@ describe('LookerNodeSDK', () => {
           if (d.title_color)
             expect(dashboard.title_color).toEqual(d.title_color)
           let actual = await sdk.ok(
-            sdk.update_dashboard(dashboard.id, {
+            sdk.update_dashboard(dashboard.id!, {
               deleted: true
             })
           )
@@ -612,7 +631,7 @@ describe('LookerNodeSDK', () => {
           // Ensure update *only* updates what it's supposed to
           expect(actual.title).toEqual(dashboard.title)
           dashboard = await sdk.ok(
-            sdk.update_dashboard(dashboard.id, {
+            sdk.update_dashboard(dashboard.id!, {
               deleted: false
             })
           )

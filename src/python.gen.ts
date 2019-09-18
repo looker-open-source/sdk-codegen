@@ -26,7 +26,7 @@
 
 import {
   Arg,
-  ArrayType,
+  ArrayType, DelimArrayType,
   HashType,
   IMappedType,
   IMethod,
@@ -380,6 +380,8 @@ ${this.hooks.join('\n')}
         return {name: `Sequence[${map.name}]`, default: this.nullStr}
       } else if (type instanceof HashType) {
         return {name: `MutableMapping[str, ${map.name}]`, default: this.nullStr}
+      } else if (type instanceof DelimArrayType) {
+        return {name: `DelimSequence[${map.name}]`, default: this.nullStr}
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }

@@ -37,16 +37,24 @@ describe('typescript generator', () => {
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual('// Id of query\nquery_id: number')
     })
+
     it('optional parameter', () => {
       const param = apiModel.methods['run_query'].params[2]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`// Row limit (may override the limit in the saved query).
 limit: number = 0`)
     })
+
     it('required typed parameter', () => {
       const param = apiModel.methods['create_query_render_task'].params[2]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`// Output width in pixels\nwidth: number`)
+    })
+
+    it('csv formatted parameter', () => {
+      const param = apiModel.methods['query_task_multi_results'].params[0]
+      const actual = gen.declareParameter(indent, param)
+      expect(actual).toEqual(`// List of Query Task IDs\nquery_task_ids: DelimArray<string>`)
     })
   })
 

@@ -182,7 +182,7 @@ export class Parameter implements IParameter {
     this.name = param.name!
     this.type = type
     this.description = param.description || ''
-    if (param.hasOwnProperty('in')) {
+    if ('in' in param) {
       this.location = (param as OAS.ParameterObject).in
     } else {
       this.location = (param as Partial<IParameter>).location || strBody
@@ -500,10 +500,19 @@ class Type implements IType {
 }
 
 export class ArrayType extends Type {
-  elementType: IType
 
-  constructor(elementType: IType, schema: OAS.SchemaObject) {
+  constructor(public elementType: IType, schema: OAS.SchemaObject) {
     super(schema, `${elementType.name}[]`)
+  }
+
+  get readOnly() {
+    return this.elementType.readOnly
+  }
+}
+
+export class DelimArrayType extends Type {
+  constructor(public elementType: IType, schema: OAS.SchemaObject) {
+    super(schema, `DelimArray<${elementType.name}>`)
     this.elementType = elementType
   }
 
@@ -642,7 +651,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   // Retrieve an api object via its JSON path
 
-  resolveType(schema: string | OAS.SchemaObject | OAS.ReferenceObject): IType {
+  resolveType(schema: string | OAS.SchemaObject | OAS.ReferenceObject, style?: string): IType {
     if (typeof schema === 'string') {
       if (schema.indexOf('/requestBodies/') < 0) return this.types[schema.substr(schema.lastIndexOf('/') + 1)]
       // dereference the request strBody schema reference
@@ -661,6 +670,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
         return this.types[schema.format]
       }
       if (schema.type === 'array' && schema.items) {
+        if (style === 'csv') {
+          return new DelimArrayType(this.resolveType(schema.items), schema)
+        }
         return new ArrayType(this.resolveType(schema.items), schema)
       }
       if (schema.type === 'object' && schema.additionalProperties) {
@@ -769,7 +781,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     const addIfPresent = (httpMethod: HttpMethod, opSchema: OAS.OperationObject | undefined) => {
       if (opSchema) {
         const responses = this.methodResponses(opSchema)
-        const params = this.methodParameters(opSchema)
+        const params = this.methodParameters(opSchema, endpoint, httpMethod)
         const body = this.requestBody(opSchema.requestBody, endpoint, httpMethod)
         methods.push(new Method(httpMethod, endpoint, opSchema, params, responses, body))
       }
@@ -802,14 +814,16 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return responses
   }
 
-  private methodParameters(schema: OperationObject): IParameter[] {
+  private methodParameters(schema: OperationObject, endpoint: string, httpMethod: HttpMethod): IParameter[] {
     const params: IParameter[] = []
     if (schema.parameters) {
+      const swaggerParams = this.swagger.paths[endpoint][httpMethod.toLowerCase()]['parameters']
       for (let p of schema.parameters) {
         let type: IType
         let param: OAS.ParameterObject
         if (OAS.isReferenceObject(p)) {
           // TODO make this work correctly for reference objects at the parameter level
+          // TODO is style resolution like below required here?
           type = this.resolveType(p)
           param = {
             name: type.name,
@@ -817,8 +831,10 @@ export class ApiModel implements ISymbolTable, IApiModel {
           }
         } else {
           param = p
+          const sp = swaggerParams.find((s: any) => s.name === param.name)
+          const style = sp ? sp.collectionFormat : undefined
           const schema = p.schema
-          type = this.resolveType(schema || {})
+          type = this.resolveType(schema || {}, style)
         }
         const mp = new Parameter(param, type)
         params.push(mp)

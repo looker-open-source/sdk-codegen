@@ -34,7 +34,7 @@ import {
   IntrinsicType,
   ArrayType,
   HashType,
-  strBody,
+  strBody, DelimArrayType,
 } from './sdkModels'
 import { CodeGen, warnEditing } from './codeGen'
 import * as fs from 'fs'
@@ -66,6 +66,10 @@ export class TypescriptGen extends CodeGen {
 // ${warnEditing}
 import { APIMethods } from '../rtl/apiMethods'
 import { ITransportSettings } from '../rtl/transport'
+/**
+* DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
+*/
+import { DelimArray } from '../rtl/delimArray'
 import { IDictionary, ${this.typeNames().join(', ')} } from './models'
 
 export class ${this.packageName} extends APIMethods {
@@ -83,6 +87,7 @@ export class ${this.packageName} extends APIMethods {
 // ${warnEditing}
 
 import { URL } from 'url'
+import { DelimArray } from '../rtl/delimArray'
 
 export interface IDictionary<T> {
   [key: string]: T
@@ -137,9 +142,9 @@ export interface IDictionary<T> {
     let pOpt = ''
     if (param.location === strBody) {
       mapped.name = `Partial<${mapped.name}>`
-      if (!param.required) pOpt = '?'
-    } else if (mapped.name === 'boolean' && !param.required) {
-      pOpt = '?' // booleans have no default assignment, but can be optional
+    }
+    if (!param.required) {
+      pOpt = mapped.default ? '' : '?'
     }
     return this.commentHeader(indent, param.description)
       + `${indent}${param.name}${pOpt}: ${mapped.name}`
@@ -318,8 +323,9 @@ export interface IDictionary<T> {
       if (type instanceof ArrayType) {
         return {name: `${map.name}[]`, default: '[]'}
       } else if (type instanceof HashType) {
-        // must be HashType
         return {name: `IDictionary<${map.name}>`, default: '{}'}
+      } else if (type instanceof DelimArrayType) {
+        return {name: `DelimArray<${map.name}>`, default: ''}
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
