@@ -23,7 +23,8 @@
 """Base model for all generated models
 """
 
-from typing import Any, cast
+import collections
+from typing import Any, cast, Iterable, MutableSequence, Optional, TypeVar
 
 
 EXPLICIT_NULL = cast(Any, "EXPLICIT_NULL")  # type:ignore
@@ -32,3 +33,46 @@ EXPLICIT_NULL = cast(Any, "EXPLICIT_NULL")  # type:ignore
 class Model:
     """Base model for all generated models.
     """
+
+
+T = TypeVar("T")
+
+
+class DelimSequence(collections.UserList, MutableSequence[T]):
+    def __init__(
+        self,
+        data: Optional[MutableSequence[T]] = None,
+        prefix: str = "",
+        suffix: str = "",
+        separator: str = ",",
+    ):
+        self.prefix = prefix
+        self.suffix = suffix
+        self.separator = separator
+
+        super().__init__(data)
+
+    def append(self, elem: T):
+        super().append(elem)
+
+    def extend(self, iterable: Iterable[T]):
+        super().extend(iterable)
+
+    def insert(self, i: int, elem: T):
+        super().insert(i, elem)
+
+    def remove(self, elem: T):
+        super().remove(elem)
+
+    def index(self, x: T, *args):
+        super().index(x, *args)
+
+    def count(self, elem: T):
+        super().count(elem)
+
+    def __str__(self):
+        return (
+            f"{self.prefix}"
+            f"{self.separator.join(str(d) for d in self.data)}"
+            f"{self.suffix}"
+        )

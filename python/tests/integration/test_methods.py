@@ -164,6 +164,18 @@ def test_it_matches_email_domain_and_returns_sorted(
     looker_client.logout()
 
 
+@pytest.mark.usefixtures("test_users")
+def test_delim_sequence(
+    looker_client: mtds.LookerSDK, email_domain: str, users: List[Dict[str, str]]
+):
+    search_results = looker_client.search_users_names(pattern=f"%{email_domain}")
+    assert len(search_results) == len(users)
+    delim_ids = ml.DelimSequence([cast(int, u.id) for u in search_results])
+    all_users = looker_client.all_users(ids=delim_ids)
+    assert len(all_users) == len(users)
+    looker_client.logout()
+
+
 def test_it_retrieves_session(looker_client: mtds.LookerSDK):
     """session() should return the current session.
     """
