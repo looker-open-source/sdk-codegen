@@ -35,15 +35,13 @@ Information on using the Looker SDK for Typescript/Javascript is available at <h
 
 ## Generating an API language binding
 
-By using the yarn/node app included in this project, you now have three steps to legacy language bindings:
+By using the yarn/node app included in this project, you now have two steps for generating the SDK code:
 
 * configure a `looker.ini` file so the Looker API specification can be retrieved from your Looker server
 
-* run the specification converter to convert from Swagger 2.x to OpenApi 3.x with `yarn convert`
-
 * run the SDK generator with `yarn sdk`
 
-* **Note**: [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185) describes the manual steps for generating an API language binding. This project automates these manual steps and uses an improved code generator.
+* **Note**: [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185) describes the legacy, manual steps for generating an API language binding. This project replaces these manual steps and uses an improved code generator.
 
 ## Configuring `looker.ini`
 
