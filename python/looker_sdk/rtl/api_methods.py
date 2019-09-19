@@ -95,6 +95,8 @@ class APIMethods:
                 params[k] = f'{v.isoformat(timespec="minutes")}Z'
             elif isinstance(v, str):
                 params[k] = v
+            elif isinstance(v, model.DelimSequence):
+                params[k] = str(v)
             else:
                 params[k] = json.dumps(v)
         return params

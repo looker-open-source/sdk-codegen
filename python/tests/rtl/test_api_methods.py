@@ -27,12 +27,12 @@ from typing import MutableMapping, Optional
 import pytest  # type: ignore
 
 from looker_sdk import error
+from looker_sdk.rtl import auth_session
 from looker_sdk.rtl import api_settings
 from looker_sdk.rtl import api_methods
 from looker_sdk.rtl import requests_transport
 from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
-from looker_sdk.rtl import auth_session
 from looker_sdk.sdk import models
 
 
@@ -54,6 +54,16 @@ def api() -> api_methods.APIMethods:
         ({"a": "text"}, {"a": "text"}),
         ({"a": 1}, {"a": "1"}),
         ({"a": [1, 2, 3]}, {"a": "[1, 2, 3]"}),
+        ({"a": models.DelimSequence([1, 2, 3])}, {"a": "1,2,3"}),
+        ({"a": models.DelimSequence(["a", "b", "c"])}, {"a": "a,b,c"}),
+        (
+            {
+                "a": models.DelimSequence(
+                    ["a", "b", "c"], prefix="<", suffix=">", separator="|"
+                )
+            },
+            {"a": "<a|b|c>"},
+        ),
         ({"a": ["x", "xy", "xyz"]}, {"a": '["x", "xy", "xyz"]'}),
         ({"a": datetime.datetime(2019, 8, 14, 8, 4, 2)}, {"a": "2019-08-14T08:04Z"}),
     ],

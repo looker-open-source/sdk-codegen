@@ -141,6 +141,7 @@ from ${this.packagePath}.rtl import model
 from ${this.packagePath}.rtl import serialize as sr
 
 EXPLICIT_NULL = model.EXPLICIT_NULL  # type: ignore
+DelimSequence = model.DelimSequence
 `
 
   // @ts-ignore
@@ -381,7 +382,7 @@ ${this.hooks.join('\n')}
       } else if (type instanceof HashType) {
         return {name: `MutableMapping[str, ${map.name}]`, default: this.nullStr}
       } else if (type instanceof DelimArrayType) {
-        return {name: `DelimSequence[${map.name}]`, default: this.nullStr}
+        return {name: `models.DelimSequence[${map.name}]`, default: this.nullStr}
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
