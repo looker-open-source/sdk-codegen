@@ -1,59 +1,59 @@
 {
-  "name": "@looker/sdk",
-  "version": "0.1.0-experimental.13",
-  "description": "Looker SDK",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist/**/*"
-  ],
-  "directories": {
-    "test": "test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/looker-open-source/sdk_codegen.git"
-  },
-  "author": "Looker",
-  "license": "MIT",
-  "scripts": {
-    "build": "yarn clean && tsc",
-    "clean": "rm -rf lib dist",
-    "test": "yarn jest",
-    "docs": "typedoc --mode file --out docs",
-    "lint": "tslint --project tsconfig.json --format stylish 'src/**/*.ts'",
-    "lint-fix": "tslint --fix --project tsconfig.json --format stylish 'src/**/*.ts'"
-  },
-  "bugs": {
-    "url": "https://github.com/looker-open-source/sdk_codegen/issues"
-  },
-  "engines": {
-    "node": ">=10",
-    "npm": ">=5.5.1"
-  },
-  "homepage": "https://github.com/looker-open-source/sdk_codegen/tree/jk/generator_poc/typescript/looker",
-  "devDependencies": {
-    "@types/jest": "^24.0.13",
-    "jest": "^24.8.0",
-    "ts-jest": "^24.0.2",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.2.1",
-    "tslint": "^5.19.0"
-  },
-  "dependencies": {
-    "@types/ini": "^1.3.30",
-    "@types/node": "^11.13.7",
-    "@types/request": "^2.48.2",
-    "@types/request-promise-native": "^1.0.16",
-    "ini": "^1.3.5",
-    "request": "^2.88.0",
-    "request-promise-native": "^1.0.7",
-    "ts-node": "^8.1.0",
-    "typescript": "^3.4.5"
-  },
-  "keywords": [
-    "Looker",
-    "SDK"
-  ]
+    "name": "@looker/sdk",
+    "version": "0.1.0-beta.1",
+    "description": "Looker SDK",
+    "main": "dist/index.js",
+    "typings": "dist/index.d.ts",
+    "files": [
+        "dist/**/*"
+    ],
+    "directories": {
+        "test": "test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/looker-open-source/sdk-codegen.git"
+    },
+    "author": "Looker",
+    "license": "MIT",
+    "scripts": {
+        "build": "yarn clean && tsc",
+        "clean": "rm -rf lib dist",
+        "test": "yarn jest",
+        "docs": "typedoc --mode file --out docs",
+        "lint": "tslint --project tsconfig.json --format stylish 'src/**/*.ts'",
+        "lint-fix": "tslint --fix --project tsconfig.json --format stylish 'src/**/*.ts'"
+    },
+    "bugs": {
+        "url": "https://github.com/looker-open-source/sdk-codegen/issues"
+    },
+    "engines": {
+        "node": ">=10",
+        "npm": ">=5.5.1"
+    },
+    "homepage": "https://github.com/looker-open-source/sdk-codegen/",
+    "devDependencies": {
+        "@types/jest": "^24.0.13",
+        "jest": "^24.8.0",
+        "ts-jest": "^24.0.2",
+        "webpack": "^4.29.6",
+        "webpack-cli": "^3.3.0",
+        "webpack-dev-server": "^3.2.1",
+        "tslint": "^5.19.0"
+    },
+    "dependencies": {
+        "@types/ini": "^1.3.30",
+        "@types/node": "^11.13.7",
+        "@types/request": "^2.48.2",
+        "@types/request-promise-native": "^1.0.16",
+        "ini": "^1.3.5",
+        "request": "^2.88.0",
+        "request-promise-native": "^1.0.7",
+        "ts-node": "^8.1.0",
+        "typescript": "^3.4.5"
+    },
+    "keywords": [
+        "Looker",
+        "SDK"
+    ]
 }

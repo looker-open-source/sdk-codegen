@@ -3,10 +3,10 @@ services:
 
     base:
       image: base-sdk
-      build: 
+      build:
         context: docker/base/
 
     python:
-      build: docker/python/ 
+      build: docker/python/
       volumes:
-        - '.:/sdk_codegen'
+        - '.:/sdk-codegen'

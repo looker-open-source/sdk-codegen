@@ -1,5 +1,5 @@
 {
-    "name": "sdk_codegen",
+    "name": "sdk-codegen",
     "version": "0.1-alpha-1",
     "description": "A utility for generating SDKs for various languages from an OpenApi specification",
     "main": "index.js",
@@ -24,18 +24,18 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/looker-open-source/sdk_codegen.git"
+        "url": "git+https://github.com/looker-open-source/sdk-codegen.git"
     },
     "keywords": [],
     "author": "Looker",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/looker-open-source/sdk_codegen/issues"
+        "url": "https://github.com/looker-open-source/sdk-codegen/issues"
     },
     "engines": {
         "node": ">=10"
     },
-    "homepage": "https://github.com/looker-open-source/sdk_codegen#readme",
+    "homepage": "https://github.com/looker-open-source/sdk-codegen#readme",
     "dependencies": {
         "@openapitools/openapi-generator-cli": "^0.0.9-4.0.0-beta3",
         "@types/blueimp-md5": "^2.7.0",

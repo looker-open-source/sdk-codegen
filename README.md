@@ -23,15 +23,15 @@ A Looker SDK has several parts:
 
 ## Using existing, pre-generated SDKs
 
-When a specific language SDK has been developed, Looker makes that SDK available using the standard package manager for by that platform. Currently, there are two client language SDKs Looker has deployed to package managers. If you want to use our Python or Node/Typescript/Javascript SDKs, you don't need to run the generator at all.
+When a specific language SDK has been developed, Looker makes that SDK available using the standard package manager for by that platform. Currently, there are two client language SDKs Looker has deployed to package managers. If you want to use our Python or Node/Typescript/Javascript SDKs, you don't need to run the generator in this repository at all. You can add it using `pip` or `node/yarn` and start writing your Looker SDK application.
 
 ### Installing the Python SDK
 
-Information on using the Looker SDK for Python is available at <https://pypi.org/project/looker-sdk>.
+Instructions for using the Looker SDK for Python are at <https://pypi.org/project/looker-sdk>. The source for this package's documentation is at [python/looker_sdk/README.rst](python/looker_sdk/README.rst).
 
 ### Installing the Typescript/Javascript SDK
 
-Information on using the Looker SDK for Typescript/Javascript is available at <https://www.npmjs.com/package/@looker/sdk>.
+Instructions for the Looker SDK for Typescript/Javascript are at <https://www.npmjs.com/package/@looker/sdk>. The source for this package's documentation is at [typescript/looker/README.md](typescript/looker/README.md).
 
 If you do want to use the generation options for another language, read on.
 
@@ -143,8 +143,8 @@ to see the list of all scripts that can be run by the code generator.
 
 In order to run the integration tests you will need:
 
- * [docker](https://docs.docker.com/install/#support)
- * [docker-compose](https://docs.docker.com/compose/install/)
+* [docker](https://docs.docker.com/install/#support)
+* [docker-compose](https://docs.docker.com/compose/install/)
 
 Which we use to isolate the various supporting libraries required to test the SDK in a given language.
 
@@ -157,7 +157,7 @@ To build a specific language integration testing image you simply execute:
 docker-compose build [language]
 ```
 
-Where language comes from the directories `sdk_codegen/docker/*` and we'd build the docker image to support running those tests. At this point you can run the existing tests from inside that container pointed at the instance you identified in `looker.ini` like so:
+Where language comes from the directories `sdk-codegen/docker/*` and we'd build the docker image to support running those tests. At this point you can run the existing tests from inside that container pointed at the instance you identified in `looker.ini` like so:
 
 ```bash
 docker-compose run [language]
