@@ -2,15 +2,15 @@
 
 With the number of Open-Source Swagger and [OpenAPI](https://github.com/OAI/OpenAPI-Specification) code generators already available for a wide variety of languages, a reasonable question to ask is, "Why is Looker creating yet another code generator?"
 
-This document will attempt to answer that question by providing Looker's goals and perspectives on providing rich language-specific SDKs that are a pleasure to work with, and easy to support.
+This document will attempt to answer that question by providing Looker's goals and perspectives on providing rich language-specific [SDKs](https://en.wikipedia.org/wiki/Software_development_kit) (Software Development Kit) that are a pleasure to work with, and easy to support.
 
 ## Support for multiple SDK languages
 
-The Looker API is used by customers with a wide variety of languages. Data scientists may like using `R` or `Python`. Other customers may want to use `Typescript`, `Javascript`, `Java` or `C#`.
+The Looker API is used by customers with a wide variety of languages. Data scientists may like using `R` or `Python` while other customers may want to use `Typescript`, `Javascript`, `Java`, or `C#`.
 
 At the time of this writing, the SDK code generator only supports `Python` and `Typescript` so the examples used will be based on those languages.
 
-When looking at the languages supported by the existing code generators, we found the patterns and quality of the generated code to vary widely. As Looker increases the number of supported client-language SDKs, these differences would become unsupportable.
+When looking at the languages supported by the existing code generators, we found the patterns and quality of the generated code varied widely. As Looker increases the number of supported client-language SDKs, these differences would become unsupportable.
 
 The three primary goals for the SDKs Looker provides are: **consistency**, **discoverability**, and **correctness**.
 
@@ -23,11 +23,11 @@ When determining our code generation pattern, we observed that most programming 
   - can have default values
 - structures and/or interfaces
 
-By combining these observations with the clear constraints of RESTful APIs, a clean solution to generating code for multiple target languages is possible.
+Combining these observations with the clear constraints of RESTful APIs makes a clean solution to generating code for multiple target languages possible.
 
 ### Consistency
 
-By providing a consistent implementation pattern across all supported languages, we can iterate on the [principle of least astonishment](https://softwareengineering.stackexchange.com/questions/187457/what-is-the-principle-of-least-astonishment). Additionally, a reference implementation in one supported language can help a developer quickly port that implementation to their preferred languages because the idioms and code will be as similar as possible.
+Providing a consistent implementation pattern across all supported languages helps us iterate on the [principle of least astonishment](https://softwareengineering.stackexchange.com/questions/187457/what-is-the-principle-of-least-astonishment). Additionally, a reference implementation in one supported language can help a developer quickly port that implementation to their preferred languages because the idioms and code will be as similar as possible.
 
 Looker's API methods don't have any method-specific header or cookie values, so only `path`, `body`, and `query` parameters are created by this tool. (If these values are required by another specification, there is only one place in each language generator that requires modification.)
 
@@ -42,11 +42,11 @@ The SDK method signatures declare the parameters for the methods in a consistent
   - body
   - query
 
-By prioritizing the parameter declarations, the minimal number of arguments need to be passed to the method and optional arguments can be assigned default values by the method (where appropriate).
+Prioritizing the parameter declarations minimizes the number of arguments needing to be passed to the method since optional arguments can be omitted or assigned default values by the method (where appropriate).
 
-A consistent naming scheme for the methods is provided directly from the Looker API specification. Methods are prefixed with `all`, or `delete`, or `update`.
+The Looker API specification provides a consistent naming scheme for the methods. For example, functional categories of methods are prefixed with `all`, `delete`, `create`, `update`, or `search`.
 
-Method names are preserved from the specification's `operationId`. No conversion to `CamelCase` or `snake_case` is made by the generator. Even though Typescript does not usually have `snake_case` conventions, no conversion is made, so SDK method names remain identical across languages.
+Method names are preserved from the specification's `operationId`. No conversion to `CamelCase` or `snake_case` is made by the generator. Even though Typescript does not usually have `snake_case` conventions, no conversion is made, so SDK method names remain identical across languages. Furthermore, every endpoint in the specification has a unique operationId, so the method name is also unique across the entire SDK.
 
 The Python code:
 
@@ -92,7 +92,7 @@ looks = await sdk.search_looks({fields: 'id,title,description'})
 
 Which is **just about** as convenient as the Python pattern.
 
-For any othe future supported language that doesn't support default named parameters, this on-demand `Request` structure generation will be used.
+For any other future supported language that doesn't support default named parameters, this on-demand `Request` structure generation will be used.
 
 Wherever feasible, a consistent design across languages will be retained.
 
@@ -100,9 +100,9 @@ Wherever feasible, a consistent design across languages will be retained.
 
 Code editors have grown a rich and similar feature set since the time since Delphi introduced [Code Completion](http://docwiki.embarcadero.com/RADStudio/Rio/en/Code_Completion) and Visual Studio provided [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense). Other modern code editors provide similar code assistance features, and the language patterns adopted by the SDK generator take full advantage of modern editors.
 
-The generated SDK declares all SDK methods in a single, flattened set of methods in one class. This implementation is possible because Looker enforces unique `operationId`s for every method in the Looker API. This way, with a variable called `sdk` representing an initialized LookerSDK object, typing `sdk.` in an editor should result in seeing all of the available SDK methods. Typically, as you type in additional characters, the list of available methods will be filtered to those that match what has been typed.
+The generated SDK declares all SDK methods in a single, flattened set of methods in one class. This way, with a variable called `sdk` representing an initialized LookerSDK object, typing `sdk.` in an editor should result in seeing all of the available SDK methods. Typically, as you type in additional characters, the list of available methods will be filtered to those that match what has been typed.
 
-Descriptions in the API specification are embedded into the generate method and models source code, so the methods and models are self-documenting.
+Descriptions in the API specification are embedded into the generated method and models source code, making it self-documenting.
 
 ### Correctness
 
@@ -122,13 +122,13 @@ All methods are implemented as HTTP requests. All results are returned in HTTP r
 
 Except for more esoteric REST functionality such as `HEAD` requests, all API calls are one of five HTTP methods.
 
-- `GET` is used to retrieve a resource or resource collections
+- `GET` is used to retrieve a resource or resource collections.
 
 - `PUT` is an idempotent create or update of a resource. [This comparison](https://restfulapi.net/rest-put-vs-post/) does a great job of explaining how it differs from `POST`.
 
 - `POST` is used to create a resource. Every time you pass the same data to a `POST` method, a new resource is created.
 
-- `PATCH` is used to update a resource.
+- `PATCH` is an idempotent granular update of a resource, where only some values are being updated.
 
 - `DELETE` is used to delete a resource.
 
@@ -243,7 +243,7 @@ export interface IWriteBackupConfiguration {
 
 #### Request structures
 
-As mentioned in [Diverging while remaining consistent](#Diverging_while_remaining_consistent) the `Request` or `IRequest` structure creation rules were described for languages that don't have support for optional named parameters. The `all_homepage_sections` endpoint has two optional parameters and no body parameter, so a request structure is created to make the optional properties individually configurable.
+As mentioned in [Diverging while remaining consistent](#Diverging while remaining consistent) the `Request` or `IRequest` structure creation rules were described for languages that don't have support for optional named parameters. The `all_homepage_sections` endpoint has two optional parameters and no body parameter, so a request structure is created to make the optional properties individually configurable.
 
 ```typescript
 // Dynamically generated request type for all_homepage_sections
