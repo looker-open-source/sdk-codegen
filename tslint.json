@@ -5,7 +5,7 @@
   ],
   "jsRules": {},
   "rules": {
-    "interface-name": [true, "never-prefix"],
+    "interface-name": [true, "always-prefix"],
     "jsx-boolean-value": false,
     "no-namespace": [true, "allow-declarations"]
   },

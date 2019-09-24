@@ -1,0 +1,32 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+ptpython = "*"
+ipython = "*"
+mypy = "*"
+pytest-cov = "*"
+black = "*"
+flake8 = "*"
+flake8-bugbear = "*"
+prettyprinter = "*"
+twine = "*"
+setuptools = "*"
+wheel = "*"
+pyyaml = "*"
+pytest-pudb = "*"
+pytest-mock = "*"
+
+[packages]
+requests = "*"
+attrs = "*"
+cattrs = "*"
+
+[requires]
+python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true

@@ -22,25 +22,26 @@
  * THE SOFTWARE.
  */
 
-import * as fs from 'fs'
-import * as ini from 'ini'
+import { AuthToken } from './authToken'
 
-export interface SDKConfigProps {
-  api_version: string
-  base_url: string
-  client_id: string
-  client_secret: string
-  embed_secret: string
-  user_id: string
-  verbose: boolean
-  verify_ssl: boolean
-}
+describe('AccessToken', () => {
+  it('defaults with empty token', () => {
+    const actual = new AuthToken()
+    expect(actual.access_token).toEqual('')
+    expect(actual.token_type).toEqual('')
+    expect(actual.expires_in).toEqual(0)
+    expect(actual.isActive()).toEqual(false)
+  })
 
-export interface SDKConfigSection {
-  [key: string]: SDKConfigProps
-}
-
-export const SDKConfig = (fileName = './looker.ini') => {
-  const config = ini.parse(fs.readFileSync(fileName, 'utf-8')) as SDKConfigSection
-  return config
-}
+  it('is active with full token', () => {
+    const actual = new AuthToken({
+      access_token: 'all-access',
+      token_type: 'backstage',
+      expires_in: 3600,
+    })
+    expect(actual.access_token).toEqual('all-access')
+    expect(actual.token_type).toEqual('backstage')
+    expect(actual.expires_in).toEqual(3600)
+    expect(actual.isActive()).toEqual(true)
+  })
+})

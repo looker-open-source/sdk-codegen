@@ -1,6 +1,15 @@
 looker.ini
 lookerapi*.json
 Looker*.json
-node_modules/*
-.idea/*
+**/node_modules/*
+**/.idea/*
+.vscode/*
 api/*
+sdk_generated.*
+*/looker/sdk/methods.*
+*/looker/sdk/models.*
+python/venv/*
+venv/*
+package-lock.json
+**/lib/*
+**/dist/*

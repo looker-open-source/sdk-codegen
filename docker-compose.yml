@@ -1,0 +1,12 @@
+version: '3'
+services:
+
+    base:
+      image: base-sdk
+      build:
+        context: docker/base/
+
+    python:
+      build: docker/python/
+      volumes:
+        - '.:/sdk-codegen'
