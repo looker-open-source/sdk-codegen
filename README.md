@@ -139,7 +139,13 @@ yarn run
 
 to see the list of all scripts that can be run by the code generator.
 
+## SDK Examples
+
+The open source repository <https://github.com/looker-open-source/sdk-examples> contains code snippets and projects written using the Looker language SDKs. You may find useful code in that repository. and are also welcome to contribute additional examples.
+
 ## Running Integration Tests
+
+These are notes for the integration tests Looker is developing and are left here for reference in case you want to establish your own integration testing process.
 
 In order to run the integration tests you will need:
 

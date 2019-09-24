@@ -2,7 +2,7 @@
 
 The Looker SDK for Typescript/Javascript provides a convenient way to communicate with the Looker API available on your Looker server. The SDK is written in Typescript and uses the Node [request](https://www.npmjs.com/package/request) and [request promise native](https://www.npmjs.com/package/request-promise-native) modules for processing HTTP requests.
 
-**DISCLAIMER**: This is an _experimental_ version of the Looker SDK, using a new code generator developed by Looker. You should expect some things to just not work, and foresee drastic changes to the SDK source code until an official beta begins.
+**DISCLAIMER**: This is a _beta_ version of the Looker SDK, using a completely new code generator developed by Looker. Implementations are still subject to change, but we expect most SDK method calls to work correctly. If you run into problems with the SDK, please feel free to [report an issue](https://github.com/looker-open-source/sdk-codegen/issues), and please indicate which language SDK you're using in the report.
 
 ## Getting started
 
@@ -28,7 +28,7 @@ yarn add @looker/sdk
 
 ### Configure the SDK for your Looker server
 
-**Note**: The INI configuration for the Looker SDK is a sample implementation intended to speed up the initial development of Node applications using the Looker API. See the [Securing your SDK Credentials] section below for warnings about using INI files that contain your API credentials in a source code repository or production environment.
+**Note**: The `.ini` configuration for the Looker SDK is a sample implementation intended to speed up the initial development of Node applications using the Looker API. See the [Securing your SDK Credentials](#securing-your-sdk-credentials) section below for warnings about using `.ini` files that contain your API credentials in a source code repository or production environment.
 
 Create a `looker.ini` file with your server URL and API credentials assigned as shown in this example.
 
