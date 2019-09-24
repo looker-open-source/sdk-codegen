@@ -6,10 +6,12 @@ The Looker SDK for Python provides a convenient way to communicate with the
 Looker API available on your Looker server. The library requires python3.7+
 and is annotated using the typing module.
 
-**DISCLAIMER**: This is an experimental version of the Looker SDK, using
-a new code generator developed by Looker. You should expect some things to
-just not work, and foresee drastic changes to the SDK source code until an
-official beta begins.
+**DISCLAIMER**: This is a *beta* version of the Looker SDK, using a completely
+new code generator developed by Looker. Implementations are still subject to
+change, but we expect most SDK method calls to work correctly. If you run into
+problems with the SDK, please feel free to
+`report an issue <https://github.com/looker-open-source/sdk-codegen/issues>`_,
+and please indicate which language SDK you're using in the report.
 
 Sample project setup
 --------------------
