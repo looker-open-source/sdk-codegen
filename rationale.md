@@ -243,7 +243,7 @@ export interface IWriteBackupConfiguration {
 
 #### Request structures
 
-As mentioned in [Diverging while remaining consistent](#Diverging+while+remaining+consistent) the `Request` or `IRequest` structure creation rules were described for languages that don't have support for optional named parameters. The `all_homepage_sections` endpoint has two optional parameters and no body parameter, so a request structure is created to make the optional properties individually configurable.
+As mentioned in [Diverging while remaining consistent](#diverging+while+remaining+consistent) the `Request` or `IRequest` structure creation rules were described for languages that don't have support for optional named parameters. The `all_homepage_sections` endpoint has two optional parameters and no body parameter, so a request structure is created to make the optional properties individually configurable.
 
 ```typescript
 // Dynamically generated request type for all_homepage_sections
@@ -257,7 +257,7 @@ export interface IRequestall_homepage_sections {
 
 ### Method implementations
 
-Method signatures are produced using the parameter order described in [Consistency](#Consistency) above. All API methods are generated into the same class. For the default configuration of the code generator, this class is called `LookerSDK` in Typescript.
+Method signatures are produced using the parameter order described in [Consistency](#consistency) above. All API methods are generated into the same class. For the default configuration of the code generator, this class is called `LookerSDK` in Typescript.
 
 #### Method with standard parameters
 
