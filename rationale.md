@@ -243,7 +243,7 @@ export interface IWriteBackupConfiguration {
 
 #### Request structures
 
-As mentioned in [Diverging while remaining consistent](#Diverging while remaining consistent) the `Request` or `IRequest` structure creation rules were described for languages that don't have support for optional named parameters. The `all_homepage_sections` endpoint has two optional parameters and no body parameter, so a request structure is created to make the optional properties individually configurable.
+As mentioned in [Diverging while remaining consistent](#Diverging+while+remaining+consistent) the `Request` or `IRequest` structure creation rules were described for languages that don't have support for optional named parameters. The `all_homepage_sections` endpoint has two optional parameters and no body parameter, so a request structure is created to make the optional properties individually configurable.
 
 ```typescript
 // Dynamically generated request type for all_homepage_sections
