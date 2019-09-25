@@ -63,7 +63,7 @@ const matchDomain = '%@looker.com'
 const anyoneButMe = async (userId: number, emailPattern: string) => {
   const all = await sdk.ok(sdk.search_users({email: emailPattern, page: 0, per_page: 2}))
   if (!all || all.length === 0) {
-    console.log(`No matches for ${emailPattern}`)
+    console.warn(`No matches for ${emailPattern}`)
     return undefined
   }
   // find a user who is not the specified user
@@ -78,7 +78,7 @@ const anyoneButMe = async (userId: number, emailPattern: string) => {
   // retrieve your user account to verify correct credentials
   const me = await sdk.ok(sdk.me(userFields))
   if (!me) {
-    console.log('API authentication failed')
+    console.warn('API authentication failed')
     return
   }
   console.log({me})
