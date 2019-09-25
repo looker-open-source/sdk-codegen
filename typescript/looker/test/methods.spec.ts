@@ -769,9 +769,7 @@ describe('LookerNodeSDK', () => {
         const [dash] = dashboards
         expect(dash).toBeDefined()
         expect(dash.title).toBeDefined()
-        console.log({dash})
         const searched = await sdk.ok(sdk.search_dashboards({title: dash.title}))
-        console.log({searched})
         expect(searched).toBeDefined()
         const [dashboard] = searched
         if (dashboard.dashboard_elements) {

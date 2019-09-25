@@ -9,6 +9,9 @@
         "tslint-config-prettier": "^1.18.0",
         "tslint-config-standard": "8.0.1"
     },
+    "resolutions": {
+        "set-value": "^2.0.1"
+    },
     "scripts": {
         "clean": "rm -rf api/ && rm *.3.?.json && rm *.3.?.oas.json",
         "fetch": "ts-node src/fetchSpec.ts",
