@@ -25,6 +25,7 @@
 import { IAuthSession, NodeSession } from '../rtl/nodeSession'
 import { LookerSDK } from '../sdk/methods'
 import {
+  IDashboardElement,
   IQuery,
   IRequestrun_inline_query,
   IUser, IWriteQuery,
@@ -44,6 +45,53 @@ const queries: Partial<IQuery>[] = testData['queries']
 const dashboards: any[] = testData['dashboards']
 const emailDomain = '@foo.com'
 const testTimeout = 36000000 // 1 hour
+
+const sleep = async (ms: number) => {
+  return new Promise(resolve  =>{
+    setTimeout(resolve, ms)
+  })
+}
+
+const downloadTile = async (sdk: LookerSDK, tile: IDashboardElement, format: string) => {
+  if (!tile.query_id) {
+    console.error(`Tile ${tile.title} does not have a query`)
+    return
+  }
+  const task = await sdk.ok(sdk.create_query_render_task(tile.query_id, format, 640, 480))
+
+  if (!task || !task.id) {
+    console.error(`Could not create a render task for ${tile.title}`)
+    return
+  }
+
+  // poll the render task until it completes
+  let elapsed = 0.0
+  const delay = 500 // wait .5 seconds
+  while (true) {
+    const poll = await sdk.ok(sdk.render_task(task.id!))
+    if (poll.status === 'failure') {
+      console.log({poll})
+      console.error(`Render failed for ${tile.title}`)
+      return
+    }
+    if (poll.status === 'success') {
+      break
+    }
+    await sleep(delay)
+    console.log(`${elapsed += (delay/1000)} seconds elapsed`)
+  }
+  // IMPORTANT: must set encoding to `null` for binary downloads
+  const result = await sdk.ok(sdk.render_task_results(task.id!, {encoding: null}))
+  const fileName = `${tile.title}.${format}`
+  let failed = false
+  fs.writeFile(fileName, result, 'binary',(err) => {
+      if (err) {
+        failed = true
+        console.error(err)}
+    }
+  )
+  return failed ? undefined : fileName
+}
 
 describe('LookerNodeSDK', () => {
   const settings = new NodeSettingsIniFile(localIni, 'Looker')
@@ -543,7 +591,7 @@ describe('LookerNodeSDK', () => {
     )
   })
 
-  describe('Dashboard CRUD-it checks', () => {
+  describe('Dashboard endpoints', () => {
     const getQueryId = (
       qhash: { [id: string]: IQuery },
       id: any
@@ -579,8 +627,12 @@ describe('LookerNodeSDK', () => {
             sdk.create_query(request)
           )
         }
+        let dashboard
         for (const d of dashboards) {
-          let dashboard = await sdk.ok(
+          if (!d.title) continue
+          [dashboard] = await sdk.ok(sdk.search_dashboards({title: d.title}))
+          if (dashboard) continue
+          dashboard = await sdk.ok(
             sdk.create_dashboard({
               description: d.description || undefined,
               hidden: typeof d.hidden === 'undefined' ? undefined : d.hidden,
@@ -694,6 +746,39 @@ describe('LookerNodeSDK', () => {
             expect(tile.title).toEqual(t.title)
             expect(tile.type).toEqual(t.type)
           }
+          // refresh dashboard
+          dashboard = await sdk.ok(sdk.dashboard(dashboard.id!))
+          if (dashboard.dashboard_elements) {
+            const [tile] = dashboard.dashboard_elements.filter( t => t.query_id && t.query_id > 0)
+            expect(tile).toBeDefined()
+            const file = await downloadTile(sdk, tile, 'png')
+            expect(file).toBeDefined()
+          }
+
+        }
+        await sdk.authSession.logout()
+        expect(sdk.authSession.isAuthenticated()).toBeFalsy()
+      },
+      testTimeout
+    )
+
+    it(
+      'render tile',
+      async () => {
+        const sdk = new LookerSDK(session)
+        const [dash] = dashboards
+        expect(dash).toBeDefined()
+        expect(dash.title).toBeDefined()
+        console.log({dash})
+        const searched = await sdk.ok(sdk.search_dashboards({title: dash.title}))
+        console.log({searched})
+        expect(searched).toBeDefined()
+        const [dashboard] = searched
+        if (dashboard.dashboard_elements) {
+          const [tile] = dashboard.dashboard_elements.filter( t => t.query_id && t.query_id > 0 && t.title === 'Users Data Title' )
+          expect(tile).toBeDefined()
+          const file = await downloadTile(sdk, tile, 'png')
+          expect(file).toBeDefined()
         }
         await sdk.authSession.logout()
         expect(sdk.authSession.isAuthenticated()).toBeFalsy()

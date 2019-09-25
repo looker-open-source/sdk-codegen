@@ -198,6 +198,8 @@ export interface ITransportSettings {
   verify_ssl: boolean;
   /** request timeout in seconds. Default to 30 */
   timeout: number;
+  /** encoding override */
+  encoding?: string | null
 }
 
 /** constructs the path argument including any optional query parameters

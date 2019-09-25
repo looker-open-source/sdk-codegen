@@ -155,6 +155,7 @@ export class NodeTransport implements ITransport {
       timeout: this.timeout(options) * 1000,
       method,
     }
+    if ('encoding' in options) init.encoding = options.encoding
 
     if (authenticator) {
       // Automatic authentication process for the request
