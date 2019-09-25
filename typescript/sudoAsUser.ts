@@ -61,12 +61,12 @@ const matchDomain = '%@looker.com'
  * @returns {Promise<undefined | IUser>} Returns the first matched user, or undefined if no match
  */
 const pickSomeoneElse = async (userId: number, emailPattern: string) => {
-  const all = await sdk.ok(sdk.search_users({email: emailPattern}))
+  const all = await sdk.ok(sdk.search_users({email: emailPattern, page: 0, per_page: 2}))
   if (!all || all.length === 0) {
     console.log(`No matches for ${emailPattern}`)
     return undefined
   }
-  // find a user who is not the API user
+  // find a user who is not the specified user
   const [ other ] = all
     .filter(u => u.id !== userId && !u.is_disabled)
     .slice(0, 1)
