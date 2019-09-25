@@ -27,7 +27,7 @@ When a specific language SDK has been developed, Looker makes that SDK available
 
 ### Installing the Python SDK
 
-Instructions for using the Looker SDK for Python are at <https://pypi.org/project/looker-sdk>. The source for this package's documentation is at [python/looker_sdk/README.rst](python/looker_sdk/README.rst).
+Instructions for using the Looker SDK for Python are at <https://pypi.org/project/looker-sdk>. The source for this package's documentation is at [python/README.rst](python/README.rst).
 
 ### Installing the Typescript/Javascript SDK
 
