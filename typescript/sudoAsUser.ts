@@ -60,7 +60,7 @@ const matchDomain = '%@looker.com'
  * @param {string} emailPattern email pattern for user search
  * @returns {Promise<undefined | IUser>} Returns the first matched user, or undefined if no match
  */
-const pickSomeoneElse = async (userId: number, emailPattern: string) => {
+const anyoneButMe = async (userId: number, emailPattern: string) => {
   const all = await sdk.ok(sdk.search_users({email: emailPattern, page: 0, per_page: 2}))
   if (!all || all.length === 0) {
     console.log(`No matches for ${emailPattern}`)
@@ -82,7 +82,7 @@ const pickSomeoneElse = async (userId: number, emailPattern: string) => {
     return
   }
   console.log({me})
-  const sudoUser = await pickSomeoneElse(me.id!, matchDomain)
+  const sudoUser = await anyoneButMe(me.id!, matchDomain)
   if (sudoUser) {
     const auth = sdk.authSession as IAuthSession
     await auth.login(sudoUser.id)
