@@ -7,7 +7,7 @@ The examples in this folder are set up for `yarn`. If you don't have `yarn` inst
 Use 
 
 ```bash
-yarn ts-node {filename}
+yarn ts-node {filename} [other command-line options]
 ```
 
 to run a Typescript SDK example file.
@@ -19,3 +19,6 @@ Very brief descriptions of the examples and the link to the main example/project
 ### User management
 
 * [sudo as another user](sudoAsUser.ts)
+
+### Data downloads
+* [download a dashboard tile by name as PNG](downloadTile.ts)
