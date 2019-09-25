@@ -1,3 +1,21 @@
 # Typescript Examples for the Looker API
 
-You can find Typescript language examples in this folder.
+The examples in this folder are set up for `yarn`. If you don't have `yarn` installed already, you'll need to [install](https://yarnpkg.com/en/docs/install) it.
+
+## Using yarn
+
+Use 
+
+```bash
+yarn ts-node {filename}
+```
+
+to run a Typescript SDK example file.
+
+## Example list
+
+Very brief descriptions of the examples and the link to the main example/project file are provided here. For more information on an example, look at the source file.
+
+### User management
+
+* [sudo as another user](sudoAsUser.ts)
