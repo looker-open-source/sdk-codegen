@@ -4,7 +4,7 @@ from looker_sdk import client, methods, models
 
 
 def main():
-    api_client = client.setup("looker.ini")
+    api_client = client.setup("../looker.ini")
 
     users = get_all_users(api_client)
 
