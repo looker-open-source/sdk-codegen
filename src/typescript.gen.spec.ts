@@ -31,30 +31,52 @@ const gen = new TypescriptGen(apiModel)
 const indent = ''
 
 describe('typescript generator', () => {
+  it('comment header', () => {
+    const text = 'line 1\nline 2'
+    const actual = gen.commentHeader(indent,text)
+    const expected = `/**
+ * line 1
+ * line 2
+ */
+`
+    expect(actual).toEqual(expected)
+  })
+
   describe('parameter declarations', () => {
     it('required parameter', () => {
       const param = apiModel.methods['run_query'].params[0]
       const actual = gen.declareParameter(indent, param)
-      expect(actual).toEqual('// Id of query\nquery_id: number')
+      expect(actual).toEqual(`/**
+ * {number} query_id Id of query
+ */
+query_id: number`)
     })
 
     it('optional parameter', () => {
       const param = apiModel.methods['run_query'].params[2]
       const actual = gen.declareParameter(indent, param)
-      expect(actual).toEqual(`// Row limit (may override the limit in the saved query).
+      expect(actual).toEqual(`/**
+ * {number} limit Row limit (may override the limit in the saved query).
+ */
 limit: number = 0`)
     })
 
     it('required typed parameter', () => {
       const param = apiModel.methods['create_query_render_task'].params[2]
       const actual = gen.declareParameter(indent, param)
-      expect(actual).toEqual(`// Output width in pixels\nwidth: number`)
+      expect(actual).toEqual(`/**
+ * {number} width Output width in pixels
+ */
+width: number`)
     })
 
     it('csv formatted parameter', () => {
       const param = apiModel.methods['query_task_multi_results'].params[0]
       const actual = gen.declareParameter(indent, param)
-      expect(actual).toEqual(`// List of Query Task IDs\nquery_task_ids: DelimArray<string>`)
+      expect(actual).toEqual(`/**
+ * {DelimArray<string>} query_task_ids List of Query Task IDs
+ */
+query_task_ids: DelimArray<string>`)
     })
   })
 
@@ -88,7 +110,10 @@ limit: number = 0`)
       expect(body.length).toEqual(1)
       expect(body[0].type.name).toEqual('Query')
       const param = gen.declareParameter(indent, body[0])
-      expect(param).toEqual('body?: Partial<IWriteQuery>')
+      expect(param).toEqual(`/**
+ * {Partial<IWriteQuery>} body
+ */
+body?: Partial<IWriteQuery>`)
       expect(method.bodyArg).toEqual('body')
       expect(method.queryArgs).toEqual(['fields'])
       expect(method.headerArgs).toEqual([])
@@ -102,7 +127,10 @@ limit: number = 0`)
       expect(body.length).toEqual(1)
       expect(body[0].type.name).toEqual('Dashboard')
       const param = gen.declareParameter(indent, body[0])
-      expect(param).toEqual('body?: Partial<IWriteDashboard>')
+      expect(param).toEqual(`/**
+ * {Partial<IWriteDashboard>} body
+ */
+body?: Partial<IWriteDashboard>`)
       expect(method.bodyArg).toEqual('body')
       expect(method.queryArgs).toEqual([])
       expect(method.headerArgs).toEqual([])
@@ -132,12 +160,21 @@ limit: number = 0`)
     it('optional body and additional param', () => {
       const method = apiModel.methods['create_user_credentials_email']
       expect(method).toBeDefined()
-      const expected = `// POST /users/{user_id}/credentials_email -> ICredentialsEmail
+      const expected = `/**
+ * POST /users/{user_id}/credentials_email -> ICredentialsEmail
+ */
 async create_user_credentials_email(
-  // id of user
+  /**
+   * {number} user_id id of user
+   */
   user_id: number,
+  /**
+   * {Partial<IWriteCredentialsEmail>} body
+   */
   body?: Partial<IWriteCredentialsEmail>,
-  // Requested fields.
+  /**
+   * {string} fields Requested fields.
+   */
   fields: string = '',
   options?: Partial<ITransportSettings>) {
 `
@@ -147,7 +184,9 @@ async create_user_credentials_email(
     it('no params', () => {
       const method = apiModel.methods['all_datagroups']
       expect(method).toBeDefined()
-      const expected = `// GET /datagroups -> IDatagroup[]
+      const expected = `/**
+ * GET /datagroups -> IDatagroup[]
+ */
 async all_datagroups(
   options?: Partial<ITransportSettings>) {
 `
@@ -186,7 +225,9 @@ async all_datagroups(
       if (type) {
         const property = type.properties['body']
         const actual = gen.declareProperty(indent, property)
-        expect(actual).toEqual(`// body parameter for dynamically created request type
+        expect(actual).toEqual(`/**
+ * body parameter for dynamically created request type
+ */
 body?: Partial<ICreateDashboardRenderTask>`)
 //         const actual = gen.declareType(indent, type!)
 //         expect(actual).toEqual(`// Dynamically generated request type for create_dashboard_render_task
@@ -213,11 +254,17 @@ body?: Partial<ICreateDashboardRenderTask>`)
       const type = apiModel.types['Workspace']
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface IWorkspace{
-  // The unique id of this user workspace. Predefined workspace ids include "production" and "dev"
+  /**
+   * The unique id of this user workspace. Predefined workspace ids include "production" and "dev"
+   */
   id?: string
-  // The local state of each project in the workspace
+  /**
+   * The local state of each project in the workspace
+   */
   projects?: IProject[]
-  // Operations the current user is able to perform on this object
+  /**
+   * Operations the current user is able to perform on this object
+   */
   can?: IDictionary<boolean>
 }`)
     })
@@ -225,10 +272,14 @@ body?: Partial<ICreateDashboardRenderTask>`)
       const type = apiModel.types['ApiVersion']
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface IApiVersion{
-  // Current Looker release version number
+  /**
+   * Current Looker release version number
+   */
   looker_release_version?: string
   current_version?: IApiVersionElement
-  // Array of versions supported by this Looker instance
+  /**
+   * Array of versions supported by this Looker instance
+   */
   supported_versions?: IApiVersionElement[]
 }`)
     })

@@ -39,7 +39,7 @@ import {
 import { CodeGen, warnEditing } from './codeGen'
 import * as fs from 'fs'
 import * as prettier from 'prettier'
-import { warn, isFileSync, utf8, success } from './utils'
+import { warn, isFileSync, utf8, success, commentBlock } from './utils'
 
 // const strDefault = 'Default'
 
@@ -67,8 +67,8 @@ export class TypescriptGen extends CodeGen {
 import { APIMethods } from '../rtl/apiMethods'
 import { ITransportSettings } from '../rtl/transport'
 /**
-* DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
-*/
+ * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
+ */
 import { DelimArray } from '../rtl/delimArray'
 import { IDictionary, ${this.typeNames().join(', ')} } from './models'
 
@@ -99,6 +99,10 @@ export interface IDictionary<T> {
   // @ts-ignore
   modelsEpilogue(indent: string) {
     return ''
+  }
+
+  commentHeader(indent: string, text: string | undefined) {
+    return text ? `${indent}/**\n${commentBlock(text, indent, ' * ')}\n${indent} */\n` : ''
   }
 
   declareProperty(indent: string, property: IProperty) {
@@ -134,6 +138,10 @@ export interface IDictionary<T> {
     return header + fragment + `${fragment? ',' : ''}\n${bump}options?: Partial<ITransportSettings>) {\n`
   }
 
+  paramComment(param: IParameter, mapped: IMappedType) {
+    return `{${mapped.name}} ${param.name} ${param.description}`
+  }
+
   declareParameter(indent: string, param: IParameter) {
     let type = (param.location === strBody)
       ? this.writeableType(param.type) || param.type
@@ -146,7 +154,7 @@ export interface IDictionary<T> {
     if (!param.required) {
       pOpt = mapped.default ? '' : '?'
     }
-    return this.commentHeader(indent, param.description)
+    return this.commentHeader(indent, this.paramComment(param, mapped))
       + `${indent}${param.name}${pOpt}: ${mapped.name}`
       + (param.required ? '' : (mapped.default ? ` = ${mapped.default}` : ''))
   }
@@ -230,7 +238,6 @@ export interface IDictionary<T> {
   //   {queryArgs...}, bodyArg, {headerArgs...}, {cookieArgs...}
   //   {queryArgs...}, null, null, {cookieArgs...}
   //   null, bodyArg
-
   //   {queryArgs...}
   httpArgs(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
