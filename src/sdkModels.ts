@@ -233,20 +233,30 @@ export interface IMethod extends ISymbol {
   // All optional parameters
   optionalParams: IParameter[]
   bodyParams: IParameter[]
+  responseModes: Set<string>
 
   getParams(location?: MethodParameterLocation): IParameter[]
 
   optional(location?: MethodParameterLocation): IParameter[]
 
   hasOptionalParams(): boolean
+
+  responseIsBinary() : boolean
+
+  responseIsString() : boolean
+
+  responseIsBoth() : boolean
 }
 
 export class Method extends SchemadSymbol implements IMethod {
+  static strBinary = 'binary'
+  static strString = 'string'
   readonly httpMethod: HttpMethod
   readonly endpoint: string
   readonly primaryResponse: IMethodResponse
   responses: IMethodResponse[]
   readonly params: IParameter[]
+  readonly responseModes: Set<string>
 
   constructor(httpMethod: HttpMethod, endpoint: string, schema: OAS.OperationObject, params: IParameter[],
               responses: IMethodResponse[], body?: IParameter) {
@@ -272,10 +282,42 @@ export class Method extends SchemadSymbol implements IMethod {
     this.endpoint = endpoint
     this.responses = responses
     this.primaryResponse = primaryResponse
+    this.responseModes = this.getResponseModes()
     this.params = params
     if (body) {
       this.params.push(body)
     }
+  }
+
+
+  /**
+   * Determines which response modes (binary/string) this method supports
+   * @returns {Set<string>} Either a set of 'string' or 'binary' or both
+   */
+  private getResponseModes() {
+    let modes = new Set<string>()
+    for (const resp of this.responses) {
+
+      switch (resp.mediaType) {
+        case 'application/json':
+        case 'text/plain':
+        case 'text':
+          modes.add(Method.strString)
+          break
+        case 'image/png':
+        case 'image/jpg':
+        case 'image/jpeg':
+        case 'application/pdf':
+          modes.add(Method.strBinary)
+          break
+        case '':
+          break
+        default:
+          throw new Error(`What mode should I use for ${this.operationId} ${JSON.stringify(resp)}?`)
+      }
+    }
+
+    return modes
   }
 
   get resultType(): IType {
@@ -379,8 +421,20 @@ export class Method extends SchemadSymbol implements IMethod {
     return this.params
   }
 
+  responseIsBinary(): boolean {
+    return this.responseModes.has(Method.strBinary)
+  }
+
+  responseIsString(): boolean {
+    return this.responseModes.has(Method.strString)
+  }
+
+  responseIsBoth(): boolean {
+    return this.responseIsBinary() && this.responseIsString()
+  }
+
   // order parameters in location priority
-  locationSorter(p1: IParameter, p2: IParameter) {
+  private locationSorter(p1: IParameter, p2: IParameter) {
     const remain = 0
     const before = -1
     // const after = 1

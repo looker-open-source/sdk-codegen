@@ -65,7 +65,7 @@ export class TypescriptGen extends CodeGen {
     return `
 // ${warnEditing}
 import { APIMethods } from '../rtl/apiMethods'
-import { ITransportSettings } from '../rtl/transport'
+import { binaryMode, ITransportSettings } from '../rtl/transport'
 /**
  * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
  */
@@ -119,9 +119,9 @@ export interface IDictionary<T> {
   }
 
   methodSignature(indent: string, method: IMethod) {
+    const binMode = 'binaryMode'
     const type = this.typeMap(method.type)
-    const header = this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${type.name}`)
-      + `${indent}async ${method.name}(`
+    let headComment = `${method.httpMethod} ${method.endpoint} -> ${type.name}`
     let fragment = ''
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
@@ -135,11 +135,23 @@ export interface IDictionary<T> {
       if (args && args.length > 0) args.forEach(p => params.push(this.declareParameter(bump, p)))
       fragment = params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
     }
-    return header + fragment + `${fragment? ',' : ''}\n${bump}options?: Partial<ITransportSettings>) {\n`
+    let options = method.responseIsBinary() && !method.responseIsString() ?
+      `\n${bump}options = {...${binMode}, ...options}\n` : ''
+    if (method.responseIsBoth()) {
+      headComment += `\n\n**Note**: Binary content may be returned by this method. Add \`${binMode}\` to the \`options\` parameter to correctly receive binary content\n`
+    } else if (method.responseIsBinary()) {
+      headComment += `\n\n**Note**: Binary content is returned by this method.\n`
+    }
+    const header = this.commentHeader(indent, headComment)
+      + `${indent}async ${method.name}(`
+
+    return header + fragment
+      + `${fragment? ',' : ''}\n${bump}options?: Partial<ITransportSettings>) {\n`
+      + options
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
-    return `{${mapped.name}} ${param.name} ${param.description}`
+    return `@param {${mapped.name}} ${param.name} ${param.description}`
   }
 
   declareParameter(indent: string, param: IParameter) {

@@ -26,6 +26,31 @@ describe('sdkModels', () => {
 
   })
 
+  describe('response modes', () => {
+
+    it('binary only', () => {
+      const method = apiModel.methods['render_task_results']
+      expect(method.responseIsBinary()).toEqual(true)
+      expect(method.responseIsString()).toEqual(false)
+      expect(method.responseIsBoth()).toEqual(false)
+    })
+
+    it('string only', () => {
+      const method = apiModel.methods['add_group_user']
+      expect(method.responseIsBinary()).toEqual(false)
+      expect(method.responseIsString()).toEqual(true)
+      expect(method.responseIsBoth()).toEqual(false)
+    })
+
+    it('both modes', () => {
+      const method = apiModel.methods['run_look']
+      expect(method.responseIsBinary()).toEqual(true)
+      expect(method.responseIsString()).toEqual(true)
+      expect(method.responseIsBoth()).toEqual(true)
+    })
+
+  })
+
   describe('required properties', () => {
 
     it('CreateQueryTask', () => {

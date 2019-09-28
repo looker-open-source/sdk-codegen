@@ -749,6 +749,7 @@ describe('LookerNodeSDK', () => {
           // refresh dashboard
           dashboard = await sdk.ok(sdk.dashboard(dashboard.id!))
           if (dashboard.dashboard_elements) {
+            // TODO figure out configuration problems causing dashboard to fail render
             const [tile] = dashboard.dashboard_elements.filter( t => t.query_id && t.query_id > 0)
             expect(tile).toBeDefined()
             const file = await downloadTile(sdk, tile, 'png')

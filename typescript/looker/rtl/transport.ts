@@ -39,6 +39,15 @@ export const agentTag = `TS-SDK ${sdkVersion}`
  */
 export const defaultTimeout = 120
 
+/**
+ * Request object options toggle for binary mode
+ * @type {{encoding: null}}
+ */
+export const binaryMode = {encoding: null}
+
+/**
+ * Recognized HTTP methods
+ */
 export type HttpMethod =
   | 'GET'
   | 'POST'
@@ -46,9 +55,12 @@ export type HttpMethod =
   | 'DELETE'
   | 'PATCH'
   | 'TRACE'
-  | 'HEAD';
+  | 'HEAD'
 
-// https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for reference
+/**
+ * HTTP status codes
+ * https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for reference
+ */
 export enum StatusCode {
   OK = 200,
   Created,
@@ -148,6 +160,9 @@ export type SDKResponse<TSuccess, TError> =
   | ISDKSuccessResponse<TSuccess>
   | ISDKErrorResponse<TError | ISDKError>;
 
+/**
+ * Base authorization interface
+ */
 export interface IAuthorizer {
   settings: IApiSettings;
   transport: ITransport;
@@ -203,9 +218,9 @@ export interface ITransportSettings {
 }
 
 /** constructs the path argument including any optional query parameters
- @param path {string} the base path of the request
+ @param {string} path the base path of the request
 
- @param obj {[key: string]: string} optional collection of query parameters to encode and append to the path
+ @param {[key: string]: string} obj optional collection of query parameters to encode and append to the path
 
  */
 export function addQueryParams(path: string, obj?: { [key: string]: string }) {
