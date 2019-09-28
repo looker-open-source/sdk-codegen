@@ -139,7 +139,7 @@ const downloadTile = async (sdk: LookerSDK, tile: IDashboardElement, format: str
     console.log(`${elapsed += (delay/1000)} seconds elapsed`)
   }
   // IMPORTANT: Encoding must be `null` for binary downloads
-  const result = await sdk.ok(sdk.render_task_results(task.id!, {encoding: null}))
+  const result = await sdk.ok(sdk.render_task_results(task.id!))
   const fileName = `${tile.title}.${format}`
   // const encoding = format === 'png' ? 'binary' : 'utf-8'
   let failed = false
