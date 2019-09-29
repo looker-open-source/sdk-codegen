@@ -58,7 +58,7 @@ const getParams = () => {
   const result = {
     dashboardTitle: process.argv.length >= offset + 1? process.argv[offset + 1] : '',
     tileTitle: process.argv.length > offset + 2 ? process.argv[offset + 2] : '',
-    renderFormat: 'png' //process.argv.length >= offset + 3 ? process.argv[offset + 3] : 'png'
+    renderFormat: process.argv.length >= offset + 3 ? process.argv[offset + 3] : 'png'
   }
   return result
 }
@@ -111,45 +111,51 @@ const sleep = async (ms: number) => {
  * @returns {Promise<undefined | string>} Name of file downloaded
  */
 const downloadTile = async (sdk: LookerSDK, tile: IDashboardElement, format: string) => {
+  let fileName = undefined
   if (!tile.query_id) {
     console.error(`Tile ${tile.title} does not have a query`)
     return
   }
-  const task = await sdk.ok(sdk.create_query_render_task(tile.query_id, format, 640, 480))
+  try {
+    const task = await sdk.ok(sdk.create_query_render_task(tile.query_id, format, 640, 480))
 
-  if (!task || !task.id) {
-    console.error(`Could not create a render task for ${tile.title}`)
-    return
-  }
-
-  // poll the render task until it completes
-  let elapsed = 0.0
-  const delay = 500 // wait .5 seconds
-  while (true) {
-    const poll = await sdk.ok(sdk.render_task(task.id!))
-    if (poll.status === 'failure') {
-      console.log({poll})
-      console.error(`Render failed for ${tile.title}`)
+    if (!task || !task.id) {
+      console.error(`Could not create a render task for ${tile.title}`)
       return
     }
-    if (poll.status === 'success') {
-      break
+
+    // poll the render task until it completes
+    let elapsed = 0.0
+    const delay = 500 // wait .5 seconds
+    while (true) {
+      const poll = await sdk.ok(sdk.render_task(task.id!))
+      if (poll.status === 'failure') {
+        console.log({poll})
+        console.error(`Render failed for ${tile.title}`)
+        return
+      }
+      if (poll.status === 'success') {
+        break
+      }
+      await sleep(delay)
+      console.log(`${elapsed += (delay/1000)} seconds elapsed`)
     }
-    await sleep(delay)
-    console.log(`${elapsed += (delay/1000)} seconds elapsed`)
+    // IMPORTANT: Encoding must be `null` for binary downloads
+    const result = await sdk.ok(sdk.render_task_results(task.id!))
+    fileName = `${tile.title}.${format}`
+    // const encoding = format === 'png' ? 'binary' : 'utf-8'
+    fs.writeFile(fileName, result, 'binary',(err) => {
+        if (err) {
+          fileName = undefined
+          console.error(err)}
+      }
+    )
+
+  } catch (err) {
+    console.error(`'${format}' is probably not a valid format`)
+    console.error(err)
   }
-  // IMPORTANT: Encoding must be `null` for binary downloads
-  const result = await sdk.ok(sdk.render_task_results(task.id!))
-  const fileName = `${tile.title}.${format}`
-  // const encoding = format === 'png' ? 'binary' : 'utf-8'
-  let failed = false
-  fs.writeFile(fileName, result, 'binary',(err) => {
-      if (err) {
-        failed = true
-        console.error(err)}
-    }
-  )
-  return failed ? undefined : fileName
+  return fileName
 }
 
 (async () => {
