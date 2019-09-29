@@ -298,22 +298,14 @@ export class Method extends SchemadSymbol implements IMethod {
     let modes = new Set<string>()
     for (const resp of this.responses) {
 
-      switch (resp.mediaType) {
-        case 'application/json':
-        case 'text/plain':
-        case 'text':
-          modes.add(Method.strString)
-          break
-        case 'image/png':
-        case 'image/jpg':
-        case 'image/jpeg':
-        case 'application/pdf':
-          modes.add(Method.strBinary)
-          break
-        case '':
-          break
-        default:
-          throw new Error(`What mode should I use for ${this.operationId} ${JSON.stringify(resp)}?`)
+      // TODO should we use one of the mime packages like https://www.npmjs.com/package/mime-types for
+      // more thorough/accurate coverage?
+      if (resp.mediaType.match(/^application\/.*(json|xml|sql|graphql)|^text/i)) {
+        modes.add(Method.strString)
+      } else if (resp.mediaType.match(/^image\/|^audio\/|^application\/.*(pdf|wbxml|zip)/i)) {
+        modes.add(Method.strBinary)
+      } else if (resp.mediaType !== '') {
+        throw new Error(`Is ${this.operationId} ${JSON.stringify(resp)} binary or string?`)
       }
     }
 
