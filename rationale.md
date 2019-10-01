@@ -523,7 +523,7 @@ A **mixed mode** response that can be either binary or string (e.g. text or json
 /**
  * POST /queries/run/{result_format} -> string
  *
- * **Note**: Binary content may be returned by this method. Add `binaryMode` to the `options` parameter to correctly receive binary content
+ * **Note**: Binary content may be returned by this method.
  */
 async run_inline_query(
   request: Partial<IRequestRunInlineQuery>,

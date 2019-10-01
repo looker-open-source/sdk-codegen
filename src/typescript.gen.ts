@@ -119,7 +119,6 @@ export interface IDictionary<T> {
   }
 
   methodSignature(indent: string, method: IMethod) {
-    const binMode = 'binaryMode'
     const type = this.typeMap(method.type)
     let headComment = `${method.httpMethod} ${method.endpoint} -> ${type.name}`
     let fragment = ''
@@ -136,7 +135,7 @@ export interface IDictionary<T> {
       fragment = params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
     }
     if (method.responseIsBoth()) {
-      headComment += `\n\n**Note**: Binary content may be returned by this method. Add \`${binMode}\` to the \`options\` parameter to correctly receive binary content\n`
+      headComment += `\n\n**Note**: Binary content may be returned by this method.`
     } else if (method.responseIsBinary()) {
       headComment += `\n\n**Note**: Binary content is returned by this method.\n`
     }

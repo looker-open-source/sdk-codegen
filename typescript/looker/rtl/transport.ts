@@ -67,12 +67,6 @@ export const charsetUtf8Pattern = new RegExp(matchCharsetUtf8, "i")
 export const defaultTimeout = 120
 
 /**
- * Request object options toggle for binary mode
- * @type {{encoding: null}}
- */
-export const binaryMode = {encoding: null}
-
-/**
  * Recognized HTTP methods
  */
 export type HttpMethod =
