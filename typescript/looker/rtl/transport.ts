@@ -28,7 +28,7 @@
 // TODO create generic Agent that is not transport-specific
 import { Agent } from 'https'
 import { Headers } from 'request'
-import { sdkVersion } from './versions'
+import { matchCharsetUtf8, matchModeBinary, matchModeString, sdkVersion } from './constants'
 import { IApiSettings } from './apiSettings'
 
 export const agentTag = `TS-SDK ${sdkVersion}`
@@ -41,6 +41,24 @@ export enum ResponseMode {
   'string', // this is a "string" response
   'unknown' // unrecognized response type
 }
+
+/**
+ * MIME patterns for string content types
+ * @type {RegExp}
+ */
+export const contentPatternString = new RegExp(matchModeString, "i")
+
+/**
+ * MIME patterns for "binary" content types
+ * @type {RegExp}
+ */
+export const contentPatternBinary = new RegExp(matchModeBinary, "i")
+
+/**
+ * MIME pattern for UTF8 charset attribute
+ * @type {RegExp}
+ */
+export const charsetUtf8Pattern = new RegExp(matchCharsetUtf8, "i")
 
 /**
  * Default request timeout
@@ -227,29 +245,27 @@ export interface ITransportSettings {
 }
 
 /**
- * MIME patterns for binary content types
- * @type {RegExp}
- */
-export const contentPatternBinary = /^application\/.*(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b)|^text/i
-
-/**
- * MIME patterns for "string" content types
- * @type {RegExp}
- */
-export const contentPatternString = /(^image\/|^audio\/|^video\/|^application\/.*(\bpdf\b|\bwbxml\b|\bzip\b|\bgzip\b))|charset.*=/i
-
-/**
  * Is the content type binary or "string"?
  * @param {string} contentType
  * @returns {ResponseMode.binary | ResponseMode.string}
  */
 export function responseMode(contentType: string) {
-  if (contentType.match(contentPatternBinary)) {
+  if (contentType.match(contentPatternString)) {
     return ResponseMode.string
-  } else if (contentType.match(contentPatternString)) {
+  }
+  if (contentType.match(contentPatternBinary)) {
     return ResponseMode.binary
   }
   return ResponseMode.unknown
+}
+
+/**
+ * Does this content type have a UTF-8 charset?
+ * @param {string} contentType
+ * @returns {RegExpMatchArray | null}
+ */
+export function isUtf8(contentType: string) {
+  return contentType.match(/;.*\bcharset\b=\butf-8\b/i)
 }
 
 /** constructs the path argument including any optional query parameters

@@ -23,7 +23,7 @@
  */
 
 import { agentTag, defaultTimeout, ITransportSettings } from './transport'
-import { environmentPrefix } from './versions'
+import { environmentPrefix } from './constants'
 
 export const strLookerBaseUrl = `${environmentPrefix}_BASE_URL`
 export const strLookerApiVersion = `${environmentPrefix}_API_VERSION`

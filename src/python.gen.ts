@@ -354,7 +354,7 @@ ${this.hooks.join('\n')}
 
   versionStamp() {
     if (this.versions) {
-      const stampFile = this.fileName('rtl/versions')
+      const stampFile = this.fileName('rtl/constants')
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }

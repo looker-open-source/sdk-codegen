@@ -32,7 +32,7 @@ import cattr
 
 from looker_sdk import error
 from looker_sdk.rtl import transport
-from looker_sdk.rtl import versions
+from looker_sdk.rtl import constants
 
 
 def _convert_bool(val: str, _: bool) -> bool:
@@ -80,17 +80,17 @@ class ApiSettings(transport.TransportSettings):
         config_data = cls.read_ini(filename, section)
 
         env_api_version = cast(
-            str, os.getenv(f"{versions.environment_prefix}_API_VERSION")
+            str, os.getenv(f"{constants.environment_prefix}_API_VERSION")
         )
         if env_api_version:
             config_data["api_version"] = env_api_version
 
-        env_base_url = cast(str, os.getenv(f"{versions.environment_prefix}_BASE_URL"))
+        env_base_url = cast(str, os.getenv(f"{constants.environment_prefix}_BASE_URL"))
         if env_base_url:
             config_data["base_url"] = env_base_url
 
         env_verify_ssl = cast(
-            str, os.getenv(f"{versions.environment_prefix}_VERIFY_SSL")
+            str, os.getenv(f"{constants.environment_prefix}_VERIFY_SSL")
         )
         if env_verify_ssl:
             config_data["verify_ssl"] = env_verify_ssl

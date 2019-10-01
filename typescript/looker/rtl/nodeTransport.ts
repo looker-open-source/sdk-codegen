@@ -28,7 +28,7 @@ import {
   Authenticator,
   defaultTimeout,
   HttpMethod,
-  ISDKError,
+  ISDKError, isUtf8,
   ITransport,
   ITransportSettings,
   responseMode,
@@ -171,10 +171,6 @@ export class NodeTransport implements ITransport {
       res.statusCode >= StatusCode.OK && res.statusCode <= StatusCode.IMUsed
     )
   }
-}
-
-function isUtf8(contentType: string) {
-  return contentType.match(/;.*\bcharset\b=\butf-8\b/i)
 }
 
 async function parseResponse(contentType: string, res: Response) {

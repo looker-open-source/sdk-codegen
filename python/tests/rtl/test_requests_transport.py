@@ -25,7 +25,7 @@ import pytest  # type: ignore
 
 from looker_sdk.rtl import requests_transport
 from looker_sdk.rtl import transport
-from looker_sdk.rtl import versions
+from looker_sdk.rtl import constants
 
 
 @attr.s(auto_attribs=True)
@@ -67,7 +67,7 @@ def test_configure(settings):
 
     test = requests_transport.RequestsTransport.configure(settings)
     assert isinstance(test, requests_transport.RequestsTransport)
-    assert test.session.headers.get("User-Agent") == f"PY-SDK {versions.sdk_version}"
+    assert test.session.headers.get("User-Agent") == f"PY-SDK {constants.sdk_version}"
 
 
 def test_request_ok(settings):

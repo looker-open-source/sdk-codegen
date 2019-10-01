@@ -28,7 +28,7 @@ from typing import Callable, Dict, MutableMapping, Optional, Union
 
 import attr
 
-from looker_sdk.rtl import versions
+from looker_sdk.rtl import constants
 
 
 class HttpMethod(enum.Enum):
@@ -64,7 +64,7 @@ class TransportSettings:
     def agent_tag(self) -> str:
         """User Agent value
         """
-        return f"PY-SDK {versions.sdk_version}"
+        return f"PY-SDK {constants.sdk_version}"
 
 
 TResponseValue = Union[str, bytes]
