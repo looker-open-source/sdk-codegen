@@ -23,12 +23,12 @@
  */
 
 import * as OAS from 'openapi3-ts'
+import { OperationObject } from 'openapi3-ts'
 import * as fs from 'fs'
 import md5 from 'blueimp-md5'
-import { utf8 } from './utils'
-import { HttpMethod, StatusCode } from '../typescript/looker/rtl/transport'
+import { camelCase, utf8 } from './utils'
+import { HttpMethod, ResponseMode, responseMode, StatusCode } from '../typescript/looker/rtl/transport'
 import { IVersionInfo } from './codeGen'
-import { OperationObject } from 'openapi3-ts'
 
 export const strBody = 'body'
 export const strRequest = 'Request'
@@ -233,7 +233,7 @@ export interface IMethod extends ISymbol {
   // All optional parameters
   optionalParams: IParameter[]
   bodyParams: IParameter[]
-  responseModes: Set<string>
+  responseModes: Set<ResponseMode>
 
   getParams(location?: MethodParameterLocation): IParameter[]
 
@@ -249,14 +249,12 @@ export interface IMethod extends ISymbol {
 }
 
 export class Method extends SchemadSymbol implements IMethod {
-  static strBinary = 'binary'
-  static strString = 'string'
   readonly httpMethod: HttpMethod
   readonly endpoint: string
   readonly primaryResponse: IMethodResponse
   responses: IMethodResponse[]
   readonly params: IParameter[]
-  readonly responseModes: Set<string>
+  readonly responseModes: Set<ResponseMode>
 
   constructor(httpMethod: HttpMethod, endpoint: string, schema: OAS.OperationObject, params: IParameter[],
               responses: IMethodResponse[], body?: IParameter) {
@@ -289,24 +287,22 @@ export class Method extends SchemadSymbol implements IMethod {
     }
   }
 
-
   /**
    * Determines which response modes (binary/string) this method supports
    * @returns {Set<string>} Either a set of 'string' or 'binary' or both
    */
   private getResponseModes() {
-    let modes = new Set<string>()
+    let modes = new Set<ResponseMode>()
     for (const resp of this.responses) {
 
       // TODO should we use one of the mime packages like https://www.npmjs.com/package/mime-types for
       // more thorough/accurate coverage?
-      if (resp.mediaType.match(/^application\/.*(json|xml|sql|graphql)|^text/i)) {
-        modes.add(Method.strString)
-      } else if (resp.mediaType.match(/^image\/|^audio\/|^application\/.*(pdf|wbxml|zip)/i)) {
-        modes.add(Method.strBinary)
-      } else if (resp.mediaType !== '') {
-        throw new Error(`Is ${this.operationId} ${JSON.stringify(resp)} binary or string?`)
-      }
+      const mode = responseMode(resp.mediaType)
+      if (mode !== ResponseMode.unknown) modes.add(mode)
+    }
+
+    if (modes.size === 0) {
+      throw new Error(`Is ${this.operationId} ${JSON.stringify(this.responses)} binary or string?`)
     }
 
     return modes
@@ -414,11 +410,11 @@ export class Method extends SchemadSymbol implements IMethod {
   }
 
   responseIsBinary(): boolean {
-    return this.responseModes.has(Method.strBinary)
+    return this.responseModes.has(ResponseMode.binary)
   }
 
   responseIsString(): boolean {
-    return this.responseModes.has(Method.strString)
+    return this.responseModes.has(ResponseMode.string)
   }
 
   responseIsBoth(): boolean {
@@ -741,7 +737,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   // add to this.requestTypes collection with hash as key
   makeRequestType(hash: string, method: IMethod) {
-    const name = `${strRequest}${method.name}`
+    const name = `${strRequest}${camelCase('_' + method.name)}`
     const request = new RequestType(this, name, method.allParams,
       `Dynamically generated request type for ${method.name}`)
     this.types[name] = request

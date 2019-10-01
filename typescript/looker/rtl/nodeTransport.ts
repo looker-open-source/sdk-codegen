@@ -23,21 +23,22 @@
  */
 
 import {
-  ISDKError,
-  SDKResponse,
-  ITransport,
   addQueryParams,
-  ITransportSettings,
-  Authenticator,
-  StatusCode,
   agentTag,
-  HttpMethod,
+  Authenticator,
   defaultTimeout,
+  HttpMethod,
+  ISDKError,
+  ITransport,
+  ITransportSettings,
+  responseMode,
+  ResponseMode,
+  SDKResponse,
+  StatusCode,
 } from './transport'
 
-import rq from 'request'
+import rq, { Response } from 'request'
 import rp from 'request-promise-native'
-import { Response } from 'request'
 
 type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions;
 
@@ -153,6 +154,7 @@ export class NodeTransport implements ITransport {
       resolveWithFullResponse: true,
       rejectUnauthorized: this.verifySsl(options),
       timeout: this.timeout(options) * 1000,
+      encoding: null, // null = requests are returned as binary so `Content-Type` dictates response format
       method,
     }
     if ('encoding' in options) init.encoding = options.encoding
@@ -171,24 +173,31 @@ export class NodeTransport implements ITransport {
   }
 }
 
+function isUtf8(contentType: string) {
+  return contentType.match(/;.*\bcharset\b=\butf-8\b/i)
+}
+
 async function parseResponse(contentType: string, res: Response) {
-  if (contentType.match(/application\/json/g)) {
-    try {
-      // return await res.json()
-      const result = await res.body
-      return result instanceof Object ? result : JSON.parse(result)
-    } catch (error) {
-      console.log(res.body)
-      return Promise.reject(error)
+  const mode = responseMode(contentType)
+  let result = await res.body
+  if (mode === ResponseMode.string) {
+    if (!isUtf8(contentType)) {
+      // always convert to UTF-8 from whatever it was
+      result = Buffer.from(result.toString(), 'utf8')
     }
-  } else if (contentType === 'text' || contentType.startsWith('text/')) {
-    return res.body
-    // return res.text()
+    if (contentType.match(/^application\/.*\bjson\b/g)) {
+      try {
+        result = result instanceof Object ? result : JSON.parse(result)
+        return result
+      } catch (error) {
+        return Promise.reject(error)
+      }
+    }
+    return result.toString()
   } else {
     try {
-      // TODO figure out streaming? Or provide different method for streaming?
-      return await res.body
-      // return await res.blob()
+      // Return string result from buffer without any character encoding
+      return result.toString()
     } catch (error) {
       return Promise.reject(error)
     }

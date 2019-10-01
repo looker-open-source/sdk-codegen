@@ -34,6 +34,15 @@ import { IApiSettings } from './apiSettings'
 export const agentTag = `TS-SDK ${sdkVersion}`
 
 /**
+ * ResponseMode for an HTTP request - either binary or "string"
+ */
+export enum ResponseMode {
+  'binary', // this is a binary response
+  'string', // this is a "string" response
+  'unknown' // unrecognized response type
+}
+
+/**
  * Default request timeout
  * @type {number} default request timeout is 120 seconds, or two minutes
  */
@@ -217,6 +226,32 @@ export interface ITransportSettings {
   encoding?: string | null
 }
 
+/**
+ * MIME patterns for binary content types
+ * @type {RegExp}
+ */
+export const contentPatternBinary = /^application\/.*(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b)|^text/i
+
+/**
+ * MIME patterns for "string" content types
+ * @type {RegExp}
+ */
+export const contentPatternString = /(^image\/|^audio\/|^video\/|^application\/.*(\bpdf\b|\bwbxml\b|\bzip\b|\bgzip\b))|charset.*=/i
+
+/**
+ * Is the content type binary or "string"?
+ * @param {string} contentType
+ * @returns {ResponseMode.binary | ResponseMode.string}
+ */
+export function responseMode(contentType: string) {
+  if (contentType.match(contentPatternBinary)) {
+    return ResponseMode.string
+  } else if (contentType.match(contentPatternString)) {
+    return ResponseMode.binary
+  }
+  return ResponseMode.unknown
+}
+
 /** constructs the path argument including any optional query parameters
  @param {string} path the base path of the request
 
@@ -240,10 +275,11 @@ export function addQueryParams(path: string, obj?: { [key: string]: string }) {
 }
 
 export function sdkError(result: any) {
-  if (typeof result.error.message === 'string') {
-    return new Error(result.error.message)
-  } else if (typeof result.message === 'string') {
+  if ('message' in result && typeof result.message === 'string') {
     return new Error(result.message)
+  }
+  if ('error' in result && 'message' in result.error && typeof result.error.message === 'string') {
+    return new Error(result.error.message)
   }
   const error = JSON.stringify(result)
   return new Error(`Unknown error with SDK method ${error}`)

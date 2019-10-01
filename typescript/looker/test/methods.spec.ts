@@ -27,7 +27,7 @@ import { LookerSDK } from '../sdk/methods'
 import {
   IDashboardElement,
   IQuery,
-  IRequestrun_inline_query,
+  IRequestRunInlineQuery,
   IUser, IWriteQuery,
 } from '../sdk/models'
 import * as yaml from 'js-yaml'
@@ -546,7 +546,7 @@ describe('LookerNodeSDK', () => {
         for (const q of queries) {
           // default the result limit to 10
           const limit = q.limit ? parseInt(q.limit) : 10
-          const request: IRequestrun_inline_query = {
+          const request: IRequestRunInlineQuery = {
             body: {
               model: q.model,
               view: q.view,

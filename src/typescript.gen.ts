@@ -65,7 +65,7 @@ export class TypescriptGen extends CodeGen {
     return `
 // ${warnEditing}
 import { APIMethods } from '../rtl/apiMethods'
-import { binaryMode, ITransportSettings } from '../rtl/transport'
+import { ITransportSettings } from '../rtl/transport'
 /**
  * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
  */
@@ -135,8 +135,6 @@ export interface IDictionary<T> {
       if (args && args.length > 0) args.forEach(p => params.push(this.declareParameter(bump, p)))
       fragment = params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
     }
-    let options = method.responseIsBinary() && !method.responseIsString() ?
-      `\n${bump}options = {...${binMode}, ...options}\n` : ''
     if (method.responseIsBoth()) {
       headComment += `\n\n**Note**: Binary content may be returned by this method. Add \`${binMode}\` to the \`options\` parameter to correctly receive binary content\n`
     } else if (method.responseIsBinary()) {
@@ -147,7 +145,6 @@ export interface IDictionary<T> {
 
     return header + fragment
       + `${fragment? ',' : ''}\n${bump}options?: Partial<ITransportSettings>) {\n`
-      + options
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {

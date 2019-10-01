@@ -84,7 +84,7 @@ looks = await sdk.search_looks(undefined, undefined, undefined, undefined, undef
 
 Clearly, this would not be a pleasant way to make SDK calls.
 
-To make Typescript coding more enjoyable, methods that have more than one optional parameter (or two, if the body parameter is also present but optional), a `Request` structure is created that supports the sparse assignment of arguments. Thanks to the `IRequestsearch_looks` interface generated for Typescript, `search_looks` can be called like this:
+To make Typescript coding more enjoyable, methods that have more than one optional parameter (or two, if the body parameter is also present but optional), a `Request` structure is created that supports the sparse assignment of arguments. Thanks to the `IRequestSearchLooks` interface generated for Typescript, `search_looks` can be called like this:
 
 ```typescript
 looks = await sdk.search_looks({fields: 'id,title,description'})
@@ -275,7 +275,7 @@ As mentioned in [Diverging while remaining consistent](#diverging-while-remainin
 /**
  * Dynamically generated request type for all_homepage_sections
  */
-export interface IRequestall_homepage_sections {
+export interface IRequestAllHomepageSections {
   /**
    * Requested fields.
    */
@@ -395,10 +395,10 @@ Typescript:
 
 ```typescript
 /**
- * POST /query_tasks -> IQueryTask}
+ * POST /query_tasks -> IQueryTask
  */
 async create_query_task(
-  request: Partial<IRequestcreate_query_task>,
+  request: Partial<IRequestCreateQueryTask>,
   options?: Partial<ITransportSettings>,
 ) {
   return this.post<IQueryTask, IError | IValidationError>(
@@ -430,7 +430,7 @@ The Request structure is:
 /**
  * Dynamically generated request type for create_query_task
  */
-export interface IRequestcreate_query_task {
+export interface IRequestCreateQueryTask {
   /**
    * body parameter for dynamically created request type
    */
@@ -511,9 +511,9 @@ Both `DelimArray` and `DelimSequence` accept optional overrides for:
 
 ### Binary response handling
 
-The popular request libraries currently used by the RTLs for both Python and the Node-based Typescript SDK treat response content as string by default, with binary mode as an opt-in setting. This results in the download of binary content like images or PDFs from SDK methods to be corrupted.
+The popular request libraries currently used by the RTLs for both Python and the Node-based Typescript SDK treat response content as string by default, with binary mode as an opt-in setting. By default, this results in the download of binary content like images or PDFs from SDK methods to be corrupted.
 
-Until we've [resolved this issue](#binary-response-detection) with replacement HTTP request methods, the code generator will assist with binary responses in the following ways (the provided examples in Typescript).
+We've resolved this issue by setting up the request methods to process requests as binary by default, with the RTL using the `Content-Type` of the response to determine whether it's binary before returning the response payload to the SDK method.
 
 #### Response can be either binary and string
 
@@ -521,12 +521,12 @@ A **mixed mode** response that can be either binary or string (e.g. text or json
 
 ```typescript
 /**
-  * POST /queries/run/{result_format} -> string}
-  *
-  * **Note**: Binary content may be returned by this method. Add `binaryMode` to the `options` parameter to correctly receive binary content
-  */
+ * POST /queries/run/{result_format} -> string
+ *
+ * **Note**: Binary content may be returned by this method. Add `binaryMode` to the `options` parameter to correctly receive binary content
+ */
 async run_inline_query(
-  request: Partial<IRequestrun_inline_query>,
+  request: Partial<IRequestRunInlineQuery>,
   options?: Partial<ITransportSettings>,
 ) {
   return this.post<string, IError>(
@@ -553,7 +553,7 @@ async run_inline_query(
 
 #### Binary responses
 
-A method that only has binary responses will have the request configured for binary inside the generated SDK method. Images and PDFs are considered binary.
+A method that only has binary responses will have a note that the response is binary.
 
 ```typescript
 /**
@@ -568,7 +568,6 @@ async render_task_results(
   render_task_id: string,
   options?: Partial<ITransportSettings>,
 ) {
-  options = { options, ...binaryMode }
   return this.get<string, IError>(
     encodeURI(`/render_tasks/${render_task_id}/results`),
     null,
@@ -580,7 +579,7 @@ async render_task_results(
 
 #### String responses
 
-No changes are made to the standard generated method for response that are handled as string, like text or json
+A method that returns anything that's considered a string, such as `json`, `xml`, or `text` will not have a note about binary responses.
 
 ```typescript
 /**
@@ -602,17 +601,15 @@ async role(
 }
 ```
 
-### Future enhancements
+### Future research
 
-While the new SDKs are easier to use than the previous options, there are still some additional improvements we are working on.
+While the new SDKs are easier to use than the previous options, there are still additional improvements we are researching.
 
 #### Streaming support
 
 Looker intends to provide streaming (http chunking) methods for all streamable API endpoints, in addition to the current non-streaming methods.
 
-#### Binary response detection
-
-We would prefer to process requests as binary by default, and use the `Content-Type` of the response to determine whether it's binary before returning the response payload to the SDK method.
+Assigning an API response to a local variable is simple and easy, but if the response is extremely large (gigabytes of data), deserializing into client application memory will probably cause the client application to crash with an out-of-memory exception. Streaming large responses chunk by chunk can achieve constant memory use for arbitrarily large responses, at a cost of additional code complexity.
 
 ## API Troubleshooting
 
@@ -620,4 +617,4 @@ See the official documentation for [API Troubleshooting](https://docs.looker.com
 
 ## Notes
 
-In addition to Swagger being deprecated, this [visual guide](https://blog.readme.io/an-example-filled-guide-to-swagger-3-2/) shows why OpenAPI 3.x is preferred to Swagger 2.x.
+This [visual guide](https://blog.readme.io/an-example-filled-guide-to-swagger-3-2/) shows some of the reasons to switch from Swagger 2.x to OpenAPI 3.x.
