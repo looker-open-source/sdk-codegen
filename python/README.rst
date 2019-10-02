@@ -29,7 +29,7 @@ Follow the **remaining steps 3 - 5** of
 https://github.com/pyenv/pyenv#basic-github-checkout otherwise your python3.7
 installation may break.
 
-Now you're ready  install python 3.7:
+Now you're ready to install python 3.7:
 
 .. code-block:: bash
 
