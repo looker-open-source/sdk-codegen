@@ -13,12 +13,12 @@ black = "*"
 flake8 = "*"
 flake8-bugbear = "*"
 prettyprinter = "*"
-twine = "*"
 setuptools = "*"
 wheel = "*"
 pyyaml = "*"
 pytest-pudb = "*"
 pytest-mock = "*"
+twine = "*"
 
 [packages]
 requests = "*"

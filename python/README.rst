@@ -16,14 +16,31 @@ and please indicate which language SDK you're using in the report.
 Sample project setup
 --------------------
 
-In these instructions we'll use `pyenv <https://github.com/pyenv/pyenv#installation>`_
-to install python3.7 and
-`pipenv <https://docs.pipenv.org/en/latest/#install-pipenv-today>`_
-to manage project dependencies. Here is how to install them on a mac
+Install python 3.7. We highly recommend using
+`pyenv <https://github.com/pyenv/pyenv#installation>`_ to install
+different versions of python. Mac users should use
+`homebrew <https://brew.sh/>`_ to install pyenv:
 
 .. code-block:: bash
 
-    brew update && brew install pyenv && brew install pipenv
+    brew install pyenv
+
+Follow the **remaining steps 3 - 5** of
+https://github.com/pyenv/pyenv#basic-github-checkout otherwise your python3.7
+installation may break.
+
+Now you're ready to install python 3.7:
+
+.. code-block:: bash
+
+    pyenv install 3.7.4
+
+Next we'll use `pipenv <https://docs.pipenv.org/en/latest/#install-pipenv-today>`_
+as an awesome enhancement to pip to manage project dependencies.
+
+.. code-block:: bash
+
+    brew install pipenv
 
 Create a project directory
 
@@ -36,14 +53,13 @@ Install python3.7 and use it for this directory
 .. code-block:: bash
 
     cd looker-sdk-example/
-    pyenv install 3.7.4
     pyenv local 3.7.4
 
 Install looker_sdk using pipenv
 
 .. code-block:: bash
 
-    $ pipenv install --pre looker_sdk
+    pipenv install --python 3.7 --pre looker_sdk
 
 
 Configuring the SDK
@@ -71,7 +87,12 @@ example file:
 
 Code example
 ------------
-Copy the following code block into `example.py`
+Copy the following code block into `example.py`. Note: it's helpful to launch your
+code editor with your virtual environment loaded so that it can find the looker_sdk
+library and give you a nice code completion experience. Run :code:`pipenv shell` to
+start load the virtual environment and then run your editor command
+(e.g. for VSCode - :code:`code example.py`)
+
 
 .. code-block:: python
 
