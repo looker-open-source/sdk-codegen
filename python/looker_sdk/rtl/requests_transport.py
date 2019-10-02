@@ -38,7 +38,7 @@ class RequestsTransport(transport.Transport):
     def __init__(
         self, settings: transport.TransportSettings, session: requests.Session
     ):
-
+        self.settings = settings
         headers: Dict[str, str] = {"User-Agent": settings.agent_tag}
         if settings.headers:
             headers.update(settings.headers)
@@ -62,6 +62,7 @@ class RequestsTransport(transport.Transport):
         body: Optional[bytes] = None,
         authenticator: Optional[Callable[[], Dict[str, str]]] = None,
         headers: Optional[MutableMapping[str, str]] = None,
+        transport_options: Optional[transport.TransportSettings] = None,
     ) -> transport.Response:
 
         url = f"{self.api_path}{path}"
@@ -69,10 +70,18 @@ class RequestsTransport(transport.Transport):
             headers = {}
         if authenticator:
             headers.update(authenticator())
+        timeout = self.settings.timeout
+        if transport_options:
+            timeout = transport_options.timeout
         logging.info("%s(%s)", method.name, url)
         try:
             resp = self.session.request(
-                method.name, url, params=query_params, data=body, headers=headers
+                method.name,
+                url,
+                params=query_params,
+                data=body,
+                headers=headers,
+                timeout=timeout,
             )
         except IOError as exc:
             ret = transport.Response(False, str(exc))
