@@ -17,7 +17,7 @@ A Looker SDK has several parts:
 
 * The **Looker API Explorer**, provided in the Looker web app directly from our version-specific OpenAPI specification, avaiable in each Looker server instance.
 
-* **Language SDKs**, "smarter" client language classes and methods to improve the experience of calling the Looker API in various popular coding languages. Looker has created a code generator for specific languages in this repository, which is used by the command `yarn sdk`'
+* **Language SDKs**, "smarter" client language classes and methods to improve the experience of calling the Looker API in various popular coding languages. Looker has created a code generator for specific languages in this repository, which is used by the command `yarn sdk`.
 
 * **API bindings** using the legacy [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) can also be product. This process converts the API specification to language-specific code. Most of these template-based generators are written by different language enthusiasts, so the pattern and quality of the generated code varies widely, even though most generated code tends to work acceptably.
 
@@ -40,6 +40,8 @@ If you do want to use the generation options for another language, read on.
 By using the yarn/node app included in this project, you now have two steps for generating the SDK code:
 
 * configure a `looker.ini` file so the Looker API specification can be retrieved from your Looker server
+
+* configure the generator folder by running `yarn`. If you don't have `yarn` already, you'll need to [install](https://yarnpkg.com/lang/en/docs/install/) it.
 
 * run the SDK generator with `yarn sdk`
 
