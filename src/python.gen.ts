@@ -48,11 +48,12 @@ export class PythonGen extends CodeGen {
   commentStr = '# '
   nullStr = 'None'
 
-  argDelimiter = ', '
+  indentStr = '    '
+  argDelimiter = `,\n${this.indentStr.repeat(3)}`
   paramDelimiter = ',\n'
   propDelimiter = '\n'
+  dataStructureDelimiter = ', '
 
-  indentStr = '    '
   endTypeStr = ''
 
   // keyword.kwlist
@@ -116,7 +117,7 @@ export class PythonGen extends CodeGen {
   methodsPrologue = (indent: string) => `
 # ${warnEditing}
 import datetime
-from typing import MutableMapping, Optional, Sequence
+from typing import MutableMapping, Optional, Sequence, Union
 
 from ${this.packagePath}.sdk import models
 from ${this.packagePath}.rtl import api_methods
@@ -167,7 +168,7 @@ ${this.hooks.join('\n')}
     for (let arg of args) {
       hash.push(`"${arg}": ${arg}`)
     }
-    return `{${hash.join(this.argDelimiter)}}`
+    return `{${hash.join(this.dataStructureDelimiter)}}`
   }
 
   // @ts-ignore
@@ -196,17 +197,33 @@ ${this.hooks.join('\n')}
     return propDef
   }
 
+  private methodReturnType(method: IMethod) {
+    const type = this.typeMapMethods(method.type)
+    let returnType = type.name
+    if (method.responseIsBoth()) {
+      returnType = `Union[${returnType}, bytes]`
+    } else if (method.responseIsBinary()) {
+      returnType = 'bytes'
+    }
+    return returnType
+  }
+
   // because Python has named default parameters, Request types are not required like
   // they are for Typescript
   methodSignature(indent: string, method: IMethod) {
-    const type = this.typeMapMethods(method.type)
+    const returnType = this.methodReturnType(method)
     const bump = this.bumper(indent)
     let params: string[] = []
     const args = method.allParams
-    if (args && args.length > 0) method.allParams.forEach(p => params.push(this.declareParameter(bump, p)))
+    if (args && args.length > 0) {
+      method.allParams.forEach(p => params.push(this.declareParameter(bump, p)))
+    }
     params.push(`${bump}transport_options: Optional[transport.TransportSettings] = None,`)
-    return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${type.name}`)
-      + `${indent}def ${method.name}(\n${bump}self${params.length > 0 ? ',\n' : ''}${params.join(this.paramDelimiter)}\n${indent}) -> ${type.name}:\n`
+    return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${returnType}`)
+      + `${indent}def ${method.name}(\n`
+      + `${bump}self${params.length > 0 ? ',\n' : ''}`
+      + `${params.join(this.paramDelimiter)}\n`
+      + `${indent}) -> ${returnType}:\n`
   }
 
   declareParameter(indent: string, param: IParameter) {
@@ -262,6 +279,22 @@ ${this.hooks.join('\n')}
     return `${indent}${property.name}: ${propType}`
   }
 
+  // this is a builder function to produce arguments with optional null place holders but no extra required optional arguments
+  argFill(current: string, args: string) {
+    if ((!current) && args.trim() === this.nullStr) {
+      // Don't append trailing optional arguments if none have been set yet
+      return ''
+    }
+    let delimiter = this.argDelimiter
+    if (!current) {
+      delimiter = ''
+    // Caller manually inserted delimiter followed by inline comment
+    } else if (args.match(/,  #/)) {
+      delimiter = this.argDelimiter.replace(',', '')
+    }
+    return `${args}${delimiter}${current}`
+  }
+
   httpArgs(indent: string, method: IMethod) {
     let result = this.argFill('', this.argGroup(indent, method.cookieArgs))
     result = this.argFill(result, this.argGroup(indent, method.headerArgs))
@@ -274,7 +307,12 @@ ${this.hooks.join('\n')}
       result = this.argFill(result, `query_params=${queryParams}`)
     }
     const type = this.typeMapMethods(method.type)
-    result = this.argFill(result, type.name)
+    let returnType = this.methodReturnType(method)
+    if (returnType == `Union[${type.name}, bytes]`) {
+      returnType = `${returnType},  # type: ignore`
+    }
+    result = this.argFill(result, returnType)
+    result = this.argFill(result, `f"${method.endpoint}"`)
     return result
   }
 
@@ -282,12 +320,13 @@ ${this.hooks.join('\n')}
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     const methodCall = `${indent}response = ${this.it(method.httpMethod.toLowerCase())}`
-    const callArgs = `f"${method.endpoint}"${args ? ', ' + args : ''}`
-    let assertTypeName = this.typeMapMethods(method.type).name
+    let assertTypeName = this.methodReturnType(method)
     if (method.type instanceof ArrayType) {
       assertTypeName = 'list'
     } else if (method.type instanceof HashType) {
       assertTypeName = 'dict'
+    } else if (assertTypeName == 'Union[str, bytes]') {
+      assertTypeName = '(str, bytes)'
     }
     let assertion = `${indent}assert `
     if (assertTypeName === this.nullStr) {
@@ -296,7 +335,11 @@ ${this.hooks.join('\n')}
       assertion += `isinstance(response, ${assertTypeName})`
     }
     const returnStmt = `${indent}return response`
-    return `${methodCall}(${callArgs})\n${assertion}\n${returnStmt}`
+    return `${methodCall}(\n`
+      + `${bump.repeat(3)}${args}\n`
+      + `${indent})\n`
+      + `${assertion}\n`
+      + `${returnStmt}`
   }
 
   declareMethod(indent: string, method: IMethod) {

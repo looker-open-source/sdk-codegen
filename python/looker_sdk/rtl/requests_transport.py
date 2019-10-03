@@ -24,7 +24,7 @@
 """
 
 import logging
-from typing import Callable, Dict, MutableMapping, Optional
+from typing import cast, Callable, Dict, MutableMapping, Optional
 
 import requests
 
@@ -84,11 +84,21 @@ class RequestsTransport(transport.Transport):
                 timeout=timeout,
             )
         except IOError as exc:
-            ret = transport.Response(False, str(exc))
+            ret = transport.Response(
+                False,
+                bytes(str(exc), encoding="utf-8"),
+                transport.ResponseMode.STRING,
+            )
         else:
-            if resp.ok:
-                ret = transport.Response(True, resp.text)
-            else:
-                ret = transport.Response(False, resp.text)
+            ret = transport.Response(
+                resp.ok,
+                resp.content,
+                transport.response_mode(resp.headers.get("content-type")),
+            )
+            encoding = cast(
+                Optional[str], requests.utils.get_encoding_from_headers(resp.headers)
+            )
+            if encoding:
+                ret.encoding = encoding
 
         return ret

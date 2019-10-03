@@ -29,9 +29,9 @@ import urllib.parse
 from looker_sdk import error
 from looker_sdk.rtl import api_settings
 from looker_sdk.rtl import auth_token
-from looker_sdk.rtl import transport
+from looker_sdk.rtl import constants
 from looker_sdk.rtl import serialize
-from looker_sdk.rtl import versions
+from looker_sdk.rtl import transport
 from looker_sdk.sdk import models
 
 
@@ -123,10 +123,10 @@ class AuthSession:
             self.settings._filename, self.settings._section
         )
         client_id = os.getenv(
-            f"{versions.environment_prefix}_CLIENT_ID"
+            f"{constants.environment_prefix}_CLIENT_ID"
         ) or config_data.get("client_id")
         client_secret = os.getenv(
-            f"{versions.environment_prefix}_CLIENT_SECRET"
+            f"{constants.environment_prefix}_CLIENT_SECRET"
         ) or config_data.get("client_secret")
 
         if not (client_id and client_secret):
@@ -217,7 +217,7 @@ class AuthSession:
     def _reset_user_token(self) -> None:
         self.user_token = auth_token.AuthToken()
 
-    def _ok(self, response: transport.Response) -> transport.TResponseValue:
+    def _ok(self, response: transport.Response) -> str:
         if not response.ok:
             raise error.SDKError(response.value)
-        return response.value
+        return response.value.decode(encoding="utf-8")

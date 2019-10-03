@@ -44,7 +44,7 @@ TBody = Optional[
     ]
 ]
 TStructure = Optional[Union[Type[str], serialize.TStructure]]
-TReturn = Optional[Union[transport.TResponseValue, serialize.TDeserializeReturn]]
+TReturn = Optional[Union[str, bytes, serialize.TDeserializeReturn]]
 TQueryParams = MutableMapping[
     str, Union[None, bool, str, int, Sequence[int], Sequence[str], datetime.datetime]
 ]
@@ -73,15 +73,20 @@ class APIMethods:
         self.auth.logout()
 
     def _return(self, response: transport.Response, structure: TStructure) -> TReturn:
+        encoding = response.encoding
         if not response.ok:
-            raise error.SDKError(response.value)
+            raise error.SDKError(response.value.decode(encoding=encoding))
         ret: TReturn
         if structure is None:
             ret = None
-        elif structure is str:
+        elif response.response_mode == transport.ResponseMode.BINARY:
             ret = response.value
         else:
-            ret = self.deserialize(response.value, structure)
+            value = response.value.decode(encoding=encoding)
+            if structure is Union[str, bytes] or structure is str:  # type: ignore
+                ret = value
+            else:
+                ret = self.deserialize(value, structure)
         return ret
 
     def _convert_query_params(

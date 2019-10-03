@@ -20,16 +20,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-looker_version = "6.21"
-api_version = "3.1"
-sdk_version = f"{api_version}.{looker_version}"
-environment_prefix = "LOOKERSDK"
+import pytest  # type: ignore
 
-RESPONSE_STRING_MODE = (
-    r"(^application/.*"
-    r"(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b|\bjavascript\b|\bx-www-form-urlencoded\b)"
-    r"|^text/|;.*charset=)"
+from looker_sdk.rtl import transport
+
+
+@pytest.mark.parametrize(  # type: ignore
+    "content_type, expected_response_mode",
+    [
+        ("application/json", transport.ResponseMode.STRING),
+        ("image/png", transport.ResponseMode.BINARY),
+        ("text/xml", transport.ResponseMode.STRING),
+        ("audio/gzip", transport.ResponseMode.BINARY),
+    ],
 )
-
-# note: string mode must be checked first
-RESPONSE_BINARY_MODE = r"^image/|^audio/|^video/|^font/|^application/|^multipart/"
+def test_response_mode(content_type, expected_response_mode):
+    assert transport.response_mode(content_type) == expected_response_mode
