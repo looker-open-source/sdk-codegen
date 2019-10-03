@@ -33,7 +33,7 @@ export * from './rtl/nodeSession'
 export * from './rtl/nodeSettings'
 export * from './rtl/nodeTransport'
 export * from './rtl/transport'
-export * from './rtl/versions'
+export * from './rtl/constants'
 export * from './sdk/methods'
 export * from './sdk/models'
 

@@ -27,7 +27,7 @@ import { LookerSDK } from '../sdk/methods'
 import {
   IDashboardElement,
   IQuery,
-  IRequestrun_inline_query,
+  IRequestRunInlineQuery,
   IUser, IWriteQuery,
 } from '../sdk/models'
 import * as yaml from 'js-yaml'
@@ -546,7 +546,7 @@ describe('LookerNodeSDK', () => {
         for (const q of queries) {
           // default the result limit to 10
           const limit = q.limit ? parseInt(q.limit) : 10
-          const request: IRequestrun_inline_query = {
+          const request: IRequestRunInlineQuery = {
             body: {
               model: q.model,
               view: q.view,
@@ -749,6 +749,7 @@ describe('LookerNodeSDK', () => {
           // refresh dashboard
           dashboard = await sdk.ok(sdk.dashboard(dashboard.id!))
           if (dashboard.dashboard_elements) {
+            // TODO figure out configuration problems causing dashboard to fail render
             const [tile] = dashboard.dashboard_elements.filter( t => t.query_id && t.query_id > 0)
             expect(tile).toBeDefined()
             const file = await downloadTile(sdk, tile, 'png')

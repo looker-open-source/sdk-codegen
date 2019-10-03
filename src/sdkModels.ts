@@ -23,12 +23,12 @@
  */
 
 import * as OAS from 'openapi3-ts'
+import { OperationObject } from 'openapi3-ts'
 import * as fs from 'fs'
 import md5 from 'blueimp-md5'
-import { utf8 } from './utils'
-import { HttpMethod, StatusCode } from '../typescript/looker/rtl/transport'
+import { camelCase, utf8 } from './utils'
+import { HttpMethod, ResponseMode, responseMode, StatusCode } from '../typescript/looker/rtl/transport'
 import { IVersionInfo } from './codeGen'
-import { OperationObject } from 'openapi3-ts'
 
 export const strBody = 'body'
 export const strRequest = 'Request'
@@ -233,12 +233,19 @@ export interface IMethod extends ISymbol {
   // All optional parameters
   optionalParams: IParameter[]
   bodyParams: IParameter[]
+  responseModes: Set<ResponseMode>
 
   getParams(location?: MethodParameterLocation): IParameter[]
 
   optional(location?: MethodParameterLocation): IParameter[]
 
   hasOptionalParams(): boolean
+
+  responseIsBinary() : boolean
+
+  responseIsString() : boolean
+
+  responseIsBoth() : boolean
 }
 
 export class Method extends SchemadSymbol implements IMethod {
@@ -247,6 +254,7 @@ export class Method extends SchemadSymbol implements IMethod {
   readonly primaryResponse: IMethodResponse
   responses: IMethodResponse[]
   readonly params: IParameter[]
+  readonly responseModes: Set<ResponseMode>
 
   constructor(httpMethod: HttpMethod, endpoint: string, schema: OAS.OperationObject, params: IParameter[],
               responses: IMethodResponse[], body?: IParameter) {
@@ -272,10 +280,32 @@ export class Method extends SchemadSymbol implements IMethod {
     this.endpoint = endpoint
     this.responses = responses
     this.primaryResponse = primaryResponse
+    this.responseModes = this.getResponseModes()
     this.params = params
     if (body) {
       this.params.push(body)
     }
+  }
+
+  /**
+   * Determines which response modes (binary/string) this method supports
+   * @returns {Set<string>} Either a set of 'string' or 'binary' or both
+   */
+  private getResponseModes() {
+    let modes = new Set<ResponseMode>()
+    for (const resp of this.responses) {
+
+      // TODO should we use one of the mime packages like https://www.npmjs.com/package/mime-types for
+      // more thorough/accurate coverage?
+      const mode = responseMode(resp.mediaType)
+      if (mode !== ResponseMode.unknown) modes.add(mode)
+    }
+
+    if (modes.size === 0) {
+      throw new Error(`Is ${this.operationId} ${JSON.stringify(this.responses)} binary or string?`)
+    }
+
+    return modes
   }
 
   get resultType(): IType {
@@ -379,8 +409,20 @@ export class Method extends SchemadSymbol implements IMethod {
     return this.params
   }
 
+  responseIsBinary(): boolean {
+    return this.responseModes.has(ResponseMode.binary)
+  }
+
+  responseIsString(): boolean {
+    return this.responseModes.has(ResponseMode.string)
+  }
+
+  responseIsBoth(): boolean {
+    return this.responseIsBinary() && this.responseIsString()
+  }
+
   // order parameters in location priority
-  locationSorter(p1: IParameter, p2: IParameter) {
+  private locationSorter(p1: IParameter, p2: IParameter) {
     const remain = 0
     const before = -1
     // const after = 1
@@ -695,7 +737,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   // add to this.requestTypes collection with hash as key
   makeRequestType(hash: string, method: IMethod) {
-    const name = `${strRequest}${method.name}`
+    const name = `${strRequest}${camelCase('_' + method.name)}`
     const request = new RequestType(this, name, method.allParams,
       `Dynamically generated request type for ${method.name}`)
     this.types[name] = request

@@ -33,7 +33,7 @@ import {
 import { AuthToken } from './authToken'
 import { NodeTransport } from './nodeTransport'
 import { IApiSettingsIniFile } from './nodeSettings'
-import { environmentPrefix } from './versions'
+import { environmentPrefix } from './constants'
 
 const strPost = 'POST'
 const strDelete = 'DELETE'

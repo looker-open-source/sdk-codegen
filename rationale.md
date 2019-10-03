@@ -84,7 +84,7 @@ looks = await sdk.search_looks(undefined, undefined, undefined, undefined, undef
 
 Clearly, this would not be a pleasant way to make SDK calls.
 
-To make Typescript coding more enjoyable, methods that have more than one optional parameter (or two, if the body parameter is also present but optional), a `Request` structure is created that supports the sparse assignment of arguments. Thanks to the `IRequestsearch_looks` interface generated for Typescript, `search_looks` can be called like this:
+To make Typescript coding more enjoyable, methods that have more than one optional parameter (or two, if the body parameter is also present but optional), a `Request` structure is created that supports the sparse assignment of arguments. Thanks to the `IRequestSearchLooks` interface generated for Typescript, `search_looks` can be called like this:
 
 ```typescript
 looks = await sdk.search_looks({fields: 'id,title,description'})
@@ -206,19 +206,33 @@ The API specification for `BackupConfiguration` has a read-only `can` property:
 
 ```typescript
 export interface IBackupConfiguration {
-  // Type of backup: looker-s3 or custom-s3
+  /**
+   * Type of backup: looker-s3 or custom-s3
+   */
   type?: string
-  // Name of bucket for custom-s3 backups
+  /**
+   * Name of bucket for custom-s3 backups
+   */
   custom_s3_bucket?: string
-  // Name of region where the bucket is located
+  /**
+   * Name of region where the bucket is located
+   */
   custom_s3_bucket_region?: string
-  // (Write-Only) AWS S3 key used for custom-s3 backups
+  /**
+   * (Write-Only) AWS S3 key used for custom-s3 backups
+   */
   custom_s3_key?: string
-  // (Write-Only) AWS S3 secret used for custom-s3 backups
+  /**
+   * (Write-Only) AWS S3 secret used for custom-s3 backups
+   */
   custom_s3_secret?: string
-  // Link to get this item
+  /**
+   * Link to get this item
+   */
   url?: URL
-  // Operations the current user is able to perform on this object
+  /**
+   * Operations the current user is able to perform on this object
+   */
   can?: IDictionary<boolean>
 }
 ```
@@ -226,17 +240,29 @@ export interface IBackupConfiguration {
 Therefore, a writeable version is created that does not have a `can` property:
 
 ```typescript
-// Dynamically generated writeable type for BackupConfiguration
+/**
+ * Dynamically generated writeable type for BackupConfiguration
+ */
 export interface IWriteBackupConfiguration {
-  // Type of backup: looker-s3 or custom-s3
+  /**
+   * Type of backup: looker-s3 or custom-s3
+   */
   type?: string
-  // Name of bucket for custom-s3 backups
+  /**
+   * Name of bucket for custom-s3 backups
+   */
   custom_s3_bucket?: string
-  // Name of region where the bucket is located
+  /**
+   * Name of region where the bucket is located
+   */
   custom_s3_bucket_region?: string
-  // (Write-Only) AWS S3 key used for custom-s3 backups
+  /**
+   * (Write-Only) AWS S3 key used for custom-s3 backups
+   */
   custom_s3_key?: string
-  // (Write-Only) AWS S3 secret used for custom-s3 backups
+  /**
+   * (Write-Only) AWS S3 secret used for custom-s3 backups
+   */
   custom_s3_secret?: string
 }
 ```
@@ -246,11 +272,17 @@ export interface IWriteBackupConfiguration {
 As mentioned in [Diverging while remaining consistent](#diverging-while-remaining-consistent) the `Request` or `IRequest` structure creation rules were described for languages that don't have support for optional named parameters. The `all_homepage_sections` endpoint has two optional parameters and no body parameter, so a request structure is created to make the optional properties individually configurable.
 
 ```typescript
-// Dynamically generated request type for all_homepage_sections
-export interface IRequestall_homepage_sections {
-  // Requested fields.
+/**
+ * Dynamically generated request type for all_homepage_sections
+ */
+export interface IRequestAllHomepageSections {
+  /**
+   * Requested fields.
+   */
   fields?: string
-  // Fields to sort by.
+  /**
+   * Fields to sort by.
+   */
   sorts?: string
 }
 ```
@@ -286,12 +318,21 @@ def create_user_credentials_api3(
 And the Typescript version:
 
 ```typescript
-// POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
+/**
+ * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3}
+ */
 async create_user_credentials_api3(
-  // id of user
+  /**
+   * @param {number} user_id id of user
+   */
   user_id: number,
+  /**
+   * @param {Partial<ICredentialsApi3>} body
+   */
   body?: Partial<ICredentialsApi3>,
-  // Requested fields.
+  /**
+   * @param {string} fields Requested fields.
+   */
   fields: string = '',
   options?: Partial<ITransportSettings>,
 ) {
@@ -351,10 +392,13 @@ def create_query_task(
 ```
 
 Typescript:
+
 ```typescript
-// POST /query_tasks -> IQueryTask
+/**
+ * POST /query_tasks -> IQueryTask
+ */
 async create_query_task(
-  request: Partial<IRequestcreate_query_task>,
+  request: Partial<IRequestCreateQueryTask>,
   options?: Partial<ITransportSettings>,
 ) {
   return this.post<IQueryTask, IError | IValidationError>(
@@ -383,42 +427,189 @@ async create_query_task(
 The Request structure is:
 
 ```typescript
-// Dynamically generated request type for create_query_task
-export interface IRequestcreate_query_task {
-  // body parameter for dynamically created request type
+/**
+ * Dynamically generated request type for create_query_task
+ */
+export interface IRequestCreateQueryTask {
+  /**
+   * body parameter for dynamically created request type
+   */
   body?: Partial<IWriteCreateQueryTask>
-  // Row limit (may override the limit in the saved query).
+  /**
+   * Row limit (may override the limit in the saved query).
+   */
   limit?: number
-  // Apply model-specified formatting to each result.
+  /**
+   * Apply model-specified formatting to each result.
+   */
   apply_formatting?: boolean
-  // Apply visualization options to results.
+  /**
+   * Apply visualization options to results.
+   */
   apply_vis?: boolean
-  // Get results from cache if available.
+  /**
+   * Get results from cache if available.
+   */
   cache?: boolean
-  // Render width for image formats.
+  /**
+   * Render width for image formats.
+   */
   image_width?: number
-  // Render height for image formats.
+  /**
+   * Render height for image formats.
+   */
   image_height?: number
-  // Generate drill links (only applicable to 'json_detail' format.
+  /**
+   * Generate drill links (only applicable to 'json_detail' format.
+   */
   generate_drill_links?: boolean
-  // Force use of production models even if the user is in development mode.
+  /**
+   * Force use of production models even if the user is in development mode.
+   */
   force_production?: boolean
-  // Retrieve any results from cache even if the results have expired.
+  /**
+   * Retrieve any results from cache even if the results have expired.
+   */
   cache_only?: boolean
-  // Prefix to use for drill links (url encoded).
+  /**
+   * Prefix to use for drill links (url encoded).
+   */
   path_prefix?: string
-  // Rebuild PDTS used in query.
+  /**
+   * Rebuild PDTS used in query.
+   */
   rebuild_pdts?: boolean
-  // Perform table calculations on query results
+  /**
+   * Perform table calculations on query results
+   */
   server_table_calcs?: boolean
-  // Requested fields
+  /**
+   * Requested fields
+   */
   fields?: string
 }
 ```
 
-### Missing features
+#### Methods with delimited list types
 
-Looker intends to provide parallel streaming (http chunking) methods for all streamable API endpoints in addition to the current methods. This feature is not available in the current beta release.
+As indicated in the [style values section of the OpenAPI specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#style-values), a list of values can be provided to a REST call in a variety of delimited formats. The Looker API uses "csv" formatting for some requests that receive simple lists, such as IDs.
+
+In Typescript, calling `toString()` on an array of numbers such as `[1,2,3]` would return `1, 2, 3`, which is fine for the Looker API methods expecting "csv-formatted" lists. However, in Python, the equivalent function returns `[1, 2, 3]` which would cause a parsing error by the Looker API endpoint.
+
+As indicated in the OpenAPI specification style values, other delimiters such as pipe (`|`), space, or tab characters could be expected by an API endpoint.
+
+To guarantee consistency in the serialization of "csv-formatted" array values, the code generator uses a **Delim** type for parameters that are specified as having a special delimiter. In Typescript, this type is called `DelimArray`. In Python, it's called `DelimSequence`.
+Using this type for the parameter also helps document the expected format for the list submitted to the API endpoint.
+
+Both `DelimArray` and `DelimSequence` accept optional overrides for:
+
+- `separator`, which default to a comma. This can be overridden with pipe, space, tab, tilde or whatever string separator might be required.
+
+- `prefix`, which defaults to an empty string.
+
+- `suffix`, which defaults to an empty string.
+
+### Binary response handling
+
+The popular request libraries currently used by the RTLs for both Python and the Node-based Typescript SDK treat response content as string by default, with binary mode as an opt-in setting. By default, this results in the download of binary content like images or PDFs from SDK methods to be corrupted.
+
+We've resolved this issue by setting up the request methods to process requests as binary by default, with the RTL using the `Content-Type` of the response to determine whether it's binary before returning the response payload to the SDK method.
+
+#### Response can be either binary and string
+
+A **mixed mode** response that can be either binary or string (e.g. text or json) has a note placed into the method header.
+
+```typescript
+/**
+ * POST /queries/run/{result_format} -> string
+ *
+ * **Note**: Binary content may be returned by this method.
+ */
+async run_inline_query(
+  request: Partial<IRequestRunInlineQuery>,
+  options?: Partial<ITransportSettings>,
+) {
+  return this.post<string, IError>(
+    encodeURI(`/queries/run/${request.result_format}`),
+    {
+      limit: request.limit,
+      apply_formatting: request.apply_formatting,
+      apply_vis: request.apply_vis,
+      cache: request.cache,
+      image_width: request.image_width,
+      image_height: request.image_height,
+      generate_drill_links: request.generate_drill_links,
+      force_production: request.force_production,
+      cache_only: request.cache_only,
+      path_prefix: request.path_prefix,
+      rebuild_pdts: request.rebuild_pdts,
+      server_table_calcs: request.server_table_calcs,
+    },
+    request.body,
+    options,
+  )
+}
+```
+
+#### Binary responses
+
+A method that only has binary responses will have a note that the response is binary.
+
+```typescript
+/**
+  * GET /render_tasks/{render_task_id}/results -> string}
+  *
+  * **Note**: Binary content is returned by this method.
+  */
+async render_task_results(
+  /**
+    * @param {string} render_task_id Id of render task
+    */
+  render_task_id: string,
+  options?: Partial<ITransportSettings>,
+) {
+  return this.get<string, IError>(
+    encodeURI(`/render_tasks/${render_task_id}/results`),
+    null,
+    null,
+    options,
+  )
+}
+```
+
+#### String responses
+
+A method that returns anything that's considered a string, such as `json`, `xml`, or `text` will not have a note about binary responses.
+
+```typescript
+/**
+  * GET /roles/{role_id} -> IRole}
+  */
+async role(
+  /**
+    * @param {number} role_id id of role
+    */
+  role_id: number,
+  options?: Partial<ITransportSettings>,
+) {
+  return this.get<IRole, IError>(
+    encodeURI(`/roles/${role_id}`),
+    null,
+    null,
+    options,
+  )
+}
+```
+
+### Future research
+
+While the new SDKs are easier to use than the previous options, there are still additional improvements we are researching.
+
+#### Streaming support
+
+Looker intends to provide streaming (http chunking) methods for all streamable API endpoints, in addition to the current non-streaming methods.
+
+Assigning an API response to a local variable is simple and easy, but if the response is extremely large (gigabytes of data), deserializing into client application memory will probably cause the client application to crash with an out-of-memory exception. Streaming large responses chunk by chunk can achieve constant memory use for arbitrarily large responses, at a cost of additional code complexity.
 
 ## API Troubleshooting
 
@@ -426,4 +617,4 @@ See the official documentation for [API Troubleshooting](https://docs.looker.com
 
 ## Notes
 
-In addition to Swagger being deprecated, this [visual guide](https://blog.readme.io/an-example-filled-guide-to-swagger-3-2/) shows why OpenAPI 3.x is preferred to Swagger 2.x.
+This [visual guide](https://blog.readme.io/an-example-filled-guide-to-swagger-3-2/) shows some of the reasons to switch from Swagger 2.x to OpenAPI 3.x.

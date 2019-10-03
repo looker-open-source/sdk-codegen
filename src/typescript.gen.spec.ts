@@ -47,7 +47,7 @@ describe('typescript generator', () => {
       const param = apiModel.methods['run_query'].params[0]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`/**
- * {number} query_id Id of query
+ * @param {number} query_id Id of query
  */
 query_id: number`)
     })
@@ -56,7 +56,7 @@ query_id: number`)
       const param = apiModel.methods['run_query'].params[2]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`/**
- * {number} limit Row limit (may override the limit in the saved query).
+ * @param {number} limit Row limit (may override the limit in the saved query).
  */
 limit: number = 0`)
     })
@@ -65,7 +65,7 @@ limit: number = 0`)
       const param = apiModel.methods['create_query_render_task'].params[2]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`/**
- * {number} width Output width in pixels
+ * @param {number} width Output width in pixels
  */
 width: number`)
     })
@@ -74,7 +74,7 @@ width: number`)
       const param = apiModel.methods['query_task_multi_results'].params[0]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`/**
- * {DelimArray<string>} query_task_ids List of Query Task IDs
+ * @param {DelimArray<string>} query_task_ids List of Query Task IDs
  */
 query_task_ids: DelimArray<string>`)
     })
@@ -111,7 +111,7 @@ query_task_ids: DelimArray<string>`)
       expect(body[0].type.name).toEqual('Query')
       const param = gen.declareParameter(indent, body[0])
       expect(param).toEqual(`/**
- * {Partial<IWriteQuery>} body
+ * @param {Partial<IWriteQuery>} body
  */
 body?: Partial<IWriteQuery>`)
       expect(method.bodyArg).toEqual('body')
@@ -128,7 +128,7 @@ body?: Partial<IWriteQuery>`)
       expect(body[0].type.name).toEqual('Dashboard')
       const param = gen.declareParameter(indent, body[0])
       expect(param).toEqual(`/**
- * {Partial<IWriteDashboard>} body
+ * @param {Partial<IWriteDashboard>} body
  */
 body?: Partial<IWriteDashboard>`)
       expect(method.bodyArg).toEqual('body')
@@ -165,15 +165,15 @@ body?: Partial<IWriteDashboard>`)
  */
 async create_user_credentials_email(
   /**
-   * {number} user_id id of user
+   * @param {number} user_id id of user
    */
   user_id: number,
   /**
-   * {Partial<IWriteCredentialsEmail>} body
+   * @param {Partial<IWriteCredentialsEmail>} body
    */
   body?: Partial<IWriteCredentialsEmail>,
   /**
-   * {string} fields Requested fields.
+   * @param {string} fields Requested fields.
    */
   fields: string = '',
   options?: Partial<ITransportSettings>) {

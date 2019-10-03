@@ -26,3 +26,22 @@ export const lookerVersion = '6.21'
 export const apiVersion = '3.1'
 export const sdkVersion = `${apiVersion}.${lookerVersion}`
 export const environmentPrefix = 'LOOKERSDK'
+export const matchCharset = ';.*charset='
+
+/**
+ * Does this content type say it's utf-8?
+ * @type {string} Regular expression for matching charset=utf-8 in Content-Type
+ */
+export const matchCharsetUtf8 = `${matchCharset}.*\\butf-8\\b`
+
+/**
+ * Matching rules for string/text types. String matches must be checked *before* binary matches
+ * @type {string} Regular expression for matching Content-Type headers
+ */
+export const matchModeString = `(^application\\/.*(\\bjson\\b|\\bxml\\b|\\bsql\\b|\\bgraphql\\b|\\bjavascript\\b|\\bx-www-form-urlencoded\\b)|^text\\/|${matchCharset})`
+
+/**
+ * Matching rules for all binary or unknown types. Binary matches must be checked *after* string matches
+ * @type {string} Regular expression for matching Content-Type headers
+ */
+export const matchModeBinary = '^image\\/|^audio\\/|^video\\/|^font\\/|^application\\/|^multipart\\/'

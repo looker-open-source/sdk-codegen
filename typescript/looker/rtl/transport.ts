@@ -28,10 +28,37 @@
 // TODO create generic Agent that is not transport-specific
 import { Agent } from 'https'
 import { Headers } from 'request'
-import { sdkVersion } from './versions'
+import { matchCharsetUtf8, matchModeBinary, matchModeString, sdkVersion } from './constants'
 import { IApiSettings } from './apiSettings'
 
 export const agentTag = `TS-SDK ${sdkVersion}`
+
+/**
+ * ResponseMode for an HTTP request - either binary or "string"
+ */
+export enum ResponseMode {
+  'binary', // this is a binary response
+  'string', // this is a "string" response
+  'unknown' // unrecognized response type
+}
+
+/**
+ * MIME patterns for string content types
+ * @type {RegExp}
+ */
+export const contentPatternString = new RegExp(matchModeString, "i")
+
+/**
+ * MIME patterns for "binary" content types
+ * @type {RegExp}
+ */
+export const contentPatternBinary = new RegExp(matchModeBinary, "i")
+
+/**
+ * MIME pattern for UTF8 charset attribute
+ * @type {RegExp}
+ */
+export const charsetUtf8Pattern = new RegExp(matchCharsetUtf8, "i")
 
 /**
  * Default request timeout
@@ -39,6 +66,9 @@ export const agentTag = `TS-SDK ${sdkVersion}`
  */
 export const defaultTimeout = 120
 
+/**
+ * Recognized HTTP methods
+ */
 export type HttpMethod =
   | 'GET'
   | 'POST'
@@ -46,9 +76,12 @@ export type HttpMethod =
   | 'DELETE'
   | 'PATCH'
   | 'TRACE'
-  | 'HEAD';
+  | 'HEAD'
 
-// https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for reference
+/**
+ * HTTP status codes
+ * https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for reference
+ */
 export enum StatusCode {
   OK = 200,
   Created,
@@ -148,6 +181,9 @@ export type SDKResponse<TSuccess, TError> =
   | ISDKSuccessResponse<TSuccess>
   | ISDKErrorResponse<TError | ISDKError>;
 
+/**
+ * Base authorization interface
+ */
 export interface IAuthorizer {
   settings: IApiSettings;
   transport: ITransport;
@@ -202,10 +238,34 @@ export interface ITransportSettings {
   encoding?: string | null
 }
 
-/** constructs the path argument including any optional query parameters
- @param path {string} the base path of the request
+/**
+ * Is the content type binary or "string"?
+ * @param {string} contentType
+ * @returns {ResponseMode.binary | ResponseMode.string}
+ */
+export function responseMode(contentType: string) {
+  if (contentType.match(contentPatternString)) {
+    return ResponseMode.string
+  }
+  if (contentType.match(contentPatternBinary)) {
+    return ResponseMode.binary
+  }
+  return ResponseMode.unknown
+}
 
- @param obj {[key: string]: string} optional collection of query parameters to encode and append to the path
+/**
+ * Does this content type have a UTF-8 charset?
+ * @param {string} contentType
+ * @returns {RegExpMatchArray | null}
+ */
+export function isUtf8(contentType: string) {
+  return contentType.match(/;.*\bcharset\b=\butf-8\b/i)
+}
+
+/** constructs the path argument including any optional query parameters
+ @param {string} path the base path of the request
+
+ @param {[key: string]: string} obj optional collection of query parameters to encode and append to the path
 
  */
 export function addQueryParams(path: string, obj?: { [key: string]: string }) {
@@ -225,10 +285,11 @@ export function addQueryParams(path: string, obj?: { [key: string]: string }) {
 }
 
 export function sdkError(result: any) {
-  if (typeof result.error.message === 'string') {
-    return new Error(result.error.message)
-  } else if (typeof result.message === 'string') {
+  if ('message' in result && typeof result.message === 'string') {
     return new Error(result.message)
+  }
+  if ('error' in result && 'message' in result.error && typeof result.error.message === 'string') {
+    return new Error(result.error.message)
   }
   const error = JSON.stringify(result)
   return new Error(`Unknown error with SDK method ${error}`)

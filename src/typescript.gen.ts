@@ -120,8 +120,7 @@ export interface IDictionary<T> {
 
   methodSignature(indent: string, method: IMethod) {
     const type = this.typeMap(method.type)
-    const header = this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${type.name}`)
-      + `${indent}async ${method.name}(`
+    let headComment = `${method.httpMethod} ${method.endpoint} -> ${type.name}`
     let fragment = ''
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
@@ -135,11 +134,20 @@ export interface IDictionary<T> {
       if (args && args.length > 0) args.forEach(p => params.push(this.declareParameter(bump, p)))
       fragment = params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
     }
-    return header + fragment + `${fragment? ',' : ''}\n${bump}options?: Partial<ITransportSettings>) {\n`
+    if (method.responseIsBoth()) {
+      headComment += `\n\n**Note**: Binary content may be returned by this method.`
+    } else if (method.responseIsBinary()) {
+      headComment += `\n\n**Note**: Binary content is returned by this method.\n`
+    }
+    const header = this.commentHeader(indent, headComment)
+      + `${indent}async ${method.name}(`
+
+    return header + fragment
+      + `${fragment? ',' : ''}\n${bump}options?: Partial<ITransportSettings>) {\n`
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
-    return `{${mapped.name}} ${param.name} ${param.description}`
+    return `@param {${mapped.name}} ${param.name} ${param.description}`
   }
 
   declareParameter(indent: string, param: IParameter) {
@@ -283,7 +291,7 @@ export interface IDictionary<T> {
 
   versionStamp() {
     if (this.versions) {
-      const stampFile = this.fileName('rtl/versions')
+      const stampFile = this.fileName('rtl/constants')
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
