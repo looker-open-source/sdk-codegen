@@ -255,15 +255,15 @@ body?: Partial<ICreateDashboardRenderTask>`)
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface IWorkspace{
   /**
-   * The unique id of this user workspace. Predefined workspace ids include "production" and "dev"
+   * The unique id of this user workspace. Predefined workspace ids include "production" and "dev" (read-only)
    */
   id?: string
   /**
-   * The local state of each project in the workspace
+   * The local state of each project in the workspace (read-only)
    */
   projects?: IProject[]
   /**
-   * Operations the current user is able to perform on this object
+   * Operations the current user is able to perform on this object (read-only)
    */
   can?: IDictionary<boolean>
 }`)
@@ -273,12 +273,12 @@ body?: Partial<ICreateDashboardRenderTask>`)
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface IApiVersion{
   /**
-   * Current Looker release version number
+   * Current Looker release version number (read-only)
    */
   looker_release_version?: string
   current_version?: IApiVersionElement
   /**
-   * Array of versions supported by this Looker instance
+   * Array of versions supported by this Looker instance (read-only)
    */
   supported_versions?: IApiVersionElement[]
 }`)

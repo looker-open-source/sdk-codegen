@@ -114,7 +114,7 @@ export interface IDictionary<T> {
         + `${indent}${property.name}${optional}: Partial<I${property.type.name}>`
     }
     const type = this.typeMap(property.type)
-    return this.commentHeader(indent, property.description)
+    return this.commentHeader(indent, this.describeProperty(property))
       + `${indent}${property.name}${optional}: ${type.name}`
   }
 

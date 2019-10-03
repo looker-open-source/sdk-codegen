@@ -103,6 +103,10 @@ export abstract class CodeGen implements ICodeGen {
     return indent + this.indentStr
   }
 
+  describeProperty(property: IProperty) {
+    return `${property.description}${property.readOnly?' (read-only)':''}`
+  }
+
   fileName(base: string) {
     return `${this.codePath}${this.packagePath}/${base}${this.fileExtension}`
   }

@@ -1171,6 +1171,9 @@ export interface ICodeGen {
   // generates entire type declaration
   declareType(indent: string, type: IType): string
 
+  // generates a textual description for the property's comment header
+  describeProperty(property: IProperty): string
+
   // generates type property
   declareProperty(indent: string, property: IProperty): string
 
