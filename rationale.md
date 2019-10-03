@@ -170,9 +170,9 @@ The code generator doesn't write **any** credentials or server urls into the gen
 
 By using an `.ini` or other configuration file rather than what would typically be a source code file, it is easy and convenient to ensure that credential file is ignored by a version control system, so it will never been checked in and accidentally revealed to bad people.
 
-Another convenience of using an `.ini` file is that every RTL provided by Looker will have sample source code that can read that configuration file to authenticate the SDK.
+Another convenience of using an `.ini` file is that every RTL provided by Looker will have sample source code to read that configuration file for authenticating the SDK.
 
-Depending on the run-time environment for the SDK application, there may be more or less secure ways of providing credentials. That is something every implementer will need to determine for their own usage patterns. Fortunately, securing API credentials can be achieved in a variety of ways. By creating a plug-in architecture for API authentication, Looker SDKs can support any authentication method you choose to implement.
+Depending on the run-time environment for the SDK application, there may be more or less secure ways of providing credentials. That is something every implementer will need to determine for their own usage patterns. Fortunately, securing API credentials can be achieved in a variety of ways. By creating a plug-in architecture for API authentication, Looker SDKs can support any credential providing method you choose to implement.
 
 ## Using the Looker API specification
 
@@ -503,7 +503,7 @@ Using this type for the parameter also helps document the expected format for th
 
 Both `DelimArray` and `DelimSequence` accept optional overrides for:
 
-- `separator`, which default to a comma. This can be overridden with pipe, space, tab, tilde or whatever string separator might be required.
+- `separator`, which defaults to a comma. This can be overridden with pipe, space, tab, tilde or whatever string separator might be required.
 
 - `prefix`, which defaults to an empty string.
 
