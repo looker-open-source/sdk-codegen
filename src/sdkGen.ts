@@ -27,7 +27,7 @@
 import * as fs from 'fs'
 import * as Models from './sdkModels'
 import { SDKConfig } from './sdkConfig'
-import { isFileSync, log, quit, success } from './utils'
+import { isDirSync, log, quit, success } from './utils'
 import { getVersionInfo, openApiFileName, specFileName } from './fetchSpec'
 import { SdkGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
@@ -63,7 +63,7 @@ import { IVersionInfo } from './codeGen'
         const apiModel = Models.ApiModel.fromFile(oasFile, swaggerFile)
         const gen = getFormatter(language, apiModel, versions)
         const sdkPath = `${gen.codePath}/${gen.packagePath}/sdk`
-        if (!isFileSync(sdkPath)) fs.mkdirSync(sdkPath, {recursive: true})
+        if (!isDirSync(sdkPath)) fs.mkdirSync(sdkPath, {recursive: true})
         const sdk = new SdkGenerator(apiModel, gen)
         let output = sdk.render(gen.indentStr)
         fs.writeFileSync(gen.fileName('sdk/methods'), output)
