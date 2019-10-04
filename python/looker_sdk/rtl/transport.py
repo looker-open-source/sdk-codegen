@@ -60,7 +60,7 @@ class TransportSettings:
     base_url: str = ""
     api_version: str = "3.1"
     verify_ssl: bool = True
-    timeout: TConnectAndReadTimeout = (120, 120)
+    timeout: TConnectAndReadTimeoutSeconds = (120, 120)
     headers: Optional[MutableMapping[str, str]] = None
 
     @property
