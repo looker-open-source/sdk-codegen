@@ -102,17 +102,17 @@ describe('python generator', () => {
     it('add_group_group', () => {
       const method = apiModel.methods['add_group_group']
       const args = gen.httpArgs('', method).trim()
-      expect(args).toEqual('models.Group, body=body')
+      expect(args).toEqual('models.Group, body=body, transport_options=transport_options')
     })
     it('create_query', () => {
       const method = apiModel.methods['create_query']
       const args = gen.httpArgs('', method).trim()
-      expect(args).toEqual('models.Query, query_params={"fields": fields}, body=body')
+      expect(args).toEqual('models.Query, query_params={"fields": fields}, body=body, transport_options=transport_options')
     })
     it('create_dashboard', () => {
       const method = apiModel.methods['create_dashboard']
       const args = gen.httpArgs('', method).trim()
-      expect(args).toEqual('models.Dashboard, body=body')
+      expect(args).toEqual('models.Dashboard, body=body, transport_options=transport_options')
     })
   })
 
@@ -122,7 +122,8 @@ describe('python generator', () => {
       const expected =
         `# GET /datagroups -> Sequence[models.Datagroup]
 def all_datagroups(
-    self
+    self,
+    transport_options: Optional[transport.TransportSettings] = None,
 ) -> Sequence[models.Datagroup]:
 `
       const actual = gen.methodSignature('', method)
@@ -134,7 +135,7 @@ def all_datagroups(
     it('assert response is model add_group_group', () => {
       const method = apiModel.methods['add_group_group']
       const expected =
-        `response = self.post(f"/groups/{group_id}/groups", models.Group, body=body)
+        `response = self.post(f"/groups/{group_id}/groups", models.Group, body=body, transport_options=transport_options)
 assert isinstance(response, models.Group)
 return response`
       const actual = gen.httpCall(indent, method)
@@ -143,7 +144,7 @@ return response`
     it('assert response is None delete_group_from_group', () => {
       const method = apiModel.methods['delete_group_from_group']
       const expected =
-        `response = self.delete(f"/groups/{group_id}/groups/{deleting_group_id}")
+        `response = self.delete(f"/groups/{group_id}/groups/{deleting_group_id}", None, transport_options=transport_options)
 assert response is None
 return response`
       const actual = gen.httpCall(indent, method)
@@ -152,7 +153,7 @@ return response`
     it('assert response is list active_themes', () => {
       const method = apiModel.methods['active_themes']
       const expected =
-        `response = self.get(f"/themes/active", Sequence[models.Theme], query_params={"name": name, "ts": ts, "fields": fields})
+        `response = self.get(f"/themes/active", Sequence[models.Theme], query_params={"name": name, "ts": ts, "fields": fields}, transport_options=transport_options)
 assert isinstance(response, list)
 return response`
       const actual = gen.httpCall(indent, method)
@@ -161,7 +162,7 @@ return response`
     it('assert response is dict query_task_results', () => {
       const method = apiModel.methods['query_task_results']
       const expected =
-        `response = self.get(f"/query_tasks/{query_task_id}/results", MutableMapping[str, str])
+        `response = self.get(f"/query_tasks/{query_task_id}/results", MutableMapping[str, str], transport_options=transport_options)
 assert isinstance(response, dict)
 return response`
       const actual = gen.httpCall(indent, method)
