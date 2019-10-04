@@ -120,6 +120,7 @@ from typing import MutableMapping, Optional, Sequence
 
 from ${this.packagePath}.sdk import models
 from ${this.packagePath}.rtl import api_methods
+from ${this.packagePath}.rtl import transport
 
 
 class ${this.packageName}(api_methods.APIMethods):
@@ -203,6 +204,7 @@ ${this.hooks.join('\n')}
     let params: string[] = []
     const args = method.allParams
     if (args && args.length > 0) method.allParams.forEach(p => params.push(this.declareParameter(bump, p)))
+    params.push(`${bump}transport_options: Optional[transport.TransportSettings] = None,`)
     return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${type.name}`)
       + `${indent}def ${method.name}(\n${bump}self${params.length > 0 ? ',\n' : ''}${params.join(this.paramDelimiter)}\n${indent}) -> ${type.name}:\n`
   }
@@ -263,6 +265,7 @@ ${this.hooks.join('\n')}
   httpArgs(indent: string, method: IMethod) {
     let result = this.argFill('', this.argGroup(indent, method.cookieArgs))
     result = this.argFill(result, this.argGroup(indent, method.headerArgs))
+    result = this.argFill(result, `transport_options=transport_options`)
     if (method.bodyArg) {
       result = this.argFill(result, `body=${method.bodyArg}`)
     }

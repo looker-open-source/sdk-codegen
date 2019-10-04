@@ -113,6 +113,7 @@ class APIMethods:
         path: str,
         structure: TStructure,
         query_params: Optional[TQueryParams] = None,
+        transport_options: Optional[transport.TransportSettings] = None,
     ) -> TReturn:
         """GET method
         """
@@ -123,6 +124,7 @@ class APIMethods:
             query_params=params,
             body=None,
             authenticator=self.auth.authenticate,
+            transport_options=transport_options,
         )
         return self._return(response, structure)
 
@@ -142,6 +144,7 @@ class APIMethods:
         structure: TStructure,
         query_params: Optional[TQueryParams] = None,
         body: TBody = None,
+        transport_options: Optional[transport.TransportSettings] = None,
     ) -> TReturn:
         """POST method
         """
@@ -153,6 +156,7 @@ class APIMethods:
             query_params=params,
             body=serialized,
             authenticator=self.auth.authenticate,
+            transport_options=transport_options,
         )
         return self._return(response, structure)
 
@@ -162,6 +166,7 @@ class APIMethods:
         structure: TStructure,
         query_params: Optional[TQueryParams] = None,
         body: TBody = None,
+        transport_options: Optional[transport.TransportSettings] = None,
     ) -> TReturn:
         """PATCH method
         """
@@ -173,6 +178,7 @@ class APIMethods:
             query_params=params,
             body=serialized,
             authenticator=self.auth.authenticate,
+            transport_options=transport_options,
         )
         return self._return(response, structure)
 
@@ -182,6 +188,7 @@ class APIMethods:
         structure: TStructure = None,
         query_params: Optional[TQueryParams] = None,
         body: TBody = None,
+        transport_options: Optional[transport.TransportSettings] = None,
     ) -> TReturn:
         """PUT method
         """
@@ -193,6 +200,7 @@ class APIMethods:
             query_params=params,
             body=serialized,
             authenticator=self.auth.authenticate,
+            transport_options=transport_options,
         )
         return self._return(response, structure)
 
@@ -201,6 +209,7 @@ class APIMethods:
         path: str,
         structure: TStructure = None,
         query_params: Optional[MutableMapping[str, str]] = None,
+        transport_options: Optional[transport.TransportSettings] = None,
     ) -> TReturn:
         """DELETE method
         """
@@ -209,5 +218,6 @@ class APIMethods:
             path,
             body=None,
             authenticator=self.auth.authenticate,
+            transport_options=transport_options,
         )
         return self._return(response, structure)

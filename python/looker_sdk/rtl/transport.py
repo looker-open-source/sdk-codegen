@@ -24,7 +24,7 @@
 """
 import abc
 import enum
-from typing import Callable, Dict, MutableMapping, Optional, Union
+from typing import Callable, Dict, MutableMapping, Optional, Union, Tuple
 
 import attr
 
@@ -44,14 +44,21 @@ class HttpMethod(enum.Enum):
     HEAD = 7
 
 
+TConnectTimeout = int
+TReadTimeout = int
+TConnectAndReadTimeout = int
+TTimeoutSeconds = Union[Tuple[TConnectTimeout, TReadTimeout], TConnectAndReadTimeout]
+
+
 @attr.s(auto_attribs=True, kw_only=True)
 class TransportSettings:
     """Basic transport settings.
     """
 
-    base_url: str
+    base_url: str = ""
     api_version: str = "3.1"
     verify_ssl: bool = True
+    timeout: TTimeoutSeconds = (120, 120)
     headers: Optional[MutableMapping[str, str]] = None
 
     @property
@@ -100,6 +107,7 @@ class Transport(abc.ABC):
         body: Optional[bytes] = None,
         authenticator: TAuthenticator = None,
         headers: Optional[MutableMapping[str, str]] = None,
+        transport_options: Optional[TransportSettings] = None,
     ) -> Response:
         """Send API request.
         """
