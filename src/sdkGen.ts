@@ -29,7 +29,7 @@ import * as Models from './sdkModels'
 import { SDKConfig } from './sdkConfig'
 import { isDirSync, log, quit, success } from './utils'
 import { getVersionInfo, openApiFileName, specFileName } from './fetchSpec'
-import { SdkGenerator, TypeGenerator } from './sdkGenerator'
+import { MethodGenerator, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
 import { logConvert } from './convert'
 import { IVersionInfo } from './codeGen'
@@ -64,9 +64,18 @@ import { IVersionInfo } from './codeGen'
         const gen = getFormatter(language, apiModel, versions)
         const sdkPath = `${gen.codePath}/${gen.packagePath}/sdk`
         if (!isDirSync(sdkPath)) fs.mkdirSync(sdkPath, {recursive: true})
-        const sdk = new SdkGenerator(apiModel, gen)
+        // Generate standard method declarations
+        const sdk = new MethodGenerator(apiModel, gen)
         let output = sdk.render(gen.indentStr)
         fs.writeFileSync(gen.fileName('sdk/methods'), output)
+
+        if (gen.willItStream) {
+          // Generate streaming method declarations
+          const s = new StreamGenerator(apiModel, gen)
+          let output = s.render(gen.indentStr)
+          fs.writeFileSync(gen.fileName('sdk/streams'), output)
+        }
+
         const types = new TypeGenerator(apiModel, gen)
         output = types.render('')
         fs.writeFileSync(gen.fileName('sdk/models'), output)

@@ -121,7 +121,6 @@ from typing import MutableMapping, Optional, Sequence
 from ${this.packagePath}.sdk import models
 from ${this.packagePath}.rtl import api_methods
 
-
 class ${this.packageName}(api_methods.APIMethods):
 `
 

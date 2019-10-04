@@ -1074,6 +1074,9 @@ export interface ICodeGen {
   // conveniently support named default parameters?
   needsRequestTypes: boolean
 
+  // Does this language support specific streaming methods?
+  willItStream: boolean
+
   // Stamps the version files with server and api version
   versionStamp(): IVersionInfo | undefined
 
@@ -1089,6 +1092,9 @@ export interface ICodeGen {
 
   // standard code to append to the bottom of the generated "methods" file(s)
   methodsEpilogue(indent: string): string
+
+  // standard code to insert at the top of the generated "streams" file(s)
+  streamsPrologue(indent: string): string
 
   // standard code to insert at the top of the generated "models" file(s)
   modelsPrologue(indent: string): string
@@ -1119,21 +1125,21 @@ export interface ICodeGen {
   comment(indent: string, description: string): string
 
   // generates the method signature including parameter list and return type.
-  // supports
   methodSignature(indent: string, method: IMethod): string
 
   // convert endpoint pattern to platform-specific string template
   httpPath(path: string, prefix?: string): string
 
   // generate a call to the http API abstraction
-  // includes http method, path, strBody, query, headers, cookie arguments
+  // includes http method, path, body, query, headers, cookie arguments
   httpCall(indent: string, method: IMethod): string
+
+  // generate a call to the stream API abstraction
+  // includes http method, path, body, query, headers, cookie arguments
+  streamCall(indent: string, method: IMethod): string
 
   // generates the type declaration signature for the start of the type definition
   typeSignature(indent: string, type: IType): string
-
-  // // creates the requester type and defaulter for those languages requiring them
-  // createRequester(indent: string, method: IMethod): string
 
   // generates summary text
   // e.g, for Python:
@@ -1151,8 +1157,17 @@ export interface ICodeGen {
   //   row_limit: int = None
   declareParameter(indent: string, param: IParameter): string
 
+  // generates the method signature including parameter list and return type.
+  methodSignature(indent: string, method: IMethod): string
+
   // generates the entire method
   declareMethod(indent: string, method: IMethod): string
+
+  // generates the streaming method signature including parameter list and return type.
+  streamerSignature(indent: string, method: IMethod): string
+
+  // generates the entire streaming method
+  declareStreamer(indent: string, method: IMethod): string
 
   // generates the list of parameters for a method signature
   // e.g.
@@ -1177,7 +1192,8 @@ export interface ICodeGen {
   // generates type property
   declareProperty(indent: string, property: IProperty): string
 
-  typeNames(): string[]
+  // if countError is false, no import reference to Error or IError should be included
+  typeNames(countError: boolean): string[]
 
   typeMap(type: IType): IMappedType
 

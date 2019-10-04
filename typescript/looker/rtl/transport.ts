@@ -30,6 +30,7 @@ import { Agent } from 'https'
 import { Headers } from 'request'
 import { matchCharsetUtf8, matchModeBinary, matchModeString, sdkVersion } from './constants'
 import { IApiSettings } from './apiSettings'
+import { Readable } from "readable-stream"
 
 export const agentTag = `TS-SDK ${sdkVersion}`
 
@@ -153,6 +154,17 @@ export interface ITransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>>
+
+  stream<T>(
+    callback: (readable: Readable) => Promise<T>,
+    method: HttpMethod,
+    path: string,
+    queryParams?: any,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>,
+  ): Promise<T>
+
 }
 
 /** A successful SDK call. */
