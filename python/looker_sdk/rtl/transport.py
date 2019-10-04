@@ -47,9 +47,7 @@ class HttpMethod(enum.Enum):
 TConnectTimeout = int
 TReadTimeout = int
 TConnectAndReadTimeout = int
-TConnectAndReadTimeoutSeconds = Union[
-    Tuple[TConnectTimeout, TReadTimeout], TConnectAndReadTimeout
-]
+TTimeoutSeconds = Union[Tuple[TConnectTimeout, TReadTimeout], TConnectAndReadTimeout]
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -60,7 +58,7 @@ class TransportSettings:
     base_url: str = ""
     api_version: str = "3.1"
     verify_ssl: bool = True
-    timeout: TConnectAndReadTimeoutSeconds = (120, 120)
+    timeout: TTimeoutSeconds = (120, 120)
     headers: Optional[MutableMapping[str, str]] = None
 
     @property
