@@ -25,7 +25,7 @@
 import abc
 import enum
 import re
-from typing import Callable, Dict, MutableMapping, Optional, Union, Tuple
+from typing import Callable, Dict, MutableMapping, Optional
 
 import attr
 
@@ -45,12 +45,6 @@ class HttpMethod(enum.Enum):
     HEAD = 7
 
 
-TConnectTimeout = int
-TReadTimeout = int
-TConnectAndReadTimeout = int
-TTimeoutSeconds = Union[Tuple[TConnectTimeout, TReadTimeout], TConnectAndReadTimeout]
-
-
 @attr.s(auto_attribs=True, kw_only=True)
 class TransportSettings:
     """Basic transport settings.
@@ -59,7 +53,7 @@ class TransportSettings:
     base_url: str = ""
     api_version: str = "3.1"
     verify_ssl: bool = True
-    timeout: TTimeoutSeconds = (120, 120)
+    timeout: int = 120
     headers: Optional[MutableMapping[str, str]] = None
 
     @property
