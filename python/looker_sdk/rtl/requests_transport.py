@@ -78,6 +78,7 @@ class RequestsTransport(transport.Transport):
             resp = self.session.request(
                 method.name,
                 url,
+                auth=NullAuth(),
                 params=query_params,
                 data=body,
                 headers=headers,
@@ -102,3 +103,12 @@ class RequestsTransport(transport.Transport):
                 ret.encoding = encoding
 
         return ret
+
+
+class NullAuth(requests.auth.AuthBase):
+    """A custom auth class which ensures requests does not override authorization
+    headers with netrc file credentials if present.
+    """
+
+    def __call__(self, r):
+        return r
