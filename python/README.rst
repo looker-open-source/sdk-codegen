@@ -14,7 +14,7 @@ problems with the SDK, please feel free to
 and please indicate which language SDK you're using in the report.
 
 Sample project setup
---------------------
+====================
 
 Install python 3.7. We highly recommend using
 `pyenv <https://github.com/pyenv/pyenv#installation>`_ to install
@@ -63,10 +63,20 @@ Install looker_sdk using pipenv
 
 
 Configuring the SDK
--------------------
+===================
+
+The SDK supports configuration through a ``.ini`` file on disk as well
+as setting environment variables (the latter override the former).
+
+**Note**: The ``.ini`` configuration for the Looker SDK is a sample
+implementation intended to speed up the initial development of python
+applications using the Looker API. See this note on
+`Securing your SDK Credentials <https://github.com/looker-open-source/sdk-codegen/blob/master/README.md#securing-your-sdk-credentials>`_
+for warnings about using ``.ini`` files that contain your
+API credentials in a source code repository or production environment.
 
 In order to configure the SDK client, create a "looker.ini" file to reference
-during `client.setup()`
+during ``client.setup()``
 
 example file:
 
@@ -84,9 +94,16 @@ example file:
     # Set to false if testing locally against self-signed certs. Otherwise leave True
     verify_ssl=True
 
+**Note**: If the application using the Looker SDK is going to be committed to a version control system, be sure to
+**ignore** the ``looker.ini`` file so the API credentials aren't unintentionally published.
+
+For any ``.ini`` setting you can use an environment variable instead. It takes the form of
+``LOOKERSDK_<UPPERCASE-SETTING-FROM-INI>`` e.g. ``LOOKERSDK_CLIENT_SECRET``
+
+
 
 Code example
-------------
+============
 Copy the following code block into `example.py`. Note: it's helpful to launch your
 code editor with your virtual environment loaded so that it can find the looker_sdk
 library and give you a nice code completion experience. Run :code:`pipenv shell` to
@@ -100,8 +117,8 @@ start load the virtual environment and then run your editor command
 
     # client calls will now automatically authenticate using the
     # api3credentials specified in 'looker.ini'
-    looker_client = client.setup("looker.ini")
-    looker_api_user = looker_client.me()
+    sdk = client.setup("looker.ini")
+    looker_api_user = sdk.me()
 
     # models can be passed named parameters to the constructor
     new_user = models.WriteUser(first_name="John", last_name="Doe")
@@ -111,7 +128,7 @@ start load the virtual environment and then run your editor command
     new_user.locale = "fr"
 
     # create the user with the client
-    created_user = looker_client.create_user(new_user)
+    created_user = sdk.create_user(new_user)
     print(
         f"Created user({created_user.id}): "
         f"{created_user.display_name} "
@@ -127,7 +144,7 @@ start load the virtual environment and then run your editor command
 
     # update the user with the client
     user_id = created_user.id
-    updated_user = looker_client.update_user(user_id, body=update_user)
+    updated_user = sdk.update_user(user_id, body=update_user)
     print(
         f"Updated user({user_id}): {updated_user.display_name} "
         f"locale({updated_user.locale})"
@@ -136,31 +153,31 @@ start load the virtual environment and then run your editor command
     # perform API calls on behalf of the user: "sudo"
     try:
         print(f"Sudo as {user_id}")
-        looker_client.login_user(user_id)
+        sdk.login_user(user_id)
     except error.SDKError:
         print(f"Oops, we need to enable user({user_id}) first")
-        looker_client.update_user(user_id, body=models.WriteUser(is_disabled=False))
-        looker_client.login_user(user_id)
+        sdk.update_user(user_id, body=models.WriteUser(is_disabled=False))
+        sdk.login_user(user_id)
 
-    sudo_user = looker_client.me()
+    sudo_user = sdk.me()
     assert sudo_user.id == user_id
     assert sudo_user.id != looker_api_user.id
 
     # logout to switch back to authenticating per 'looker.ini'
-    looker_client.logout()
+    sdk.logout()
     print(f"Ending sudo({user_id}) session")
-    assert looker_client.me().id == looker_api_user.id
+    assert sdk.me().id == looker_api_user.id
 
     # "sudo" using a context manager
-    with looker_client.login_user(user_id):
-        assert looker_client.me().id == user_id
+    with sdk.login_user(user_id):
+        assert sdk.me().id == user_id
 
     # exiting context manager is the same as
-    # calling looker_client.logout()
-    assert looker_client.me().id == looker_api_user.id
+    # calling sdk.logout()
+    assert sdk.me().id == looker_api_user.id
 
     # cleanup
-    looker_client.delete_user(user_id)
+    sdk.delete_user(user_id)
     print(f"Removed user({user_id})")
 
 You can run the example code above but *be aware* it will actually create and
@@ -179,27 +196,27 @@ against an instance with a self-signed cert, this will clean up the output:
 
 
 A note on static type checking
-------------------------------
+==============================
 
 All client calls are annotated with with basic types as well as model types.
-Many client calls accept a `fields` argument which limits the JSON response
+Many client calls accept a ``fields`` argument which limits the JSON response
 from the API to the specified fields. For this reason, the all properties on the
-model are all typed as `Optional[]`. The effect is that static code analysis
+model are all typed as ``Optional[]``. The effect is that static code analysis
 (`mypy <https://mypy.readthedocs.io/en/latest/>`_ for example) will complain
 if you try to use a field from a model instance in a place that requires
-the value not be `Optional`. From the example above
+the value not be ``Optional``. From the example above
 
 .. code-block:: python
 
-    created_user = looker_client.create_user(new_user)
+    created_user = sdk.create_user(new_user)
     user_id = created_user.id
 
     # mypy error: Argument "user_id" to "update_user" of "LookerSDK"
     # has incompatible type "Optional[int]"; expected "int"
-    looker_client.update_user(user_id, ...)
+    sdk.update_user(user_id, ...)
 
-This is because `created_user.id` has type `Optional[int]` but we need to use
-it in the `update_user()` call which is annotated like this:
+This is because ``created_user.id`` has type ``Optional[int]`` but we need to use
+it in the ``update_user()`` call which is annotated like this:
 
 .. code-block:: python
 
@@ -210,8 +227,8 @@ it in the `update_user()` call which is annotated like this:
         fields: Optional[str] = None,
     ) -> models.User:
 
-*We* know that `created_user.id` is an `int` (we didn't pass in a `fields`
-argument to `create_user()` excluding `id` from the response). However, mypy
+*We* know that ``created_user.id`` is an ``int`` (we didn't pass in a ``fields``
+argument to ``create_user()`` excluding ``id`` from the response). However, mypy
 does not so we must guide it in one of the following ways
 
 .. code-block:: python
@@ -223,4 +240,4 @@ does not so we must guide it in one of the following ways
     from typing import cast
     user_id = cast(created_user.id, int)
 
-Now mypy is happy with `update_user(user_id, ...)`
+Now mypy is happy with ``update_user(user_id, ...)``
