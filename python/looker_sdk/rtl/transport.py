@@ -24,7 +24,8 @@
 """
 import abc
 import enum
-from typing import Callable, Dict, MutableMapping, Optional, Union, Tuple
+import re
+from typing import Callable, Dict, MutableMapping, Optional
 
 import attr
 
@@ -44,12 +45,6 @@ class HttpMethod(enum.Enum):
     HEAD = 7
 
 
-TConnectTimeout = int
-TReadTimeout = int
-TConnectAndReadTimeout = int
-TTimeoutSeconds = Union[Tuple[TConnectTimeout, TReadTimeout], TConnectAndReadTimeout]
-
-
 @attr.s(auto_attribs=True, kw_only=True)
 class TransportSettings:
     """Basic transport settings.
@@ -58,7 +53,7 @@ class TransportSettings:
     base_url: str = ""
     api_version: str = "3.1"
     verify_ssl: bool = True
-    timeout: TTimeoutSeconds = (120, 120)
+    timeout: int = 120
     headers: Optional[MutableMapping[str, str]] = None
 
     @property
@@ -74,8 +69,16 @@ class TransportSettings:
         return f"PY-SDK {constants.sdk_version}"
 
 
-TResponseValue = Union[str, bytes]
 TAuthenticator = Optional[Callable[[], Dict[str, str]]]
+
+
+class ResponseMode(enum.Enum):
+    """ResponseMode for an HTTP request - either binary or "string"
+    """
+
+    BINARY = 1
+    STRING = 2
+    UNKNOWN = 3
 
 
 @attr.s(auto_attribs=True)
@@ -84,7 +87,27 @@ class Response:
     """
 
     ok: bool
-    value: TResponseValue
+    value: bytes
+    response_mode: ResponseMode
+    encoding: str = "utf-8"
+
+
+_STRING_MODE = re.compile(constants.RESPONSE_STRING_MODE, re.IGNORECASE)
+_BINARY_MODE = re.compile(constants.RESPONSE_BINARY_MODE, re.IGNORECASE)
+
+
+def response_mode(content_type: Optional[str] = None) -> ResponseMode:
+    """Determine ResponseMode from http Content-Type header
+    """
+    response = ResponseMode.UNKNOWN
+    if not content_type:
+        return response
+
+    if _STRING_MODE.search(content_type):
+        response = ResponseMode.STRING
+    elif _BINARY_MODE.search(content_type):
+        response = ResponseMode.BINARY
+    return response
 
 
 class Transport(abc.ABC):
@@ -97,7 +120,6 @@ class Transport(abc.ABC):
         """Configure and return an instance of Transport
         """
 
-    # pylint: disable=too-many-arguments
     @abc.abstractmethod
     def request(
         self,

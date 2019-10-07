@@ -102,17 +102,30 @@ describe('python generator', () => {
     it('add_group_group', () => {
       const method = apiModel.methods['add_group_group']
       const args = gen.httpArgs('', method).trim()
-      expect(args).toEqual('models.Group, body=body, transport_options=transport_options')
+      const expected = `f"/groups/{group_id}/groups",
+            models.Group,
+            body=body,
+            transport_options=transport_options`
+      expect(args).toEqual(expected)
     })
     it('create_query', () => {
       const method = apiModel.methods['create_query']
       const args = gen.httpArgs('', method).trim()
-      expect(args).toEqual('models.Query, query_params={"fields": fields}, body=body, transport_options=transport_options')
+      const expected = `f"/queries",
+            models.Query,
+            query_params={"fields": fields},
+            body=body,
+            transport_options=transport_options`
+      expect(args).toEqual(expected)
     })
     it('create_dashboard', () => {
       const method = apiModel.methods['create_dashboard']
       const args = gen.httpArgs('', method).trim()
-      expect(args).toEqual('models.Dashboard, body=body, transport_options=transport_options')
+      const expected = `f"/dashboards",
+            models.Dashboard,
+            body=body,
+            transport_options=transport_options`
+      expect(args).toEqual(expected)
     })
   })
 
@@ -129,13 +142,50 @@ def all_datagroups(
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
     })
+    it('binary return type render_task_results', () => {
+      const method = apiModel.methods['render_task_results']
+      const expected =
+        `# GET /render_tasks/{render_task_id}/results -> bytes
+def render_task_results(
+    self,
+    # Id of render task
+    render_task_id: str,
+    transport_options: Optional[transport.TransportSettings] = None,
+) -> bytes:
+`
+      const actual = gen.methodSignature('', method)
+      expect(actual).toEqual(expected)
+    })
+    it('binary or string return type run_url_encoded_query', () => {
+      const method = apiModel.methods['run_url_encoded_query']
+      const expected =
+`# GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> Union[str, bytes]
+def run_url_encoded_query(
+    self,
+    # Model name
+    model_name: str,
+    # View name
+    view_name: str,
+    # Format of result
+    result_format: str,
+    transport_options: Optional[transport.TransportSettings] = None,
+) -> Union[str, bytes]:
+`
+      const actual = gen.methodSignature('', method)
+      expect(actual).toEqual(expected)
+    })
   })
 
   describe('method body', () => {
     it('assert response is model add_group_group', () => {
       const method = apiModel.methods['add_group_group']
       const expected =
-        `response = self.post(f"/groups/{group_id}/groups", models.Group, body=body, transport_options=transport_options)
+`response = self.post(
+            f"/groups/{group_id}/groups",
+            models.Group,
+            body=body,
+            transport_options=transport_options
+)
 assert isinstance(response, models.Group)
 return response`
       const actual = gen.httpCall(indent, method)
@@ -144,7 +194,11 @@ return response`
     it('assert response is None delete_group_from_group', () => {
       const method = apiModel.methods['delete_group_from_group']
       const expected =
-        `response = self.delete(f"/groups/{group_id}/groups/{deleting_group_id}", None, transport_options=transport_options)
+`response = self.delete(
+            f"/groups/{group_id}/groups/{deleting_group_id}",
+            None,
+            transport_options=transport_options
+)
 assert response is None
 return response`
       const actual = gen.httpCall(indent, method)
@@ -153,7 +207,12 @@ return response`
     it('assert response is list active_themes', () => {
       const method = apiModel.methods['active_themes']
       const expected =
-        `response = self.get(f"/themes/active", Sequence[models.Theme], query_params={"name": name, "ts": ts, "fields": fields}, transport_options=transport_options)
+`response = self.get(
+            f"/themes/active",
+            Sequence[models.Theme],
+            query_params={"name": name, "ts": ts, "fields": fields},
+            transport_options=transport_options
+)
 assert isinstance(response, list)
 return response`
       const actual = gen.httpCall(indent, method)
@@ -162,8 +221,38 @@ return response`
     it('assert response is dict query_task_results', () => {
       const method = apiModel.methods['query_task_results']
       const expected =
-        `response = self.get(f"/query_tasks/{query_task_id}/results", MutableMapping[str, str], transport_options=transport_options)
+`response = self.get(
+            f"/query_tasks/{query_task_id}/results",
+            MutableMapping[str, str],
+            transport_options=transport_options
+)
 assert isinstance(response, dict)
+return response`
+      const actual = gen.httpCall(indent, method)
+      expect(actual).toEqual(expected)
+    })
+    it('assert response is bytes render_task_results', () => {
+      const method = apiModel.methods['render_task_results']
+      const expected =
+`response = self.get(
+            f"/render_tasks/{render_task_id}/results",
+            bytes,
+            transport_options=transport_options
+)
+assert isinstance(response, bytes)
+return response`
+      const actual = gen.httpCall(indent, method)
+      expect(actual).toEqual(expected)
+    })
+    it('assert response is bytes or str run_url_encoded_query', () => {
+      const method = apiModel.methods['run_url_encoded_query']
+      const expected =
+`response = self.get(
+            f"/queries/models/{model_name}/views/{view_name}/run/{result_format}",
+            Union[str, bytes],  # type: ignore
+            transport_options=transport_options
+)
+assert isinstance(response, (str, bytes))
 return response`
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
@@ -232,7 +321,12 @@ class WriteCreateQueryTask(model.Model):
     look_id: Optional[int] = None
     dashboard_id: Optional[str] = None
 
-    def __init__(self, *, query_id: int, result_format: str, source: Optional[str] = None, deferred: Optional[bool] = None, look_id: Optional[int] = None, dashboard_id: Optional[str] = None):
+    def __init__(self, *, query_id: int,
+            result_format: str,
+            source: Optional[str] = None,
+            deferred: Optional[bool] = None,
+            look_id: Optional[int] = None,
+            dashboard_id: Optional[str] = None):
         self.query_id = query_id
         self.result_format = result_format
         self.source = source

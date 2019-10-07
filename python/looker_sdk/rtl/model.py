@@ -65,7 +65,7 @@ class DelimSequence(collections.UserList, MutableSequence[T]):
         super().remove(elem)
 
     def index(self, x: T, *args):
-        super().index(x, *args)
+        super().index(x, *args)  # type: ignore
 
     def count(self, elem: T):
         super().count(elem)

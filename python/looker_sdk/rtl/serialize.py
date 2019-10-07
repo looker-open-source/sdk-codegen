@@ -40,7 +40,6 @@ from typing import (  # type: ignore
 import cattr
 
 from looker_sdk.rtl import model
-from looker_sdk.rtl import transport
 
 
 class DeserializeError(Exception):
@@ -57,13 +56,11 @@ TModelOrSequence = Union[
 ]
 TDeserializeReturn = TModelOrSequence
 TStructure = Union[Type[Sequence[int]], Type[Sequence[str]], Type[TDeserializeReturn]]
-TDeserialize = Callable[[transport.TResponseValue, TStructure], TDeserializeReturn]
+TDeserialize = Callable[[str, TStructure], TDeserializeReturn]
 TSerialize = Callable[[TModelOrSequence], bytes]
 
 
-def deserialize(
-    data: transport.TResponseValue, structure: TStructure
-) -> TDeserializeReturn:
+def deserialize(data: str, structure: TStructure) -> TDeserializeReturn:
     """Translate API data into models.
     """
     try:
