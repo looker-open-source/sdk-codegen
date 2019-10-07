@@ -43,10 +43,17 @@ import { PassThrough, Readable } from 'readable-stream'
 
 type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
 
+/**
+ * Set to `true` to follow streaming process
+  */
+const tracing = false
+
 function trace(entry: string, info?: any) {
-  console.debug(entry)
-  if (info) {
-    console.debug(info)
+  if (tracing) {
+    console.debug(entry)
+    if (info) {
+      console.debug(info)
+    }
   }
 }
 
@@ -404,7 +411,9 @@ async function parseResponse(contentType: string, res: Response) {
     return result.toString()
   } else {
     try {
-      // Return string result from buffer without any character encoding
+      // TODO Return ArrayBuffer from buffer without any character encoding?
+      // See https://stackoverflow.com/a/31394257/74137 for more info
+      // return result.buffer.slice(result.byteOffset, result.byteOffset + result.byteLength)
       return result.toString()
     } catch (error) {
       return Promise.reject(error)
