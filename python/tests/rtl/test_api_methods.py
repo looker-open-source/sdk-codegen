@@ -22,7 +22,7 @@
 
 import datetime
 import json
-from typing import MutableMapping, Optional
+from typing import MutableMapping, Optional, Union
 
 import pytest  # type: ignore
 
@@ -103,19 +103,49 @@ def test_get_serialized(
     assert actual == expected
 
 
+# all these type-ignore comments are because Union[str, bytes] has type Any
 @pytest.mark.parametrize(  # type: ignore
     "test_response, test_structure, expected",
-    [
+    [  # type: ignore
         (
-            transport.Response(ok=True, value="some response text"),
-            str,
+            transport.Response(  # type: ignore
+                ok=True,
+                value=bytes(range(0, 10)),
+                response_mode=transport.ResponseMode.BINARY,
+            ),
+            Union[str, bytes],  # type: ignore
+            bytes(range(0, 10)),
+        ),
+        (
+            transport.Response(  # type: ignore
+                ok=True,
+                value=b"some response text",
+                response_mode=transport.ResponseMode.STRING,
+            ),
+            Union[str, bytes],  # type: ignore
             "some response text",
         ),
-        (transport.Response(ok=True, value=""), None, None),
+        (
+            transport.Response(  # type: ignore
+                ok=True,
+                value=bytes("ئ", encoding="arabic"),
+                response_mode=transport.ResponseMode.STRING,
+                encoding="arabic",
+            ),
+            Union[str, bytes],  # type: ignore
+            "ئ",
+        ),
+        (
+            transport.Response(
+                ok=True, value=b"", response_mode=transport.ResponseMode.STRING
+            ),
+            None,
+            None,
+        ),
         (
             transport.Response(
                 ok=True,
-                value=(
+                value=bytes(
                     json.dumps(
                         {  # type: ignore
                             "current_version": {  # type: ignore
@@ -127,8 +157,10 @@ def test_get_serialized(
                             "looker_release_version": "6.18",
                             "supported_versions": None,
                         }
-                    )
+                    ),
+                    encoding="utf-8",
                 ),
+                response_mode=transport.ResponseMode.STRING,
             ),
             models.ApiVersion,
             models.ApiVersion(
@@ -156,5 +188,12 @@ def test_return(
 
 def test_return_raises_an_SDKError_for_bad_responses(api):
     with pytest.raises(error.SDKError) as exc:
-        api._return(transport.Response(ok=False, value="some error message"), str)
+        api._return(
+            transport.Response(
+                ok=False,
+                value=b"some error message",
+                response_mode=transport.ResponseMode.STRING,
+            ),
+            str,
+        )
     assert "some error message" in str(exc.value)

@@ -1,8 +1,10 @@
+import io
 import json
 from operator import itemgetter
 import re
 from typing import Any, cast, Dict, List, Optional, Union
 
+from PIL import Image
 import pytest  # type: ignore
 
 from looker_sdk.sdk import methods as mtds
@@ -261,7 +263,15 @@ def test_it_runs_inline_query(looker_client: mtds.LookerSDK, queries: TQueries):
         assert isinstance(csv, str)
         assert len(re.findall(r"\n", csv)) == int(limit) + 1
 
-        looker_client.logout()
+    # only do 1 image download since it takes a while
+    png = looker_client.run_inline_query("png", request)
+    assert isinstance(png, bytes)
+    try:
+        Image.open(io.BytesIO(png))
+    except IOError:
+        raise AssertionError("png format failed to return an image")
+
+    looker_client.logout()
 
 
 def test_search_looks_returns_looks(looker_client: mtds.LookerSDK):

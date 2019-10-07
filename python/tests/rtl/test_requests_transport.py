@@ -20,8 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from typing import cast, MutableMapping
+
 import attr
 import pytest  # type: ignore
+import requests
 
 from looker_sdk.rtl import requests_transport
 from looker_sdk.rtl import transport
@@ -34,7 +37,8 @@ class Response:
     """
 
     ok: bool
-    text: str
+    content: bytes
+    headers: MutableMapping[str, str]
 
 
 class Session:
@@ -46,7 +50,7 @@ class Session:
         self.ret_val = ret_val
         self.error = error
 
-    def request(self, method, url, params, data, headers):
+    def request(self, method, url, auth, params, data, headers, timeout):
         """Fake request.Session.request
         """
         if self.error:
@@ -54,7 +58,7 @@ class Session:
         return self.ret_val
 
 
-@pytest.fixture
+@pytest.fixture  # type: ignore
 def settings():
     return transport.TransportSettings(
         base_url="/some/path", api_version="3.1", headers=None, verify_ssl=True
@@ -70,36 +74,86 @@ def test_configure(settings):
     assert test.session.headers.get("User-Agent") == f"PY-SDK {constants.sdk_version}"
 
 
-def test_request_ok(settings):
+parametrize = [
+    ({"Content-Type": "application/json"}, "utf-8", transport.ResponseMode.STRING),
+    ({"Content-Type": "image/png"}, "utf-8", transport.ResponseMode.BINARY),
+    (
+        {"Content-Type": "text/xml; charset=latin1"},
+        "latin1",
+        transport.ResponseMode.STRING,
+    ),
+    (
+        {"Content-Type": "text/plain; charset=arabic"},
+        "arabic",
+        transport.ResponseMode.STRING,
+    ),
+    (
+        {"Content-Type": "text/plain; charset=utf-8"},
+        "utf-8",
+        transport.ResponseMode.STRING,
+    ),
+    ({"Content-Type": "audio/gzip"}, "utf-8", transport.ResponseMode.BINARY),
+]
+
+
+@pytest.mark.parametrize(  # type: ignore
+    "headers, expected_encoding, expected_response_mode", parametrize
+)
+def test_request_ok(
+    settings: transport.TransportSettings,
+    headers: MutableMapping[str, str],
+    expected_response_mode: transport.ResponseMode,
+    expected_encoding: str,
+):
     """Test basic successful round trip
     """
-    ret_val = Response(ok=True, text="yay!")
-    session = Session(ret_val)
+    value = b"yay!"
+    ret_val = Response(
+        ok=True, content=value, headers=requests.structures.CaseInsensitiveDict(headers)
+    )
+    session = cast(requests.Session, Session(ret_val))
     test = requests_transport.RequestsTransport(settings, session)
     resp = test.request(transport.HttpMethod.GET, "/some/path")
     assert isinstance(resp, transport.Response)
-    assert resp.value == "yay!"
+    assert resp.value == value
     assert resp.ok is True
+    assert resp.response_mode == expected_response_mode
+    assert resp.encoding == expected_encoding
 
 
-def test_request_not_ok(settings):
+@pytest.mark.parametrize(  # type: ignore
+    "headers, expected_encoding, expected_response_mode", parametrize
+)
+def test_request_not_ok(
+    settings: transport.TransportSettings,
+    headers: MutableMapping[str, str],
+    expected_response_mode: transport.ResponseMode,
+    expected_encoding: str,
+):
     """Test API error response
     """
-    ret_val = Response(ok=False, text="Some API error")
-    session = Session(ret_val)
+    value = b"Some API error"
+    ret_val = Response(
+        ok=False,
+        content=value,
+        headers=requests.structures.CaseInsensitiveDict(headers),
+    )
+    session = cast(requests.Session, Session(ret_val))
     test = requests_transport.RequestsTransport(settings, session)
     resp = test.request(transport.HttpMethod.GET, "/some/path")
     assert isinstance(resp, transport.Response)
-    assert resp.value == "Some API error"
+    assert resp.value == value
     assert resp.ok is False
+    assert resp.response_mode == expected_response_mode
+    assert resp.encoding == expected_encoding
 
 
 def test_request_error(settings):
     """Test network error response
     """
-    session = Session(None, True)
+    session = cast(requests.Session, Session(None, True))
     test = requests_transport.RequestsTransport(settings, session)
     resp = test.request(transport.HttpMethod.GET, "/some/path")
     assert isinstance(resp, transport.Response)
-    assert resp.value == "(54, 'Connection reset by peer')"
+    assert resp.value == b"(54, 'Connection reset by peer')"
     assert resp.ok is False
