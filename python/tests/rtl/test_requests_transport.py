@@ -50,7 +50,7 @@ class Session:
         self.ret_val = ret_val
         self.error = error
 
-    def request(self, method, url, params, data, headers, timeout):
+    def request(self, method, url, auth, params, data, headers, timeout):
         """Fake request.Session.request
         """
         if self.error:
