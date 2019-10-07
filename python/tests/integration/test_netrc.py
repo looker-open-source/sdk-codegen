@@ -8,7 +8,7 @@ from looker_sdk.sdk import models as ml
 NETRC_LOCATION = os.path.expanduser("~/.netrc")
 
 
-def can_netrc_file_be_created():
+def can_create_netrc_file():
     """Check if netrc can be created in home directory."""
     can = False
     if NETRC_LOCATION.startswith("~") or os.path.exists(NETRC_LOCATION):
@@ -37,7 +37,7 @@ def create_netrc_file(looker_client: mtds.LookerSDK):
 
 
 @pytest.mark.skipif(
-    not can_netrc_file_be_created(),
+    not can_create_netrc_file(),
     reason="netrc file cannot be created because it already exists or $HOME is undefined",  # noqa: B950
 )
 @pytest.mark.usefixtures("create_netrc_file")
