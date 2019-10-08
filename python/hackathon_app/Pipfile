@@ -4,9 +4,10 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-mypy = "*"
-black = "*"
 flake8 = "*"
+black = "*"
+mypy = "*"
+flask = "*"
 
 [packages]
 looker-sdk = "*"
