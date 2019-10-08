@@ -123,7 +123,6 @@ from ${this.packagePath}.sdk import models
 from ${this.packagePath}.rtl import api_methods
 from ${this.packagePath}.rtl import transport
 
-
 class ${this.packageName}(api_methods.APIMethods):
 `
 
