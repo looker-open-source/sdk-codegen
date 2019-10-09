@@ -40,13 +40,17 @@ protocol IApiSettings: ITransportSettings {
  * @constructor
  *
  */
-func DefaultSettings() -> IApiSettings {
-  return (
-    base_url: "",
-    api_version: "3.1", // default to API 3.1
-    verify_ssl: true,
-timeout: defaultTimeout
-) as! IApiSettings
+struct DefaultSettings : IApiSettings {
+    func isConfigured() -> Bool {
+        return false
+    }
+
+    var base_url: String? = ""
+    var api_version: String? = "3.1"
+    var verify_ssl: Bool? = true
+    var timeout: Int? = defaultTimeout
+    var headers: Headers?
+    var encoding: String?
 }
 
 /**
@@ -61,7 +65,7 @@ timeout: defaultTimeout
  *  - <environmentPrefix>_VERIFY_SSL
  *  - <environmentPrefix>_TIMEOUT
  */
-func ValueSettings(values: StringDictionary) -> IApiSettings {
+func ValueSettings(_ values: StringDictionary) -> IApiSettings {
   var settings = DefaultSettings()
   settings.api_version = values[strLookerApiVersion] ?? settings.api_version
   settings.base_url = values[strLookerBaseUrl] ?? settings.base_url
@@ -88,11 +92,11 @@ class ApiSettings: IApiSettings {
   var headers: Headers?
   var encoding: String?
 
-  init(settings: IApiSettings) throws {
+  init(_ settings: IApiSettings) throws {
     // coerce types to declared types since some paths could have non-conforming settings values
     self.base_url = settings.base_url ?? self.base_url
     self.api_version = settings.api_version ?? self.api_version
-    self.verify_ssl = settings.verify_ssl ?? self.verify_ssl // TODO This may not work without parsing
+    self.verify_ssl = settings.verify_ssl ?? self.verify_ssl
     self.timeout = settings.timeout ?? self.timeout
     if (!self.isConfigured()) {
       throw SdkError.error(strBadConfiguration)

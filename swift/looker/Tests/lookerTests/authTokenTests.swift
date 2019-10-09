@@ -22,13 +22,13 @@ class authTokenTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         let auth = AuthToken()
-        XCTAssertEqual(auth.isActive(), false)
+        XCTAssertEqual(auth.isActive(), false, "auth should not be active")
     }
     
     func testIsActiveWithToken() {
         // TODO figure out how to init protocol and pass it in
         let auth = AuthToken(AccessToken(access_token: "thisismytoken", token_type: "bearer", expires_in: 30))
-        XCTAssertEqual(auth.isActive(), true)
+        XCTAssertEqual(auth.isActive(), true, "auth should be active")
         //        let auth = AuthToken("thisismytoken", "bearer", 30)
         //        XCTAssertEqual(auth.isActive(), true)
     }
