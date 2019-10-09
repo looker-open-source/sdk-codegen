@@ -29,7 +29,6 @@ def download_tile(tile: models.DashboardElement, format:str = 'png'):
   if not tile.query_id:
     print(f"tile {tile.title} has no query_id")
     return None
-  print(tile.query_id)
   task = sdk.create_query_render_task(
       query_id=tile.query_id, result_format=format, width=500, height=500)
 
