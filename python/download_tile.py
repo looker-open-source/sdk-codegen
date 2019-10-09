@@ -19,9 +19,10 @@ def get_tile(dash: models.Dashboard, title: str):
   for tile in dash.dashboard_elements:
     assert tile.title
     if tile.title.lower() == title:
-      found = tile
-  if not tile:
+      break
+  else:
     print(f"tile {title} of dashboard {dash.title} was not found")
+    return None
   return tile
 
 def download_tile(tile: models.DashboardElement, format:str = 'png'):
