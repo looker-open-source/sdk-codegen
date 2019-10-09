@@ -14,7 +14,6 @@ def get_dashboard(title: str):
 def get_tile(dash: models.Dashboard, title: str):
   """Find a dashboard tile by title"""
   title = title.lower()
-  found = None
   assert dash.dashboard_elements
   for tile in dash.dashboard_elements:
     assert tile.title
