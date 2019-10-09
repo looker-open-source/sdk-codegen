@@ -159,7 +159,13 @@ Which we use to isolate the various supporting libraries required to test the SD
 You will also need to copy the `looker-sample.ini` to `looker.ini` and fill out
 the necessary details so it can reach your running *Looker* instance.
 
-To build a specific language integration testing image you simply execute:
+First, you will need to build the base:
+
+```bash
+docker-compose build base
+```
+
+Then to build a specific language integration testing image you simply execute:
 
 ```bash
 docker-compose build [language]
