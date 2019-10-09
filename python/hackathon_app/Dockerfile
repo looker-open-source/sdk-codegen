@@ -8,3 +8,7 @@ COPY Pipfile Pipfile.lock /app/
 WORKDIR /app
 
 RUN pipenv install --system
+
+ENV STATIC_INDEX 1
+
+COPY ./frontend/build /app/static
