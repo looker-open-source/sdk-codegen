@@ -7,6 +7,7 @@ verify_ssl = true
 
 [packages]
 looker-sdk = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.7"
