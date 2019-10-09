@@ -8,6 +8,9 @@ verify_ssl = true
 [packages]
 looker-sdk = "*"
 mypy = "*"
+black = "*"
+flake8 = "*"
+flake8-bugbear = "*"
 
 [requires]
 python_version = "3.7"
