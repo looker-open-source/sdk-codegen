@@ -1,18 +1,21 @@
-import React, {useEffect, useState} from 'react'
+import * as React from 'react'
 import logo from './logo.svg'
 import styled from 'styled-components'
 import {Router, navigate} from '@reach/router'
+import {Formik, Form, Field, ErrorMessage} from 'formik'
+import * as yup from 'yup'
+import {placeholder} from '@babel/types'
 
 type Path = {
   path: string
 }
 
 export const RegisterScene: React.FC<Path> = () => {
-  const [hackathons, setHackathons] = useState(['hack 1', 'hack 2'])
+  const [hackathons, setHackathons] = React.useState(['hack 1', 'hack 2'])
 
-  useEffect(() => {
+  React.useEffect(() => {
     async function fetchData() {
-      const result = await fetch(`/hackathons`)
+      const result = await fetch('/hackathons')
       setHackathons(await result.json())
     }
     fetchData()
@@ -26,51 +29,118 @@ export const RegisterScene: React.FC<Path> = () => {
         <Description>Description of Hackathon , venue/agenda</Description>
         <hr />
         <Header>Registration</Header>
-        <Form>
-          <InputGroup>
-            <Label>First name</Label>
-            <Input placeholder="Dandy" />
-          </InputGroup>
-          <InputGroup>
-            <Label>Last name</Label>
-            <Input placeholder="Chiggins" />
-          </InputGroup>
-          <InputGroup>
-            <Label>Email</Label>
-            <Input placeholder="dandychiggins@gmail.com" />
-          </InputGroup>
-          <InputGroup>
-            <Label>Organization</Label>
-            <Input placeholder="Looker" />
-          </InputGroup>
-          <InputGroup>
-            <Label>Hackathon</Label>
-            <HackathonSelect hackathons={hackathons} />
-          </InputGroup>
-          <CheckboxGroup>
-            <input type="checkbox" />
-            <CheckboxLabel>
-              I agree to the Terms and Conditions/NDAQ
-            </CheckboxLabel>
-          </CheckboxGroup>
-          <CheckboxGroup>
-            <input type="checkbox" />
-            <CheckboxLabel>I agree to the Code of Conduct</CheckboxLabel>
-          </CheckboxGroup>
-          <CheckboxGroup>
-            <input type="checkbox" />
-            <CheckboxLabel>
-              I agree to the Contribution Guidelines
-            </CheckboxLabel>
-          </CheckboxGroup>
-        </Form>
-        <RegisterButton
-          onClick={() => {
-            navigate('/resources')
+        <Formik
+          initialValues={{
+            firstName: '',
+            lastName: '',
+            email: '',
+            organization: '',
+            hackathon: '',
+            ndaq: false,
+            codeOfConduct: false,
+            contributing: false,
+          }}
+          validationSchema={() =>
+            yup.object().shape({
+              firstName: yup.string().required(),
+              lastName: yup.string().required(),
+              email: yup
+                .string()
+                .email()
+                .required(),
+              organization: yup.string().required(),
+              hackathon: yup.string().required(),
+              ndaq: yup
+                .boolean()
+                .oneOf([true], 'Required')
+                .required(),
+              codeOfConduct: yup
+                .boolean()
+                .oneOf([true], 'Required')
+                .required(),
+              contributing: yup
+                .boolean()
+                .oneOf([true], 'Required')
+                .required(),
+            })
+          }
+          onSubmit={(values, actions) => {
+            async function fetchData() {
+              const result = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(values),
+              })
+              const msg = await result.json()
+              if (msg.ok) {
+                navigate('/resources')
+              } else {
+                actions.setStatus(msg.message)
+                actions.setSubmitting(false)
+              }
+            }
+            fetchData()
           }}
         >
-          Register
-        </RegisterButton>
+          {({isSubmitting, status}) => (
+            <RegForm>
+              <InputGroup>
+                <Label>First name</Label>
+                <Input name="firstName" type="text" placeholder="Andy" />
+                <ErrorMessage name="firstName" component="div" />
+              </InputGroup>
+              <InputGroup>
+                <Label>Last name</Label>
+                <Input name="lastName" type="text" placeholder="Chiggins" />
+                <ErrorMessage name="lastName" component="div" />
+              </InputGroup>
+              <InputGroup>
+                <Label>Email</Label>
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="dandychiggins@gmail.com"
+                />
+                <ErrorMessage name="email" component="div" />
+              </InputGroup>
+              <InputGroup>
+                <Label>Organization</Label>
+                <Input name="organization" placeholder="Looker" />
+                <ErrorMessage name="organization" component="div" />
+              </InputGroup>
+              <InputGroup>
+                <Label>Hackathon</Label>
+                <HackathonSelect hackathons={hackathons} />
+                <ErrorMessage name="hackathon" component="div" />
+              </InputGroup>
+              <CheckboxGroup>
+                <Input name="ndaq" type="checkbox" />
+                <ErrorMessage name="ndaq" component="div" />
+                <CheckboxLabel>
+                  I agree to the Terms and Conditions/NDAQ
+                </CheckboxLabel>
+              </CheckboxGroup>
+              <CheckboxGroup>
+                <Input name="codeOfConduct" type="checkbox" />
+                <ErrorMessage name="codeOfConduct" component="div" />
+                <CheckboxLabel>I agree to the Code of Conduct</CheckboxLabel>
+              </CheckboxGroup>
+              <CheckboxGroup>
+                <Input name="contributing" type="checkbox" />
+                <ErrorMessage name="contributing" component="div" />
+                <CheckboxLabel>
+                  I agree to the Contribution Guidelines
+                </CheckboxLabel>
+              </CheckboxGroup>
+              {status && <div>{status}</div>}
+              <RegisterButton type="submit" disabled={isSubmitting}>
+                Register
+              </RegisterButton>
+            </RegForm>
+          )}
+        </Formik>
       </SceneBody>
     </CenterContainer>
   )
@@ -81,8 +151,12 @@ type HackathonSelectProps = {
 }
 
 const HackathonSelect: React.FC<HackathonSelectProps> = ({hackathons}) => {
-  let options = []
-  let key = 0
+  let options = [
+    <option key="0" disabled selected value="">
+      Select a Hack
+    </option>,
+  ]
+  let key = 1
   for (let hack of hackathons) {
     options.push(
       <option key={key} value={hack}>
@@ -91,7 +165,11 @@ const HackathonSelect: React.FC<HackathonSelectProps> = ({hackathons}) => {
     )
     key++
   }
-  return <select>{options}</select>
+  return (
+    <Input component="select" name="hackathon">
+      {options}
+    </Input>
+  )
 }
 
 type LinkProps = {
@@ -201,11 +279,11 @@ const Label = styled.div`
   margin-bottom: 4px;
 `
 
-const Form = styled.div`
+const RegForm = styled(Form)`
   margin-bottom: 32px;
 `
 
-const Input = styled.input`
+const Input = styled(Field)`
   border-radius: 4px;
   height: 30px;
   font-size: 16px;
