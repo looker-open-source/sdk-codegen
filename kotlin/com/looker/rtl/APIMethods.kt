@@ -1,0 +1,57 @@
+import com.looker.rtl.HttpMethod
+import com.looker.rtl.SDKResponse
+import com.looker.rtl.UserSession
+import kotlinx.coroutines.Deferred
+
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2019 Looker Data Sciences, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+class APIMethods(val authSession: UserSession) {
+
+    val authRequest = authSession::authenticate
+
+    inline fun <reified T> get(path: String, queryParams: Map<String, String> = mapOf(), body: String = ""): SDKResponse {
+        return authSession.transport.request<T>(HttpMethod.GET, path, queryParams, body, authRequest)
+    }
+
+    inline fun <reified T> head(path: String, queryParams: Map<String, String> = mapOf(), body: String = ""): SDKResponse {
+        return authSession.transport.request<T>(HttpMethod.HEAD, path, queryParams, body, authRequest)
+    }
+
+    inline fun <reified T> delete(path: String, queryParams: Map<String, String> = mapOf(), body: String = ""): SDKResponse {
+        return authSession.transport.request<T>(HttpMethod.DELETE, path, queryParams, body, authRequest)
+    }
+
+    inline fun <reified T> post(path: String, queryParams: Map<String, String> = mapOf(), body: String = ""): SDKResponse {
+        return authSession.transport.request<T>(HttpMethod.POST, path, queryParams, body, authRequest)
+    }
+
+    inline fun <reified T> put(path: String, queryParams: Map<String, String> = mapOf(), body: String = ""): SDKResponse {
+        return authSession.transport.request<T>(HttpMethod.PUT, path, queryParams, body, authRequest)
+    }
+
+    inline fun <reified T> patch(path: String, queryParams: Map<String, String> = mapOf(), body: String = ""): SDKResponse {
+        return authSession.transport.request<T>(HttpMethod.PATCH, path, queryParams, body, authRequest)
+    }
+}
