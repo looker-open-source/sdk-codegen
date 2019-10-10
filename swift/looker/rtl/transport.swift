@@ -77,10 +77,6 @@ enum HttpMethod: String {
 typealias Headers = Any
 typealias Agent = Any
 
-struct Partial<T> {
-    
-}
-
 struct Promise<T> {
     
 }

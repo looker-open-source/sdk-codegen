@@ -32,7 +32,7 @@ Missing required configuration values like base_url and api_version
 """
 
 protocol IApiSettings: ITransportSettings {
-  func isConfigured() -> Bool
+    func isConfigured() -> Bool
 }
 
 /**
@@ -44,7 +44,7 @@ struct DefaultSettings : IApiSettings {
     func isConfigured() -> Bool {
         return false
     }
-
+    
     var base_url: String? = ""
     var api_version: String? = "3.1"
     var verify_ssl: Bool? = true
@@ -66,45 +66,48 @@ struct DefaultSettings : IApiSettings {
  *  - <environmentPrefix>_TIMEOUT
  */
 func ValueSettings(_ values: StringDictionary) -> IApiSettings {
-  var settings = DefaultSettings()
-  settings.api_version = values[strLookerApiVersion] ?? settings.api_version
-  settings.base_url = values[strLookerBaseUrl] ?? settings.base_url
-  if (values[strLookerVerifySsl] != nil) {
-    let v = values[strLookerVerifySsl]!.lowercased()
-    settings.verify_ssl = v == "true" || v == "1"
-  }
-  if (values[strLookerTimeout] != nil) {
-    settings.timeout = Int(values[strLookerTimeout]!)!
-  }
-  return settings
+    var settings = DefaultSettings()
+    settings.api_version = values[strLookerApiVersion] ?? settings.api_version
+    settings.base_url = values[strLookerBaseUrl] ?? settings.base_url
+    if (values[strLookerVerifySsl] != nil) {
+        let v = values[strLookerVerifySsl]!.lowercased()
+        settings.verify_ssl = v == "true" || v == "1"
+    }
+    if (values[strLookerTimeout] != nil) {
+        settings.timeout = Int(values[strLookerTimeout]!)!
+    }
+    return settings
 }
 
 /**
- * @class ApiSettings
+ * @struct  ApiSettings
  *
  * .ini Configuration initializer
  */
-class ApiSettings: IApiSettings {
-  var base_url: String? = ""
-  var api_version: String? = "3.1"
-  var verify_ssl: Bool? = true
-  var timeout: Int? = defaultTimeout
-  var headers: Headers?
-  var encoding: String?
-
-  init(_ settings: IApiSettings) throws {
-    // coerce types to declared types since some paths could have non-conforming settings values
-    self.base_url = settings.base_url ?? self.base_url
-    self.api_version = settings.api_version ?? self.api_version
-    self.verify_ssl = settings.verify_ssl ?? self.verify_ssl
-    self.timeout = settings.timeout ?? self.timeout
-    if (!self.isConfigured()) {
-      throw SdkError.error(strBadConfiguration)
+struct ApiSettings: IApiSettings {
+    var base_url: String?
+    var api_version: String?
+    var verify_ssl: Bool?
+    var timeout: Int?
+    var headers: Headers?
+    var encoding: String?
+    
+    init() {
+        
     }
-  }
-
-  func isConfigured() -> Bool {
-    return (self.base_url != "" && self.api_version != "")
-  }
+    init(_ settings: IApiSettings) throws {
+        // coerce types to declared types since some paths could have non-conforming settings values
+        guard case self.base_url = settings.base_url else { return } // optional assignment
+        guard case self.api_version = settings.api_version else { return }
+        self.verify_ssl = settings.verify_ssl ?? self.verify_ssl
+        self.timeout = settings.timeout ?? self.timeout
+        if (!self.isConfigured()) {
+            throw SdkError.error(strBadConfiguration)
+        }
+    }
+    
+    func isConfigured() -> Bool {
+        return (self.base_url != "" && self.api_version != "")
+    }
 }
 

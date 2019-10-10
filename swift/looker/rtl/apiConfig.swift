@@ -78,3 +78,44 @@ func parseConfig(_ filename : String) -> Config {
     }
     return config
 }
+
+struct ApiConfig : IApiSettings {
+    func isConfigured() -> Bool {
+        return (base_url != "" && api_version != "")
+    }
+    
+    var base_url: String?
+    
+    var api_version: String?
+    
+    var headers: Headers?
+    
+    var verify_ssl: Bool?
+    
+    var timeout: Int?
+    
+    var encoding: String?
+    
+    init() {
+        self.assign(DefaultSettings())
+    }
+    
+    init(_ settings: IApiSettings) {
+        self.assign(settings)
+    }
+    
+    init(_ fileName: String) {
+        let contents = parseConfig(fileName)
+        
+    }
+    
+    mutating func assign(_ values: IApiSettings) {
+        let defaults = DefaultSettings()
+        self.base_url = values.base_url ?? defaults.base_url
+        self.api_version = values.api_version ?? defaults.api_version
+        self.headers = values.headers ?? defaults.headers
+        self.verify_ssl = values.verify_ssl ?? defaults.verify_ssl
+        self.timeout = values.timeout ?? defaults.timeout
+        self.encoding = values.encoding ?? defaults.encoding
+    }
+}
