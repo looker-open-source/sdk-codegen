@@ -1,13 +1,14 @@
 from functools import reduce
 from typing import cast, MutableSequence, Sequence
 
-from looker_sdk import client, methods, models
+from looker_sdk import client, models
+
+
+sdk = client.setup("../looker.ini")
 
 
 def main():
-    api_client = client.setup("looker.ini")
-
-    connections = get_connections(api_client)
+    connections = get_connections()
 
     if not connections:
         print("No connections found.")
@@ -15,21 +16,23 @@ def main():
     for connection in connections:
         if connection.name == "looker":
             continue
-        test_results = run_connection_tests(api_client, connection)
+        test_results = run_connection_tests(connection)
         generate_report(connection.name, test_results)
 
 
-def get_connections(api_client: methods.LookerSDK) -> Sequence[models.DBConnection]:
-    return api_client.all_connections(fields="name, dialect")
+def get_connections() -> Sequence[models.DBConnection]:
+    """Get list of all connections."""
+    return sdk.all_connections(fields="name, dialect")
 
 
 def run_connection_tests(
-    api_client: methods.LookerSDK, connection: models.DBConnection
+    connection: models.DBConnection
 ) -> Sequence[models.DBConnectionTestResult]:
+    """Run supported tests against a given connection."""
     assert connection.name
     assert connection.dialect and connection.dialect.connection_tests
     supported_tests: MutableSequence[str] = list(connection.dialect.connection_tests)
-    test_results = api_client.test_connection(
+    test_results = sdk.test_connection(
         connection.name, models.DelimSequence(supported_tests)
     )
     return test_results
