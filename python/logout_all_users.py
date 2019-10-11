@@ -1,35 +1,38 @@
-from typing import cast, MutableSequence, Optional, Sequence
+from typing import Sequence
 
-from looker_sdk import client, methods, models
+from looker_sdk import client, models
+
+
+sdk = client.setup("../looker.ini")
 
 
 def main():
-    api_client = client.setup("../looker.ini")
+    users = get_all_users()
 
-    users = get_all_users(api_client)
+    if not users:
+        print("No users found.")
+        return
 
-    terminations_count = 0
+    count = 0
     for user in users:
         if user.sessions:
-            terminate_sessions(api_client, user.id, user.sessions)
-            terminations_count += len(user.sessions)
+            terminate_sessions(user.id, user.sessions)
+            count += len(user.sessions)
 
-    generate_report(terminations_count)
-
-
-def get_all_users(api_client: methods.LookerSDK) -> Sequence[models.User]:
-    return api_client.all_users(fields="id, sessions")
-
-
-def terminate_sessions(
-    api_client: methods.LookerSDK, user_id: int, sessions: Sequence[models.Session]
-):
-    for session in sessions:
-        api_client.delete_user_session(user_id, cast(int, session.id))
-
-
-def generate_report(count: int):
     print(f"Terminated {count} session{'' if count == 1 else 's'}")
+
+
+def get_all_users() -> Sequence[models.User]:
+    """Return a list of users."""
+    users = sdk.all_users(fields="id, sessions")
+    return users
+
+
+def terminate_sessions(user_id: int, sessions: Sequence[models.Session]):
+    """Delete active sessions for a given user id."""
+    for session in sessions:
+        assert isinstance(session.id, int)
+        sdk.delete_user_session(user_id, session.id)
 
 
 main()
