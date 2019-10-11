@@ -31,6 +31,14 @@ class APIMethods(val authSession: UserSession) {
 
     val authRequest = authSession::authenticate
 
+    fun <T> ok(response: SDKResponse): T {
+        when(response) {
+            is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
+            is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
+            else -> throw Error("Fail!!")
+        }
+    }
+
     inline fun <reified T> get(path: String, queryParams: Map<String, String> = mapOf(), body: String = ""): SDKResponse {
         return authSession.transport.request<T>(HttpMethod.GET, path, queryParams, body, authRequest)
     }

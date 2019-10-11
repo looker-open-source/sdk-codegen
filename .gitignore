@@ -13,3 +13,4 @@ venv/*
 package-lock.json
 **/lib/*
 **/dist/*
+kotlin/.gradle/*

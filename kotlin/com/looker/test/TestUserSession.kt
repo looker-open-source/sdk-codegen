@@ -38,7 +38,8 @@ import org.junit.Test as test
 
 
 class TestUserSession {
-    val localIni = "/Users/looker/Documents/sdk_codegen/looker.ini"
+//    val localIni = "/Users/looker/Documents/sdk_codegen/looker.ini"
+    val localIni = "/Users/looker/sdk-codegen/looker.ini"
     val settings = ApiSettingsIniFile(localIni, "Looker")
 
     val client: HttpClient = HttpClient(Apache) {
