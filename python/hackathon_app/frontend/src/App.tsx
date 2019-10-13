@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import {Router, navigate} from '@reach/router'
 import {Formik, Form, Field, ErrorMessage} from 'formik'
 import * as yup from 'yup'
-import {placeholder} from '@babel/types'
 
 type Path = {
   path: string
@@ -12,11 +11,14 @@ type Path = {
 
 export const RegisterScene: React.FC<Path> = () => {
   const [hackathons, setHackathons] = React.useState(['hack 1', 'hack 2'])
+  const [csrf, setCsrf] = React.useState({token: ''})
 
   React.useEffect(() => {
     async function fetchData() {
-      const result = await fetch('/hackathons')
-      setHackathons(await result.json())
+      const hackathons = await fetch('/hackathons')
+      setHackathons(await hackathons.json())
+      const csrf = await fetch('/csrf')
+      setCsrf(await csrf.json())
     }
     fetchData()
   }, [])
@@ -30,7 +32,9 @@ export const RegisterScene: React.FC<Path> = () => {
         <hr />
         <Header>Registration</Header>
         <Formik
+          enableReinitialize // for csrf token
           initialValues={{
+            csrf_token: csrf.token,
             firstName: '',
             lastName: '',
             email: '',
@@ -42,6 +46,7 @@ export const RegisterScene: React.FC<Path> = () => {
           }}
           validationSchema={() =>
             yup.object().shape({
+              csrf_token: yup.string().required(),
               firstName: yup.string().required(),
               lastName: yup.string().required(),
               email: yup
@@ -86,6 +91,7 @@ export const RegisterScene: React.FC<Path> = () => {
         >
           {({isSubmitting, status}) => (
             <RegForm>
+              <Field type="hidden" name="csrf_token" value={csrf.token} />
               <InputGroup>
                 <Label>First name</Label>
                 <Input name="firstName" type="text" placeholder="Andy" />
@@ -152,7 +158,7 @@ type HackathonSelectProps = {
 
 const HackathonSelect: React.FC<HackathonSelectProps> = ({hackathons}) => {
   let options = [
-    <option key="0" disabled selected value="">
+    <option key="0" disabled defaultValue="1" value="">
       Select a Hack
     </option>,
   ]
