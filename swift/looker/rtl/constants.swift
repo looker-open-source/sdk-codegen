@@ -22,6 +22,8 @@
  * THE SOFTWARE.
  */
 
+import Foundation
+
 struct Constants {
     static let lookerVersion = "6.21"
     static let apiVersion = "3.1"
@@ -29,23 +31,25 @@ struct Constants {
     static let environmentPrefix = "LOOKERSDK"
     static let matchCharset = ";.*charset="
 
+    static let applicationJson = "^application\\/.*\\bjson\\b"
     /**
      * Does this content type say it's utf-8?
      * @type Regular expression for matching charset=utf-8 in Content-Type
      */
-    static let matchCharsetUtf8 = "\(matchCharset).*\\butf-8\\b"
+    static let matchCharsetUtf8 = ";.*charset=.*\\butf-8\\b"
 
     /**
      * Matching rules for string/text types. String matches must be checked *before* binary matches
      * @type Regular expression for matching Content-Type headers
      */
-    static let matchModeString = "(^application\\/.*(\\bjson\\b|\\bxml\\b|\\bsql\\b|\\bgraphql\\b|\\bjavascript\\b|\\bx-www-form-urlencoded\\b)|^text\\/|$\(matchCharset)"
+    static let matchModeString = "(^application\\/.*(\\bjson\\b|\\bxml\\b|\\bsql\\b|\\bgraphql\\b|\\bjavascript\\b|\\bx-www-form-urlencoded\\b)|^text\\/|;.*charset="
 
     /**
      * Matching rules for all binary or unknown types. Binary matches must be checked *after* string matches
      * @type {string} Regular expression for matching Content-Type headers
      */
     static let matchModeBinary = "^image\\/|^audio\\/|^video\\/|^font\\/|^application\\/|^multipart\\/"
+    
 }
 
 // TODO implement StringDictionary<T>
@@ -61,3 +65,18 @@ typealias ValueDictionary = [String:Any?]
 enum SdkError: Error {
     case error(String)
 }
+
+// Extension for converting a string to bool
+extension String {
+    var bool: Bool? {
+        switch self.lowercased() {
+        case "true", "t", "yes", "y", "1":
+            return true
+        case "false", "f", "no", "n", "0":
+            return false
+        default:
+            return nil
+        }
+    }
+}
+

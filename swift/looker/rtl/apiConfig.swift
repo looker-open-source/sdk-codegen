@@ -104,9 +104,18 @@ struct ApiConfig : IApiSettings {
         self.assign(settings)
     }
     
-    init(_ fileName: String) {
-        let contents = parseConfig(fileName)
-        
+    // TODO figure out how to use Codable and PropertyListDecoder
+    // similar to https://www.raywenderlich.com/3418439-encoding-and-decoding-in-swift
+    init(_ fileName: String, _ section: String? = "Looker") throws {
+        let config = parseConfig(fileName)
+        let values = config[section!]
+        let defaults = DefaultSettings()
+        self.base_url = values?["base_url"] as String? ?? defaults.base_url
+        self.api_version = values?["api_version"] as String? ?? defaults.api_version
+        self.headers = values?["headers"] as Any? ?? defaults.headers
+        self.verify_ssl = values?["verify_ssl"]?.bool ?? defaults.verify_ssl
+        self.timeout = Int((values?["timeout"])!) ?? defaults.timeout
+        self.encoding = values?["encoding"] ?? defaults.encoding
     }
     
     mutating func assign(_ values: IApiSettings) {

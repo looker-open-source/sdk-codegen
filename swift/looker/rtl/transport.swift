@@ -35,6 +35,31 @@ enum ResponseMode {
     case binary, string, unknown
 }
 
+// handy extensions from https://www.hackingwithswift.com/articles/108/how-to-use-regular-expressions-in-swift
+extension NSRegularExpression {
+    convenience init(_ pattern: String) {
+        do {
+            try self.init(pattern: pattern)
+        } catch {
+            preconditionFailure("Illegal regular expression: \(pattern).")
+        }
+    }
+}
+
+extension NSRegularExpression {
+    func matches(_ string: String) -> Bool {
+        let range = NSRange(location: 0, length: string.utf16.count)
+        return firstMatch(in: string, options: [], range: range) != nil
+    }
+}
+
+extension String {
+    static func ~= (lhs: String, rhs: String) -> Bool {
+        guard let regex = try? NSRegularExpression(pattern: rhs) else { return false }
+        let range = NSRange(location: 0, length: lhs.utf16.count)
+        return regex.firstMatch(in: lhs, options: [], range: range) != nil
+    }
+}
 /**
  * MIME patterns for string content types
  * @type {RegExp}
@@ -53,7 +78,7 @@ let contentPatternBinary = try? NSRegularExpression(pattern: Constants.matchMode
  */
 let charsetUtf8Pattern = try? NSRegularExpression(pattern: Constants.matchCharsetUtf8, options: .caseInsensitive)
 
-
+let applicationJsonPattern = try? NSRegularExpression(pattern: Constants.applicationJson, options: .caseInsensitive)
 /**
  * Default request timeout
  * @type {number} default request timeout is 120 seconds, or two minutes
@@ -77,23 +102,18 @@ enum HttpMethod: String {
 typealias Headers = Any
 typealias Agent = Any
 
-struct Promise<T> {
-    
-}
-
-struct SDKResponse<TSuccess, TError> {
-    
-}
+typealias Authenticator = (_ req: URLRequest) -> URLRequest
 
 protocol ITransport {
+    @available(OSX 10.15, *)
     func request<TSuccess, TError>(
-        method: HttpMethod,
-        path: String,
-        queryParams: Any?,
-        body: Any?,
-        authenticator: Any?, // TODO Authenticator?,
-        options: Partial<ITransportSettings>?
-    ) -> Promise<SDKResponse<TSuccess, TError>>
+        _ method: HttpMethod,
+        _ path: String,
+        _ queryParams: Any?,
+        _ body: Any?,
+        _ authenticator: Authenticator?,
+        _ options: ITransportSettings?
+    ) -> SDKResponse<TSuccess, TError>
 }
 
 /** A successful SDK call. */
@@ -121,6 +141,11 @@ protocol ISDKError {
     var message: String { get set }
 }
 
+struct SDKResponse<TSuccess, TError> {
+    
+}
+//typealias SDKResponse<TSuccess, TError> = ISDKSuccessResponse<TSuccess> | ISDKErrorResponse<TError | ISDKError>
+
 //protocol SDKResponse: ISDKSuccessResponse, ISDKErrorResponse {
 //    associatedtype TSuccess
 //    associatedtype TError
@@ -139,9 +164,9 @@ protocol IAuthorizer {
     /** is the current session authenticated? */
     func isAuthenticated() -> Bool
     
-    func authenticate(init: IRequestInit) -> Promise<IRequestInit>
+    func authenticate(init: IRequestInit) -> IRequestInit
     
-    func logout() -> Promise<Bool>
+    func logout() -> Bool
 }
 
 /** Generic http request property collection */
@@ -195,12 +220,20 @@ func isMatch(_ contentType: String, _ exp: NSRegularExpression) -> Bool {
     return matches.numberOfRanges > 0
 }
 
+func isUtf8(_ contentType: String) -> Bool {
+    return isMatch(contentType, charsetUtf8Pattern!)
+}
+
+func isJson(_ contentType: String) -> Bool {
+    return isMatch(contentType, applicationJsonPattern!)
+}
+
 /**
  * Is the content type binary or "string"?
  * @param {string} contentType
  * @returns {ResponseMode.binary | ResponseMode.string}
  */
-func responseMode(contentType: String) -> ResponseMode {
+func responseMode(_ contentType: String) -> ResponseMode {
     if (isMatch(contentType, contentPatternString!)) {
         return ResponseMode.string
     }
@@ -216,7 +249,7 @@ func responseMode(contentType: String) -> ResponseMode {
  @param {[key: string]: string} obj optional collection of query parameters to encode and append to the path
  
  */
-func addQueryParams(path: String, params: ValueDictionary?) -> String {
+func addQueryParams(_ path: String, _ params: ValueDictionary?) -> String {
     if (params == nil || params?.count == 0) {
         return path
     }

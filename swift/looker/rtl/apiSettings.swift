@@ -95,12 +95,16 @@ struct ApiSettings: IApiSettings {
     init() {
         
     }
+    
     init(_ settings: IApiSettings) throws {
+        let defaults = DefaultSettings()
         // coerce types to declared types since some paths could have non-conforming settings values
-        guard case self.base_url = settings.base_url else { return } // optional assignment
-        guard case self.api_version = settings.api_version else { return }
-        self.verify_ssl = settings.verify_ssl ?? self.verify_ssl
-        self.timeout = settings.timeout ?? self.timeout
+        self.base_url = settings.base_url ?? defaults.base_url
+        self.api_version = settings.api_version ?? defaults.api_version
+        self.verify_ssl = settings.verify_ssl ?? defaults.verify_ssl
+        self.timeout = settings.timeout ?? defaults.timeout
+        self.headers = settings.headers ?? defaults.headers
+        self.encoding = settings.encoding ?? defaults.encoding
         if (!self.isConfigured()) {
             throw SdkError.error(strBadConfiguration)
         }
