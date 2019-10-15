@@ -57,6 +57,27 @@ class testTransport: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func checkRegex(_ exp: String, _ desc: String = "") {
+        do {
+            let regex = try NSRegularExpression(exp)
+            XCTAssertNotNil(regex, desc)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func testRegexExtension() {
+        checkRegex(Constants.matchModeString, "string match")
+        checkRegex(Constants.matchCharset, "charset match")
+        checkRegex(Constants.matchModeBinary, "binary match")
+        checkRegex(Constants.applicationJson, "application/json")
+        checkRegex(Constants.matchCharsetUtf8, "utf-8 match")
+}
+    
+    func testApproxEquals() {
+        XCTAssertTrue("application/json" ~= Constants.matchModeString)
+    }
+    
     func testPatterns() {
         XCTAssertNotNil(contentPatternBinary, "Binary should be compiled")
         XCTAssertNotNil(charsetUtf8Pattern, "Charset should be compiled")
@@ -71,4 +92,12 @@ class testTransport: XCTestCase {
         }
     }
 
+    func testStringMode() {
+        print(Constants.matchModeString)
+        for (item) in textTypes {
+            let val = String(item)
+            let actual = responseMode(val)
+            XCTAssertEqual(actual, .string, val)
+        }
+    }
 }

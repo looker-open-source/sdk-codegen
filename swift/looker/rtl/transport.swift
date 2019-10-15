@@ -35,50 +35,26 @@ enum ResponseMode {
     case binary, string, unknown
 }
 
-// handy extensions from https://www.hackingwithswift.com/articles/108/how-to-use-regular-expressions-in-swift
-extension NSRegularExpression {
-    convenience init(_ pattern: String) {
-        do {
-            try self.init(pattern: pattern)
-        } catch {
-            preconditionFailure("Illegal regular expression: \(pattern).")
-        }
-    }
-}
-
-extension NSRegularExpression {
-    func matches(_ string: String) -> Bool {
-        let range = NSRange(location: 0, length: string.utf16.count)
-        return firstMatch(in: string, options: [], range: range) != nil
-    }
-}
-
-extension String {
-    static func ~= (lhs: String, rhs: String) -> Bool {
-        guard let regex = try? NSRegularExpression(pattern: rhs) else { return false }
-        let range = NSRange(location: 0, length: lhs.utf16.count)
-        return regex.firstMatch(in: lhs, options: [], range: range) != nil
-    }
-}
 /**
  * MIME patterns for string content types
  * @type {RegExp}
  */
-let contentPatternString = try? NSRegularExpression(pattern: Constants.matchModeString, options: .caseInsensitive)
+let contentPatternString = try? NSRegularExpression(Constants.matchModeString)
 
 /**
  * MIME patterns for "binary" content types
  * @type {RegExp}
  */
-let contentPatternBinary = try? NSRegularExpression(pattern: Constants.matchModeBinary, options: .caseInsensitive)
+let contentPatternBinary = try? NSRegularExpression(Constants.matchModeBinary)
 
 /**
  * MIME pattern for UTF8 charset attribute
  * @type {RegExp}
  */
-let charsetUtf8Pattern = try? NSRegularExpression(pattern: Constants.matchCharsetUtf8, options: .caseInsensitive)
+let charsetUtf8Pattern = try? NSRegularExpression(Constants.matchCharsetUtf8)
 
-let applicationJsonPattern = try? NSRegularExpression(pattern: Constants.applicationJson, options: .caseInsensitive)
+let applicationJsonPattern = try? NSRegularExpression(Constants.applicationJson)
+
 /**
  * Default request timeout
  * @type {number} default request timeout is 120 seconds, or two minutes
@@ -213,19 +189,12 @@ protocol ITransportSettings {
     var encoding: String? { get set }
 }
 
-func isMatch(_ contentType: String, _ exp: NSRegularExpression) -> Bool {
-    guard let range = NSRange(contentType) else { return false }
-    guard let matches = exp.firstMatch(in: contentType, options: .anchored, range: range)
-        else { return false }
-    return matches.numberOfRanges > 0
-}
-
 func isUtf8(_ contentType: String) -> Bool {
-    return isMatch(contentType, charsetUtf8Pattern!)
+    return charsetUtf8Pattern?.matches(contentType) ?? false
 }
 
 func isJson(_ contentType: String) -> Bool {
-    return isMatch(contentType, applicationJsonPattern!)
+    return applicationJsonPattern?.matches(contentType) ?? false
 }
 
 /**
@@ -234,10 +203,10 @@ func isJson(_ contentType: String) -> Bool {
  * @returns {ResponseMode.binary | ResponseMode.string}
  */
 func responseMode(_ contentType: String) -> ResponseMode {
-    if (isMatch(contentType, contentPatternString!)) {
+    if (contentPatternString!.matches(contentType)) {
         return ResponseMode.string
     }
-    if (isMatch(contentType, contentPatternBinary!)) {
+    if (contentPatternBinary!.matches(contentType)) {
         return ResponseMode.binary
     }
     return ResponseMode.unknown
