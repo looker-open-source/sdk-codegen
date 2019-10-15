@@ -9,10 +9,14 @@ black = "*"
 mypy = "*"
 flask = "*"
 pudb = "*"
+ptipython = "*"
+pytest = "*"
 
 [packages]
 looker-sdk = "*"
 flask-wtf = "*"
+google-api-python-client = "*"
+google-auth = "*"
 
 [requires]
 python_version = "3.7"
