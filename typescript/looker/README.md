@@ -88,7 +88,7 @@ import { LookerNodeSDK } from '@looker/sdk'
 Almost all requests to Looker's API require an access token. This token is established when the `login` endpoint is called with correct API3 credentials for `client_id` and `client_secret`. When `login` is successful, the user whose API3 credentials are provided is considered the active user. For this discussion of `NodeSession`, we'll
 call this user the **API User**.
 
-The `settings` provided to the `NodeSession` class include the base URL for the Looker instance and the desired API version. When API requests are made, if the auth session is not yet established, `NodeSession` will automatically authenticate the **API User**. The `NodeSession` also directly support logging in as another user, usually called `sudo as` another user in the Looker browser application.
+The `settings` provided to the `NodeSession` class include the base URL for the Looker instance and the desired API version. When API requests are made, if the auth session is not yet established, `NodeSession` will automatically authenticate the **API User**. The `NodeSession` also directly supports logging in as another user, usually called `sudo as` another user in the Looker browser application.
 
 API users with appropriate permissions can `sudo` as another user by specifying a specific user ID in the `NodeSession.login()` method. Only one user can be impersonated at a time via `NodeSession`. When a `sudo` session is active, all SDK methods will be processed as that user.
 
