@@ -21,24 +21,26 @@ class RegistrationForm(flask_wtf.FlaskForm):
     on the frontend. Hence the camelCase names.
     """
 
-    firstName = wtforms.StringField("firstName", validators=[validators.DataRequired()])
-    lastName = wtforms.StringField("lastName", validators=[validators.DataRequired()])
+    first_name = wtforms.StringField(
+        "First Name", validators=[validators.DataRequired()]
+    )
+    last_name = wtforms.StringField("Last Name", validators=[validators.DataRequired()])
     email = wtforms.StringField(
-        "email", validators=[validators.DataRequired(), validators.Email()]
+        "Email", validators=[validators.DataRequired(), validators.Email()]
     )
     organization = wtforms.StringField(
-        "organization", validators=[validators.DataRequired()]
+        "Organization", validators=[validators.DataRequired()]
     )
-    hackathon = wtforms.StringField("hackathon", validators=[validators.DataRequired()])
-    tShirtSize = wtforms.StringField(
-        "tShirtSize", validators=[validators.DataRequired()]
+    hackathon = wtforms.StringField("Hackathon", validators=[validators.DataRequired()])
+    tshirt_size = wtforms.StringField(
+        "T-Shirt Size", validators=[validators.DataRequired()]
     )
     ndaq = wtforms.StringField("ndaq", validators=[validators.DataRequired()])
-    codeOfConduct = wtforms.StringField(
-        "codeOfConduct", validators=[validators.DataRequired()]
+    code_of_conduct = wtforms.StringField(
+        "Code Of Conduct", validators=[validators.DataRequired()]
     )
     contributing = wtforms.StringField(
-        "contributing", validators=[validators.DataRequired()]
+        "Contributing", validators=[validators.DataRequired()]
     )
 
 

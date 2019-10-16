@@ -31,35 +31,35 @@ export const RegisterScene: React.FC<{path: string}> = () => {
           enableReinitialize // for csrf token
           initialValues={{
             csrf_token: csrf.token,
-            firstName: '',
-            lastName: '',
+            first_name: '',
+            last_name: '',
             email: '',
             organization: '',
             hackathon: '',
-            tShirtSize: '',
+            tshirt_size: '',
             ndaq: false,
-            codeOfConduct: false,
+            code_of_conduct: false,
             contributing: false,
           }}
           validationSchema={() =>
             yup.object().shape({
               csrf_token: yup.string().required(),
-              firstName: yup.string().required(),
-              lastName: yup.string().required(),
+              first_name: yup.string().required(),
+              last_name: yup.string().required(),
               email: yup
                 .string()
                 .email()
                 .required(),
               organization: yup.string().required(),
               hackathon: yup.string().required(),
-              tShirtSize: yup
+              tshirt_size: yup
                 .string()
                 .oneOf(['XS', 'S', 'M', 'L', 'XL', 'XXL']),
               ndaq: yup
                 .boolean()
                 .oneOf([true], 'Required')
                 .required(),
-              codeOfConduct: yup
+              code_of_conduct: yup
                 .boolean()
                 .oneOf([true], 'Required')
                 .required(),
@@ -94,13 +94,13 @@ export const RegisterScene: React.FC<{path: string}> = () => {
               <Field type="hidden" name="csrf_token" value={csrf.token} />
               <InputGroup>
                 <Label>First name</Label>
-                <Input name="firstName" type="text" placeholder="Andy" />
-                <ErrorMessage name="firstName" component="div" />
+                <Input name="first_name" type="text" placeholder="Andy" />
+                <ErrorMessage name="first_name" component="div" />
               </InputGroup>
               <InputGroup>
                 <Label>Last name</Label>
-                <Input name="lastName" type="text" placeholder="Chiggins" />
-                <ErrorMessage name="lastName" component="div" />
+                <Input name="last_name" type="text" placeholder="Chiggins" />
+                <ErrorMessage name="last_name" component="div" />
               </InputGroup>
               <InputGroup>
                 <Label>Email</Label>
@@ -124,42 +124,42 @@ export const RegisterScene: React.FC<{path: string}> = () => {
               <RadioButtonGroup label="T-Shirt Size">
                 <Field
                   component={RadioButton}
-                  name="tShirtSize"
+                  name="tshirt_size"
                   id="XS"
                   label="XS"
                 />
                 <Field
                   component={RadioButton}
-                  name="tShirtSize"
+                  name="tshirt_size"
                   id="S"
                   label="S"
                 />
                 <Field
                   component={RadioButton}
-                  name="tShirtSize"
+                  name="tshirt_size"
                   id="M"
                   label="M"
                 />
                 <Field
                   component={RadioButton}
-                  name="tShirtSize"
+                  name="tshirt_size"
                   id="L"
                   label="L"
                 />
                 <Field
                   component={RadioButton}
-                  name="tShirtSize"
+                  name="tshirt_size"
                   id="XL"
                   label="XL"
                 />
                 <Field
                   component={RadioButton}
-                  name="tShirtSize"
+                  name="tshirt_size"
                   id="XXL"
                   label="XXL"
                 />
               </RadioButtonGroup>
-              <ErrorMessage name="tShirtSize" component="div" />
+              <ErrorMessage name="tshirt_size" component="div" />
               <CheckboxGroup>
                 <Input name="ndaq" type="checkbox" />
                 <ErrorMessage name="ndaq" component="div" />
@@ -168,8 +168,8 @@ export const RegisterScene: React.FC<{path: string}> = () => {
                 </CheckboxLabel>
               </CheckboxGroup>
               <CheckboxGroup>
-                <Input name="codeOfConduct" type="checkbox" />
-                <ErrorMessage name="codeOfConduct" component="div" />
+                <Input name="code_of_conduct" type="checkbox" />
+                <ErrorMessage name="code_of_conduct" component="div" />
                 <CheckboxLabel>I agree to the Code of Conduct</CheckboxLabel>
               </CheckboxGroup>
               <CheckboxGroup>
