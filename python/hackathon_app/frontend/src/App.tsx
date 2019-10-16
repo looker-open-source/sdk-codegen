@@ -5,11 +5,7 @@ import {Router, navigate} from '@reach/router'
 import {Formik, Form, Field, ErrorMessage} from 'formik'
 import * as yup from 'yup'
 
-type Path = {
-  path: string
-}
-
-export const RegisterScene: React.FC<Path> = () => {
+export const RegisterScene: React.FC<{path: string}> = () => {
   const [hackathons, setHackathons] = React.useState(['hack 1', 'hack 2'])
   const [csrf, setCsrf] = React.useState({token: ''})
 
@@ -27,8 +23,8 @@ export const RegisterScene: React.FC<Path> = () => {
     <CenterContainer>
       <SceneBody>
         <Logo src={logo} />
-        <Header>Chicago Hackathon 2019</Header>
-        <Description>Description of Hackathon , venue/agenda</Description>
+        <Header>Looker Hackathon Registration</Header>
+        <Description>Register for a Looker Hackathon below</Description>
         <hr />
         <Header>Registration</Header>
         <Formik
@@ -40,6 +36,7 @@ export const RegisterScene: React.FC<Path> = () => {
             email: '',
             organization: '',
             hackathon: '',
+            tShirtSize: '',
             ndaq: false,
             codeOfConduct: false,
             contributing: false,
@@ -55,6 +52,9 @@ export const RegisterScene: React.FC<Path> = () => {
                 .required(),
               organization: yup.string().required(),
               hackathon: yup.string().required(),
+              tShirtSize: yup
+                .string()
+                .oneOf(['XS', 'S', 'M', 'L', 'XL', 'XXL']),
               ndaq: yup
                 .boolean()
                 .oneOf([true], 'Required')
@@ -89,7 +89,7 @@ export const RegisterScene: React.FC<Path> = () => {
             fetchData()
           }}
         >
-          {({isSubmitting, status}) => (
+          {({isSubmitting, status, values, errors, touched}) => (
             <RegForm>
               <Field type="hidden" name="csrf_token" value={csrf.token} />
               <InputGroup>
@@ -121,6 +121,45 @@ export const RegisterScene: React.FC<Path> = () => {
                 <HackathonSelect hackathons={hackathons} />
                 <ErrorMessage name="hackathon" component="div" />
               </InputGroup>
+              <RadioButtonGroup label="T-Shirt Size">
+                <Field
+                  component={RadioButton}
+                  name="tShirtSize"
+                  id="XS"
+                  label="XS"
+                />
+                <Field
+                  component={RadioButton}
+                  name="tShirtSize"
+                  id="S"
+                  label="S"
+                />
+                <Field
+                  component={RadioButton}
+                  name="tShirtSize"
+                  id="M"
+                  label="M"
+                />
+                <Field
+                  component={RadioButton}
+                  name="tShirtSize"
+                  id="L"
+                  label="L"
+                />
+                <Field
+                  component={RadioButton}
+                  name="tShirtSize"
+                  id="XL"
+                  label="XL"
+                />
+                <Field
+                  component={RadioButton}
+                  name="tShirtSize"
+                  id="XXL"
+                  label="XXL"
+                />
+              </RadioButtonGroup>
+              <ErrorMessage name="tShirtSize" component="div" />
               <CheckboxGroup>
                 <Input name="ndaq" type="checkbox" />
                 <ErrorMessage name="ndaq" component="div" />
@@ -152,11 +191,46 @@ export const RegisterScene: React.FC<Path> = () => {
   )
 }
 
-type HackathonSelectProps = {
-  hackathons: string[]
+// Radio input
+const RadioButton: React.FC<{
+  field: {
+    name: string
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  }
+  id: string
+  label: string
+}> = ({field: {name, onChange}, id, label, ...props}) => {
+  return (
+    <div>
+      <input
+        onChange={onChange}
+        name={name}
+        id={id}
+        type="radio"
+        value={id}
+        {...props}
+      />
+      <label htmlFor={id}>{label}</label>
+    </div>
+  )
 }
 
-const HackathonSelect: React.FC<HackathonSelectProps> = ({hackathons}) => {
+// Radio group
+const RadioButtonGroup: React.FC<{
+  label: string
+  children: React.ReactNode
+}> = ({label, children}) => {
+  return (
+    <div>
+      <fieldset>
+        <legend>{label}</legend>
+        {children}
+      </fieldset>
+    </div>
+  )
+}
+
+const HackathonSelect: React.FC<{hackathons: string[]}> = ({hackathons}) => {
   let options = [
     <option key="0" disabled defaultValue="1" value="">
       Select a Hack
@@ -178,23 +252,19 @@ const HackathonSelect: React.FC<HackathonSelectProps> = ({hackathons}) => {
   )
 }
 
-type LinkProps = {
-  title: string
-}
-
-const Link: React.FC<LinkProps> = ({title}) => (
+const Link: React.FC<{title: string}> = ({title}) => (
   <LinkContainer>
     <TitleLink>{title}</TitleLink>
   </LinkContainer>
 )
 
-export const ResourcesScene: React.FC<Path> = () => {
+export const ResourcesScene: React.FC<{path: string}> = () => {
   return (
     <CenterContainer>
       <SceneBody>
         <Logo src={logo} />
-        <Header>Chicago Hackathon 2019</Header>
-        <Description>Description of Hackathon , venue/agenda</Description>
+        <Header>Looker Hackathon Resources</Header>
+        <Description>Find information on Looker Hackathons below</Description>
         <hr />
         <Header>Welcome!</Header>
         <Description>

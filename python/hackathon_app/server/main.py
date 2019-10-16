@@ -30,6 +30,9 @@ class RegistrationForm(flask_wtf.FlaskForm):
         "organization", validators=[validators.DataRequired()]
     )
     hackathon = wtforms.StringField("hackathon", validators=[validators.DataRequired()])
+    tShirtSize = wtforms.StringField(
+        "tShirtSize", validators=[validators.DataRequired()]
+    )
     ndaq = wtforms.StringField("ndaq", validators=[validators.DataRequired()])
     codeOfConduct = wtforms.StringField(
         "codeOfConduct", validators=[validators.DataRequired()]
