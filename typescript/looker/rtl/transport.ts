@@ -307,14 +307,15 @@ export function sdkError(result: any) {
   return new Error(`Unknown error with SDK method ${error}`)
 }
 
-/**
- * is the SDK running in node.js?
- */
-export function isNodejs() {
-  return (
-    typeof 'process' !== 'undefined' &&
-    process &&
-    process.versions &&
-    process.versions.node
-  )
-}
+// TODO remove this permanently
+// /**
+//  * is the SDK running in node.js?
+//  */
+// export function isNodejs() {
+//   return (
+//     typeof 'process' !== 'undefined' &&
+//     process &&
+//     process.versions &&
+//     process.versions.node
+//   )
+// }

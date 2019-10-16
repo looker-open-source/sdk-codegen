@@ -23,12 +23,14 @@
  */
 
 import { agentTag, defaultTimeout, ITransportSettings } from './transport'
-import { environmentPrefix } from './constants'
+import { environmentPrefix, isTrue } from './constants'
 
 export const strLookerBaseUrl = `${environmentPrefix}_BASE_URL`
 export const strLookerApiVersion = `${environmentPrefix}_API_VERSION`
 export const strLookerVerifySsl = `${environmentPrefix}_VERIFY_SSL`
 export const strLookerTimeout = `${environmentPrefix}_TIMEOUT`
+export const strLookerClientId =`${environmentPrefix}_CLIENT_ID`
+export const strLookerClientSecret = `${environmentPrefix}_CLIENT_SECRET`
 export const strBadConfiguration = `${agentTag} configuration error:
 Missing required configuration values like base_url and api_version
 `
@@ -102,7 +104,7 @@ export class ApiSettings implements IApiSettings {
         : this.api_version
     this.verify_ssl =
       'verify_ssl' in settings
-        ? /true|1/i.test(settings.verify_ssl!.toString())
+        ? isTrue(settings.verify_ssl!.toString())
         : this.verify_ssl
     this.timeout =
       'timeout' in settings

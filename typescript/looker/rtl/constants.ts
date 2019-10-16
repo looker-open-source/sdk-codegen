@@ -45,3 +45,5 @@ export const matchModeString = `(^application\\/.*(\\bjson\\b|\\bxml\\b|\\bsql\\
  * @type {string} Regular expression for matching Content-Type headers
  */
 export const matchModeBinary = '^image\\/|^audio\\/|^video\\/|^font\\/|^application\\/|^multipart\\/'
+
+export const isTrue = (value: string) => /true|1/i.test(value)

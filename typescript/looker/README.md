@@ -56,6 +56,7 @@ Verify authentication works and that API calls will succeed with code similar to
 ```typescript
 import { LookerNodeSDK } from '@looker/sdk'
 (async () => {
+  // create a Node SDK client that reads from an INI file
   const sdk = LookerNodeSDK.createClient()
   // retrieve your user account to verify correct credentials
   const me = await sdk.ok(sdk.me(
@@ -77,7 +78,6 @@ import { LookerNodeSDK } from '@looker/sdk'
   if (!sdk.authSession.isAuthenticated()) {
     console.log('Logout successful')
   }
-
 })()
 ```
 
@@ -88,7 +88,7 @@ import { LookerNodeSDK } from '@looker/sdk'
 Almost all requests to Looker's API require an access token. This token is established when the `login` endpoint is called with correct API3 credentials for `client_id` and `client_secret`. When `login` is successful, the user whose API3 credentials are provided is considered the active user. For this discussion of `NodeSession`, we'll
 call this user the **API User**.
 
-The `settings` provided to the `NodeSession` class include the base URL for the Looker instance, and the API3 credentials. When API requests are made, if the auth session is not yet established, `NodeSession` will automatically authenticate the **API User**. The `NodeSession` also directly support logging in as another user, usually called `sudo as` another user in the Looker browser application.
+The `settings` provided to the `NodeSession` class include the base URL for the Looker instance and the desired API version. When API requests are made, if the auth session is not yet established, `NodeSession` will automatically authenticate the **API User**. The `NodeSession` also directly support logging in as another user, usually called `sudo as` another user in the Looker browser application.
 
 API users with appropriate permissions can `sudo` as another user by specifying a specific user ID in the `NodeSession.login()` method. Only one user can be impersonated at a time via `NodeSession`. When a `sudo` session is active, all SDK methods will be processed as that user.
 
@@ -151,3 +151,32 @@ describe('sudo', () => {
 
 })
 ```
+
+### Configuring the SDK with environment variables
+
+Environment variables can be used for the Node version of the Typescript SDK.
+
+| Variable name | Description |
+| ------------- | ----------- |
+| LOOKERSDK_BASE_URL | like `https://my.looker.com:19999`. No default value. |
+| LOOKERSDK_API_VERSION | version of the Looker API to use. Allowed values are `3.1` and `3.0`. `3.1` is strongly recommended, and `3.0` won't work with this version of the SDK. |
+| LOOKERSDK_VERIFY_SSL | `true` or `1` (case insensitive) to enable. Any other value is `false`. Defaults to `true` if not set. |
+| LOOKERSDK_TIMEOUT | Request timeout in seconds. Defaults to `120` for Node. |
+| LOOKERSDK_CLIENT_ID | API3 credentials `client_id`. This and `client_secret` must be provided in some fashion to the Node SDK or no calls to the API will be authorized. |
+| LOOKERSDK_CLIENT_SECRET | API3 credentials `client_secrect`. No default value. |
+
+Once the desired environment variables are set, the following code is all that's required to initialize the Looker SDK and retrieve the API credential's `User` information.
+
+```typescript
+const sdk = LookerNodeSDK.createClient(new NodeSettingsEnv())
+const me = await sdk.ok(sdk.me())
+
+```
+
+## Additional examples
+
+Looker's open source repository of [SDK Examples](https://github.com/looker-open-source/sdk-examples/tree/master/typescript) has more example scripts and applications that show how to use the Looker SDK.
+
+## A note about security
+
+Any script or configuration file used to provide credentials to your Looker SDK instance [needs to be secured](https://github.com/looker-open-source/sdk-codegen#securing-your-sdk-credentials). 

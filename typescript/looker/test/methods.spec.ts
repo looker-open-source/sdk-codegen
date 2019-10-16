@@ -33,10 +33,20 @@ import {
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 // import FileType from 'file-type'
-import { NodeSettingsIniFile } from '../rtl/nodeSettings'
+import { ApiConfig, NodeSettingsEnv, NodeSettingsIniFile } from '../rtl/nodeSettings'
 import { DelimArray } from '../rtl/delimArray'
 import { Readable } from 'readable-stream'
 import { isFileSync, utf8 } from '../../../src/utils'
+import { isTrue } from '../rtl/constants'
+import {
+  strLookerApiVersion,
+  strLookerBaseUrl,
+  strLookerClientId,
+  strLookerClientSecret,
+  strLookerTimeout, strLookerVerifySsl,
+} from '../rtl/apiSettings'
+import { defaultTimeout } from '../rtl/transport'
+import { LookerNodeSDK } from '../rtl/nodeSdk'
 
 const dataFile = 'test/data.yml'
 // slightly hackish data path determination for tests
@@ -815,5 +825,39 @@ describe('LookerNodeSDK', () => {
       testTimeout
     )
 
+  })
+
+  describe('Node environment', () => {
+    beforeAll(() => {
+      const section = ApiConfig(fs.readFileSync(localIni, utf8))['Looker']
+      const verify_ssl = isTrue(section['verify_ssl'] || 'false')
+      // populate environment variables
+      process.env[strLookerTimeout] = section['timeout'] || defaultTimeout.toString()
+      process.env[strLookerClientId] = section['client_id']
+      process.env[strLookerClientSecret] = section['client_secret']
+      process.env[strLookerBaseUrl] = section['base_url']
+      process.env[strLookerApiVersion] = section['api_version'] || '3.1'
+      process.env[strLookerVerifySsl] = verify_ssl.toString()
+    })
+
+    afterAll( () => {
+      // reset environment variables
+      delete process.env[strLookerTimeout]
+      delete process.env[strLookerClientId]
+      delete process.env[strLookerClientSecret]
+      delete process.env[strLookerBaseUrl]
+      delete process.env[strLookerApiVersion]
+      delete process.env[strLookerVerifySsl]
+    })
+
+    it('no INI', async () =>{
+      const sdk = LookerNodeSDK.createClient(new NodeSettingsEnv())
+      const me = await sdk.ok(sdk.me())
+      expect(me).not.toBeUndefined()
+      expect(me.id).not.toBeUndefined()
+      expect(sdk.authSession.isAuthenticated()).toBeTruthy()
+      await sdk.authSession.logout()
+      expect(sdk.authSession.isAuthenticated()).toBeFalsy()
+    })
   })
 })

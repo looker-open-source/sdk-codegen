@@ -28,7 +28,7 @@ import {
   Authenticator,
   defaultTimeout,
   HttpMethod,
-  ISDKError, isUtf8,
+  ISDKError,
   ITransport,
   ITransportSettings,
   responseMode,
@@ -394,19 +394,28 @@ export class NodeTransport implements ITransport {
 
 async function parseResponse(contentType: string, res: Response) {
   const mode = responseMode(contentType)
+  const utf8 = 'utf8'
   let result = await res.body
   if (mode === ResponseMode.string) {
-    if (!isUtf8(contentType)) {
-      // always convert to UTF-8 from whatever it was
-      result = Buffer.from(result.toString(), 'utf8')
-    }
     if (contentType.match(/^application\/.*\bjson\b/g)) {
       try {
-        result = result instanceof Object ? result : JSON.parse(result)
-        return result
+        if (result instanceof Buffer) {
+          result = result.toString(utf8)
+        }
+        if (result instanceof Object) {
+          return result
+        }
+        return JSON.parse(result.toString())
       } catch (error) {
         return Promise.reject(error)
       }
+    }
+    // if (!isUtf8(contentType)) {
+    //   // always convert to UTF-8 from whatever it was
+    //   result = if (result instanceof Buffer) result.toString(utf8)
+    // }
+    if (result instanceof Buffer) {
+      result = result.toString(utf8)
     }
     return result.toString()
   } else {

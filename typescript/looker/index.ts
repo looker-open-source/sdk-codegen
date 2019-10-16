@@ -43,7 +43,7 @@ import { LookerSDK } from './sdk/methods'
 /**
  * @class SDK
  *
- * Simple factory for the Node version of the Looker SDK. Provides default connectivity for SDK methods
+ * Simple factory for the Typescript version of the Looker SDK. Provides default connectivity for SDK methods
  *
  */
 export class SDK {

@@ -24,9 +24,19 @@
 
 import { NodeTransport } from './nodeTransport'
 import { NodeSession } from './nodeSession'
-import { NodeSettingsIniFile } from './nodeSettings'
+import { ApiConfig, NodeSettingsEnv, NodeSettingsIniFile } from './nodeSettings'
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
+import {
+  strLookerApiVersion,
+  strLookerBaseUrl,
+  strLookerClientId, strLookerClientSecret,
+  strLookerTimeout,
+  strLookerVerifySsl,
+} from './apiSettings'
+import { defaultTimeout } from './transport'
+import { isTrue } from './constants'
+import { utf8 } from '../../../src/utils'
 
 // TODO create destructurable function for test path resolution
 const dataFile = 'test/data.yml'
@@ -66,6 +76,44 @@ describe('NodeSession', () => {
       const result = await session.logout()
       expect(result).toEqual(true)
       expect(session.isAuthenticated()).toEqual(false)
+    })
+  })
+
+  describe('environmental configuration', () => {
+    it('no INI file', async () => {
+      const section = ApiConfig(fs.readFileSync(localIni, utf8))['Looker']
+      const verify_ssl = isTrue(section['verify_ssl'] || 'false')
+      // populate environment variables
+      process.env[strLookerTimeout] = section['timeout'] || defaultTimeout.toString()
+      process.env[strLookerClientId] = section['client_id']
+      process.env[strLookerClientSecret] = section['client_secret']
+      process.env[strLookerBaseUrl] = section['base_url']
+      process.env[strLookerApiVersion] = section['api_version'] || '3.1'
+      process.env[strLookerVerifySsl] = verify_ssl.toString()
+
+      const settings = new NodeSettingsEnv()
+      expect(settings.base_url).toEqual(section['base_url'])
+      expect(settings.api_version).toEqual(section['api_version'] || '3.1')
+      expect(settings.timeout.toString()).toEqual(section['timeout'] || defaultTimeout.toString())
+      expect(settings.verify_ssl).toEqual(verify_ssl)
+
+      const session = new NodeSession(settings, transport)
+      expect(session.isAuthenticated()).toEqual(false)
+      const token = await session.login()
+      expect(token).toBeDefined()
+      expect(token.access_token).toBeDefined()
+      expect(session.isAuthenticated()).toEqual(true)
+      const result = await session.logout()
+      expect(result).toEqual(true)
+      expect(session.isAuthenticated()).toEqual(false)
+
+      // reset environment variables
+      delete process.env[strLookerTimeout]
+      delete process.env[strLookerClientId]
+      delete process.env[strLookerClientSecret]
+      delete process.env[strLookerBaseUrl]
+      delete process.env[strLookerApiVersion]
+      delete process.env[strLookerVerifySsl]
     })
   })
 })

@@ -24,7 +24,7 @@
 
 import {
   ApiConfig,
-  NodeSettingsIni,
+  NodeSettings,
   NodeSettingsIniFile,
 } from './nodeSettings'
 import * as fs from 'fs'
@@ -72,26 +72,26 @@ timeout=30
 
   describe('NodeSettingsIni', () => {
     it('settings default to the first section', () => {
-      const settings = new NodeSettingsIni(contents)
+      const settings = new NodeSettings(contents)
       expect(settings.api_version).toEqual('3.1')
       expect(settings.timeout).toEqual(defaultTimeout)
       expect(settings.verify_ssl).toEqual(true)
     })
 
     it('retrieves the first section by name', () => {
-      const settings = new NodeSettingsIni(contents, 'Looker')
+      const settings = new NodeSettings(contents, 'Looker')
       expect(settings.api_version).toEqual('3.1')
     })
 
     it('retrieves the second section by name', () => {
-      const settings = new NodeSettingsIni(contents, 'Looker30')
+      const settings = new NodeSettings(contents, 'Looker30')
       expect(settings.api_version).toEqual('3.0')
       expect(settings.timeout).toEqual(30)
       expect(settings.verify_ssl).toEqual(false)
     })
 
     it('fails with a bad section name', () => {
-      expect(() => new NodeSettingsIni(contents, 'NotAGoodLookForYou')).toThrow(
+      expect(() => new NodeSettings(contents, 'NotAGoodLookForYou')).toThrow(
         /No section named "NotAGoodLookForYou"/,
       )
     })

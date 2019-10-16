@@ -28,12 +28,30 @@ import {
   ITransport,
   addQueryParams,
   ITransportSettings,
-  HttpMethod,
+  HttpMethod, Authenticator, agentTag,
 } from './transport'
+import { PassThrough, Readable } from 'readable-stream'
+
+/**
+ * Set to `true` to follow streaming process
+ */
+const tracing = false
+
+function trace(entry: string, info?: any) {
+  if (tracing) {
+    console.debug(entry)
+    if (info) {
+      console.debug(info)
+    }
+  }
+}
 
 export class BrowserTransport implements ITransport {
-  constructor(private options: ITransportSettings) {
+  apiPath = ''
+
+  constructor(private readonly options: ITransportSettings) {
     this.options = options
+    this.apiPath = `${options.base_url}/api/${options.api_version}`
   }
 
   async request<TSuccess, TError>(
@@ -41,15 +59,18 @@ export class BrowserTransport implements ITransport {
     path: string,
     queryParams?: any,
     body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
+    options = { ... this.options, ...options}
+    // is this an API-versioned call?
+    let requestPath =
+      (authenticator ? this.apiPath : options.base_url) +
+      addQueryParams(path, queryParams)
+    const props = this.initRequest(method, path, queryParams, body, authenticator, options)
     const req = fetch(
-      this.options.base_url + addQueryParams(path, queryParams),
-      {
-        body: body ? JSON.stringify(body) : undefined,
-        headers: this.options.headers || new Headers(),
-        credentials: 'same-origin',
-        method,
-      },
+      requestPath,
+      props,
     )
 
     try {
@@ -72,6 +93,117 @@ export class BrowserTransport implements ITransport {
       return {ok: false, error}
     }
   }
+
+  private initRequest(
+    method: HttpMethod,
+    path: string,
+    queryParams?: any,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>,
+  ) {
+    options = options ? {...this.options, ...options} : this.options
+    let headers = new Headers({'User-Agent': agentTag})
+    if (options && options.headers) {
+      Object.keys(options.headers).forEach(key => {
+        headers.append(key, options!.headers![key])
+      })
+    }
+
+    // if ('encoding' in options) init.encoding = options.encoding
+    //
+    // if (authenticator) {
+    //   // Automatic authentication process for the request
+    //   init = await authenticator(init)
+    // }
+
+    let init: RequestInit = {
+      body: body ? JSON.stringify(body) : undefined,
+      headers: headers,
+      credentials: 'same-origin',
+      // resolveWithFullResponse: true,
+      // rejectUnauthorized: this.verifySsl(options),
+      // timeout: this.timeout(options) * 1000,
+      // encoding: null, // null = requests are returned as binary so `Content-Type` dictates response format
+      // method,
+      method,
+    }
+
+    return init
+  }
+
+  async stream<TSuccess>(
+    callback: (readable: Readable) => Promise<TSuccess>,
+    method: HttpMethod,
+    path: string,
+    queryParams?: any,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  )
+    : Promise<TSuccess> {
+
+    const stream = new PassThrough()
+    const returnPromise = callback(stream)
+    let init = await this.initRequest(
+      method,
+      path,
+      queryParams,
+      body,
+      authenticator,
+      options,
+    )
+
+    const streamPromise = new Promise<void>((resolve, reject) => {
+      trace(`[stream] beginning stream via download url`, init)
+      let hasResolved = false
+      reject('Not implemented yet!')
+      // const req = this.requestor(init)
+      //
+      // req
+      //   .on("error", (err) => {
+      //     if (hasResolved && (err as any).code === "ECONNRESET") {
+      //       trace('ignoring ECONNRESET that occurred after streaming finished', init)
+      //     } else {
+      //       trace('streaming error', err)
+      //       reject(err)
+      //     }
+      //   })
+      //   .on("finish", () => {
+      //     trace(`[stream] streaming via download url finished`, init)
+      //   })
+      //   .on("socket", (socket) => {
+      //     trace(`[stream] setting keepalive on socket`, init)
+      //     socket.setKeepAlive(true)
+      //   })
+      //   .on("abort", () => {
+      //     trace(`[stream] streaming via download url aborted`, init)
+      //   })
+      //   .on("response", () => {
+      //     trace(`[stream] got response from download url`, init)
+      //   })
+      //   .on("close", () => {
+      //     trace(`[stream] request stream closed`, init)
+      //   })
+      //   .pipe(stream)
+      //   .on("error", (err) => {
+      //     trace(`[stream] PassThrough stream error`, err)
+      //     reject(err)
+      //   })
+      //   .on("finish", () => {
+      //     trace(`[stream] PassThrough stream finished`, init)
+      //     resolve()
+      //     hasResolved = true
+      //   })
+      //   .on("close", () => {
+      //     trace(`[stream] PassThrough stream closed`, init)
+      //   })
+    })
+
+    const results = await Promise.all([returnPromise, streamPromise])
+    return results[0]
+  }
+
 }
 
 async function parseResponse(contentType: string, res: Response) {

@@ -24,18 +24,25 @@
 
 import * as fs from 'fs'
 import * as ini from 'ini'
-import { ApiSettings, IApiSettings } from './apiSettings'
+import {
+  ApiSettings,
+  DefaultSettings,
+  IApiSettings,
+  strLookerApiVersion,
+  strLookerBaseUrl, strLookerClientId, strLookerClientSecret, strLookerTimeout, strLookerVerifySsl,
+  ValueSettings,
+} from './apiSettings'
 
 export interface IApiSection {
   [key: string]: string;
 }
 
 /**
- * Interface that supports reading the API settings on demand from an .ini file
+ * Interface that supports reading the API settings on demand from a configuration store
  *
  */
-export interface IApiSettingsIniFile extends IApiSettings {
-  readIni(section?: string): IApiSection;
+export interface IApiSettingsConfig extends IApiSettings {
+  readConfig(section?: string): IApiSection;
 }
 
 /**
@@ -68,26 +75,49 @@ export const ApiConfigSection = (
 }
 
 /**
- * .ini Configuration initializer
- * @class NodeSettingsIni
+ * Configuration initializer
+ * @class NodeSettings
  *
  */
-export class NodeSettingsIni extends ApiSettings {
+export class NodeSettings extends ApiSettings {
   constructor(contents: string, section?: string) {
     const settings = ApiConfigSection(contents, section)
     super(settings)
   }
 }
 
+const readEnvConfig = () => {
+  const defaults = DefaultSettings()
+  return {
+    [strLookerApiVersion]: process.env[strLookerApiVersion] || defaults.api_version,
+    [strLookerBaseUrl]: process.env[strLookerBaseUrl] || defaults.base_url,
+    [strLookerVerifySsl]: process.env[strLookerVerifySsl] || defaults.verify_ssl.toString(),
+    [strLookerTimeout]: process.env[strLookerTimeout] || defaults.timeout.toString(),
+    [strLookerClientId]: process.env[strLookerClientId] || '',
+    [strLookerClientSecret]: process.env[strLookerClientSecret] || '',
+  }
+}
+
+export class NodeSettingsEnv extends ApiSettings {
+  constructor() {
+    const settings = ValueSettings(readEnvConfig())
+    super(settings)
+  }
+
+  // @ts-ignore
+  readConfig(section?: string) {
+    return readEnvConfig()
+  }
+}
 /**
- * Example class that reads INI configuration from a file in node
+ * Example class that reads a configuration from a file in node
  * @class NodeSettingsIniFile
  *
  * Warning: INI files storing credentials should be secured in the run-time environment, and
  * ignored by version control systems so credentials never get checked in to source code repositories
  */
-export class NodeSettingsIniFile extends NodeSettingsIni
-  implements IApiSettingsIniFile {
+export class NodeSettingsIniFile extends NodeSettings
+  implements IApiSettingsConfig {
   private readonly fileName!: string
 
   constructor(fileName: string = './looker.ini', section?: string) {
@@ -98,10 +128,10 @@ export class NodeSettingsIniFile extends NodeSettingsIni
   }
 
   /**
-   * Read an INI file section and return it as a generic keyed collection
+   * Read a configuration section and return it as a generic keyed collection
    * @param section {string} Name of Ini section to read. Optional. Defaults to first section.
    */
-  readIni(section?: string): IApiSection {
+  readConfig(section?: string): IApiSection {
     if (fs.existsSync(this.fileName)) {
       return ApiConfigSection(fs.readFileSync(this.fileName, 'utf-8'), section)
     }
