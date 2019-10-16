@@ -6,6 +6,8 @@ from looker_sdk import client
 import wtforms  # type: ignore
 from wtforms import validators
 
+import sheets
+
 
 app = flask.Flask(__name__)
 app.config["WTF_CSRF_SECRET_KEY"] = "foobar"
@@ -14,6 +16,11 @@ sdk = client.setup()
 
 
 class RegistrationForm(flask_wtf.FlaskForm):
+    """Form used for validating registration POST
+
+    This form is not rendered and is only a copy of the React Formik form
+    on the frontend. Hence the camelCase names.
+    """
 
     firstName = wtforms.StringField("firstName", validators=[validators.DataRequired()])
     lastName = wtforms.StringField("lastName", validators=[validators.DataRequired()])
@@ -35,7 +42,11 @@ class RegistrationForm(flask_wtf.FlaskForm):
 
 @app.route("/hackathons")
 def get_hackathons():
-    return flask.jsonify(["Hack 1", "Hack 2"])
+    sheets_client = sheets.Sheets(
+        spreadsheet_id=app.config["GOOGLE_SHEET_ID"],
+        cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
+    )
+    return flask.jsonify(sheets_client.get_hackathons())
 
 
 @app.route("/csrf")
@@ -53,6 +64,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         response = {"ok": True, "message": "Congratulations!"}
+        # pass form.data to sheets module and looker module
     else:
         errors = {}
         for field, field_errors in form.errors.items():
@@ -64,7 +76,6 @@ def register():
             "ok": False,
             "message": "; ".join(f"{k}: {v}" for k, v in errors.items()),
         }
-    # pass form.data to sheets module and looker module
     return flask.jsonify(response)
 
 
