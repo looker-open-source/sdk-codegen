@@ -10,8 +10,7 @@ import sheets
 
 
 app = flask.Flask(__name__)
-app.config["WTF_CSRF_SECRET_KEY"] = "foobar"
-app.config["SECRET_KEY"] = "goobar"
+app.config.from_object("config")
 sdk = client.setup()
 
 

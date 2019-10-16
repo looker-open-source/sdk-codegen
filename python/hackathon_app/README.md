@@ -39,13 +39,26 @@ cd frontend/
 yarn install
 ```
 
-#### Run local dev servers
+### Create a google spreadsheet
+3 tabs: (todo: script to bootstrap a skeleton sheet)
+- hackathons (name, location, date, duration)
+- users (first_name, last_name, email, date_created, organization, tshirt_size, dietary_restrictions)
+- registrations (user_email, hackathon_name, date_registered, attended)
 
-Add a `looker.ini` file under `server/`. [Instructions here](https://github.com/looker-open-source/sdk-codegen#configuring-lookerini)
+Note the sheet ID (from the URL) to use in the `env.list` file below.
+
+### sheets api creds
+Create a GCP project:
+- enable Sheets api
+- create a service account
+- go back to your spreadsheet and "share" it with the email address of the service account
+
+### Run local dev servers
+
+Copy `env.list.sample` to `env.list` and modify accordingly
 
 ```sh
-cd server/
-FLASK_APP=main FLASK_ENV=development flask run
+./start-dev-flask.sh
 ```
 
 - this launches the backend server available at http://127.0.0.1:5000
@@ -62,14 +75,14 @@ yarn start
 Make sure to [install docker](https://download.docker.com/mac/stable/Docker.dmg)
 
 ```sh
-sh build-docker.sh
+./build-docker.sh
 ```
 
 you can run the docker container locally with
 
 
 ```sh
-sh run-docker.sh
+./run-docker.sh
 ```
 
 which exposes the whole app (both frontend and backend) on http://127.0.0.1:8080
