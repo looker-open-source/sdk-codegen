@@ -163,7 +163,7 @@ Environment variables can be used for the Node version of the Typescript SDK.
 | LOOKERSDK_VERIFY_SSL | `true` or `1` (case insensitive) to enable. Any other value is `false`. Defaults to `true` if not set. |
 | LOOKERSDK_TIMEOUT | Request timeout in seconds. Defaults to `120` for Node. |
 | LOOKERSDK_CLIENT_ID | API3 credentials `client_id`. This and `client_secret` must be provided in some fashion to the Node SDK or no calls to the API will be authorized. |
-| LOOKERSDK_CLIENT_SECRET | API3 credentials `client_secrect`. No default value. |
+| LOOKERSDK_CLIENT_SECRET | API3 credentials `client_secret`. No default value. |
 
 Once the desired environment variables are set, the following code is all that's required to initialize the Looker SDK and retrieve the API credential's `User` information.
 
