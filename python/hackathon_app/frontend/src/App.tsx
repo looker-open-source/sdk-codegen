@@ -7,14 +7,16 @@ import * as yup from 'yup'
 
 export const RegisterScene: React.FC<{path: string}> = () => {
   const [hackathons, setHackathons] = React.useState(['hack 1', 'hack 2'])
-  const [csrf, setCsrf] = React.useState({token: ''})
+  const [csrf, setCsrf] = React.useState({token: 'someToken'})
 
   React.useEffect(() => {
     async function fetchData() {
-      const hackathons = await fetch('/hackathons')
-      setHackathons(await hackathons.json())
-      const csrf = await fetch('/csrf')
-      setCsrf(await csrf.json())
+      try {
+        const hackathons = await fetch('/hackathons')
+        setHackathons(await hackathons.json())
+        const csrf = await fetch('/csrf')
+        setCsrf(await csrf.json())
+      } catch (e) {} // TODO: hack for local frontend dev
     }
     fetchData()
   }, [])
@@ -71,18 +73,24 @@ export const RegisterScene: React.FC<{path: string}> = () => {
           }
           onSubmit={(values, actions) => {
             async function fetchData() {
-              const result = await fetch('/register', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(values),
-              })
-              const msg = await result.json()
-              if (msg.ok) {
-                navigate('/resources')
-              } else {
-                actions.setStatus(msg.message)
+              try {
+                const result = await fetch('/register', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(values),
+                })
+                const msg = await result.json()
+                if (msg.ok) {
+                  navigate('/resources')
+                } else {
+                  actions.setStatus(msg.message)
+                  actions.setSubmitting(false)
+                }
+              } catch (e) {
+                // TODO: hack for local frontend dev
+                alert(JSON.stringify(values, null, 2))
                 actions.setSubmitting(false)
               }
             }

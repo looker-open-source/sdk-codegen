@@ -4,6 +4,20 @@ Welcome to the hackathon app: a web app using a React frontend and a python flas
 
 ### Getting setup for local development
 
+
+#### Frontend
+
+Node 10 is required for the frontend. You can use [nvm](https://github.com/creationix/nvm#installation) and [avn](https://github.com/wbyoung/avn#install) to easily switch Node versions between different projects.
+
+```sh
+cd frontend/
+yarn install
+yarn start
+```
+You can work on the frontend React app without running the python server or having any backend google sheets or looker instance dependencies. Simply skip the remaining setup.
+
+#### Backend
+
 hackathon_app requires python 3.7+ The easiest way to get this installed on a mac is to install [pyenv](https://github.com/pyenv/pyenv#installation) via [homebrew](https://brew.sh/)
 
 
@@ -30,13 +44,6 @@ Install all dependencies.
 
 ```sh
 pipenv install --dev
-```
-
-Node 10 is required for the frontend. You can use [nvm](https://github.com/creationix/nvm#installation) and [avn](https://github.com/wbyoung/avn#install) to easily switch Node versions between different projects.
-
-```sh
-cd frontend/
-yarn install
 ```
 
 ### Create a google spreadsheet
