@@ -24,8 +24,7 @@
 
 import * as fs from 'fs'
 import { execSync } from 'child_process'
-
-export const utf8 = 'utf-8'
+import { utf8 } from '../typescript/looker/rtl/constants'
 
 // ANSI colors
 const Reset = '\x1b[0m'
@@ -142,38 +141,47 @@ export interface ITypeMap {
   [typeformat: string]: ITypeMapItem
 }
 
-export interface ICodePattern {
-  commentString: string,
-  paramIndent: string,
-  paramSeparator: string,
-  paramDeclaration: string,
-  paramEmptyList: string,
-  paramOpenList: string,
-  paramCloseList: string,
-  argEmptyList: string,
-  argSeparator: string,
-  argOpenList: string,
-  argCloseList: string,
-  noBody: string,
-  typeMap: ITypeMap[]
-}
+// TODO remove when we're sure we don't need these
+// export interface ICodePattern {
+//   commentString: string,
+//   paramIndent: string,
+//   paramSeparator: string,
+//   paramDeclaration: string,
+//   paramEmptyList: string,
+//   paramOpenList: string,
+//   paramCloseList: string,
+//   argEmptyList: string,
+//   argSeparator: string,
+//   argOpenList: string,
+//   argCloseList: string,
+//   noBody: string,
+//   typeMap: ITypeMap[]
+// }
+//
+// // handy refs
+// // https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schema-object
+// // https://swagger.io/docs/specification/data-models/data-types/
+// export const typeMap = (type?: string, format?: string) => {
+//   if (!type) {
+//     console.error({type, format})
+//     return '' // fail('typeMap', 'Schema type was not defined')
+//   }
+//   const typeFormat: keyof ITypeMap = type + (format ? `.${format}` : '')
+//   // @ts-ignore
+//   const result = code.typeMap[typeFormat]
+//   if (!result) {
+//     return {type: type}
+//   }
+//   return result
+// }
 
-// handy refs
-// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schema-object
-// https://swagger.io/docs/specification/data-models/data-types/
-export const typeMap = (type?: string, format?: string) => {
-  if (!type) {
-    console.error({type, format})
-    return '' // fail('typeMap', 'Schema type was not defined')
-  }
-  const typeFormat: keyof ITypeMap = type + (format ? `.${format}` : '')
-  // @ts-ignore
-  const result = code.typeMap[typeFormat]
-  if (!result) {
-    return {type: type}
-  }
-  return result
-}
+/**
+ * Abstraction of reading a file so all refs go to one place
+ * @param filePath name of file
+ * @param encoding character encoding. defaults to utf-8
+ * @returns {string}
+ */
+export const readFileSync = (filePath: string, encoding: string = utf8) => fs.readFileSync(filePath, encoding)
 
 export const isDirSync = (filePath: string) => {
   try {

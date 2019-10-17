@@ -238,7 +238,7 @@ export abstract class CodeGen implements ICodeGen {
   // If no request type is required, no request type is created or referenced
   requestTypeName(method: IMethod): string {
     if (!this.useRequest(method)) return ''
-    const request = this.api!.getRequestType(method)
+    const request = this.api.getRequestType(method)
     if (!request) return ''
     request.refCount++
     return request.name
@@ -249,7 +249,7 @@ export abstract class CodeGen implements ICodeGen {
   // If no writeable type is required, no writeable type is created or referenced
   writeableType(type: IType): IType | undefined {
     if (!type) return undefined
-    const writer = this.api!.getWriteableType(type)
+    const writer = this.api.getWriteableType(type)
     if (!writer) return undefined
     writer.refCount++
     return writer

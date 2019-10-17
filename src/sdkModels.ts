@@ -23,10 +23,8 @@
  */
 
 import * as OAS from 'openapi3-ts'
-import { OperationObject } from 'openapi3-ts'
-import * as fs from 'fs'
 import md5 from 'blueimp-md5'
-import { camelCase, utf8 } from './utils'
+import { camelCase, readFileSync } from './utils'
 import { HttpMethod, ResponseMode, responseMode, StatusCode } from '../typescript/looker/rtl/transport'
 import { IVersionInfo } from './codeGen'
 
@@ -183,7 +181,7 @@ export class Parameter implements IParameter {
     this.type = type
     this.description = param.description || ''
     if ('in' in param) {
-      this.location = (param as OAS.ParameterObject).in
+      this.location = param.in
     } else {
       this.location = (param as Partial<IParameter>).location || strBody
     }
@@ -661,8 +659,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
   }
 
   static fromFile(specFile: string, swaggerFile: string): ApiModel {
-    const specContent = fs.readFileSync(specFile, utf8)
-    const swaggerContent = fs.readFileSync(swaggerFile, utf8)
+    const specContent = readFileSync(specFile)
+    const swaggerContent = readFileSync(swaggerFile)
     return this.fromString(specContent, swaggerContent)
   }
 
@@ -856,7 +854,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return responses
   }
 
-  private methodParameters(schema: OperationObject, endpoint: string, httpMethod: HttpMethod): IParameter[] {
+  private methodParameters(schema: OAS.OperationObject, endpoint: string, httpMethod: HttpMethod): IParameter[] {
     const params: IParameter[] = []
     if (schema.parameters) {
       const swaggerParams = this.swagger.paths[endpoint][httpMethod.toLowerCase()]['parameters']

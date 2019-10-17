@@ -28,6 +28,8 @@ export const sdkVersion = `${apiVersion}.${lookerVersion}`
 export const environmentPrefix = 'LOOKERSDK'
 export const matchCharset = ';.*charset='
 
+export const utf8 = 'utf-8'
+
 /**
  * Does this content type say it's utf-8?
  * @type {string} Regular expression for matching charset=utf-8 in Content-Type
@@ -45,3 +47,29 @@ export const matchModeString = `(^application\\/.*(\\bjson\\b|\\bxml\\b|\\bsql\\
  * @type {string} Regular expression for matching Content-Type headers
  */
 export const matchModeBinary = '^image\\/|^audio\\/|^video\\/|^font\\/|^application\\/|^multipart\\/'
+
+/**
+ * Does this string mean "true"
+ * @param {string} value
+ * @returns {boolean} true if matching a `true` value, false otherwise
+ */
+export const isTrue = (value: string) => /^(true|t|yes|y|1)$/i.test(value)
+
+/**
+ * Does this string mean "false"
+ * @param {string} value
+ * @returns {boolean} true if matching a `false` value, false otherwise
+ */
+export const isFalse = (value: string) => /^(false|f|no|n|0)$/i.test(value)
+
+/**
+ * Return true, false, or default boolean value for string representation of boolean
+ * @param {string} value
+ * @param {boolean} defaultBool is the value to return if the string doesn't match. defaults to false.
+ * @returns {boolean} true or false
+ */
+export const boolDefault = (value: string, defaultBool: boolean = false) => {
+  if (isTrue(value)) return true
+  if (isFalse(value)) return false
+  return defaultBool
+}

@@ -39,7 +39,8 @@ import {
 import { CodeGen, warnEditing } from './codeGen'
 import * as fs from 'fs'
 import * as prettier from 'prettier'
-import { warn, isFileSync, utf8, success, commentBlock } from './utils'
+import { warn, isFileSync, success, commentBlock, readFileSync } from './utils'
+import { utf8 } from '../typescript/looker/rtl/constants'
 
 // const strDefault = 'Default'
 
@@ -345,7 +346,7 @@ export interface IDictionary<T> {
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
-      let content = fs.readFileSync(stampFile, utf8)
+      let content = readFileSync(stampFile)
       const lookerPattern = /lookerVersion = ['"].*['"]/i
       const apiPattern = /apiVersion = ['"].*['"]/i
       const envPattern = /environmentPrefix = ['"].*['"]/i
@@ -415,7 +416,7 @@ export interface IDictionary<T> {
     }
     const name = super.reformatFile(fileName)
     if (name) {
-      const source = prettier.format(fs.readFileSync(name, utf8), formatOptions)
+      const source = prettier.format(readFileSync(name), formatOptions)
       if (source) {
         fs.writeFileSync(name, source, {encoding: utf8})
         return name
