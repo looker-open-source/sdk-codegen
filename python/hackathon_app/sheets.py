@@ -1,9 +1,13 @@
-from datetime import datetime
-
 from google.oauth2 import service_account  # type: ignore
 from googleapiclient import discovery  # type: ignore
 
-from typing import Sequence, List, Dict
+from typing import cast, Dict, Mapping, Optional, Union, Sequence
+
+import attr
+import cattr
+import datetime
+
+# TODO: add error handling. Isolate it around unstructure and the client
 
 
 class Sheets:
@@ -21,121 +25,176 @@ class Sheets:
         )
 
         service = discovery.build("sheets", "v4", credentials=credentials)
-        self.spreadsheet = service.spreadsheets().values()
+        client = service.spreadsheets().values()
         self.id = spreadsheet_id
+        self.hackathons = Hackathons(client, spreadsheet_id)
+        self.registrations = Registrations(client, spreadsheet_id)
+        self.users = Users(client, spreadsheet_id)
 
-    def get_hackathons(self):
+    def get_hackathons(self) -> Sequence["Hackathon"]:
         """Get names of active hackathons."""
-        hackathons_table = self.spreadsheet.get(
-            spreadsheetId=self.id, range="hackathons!A1:end"
-        ).execute()
-        data = hackathons_table["values"][1:]
-        date_index = hackathons_table["values"][0].index("date")
-        hackathons = []
-        for row in data:
-            if datetime.strptime(row[date_index], "%m/%d/%Y") >= datetime.now():
-                hackathons.append(row[1])
-        return hackathons
+        hackathons = cast(Sequence["Hackathon"], self.hackathons.rows())
+        result = []
+        for hackathon in hackathons:
+            if hackathon.date >= datetime.datetime.now():
+                result.append(hackathon)
+        return result
 
-    def register_user(
-        self,
-        hackathon: str,
-        first_name: str,
-        last_name: str,
-        email: str,
-        company: str,
-        country: str,
-        tshirt_size: str,
-    ):
+    def register_user(self, hackathon: str, user: "User"):
         """Register user to a hackathon"""
-        if not self._is_created(email):
-            self.create_user(
-                first_name, last_name, email, company, country, tshirt_size
-            )
-        if not self._is_registered(email, hackathon):
-            self._register_user(email, hackathon)
+        if not self.users.is_created(user):
+            self.users.create(user)
+        registrant = Registrant(
+            user_email=user.email,
+            hackathon_name=hackathon,
+            date_registered=datetime.datetime.now(),
+            attended=None,
+        )
+        if not self.registrations.is_registered(registrant):
+            self.registrations.register(registrant)
 
-    def _is_created(self, email: str) -> bool:
-        """Check if user already exists in the users sheet."""
-        users = self.get_users()
+
+TStructure = Union[Sequence["Hackathon"], Sequence["User"], Sequence["Registrant"]]
+
+
+class WhollySheet:
+    def __init__(self, client, spreadsheet_id: str, sheet_name: str, structure):
+        self.client = client
+        self.spreadsheet_id = spreadsheet_id
+        self.range = f"{sheet_name}!A1:end"
+        self.structure = structure
+
+    def insert(self, data):
+        """Insert data as rows into sheet"""
+        try:
+            serialized_ = cattr.unstructure(data)
+            serialized = self._convert_to_list(serialized_)
+            body = {"values": [serialized]}
+            self.client.append(
+                spreadsheetId=self.spreadsheet_id,
+                range=self.range,
+                insertDataOption="INSERT_ROWS",
+                valueInputOption="RAW",
+                body=body,
+            ).execute()
+        except:
+            print("Oops. No go.")
+
+    def rows(self) -> TStructure:
+        """Retrieve rows from sheet"""
+        try:
+            response = self.client.get(
+                spreadsheetId=self.spreadsheet_id, range=self.range
+            ).execute()
+            rows = response["values"]
+            data = self._convert_to_dict(rows)
+            response = cattr.structure(data, self.structure)
+        except (TypeError, AttributeError):
+            raise DeserializeError("Bad Data")
+        return response
+
+    def _convert_to_dict(self, data) -> Sequence[Mapping[str, str]]:
+        """Given a list of lists where the first list contains key names, convert it to
+        a list of dictionaries.
+        """
+        result: Sequence[Dict[str, str]] = [dict(zip(data[0], r)) for r in data[1:]]
+        return result
+
+    def _convert_to_list(
+        self,
+        data: Mapping[str, Union[str, int, Sequence[str], datetime.datetime, None]],
+    ) -> Sequence:
+        """Given a dictionary, return a list containing its values"""
+        return list(data.values())
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class User:
+    first_name: str
+    last_name: str
+    email: str
+    date_created: Optional[datetime.datetime]
+    organization: str
+    tshirt_size: str
+
+
+class Users(WhollySheet):
+    def __init__(self, client, spreadsheet_id):
+        super().__init__(client, spreadsheet_id, "users", Sequence[User])
+
+    def is_created(self, user: User) -> bool:
+        """Checks if user already exists in users sheet"""
+        users = super().rows()
         found = False
         for u in users:
-            if u["email"] == email:
+            if u == user:
                 found = True
-                break
         return found
 
-    def create_user(
-        self,
-        first_name: str,
-        last_name: str,
-        email: str,
-        company: str,
-        country: str,
-        tshirt_size: str,
-    ):
-        """Append user details to users sheet."""
-        data = {
-            "values": [
-                [
-                    first_name,
-                    last_name,
-                    email,
-                    company,
-                    country,
-                    datetime.now().strftime("%m/%d/%Y"),
-                    tshirt_size,
-                ]
-            ]
-        }
-        request = self.spreadsheet.append(
-            spreadsheetId=self.id,
-            range="users!A1:END",
-            insertDataOption="INSERT_ROWS",
-            valueInputOption="RAW",
-            body=data,
-        )
-        request.execute()
+    def create(self, user: User):
+        """Insert user details in the users sheet"""
+        super().insert(user)
 
-    def _is_registered(self, email: str, hackathon_name: str):
-        """Check if user is already registed for a given hackathon."""
-        registrants = self.spreadsheet.get(
-            spreadsheetId=self.id, range="hackathons_users!A1:end"
-        ).execute()
-        found = False
-        for u in registrants:
-            if u["email"] == email and u["hackathon_name"] == hackathon_name:
-                found = True
-                break
-        return found
 
-    def _register_user(self, email: str, hackathon_name: str):
-        """Register users by adding them to hackathons_users sheet."""
-        data = {
-            "values": [
-                [email, hackathon_name, datetime.now().strftime("%m/%d/%Y"), 0, "", ""]
-            ]
-        }
+@attr.s(auto_attribs=True, kw_only=True)
+class Hackathon:
+    name: str
+    location: str
+    date: datetime.datetime
+    duration_in_days: int
 
-        request = self.spreadsheet.append(
-            spreadsheetId=self.id,
-            range="hackathons_users!A1:END",
-            insertDataOption="INSERT_ROWS",
-            valueInputOption="RAW",
-            body=data,
-        )
-        request.execute()
 
-    def get_users(self):
-        """Get users from the users sheets."""
-        resp = self.spreadsheet.get(
-            spreadsheetId=self.id, range="users!A1:end"
-        ).execute()
-        users = self._convert_to_dict(resp["values"])
-        return users
+class Hackathons(WhollySheet):
+    def __init__(self, client, spreadsheet_id):
+        super().__init__(client, spreadsheet_id, "hackathons", Sequence[Hackathon])
 
-    def _convert_to_dict(self, data) -> Sequence[Dict[str, str]]:
-        # TODO: convert columns to proper type before returning
-        # TODO: abstract this into a cattr structure
-        result: List[Dict[str, str]] = [dict(zip(data[0], r)) for r in data[1:]]
-        return result
+
+@attr.s(auto_attribs=True, kw_only=True)
+class Registrant:
+    user_email: str
+    hackathon_name: str
+    date_registered: datetime.datetime
+    attended: Optional[bool]
+
+
+class Registrations(WhollySheet):
+    def __init__(self, client, spreadsheet_id):
+        super().__init__(client, spreadsheet_id, "registrations", Sequence[Registrant])
+
+    def is_registered(self, registrant: Registrant) -> bool:
+        """Check if registrant is already registerd"""
+        registrants = cast(Sequence[Registrant], super().rows())
+        registered = False
+        for r in registrants:
+            if (
+                r.user_email == registrant.user_email
+                and r.hackathon_name == registrant.hackathon_name
+            ):
+                registered = True
+        return registered
+
+    def register(self, registrant: Registrant):
+        """Register user by inserting registrant details into registrations sheet"""
+        super().insert(registrant)
+
+
+class DeserializeError(Exception):
+    """Improperly formatted data to deserialize"""
+
+
+cattr.register_structure_hook(
+    datetime.datetime,
+    lambda d, _: datetime.datetime.strptime(  # type: ignore
+        d, "%m/%d/%Y"
+    ),
+)
+cattr.register_unstructure_hook(
+    datetime.datetime,
+    lambda d: datetime.datetime.strftime(  # type: ignore
+        d, "%m/%d/%Y"
+    ),
+)
+cattr.register_unstructure_hook(type(None), lambda s: "NA")
+
+if __name__ == "__main__":
+    sheets = Sheets("SHEET_ID", "CREDS_FILE")

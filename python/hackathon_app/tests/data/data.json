@@ -26,17 +26,12 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "company"
+                                        "stringValue": "date_created"
                                     }
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "country"
-                                    }
-                                },
-                                {
-                                    "userEnteredValue": {
-                                        "stringValue": "created_date"
+                                        "stringValue": "organization"
                                     }
                                 },
                                 {
@@ -65,17 +60,12 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "Foo"
-                                    }
-                                },
-                                {
-                                    "userEnteredValue": {
-                                        "stringValue": "USA"
-                                    }
-                                },
-                                {
-                                    "userEnteredValue": {
                                         "stringValue": "5/1/2012"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Looker"
                                     }
                                 },
                                 {
@@ -104,17 +94,12 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "Bar"
-                                    }
-                                },
-                                {
-                                    "userEnteredValue": {
-                                        "stringValue": "USA"
-                                    }
-                                },
-                                {
-                                    "userEnteredValue": {
                                         "stringValue": "5/1/2018"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Bar"
                                     }
                                 },
                                 {
@@ -143,17 +128,12 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "Quz"
-                                    }
-                                },
-                                {
-                                    "userEnteredValue": {
-                                        "stringValue": "USA"
-                                    }
-                                },
-                                {
-                                    "userEnteredValue": {
                                         "stringValue": "4/15/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Quz"
                                     }
                                 },
                                 {
@@ -182,17 +162,12 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "Baz"
-                                    }
-                                },
-                                {
-                                    "userEnteredValue": {
-                                        "stringValue": "UK"
-                                    }
-                                },
-                                {
-                                    "userEnteredValue": {
                                         "stringValue": "2/20/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Baz"
                                     }
                                 },
                                 {
@@ -339,7 +314,7 @@
         },
         {
             "properties": {
-                "title": "hackathons_users"
+                "title": "registrations"
             },
             "data": [
                 {
@@ -387,7 +362,7 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "1"
+                                        "stringValue": "True"
                                     }
                                 }
                             ]
@@ -411,7 +386,7 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "0"
+                                        "stringValue": "False"
                                     }
                                 }
                             ]
@@ -435,7 +410,7 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "1"
+                                        "stringValue": "True"
                                     }
                                 }
                             ]
@@ -459,7 +434,7 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "1"
+                                        "stringValue": "False"
                                     }
                                 }
                             ]
@@ -483,7 +458,7 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "1"
+                                        "stringValue": "True"
                                     }
                                 }
                             ]
@@ -507,7 +482,7 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "1"
+                                        "stringValue": "True"
                                     }
                                 }
                             ]
@@ -531,7 +506,7 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "0"
+                                        "stringValue": "False"
                                     }
                                 }
                             ]
@@ -555,7 +530,7 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "1"
+                                        "stringValue": "True"
                                     }
                                 }
                             ]
@@ -576,6 +551,11 @@
                                     "userEnteredValue": {
                                         "stringValue": "10/5/2019"
                                     }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "NULL"
+                                    }
                                 }
                             ]
                         },
@@ -594,6 +574,11 @@
                                 {
                                     "userEnteredValue": {
                                         "stringValue": "10/9/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "NULL"
                                     }
                                 }
                             ]
