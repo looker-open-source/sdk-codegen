@@ -129,63 +129,57 @@ export const RegisterScene: React.FC<{path: string}> = () => {
                 <HackathonSelect hackathons={hackathons} />
                 <ErrorMessage name="hackathon" component="div" />
               </InputGroup>
-              <RadioButtonGroup label="T-Shirt Size">
-                <Field
-                  component={RadioButton}
-                  name="tshirt_size"
-                  id="XS"
-                  label="XS"
-                />
-                <Field
-                  component={RadioButton}
-                  name="tshirt_size"
-                  id="S"
-                  label="S"
-                />
-                <Field
-                  component={RadioButton}
-                  name="tshirt_size"
-                  id="M"
-                  label="M"
-                />
-                <Field
-                  component={RadioButton}
-                  name="tshirt_size"
-                  id="L"
-                  label="L"
-                />
-                <Field
-                  component={RadioButton}
-                  name="tshirt_size"
-                  id="XL"
-                  label="XL"
-                />
-                <Field
-                  component={RadioButton}
-                  name="tshirt_size"
-                  id="XXL"
-                  label="XXL"
-                />
-              </RadioButtonGroup>
+              <InputGroup>
+                <Label>T-Shirt Size</Label>
+              </InputGroup>
+              <InputGroup>
+                <Label>
+                  <Radio type="radio" name="tshirt_size" value="XS" />
+                  XS
+                </Label>
+                <Label>
+                  <Radio type="radio" name="tshirt_size" value="S" />S
+                </Label>
+                <Label>
+                  <Radio type="radio" name="tshirt_size" value="M" />M
+                </Label>
+                <Label>
+                  <Radio type="radio" name="tshirt_size" value="L" />L
+                </Label>
+                <Label>
+                  <Radio type="radio" name="tshirt_size" value="XL" />
+                  XL
+                </Label>
+                <Label>
+                  <Radio type="radio" name="tshirt_size" value="XL" />
+                  XL
+                </Label>
+                <Label>
+                  <Radio type="radio" name="tshirt_size" value="XXL" />
+                  XXL
+                </Label>
+              </InputGroup>
               <ErrorMessage name="tshirt_size" component="div" />
               <CheckboxGroup>
-                <Input name="ndaq" type="checkbox" />
+                <CheckboxLabel>
+                  <CheckBox name="ndaq" type="checkbox" />I agree to the Terms
+                  and Conditions/NDAQ
+                </CheckboxLabel>
                 <ErrorMessage name="ndaq" component="div" />
-                <CheckboxLabel>
-                  I agree to the Terms and Conditions/NDAQ
-                </CheckboxLabel>
               </CheckboxGroup>
               <CheckboxGroup>
-                <Input name="code_of_conduct" type="checkbox" />
+                <CheckboxLabel>
+                  <CheckBox name="code_of_conduct" type="checkbox" />I agree to
+                  the Code of Conduct
+                </CheckboxLabel>
                 <ErrorMessage name="code_of_conduct" component="div" />
-                <CheckboxLabel>I agree to the Code of Conduct</CheckboxLabel>
               </CheckboxGroup>
               <CheckboxGroup>
-                <Input name="contributing" type="checkbox" />
-                <ErrorMessage name="contributing" component="div" />
                 <CheckboxLabel>
-                  I agree to the Contribution Guidelines
+                  <CheckBox name="contributing" type="checkbox" />I agree to the
+                  Contribution Guidelines
                 </CheckboxLabel>
+                <ErrorMessage name="contributing" component="div" />
               </CheckboxGroup>
               {status && <div>{status}</div>}
               <RegisterButton type="submit" disabled={isSubmitting}>
@@ -196,45 +190,6 @@ export const RegisterScene: React.FC<{path: string}> = () => {
         </Formik>
       </SceneBody>
     </CenterContainer>
-  )
-}
-
-// Radio input
-const RadioButton: React.FC<{
-  field: {
-    name: string
-    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
-  }
-  id: string
-  label: string
-}> = ({field: {name, onChange}, id, label, ...props}) => {
-  return (
-    <div>
-      <input
-        onChange={onChange}
-        name={name}
-        id={id}
-        type="radio"
-        value={id}
-        {...props}
-      />
-      <label htmlFor={id}>{label}</label>
-    </div>
-  )
-}
-
-// Radio group
-const RadioButtonGroup: React.FC<{
-  label: string
-  children: React.ReactNode
-}> = ({label, children}) => {
-  return (
-    <div>
-      <fieldset>
-        <legend>{label}</legend>
-        {children}
-      </fieldset>
-    </div>
   )
 }
 
@@ -343,8 +298,8 @@ const SceneBody = styled.div`
 const Body = styled.div`
   background-color: #4636ac;
   margin: auto;
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
+  min-width: 100vw;
 `
 
 const Description = styled.div`
@@ -357,7 +312,7 @@ const Header = styled.h2`
   font-size: 28px;
 `
 
-const Label = styled.div`
+const Label = styled.label`
   color: white;
   font-size: 14px;
   margin-bottom: 4px;
@@ -365,6 +320,17 @@ const Label = styled.div`
 
 const RegForm = styled(Form)`
   margin-bottom: 32px;
+`
+
+const Radio = styled(Field)`
+  margin-left: 12px;
+  margin-bottom: 32px;
+  font-size: 16px;
+`
+
+const CheckBox = styled(Field)`
+  margin-left: 12px;
+  font-size: 16px;
 `
 
 const Input = styled(Field)`
