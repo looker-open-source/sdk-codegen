@@ -26,11 +26,12 @@ import * as fs from 'fs'
 import * as yaml from 'js-yaml'
 import { SDKConfig } from './sdkConfig'
 import { getVersionInfo } from './fetchSpec'
+import { readFileSync } from './utils'
 
 const dataFile = 'test/data.yml'
 // slightly hackish data path determination for tests
 const root = fs.existsSync(dataFile) ? '' : '../../'
-const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, 'utf-8'))
+const testData = yaml.safeLoad(readFileSync(`${root}${dataFile}`))
 const localIni = `${root}${testData['iniFile']}`
 const config = SDKConfig(localIni)
 

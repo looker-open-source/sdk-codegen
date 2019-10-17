@@ -32,14 +32,12 @@ import {
 } from './transport'
 import { AuthToken } from './authToken'
 import { NodeTransport } from './nodeTransport'
-import { IApiSettingsIniFile } from './nodeSettings'
-import { environmentPrefix } from './constants'
+import { IApiSettingsConfig } from './nodeSettings'
+import { strLookerClientId, strLookerClientSecret } from './apiSettings'
 
 const strPost = 'POST'
 const strDelete = 'DELETE'
 
-const strLookerClientId = `${environmentPrefix}_CLIENT_ID`
-const strLookerClientSecret = `${environmentPrefix}_CLIENT_SECRET`
 
 /**
  * Same as the Looker API access token object
@@ -64,13 +62,13 @@ export interface IAuthSession extends IAuthorizer {
   sudoId: string;
 
   // Authentication token
-  getToken(): Promise<IAccessToken>;
+  getToken(): Promise<IAccessToken>
 
-  isSudo(): boolean;
+  isSudo(): boolean
 
-  login(sudoId?: string | number): Promise<IAccessToken>;
+  login(sudoId?: string | number): Promise<IAccessToken>
 
-  reset(): void;
+  reset(): void
 }
 
 export class NodeSession implements IAuthSession {
@@ -79,7 +77,7 @@ export class NodeSession implements IAuthSession {
   sudoId: string = ''
   transport: ITransport
 
-  constructor(public settings: IApiSettingsIniFile, transport?: ITransport) {
+  constructor(public settings: IApiSettingsConfig, transport?: ITransport) {
     this.settings = settings
     this.transport = transport || new NodeTransport(settings)
   }
@@ -200,10 +198,13 @@ export class NodeSession implements IAuthSession {
     if (!this._authToken.isActive()) {
       this.reset()
       // only retain client API3 credentials for the lifetime of the login request
-      const section = this.settings.readIni()
+      const section = this.settings.readConfig()
       const client_id = process.env[strLookerClientId] || section['client_id']
       const client_secret =
         process.env[strLookerClientSecret] || section['client_secret']
+      if (!client_id || !client_secret) {
+        throw sdkError({ message: 'API credentials client_id and/or client_secret are not set' })
+      }
       // authenticate client
       const token = await this.ok(
         this.transport.request<IAccessToken, IError>(

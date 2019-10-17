@@ -39,7 +39,8 @@ import {
 import { CodeGen, warnEditing } from './codeGen'
 import * as fs from 'fs'
 import * as prettier from 'prettier'
-import { warn, isFileSync, utf8, success, commentBlock } from './utils'
+import { warn, isFileSync, success, commentBlock, readFileSync } from './utils'
+import { utf8 } from '../typescript/looker/rtl/constants'
 
 // const strDefault = 'Default'
 
@@ -59,13 +60,15 @@ export class TypescriptGen extends CodeGen {
   indentStr = '  '
   endTypeStr = '\n}'
   needsRequestTypes = true
+  willItStream = true
 
   // @ts-ignore
   methodsPrologue(indent: string) {
     return `
 // ${warnEditing}
 import { APIMethods } from '../rtl/apiMethods'
-import { ITransportSettings } from '../rtl/transport'
+import { IAuthorizer, ITransportSettings } from '../rtl/transport'
+import { ${this.packageName}Stream } from './streams'
 /**
  * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
  */
@@ -73,6 +76,31 @@ import { DelimArray } from '../rtl/delimArray'
 import { IDictionary, ${this.typeNames().join(', ')} } from './models'
 
 export class ${this.packageName} extends APIMethods {
+
+  public stream: LookerSDKStream
+  
+  constructor(authSession: IAuthorizer) {
+    super(authSession)
+    this.stream = new LookerSDKStream(authSession)  
+  }
+  
+`
+  }
+
+  // @ts-ignore
+  streamsPrologue(indent: string): string {
+    return `
+// ${warnEditing}
+import { Readable } from 'readable-stream'
+import { APIMethods } from '../rtl/apiMethods'
+import { ITransportSettings } from '../rtl/transport'
+/**
+ * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
+ */
+import { DelimArray } from '../rtl/delimArray'
+import { IDictionary, ${this.typeNames(false).join(', ')} } from './models'
+
+export class ${this.packageName}Stream extends APIMethods {
 `
   }
 
@@ -118,34 +146,6 @@ export interface IDictionary<T> {
       + `${indent}${property.name}${optional}: ${type.name}`
   }
 
-  methodSignature(indent: string, method: IMethod) {
-    const type = this.typeMap(method.type)
-    let headComment = `${method.httpMethod} ${method.endpoint} -> ${type.name}`
-    let fragment = ''
-    const requestType = this.requestTypeName(method)
-    const bump = indent + this.indentStr
-
-    if (requestType) {
-      // use the request type that will be generated in models.ts
-      fragment = `request: Partial<I${requestType}>`
-    } else {
-      let params: string[] = []
-      const args = method.allParams // get the params in signature order
-      if (args && args.length > 0) args.forEach(p => params.push(this.declareParameter(bump, p)))
-      fragment = params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
-    }
-    if (method.responseIsBoth()) {
-      headComment += `\n\n**Note**: Binary content may be returned by this method.`
-    } else if (method.responseIsBinary()) {
-      headComment += `\n\n**Note**: Binary content is returned by this method.\n`
-    }
-    const header = this.commentHeader(indent, headComment)
-      + `${indent}async ${method.name}(`
-
-    return header + fragment
-      + `${fragment? ',' : ''}\n${bump}options?: Partial<ITransportSettings>) {\n`
-  }
-
   paramComment(param: IParameter, mapped: IMappedType) {
     return `@param {${mapped.name}} ${param.name} ${param.description}`
   }
@@ -177,20 +177,59 @@ export interface IDictionary<T> {
     return ''
   }
 
+  methodHeaderDeclaration(indent: string, method: IMethod, streamer: boolean = false) {
+    const type = this.typeMap(method.type)
+    let headComment = `${method.httpMethod} ${method.endpoint} -> ${type.name}`
+    let fragment = ''
+    const requestType = this.requestTypeName(method)
+    const bump = indent + this.indentStr
+
+    if (requestType) {
+      // use the request type that will be generated in models.ts
+      fragment = `request: Partial<I${requestType}>`
+    } else {
+      let params: string[] = []
+      const args = method.allParams // get the params in signature order
+      if (args && args.length > 0) args.forEach(p => params.push(this.declareParameter(bump, p)))
+      fragment = params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
+    }
+    if (method.responseIsBoth()) {
+      headComment += `\n\n**Note**: Binary content may be returned by this method.`
+    } else if (method.responseIsBinary()) {
+      headComment += `\n\n**Note**: Binary content is returned by this method.\n`
+    }
+    const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
+    const header = this.commentHeader(indent, headComment)
+    + `${indent}async ${method.name}(`
+    + (streamer ? `\n${bump}${callback}` : '')
+
+    return header + fragment
+      + `${fragment? ',' : ''}\n${bump}options?: Partial<ITransportSettings>) {\n`
+  }
+
+  methodSignature(indent: string, method: IMethod) {
+    return this.methodHeaderDeclaration(indent, method, false)
+  }
+
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
-    // const request = this.requestTypeName(method)
-    // const defaultName = request ? `${strDefault}${request.substring(strRequest.length)}` : ''
-    // const defaulter = defaultName? `${bump}request = { ...${defaultName}, ...request}\n` : ''
-    const defaulter = ''
     return this.methodSignature(indent, method)
-      + defaulter
       + this.httpCall(bump, method)
       + `\n${indent}}`
   }
 
+  streamerSignature(indent: string, method: IMethod) {
+    return this.methodHeaderDeclaration(indent, method, true)
+  }
+
+  declareStreamer(indent: string, method: IMethod) {
+    const bump = this.bumper(indent)
+    return this.streamerSignature(indent, method)
+      + this.streamCall(bump, method)
+      + `\n${indent}}`
+  }
+
   typeSignature(indent: string, type: IType) {
-    // return this.generateDefaults(indent, type) +
     return this.commentHeader(indent, type.description) +
       `${indent}export interface I${type.name}{\n`
   }
@@ -269,15 +308,27 @@ export interface IDictionary<T> {
     return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}, ${errors}>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
   }
 
+  streamCall(indent: string, method: IMethod) {
+    const request = this.useRequest(method) ? 'request.' : ''
+    const type = this.typeMap(method.type)
+    const bump = indent + this.indentStr
+    const args = this.httpArgs(bump, method)
+    // const errors = this.errorResponses(indent, method)
+    return `${indent}return ${this.it('authStream')}<${type.name}>(callback, '${method.httpMethod.toUpperCase()}', ${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
+  }
+
   summary(indent: string, text: string | undefined) {
     return this.commentHeader(indent, text)
   }
 
-  typeNames() {
+  typeNames(countError: boolean = true) {
     let names: string[] = []
     if (!this.api) return names
-    // include Error in the import
-    this.api.types['Error'].refCount++
+    if (countError) {
+      this.api.types['Error'].refCount++
+    } else {
+      this.api.types['Error'].refCount = 0
+    }
     const types = this.api.sortedTypes()
     Object.values(types)
       .filter(type => (type.refCount > 0) && !(type instanceof IntrinsicType))
@@ -295,7 +346,7 @@ export interface IDictionary<T> {
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
-      let content = fs.readFileSync(stampFile, utf8)
+      let content = readFileSync(stampFile)
       const lookerPattern = /lookerVersion = ['"].*['"]/i
       const apiPattern = /apiVersion = ['"].*['"]/i
       const envPattern = /environmentPrefix = ['"].*['"]/i
@@ -365,7 +416,7 @@ export interface IDictionary<T> {
     }
     const name = super.reformatFile(fileName)
     if (name) {
-      const source = prettier.format(fs.readFileSync(name, utf8), formatOptions)
+      const source = prettier.format(readFileSync(name), formatOptions)
       if (source) {
         fs.writeFileSync(name, source, {encoding: utf8})
         return name

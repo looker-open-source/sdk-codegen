@@ -5,9 +5,9 @@ Looker*.json
 **/.idea/*
 .vscode/*
 api/*
-sdk_generated.*
-*/looker/sdk/methods.*
-*/looker/sdk/models.*
+**/sdk/methods.*
+**/sdk/models.*
+**/sdk/streams.*
 python/venv/*
 venv/*
 package-lock.json

@@ -23,19 +23,31 @@
  */
 
 import { agentTag, defaultTimeout, ITransportSettings } from './transport'
-import { environmentPrefix } from './constants'
+import { boolDefault, environmentPrefix, isTrue } from './constants'
+
+export interface IValueSettings {
+  [name: string]: string;
+}
 
 export const strLookerBaseUrl = `${environmentPrefix}_BASE_URL`
 export const strLookerApiVersion = `${environmentPrefix}_API_VERSION`
 export const strLookerVerifySsl = `${environmentPrefix}_VERIFY_SSL`
 export const strLookerTimeout = `${environmentPrefix}_TIMEOUT`
+export const strLookerClientId =`${environmentPrefix}_CLIENT_ID`
+export const strLookerClientSecret = `${environmentPrefix}_CLIENT_SECRET`
+
+export const ApiConfigMap: IValueSettings = {
+  'base_url': strLookerBaseUrl,
+  'api_version': strLookerApiVersion,
+  'verify_ssl': strLookerVerifySsl,
+  'timeout': strLookerTimeout,
+  'client_id': strLookerClientId,
+  'client_secret': strLookerClientSecret
+}
+
 export const strBadConfiguration = `${agentTag} configuration error:
 Missing required configuration values like base_url and api_version
 `
-
-export interface IValueSettings {
-  [name: string]: string;
-}
 
 export interface IApiSettings extends ITransportSettings {
   isConfigured(): boolean;
@@ -55,27 +67,34 @@ export const DefaultSettings = () =>
   } as IApiSettings)
 
 /**
+ * Return environment variable name value first, otherwise config name value
+ * @param {IValueSettings} values
+ * @param {string} name
+ * @returns {string}
+ */
+export const configValue = (values: IValueSettings, name: string) => {
+  return values[ApiConfigMap[name]] || values[name]
+}
+
+/**
  * Read any key/value collection for environment variable names and return as IApiSettings
  * @constructor
  *
- * The values keys are:
- *  - <environmentPrefix>_BASE_URL
- *  - <environmentPrefix>_API_VERSION
- *  - <environmentPrefix>_CLIENT_ID
- *  - <environmentPrefix>_CLIENT_SECRET
- *  - <environmentPrefix>_VERIFY_SSL
- *  - <environmentPrefix>_TIMEOUT
+ * The keys for the values are:
+ *  - <environmentPrefix>_BASE_URL or `base_url`
+ *  - <environmentPrefix>_API_VERSION or `api_version`
+ *  - <environmentPrefix>_CLIENT_ID or `client_id`
+ *  - <environmentPrefix>_CLIENT_SECRET or `client_secret`
+ *  - <environmentPrefix>_VERIFY_SSL or `verify_ssl`
+ *  - <environmentPrefix>_TIMEOUT or `timeout`
  */
 export const ValueSettings = (values: IValueSettings): IApiSettings => {
   const settings = DefaultSettings()
-  settings.api_version = values[strLookerApiVersion] || settings.api_version
-  settings.base_url = values[strLookerBaseUrl] || settings.base_url
-  if (strLookerVerifySsl in values) {
-    settings.verify_ssl = /true|1/i.test(values[strLookerVerifySsl])
-  }
-  if (strLookerTimeout in values) {
-    settings.timeout = parseInt(values[strLookerTimeout], 10)
-  }
+  settings.api_version = configValue(values, 'api_version') || settings.api_version
+  settings.base_url = configValue(values, 'base_url') || settings.base_url
+  settings.verify_ssl = boolDefault(configValue(values, 'verify_ssl'), true)
+  const timeout = configValue(values, 'timeout')
+  settings.timeout = timeout ? parseInt(timeout, 10) : defaultTimeout
   return settings
 }
 
@@ -102,11 +121,11 @@ export class ApiSettings implements IApiSettings {
         : this.api_version
     this.verify_ssl =
       'verify_ssl' in settings
-        ? /true|1/i.test(settings.verify_ssl!.toString())
+        ? isTrue(settings.verify_ssl!.toString())
         : this.verify_ssl
     this.timeout =
       'timeout' in settings
-        ? parseInt(settings.timeout!.toString())
+        ? parseInt(settings.timeout!.toString(), 10)
         : this.timeout
     if (!this.isConfigured()) {
       throw new Error(strBadConfiguration)

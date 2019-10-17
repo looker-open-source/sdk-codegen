@@ -44,6 +44,7 @@ export interface IVersionInfo {
 
 export abstract class CodeGen implements ICodeGen {
   needsRequestTypes = false
+  willItStream = false
   codePath = './'
   packagePath = 'looker'
   packageName = 'LookerSDK'
@@ -67,6 +68,11 @@ export abstract class CodeGen implements ICodeGen {
 
   abstract methodsEpilogue(indent: string): string
 
+  // @ts-ignore
+  streamsPrologue(indent: string) {
+    return ''
+  }
+
   abstract modelsPrologue(indent: string): string
 
   abstract modelsEpilogue(indent: string): string
@@ -80,6 +86,17 @@ export abstract class CodeGen implements ICodeGen {
   abstract methodSignature(indent: string, method: IMethod): string
 
   abstract declareMethod(indent: string, method: IMethod): string
+
+  // @ts-ignore
+  streamerSignature(indent: string, method: IMethod) {
+    return ''
+  }
+
+  // Only implement this method for languages that have explicit streaming methods declared
+  // @ts-ignore
+  declareStreamer(indent: string, method: IMethod) {
+    return ''
+  }
 
   abstract summary(indent: string, text: string | undefined): string
 
@@ -199,6 +216,11 @@ export abstract class CodeGen implements ICodeGen {
     return `${indent}return ${this.it(this.transport)}.${method.httpMethod.toLowerCase()}(${errors}, "${method.endpoint}"${args ? ', ' + args : ''})`
   }
 
+  // @ts-ignore
+  streamCall(indent: string, method: IMethod) {
+    return ''
+  }
+
   useRequest(method: IMethod) {
     if (!this.needsRequestTypes) return false
     const [body] = method.bodyParams
@@ -216,7 +238,7 @@ export abstract class CodeGen implements ICodeGen {
   // If no request type is required, no request type is created or referenced
   requestTypeName(method: IMethod): string {
     if (!this.useRequest(method)) return ''
-    const request = this.api!.getRequestType(method)
+    const request = this.api.getRequestType(method)
     if (!request) return ''
     request.refCount++
     return request.name
@@ -227,13 +249,14 @@ export abstract class CodeGen implements ICodeGen {
   // If no writeable type is required, no writeable type is created or referenced
   writeableType(type: IType): IType | undefined {
     if (!type) return undefined
-    const writer = this.api!.getWriteableType(type)
+    const writer = this.api.getWriteableType(type)
     if (!writer) return undefined
     writer.refCount++
     return writer
   }
 
-  typeNames() {
+  // @ts-ignore
+  typeNames(countError: boolean = true) {
     let items: string[] = []
     if (!this.api) return items
     Object.values(this.api.sortedTypes())
@@ -255,7 +278,9 @@ export abstract class CodeGen implements ICodeGen {
   // Reformat source files after generation
   reformat() {
     const result: string[] = []
-    for (const name of ['sdk/methods', 'sdk/models']) {
+    let files = ['sdk/methods', 'sdk/models']
+    if (this.willItStream) files.push('sdk/streams')
+    for (const name of files) {
       const sourceFile = this.fileName(name)
       const output = this.reformatFile(sourceFile)
       if (output) {

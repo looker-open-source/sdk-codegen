@@ -29,6 +29,7 @@ import {
   IAuthorizer,
   ITransportSettings,
 } from './transport'
+import { Readable } from "readable-stream"
 
 export class APIMethods {
   constructor(public authSession: IAuthorizer) {
@@ -69,8 +70,7 @@ export class APIMethods {
 
   /**
    *
-   * A helper method to decorate an API request with authentication information
-   * before submitting the request to the API
+   * A helper method to add authentication to an API request for deserialization
    *
    * @param {HttpMethod} method type of HTTP method
    * @param {string} path API endpoint path
@@ -95,6 +95,39 @@ export class APIMethods {
       },
       options,
     )
+  }
+
+  /**
+   * A helper method to add authentication to an API request for streaming
+   * @param {(readable: Readable) => Promise<T>} callback
+   * @param {HttpMethod} method
+   * @param {string} path
+   * @param queryParams
+   * @param body
+   * @param {Partial<ITransportSettings>} options
+   * @returns {Promise<T>}
+   */
+  async authStream<T>(
+    callback: (readable: Readable) => Promise<T>,
+    method: HttpMethod,
+    path: string,
+    queryParams?: any,
+    body?: any,
+    options?: Partial<ITransportSettings>
+  )
+    : Promise<T> {
+    return this.authSession.transport.stream<T>(
+      callback,
+      method,
+      path,
+      queryParams,
+      body,
+      (init: any) => {
+        return this.authSession.authenticate(init)
+      },
+      options,
+    )
+
   }
 
   // // dynamically evaluate a template string

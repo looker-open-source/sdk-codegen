@@ -24,23 +24,30 @@
 
 import * as fs from 'fs'
 import * as ini from 'ini'
-import { ApiSettings, IApiSettings } from './apiSettings'
+import {
+  ApiConfigMap,
+  ApiSettings, DefaultSettings,
+  IApiSettings,
+  ValueSettings,
+} from './apiSettings'
+import { utf8 } from './constants'
+import { sdkError } from './transport'
 
 export interface IApiSection {
   [key: string]: string;
 }
 
 /**
- * Interface that supports reading the API settings on demand from an .ini file
+ * Interface that supports reading the API settings on demand from a configuration store
  *
  */
-export interface IApiSettingsIniFile extends IApiSettings {
-  readIni(section?: string): IApiSection;
+export interface IApiSettingsConfig extends IApiSettings {
+  readConfig(section?: string): IApiSection;
 }
 
 /**
- * Parse .ini formatted content
- * @param contents {string} formatted as an .ini file
+ * Parses `.ini` formatted content
+ * @param contents formatted as an `.ini` file
  * @constructor
  */
 export const ApiConfig = (contents: string) => ini.parse(contents)
@@ -68,43 +75,139 @@ export const ApiConfigSection = (
 }
 
 /**
- * .ini Configuration initializer
- * @class NodeSettingsIni
+ * Configuration initializer for Node applications
+ *
+ * This class can be used directly when configuration settings should NOT come
+ * from the default environment variables or a configuration file
  *
  */
-export class NodeSettingsIni extends ApiSettings {
-  constructor(contents: string, section?: string) {
-    const settings = ApiConfigSection(contents, section)
+export class NodeSettings extends ApiSettings {
+  constructor(contents: string | IApiSettings, section?: string) {
+    const settings = typeof contents === 'string' ? ApiConfigSection(contents, section) : contents
     super(settings)
+  }
+
+  /**
+   * All descendants of NodeSettings must implement readConfig to retrieve API credentials
+   * since credentials are not stored in memory
+   *
+   * @param {string} section
+   * @returns {IApiSection} is not returned and an error is thrown instead
+   *
+   * @throws sdkError
+   *
+   */
+  // @ts-ignore
+  readConfig(section?: string) : IApiSection {
+    throw sdkError({message: 'NodeSettings has no config to read'})
   }
 }
 
 /**
- * Example class that reads INI configuration from a file in node
- * @class NodeSettingsIniFile
+ * A utility function that loads environment variables and maps them to the standard configuration values
  *
- * Warning: INI files storing credentials should be secured in the run-time environment, and
- * ignored by version control systems so credentials never get checked in to source code repositories
+ * @returns the populated `IApiSection`, which may be empty
  */
-export class NodeSettingsIniFile extends NodeSettingsIni
-  implements IApiSettingsIniFile {
+const readEnvConfig = () => {
+  let values : IApiSection = {}
+  Object.keys(ApiConfigMap).forEach(key => {
+    const envKey = ApiConfigMap[key]
+    if (process.env[envKey] !== undefined) {
+      // map environment variable keys to config variable keys
+      values[key] = process.env[envKey]!
+    }
+  })
+  return values
+}
+
+/**
+ * A utility function that loads the configuration values from the specified file name and overrides them
+ * with environment variable values, if the environment variables exist
+ *
+ * @param {string} fileName Name of configuration file to read
+ * @param {string} section Optional. Name of section of configuration file to read
+ * @returns {IApiSection} containing the configuration values
+ */
+const readIniConfig = (fileName: string, section?: string) => {
+  // get environment variables
+  let config = readEnvConfig()
+  if (fileName && fs.existsSync(fileName)) {
+    // override any config file settings with environment values if the environment value is set
+    config  = {...ApiConfigSection(fs.readFileSync(fileName, utf8), section), ...config}
+  }
+  return config
+}
+
+/**
+ * Read configuration settings from Node environment variables
+ *
+ * This class initializes SDK settings **only** from the values passed in to its constructor and
+ * (potentially) configured environment variables, and does not read a configuration file at all
+ *
+ * Any environment variables that **are** set, will override the values passed in to the constructor
+ * with the same key
+ *
+ */
+export class NodeSettingsEnv extends NodeSettings {
+  constructor(contents?: string | IApiSettings, section?: string) {
+    let settings: IApiSettings
+    if (contents) {
+      if (typeof contents === 'string') {
+        settings = ApiConfigSection(contents, section) as IApiSettings
+      } else {
+        settings = contents
+      }
+      settings = {...readEnvConfig(), ...settings}
+    } else {
+      settings = readEnvConfig() as IApiSettings
+    }
+    super({...DefaultSettings(), ...settings})
+  }
+
+  // @ts-ignore
+  readConfig(section?: string) : IApiSection {
+    return readEnvConfig()
+  }
+}
+
+/**
+ * Example class that reads a configuration from a file in node
+ *
+ * If `fileName` is not specified in the constructor, the default file name is `./looker.ini`
+ *
+ * **Warning**: `.ini` files storing credentials should be secured in the run-time environment, and
+ * ignored by version control systems so credentials never get checked in to source code repositories.
+ * A recommended pattern is using Node environment variables to specify confidential API credentials
+ * while using an `.ini` file for values like `base_url` and `api_version`.
+ *
+ * **Note**: If the configuration file is specified but does **not** exist, an error will be thrown.
+ * No error is thrown if the fileName defaulted to `./looker.ini` inside the constructor and that
+ * file does not exist. In that case, configuration from environment variables will be required.
+ *
+ */
+export class NodeSettingsIniFile extends NodeSettingsEnv
+  implements IApiSettingsConfig {
   private readonly fileName!: string
 
-  constructor(fileName: string = './looker.ini', section?: string) {
-    if (fs.existsSync(fileName)) {
-      super(fs.readFileSync(fileName, 'utf-8'), section)
+  constructor(fileName: string = '', section?: string) {
+    if (fileName && !fs.existsSync(fileName)) {
+      throw sdkError({message: `File ${fileName} was not found`})
     }
+    // default fileName to looker.ini
+    fileName = fileName || './looker.ini'
+    const settings = ValueSettings(readIniConfig(fileName, section))
+    super(settings, section)
     this.fileName = fileName
   }
 
   /**
-   * Read an INI file section and return it as a generic keyed collection
+   * Read a configuration section and return it as a generic keyed collection
+   * If the configuration file doesn't exist, environment variables will be used for the values
+   * Environment variables, if set, also override the configuration file values
    * @param section {string} Name of Ini section to read. Optional. Defaults to first section.
+   *
    */
-  readIni(section?: string): IApiSection {
-    if (fs.existsSync(this.fileName)) {
-      return ApiConfigSection(fs.readFileSync(this.fileName, 'utf-8'), section)
-    }
-    return ApiConfigSection('')
+  readConfig(section?: string): IApiSection {
+    return readIniConfig(this.fileName, section)
   }
 }
