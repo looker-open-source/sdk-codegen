@@ -32,6 +32,7 @@ import * as yaml from 'js-yaml'
 import { defaultTimeout } from './transport'
 import { boolDefault, utf8 } from './constants'
 import {
+  IApiSettings,
   strLookerApiVersion,
   strLookerBaseUrl,
   strLookerClientId,
@@ -107,7 +108,7 @@ timeout=30
 
   describe('NodeSettingsEnv', () => {
     const section = ApiConfig(fs.readFileSync(localIni, utf8))['Looker']
-    const verify_ssl = boolDefault(section['verify_ssl'], false).toString()
+    const verifySsl = boolDefault(section['verify_ssl'], false).toString()
     beforeAll(() => {
       // populate environment variables
       process.env[strLookerTimeout] = section['timeout'] || defaultTimeout.toString()
@@ -115,7 +116,7 @@ timeout=30
       process.env[strLookerClientSecret] = section['client_secret']
       process.env[strLookerBaseUrl] = section['base_url']
       process.env[strLookerApiVersion] = section['api_version'] || '3.1'
-      process.env[strLookerVerifySsl] = verify_ssl.toString()
+      process.env[strLookerVerifySsl] = verifySsl.toString()
     })
 
     afterAll( () => {
@@ -144,6 +145,17 @@ timeout=30
       expect(settings.verify_ssl).toEqual(false)
     })
 
+    it('partial INI uses environment variables', () => {
+      const settings = new NodeSettingsEnv({base_url: section['base_url']} as IApiSettings)
+      expect(settings.api_version).toEqual('3.1')
+      expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
+      expect(settings.timeout).toEqual(31)
+      expect(settings.verify_ssl).toEqual(false)
+      const config = settings.readConfig()
+      expect(config['client_id']).toBeDefined()
+      expect(config['client_secret']).toBeDefined()
+    })
+
     it('environment variables override ini values', () => {
       process.env[strLookerTimeout] = '66'
       process.env[strLookerVerifySsl] = '1'
@@ -153,7 +165,7 @@ timeout=30
       expect(settings.timeout).toEqual(66)
       expect(settings.verify_ssl).toEqual(true)
       process.env[strLookerTimeout] = section['timeout'] || defaultTimeout.toString()
-      process.env[strLookerVerifySsl] = verify_ssl.toString()
+      process.env[strLookerVerifySsl] = verifySsl.toString()
     })
   })
 

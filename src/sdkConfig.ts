@@ -25,18 +25,18 @@
 import * as ini from 'ini'
 import { readFileSync } from './utils'
 
-export interface SDKConfigProps {
+export interface ISDKConfigProps {
   api_version: string
   base_url: string
   client_id: string
   client_secret: string
 }
 
-export interface SDKConfigSection {
-  [key: string]: SDKConfigProps
+export interface ISDKConfigSection {
+  [key: string]: ISDKConfigProps
 }
 
 export const SDKConfig = (fileName = './looker.ini') => {
-  const config = ini.parse(readFileSync(fileName)) as SDKConfigSection
+  const config = ini.parse(readFileSync(fileName)) as ISDKConfigSection
   return config
 }

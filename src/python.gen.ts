@@ -112,7 +112,7 @@ export class PythonGen extends CodeGen {
   }
   // cattrs [un]structure hooks for model [de]serialization
   hooks: string[] = []
-  structure_hook: string = 'structure_hook'
+  structureHook: string = 'structure_hook'
 
   // @ts-ignore
   methodsPrologue = (indent: string) => `
@@ -156,7 +156,7 @@ DelimSequence = model.DelimSequence
 import functools  # noqa:E402
 from typing import ForwardRef  # type: ignore  # noqa:E402
 
-${this.structure_hook} = functools.partial(sr.structure_hook, globals())  # type: ignore
+${this.structureHook} = functools.partial(sr.structure_hook, globals())  # type: ignore
 ${this.hooks.join('\n')}
 `
 
@@ -289,7 +289,7 @@ ${this.hooks.join('\n')}
     if (!current) {
       delimiter = ''
     // Caller manually inserted delimiter followed by inline comment
-    } else if (args.match(/,  #/)) {
+    } else if (args.match(/, {2}#/)) {
       delimiter = this.argDelimiter.replace(',', '')
     }
     return `${args}${delimiter}${current}`
@@ -308,7 +308,7 @@ ${this.hooks.join('\n')}
     }
     const type = this.typeMapMethods(method.type)
     let returnType = this.methodReturnType(method)
-    if (returnType == `Union[${type.name}, bytes]`) {
+    if (returnType === `Union[${type.name}, bytes]`) {
       returnType = `${returnType},  # type: ignore`
     }
     result = this.argFill(result, returnType)
@@ -325,7 +325,7 @@ ${this.hooks.join('\n')}
       assertTypeName = 'list'
     } else if (method.type instanceof HashType) {
       assertTypeName = 'dict'
-    } else if (assertTypeName == 'Union[str, bytes]') {
+    } else if (assertTypeName === 'Union[str, bytes]') {
       assertTypeName = '(str, bytes)'
     }
     let assertion = `${indent}assert `
@@ -382,7 +382,7 @@ ${this.hooks.join('\n')}
 
     const forwardRef = `ForwardRef("${type.name}")`
     this.hooks.push(
-      `cattr.register_structure_hook(\n${bump}${forwardRef},  # type: ignore\n${bump}${this.structure_hook}  # type:ignore\n)`
+      `cattr.register_structure_hook(\n${bump}${forwardRef},  # type: ignore\n${bump}${this.structureHook}  # type:ignore\n)`
     )
     return `\n` +
       `${indent}@attr.s(${attrsArgs})\n` +
@@ -434,9 +434,9 @@ ${this.hooks.join('\n')}
     }
     if (type.name) {
       let name: string
-      if (format == 'models') {
+      if (format === 'models') {
         name = `"${type.name}"`
-      } else if (format == 'methods') {
+      } else if (format === 'methods') {
         name = `models.${type.name}`
       } else {
         throw new Error('format must be "models" or "methods"')

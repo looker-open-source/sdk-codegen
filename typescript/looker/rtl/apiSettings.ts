@@ -125,7 +125,7 @@ export class ApiSettings implements IApiSettings {
         : this.verify_ssl
     this.timeout =
       'timeout' in settings
-        ? parseInt(settings.timeout!.toString())
+        ? parseInt(settings.timeout!.toString(), 10)
         : this.timeout
     if (!this.isConfigured()) {
       throw new Error(strBadConfiguration)

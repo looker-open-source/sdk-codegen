@@ -25,14 +25,14 @@
  */
 
 import { Languages, IGeneratorSpec as LanguageSpec } from './languages'
-import { SDKConfigProps, SDKConfig } from './sdkConfig'
+import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { log, quit, run } from './utils'
 import { logConvert } from './convert'
 
 // TODO replace with sdkGen.ts and remove `yarn sdk` command
 // TODO deprecated. This is using the legacy code generator
 // perform the generation for specific API version, configuration, and language
-const generate = async (fileName: string, spec: LanguageSpec, props: SDKConfigProps) => {
+const generate = async (fileName: string, spec: LanguageSpec, props: ISDKConfigProps) => {
   const path = spec.path ? spec.path : spec.language
   const language = spec.legacy ? spec.legacy : spec.language
   const apiPath = `./api/${props.api_version}/${path}`
@@ -41,7 +41,7 @@ const generate = async (fileName: string, spec: LanguageSpec, props: SDKConfigPr
 }
 
 // legacy all languages for the specified configuration
-const runConfig = async (name: string, props: SDKConfigProps) => {
+const runConfig = async (name: string, props: ISDKConfigProps) => {
   log(`processing ${name} configuration ...`)
 
   const openApiFile = await logConvert(name, props)

@@ -23,7 +23,6 @@
  */
 
 import * as OAS from 'openapi3-ts'
-import { OperationObject } from 'openapi3-ts'
 import md5 from 'blueimp-md5'
 import { camelCase, readFileSync } from './utils'
 import { HttpMethod, ResponseMode, responseMode, StatusCode } from '../typescript/looker/rtl/transport'
@@ -182,7 +181,7 @@ export class Parameter implements IParameter {
     this.type = type
     this.description = param.description || ''
     if ('in' in param) {
-      this.location = (param as OAS.ParameterObject).in
+      this.location = param.in
     } else {
       this.location = (param as Partial<IParameter>).location || strBody
     }
@@ -855,7 +854,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return responses
   }
 
-  private methodParameters(schema: OperationObject, endpoint: string, httpMethod: HttpMethod): IParameter[] {
+  private methodParameters(schema: OAS.OperationObject, endpoint: string, httpMethod: HttpMethod): IParameter[] {
     const params: IParameter[] = []
     if (schema.parameters) {
       const swaggerParams = this.swagger.paths[endpoint][httpMethod.toLowerCase()]['parameters']

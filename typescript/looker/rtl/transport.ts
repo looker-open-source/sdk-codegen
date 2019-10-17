@@ -268,18 +268,17 @@ export function responseMode(contentType: string) {
 
 /**
  * Does this content type have a UTF-8 charset?
- * @param {string} contentType
- * @returns {RegExpMatchArray | null}
+ * @param contentType
+ * @returns match if it exists
  */
 export function isUtf8(contentType: string) {
   return contentType.match(/;.*\bcharset\b=\butf-8\b/i)
 }
 
-/** constructs the path argument including any optional query parameters
- @param {string} path the base path of the request
-
- @param {[key: string]: string} obj optional collection of query parameters to encode and append to the path
-
+/**
+ * constructs the path argument including any optional query parameters
+ * @param path the base path of the request
+ * @param obj optional collection of query parameters to encode and append to the path
  */
 export function addQueryParams(path: string, obj?: { [key: string]: string }) {
   if (!obj) {
