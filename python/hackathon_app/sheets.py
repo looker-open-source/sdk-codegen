@@ -1,11 +1,10 @@
-from google.oauth2 import service_account  # type: ignore
-from googleapiclient import discovery  # type: ignore
-
 from typing import cast, Dict, Mapping, Optional, Union, Sequence
+import datetime
 
 import attr
 import cattr
-import datetime
+from google.oauth2 import service_account  # type: ignore
+from googleapiclient import discovery  # type: ignore
 
 # TODO: add error handling. Isolate it around unstructure and the client
 
