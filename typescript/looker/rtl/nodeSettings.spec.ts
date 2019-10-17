@@ -24,12 +24,20 @@
 
 import {
   ApiConfig,
-  NodeSettings,
+  NodeSettings, NodeSettingsEnv,
   NodeSettingsIniFile,
 } from './nodeSettings'
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
 import { defaultTimeout } from './transport'
+import { boolDefault, utf8 } from './constants'
+import {
+  strLookerApiVersion,
+  strLookerBaseUrl,
+  strLookerClientId,
+  strLookerClientSecret,
+  strLookerTimeout, strLookerVerifySsl,
+} from './apiSettings'
 
 // TODO create destructurable function for test path resolution
 const dataFile = 'test/data.yml'
@@ -97,6 +105,58 @@ timeout=30
     })
   })
 
+  describe('NodeSettingsEnv', () => {
+    const section = ApiConfig(fs.readFileSync(localIni, utf8))['Looker']
+    const verify_ssl = boolDefault(section['verify_ssl'], false).toString()
+    beforeAll(() => {
+      // populate environment variables
+      process.env[strLookerTimeout] = section['timeout'] || defaultTimeout.toString()
+      process.env[strLookerClientId] = section['client_id']
+      process.env[strLookerClientSecret] = section['client_secret']
+      process.env[strLookerBaseUrl] = section['base_url']
+      process.env[strLookerApiVersion] = section['api_version'] || '3.1'
+      process.env[strLookerVerifySsl] = verify_ssl.toString()
+    })
+
+    afterAll( () => {
+      // reset environment variables
+      delete process.env[strLookerTimeout]
+      delete process.env[strLookerClientId]
+      delete process.env[strLookerClientSecret]
+      delete process.env[strLookerBaseUrl]
+      delete process.env[strLookerApiVersion]
+      delete process.env[strLookerVerifySsl]
+    })
+
+    it('settings are retrieved from environment variables', () => {
+      const settings = new NodeSettingsEnv('')
+      expect(settings.api_version).toEqual('3.1')
+      expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
+      expect(settings.timeout).toEqual(31)
+      expect(settings.verify_ssl).toEqual(false)
+    })
+
+    it('empty file name uses environment variables', () => {
+      const settings = new NodeSettingsIniFile('')
+      expect(settings.api_version).toEqual('3.1')
+      expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
+      expect(settings.timeout).toEqual(31)
+      expect(settings.verify_ssl).toEqual(false)
+    })
+
+    it('environment variables override ini values', () => {
+      process.env[strLookerTimeout] = '66'
+      process.env[strLookerVerifySsl] = '1'
+      const settings = new NodeSettingsIniFile(localIni)
+      expect(settings.api_version).toEqual('3.1')
+      expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
+      expect(settings.timeout).toEqual(66)
+      expect(settings.verify_ssl).toEqual(true)
+      process.env[strLookerTimeout] = section['timeout'] || defaultTimeout.toString()
+      process.env[strLookerVerifySsl] = verify_ssl.toString()
+    })
+  })
+
   describe('NodeSettingsIniFile', () => {
     it('settings default to the first section', () => {
       const settings = new NodeSettingsIniFile(localIni)
@@ -123,6 +183,12 @@ timeout=30
       expect(
         () => new NodeSettingsIniFile(localIni, 'NotAGoodLookForYou'),
       ).toThrow(/No section named "NotAGoodLookForYou"/)
+    })
+
+    it('fails with a bad file name', () => {
+      expect(
+        () => new NodeSettingsIniFile('missing.ini', 'NotAGoodLookForYou'),
+      ).toThrow(/File missing.ini was not found/)
     })
   })
 })

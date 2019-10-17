@@ -25,13 +25,13 @@
 import * as fs from 'fs'
 import * as ini from 'ini'
 import {
+  ApiConfigMap,
   ApiSettings,
-  DefaultSettings,
   IApiSettings,
-  strLookerApiVersion,
-  strLookerBaseUrl, strLookerClientId, strLookerClientSecret, strLookerTimeout, strLookerVerifySsl,
   ValueSettings,
 } from './apiSettings'
+import { utf8 } from './constants'
+import { sdkError } from './transport'
 
 export interface IApiSection {
   [key: string]: string;
@@ -87,20 +87,42 @@ export class NodeSettings extends ApiSettings {
 }
 
 const readEnvConfig = () => {
-  const defaults = DefaultSettings()
-  return {
-    [strLookerApiVersion]: process.env[strLookerApiVersion] || defaults.api_version,
-    [strLookerBaseUrl]: process.env[strLookerBaseUrl] || defaults.base_url,
-    [strLookerVerifySsl]: process.env[strLookerVerifySsl] || defaults.verify_ssl.toString(),
-    [strLookerTimeout]: process.env[strLookerTimeout] || defaults.timeout.toString(),
-    [strLookerClientId]: process.env[strLookerClientId] || '',
-    [strLookerClientSecret]: process.env[strLookerClientSecret] || '',
+  let values : IApiSection = {}
+  Object.keys(ApiConfigMap).forEach(key => {
+    const envKey = ApiConfigMap[key]
+    if (process.env[envKey] !== undefined) {
+      // map environment variable keys to config variable keys
+      values[key] = process.env[envKey]!
+    }
+  })
+  return values
+}
+
+const readIniConfig = (fileName: string, section?: string) => {
+  // get environment variables
+  const config = readEnvConfig()
+  if (fileName && fs.existsSync(fileName)) {
+    const values = ApiConfigSection(fs.readFileSync(fileName, utf8), section)
+    // override any config file settings with environment values if the environment value is set
+    Object.keys(values).forEach(key => {
+      config[key] = config[key] || values[key]
+    })
   }
+  return config
 }
 
 export class NodeSettingsEnv extends ApiSettings {
-  constructor() {
-    const settings = ValueSettings(readEnvConfig())
+  constructor(contents?: string | IApiSettings, section?: string) {
+    let settings
+    if (contents) {
+      if (typeof contents === 'string') {
+        settings = ValueSettings(ApiConfigSection(contents, section))
+      } else {
+        settings = contents
+      }
+    } else {
+      settings = ValueSettings(readEnvConfig())
+    }
     super(settings)
   }
 
@@ -109,32 +131,43 @@ export class NodeSettingsEnv extends ApiSettings {
     return readEnvConfig()
   }
 }
+
 /**
  * Example class that reads a configuration from a file in node
  * @class NodeSettingsIniFile
  *
- * Warning: INI files storing credentials should be secured in the run-time environment, and
+ * If `fileName` is not specified in the constructor, the default file name is `./looker.ini`
+ *
+ * **Warning**: INI files storing credentials should be secured in the run-time environment, and
  * ignored by version control systems so credentials never get checked in to source code repositories
+ *
+ * **Note**: If the configuration file is specified but does **not** exist, an error will be thrown.
+ * No error is thrown if the fileName defaulted to `./looker.ini` inside the constructor
+ *
  */
-export class NodeSettingsIniFile extends NodeSettings
+export class NodeSettingsIniFile extends NodeSettingsEnv
   implements IApiSettingsConfig {
   private readonly fileName!: string
 
-  constructor(fileName: string = './looker.ini', section?: string) {
-    if (fs.existsSync(fileName)) {
-      super(fs.readFileSync(fileName, 'utf-8'), section)
+  constructor(fileName: string = '', section?: string) {
+    if (fileName && !fs.existsSync(fileName)) {
+      throw sdkError({message: `File ${fileName} was not found`})
     }
+    // default fileName to looker.ini
+    fileName = fileName || './looker.ini'
+    const settings = ValueSettings(readIniConfig(fileName, section))
+    super(settings, section)
     this.fileName = fileName
   }
 
   /**
    * Read a configuration section and return it as a generic keyed collection
+   * If the configuration file doesn't exist, environment variables will be used for the values
+   * Environment variables, if set, also override the configuration file values
    * @param section {string} Name of Ini section to read. Optional. Defaults to first section.
+   *
    */
   readConfig(section?: string): IApiSection {
-    if (fs.existsSync(this.fileName)) {
-      return ApiConfigSection(fs.readFileSync(this.fileName, 'utf-8'), section)
-    }
-    return ApiConfigSection('')
+    return readIniConfig(this.fileName, section)
   }
 }

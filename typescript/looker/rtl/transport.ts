@@ -236,6 +236,7 @@ export type Authenticator = (init: any) => any;
 
 /** Interface for API transport values */
 export interface ITransportSettings {
+  [key:string] : any,
   /** base URL of host address */
   base_url: string;
   /** api version */

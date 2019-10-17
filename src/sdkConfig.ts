@@ -22,9 +22,8 @@
  * THE SOFTWARE.
  */
 
-import * as fs from 'fs'
 import * as ini from 'ini'
-import { utf8 } from './utils'
+import { readFileSync } from './utils'
 
 export interface SDKConfigProps {
   api_version: string
@@ -38,6 +37,6 @@ export interface SDKConfigSection {
 }
 
 export const SDKConfig = (fileName = './looker.ini') => {
-  const config = ini.parse(fs.readFileSync(fileName, utf8)) as SDKConfigSection
+  const config = ini.parse(readFileSync(fileName)) as SDKConfigSection
   return config
 }

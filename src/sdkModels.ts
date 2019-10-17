@@ -24,9 +24,8 @@
 
 import * as OAS from 'openapi3-ts'
 import { OperationObject } from 'openapi3-ts'
-import * as fs from 'fs'
 import md5 from 'blueimp-md5'
-import { camelCase, utf8 } from './utils'
+import { camelCase, readFileSync } from './utils'
 import { HttpMethod, ResponseMode, responseMode, StatusCode } from '../typescript/looker/rtl/transport'
 import { IVersionInfo } from './codeGen'
 
@@ -661,8 +660,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
   }
 
   static fromFile(specFile: string, swaggerFile: string): ApiModel {
-    const specContent = fs.readFileSync(specFile, utf8)
-    const swaggerContent = fs.readFileSync(swaggerFile, utf8)
+    const specContent = readFileSync(specFile)
+    const swaggerContent = readFileSync(swaggerFile)
     return this.fromString(specContent, swaggerContent)
   }
 

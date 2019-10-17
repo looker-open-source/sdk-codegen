@@ -36,8 +36,7 @@ import * as fs from 'fs'
 import { ApiConfig, NodeSettingsEnv, NodeSettingsIniFile } from '../rtl/nodeSettings'
 import { DelimArray } from '../rtl/delimArray'
 import { Readable } from 'readable-stream'
-import { isFileSync, utf8 } from '../../../src/utils'
-import { isTrue } from '../rtl/constants'
+import { boolDefault, utf8 } from '../rtl/constants'
 import {
   strLookerApiVersion,
   strLookerBaseUrl,
@@ -51,7 +50,7 @@ import { LookerNodeSDK } from '../rtl/nodeSdk'
 const dataFile = 'test/data.yml'
 // slightly hackish data path determination for tests
 const root = fs.existsSync(dataFile) ? '' : '../../'
-const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, 'utf-8'))
+const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, utf8))
 const localIni = `${root}${testData['iniFile']}`
 const users: Partial<IUser>[] = testData['users']
 const queries: Partial<IQuery>[] = testData['queries']
@@ -626,10 +625,10 @@ describe('LookerNodeSDK', () => {
                     .on('finish', resolve)
                 })
               }, request)
-              expect(isFileSync(csvFile)).toEqual(true)
+              expect(fs.existsSync(csvFile)).toEqual(true)
               const contents = fs.readFileSync(csvFile, utf8)
               fs.unlinkSync(csvFile)
-              expect(isFileSync(csvFile)).toEqual(false)
+              expect(fs.existsSync(csvFile)).toEqual(false)
               expect(contents).toEqual(csv)
             } catch (e) {
               throw e
@@ -830,7 +829,7 @@ describe('LookerNodeSDK', () => {
   describe('Node environment', () => {
     beforeAll(() => {
       const section = ApiConfig(fs.readFileSync(localIni, utf8))['Looker']
-      const verify_ssl = isTrue(section['verify_ssl'] || 'false')
+      const verify_ssl = boolDefault(section['verify_ssl'], false).toString()
       // populate environment variables
       process.env[strLookerTimeout] = section['timeout'] || defaultTimeout.toString()
       process.env[strLookerClientId] = section['client_id']

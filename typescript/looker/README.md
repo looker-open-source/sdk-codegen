@@ -158,11 +158,11 @@ Environment variables can be used for the Node version of the Typescript SDK.
 
 | Variable name | Description |
 | ------------- | ----------- |
-| LOOKERSDK_BASE_URL | like `https://my.looker.com:19999`. No default value. |
-| LOOKERSDK_API_VERSION | version of the Looker API to use. Allowed values are `3.1` and `3.0`. `3.1` is strongly recommended, and `3.0` won't work with this version of the SDK. |
-| LOOKERSDK_VERIFY_SSL | `true` or `1` (case insensitive) to enable. Any other value is `false`. Defaults to `true` if not set. |
+| LOOKERSDK_BASE_URL | A URL like `https://my.looker.com:19999`. No default value. |
+| LOOKERSDK_API_VERSION | Version of the Looker API to use. Use `3.1` for now, which is the default and used to produce this SDK. |
+| LOOKERSDK_VERIFY_SSL | `true`, `t`, `yes`, `y`, or `1` (case insensitive) to enable. Any other value is treated as `false`. Defaults to `true` if not set. |
 | LOOKERSDK_TIMEOUT | Request timeout in seconds. Defaults to `120` for Node. |
-| LOOKERSDK_CLIENT_ID | API3 credentials `client_id`. This and `client_secret` must be provided in some fashion to the Node SDK or no calls to the API will be authorized. |
+| LOOKERSDK_CLIENT_ID | API3 credentials `client_id`. This and `client_secret` must be provided in some fashion to the Node SDK, or no calls to the API will be authorized. No default value. |
 | LOOKERSDK_CLIENT_SECRET | API3 credentials `client_secret`. No default value. |
 
 Once the desired environment variables are set, the following code is all that's required to initialize the Looker SDK and retrieve the API credential's `User` information.
@@ -170,7 +170,6 @@ Once the desired environment variables are set, the following code is all that's
 ```typescript
 const sdk = LookerNodeSDK.createClient(new NodeSettingsEnv())
 const me = await sdk.ok(sdk.me())
-
 ```
 
 ## Additional examples

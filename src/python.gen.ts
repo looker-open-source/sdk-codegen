@@ -38,7 +38,8 @@ import {
 } from './sdkModels'
 import { CodeGen, warnEditing } from './codeGen'
 import * as fs from 'fs'
-import { run, warn, isFileSync, utf8, success } from './utils'
+import { run, warn, isFileSync, success, readFileSync } from './utils'
+import { utf8 } from '../typescript/looker/rtl/constants'
 
 export class PythonGen extends CodeGen {
   codePath = './python/'
@@ -403,7 +404,7 @@ ${this.hooks.join('\n')}
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
-      let content = fs.readFileSync(stampFile, utf8)
+      let content = readFileSync(stampFile)
       const lookerPattern = /looker_version = ['"].*['"]/i
       const apiPattern = /api_version = ['"].*['"]/i
       const envPattern = /environment_prefix = ['"].*['"]/i

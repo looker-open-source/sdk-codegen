@@ -35,14 +35,13 @@ import {
   strLookerVerifySsl,
 } from './apiSettings'
 import { defaultTimeout } from './transport'
-import { isTrue } from './constants'
-import { utf8 } from '../../../src/utils'
+import { boolDefault, utf8 } from './constants'
 
 // TODO create destructurable function for test path resolution
 const dataFile = 'test/data.yml'
 // slightly hackish data path determination for tests
 const root = fs.existsSync(dataFile) ? '' : '../../'
-const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, 'utf-8'))
+const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, utf8))
 const localIni = `${root}${testData['iniFile']}`
 
 describe('NodeSession', () => {
@@ -82,7 +81,7 @@ describe('NodeSession', () => {
   describe('environmental configuration', () => {
     it('no INI file', async () => {
       const section = ApiConfig(fs.readFileSync(localIni, utf8))['Looker']
-      const verify_ssl = isTrue(section['verify_ssl'] || 'false')
+      const verify_ssl = boolDefault(section['verify_ssl'], false).toString()
       // populate environment variables
       process.env[strLookerTimeout] = section['timeout'] || defaultTimeout.toString()
       process.env[strLookerClientId] = section['client_id']
@@ -95,7 +94,7 @@ describe('NodeSession', () => {
       expect(settings.base_url).toEqual(section['base_url'])
       expect(settings.api_version).toEqual(section['api_version'] || '3.1')
       expect(settings.timeout.toString()).toEqual(section['timeout'] || defaultTimeout.toString())
-      expect(settings.verify_ssl).toEqual(verify_ssl)
+      expect(settings.verify_ssl.toString()).toEqual(verify_ssl)
 
       const session = new NodeSession(settings, transport)
       expect(session.isAuthenticated()).toEqual(false)
