@@ -24,7 +24,10 @@
 
 import Foundation
 
-class BaseTransport /*: ITransport */ {
+//class BaseTransport : ITransport {
+// TODO why doesn't this implementation satisfy ITransport?!?!?
+class BaseTransport {
+
     let session = URLSession.shared
     var apiPath = ""
     var options: ITransportSettings
@@ -34,39 +37,42 @@ class BaseTransport /*: ITransport */ {
         self.apiPath = "\(options.base_url!)/api/\(options.api_version!)"
     }
     
-//    func request<TSuccess, TError> (
-//        _ method: HttpMethod,
-//        _ path: String,
-//        _ queryParams: Any?,
-//        _ body: Any?,
-//        _ authenticator: Authenticator?,
-//        _ options: ITransportSettings?
-//    ) throws -> SDKResponse<TSuccess, TError> {
-//        let req = self.initRequest(method, path, queryParams, body, authenticator, options)
-//        if (req == nil) {
-//            return (type: "sdk_error", message: "The SDK call failed. Invalid properties for request \(method.rawValue) \(path).")
-//        }
-//        var result: SDKResponse<TSuccess, TError>
-//        self.session.dataTask(with: req!) { (data, response, error) in
-//            if let error = error as NSError? {
-//                NSLog("task transport error %@ / %d", error.domain, error.code)
-//                return
-//            }
-//            let response = response as! HTTPURLResponse
-//            let contentType = response.allHeaderFields["content-type"] as! String
-//            let parsed = parseResponse(contentType, data)
-//            if (self.ok(response)) {
-//                result.ok = true
-//                result.value = parsed
-//            } else {
-//                result.ok = false
-//                result.error = parsed
-//            }
-//            let data = data!
-////            NSLog("task finished with status %d, bytes %d", response.statusCode, data.count)
-//        }.resume()
-//        return result
-//    }
+    func request<TSuccess, TError> (
+        _ method: HttpMethod,
+        _ path: String,
+        _ queryParams: Any?,
+        _ body: Any?,
+        _ authenticator: Authenticator?,
+        _ options: ITransportSettings?
+    ) throws -> SDKResponse<TSuccess, TError> {
+        let req = self.initRequest(method, path, queryParams, body, authenticator, options)
+        if (req == nil) {
+            let err: TError = SDKError("The SDK call failed. Invalid properties for request \(method.rawValue) \(path).") as! TError
+            return SDKResponse<TSuccess, TError>(error: err)
+        }
+        var ok: Bool = false
+        var success: TSuccess? = nil
+        var fail: TError? = nil
+        self.session.dataTask(with: req!) { (data, response, error) in
+            if let error = error as NSError? {
+                NSLog("task transport error %@ / %d", error.domain, error.code)
+                return
+            }
+            let response = response as! HTTPURLResponse
+            let contentType = response.allHeaderFields["content-type"] as! String
+            let parsed = parseResponse(contentType, data)
+            if (self.ok(response)) {
+                ok = true
+                success = parsed as? TSuccess
+            } else {
+                ok = false
+                fail = parsed as? TError
+            }
+        }.resume()
+        return ok
+            ? SDKResponse<TSuccess,TError>(success: success)
+            : SDKResponse<TSuccess,TError>(error: fail)
+    }
     
     private func initRequest(
         _ method: HttpMethod,

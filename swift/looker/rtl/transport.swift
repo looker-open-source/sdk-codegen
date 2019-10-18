@@ -110,16 +110,63 @@ protocol ISDKErrorResponse {
     var error: T { get set}
 }
 
-/** An error representing an issue in the SDK, like a network or parsing error. */
-protocol ISDKError {
+protocol ISDKError: LocalizedError {
     
-    var type: String { get } // "sdk_error"
-    var message: String { get set }
 }
 
-struct SDKResponse<TSuccess, TError> {
+/// Common ancestor for all error responses
+struct SDKError: ISDKError {
+    private var description: String?
+    private var reason: String?
+    private var suggestion: String?
+    private var help: String?
+    
+    init(_ description: String, reason: String? = "", suggestion: String? = "", help: String? = "") {
+        self.description = description
+        self.reason = reason
+        self.suggestion = suggestion
+        self.help = help
+    }
+    
+    /// A localized message describing the error
+    var errorDescription: String? { get { return self.description } }
+
+    /// A localized message describing the reason for the failure.
+    var failureReason: String? { get { return self.reason } }
+
+    /// A localized message describing how one might recover from the failure.
+    var recoverySuggestion: String? { get { return self.suggestion } }
+
+    /// A localized message providing "help" text if the user requests help.
+    var helpAnchor: String? { get { return self.help } }
+}
+
+struct SDKResponse<TSuccess, TError> where TError : ISDKError {
+    var ok: Bool
+    var value: TSuccess?
+    var error: TError?
+    
+    init(success: TSuccess?) {
+        self.ok = true
+        self.value = success
+    }
+    
+    init(error: TError?) {
+        self.ok = false
+        self.error = error
+    }
     
 }
+
+func SDKOk(response: SDKResponse<Any, SDKError>) throws -> Any {
+    if (response.ok) {
+        return response.value!
+    }
+    throw SdkError.error(response.error?.errorDescription ?? response.error.debugDescription)
+}
+
+//
+//}
 //typealias SDKResponse<TSuccess, TError> = ISDKSuccessResponse<TSuccess> | ISDKErrorResponse<TError | ISDKError>
 
 //protocol SDKResponse: ISDKSuccessResponse, ISDKErrorResponse {
