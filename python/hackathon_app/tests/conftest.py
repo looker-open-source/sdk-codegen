@@ -6,6 +6,8 @@ from google.oauth2 import service_account  # type: ignore
 from googleapiclient import discovery  # type: ignore
 import pytest  # type: ignore
 
+import sheets
+
 
 @pytest.fixture(scope="session", name="spreadsheet")
 def create_test_sheet(test_data, spreadsheet_client, drive_client):
@@ -22,7 +24,7 @@ def get_test_users(test_data):
     """Returns a list of dicts representing the users sheet"""
     users_sheet = test_data["sheets"][0]
     assert users_sheet["properties"]["title"] == "users"
-    return create_sheet_repr(users_sheet)
+    return create_sheet_repr(users_sheet, sheets.User)
 
 
 @pytest.fixture(name="test_hackathons")
@@ -30,7 +32,7 @@ def get_test_hackathons(test_data):
     """Returns a list of dicts representing the hackathons sheet"""
     hackathons_sheet = test_data["sheets"][1]
     assert hackathons_sheet["properties"]["title"] == "hackathons"
-    return create_sheet_repr(hackathons_sheet)
+    return create_sheet_repr(hackathons_sheet, sheets.Hackathon)
 
 
 @pytest.fixture(name="test_registrants")
@@ -38,17 +40,17 @@ def get_test_registrants(test_data):
     """Returns a list of dicts representing the registrations sheet"""
     registrations_sheet = test_data["sheets"][2]
     assert registrations_sheet["properties"]["title"] == "registrations"
-    return create_sheet_repr(registrations_sheet)
+    return create_sheet_repr(registrations_sheet, sheets.Registrant)
 
 
-def create_sheet_repr(sheet):
+def create_sheet_repr(sheet, klass):
     """Converts a JSON representation of a sheet into a list of dicts. Each element
     in the list represents a row in the sheet, where each cell value can be accessed
     using the cell header as a key
     """
     header = get_header(sheet)
     data = get_data(sheet)
-    result = [dict(zip(header, d)) for d in data]
+    result = [klass(**dict(zip(header, d))) for d in data]
     return result
 
 

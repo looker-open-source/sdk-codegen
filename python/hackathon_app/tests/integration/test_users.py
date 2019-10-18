@@ -22,25 +22,25 @@ def test_rows_returns_users(users: Users, test_users):
     user = all_users[0]
     expected = test_users[0]
     assert isinstance(user, User)
-    assert user.first_name == expected["first_name"]
-    assert user.last_name == expected["last_name"]
-    assert user.email == expected["email"]
+    assert user.first_name == expected.first_name
+    assert user.last_name == expected.last_name
+    assert user.email == expected.email
     assert user.date_created == datetime.datetime.strptime(
-        expected["date_created"], DATE_FORMAT
+        expected.date_created, DATE_FORMAT
     )
-    assert user.organization == expected["organization"]
-    assert user.tshirt_size == expected["tshirt_size"]
+    assert user.organization == expected.organization
+    assert user.tshirt_size == expected.tshirt_size
 
 
 def test_is_created_returns_true_for_existing_users(users: Users, test_users):
     """is_created(user) returns True if user already exists"""
     user = test_users[0]
     existing_user = User(
-        first_name=f"Updated {user['first_name']}",
-        last_name=f"Updated {user['last_name']}",
-        email=user["email"],
-        organization=f"Updated {user['organization']}",
-        tshirt_size=f"Updated {user['tshirt_size']}",
+        first_name=f"Updated {user.first_name}",
+        last_name=f"Updated {user.last_name}",
+        email=user.email,
+        organization=f"Updated {user.organization}",
+        tshirt_size=f"Updated {user.tshirt_size}",
     )
     result = users.is_created(existing_user)
     assert result
