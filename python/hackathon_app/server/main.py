@@ -3,16 +3,15 @@ from typing import Any
 
 import flask
 import flask_wtf  # type: ignore
-from looker_sdk import client
 import wtforms  # type: ignore
 from wtforms import validators
 
+# import looker
 import sheets
 
 
 app = flask.Flask(__name__)
 app.config.from_object("config")
-sdk = client.setup()
 
 
 class RegistrationForm(flask_wtf.FlaskForm):
@@ -70,10 +69,13 @@ def register() -> Any:
     if form.validate_on_submit():
         response = {"ok": True, "message": "Congratulations!"}
         hackathon = form.data["hackathon"]
-        user = sheets.User(
-            first_name=form.data["first_name"],
-            last_name=form.data["last_name"],
-            email=form.data["email"],
+        first_name = form.data["first_name"]
+        last_name = form.data["last_name"]
+        email = form.data["email"]
+        sheets_user = sheets.User(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
             organization=form.data["organization"],
             tshirt_size=form.data["tshirt_size"],
         )
@@ -82,9 +84,19 @@ def register() -> Any:
             cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
         )
         try:
-            sheets_client.register_user(hackathon=hackathon, user=user)
+            sheets_client.register_user(hackathon=hackathon, user=sheets_user)
         except sheets.SheetError:
             response = {"ok": False, "message": "There was a problem, try again later."}
+        # try:
+        #    looker.register_user(
+        #        hackathon=hackathon,
+        #        first_name=first_name,
+        #        last_name=last_name,
+        #        email=email,
+        #    )
+        # except looker.RegisterError:
+        #    # TODO: rollback sheets registration?
+        #    response = {"ok": False, "message": "There was a problem, try again later."}
     else:
         errors = {}
         for field, field_errors in form.errors.items():
