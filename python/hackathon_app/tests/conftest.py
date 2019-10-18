@@ -101,8 +101,9 @@ def drive_client(credentials):
 
 
 @pytest.fixture(scope="session")
-def credentials():
+def credentials() -> service_account.Credentials:
     google_creds = os.environ.get("GOOGLE_APPLICATION_CREDENTIAL_ENCODED")
+    assert google_creds
     with open("./google-creds.json", "wb") as f:
         f.write(base64.b64decode(google_creds))
     scopes = [
