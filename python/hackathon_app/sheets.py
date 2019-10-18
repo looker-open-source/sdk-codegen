@@ -89,7 +89,7 @@ class WhollySheet(Generic[TModel]):
                 body=body,
             ).execute()
         except (TypeError, AttributeError):
-            print("Oops. No go.")
+            raise SheetError("Could not insert row")
 
     def rows(self) -> Sequence[TModel]:
         """Retrieve rows from sheet"""
@@ -102,7 +102,7 @@ class WhollySheet(Generic[TModel]):
             # ignoring type (mypy bug?) "Name 'self.structure' is not defined"
             response = cattr.structure(data, Sequence[self.structure])  # type: ignore
         except (TypeError, AttributeError):
-            raise DeserializeError("Bad Data")
+            raise SheetError("Bad Data")
         return response
 
     def _convert_to_dict(self, data) -> Sequence[Mapping[str, str]]:
@@ -206,7 +206,7 @@ class Registrations(WhollySheet[Registrant]):
         super().insert(registrant)
 
 
-class DeserializeError(Exception):
+class SheetError(Exception):
     """Improperly formatted data to deserialize"""
 
 

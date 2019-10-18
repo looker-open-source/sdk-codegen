@@ -1,4 +1,5 @@
 import os
+from typing import Any
 
 import flask
 import flask_wtf  # type: ignore
@@ -50,7 +51,7 @@ def get_hackathons():
         spreadsheet_id=app.config["GOOGLE_SHEET_ID"],
         cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
     )
-    return flask.jsonify(sheets_client.get_hackathons())
+    return flask.jsonify([h.name for h in sheets_client.get_hackathons()])
 
 
 @app.route("/csrf")
@@ -64,11 +65,26 @@ def csrf():
 
 
 @app.route("/register", methods=["POST"])
-def register():
+def register() -> Any:
     form = RegistrationForm()
     if form.validate_on_submit():
         response = {"ok": True, "message": "Congratulations!"}
-        # pass form.data to sheets module and looker module
+        hackathon = form.data["hackathon"]
+        user = sheets.User(
+            first_name=form.data["first_name"],
+            last_name=form.data["last_name"],
+            email=form.data["email"],
+            organization=form.data["organization"],
+            tshirt_size=form.data["tshirt_size"],
+        )
+        sheets_client = sheets.Sheets(
+            spreadsheet_id=app.config["GOOGLE_SHEET_ID"],
+            cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
+        )
+        try:
+            sheets_client.register_user(hackathon=hackathon, user=user)
+        except sheets.SheetError:
+            response = {"ok": False, "message": "There was a problem, try again later."}
     else:
         errors = {}
         for field, field_errors in form.errors.items():
