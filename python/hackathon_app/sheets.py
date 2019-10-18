@@ -1,4 +1,14 @@
-from typing import cast, Dict, Mapping, Optional, Union, Sequence
+from typing import (
+    cast,
+    Dict,
+    Generic,
+    Mapping,
+    Optional,
+    Union,
+    Sequence,
+    Type,
+    TypeVar,
+)
 import datetime
 
 import attr
@@ -53,20 +63,22 @@ class Sheets:
             self.registrations.register(registrant)
 
 
-TStructure = Union[Sequence["Hackathon"], Sequence["User"], Sequence["Registrant"]]
+TModel = TypeVar("TModel")
 
 
-class WhollySheet:
-    def __init__(self, client, spreadsheet_id: str, sheet_name: str, structure):
+class WhollySheet(Generic[TModel]):
+    def __init__(
+        self, *, client, spreadsheet_id: str, sheet_name: str, structure: Type[TModel]
+    ):
         self.client = client
         self.spreadsheet_id = spreadsheet_id
         self.range = f"{sheet_name}!A1:end"
         self.structure = structure
 
-    def insert(self, data):
+    def insert(self, model: TModel):
         """Insert data as rows into sheet"""
         try:
-            serialized_ = cattr.unstructure(data)
+            serialized_ = cattr.unstructure(model)
             serialized = self._convert_to_list(serialized_)
             body = {"values": [serialized]}
             self.client.append(
@@ -79,7 +91,7 @@ class WhollySheet:
         except (TypeError, AttributeError):
             print("Oops. No go.")
 
-    def rows(self) -> TStructure:
+    def rows(self) -> Sequence[TModel]:
         """Retrieve rows from sheet"""
         try:
             response = self.client.get(
@@ -87,7 +99,8 @@ class WhollySheet:
             ).execute()
             rows = response["values"]
             data = self._convert_to_dict(rows)
-            response = cattr.structure(data, self.structure)
+            # ignoring type (mypy bug?) "Name 'self.structure' is not defined"
+            response = cattr.structure(data, Sequence[self.structure])  # type: ignore
         except (TypeError, AttributeError):
             raise DeserializeError("Bad Data")
         return response
@@ -117,9 +130,14 @@ class User:
     tshirt_size: str
 
 
-class Users(WhollySheet):
-    def __init__(self, client, spreadsheet_id):
-        super().__init__(client, spreadsheet_id, "users", Sequence[User])
+class Users(WhollySheet[User]):
+    def __init__(self, *, client, spreadsheet_id: str):
+        super().__init__(
+            client=client,
+            spreadsheet_id=spreadsheet_id,
+            sheet_name="users",
+            structure=User,
+        )
 
     def is_created(self, user: User) -> bool:
         """Checks if user already exists in users sheet"""
@@ -143,9 +161,14 @@ class Hackathon:
     duration_in_days: int
 
 
-class Hackathons(WhollySheet):
-    def __init__(self, client, spreadsheet_id):
-        super().__init__(client, spreadsheet_id, "hackathons", Sequence[Hackathon])
+class Hackathons(WhollySheet[Hackathon]):
+    def __init__(self, *, client, spreadsheet_id: str):
+        super().__init__(
+            client=client,
+            spreadsheet_id=spreadsheet_id,
+            sheet_name="hackathons",
+            structure=Hackathon,
+        )
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -156,9 +179,14 @@ class Registrant:
     attended: Optional[bool]
 
 
-class Registrations(WhollySheet):
-    def __init__(self, client, spreadsheet_id):
-        super().__init__(client, spreadsheet_id, "registrations", Sequence[Registrant])
+class Registrations(WhollySheet[Registrant]):
+    def __init__(self, *, client, spreadsheet_id: str):
+        super().__init__(
+            client=client,
+            spreadsheet_id=spreadsheet_id,
+            sheet_name="registrations",
+            structure=Registrant,
+        )
 
     def is_registered(self, registrant: Registrant) -> bool:
         """Check if registrant is already registerd"""
