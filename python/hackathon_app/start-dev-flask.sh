@@ -1,4 +1,5 @@
 set -e
+cd "$(dirname "$0")"
 ENV_LIST=./env.list
 if [ ! -f $ENV_LIST ]; then
 	echo "Please create env.list from env.list.sample"
