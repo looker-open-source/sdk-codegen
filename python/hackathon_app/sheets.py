@@ -49,7 +49,7 @@ class Sheets:
                 result.append(hackathon)
         return result
 
-    def register_user(self, hackathon: str, user: "User"):
+    def register_user(self, *, hackathon: str, user: "User"):
         """Register user to a hackathon"""
         if not self.users.is_created(user):
             self.users.create(user)
@@ -125,7 +125,7 @@ class User:
     first_name: str
     last_name: str
     email: str
-    date_created: Optional[datetime.datetime]
+    date_created: Optional[datetime.datetime] = None
     organization: str
     tshirt_size: str
 
@@ -144,12 +144,13 @@ class Users(WhollySheet[User]):
         users = super().rows()
         found = False
         for u in users:
-            if u == user:
+            if u.email == user.email:
                 found = True
         return found
 
     def create(self, user: User):
         """Insert user details in the users sheet"""
+        user.date_created = datetime.datetime.now()
         super().insert(user)
 
 
@@ -190,7 +191,7 @@ class Registrations(WhollySheet[Registrant]):
 
     def is_registered(self, registrant: Registrant) -> bool:
         """Check if registrant is already registerd"""
-        registrants = cast(Sequence[Registrant], super().rows())
+        registrants = super().rows()
         registered = False
         for r in registrants:
             if (
