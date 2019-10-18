@@ -1,4 +1,5 @@
 set -e
+cd "$(dirname "$0")"
 cd frontend
 yarn build
 cd ..

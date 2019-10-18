@@ -57,6 +57,7 @@ Note the sheet ID (from the URL) to use in the `env.list` file below.
 ### sheets api creds
 Create a GCP project:
 - enable Sheets api
+- enable Drive api
 - create a service account
 - go back to your spreadsheet and "share" it with the email address of the service account
 

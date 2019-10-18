@@ -1,10 +1,10 @@
+import base64
 import json
-import pytest  # type: ignore
+import os
 
 from google.oauth2 import service_account  # type: ignore
 from googleapiclient import discovery  # type: ignore
-
-# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import pytest  # type: ignore
 
 
 @pytest.fixture(scope="session", name="spreadsheet")
@@ -102,6 +102,9 @@ def drive_client(credentials):
 
 @pytest.fixture(scope="session")
 def credentials():
+    google_creds = os.environ.get("GOOGLE_APPLICATION_CREDENTIAL_ENCODED")
+    with open("./google-creds.json", "wb") as f:
+        f.write(base64.b64decode(google_creds))
     scopes = [
         "https://www.googleapis.com/auth/drive",
         "https://www.googleapis.com/auth/drive.file",
@@ -109,8 +112,8 @@ def credentials():
     ]
 
     credentials = service_account.Credentials.from_service_account_file(
-        "/Users/jax/Documents/sdk-examples/python/hackathon_app/tests/jaxdata-a93316beb3a0.json",
-        scopes=scopes,
+        "google-creds.json", scopes=scopes
     )
 
-    return credentials
+    yield credentials
+    os.remove("./google-creds.json")

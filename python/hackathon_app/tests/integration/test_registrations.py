@@ -10,7 +10,7 @@ DATE_FORMAT = "%m/%d/%Y"
 def instatiate_registrations(spreadsheet_client, spreadsheet):
     """Creates and returns an instance of Registrations"""
     client = spreadsheet_client.values()
-    return Registrations(client, spreadsheet["spreadsheetId"])
+    return Registrations(client=client, spreadsheet_id=spreadsheet["spreadsheetId"])
 
 
 def test_rows_returns_registrants(registrations: Registrations, test_registrants):
