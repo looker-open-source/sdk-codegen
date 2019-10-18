@@ -36,12 +36,11 @@ def test_is_created_returns_true_for_existing_users(users: Users, test_users):
     """is_created(user) returns True if user already exists"""
     user = test_users[0]
     existing_user = User(
-        first_name=user["first_name"],
-        last_name=user["last_name"],
+        first_name=f"Updated {user['first_name']}",
+        last_name=f"Updated {user['last_name']}",
         email=user["email"],
-        date_created=datetime.datetime.strptime(user["date_created"], DATE_FORMAT),
-        organization=user["organization"],
-        tshirt_size=user["tshirt_size"],
+        organization=f"Updated {user['organization']}",
+        tshirt_size=f"Updated {user['tshirt_size']}",
     )
     result = users.is_created(existing_user)
     assert result
@@ -53,7 +52,6 @@ def test_is_created_returns_false_for_new_users(users: Users):
         first_name="New",
         last_name="Registrant",
         email="newregistrant@newcompany.com",
-        date_created=generate_date(),
         organization="company",
         tshirt_size="M",
     )
@@ -67,7 +65,6 @@ def test_create_user(users: Users):
         first_name="Hundy",
         last_name="P",
         email="hundyp@company.com",
-        date_created=generate_date(),
         organization="company",
         tshirt_size="M",
     )

@@ -101,20 +101,26 @@ def drive_client(credentials):
 
 
 @pytest.fixture(scope="session")
-def credentials() -> service_account.Credentials:
-    google_creds = os.environ.get("GOOGLE_APPLICATION_CREDENTIAL_ENCODED")
-    assert google_creds
-    with open("./google-creds.json", "wb") as f:
-        f.write(base64.b64decode(google_creds))
+def credentials(cred_file) -> service_account.Credentials:
+
     scopes = [
         "https://www.googleapis.com/auth/drive",
         "https://www.googleapis.com/auth/drive.file",
         "https://www.googleapis.com/auth/spreadsheets",
     ]
-
     credentials = service_account.Credentials.from_service_account_file(
-        "google-creds.json", scopes=scopes
+        cred_file, scopes=scopes
     )
 
     yield credentials
     os.remove("./google-creds.json")
+
+
+@pytest.fixture(scope="session")
+def cred_file() -> str:
+    google_creds = os.environ.get("GOOGLE_APPLICATION_CREDENTIAL_ENCODED")
+    assert google_creds
+    file_name = "./google-creds.json"
+    with open(file_name, "wb") as f:
+        f.write(base64.b64decode(google_creds))
+    return "./google-creds.json"

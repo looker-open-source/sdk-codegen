@@ -22,7 +22,7 @@ from googleapiclient import discovery  # type: ignore
 class Sheets:
     """An API for manipulating the Google Sheet containing hackathon data."""
 
-    def __init__(self, spreadsheet_id: str, cred_file: str):
+    def __init__(self, *, spreadsheet_id: str, cred_file: str):
         scopes = [
             "https://www.googleapis.com/auth/drive",
             "https://www.googleapis.com/auth/drive.file",
