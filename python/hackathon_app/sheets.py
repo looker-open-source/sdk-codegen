@@ -26,9 +26,9 @@ class Sheets:
         service = discovery.build("sheets", "v4", credentials=credentials)
         client = service.spreadsheets().values()
         self.id = spreadsheet_id
-        self.hackathons = Hackathons(client, spreadsheet_id)
-        self.registrations = Registrations(client, spreadsheet_id)
-        self.users = Users(client, spreadsheet_id)
+        self.hackathons = Hackathons(client=client, spreadsheet_id=spreadsheet_id)
+        self.registrations = Registrations(client=client, spreadsheet_id=spreadsheet_id)
+        self.users = Users(client=client, spreadsheet_id=spreadsheet_id)
 
     def get_hackathons(self) -> Sequence["Hackathon"]:
         """Get names of active hackathons."""
@@ -76,7 +76,7 @@ class WhollySheet:
                 valueInputOption="RAW",
                 body=body,
             ).execute()
-        except:
+        except (TypeError, AttributeError):
             print("Oops. No go.")
 
     def rows(self) -> TStructure:

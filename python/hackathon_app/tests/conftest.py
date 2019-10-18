@@ -1,10 +1,10 @@
+import base64
 import json
-import pytest  # type: ignore
+import os
 
 from google.oauth2 import service_account  # type: ignore
 from googleapiclient import discovery  # type: ignore
-
-# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import pytest  # type: ignore
 
 
 @pytest.fixture(scope="session", name="spreadsheet")

@@ -10,7 +10,7 @@ DATE_FORMAT = "%m/%d/%Y"
 def instantiate_users(spreadsheet_client, spreadsheet):
     """Creates and returns an instance of Users"""
     client = spreadsheet_client.values()
-    return Users(client, spreadsheet["spreadsheetId"])
+    return Users(client=client, spreadsheet_id=spreadsheet["spreadsheetId"])
 
 
 def test_rows_returns_users(users: Users, test_users):
