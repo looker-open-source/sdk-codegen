@@ -71,10 +71,8 @@ def download_dashboard(
 
     result = sdk.render_task_results(task.id)
     fileName = f"{dashboard.title}.pdf"
-
-    buffer = bytearray(result)
     with open(fileName, "wb+") as f:
-        f.write(buffer)
+        f.write(result)
     print(f"Dashboard pdf saved to {fileName}")
 
 
