@@ -61,16 +61,24 @@ class BaseTransport {
         var ok: Bool = false
         var success: TSuccess? = nil
         var fail: TError? = nil
-        self.session.dataTask(with: req!) { data, response, error in
-            print(data as Any)
-            print(response as Any)
-            print(error as Any)
-            if let error = error as NSError? {
-                NSLog("task transport error %@ / %d", error.domain, error.code)
+        let s = URLSession.shared
+        let task = s.dataTask(with: req!) { data, response, error in
+            if let error = error {
+                print(error as Any)
+                ok = false
+                fail = SDKError(error.localizedDescription) as? TError
                 return
             }
+            guard let httpResponse = response as? HTTPURLResponse,
+                (200...299).contains(httpResponse.statusCode) else {
+                print(response as Any)
+                ok = false
+                fail = SDKError("\(response.debugDescription)") as? TError
+                return
+            }
+            print(data as Any)
             let response = response as! HTTPURLResponse
-            let contentType = response.allHeaderFields["content-type"] as! String
+            let contentType = response.mimeType!
             let parsed = parseResponse(contentType, data)
             if (self.ok(response)) {
                 ok = true
@@ -79,7 +87,8 @@ class BaseTransport {
                 ok = false
                 fail = parsed as? TError
             }
-        }.resume()
+        }
+        task.resume()
         return ok
             ? SDKResponse.success(success!)
             : SDKResponse.error(fail!)
