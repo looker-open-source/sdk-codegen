@@ -1,33 +1,33 @@
 /*
-* The MIT License (MIT)
-*
-* Copyright (c) 2019 Looker Data Sciences, Inc.
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in
-* all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-* THE SOFTWARE.
-*/
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2019 Looker Data Sciences, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 import Foundation
 
 //class BaseTransport : ITransport {
 // TODO why doesn't this implementation satisfy ITransport?!?!?
 class BaseTransport {
-
+    
     let session = URLSession.shared
     var apiPath = ""
     var options: ITransportSettings
@@ -45,15 +45,26 @@ class BaseTransport {
         _ authenticator: Authenticator?,
         _ options: ITransportSettings?
     ) throws -> SDKResponse<TSuccess, TError> {
-        let req = self.initRequest(method, path, queryParams, body, authenticator, options)
+        var settings = options
+        if (settings == nil) {
+            settings = self.options
+        } else {
+            settings?.headers = options?.headers ?? self.options.headers
+            settings?.timeout = options?.timeout ?? self.options.timeout
+            settings?.encoding = options?.encoding ?? self.options.encoding
+        }
+        let req = self.initRequest(method, path, queryParams, body, authenticator, settings)
         if (req == nil) {
-            let err: TError = SDKError("The SDK call failed. Invalid properties for request \(method.rawValue) \(path).") as! TError
-            return SDKResponse<TSuccess, TError>(error: err)
+            throw SDKError("The SDK call failed. Invalid properties for request \(method.rawValue) \(path)")
+            //            return SDKResponse.error(err)
         }
         var ok: Bool = false
         var success: TSuccess? = nil
         var fail: TError? = nil
-        self.session.dataTask(with: req!) { (data, response, error) in
+        self.session.dataTask(with: req!) { data, response, error in
+            print(data as Any)
+            print(response as Any)
+            print(error as Any)
             if let error = error as NSError? {
                 NSLog("task transport error %@ / %d", error.domain, error.code)
                 return
@@ -70,8 +81,8 @@ class BaseTransport {
             }
         }.resume()
         return ok
-            ? SDKResponse<TSuccess,TError>(success: success)
-            : SDKResponse<TSuccess,TError>(error: fail)
+            ? SDKResponse.success(success!)
+            : SDKResponse.error(fail!)
     }
     
     private func initRequest(
@@ -82,7 +93,8 @@ class BaseTransport {
         _ authenticator: Authenticator?,
         _ options: ITransportSettings?
     ) -> URLRequest? {
-        guard let requestPath = URL(string: (authenticator != nil) ? self.apiPath : (options?.base_url)!) else { return nil }
+        let fullPath = ((authenticator != nil) ? self.apiPath : (options?.base_url!)!) + path
+        let requestPath = URL(string: fullPath)!
         var req = URLRequest(
             url: requestPath,
             timeoutInterval: TimeInterval(options?.timeout ?? self.options.timeout!))
@@ -97,9 +109,9 @@ class BaseTransport {
     }
     
     private func ok(_ res: HTTPURLResponse) -> Bool {
-      return (200...299).contains(res.statusCode)
+        return (200...299).contains(res.statusCode)
     }
-
+    
 }
 
 // TODO add error handling
@@ -109,7 +121,7 @@ func parseResponse(_ contentType: String, _ data: Data?) -> Any {
     case .string:
         if (isJson(contentType)) {
             do {
-              let json = try JSONSerialization.jsonObject(with: data!, options: [])
+                let json = try JSONSerialization.jsonObject(with: data!, options: [])
                 return json
             } catch {
                 return "Error parsing JSON: \(error): \(data!)"
@@ -120,8 +132,8 @@ func parseResponse(_ contentType: String, _ data: Data?) -> Any {
             return dataString
         }
         
-//        if (!isUtf8(contentType)) {
-//        }
+        //        if (!isUtf8(contentType)) {
+    //        }
     case .binary:
         return data!
     case .unknown:

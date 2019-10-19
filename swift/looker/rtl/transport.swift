@@ -141,28 +141,39 @@ struct SDKError: ISDKError {
     var helpAnchor: String? { get { return self.help } }
 }
 
-struct SDKResponse<TSuccess, TError> where TError : ISDKError {
-    var ok: Bool
-    var value: TSuccess?
-    var error: TError?
-    
-    init(success: TSuccess?) {
-        self.ok = true
-        self.value = success
-    }
-    
-    init(error: TError?) {
-        self.ok = false
-        self.error = error
-    }
-    
+//struct SDKResponse<TSuccess, TError> where TError : ISDKError {
+//    var ok: Bool
+//    var value: TSuccess?
+//    var error: TError?
+//
+//    init(success: TSuccess?) {
+//        self.ok = true
+//        self.value = success
+//    }
+//
+//    init(error: TError?) {
+//        self.ok = false
+//        self.error = error
+//    }
+//
+//}
+
+enum SDKResponse<TSuccess, TError> where TError: ISDKError {
+    case success(TSuccess)
+    case error(TError)
 }
 
-func SDKOk(response: SDKResponse<Any, SDKError>) throws -> Any {
-    if (response.ok) {
-        return response.value!
+func SDKOk(_ response: SDKResponse<Any, SDKError>) throws -> Any {
+    switch response {
+    case .success(let response):
+        return response
+    case .error(let error):
+        throw SdkError.error(error.errorDescription
+            ?? error.failureReason
+            ?? error.recoverySuggestion
+            ?? error.helpAnchor
+            ?? "Unknown SDK Error")
     }
-    throw SdkError.error(response.error?.errorDescription ?? response.error.debugDescription)
 }
 
 //
