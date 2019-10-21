@@ -58,7 +58,7 @@ class Session:
         return self.ret_val
 
 
-@pytest.fixture  # type: ignore
+@pytest.fixture
 def settings():
     return transport.TransportSettings(
         base_url="/some/path", api_version="3.1", headers=None, verify_ssl=True
@@ -96,7 +96,7 @@ parametrize = [
 ]
 
 
-@pytest.mark.parametrize(  # type: ignore
+@pytest.mark.parametrize(
     "headers, expected_encoding, expected_response_mode", parametrize
 )
 def test_request_ok(
@@ -121,7 +121,7 @@ def test_request_ok(
     assert resp.encoding == expected_encoding
 
 
-@pytest.mark.parametrize(  # type: ignore
+@pytest.mark.parametrize(
     "headers, expected_encoding, expected_response_mode", parametrize
 )
 def test_request_not_ok(

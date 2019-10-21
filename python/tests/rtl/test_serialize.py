@@ -80,13 +80,9 @@ class WriteChildModel(ml.Model):
         self.import_ = import_
 
 
-structure_hook = functools.partial(sr.structure_hook, globals())  # type: ignore
-cattr.register_structure_hook(
-    ForwardRef("ChildModel"), structure_hook  # type: ignore
-)
-cattr.register_structure_hook(
-    ForwardRef("WriteChildModel"), structure_hook  # type: ignore
-)
+structure_hook = functools.partial(sr.structure_hook, globals())
+cattr.register_structure_hook(ForwardRef("ChildModel"), structure_hook)
+cattr.register_structure_hook(ForwardRef("WriteChildModel"), structure_hook)
 
 MODEL_DATA = {
     "id": 1,
@@ -168,7 +164,7 @@ def test_deserialize_with_null():
     assert model.finally_[1].id == 2
 
 
-@pytest.mark.parametrize(  # type: ignore
+@pytest.mark.parametrize(
     "data, structure", [(MODEL_DATA, Sequence[Model]), ([MODEL_DATA], Model)]
 )
 def test_deserialize_data_structure_mismatch(data, structure):
