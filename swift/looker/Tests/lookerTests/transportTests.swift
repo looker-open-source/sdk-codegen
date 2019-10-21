@@ -47,6 +47,12 @@ text/plain
 application/vnd.api+json
 """.split(separator: "\n")
 
+struct SimpleUser : SDKModel {
+    var first: String
+    var last: String
+    var email : String?
+}
+
 class testTransport: XCTestCase {
 
     override func setUp() {
@@ -100,4 +106,30 @@ class testTransport: XCTestCase {
             XCTAssertEqual(actual, .string, val)
         }
     }
+    
+    func testDeserialize() {
+        let jsonString = """
+        {
+            "first": "Lloyd",
+            "last": "Llookicorn"
+        }
+        """
+        var user: SimpleUser = try! deserialize(json: jsonString)
+        XCTAssertNotNil(user, "LLoyd is assigned")
+        XCTAssertEqual(user.first, "Lloyd")
+        XCTAssertEqual(user.last, "Llookicorn")
+        XCTAssertNil(user.email)
+        user = try! deserialize(json: """
+        {
+            "first": "Zzoey",
+            "last": "Zzebra",
+            "email": "zz@foo.bar"
+        }
+        """)
+        XCTAssertNotNil(user, "Zzoey is assigned")
+        XCTAssertEqual(user.first, "Zzoey")
+        XCTAssertEqual(user.last, "Zzebra")
+        XCTAssertEqual(user.email, "zz@foo.bar")
+    }
+
 }

@@ -141,6 +141,25 @@ struct SDKError: ISDKError {
     var helpAnchor: String? { get { return self.help } }
 }
 
+/// For deserializating JSON into SDK structures
+/// This could remain the same as simply `Codable`, but this abstraction is introduced for future flexibility
+protocol SDKModel: Codable {
+}
+
+/// Convert a JSON string into the type `T`
+/// @throws errors if deserialization fails
+func deserialize<T>(json: String) throws -> T where T : Codable {
+    let decoder = JSONDecoder()
+    do {
+        let data = Data(json.utf8)
+        let result: T = try decoder.decode(T.self, from: data)
+        return result
+    } catch {
+        throw error
+    }
+}
+
+
 //struct SDKResponse<TSuccess, TError> where TError : ISDKError {
 //    var ok: Bool
 //    var value: TSuccess?

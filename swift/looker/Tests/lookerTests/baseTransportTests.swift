@@ -36,7 +36,6 @@ class testBaseTransport: XCTestCase {
         }
         task.resume()
         
-
     }
     
     func fetchData(_ path: String, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
@@ -49,8 +48,6 @@ class testBaseTransport: XCTestCase {
 //            }
         }).resume()
     }
-
-    //USAGE:
 
     func testGet() {
         let path = "https://google.com"
