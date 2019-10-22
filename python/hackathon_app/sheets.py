@@ -66,19 +66,29 @@ class Sheets:
 TModel = TypeVar("TModel")
 
 
+converter = cattr.Converter()
+
+
 class WhollySheet(Generic[TModel]):
     def __init__(
-        self, *, client, spreadsheet_id: str, sheet_name: str, structure: Type[TModel]
+        self,
+        *,
+        client,
+        spreadsheet_id: str,
+        sheet_name: str,
+        structure: Type[TModel],
+        converter=converter,
     ):
         self.client = client
         self.spreadsheet_id = spreadsheet_id
         self.range = f"{sheet_name}!A1:end"
         self.structure = structure
+        self.converter = converter
 
     def insert(self, model: TModel):
         """Insert data as rows into sheet"""
         try:
-            serialized_ = cattr.unstructure(model)
+            serialized_ = self.converter.unstructure(model)
             serialized = self._convert_to_list(serialized_)
             body = {"values": [serialized]}
             self.client.append(
@@ -100,7 +110,9 @@ class WhollySheet(Generic[TModel]):
             rows = response["values"]
             data = self._convert_to_dict(rows)
             # ignoring type (mypy bug?) "Name 'self.structure' is not defined"
-            response = cattr.structure(data, Sequence[self.structure])  # type: ignore
+            response = self.converter.structure(
+                data, Sequence[self.structure]  # type: ignore
+            )
         except (TypeError, AttributeError):
             raise SheetError("Bad Data")
         return response
@@ -210,19 +222,19 @@ class SheetError(Exception):
     """Improperly formatted data to deserialize"""
 
 
-cattr.register_structure_hook(
+converter.register_structure_hook(
     datetime.datetime,
     lambda d, _: datetime.datetime.strptime(  # type: ignore
         d, "%m/%d/%Y"
     ),
 )
-cattr.register_unstructure_hook(
+converter.register_unstructure_hook(
     datetime.datetime,
     lambda d: datetime.datetime.strftime(  # type: ignore
         d, "%m/%d/%Y"
     ),
 )
-cattr.register_unstructure_hook(type(None), lambda s: "NA")
+converter.register_unstructure_hook(type(None), lambda s: "NA")
 
 if __name__ == "__main__":
-    sheets = Sheets("SHEET_ID", "CREDS_FILE")
+    sheets = Sheets(spreadsheet_id="SHEET_ID", cred_file="CREDS_FILE")
