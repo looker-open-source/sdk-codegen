@@ -11,6 +11,7 @@ import sheets
 
 @pytest.fixture(scope="session", name="spreadsheet")
 def create_test_sheet(test_data, spreadsheet_client, drive_client):
+    """Create a test sheet and populated it with test data"""
     request = spreadsheet_client.create(body=test_data)
     response = request.execute()
 
@@ -81,14 +82,15 @@ def get_data(sheet):
 
 @pytest.fixture(name="test_data", scope="session")
 def get_test_data():
-    # TODO: use special notation for dynamically generating dates
-    with open("tests/data/data.json", "r") as f:
+    """Load the test data"""
+    with open("./data/data.json", "r") as f:
         data = json.load(f)
     return data
 
 
 @pytest.fixture(scope="session")
 def spreadsheet_client(credentials):
+    """Create a resource object to use the sheets API"""
     service = discovery.build("sheets", "v4", credentials=credentials)
     spreadsheet_client = service.spreadsheets()
 
@@ -97,6 +99,7 @@ def spreadsheet_client(credentials):
 
 @pytest.fixture(scope="session")
 def drive_client(credentials):
+    """Create a resource object to use the drive API"""
     drive_client = discovery.build("drive", "v3", credentials=credentials)
 
     return drive_client
@@ -104,7 +107,7 @@ def drive_client(credentials):
 
 @pytest.fixture(scope="session")
 def credentials(cred_file) -> service_account.Credentials:
-
+    """Build a Credentials instance from file"""
     scopes = [
         "https://www.googleapis.com/auth/drive",
         "https://www.googleapis.com/auth/drive.file",
@@ -114,15 +117,21 @@ def credentials(cred_file) -> service_account.Credentials:
         cred_file, scopes=scopes
     )
 
-    yield credentials
-    os.remove("./google-creds.json")
+    return credentials
 
 
 @pytest.fixture(scope="session")
 def cred_file() -> str:
+    """Read the google json credentials file (base64 encoded) from the
+    GOOGLE_APPLICATION_CREDENTIAL_ENCODED env variable, decode it and write
+    it to google-creds.json
+    """
     google_creds = os.environ.get("GOOGLE_APPLICATION_CREDENTIAL_ENCODED")
     assert google_creds
     file_name = "./google-creds.json"
     with open(file_name, "wb") as f:
         f.write(base64.b64decode(google_creds))
-    return "./google-creds.json"
+
+    yield file_name
+
+    os.remove("./google-creds.json")
