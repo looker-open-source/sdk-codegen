@@ -5,17 +5,17 @@ import {Router, navigate} from '@reach/router'
 import {Formik, Form, Field, ErrorMessage} from 'formik'
 import * as yup from 'yup'
 
-export const RegisterScene: React.FC<{path: string}> = () => {
+const RegisterScene: React.FC<{path: string}> = () => {
   const [hackathons, setHackathons] = React.useState(['hack 1', 'hack 2'])
   const [csrf, setCsrf] = React.useState({token: 'someToken'})
 
   React.useEffect(() => {
     async function fetchData() {
       try {
-        const hackathons = await fetch('/hackathons')
-        setHackathons(await hackathons.json())
-        const csrf = await fetch('/csrf')
-        setCsrf(await csrf.json())
+        const newHackathons = await fetch('/hackathons')
+        setHackathons(await newHackathons.json())
+        const newCsrf = await fetch('/csrf')
+        setCsrf(await newCsrf.json())
       } catch (e) {} // TODO: hack for local frontend dev
     }
     fetchData()
@@ -221,7 +221,7 @@ const Link: React.FC<{title: string}> = ({title}) => (
   </LinkContainer>
 )
 
-export const ResourcesScene: React.FC<{path: string}> = () => {
+const ResourcesScene: React.FC<{path: string}> = () => {
   return (
     <CenterContainer>
       <SceneBody>
