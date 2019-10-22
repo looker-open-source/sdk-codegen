@@ -47,12 +47,12 @@ pipenv install --dev
 ```
 
 ### Create a google spreadsheet
-3 tabs: (todo: script to bootstrap a skeleton sheet)
-- hackathons (name, location, date, duration)
-- users (first_name, last_name, email, date_created, organization, tshirt_size, dietary_restrictions)
-- registrations (user_email, hackathon_name, date_registered, attended)
 
-Note the sheet ID (from the URL) to use in the `env.list` file below.
+```sh
+./create-test-sheet.sh <email-to-own-sheet@some-gmail-domain.com>
+```
+
+Note the sheet ID (from the output) to use in the `env.list` file below.
 
 ### sheets api creds
 Create a GCP project:
