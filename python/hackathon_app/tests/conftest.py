@@ -1,15 +1,57 @@
 import base64
 import json
 import os
+import pytest  # type: ignore
+from typing import Sequence
 
 from google.oauth2 import service_account  # type: ignore
 from googleapiclient import discovery  # type: ignore
-import pytest  # type: ignore
+from sheets import (
+    Hackathon,
+    Registrant,
+    Registrations,
+    Sheets,
+    User,
+    Users,
+    WhollySheet,
+)
 
-import sheets
+
+@pytest.fixture(scope="module", name="WhollySheet")
+def instantiate_whollysheet(spreadsheet_client, spreadsheet):
+    """Creates and returns an instance of WhollySheet"""
+
+    client = spreadsheet_client.values()
+    return WhollySheet(
+        client=client,
+        spreadsheet_id=spreadsheet["spreadsheetId"],
+        sheet_name="users",
+        structure=Sequence[User],
+    )
 
 
-@pytest.fixture(scope="session", name="spreadsheet")
+@pytest.fixture(scope="module", name="sheets")
+def instantiate_sheets(spreadsheet, cred_file):
+    """Creates and returns an instance of Sheets"""
+    spreadsheet = spreadsheet
+    return Sheets(spreadsheet_id=spreadsheet["spreadsheetId"], cred_file=cred_file)
+
+
+@pytest.fixture(scope="module", name="users")
+def instantiate_users(spreadsheet_client, spreadsheet):
+    """Creates and returns an instance of Users"""
+    client = spreadsheet_client.values()
+    return Users(client=client, spreadsheet_id=spreadsheet["spreadsheetId"])
+
+
+@pytest.fixture(scope="module", name="registrations")
+def instantiate_registrations(spreadsheet_client, spreadsheet):
+    """Creates and returns an instance of Registrations"""
+    client = spreadsheet_client.values()
+    return Registrations(client=client, spreadsheet_id=spreadsheet["spreadsheetId"])
+
+
+@pytest.fixture(scope="module", name="spreadsheet")
 def create_test_sheet(test_data, spreadsheet_client, drive_client):
     """Create a test sheet and populated it with test data"""
     request = spreadsheet_client.create(body=test_data)
@@ -25,7 +67,7 @@ def get_test_users(test_data):
     """Returns a list of dicts representing the users sheet"""
     users_sheet = test_data["sheets"][0]
     assert users_sheet["properties"]["title"] == "users"
-    return create_sheet_repr(users_sheet, sheets.User)
+    return create_sheet_repr(users_sheet, User)
 
 
 @pytest.fixture(name="test_hackathons")
@@ -33,7 +75,7 @@ def get_test_hackathons(test_data):
     """Returns a list of dicts representing the hackathons sheet"""
     hackathons_sheet = test_data["sheets"][1]
     assert hackathons_sheet["properties"]["title"] == "hackathons"
-    return create_sheet_repr(hackathons_sheet, sheets.Hackathon)
+    return create_sheet_repr(hackathons_sheet, Hackathon)
 
 
 @pytest.fixture(name="test_registrants")
@@ -41,7 +83,7 @@ def get_test_registrants(test_data):
     """Returns a list of dicts representing the registrations sheet"""
     registrations_sheet = test_data["sheets"][2]
     assert registrations_sheet["properties"]["title"] == "registrations"
-    return create_sheet_repr(registrations_sheet, sheets.Registrant)
+    return create_sheet_repr(registrations_sheet, Registrant)
 
 
 def create_sheet_repr(sheet, klass):
@@ -83,7 +125,7 @@ def get_data(sheet):
 @pytest.fixture(name="test_data", scope="session")
 def get_test_data():
     """Load the test data"""
-    with open("./data/data.json", "r") as f:
+    with open("tests/data/data.json", "r") as f:
         data = json.load(f)
     return data
 

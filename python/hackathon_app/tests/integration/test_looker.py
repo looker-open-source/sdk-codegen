@@ -26,7 +26,7 @@ def test_register_user(test_users: List[sheets.User]):
 
     assert password_reset
 
-    sdk = client.setup()
+    sdk = client.setup("../looker.ini")
     users = sdk.search_users(email=test_user.email)
     assert len(users) > 0
     actual_user = users[0]

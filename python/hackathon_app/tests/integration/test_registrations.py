@@ -1,16 +1,8 @@
 import datetime
-import pytest  # type: ignore
 
 from sheets import Registrant, Registrations
 
 DATE_FORMAT = "%m/%d/%Y"
-
-
-@pytest.fixture(scope="module", name="registrations")
-def instatiate_registrations(spreadsheet_client, spreadsheet):
-    """Creates and returns an instance of Registrations"""
-    client = spreadsheet_client.values()
-    return Registrations(client=client, spreadsheet_id=spreadsheet["spreadsheetId"])
 
 
 def test_rows_returns_registrants(registrations: Registrations, test_registrants):
