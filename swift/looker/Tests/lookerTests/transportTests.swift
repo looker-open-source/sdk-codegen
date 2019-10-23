@@ -121,14 +121,14 @@ class testTransport: XCTestCase {
         XCTAssertNil(user.email)
         user = try! deserialize(json: """
         {
-            "first": "Zzoey",
-            "last": "Zzebra",
+            "first": "Zzooey",
+            "last": "Zzeebra",
             "email": "zz@foo.bar"
         }
         """)
-        XCTAssertNotNil(user, "Zzoey is assigned")
-        XCTAssertEqual(user.first, "Zzoey")
-        XCTAssertEqual(user.last, "Zzebra")
+        XCTAssertNotNil(user, "Zzooey is assigned")
+        XCTAssertEqual(user.first, "Zzooey")
+        XCTAssertEqual(user.last, "Zzeebra")
         XCTAssertEqual(user.email, "zz@foo.bar")
     }
 

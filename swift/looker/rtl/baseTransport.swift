@@ -24,11 +24,22 @@
 
 import Foundation
 
+struct RequestResponse {
+    var data: Data?
+    var response: URLResponse?
+    var error: Error?
+    init(_ data: Data?, _ response: URLResponse?, _ error: Error?) {
+        self.data = data
+        self.response = response
+        self.error = error
+    }
+}
+
 //class BaseTransport : ITransport {
 // TODO why doesn't this implementation satisfy ITransport?!?!?
 class BaseTransport {
     
-    let session = URLSession.shared
+    let session = URLSession.shared // TODO Should this be something else like `configuration: .default`? or ephemeral?
     var apiPath = ""
     var options: ITransportSettings
     
@@ -37,7 +48,44 @@ class BaseTransport {
         self.apiPath = "\(options.base_url!)/api/\(options.api_version!)"
     }
     
-    func request<TSuccess, TError> (
+    func plainRequest(
+        _ method: HttpMethod,
+        _ path: String,
+        _ queryParams: Any?,
+        _ body: Any?,
+        _ authenticator: Authenticator?,
+        _ options: ITransportSettings?
+    ) -> RequestResponse {
+        var settings = options
+        if (settings == nil) {
+            settings = self.options
+        } else {
+            settings?.headers = options?.headers ?? self.options.headers
+            settings?.timeout = options?.timeout ?? self.options.timeout
+            settings?.encoding = options?.encoding ?? self.options.encoding
+        }
+        let req = self.initRequest(method, path, queryParams, body, authenticator, settings)
+        if (req == nil) {
+            return RequestResponse(nil, nil, SDKError("The SDK call failed. Invalid properties for request \(method.rawValue) \(path)"))
+        }
+        
+        // This is required for requests without a UI for some bogus reason
+        // https://stackoverflow.com/a/39064025/74137
+        let semi = DispatchSemaphore(value: 0)
+        
+        var result: RequestResponse? = nil
+        let task = self.session.dataTask(with: req!) { data, response, error in
+            result = RequestResponse(data, response, error)
+            semi.signal() // Notify request has completed
+        }
+        task.resume() // begin request
+        semi.wait() // wait for request completion
+        return result!
+    }
+    
+    // Some sample request processing architecture https://www.swiftbysundell.com/articles/conditional-conformances-in-swift/
+    //    func request<TSuccess: SDKModel, TError: SDKModel> (
+    func request<TSuccess: Codable, TError: Codable> (
         _ method: HttpMethod,
         _ path: String,
         _ queryParams: Any?,
@@ -53,42 +101,33 @@ class BaseTransport {
             settings?.timeout = options?.timeout ?? self.options.timeout
             settings?.encoding = options?.encoding ?? self.options.encoding
         }
-        let req = self.initRequest(method, path, queryParams, body, authenticator, settings)
-        if (req == nil) {
-            throw SDKError("The SDK call failed. Invalid properties for request \(method.rawValue) \(path)")
-            //            return SDKResponse.error(err)
-        }
         var ok: Bool = false
         var success: TSuccess? = nil
         var fail: TError? = nil
-        let s = URLSession.shared
-        let task = s.dataTask(with: req!) { data, response, error in
-            if let error = error {
-                print(error as Any)
+        
+        let http = self.plainRequest(method, path, queryParams, body, authenticator, settings)
+        if let error = http.error {
+            ok = false
+            fail = SDKError(error.localizedDescription) as? TError
+        } else {
+            let response = http.response as! HTTPURLResponse
+            let contentType = response.mimeType!
+            let data = http.data!
+            do {
+                print(http.data as Any)
+                let parsed = parseResponse(contentType, data)
+                if (self.ok(response)) {
+                    ok = true
+                    success = try deserialize(json: parsed as! String)
+                } else {
+                    ok = false
+                    fail = try deserialize(json: parsed as! String)
+                }
+            } catch {
                 ok = false
                 fail = SDKError(error.localizedDescription) as? TError
-                return
-            }
-            guard let httpResponse = response as? HTTPURLResponse,
-                (200...299).contains(httpResponse.statusCode) else {
-                print(response as Any)
-                ok = false
-                fail = SDKError("\(response.debugDescription)") as? TError
-                return
-            }
-            print(data as Any)
-            let response = response as! HTTPURLResponse
-            let contentType = response.mimeType!
-            let parsed = parseResponse(contentType, data)
-            if (self.ok(response)) {
-                ok = true
-                success = parsed as? TSuccess
-            } else {
-                ok = false
-                fail = parsed as? TError
             }
         }
-        task.resume()
         return ok
             ? SDKResponse.success(success!)
             : SDKResponse.error(fail!)
@@ -102,7 +141,10 @@ class BaseTransport {
         _ authenticator: Authenticator?,
         _ options: ITransportSettings?
     ) -> URLRequest? {
-        let fullPath = ((authenticator != nil) ? self.apiPath : (options?.base_url!)!) + path
+        var fullPath = path
+        if !(fullPath.starts(with: "https:") || fullPath.starts(with: "http:")) {
+            fullPath = ((authenticator != nil) ? self.apiPath : (options?.base_url!)!) + path
+        }
         let requestPath = URL(string: fullPath)!
         var req = URLRequest(
             url: requestPath,
@@ -128,7 +170,7 @@ func parseResponse(_ contentType: String, _ data: Data?) -> Any {
     let mode = responseMode(contentType)
     switch mode {
     case .string:
-        if (isJson(contentType)) {
+        if (isMimeJson(contentType)) {
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: [])
                 return json
@@ -141,7 +183,7 @@ func parseResponse(_ contentType: String, _ data: Data?) -> Any {
             return dataString
         }
         
-        //        if (!isUtf8(contentType)) {
+        //        if (!isMimeUtf8(contentType)) {
     //        }
     case .binary:
         return data!

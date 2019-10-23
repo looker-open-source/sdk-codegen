@@ -65,7 +65,7 @@ struct DefaultSettings : IApiSettings {
  *  - <environmentPrefix>_VERIFY_SSL
  *  - <environmentPrefix>_TIMEOUT
  */
-func ValueSettings(_ values: StringDictionary) -> IApiSettings {
+func ValueSettings(_ values: StringDictionary<String>) -> IApiSettings {
     var settings = DefaultSettings()
     settings.api_version = values[strLookerApiVersion] ?? settings.api_version
     settings.base_url = values[strLookerBaseUrl] ?? settings.base_url

@@ -266,19 +266,19 @@ protocol ITransportSettings {
     var encoding: String? { get set }
 }
 
-func isUtf8(_ contentType: String) -> Bool {
+/// Returns `True` if `contentType` is charset utf-8
+func isMimeUtf8(_ contentType: String) -> Bool {
     return charsetUtf8Pattern?.matches(contentType) ?? false
 }
 
-func isJson(_ contentType: String) -> Bool {
+/// Returns `True` if `contentType` is JSON
+func isMimeJson(_ contentType: String) -> Bool {
     return applicationJsonPattern?.matches(contentType) ?? false
 }
 
-/**
- * Is the content type binary or "string"?
- * @param {string} contentType
- * @returns {ResponseMode.binary | ResponseMode.string}
- */
+/// Is the content type binary or "string"?
+/// @param {String} contentType
+/// @returns {ResponseMode.binary | ResponseMode.string | ResponseMode.unknown}
 func responseMode(_ contentType: String) -> ResponseMode {
     if (contentPatternString!.matches(contentType)) {
         return ResponseMode.string
@@ -295,7 +295,7 @@ func responseMode(_ contentType: String) -> ResponseMode {
  @param {[key: string]: string} obj optional collection of query parameters to encode and append to the path
  
  */
-func addQueryParams(_ path: String, _ params: ValueDictionary?) -> String {
+func addQueryParams(_ path: String, _ params: ValueDictionary<String, Any?>?) -> String {
     if (params == nil || params?.count == 0) {
         return path
     }

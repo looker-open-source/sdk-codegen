@@ -75,10 +75,11 @@ struct Constants {
     
 }
 
-// TODO implement StringDictionary<T>
-typealias StringDictionary = [String:String]
+/// Homogeneous generic Dictionary with String keys
+typealias StringDictionary<Value> = Dictionary<String, Value>
 
-typealias ValueDictionary = [String:Any?]
+/// Heterogeneous Dictionary with String keys
+typealias ValueDictionary<K: Hashable, V> = Dictionary<K, V>
 
 // From https://stackoverflow.com/a/40629365/74137 may want to use one of the other patterns instead
 //extension String: LocalizedError {
@@ -89,7 +90,7 @@ enum SdkError: Error {
     case error(String)
 }
 
-// Extension for converting a string to bool
+/// Extension for converting a `String` to `Bool`
 extension String {
     var bool: Bool? {
         switch self.lowercased() {
@@ -103,3 +104,29 @@ extension String {
     }
 }
 
+/* TODO implement DelimArray<T>
+extension Array where Element: Codable {
+    func toString() {
+        let strings = self.map(String{$0})
+        return ", ".joined(strings)
+    }
+}
+
+class DelimArray<T> : Array<T> {
+    var items: [T]
+    var separator: String
+    var prefix: String
+    var suffix: String
+    init(_ items: [T], _ separator: String = ",", _ prefix: String = "", _ suffix: String = "") {
+        self.items = items
+        self.separator = separator
+        self.prefix = prefix
+        self.suffix = suffix
+    }
+    
+    mutating func toString() {
+        let strings = self.items.map(String{$0})
+        return self.prefix + separator.join(strings) + self.suffix
+    }
+}
+*/
