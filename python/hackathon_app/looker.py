@@ -4,8 +4,8 @@ from looker_sdk import client, methods, models, error
 
 
 def register_user(
-    *, hackathon: str, first_name: str, last_name: str, email: str, disable: bool = True
-) -> str:
+    *, hackathon: str, first_name: str, last_name: str, email: str
+) -> None:
     sdk = client.setup()
 
     user = find_or_create_user(
@@ -18,12 +18,7 @@ def register_user(
         create_api3_credentials(sdk=sdk, user_id=user.id)
     set_user_roles(sdk=sdk, user_id=user.id)
     set_user_attributes(sdk=sdk, user_id=user.id, hackathon=hackathon)
-
-    ret = create_reset_password_link(sdk=sdk, user_id=user.id)
-
-    if disable:
-        disable_user(sdk=sdk, user_id=user.id)
-    return ret
+    disable_user(sdk=sdk, user_id=user.id)
 
 
 def find_or_create_user(
@@ -106,15 +101,6 @@ def set_user_attributes(*, sdk: methods.LookerSDK, user_id, hackathon):
         user_attribute_id=hackathon_attr_id,
         body=models.WriteUserAttributeWithValue(value=hackathon),
     )
-
-
-@try_to
-def create_reset_password_link(*, sdk: methods.LookerSDK, user_id: int) -> str:
-    ret = sdk.create_user_credentials_email_password_reset(
-        user_id=user_id, expires=False
-    ).password_reset_url
-    assert ret
-    return ret
 
 
 @try_to

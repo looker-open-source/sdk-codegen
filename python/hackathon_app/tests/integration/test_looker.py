@@ -1,32 +1,50 @@
 from typing import List
 
-from looker_sdk import client, models
+from looker_sdk import client, models, methods
+import pytest  # type: ignore
 
 import looker
 import sheets
 
 
-# TODO
-# - test errors
-# - remove user after test
-# - test with existing user
+@pytest.fixture
+def sdk():
+    sdk = client.setup()
+    yield sdk
+    sdk.logout()
 
 
-def test_register_user(test_users: List[sheets.User]):
-
+@pytest.fixture
+def test_user(sdk: methods.LookerSDK, test_users: List[sheets.User]):
     test_user = test_users[0]
+    yield test_user
+    users = sdk.search_users(email=test_user.email)
+    if len(users) > 0:
+        assert users[0].id
+        sdk.delete_user(user_id=users[0].id)
+
+
+@pytest.mark.parametrize("register_twice", [False, True])
+def test_register_user(
+    test_user: sheets.User, sdk: methods.LookerSDK, register_twice: bool
+):
+
     test_hackathon = "Some Hackathon"
 
-    password_reset = looker.register_user(
+    looker.register_user(
         hackathon=test_hackathon,
         first_name=test_user.first_name,
         last_name=test_user.last_name,
         email=test_user.email,
     )
+    if register_twice:
+        looker.register_user(
+            hackathon=test_hackathon,
+            first_name=test_user.first_name,
+            last_name=test_user.last_name,
+            email=test_user.email,
+        )
 
-    assert password_reset
-
-    sdk = client.setup("../looker.ini")
     users = sdk.search_users(email=test_user.email)
     assert len(users) > 0
     actual_user = users[0]
@@ -38,6 +56,7 @@ def test_register_user(test_users: List[sheets.User]):
     assert len(actual_user.credentials_api3) == 1
     assert actual_user.role_ids
     assert len(actual_user.role_ids) == 2
+    assert actual_user.is_disabled
 
     roles = sdk.all_roles(
         fields="name", ids=models.DelimSequence(list(actual_user.role_ids))
