@@ -7,7 +7,7 @@ import flask_wtf  # type: ignore
 import wtforms  # type: ignore
 from wtforms import validators
 
-# import looker
+import looker
 import sheets
 
 logging.config.fileConfig("logging.conf")
@@ -97,15 +97,16 @@ def register() -> Any:
         except sheets.SheetError as ex:
             app.logger.error(ex, exc_info=True)
             response = {"ok": False, "message": "There was a problem, try again later."}
-        # try:
-        #    looker.register_user(
-        #        hackathon=hackathon,
-        #        first_name=first_name,
-        #        last_name=last_name,
-        #        email=email,
-        #    )
-        # except looker.RegisterError:
-        #    response = {"ok": False, "message": "There was a problem, try again later."}
+        try:
+            looker.register_user(
+                hackathon=hackathon,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+            )
+        except looker.RegisterError as ex:
+            app.logger.error(ex, exc_info=True)
+            response = {"ok": False, "message": "There was a problem, try again later."}
     else:
         errors = {}
         for field, field_errors in form.errors.items():
