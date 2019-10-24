@@ -1,3 +1,4 @@
+import logging.config
 import os
 from typing import Any
 
@@ -9,9 +10,12 @@ from wtforms import validators
 # import looker
 import sheets
 
+logging.config.fileConfig("logging.conf")
+
 
 app = flask.Flask(__name__)
 app.config.from_object("config")
+app.logger.removeHandler(flask.logging.default_handler)
 
 
 class RegistrationForm(flask_wtf.FlaskForm):
@@ -50,7 +54,12 @@ def get_hackathons():
         spreadsheet_id=app.config["GOOGLE_SHEET_ID"],
         cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
     )
-    return flask.jsonify([h.name for h in sheets_client.get_hackathons()])
+    try:
+        hackathons = [h.name for h in sheets_client.get_hackathons()]
+    except sheets.SheetError as ex:
+        app.logger.error(ex, exc_info=True)
+        hackathons = [""]
+    return flask.jsonify(hackathons)
 
 
 @app.route("/csrf")
@@ -85,7 +94,8 @@ def register() -> Any:
         )
         try:
             sheets_client.register_user(hackathon=hackathon, user=sheets_user)
-        except sheets.SheetError:
+        except sheets.SheetError as ex:
+            app.logger.error(ex, exc_info=True)
             response = {"ok": False, "message": "There was a problem, try again later."}
         # try:
         #    looker.register_user(
@@ -95,7 +105,6 @@ def register() -> Any:
         #        email=email,
         #    )
         # except looker.RegisterError:
-        #    # TODO: rollback sheets registration?
         #    response = {"ok": False, "message": "There was a problem, try again later."}
     else:
         errors = {}
@@ -128,4 +137,7 @@ def route_frontend(path):
     # ...or should be handled by the SPA's "router" in front end
     else:
         index_path = os.path.join(app.static_folder, "index.html")
-        return flask.send_file(index_path)
+        try:
+            return flask.send_file(index_path)
+        except FileNotFoundError:
+            return ""

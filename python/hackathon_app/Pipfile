@@ -17,6 +17,7 @@ looker-sdk = "*"
 flask-wtf = "*"
 google-api-python-client = "*"
 google-auth = "*"
+python-json-logger = "*"
 
 [requires]
 python_version = "3.7"

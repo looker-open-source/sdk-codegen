@@ -14,9 +14,8 @@ import datetime
 import attr
 import cattr
 from google.oauth2 import service_account  # type: ignore
-from googleapiclient import discovery  # type: ignore
-
-# TODO: add error handling. Isolate it around unstructure and the client
+import googleapiclient.errors  # type: ignore
+import googleapiclient.discovery  # type: ignore
 
 
 class Sheets:
@@ -33,7 +32,9 @@ class Sheets:
             cred_file, scopes=scopes
         )
 
-        service = discovery.build("sheets", "v4", credentials=credentials)
+        service = googleapiclient.discovery.build(
+            "sheets", "v4", credentials=credentials, cache_discovery=False
+        )
         client = service.spreadsheets().values()
         self.id = spreadsheet_id
         self.hackathons = Hackathons(client=client, spreadsheet_id=spreadsheet_id)
@@ -107,14 +108,17 @@ class WhollySheet(Generic[TModel]):
             response = self.client.get(
                 spreadsheetId=self.spreadsheet_id, range=self.range
             ).execute()
+        except googleapiclient.errors.HttpError as ex:
+            raise SheetError(str(ex))
+        try:
             rows = response["values"]
             data = self._convert_to_dict(rows)
             # ignoring type (mypy bug?) "Name 'self.structure' is not defined"
             response = self.converter.structure(
                 data, Sequence[self.structure]  # type: ignore
             )
-        except (TypeError, AttributeError):
-            raise SheetError("Bad Data")
+        except (TypeError, AttributeError) as ex:
+            raise SheetError(str(ex))
         return response
 
     def _convert_to_dict(self, data) -> Sequence[Mapping[str, str]]:
