@@ -1,4 +1,5 @@
 // from https://josephduffy.co.uk/partial-in-swift
+// TODO not currently used and not sure it makes sense
 
 import Foundation
 

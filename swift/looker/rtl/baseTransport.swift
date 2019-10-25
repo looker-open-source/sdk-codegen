@@ -37,8 +37,7 @@ struct RequestResponse {
 
 //class BaseTransport : ITransport {
 // TODO why doesn't this implementation satisfy ITransport?!?!?
-class BaseTransport {
-    
+class BaseTransport : ITransport  {
     let session = URLSession.shared // TODO Should this be something else like `configuration: .default`? or ephemeral?
     var apiPath = ""
     var options: ITransportSettings
@@ -48,43 +47,6 @@ class BaseTransport {
         self.apiPath = "\(options.base_url!)/api/\(options.api_version!)"
     }
     
-    func plainRequest(
-        _ method: HttpMethod,
-        _ path: String,
-        _ queryParams: Any?,
-        _ body: Any?,
-        _ authenticator: Authenticator?,
-        _ options: ITransportSettings?
-    ) -> RequestResponse {
-        var settings = options
-        if (settings == nil) {
-            settings = self.options
-        } else {
-            settings?.headers = options?.headers ?? self.options.headers
-            settings?.timeout = options?.timeout ?? self.options.timeout
-            settings?.encoding = options?.encoding ?? self.options.encoding
-        }
-        let req = self.initRequest(method, path, queryParams, body, authenticator, settings)
-        if (req == nil) {
-            return RequestResponse(nil, nil, SDKError("The SDK call failed. Invalid properties for request \(method.rawValue) \(path)"))
-        }
-        
-        // This is required for requests without a UI for some bogus reason
-        // https://stackoverflow.com/a/39064025/74137
-        let semi = DispatchSemaphore(value: 0)
-        
-        var result: RequestResponse? = nil
-        let task = self.session.dataTask(with: req!) { data, response, error in
-            result = RequestResponse(data, response, error)
-            semi.signal() // Notify request has completed
-        }
-        task.resume() // begin request
-        semi.wait() // wait for request completion
-        return result!
-    }
-    
-    // Some sample request processing architecture https://www.swiftbysundell.com/articles/conditional-conformances-in-swift/
-    //    func request<TSuccess: SDKModel, TError: SDKModel> (
     func request<TSuccess: Codable, TError: Codable> (
         _ method: HttpMethod,
         _ path: String,
@@ -92,7 +54,7 @@ class BaseTransport {
         _ body: Any?,
         _ authenticator: Authenticator?,
         _ options: ITransportSettings?
-    ) throws -> SDKResponse<TSuccess, TError> {
+    ) -> SDKResponse<TSuccess, TError> {
         var settings = options
         if (settings == nil) {
             settings = self.options
@@ -131,6 +93,41 @@ class BaseTransport {
         return ok
             ? SDKResponse.success(success!)
             : SDKResponse.error(fail!)
+    }
+    
+    func plainRequest(
+        _ method: HttpMethod,
+        _ path: String,
+        _ queryParams: Any?,
+        _ body: Any?,
+        _ authenticator: Authenticator?,
+        _ options: ITransportSettings?
+    ) -> RequestResponse {
+        var settings = options
+        if (settings == nil) {
+            settings = self.options
+        } else {
+            settings?.headers = options?.headers ?? self.options.headers
+            settings?.timeout = options?.timeout ?? self.options.timeout
+            settings?.encoding = options?.encoding ?? self.options.encoding
+        }
+        let req = self.initRequest(method, path, queryParams, body, authenticator, settings)
+        if (req == nil) {
+            return RequestResponse(nil, nil, SDKError("The SDK call failed. Invalid properties for request \(method.rawValue) \(path)"))
+        }
+        
+        // This is required for requests without a UI for some bogus reason
+        // https://stackoverflow.com/a/39064025/74137
+        let semi = DispatchSemaphore(value: 0)
+        
+        var result: RequestResponse? = nil
+        let task = self.session.dataTask(with: req!) { data, response, error in
+            result = RequestResponse(data, response, error)
+            semi.signal() // Notify request has completed
+        }
+        task.resume() // begin request
+        semi.wait() // wait for request completion
+        return result!
     }
     
     private func initRequest(

@@ -78,11 +78,9 @@ enum HttpMethod: String {
 typealias Headers = Any
 typealias Agent = Any
 
-typealias Authenticator = (_ req: URLRequest) -> URLRequest
-
 protocol ITransport {
     @available(OSX 10.15, *)
-    func request<TSuccess, TError>(
+    func request<TSuccess: Codable, TError: Codable>(
         _ method: HttpMethod,
         _ path: String,
         _ queryParams: Any?,
@@ -115,7 +113,7 @@ protocol ISDKError: LocalizedError {
 }
 
 /// Common ancestor for all error responses
-struct SDKError: ISDKError {
+struct SDKError: ISDKError, Codable {
     private var description: String?
     private var reason: String?
     private var suggestion: String?
@@ -195,39 +193,12 @@ func SDKOk(_ response: SDKResponse<Any, SDKError>) throws -> Any {
     }
 }
 
-//
-//}
-//typealias SDKResponse<TSuccess, TError> = ISDKSuccessResponse<TSuccess> | ISDKErrorResponse<TError | ISDKError>
-
-//protocol SDKResponse: ISDKSuccessResponse, ISDKErrorResponse {
-//    associatedtype TSuccess
-//    associatedtype TError
-//}
-//<TSuccess, TError> =
-//  | ISDKSuccessResponse<TSuccess>
-//  | ISDKErrorResponse<TError | ISDKError>
-
-/**
- * Base authorization interface
- */
-protocol IAuthorizer {
-    var settings: IApiSettings { get set }
-    var transport: ITransport { get set }
-    
-    /** is the current session authenticated? */
-    func isAuthenticated() -> Bool
-    
-    func authenticate(init: IRequestInit) -> IRequestInit
-    
-    func logout() -> Bool
-}
-
 /** Generic http request property collection */
 protocol IRequestInit {
     /** body of request. optional */
     var body: Any? { get set }
     /** headers for request. optional */
-    var headers: Any? { get set }
+    var headers: StringDictionary<String>? { get set }
     /** Http method for request. required. */
     var method: HttpMethod { get set }
     /** Redirect processing for request. optional */
@@ -243,6 +214,23 @@ protocol IRequestInit {
     var size: Int? { get set }
     /** req/res timeout in ms, it resets on redirect. 0 to disable (OS limit applies) */
     var timeout: Int? { get set }
+}
+
+typealias Authenticator = (_ req: URLRequest) -> URLRequest
+
+/**
+ * Base authorization interface
+ */
+protocol IAuthorizer {
+    var settings: IApiSettings { get set }
+    var transport: ITransport { get set }
+    
+    /** is the current session authenticated? */
+    func isAuthenticated() -> Bool
+    
+    func authenticate(_ props: URLRequest) -> URLRequest
+    
+    func logout() -> Bool
 }
 
 /** General purpose authentication callback */

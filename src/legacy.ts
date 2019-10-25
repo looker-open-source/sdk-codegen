@@ -40,7 +40,7 @@ const generate = async (fileName: string, spec: LanguageSpec, props: ISDKConfigP
     ['generate', '-i', fileName, '-g', language, '-o', apiPath, '--enable-post-process-file', spec.options])
 }
 
-// legacy all languages for the specified configuration
+// generate all languages for the specified configuration
 const runConfig = async (name: string, props: ISDKConfigProps) => {
   log(`processing ${name} configuration ...`)
 

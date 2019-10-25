@@ -80,6 +80,10 @@ func parseConfig(_ filename : String) -> Config {
 }
 
 struct ApiConfig : IApiSettings {
+    func readConfig(_ section: String?) -> IApiSection {
+        return [:]
+    }
+    
     func isConfigured() -> Bool {
         return (base_url != "" && api_version != "")
     }

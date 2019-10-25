@@ -30,7 +30,7 @@ protocol AccessTokenProtocol {
   var expires_in: Int { get set }
 }
 
-struct AccessToken: AccessTokenProtocol {
+struct AccessToken: AccessTokenProtocol, Codable {
   var access_token: String
   var token_type: String
   var expires_in: Int

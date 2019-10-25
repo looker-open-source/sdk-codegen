@@ -26,6 +26,8 @@ let strLookerBaseUrl = "\(Constants.environmentPrefix)_BASE_URL"
 let strLookerApiVersion = "\(Constants.environmentPrefix)_API_VERSION"
 let strLookerVerifySsl = "\(Constants.environmentPrefix)_VERIFY_SSL"
 let strLookerTimeout = "\(Constants.environmentPrefix)_TIMEOUT"
+let strLookerClientId = "\(Constants.environmentPrefix)_CLIENT_ID"
+let strLookerClientSecret = "\(Constants.environmentPrefix)_CLIENT_SECRET"
 let strBadConfiguration = """
 \(agentTag) configuration error:
 Missing required configuration values like base_url and api_version
@@ -33,7 +35,10 @@ Missing required configuration values like base_url and api_version
 
 protocol IApiSettings: ITransportSettings {
     func isConfigured() -> Bool
+    func readConfig(_ section: String?) -> IApiSection
 }
+
+typealias IApiSection = SectionConfig
 
 /**
  * default the runtime configuration settings
@@ -44,7 +49,9 @@ struct DefaultSettings : IApiSettings {
     func isConfigured() -> Bool {
         return false
     }
-    
+    func readConfig(_ section: String?) -> IApiSection {
+        return [:]
+    }
     var base_url: String? = ""
     var api_version: String? = "3.1"
     var verify_ssl: Bool? = true
@@ -85,6 +92,10 @@ func ValueSettings(_ values: StringDictionary<String>) -> IApiSettings {
  * .ini Configuration initializer
  */
 struct ApiSettings: IApiSettings {
+    func readConfig(_ section: String?) -> IApiSection {
+        return [:]
+    }
+    
     var base_url: String?
     var api_version: String?
     var verify_ssl: Bool?

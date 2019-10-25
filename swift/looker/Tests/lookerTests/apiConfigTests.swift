@@ -14,7 +14,7 @@ fileprivate let testRootPath = URL(fileURLWithPath: #file).pathComponents
 fileprivate let repoPath : String = testRootPath + "/../../"
 fileprivate let localIni : String = repoPath + "looker.ini"
 
-class testApiConfig: XCTestCase {
+class apiConfigTests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.

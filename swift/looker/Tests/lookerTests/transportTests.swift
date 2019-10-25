@@ -1,5 +1,5 @@
 //
-//  testTransport.swift
+//  transportTests.swift
 //  lookerTests
 //
 //  Created by John Kaster on 10/14/19.
@@ -53,7 +53,7 @@ struct SimpleUser : SDKModel {
     var email : String?
 }
 
-class testTransport: XCTestCase {
+class transportTests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.

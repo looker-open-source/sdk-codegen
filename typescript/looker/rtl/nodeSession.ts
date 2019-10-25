@@ -38,7 +38,6 @@ import { strLookerClientId, strLookerClientSecret } from './apiSettings'
 const strPost = 'POST'
 const strDelete = 'DELETE'
 
-
 /**
  * Same as the Looker API access token object
  */
@@ -96,6 +95,7 @@ export class NodeSession implements IAuthSession {
    * Is there an active authentication token?
    */
   isAuthenticated() {
+    // TODO I think this can be simplified
     const token = this.activeToken
     if (!(token && token.access_token)) return false
     return token.isActive()
