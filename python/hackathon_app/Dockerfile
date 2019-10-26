@@ -4,6 +4,7 @@ RUN pip install pipenv
 
 COPY ./server /app
 COPY Pipfile Pipfile.lock looker.py sheets.py config.py logging.conf /app/
+COPY env.list /app/prestart.sh
 
 WORKDIR /app
 
