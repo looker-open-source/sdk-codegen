@@ -27,6 +27,7 @@ import { ICodeGen, ApiModel } from './sdkModels'
 import { TypescriptGen } from './typescript.gen'
 import { quit } from './utils'
 import { IVersionInfo } from './codeGen'
+import { SwiftGen } from './swift.gen'
 
 export interface IGeneratorSpec {
   language: string // name of Open API Generator language to produce
@@ -47,7 +48,12 @@ export const Languages: Array<IGeneratorSpec> =
     //   language: 'kotlin',
     //   options: '-DapiPackage=com.looker.sdk -DpackageName=com.looker.sdk'
     // },
-    // TODO figure out why swift aborts with an error and none of the other languages do
+    // TODO figure out why legacy swift aborts with an error and none of the other languages do
+    { language: 'swift',
+      legacy: 'swift4',
+      factory: (api: ApiModel, versions?: IVersionInfo) => new SwiftGen(api, versions),
+      options: '-DapiPackage=Looker -DpackageName=looker'
+    },
     // {
     //   language: 'swift4',
     //   path: 'swift',

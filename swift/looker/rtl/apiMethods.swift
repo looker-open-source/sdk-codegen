@@ -25,19 +25,19 @@
 import Foundation
 
 @available(OSX 10.15, *)
-class ApiMethods {
+class APIMethods {
     var authSession: IAuthorizer
     
     init(_ authSession: IAuthorizer) {
         self.authSession = authSession
     }
     
-    func ok<TSuccess, TError>(response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
+    func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
         switch response {
         case .success(let response):
             return response
         case .error(let error):
-            throw SdkError.error(error.errorDescription
+            throw SDKError(error.errorDescription
                 ?? error.failureReason
                 ?? error.recoverySuggestion
                 ?? error.helpAnchor
@@ -48,7 +48,7 @@ class ApiMethods {
     func authRequest<TSuccess: Codable, TError: Codable>(
         _ method: HttpMethod,
         _ path: String,
-        _ queryParams: Any?,
+        _ queryParams: Values?,
         _ body: Any?,
         _ options: ITransportSettings?
     ) -> SDKResponse<TSuccess, TError> {
@@ -68,10 +68,10 @@ class ApiMethods {
     
     /** Make a GET request */
     func get<TSuccess: Codable, TError: Codable>(
-        path: String,
-        queryParams: Any?,
-        body: Any?,
-        options: ITransportSettings?
+        _ path: String,
+        _ queryParams: Values?,
+        _ body: Any?,
+        _ options: ITransportSettings?
     ) -> SDKResponse<TSuccess, TError> {
         return self.authRequest(
             HttpMethod.GET,
@@ -84,10 +84,10 @@ class ApiMethods {
     
     /** Make a HEAD request */
     func head<TSuccess: Codable, TError: Codable>(
-        path: String,
-        queryParams: Any?,
-        body: Any?,
-        options: ITransportSettings?
+        _ path: String,
+        _ queryParams: Values?,
+        _ body: Any?,
+        _ options: ITransportSettings?
     ) -> SDKResponse<TSuccess, TError> {
         return self.authRequest(
             HttpMethod.HEAD,
@@ -100,10 +100,10 @@ class ApiMethods {
     
     /** Make a DELETE request */
     func delete<TSuccess: Codable, TError: Codable>(
-        path: String,
-        queryParams: Any?,
-        body: Any?,
-        options: ITransportSettings?
+        _ path: String,
+        _ queryParams: Values?,
+        _ body: Any?,
+        _ options: ITransportSettings?
     ) -> SDKResponse<TSuccess, TError> {
         return self.authRequest(
             HttpMethod.DELETE,
@@ -116,10 +116,10 @@ class ApiMethods {
     
     /** Make a POST request */
     func post<TSuccess: Codable, TError: Codable>(
-        path: String,
-        queryParams: Any?,
-        body: Any?,
-        options: ITransportSettings?
+        _ path: String,
+        _ queryParams: Values?,
+        _ body: Any?,
+        _ options: ITransportSettings?
     ) -> SDKResponse<TSuccess, TError> {
         return self.authRequest(
             HttpMethod.POST,
@@ -132,10 +132,10 @@ class ApiMethods {
     
     /** Make a PUT request */
     func put<TSuccess: Codable, TError: Codable>(
-        path: String,
-        queryParams: Any?,
-        body: Any?,
-        options: ITransportSettings?
+        _ path: String,
+        _ queryParams: Values?,
+        _ body: Any?,
+        _ options: ITransportSettings?
     ) -> SDKResponse<TSuccess, TError> {
         return self.authRequest(
             HttpMethod.PUT,
@@ -148,10 +148,10 @@ class ApiMethods {
     
     /** Make a PATCH request */
     func patch<TSuccess: Codable, TError: Codable>(
-        path: String,
-        queryParams: Any?,
-        body: Any?,
-        options: ITransportSettings?
+        _ path: String,
+        _ queryParams: Values?,
+        _ body: Any?,
+        _ options: ITransportSettings?
     ) -> SDKResponse<TSuccess, TError> {
         return self.authRequest(
             HttpMethod.PATCH,

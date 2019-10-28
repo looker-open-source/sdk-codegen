@@ -117,7 +117,7 @@ struct ApiSettings: IApiSettings {
         self.headers = settings.headers ?? defaults.headers
         self.encoding = settings.encoding ?? defaults.encoding
         if (!self.isConfigured()) {
-            throw SdkError.error(strBadConfiguration)
+            throw SDKError(strBadConfiguration)
         }
     }
     

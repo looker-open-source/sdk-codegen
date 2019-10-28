@@ -38,7 +38,6 @@ import {
 } from './sdkModels'
 import { CodeGen, warnEditing } from './codeGen'
 import * as fs from 'fs'
-import * as prettier from 'prettier'
 import { warn, isFileSync, success, commentBlock, readFileSync } from './utils'
 import { utf8 } from '../typescript/looker/rtl/constants'
 
@@ -48,7 +47,7 @@ export class SwiftGen extends CodeGen {
   itself = 'self'
   fileExtension = '.swift'
   commentStr = '// '
-  nullStr = 'null'
+  nullStr = 'nil'
   transport = 'transport'
 
   argDelimiter = ', '
@@ -59,6 +58,14 @@ export class SwiftGen extends CodeGen {
   endTypeStr = '\n}'
   needsRequestTypes = false
   willItStream = false
+  keywords = 'associatedtype,class,deinit,enum,extension,fileprivate,func,import,init,inout,internal,let,open,'
+    + 'operator,private,protocol,public,static,struct,subscript,typealias,var,break,case,continue,default,'
+    + 'defer,do,else,fallthrough,for,guard,if,in,repeat,return,switch,where,while,'
+    + 'as,Any,catch,false,is,nil,rethrows,super,self,Self,throw,throws,true,try,'
+    + '_,#available,#colorLiteral,#column,#else,#elseif,#endif,#file,#fileLiteral,#function,#if,#imageLiteral,'
+    + '#line,#selector,and #sourceLocation,associativity,convenience,dynamic,didSet,final,get,infix,indirect,'
+    + 'lazy,left,mutating,none,nonmutating,optional,override,postfix,precedence,prefix,Protocol,required,right,'
+    + 'set,Type,unowned,weak,willSet'.split(',')
 
   // @ts-ignore
   methodsPrologue(indent: string) {
@@ -67,12 +74,8 @@ export class SwiftGen extends CodeGen {
 
 import Foundation
 
+@available(OSX 10.15, *)
 class ${this.packageName}: APIMethods {
-  
-  init(authSession: IAuthorizer) {
-    super(authSession)
-  }
-  
 `
   }
 
@@ -101,6 +104,13 @@ import Foundation
     return ''
   }
 
+  private reserve(name: string) {
+    if (this.keywords.includes(name)) {
+      return `\`${name}\``
+    }
+    return name
+  }
+
   commentHeader(indent: string, text: string | undefined) {
     return text ? `${indent}/**\n${commentBlock(text, indent, ' * ')}\n${indent} */\n` : ''
   }
@@ -111,11 +121,11 @@ import Foundation
       // TODO refactor this hack to track context when the body parameter is created for the request type
       property.type.refCount++
       return this.commentHeader(indent, property.description || 'body parameter for dynamically created request type')
-        + `${indent}${property.name}: ${property.type.name}${optional}`
+        + `${indent}var ${this.reserve(property.name)}: ${property.type.name}${optional}`
     }
     const type = this.typeMap(property.type)
     return this.commentHeader(indent, this.describeProperty(property))
-      + `${indent}${property.name}: ${type.name}${optional}`
+      + `${indent}var ${this.reserve(property.name)}: ${type.name}${optional}`
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
@@ -128,14 +138,17 @@ import Foundation
       : param.type
     const mapped = this.typeMap(type)
     let pOpt = ''
+    let line = ''
     if (param.location === strBody) {
       mapped.name = `Partial<${mapped.name}>`
     }
     if (!param.required) {
       pOpt = mapped.default ? '' : '?'
+    } else {
+      line = '_ '
     }
     return this.commentHeader(indent, this.paramComment(param, mapped))
-      + `${indent}${param.name}: ${mapped.name}${pOpt}`
+      + `${indent}${line}${this.reserve(param.name)}: ${mapped.name}${pOpt}`
       + (param.required ? '' : (mapped.default ? ` = ${mapped.default}` : ''))
   }
 
@@ -151,7 +164,8 @@ import Foundation
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer: boolean = false) {
     const type = this.typeMap(method.type)
-    let headComment = `${method.httpMethod} ${method.endpoint} -> ${type.name}`
+    let returnType = type.name === 'Void' ? 'Void' : `SDKResponse<${type.name}, SDKError>`
+    let headComment = `${method.httpMethod} ${method.endpoint} -> ${returnType}`
     let fragment = ''
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
@@ -172,11 +186,11 @@ import Foundation
     }
     const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
     const header = this.commentHeader(indent, headComment)
-    + `${indent}async ${method.name}(`
+    + `${indent}func ${method.name}(`
     + (streamer ? `\n${bump}${callback}` : '')
 
     return header + fragment
-      + `${fragment? ',' : ''}\n${bump}options?: Partial<ITransportSettings>) {\n`
+      + `${fragment? ',' : ''}\n${bump}options: ITransportSettings?\n${indent}) -> ${returnType} {\n`
   }
 
   methodSignature(indent: string, method: IMethod) {
@@ -203,20 +217,26 @@ import Foundation
 
   typeSignature(indent: string, type: IType) {
     return this.commentHeader(indent, type.description) +
-      `${indent}struct ${type.name}{\n`
+      `${indent}struct ${type.name}: SDKModel {\n`
   }
 
   // @ts-ignore
   errorResponses(indent: string, method: IMethod) {
-    const results: string[] = method.errorResponses
-      .map(r => `${r.type.name}`)
-    return results.join(' | ')
+    // const results: string[] = method.errorResponses
+    //   .map(r => `${r.type.name}`)
+    // return results.join(' | ')
+    // TODO figure out how to express OR'd error type responses
+    return 'SDKError'
   }
 
   httpPath(path: string, prefix?: string) {
     prefix = prefix || ''
-    if (path.indexOf('{') >= 0) return 'encodeURI(`' + path.replace(/{/gi, '${' + prefix) + '`)'
-    return `'${path}'`
+    if (path.indexOf('{') >= 0) {
+      let tweak = path.replace(/{/gi, '\\(' + prefix)
+      tweak = tweak.replace(/}/gi, ')')
+      return `"${tweak}".encodeURI()`
+    }
+    return `"${path}"`
   }
 
   // @ts-ignore
@@ -225,12 +245,42 @@ import Foundation
     let hash: string[] = []
     for (let arg of args) {
       if (prefix) {
-        hash.push(`${arg}: ${prefix}${arg}`)
+        hash.push(`"${arg}": ${prefix}${arg}`)
       } else {
-        hash.push(arg)
+        hash.push(`"${arg}": ${arg}`)
       }
     }
-    return `\n${indent}{${hash.join(this.argDelimiter)}}`
+    return `\n${indent}[${hash.join(this.argDelimiter)}]`
+  }
+
+  queryGroup(indent: string, method: IMethod, prefix?: string) {
+    let params = method.getParams('query')
+    if ((!params) || params.length === 0) return this.nullStr
+    let hash: string[] = []
+    for (let param of params) {
+      let arg = this.asAny(param)
+      if (prefix) {
+        hash.push(`"${param.name}": ${prefix}${arg}`)
+      } else {
+        hash.push(`"${param.name}": ${arg}`)
+      }
+    }
+    return `\n${indent}[${hash.join(this.argDelimiter)}]`
+  }
+
+  asAny(param: IParameter) : Arg {
+    let castIt = false
+    if (param.type.elementType) {
+      castIt = true
+    } else {
+      let mapped = this.typeMap(param.type)
+      switch (mapped.name.toLowerCase()) {
+        case 'date': case 'datetime': case 'url': case 'uri': case 'object':
+        case 'bool': castIt = true; break;
+        default: castIt = false; break;
+      }
+    }
+    return param.name + (castIt ? ' as Any' : '')
   }
 
   // @ts-ignore
@@ -267,7 +317,7 @@ import Foundation
     // let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
     // result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
     result = this.argFill(result, method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr)
-    result = this.argFill(result, this.argGroup(indent, method.queryArgs, request))
+    result = this.argFill(result, this.queryGroup(indent, method, request))
     return result
   }
 
@@ -277,7 +327,8 @@ import Foundation
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     const errors = this.errorResponses(indent, method)
-    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}, ${errors}>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
+    return `${indent}let result: SDKResponse<${type.name}, ${errors}> = ${this.it(method.httpMethod.toLowerCase())}(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})
+${indent}return result`
   }
 
   streamCall(indent: string, method: IMethod) {
@@ -322,9 +373,9 @@ import Foundation
       const lookerPattern = /lookerVersion = ['"].*['"]/i
       const apiPattern = /apiVersion = ['"].*['"]/i
       const envPattern = /environmentPrefix = ['"].*['"]/i
-      content = content.replace(lookerPattern, `lookerVersion = '${this.versions.lookerVersion}'`)
-      content = content.replace(apiPattern, `apiVersion = '${this.versions.apiVersion}'`)
-      content = content.replace(envPattern, `environmentPrefix = '${this.packageName.toUpperCase()}'`)
+      content = content.replace(lookerPattern, `lookerVersion = "${this.versions.lookerVersion}"`)
+      content = content.replace(apiPattern, `apiVersion = "${this.versions.apiVersion}"`)
+      content = content.replace(envPattern, `environmentPrefix = "${this.packageName.toUpperCase()}"`)
       fs.writeFileSync(stampFile, content, {encoding: utf8})
       success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}`)
     } else {
@@ -343,16 +394,16 @@ import Foundation
       'integer': {name: 'Int', default: '0'},
       'int32': {name: 'Int32', default: '0'},
       'int64': {name: 'Int64', default: '0'},
-      'string': {name: 'String', default: "''"},
+      'string': {name: 'String', default: '""'},
       'password': {name: 'Password', default: this.nullStr},
       'byte': {name: 'binary', default: this.nullStr},
-      'boolean': {name: 'boolean', default: ''},
+      'boolean': {name: 'Bool', default: ''},
       'uri': {name: 'URL', default: this.nullStr},
       'url': {name: 'URL', default: this.nullStr},
       'datetime': {name: 'Date', default: ''}, // TODO is there a default expression for datetime?
       'date': {name: 'Date', default: ''}, // TODO is there a default expression for date?
       'object': {name: 'Any', default: ''},
-      'void': {name: 'Void', default: ''}
+      'void': {name: 'Voidable', default: ''},
     }
 
     if (type.elementType) {

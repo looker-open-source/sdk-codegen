@@ -27,8 +27,8 @@ import Foundation
 struct RequestResponse {
     var data: Data?
     var response: URLResponse?
-    var error: Error?
-    init(_ data: Data?, _ response: URLResponse?, _ error: Error?) {
+    var error: SDKError?
+    init(_ data: Data?, _ response: URLResponse?, _ error: SDKError?) {
         self.data = data
         self.response = response
         self.error = error
@@ -50,7 +50,7 @@ class BaseTransport : ITransport  {
     func request<TSuccess: Codable, TError: Codable> (
         _ method: HttpMethod,
         _ path: String,
-        _ queryParams: Any?,
+        _ queryParams: Values?,
         _ body: Any?,
         _ authenticator: Authenticator?,
         _ options: ITransportSettings?
@@ -70,7 +70,8 @@ class BaseTransport : ITransport  {
         let http = self.plainRequest(method, path, queryParams, body, authenticator, settings)
         if let error = http.error {
             ok = false
-            fail = SDKError(error.localizedDescription) as? TError
+//            let msg = error.errorDescription!
+            fail = error as? TError
         } else {
             let response = http.response as! HTTPURLResponse
             let contentType = response.mimeType!
@@ -98,7 +99,7 @@ class BaseTransport : ITransport  {
     func plainRequest(
         _ method: HttpMethod,
         _ path: String,
-        _ queryParams: Any?,
+        _ queryParams: Values?,
         _ body: Any?,
         _ authenticator: Authenticator?,
         _ options: ITransportSettings?
@@ -113,7 +114,8 @@ class BaseTransport : ITransport  {
         }
         let req = self.initRequest(method, path, queryParams, body, authenticator, settings)
         if (req == nil) {
-            return RequestResponse(nil, nil, SDKError("The SDK call failed. Invalid properties for request \(method.rawValue) \(path)"))
+            let err = SDKError("The SDK call failed. Invalid properties for request \(method.rawValue) \(path)")
+            return RequestResponse(nil, nil, err)
         }
         
         // This is required for requests without a UI for some bogus reason
@@ -122,7 +124,7 @@ class BaseTransport : ITransport  {
         
         var result: RequestResponse? = nil
         let task = self.session.dataTask(with: req!) { data, response, error in
-            result = RequestResponse(data, response, error)
+            result = RequestResponse(data, response, error as? SDKError)
             semi.signal() // Notify request has completed
         }
         task.resume() // begin request
@@ -133,7 +135,7 @@ class BaseTransport : ITransport  {
     private func initRequest(
         _ method: HttpMethod,
         _ path: String,
-        _ queryParams: Any?,
+        _ queryParams: Values?,
         _ body: Any?,
         _ authenticator: Authenticator?,
         _ options: ITransportSettings?

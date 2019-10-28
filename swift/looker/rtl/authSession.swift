@@ -105,7 +105,7 @@ class AuthSession: IAuthSession {
         case .success(let response):
             return response
         case .error(let error):
-            throw SdkError.error(error.errorDescription
+            throw SDKError(error.errorDescription
                 ?? error.failureReason
                 ?? error.recoverySuggestion
                 ?? error.helpAnchor
@@ -132,7 +132,7 @@ class AuthSession: IAuthSession {
             let response : SDKResponse<AccessToken, SDKError> = self.transport.request(
                 HttpMethod.POST,
                 "/login",
-                ["client_id": client_id, "client_secret": client_secret],
+                ["client_id": client_id!, "client_secret": client_secret!],
                 nil,
                 nil,
                 nil

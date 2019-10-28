@@ -31,6 +31,7 @@ extension NSRegularExpression {
     }
 }
 
+// Convenience extension for regular expression matching
 extension NSRegularExpression {
     func matches(_ string: String) -> Bool {
         let range = NSRange(location: 0, length: string.utf16.count)
@@ -38,6 +39,7 @@ extension NSRegularExpression {
     }
 }
 
+// Convenience extension for regular expression matching
 extension String {
     static func ~= (lhs: String, rhs: String) -> Bool {
         guard let regex = try? NSRegularExpression(pattern: rhs) else { return false }
@@ -46,8 +48,15 @@ extension String {
     }
 }
 
+// Convenience extension for an encodeURI() function similar to other SDKs
+extension String {
+    func encodeURI() -> String {
+        return self.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+    }
+}
+
 struct Constants {
-    static let lookerVersion = "6.21"
+    static let lookerVersion = "6.23"
     static let apiVersion = "3.1"
     static let sdkVersion = #"\#(apiVersion).\#(lookerVersion)"#
     static let environmentPrefix = "LOOKERSDK"
@@ -81,14 +90,7 @@ typealias StringDictionary<Value> = Dictionary<String, Value>
 /// Heterogeneous Dictionary with String keys
 typealias ValueDictionary<K: Hashable, V> = Dictionary<K, V>
 
-// From https://stackoverflow.com/a/40629365/74137 may want to use one of the other patterns instead
-//extension String: LocalizedError {
-//    public var errorDescription: String? { return self }
-//}
-
-enum SdkError: Error {
-    case error(String)
-}
+typealias Values = [String: Any]
 
 /// Extension for converting a `String` to `Bool`
 extension String {
@@ -104,14 +106,52 @@ extension String {
     }
 }
 
-/* TODO implement DelimArray<T>
-extension Array where Element: Codable {
-    func toString() {
-        let strings = self.map(String{$0})
-        return ", ".joined(strings)
+/// Structure that represents "Void" return results for the SDK response
+struct Voidable : SDKModel {
+}
+
+// Support for converting a struct or class to a Dictionary of values
+// Nifty code taken from https://stackoverflow.com/a/46597941/74137
+struct JSON {
+    static let encoder = JSONEncoder()
+}
+
+extension Encodable {
+    subscript(key: String) -> Any? {
+        return dictionary[key]
+    }
+    var dictionary: Values {
+        return (try? JSONSerialization.jsonObject(with: JSON.encoder.encode(self))) as? Values ?? [:]
     }
 }
 
+extension StringProtocol {
+    subscript(bounds: CountableClosedRange<Int>) -> SubSequence {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(start, offsetBy: bounds.count)
+        return self[start...end]
+    }
+    
+    subscript(bounds: CountableRange<Int>) -> SubSequence {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(start, offsetBy: bounds.count)
+        return self[start..<end]
+    }
+}
+
+extension Array where Element: LosslessStringConvertible {
+    func toString(_ separator: String = ", ", _ prefix: String = "", _ suffix: String = "") -> String {
+        var result = ""
+        let skip = separator.count
+        result = reduce(result, { $0 + separator + String($1) })
+        result = String(result[skip..<result.count])
+        return "\(prefix)\(result)\(suffix)"
+    }
+}
+
+typealias DelimArray<T> = Array<T>
+
+/*
 class DelimArray<T> : Array<T> {
     var items: [T]
     var separator: String

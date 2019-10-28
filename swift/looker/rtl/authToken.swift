@@ -27,25 +27,25 @@ import Foundation
 protocol AccessTokenProtocol {
   var access_token: String { get set }
   var token_type: String { get set }
-  var expires_in: Int { get set }
+  var expires_in: Int64 { get set }
 }
-
-struct AccessToken: AccessTokenProtocol, Codable {
-  var access_token: String
-  var token_type: String
-  var expires_in: Int
-}
+//
+//struct AccessToken: AccessTokenProtocol, Codable {
+//  var access_token: String
+//  var token_type: String
+//  var expires_in: Int
+//}
 
 struct AuthToken: AccessTokenProtocol {
   var access_token = ""
   var token_type = ""
-  var expires_in = 0
+    var expires_in: Int64 = 0
 
   private var expiresAt: Date?
 
   init() { }
 
-  init(_ token: AccessTokenProtocol) {
+  init(_ token: AccessToken) {
     self = self.setToken(token)
   }
 
@@ -62,11 +62,11 @@ struct AuthToken: AccessTokenProtocol {
   }
 
   // Assign the token and set its expiration
-  mutating func setToken(_ token: AccessTokenProtocol) -> Self {
-    self.access_token = token.access_token
-    self.token_type = token.token_type
-    self.expires_in = token.expires_in
-    self.expiresAt = Self.expiryDate(token.expires_in)
+  mutating func setToken(_ token: AccessToken) -> Self {
+    self.access_token = token.access_token!
+    self.token_type = token.token_type!
+    self.expires_in = token.expires_in!
+    self.expiresAt = Self.expiryDate(Int(self.expires_in))
     return self
   }
 

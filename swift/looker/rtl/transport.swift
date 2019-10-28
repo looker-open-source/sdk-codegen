@@ -83,7 +83,7 @@ protocol ITransport {
     func request<TSuccess: Codable, TError: Codable>(
         _ method: HttpMethod,
         _ path: String,
-        _ queryParams: Any?,
+        _ queryParams: Values?,
         _ body: Any?,
         _ authenticator: Authenticator?,
         _ options: ITransportSettings?
@@ -140,7 +140,7 @@ struct SDKError: ISDKError, Codable {
 }
 
 /// For deserializating JSON into SDK structures
-/// This could remain the same as simply `Codable`, but this abstraction is introduced for future flexibility
+/// This could remain the same as simply `Codable`, but this abstraction is introduced for future extensibility
 protocol SDKModel: Codable {
 }
 
@@ -185,7 +185,7 @@ func SDKOk(_ response: SDKResponse<Any, SDKError>) throws -> Any {
     case .success(let response):
         return response
     case .error(let error):
-        throw SdkError.error(error.errorDescription
+        throw SDKError(error.errorDescription
             ?? error.failureReason
             ?? error.recoverySuggestion
             ?? error.helpAnchor
