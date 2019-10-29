@@ -17,6 +17,10 @@ from google.oauth2 import service_account  # type: ignore
 import googleapiclient.errors  # type: ignore
 import googleapiclient.discovery  # type: ignore
 
+NIL = "\x00"
+
+DATE_FORMAT = "%m/%d/%Y"
+
 
 class Sheets:
     """An API for manipulating the Google Sheet containing hackathon data."""
@@ -54,6 +58,7 @@ class Sheets:
         """Register user to a hackathon"""
         if not self.users.is_created(user):
             self.users.create(user)
+
         registrant = Registrant(
             user_email=user.email,
             hackathon_name=hackathon,
@@ -193,7 +198,7 @@ class Registrant:
     user_email: str
     hackathon_name: str
     date_registered: datetime.datetime
-    attended: Optional[bool]
+    attended: Optional[bool] = None
 
 
 class Registrations(WhollySheet[Registrant]):
@@ -229,16 +234,33 @@ class SheetError(Exception):
 converter.register_structure_hook(
     datetime.datetime,
     lambda d, _: datetime.datetime.strptime(  # type: ignore
-        d, "%m/%d/%Y"
+        d, DATE_FORMAT
     ),
 )
 converter.register_unstructure_hook(
     datetime.datetime,
     lambda d: datetime.datetime.strftime(  # type: ignore
-        d, "%m/%d/%Y"
+        d, DATE_FORMAT
     ),
 )
-converter.register_unstructure_hook(type(None), lambda s: "NA")
+
+
+def _convert_bool(val: str, _: bool) -> Optional[bool]:
+    converted: Optional[bool]
+    if val.lower() in ("yes", "y", "true", "t", "1"):
+        converted = True
+    elif val.lower() in ("", "no", "n", "false", "f", "0"):
+        converted = False
+    elif val.lower() == NIL:
+        converted = None
+    else:
+        raise TypeError
+    return converted
+
+
+converter.register_unstructure_hook(type(None), lambda t: NIL)
+converter.register_structure_hook(bool, _convert_bool)
+
 
 if __name__ == "__main__":
     sheets = Sheets(spreadsheet_id="SHEET_ID", cred_file="CREDS_FILE")

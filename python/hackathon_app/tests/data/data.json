@@ -554,7 +554,7 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "NULL"
+                                        "stringValue": "\u0000"
                                     }
                                 }
                             ]
@@ -578,7 +578,7 @@
                                 },
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "NULL"
+                                        "stringValue": "\u0000"
                                     }
                                 }
                             ]

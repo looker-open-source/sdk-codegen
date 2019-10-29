@@ -6,13 +6,6 @@ from sheets import Hackathon, Hackathons
 DATE_FORMAT = "%m/%d/%Y"
 
 
-@pytest.fixture(scope="module", name="hackathons")
-def instantiate_users(spreadsheet_client, spreadsheet):
-    """Creates and returns an instance of Hackathons"""
-    client = spreadsheet_client.values()
-    return Hackathons(client=client, spreadsheet_id=spreadsheet["spreadsheetId"])
-
-
 def test_rows_returns_hackathons(hackathons: Hackathons, test_hackathons):
     """rows() should return a list of Hackathon objects"""
     all_hackathons = hackathons.rows()

@@ -8,6 +8,7 @@ from google.oauth2 import service_account  # type: ignore
 from googleapiclient import discovery  # type: ignore
 from sheets import (
     Hackathon,
+    Hackathons,
     Registrant,
     Registrations,
     Sheets,
@@ -17,7 +18,7 @@ from sheets import (
 )
 
 
-@pytest.fixture(scope="module", name="WhollySheet")
+@pytest.fixture(name="WhollySheet")
 def instantiate_whollysheet(spreadsheet_client, spreadsheet):
     """Creates and returns an instance of WhollySheet"""
 
@@ -30,28 +31,34 @@ def instantiate_whollysheet(spreadsheet_client, spreadsheet):
     )
 
 
-@pytest.fixture(scope="module", name="sheets")
+@pytest.fixture(name="sheets")
 def instantiate_sheets(spreadsheet, cred_file):
     """Creates and returns an instance of Sheets"""
-    spreadsheet = spreadsheet
     return Sheets(spreadsheet_id=spreadsheet["spreadsheetId"], cred_file=cred_file)
 
 
-@pytest.fixture(scope="module", name="users")
+@pytest.fixture(name="users")
 def instantiate_users(spreadsheet_client, spreadsheet):
     """Creates and returns an instance of Users"""
     client = spreadsheet_client.values()
     return Users(client=client, spreadsheet_id=spreadsheet["spreadsheetId"])
 
 
-@pytest.fixture(scope="module", name="registrations")
+@pytest.fixture(name="hackathons")
+def instantiate_hackathons(spreadsheet_client, spreadsheet):
+    """Creates and returns an instance of Hackathons"""
+    client = spreadsheet_client.values()
+    return Hackathons(client=client, spreadsheet_id=spreadsheet["spreadsheetId"])
+
+
+@pytest.fixture(name="registrations")
 def instantiate_registrations(spreadsheet_client, spreadsheet):
     """Creates and returns an instance of Registrations"""
     client = spreadsheet_client.values()
     return Registrations(client=client, spreadsheet_id=spreadsheet["spreadsheetId"])
 
 
-@pytest.fixture(scope="module", name="spreadsheet")
+@pytest.fixture(name="spreadsheet")
 def create_test_sheet(test_data, spreadsheet_client, drive_client):
     """Create a test sheet and populated it with test data"""
     request = spreadsheet_client.create(body=test_data)
