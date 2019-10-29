@@ -18,6 +18,7 @@ flask-wtf = "*"
 google-api-python-client = "*"
 google-auth = "*"
 python-json-logger = "*"
+click = "*"
 
 [requires]
 python_version = "3.7"
