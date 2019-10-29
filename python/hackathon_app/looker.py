@@ -108,6 +108,11 @@ def disable_user(*, sdk: methods.LookerSDK, user_id: int):
     sdk.update_user(user_id=user_id, body=models.WriteUser(is_disabled=True))
 
 
+def me():
+    sdk = client.setup()
+    return sdk.me()
+
+
 class RegisterError(Exception):
     """Failed to register user in looker instance.
     """

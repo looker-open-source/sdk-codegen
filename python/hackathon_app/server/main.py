@@ -49,6 +49,10 @@ class RegistrationForm(flask_wtf.FlaskForm):
 
 
 @app.route("/hackathons")
+def hackathons():
+    return get_hackathons()
+
+
 def get_hackathons():
     sheets_client = sheets.Sheets(
         spreadsheet_id=app.config["GOOGLE_SHEET_ID"],
@@ -123,6 +127,14 @@ def register() -> Any:
             "message": "; ".join(f"{k}: {v}" for k, v in errors.items()),
         }
     return flask.jsonify(response)
+
+
+@app.route("/status")
+def status():
+    assert get_hackathons()
+    assert looker.me()
+    status_path = os.path.join(app.static_folder, "status.json")
+    return flask.send_file(status_path)
 
 
 @app.route("/")
