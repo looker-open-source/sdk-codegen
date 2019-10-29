@@ -1,6 +1,7 @@
 import sys
 import time
 import textwrap
+from typing import Optional
 
 import exceptions
 from looker_sdk import client, models
@@ -31,8 +32,7 @@ def main():
         )  # noqa: B950
 
     dashboard = get_dashboard(dashboard_title)
-    if dashboard:
-        download_dashboard(dashboard, pdf_style, pdf_width, pdf_height)
+    download_dashboard(dashboard, pdf_style, pdf_width, pdf_height)
 
 
 def get_dashboard(title: str) -> Optional[models.Dashboard]:
