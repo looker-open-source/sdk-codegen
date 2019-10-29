@@ -132,4 +132,41 @@ class transportTests: XCTestCase {
         XCTAssertEqual(user.email, "zz@foo.bar")
     }
 
+    func testQueryParamsAllNil() {
+        let values: Values = [ "Not": nil, "A": nil, "Darned": nil, "Thing!": nil ]
+        let actual = addQueryParams("empty", values)
+        XCTAssertEqual(actual, "empty")
+    }
+    
+    func testQueryParams1() {
+        let values: Values = [ "One": 1 ]
+        let actual = addQueryParams("Wonderful", values)
+        XCTAssertEqual(actual, "Wonderful?One=1")
+    }
+
+    func testQueryParamsMixed() {
+        let opt: Bool? = nil
+        let values: Values = [ "One": 1, "Missing": opt, "Name": "John Kaster" ]
+        let actual = addQueryParams("Some", values)
+        XCTAssertEqual(actual, "Some?One=1&Name=John%20Kaster")
+    }
+
+    func testQueryParamsDelimArray() {
+        let ids: DelimArray<Int64> = [1,2,3]
+        let names: DelimArray<String> = ["LLoyd?", "ZZooey#"]
+        let nums: DelimArray<Double> = [2.2,3.3]
+        let flags: DelimArray<Bool> = [false, true]
+        let values: Values = [ "Ids": ids, "Names": names, "Nums": nums, "Flags": flags]
+        let actual = addQueryParams("Delim", values)
+        XCTAssertEqual(actual, "Delim?Ids=1,2,3&Names=LLoyd?,ZZooey#&Nums=2.2,3.3&Flags=false,true")
+    }
+    
+    func testQueryParamsMulti() {
+        let date: Date? = SToD("20191028")
+        let ids: DelimArray<Int> = [1,2,3]
+        let values: Values = [ "Int": 1, "Dub": 2.2, "Bool": false, "Str": "Boo?", "Date": date, "Ids": ids]
+        let actual = addQueryParams("Multi", values)
+        XCTAssertEqual(actual, "Multi?Int=1&Dub=2.2&Bool=false&Str=Boo?&Date=2019-01-28%2008:00:00%20+0000")
+    }
+
 }

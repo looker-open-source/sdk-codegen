@@ -234,7 +234,7 @@ import Foundation
     if (path.indexOf('{') >= 0) {
       let tweak = path.replace(/{/gi, '\\(' + prefix)
       tweak = tweak.replace(/}/gi, ')')
-      return `"${tweak}".encodeURI()`
+      return `"${tweak}".encodePath()`
     }
     return `"${path}"`
   }

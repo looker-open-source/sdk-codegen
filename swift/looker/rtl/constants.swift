@@ -50,8 +50,11 @@ extension String {
 
 // Convenience extension for an encodeURI() function similar to other SDKs
 extension String {
-    func encodeURI() -> String {
+    func encodePath() -> String {
         return self.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+    }
+    func encodeQuery() -> String {
+        return self.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
     }
 }
 
@@ -90,7 +93,7 @@ typealias StringDictionary<Value> = Dictionary<String, Value>
 /// Heterogeneous Dictionary with String keys
 typealias ValueDictionary<K: Hashable, V> = Dictionary<K, V>
 
-typealias Values = [String: Any]
+typealias Values = [String: Any?]
 
 /// Extension for converting a `String` to `Bool`
 extension String {
@@ -118,11 +121,75 @@ struct JSON {
 
 extension Encodable {
     subscript(key: String) -> Any? {
-        return dictionary[key]
+        return dictionary[key] as Any?
     }
     var dictionary: Values {
         return (try? JSONSerialization.jsonObject(with: JSON.encoder.encode(self))) as? Values ?? [:]
     }
+}
+
+func isOptional(_ value: Any) -> Bool {
+    let mirror = Mirror(reflecting: value)
+    let style = mirror.displayStyle
+    return style == .optional
+}
+
+func unwrap(_ any:Any) -> Any? {
+
+    let mi = Mirror(reflecting: any)
+    if mi.displayStyle != .optional {
+        return any
+    }
+
+    if mi.children.count == 0 { return nil }
+    let (_, some) = mi.children.first!
+    return some
+
+}
+
+// Convert any value to its Query Param equivalent
+func asQ(_ value: Any?) -> String {
+    var result = ""
+    if let val = value {
+        switch (val) {
+        case is DelimArray<Double>:
+            let x = val as! DelimArray<Double>
+            result = x.toString().encodeQuery()
+            break
+        case is DelimArray<Float>:
+            let x = val as! DelimArray<Float>
+            result = x.toString().encodeQuery()
+            break
+        case is DelimArray<Int>:
+            let x = val as! DelimArray<Int>
+            result = x.toString().encodeQuery()
+            break
+        case is DelimArray<Int32>:
+            let x = val as! DelimArray<Int32>
+            result = x.toString().encodeQuery()
+            break
+        case is DelimArray<Int64>:
+            let x = val as! DelimArray<Int64>
+            result = x.toString().encodeQuery()
+            break
+        case is DelimArray<String>:
+            let x = val as! DelimArray<String>
+            result = x.toString().encodeQuery()
+            break
+        case is DelimArray<Bool>:
+            let x = val as! DelimArray<Bool>
+            result = x.toString().encodeQuery()
+            break
+        default:
+            result = "\(val)".encodeQuery()
+        }
+//        if val is Array<Any> {
+//            let a = val as! Array<Any>
+//            result = a.toString().encodeQuery()
+//        } else {
+//        }
+    }
+    return result
 }
 
 extension StringProtocol {
@@ -140,7 +207,7 @@ extension StringProtocol {
 }
 
 extension Array where Element: LosslessStringConvertible {
-    func toString(_ separator: String = ", ", _ prefix: String = "", _ suffix: String = "") -> String {
+    func toString(_ separator: String = ",", _ prefix: String = "", _ suffix: String = "") -> String {
         var result = ""
         let skip = separator.count
         result = reduce(result, { $0 + separator + String($1) })
@@ -151,22 +218,76 @@ extension Array where Element: LosslessStringConvertible {
 
 typealias DelimArray<T> = Array<T>
 
-/*
-class DelimArray<T> : Array<T> {
-    var items: [T]
-    var separator: String
-    var prefix: String
-    var suffix: String
-    init(_ items: [T], _ separator: String = ",", _ prefix: String = "", _ suffix: String = "") {
-        self.items = items
-        self.separator = separator
-        self.prefix = prefix
-        self.suffix = suffix
-    }
-    
-    mutating func toString() {
-        let strings = self.items.map(String{$0})
-        return self.prefix + separator.join(strings) + self.suffix
+// UTC date routines from this wonderful code
+// https://stackoverflow.com/a/28016692/74137
+@available(OSX 10.12, *)
+extension ISO8601DateFormatter {
+    convenience init(_ formatOptions: Options, timeZone: TimeZone = TimeZone(secondsFromGMT: 0)!) {
+        self.init()
+        self.formatOptions = formatOptions
+        self.timeZone = timeZone
     }
 }
-*/
+
+@available(OSX 10.13, *)
+extension Formatter {
+    static let iso8601 = ISO8601DateFormatter([.withInternetDateTime, .withFractionalSeconds])
+}
+
+@available(OSX 10.13, *)
+extension Date {
+    var iso8601: String {
+        return Formatter.iso8601.string(from: self)
+    }
+}
+
+@available(OSX 10.13, *)
+extension String {
+    var iso8601: Date? {
+        return Formatter.iso8601.date(from: self)
+    }
+}
+
+@available(OSX 10.13, *)
+extension JSONDecoder.DateDecodingStrategy {
+    static let iso8601withFractionalSeconds = custom {
+        let container = try $0.singleValueContainer()
+        let string = try container.decode(String.self)
+        guard let date = Formatter.iso8601.date(from: string) else {
+            throw DecodingError.dataCorruptedError(in: container,
+                  debugDescription: "Invalid date: " + string)
+        }
+        return date
+    }
+}
+
+@available(OSX 10.13, *)
+extension JSONEncoder.DateEncodingStrategy {
+    static let iso8601withFractionalSeconds = custom {
+        var container = $1.singleValueContainer()
+        try container.encode(Formatter.iso8601.string(from: $0))
+    }
+}
+
+@available(OSX 10.13, *)
+func UTCDate(_ dateString: String) -> Date? {
+    if let date = dateString.iso8601 {
+        return date
+    }
+    // No error handling, just return nil
+    return nil
+}
+
+/// YYYYMMDD date representation to Date
+func SToD(_ dateString: String) -> Date? {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "YYYYMMDD"
+    return formatter.date(from: dateString)
+}
+
+/// Date to string YYYYMMDD representation
+func DToS(_ date: Date) -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "YYYYMMDD"
+    return formatter.string(from: date)
+}

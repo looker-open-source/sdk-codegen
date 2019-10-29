@@ -277,25 +277,41 @@ func responseMode(_ contentType: String) -> ResponseMode {
     return ResponseMode.unknown
 }
 
+// Remove all "optional" possibly nil values from the dictionary
+func notAnOption(_ values: Values) -> ValueDictionary<String, Any> {
+    var result = ValueDictionary<String, Any>()
+    for (key, optional) in values {
+        if let un = optional {
+            result[key] = un
+        }
+    }
+    return result
+}
+
 /** constructs the path argument including any optional query parameters
- @param {string} path the base path of the request
+ @param path the base path of the request
  
- @param {[key: string]: string} obj optional collection of query parameters to encode and append to the path
+ @param params optional collection of query parameters to encode and append to the path
  
  */
-func addQueryParams(_ path: String, _ params: ValueDictionary<String, Any?>?) -> String {
+func addQueryParams(_ path: String, _ params: Values?) -> String {
     if (params == nil || params?.count == 0) {
         return path
     }
-    let qp = params!
-        // TODO verify we don't need to filter out unset values
-        //        .filter { (key: String, value: Any) -> Bool in
-        //            guard value != nil { return true } else { return false }
-        //    }
-        .map { (key: String, value: Any ) -> String in
-            "\(key)=\(value)"
+    var qp = ""
+    if let up = params {
+        // Strip out any values that may be assigned that are nil.
+        let vals = notAnOption(up)
+        qp = vals
+            // TODO verify we don't need to filter out unset values
+            //        .filter { (key: String, value: Any) -> Bool in
+            //            guard value != nil { return true } else { return false }
+            //    }
+            .map { (key: String, value: Any ) -> String in
+                "\(key)=\(asQ(value))"
+        }
+        .joined(separator: "&")
     }
-    .joined(separator: "&")
     var result = path
     if (qp != "") { result += "?" + qp }
     return result
