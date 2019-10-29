@@ -1,6 +1,6 @@
 set -e
-cd "$(dirname "$0")"
 cd frontend
+yarn install
 yarn build
 cd ..
 docker build -t hackathon_app .
