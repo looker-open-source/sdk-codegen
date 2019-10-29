@@ -2,5 +2,6 @@
 **/looker.ini
 **/node_modules
 **/package-lock.json
+**/.mypy_cache/
 **/.vscode
-**/.mypy_cache
+**/.__pycache__

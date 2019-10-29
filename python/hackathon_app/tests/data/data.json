@@ -1,0 +1,594 @@
+{
+    "sheets": [
+        {
+            "properties": {
+                "title": "users"
+            },
+            "data": [
+                {
+                    "rowData": [
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "first_name"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "last_name"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "email"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "date_created"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "organization"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "tshirt_size"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "LLoyd"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Llookicorn"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "lloyd@foo.com"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "5/1/2012"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Looker"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "M"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Zachary"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Zoomify"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "zachd@bar.com"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "5/1/2018"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Bar"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "M"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Balthazar"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Bombastic"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "blthzr@quz.com"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "4/15/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Quz"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "S"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Amanda"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Smith"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "amanda@baz.com"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "2/20/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Baz"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "S"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "properties": {
+                "title": "hackathons"
+            },
+            "data": [
+                {
+                    "rowData": [
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "name"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "location"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "date"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "duration_in_days"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "sfo_2018"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "San Francisco"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "11/20/2028"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "1"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "chicago_2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Chicago"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "9/25/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "1"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "london_2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "London"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "5/17/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "1"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "sfo_2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "San Francisco"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "11/15/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "1"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "properties": {
+                "title": "registrations"
+            },
+            "data": [
+                {
+                    "rowData": [
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "user_email"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "hackathon_name"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "date_registered"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "attended"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "lloyd@foo.com"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "sfo_2018"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "9/10/2018"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "True"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "zach@bar.com"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "sfo_2018"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "9/13/2018"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "False"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "amanda@baz.com"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "chicago_2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "8/15/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "True"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "blthzr@quz.com"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "chicago_2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "8/28/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "False"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "lloyd@foo.com"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "london_2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "4/4/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "True"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "zach@bar.com"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "london_2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "5/10/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "True"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "amanda@baz.com"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "london_2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "4/20/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "False"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "blthzr@quz.com"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "london_2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "5/1/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "True"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "lloyd@foo.com"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "sfo_2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "10/5/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "\u0000"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "zach@bar.com"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "sfo_2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "10/9/2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "\u0000"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "properties": {
+        "title": "Hackathons Test Data"
+    }
+}
