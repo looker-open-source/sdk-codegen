@@ -32,17 +32,19 @@ class APIMethods {
         self.authSession = authSession
     }
     
-    func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
+    func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) -> TSuccess {
         switch response {
         case .success(let response):
             return response
         case .error(let error):
-            throw SDKError(error.errorDescription
+            let message = error.errorDescription
                 ?? error.failureReason
                 ?? error.recoverySuggestion
                 ?? error.helpAnchor
-                ?? "Unknown SDK Error")
+                ?? "Unknown SDK Error"
+            print("Error: \(message)")
         }
+        return () as! TSuccess
     }
     
     func authRequest<TSuccess: Codable, TError: Codable>(
@@ -61,7 +63,7 @@ class APIMethods {
             body,
             { props -> URLRequest in
                 return self.authSession.authenticate(props)
-        },
+            },
             options
         )
     }

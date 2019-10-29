@@ -49,7 +49,7 @@ struct DefaultSettings : IApiSettings {
     func isConfigured() -> Bool {
         return false
     }
-    func readConfig(_ section: String?) -> IApiSection {
+    func readConfig(_ section: String? = nil) -> IApiSection {
         return [:]
     }
     var base_url: String? = ""
@@ -92,7 +92,7 @@ func ValueSettings(_ values: StringDictionary<String>) -> IApiSettings {
  * .ini Configuration initializer
  */
 struct ApiSettings: IApiSettings {
-    func readConfig(_ section: String?) -> IApiSection {
+    func readConfig(_ section: String? = nil) -> IApiSection {
         return [:]
     }
     

@@ -26,6 +26,7 @@ class authSessionTests: XCTestCase {
         let auth = AuthSession(settings, xp)
         XCTAssertFalse(auth.isAuthenticated())
         let token = auth.login()
+        XCTAssertTrue(auth.isAuthenticated())
         XCTAssertNotNil(token)
         XCTAssertNotNil(token.access_token)
         XCTAssertNotNil(token.token_type)

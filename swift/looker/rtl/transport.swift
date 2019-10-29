@@ -146,15 +146,20 @@ protocol SDKModel: Codable {
 
 /// Convert a JSON string into the type `T`
 /// @throws errors if deserialization fails
-func deserialize<T>(json: String) throws -> T where T : Codable {
+func deserialize<T>(_ data: Data) throws -> T where T : Codable {
     let decoder = JSONDecoder()
     do {
-        let data = Data(json.utf8)
         let result: T = try decoder.decode(T.self, from: data)
         return result
     } catch {
         throw error
     }
+
+}
+/// Convert a JSON string into the type `T`
+/// @throws errors if deserialization fails
+func deserialize<T>(_ json: String) throws -> T where T : Codable {
+    return try deserialize(Data(json.utf8))
 }
 
 

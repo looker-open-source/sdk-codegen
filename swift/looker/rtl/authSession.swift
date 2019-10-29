@@ -67,7 +67,7 @@ class AuthSession: IAuthSession {
     }
     
     func login(_ sudoId: String = "") -> AuthToken {
-        if (sudoId != self.sudoId || self.isAuthenticated()) {
+        if (sudoId != self.sudoId || !self.isAuthenticated()) {
             _ = try? self._login(sudoId)
         }
         return self.activeToken
@@ -132,8 +132,8 @@ class AuthSession: IAuthSession {
             let response : SDKResponse<AccessToken, SDKError> = self.transport.request(
                 HttpMethod.POST,
                 "/login",
-                ["client_id": client_id!, "client_secret": client_secret!],
                 nil,
+                ["client_id": client_id!, "client_secret": client_secret!],
                 nil,
                 nil
             )

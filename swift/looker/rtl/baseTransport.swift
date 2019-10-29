@@ -79,12 +79,13 @@ class BaseTransport : ITransport  {
             do {
                 print(http.data as Any)
                 let parsed = parseResponse(contentType, data)
+                let str = parsed as! String
                 if (self.ok(response)) {
                     ok = true
-                    success = try deserialize(json: parsed as! String)
+                    success = try deserialize(str)
                 } else {
                     ok = false
-                    fail = try deserialize(json: parsed as! String)
+                    fail = try deserialize(str)
                 }
             } catch {
                 ok = false
@@ -124,6 +125,9 @@ class BaseTransport : ITransport  {
         
         var result: RequestResponse? = nil
         let task = self.session.dataTask(with: req!) { data, response, error in
+            if let err = error {
+                print(err as Any)
+            }
             result = RequestResponse(data, response, error as? SDKError)
             semi.signal() // Notify request has completed
         }
@@ -159,7 +163,8 @@ class BaseTransport : ITransport  {
     }
     
     private func ok(_ res: HTTPURLResponse) -> Bool {
-        return (200...299).contains(res.statusCode)
+        let code = res.statusCode // For visibility in the sucky XCode debugger
+        return (200...299).contains(code)
     }
     
 }

@@ -58,4 +58,24 @@ class baseTransportTests: XCTestCase {
         XCTAssertTrue(val.contains("looker_release_version"))
     }
     
+    func testPlainLogin() {
+        let settings = config!
+        let values = settings.readConfig()
+        let client_id = values["client_id"]
+        let client_secret = values["client_secret"]
+        let xp = BaseTransport(settings)
+        let path = "/login"
+        let response = xp.plainRequest(
+            HttpMethod.POST, path, nil,
+            ["client_id": client_id, "client_secret": client_secret], nil, nil)
+        XCTAssertNotNil(response)
+        XCTAssertNotNil(response.data)
+        let json = try? JSONSerialization.jsonObject(with: response.data!, options: [])
+        XCTAssertNotNil(json)
+        let val = String(decoding: response.data!, as: UTF8.self)
+        XCTAssertNotNil(val)
+        print(val)
+        XCTAssertTrue(val.contains("token"))
+    }
+    
 }

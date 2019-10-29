@@ -80,8 +80,9 @@ func parseConfig(_ filename : String) -> Config {
 }
 
 struct ApiConfig : IApiSettings {
-    func readConfig(_ section: String?) -> IApiSection {
-        return [:]
+    func readConfig(_ section: String? = nil) -> IApiSection {
+        let config = parseConfig(self.fileName)
+        return config[section ?? self.section] ?? [:]
     }
     
     func isConfigured() -> Bool {
@@ -100,6 +101,9 @@ struct ApiConfig : IApiSettings {
     
     var encoding: String?
     
+    private var fileName = ""
+    private var section = "Looker"
+    
     init() {
         self.assign(DefaultSettings())
     }
@@ -110,9 +114,11 @@ struct ApiConfig : IApiSettings {
     
     // TODO figure out how to use Codable and PropertyListDecoder
     // similar to https://www.raywenderlich.com/3418439-encoding-and-decoding-in-swift
-    init(_ fileName: String, _ section: String? = "Looker") throws {
+    init(_ fileName: String, _ section: String = "Looker") throws {
+        self.fileName = fileName
+        self.section = section
         let config = parseConfig(fileName)
-        let values = config[section!]
+        let values = config[section]
         let defaults = DefaultSettings()
         self.base_url = values?["base_url"] as String? ?? defaults.base_url
         self.api_version = values?["api_version"] as String? ?? defaults.api_version

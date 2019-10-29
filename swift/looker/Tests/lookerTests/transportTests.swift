@@ -114,12 +114,12 @@ class transportTests: XCTestCase {
             "last": "Llookicorn"
         }
         """
-        var user: SimpleUser = try! deserialize(json: jsonString)
+        var user: SimpleUser = try! deserialize(jsonString)
         XCTAssertNotNil(user, "LLoyd is assigned")
         XCTAssertEqual(user.first, "Lloyd")
         XCTAssertEqual(user.last, "Llookicorn")
         XCTAssertNil(user.email)
-        user = try! deserialize(json: """
+        user = try! deserialize("""
         {
             "first": "Zzooey",
             "last": "Zzeebra",
@@ -144,29 +144,88 @@ class transportTests: XCTestCase {
         XCTAssertEqual(actual, "Wonderful?One=1")
     }
 
-    func testQueryParamsMixed() {
+    func testQueryParamsNil() {
         let opt: Bool? = nil
-        let values: Values = [ "One": 1, "Missing": opt, "Name": "John Kaster" ]
+        let values: Values = ["Missing": opt, "Num": 1]
         let actual = addQueryParams("Some", values)
-        XCTAssertEqual(actual, "Some?One=1&Name=John%20Kaster")
+        XCTAssertEqual(actual, "Some?Num=1")
     }
 
-    func testQueryParamsDelimArray() {
-        let ids: DelimArray<Int64> = [1,2,3]
-        let names: DelimArray<String> = ["LLoyd?", "ZZooey#"]
-        let nums: DelimArray<Double> = [2.2,3.3]
-        let flags: DelimArray<Bool> = [false, true]
-        let values: Values = [ "Ids": ids, "Names": names, "Nums": nums, "Flags": flags]
-        let actual = addQueryParams("Delim", values)
-        XCTAssertEqual(actual, "Delim?Ids=1,2,3&Names=LLoyd?,ZZooey#&Nums=2.2,3.3&Flags=false,true")
+    func testQueryParamsDelimArrayInt() {
+        let ids: DelimArray<Int> = [1,2,3]
+        var values: Values = [ "Ids": ids ]
+        var actual = addQueryParams("Int", values)
+        XCTAssertEqual(actual, "Int?Ids=1,2,3")
+        let opts: DelimArray<Int?>? = [1,2,3]
+        values = [ "Ids": opts ]
+        actual = addQueryParams("Int", values)
+        XCTAssertEqual(actual, "Int?Ids=1,2,3")
     }
     
-    func testQueryParamsMulti() {
-        let date: Date? = SToD("20191028")
-        let ids: DelimArray<Int> = [1,2,3]
-        let values: Values = [ "Int": 1, "Dub": 2.2, "Bool": false, "Str": "Boo?", "Date": date, "Ids": ids]
-        let actual = addQueryParams("Multi", values)
-        XCTAssertEqual(actual, "Multi?Int=1&Dub=2.2&Bool=false&Str=Boo?&Date=2019-01-28%2008:00:00%20+0000")
+    func testQueryParamsDelimArrayInt32() {
+        let ids: DelimArray<Int32> = [1,2,3]
+        var values: Values = [ "Ids": ids ]
+        var actual = addQueryParams("Int", values)
+        XCTAssertEqual(actual, "Int?Ids=1,2,3")
+        let opts: DelimArray<Int32?>? = [1,2,3]
+        values = [ "Ids": opts ]
+        actual = addQueryParams("Int", values)
+        XCTAssertEqual(actual, "Int?Ids=1,2,3")
     }
-
+    
+    func testQueryParamsDelimArrayInt64() {
+        let ids: DelimArray<Int64> = [1,2,3]
+        var values: Values = [ "Ids": ids ]
+        var actual = addQueryParams("Int", values)
+        XCTAssertEqual(actual, "Int?Ids=1,2,3")
+        let opts: DelimArray<Int64?>? = [1,2,3]
+        values = [ "Ids": opts ]
+        actual = addQueryParams("Int", values)
+        XCTAssertEqual(actual, "Int?Ids=1,2,3")
+    }
+    
+    func testQueryParamsDelimString() {
+        let names: DelimArray<String> = ["LLoyd?", "ZZooey#"]
+        var values: Values = [ "Names": names]
+        var actual = addQueryParams("String", values)
+        XCTAssertEqual(actual, "String?Names=LLoyd%3F,ZZooey%23")
+        let opts: DelimArray<String?>? = ["LLoyd?", "ZZooey#"]
+        values = ["Names": opts]
+        actual = addQueryParams("String", values)
+        XCTAssertEqual(actual, "String?Names=LLoyd%3F,ZZooey%23")
+    }
+    
+    func testQueryParamsDelimArrayDouble() {
+        let nums: DelimArray<Double> = [2.2,3.3]
+        var values: Values = [ "Nums": nums]
+        var actual = addQueryParams("Double", values)
+        XCTAssertEqual(actual, "Double?Nums=2.2,3.3")
+        let opts: DelimArray<Double?>? = [2.2,3.3]
+        values = [ "Nums": opts]
+        actual = addQueryParams("Double", values)
+        XCTAssertEqual(actual, "Double?Nums=2.2,3.3")
+    }
+    
+    func testQueryParamsDelimArrayFloat() {
+        let nums: DelimArray<Float> = [2.2,3.3]
+        var values: Values = [ "Nums": nums]
+        var actual = addQueryParams("Float", values)
+        XCTAssertEqual(actual, "Float?Nums=2.2,3.3")
+        let opts: DelimArray<Float?>? = [2.2,3.3]
+        values = [ "Nums": opts]
+        actual = addQueryParams("Float", values)
+        XCTAssertEqual(actual, "Float?Nums=2.2,3.3")
+    }
+    
+    func testQueryParamsDelimArrayBool() {
+        let flags: DelimArray<Bool> = [false, true]
+        var values: Values = [ "Flags": flags]
+        var actual = addQueryParams("Bool", values)
+        XCTAssertEqual(actual, "Bool?Flags=false,true")
+        let opts: DelimArray<Bool?>? = [false,true]
+        values = [ "Flags": opts]
+        actual = addQueryParams("Bool", values)
+        XCTAssertEqual(actual, "Bool?Flags=false,true")
+    }
+    
 }

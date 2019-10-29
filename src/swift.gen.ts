@@ -190,7 +190,7 @@ import Foundation
     + (streamer ? `\n${bump}${callback}` : '')
 
     return header + fragment
-      + `${fragment? ',' : ''}\n${bump}options: ITransportSettings?\n${indent}) -> ${returnType} {\n`
+      + `${fragment? ',' : ''}\n${bump}options: ITransportSettings? = nil\n${indent}) -> ${returnType} {\n`
   }
 
   methodSignature(indent: string, method: IMethod) {
