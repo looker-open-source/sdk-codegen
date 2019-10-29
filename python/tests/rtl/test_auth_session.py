@@ -31,7 +31,7 @@ from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
 
 
-@pytest.fixture(scope="module")  # type: ignore
+@pytest.fixture(scope="module")
 def config_file(tmpdir_factory):
     """Creates a sample looker.ini file and returns it"""
     filename = tmpdir_factory.mktemp("settings").join("looker.ini")
@@ -61,7 +61,7 @@ client_secret=
     return filename
 
 
-@pytest.fixture(scope="function")  # type: ignore
+@pytest.fixture(scope="function")
 def auth_session(config_file):
     settings = api_settings.ApiSettings.configure(config_file)
     return auth.AuthSession(
@@ -146,7 +146,7 @@ def test_user_logout_leaves_admin_logged_in(auth_session: auth.AuthSession):
 
 def test_login_user_login_user(auth_session: auth.AuthSession):
     auth_session.login_user(5)
-    with pytest.raises(error.SDKError):  # type: ignore
+    with pytest.raises(error.SDKError):
         auth_session.login_user(10)
 
 
@@ -160,7 +160,7 @@ def test_is_sudo(auth_session: auth.AuthSession):
     assert auth_session.is_sudo is None
 
 
-@pytest.mark.parametrize(  # type: ignore
+@pytest.mark.parametrize(
     "test_section, test_env_client_id, test_env_client_secret",
     [
         ("NO_CREDENTIALS", "", ""),
@@ -187,7 +187,7 @@ def test_it_fails_with_missing_credentials(
     assert "auth credentials not found" in str(exc_info.value)
 
 
-@pytest.mark.parametrize(  # type: ignore
+@pytest.mark.parametrize(
     "test_env_client_id, test_env_client_secret, expected_id, expected_secret",
     [
         ("", "", "your_API3_client_id", "your_API3_client_secret"),
@@ -203,16 +203,14 @@ def test_env_variables_override_config_file_credentials(
     expected_id: str,
     expected_secret: str,
 ):
-    monkeypatch.setenv("LOOKERSDK_CLIENT_ID", test_env_client_id)  # type: ignore
-    monkeypatch.setenv(  # type: ignore
-        "LOOKERSDK_CLIENT_SECRET", test_env_client_secret
-    )
-    mocked_request = mocker.patch.object(MockTransport, "request")  # type: ignore
-    mocked_request.return_value = transport.Response(  # type: ignore
+    monkeypatch.setenv("LOOKERSDK_CLIENT_ID", test_env_client_id)
+    monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", test_env_client_secret)
+    mocked_request = mocker.patch.object(MockTransport, "request")
+    mocked_request.return_value = transport.Response(
         ok=True,
         value=bytes(
             json.dumps(
-                {  # type: ignore
+                {
                     "access_token": "AdminAccessToken",
                     "token_type": "Bearer",
                     "expires_in": 3600,
@@ -228,6 +226,6 @@ def test_env_variables_override_config_file_credentials(
     expected_body = urllib.parse.urlencode(
         {"client_id": expected_id, "client_secret": expected_secret}
     ).encode("utf-8")
-    mocked_request.assert_called()  # type: ignore
-    actual_request_body = mocked_request.call_args[1]["body"]  # type: ignore
-    assert actual_request_body == expected_body  # type: ignore
+    mocked_request.assert_called()
+    actual_request_body = mocked_request.call_args[1]["body"]
+    assert actual_request_body == expected_body
