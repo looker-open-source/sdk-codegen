@@ -116,7 +116,8 @@ import Foundation
   }
 
   declareProperty(indent: string, property: IProperty) {
-    const optional = (property.nullable || !property.required) ? '?' : ''
+    // const optional = (property.nullable || !property.required) ? '?' : ''
+    const optional = property.required ? '' : '?'
     if (property.name === strBody) {
       // TODO refactor this hack to track context when the body parameter is created for the request type
       property.type.refCount++
@@ -124,8 +125,12 @@ import Foundation
         + `${indent}var ${this.reserve(property.name)}: ${property.type.name}${optional}`
     }
     const type = this.typeMap(property.type)
+    // TODO fix this HORRIBLE hack once our API JSON results to CORRECTLY represent strings in payloads
+    let scalarHack = type.name
+    let low = property.name.toLowerCase()
+    if (type.name === 'String' && (low === "id" || low.endsWith("_id"))) scalarHack = 'Scalar'
     return this.commentHeader(indent, this.describeProperty(property))
-      + `${indent}var ${this.reserve(property.name)}: ${type.name}${optional}`
+      + `${indent}var ${this.reserve(property.name)}: ${scalarHack}${optional}`
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
@@ -143,7 +148,7 @@ import Foundation
       mapped.name = `Partial<${mapped.name}>`
     }
     if (!param.required) {
-      pOpt = mapped.default ? '' : '?'
+      pOpt = '?'
     } else {
       line = '_ '
     }
@@ -280,7 +285,7 @@ import Foundation
         default: castIt = false; break;
       }
     }
-    return param.name + (castIt ? ' as Any' : '')
+    return param.name + (castIt ? ' as Any?' : '')
   }
 
   // @ts-ignore
@@ -388,21 +393,21 @@ ${indent}return result`
     super.typeMap(type)
 
     const swiftTypes: Record<string, IMappedType> = {
-      'number': {name: 'Double', default: '0.0'},
-      'float': {name: 'Float', default: '0.0'},
-      'double': {name: 'Double', default: '0.0'},
-      'integer': {name: 'Int', default: '0'},
-      'int32': {name: 'Int32', default: '0'},
-      'int64': {name: 'Int64', default: '0'},
-      'string': {name: 'String', default: '""'},
+      'number': {name: 'Double', default: this.nullStr},
+      'float': {name: 'Float', default: this.nullStr},
+      'double': {name: 'Double', default: this.nullStr},
+      'integer': {name: 'Int', default: this.nullStr},
+      'int32': {name: 'Int32', default: this.nullStr},
+      'int64': {name: 'Int64', default: this.nullStr},
+      'string': {name: 'String', default: this.nullStr},
       'password': {name: 'Password', default: this.nullStr},
       'byte': {name: 'binary', default: this.nullStr},
-      'boolean': {name: 'Bool', default: ''},
+      'boolean': {name: 'Bool', default: this.nullStr},
       'uri': {name: 'URL', default: this.nullStr},
       'url': {name: 'URL', default: this.nullStr},
-      'datetime': {name: 'Date', default: ''}, // TODO is there a default expression for datetime?
-      'date': {name: 'Date', default: ''}, // TODO is there a default expression for date?
-      'object': {name: 'Any', default: ''},
+      'datetime': {name: 'Date', default: this.nullStr}, // TODO is there a default expression for datetime?
+      'date': {name: 'Date', default: this.nullStr}, // TODO is there a default expression for date?
+      'object': {name: 'Any', default: this.nullStr},
       'void': {name: 'Voidable', default: ''},
     }
 
@@ -414,7 +419,7 @@ ${indent}return result`
       } else if (type instanceof HashType) {
         // TODO fix the API endpoints like those that return `User` to correctly encode JSON hashes
         // return {name: `StringDictionary<${map.name}>`, default: ''}
-        return {name: `StringDictionary<JsonItem>`, default: ''}
+        return {name: `StringDictionary<Scalar>`, default: ''}
       } else if (type instanceof DelimArrayType) {
         return {name: `DelimArray<${map.name}>`, default: ''}
       }

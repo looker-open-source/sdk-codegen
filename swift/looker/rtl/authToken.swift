@@ -25,9 +25,9 @@
 import Foundation
 
 protocol AccessTokenProtocol {
-  var access_token: String { get set }
-  var token_type: String { get set }
-  var expires_in: Int64 { get set }
+    var access_token: String { get set }
+    var token_type: String { get set }
+    var expires_in: Int64 { get set }
 }
 //
 //struct AccessToken: AccessTokenProtocol, Codable {
@@ -37,41 +37,41 @@ protocol AccessTokenProtocol {
 //}
 
 struct AuthToken: AccessTokenProtocol {
-  var access_token = ""
-  var token_type = ""
+    var access_token: String = ""
+    var token_type: String = ""
     var expires_in: Int64 = 0
-
-  private var expiresAt: Date?
-
-  init() { }
-
-  init(_ token: AccessToken) {
-    self = self.setToken(token)
-  }
-
-  // true if the authentication token is set and has not timed without
-  func isActive() -> Bool {
-    if (self.access_token == "" || self.expires_in == 0) { return false }
-    guard let expiresAt = self.expiresAt else { return false }
-    return expiresAt > Date()
-  }
-
-  static func expiryDate(_ inSeconds: Int) -> Date {
-    let interval = inSeconds > 0 ? inSeconds : -10
-    return Date.init(timeIntervalSinceNow: TimeInterval(interval))
-  }
-
-  // Assign the token and set its expiration
-  mutating func setToken(_ token: AccessToken) -> Self {
-    self.access_token = token.access_token!
-    self.token_type = token.token_type!
-    self.expires_in = token.expires_in!
-    self.expiresAt = Self.expiryDate(Int(self.expires_in))
-    return self
-  }
-
-  mutating func reset() {
-      self.access_token = ""
-      self.expires_in = 0
-      }
+    
+    private var expiresAt: Date?
+    
+    init() { }
+    
+    init(_ token: AccessToken) {
+        self = self.setToken(token)
+    }
+    
+    // true if the authentication token is set and has not timed without
+    func isActive() -> Bool {
+        if (self.access_token == "" || self.expires_in == 0) { return false }
+        guard let expiresAt = self.expiresAt else { return false }
+        return expiresAt > Date()
+    }
+    
+    static func expiryDate(_ inSeconds: Int) -> Date {
+        let interval = inSeconds > 0 ? inSeconds : -10
+        return Date.init(timeIntervalSinceNow: TimeInterval(interval))
+    }
+    
+    // Assign the token and set its expiration
+    mutating func setToken(_ token: AccessToken) -> Self {
+        self.access_token = token.access_token!
+        self.token_type = token.token_type!
+        self.expires_in = token.expires_in!
+        self.expiresAt = Self.expiryDate(Int(self.expires_in))
+        return self
+    }
+    
+    mutating func reset() {
+        self.access_token = ""
+        self.expires_in = 0
+    }
 }

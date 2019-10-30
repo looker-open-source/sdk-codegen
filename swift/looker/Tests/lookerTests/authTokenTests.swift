@@ -27,7 +27,7 @@ class authTokenTests: XCTestCase {
     
     func testIsActiveWithToken() {
         // TODO figure out how to init protocol and pass it in
-        let auth = AuthToken(AccessToken(access_token: "thisismytoken", token_type: "bearer", expires_in: 30))
+        let auth = AuthToken(AccessToken(access_token: "thisismytoken", token_type: "Bearer", expires_in: 30))
         XCTAssertEqual(auth.isActive(), true, "auth should be active")
         //        let auth = AuthToken("thisismytoken", "bearer", 30)
         //        XCTAssertEqual(auth.isActive(), true)

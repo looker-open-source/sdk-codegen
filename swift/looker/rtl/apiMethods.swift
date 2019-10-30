@@ -55,8 +55,6 @@ class APIMethods {
         _ body: Any?,
         _ options: ITransportSettings?
     ) -> SDKResponse<TSuccess, TError> {
-        //        let this = self
-        //        let authCallback : Authenticator = (req: URLRequest) -> URLRequest in { self.authSession.authenticate(req) }
         return self.authSession.transport.request(
             method,
             path,

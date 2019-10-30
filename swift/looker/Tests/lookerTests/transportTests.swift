@@ -53,6 +53,7 @@ struct SimpleUser : SDKModel {
     var email : String?
 }
 
+@available(OSX 10.12, *)
 class transportTests: XCTestCase {
 
     override func setUp() {

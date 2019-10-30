@@ -16,6 +16,7 @@ fileprivate let localIni : String = repoPath + "looker.ini"
 
 let config = try? ApiConfig(localIni)
 
+@available(OSX 10.12, *)
 class baseTransportTests: XCTestCase {
     
     override func setUp() {

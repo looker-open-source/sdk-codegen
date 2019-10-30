@@ -37,6 +37,7 @@ struct RequestResponse {
 
 //class BaseTransport : ITransport {
 // TODO why doesn't this implementation satisfy ITransport?!?!?
+@available(OSX 10.12, *)
 class BaseTransport : ITransport  {
     let session = URLSession.shared // TODO Should this be something else like `configuration: .default`? or ephemeral?
     var apiPath = ""
@@ -144,8 +145,10 @@ class BaseTransport : ITransport  {
     
 }
 
+@available(OSX 10.12, *)
 func processResponse<TSuccess: Codable, TError: Codable> (_ response: RequestResponse) -> SDKResponse<TSuccess,TError> {
     if let error = response.error {
+        print("Error: \(error)")
         return SDKResponse.error((error as? TError)!)
     }
 
@@ -156,6 +159,10 @@ func processResponse<TSuccess: Codable, TError: Codable> (_ response: RequestRes
     guard let data = response.data else {
         fail = SDKError("No response data for request") as? TError
         return SDKResponse.error(fail!)
+    }
+    
+    if let debug = String(data: data, encoding: .utf8) {
+        print(debug)
     }
     
     if (!BaseTransport.ok(response.response as! HTTPURLResponse)) {
@@ -177,9 +184,6 @@ func processResponse<TSuccess: Codable, TError: Codable> (_ response: RequestRes
     switch mode {
     case .string:
         do {
-//            if let debug = String(data: data, encoding: .utf8) {
-//                print(debug)
-//            }
             if (isMimeJson(contentType)) {
                 success = try deserialize(data)
             } else if let dataString = String(data: data, encoding: .utf8) {

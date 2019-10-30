@@ -109,25 +109,28 @@ protocol ISDKErrorResponse {
 }
 
 protocol ISDKError: LocalizedError {
-    
+    var message: String? { get set }
+    var documentation_url: String? { get set }
 }
 
 /// Common ancestor for all error responses
 struct SDKError: ISDKError, Codable {
-    private var description: String?
+    var message : String?
+    var documentation_url: String?
     private var reason: String?
     private var suggestion: String?
     private var help: String?
     
-    init(_ description: String, reason: String? = "", suggestion: String? = "", help: String? = "") {
-        self.description = description
+    init() { }
+    init(_ message: String, documentation_url: String? = "", reason: String? = "", suggestion: String? = "", help: String? = "") {
+        self.message = message
         self.reason = reason
         self.suggestion = suggestion
         self.help = help
     }
     
     /// A localized message describing the error
-    var errorDescription: String? { get { return self.description } }
+    var errorDescription: String? { get { return self.message } }
 
     /// A localized message describing the reason for the failure.
     var failureReason: String? { get { return self.reason } }
@@ -143,42 +146,6 @@ struct SDKError: ISDKError, Codable {
 /// This could remain the same as simply `Codable`, but this abstraction is introduced for future extensibility
 protocol SDKModel: Codable {
 }
-
-/// Convert a JSON string into the type `T`
-/// @throws errors if deserialization fails
-func deserialize<T>(_ data: Data) throws -> T where T : Codable {
-    let decoder = JSONDecoder()
-    do {
-        let result: T = try decoder.decode(T.self, from: data)
-        return result
-    } catch {
-        throw error
-    }
-
-}
-/// Convert a JSON string into the type `T`
-/// @throws errors if deserialization fails
-func deserialize<T>(_ json: String) throws -> T where T : Codable {
-    return try deserialize(Data(json.utf8))
-}
-
-
-//struct SDKResponse<TSuccess, TError> where TError : ISDKError {
-//    var ok: Bool
-//    var value: TSuccess?
-//    var error: TError?
-//
-//    init(success: TSuccess?) {
-//        self.ok = true
-//        self.value = success
-//    }
-//
-//    init(error: TError?) {
-//        self.ok = false
-//        self.error = error
-//    }
-//
-//}
 
 enum SDKResponse<TSuccess, TError> where TError: ISDKError {
     case success(TSuccess)

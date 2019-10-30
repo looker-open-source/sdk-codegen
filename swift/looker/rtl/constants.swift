@@ -115,64 +115,6 @@ extension String {
 
 typealias Voidable = String
 
-// Support for converting a struct or class to a Dictionary of values
-// Nifty code taken from https://stackoverflow.com/a/46597941/74137
-struct JSON {
-    static let encoder = JSONEncoder()
-}
-
-extension Encodable {
-    subscript(key: String) -> Any? {
-        return dictionary[key] as Any?
-    }
-    var dictionary: Values {
-        return (try? JSONSerialization.jsonObject(with: JSON.encoder.encode(self))) as? Values ?? [:]
-    }
-}
-
-// Handling JSON that doesn't QUITE conform to spec https://stackoverflow.com/a/47936036/74137
-enum JsonItem: Codable {
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .int(let int):
-            try container.encode(int)
-        case .string(let string):
-            try container.encode(string)
-        case .double(let double):
-            try container.encode(double)
-        case .bool(let bool):
-            try container.encode(bool)
-        }
-    }
-    
-    case int(Int)
-    case string(String)
-    case double(Double)
-    case bool(Bool)
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        do {
-            self = try .int(container.decode(Int.self))
-        } catch DecodingError.typeMismatch {
-            do {
-                self = try .string(container.decode(String.self))
-            } catch DecodingError.typeMismatch {
-                do {
-                    self = try .double(container.decode(Double.self))
-                } catch DecodingError.typeMismatch {
-                    do {
-                        self = try .bool(container.decode(Bool.self))
-                    } catch DecodingError.typeMismatch {
-                        throw DecodingError.typeMismatch(JsonItem.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Encoded payload not of an expected type"))
-                    }
-                }
-            }
-        }
-        
-    }
-}
 
 func isOptional(_ value: Any) -> Bool {
     let mirror = Mirror(reflecting: value)
@@ -264,65 +206,65 @@ extension Array where Element: LosslessStringConvertible {
 
 typealias DelimArray<T> = Array<T>
 
-// UTC date routines from this wonderful code
+// TODO: UTC date routines from this code. Are they necessary?
 // https://stackoverflow.com/a/28016692/74137
-@available(OSX 10.12, *)
-extension ISO8601DateFormatter {
-    convenience init(_ formatOptions: Options, timeZone: TimeZone = TimeZone(secondsFromGMT: 0)!) {
-        self.init()
-        self.formatOptions = formatOptions
-        self.timeZone = timeZone
-    }
-}
-
-@available(OSX 10.13, *)
-extension Formatter {
-    static let iso8601 = ISO8601DateFormatter([.withInternetDateTime, .withFractionalSeconds])
-}
-
-@available(OSX 10.13, *)
-extension Date {
-    var iso8601: String {
-        return Formatter.iso8601.string(from: self)
-    }
-}
-
-@available(OSX 10.13, *)
-extension String {
-    var iso8601: Date? {
-        return Formatter.iso8601.date(from: self)
-    }
-}
-
-@available(OSX 10.13, *)
-extension JSONDecoder.DateDecodingStrategy {
-    static let iso8601withFractionalSeconds = custom {
-        let container = try $0.singleValueContainer()
-        let string = try container.decode(String.self)
-        guard let date = Formatter.iso8601.date(from: string) else {
-            throw DecodingError.dataCorruptedError(in: container,
-                  debugDescription: "Invalid date: " + string)
-        }
-        return date
-    }
-}
-
-@available(OSX 10.13, *)
-extension JSONEncoder.DateEncodingStrategy {
-    static let iso8601withFractionalSeconds = custom {
-        var container = $1.singleValueContainer()
-        try container.encode(Formatter.iso8601.string(from: $0))
-    }
-}
-
-@available(OSX 10.13, *)
-func UTCDate(_ dateString: String) -> Date? {
-    if let date = dateString.iso8601 {
-        return date
-    }
-    // No error handling, just return nil
-    return nil
-}
+//@available(OSX 10.12, *)
+//extension ISO8601DateFormatter {
+//    convenience init(_ formatOptions: Options, timeZone: TimeZone = TimeZone(secondsFromGMT: 0)!) {
+//        self.init()
+//        self.formatOptions = formatOptions
+//        self.timeZone = timeZone
+//    }
+//}
+//
+//@available(OSX 10.13, *)
+//extension Formatter {
+//    static let iso8601 = ISO8601DateFormatter([.withInternetDateTime, .withFractionalSeconds])
+//}
+//
+//@available(OSX 10.13, *)
+//extension Date {
+//    var iso8601: String {
+//        return Formatter.iso8601.string(from: self)
+//    }
+//}
+//
+//@available(OSX 10.13, *)
+//extension String {
+//    var iso8601: Date? {
+//        return Formatter.iso8601.date(from: self)
+//    }
+//}
+//
+//@available(OSX 10.13, *)
+//extension JSONDecoder.DateDecodingStrategy {
+//    static let iso8601withFractionalSeconds = custom {
+//        let container = try $0.singleValueContainer()
+//        let string = try container.decode(String.self)
+//        guard let date = Formatter.iso8601.date(from: string) else {
+//            throw DecodingError.dataCorruptedError(in: container,
+//                  debugDescription: "Invalid date: " + string)
+//        }
+//        return date
+//    }
+//}
+//
+//@available(OSX 10.13, *)
+//extension JSONEncoder.DateEncodingStrategy {
+//    static let iso8601withFractionalSeconds = custom {
+//        var container = $1.singleValueContainer()
+//        try container.encode(Formatter.iso8601.string(from: $0))
+//    }
+//}
+//
+//@available(OSX 10.13, *)
+//func UTCDate(_ dateString: String) -> Date? {
+//    if let date = dateString.iso8601 {
+//        return date
+//    }
+//    // No error handling, just return nil
+//    return nil
+//}
 
 /// YYYYMMDD date representation to Date
 func SToD(_ dateString: String) -> Date? {
