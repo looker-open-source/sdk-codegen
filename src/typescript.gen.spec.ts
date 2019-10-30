@@ -283,5 +283,39 @@ body?: Partial<ICreateDashboardRenderTask>`)
   supported_versions?: IApiVersionElement[]
 }`)
     })
+    it('required properties', () => {
+      const type = apiModel.types['CreateQueryTask']
+      const actual = gen.declareType(indent, type)
+      expect(actual).toEqual(`export interface ICreateQueryTask{
+  /**
+   * Id of query to run
+   */
+  query_id: number
+  /**
+   * Desired result format
+   */
+  result_format: string
+  /**
+   * Source of query task
+   */
+  source?: string
+  /**
+   * Create the task but defer execution
+   */
+  deferred?: boolean
+  /**
+   * Id of look associated with query.
+   */
+  look_id?: number
+  /**
+   * Id of dashboard associated with query.
+   */
+  dashboard_id?: string
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>
+}`)
+    })
   })
 })

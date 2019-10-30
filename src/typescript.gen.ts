@@ -134,7 +134,7 @@ export interface IDictionary<T> {
   }
 
   declareProperty(indent: string, property: IProperty) {
-    const optional = (property.nullable || !property.required) ? '?' : ''
+    const optional = !property.required ? '?' : ''
     if (property.name === strBody) {
       // TODO refactor this hack to track context when the body parameter is created for the request type
       property.type.refCount++
