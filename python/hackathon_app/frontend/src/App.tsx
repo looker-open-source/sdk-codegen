@@ -1,5 +1,5 @@
 import * as React from 'react'
-import logo from './logo.svg'
+import Web_Looker_Logo_White from './Web_Looker_Logo_White.svg'
 import styled from 'styled-components'
 import {Router, navigate} from '@reach/router'
 import {Formik, Form, Field, ErrorMessage} from 'formik'
@@ -24,9 +24,9 @@ const RegisterScene: React.FC<{path: string}> = () => {
   return (
     <CenterContainer>
       <SceneBody>
-        <Logo src={logo} />
-        <Header>Looker Hackathon Registration</Header>
-        <Description>Register for a Looker Hackathon below</Description>
+        <Logo src={Web_Looker_Logo_White} />
+        <Header>Hackathon Registration</Header>
+        <Description>Register for a Hackathon below</Description>
         <hr />
         <Header>Registration</Header>
         <Formik
@@ -102,26 +102,22 @@ const RegisterScene: React.FC<{path: string}> = () => {
               <Field type="hidden" name="csrf_token" value={csrf.token} />
               <InputGroup>
                 <Label>First name</Label>
-                <Input name="first_name" type="text" placeholder="Andy" />
+                <Input name="first_name" type="text" placeholder="First Name" />
                 <ErrorMessage name="first_name" component="div" />
               </InputGroup>
               <InputGroup>
                 <Label>Last name</Label>
-                <Input name="last_name" type="text" placeholder="Chiggins" />
+                <Input name="last_name" type="text" placeholder="Last Name" />
                 <ErrorMessage name="last_name" component="div" />
               </InputGroup>
               <InputGroup>
                 <Label>Email</Label>
-                <Input
-                  name="email"
-                  type="email"
-                  placeholder="dandychiggins@gmail.com"
-                />
+                <Input name="email" type="email" placeholder="Email Address" />
                 <ErrorMessage name="email" component="div" />
               </InputGroup>
               <InputGroup>
                 <Label>Organization</Label>
-                <Input name="organization" placeholder="Looker" />
+                <Input name="organization" placeholder="Organization" />
                 <ErrorMessage name="organization" component="div" />
               </InputGroup>
               <InputGroup>
@@ -225,9 +221,9 @@ const ResourcesScene: React.FC<{path: string}> = () => {
   return (
     <CenterContainer>
       <SceneBody>
-        <Logo src={logo} />
-        <Header>Looker Hackathon Resources</Header>
-        <Description>Find information on Looker Hackathons below</Description>
+        <Logo src={Web_Looker_Logo_White} />
+        <Header>Hackathon Resources</Header>
+        <Description>Find information on Hackathons below</Description>
         <hr />
         <Header>Welcome!</Header>
         <Description>
@@ -263,7 +259,7 @@ const Links = styled.div`
 
 const LinkContainer = styled.div`
   align-items: center;
-  background-color: #543fb2;
+  background-color: #7a58ce;
   cursor: pointer;
   display: flex;
   height: 50px;
@@ -272,7 +268,7 @@ const LinkContainer = styled.div`
   width: 100%;
 
   &:hover {
-    background-color: #d35160;
+    background-color: #ac96e0;
   }
 `
 
@@ -296,7 +292,7 @@ const SceneBody = styled.div`
 `
 
 const Body = styled.div`
-  background-color: #4636ac;
+  background-color: #5a2fc2;
   margin: auto;
   min-height: 100vh;
   min-width: 100vw;
