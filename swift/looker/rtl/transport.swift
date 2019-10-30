@@ -26,7 +26,7 @@
 
 import Foundation
 
-let agentTag = "TS-SDK \(Constants.sdkVersion)"
+let agentTag = "Swift-SDK \(Constants.sdkVersion)"
 
 /**
  * ResponseMode for an HTTP request - either binary or "string"

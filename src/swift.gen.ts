@@ -412,7 +412,9 @@ ${indent}return result`
       if (type instanceof ArrayType) {
         return {name: `[${map.name}]`, default: '[]'}
       } else if (type instanceof HashType) {
-        return {name: `StringDictionary<${map.name}>`, default: ''}
+        // TODO fix the API endpoints like those that return `User` to correctly encode JSON hashes
+        // return {name: `StringDictionary<${map.name}>`, default: ''}
+        return {name: `StringDictionary<JsonItem>`, default: ''}
       } else if (type instanceof DelimArrayType) {
         return {name: `DelimArray<${map.name}>`, default: ''}
       }

@@ -110,8 +110,10 @@ extension String {
 }
 
 /// Structure that represents "Void" return results for the SDK response
-struct Voidable : SDKModel {
-}
+//struct Voidable : SDKModel {
+//}
+
+typealias Voidable = String
 
 // Support for converting a struct or class to a Dictionary of values
 // Nifty code taken from https://stackoverflow.com/a/46597941/74137
@@ -125,6 +127,50 @@ extension Encodable {
     }
     var dictionary: Values {
         return (try? JSONSerialization.jsonObject(with: JSON.encoder.encode(self))) as? Values ?? [:]
+    }
+}
+
+// Handling JSON that doesn't QUITE conform to spec https://stackoverflow.com/a/47936036/74137
+enum JsonItem: Codable {
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .int(let int):
+            try container.encode(int)
+        case .string(let string):
+            try container.encode(string)
+        case .double(let double):
+            try container.encode(double)
+        case .bool(let bool):
+            try container.encode(bool)
+        }
+    }
+    
+    case int(Int)
+    case string(String)
+    case double(Double)
+    case bool(Bool)
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        do {
+            self = try .int(container.decode(Int.self))
+        } catch DecodingError.typeMismatch {
+            do {
+                self = try .string(container.decode(String.self))
+            } catch DecodingError.typeMismatch {
+                do {
+                    self = try .double(container.decode(Double.self))
+                } catch DecodingError.typeMismatch {
+                    do {
+                        self = try .bool(container.decode(Bool.self))
+                    } catch DecodingError.typeMismatch {
+                        throw DecodingError.typeMismatch(JsonItem.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Encoded payload not of an expected type"))
+                    }
+                }
+            }
+        }
+        
     }
 }
 

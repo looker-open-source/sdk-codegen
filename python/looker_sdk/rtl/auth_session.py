@@ -92,7 +92,7 @@ class AuthSession:
         else:
             token = self._get_admin_token()
 
-        return {"Authorization": f"token {token.access_token}"}
+        return {"Authorization": f"Bearer {token.access_token}"}
 
     def login_user(self, sudo_id: int) -> None:
         """Authenticate using settings credentials and sudo as sudo_id.
@@ -158,7 +158,7 @@ class AuthSession:
                 transport.HttpMethod.POST,
                 f"/login/{self._sudo_id}",
                 authenticator=lambda: {
-                    "Authorization": f"token {self._get_admin_token().access_token}"
+                    "Authorization": f"Bearer {self._get_admin_token().access_token}"
                 },
             )
         )
@@ -192,7 +192,7 @@ class AuthSession:
                 transport.HttpMethod.DELETE,
                 "/logout",
                 authenticator=lambda: {
-                    "Authorization": f"token {self.user_token.access_token}"
+                    "Authorization": f"Bearer {self.user_token.access_token}"
                 },
             )
         )
@@ -204,7 +204,7 @@ class AuthSession:
                 transport.HttpMethod.DELETE,
                 "/logout",
                 authenticator=lambda: {
-                    "Authorization": f"token {self.admin_token.access_token}"
+                    "Authorization": f"Bearer {self.admin_token.access_token}"
                 },
             )
         )

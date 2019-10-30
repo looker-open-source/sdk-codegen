@@ -45,6 +45,7 @@ class APIMethods {
             print("Error: \(message)")
         }
         return () as! TSuccess
+//        return SDKResponse<TSuccess, TError>.success(<#TSuccess#>) as! TSuccess
     }
     
     func authRequest<TSuccess: Codable, TError: Codable>(

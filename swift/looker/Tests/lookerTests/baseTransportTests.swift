@@ -66,8 +66,8 @@ class baseTransportTests: XCTestCase {
         let xp = BaseTransport(settings)
         let path = "/login"
         let response = xp.plainRequest(
-            HttpMethod.POST, path, nil,
-            ["client_id": client_id, "client_secret": client_secret], nil, nil)
+            HttpMethod.POST, path,
+            ["client_id": client_id, "client_secret": client_secret], nil, nil, nil)
         XCTAssertNotNil(response)
         XCTAssertNotNil(response.data)
         let json = try? JSONSerialization.jsonObject(with: response.data!, options: [])
@@ -81,11 +81,12 @@ class baseTransportTests: XCTestCase {
     func testPassthroughValues() {
         let settings = config!
 //        let values = settings.readConfig()
-        let hostname = "yourserver.looker.com"
+        let hostname = "johnkuitheme.dev.looker.com"
         let client_id = "FtYNVWwKNG2QdkvQT8PN"
         let client_secret = "5rJ73BvcwgNBJtTpZDvFVpmn"
         let xp = BaseTransport(settings)
         let path = "https://\(hostname):19999/api/3.1/login"
+//        let path = "https://\(hostname):19999/login"
         let response = xp.plainRequest(
             HttpMethod.POST, path,
             ["client_id": client_id, "client_secret": client_secret], nil, nil, nil)

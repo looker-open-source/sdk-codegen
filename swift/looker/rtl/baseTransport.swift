@@ -63,38 +63,10 @@ class BaseTransport : ITransport  {
             settings?.timeout = options?.timeout ?? self.options.timeout
             settings?.encoding = options?.encoding ?? self.options.encoding
         }
-        var ok: Bool = false
-        var success: TSuccess? = nil
-        var fail: TError? = nil
-        
-        let http = self.plainRequest(method, path, queryParams, body, authenticator, settings)
-        if let error = http.error {
-            ok = false
-//            let msg = error.errorDescription!
-            fail = error as? TError
-        } else {
-            let response = http.response as! HTTPURLResponse
-            let contentType = response.mimeType!
-            let data = http.data!
-            do {
-                print(http.data as Any)
-                let parsed = parseResponse(contentType, data)
-                let str = parsed as! String
-                if (self.ok(response)) {
-                    ok = true
-                    success = try deserialize(str)
-                } else {
-                    ok = false
-                    fail = try deserialize(str)
-                }
-            } catch {
-                ok = false
-                fail = SDKError(error.localizedDescription) as? TError
-            }
-        }
-        return ok
-            ? SDKResponse.success(success!)
-            : SDKResponse.error(fail!)
+        var result: SDKResponse<TSuccess,TError>
+        let response = self.plainRequest(method, path, queryParams, body, authenticator, settings)
+        result = processResponse(response)
+        return result
     }
     
     func plainRequest(
@@ -146,13 +118,16 @@ class BaseTransport : ITransport  {
     ) -> URLRequest? {
         var fullPath = path
         if !(fullPath.starts(with: "https:") || fullPath.starts(with: "http:")) {
+            // modify path if it's an API call rather than full path request
             fullPath = ((authenticator != nil) ? self.apiPath : (options?.base_url!)!) + path
         }
+        fullPath = addQueryParams(fullPath, queryParams)
         let requestPath = URL(string: fullPath)!
         var req = URLRequest(
             url: requestPath,
             timeoutInterval: TimeInterval(options?.timeout ?? self.options.timeout!))
         req.httpMethod = method.rawValue
+        req.addValue(agentTag, forHTTPHeaderField: "User-Agent")
         if (body != nil) {
             req.httpBody = try? JSONSerialization.data(withJSONObject: body!)
         }
@@ -162,38 +137,71 @@ class BaseTransport : ITransport  {
         return req
     }
     
-    private func ok(_ res: HTTPURLResponse) -> Bool {
+    static func ok(_ res: HTTPURLResponse) -> Bool {
         let code = res.statusCode // For visibility in the sucky XCode debugger
         return (200...299).contains(code)
     }
     
 }
 
-// TODO add error handling
-func parseResponse(_ contentType: String, _ data: Data?) -> Any {
+func processResponse<TSuccess: Codable, TError: Codable> (_ response: RequestResponse) -> SDKResponse<TSuccess,TError> {
+    if let error = response.error {
+        return SDKResponse.error((error as? TError)!)
+    }
+
+    var ok = true
+    var success: TSuccess? = nil
+    var fail: TError? = nil
+    
+    guard let data = response.data else {
+        fail = SDKError("No response data for request") as? TError
+        return SDKResponse.error(fail!)
+    }
+    
+    if (!BaseTransport.ok(response.response as! HTTPURLResponse)) {
+        do {
+            fail = try deserialize(data)
+        } catch {
+            fail = SDKError("Error parsing response: \(error): \(data)") as? TError
+        }
+        return SDKResponse.error(fail!)
+    }
+    
+    guard let contentType = response.response?.mimeType else {
+        /// Hopefully `TSuccess` is a `Voidable`, which is simply a documentation typealias hack for `String`
+        return SDKResponse.success("" as! TSuccess)
+    }
+    
     let mode = responseMode(contentType)
+    
     switch mode {
     case .string:
-        if (isMimeJson(contentType)) {
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!, options: [])
-                return json
-            } catch {
-                return "Error parsing JSON: \(error): \(data!)"
+        do {
+//            if let debug = String(data: data, encoding: .utf8) {
+//                print(debug)
+//            }
+            if (isMimeJson(contentType)) {
+                success = try deserialize(data)
+            } else if let dataString = String(data: data, encoding: .utf8) {
+                success = try deserialize(dataString)
+            } else {
+                // We shouldn't get here, but if we do, defer to default error handling
+                success = try deserialize(data)
             }
+        } catch {
+            ok = false
+            fail = SDKError("Error parsing response: \(error): \(data)") as? TError
         }
-        // convert result to UTF-8, without checking?
-        if let data = data, let dataString = String(data: data, encoding: .utf8) {
-            return dataString
-        }
-        
-        //        if (!isMimeUtf8(contentType)) {
-    //        }
     case .binary:
-        return data!
+        success = data as? TSuccess
+        break
     case .unknown:
-        return data!
+        success = data as? TSuccess
+        break
     }
-    return data!
+    return ok
+        ? SDKResponse.success(success!)
+        : SDKResponse.error(fail!)
+
 }
 

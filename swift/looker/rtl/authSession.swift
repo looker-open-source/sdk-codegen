@@ -87,7 +87,7 @@ class AuthSession: IAuthSession {
         let token = self.getToken()
         var updated = props
         if (token.isActive()) {
-            updated.allHTTPHeaderFields!["Authorization"] = "token \(token.access_token)"
+            updated.addValue("Bearer \(token.access_token)", forHTTPHeaderField: "Authorization")
         }
         return updated
     }
@@ -132,8 +132,8 @@ class AuthSession: IAuthSession {
             let response : SDKResponse<AccessToken, SDKError> = self.transport.request(
                 HttpMethod.POST,
                 "/login",
-                nil,
                 ["client_id": client_id!, "client_secret": client_secret!],
+                nil,
                 nil,
                 nil
             )
@@ -150,7 +150,7 @@ class AuthSession: IAuthSession {
                 nil,
                 { props -> URLRequest in
                     var update = props
-                    update.allHTTPHeaderFields!["Authorization"] = "token \(token.access_token)"
+                    update.addValue("Bearer \(token.access_token)", forHTTPHeaderField:  "Authorization")
                     return update
                 },
                 self.settings
@@ -173,14 +173,14 @@ class AuthSession: IAuthSession {
     private func _logout() -> Bool {
         var result = true
         let token = self.activeToken
-        let response : SDKResponse<String, SDKError> = self.transport.request(
+        let response : SDKResponse<Voidable, SDKError> = self.transport.request(
             HttpMethod.DELETE,
             "/logout",
             nil,
             nil,
             { props -> URLRequest in
                 var update = props
-                update.allHTTPHeaderFields!["Authorization"] = "token \(token.access_token)"
+                update.addValue("Bearer \(token.access_token)", forHTTPHeaderField:  "Authorization")
                 return update
             },
             self.settings

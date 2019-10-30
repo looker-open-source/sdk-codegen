@@ -36,7 +36,7 @@ const loginUrl = (props: ISDKConfigProps) => `${props.base_url}/login`
 const logoutUrl = (props: ISDKConfigProps) => `${props.base_url}/logout`
 
 const logout = async (props: ISDKConfigProps, token: string) =>
-  fetch(logoutUrl(props), {method: 'DELETE', headers: {'Authorization': `token ${token}`}})
+  fetch(logoutUrl(props), {method: 'DELETE', headers: {'Authorization': `Bearer ${token}`}})
 
 const login = async (props: ISDKConfigProps) => {
 
@@ -94,13 +94,13 @@ export const fetchSpecFile = async (name: string, props: ISDKConfigProps) => {
       content = await response.text()
       if (badAuth(content)) {
         token = await login(props)
-        response = await fetch(specFileUrl(props), {headers: {'Authorization': `token ${token}`}})
+        response = await fetch(specFileUrl(props), {headers: {'Authorization': `Bearer ${token}`}})
         content = await response.text()
       }
     } catch (err) {
       // Whoops!  Ok, try again with login
       token = await login(props)
-      response = await fetch(specFileUrl(props), {headers: {'Authorization': `token ${token}`}})
+      response = await fetch(specFileUrl(props), {headers: {'Authorization': `Bearer ${token}`}})
       content = await response.text()
     }
 
