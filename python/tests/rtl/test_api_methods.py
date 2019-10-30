@@ -36,7 +36,7 @@ from looker_sdk.rtl import transport
 from looker_sdk.sdk import models
 
 
-@pytest.fixture(scope="module")  # type: ignore
+@pytest.fixture(scope="module")
 def api() -> api_methods.APIMethods:
     settings = api_settings.ApiSettings.configure("../looker.ini")
     transport = requests_transport.RequestsTransport.configure(settings)
@@ -46,7 +46,7 @@ def api() -> api_methods.APIMethods:
     )
 
 
-@pytest.mark.parametrize(  # type: ignore
+@pytest.mark.parametrize(
     "test_query_params, expected",
     [
         ({"a": None}, {}),
@@ -77,7 +77,7 @@ def test_convert_query_params(
     assert actual == expected
 
 
-@pytest.mark.parametrize(  # type: ignore
+@pytest.mark.parametrize(
     "test_body, expected",
     [
         ("some body text", b"some body text"),
@@ -103,36 +103,35 @@ def test_get_serialized(
     assert actual == expected
 
 
-# all these type-ignore comments are because Union[str, bytes] has type Any
-@pytest.mark.parametrize(  # type: ignore
+@pytest.mark.parametrize(
     "test_response, test_structure, expected",
-    [  # type: ignore
+    [
         (
-            transport.Response(  # type: ignore
+            transport.Response(
                 ok=True,
                 value=bytes(range(0, 10)),
                 response_mode=transport.ResponseMode.BINARY,
             ),
-            Union[str, bytes],  # type: ignore
+            Union[str, bytes],
             bytes(range(0, 10)),
         ),
         (
-            transport.Response(  # type: ignore
+            transport.Response(
                 ok=True,
                 value=b"some response text",
                 response_mode=transport.ResponseMode.STRING,
             ),
-            Union[str, bytes],  # type: ignore
+            Union[str, bytes],
             "some response text",
         ),
         (
-            transport.Response(  # type: ignore
+            transport.Response(
                 ok=True,
                 value=bytes("ئ", encoding="arabic"),
                 response_mode=transport.ResponseMode.STRING,
                 encoding="arabic",
             ),
-            Union[str, bytes],  # type: ignore
+            Union[str, bytes],
             "ئ",
         ),
         (
@@ -147,8 +146,8 @@ def test_get_serialized(
                 ok=True,
                 value=bytes(
                     json.dumps(
-                        {  # type: ignore
-                            "current_version": {  # type: ignore
+                        {
+                            "current_version": {
                                 "full_version": "6.18.4",
                                 "status": "fully functional",
                                 "swagger_url": None,

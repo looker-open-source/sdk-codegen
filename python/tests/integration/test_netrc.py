@@ -19,9 +19,9 @@ def can_create_netrc_file():
 
 
 @pytest.fixture()
-def create_netrc_file(looker_client: mtds.LookerSDK):
+def create_netrc_file(sdk: mtds.LookerSDK):
     """Create a sample netrc meant to cause conflicts with the looker.ini file"""
-    host = urlparse(looker_client.auth.settings.base_url).netloc.split(":")[0]
+    host = urlparse(sdk.auth.settings.base_url).netloc.split(":")[0]
     netrc_contents = (
         f"machine {host}"
         f"\n  login netrc_client_id"
@@ -41,10 +41,10 @@ def create_netrc_file(looker_client: mtds.LookerSDK):
     reason="netrc file cannot be created because it already exists or $HOME is undefined",  # noqa: B950
 )
 @pytest.mark.usefixtures("create_netrc_file")
-def test_netrc_does_not_override_ini_creds(looker_client: mtds.LookerSDK):
+def test_netrc_does_not_override_ini_creds(sdk: mtds.LookerSDK):
     """The requests library overrides HTTP authorization headers if the auth= parameter
     is not specified, resulting in an authentication error. This test makes sure this
     does not happen when netrc files are found on the system.
     """
-    me = looker_client.me()
+    me = sdk.me()
     assert isinstance(me, ml.User)

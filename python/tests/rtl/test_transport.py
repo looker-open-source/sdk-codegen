@@ -25,7 +25,7 @@ import pytest  # type: ignore
 from looker_sdk.rtl import transport
 
 
-@pytest.mark.parametrize(  # type: ignore
+@pytest.mark.parametrize(
     "content_type, expected_response_mode",
     [
         ("application/json", transport.ResponseMode.STRING),
