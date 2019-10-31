@@ -115,7 +115,7 @@ class MockTransport(transport.Transport):
 def test_auto_admin_login(auth_session: auth.AuthSession):
     assert not auth_session.is_admin_authenticated
     auth_header = auth_session.authenticate()
-    assert auth_header["Authorization"] == "token AdminAccessToken"
+    assert auth_header["Authorization"] == "Bearer AdminAccessToken"
     assert auth_session.is_admin_authenticated
 
     # even after explicit logout
@@ -123,7 +123,7 @@ def test_auto_admin_login(auth_session: auth.AuthSession):
     assert not auth_session.is_admin_authenticated
     auth_header = auth_session.authenticate()
     assert isinstance(auth_header, dict)
-    assert auth_header["Authorization"] == "token AdminAccessToken"
+    assert auth_header["Authorization"] == "Bearer AdminAccessToken"
     assert auth_session.is_admin_authenticated
 
 
@@ -134,7 +134,7 @@ def test_user_login_auto_logs_in_admin(auth_session: auth.AuthSession):
     assert auth_session.is_admin_authenticated
     assert auth_session.is_user_authenticated
     auth_header = auth_session.authenticate()
-    assert auth_header["Authorization"] == "token UserAccessToken"
+    assert auth_header["Authorization"] == "Bearer UserAccessToken"
 
 
 def test_user_logout_leaves_admin_logged_in(auth_session: auth.AuthSession):

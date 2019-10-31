@@ -38,7 +38,6 @@ import { strLookerClientId, strLookerClientSecret } from './apiSettings'
 const strPost = 'POST'
 const strDelete = 'DELETE'
 
-
 /**
  * Same as the Looker API access token object
  */
@@ -96,6 +95,7 @@ export class NodeSession implements IAuthSession {
    * Is there an active authentication token?
    */
   isAuthenticated() {
+    // TODO I think this can be simplified
     const token = this.activeToken
     if (!(token && token.access_token)) return false
     return token.isActive()
@@ -105,12 +105,12 @@ export class NodeSession implements IAuthSession {
    * Add authentication data to the pending API request
    * @param init {IRequestInit} initialized API request properties
    *
-   * @returns the updated request properties
+   * @returns the updated request properties"
    */
   async authenticate(init: IRequestInit) {
     const token = await this.getToken()
     if (token && token.access_token)
-      init.headers.Authorization = `token ${token.access_token}`
+      init.headers.Authorization = `Bearer ${token.access_token}`
     return init
   }
 
@@ -230,7 +230,7 @@ export class NodeSession implements IAuthSession {
         // ensure the auth token is included in the sudo request
         (init: IRequestInit) => {
           if (token.access_token) {
-            init.headers.Authorization = `token ${token.access_token}`
+            init.headers.Authorization = `Bearer ${token.access_token}`
           }
           return init
         },
@@ -255,7 +255,7 @@ export class NodeSession implements IAuthSession {
       // ensure the auth token is included in the logout promise
       (init: IRequestInit) => {
         if (token.access_token) {
-          init.headers.Authorization = `token ${token.access_token}`
+          init.headers.Authorization = `Bearer ${token.access_token}`
         }
         return init
       },

@@ -191,7 +191,7 @@ export interface ISDKError {
 
 export type SDKResponse<TSuccess, TError> =
   | ISDKSuccessResponse<TSuccess>
-  | ISDKErrorResponse<TError | ISDKError>;
+  | ISDKErrorResponse<TError | ISDKError>
 
 /**
  * Base authorization interface
