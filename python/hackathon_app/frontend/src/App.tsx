@@ -1,12 +1,12 @@
 import * as React from 'react'
 import Web_Looker_Logo_White from './Web_Looker_Logo_White.svg'
 import styled from 'styled-components'
-import {Router, navigate} from '@reach/router'
+import {Link, Router, navigate} from '@reach/router'
 import {Formik, Form, Field, ErrorMessage} from 'formik'
 import * as yup from 'yup'
 
 const RegisterScene: React.FC<{path: string}> = () => {
-  const [hackathons, setHackathons] = React.useState(['hack 1', 'hack 2'])
+  const [hackathons, setHackathons] = React.useState([])
   const [csrf, setCsrf] = React.useState({token: 'someToken'})
 
   React.useEffect(() => {
@@ -83,7 +83,7 @@ const RegisterScene: React.FC<{path: string}> = () => {
                 })
                 const msg = await result.json()
                 if (msg.ok) {
-                  navigate('/resources')
+                  navigate('/')
                 } else {
                   actions.setStatus(msg.message)
                   actions.setSubmitting(false)
@@ -211,30 +211,26 @@ const HackathonSelect: React.FC<{hackathons: string[]}> = ({hackathons}) => {
   )
 }
 
-const Link: React.FC<{title: string}> = ({title}) => (
-  <LinkContainer>
-    <TitleLink>{title}</TitleLink>
-  </LinkContainer>
-)
-
 const ResourcesScene: React.FC<{path: string}> = () => {
   return (
     <CenterContainer>
       <SceneBody>
         <Logo src={Web_Looker_Logo_White} />
-        <Header>Hackathon Resources</Header>
+        <Header>Looker Hackathons</Header>
         <Description>Find information on Hackathons below</Description>
         <hr />
         <Header>Welcome!</Header>
         <Description>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostr
+          Explore the links below to find useful documentation and tools for
+          participating in a hackathon.
         </Description>
         <Links>
-          <Link title={'Hackathon resources'} />
-          <Link title={'Open source documents'} />
-          <Link title={'Slack'} />
+          <LinkContainer>
+            <TitleLink to="/registration">Register for a Hackathon</TitleLink>
+          </LinkContainer>
+          <LinkContainer>
+            <TitleLink to="//lookerhack.slack.com/">Slack</TitleLink>
+          </LinkContainer>
         </Links>
       </SceneBody>
     </CenterContainer>
@@ -245,8 +241,8 @@ const App: React.FC = () => {
   return (
     <Body>
       <Router>
-        <RegisterScene path="/" />
-        <ResourcesScene path="/resources" />
+        <RegisterScene path="/registration" />
+        <ResourcesScene path="/" />
       </Router>
     </Body>
   )
@@ -272,7 +268,7 @@ const LinkContainer = styled.div`
   }
 `
 
-const TitleLink = styled.div`
+const TitleLink = styled(Link)`
   color: white;
   margin-left: 16px;
 `
@@ -351,7 +347,7 @@ const CheckboxLabel = styled(Label)`
 `
 
 const RegisterButton = styled.button`
-  background-color: #d35160;
+  background-color: #e13d73;
   border: none;
   border-radius: 5px;
   color: white;
