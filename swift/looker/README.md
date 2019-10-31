@@ -2,7 +2,7 @@
 
 The Looker SDK for Swift provides a convenient way to communicate with the Looker API available on your Looker server. The SDK is written in Swift and uses `URLSession` for HTTP request processing.
 
-**DISCLAIMER**: This is a _beta_ version of the Looker SDK, using a completely new code generator developed by Looker. Implementations are still subject to change, but we expect most SDK method calls to work correctly. If you run into problems with the SDK, please feel free to [report an issue](https://github.com/looker-open-source/sdk-codegen/issues), and please indicate which language SDK you're using in the report.
+**DISCLAIMER**: This is an _alpha_ version of the Looker SDK, using a completely new code generator developed by Looker. Implementations are still subject to major change. If you run into problems with the SDK, feel free to [report an issue](https://github.com/looker-open-source/sdk-codegen/issues), and please indicate which language SDK you're using in the report.
 
 ## Getting started
 
@@ -12,18 +12,27 @@ The Looker SDK can be used in a Swift application in 3 steps:
 * configure
 * use
 
-### Install the Looker SDK into your node application
+### Install the Looker SDK for Swift
 
+The alpha version of the Looker SDK is not published to the Swift Package Manager. It's way too early for that. Currently, the only way to get the source code is by cloning the Looker SDK Codegen repository and use the source code in the `swift` folder.
+
+To ensure you have the version of the SDK that matches your Looker version, you can regenerate `methods.swift` and `models.swift` from the root of the repository with the command:
+
+```bash
+yarn sdk swift
+```
+
+If this command fails the first time, read the [instructions for setting up `yarn`](https://github.com/looker-open-source/sdk-codegen/blob/master/README.md#using-the-yarnnode-based-generator)
 
 ### Configure the SDK for your Looker server
 
-**Note**: The `.ini` configuration for the Looker SDK is a sample implementation intended to speed up the initial development of Node applications using the Looker API. See the [Securing your SDK Credentials](#securing-your-sdk-credentials) section below for warnings about using `.ini` files that contain your API credentials in a source code repository or production environment.
+**Note**: The `.ini` configuration for the Looker SDK is a sample implementation intended to speed up the initial development of Node applications using the Looker API. See this note on [Securing your SDK Credentials](https://github.com/looker-open-source/sdk-codegen/blob/master/README.md#securing-your-sdk-credentials) for warnings about using `.ini` files that contain your API credentials in a source code repository or production environment.
 
 Create a `looker.ini` file with your server URL and API credentials assigned as shown in this example.
 
 ```ini
 [Looker]
-# API version is required. 3.1 and 3.0 are currently supported. 3.1 is highly recommended.
+# API version defaults to 3.1. 3.1 and 3.0 are currently supported. 3.1 is highly recommended.
 api_version=3.1
 # Base URL for API. Do not include /api/* in the url
 base_url=https://<your-looker-server>:19999
@@ -43,6 +52,25 @@ When the SDK is installed and the server location and API credentials are config
 Verify authentication works and that API calls will succeed with code similar to the following:
 
 ```swift
+import looker
+
+/// read the Looker configuration file
+let config = try? ApiConfig("looker.ini")
+
+/// Use the standard transport based on URLSession
+let xp = BaseTransport(settings)
+
+/// Use the authentication session manager to automatically handle session expiration 
+/// See the section below for more on `AuthSession`
+let auth = AuthSession(settings, xp)
+
+/// Create you Looker SDK instance
+let sdk = LookerSDK(auth)
+
+/// Retrieve the API user record. If this fails, your Looker server or credentials are bad
+let me = sdk.ok(sdk.me())
+
+/// continue making SDK calls
 ```
 
 ## Using AuthSession for automatic authentication
@@ -60,9 +88,25 @@ API users with appropriate permissions can `sudo` as another user by specifying 
 
 The rest of this section shows sample code for typical use cases for authentication and sudo. This code sample is extracted directly from the sdk methods Jest tests, and assumes `apiUser` is the default authenticated user record with `sudo` abilities, and `sudoA` and `sudoB` are other enabled Looker user records.
 
+## THIS IS AN ALPHA VERSION!!!
+
+There are still some issues processing the full return values of some of the more complex structures returned by Looker API endpoints. While these JSON parsing issues are being resolved, restricting the set of fields to be returned by the problematic endpoint is a simple work-around. To save time, some constants for currently supported fields are defined in the SDK.
+
+```swift
+
+/// safely list all active dashboards
+let dashboards = sdk.ok(sdk.all_dashboards(fields:Safe.DashboardBase))
+
+/// safely get a dashboard via the SDK
+let dashboard = sdk.ok(sdk.dashboard(id, fields:Safe.Dashboard))
+
+/// safely list all active looks
+let looks = sdk.ok(sdk.all_looks(fields:Safe.Look))
+
+```
 ## Classes vs. Structs
 
-Both the [Swift documentation](https://developer.apple.com/documentation/swift/choosing_between_structures_and_classes) and LearnAppMaking has an excellent [overview of Swift classes vs. structs](https://learnappmaking.com/struct-vs-class-swift-how-to/) explain the choices between structs and classes in Swift.
+Both the [Swift documentation](https://developer.apple.com/documentation/swift/choosing_between_structures_and_classes) and LearnAppMaking has an  [overview of Swift classes vs. structs](https://learnappmaking.com/struct-vs-class-swift-how-to/) explain the choices between structs and classes in Swift.
 
 The SDK generator uses both classes and structs. Classes are used where required in the SDK where class-specific features for:
 
@@ -70,4 +114,6 @@ The SDK generator uses both classes and structs. Classes are used where required
 * destructors (aka `deinit`)
 * identity comparisons
 
-Otherwise, structs or interfaces are used for the declaration of complex method inputs such as `body` parameters.
+Otherwise, `struct`s, `enum`s, or `protocol`s are used for the declaration of complex method inputs, such as `body` parameters and the complex API structures returned from API endpoints.
+
+Enjoy, and thanks for trying out the bleeding edge!

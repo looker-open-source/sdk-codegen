@@ -418,10 +418,10 @@ ${indent}return result`
         return {name: `[${map.name}]`, default: '[]'}
       } else if (type instanceof HashType) {
         // TODO fix the API endpoints like those that return `User` to correctly encode JSON hashes
-        // return {name: `StringDictionary<${map.name}>`, default: ''}
-        return {name: `StringDictionary<Variant>`, default: ''}
+        // return {name: `StringDictionary<${map.name}>`, default: 'nil'}
+        return {name: `StringDictionary<Variant>`, default: 'nil'}
       } else if (type instanceof DelimArrayType) {
-        return {name: `DelimArray<${map.name}>`, default: ''}
+        return {name: `DelimArray<${map.name}>`, default: 'nil'}
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }

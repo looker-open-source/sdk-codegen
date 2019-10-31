@@ -285,5 +285,5 @@ struct Safe {
 
     static let DashboardBase = "id,title,description,hidden,model,user_id,content_favorite_id,content_metadata_id,query_timezone,readonly,refresh_interval,refresh_interval_to_i,can"
 
-    static let Look = "content_metadata_id,id,title,content_favorite_id,created_at,deleted,deleted_at,deleter_id,descrption,embed_url,excel_file_url,favorite_count,google_spreadsheet_formula,image_embed_url,is_run_on_load,last_accessed_at,last_updater_id,last_viewed_at,model,public,public_slug,public_url,query_id,short_url,folder,space_id,folder_id,updated_at,user,user_id,view_count"
+    static let Look = "content_metadata_id,id,title,content_favorite_id,created_at,deleted,deleted_at,deleter_id,descrption,embed_url,excel_file_url,favorite_count,google_spreadsheet_formula,image_embed_url,is_run_on_load,last_accessed_at,last_updater_id,last_viewed_at,model,public,public_slug,public_url,query_id,short_url,space_id,folder_id,updated_at,user,user_id,view_count"
 }

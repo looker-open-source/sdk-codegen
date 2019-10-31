@@ -112,7 +112,7 @@ struct ApiConfig : IApiSettings {
         self.assign(settings)
     }
     
-    // TODO figure out how to use Codable and PropertyListDecoder
+    // TODO figure out how to use Codable and PropertyListDecoder?
     // similar to https://www.raywenderlich.com/3418439-encoding-and-decoding-in-swift
     init(_ fileName: String, _ section: String = "Looker") throws {
         self.fileName = fileName
