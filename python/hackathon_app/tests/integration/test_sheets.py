@@ -1,7 +1,7 @@
 import datetime
-from typing import cast, Sequence
+from typing import Sequence
 
-from sheets import User, Users, DATE_FORMAT, Registrant, Registrations, Sheets
+from sheets import User, Users, Registrant, Registrations, Sheets
 
 
 def test_gets_all_hackathons(sheets: Sheets, test_data):
@@ -28,32 +28,26 @@ def test_register_user_registers(
 
     all_users = users.rows()
     last_inserted_user = all_users[-1]
-    assert last_inserted_user.first_name == new_user.first_name
-    assert last_inserted_user.last_name == new_user.last_name
-    assert last_inserted_user.email == new_user.email
-    assert last_inserted_user.date_created == datetime.datetime.strptime(
-        datetime.datetime.now().strftime(DATE_FORMAT), DATE_FORMAT
-    )
-    assert last_inserted_user.organization == new_user.organization
-    assert last_inserted_user.tshirt_size == new_user.tshirt_size
+    assert new_user == last_inserted_user
 
     all_registrants = registrations.rows()
     last_registrant = all_registrants[-1]
     assert last_registrant.user_email == new_user.email
     assert last_registrant.hackathon_name == "sanfrancisco_2019"
-    assert last_registrant.date_registered == datetime.datetime.strptime(
-        datetime.datetime.now().strftime(DATE_FORMAT), DATE_FORMAT
-    )
+    assert last_registrant.date_registered == datetime.date.today()
     assert last_registrant.attended is None
 
 
 def test_register_user_registers_when_user_exists(
-    test_users, sheets: Sheets, users: Users, registrations: Registrations
+    test_users: Sequence[User],
+    sheets: Sheets,
+    users: Users,
+    registrations: Registrations,
 ):
     """register_user() should register a user by adding them to the Registrations sheet
     if user already exists in the Users sheet but not in the Registrations sheet.
     """
-    existing_user = cast(User, test_users[0])
+    existing_user = test_users[0]
     new_user = User(
         first_name=existing_user.first_name,
         last_name=existing_user.last_name,
@@ -70,9 +64,7 @@ def test_register_user_registers_when_user_exists(
     last_registrant = all_registrants[-1]
     assert last_registrant.user_email == existing_user.email
     assert last_registrant.hackathon_name == "newhackathon_2019"
-    assert last_registrant.date_registered == datetime.datetime.strptime(
-        datetime.datetime.now().strftime(DATE_FORMAT), DATE_FORMAT
-    )
+    assert last_registrant.date_registered == datetime.date.today()
     assert last_registrant.attended is None
 
 
@@ -84,12 +76,12 @@ def test_register_updates_user_if_user_is_registered(
     registrations: Registrations,
 ):
     """register_user() should update the user but not re-register if user is already registered"""
-    existing_registrant = cast(Registrant, test_registrants[0])
+    # existing_registrant = cast(Registrant, test_registrants[0])
+    existing_registrant = test_registrants[0]
     for user in test_users:
         if user.email == existing_registrant.user_email:
             updated_user = user
             break
-    assert isinstance(updated_user, User)
 
     updated_user.first_name = "updated_first"
     updated_user.last_name = "updated_last"
@@ -100,9 +92,5 @@ def test_register_updates_user_if_user_is_registered(
         hackathon=existing_registrant.hackathon_name, user=updated_user
     )
 
-    retrieved_user = users.find("email", existing_registrant.user_email)
-    assert isinstance(retrieved_user, User)
-    assert retrieved_user.first_name == updated_user.first_name
-    assert retrieved_user.last_name == updated_user.last_name
-    assert retrieved_user.organization == updated_user.organization
-    assert retrieved_user.tshirt_size == updated_user.tshirt_size
+    retrieved_user = users.find(existing_registrant.user_email)
+    assert retrieved_user == updated_user

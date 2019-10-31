@@ -1,15 +1,6 @@
-from typing import (
-    cast,
-    Dict,
-    Generic,
-    MutableMapping,
-    Optional,
-    Union,
-    Sequence,
-    Type,
-    TypeVar,
-)
+from typing import cast, Dict, Generic, List, Optional, Union, Sequence, Type, TypeVar
 import datetime
+import itertools
 
 import attr
 import cattr
@@ -50,27 +41,32 @@ class Sheets:
         hackathons = cast(Sequence["Hackathon"], self.hackathons.rows())
         result = []
         for hackathon in hackathons:
-            if hackathon.date >= datetime.datetime.now():
+            if hackathon.date >= datetime.date.today():
                 result.append(hackathon)
         return result
 
     def register_user(self, *, hackathon: str, user: "User"):
         """Register user to a hackathon"""
-        if not self.users.is_created(user):
-            self.users.create(user)
-        else:
+        if self.users.find(user.email):
             self.users.update(user)
+        else:
+            self.users.create(user)
         registrant = Registrant(
             user_email=user.email,
             hackathon_name=hackathon,
-            date_registered=datetime.datetime.now(),
+            date_registered=datetime.date.today(),
             attended=None,
         )
         if not self.registrations.is_registered(registrant):
             self.registrations.register(registrant)
 
 
-TModel = TypeVar("TModel")
+@attr.s(auto_attribs=True, kw_only=True)
+class Model:
+    id: Optional[int] = None
+
+
+TModel = TypeVar("TModel", bound=Model)
 
 
 converter = cattr.Converter()
@@ -84,14 +80,20 @@ class WhollySheet(Generic[TModel]):
         spreadsheet_id: str,
         sheet_name: str,
         structure: Type[TModel],
+        key: str,
         converter=converter,
+        immutable_fields: Optional[List[str]] = None,
     ):
         self.client = client
         self.spreadsheet_id = spreadsheet_id
         self.sheet_name = sheet_name
         self.range = f"{sheet_name}!A1:end"
         self.structure = structure
+        self.key = key
         self.converter = converter
+        self.immutable_fields = ["id"]
+        if immutable_fields:
+            self.immutable_fields.extend(immutable_fields)
 
     def insert(self, model: TModel):
         """Insert data as rows into sheet"""
@@ -99,7 +101,7 @@ class WhollySheet(Generic[TModel]):
             serialized_ = self.converter.unstructure(model)
             serialized = self._convert_to_list(serialized_)
             body = {"values": [serialized]}
-            self.client.append(
+            response = self.client.append(
                 spreadsheetId=self.spreadsheet_id,
                 range=self.range,
                 insertDataOption="INSERT_ROWS",
@@ -108,6 +110,11 @@ class WhollySheet(Generic[TModel]):
             ).execute()
         except (TypeError, AttributeError):
             raise SheetError("Could not insert row")
+
+        # something like "users!A6:F6"
+        updated_range = response["updates"]["updatedRange"]
+        id_in_range_offset = len(f"{self.sheet_name}!A")
+        model.id = int(updated_range[id_in_range_offset])
 
     def rows(self) -> Sequence[TModel]:
         """Retrieve rows from sheet"""
@@ -120,7 +127,6 @@ class WhollySheet(Generic[TModel]):
         try:
             rows = response["values"]
             data = self._convert_to_dict(rows)
-            print(f"Retrieved data: {data}")
             # ignoring type (mypy bug?) "Name 'self.structure' is not defined"
             response = self.converter.structure(
                 data, Sequence[self.structure]  # type: ignore
@@ -131,8 +137,11 @@ class WhollySheet(Generic[TModel]):
 
     def update(self, model: TModel):
         """Update user"""
-        if not model.id:
-            raise SheetError("No update row specified")
+        ex_model = self.find(getattr(model, self.key))
+        if not ex_model:
+            raise SheetError("No entry found.")
+        for field in self.immutable_fields:
+            setattr(model, field, getattr(ex_model, field))
         try:
             serialized_ = self.converter.unstructure(model)
             serialized = self._convert_to_list(serialized_)
@@ -147,27 +156,32 @@ class WhollySheet(Generic[TModel]):
             raise SheetError("Could not update row")
 
     def find(
-        self, key: str, value: Union[str, bool, int, datetime.datetime, None]
+        self,
+        value: Union[str, bool, int, datetime.datetime, None],
+        *,
+        key: Optional[str] = None,
     ) -> Optional[TModel]:
-        # Google Sheets are 1 indexed, with the first row being the header.
-        header_offset = 2
+        key = key if key else self.key
         ret = None
-        for index, row in enumerate(self.rows()):
+        for row in self.rows():
             if getattr(row, key) == value:
                 ret = row
-                ret.id = index + header_offset
                 break
         return ret
 
-    def _convert_to_dict(self, data) -> Sequence[Dict[str, str]]:
+    def _convert_to_dict(self, data) -> List[Dict[str, str]]:
         """Given a list of lists where the first list contains key names, convert it to
         a list of dictionaries.
         """
-        header = data[0] + ["id"]
-        id_val = [None]
-        result: Sequence[Dict[str, str]] = [
-            dict(zip(header, r + id_val)) for r in data[1:]
-        ]
+        header = data[0]
+        header.insert(0, "id")
+        result: List[Dict[str, str]] = []
+        # Google Sheets are 1 indexed, with the first row being the header.
+        header_offset = 2
+        for index, row in enumerate(data[1:]):
+            row.insert(0, index + header_offset)  # id value
+            row_tuples = itertools.zip_longest(header, row, fillvalue="")
+            result.append(dict(row_tuples))
         return result
 
     def _convert_to_list(
@@ -181,12 +195,11 @@ class WhollySheet(Generic[TModel]):
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class User:
-    id: Optional[int] = None
+class User(Model):
     first_name: str
     last_name: str
     email: str
-    date_created: Optional[datetime.datetime] = None
+    date_created: Optional[datetime.date] = None
     organization: str
     tshirt_size: str
 
@@ -198,34 +211,21 @@ class Users(WhollySheet[User]):
             spreadsheet_id=spreadsheet_id,
             sheet_name="users",
             structure=User,
+            key="email",
+            immutable_fields=["date_created"],
         )
-        self.users = None
-
-    def is_created(self, user: User) -> bool:
-        """Checks if user already exists in users sheet"""
-        found = True if super().find("email", user.email) else False
-        return found
 
     def create(self, user: User):
         """Insert user details in the users sheet"""
-        user.date_created = datetime.datetime.now()
+        user.date_created = datetime.date.today()
         super().insert(user)
-
-    def update(self, user: User):
-        """Find and update user"""
-        retrieved_user = super().find("email", user.email)
-        assert retrieved_user
-        user.id = retrieved_user.id
-        user.date_created = retrieved_user.date_created
-        super().update(user)
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class Hackathon:
-    id: Optional[int] = None
+class Hackathon(Model):
     name: str
     location: str
-    date: datetime.datetime
+    date: datetime.date
     duration_in_days: int
 
 
@@ -236,15 +236,15 @@ class Hackathons(WhollySheet[Hackathon]):
             spreadsheet_id=spreadsheet_id,
             sheet_name="hackathons",
             structure=Hackathon,
+            key="name",
         )
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class Registrant:
-    id: Optional[int] = None
+class Registrant(Model):
     user_email: str
     hackathon_name: str
-    date_registered: datetime.datetime
+    date_registered: datetime.date
     attended: Optional[bool] = None
 
 
@@ -255,6 +255,7 @@ class Registrations(WhollySheet[Registrant]):
             spreadsheet_id=spreadsheet_id,
             sheet_name="registrations",
             structure=Registrant,
+            key="hackathon_name",
         )
 
     def is_registered(self, registrant: Registrant) -> bool:
@@ -279,14 +280,14 @@ class SheetError(Exception):
 
 
 converter.register_structure_hook(
-    datetime.datetime,
+    datetime.date,
     lambda d, _: datetime.datetime.strptime(  # type: ignore
         d, DATE_FORMAT
-    ),
+    ).date(),
 )
 converter.register_unstructure_hook(
-    datetime.datetime,
-    lambda d: datetime.datetime.strftime(  # type: ignore
+    datetime.date,
+    lambda d: datetime.date.strftime(  # type: ignore
         d, DATE_FORMAT
     ),
 )
@@ -296,12 +297,12 @@ def _convert_bool(val: str, _: bool) -> Optional[bool]:
     converted: Optional[bool]
     if val.lower() in ("yes", "y", "true", "t", "1"):
         converted = True
-    elif val.lower() in ("", "no", "n", "false", "f", "0"):
+    elif val.lower() in ("", "no", "n", "false", "f", "0", "null", "na"):
         converted = False
     elif val.lower() == NIL:
         converted = None
     else:
-        raise TypeError
+        raise TypeError(f"Failed to convert '{val}' to bool")
     return converted
 
 

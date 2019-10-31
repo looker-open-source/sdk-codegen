@@ -15,6 +15,7 @@ from sheets import (
     User,
     Users,
     WhollySheet,
+    converter,
 )
 
 
@@ -28,6 +29,7 @@ def instantiate_whollysheet(spreadsheet_client, spreadsheet):
         spreadsheet_id=spreadsheet["spreadsheetId"],
         sheet_name="users",
         structure=Sequence[User],
+        key="email",
     )
 
 
@@ -93,21 +95,21 @@ def get_test_registrants(test_data):
     return create_sheet_repr(registrations_sheet, Registrant)
 
 
-def create_sheet_repr(sheet, klass):
+def create_sheet_repr(sheet, model):
     """Converts a JSON representation of a sheet into a list of dicts. Each element
     in the list represents a row in the sheet, where each cell value can be accessed
     using the cell header as a key
     """
     header = get_header(sheet)
     data = get_data(sheet)
-    result = [klass(**dict(zip(header, d))) for d in data]
+    result = converter.structure([dict(zip(header, d)) for d in data], Sequence[model])
     return result
 
 
 def get_header(sheet):
     """Get the header as a list"""
     sheet_header = sheet["data"][0]["rowData"][0]["values"]
-    header = []
+    header = ["id"]
     for cell in sheet_header:
         cell_value = cell["userEnteredValue"]["stringValue"]
         header.append(cell_value)
@@ -120,8 +122,8 @@ def get_data(sheet):
      """
     rows_exc_header = sheet["data"][0]["rowData"][1:]
     data = []
-    for row in rows_exc_header:
-        row_data = []
+    for id_, row in enumerate(rows_exc_header, start=2):
+        row_data = [id_]
         for cell in row["values"]:
             cell_value = cell["userEnteredValue"]["stringValue"]
             row_data.append(cell_value)
@@ -170,7 +172,7 @@ def credentials(cred_file) -> service_account.Credentials:
 
 
 @pytest.fixture(scope="session")
-def cred_file() -> str:
+def cred_file():
     """Read the google json credentials file (base64 encoded) from the
     GOOGLE_APPLICATION_CREDENTIAL_ENCODED env variable, decode it and write
     it to google-creds.json

@@ -12,9 +12,7 @@ def test_convert_to_list_returns_list(WhollySheet: WhollySheet):
         "first_name": "John",
         "last_name": "Doe",
         "email": "john@foo.com",
-        "created_date": datetime.datetime.strftime(
-            datetime.datetime.now(), DATE_FORMAT
-        ),
+        "created_date": datetime.date.strftime(datetime.date.today(), DATE_FORMAT),
         "organization": "foo",
         "tshirt_size": "S",
     }
@@ -24,7 +22,7 @@ def test_convert_to_list_returns_list(WhollySheet: WhollySheet):
         "John",
         "Doe",
         "john@foo.com",
-        datetime.datetime.strftime(datetime.datetime.now(), DATE_FORMAT),
+        datetime.date.strftime(datetime.date.today(), DATE_FORMAT),
         "foo",
         "S",
     ]
@@ -41,14 +39,14 @@ def test_convert_to_list_returns_list(WhollySheet: WhollySheet):
             ],
             [
                 {
-                    "id": None,
+                    "id": 2,
                     "user_email": "jane@bar.com",
                     "hackathon_name": "london2019",
                     "date_registered": "6/10/2019",
                     "attended": "True",
                 },
                 {
-                    "id": None,
+                    "id": 3,
                     "user_email": "john@foo.com",
                     "hackathon_name": "london2019",
                     "date_registered": "6/11/2019",
