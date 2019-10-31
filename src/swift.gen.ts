@@ -126,11 +126,11 @@ import Foundation
     }
     const type = this.typeMap(property.type)
     // TODO fix this HORRIBLE hack once our API JSON results to CORRECTLY represent strings in payloads
-    let scalarHack = type.name
+    let variantHack = type.name
     let low = property.name.toLowerCase()
-    if (type.name === 'String' && (low === "id" || low.endsWith("_id"))) scalarHack = 'Scalar'
+    if (type.name === 'String' && (low === "id" || low.endsWith("_id"))) variantHack = 'Variant'
     return this.commentHeader(indent, this.describeProperty(property))
-      + `${indent}var ${this.reserve(property.name)}: ${scalarHack}${optional}`
+      + `${indent}var ${this.reserve(property.name)}: ${variantHack}${optional}`
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
@@ -419,7 +419,7 @@ ${indent}return result`
       } else if (type instanceof HashType) {
         // TODO fix the API endpoints like those that return `User` to correctly encode JSON hashes
         // return {name: `StringDictionary<${map.name}>`, default: ''}
-        return {name: `StringDictionary<Scalar>`, default: ''}
+        return {name: `StringDictionary<Variant>`, default: ''}
       } else if (type instanceof DelimArrayType) {
         return {name: `DelimArray<${map.name}>`, default: ''}
       }

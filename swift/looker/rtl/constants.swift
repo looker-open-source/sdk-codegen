@@ -279,3 +279,11 @@ func DToS(_ date: Date) -> String {
     formatter.dateFormat = "YYYYMMDD"
     return formatter.string(from: date)
 }
+
+struct Safe {
+    static let Dashboard = "content_favorite_id,content_metadata_id,description,hidden,id,model,query_timezone,readonly,refresh_interval,created_at,title,user_id,background_color,dashboard_layouts,delete,deleted_at,deleter_id,edit_uri,favorite_count,last_accessed_at,last_viewed_at,load_configuration,lookml_link_id,show_filters_bar,show_title,slug,space_id,folder_id,text_tile_text_color,tile_background_color,tile_text_color,title_color,view_count,settings,can"
+
+    static let DashboardBase = "id,title,description,hidden,model,user_id,content_favorite_id,content_metadata_id,query_timezone,readonly,refresh_interval,refresh_interval_to_i,can"
+
+    static let Look = "content_metadata_id,id,title,content_favorite_id,created_at,deleted,deleted_at,deleter_id,descrption,embed_url,excel_file_url,favorite_count,google_spreadsheet_formula,image_embed_url,is_run_on_load,last_accessed_at,last_updater_id,last_viewed_at,model,public,public_slug,public_url,query_id,short_url,folder,space_id,folder_id,updated_at,user,user_id,view_count"
+}

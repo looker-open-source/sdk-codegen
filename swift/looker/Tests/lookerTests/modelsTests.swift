@@ -39,32 +39,123 @@ class modelsTests: XCTestCase {
         }
     }
 
-    // TODO figure out how to parse these date times with Time Zone
-    func testJsonDate() {
-        let json = #"""
-{"created_at":"2017-09-18T17:29:12.757-07:00"}
-"""#
-        let json2 = #"""
-{"created_at":"2018-03-15T13:16:34.692-07:00"}
-"""#
-        struct Created : SDKModel {
-            var created_at: Scalar
+    func deserialize<T>(_ data: Data) throws -> T where T : Codable {
+        let decoder = JSONDecoder()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.locale = Foundation.Locale(identifier: "en_US_POSIX")
+        decoder.dateDecodingStrategy = .formatted(formatter)
+        do {
+            let result: T = try decoder.decode(T.self, from: data)
+            return result
+        } catch {
+            throw error
         }
         
+    }
+    /// Convert a JSON string into the type `T`
+    /// @throws errors if deserialization fails
+    func deserialize<T>(_ json: String) throws -> T where T : Codable {
+        return try deserialize(Data(json.utf8))
+    }
+
+    func testDateParse() {
+        let value = "2018-03-15T13:16:34.692-07:00"
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.locale = Foundation.Locale(identifier: "en_US_POSIX")
+        let date = formatter.date(from: value)
+
+        XCTAssertNotNil(date)
+        let dateString = formatter.string(from: date!)
+        print(dateString)
+        XCTAssertNotNil(dateString)
+    }
+    
+    let json = #"""
+    {
+    "want_string": 4,
+    "want_int": "5",
+    "want_dub": 2.3,
+    "not_a_date":"2018-03-15T13:16:34.692-07:00",
+    "nullable": null,
+    "is_bool": true
+    }
+    """#
+
+    struct Hacky : Codable {
+        var want_string: Variant
+        var want_int: Variant
+        var want_dub: Variant
+        var not_a_date: Variant
+        var is_bool: Variant
+        var nullable: Variant
+    }
+    
+    struct Simple : Codable {
+        var want_string: String?
+        var want_int: Int?
+        var want_dub: Double?
+        var not_a_date: String?
+        var is_bool: Bool?
+    }
+    
+    // TODO figure out how to coerce String types to String with sloppy JSON
+    // Parsing String as Date Swift bug https://bugs.swift.org/browse/SR-7461
+    func testJsonHackyString() {
         do {
-            var foo : Created = try deserialize(json)
-            XCTAssertNotNil(foo)
-            XCTAssertNotNil(foo.created_at)
-            let d = foo.created_at.get() as! Date
-            XCTAssertNotNil(d)
-            foo = try deserialize(json2)
+            let item : Hacky = try deserialize(#"{"want_string":4}"#)
+            XCTAssertNotNil(item)
+            XCTAssertEqual(item.want_string.getString(), "4", "Expected '4'")
         } catch {
             print(error)
             XCTAssertNil(error)
         }
-        
     }
     
+    func testJsonSimpleString() {
+        
+        do {
+            var item : Simple = try deserialize(#"{"want_string":"4"}"#)
+            print("strict passed")
+            XCTAssertNotNil(item)
+            XCTAssertEqual(item.want_string, "4")
+            item = try deserialize(#"{"want_string":null}"#)
+            print("strict null passed")
+            XCTAssertNotNil(item)
+            XCTAssertNil(item.want_string, "want_string should be nil")
+            item = try deserialize(#"{"want_string":4}"#)
+            print("lazy passed")
+            XCTAssertNotNil(item)
+            XCTAssertEqual(item.want_string, "4")
+
+        } catch {
+            print(error)
+            XCTAssertNil(error)
+        }
+    }
+
+    func testJsonSimpleInt() {
+        
+        do {
+            var item : Simple = try deserialize(#"{"want_int":4}"#)
+            print("strict passed")
+            XCTAssertNotNil(item)
+            XCTAssertEqual(item.want_int, 4)
+            item = try deserialize(#"{"want_int":"4"}"#)
+            print("lazy passed")
+            XCTAssertNotNil(item)
+            XCTAssertEqual(item.want_int, 4)
+        } catch {
+            print(error)
+            XCTAssertNil(error)
+        }
+    }
+
     func testDashboard() {
         do {
             let dash : Dashboard = try deserialize(jsonDashboard2)

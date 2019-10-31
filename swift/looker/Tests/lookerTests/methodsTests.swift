@@ -66,18 +66,32 @@ class methodsTests: XCTestCase {
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
-        let list = sdk.ok(sdk.all_dashboards(fields:"id,title,description,hidden,model,user_id"))
+        let list = sdk.ok(sdk.all_dashboards(fields:Safe.DashboardBase))
         XCTAssertNotNil(list)
+        let count = list.count
+        XCTAssertTrue(count > 0, "Found \(count) dashboards")
+        print("Dashboard count: \(count)")
         _ = sdk.authSession.logout()
     }
     
-    func testGetDashboard() {
+    func testGetAllDashboards() {
         let settings = config!
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
-        let dashboard = sdk.ok(sdk.dashboard("2")) //, fields:"id,title"))
-        XCTAssertNotNil(dashboard)
+        let list = sdk.ok(sdk.all_dashboards(fields:Safe.DashboardBase))
+        for item in list {
+            let id = item.id!.getString()
+//            if (id == "185") {
+//                BaseTransport.debugging = true
+//            }
+            print("Getting dashboard \(id) '\(item.title!)'")
+            let dashboard = sdk.ok(sdk.dashboard(id, fields:Safe.Dashboard))
+            XCTAssertNotNil(dashboard, "Dashboard \(id) should be gotten")
+            if (dashboard.created_at == nil) {
+                print("Dashboard \(id) created_at is nil")
+            }
+        }
         _ = sdk.authSession.logout()
 
     }

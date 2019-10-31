@@ -35,10 +35,12 @@ struct RequestResponse {
     }
 }
 
+
 //class BaseTransport : ITransport {
 // TODO why doesn't this implementation satisfy ITransport?!?!?
 @available(OSX 10.12, *)
 class BaseTransport : ITransport  {
+    public static var debugging = false
     let session = URLSession.shared // TODO Should this be something else like `configuration: .default`? or ephemeral?
     var apiPath = ""
     var options: ITransportSettings
@@ -161,8 +163,10 @@ func processResponse<TSuccess: Codable, TError: Codable> (_ response: RequestRes
         return SDKResponse.error(fail!)
     }
     
-    if let debug = String(data: data, encoding: .utf8) {
-        print(debug)
+    if BaseTransport.debugging {
+        if let debug = String(data: data, encoding: .utf8) {
+            print(debug)
+        }
     }
     
     if (!BaseTransport.ok(response.response as! HTTPURLResponse)) {
