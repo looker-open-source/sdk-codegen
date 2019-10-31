@@ -1,5 +1,7 @@
 import datetime
 
+import pytest  # type: ignore
+
 from sheets import User, Users
 
 DATE_FORMAT = "%m/%d/%Y"
@@ -63,6 +65,40 @@ def test_create_user(users: Users):
     assert not users.is_created(new_user)
     users.create(new_user)
     assert users.is_created(new_user)
+    all_users = users.rows()
+    user = all_users[-1]
+    assert isinstance(user, User)
+    assert user.first_name == new_user.first_name
+    assert user.last_name == new_user.last_name
+    assert user.email == new_user.email
+    assert user.date_created == generate_date()
+    assert user.organization == new_user.organization
+    assert user.tshirt_size == new_user.tshirt_size
+
+
+def test_update_user_updates(users: Users):
+    """update(user) should modify existing users in the users sheet. The user's
+    email is used to uniquely identify a user and cannot be amended from the front end.
+    """
+    all_users = users.rows()
+    updated_user = all_users[0]
+    updated_user.first_name = "updated_first"
+    updated_user.last_name = "updated_last"
+    updated_user.organization = "updated_org"
+    updated_user.tshirt_size = "update_size"
+    users.update(updated_user)
+
+    all_users = users.rows()
+    for u in all_users:
+        if u.email == updated_user.email:
+            user = u
+            break
+    else:
+        pytest.fail("User not found")
+    assert user.first_name == updated_user.first_name
+    assert user.last_name == updated_user.last_name
+    assert user.organization == updated_user.organization
+    assert user.tshirt_size == updated_user.tshirt_size
 
 
 def generate_date():

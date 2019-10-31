@@ -1,17 +1,7 @@
 import datetime
 from typing import cast, Sequence
 
-import pytest  # type: ignore
-
-from sheets import (
-    User,
-    Users,
-    DATE_FORMAT,
-    Registrant,
-    Registrations,
-    Sheets,
-    SheetError,
-)
+from sheets import User, Users, DATE_FORMAT, Registrant, Registrations, Sheets
 
 
 def test_gets_all_hackathons(sheets: Sheets, test_data):
@@ -86,20 +76,33 @@ def test_register_user_registers_when_user_exists(
     assert last_registrant.attended is None
 
 
-def test_register_throws_error_if_already_registered(
+def test_register_updates_user_if_user_is_registered(
+    users: Users,
     test_users: Sequence[User],
     test_registrants: Sequence[Registrant],
     sheets: Sheets,
     registrations: Registrations,
 ):
-    """register_user() should throw an error if a user is already registered"""
+    """register_user() should update the user but not re-register if user is already registered"""
     existing_registrant = cast(Registrant, test_registrants[0])
     for user in test_users:
         if user.email == existing_registrant.user_email:
-            existing_user = user
-    assert isinstance(existing_user, User)
+            updated_user = user
+            break
+    assert isinstance(updated_user, User)
 
-    with pytest.raises(SheetError):  # type: ignore
-        sheets.register_user(
-            hackathon=existing_registrant.hackathon_name, user=existing_user
-        )
+    updated_user.first_name = "updated_first"
+    updated_user.last_name = "updated_last"
+    updated_user.organization = "updated_org"
+    updated_user.tshirt_size = "update_size"
+
+    sheets.register_user(
+        hackathon=existing_registrant.hackathon_name, user=updated_user
+    )
+
+    retrieved_user = users.find("email", existing_registrant.user_email)
+    assert isinstance(retrieved_user, User)
+    assert retrieved_user.first_name == updated_user.first_name
+    assert retrieved_user.last_name == updated_user.last_name
+    assert retrieved_user.organization == updated_user.organization
+    assert retrieved_user.tshirt_size == updated_user.tshirt_size

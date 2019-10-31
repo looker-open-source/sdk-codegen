@@ -2,7 +2,7 @@ from typing import (
     cast,
     Dict,
     Generic,
-    Mapping,
+    MutableMapping,
     Optional,
     Union,
     Sequence,
@@ -58,7 +58,8 @@ class Sheets:
         """Register user to a hackathon"""
         if not self.users.is_created(user):
             self.users.create(user)
-
+        else:
+            self.users.update(user)
         registrant = Registrant(
             user_email=user.email,
             hackathon_name=hackathon,
@@ -87,6 +88,7 @@ class WhollySheet(Generic[TModel]):
     ):
         self.client = client
         self.spreadsheet_id = spreadsheet_id
+        self.sheet_name = sheet_name
         self.range = f"{sheet_name}!A1:end"
         self.structure = structure
         self.converter = converter
@@ -118,6 +120,7 @@ class WhollySheet(Generic[TModel]):
         try:
             rows = response["values"]
             data = self._convert_to_dict(rows)
+            print(f"Retrieved data: {data}")
             # ignoring type (mypy bug?) "Name 'self.structure' is not defined"
             response = self.converter.structure(
                 data, Sequence[self.structure]  # type: ignore
@@ -126,23 +129,60 @@ class WhollySheet(Generic[TModel]):
             raise SheetError(str(ex))
         return response
 
-    def _convert_to_dict(self, data) -> Sequence[Mapping[str, str]]:
+    def update(self, model: TModel):
+        """Update user"""
+        if not model.id:
+            raise SheetError("No update row specified")
+        try:
+            serialized_ = self.converter.unstructure(model)
+            serialized = self._convert_to_list(serialized_)
+            body = {"values": [serialized]}
+            self.client.update(
+                spreadsheetId=self.spreadsheet_id,
+                range=f"{self.sheet_name}!A{model.id}:end",
+                valueInputOption="RAW",
+                body=body,
+            ).execute()
+        except (TypeError, AttributeError):
+            raise SheetError("Could not update row")
+
+    def find(
+        self, key: str, value: Union[str, bool, int, datetime.datetime, None]
+    ) -> Optional[TModel]:
+        # Google Sheets are 1 indexed, with the first row being the header.
+        header_offset = 2
+        ret = None
+        for index, row in enumerate(self.rows()):
+            if getattr(row, key) == value:
+                ret = row
+                ret.id = index + header_offset
+                break
+        return ret
+
+    def _convert_to_dict(self, data) -> Sequence[Dict[str, str]]:
         """Given a list of lists where the first list contains key names, convert it to
         a list of dictionaries.
         """
-        result: Sequence[Dict[str, str]] = [dict(zip(data[0], r)) for r in data[1:]]
+        header = data[0] + ["id"]
+        id_val = [None]
+        result: Sequence[Dict[str, str]] = [
+            dict(zip(header, r + id_val)) for r in data[1:]
+        ]
         return result
 
     def _convert_to_list(
-        self,
-        data: Mapping[str, Union[str, int, Sequence[str], datetime.datetime, None]],
-    ) -> Sequence:
-        """Given a dictionary, return a list containing its values"""
+        self, data: Dict[str, Union[str, int]]
+    ) -> Sequence[Union[str, int]]:
+        """Given a dictionary, return a list containing its values. The 'id' key is dropped
+        since it's not part of the schema
+        """
+        data.pop("id")
         return list(data.values())
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class User:
+    id: Optional[int] = None
     first_name: str
     last_name: str
     email: str
@@ -159,14 +199,11 @@ class Users(WhollySheet[User]):
             sheet_name="users",
             structure=User,
         )
+        self.users = None
 
     def is_created(self, user: User) -> bool:
         """Checks if user already exists in users sheet"""
-        users = super().rows()
-        found = False
-        for u in users:
-            if u.email == user.email:
-                found = True
+        found = True if super().find("email", user.email) else False
         return found
 
     def create(self, user: User):
@@ -174,9 +211,18 @@ class Users(WhollySheet[User]):
         user.date_created = datetime.datetime.now()
         super().insert(user)
 
+    def update(self, user: User):
+        """Find and update user"""
+        retrieved_user = super().find("email", user.email)
+        assert retrieved_user
+        user.id = retrieved_user.id
+        user.date_created = retrieved_user.date_created
+        super().update(user)
+
 
 @attr.s(auto_attribs=True, kw_only=True)
 class Hackathon:
+    id: Optional[int] = None
     name: str
     location: str
     date: datetime.datetime
@@ -195,6 +241,7 @@ class Hackathons(WhollySheet[Hackathon]):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class Registrant:
+    id: Optional[int] = None
     user_email: str
     hackathon_name: str
     date_registered: datetime.datetime

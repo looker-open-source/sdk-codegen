@@ -1,21 +1,33 @@
+import datetime
 import pytest  # type: ignore
 
-from sheets import WhollySheet
+
+from sheets import WhollySheet, DATE_FORMAT
 
 
 def test_convert_to_list_returns_list(WhollySheet: WhollySheet):
     """_convert_to_list() should convert a dict into a list"""
     data = {
+        "id": 5,
         "first_name": "John",
         "last_name": "Doe",
         "email": "john@foo.com",
-        "created_date": "10/17/2019",
+        "created_date": datetime.datetime.strftime(
+            datetime.datetime.now(), DATE_FORMAT
+        ),
         "organization": "foo",
         "tshirt_size": "S",
     }
     result = WhollySheet._convert_to_list(data)
     assert isinstance(result, list)
-    assert result == list(data.values())
+    assert result == [
+        "John",
+        "Doe",
+        "john@foo.com",
+        datetime.datetime.strftime(datetime.datetime.now(), DATE_FORMAT),
+        "foo",
+        "S",
+    ]
 
 
 @pytest.mark.parametrize(
@@ -29,12 +41,14 @@ def test_convert_to_list_returns_list(WhollySheet: WhollySheet):
             ],
             [
                 {
+                    "id": None,
                     "user_email": "jane@bar.com",
                     "hackathon_name": "london2019",
                     "date_registered": "6/10/2019",
                     "attended": "True",
                 },
                 {
+                    "id": None,
                     "user_email": "john@foo.com",
                     "hackathon_name": "london2019",
                     "date_registered": "6/11/2019",
