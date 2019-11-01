@@ -33,6 +33,7 @@ def main(filename: str, hackathon: str, enable: bool):
             last_name=last_name,
             email=email,
             organization=registrant.get("organization", ""),
+            role=registrant.get("role", ""),
             tshirt_size=registrant.get("tshirt_size", ""),
         )
         sheets_client = sheets.Sheets(
@@ -62,9 +63,10 @@ def main(filename: str, hackathon: str, enable: bool):
                 )
                 raise ex
         count += 1
+    click.secho(f"Registered {count} users", fg="green")
     if enable:
         looker.enable_users_by_hackathons([hackathon])
-    click.secho(f"Registered {count} users", fg="green")
+        click.secho(f"Enabled {count} users", fg="green")
     f.close()
 
 
