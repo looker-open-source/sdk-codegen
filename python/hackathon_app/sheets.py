@@ -196,6 +196,7 @@ class User(Model):
     email: str
     date_created: Optional[datetime.date] = None
     organization: str
+    role: str
     tshirt_size: str
 
 

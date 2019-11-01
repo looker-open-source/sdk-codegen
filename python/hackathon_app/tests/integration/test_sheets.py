@@ -22,6 +22,7 @@ def test_register_user_registers(
         last_name="Registrant",
         email="newregistrant@newompany.com",
         organization="New Company",
+        role="Data person",
         tshirt_size="M",
     )
     sheets.register_user(hackathon="sanfrancisco_2019", user=new_user)
@@ -53,6 +54,7 @@ def test_register_user_registers_when_user_exists(
         last_name=existing_user.last_name,
         email=existing_user.email,
         organization=existing_user.organization,
+        role=existing_user.role,
         tshirt_size=existing_user.tshirt_size,
     )
     sheets.register_user(hackathon="newhackathon_2019", user=new_user)

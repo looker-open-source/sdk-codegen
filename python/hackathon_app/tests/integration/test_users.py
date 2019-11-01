@@ -35,6 +35,7 @@ def test_create_user(users: Users):
         last_name="P",
         email="hundyp@company.com",
         organization="company",
+        role="BI analyst",
         tshirt_size="M",
     )
     users.create(new_user)
@@ -52,6 +53,7 @@ def test_update_user_updates(users: Users):
     updated_user.first_name = "updated_first"
     updated_user.last_name = "updated_last"
     updated_user.organization = "updated_org"
+    updated_user.organization = "updated_role"
     updated_user.tshirt_size = "update_size"
     users.update(updated_user)
 
