@@ -86,10 +86,18 @@ open class TransportSettings(var baseUrl: String = "",
                              var apiVersion: String = "",
                              var headers: Map<String, String> = mapOf())
 
-fun addQueryParams(path: String, params: Map<String, String> = mapOf()): String {
+fun encodeValues(params: Values = mapOf()): String {
+    return params
+            .filter { (k, v) -> v !== null }
+            .map { (k, v) -> "$k=${URLEncoder.encode(v as String?, "utf-8")}"}
+            .joinToString("&")
+
+}
+
+fun addQueryParams(path: String, params: Values = mapOf()): String {
     if (params.isEmpty()) return path
 
-    val qp = params.map { (k, v) -> "$k=${URLEncoder.encode(v, "utf-8")}"}.joinToString("&")
+    val qp = encodeValues(params)
     return "$path?$qp"
 }
 
@@ -123,8 +131,8 @@ class Transport(val options: TransportSettings) {
 
     inline fun <reified T> request(method: HttpMethod,
                                    path: String,
-                                   queryParams: Map<String, String> = mapOf(),
-                                   body: String = "",
+                                   queryParams: Values = mapOf(),
+                                   body: Any? = null,
                                    noinline authenticator: Authenticator = ::defaultAuthenticator): SDKResponse {
 
         val builder = HttpRequestBuilder()
@@ -136,8 +144,11 @@ class Transport(val options: TransportSettings) {
         val headers = options.headers.toMutableMap()
         headers["User-Agent"] = agentTag
 
-        if (body.isNotBlank()) {
-            headers["Content-Length"] = body.toByteArray().size.toString()
+        var content = ""
+
+        if (body !== null) { //.isNotBlank()) {
+            content = body.toString()
+            headers["Content-Length"] = content.toByteArray().size.toString()
         }
 
         // Set the request URL
@@ -149,15 +160,16 @@ class Transport(val options: TransportSettings) {
 
         // Request body
         val json = io.ktor.client.features.json.defaultSerializer()
+        // TODO make our request body form encoded
 
-        val finishedRequest = authenticator(RequestSettings(method, requestPath, headers, body))
+        val finishedRequest = authenticator(RequestSettings(method, requestPath, headers, content))
 
         builder.method = finishedRequest.method.value
         finishedRequest.headers.forEach {(k, v) ->
             builder.headers.append(k,v)
         }
         builder.url.takeFrom(finishedRequest.url)
-        builder.body = json.write(body)
+        builder.body = json.write(content)
 
         return runBlocking {
             SDKResponse.SDKSuccessResponse(httpClient!!.call(builder).response.receive<T>())

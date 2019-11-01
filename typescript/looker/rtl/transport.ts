@@ -30,6 +30,7 @@ import { Agent } from 'https'
 import { Headers } from 'request'
 import { matchCharsetUtf8, matchModeBinary, matchModeString, sdkVersion } from './constants'
 import { IApiSettings } from './apiSettings'
+import { Readable } from "readable-stream"
 
 export const agentTag = `TS-SDK ${sdkVersion}`
 
@@ -153,6 +154,17 @@ export interface ITransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>>
+
+  stream<T>(
+    callback: (readable: Readable) => Promise<T>,
+    method: HttpMethod,
+    path: string,
+    queryParams?: any,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>,
+  ): Promise<T>
+
 }
 
 /** A successful SDK call. */
@@ -179,7 +191,7 @@ export interface ISDKError {
 
 export type SDKResponse<TSuccess, TError> =
   | ISDKSuccessResponse<TSuccess>
-  | ISDKErrorResponse<TError | ISDKError>;
+  | ISDKErrorResponse<TError | ISDKError>
 
 /**
  * Base authorization interface
@@ -224,6 +236,7 @@ export type Authenticator = (init: any) => any;
 
 /** Interface for API transport values */
 export interface ITransportSettings {
+  [key:string] : any,
   /** base URL of host address */
   base_url: string;
   /** api version */
@@ -255,18 +268,17 @@ export function responseMode(contentType: string) {
 
 /**
  * Does this content type have a UTF-8 charset?
- * @param {string} contentType
- * @returns {RegExpMatchArray | null}
+ * @param contentType
+ * @returns match if it exists
  */
 export function isUtf8(contentType: string) {
   return contentType.match(/;.*\bcharset\b=\butf-8\b/i)
 }
 
-/** constructs the path argument including any optional query parameters
- @param {string} path the base path of the request
-
- @param {[key: string]: string} obj optional collection of query parameters to encode and append to the path
-
+/**
+ * constructs the path argument including any optional query parameters
+ * @param path the base path of the request
+ * @param obj optional collection of query parameters to encode and append to the path
  */
 export function addQueryParams(path: string, obj?: { [key: string]: string }) {
   if (!obj) {
@@ -295,14 +307,15 @@ export function sdkError(result: any) {
   return new Error(`Unknown error with SDK method ${error}`)
 }
 
-/**
- * is the SDK running in node.js?
- */
-export function isNodejs() {
-  return (
-    typeof 'process' !== 'undefined' &&
-    process &&
-    process.versions &&
-    process.versions.node
-  )
-}
+// TODO remove this permanently
+// /**
+//  * is the SDK running in node.js?
+//  */
+// export function isNodejs() {
+//   return (
+//     typeof 'process' !== 'undefined' &&
+//     process &&
+//     process.versions &&
+//     process.versions.node
+//   )
+// }

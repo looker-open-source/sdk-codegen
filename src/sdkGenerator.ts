@@ -78,7 +78,7 @@ export abstract class Generator<T extends Models.IModel> {
   }
 }
 
-export class SdkGenerator extends Generator<Models.IApiModel> {
+export class MethodGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
     let items: string[] = []
     // reset refcounts for ALL types so dynamic import statement will work
@@ -97,6 +97,27 @@ export class SdkGenerator extends Generator<Models.IApiModel> {
       .toString('')
   }
 }
+
+export class StreamGenerator extends Generator<Models.IApiModel> {
+  render(indent: string) {
+    let items: string[] = []
+    // reset refcounts for ALL types so dynamic import statement will work
+    Object.entries(this.model.types).forEach(([_, type]) => type.refCount = 0)
+    Object.values(this.model.sortedMethods())
+      .forEach(method => {
+        items.push(this.codeFormatter.declareStreamer(indent, method))
+      })
+    const tally = `${items.length} API methods`
+    success(tally)
+    return this
+      .p(`${this.codeFormatter.comment('', tally)}`)
+      .p(this.codeFormatter.streamsPrologue(indent))
+      .p(items.join('\n\n'))
+      .p(this.codeFormatter.methodsEpilogue(indent))
+      .toString('')
+  }
+}
+
 
 export class TypeGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {

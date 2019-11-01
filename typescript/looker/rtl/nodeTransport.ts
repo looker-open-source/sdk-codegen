@@ -28,7 +28,7 @@ import {
   Authenticator,
   defaultTimeout,
   HttpMethod,
-  ISDKError, isUtf8,
+  ISDKError,
   ITransport,
   ITransportSettings,
   responseMode,
@@ -37,10 +37,25 @@ import {
   StatusCode,
 } from './transport'
 
-import rq, { Response } from 'request'
+import rq, { Response, Request } from 'request'
 import rp from 'request-promise-native'
+import { PassThrough, Readable } from 'readable-stream'
 
-type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions;
+type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
+
+/**
+ * Set to `true` to follow streaming process
+  */
+const tracing = false
+
+function trace(entry: string, info?: any) {
+  if (tracing) {
+    console.debug(entry)
+    if (info) {
+      console.debug(info)
+    }
+  }
+}
 
 export class NodeTransport implements ITransport {
   apiPath = ''
@@ -89,6 +104,112 @@ export class NodeTransport implements ITransport {
       }
       return {ok: false, error}
     }
+  }
+
+  /**
+   * Http method dispatcher from general-purpose options
+   * @param {RequestOptions} options
+   * @returns {request.Request}
+   */
+  requestor(options: RequestOptions): Request {
+    const method = options.method!.toString().toUpperCase() as HttpMethod
+    switch (method) {
+      case 'GET': return rq.get(options)
+      case 'PUT': return rq.put(options)
+      case 'POST': return rq.post(options)
+      case 'PATCH': return rq.patch(options)
+      case 'DELETE': return rq.put(options)
+      case 'HEAD': return rq.head(options)
+      default: return rq.get(options)
+    }
+  }
+
+  /** `stream` creates and manages a stream of the request data
+   *
+   * ```ts
+   * let prom = await request.stream(async (readable) => {
+   *    return myService.uploadStreaming(readable).promise()
+   * })
+   * ```
+   *
+   * Streaming generally occurs only if Looker sends the data in a streaming fashion via a push url,
+   * however it will also wrap non-streaming attachment data so that actions only need a single implementation.
+   *
+   * @returns A promise returning the same value as the callback's return value.
+   * This promise will resolve after the stream has completed and the callback's promise
+   * has also resolved.
+   * @param callback A function will be called with a Node.js or Browser `Readable` object.
+   * The readable object represents the streaming data.
+   */
+  async stream<TSuccess>(
+    callback: (readable: Readable) => Promise<TSuccess>,
+    method: HttpMethod,
+    path: string,
+    queryParams?: any,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  )
+    : Promise<TSuccess> {
+
+    const stream = new PassThrough()
+    const returnPromise = callback(stream)
+    let init = await this.initRequest(
+      method,
+      path,
+      queryParams,
+      body,
+      authenticator,
+      options,
+    )
+
+    const streamPromise = new Promise<void>((resolve, reject) => {
+      trace(`[stream] beginning stream via download url`, init)
+      let hasResolved = false
+      const req = this.requestor(init)
+
+      req
+        .on("error", (err) => {
+          if (hasResolved && (err as any).code === "ECONNRESET") {
+            trace('ignoring ECONNRESET that occurred after streaming finished', init)
+          } else {
+            trace('streaming error', err)
+            reject(err)
+          }
+        })
+        .on("finish", () => {
+          trace(`[stream] streaming via download url finished`, init)
+        })
+        .on("socket", (socket) => {
+          trace(`[stream] setting keepalive on socket`, init)
+          socket.setKeepAlive(true)
+        })
+        .on("abort", () => {
+          trace(`[stream] streaming via download url aborted`, init)
+        })
+        .on("response", () => {
+          trace(`[stream] got response from download url`, init)
+        })
+        .on("close", () => {
+          trace(`[stream] request stream closed`, init)
+        })
+        .pipe(stream)
+        .on("error", (err) => {
+          trace(`[stream] PassThrough stream error`, err)
+          reject(err)
+        })
+        .on("finish", () => {
+          trace(`[stream] PassThrough stream finished`, init)
+          resolve()
+          hasResolved = true
+        })
+        .on("close", () => {
+          trace(`[stream] PassThrough stream closed`, init)
+        })
+    })
+
+    const results = await Promise.all([returnPromise, streamPromise])
+    return results[0]
   }
 
   /**
@@ -171,28 +292,137 @@ export class NodeTransport implements ITransport {
       res.statusCode >= StatusCode.OK && res.statusCode <= StatusCode.IMUsed
     )
   }
+
+
+  // /**
+  //  * A streaming helper for the "json" data format. It handles automatically parsing
+  //  * the JSON in a streaming fashion. You just need to implement a function that will
+  //  * be called for each row.
+  //  *
+  //  * ```ts
+  //  * await request.streamJson((row) => {
+  //  *   // This will be called for each row of data
+  //  * })
+  //  * ```
+  //  *
+  //  * @returns A promise that will be resolved when streaming is complete.
+  //  * @param onRow A function that will be called for each streamed row, with the row as the first argument.
+  //  */
+  // async streamJson(onRow: (row: { [fieldName: string]: any }) => void) {
+  //   return new Promise<void>((resolve, reject) => {
+  //     let rows = 0
+  //     this.stream(async (readable) => {
+  //       oboe(readable)
+  //         .node("![*]", this.safeOboe(readable, reject, (row) => {
+  //           rows++
+  //           onRow(row)
+  //         }))
+  //         .done(() => {
+  //           winston.info(`[streamJson] oboe reports done`, {...this.logInfo, rows})
+  //         })
+  //     }).then(() => {
+  //       winston.info(`[streamJson] complete`, {...this.logInfo, rows})
+  //       resolve()
+  //     }).catch((error) => {
+  //       // This error should not be logged as it could come from an action
+  //       // which might decide to include user information in the error message
+  //       winston.info(`[streamJson] reported an error`, {...this.logInfo, rows})
+  //       reject(error)
+  //     })
+  //   })
+  // }
+  //
+  // /**
+  //  * A streaming helper for the "json_detail" data format. It handles automatically parsing
+  //  * the JSON in a streaming fashion. You can implement an `onFields` callback to get
+  //  * the field metadata, and an `onRow` callback for each row of data.
+  //  *
+  //  * ```ts
+  //  * await request.streamJsonDetail({
+  //  *   onFields: (fields) => {
+  //  *     // This will be called when fields are available
+  //  *   },
+  //  *   onRow: (row) => {
+  //  *     // This will be called for each row of data
+  //  *   },
+  //  * })
+  //  * ```
+  //  *
+  //  * @returns A promise that will be resolved when streaming is complete.
+  //  * @param callbacks An object consisting of several callbacks that will be called
+  //  * when various parts of the data are parsed.
+  //  */
+  // async streamJsonDetail(callbacks: {
+  //   onRow: (row: JsonDetailRow) => void,
+  //   onFields?: (fields: Fieldset) => void,
+  //   onRanAt?: (iso8601string: string) => void,
+  // }) {
+  //   return new Promise<void>((resolve, reject) => {
+  //     let rows = 0
+  //     this.stream(async (readable) => {
+  //       oboe(readable)
+  //         .node("data.*", this.safeOboe(readable, reject, (row) => {
+  //           rows++
+  //           callbacks.onRow(row)
+  //         }))
+  //         .node("!.fields", this.safeOboe(readable, reject, (fields) => {
+  //           if (callbacks.onFields) {
+  //             callbacks.onFields(fields)
+  //           }
+  //         }))
+  //         .node("!.ran_at", this.safeOboe(readable, reject, (ranAt) => {
+  //           if (callbacks.onRanAt) {
+  //             callbacks.onRanAt(ranAt)
+  //           }
+  //         }))
+  //         .done(() => {
+  //           winston.info(`[streamJsonDetail] oboe reports done`, {...this.logInfo, rows})
+  //         })
+  //     }).then(() => {
+  //       winston.info(`[streamJsonDetail] complete`, {...this.logInfo, rows})
+  //       resolve()
+  //     }).catch((error) => {
+  //       // This error should not be logged as it could come from an action
+  //       // which might decide to include user information in the error message
+  //       winston.info(`[streamJsonDetail] reported an error`, {...this.logInfo, rows})
+  //       reject(error)
+  //     })
+  //   })
+  // }
+
 }
 
 async function parseResponse(contentType: string, res: Response) {
   const mode = responseMode(contentType)
+  const utf8 = 'utf8'
   let result = await res.body
   if (mode === ResponseMode.string) {
-    if (!isUtf8(contentType)) {
-      // always convert to UTF-8 from whatever it was
-      result = Buffer.from(result.toString(), 'utf8')
-    }
     if (contentType.match(/^application\/.*\bjson\b/g)) {
       try {
-        result = result instanceof Object ? result : JSON.parse(result)
-        return result
+        if (result instanceof Buffer) {
+          result = result.toString(utf8)
+        }
+        if (result instanceof Object) {
+          return result
+        }
+        return JSON.parse(result.toString())
       } catch (error) {
         return Promise.reject(error)
       }
     }
+    // if (!isUtf8(contentType)) {
+    //   // always convert to UTF-8 from whatever it was
+    //   result = if (result instanceof Buffer) result.toString(utf8)
+    // }
+    if (result instanceof Buffer) {
+      result = result.toString(utf8)
+    }
     return result.toString()
   } else {
     try {
-      // Return string result from buffer without any character encoding
+      // TODO Return ArrayBuffer from buffer without any character encoding?
+      // See https://stackoverflow.com/a/31394257/74137 for more info
+      // return result.buffer.slice(result.byteOffset, result.byteOffset + result.byteLength)
       return result.toString()
     } catch (error) {
       return Promise.reject(error)

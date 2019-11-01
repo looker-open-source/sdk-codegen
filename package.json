@@ -5,6 +5,7 @@
     "main": "index.js",
     "devDependencies": {
         "@types/node-fetch": "^2.3.3",
+        "file-type": "^12.3.0",
         "tslint": "^5.15.0",
         "tslint-config-prettier": "^1.18.0",
         "tslint-config-standard": "8.0.1"
@@ -50,6 +51,7 @@
         "@types/mustache": "^0.8.32",
         "@types/node": "^11.13.7",
         "@types/prettier": "^1.18.2",
+        "@types/readable-stream": "^2.3.5",
         "@types/request": "^2.48.2",
         "@types/request-promise-native": "^1.0.16",
         "@types/yargs": "^13.0.0",
@@ -61,6 +63,7 @@
         "node-fetch": "^2.3.0",
         "openapi3-ts": "^1.2.0",
         "prettier": "^1.18.2",
+        "readable-stream": "^3.4.0",
         "request": "^2.88.0",
         "request-promise-native": "^1.0.7",
         "speccy": "^0.9.0",

@@ -1,7 +1,12 @@
+package com.looker.rtl
+
 import com.looker.rtl.HttpMethod
 import com.looker.rtl.SDKResponse
 import com.looker.rtl.UserSession
 import kotlinx.coroutines.Deferred
+import java.io.UnsupportedEncodingException
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 /*
  * The MIT License (MIT)
@@ -27,7 +32,7 @@ import kotlinx.coroutines.Deferred
  * THE SOFTWARE.
  */
 
-class APIMethods(val authSession: UserSession) {
+open class APIMethods(val authSession: UserSession) {
 
     val authRequest = authSession::authenticate
 
@@ -39,27 +44,38 @@ class APIMethods(val authSession: UserSession) {
         }
     }
 
-    inline fun <reified T> get(path: String, queryParams: Map<String, String> = mapOf(), body: String = ""): SDKResponse {
+    inline fun <reified T> get(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
         return authSession.transport.request<T>(HttpMethod.GET, path, queryParams, body, authRequest)
     }
 
-    inline fun <reified T> head(path: String, queryParams: Map<String, String> = mapOf(), body: String = ""): SDKResponse {
+    inline fun <reified T> head(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
         return authSession.transport.request<T>(HttpMethod.HEAD, path, queryParams, body, authRequest)
     }
 
-    inline fun <reified T> delete(path: String, queryParams: Map<String, String> = mapOf(), body: String = ""): SDKResponse {
+    inline fun <reified T> delete(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
         return authSession.transport.request<T>(HttpMethod.DELETE, path, queryParams, body, authRequest)
     }
 
-    inline fun <reified T> post(path: String, queryParams: Map<String, String> = mapOf(), body: String = ""): SDKResponse {
+    inline fun <reified T> post(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
         return authSession.transport.request<T>(HttpMethod.POST, path, queryParams, body, authRequest)
     }
 
-    inline fun <reified T> put(path: String, queryParams: Map<String, String> = mapOf(), body: String = ""): SDKResponse {
+    inline fun <reified T> put(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
         return authSession.transport.request<T>(HttpMethod.PUT, path, queryParams, body, authRequest)
     }
 
-    inline fun <reified T> patch(path: String, queryParams: Map<String, String> = mapOf(), body: String = ""): SDKResponse {
+    inline fun <reified T> patch(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
         return authSession.transport.request<T>(HttpMethod.PATCH, path, queryParams, body, authRequest)
     }
+
+    fun encodeURI(value: String): String {
+        try {
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.toString())
+        } catch (ex: UnsupportedEncodingException) {
+            throw RuntimeException(ex.cause)
+        }
+
+    }
+
+
 }

@@ -29,9 +29,9 @@ import urllib.parse
 from looker_sdk import error
 from looker_sdk.rtl import api_settings
 from looker_sdk.rtl import auth_token
-from looker_sdk.rtl import transport
+from looker_sdk.rtl import constants
 from looker_sdk.rtl import serialize
-from looker_sdk.rtl import versions
+from looker_sdk.rtl import transport
 from looker_sdk.sdk import models
 
 
@@ -92,7 +92,7 @@ class AuthSession:
         else:
             token = self._get_admin_token()
 
-        return {"Authorization": f"token {token.access_token}"}
+        return {"Authorization": f"Bearer {token.access_token}"}
 
     def login_user(self, sudo_id: int) -> None:
         """Authenticate using settings credentials and sudo as sudo_id.
@@ -123,10 +123,10 @@ class AuthSession:
             self.settings._filename, self.settings._section
         )
         client_id = os.getenv(
-            f"{versions.environment_prefix}_CLIENT_ID"
+            f"{constants.environment_prefix}_CLIENT_ID"
         ) or config_data.get("client_id")
         client_secret = os.getenv(
-            f"{versions.environment_prefix}_CLIENT_SECRET"
+            f"{constants.environment_prefix}_CLIENT_SECRET"
         ) or config_data.get("client_secret")
 
         if not (client_id and client_secret):
@@ -158,7 +158,7 @@ class AuthSession:
                 transport.HttpMethod.POST,
                 f"/login/{self._sudo_id}",
                 authenticator=lambda: {
-                    "Authorization": f"token {self._get_admin_token().access_token}"
+                    "Authorization": f"Bearer {self._get_admin_token().access_token}"
                 },
             )
         )
@@ -192,7 +192,7 @@ class AuthSession:
                 transport.HttpMethod.DELETE,
                 "/logout",
                 authenticator=lambda: {
-                    "Authorization": f"token {self.user_token.access_token}"
+                    "Authorization": f"Bearer {self.user_token.access_token}"
                 },
             )
         )
@@ -204,7 +204,7 @@ class AuthSession:
                 transport.HttpMethod.DELETE,
                 "/logout",
                 authenticator=lambda: {
-                    "Authorization": f"token {self.admin_token.access_token}"
+                    "Authorization": f"Bearer {self.admin_token.access_token}"
                 },
             )
         )
@@ -217,7 +217,7 @@ class AuthSession:
     def _reset_user_token(self) -> None:
         self.user_token = auth_token.AuthToken()
 
-    def _ok(self, response: transport.Response) -> transport.TResponseValue:
+    def _ok(self, response: transport.Response) -> str:
         if not response.ok:
             raise error.SDKError(response.value)
-        return response.value
+        return response.value.decode(encoding="utf-8")

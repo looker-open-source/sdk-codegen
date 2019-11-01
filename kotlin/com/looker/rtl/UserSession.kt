@@ -24,7 +24,6 @@
 
 package com.looker.rtl
 
-import ENVIRONMENT_PREFIX
 import io.ktor.http.headersOf
 
 

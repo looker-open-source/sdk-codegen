@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-import { SDKConfigProps, SDKConfig } from './sdkConfig'
+import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { openApiFileName, logFetch } from './fetchSpec'
 import { fail, isFileSync, log, quit, run } from './utils'
 
@@ -61,7 +61,7 @@ const convertSpec = async (fileName: string, openApiFile: string) => {
 }
 
 // convert the swagger specification to OpenApi
-export const logConvert = async (name: string, props: SDKConfigProps) => {
+export const logConvert = async (name: string, props: ISDKConfigProps) => {
   const oaFile = openApiFileName(name, props)
   if (isFileSync(oaFile)) return oaFile
 

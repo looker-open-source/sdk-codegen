@@ -19,6 +19,7 @@ pyyaml = "*"
 pytest-pudb = "*"
 pytest-mock = "*"
 twine = "*"
+pillow = "*"
 
 [packages]
 requests = "*"

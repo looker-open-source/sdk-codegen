@@ -38,7 +38,8 @@ import {
 } from './sdkModels'
 import { CodeGen, warnEditing } from './codeGen'
 import * as fs from 'fs'
-import { run, warn, isFileSync, utf8, success } from './utils'
+import { run, warn, isFileSync, success, readFileSync } from './utils'
+import { utf8 } from '../typescript/looker/rtl/constants'
 
 export class PythonGen extends CodeGen {
   codePath = './python/'
@@ -48,11 +49,12 @@ export class PythonGen extends CodeGen {
   commentStr = '# '
   nullStr = 'None'
 
-  argDelimiter = ', '
+  indentStr = '    '
+  argDelimiter = `,\n${this.indentStr.repeat(3)}`
   paramDelimiter = ',\n'
   propDelimiter = '\n'
+  dataStructureDelimiter = ', '
 
-  indentStr = '    '
   endTypeStr = ''
 
   // keyword.kwlist
@@ -110,17 +112,17 @@ export class PythonGen extends CodeGen {
   }
   // cattrs [un]structure hooks for model [de]serialization
   hooks: string[] = []
-  structure_hook: string = 'structure_hook'
+  structureHook: string = 'structure_hook'
 
   // @ts-ignore
   methodsPrologue = (indent: string) => `
 # ${warnEditing}
 import datetime
-from typing import MutableMapping, Optional, Sequence
+from typing import MutableMapping, Optional, Sequence, Union
 
 from ${this.packagePath}.sdk import models
 from ${this.packagePath}.rtl import api_methods
-
+from ${this.packagePath}.rtl import transport
 
 class ${this.packageName}(api_methods.APIMethods):
 `
@@ -154,7 +156,7 @@ DelimSequence = model.DelimSequence
 import functools  # noqa:E402
 from typing import ForwardRef  # type: ignore  # noqa:E402
 
-${this.structure_hook} = functools.partial(sr.structure_hook, globals())  # type: ignore
+${this.structureHook} = functools.partial(sr.structure_hook, globals())  # type: ignore
 ${this.hooks.join('\n')}
 `
 
@@ -166,7 +168,7 @@ ${this.hooks.join('\n')}
     for (let arg of args) {
       hash.push(`"${arg}": ${arg}`)
     }
-    return `{${hash.join(this.argDelimiter)}}`
+    return `{${hash.join(this.dataStructureDelimiter)}}`
   }
 
   // @ts-ignore
@@ -195,16 +197,33 @@ ${this.hooks.join('\n')}
     return propDef
   }
 
+  private methodReturnType(method: IMethod) {
+    const type = this.typeMapMethods(method.type)
+    let returnType = type.name
+    if (method.responseIsBoth()) {
+      returnType = `Union[${returnType}, bytes]`
+    } else if (method.responseIsBinary()) {
+      returnType = 'bytes'
+    }
+    return returnType
+  }
+
   // because Python has named default parameters, Request types are not required like
   // they are for Typescript
   methodSignature(indent: string, method: IMethod) {
-    const type = this.typeMapMethods(method.type)
+    const returnType = this.methodReturnType(method)
     const bump = this.bumper(indent)
     let params: string[] = []
     const args = method.allParams
-    if (args && args.length > 0) method.allParams.forEach(p => params.push(this.declareParameter(bump, p)))
-    return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${type.name}`)
-      + `${indent}def ${method.name}(\n${bump}self${params.length > 0 ? ',\n' : ''}${params.join(this.paramDelimiter)}\n${indent}) -> ${type.name}:\n`
+    if (args && args.length > 0) {
+      method.allParams.forEach(p => params.push(this.declareParameter(bump, p)))
+    }
+    params.push(`${bump}transport_options: Optional[transport.TransportSettings] = None,`)
+    return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${returnType}`)
+      + `${indent}def ${method.name}(\n`
+      + `${bump}self${params.length > 0 ? ',\n' : ''}`
+      + `${params.join(this.paramDelimiter)}\n`
+      + `${indent}) -> ${returnType}:\n`
   }
 
   declareParameter(indent: string, param: IParameter) {
@@ -260,9 +279,26 @@ ${this.hooks.join('\n')}
     return `${indent}${property.name}: ${propType}`
   }
 
+  // this is a builder function to produce arguments with optional null place holders but no extra required optional arguments
+  argFill(current: string, args: string) {
+    if ((!current) && args.trim() === this.nullStr) {
+      // Don't append trailing optional arguments if none have been set yet
+      return ''
+    }
+    let delimiter = this.argDelimiter
+    if (!current) {
+      delimiter = ''
+    // Caller manually inserted delimiter followed by inline comment
+    } else if (args.match(/, {2}#/)) {
+      delimiter = this.argDelimiter.replace(',', '')
+    }
+    return `${args}${delimiter}${current}`
+  }
+
   httpArgs(indent: string, method: IMethod) {
     let result = this.argFill('', this.argGroup(indent, method.cookieArgs))
     result = this.argFill(result, this.argGroup(indent, method.headerArgs))
+    result = this.argFill(result, `transport_options=transport_options`)
     if (method.bodyArg) {
       result = this.argFill(result, `body=${method.bodyArg}`)
     }
@@ -271,7 +307,12 @@ ${this.hooks.join('\n')}
       result = this.argFill(result, `query_params=${queryParams}`)
     }
     const type = this.typeMapMethods(method.type)
-    result = this.argFill(result, type.name)
+    let returnType = this.methodReturnType(method)
+    if (returnType === `Union[${type.name}, bytes]`) {
+      returnType = `${returnType},  # type: ignore`
+    }
+    result = this.argFill(result, returnType)
+    result = this.argFill(result, `f"${method.endpoint}"`)
     return result
   }
 
@@ -279,12 +320,13 @@ ${this.hooks.join('\n')}
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     const methodCall = `${indent}response = ${this.it(method.httpMethod.toLowerCase())}`
-    const callArgs = `f"${method.endpoint}"${args ? ', ' + args : ''}`
-    let assertTypeName = this.typeMapMethods(method.type).name
+    let assertTypeName = this.methodReturnType(method)
     if (method.type instanceof ArrayType) {
       assertTypeName = 'list'
     } else if (method.type instanceof HashType) {
       assertTypeName = 'dict'
+    } else if (assertTypeName === 'Union[str, bytes]') {
+      assertTypeName = '(str, bytes)'
     }
     let assertion = `${indent}assert `
     if (assertTypeName === this.nullStr) {
@@ -293,7 +335,11 @@ ${this.hooks.join('\n')}
       assertion += `isinstance(response, ${assertTypeName})`
     }
     const returnStmt = `${indent}return response`
-    return `${methodCall}(${callArgs})\n${assertion}\n${returnStmt}`
+    return `${methodCall}(\n`
+      + `${bump.repeat(3)}${args}\n`
+      + `${indent})\n`
+      + `${assertion}\n`
+      + `${returnStmt}`
   }
 
   declareMethod(indent: string, method: IMethod) {
@@ -336,7 +382,7 @@ ${this.hooks.join('\n')}
 
     const forwardRef = `ForwardRef("${type.name}")`
     this.hooks.push(
-      `cattr.register_structure_hook(\n${bump}${forwardRef},  # type: ignore\n${bump}${this.structure_hook}  # type:ignore\n)`
+      `cattr.register_structure_hook(\n${bump}${forwardRef},  # type: ignore\n${bump}${this.structureHook}  # type:ignore\n)`
     )
     return `\n` +
       `${indent}@attr.s(${attrsArgs})\n` +
@@ -358,7 +404,7 @@ ${this.hooks.join('\n')}
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
-      let content = fs.readFileSync(stampFile, utf8)
+      let content = readFileSync(stampFile)
       const lookerPattern = /looker_version = ['"].*['"]/i
       const apiPattern = /api_version = ['"].*['"]/i
       const envPattern = /environment_prefix = ['"].*['"]/i
@@ -388,9 +434,9 @@ ${this.hooks.join('\n')}
     }
     if (type.name) {
       let name: string
-      if (format == 'models') {
+      if (format === 'models') {
         name = `"${type.name}"`
-      } else if (format == 'methods') {
+      } else if (format === 'methods') {
         name = `models.${type.name}`
       } else {
         throw new Error('format must be "models" or "methods"')

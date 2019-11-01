@@ -31,7 +31,7 @@ from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
 
 
-@pytest.fixture(scope="module")  # type: ignore
+@pytest.fixture(scope="module")
 def config_file(tmpdir_factory):
     """Creates a sample looker.ini file and returns it"""
     filename = tmpdir_factory.mktemp("settings").join("looker.ini")
@@ -61,7 +61,7 @@ client_secret=
     return filename
 
 
-@pytest.fixture(scope="function")  # type: ignore
+@pytest.fixture(scope="function")
 def auth_session(config_file):
     settings = api_settings.ApiSettings.configure(config_file)
     return auth.AuthSession(
@@ -98,9 +98,15 @@ class MockTransport(transport.Transport):
             access_token = json.dumps(
                 {"access_token": token, "token_type": "Bearer", "expires_in": 3600}
             )
-            response = transport.Response(ok=True, value=access_token)
+            response = transport.Response(
+                ok=True,
+                value=bytes(access_token, encoding="utf-8"),
+                response_mode=transport.ResponseMode.STRING,
+            )
         elif (method == transport.HttpMethod.DELETE) and (path == "/logout"):
-            response = transport.Response(ok=True, value="")
+            response = transport.Response(
+                ok=True, value=b"", response_mode=transport.ResponseMode.STRING
+            )
         else:
             raise TypeError("Bad transport layer call")
         return response
@@ -109,7 +115,7 @@ class MockTransport(transport.Transport):
 def test_auto_admin_login(auth_session: auth.AuthSession):
     assert not auth_session.is_admin_authenticated
     auth_header = auth_session.authenticate()
-    assert auth_header["Authorization"] == "token AdminAccessToken"
+    assert auth_header["Authorization"] == "Bearer AdminAccessToken"
     assert auth_session.is_admin_authenticated
 
     # even after explicit logout
@@ -117,7 +123,7 @@ def test_auto_admin_login(auth_session: auth.AuthSession):
     assert not auth_session.is_admin_authenticated
     auth_header = auth_session.authenticate()
     assert isinstance(auth_header, dict)
-    assert auth_header["Authorization"] == "token AdminAccessToken"
+    assert auth_header["Authorization"] == "Bearer AdminAccessToken"
     assert auth_session.is_admin_authenticated
 
 
@@ -128,7 +134,7 @@ def test_user_login_auto_logs_in_admin(auth_session: auth.AuthSession):
     assert auth_session.is_admin_authenticated
     assert auth_session.is_user_authenticated
     auth_header = auth_session.authenticate()
-    assert auth_header["Authorization"] == "token UserAccessToken"
+    assert auth_header["Authorization"] == "Bearer UserAccessToken"
 
 
 def test_user_logout_leaves_admin_logged_in(auth_session: auth.AuthSession):
@@ -140,7 +146,7 @@ def test_user_logout_leaves_admin_logged_in(auth_session: auth.AuthSession):
 
 def test_login_user_login_user(auth_session: auth.AuthSession):
     auth_session.login_user(5)
-    with pytest.raises(error.SDKError):  # type: ignore
+    with pytest.raises(error.SDKError):
         auth_session.login_user(10)
 
 
@@ -192,23 +198,27 @@ def test_env_variables_override_config_file_credentials(
     auth_session: auth.AuthSession,
     mocker,
     monkeypatch,
-    test_env_client_id,
-    test_env_client_secret,
-    expected_id,
-    expected_secret,
+    test_env_client_id: str,
+    test_env_client_secret: str,
+    expected_id: str,
+    expected_secret: str,
 ):
     monkeypatch.setenv("LOOKERSDK_CLIENT_ID", test_env_client_id)
     monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", test_env_client_secret)
     mocked_request = mocker.patch.object(MockTransport, "request")
     mocked_request.return_value = transport.Response(
         ok=True,
-        value=json.dumps(
-            {
-                "access_token": "AdminAccessToken",
-                "token_type": "Bearer",
-                "expires_in": 3600,
-            }
+        value=bytes(
+            json.dumps(
+                {
+                    "access_token": "AdminAccessToken",
+                    "token_type": "Bearer",
+                    "expires_in": 3600,
+                }
+            ),
+            encoding="utf-8",
         ),
+        response_mode=transport.ResponseMode.STRING,
     )
 
     auth_session.authenticate()
@@ -216,6 +226,6 @@ def test_env_variables_override_config_file_credentials(
     expected_body = urllib.parse.urlencode(
         {"client_id": expected_id, "client_secret": expected_secret}
     ).encode("utf-8")
-    mocked_request.assert_called
+    mocked_request.assert_called()
     actual_request_body = mocked_request.call_args[1]["body"]
     assert actual_request_body == expected_body

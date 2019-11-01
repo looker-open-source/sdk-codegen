@@ -23,22 +23,22 @@
  */
 
 import fetch from 'node-fetch'
-import { SDKConfig, SDKConfigProps } from './sdkConfig'
+import { SDKConfig, ISDKConfigProps } from './sdkConfig'
 import { URLSearchParams } from 'url'
 import * as fs from 'fs'
 import { fail, quit, log, isFileSync, warn } from './utils'
 import { IVersionInfo } from './codeGen'
 
-const specFileUrl = (props: SDKConfigProps) => `${props.base_url}/api/${props.api_version}/swagger.json`
+const specFileUrl = (props: ISDKConfigProps) => `${props.base_url}/api/${props.api_version}/swagger.json`
 
-const loginUrl = (props: SDKConfigProps) => `${props.base_url}/login`
+const loginUrl = (props: ISDKConfigProps) => `${props.base_url}/login`
 
-const logoutUrl = (props: SDKConfigProps) => `${props.base_url}/logout`
+const logoutUrl = (props: ISDKConfigProps) => `${props.base_url}/logout`
 
-const logout = async (props: SDKConfigProps, token: string) =>
-  fetch(logoutUrl(props), {method: 'DELETE', headers: {'Authorization': `token ${token}`}})
+const logout = async (props: ISDKConfigProps, token: string) =>
+  fetch(logoutUrl(props), {method: 'DELETE', headers: {'Authorization': `Bearer ${token}`}})
 
-const login = async (props: SDKConfigProps) => {
+const login = async (props: ISDKConfigProps) => {
 
   const params = new URLSearchParams()
   params.append('client_id', props.client_id)
@@ -61,10 +61,10 @@ const login = async (props: SDKConfigProps) => {
   }
 }
 
-export const specFileName = (name: string, props: SDKConfigProps) =>
+export const specFileName = (name: string, props: ISDKConfigProps) =>
   `./${name}.${props.api_version}.json`
 
-export const openApiFileName = (name: string, props: SDKConfigProps) =>
+export const openApiFileName = (name: string, props: ISDKConfigProps) =>
   `./${name}.${props.api_version}.oas.json`
 
 const badAuth = (content: string) => content.indexOf('Requires authentication') > 0
@@ -80,7 +80,7 @@ NOTE! Certificate validation can be disabled with:
   return false
 }
 
-export const fetchSpecFile = async (name: string, props: SDKConfigProps) => {
+export const fetchSpecFile = async (name: string, props: ISDKConfigProps) => {
   const fileName = specFileName(name, props)
   if (isFileSync(fileName)) return fileName
 
@@ -94,13 +94,13 @@ export const fetchSpecFile = async (name: string, props: SDKConfigProps) => {
       content = await response.text()
       if (badAuth(content)) {
         token = await login(props)
-        response = await fetch(specFileUrl(props), {headers: {'Authorization': `token ${token}`}})
+        response = await fetch(specFileUrl(props), {headers: {'Authorization': `Bearer ${token}`}})
         content = await response.text()
       }
     } catch (err) {
       // Whoops!  Ok, try again with login
       token = await login(props)
-      response = await fetch(specFileUrl(props), {headers: {'Authorization': `token ${token}`}})
+      response = await fetch(specFileUrl(props), {headers: {'Authorization': `Bearer ${token}`}})
       content = await response.text()
     }
 
@@ -122,7 +122,7 @@ export const fetchSpecFile = async (name: string, props: SDKConfigProps) => {
   }
 }
 
-export const logFetch = async (name: string, props: SDKConfigProps) => {
+export const logFetch = async (name: string, props: ISDKConfigProps) => {
   const specFile = await fetchSpecFile(name, props)
   if (!specFile) {
     return fail('fetchSpecFile', 'No specification file name returned')
@@ -130,7 +130,7 @@ export const logFetch = async (name: string, props: SDKConfigProps) => {
   return specFile
 }
 
-export const getVersionInfo = async (props: SDKConfigProps): Promise<IVersionInfo | undefined> => {
+export const getVersionInfo = async (props: ISDKConfigProps): Promise<IVersionInfo | undefined> => {
   try {
     const lookerVersion = await fetchLookerVersion(props.base_url)
     return {

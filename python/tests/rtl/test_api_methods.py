@@ -22,7 +22,7 @@
 
 import datetime
 import json
-from typing import MutableMapping, Optional
+from typing import MutableMapping, Optional, Union
 
 import pytest  # type: ignore
 
@@ -36,7 +36,7 @@ from looker_sdk.rtl import transport
 from looker_sdk.sdk import models
 
 
-@pytest.fixture(scope="module")  # type: ignore
+@pytest.fixture(scope="module")
 def api() -> api_methods.APIMethods:
     settings = api_settings.ApiSettings.configure("../looker.ini")
     transport = requests_transport.RequestsTransport.configure(settings)
@@ -46,7 +46,7 @@ def api() -> api_methods.APIMethods:
     )
 
 
-@pytest.mark.parametrize(  # type: ignore
+@pytest.mark.parametrize(
     "test_query_params, expected",
     [
         ({"a": None}, {}),
@@ -77,7 +77,7 @@ def test_convert_query_params(
     assert actual == expected
 
 
-@pytest.mark.parametrize(  # type: ignore
+@pytest.mark.parametrize(
     "test_body, expected",
     [
         ("some body text", b"some body text"),
@@ -103,22 +103,51 @@ def test_get_serialized(
     assert actual == expected
 
 
-@pytest.mark.parametrize(  # type: ignore
+@pytest.mark.parametrize(
     "test_response, test_structure, expected",
     [
         (
-            transport.Response(ok=True, value="some response text"),
-            str,
-            "some response text",
+            transport.Response(
+                ok=True,
+                value=bytes(range(0, 10)),
+                response_mode=transport.ResponseMode.BINARY,
+            ),
+            Union[str, bytes],
+            bytes(range(0, 10)),
         ),
-        (transport.Response(ok=True, value=""), None, None),
         (
             transport.Response(
                 ok=True,
-                value=(
+                value=b"some response text",
+                response_mode=transport.ResponseMode.STRING,
+            ),
+            Union[str, bytes],
+            "some response text",
+        ),
+        (
+            transport.Response(
+                ok=True,
+                value=bytes("ئ", encoding="arabic"),
+                response_mode=transport.ResponseMode.STRING,
+                encoding="arabic",
+            ),
+            Union[str, bytes],
+            "ئ",
+        ),
+        (
+            transport.Response(
+                ok=True, value=b"", response_mode=transport.ResponseMode.STRING
+            ),
+            None,
+            None,
+        ),
+        (
+            transport.Response(
+                ok=True,
+                value=bytes(
                     json.dumps(
-                        {  # type: ignore
-                            "current_version": {  # type: ignore
+                        {
+                            "current_version": {
                                 "full_version": "6.18.4",
                                 "status": "fully functional",
                                 "swagger_url": None,
@@ -127,8 +156,10 @@ def test_get_serialized(
                             "looker_release_version": "6.18",
                             "supported_versions": None,
                         }
-                    )
+                    ),
+                    encoding="utf-8",
                 ),
+                response_mode=transport.ResponseMode.STRING,
             ),
             models.ApiVersion,
             models.ApiVersion(
@@ -156,5 +187,12 @@ def test_return(
 
 def test_return_raises_an_SDKError_for_bad_responses(api):
     with pytest.raises(error.SDKError) as exc:
-        api._return(transport.Response(ok=False, value="some error message"), str)
+        api._return(
+            transport.Response(
+                ok=False,
+                value=b"some error message",
+                response_mode=transport.ResponseMode.STRING,
+            ),
+            str,
+        )
     assert "some error message" in str(exc.value)
