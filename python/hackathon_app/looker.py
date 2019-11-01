@@ -1,4 +1,5 @@
 import functools
+from typing import Sequence
 
 from looker_sdk import client, methods, models, error
 
@@ -50,6 +51,22 @@ def find_or_create_user(
     except error.SDKError as create_ex:
         raise RegisterError(f"Failed to find or create User ({create_ex})")
     return user
+
+
+def enable_users_by_hackathons(hackathons: Sequence[str]) -> None:
+    sdk = client.setup()
+    groups = {g.name: g.id for g in sdk.all_groups(fields="id,name")}
+    for hackathon in hackathons:
+        try:
+            group_id = groups[f"Looker_hack: {hackathon}"]
+        except KeyError:
+            raise RegisterError(f"No group found for hackathon: '{hackathon}'")
+        for user in sdk.search_users(group_id=group_id):
+            if user.is_disabled:
+                assert user.id
+                sdk.update_user(
+                    user_id=user.id, body=models.WriteUser(is_disabled=False)
+                )
 
 
 def try_to(func):

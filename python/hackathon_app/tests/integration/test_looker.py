@@ -15,22 +15,23 @@ def sdk():
 
 
 @pytest.fixture
-def test_user(sdk: methods.LookerSDK, test_users: List[sheets.User]):
-    test_user = test_users[0]
-    yield test_user
-    users = sdk.search_users(email=test_user.email)
-    if len(users) > 0:
-        assert users[0].id
-        sdk.delete_user(user_id=users[0].id)
+def looker_test_users(sdk: methods.LookerSDK, test_users: List[sheets.User]):
+    yield test_users
+    for test_user in test_users:
+        users = sdk.search_users(email=test_user.email)
+        if len(users) > 0:
+            assert users[0].id
+            sdk.delete_user(user_id=users[0].id)
 
 
 @pytest.mark.parametrize("register_twice", [False, True])
 def test_register_user(
-    test_user: sheets.User, sdk: methods.LookerSDK, register_twice: bool
+    looker_test_users: List[sheets.User], sdk: methods.LookerSDK, register_twice: bool
 ):
 
     test_hackathon = "Some Hackathon"
 
+    test_user = looker_test_users[0]
     looker.register_user(
         hackathon=test_hackathon,
         first_name=test_user.first_name,
@@ -88,3 +89,53 @@ def test_register_user(
             break
     else:
         assert False, "Not assigned hackathon role"
+
+
+def test_enable_users_by_hackathons(
+    looker_test_users: List[sheets.User], sdk: methods.LookerSDK
+):
+    test_user1, test_user2, test_user3, test_user4 = looker_test_users
+    looker.register_user(
+        hackathon="hack_1",
+        first_name=test_user1.first_name,
+        last_name=test_user1.last_name,
+        email=test_user1.email,
+    )
+    looker.register_user(
+        hackathon="hack_2",
+        first_name=test_user2.first_name,
+        last_name=test_user2.last_name,
+        email=test_user2.email,
+    )
+    looker.register_user(
+        hackathon="hack_1",
+        first_name=test_user3.first_name,
+        last_name=test_user3.last_name,
+        email=test_user3.email,
+    )
+    looker.register_user(
+        hackathon="hack_2",
+        first_name=test_user4.first_name,
+        last_name=test_user4.last_name,
+        email=test_user4.email,
+    )
+
+    assert sdk.search_users(fields="is_disabled", email=test_user1.email)[0].is_disabled
+    assert sdk.search_users(fields="is_disabled", email=test_user2.email)[0].is_disabled
+    assert sdk.search_users(fields="is_disabled", email=test_user3.email)[0].is_disabled
+    assert sdk.search_users(fields="is_disabled", email=test_user4.email)[0].is_disabled
+
+    looker.enable_users_by_hackathons(hackathons=["hack_1", "hack_2"])
+
+    assert not sdk.search_users(fields="is_disabled", email=test_user1.email)[
+        0
+    ].is_disabled
+    assert not sdk.search_users(fields="is_disabled", email=test_user2.email)[
+        0
+    ].is_disabled
+    assert not sdk.search_users(fields="is_disabled", email=test_user3.email)[
+        0
+    ].is_disabled
+    assert not sdk.search_users(fields="is_disabled", email=test_user4.email)[
+        0
+    ].is_disabled
