@@ -37,6 +37,7 @@ const RegisterScene: React.FC<{path: string}> = () => {
             last_name: '',
             email: '',
             organization: '',
+            role: '',
             hackathon: '',
             tshirt_size: '',
             ndaq: false,
@@ -53,6 +54,7 @@ const RegisterScene: React.FC<{path: string}> = () => {
                 .email()
                 .required(),
               organization: yup.string().required(),
+              role: yup.string().required(),
               hackathon: yup.string().required(),
               tshirt_size: yup
                 .string()
@@ -119,6 +121,11 @@ const RegisterScene: React.FC<{path: string}> = () => {
                 <Label>Organization</Label>
                 <Input name="organization" placeholder="Organization" />
                 <ErrorMessage name="organization" component="div" />
+              </InputGroup>
+              <InputGroup>
+                <Label>Role</Label>
+                <Input name="role" placeholder="Role" />
+                <ErrorMessage name="role" component="div" />
               </InputGroup>
               <InputGroup>
                 <Label>Hackathon</Label>

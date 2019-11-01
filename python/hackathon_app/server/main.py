@@ -35,6 +35,7 @@ class RegistrationForm(flask_wtf.FlaskForm):
     organization = wtforms.StringField(
         "Organization", validators=[validators.DataRequired()]
     )
+    role = wtforms.StringField("Role", validators=[validators.DataRequired()])
     hackathon = wtforms.StringField("Hackathon", validators=[validators.DataRequired()])
     tshirt_size = wtforms.StringField(
         "T-Shirt Size", validators=[validators.DataRequired()]
@@ -90,6 +91,7 @@ def register() -> Any:
             last_name=last_name,
             email=email,
             organization=form.data["organization"],
+            role=form.data["role"],
             tshirt_size=form.data["tshirt_size"],
         )
         sheets_client = sheets.Sheets(

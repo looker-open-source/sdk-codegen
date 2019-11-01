@@ -36,6 +36,11 @@
                                 },
                                 {
                                     "userEnteredValue": {
+                                        "stringValue": "role"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
                                         "stringValue": "tshirt_size"
                                     }
                                 }
@@ -70,6 +75,11 @@
                                 },
                                 {
                                     "userEnteredValue": {
+                                        "stringValue": "Owner"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
                                         "stringValue": "M"
                                     }
                                 }
@@ -95,6 +105,11 @@
                                 {
                                     "userEnteredValue": {
                                         "stringValue": "5/1/2018"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Foo"
                                     }
                                 },
                                 {
@@ -138,6 +153,11 @@
                                 },
                                 {
                                     "userEnteredValue": {
+                                        "stringValue": "Quzzer"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
                                         "stringValue": "S"
                                     }
                                 }
@@ -168,6 +188,11 @@
                                 {
                                     "userEnteredValue": {
                                         "stringValue": "Baz"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Bazifier"
                                     }
                                 },
                                 {
