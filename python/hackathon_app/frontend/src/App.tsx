@@ -356,4 +356,7 @@ const RegisterButton = styled.button`
   padding-bottom: 6px;
   font-size: 24px;
   width: 100%;
+  :disabled {
+    opacity: 0.6;
+  }
 `
