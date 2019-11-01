@@ -3,6 +3,9 @@ import functools
 from looker_sdk import client, methods, models, error
 
 
+LOOKER_GROUP_PREFIX = "Looker_Hack: "
+
+
 def register_user(
     *, hackathon: str, first_name: str, last_name: str, email: str
 ) -> None:
@@ -16,7 +19,7 @@ def register_user(
         create_email_credentials(sdk=sdk, user_id=user.id, email=email)
     if not user.credentials_api3:
         create_api3_credentials(sdk=sdk, user_id=user.id)
-    set_user_roles(sdk=sdk, user_id=user.id)
+    set_user_group(sdk=sdk, user_id=user.id, hackathon=hackathon)
     set_user_attributes(sdk=sdk, user_id=user.id, hackathon=hackathon)
     disable_user(sdk=sdk, user_id=user.id)
 
@@ -71,19 +74,40 @@ def create_email_credentials(*, sdk: methods.LookerSDK, user_id: int, email: str
 
 
 @try_to
-def create_api3_credentials(*, sdk: methods.LookerSDK, user_id):
+def create_api3_credentials(*, sdk: methods.LookerSDK, user_id: int):
     sdk.create_user_credentials_api3(user_id=user_id, body=models.CredentialsApi3())
 
 
 @try_to
-def set_user_roles(*, sdk: methods.LookerSDK, user_id):
-    hack_roles = {"Developer", "Hackathon"}
-    role_ids = []
-    for role in sdk.all_roles(fields="name,id"):
-        if role.name in hack_roles:
-            assert role.id
-            role_ids.append(role.id)
-    sdk.set_user_roles(user_id=user_id, body=role_ids)
+def set_user_group(*, sdk: methods.LookerSDK, user_id: int, hackathon: str):
+
+    # TODO - switch to sdk.search_groups once that method is live on
+    # sandboxcl and hack instances
+    groups = sdk.all_groups(fields="id,name")
+    name = f"{LOOKER_GROUP_PREFIX}{hackathon}"
+    for group in groups:
+        if group.name == name:
+            break
+    else:
+        for role in sdk.all_roles(fields="name,id"):
+            if role.name == "Hackathon":
+                assert role.id
+                break
+        else:
+            raise RegisterError("Hackathon role needs to be created")
+        role_groups = []
+        for g in sdk.role_groups(role_id=role.id, fields="id"):
+            assert g.id
+            role_groups.append(g.id)
+        group = sdk.create_group(body=models.WriteGroup(name=name))
+        assert group.id
+        role_groups.append(group.id)
+        sdk.set_role_groups(role_id=role.id, body=role_groups)
+
+    assert group.id
+    sdk.add_group_user(
+        group_id=group.id, body=models.GroupIdForGroupUserInclusion(user_id=user_id)
+    )
 
 
 @try_to
