@@ -58,7 +58,7 @@ def enable_users_by_hackathons(hackathons: Sequence[str]) -> None:
     groups = {g.name: g.id for g in sdk.all_groups(fields="id,name")}
     for hackathon in hackathons:
         try:
-            group_id = groups[f"Looker_hack: {hackathon}"]
+            group_id = groups[f"{LOOKER_GROUP_PREFIX}{hackathon}"]
         except KeyError:
             raise RegisterError(f"No group found for hackathon: '{hackathon}'")
         for user in sdk.search_users(group_id=group_id):
