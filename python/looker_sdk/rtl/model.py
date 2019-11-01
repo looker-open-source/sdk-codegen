@@ -24,7 +24,7 @@
 """
 
 import collections
-from typing import Any, cast, Iterable, MutableSequence, Optional, TypeVar
+from typing import Any, cast, Iterable, Sequence, Optional, TypeVar
 
 
 EXPLICIT_NULL = cast(Any, "EXPLICIT_NULL")  # type:ignore
@@ -38,10 +38,10 @@ class Model:
 T = TypeVar("T")
 
 
-class DelimSequence(collections.UserList, MutableSequence[T]):
+class DelimSequence(collections.UserList, Sequence[T]):
     def __init__(
         self,
-        data: Optional[MutableSequence[T]] = None,
+        data: Optional[Sequence[T]] = None,
         prefix: str = "",
         suffix: str = "",
         separator: str = ",",
