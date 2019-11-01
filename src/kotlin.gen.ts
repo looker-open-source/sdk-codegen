@@ -42,7 +42,7 @@ import { warn, isFileSync, success, commentBlock, readFileSync } from './utils'
 import { utf8 } from '../typescript/looker/rtl/constants'
 
 export class KotlinGen extends CodeGen {
-  codePath = './kotlin/com/'
+  codePath = './kotlin/src/main/com/'
   packagePath = 'looker'
   itself = 'this'
   fileExtension = '.kt'
@@ -55,7 +55,7 @@ export class KotlinGen extends CodeGen {
   propDelimiter = ',\n'
 
   indentStr = '  '
-  endTypeStr = '\n)'
+  endTypeStr = `\n${this.indentStr}) : ApiModel()`
   needsRequestTypes = false
   willItStream = false
 
@@ -99,12 +99,14 @@ package com.looker.sdk
 
 import java.net.URL
 import java.util.*
+
+sealed class ApiModel {
 `
   }
 
   // @ts-ignore
   modelsEpilogue(indent: string) {
-    return ''
+    return '\n}'
   }
 
   commentHeader(indent: string, text: string | undefined) {
@@ -112,10 +114,11 @@ import java.util.*
   }
 
   declareProperty(indent: string, property: IProperty) {
+    const bump = this.bumper(indent)
     const optional = !property.required ? '?' : ''
     const type = this.typeMap(property.type)
-    return this.commentHeader(indent, this.describeProperty(property))
-      + `${indent}var ${property.name}: ${type.name}${optional}`
+    return this.commentHeader(bump, this.describeProperty(property))
+      + `${bump}var ${property.name}: ${type.name}${optional}`
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
@@ -199,8 +202,9 @@ import java.util.*
   }
 
   typeSignature(indent: string, type: IType) {
-    return this.commentHeader(indent, type.description) +
-      `${indent}data class ${type.name} (\n`
+    const bump = this.bumper(indent)
+    return this.commentHeader(bump, type.description) +
+      `${bump}data class ${type.name} (\n`
   }
 
   // @ts-ignore
