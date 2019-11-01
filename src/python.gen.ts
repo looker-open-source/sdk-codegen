@@ -463,8 +463,7 @@ ${this.hooks.join('\n')}
         `To reformat ${fileName}, please install pipenv: https://docs.pipenv.org/en/latest/install/#installing-pipenv`, true)
       if (pipEnvExists.includes('pipenv')) {
         // pipenv check completed without error
-        run('pipenv', ['update'])
-        run('pipenv', ['run', 'black', `${this.codePath}/${this.packagePath}/sdk/`])
+        run('pipenv', ['run', 'black', fileName])
       }
     }
     return ''
