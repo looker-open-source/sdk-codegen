@@ -1,4 +1,4 @@
-from typing import cast, Dict, Generic, List, Optional, Union, Sequence, Type, TypeVar
+from typing import Dict, Generic, List, Optional, Union, Sequence, Type, TypeVar
 import datetime
 import itertools
 
@@ -38,12 +38,7 @@ class Sheets:
 
     def get_hackathons(self) -> Sequence["Hackathon"]:
         """Get names of active hackathons."""
-        hackathons = cast(Sequence["Hackathon"], self.hackathons.rows())
-        result = []
-        for hackathon in hackathons:
-            if hackathon.date >= datetime.date.today():
-                result.append(hackathon)
-        return result
+        return self.hackathons.get_upcoming()
 
     def register_user(self, *, hackathon: str, user: "User"):
         """Register user to a hackathon"""
@@ -238,6 +233,19 @@ class Hackathons(WhollySheet[Hackathon]):
             structure=Hackathon,
             key="name",
         )
+
+    def get_upcoming(
+        self, *, cutoff: Optional[datetime.date] = None
+    ) -> Sequence[Hackathon]:
+        today = datetime.date.today()
+        ret = []
+        for hackathon in self.rows():
+            if hackathon.date < today:
+                continue
+            if cutoff and hackathon.date > cutoff:
+                continue
+            ret.append(hackathon)
+        return ret
 
 
 @attr.s(auto_attribs=True, kw_only=True)

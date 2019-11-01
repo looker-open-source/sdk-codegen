@@ -11,7 +11,12 @@ import sheets
 @click.command()
 @click.option("--filename", help="CSV file containing registrations")
 @click.option("--hackathon", help="Hackathon name")
-def main(filename: str, hackathon: str):
+@click.option(
+    "--enable/--no-enable",
+    default=False,
+    help="Enable user accounts in hack.looker.com",
+)
+def main(filename: str, hackathon: str, enable: bool):
     f = open(filename)
     registrants = csv.DictReader(f)
 
@@ -57,6 +62,8 @@ def main(filename: str, hackathon: str):
                 )
                 raise ex
         count += 1
+    if enable:
+        looker.enable_users_by_hackathons([hackathon])
     click.secho(f"Registered {count} users", fg="green")
     f.close()
 

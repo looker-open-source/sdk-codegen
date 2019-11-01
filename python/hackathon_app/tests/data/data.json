@@ -216,7 +216,79 @@
                             "values": [
                                 {
                                     "userEnteredValue": {
-                                        "stringValue": "sfo_2018"
+                                        "stringValue": "sfo_2025"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "San Francisco"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "11/20/2025"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "1"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "sfo_2026"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "San Francisco"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "11/20/2026"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "1"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "sfo_2027"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "San Francisco"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "11/20/2027"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "1"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "values": [
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "sfo_2028"
                                     }
                                 },
                                 {
