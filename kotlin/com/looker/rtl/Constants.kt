@@ -13,4 +13,8 @@ const val MATCH_MODE_BINARY = "^image\\\\/|^audio\\\\/|^video\\\\/|^font\\\\/|^a
 typealias Values = Map<String, Any?>
 
 // TODO ensure DelimArray<t> returns 1,2,3 for the string representation rather than [1,2,3] or some other syntax
-typealias DelimArray<T> = Array<T>
+//typealias DelimArray<T> = Array<T>
+
+class DelimArray<T> : Array<T> {
+
+}
