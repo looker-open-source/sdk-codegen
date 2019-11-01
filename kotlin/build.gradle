@@ -19,9 +19,8 @@ repositories {
 }
 
 sourceSets {
-    main.kotlin.srcDirs += 'com/looker/rtl'
-    main.kotlin.srcDirs += 'com/looker/sdk'
-    test.kotlin.srcDirs += 'com/looker/test'
+    main.kotlin.srcDirs += 'src/main/'
+    test.kotlin.srcDirs += 'src/test'
 }
 
 dependencies {
