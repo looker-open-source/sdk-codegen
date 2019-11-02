@@ -25,8 +25,6 @@
 import {
   ISDKError,
   SDKResponse,
-  ITransport,
-  addQueryParams,
   ITransportSettings,
   HttpMethod, Authenticator, agentTag, trace,
 } from './transport'
@@ -52,7 +50,8 @@ export class BrowserTransport extends BaseTransport {
     const props = await this.initRequest(method, body, authenticator, options)
     const req = fetch(
       requestPath,
-      props,
+      // @ts-ignore
+      props, // Weird package issues with unresolved imports for RequestInit :(
     )
 
     try {
@@ -76,7 +75,7 @@ export class BrowserTransport extends BaseTransport {
     }
   }
 
-  protected async initRequest(
+  private async initRequest(
     method: HttpMethod,
     body?: any,
     authenticator?: Authenticator,
@@ -93,7 +92,7 @@ export class BrowserTransport extends BaseTransport {
     // if ('encoding' in options) init.encoding = options.encoding
     //
 
-    let init: RequestInit = {
+    let init = {
       body: body ? JSON.stringify(body) : undefined,
       headers: headers,
       credentials: 'same-origin',

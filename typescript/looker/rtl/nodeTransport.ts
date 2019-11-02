@@ -42,7 +42,6 @@ import { BaseTransport } from './baseTransport'
 
 type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
 
-
 export class NodeTransport extends BaseTransport {
 
   constructor(protected readonly options: ITransportSettings) {
@@ -200,14 +199,14 @@ export class NodeTransport extends BaseTransport {
     return defaultTimeout
   }
 
-  protected async initRequest(
+  private async initRequest(
     method: HttpMethod,
     path: string,
     queryParams?: any,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>,
-  ): Promise<RequestOptions> {
+  ) {
     options = options ? {...this.options, ...options} : this.options
     let headers: any = {
       'User-Agent': agentTag,
