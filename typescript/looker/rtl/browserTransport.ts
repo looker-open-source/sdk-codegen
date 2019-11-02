@@ -28,30 +28,15 @@ import {
   ITransport,
   addQueryParams,
   ITransportSettings,
-  HttpMethod, Authenticator, agentTag,
+  HttpMethod, Authenticator, agentTag, trace,
 } from './transport'
 import { PassThrough, Readable } from 'readable-stream'
+import { BaseTransport } from './baseTransport'
 
-/**
- * Set to `true` to follow streaming process
- */
-const tracing = false
+export class BrowserTransport extends BaseTransport {
 
-function trace(entry: string, info?: any) {
-  if (tracing) {
-    console.debug(entry)
-    if (info) {
-      console.debug(info)
-    }
-  }
-}
-
-export class BrowserTransport implements ITransport {
-  apiPath = ''
-
-  constructor(private readonly options: ITransportSettings) {
-    this.options = options
-    this.apiPath = `${options.base_url}/api/${options.api_version}`
+  constructor(protected readonly options: ITransportSettings) {
+    super(options)
   }
 
   async request<TSuccess, TError>(
@@ -91,30 +76,7 @@ export class BrowserTransport implements ITransport {
     }
   }
 
-  /**
-   * Determine whether the path should be an API path, a fully specified override, or relative from base_url
-   * @param path Request path
-   * @param options Transport settings
-   * @param queryParams Collection of query Params
-   * @param authenticator optional callback
-   * @returns the fully specified request path including any query string parameters
-   */
-  private makePath(
-    path: string,
-    options: Partial<ITransportSettings>,
-    queryParams?: any,
-    authenticator?: Authenticator,
-    ) {
-    // is this an API-versioned call?
-    let base = (authenticator ? this.apiPath : options.base_url)!
-    if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {
-      path = `${base}${path}` // path was relative
-    }
-    path = addQueryParams(path, queryParams)
-    return path
-  }
-
-  private async initRequest(
+  protected async initRequest(
     method: HttpMethod,
     body?: any,
     authenticator?: Authenticator,

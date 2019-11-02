@@ -23,52 +23,36 @@
  */
 
 import {
-  addQueryParams,
   agentTag,
   Authenticator,
   defaultTimeout,
   HttpMethod,
   ISDKError,
-  ITransport,
   ITransportSettings,
   responseMode,
   ResponseMode,
   SDKResponse,
-  StatusCode,
+  StatusCode, trace, Values,
 } from './transport'
 
 import rq, { Response, Request } from 'request'
 import rp from 'request-promise-native'
 import { PassThrough, Readable } from 'readable-stream'
+import { BaseTransport } from './baseTransport'
 
 type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
 
-/**
- * Set to `true` to follow streaming process
-  */
-const tracing = false
 
-function trace(entry: string, info?: any) {
-  if (tracing) {
-    console.debug(entry)
-    if (info) {
-      console.debug(info)
-    }
-  }
-}
+export class NodeTransport extends BaseTransport {
 
-export class NodeTransport implements ITransport {
-  apiPath = ''
-
-  constructor(private readonly options: ITransportSettings) {
-    this.options = options
-    this.apiPath = `${options.base_url}/api/${options.api_version}`
+  constructor(protected readonly options: ITransportSettings) {
+    super(options)
   }
 
   async request<TSuccess, TError>(
     method: HttpMethod,
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>,
@@ -107,45 +91,28 @@ export class NodeTransport implements ITransport {
   }
 
   /**
-   * Http method dispatcher from general-purpose options
-   * @param {RequestOptions} options
+   * Http method dispatcher from general-purpose request properties
+   * @param props
    * @returns {request.Request}
    */
-  requestor(options: RequestOptions): Request {
-    const method = options.method!.toString().toUpperCase() as HttpMethod
+  protected requestor(props: RequestOptions): Request {
+    const method = props.method!.toString().toUpperCase() as HttpMethod
     switch (method) {
-      case 'GET': return rq.get(options)
-      case 'PUT': return rq.put(options)
-      case 'POST': return rq.post(options)
-      case 'PATCH': return rq.patch(options)
-      case 'DELETE': return rq.put(options)
-      case 'HEAD': return rq.head(options)
-      default: return rq.get(options)
+      case 'GET': return rq.get(props)
+      case 'PUT': return rq.put(props)
+      case 'POST': return rq.post(props)
+      case 'PATCH': return rq.patch(props)
+      case 'DELETE': return rq.put(props)
+      case 'HEAD': return rq.head(props)
+      default: return rq.get(props)
     }
   }
 
-  /** `stream` creates and manages a stream of the request data
-   *
-   * ```ts
-   * let prom = await request.stream(async (readable) => {
-   *    return myService.uploadStreaming(readable).promise()
-   * })
-   * ```
-   *
-   * Streaming generally occurs only if Looker sends the data in a streaming fashion via a push url,
-   * however it will also wrap non-streaming attachment data so that actions only need a single implementation.
-   *
-   * @returns A promise returning the same value as the callback's return value.
-   * This promise will resolve after the stream has completed and the callback's promise
-   * has also resolved.
-   * @param callback A function will be called with a Node.js or Browser `Readable` object.
-   * The readable object represents the streaming data.
-   */
   async stream<TSuccess>(
     callback: (readable: Readable) => Promise<TSuccess>,
     method: HttpMethod,
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
@@ -233,25 +200,14 @@ export class NodeTransport implements ITransport {
     return defaultTimeout
   }
 
-  // async stream<TError>(
-  //   method: HttpMethod,
-  //   path: string,
-  //   queryParams?: any,
-  //   body?: any,
-  //   authenticator?: Authenticator
-  // ): Promise<SDKResponse<rq.Response, TError>> {
-  //   let init = await this.initRequest(method, path, queryParams, body, authenticator)
-  //   let req: rq.Request = rq.defaults(init)
-  // }
-
-  private async initRequest(
+  protected async initRequest(
     method: HttpMethod,
     path: string,
     queryParams?: any,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>,
-  ) {
+  ): Promise<RequestOptions> {
     options = options ? {...this.options, ...options} : this.options
     let headers: any = {
       'User-Agent': agentTag,
@@ -263,10 +219,7 @@ export class NodeTransport implements ITransport {
         ...options.headers,
       }
     }
-    // is this an API-versioned call?
-    let requestPath =
-      (authenticator ? this.apiPath : options.base_url) +
-      addQueryParams(path, queryParams)
+    const requestPath = this.makePath(path, options, queryParams, authenticator)
     let init: RequestOptions = {
       url: requestPath,
       headers: headers,
