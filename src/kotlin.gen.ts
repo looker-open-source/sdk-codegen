@@ -55,7 +55,7 @@ export class KotlinGen extends CodeGen {
   propDelimiter = ',\n'
 
   indentStr = '  '
-  endTypeStr = `\n${this.indentStr}) : ApiModel()`
+  endTypeStr = '\n)'
   needsRequestTypes = false
   willItStream = false
 
@@ -99,14 +99,12 @@ package com.looker.sdk
 
 import java.net.URL
 import java.util.*
-
-sealed class ApiModel {
 `
   }
 
   // @ts-ignore
   modelsEpilogue(indent: string) {
-    return '\n}'
+    return ''
   }
 
   commentHeader(indent: string, text: string | undefined) {
@@ -114,11 +112,10 @@ sealed class ApiModel {
   }
 
   declareProperty(indent: string, property: IProperty) {
-    const bump = this.bumper(indent)
-    const optional = !property.required ? '?' : ''
+    const optional = !property.required ? '? = null' : ''
     const type = this.typeMap(property.type)
-    return this.commentHeader(bump, this.describeProperty(property))
-      + `${bump}var ${property.name}: ${type.name}${optional}`
+    return this.commentHeader(indent, this.describeProperty(property))
+      + `${indent}var ${property.name}: ${type.name}${optional}`
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
@@ -202,9 +199,8 @@ sealed class ApiModel {
   }
 
   typeSignature(indent: string, type: IType) {
-    const bump = this.bumper(indent)
-    return this.commentHeader(bump, type.description) +
-      `${bump}data class ${type.name} (\n`
+    return this.commentHeader(indent, type.description) +
+      `${indent}data class ${type.name} (\n`
   }
 
   // @ts-ignore
@@ -217,7 +213,7 @@ sealed class ApiModel {
 
   httpPath(path: string, prefix?: string) {
     prefix = prefix || ''
-    if (path.indexOf('{') >= 0) return 'encodeURI("' + path.replace(/{/gi, '${' + prefix) + '")'
+    if (path.indexOf('{') >= 0) return '"' + path.replace(/{/gi, '${' + prefix) + '"'
     return `"${path}"`
   }
 

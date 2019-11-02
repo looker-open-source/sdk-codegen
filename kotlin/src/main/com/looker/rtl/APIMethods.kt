@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets
  * THE SOFTWARE.
  */
 
+@Suppress("UNCHECKED_CAST")
 open class APIMethods(val authSession: UserSession) {
 
     val authRequest = authSession::authenticate

@@ -1,4 +1,5 @@
 import com.looker.rtl.ApiSettingsIniFile
+import com.looker.rtl.SDKResponse
 import com.looker.rtl.Transport
 import com.looker.rtl.UserSession
 import io.ktor.client.HttpClient
@@ -11,10 +12,13 @@ import org.apache.http.ssl.SSLContextBuilder
 import kotlin.test.assertEquals
 import org.junit.Test as test
 import com.looker.sdk.LookerSDK
+import com.looker.sdk.WriteQuery
+import junit.framework.Assert.assertTrue
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class TestMethods {
-    val localIni = "/Users/looker/sdk-codegen/looker.ini"
+    val localIni = "/Users/Looker/Documents/sdk_codegen/looker.ini"
     val settings = ApiSettingsIniFile(localIni, "Looker")
 
     val client: HttpClient = HttpClient(Apache) {
@@ -37,13 +41,9 @@ class TestMethods {
 
     val sdk = LookerSDK(session)
 
-    @test fun defaultsWithEmptyToken() {
-        val hub = sdk.accept_integration_hub_legal_agreement(1)
-        assertNotNull(hub)
-//        val testToken = AuthToken()
-//        assertEquals(testToken.accessToken, "")
-//        assertEquals(testToken.tokenType, "")
-//        assertEquals(testToken.expiresIn, 0)
-//        assertEquals(testToken.isActive(), false)
+    @test fun testCreateQuery() {
+        val response = sdk.create_query(WriteQuery("thelook", "users", arrayOf("users.count")))
+        assertTrue(response is SDKResponse.SDKSuccessResponse<*>)
+        assertTrue((response as SDKResponse.SDKSuccessResponse<*>).ok)
     }
 }

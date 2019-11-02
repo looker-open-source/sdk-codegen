@@ -32,6 +32,7 @@ import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.response.HttpResponse
+import io.ktor.content.TextContent
 import io.ktor.http.takeFrom
 import kotlinx.coroutines.runBlocking
 import java.net.URLEncoder
@@ -74,8 +75,7 @@ enum class HttpMethod(val value: io.ktor.http.HttpMethod) {
 data class RequestSettings(
         val method: HttpMethod,
         val url: String,
-        val headers: Map<String, String> = mapOf(),
-        val body: String = ""
+        val headers: Map<String, String> = mapOf()
 )
 
 typealias Authenticator = (init: RequestSettings) -> RequestSettings
@@ -135,6 +135,10 @@ class Transport(val options: TransportSettings) {
                                    body: Any? = null,
                                    noinline authenticator: Authenticator = ::defaultAuthenticator): SDKResponse {
 
+        // Request body
+        val json = io.ktor.client.features.json.defaultSerializer()
+        // TODO make our request body form encoded
+
         val builder = HttpRequestBuilder()
         // Set the request method
         builder.method = method.value
@@ -144,13 +148,6 @@ class Transport(val options: TransportSettings) {
         val headers = options.headers.toMutableMap()
         headers["User-Agent"] = agentTag
 
-        var content = ""
-
-        if (body !== null) { //.isNotBlank()) {
-            content = body.toString()
-            headers["Content-Length"] = content.toByteArray().size.toString()
-        }
-
         // Set the request URL
         val requestPath = if (authenticator === ::defaultAuthenticator)  {
             options.baseUrl
@@ -158,18 +155,19 @@ class Transport(val options: TransportSettings) {
             apiPath
         } + addQueryParams(path, queryParams)
 
-        // Request body
-        val json = io.ktor.client.features.json.defaultSerializer()
-        // TODO make our request body form encoded
-
-        val finishedRequest = authenticator(RequestSettings(method, requestPath, headers, content))
+        val finishedRequest = authenticator(RequestSettings(method, requestPath, headers))
 
         builder.method = finishedRequest.method.value
         finishedRequest.headers.forEach {(k, v) ->
             builder.headers.append(k,v)
         }
         builder.url.takeFrom(finishedRequest.url)
-        builder.body = json.write(content)
+
+        if (body != null) {
+            val jsonBody = json.write(body)
+            builder.body = jsonBody  // TODO: I think having to do this is a bug? https://github.com/ktorio/ktor/issues/1265
+            headers["Content-Length"] = jsonBody.contentLength.toString()
+        }
 
         return runBlocking {
             SDKResponse.SDKSuccessResponse(httpClient!!.call(builder).response.receive<T>())
