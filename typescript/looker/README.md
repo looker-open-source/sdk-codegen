@@ -199,7 +199,7 @@ export class EmbedSession extends ProxySession {
     // get the auth token from the proxy server
     const token = await getProxyToken()
     if (token) {
-      // Assign the token, which will track its expiratin time automatically
+      // Assign the token, which will track its expiration time automatically
       this.activeToken.setToken(token)
     }
 
