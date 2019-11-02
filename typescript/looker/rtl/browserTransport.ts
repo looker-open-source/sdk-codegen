@@ -63,11 +63,8 @@ export class BrowserTransport implements ITransport {
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
     options = { ... this.options, ...options}
-    // is this an API-versioned call?
-    let requestPath =
-      (authenticator ? this.apiPath : options.base_url) +
-      addQueryParams(path, queryParams)
-    const props = this.initRequest(method, path, queryParams, body, authenticator, options)
+    const requestPath = this.makePath(path, options, queryParams, authenticator)
+    const props = await this.initRequest(method, body, authenticator, options)
     const req = fetch(
       requestPath,
       props,
@@ -94,10 +91,31 @@ export class BrowserTransport implements ITransport {
     }
   }
 
-  private initRequest(
-    method: HttpMethod,
+  /**
+   * Determine whether the path should be an API path, a fully specified override, or relative from base_url
+   * @param path Request path
+   * @param options Transport settings
+   * @param queryParams Collection of query Params
+   * @param authenticator optional callback
+   * @returns the fully specified request path including any query string parameters
+   */
+  private makePath(
     path: string,
+    options: Partial<ITransportSettings>,
     queryParams?: any,
+    authenticator?: Authenticator,
+    ) {
+    // is this an API-versioned call?
+    let base = (authenticator ? this.apiPath : options.base_url)!
+    if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {
+      path = `${base}${path}` // path was relative
+    }
+    path = addQueryParams(path, queryParams)
+    return path
+  }
+
+  private async initRequest(
+    method: HttpMethod,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>,
@@ -112,10 +130,6 @@ export class BrowserTransport implements ITransport {
 
     // if ('encoding' in options) init.encoding = options.encoding
     //
-    // if (authenticator) {
-    //   // Automatic authentication process for the request
-    //   init = await authenticator(init)
-    // }
 
     let init: RequestInit = {
       body: body ? JSON.stringify(body) : undefined,
@@ -129,9 +143,15 @@ export class BrowserTransport implements ITransport {
       method,
     }
 
+    if (authenticator) {
+      // Add authentication information to the request
+      init = await authenticator(init)
+    }
+
     return init
   }
 
+  // TODO finish this method
   async stream<TSuccess>(
     callback: (readable: Readable) => Promise<TSuccess>,
     method: HttpMethod,
@@ -143,16 +163,17 @@ export class BrowserTransport implements ITransport {
   )
     : Promise<TSuccess> {
 
+    options = options ? {...this.options, ...options} : this.options
     const stream = new PassThrough()
+    const requestPath = this.makePath(path, options, queryParams, authenticator)
     const returnPromise = callback(stream)
     let init = await this.initRequest(
       method,
-      path,
-      queryParams,
       body,
       authenticator,
       options,
     )
+    trace(`requestPath: ${requestPath}`)
 
     const streamPromise = new Promise<void>((resolve, reject) => {
       trace(`[stream] beginning stream via download url`, init)

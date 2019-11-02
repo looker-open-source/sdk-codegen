@@ -67,19 +67,21 @@ export class BrowserSession implements IAuthorizer {
   }
 
   async login(sudoId?: string | number): Promise<IAccessToken> {
-    if (!!sudoId) {
+    // TODO support sudo directly in the Browser session?
+    if (!sudoId) {
+      return this.getToken()
+    } else {
       throw new Error(
         'Sudo functionality is not currently supported in BrowserSession',
       )
     }
-    // TODO support sudo directly in the Browser session?
-    return this.getToken()
   }
 
   async logout(): Promise<boolean> {
     return new Promise<boolean>(() => false)
   }
 
+  // tslint:disable-next-line:no-empty
   reset(): void {
   }
 }
