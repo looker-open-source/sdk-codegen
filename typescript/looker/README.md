@@ -1,6 +1,8 @@
 # Looker SDK
 
-The Looker SDK for Typescript/Javascript provides a convenient way to communicate with the Looker API available on your Looker server. The SDK is written in Typescript and uses the Node [request](https://www.npmjs.com/package/request) and [request promise native](https://www.npmjs.com/package/request-promise-native) modules for processing HTTP requests.
+The Looker SDK for Typescript/Javascript works with Node and browser run-times. The SDK provides a convenient way to communicate with a Looker server's APIs.
+
+The SDK uses a plug-in architecture (also known as dependency injection) for initializing that supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, and `ProxySession`).
 
 **DISCLAIMER**: This is a _beta_ version of the Looker SDK, using a completely new code generator developed by Looker. Implementations are still subject to change, but we expect most SDK method calls to work correctly. If you run into problems with the SDK, please feel free to [report an issue](https://github.com/looker-open-source/sdk-codegen/issues), and please indicate which language SDK you're using in the report.
 
@@ -152,9 +154,9 @@ describe('sudo', () => {
 })
 ```
 
-### Configuring the SDK with environment variables
+## Configuring the SDK with environment variables
 
-Environment variables can be used for the Node version of the Typescript SDK.
+Environment variables can be used for the Node version of the Looker SDK.
 
 | Variable name | Description |
 | ------------- | ----------- |
@@ -170,6 +172,57 @@ Once the desired environment variables are set, the following code is all that's
 ```typescript
 const sdk = LookerNodeSDK.createClient(new NodeSettingsEnv())
 const me = await sdk.ok(sdk.me())
+```
+
+## Using a Proxy for authentication
+
+With the introduction of CORS support in the Looker API (coming soon to a release near you) the Looker SDK can now be used directly in the browser on a different domain than the Looker server. Because all API endpoints require authentication except for Login, a proxy server can be used to retrieve the API auth token and return it to the browser session.
+
+`ProxySession` is the SDK class specifically designed to make creating a proxy session simple. The source code example below shows how to override the `authenticate` method for use in a CORS request scenario.
+
+* `getProxyToken()` is the call to the proxy server's API that returns the API auth token to use
+* the code in the `if (this.isAuthenticated()` branch
+  * Sets CORS mode
+  * Sets the auth token header
+  * Identifies the Looker SDK version for the Looker server
+  
+By writing your own `getProxyToken()` visible to this class, any proxied authentication workflow is supported.
+
+```typescript
+export class EmbedSession extends ProxySession {
+
+  constructor(public settings: IApiSettings, transport?: ITransport) {
+    super(settings, transport)
+  }
+
+  async authenticate(props: any) {
+    // get the auth token from the proxy server
+    const token = await getProxyToken()
+    if (token) {
+      // Assign the token, which will track its expiratin time automatically
+      this.activeToken.setToken(token)
+    }
+
+    if (this.isAuthenticated()) {
+      // Session is authenticated
+      // set CORS mode (in this scenario)
+      props.mode = 'cors'
+
+      // remove any credentials attribute that may have been set
+      // because the BrowserTransport defaults to having `same-origin` for credentials
+      delete props['credentials']
+
+      // replace the headers argument with required values
+      // Note: using new Headers() to construct the headers breaks CORS for the Looker API. Don't know why yet
+      props.headers = {
+        'Authorization': `Bearer ${token.access_token}`,
+        'x-looker-appid': agentTag
+      }
+    }
+    return props
+  }
+
+}
 ```
 
 ## Additional examples

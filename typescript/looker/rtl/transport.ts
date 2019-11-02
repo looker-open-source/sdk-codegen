@@ -329,6 +329,11 @@ export function addQueryParams(path: string, obj?: Values ) {
   return `${path}${qp ? '?' + qp : ''}`
 }
 
+/**
+ * SDK error handler
+ * @param result any kind of error
+ * @returns a new `Error` object with the failure message
+ */
 export function sdkError(result: any) {
   if ('message' in result && typeof result.message === 'string') {
     return new Error(result.message)

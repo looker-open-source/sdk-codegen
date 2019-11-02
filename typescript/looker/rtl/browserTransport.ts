@@ -82,34 +82,26 @@ export class BrowserTransport extends BaseTransport {
     options?: Partial<ITransportSettings>,
   ) {
     options = options ? {...this.options, ...options} : this.options
-    let headers = new Headers({'User-Agent': agentTag})
+    let headers: {[key:string]: string} = {'x-looker-appid': agentTag}
     if (options && options.headers) {
       Object.keys(options.headers).forEach(key => {
-        headers.append(key, options!.headers![key])
+        headers[key] = options!.headers![key]
       })
     }
 
-    // if ('encoding' in options) init.encoding = options.encoding
-    //
-
-    let init = {
+    let props = {
       body: body ? JSON.stringify(body) : undefined,
       headers: headers,
       credentials: 'same-origin',
-      // resolveWithFullResponse: true,
-      // rejectUnauthorized: this.verifySsl(options),
-      // timeout: this.timeout(options) * 1000,
-      // encoding: null, // null = requests are returned as binary so `Content-Type` dictates response format
-      // method,
       method,
     }
 
     if (authenticator) {
       // Add authentication information to the request
-      init = await authenticator(init)
+      props = await authenticator(props)
     }
 
-    return init
+    return props
   }
 
   // TODO finish this method
