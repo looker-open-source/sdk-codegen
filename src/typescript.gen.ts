@@ -363,24 +363,25 @@ export interface IDictionary<T> {
 
   typeMap(type: IType): IMappedType {
     super.typeMap(type)
+    const mt = ''
 
     const tsTypes: Record<string, IMappedType> = {
-      'number': {name: 'number', default: '0.0'},
-      'float': {name: 'number', default: '0.0'},
-      'double': {name: 'number', default: '0.0'},
-      'integer': {name: 'number', default: '0'},
-      'int32': {name: 'number', default: '0'},
-      'int64': {name: 'number', default: '0'},
-      'string': {name: 'string', default: "''"},
-      'password': {name: 'Password', default: this.nullStr},
-      'byte': {name: 'binary', default: this.nullStr},
-      'boolean': {name: 'boolean', default: ''},
-      'uri': {name: 'URL', default: this.nullStr},
-      'url': {name: 'URL', default: this.nullStr},
-      'datetime': {name: 'Date', default: ''}, // TODO is there a default expression for datetime?
-      'date': {name: 'Date', default: ''}, // TODO is there a default expression for date?
-      'object': {name: 'any', default: ''},
-      'void': {name: 'void', default: ''}
+      'number': {name: 'number', default: mt},
+      'float': {name: 'number', default: mt},
+      'double': {name: 'number', default: mt},
+      'integer': {name: 'number', default: mt},
+      'int32': {name: 'number', default: mt},
+      'int64': {name: 'number', default: mt},
+      'string': {name: 'string', default: mt},
+      'password': {name: 'Password', default: mt},
+      'byte': {name: 'binary', default: mt},
+      'boolean': {name: 'boolean', default: mt},
+      'uri': {name: 'URL', default: mt},
+      'url': {name: 'URL', default: mt},
+      'datetime': {name: 'Date', default: mt}, // TODO is there a default expression for datetime?
+      'date': {name: 'Date', default: mt}, // TODO is there a default expression for date?
+      'object': {name: 'any', default: mt},
+      'void': {name: 'void', default: mt}
     }
 
     if (type.elementType) {
