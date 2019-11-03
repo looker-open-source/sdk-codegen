@@ -22,9 +22,54 @@
  * THE SOFTWARE.
  */
 
-import com.looker.rtl.HttpMethod
-import com.looker.rtl.Transport
-import com.looker.rtl.TransportSettings
+import com.looker.rtl.*
+import com.looker.sdk.LookerSDK
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.junit.Test as test
 
-class TestTransport
+class TestTransport {
+    val fullPath = "https://github.com/looker/looker-sdk/"
+    val base = "https://my.looker.com:19999"
+    val apiVersion = "3.1"
+    val userPath = "/user"
+
+    val options = TransportSettings(base, apiVersion)
+    val xp = Transport(options)
+    val qp: Values = mapOf("a" to 1, "b" to false, "c" to "d e", "skip" to null)
+    val mockAuth: Authenticator = { init: RequestSettings -> RequestSettings(HttpMethod.GET, "bogus") }
+    val params = "?a=1&b=false&c=d+e"
+
+    @test fun testFullPath() {
+        var actual = xp.makePath(fullPath)
+        assertEquals(fullPath, actual)
+        actual = xp.makePath(fullPath, authenticator = mockAuth)
+        assertEquals(fullPath, actual)
+        actual = xp.makePath(fullPath, qp, mockAuth)
+        assertEquals(fullPath+params, actual)
+    }
+
+    @test fun testRelativePath() {
+        var actual = xp.makePath(userPath)
+        assertEquals("$base$userPath", actual)
+        actual = xp.makePath(userPath, authenticator = mockAuth)
+        assertEquals("$base/api/$apiVersion$userPath", actual)
+        actual = xp.makePath(userPath, qp, mockAuth)
+        assertEquals("$base/api/$apiVersion$userPath$params", actual)
+    }
+
+    fun <T> ok(response: SDKResponse): T {
+        when(response) {
+            is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
+            is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
+            else -> throw Error("Fail!!")
+        }
+    }
+
+    @test fun testFullRequest() {
+        // TODO make this work!
+        val actual = ok<String>(xp.request<String>(HttpMethod.GET,fullPath))
+        assertTrue(actual.contains("One SDK to rule them all, and in the codegen bind them"))
+    }
+
+}

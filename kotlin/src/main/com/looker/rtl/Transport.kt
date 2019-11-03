@@ -32,7 +32,6 @@ import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.response.HttpResponse
-import io.ktor.content.TextContent
 import io.ktor.http.takeFrom
 import kotlinx.coroutines.runBlocking
 import java.net.URLEncoder
@@ -82,14 +81,16 @@ typealias Authenticator = (init: RequestSettings) -> RequestSettings
 
 fun defaultAuthenticator(requestSettings: RequestSettings): RequestSettings = requestSettings
 
-open class TransportSettings(var baseUrl: String = "",
-                             var apiVersion: String = "",
-                             var headers: Map<String, String> = mapOf())
+open class TransportSettings(
+        var baseUrl: String = "",
+        var apiVersion: String = "",
+        var headers: Map<String, String> = mapOf())
 
 fun encodeValues(params: Values = mapOf()): String {
+    @Suppress("UNCHECKED_CAST")
     return params
             .filter { (k, v) -> v !== null }
-            .map { (k, v) -> "$k=${URLEncoder.encode(v as String?, "utf-8")}"}
+            .map { (k, v) -> "$k=${URLEncoder.encode("$v", "utf-8")}"}
             .joinToString("&")
 
 }
@@ -126,14 +127,40 @@ class Transport(val options: TransportSettings) {
         // TODO: Should this use an enum class like in the ts version?
         // Enums in Kotlin don't work like c or ts and would require
         // an explicit numeric value for each enum type
+        // Thought: We should use whatever is idiomatic for Kotlin
         return (res.status.value >= 200) && (res.status.value <= 226)
     }
 
-    inline fun <reified T> request(method: HttpMethod,
-                                   path: String,
-                                   queryParams: Values = mapOf(),
-                                   body: Any? = null,
-                                   noinline authenticator: Authenticator = ::defaultAuthenticator): SDKResponse {
+    /**
+     * Create the correct http request path
+     * @param path Relative or absolute path
+     * @param queryParams query string arguments (if any)
+     * @param authenticator optional authenticator callback for API requests
+     * @return a fully qualified path that is the base url, the api path, or a pass through request url
+     */
+    fun makePath(
+            path: String,
+            queryParams: Values = mapOf(),
+            authenticator: Authenticator? = null
+    ): String {
+        return if (path.startsWith("http://", true)
+                || path.startsWith("https://", true)) {
+            "" // full path was passed in
+        } else {
+            if (authenticator === null)  {
+                options.baseUrl
+            } else {
+                apiPath
+            }
+        } + addQueryParams(path, queryParams)
+    }
+
+    inline fun <reified T> request(
+            method: HttpMethod,
+            path: String,
+            queryParams: Values = mapOf(),
+            body: Any? = null,
+            noinline authenticator: Authenticator? = null): SDKResponse {
 
         // Request body
         val json = io.ktor.client.features.json.defaultSerializer()
@@ -148,14 +175,12 @@ class Transport(val options: TransportSettings) {
         val headers = options.headers.toMutableMap()
         headers["User-Agent"] = agentTag
 
-        // Set the request URL
-        val requestPath = if (authenticator === ::defaultAuthenticator)  {
-            options.baseUrl
-        } else {
-            apiPath
-        } + addQueryParams(path, queryParams)
+        val requestPath = makePath(path, queryParams, authenticator)
 
-        val finishedRequest = authenticator(RequestSettings(method, requestPath, headers))
+        // TODO review this kludge
+        val auth = if (authenticator === null) { ::defaultAuthenticator } else { authenticator }
+
+        val finishedRequest = auth(RequestSettings(method, requestPath, headers))
 
         builder.method = finishedRequest.method.value
         finishedRequest.headers.forEach {(k, v) ->
@@ -173,4 +198,5 @@ class Transport(val options: TransportSettings) {
             SDKResponse.SDKSuccessResponse(httpClient!!.call(builder).response.receive<T>())
         }
     }
+
 }

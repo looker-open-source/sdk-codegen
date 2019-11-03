@@ -15,7 +15,7 @@ typealias Values = Map<String, Any?>
 // TODO ensure DelimArray<t> returns 1,2,3 for the string representation rather than [1,2,3] or some other syntax
 typealias DelimArray<T> = Array<T>
 
-/* The above won't work long term, so we'll need to implement something...
+/* TODO The above won't work long term, so we'll need to implement something...
 class DelimArray<T> : Array<T>() {
 }
  */
