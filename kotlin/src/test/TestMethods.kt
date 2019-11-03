@@ -54,9 +54,9 @@ class TestMethods {
         for (item in list) {
             // I see what you mean by the null check issue, Brian. We definitely want to solve this problem.
             item.id?.let {id ->
-                val user = sdk.ok<User>(sdk.user(id))
-                val userId = user.id
-                assertEquals(userId, id)
+                val actual = sdk.ok<User>(sdk.user(id))
+                val gotId = actual.id
+                assertEquals(gotId, id)
             }
         }
     }
@@ -66,8 +66,8 @@ class TestMethods {
         assertTrue(list.count() > 0, "Got looks?")
         for (item in list) {
             item.id?.let {id ->
-                val look = sdk.ok<Look>(sdk.look(id))
-                val gotId = look.id
+                val actual = sdk.ok<Look>(sdk.look(id))
+                val gotId = actual.id
                 assertEquals(gotId, id)
             }
         }
@@ -78,11 +78,34 @@ class TestMethods {
         assertTrue(list.count() > 0, "Got dashboards?")
         for (item in list) {
             item.id?.let {id ->
-                val dashboard = sdk.ok<Dashboard>(sdk.dashboard(id))
-                val gotId = dashboard.id
+                val actual = sdk.ok<Dashboard>(sdk.dashboard(id))
+                val gotId = actual.id
                 assertEquals(gotId, id)
             }
         }
     }
 
+    @test fun testAllFolders() {
+        val list = sdk.ok<Array<Folder>>(sdk.all_folders())
+        assertTrue(list.count() > 0, "Got folders?")
+        for (item in list) {
+            item.id?.let {id ->
+                val actual = sdk.ok<Folder>(sdk.folder(id))
+                val gotId = actual.id
+                assertEquals(gotId, id)
+            }
+        }
+    }
+
+    @test fun testAllSpaces() {
+        val list = sdk.ok<Array<SpaceBase>>(sdk.all_spaces())
+        assertTrue(list.count() > 0, "Got folders?")
+        for (item in list) {
+            item.id?.let {id ->
+                val actual = sdk.ok<Space>(sdk.space(id))
+                val gotId = actual.id
+                assertEquals(gotId, id)
+            }
+        }
+    }
 }

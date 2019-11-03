@@ -29,7 +29,7 @@ import kotlin.test.assertTrue
 import org.junit.Test as test
 
 class TestTransport {
-    val fullPath = "https://github.com/looker/looker-sdk/"
+    val fullPath = "https://github.com/looker-open-source/sdk-codegen/"
     val base = "https://my.looker.com:19999"
     val apiVersion = "3.1"
     val userPath = "/user"
@@ -67,7 +67,6 @@ class TestTransport {
     }
 
     @test fun testFullRequest() {
-        // TODO make this work!
         val actual = ok<String>(xp.request<String>(HttpMethod.GET,fullPath))
         assertTrue(actual.contains("One SDK to rule them all, and in the codegen bind them"))
     }
