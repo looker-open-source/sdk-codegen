@@ -280,7 +280,11 @@ import Foundation
     } else {
       let mapped = this.typeMap(param.type)
       switch (mapped.name.toLowerCase()) {
-        case 'date': case 'datetime': case 'url': case 'uri': case 'object':
+        case 'date':
+        case 'datetime':
+        // case 'url':
+        // case 'uri':
+        case 'object':
         case 'bool': castIt = true; break;
         default: castIt = false; break;
       }
@@ -403,7 +407,7 @@ ${indent}return result`
       'password': {name: 'Password', default: this.nullStr},
       'byte': {name: 'binary', default: this.nullStr},
       'boolean': {name: 'Bool', default: this.nullStr},
-      'uri': {name: 'URL', default: this.nullStr},
+      'uri': {name: 'URI', default: this.nullStr},
       'url': {name: 'URL', default: this.nullStr},
       'datetime': {name: 'Date', default: this.nullStr}, // TODO is there a default expression for datetime?
       'date': {name: 'Date', default: this.nullStr}, // TODO is there a default expression for date?

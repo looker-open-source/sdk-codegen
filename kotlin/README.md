@@ -1,12 +1,12 @@
 # Looker SDK
 
-The Looker SDK for Swift provides a convenient way to communicate with the Looker API available on your Looker server. The SDK is written in Swift and uses `URLSession` for HTTP request processing.
+The Looker SDK for Kotlin provides a convenient way to communicate with the Looker API available on your Looker server.
 
 **DISCLAIMER**: This is an _alpha_ version of the Looker SDK, using a completely new code generator developed by Looker. Implementations are still subject to major change. If you run into problems with the SDK, feel free to [report an issue](https://github.com/looker-open-source/sdk-codegen/issues), and please indicate which language SDK you're using in the report.
 
 ## Getting started
 
-The Looker SDK can be used in a Swift application in 3 steps:
+The Looker SDK can be used in a Kotlin application in 3 steps:
 
 * configure
 * install
@@ -33,14 +33,14 @@ client_secret=your_API3_client_secret
 **Note**: If the application using the Looker SDK is going to be committed to a version control system, be sure to
 **ignore** the `looker.ini` file so the API credentials aren't unintentionally published.
 
-### Install the Looker SDK for Swift
+### Install the Looker SDK for Kotlin
 
-The alpha version of the Looker SDK is not published to the Swift Package Manager. It's way too early for that. Currently, the only way to get the source code is by cloning the Looker SDK Codegen repository and use the source code in the `swift` folder.
+The alpha version of the Looker SDK is not published to a Kotlin Package Manager. It's way too early for that. Currently, the only way to get the source code is by cloning the Looker SDK Codegen repository and use the source code in the `kotlin` folder.
 
-To ensure you have the version of the SDK that matches your Looker version, you can regenerate `methods.swift` and `models.swift` from the root of the repository with the command:
+To ensure you have the version of the SDK that matches your Looker version, you can regenerate `methods.kt` and `models.kt` from the root of the repository with the command:
 
 ```bash
-yarn sdk swift
+yarn sdk kotlin
 ```
 
 If this command fails the first time, read the [instructions for setting up `yarn`](https://github.com/looker-open-source/sdk-codegen/blob/master/README.md#using-the-yarnnode-based-generator)
@@ -51,26 +51,16 @@ When the SDK is installed and the server location and API credentials are config
 
 Verify authentication works and that API calls will succeed with code similar to the following:
 
-```swift
-import looker
-
-/// read the Looker configuration file
-let config = try? ApiConfig("looker.ini")
-
-/// Use the standard transport based on URLSession
-let xp = BaseTransport(settings)
-
-/// Use the authentication session manager to automatically handle session expiration
-/// See the section below for more on `AuthSession`
-let auth = AuthSession(settings, xp)
-
-/// Create you Looker SDK instance
-let sdk = LookerSDK(auth)
-
-/// Retrieve the API user record. If this fails, your Looker server or credentials are bad
-let me = sdk.ok(sdk.me())
+```kotlin
+val localIni = "./looker.ini"
+val settings = ApiSettingsIniFile(localIni, "Looker")
+val session = UserSession(settings, Transport(settings))
+val sdk = LookerSDK(session)
+// Verify minimal SDK call works
+val me = sdk.ok<User>(sdk.me())
 
 /// continue making SDK calls
+val users = sdk.ok<Array<User>>(sdk.all_users())}
 ```
 
 ## Using AuthSession for automatic authentication
@@ -92,30 +82,19 @@ The rest of this section shows sample code for typical use cases for authenticat
 
 There are still some issues processing the full return values of some of the more complex structures returned by Looker API endpoints. While these JSON parsing issues are being resolved, restricting the set of fields to be returned by the problematic endpoint is a simple work-around. To save time, some constants for currently supported fields are defined in the SDK.
 
-```swift
-/// safely get a dashboard via the SDK
-let dashboard = sdk.ok(sdk.dashboard(id, fields:Safe.Dashboard))
+```kotlin
 
+/// safely get a look via the SDK
+val look = sdk.ok<LookWithQuery>(sdk.look(id, fields = Safe.Look))
+
+/// safely get a dashboard
+val actual = sdk.ok<Dashboard>(sdk.dashboard(id, fields = Safe.Dashboard))
 ```
 
-**IMPORTANT**: You'll also want to ensure the <sdk/models.swift> property `parent_id` is optional in the `FolderBase`, `Folder`, `SpaceBase` and `Space` structs. If it's not, make it look like this:
+**IMPORTANT**: You'll also want to ensure the <src/main/com/looker/sdk/models.kt> property `parent_id` is optional in the `FolderBase`, `Folder`, `SpaceBase` and `Space` data classes. If it's not, make it look like this:
 
-```swift
-    var parent_id: Variant?
+```kotlin
+  var parent_id: String? = null,
 ```
-
-The `Variant` enum was created to tolerate discrepancies in JSON payloads that don't always match the strict structure format specification. This is primarily for IDs that are specified as `String` but sometimes appear as `Int` in the JSON payload. This will be addressed before the Swift SDK is out of beta.
-
-## Classes vs. Structs
-
-Both the [Swift documentation](https://developer.apple.com/documentation/swift/choosing_between_structures_and_classes) and LearnAppMaking has an  [overview of Swift classes vs. structs](https://learnappmaking.com/struct-vs-class-swift-how-to/) explain the choices between structs and classes in Swift.
-
-The SDK generator uses both classes and structs. Classes are used where required in the SDK where class-specific features for:
-
-* inheritance
-* destructors (aka `deinit`)
-* identity comparisons
-
-Otherwise, `struct`s, `enum`s, or `protocol`s are used for the declaration of complex method inputs, such as `body` parameters and the complex API structures returned from API endpoints.
 
 Enjoy, and thanks for trying out the bleeding edge!

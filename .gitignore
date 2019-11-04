@@ -16,5 +16,10 @@ package-lock.json
 **/.DS_Store
 **/.build
 **/Packages
-**/*.xcodeproj
 **/xcuserdata/
+kotlin/.gradle/*
+.gradle/*
+kotlin/.*
+kotlin/bin/*
+kotlin/build/*
+kotlin/out/*

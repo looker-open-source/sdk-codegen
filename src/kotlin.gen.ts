@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-// TypeScript code generator
+// Kotlin code generator
 
 import {
   Arg,
@@ -38,50 +38,39 @@ import {
 } from './sdkModels'
 import { CodeGen, warnEditing } from './codeGen'
 import * as fs from 'fs'
-import * as prettier from 'prettier'
 import { warn, isFileSync, success, commentBlock, readFileSync } from './utils'
 import { utf8 } from '../typescript/looker/rtl/constants'
 
-export class TypescriptGen extends CodeGen {
-  codePath = './typescript/'
+export class KotlinGen extends CodeGen {
+  codePath = './kotlin/src/main/com/'
   packagePath = 'looker'
   itself = 'this'
-  fileExtension = '.ts'
+  fileExtension = '.kt'
   commentStr = '// '
   nullStr = 'null'
   transport = 'transport'
 
   argDelimiter = ', '
   paramDelimiter = ',\n'
-  propDelimiter = '\n'
+  propDelimiter = ',\n'
 
   indentStr = '  '
-  endTypeStr = '\n}'
-  needsRequestTypes = true
-  willItStream = true
+  endTypeStr = '\n)'
+  needsRequestTypes = false
+  willItStream = false
 
   // @ts-ignore
   methodsPrologue(indent: string) {
     return `
 // ${warnEditing}
-import { APIMethods } from '../rtl/apiMethods'
-import { IAuthorizer, ITransportSettings } from '../rtl/transport'
-import { ${this.packageName}Stream } from './streams'
-/**
- * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
- */
-import { DelimArray } from '../rtl/delimArray'
-import { IDictionary, ${this.typeNames().join(', ')} } from './models'
+package com.looker.sdk
 
-export class ${this.packageName} extends APIMethods {
+import com.looker.rtl.*
+import com.looker.rtl.UserSession
+import java.util.*
 
-  public stream: LookerSDKStream
-  
-  constructor(authSession: IAuthorizer) {
-    super(authSession)
-    this.stream = new LookerSDKStream(authSession)  
-  }
-  
+class ${this.packageName}(authSession: UserSession) : APIMethods(authSession) {
+
 `
   }
 
@@ -89,16 +78,10 @@ export class ${this.packageName} extends APIMethods {
   streamsPrologue(indent: string): string {
     return `
 // ${warnEditing}
-import { Readable } from 'readable-stream'
-import { APIMethods } from '../rtl/apiMethods'
-import { ITransportSettings } from '../rtl/transport'
-/**
- * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
- */
-import { DelimArray } from '../rtl/delimArray'
-import { IDictionary, ${this.typeNames(false).join(', ')} } from './models'
 
-export class ${this.packageName}Stream extends APIMethods {
+package com.looker.sdk
+
+// nothing to see here, yet
 `
   }
 
@@ -112,13 +95,10 @@ export class ${this.packageName}Stream extends APIMethods {
     return `
 // ${warnEditing}
 
-import { URL } from 'url'
-import { DelimArray } from '../rtl/delimArray'
+package com.looker.sdk
 
-export interface IDictionary<T> {
-  [key: string]: T
-}
-
+import java.net.*
+import java.util.*
 `
   }
 
@@ -132,16 +112,10 @@ export interface IDictionary<T> {
   }
 
   declareProperty(indent: string, property: IProperty) {
-    const optional = !property.required ? '?' : ''
-    if (property.name === strBody) {
-      // TODO refactor this hack to track context when the body parameter is created for the request type
-      property.type.refCount++
-      return this.commentHeader(indent, property.description || 'body parameter for dynamically created request type')
-        + `${indent}${property.name}${optional}: Partial<I${property.type.name}>`
-    }
+    const optional = !property.required ? '? = null' : ''
     const type = this.typeMap(property.type)
     return this.commentHeader(indent, this.describeProperty(property))
-      + `${indent}${property.name}${optional}: ${type.name}`
+      + `${indent}var ${property.name}: ${type.name}${optional}`
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
@@ -154,14 +128,11 @@ export interface IDictionary<T> {
       : param.type
     const mapped = this.typeMap(type)
     let pOpt = ''
-    if (param.location === strBody) {
-      mapped.name = `Partial<${mapped.name}>`
-    }
     if (!param.required) {
-      pOpt = mapped.default ? '' : '?'
+      pOpt = '?'
     }
     return this.commentHeader(indent, this.paramComment(param, mapped))
-      + `${indent}${param.name}${pOpt}: ${mapped.name}`
+      + `${indent}${param.name}: ${mapped.name}${pOpt}`
       + (param.required ? '' : (mapped.default ? ` = ${mapped.default}` : ''))
   }
 
@@ -184,7 +155,7 @@ export interface IDictionary<T> {
 
     if (requestType) {
       // use the request type that will be generated in models.ts
-      fragment = `request: Partial<I${requestType}>`
+      fragment = `request: Partial<${requestType}>`
     } else {
       let params: string[] = []
       const args = method.allParams // get the params in signature order
@@ -196,13 +167,13 @@ export interface IDictionary<T> {
     } else if (method.responseIsBinary()) {
       headComment += `\n\n**Note**: Binary content is returned by this method.\n`
     }
+    const jvmOverloads = method.optionalParams.length > 0 ? '@JvmOverloads ' : ''
     const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
     const header = this.commentHeader(indent, headComment)
-    + `${indent}async ${method.name}(`
-    + (streamer ? `\n${bump}${callback}` : '')
+      + `${indent}${jvmOverloads}fun ${method.name}(`
+      + (streamer ? `\n${bump}${callback}` : '')
 
-    return header + fragment
-      + `${fragment? ',' : ''}\n${bump}options?: Partial<ITransportSettings>) {\n`
+    return header + fragment + `) : SDKResponse {\n`
   }
 
   methodSignature(indent: string, method: IMethod) {
@@ -229,34 +200,35 @@ export interface IDictionary<T> {
 
   typeSignature(indent: string, type: IType) {
     return this.commentHeader(indent, type.description) +
-      `${indent}export interface I${type.name}{\n`
+      `${indent}data class ${type.name} (\n`
   }
 
   // @ts-ignore
   errorResponses(indent: string, method: IMethod) {
-    const results: string[] = method.errorResponses
-      .map(r => `I${r.type.name}`)
-    return results.join(' | ')
+    return ""
+    // const results: string[] = method.errorResponses
+    //   .map(r => `I${r.type.name}`)
+    // return results.join(' | ')
   }
 
   httpPath(path: string, prefix?: string) {
     prefix = prefix || ''
-    if (path.indexOf('{') >= 0) return 'encodeURI(`' + path.replace(/{/gi, '${' + prefix) + '`)'
-    return `'${path}'`
+    if (path.indexOf('{') >= 0) return '"' + path.replace(/{/gi, '${' + prefix) + '"'
+    return `"${path}"`
   }
 
   // @ts-ignore
   argGroup(indent: string, args: Arg[], prefix?: string) {
-    if ((!args) || args.length === 0) return this.nullStr
+    if ((!args) || args.length === 0) return 'mapOf()'
     let hash: string[] = []
     for (let arg of args) {
       if (prefix) {
-        hash.push(`${arg}: ${prefix}${arg}`)
+        hash.push(`"${arg}" to ${prefix}${arg}`)
       } else {
-        hash.push(arg)
+        hash.push(`"${arg}" to ${arg}`)
       }
     }
-    return `\n${indent}{${hash.join(this.argDelimiter)}}`
+    return `\n${indent}mapOf(${hash.join(this.argDelimiter)})`
   }
 
   // @ts-ignore
@@ -289,10 +261,10 @@ export interface IDictionary<T> {
     // add options at the end of the request calls. this will cause all other arguments to be
     // filled in but there's no way to avoid this for passing in the last optional parameter.
     // Fortunately, this code bloat is minimal and also hidden from the consumer.
-    let result = this.argFill('', 'options')
+    // let result = this.argFill('', 'options')
     // let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
     // result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
-    result = this.argFill(result, method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr)
+    let result = this.argFill('', method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr)
     result = this.argFill(result, this.argGroup(indent, method.queryArgs, request))
     return result
   }
@@ -302,8 +274,9 @@ export interface IDictionary<T> {
     const type = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
-    const errors = this.errorResponses(indent, method)
-    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}, ${errors}>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
+    // TODO don't currently need these for Kotlin
+    // const errors = this.errorResponses(indent, method)
+    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
   }
 
   streamCall(indent: string, method: IMethod) {
@@ -340,7 +313,7 @@ export interface IDictionary<T> {
 
   versionStamp() {
     if (this.versions) {
-      const stampFile = this.fileName('rtl/constants')
+      const stampFile = this.fileName('rtl/Constants')
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
@@ -361,66 +334,68 @@ export interface IDictionary<T> {
 
   typeMap(type: IType): IMappedType {
     super.typeMap(type)
-    const mt = ''
-
-    const tsTypes: Record<string, IMappedType> = {
-      'number': {name: 'number', default: mt},
-      'float': {name: 'number', default: mt},
-      'double': {name: 'number', default: mt},
-      'integer': {name: 'number', default: mt},
-      'int32': {name: 'number', default: mt},
-      'int64': {name: 'number', default: mt},
-      'string': {name: 'string', default: mt},
+    const mt = this.nullStr
+    const ktTypes: Record<string, IMappedType> = {
+      'number': {name: 'Double', default: mt},
+      'float': {name: 'Float', default: mt},
+      'double': {name: 'Double', default: mt},
+      'integer': {name: 'Int', default: mt},
+      'int32': {name: 'Int', default: mt},
+      'int64': {name: 'Long', default: mt},
+      'string': {name: 'String', default: mt},
       'password': {name: 'Password', default: mt},
       'byte': {name: 'binary', default: mt},
-      'boolean': {name: 'boolean', default: mt},
-      'uri': {name: 'URL', default: mt},
+      'boolean': {name: 'Boolean', default: mt},
+      'uri': {name: 'URI', default: mt},
       'url': {name: 'URL', default: mt},
       'datetime': {name: 'Date', default: mt}, // TODO is there a default expression for datetime?
       'date': {name: 'Date', default: mt}, // TODO is there a default expression for date?
-      'object': {name: 'any', default: mt},
-      'void': {name: 'void', default: mt}
+      'object': {name: 'Any', default: mt},
+      'void': {name: 'Void', default: mt}
     }
 
     if (type.elementType) {
       // This is a structure with nested types
       const map = this.typeMap(type.elementType)
       if (type instanceof ArrayType) {
-        return {name: `${map.name}[]`, default: '[]'}
+        return {name: `Array<${map.name}>`, default: this.nullStr}
       } else if (type instanceof HashType) {
-        return {name: `IDictionary<${map.name}>`, default: '{}'}
+        // TODO figure out this bizarre string template error either in IntelliJ or Typescript
+        // return {name: `Map<String,${map.name}>`, default: '{}'}
+        return {name: 'Map<String' + `,${map.name}>`, default: this.nullStr}
       } else if (type instanceof DelimArrayType) {
-        return {name: `DelimArray<${map.name}>`, default: ''}
+        return {name: `DelimArray<${map.name}>`, default: this.nullStr}
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
 
     if (type.name) {
-      return tsTypes[type.name] || {name: `I${type.name}`, default: ''} // No null default for complex types
+      return ktTypes[type.name] || {name: `${type.name}`, default: this.nullStr}
     } else {
       throw new Error('Cannot output a nameless type.')
     }
   }
 
   reformatFile(fileName: string) {
-    const formatOptions: prettier.Options = {
-      semi: false,
-      trailingComma: 'all',
-      bracketSpacing: true,
-      parser: 'typescript',
-      singleQuote: true,
-      proseWrap: 'preserve',
-      quoteProps: 'as-needed',
-      endOfLine: 'auto'
-    }
-    const name = super.reformatFile(fileName)
-    if (name) {
-      const source = prettier.format(readFileSync(name), formatOptions)
-      if (source) {
-        fs.writeFileSync(name, source, {encoding: utf8})
-        return name
-      }
-    }
+    warn(`No reformatter for ${fileName}, yet`)
+    // const formatOptions: prettier.Options = {
+    //   semi: false,
+    //   trailingComma: 'all',
+    //   bracketSpacing: true,
+    //   parser: 'typescript',
+    //   singleQuote: true,
+    //   proseWrap: 'preserve',
+    //   quoteProps: 'as-needed',
+    //   endOfLine: 'auto'
+    // }
+    // const name = super.reformatFile(fileName)
+    // if (name) {
+    //   const source = prettier.format(readFileSync(name), formatOptions)
+    //   if (source) {
+    //     fs.writeFileSync(name, source, {encoding: utf8})
+    //     return name
+    //   }
+    // }
     return ''
   }
 }

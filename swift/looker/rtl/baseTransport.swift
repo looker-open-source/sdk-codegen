@@ -36,8 +36,7 @@ struct RequestResponse {
 }
 
 
-//class BaseTransport : ITransport {
-// TODO why doesn't this implementation satisfy ITransport?!?!?
+// some good tips here https://www.swiftbysundell.com/articles/constructing-urls-in-swift/
 @available(OSX 10.12, *)
 class BaseTransport : ITransport  {
     public static var debugging = false

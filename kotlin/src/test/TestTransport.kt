@@ -1,0 +1,74 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2019 Looker Data Sciences, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+import com.looker.rtl.*
+import com.looker.sdk.LookerSDK
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import org.junit.Test as test
+
+class TestTransport {
+    val fullPath = "https://github.com/looker-open-source/sdk-codegen/"
+    val base = "https://my.looker.com:19999"
+    val apiVersion = "3.1"
+    val userPath = "/user"
+
+    val options = TransportSettings(base, apiVersion)
+    val xp = Transport(options)
+    val qp: Values = mapOf("a" to 1, "b" to false, "c" to "d e", "skip" to null)
+    val mockAuth: Authenticator = { init: RequestSettings -> RequestSettings(HttpMethod.GET, "bogus") }
+    val params = "?a=1&b=false&c=d+e"
+
+    @test fun testFullPath() {
+        var actual = xp.makePath(fullPath)
+        assertEquals(fullPath, actual)
+        actual = xp.makePath(fullPath, authenticator = mockAuth)
+        assertEquals(fullPath, actual)
+        actual = xp.makePath(fullPath, qp, mockAuth)
+        assertEquals(fullPath+params, actual)
+    }
+
+    @test fun testRelativePath() {
+        var actual = xp.makePath(userPath)
+        assertEquals("$base$userPath", actual)
+        actual = xp.makePath(userPath, authenticator = mockAuth)
+        assertEquals("$base/api/$apiVersion$userPath", actual)
+        actual = xp.makePath(userPath, qp, mockAuth)
+        assertEquals("$base/api/$apiVersion$userPath$params", actual)
+    }
+
+    fun <T> ok(response: SDKResponse): T {
+        when(response) {
+            is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
+            is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
+            else -> throw Error("Fail!!")
+        }
+    }
+
+    @test fun testFullRequest() {
+        val actual = ok<String>(xp.request<String>(HttpMethod.GET,fullPath))
+        assertTrue(actual.contains("One SDK to rule them all, and in the codegen bind them"))
+    }
+
+}

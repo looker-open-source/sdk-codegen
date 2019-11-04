@@ -95,13 +95,14 @@ class modelsTests: XCTestCase {
         var is_bool: Variant
         var nullable: Variant
     }
-    
+        
     struct Simple : Codable {
         var want_string: String?
         var want_int: Int?
         var want_dub: Double?
         var not_a_date: String?
         var is_bool: Bool?
+        var uri: URI?
     }
     
     // TODO figure out how to coerce String types to String with sloppy JSON
@@ -115,6 +116,23 @@ class modelsTests: XCTestCase {
             print(error)
             XCTAssertNil(error)
         }
+    }
+
+    func testJsonUri() {
+        do {
+            var item : Simple = try deserialize(#"{"uri":"/projects/cucu_thelook_1552930443_project/files/business_pulse.dashboard.lookml?line=1"}"#)
+            print("strict passed")
+            XCTAssertNotNil(item)
+            XCTAssertEqual(item.uri!, "/projects/cucu_thelook_1552930443_project/files/business_pulse.dashboard.lookml?line=1")
+            item = try deserialize(#"{"uri":null}"#)
+            print("strict null passed")
+            XCTAssertNotNil(item)
+            XCTAssertNil(item.want_string, "uri should be nil")
+        } catch {
+            print(error)
+            XCTAssertNil(error)
+        }
+
     }
     
     func testJsonSimpleString() {
@@ -146,10 +164,10 @@ class modelsTests: XCTestCase {
             print("strict passed")
             XCTAssertNotNil(item)
             XCTAssertEqual(item.want_int, 4)
-            item = try deserialize(#"{"want_int":"4"}"#)
-            print("lazy passed")
+            item = try deserialize(#"{"want_int":null}"#)
+            print("null passed")
             XCTAssertNotNil(item)
-            XCTAssertEqual(item.want_int, 4)
+            XCTAssertNil(item.want_int)
         } catch {
             print(error)
             XCTAssertNil(error)
