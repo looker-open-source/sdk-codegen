@@ -1,7 +1,4 @@
-import com.looker.rtl.ApiSettingsIniFile
-import com.looker.rtl.SDKResponse
-import com.looker.rtl.Transport
-import com.looker.rtl.UserSession
+import com.looker.rtl.*
 import com.looker.sdk.*
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.apache.Apache
@@ -13,9 +10,11 @@ import org.apache.http.ssl.SSLContextBuilder
 import kotlin.test.assertEquals
 import org.junit.Test as test
 import junit.framework.Assert.assertTrue
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class TestMethods {
+    // TODO dynamically local ini file in tests. Possibly make into test initializer utils
 //    val localIni = "/Users/Looker/Documents/sdk_codegen/looker.ini"
     val localIni = "/Users/Looker/sdk-codegen/looker.ini"
     val settings = ApiSettingsIniFile(localIni, "Looker")
@@ -39,6 +38,16 @@ class TestMethods {
     val session = UserSession(settings, Transport(settings, client))
 
     val sdk = LookerSDK(session)
+
+    @test fun testMe() {
+        val me = sdk.ok<User>(sdk.me())
+        val creds = me.credentials_api3
+        assertNotNull(me)
+        assertNotNull(me.id)
+        assertNotNull(creds)
+        assertTrue(creds.count() > 0)
+        assertNotNull(creds[0].client_id)
+    }
 
     @test fun testCreateQuery() {
         val response = sdk.create_query(WriteQuery("thelook", "users", arrayOf("users.count")))
@@ -66,7 +75,9 @@ class TestMethods {
         assertTrue(list.count() > 0, "Got looks?")
         for (item in list) {
             item.id?.let {id ->
-                val actual = sdk.ok<Look>(sdk.look(id))
+                // Workaround for JSON parsing failure
+                val actual = sdk.ok<LookWithQuery>(sdk.look(id, fields = Safe.Look))
+//                val actual = sdk.ok<LookWithQuery>(sdk.look(id))
                 val gotId = actual.id
                 assertEquals(gotId, id)
             }
@@ -78,7 +89,9 @@ class TestMethods {
         assertTrue(list.count() > 0, "Got dashboards?")
         for (item in list) {
             item.id?.let {id ->
-                val actual = sdk.ok<Dashboard>(sdk.dashboard(id))
+                // Workaround for JSON parsing failure
+                // edit_uri sometimes can't be parsed to URL either .. need wrapper type like SdkUrl for safe parsing?
+                val actual = sdk.ok<Dashboard>(sdk.dashboard(id, fields = Safe.Dashboard))
                 val gotId = actual.id
                 assertEquals(gotId, id)
             }

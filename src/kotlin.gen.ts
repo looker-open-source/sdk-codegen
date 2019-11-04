@@ -97,7 +97,7 @@ package com.looker.sdk
 
 package com.looker.sdk
 
-import java.net.URL
+import java.net.*
 import java.util.*
 `
   }
@@ -346,7 +346,7 @@ import java.util.*
       'password': {name: 'Password', default: mt},
       'byte': {name: 'binary', default: mt},
       'boolean': {name: 'Boolean', default: mt},
-      'uri': {name: 'URL', default: mt},
+      'uri': {name: 'URI', default: mt},
       'url': {name: 'URL', default: mt},
       'datetime': {name: 'Date', default: mt}, // TODO is there a default expression for datetime?
       'date': {name: 'Date', default: mt}, // TODO is there a default expression for date?

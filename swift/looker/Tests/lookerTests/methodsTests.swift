@@ -63,11 +63,11 @@ class methodsTests: XCTestCase {
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
-        let list = sdk.ok(sdk.all_looks(fields:Safe.Look))
+        let list = sdk.ok(sdk.all_looks())
         XCTAssertNotNil(list)
         XCTAssertTrue(list.count > 0, "\(list.count) looks")
         for item in list {
-            let look = sdk.ok(sdk.look(item.id!, fields:Safe.Look))
+            let look = sdk.ok(sdk.look(item.id!))
             XCTAssertNotNil(look)
             XCTAssertEqual(item.id!, look.id!)
         }
@@ -79,9 +79,10 @@ class methodsTests: XCTestCase {
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
-        let list = sdk.ok(sdk.all_dashboards(fields:Safe.DashboardBase))
+        let list = sdk.ok(sdk.all_dashboards())
         for item in list {
             let id = item.id!.getString()
+//            let dashboard = sdk.ok(sdk.dashboard(id))
             let dashboard = sdk.ok(sdk.dashboard(id, fields:Safe.Dashboard))
             XCTAssertNotNil(dashboard, "Dashboard \(id) should be gotten")
             XCTAssertEqual(id, dashboard.id!.getString())
@@ -92,4 +93,39 @@ class methodsTests: XCTestCase {
         _ = sdk.authSession.logout()
 
     }
+
+    func testGetAllSpaces() {
+        let settings = config!
+        let xp = BaseTransport(settings)
+        let auth = AuthSession(settings, xp)
+        let sdk = LookerSDK(auth)
+        let list = sdk.ok(sdk.all_spaces())
+        XCTAssertNotNil(list)
+        XCTAssertTrue(list.count > 0, "\(list.count) spaces")
+        for item in list {
+            let actual = sdk.ok(sdk.space((item.id?.getString())!))
+            XCTAssertNotNil(actual)
+            let id = actual.id?.getString()
+            XCTAssertEqual(item.id?.getString(), id!)
+        }
+        _ = sdk.authSession.logout()
+    }
+    
+    func testGetAllFolders() {
+        let settings = config!
+        let xp = BaseTransport(settings)
+        let auth = AuthSession(settings, xp)
+        let sdk = LookerSDK(auth)
+        let list = sdk.ok(sdk.all_folders())
+        XCTAssertNotNil(list)
+        XCTAssertTrue(list.count > 0, "\(list.count) folders")
+        for item in list {
+            let actual = sdk.ok(sdk.folder((item.id?.getString())!))
+            XCTAssertNotNil(actual)
+            let id = actual.id?.getString()
+            XCTAssertEqual(item.id?.getString(), id!)
+        }
+        _ = sdk.authSession.logout()
+    }
+
 }
