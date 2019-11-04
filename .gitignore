@@ -19,3 +19,8 @@ package-lock.json
 **/*.xcodeproj
 **/xcuserdata/
 kotlin/.gradle/*
+.gradle/*
+kotlin/.*
+kotlin/bin/*
+kotlin/build/*
+kotlin/out/*
