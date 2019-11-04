@@ -1,6 +1,6 @@
 # Looker SDK
 
-The Looker SDK for Kotlin provides a convenient way to communicate with the Looker API available on your Looker server. 
+The Looker SDK for Kotlin provides a convenient way to communicate with the Looker API available on your Looker server.
 
 **DISCLAIMER**: This is an _alpha_ version of the Looker SDK, using a completely new code generator developed by Looker. Implementations are still subject to major change. If you run into problems with the SDK, feel free to [report an issue](https://github.com/looker-open-source/sdk-codegen/issues), and please indicate which language SDK you're using in the report.
 
@@ -106,6 +106,12 @@ val look = sdk.ok<LookWithQuery>(sdk.look(id, fields = Safe.Look))
 
 /// safely get a dashboard
 val actual = sdk.ok<Dashboard>(sdk.dashboard(id, fields = Safe.Dashboard))
+```
+
+**IMPORTANT**: You'll also want to ensure the <src/main/com/looker/sdk/models.kt> `SpaceBase` struct `parent_id` is optional. If it's not, make it look like this:
+
+```kotlin
+  var parent_id: String? = null,
 ```
 
 Enjoy, and thanks for trying out the bleeding edge!

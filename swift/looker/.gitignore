@@ -2,3 +2,6 @@
 /.build
 /Packages
 xcuserdata/
+**/.idea/*
+.idea/*
+

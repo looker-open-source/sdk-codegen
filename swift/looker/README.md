@@ -60,7 +60,7 @@ let config = try? ApiConfig("looker.ini")
 /// Use the standard transport based on URLSession
 let xp = BaseTransport(settings)
 
-/// Use the authentication session manager to automatically handle session expiration 
+/// Use the authentication session manager to automatically handle session expiration
 /// See the section below for more on `AuthSession`
 let auth = AuthSession(settings, xp)
 
@@ -97,6 +97,15 @@ There are still some issues processing the full return values of some of the mor
 let dashboard = sdk.ok(sdk.dashboard(id, fields:Safe.Dashboard))
 
 ```
+
+**IMPORTANT**: You'll also want to ensure the <sdk/models.swift> `SpaceBase` struct `parent_id` is optional. If it's not, make it look like this:
+
+```swift
+    var parent_id: Variant?
+```
+
+The `Variant` enum was created to tolerate discrepancies in JSON payloads that don't always match the strict structure format specification. This is primarily for IDs that are specified as `String` but sometimes appear as `Int` in the JSON payload. This will be addressed before the Swift SDK is out of beta.
+
 ## Classes vs. Structs
 
 Both the [Swift documentation](https://developer.apple.com/documentation/swift/choosing_between_structures_and_classes) and LearnAppMaking has an  [overview of Swift classes vs. structs](https://learnappmaking.com/struct-vs-class-swift-how-to/) explain the choices between structs and classes in Swift.
