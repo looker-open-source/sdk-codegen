@@ -57,6 +57,9 @@ import looker
 /// read the Looker configuration file
 let config = try? ApiConfig("looker.ini")
 
+/// unwrap optional config results
+let settings = config! 
+
 /// Use the standard transport based on URLSession
 let xp = BaseTransport(settings)
 
