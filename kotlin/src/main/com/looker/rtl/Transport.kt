@@ -141,7 +141,7 @@ class Transport(val options: TransportSettings) {
     fun makePath(
             path: String,
             queryParams: Values = mapOf(),
-            authenticator: Authenticator? = null
+            authenticator: Authenticator? = null // TODO figure out why ::defaultAuthenticator is matching when it shouldn't
     ): String {
         return if (path.startsWith("http://", true)
                 || path.startsWith("https://", true)) {

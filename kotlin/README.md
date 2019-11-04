@@ -52,32 +52,15 @@ When the SDK is installed and the server location and API credentials are config
 Verify authentication works and that API calls will succeed with code similar to the following:
 
 ```kotlin
-val localIni = "/Users/Looker/sdk-codegen/looker.ini"
+val localIni = "./looker.ini"
 val settings = ApiSettingsIniFile(localIni, "Looker")
-
-val client: HttpClient = HttpClient(Apache) {
-    install(JsonFeature) {
-        serializer = JacksonSerializer()
-    }
-    engine {
-        customizeClient {
-            setSSLContext(
-                    SSLContextBuilder
-                            .create()
-                            .loadTrustMaterial(TrustSelfSignedStrategy())
-                            .build()
-            )
-            setSSLHostnameVerifier(NoopHostnameVerifier())
-        }
-    }
-}
-val session = UserSession(settings, Transport(settings, client))
-
+val session = UserSession(settings, Transport(settings))
 val sdk = LookerSDK(session)
+// Verify minimal SDK call works
 val me = sdk.ok<User>(sdk.me())
 
 /// continue making SDK calls
-val users = sdk.ok<Array<User>>(sdk.all_users())
+val users = sdk.ok<Array<User>>(sdk.all_users())}
 ```
 
 ## Using AuthSession for automatic authentication

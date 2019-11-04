@@ -14,11 +14,13 @@ import java.io.File
 import java.lang.Thread.sleep
 
 class KotlinExample {
+    // TODO dynamically resolve the ini file location
     val localConfig = "/Users/Looker/Documents/sdk_codegen/looker.ini"
     val settings = ApiSettingsIniFile(localConfig, "Looker")
 
     /**
-     * Note: This is only to work with self-signed certs... this should probably be removed before this is posted anywhere
+     * Note: `TrustSelfSignedStrategy` should never be used in production. It is only for testing with self-signed certs
+     * on local instances.
      */
     val client: HttpClient = HttpClient(Apache) {
         install(JsonFeature) {
