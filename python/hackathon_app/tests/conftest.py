@@ -60,15 +60,59 @@ def instantiate_registrations(spreadsheet_client, spreadsheet):
     return Registrations(client=client, spreadsheet_id=spreadsheet["spreadsheetId"])
 
 
-@pytest.fixture(name="spreadsheet")
-def create_test_sheet(test_data, spreadsheet_client, drive_client):
-    """Create a test sheet and populated it with test data"""
+@pytest.fixture(scope="session")
+def create_test_sheet(spreadsheet_client, test_data, drive_client):
+    """Create a test sheet and populate it with test data"""
     request = spreadsheet_client.create(body=test_data)
     response = request.execute()
-
     yield response
-
     drive_client.files().delete(fileId=response["spreadsheetId"]).execute()
+
+
+@pytest.fixture(name="spreadsheet")
+def reset_test_sheet(create_test_sheet, test_data, spreadsheet_client, drive_client):
+    """Reset spreadsheet values between tests."""
+
+    spreadsheet_id = create_test_sheet["spreadsheetId"]
+    spreadsheet_client.values().batchClear(
+        spreadsheetId=spreadsheet_id,
+        body={"ranges": ["users!A1:end", "hackathons!A1:end", "registrations!A1:end"]},
+    ).execute()
+
+    for sheet in create_test_sheet["sheets"]:
+        if sheet["properties"]["title"] == "users":
+            user_sheet_id = sheet["properties"]["sheetId"]
+        if sheet["properties"]["title"] == "hackathons":
+            hackathon_sheet_id = sheet["properties"]["sheetId"]
+        if sheet["properties"]["title"] == "registrations":
+            registration_sheet_id = sheet["properties"]["sheetId"]
+    updates = {
+        "requests": [
+            {
+                "appendCells": {
+                    "sheetId": user_sheet_id,
+                    "fields": "userEnteredValue",
+                    "rows": test_data["sheets"][0]["data"][0]["rowData"],
+                }
+            },
+            {
+                "appendCells": {
+                    "sheetId": hackathon_sheet_id,
+                    "fields": "userEnteredValue",
+                    "rows": test_data["sheets"][1]["data"][0]["rowData"],
+                }
+            },
+            {
+                "appendCells": {
+                    "sheetId": registration_sheet_id,
+                    "fields": "userEnteredValue",
+                    "rows": test_data["sheets"][2]["data"][0]["rowData"],
+                }
+            },
+        ]
+    }
+    spreadsheet_client.batchUpdate(spreadsheetId=spreadsheet_id, body=updates).execute()
+    yield create_test_sheet
 
 
 @pytest.fixture(name="test_users")
