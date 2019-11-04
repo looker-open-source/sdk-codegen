@@ -1,8 +1,6 @@
-import pytest  # type: ignore
+import datetime
 
 from sheets import User, Users
-
-DATE_FORMAT = "%m/%d/%Y"
 
 
 def test_rows_returns_users(users: Users, test_users):
@@ -38,10 +36,11 @@ def test_create_user(users: Users):
         role="BI analyst",
         tshirt_size="M",
     )
-    users.create(new_user)
+    users.save(new_user)
     all_users = users.rows()
     user = all_users[-1]
     assert user == new_user
+    assert user.date_created < datetime.datetime.now(tz=datetime.timezone.utc)
 
 
 def test_update_user_updates(users: Users):
@@ -55,13 +54,7 @@ def test_update_user_updates(users: Users):
     updated_user.organization = "updated_org"
     updated_user.organization = "updated_role"
     updated_user.tshirt_size = "update_size"
-    users.update(updated_user)
+    users.save(updated_user)
 
-    all_users = users.rows()
-    for u in all_users:
-        if u.email == updated_user.email:
-            user = u
-            break
-    else:
-        pytest.fail("User not found")
+    user = users.find(updated_user.email)
     assert user == updated_user

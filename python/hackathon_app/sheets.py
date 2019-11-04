@@ -13,6 +13,17 @@ NIL = "\x00"
 DATE_FORMAT = "%m/%d/%Y"
 
 
+@attr.s(auto_attribs=True, kw_only=True)
+class RegisterUser:
+    hackathon: str
+    first_name: str
+    last_name: str
+    email: str
+    organization: str
+    role: str
+    tshirt_size: str = ""
+
+
 class Sheets:
     """An API for manipulating the Google Sheet containing hackathon data."""
 
@@ -40,15 +51,23 @@ class Sheets:
         """Get names of active hackathons."""
         return self.hackathons.get_upcoming()
 
-    def register_user(self, *, hackathon: str, user: "User"):
+    def register_user(self, register_user: RegisterUser):
         """Register user to a hackathon"""
-        if self.users.find(user.email):
-            self.users.update(user)
-        else:
-            self.users.create(user)
-        registrant = Registrant(user_email=user.email, hackathon_name=hackathon)
+        user = self.users.find(register_user.email) or User()
+        user.first_name = register_user.first_name
+        user.last_name = register_user.last_name
+        user.email = register_user.email
+        user.organization = register_user.organization
+        user.role = register_user.role
+        user.tshirt_size = register_user.tshirt_size
+        self.users.save(user)
+        registrant = Registrant(
+            user_email=user.email, hackathon_name=register_user.hackathon
+        )
         if not self.registrations.is_registered(registrant):
             self.registrations.register(registrant)
+
+        return user
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -72,7 +91,6 @@ class WhollySheet(Generic[TModel]):
         structure: Type[TModel],
         key: str,
         converter=converter,
-        immutable_fields: Optional[List[str]] = None,
     ):
         self.client = client
         self.spreadsheet_id = spreadsheet_id
@@ -81,9 +99,12 @@ class WhollySheet(Generic[TModel]):
         self.structure = structure
         self.key = key
         self.converter = converter
-        self.immutable_fields = ["id"]
-        if immutable_fields:
-            self.immutable_fields.extend(immutable_fields)
+
+    def save(self, model: TModel):
+        if model.id:
+            self.update(model)
+        else:
+            self.insert(model)
 
     def insert(self, model: TModel):
         """Insert data as rows into sheet"""
@@ -127,11 +148,6 @@ class WhollySheet(Generic[TModel]):
 
     def update(self, model: TModel):
         """Update user"""
-        ex_model = self.find(getattr(model, self.key))
-        if not ex_model:
-            raise SheetError("No entry found.")
-        for field in self.immutable_fields:
-            setattr(model, field, getattr(ex_model, field))
         try:
             serialized_ = self.converter.unstructure(model)
             serialized = self._convert_to_list(serialized_)
@@ -186,13 +202,18 @@ class WhollySheet(Generic[TModel]):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class User(Model):
-    first_name: str
-    last_name: str
-    email: str
-    date_created: Optional[datetime.datetime] = None
-    organization: str
-    role: str
-    tshirt_size: str
+    first_name: str = ""
+    last_name: str = ""
+    email: str = ""
+    date_created: datetime.datetime = attr.ib(
+        default=attr.Factory(lambda: datetime.datetime.now(tz=datetime.timezone.utc))
+    )
+    organization: str = ""
+    role: str = ""
+    tshirt_size: str = ""
+    client_id: str = ""
+    client_secret: str = ""
+    setup_link: str = ""
 
 
 class Users(WhollySheet[User]):
@@ -203,13 +224,7 @@ class Users(WhollySheet[User]):
             sheet_name="users",
             structure=User,
             key="email",
-            immutable_fields=["date_created"],
         )
-
-    def create(self, user: User):
-        """Insert user details in the users sheet"""
-        user.date_created = datetime.datetime.now(tz=datetime.timezone.utc)
-        super().insert(user)
 
 
 @attr.s(auto_attribs=True, kw_only=True)

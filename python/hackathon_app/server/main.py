@@ -86,7 +86,8 @@ def register() -> Any:
         first_name = form.data["first_name"]
         last_name = form.data["last_name"]
         email = form.data["email"]
-        sheets_user = sheets.User(
+        register_user = sheets.RegisterUser(
+            hackathon=hackathon,
             first_name=first_name,
             last_name=last_name,
             email=email,
@@ -99,19 +100,28 @@ def register() -> Any:
             cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
         )
         try:
-            sheets_client.register_user(hackathon=hackathon, user=sheets_user)
+            sheets_user = sheets_client.register_user(register_user)
         except sheets.SheetError as ex:
             app.logger.error(ex, exc_info=True)
             response = {"ok": False, "message": "There was a problem, try again later."}
         else:
             try:
-                looker.register_user(
+                client_id = looker.register_user(
                     hackathon=hackathon,
                     first_name=first_name,
                     last_name=last_name,
                     email=email,
                 )
             except looker.RegisterError as ex:
+                app.logger.error(ex, exc_info=True)
+                response = {
+                    "ok": False,
+                    "message": "There was a problem, try again later.",
+                }
+            try:
+                sheets_user.client_id = client_id
+                sheets_client.users.save(sheets_user)
+            except sheets.SheetError as ex:
                 app.logger.error(ex, exc_info=True)
                 response = {
                     "ok": False,
