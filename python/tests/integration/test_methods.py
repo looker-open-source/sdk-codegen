@@ -291,6 +291,29 @@ def test_search_looks_title_fields_filter(sdk: mtds.LookerSDK):
     assert "Order" in look.title
     assert look.description is None
 
+def test_search_look_and_run(sdk: mtds.LookerSDK):
+    """run_look() should return CSV and JSON
+    CSV will use column descriptions
+    JSON will use column names
+    JSON_LABEL will use column descriptions
+    """
+    search_results = sdk.search_looks(title="Order%", fields="id, title")
+    assert isinstance(search_results, list)
+    assert len(search_results) > 0
+    look = search_results[0]
+    assert isinstance(look.id, int)
+    assert look.id > 0
+    assert "Order" in look.title
+    assert look.description is None
+    actual = sdk.run_look(look_id=look.id, result_format="csv")
+    assert "Orders Created Date" in actual
+    assert "Orders Count" in actual
+    actual = sdk.run_look(look_id=look.id, result_format="json")
+    assert "orders.created_date" in actual
+    assert "orders.count" in actual
+    actual = sdk.run_look(look_id=look.id, result_format="json_label")
+    assert "Orders Created Date" in actual
+    assert "Orders Count" in actual
 
 def create_query_request(q, limit: Optional[str] = None) -> ml.WriteQuery:
     return ml.WriteQuery(

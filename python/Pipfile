@@ -20,6 +20,7 @@ pytest-pudb = "*"
 pytest-mock = "*"
 twine = "*"
 pillow = "*"
+v = {editable = true,version = "*"}
 
 [packages]
 requests = "*"
