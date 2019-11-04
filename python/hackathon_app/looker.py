@@ -1,5 +1,6 @@
 import functools
-from typing import Sequence
+import re
+from typing import Dict, Sequence
 
 from looker_sdk import client, methods, models, error
 
@@ -9,7 +10,7 @@ LOOKER_GROUP_PREFIX = "Looker_Hack: "
 
 def register_user(
     *, hackathon: str, first_name: str, last_name: str, email: str
-) -> None:
+) -> str:
     sdk = client.setup()
 
     user = find_or_create_user(
@@ -18,11 +19,15 @@ def register_user(
     assert user.id
     if not user.credentials_email:
         create_email_credentials(sdk=sdk, user_id=user.id, email=email)
-    if not user.credentials_api3:
-        create_api3_credentials(sdk=sdk, user_id=user.id)
+    if user.credentials_api3:
+        client_id = user.credentials_api3[0].client_id
+    else:
+        client_id = create_api3_credentials(sdk=sdk, user_id=user.id).client_id
     set_user_group(sdk=sdk, user_id=user.id, hackathon=hackathon)
     set_user_attributes(sdk=sdk, user_id=user.id, hackathon=hackathon)
     disable_user(sdk=sdk, user_id=user.id)
+    assert client_id
+    return client_id
 
 
 def find_or_create_user(
@@ -53,20 +58,26 @@ def find_or_create_user(
     return user
 
 
-def enable_users_by_hackathons(hackathons: Sequence[str]) -> None:
+def enable_users_by_hackathons(hackathons: Sequence[str]) -> Dict[str, str]:
     sdk = client.setup()
     groups = {g.name: g.id for g in sdk.all_groups(fields="id,name")}
+    ret = {}
     for hackathon in hackathons:
         try:
             group_id = groups[f"{LOOKER_GROUP_PREFIX}{hackathon}"]
         except KeyError:
             raise RegisterError(f"No group found for hackathon: '{hackathon}'")
         for user in sdk.search_users(group_id=group_id):
-            if user.is_disabled:
-                assert user.id
-                sdk.update_user(
-                    user_id=user.id, body=models.WriteUser(is_disabled=False)
-                )
+            assert user.id
+            assert user.email
+            sdk.update_user(user_id=user.id, body=models.WriteUser(is_disabled=False))
+            password_reset_url = sdk.create_user_credentials_email_password_reset(
+                user_id=user.id, expires=False
+            ).password_reset_url
+            assert password_reset_url
+            setup = re.sub("password/reset", "account/setup", password_reset_url)
+            ret[user.email] = setup
+    return ret
 
 
 def try_to(func):
@@ -91,8 +102,12 @@ def create_email_credentials(*, sdk: methods.LookerSDK, user_id: int, email: str
 
 
 @try_to
-def create_api3_credentials(*, sdk: methods.LookerSDK, user_id: int):
-    sdk.create_user_credentials_api3(user_id=user_id, body=models.CredentialsApi3())
+def create_api3_credentials(
+    *, sdk: methods.LookerSDK, user_id: int
+) -> models.CredentialsApi3:
+    return sdk.create_user_credentials_api3(
+        user_id=user_id, body=models.CredentialsApi3()
+    )
 
 
 @try_to

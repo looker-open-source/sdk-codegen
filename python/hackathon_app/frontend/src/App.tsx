@@ -154,10 +154,6 @@ const RegisterScene: React.FC<{path: string}> = () => {
                   XL
                 </Label>
                 <Label>
-                  <Radio type="radio" name="tshirt_size" value="XL" />
-                  XL
-                </Label>
-                <Label>
                   <Radio type="radio" name="tshirt_size" value="XXL" />
                   XXL
                 </Label>

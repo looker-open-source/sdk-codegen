@@ -20,28 +20,18 @@ def main(filename: str, hackathon: str, enable: bool):
     f = open(filename)
     registrants = csv.DictReader(f)
 
+    sheets_client = sheets.Sheets(
+        spreadsheet_id=os.environ["GOOGLE_SHEET_ID"],
+        cred_file=os.environ["GOOGLE_APPLICATION_CREDENTIALS"],
+    )
     count = 0
     for registrant in registrants:
-        first_name = registrant["first_name"]
-        last_name = registrant["last_name"]
-        email = registrant["email"]
+        registrant["hackathon"] = hackathon
+        click.secho(f"Registering {registrant['email']}", fg="green")
 
-        click.secho(f"Registering {email}", fg="green")
-
-        sheets_user = sheets.User(
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            organization=registrant.get("organization", ""),
-            role=registrant.get("role", ""),
-            tshirt_size=registrant.get("tshirt_size", ""),
-        )
-        sheets_client = sheets.Sheets(
-            spreadsheet_id=os.environ["GOOGLE_SHEET_ID"],
-            cred_file=os.environ["GOOGLE_APPLICATION_CREDENTIALS"],
-        )
+        register_user = sheets.RegisterUser(**registrant)
         try:
-            sheets_client.register_user(hackathon=hackathon, user=sheets_user)
+            sheets_user = sheets_client.register_user(register_user)
         except sheets.SheetError as ex:
             click.secho(
                 f"Failed to add to sheet. Stopping after {count} users", fg="red"
@@ -50,11 +40,11 @@ def main(filename: str, hackathon: str, enable: bool):
             raise ex
         else:
             try:
-                looker.register_user(
+                client_id = looker.register_user(
                     hackathon=hackathon,
-                    first_name=first_name,
-                    last_name=last_name,
-                    email=email,
+                    first_name=register_user.first_name,
+                    last_name=register_user.last_name,
+                    email=register_user.email,
                 )
             except looker.RegisterError as ex:
                 f.close()
@@ -62,10 +52,19 @@ def main(filename: str, hackathon: str, enable: bool):
                     f"Failed to add to Looker. Stopping after {count} users", fg="red"
                 )
                 raise ex
+            sheets_user.client_id = client_id
+            sheets_client.users.save(sheets_user)
         count += 1
     click.secho(f"Registered {count} users", fg="green")
+
     if enable:
-        looker.enable_users_by_hackathons([hackathon])
+        for email, reset in looker.enable_users_by_hackathons([hackathon]).items():
+            sheets_user = sheets_client.users.find(email)
+            if not sheets_user:
+                click.secho(f"Failed to find {email} in spreadsheet", fg="red")
+                continue
+            sheets_user.setup_link = reset
+            sheets_client.users.update(sheets_user)
         click.secho(f"Enabled {count} users", fg="green")
     f.close()
 
