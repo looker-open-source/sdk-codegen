@@ -38,7 +38,9 @@ import org.junit.Test as test
 
 
 class TestUserSession {
-//    val localIni = "/Users/looker/Documents/sdk_codegen/looker.ini"
+    // TODO dynamically local ini file in tests. Possibly make into test initializer utils
+
+    //    val localIni = "/Users/looker/Documents/sdk_codegen/looker.ini"
     val localIni = "/Users/looker/sdk-codegen/looker.ini"
     val settings = ApiSettingsIniFile(localIni, "Looker")
 
