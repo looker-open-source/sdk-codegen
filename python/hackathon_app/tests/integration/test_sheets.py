@@ -35,7 +35,8 @@ def test_register_user_registers(
     last_registrant = all_registrants[-1]
     assert last_registrant.user_email == new_user.email
     assert last_registrant.hackathon_name == "sanfrancisco_2019"
-    assert last_registrant.date_registered == datetime.date.today()
+    assert last_registrant.date_registered
+    assert last_registrant.date_registered.date() == datetime.date.today()
     assert last_registrant.attended is None
 
 
@@ -59,14 +60,16 @@ def test_register_user_registers_when_user_exists(
     )
     sheets.register_user(hackathon="newhackathon_2019", user=new_user)
 
-    all_users = users.rows()
-    assert len(all_users) == len(test_users)
+    all_users = sorted(users.rows(), key=lambda a: a.id)
+    test_users = sorted(test_users, key=lambda t: t.id)
+    assert all_users == test_users
 
     all_registrants = registrations.rows()
     last_registrant = all_registrants[-1]
     assert last_registrant.user_email == existing_user.email
     assert last_registrant.hackathon_name == "newhackathon_2019"
-    assert last_registrant.date_registered == datetime.date.today()
+    assert last_registrant.date_registered
+    assert last_registrant.date_registered.date() == datetime.date.today()
     assert last_registrant.attended is None
 
 

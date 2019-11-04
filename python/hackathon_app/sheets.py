@@ -46,12 +46,7 @@ class Sheets:
             self.users.update(user)
         else:
             self.users.create(user)
-        registrant = Registrant(
-            user_email=user.email,
-            hackathon_name=hackathon,
-            date_registered=datetime.date.today(),
-            attended=None,
-        )
+        registrant = Registrant(user_email=user.email, hackathon_name=hackathon)
         if not self.registrations.is_registered(registrant):
             self.registrations.register(registrant)
 
@@ -194,7 +189,7 @@ class User(Model):
     first_name: str
     last_name: str
     email: str
-    date_created: Optional[datetime.date] = None
+    date_created: Optional[datetime.datetime] = None
     organization: str
     role: str
     tshirt_size: str
@@ -213,7 +208,7 @@ class Users(WhollySheet[User]):
 
     def create(self, user: User):
         """Insert user details in the users sheet"""
-        user.date_created = datetime.date.today()
+        user.date_created = datetime.datetime.now(tz=datetime.timezone.utc)
         super().insert(user)
 
 
@@ -221,7 +216,7 @@ class Users(WhollySheet[User]):
 class Hackathon(Model):
     name: str
     location: str
-    date: datetime.date
+    date: datetime.datetime
     duration_in_days: int
 
 
@@ -236,12 +231,12 @@ class Hackathons(WhollySheet[Hackathon]):
         )
 
     def get_upcoming(
-        self, *, cutoff: Optional[datetime.date] = None
+        self, *, cutoff: Optional[datetime.datetime] = None
     ) -> Sequence[Hackathon]:
-        today = datetime.date.today()
+        now = datetime.datetime.now(tz=datetime.timezone.utc)
         ret = []
         for hackathon in self.rows():
-            if hackathon.date < today:
+            if hackathon.date < now:
                 continue
             if cutoff and hackathon.date > cutoff:
                 continue
@@ -253,7 +248,7 @@ class Hackathons(WhollySheet[Hackathon]):
 class Registrant(Model):
     user_email: str
     hackathon_name: str
-    date_registered: datetime.date
+    date_registered: Optional[datetime.datetime] = None
     attended: Optional[bool] = None
 
 
@@ -281,6 +276,7 @@ class Registrations(WhollySheet[Registrant]):
 
     def register(self, registrant: Registrant):
         """Register user by inserting registrant details into registrations sheet"""
+        registrant.date_registered = datetime.datetime.now(tz=datetime.timezone.utc)
         super().insert(registrant)
 
 
@@ -289,16 +285,10 @@ class SheetError(Exception):
 
 
 converter.register_structure_hook(
-    datetime.date,
-    lambda d, _: datetime.datetime.strptime(  # type: ignore
-        d, DATE_FORMAT
-    ).date(),
+    datetime.datetime, lambda d, _: datetime.datetime.fromisoformat(d)  # type: ignore
 )
 converter.register_unstructure_hook(
-    datetime.date,
-    lambda d: datetime.date.strftime(  # type: ignore
-        d, DATE_FORMAT
-    ),
+    datetime.datetime, lambda d: d.isoformat()  # type: ignore
 )
 
 
