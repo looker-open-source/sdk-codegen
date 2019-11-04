@@ -35,6 +35,26 @@ import { Readable } from "readable-stream"
 export const agentTag = `TS-SDK ${sdkVersion}`
 
 /**
+ * Set to `true` to follow streaming process
+ */
+const tracing = false
+
+/**
+ * trivial tracing function that should be replaced with a log plugin
+ * @param message description for trace
+ * @param info any additional information to produce for output
+ */
+export function trace(message: string, info?: any) {
+  if (tracing) {
+    console.debug(message)
+    if (info) {
+      console.debug({ info })
+    }
+  }
+}
+
+
+/**
  * ResponseMode for an HTTP request - either binary or "string"
  */
 export enum ResponseMode {
@@ -149,7 +169,7 @@ export interface ITransport {
   request<TSuccess, TError>(
     method: HttpMethod,
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>,
@@ -159,7 +179,7 @@ export interface ITransport {
     callback: (readable: Readable) => Promise<T>,
     method: HttpMethod,
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>,
@@ -276,26 +296,44 @@ export function isUtf8(contentType: string) {
 }
 
 /**
+ * Used for name/value pair collections like for QueryParams
+ */
+export type Values = {[key:string]: any} | null | undefined
+
+/**
+ * Converts `Values` to query string parameter format
+ * @param values Name/value collection to encode
+ * @returns {string} query string parameter formatted values. Both `false` and `null` are included. Only `undefined` are omitted.
+ */
+export function encodeParams(values?: Values) {
+  if (!values) return ""
+
+  const keys = Object.keys(values)
+  const params = keys
+    .filter(k => values[k] !== undefined) // `null` and `false` will both be passe
+    .map(k => k + '=' + encodeURIComponent(values[k]))
+    .join('&')
+  return params
+}
+
+/**
  * constructs the path argument including any optional query parameters
  * @param path the base path of the request
  * @param obj optional collection of query parameters to encode and append to the path
  */
-export function addQueryParams(path: string, obj?: { [key: string]: string }) {
+export function addQueryParams(path: string, obj?: Values ) {
   if (!obj) {
     return path
   }
-  const keys = Object.keys(obj)
-  if (keys.length === 0) {
-    return path
-  } else {
-    const qp = keys
-      .filter(k => obj[k]) // TODO test for "undefined" or omitted parameters
-      .map(k => k + '=' + encodeURIComponent(obj[k]))
-      .join('&')
-    return `${path}${qp ? '?' + qp : ''}`
-  }
+  const qp = encodeParams(obj)
+  return `${path}${qp ? '?' + qp : ''}`
 }
 
+/**
+ * SDK error handler
+ * @param result any kind of error
+ * @returns a new `Error` object with the failure message
+ */
 export function sdkError(result: any) {
   if ('message' in result && typeof result.message === 'string') {
     return new Error(result.message)
@@ -306,16 +344,3 @@ export function sdkError(result: any) {
   const error = JSON.stringify(result)
   return new Error(`Unknown error with SDK method ${error}`)
 }
-
-// TODO remove this permanently
-// /**
-//  * is the SDK running in node.js?
-//  */
-// export function isNodejs() {
-//   return (
-//     typeof 'process' !== 'undefined' &&
-//     process &&
-//     process.versions &&
-//     process.versions.node
-//   )
-// }

@@ -58,7 +58,7 @@ query_id: number`)
       expect(actual).toEqual(`/**
  * @param {number} limit Row limit (may override the limit in the saved query).
  */
-limit: number = 0`)
+limit?: number`)
     })
 
     it('required typed parameter', () => {
@@ -175,7 +175,7 @@ async create_user_credentials_email(
   /**
    * @param {string} fields Requested fields.
    */
-  fields: string = '',
+  fields?: string,
   options?: Partial<ITransportSettings>) {
 `
       const actual = gen.methodSignature('', method)

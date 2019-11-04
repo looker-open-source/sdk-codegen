@@ -27,7 +27,7 @@ import {
   HttpMethod,
   sdkError,
   IAuthorizer,
-  ITransportSettings,
+  ITransportSettings, Values,
 } from './transport'
 import { Readable } from "readable-stream"
 
@@ -81,7 +81,7 @@ export class APIMethods {
   async authRequest<TSuccess, TError>(
     method: HttpMethod,
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
@@ -111,7 +111,7 @@ export class APIMethods {
     callback: (readable: Readable) => Promise<T>,
     method: HttpMethod,
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     options?: Partial<ITransportSettings>
   )
@@ -146,7 +146,7 @@ export class APIMethods {
   /** Make a GET request */
   async get<TSuccess, TError>(
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
@@ -162,7 +162,7 @@ export class APIMethods {
   /** Make a HEAD request */
   async head<TSuccess, TError>(
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
@@ -178,7 +178,7 @@ export class APIMethods {
   /** Make a DELETE request */
   async delete<TSuccess, TError>(
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
@@ -194,7 +194,7 @@ export class APIMethods {
   /** Make a POST request */
   async post<TSuccess, TError>(
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
@@ -210,7 +210,7 @@ export class APIMethods {
   /** Make a PUT request */
   async put<TSuccess, TError>(
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
@@ -226,7 +226,7 @@ export class APIMethods {
   /** Make a PATCH request */
   async patch<TSuccess, TError>(
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {

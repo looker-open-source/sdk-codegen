@@ -25,33 +25,16 @@
 import {
   ISDKError,
   SDKResponse,
-  ITransport,
-  addQueryParams,
   ITransportSettings,
-  HttpMethod, Authenticator, agentTag,
+  HttpMethod, Authenticator, agentTag, trace,
 } from './transport'
 import { PassThrough, Readable } from 'readable-stream'
+import { BaseTransport } from './baseTransport'
 
-/**
- * Set to `true` to follow streaming process
- */
-const tracing = false
+export class BrowserTransport extends BaseTransport {
 
-function trace(entry: string, info?: any) {
-  if (tracing) {
-    console.debug(entry)
-    if (info) {
-      console.debug(info)
-    }
-  }
-}
-
-export class BrowserTransport implements ITransport {
-  apiPath = ''
-
-  constructor(private readonly options: ITransportSettings) {
-    this.options = options
-    this.apiPath = `${options.base_url}/api/${options.api_version}`
+  constructor(protected readonly options: ITransportSettings) {
+    super(options)
   }
 
   async request<TSuccess, TError>(
@@ -63,14 +46,12 @@ export class BrowserTransport implements ITransport {
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
     options = { ... this.options, ...options}
-    // is this an API-versioned call?
-    let requestPath =
-      (authenticator ? this.apiPath : options.base_url) +
-      addQueryParams(path, queryParams)
-    const props = this.initRequest(method, path, queryParams, body, authenticator, options)
+    const requestPath = this.makePath(path, options, queryParams, authenticator)
+    const props = await this.initRequest(method, body, authenticator, options)
     const req = fetch(
       requestPath,
-      props,
+      // @ts-ignore
+      props, // Weird package issues with unresolved imports for RequestInit :(
     )
 
     try {
@@ -94,44 +75,36 @@ export class BrowserTransport implements ITransport {
     }
   }
 
-  private initRequest(
+  private async initRequest(
     method: HttpMethod,
-    path: string,
-    queryParams?: any,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>,
   ) {
     options = options ? {...this.options, ...options} : this.options
-    let headers = new Headers({'User-Agent': agentTag})
+    let headers: {[key:string]: string} = {'x-looker-appid': agentTag}
     if (options && options.headers) {
       Object.keys(options.headers).forEach(key => {
-        headers.append(key, options!.headers![key])
+        headers[key] = options!.headers![key]
       })
     }
 
-    // if ('encoding' in options) init.encoding = options.encoding
-    //
-    // if (authenticator) {
-    //   // Automatic authentication process for the request
-    //   init = await authenticator(init)
-    // }
-
-    let init: RequestInit = {
+    let props = {
       body: body ? JSON.stringify(body) : undefined,
       headers: headers,
       credentials: 'same-origin',
-      // resolveWithFullResponse: true,
-      // rejectUnauthorized: this.verifySsl(options),
-      // timeout: this.timeout(options) * 1000,
-      // encoding: null, // null = requests are returned as binary so `Content-Type` dictates response format
-      // method,
       method,
     }
 
-    return init
+    if (authenticator) {
+      // Add authentication information to the request
+      props = await authenticator(props)
+    }
+
+    return props
   }
 
+  // TODO finish this method
   async stream<TSuccess>(
     callback: (readable: Readable) => Promise<TSuccess>,
     method: HttpMethod,
@@ -143,16 +116,17 @@ export class BrowserTransport implements ITransport {
   )
     : Promise<TSuccess> {
 
+    options = options ? {...this.options, ...options} : this.options
     const stream = new PassThrough()
+    const requestPath = this.makePath(path, options, queryParams, authenticator)
     const returnPromise = callback(stream)
     let init = await this.initRequest(
       method,
-      path,
-      queryParams,
       body,
       authenticator,
       options,
     )
+    trace(`requestPath: ${requestPath}`)
 
     const streamPromise = new Promise<void>((resolve, reject) => {
       trace(`[stream] beginning stream via download url`, init)

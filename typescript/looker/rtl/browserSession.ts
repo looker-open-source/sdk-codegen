@@ -25,10 +25,9 @@
 import { IApiSettings } from './apiSettings'
 import { IAuthorizer, IRequestInit, ITransport } from './transport'
 import { BrowserTransport } from './browserTransport'
-import { IAccessToken } from '../sdk/models'
+import { AuthToken } from './authToken'
 
 export class BrowserSession implements IAuthorizer {
-  sudoId: string = ''
   transport: ITransport
 
   constructor(public settings: IApiSettings, transport?: ITransport) {
@@ -56,30 +55,64 @@ export class BrowserSession implements IAuthorizer {
     return init
   }
 
-  async getToken(): Promise<IAccessToken> {
-    return new Promise<IAccessToken>(() => {
-      return {} as IAccessToken
-    })
-  }
-
-  isSudo(): boolean {
-    return !!this.sudoId
-  }
-
-  async login(sudoId?: string | number): Promise<IAccessToken> {
-    if (!!sudoId) {
-      throw new Error(
-        'Sudo functionality is not currently supported in BrowserSession',
-      )
-    }
-    // TODO support sudo directly in the Browser session?
-    return this.getToken()
-  }
-
+  /**
+   * Logout is not supported for a Browser Session
+   * @returns {Promise<boolean>}
+   */
   async logout(): Promise<boolean> {
     return new Promise<boolean>(() => false)
   }
 
+  // tslint:disable-next-line:no-empty
   reset(): void {
   }
 }
+
+/**
+ * An AuthSession class intended for use with proxied authentication
+ *
+ * Override the `authenticate()` method to implmenent a browser authentication hook
+ *
+ * Override `logout()` if you want to support session logout
+ *
+ */
+export abstract class ProxySession implements IAuthorizer {
+  activeToken = new AuthToken()
+  transport: ITransport
+
+  constructor(public settings: IApiSettings, transport?: ITransport) {
+    this.settings = settings
+    this.transport = transport || new BrowserTransport(settings)
+  }
+
+  /**
+   * Is the session active and authenticated?
+   * @returns `true` if the session is active
+   */
+  isAuthenticated() {
+    return this.activeToken.isActive()
+  }
+
+  /**
+   * Decorate the request properties with the required authentication information
+   *
+   * Override this class with the implementation for a specific proxied authentication workflow
+   *
+   * @param props the properties of the request
+   * @returns the same properties with authentication added
+   */
+  abstract async authenticate(props: any): Promise<any>
+
+  /**
+   * Logout does nothing for a proxy session by default.
+   *
+   * Override to support telling the proxy to log out the session
+   *
+   * @returns a false Promise
+   */
+  async logout(): Promise<boolean> {
+    return new Promise<boolean>(() => false)
+  }
+
+}
+
