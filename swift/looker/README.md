@@ -98,7 +98,7 @@ let dashboard = sdk.ok(sdk.dashboard(id, fields:Safe.Dashboard))
 
 ```
 
-**IMPORTANT**: You'll also want to ensure the <sdk/models.swift> `SpaceBase` struct `parent_id` is optional. If it's not, make it look like this:
+**IMPORTANT**: You'll also want to ensure the <sdk/models.swift> property `parent_id` is optional in the `FolderBase`, `Folder`, `SpaceBase` and `Space` structs. If it's not, make it look like this:
 
 ```swift
     var parent_id: Variant?

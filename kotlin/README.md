@@ -108,7 +108,7 @@ val look = sdk.ok<LookWithQuery>(sdk.look(id, fields = Safe.Look))
 val actual = sdk.ok<Dashboard>(sdk.dashboard(id, fields = Safe.Dashboard))
 ```
 
-**IMPORTANT**: You'll also want to ensure the <src/main/com/looker/sdk/models.kt> `SpaceBase` data class property `parent_id` is optional. If it's not, make it look like this:
+**IMPORTANT**: You'll also want to ensure the <src/main/com/looker/sdk/models.kt> property `parent_id` is optional in the `FolderBase`, `Folder`, `SpaceBase` and `Space` data classes. If it's not, make it look like this:
 
 ```kotlin
   var parent_id: String? = null,
