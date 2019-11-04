@@ -9,14 +9,16 @@ import sheets
 
 
 @click.command()
+@click.option("--limit", help="limit number of registrations")
 @click.option("--filename", help="CSV file containing registrations")
 @click.option("--hackathon", help="Hackathon name")
+@click.option("--limit", help="limit current run", default=0)
 @click.option(
     "--enable/--no-enable",
     default=False,
     help="Enable user accounts in hack.looker.com",
 )
-def main(filename: str, hackathon: str, enable: bool):
+def main(filename: str, hackathon: str, enable: bool, limit: int):
     f = open(filename)
     registrants = csv.DictReader(f)
 
@@ -55,6 +57,8 @@ def main(filename: str, hackathon: str, enable: bool):
             sheets_user.client_id = client_id
             sheets_client.users.save(sheets_user)
         count += 1
+        if limit and count == int(limit):
+            break
     click.secho(f"Registered {count} users", fg="green")
 
     if enable:

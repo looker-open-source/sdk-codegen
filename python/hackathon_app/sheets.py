@@ -1,6 +1,7 @@
 from typing import Dict, Generic, List, Optional, Union, Sequence, Type, TypeVar
 import datetime
 import itertools
+import re
 
 import attr
 import cattr
@@ -124,8 +125,10 @@ class WhollySheet(Generic[TModel]):
 
         # something like "users!A6:F6"
         updated_range = response["updates"]["updatedRange"]
-        id_in_range_offset = len(f"{self.sheet_name}!A")
-        model.id = int(updated_range[id_in_range_offset])
+        match = re.match(fr"{self.sheet_name}!A(?P<row_id>\d+)", updated_range)
+        if not match:
+            raise SheetError("Could not determine row_id")
+        model.id = int(match.group("row_id"))
 
     def rows(self) -> Sequence[TModel]:
         """Retrieve rows from sheet"""
