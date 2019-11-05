@@ -1,6 +1,7 @@
 import base64
 import csv
 import os
+import time
 
 import click
 
@@ -9,7 +10,6 @@ import sheets
 
 
 @click.command()
-@click.option("--limit", help="limit number of registrations")
 @click.option("--filename", help="CSV file containing registrations")
 @click.option("--hackathon", help="Hackathon name")
 @click.option("--limit", help="limit current run", default=0)
@@ -68,7 +68,8 @@ def main(filename: str, hackathon: str, enable: bool, limit: int):
                 click.secho(f"Failed to find {email} in spreadsheet", fg="red")
                 continue
             sheets_user.setup_link = reset
-            sheets_client.users.update(sheets_user)
+            sheets_client.users.save(sheets_user)
+            time.sleep(1)
         click.secho(f"Enabled {count} users", fg="green")
     f.close()
 
