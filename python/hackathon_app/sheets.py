@@ -251,7 +251,9 @@ class Hackathons(WhollySheet[Hackathon]):
     def get_upcoming(
         self, *, cutoff: Optional[datetime.datetime] = None
     ) -> Sequence[Hackathon]:
-        now = datetime.datetime.now(tz=datetime.timezone.utc)
+        now = datetime.datetime.now(tz=datetime.timezone.utc) - datetime.timedelta(
+            days=1
+        )
         ret = []
         for hackathon in self.rows():
             if hackathon.date < now:
