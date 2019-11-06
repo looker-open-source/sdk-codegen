@@ -1,8 +1,23 @@
+import {
+  Button,
+  Card,
+  FieldText,
+  Heading,
+  Paragraph,
+  FieldSelect,
+  Label,
+  theme,
+  ButtonToggle,
+  ButtonItem,
+  ValidationMessage,
+  GlobalStyle,
+  FieldCheckbox,
+} from '@looker/components'
+import styled, {ThemeProvider} from 'styled-components'
 import * as React from 'react'
-import Web_Looker_Logo_White from './Web_Looker_Logo_White.svg'
-import styled from 'styled-components'
+import Looker_Logo_Purple from './Looker_Logo_Purple.svg'
 import {Link, Router, navigate} from '@reach/router'
-import {Formik, Form, Field, ErrorMessage} from 'formik'
+import {FieldProps, Formik, Form, Field} from 'formik'
 import * as yup from 'yup'
 
 const RegisterScene: React.FC<{path: string}> = () => {
@@ -22,195 +37,253 @@ const RegisterScene: React.FC<{path: string}> = () => {
   }, [])
 
   return (
-    <CenterContainer>
-      <SceneBody>
-        <Logo src={Web_Looker_Logo_White} />
-        <Header>Hackathon Registration</Header>
-        <Description>Register for a Hackathon below</Description>
-        <hr />
-        <Header>Registration</Header>
-        <Formik
-          enableReinitialize // for csrf token
-          initialValues={{
-            csrf_token: csrf.token,
-            first_name: '',
-            last_name: '',
-            email: '',
-            organization: '',
-            role: '',
-            hackathon: '',
-            tshirt_size: '',
-            ndaq: false,
-            code_of_conduct: false,
-            contributing: false,
-          }}
-          validationSchema={() =>
-            yup.object().shape({
-              csrf_token: yup.string().required(),
-              first_name: yup.string().required(),
-              last_name: yup.string().required(),
-              email: yup
-                .string()
-                .email()
-                .required(),
-              organization: yup.string().required(),
-              role: yup.string().required(),
-              hackathon: yup.string().required(),
-              tshirt_size: yup
-                .string()
-                .oneOf(['XS', 'S', 'M', 'L', 'XL', 'XXL']),
-              ndaq: yup
-                .boolean()
-                .oneOf([true], 'Required')
-                .required(),
-              code_of_conduct: yup
-                .boolean()
-                .oneOf([true], 'Required')
-                .required(),
-              contributing: yup
-                .boolean()
-                .oneOf([true], 'Required')
-                .required(),
-            })
-          }
-          onSubmit={(values, actions) => {
-            async function fetchData() {
-              try {
-                const result = await fetch('/register', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify(values),
-                })
-                const msg = await result.json()
-                if (msg.ok) {
-                  navigate('/')
-                } else {
-                  actions.setStatus(msg.message)
+    <>
+      <GlobalStyle />
+      <CenterContainer>
+        <Card raised>
+          <Logo src={Looker_Logo_Purple} />
+          <Heading>Hackathon Registration</Heading>
+          <Paragraph>Register for a Hackathon below</Paragraph>
+          <hr />
+          <Heading>Registration</Heading>
+          <Formik
+            enableReinitialize // for csrf token
+            initialValues={{
+              csrf_token: csrf.token,
+              first_name: '',
+              last_name: '',
+              email: '',
+              organization: '',
+              role: '',
+              hackathon: '',
+              tshirt_size: '',
+              ndaq: false,
+              code_of_conduct: false,
+              contributing: false,
+            }}
+            validationSchema={() =>
+              yup.object().shape({
+                csrf_token: yup.string().required(),
+                first_name: yup.string().required(),
+                last_name: yup.string().required(),
+                email: yup
+                  .string()
+                  .email()
+                  .required(),
+                organization: yup.string().required(),
+                role: yup.string().required(),
+                hackathon: yup.string().required(),
+                tshirt_size: yup
+                  .string()
+                  .oneOf(['XS', 'S', 'M', 'L', 'XL', 'XXL'])
+                  .required(),
+                ndaq: yup
+                  .boolean()
+                  .oneOf([true], 'Required')
+                  .required(),
+                code_of_conduct: yup
+                  .boolean()
+                  .oneOf([true], 'Required')
+                  .required(),
+                contributing: yup
+                  .boolean()
+                  .oneOf([true], 'Required')
+                  .required(),
+              })
+            }
+            onSubmit={(values, actions) => {
+              async function fetchData() {
+                try {
+                  const result = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(values),
+                  })
+                  const msg = await result.json()
+                  if (msg.ok) {
+                    navigate('/')
+                  } else {
+                    actions.setStatus(msg.message)
+                    actions.setSubmitting(false)
+                  }
+                } catch (e) {
+                  // TODO: hack for local frontend dev
+                  alert(JSON.stringify(values, null, 2))
                   actions.setSubmitting(false)
                 }
-              } catch (e) {
-                // TODO: hack for local frontend dev
-                alert(JSON.stringify(values, null, 2))
-                actions.setSubmitting(false)
               }
-            }
-            fetchData()
-          }}
-        >
-          {({isSubmitting, status, values, errors, touched}) => (
-            <RegForm>
-              <Field type="hidden" name="csrf_token" value={csrf.token} />
-              <InputGroup>
-                <Label>First name</Label>
-                <Input name="first_name" type="text" placeholder="First Name" />
-                <ErrorMessage name="first_name" component="div" />
-              </InputGroup>
-              <InputGroup>
-                <Label>Last name</Label>
-                <Input name="last_name" type="text" placeholder="Last Name" />
-                <ErrorMessage name="last_name" component="div" />
-              </InputGroup>
-              <InputGroup>
-                <Label>Email</Label>
-                <Input name="email" type="email" placeholder="Email Address" />
-                <ErrorMessage name="email" component="div" />
-              </InputGroup>
-              <InputGroup>
-                <Label>Organization</Label>
-                <Input name="organization" placeholder="Organization" />
-                <ErrorMessage name="organization" component="div" />
-              </InputGroup>
-              <InputGroup>
-                <Label>Role</Label>
-                <Input name="role" placeholder="Role" />
-                <ErrorMessage name="role" component="div" />
-              </InputGroup>
-              <InputGroup>
-                <Label>Hackathon</Label>
-                <HackathonSelect hackathons={hackathons} />
-                <ErrorMessage name="hackathon" component="div" />
-              </InputGroup>
-              <InputGroup>
-                <Label>T-Shirt Size</Label>
-              </InputGroup>
-              <InputGroup>
-                <Label>
-                  <Radio type="radio" name="tshirt_size" value="XS" />
-                  XS
-                </Label>
-                <Label>
-                  <Radio type="radio" name="tshirt_size" value="S" />S
-                </Label>
-                <Label>
-                  <Radio type="radio" name="tshirt_size" value="M" />M
-                </Label>
-                <Label>
-                  <Radio type="radio" name="tshirt_size" value="L" />L
-                </Label>
-                <Label>
-                  <Radio type="radio" name="tshirt_size" value="XL" />
-                  XL
-                </Label>
-                <Label>
-                  <Radio type="radio" name="tshirt_size" value="XXL" />
-                  XXL
-                </Label>
-              </InputGroup>
-              <ErrorMessage name="tshirt_size" component="div" />
-              <CheckboxGroup>
-                <CheckboxLabel>
-                  <CheckBox name="ndaq" type="checkbox" />I agree to the Terms
-                  and Conditions/NDAQ
-                </CheckboxLabel>
-                <ErrorMessage name="ndaq" component="div" />
-              </CheckboxGroup>
-              <CheckboxGroup>
-                <CheckboxLabel>
-                  <CheckBox name="code_of_conduct" type="checkbox" />I agree to
-                  the Code of Conduct
-                </CheckboxLabel>
-                <ErrorMessage name="code_of_conduct" component="div" />
-              </CheckboxGroup>
-              <CheckboxGroup>
-                <CheckboxLabel>
-                  <CheckBox name="contributing" type="checkbox" />I agree to the
-                  Contribution Guidelines
-                </CheckboxLabel>
-                <ErrorMessage name="contributing" component="div" />
-              </CheckboxGroup>
-              {status && <div>{status}</div>}
-              <RegisterButton type="submit" disabled={isSubmitting}>
-                Register
-              </RegisterButton>
-            </RegForm>
-          )}
-        </Formik>
-      </SceneBody>
-    </CenterContainer>
+              fetchData()
+            }}
+          >
+            {({isSubmitting, status, errors, values, touched}) => {
+              return (
+                <RegForm>
+                  <Field type="hidden" name="csrf_token" value={csrf.token} />
+                  <Field
+                    label="First Name"
+                    component={ValidatedFieldText}
+                    name="first_name"
+                    placeholder="First Name"
+                  />
+                  <Field
+                    label="Last Name"
+                    component={ValidatedFieldText}
+                    name="last_name"
+                    placeholder="Last Name"
+                  />
+                  <Field
+                    label="Email"
+                    component={ValidatedFieldText}
+                    name="email"
+                    placeholder="Email Address"
+                  />
+                  <Field
+                    label="Organization"
+                    component={ValidatedFieldText}
+                    name="organization"
+                    placeholder="Organization"
+                  />
+                  <Field
+                    label="Role"
+                    component={ValidatedFieldText}
+                    name="role"
+                    placeholder="Role"
+                  />
+                  <HackathonSelect hackathons={hackathons} />
+                  <Label>T-Shirt Size</Label>
+                  <Field name="tshirt_size" component={TshirtSize} />
+                  <Field
+                    name="ndaq"
+                    type="checkbox"
+                    label="I agree to the Terms and Conditions/NDAQ"
+                    alignLabel="right"
+                    component={ValidatedFieldCheckbox}
+                  />
+                  <Field
+                    name="code_of_conduct"
+                    type="checkbox"
+                    label="I agree to the Code of Conduct"
+                    alignLabel="right"
+                    component={ValidatedFieldCheckbox}
+                  />
+                  <Field
+                    name="contributing"
+                    type="checkbox"
+                    label="I agree to the Contribution Guidelines"
+                    alignLabel="right"
+                    component={ValidatedFieldCheckbox}
+                  />
+                  {status && <div>{status}</div>}
+                  <Button size="large" disabled={isSubmitting}>
+                    Register
+                  </Button>
+                </RegForm>
+              )
+            }}
+          </Formik>
+        </Card>
+      </CenterContainer>
+    </>
+  )
+}
+
+const ValidatedFieldCheckbox: React.FC<FieldProps> = ({
+  field,
+  form: {errors, touched},
+  ...props
+}) => {
+  const error = errors[field.name]
+  const touch = touched[field.name]
+  return (
+    <FieldCheckbox
+      validationMessage={
+        error && touch ? {type: 'error', message: error as string} : undefined
+      }
+      {...field}
+      {...props}
+    />
+  )
+}
+
+const ValidatedFieldText: React.FC<FieldProps> = ({
+  field,
+  form: {errors, touched},
+  ...props
+}) => {
+  const error = errors[field.name]
+  const touch = touched[field.name]
+  return (
+    <FieldText
+      validationMessage={
+        error && touch ? {type: 'error', message: error as string} : undefined
+      }
+      {...field}
+      {...props}
+    />
+  )
+}
+
+const TshirtSize: React.FC<FieldProps> = ({
+  field: {onChange, ...field},
+  form: {errors, touched},
+  ...props
+}) => {
+  const error = errors[field.name]
+  const touch = touched[field.name]
+  const handleChange = (value: string) => {
+    onChange({target: {value, name: field.name}})
+  }
+  return (
+    <div>
+      <ButtonToggle onChange={handleChange} {...field}>
+        <ButtonItem>XS</ButtonItem>
+        <ButtonItem>S</ButtonItem>
+        <ButtonItem>M</ButtonItem>
+        <ButtonItem>L</ButtonItem>
+        <ButtonItem>XL</ButtonItem>
+        <ButtonItem>XXL</ButtonItem>
+      </ButtonToggle>
+      {error && touch && (
+        <ValidationMessage type="error" message={error as string} />
+      )}
+    </div>
+  )
+}
+
+const ValidatedFieldSelect: React.FC<FieldProps> = ({
+  field,
+  form: {errors, touched},
+  ...props
+}) => {
+  const error = errors[field.name]
+  const touch = touched[field.name]
+  return (
+    <FieldSelect
+      validationMessage={
+        error && touch ? {type: 'error', message: error as string} : undefined
+      }
+      {...field}
+      {...props}
+    />
   )
 }
 
 const HackathonSelect: React.FC<{hackathons: string[]}> = ({hackathons}) => {
-  let options = [
-    <option key="0" disabled defaultValue="1" value="">
-      Select a Hack
-    </option>,
-  ]
-  let key = 1
+  //let options = [{value: '', label: 'Select Hack'}]
+  let options = []
   for (let hack of hackathons) {
-    options.push(
-      <option key={key} value={hack}>
-        {hack}
-      </option>
-    )
-    key++
+    options.push({value: hack, label: hack})
   }
   return (
-    <Input component="select" name="hackathon">
-      {options}
-    </Input>
+    <Field
+      placeholder="Select a Hack"
+      options={options}
+      label="Hackathon"
+      component={ValidatedFieldSelect}
+      name="hackathon"
+    />
   )
 }
 
@@ -218,15 +291,15 @@ const ResourcesScene: React.FC<{path: string}> = () => {
   return (
     <CenterContainer>
       <SceneBody>
-        <Logo src={Web_Looker_Logo_White} />
-        <Header>Looker Hackathons</Header>
-        <Description>Find information on Hackathons below</Description>
+        <Logo src={Looker_Logo_Purple} />
+        <Heading>Looker Hackathons</Heading>
+        <Paragraph>Find information on Hackathons below</Paragraph>
         <hr />
-        <Header>Welcome!</Header>
-        <Description>
+        <Heading>Welcome!</Heading>
+        <Paragraph>
           Explore the links below to find useful documentation and tools for
           participating in a hackathon.
-        </Description>
+        </Paragraph>
         <Links>
           <LinkContainer>
             <TitleLink to="/registration">Register for a Hackathon</TitleLink>
@@ -242,12 +315,14 @@ const ResourcesScene: React.FC<{path: string}> = () => {
 
 const App: React.FC = () => {
   return (
-    <Body>
-      <Router>
-        <RegisterScene path="/registration" />
-        <ResourcesScene path="/" />
-      </Router>
-    </Body>
+    <ThemeProvider theme={theme}>
+      <Body>
+        <Router>
+          <RegisterScene path="/registration" />
+          <ResourcesScene path="/" />
+        </Router>
+      </Body>
+    </ThemeProvider>
   )
 }
 export default App
@@ -297,69 +372,6 @@ const Body = styled.div`
   min-width: 100vw;
 `
 
-const Description = styled.div`
-  color: white;
-  margin-bottom: 16px;
-`
-
-const Header = styled.h2`
-  color: white;
-  font-size: 28px;
-`
-
-const Label = styled.label`
-  color: white;
-  font-size: 14px;
-  margin-bottom: 4px;
-`
-
 const RegForm = styled(Form)`
   margin-bottom: 32px;
-`
-
-const Radio = styled(Field)`
-  margin-left: 12px;
-  margin-bottom: 32px;
-  font-size: 16px;
-`
-
-const CheckBox = styled(Field)`
-  margin-left: 12px;
-  font-size: 16px;
-`
-
-const Input = styled(Field)`
-  border-radius: 4px;
-  height: 30px;
-  font-size: 16px;
-  width: 100%;
-`
-
-const InputGroup = styled.div`
-  margin-bottom: 20px;
-`
-
-const CheckboxGroup = styled.div`
-  display: flex;
-  margin-bottom: 8px;
-`
-
-const CheckboxLabel = styled(Label)`
-  margin-left: 8px;
-  font-size: 16px;
-`
-
-const RegisterButton = styled.button`
-  background-color: #e13d73;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  font-size: 24px;
-  width: 100%;
-  :disabled {
-    opacity: 0.6;
-  }
 `
