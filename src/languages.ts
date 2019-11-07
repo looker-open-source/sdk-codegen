@@ -33,7 +33,7 @@ import { KotlinGen } from './kotlin.gen'
 export interface IGeneratorSpec {
   language: string // name of Open API Generator language to produce
   path?: string
-  factory: (api: ApiModel, versions?: IVersionInfo) => ICodeGen
+  factory?: (api: ApiModel, versions?: IVersionInfo) => ICodeGen
   options: string // generator options
   legacy?: string // legacy language tag
 }
@@ -41,27 +41,23 @@ export interface IGeneratorSpec {
 // To disable generation of any language specification, you can just comment it out
 export const Languages: Array<IGeneratorSpec> =
   [
-    // {
-    //   language: 'csharp',
-    //   options: '-DapiPackage=Looker -DpackageName=looker'
-    // },
+    {
+      language: 'csharp',
+      legacy: 'csharp',
+      factory: undefined,
+      options: '-DapiPackage=Looker -DpackageName=looker'
+    },
     {
       language: 'kotlin',
       legacy: 'kotlin',
       factory: (api: ApiModel, versions?: IVersionInfo) => new KotlinGen(api, versions),
       options: '-DapiPackage=com.looker.sdk -DpackageName=com.looker.sdk'
     },
-    // TODO figure out why legacy swift aborts with an error and none of the other languages do
     { language: 'swift',
       legacy: 'swift4',
       factory: (api: ApiModel, versions?: IVersionInfo) => new SwiftGen(api, versions),
       options: '-DapiPackage=Looker -DpackageName=looker'
     },
-    // {
-    //   language: 'swift4',
-    //   path: 'swift',
-    //   options: '-DapiPackage=Looker -DpackageName=looker'
-    // },
     // {
     //   language: 'php',
     //   path: 'php',
@@ -102,11 +98,16 @@ export const Languages: Array<IGeneratorSpec> =
     // },
   ]
 
-export const getFormatter = (format: string, api: ApiModel, versions?: IVersionInfo): ICodeGen => {
-  const language = Languages.find((item) => item.language.toLowerCase() === format.toLowerCase())
+export const getFormatter = (format: string, api: ApiModel, versions?: IVersionInfo): ICodeGen | undefined => {
+  const generators = Languages.filter(x => x.factory !== undefined)
+  const language = generators
+    .find((item) => item.language.toLowerCase() === format.toLowerCase())
   if (!language) {
-    const langs = Languages.map((item) => item.language)
+    const langs = generators.map((item) => item.language)
     quit(`"${format}" is not a recognized language. Supported languages are: all, ${langs.join(', ')}`)
   }
-  return language!.factory(api, versions)
+  if (language && language.factory) {
+    return language.factory(api, versions)
+  }
+  return undefined
 }

@@ -27,7 +27,7 @@
 import * as fs from 'fs'
 import * as Models from './sdkModels'
 import { SDKConfig } from './sdkConfig'
-import { isDirSync, log, quit, success } from './utils'
+import { danger, isDirSync, log, quit, success } from './utils'
 import { getVersionInfo, openApiFileName, specFileName } from './fetchSpec'
 import { MethodGenerator, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
@@ -37,7 +37,9 @@ import { IVersionInfo } from './codeGen'
 // tslint:disable-next-line: no-floating-promises
 (async () => {
   let args = process.argv.slice(2)
-  let languages = Languages.map(l => l.language)
+  let languages = Languages
+    .filter(l => l.factory !== undefined)
+    .map(l => l.language)
   if (args.length > 0) {
     if (args.toString().toLowerCase() !== 'all') {
       languages = []
@@ -62,6 +64,10 @@ import { IVersionInfo } from './codeGen'
         const swaggerFile = specFileName(name, props)
         const apiModel = Models.ApiModel.fromFile(oasFile, swaggerFile)
         const gen = getFormatter(language, apiModel, versions)
+        if (!gen) {
+          danger(`${language} does not have a code generator defined`)
+          continue
+        }
         const sdkPath = `${gen.codePath}/${gen.packagePath}/sdk`
         if (!isDirSync(sdkPath)) fs.mkdirSync(sdkPath, {recursive: true})
         // Generate standard method declarations
