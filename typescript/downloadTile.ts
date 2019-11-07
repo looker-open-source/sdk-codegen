@@ -105,7 +105,7 @@ const sleep = async (ms: number) => {
 
 /**
  * Download a dashboard tile when it's finished rendering
- * @param {LookerSDK} sdk initialzed Looker SDK
+ * @param {LookerSDK} sdk initialized Looker SDK
  * @param {IDashboardElement} tile Dashboard tile to render
  * @param {string} format format of rendering
  * @returns {Promise<undefined | string>} Name of file downloaded
@@ -140,10 +140,8 @@ const downloadTile = async (sdk: LookerSDK, tile: IDashboardElement, format: str
       await sleep(delay)
       console.log(`${elapsed += (delay/1000)} seconds elapsed`)
     }
-    // IMPORTANT: Encoding must be `null` for binary downloads
     const result = await sdk.ok(sdk.render_task_results(task.id!))
     fileName = `${tile.title}.${format}`
-    // const encoding = format === 'png' ? 'binary' : 'utf-8'
     fs.writeFile(fileName, result, 'binary',(err) => {
         if (err) {
           fileName = undefined
