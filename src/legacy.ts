@@ -29,15 +29,15 @@ import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { log, quit, run } from './utils'
 import { logConvert } from './convert'
 
-// TODO replace with sdkGen.ts and remove `yarn sdk` command
-// TODO deprecated. This is using the legacy code generator
+// Warning: deprecated. This is using the legacy code generator
 // perform the generation for specific API version, configuration, and language
 const generate = async (fileName: string, spec: LanguageSpec, props: ISDKConfigProps) => {
   const path = spec.path ? spec.path : spec.language
   const language = spec.legacy ? spec.legacy : spec.language
   const apiPath = `./api/${props.api_version}/${path}`
   return run('openapi-generator',
-    ['generate', '-i', fileName, '-g', language, '-o', apiPath, '--enable-post-process-file', spec.options])
+    // ['generate', '-i', fileName, '-g', language, '-o', apiPath, '--enable-post-process-file', spec.options])
+    ['generate', spec.options, '-i', fileName, '-g', language, '-o', apiPath, '--enable-post-process-file'])
 }
 
 // generate all languages for the specified configuration
