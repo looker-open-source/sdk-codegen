@@ -107,6 +107,9 @@ extension String {
             return nil
         }
     }
+    var int: Int? {
+        return Int(self)
+    }
 }
 
 /// Structure that represents "Void" return results for the SDK response

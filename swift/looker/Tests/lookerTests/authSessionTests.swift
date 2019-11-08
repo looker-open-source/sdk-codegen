@@ -24,14 +24,14 @@ class authSessionTests: XCTestCase {
         let settings = config!
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
-        XCTAssertFalse(auth.isAuthenticated())
+        XCTAssertFalse(auth.isAuthenticated(), "should not be authenticated")
         let token = auth.login()
-        XCTAssertTrue(auth.isAuthenticated())
+        XCTAssertTrue(auth.isAuthenticated(), "should be authenticated")
         XCTAssertNotNil(token)
-        XCTAssertNotNil(token.access_token)
-        XCTAssertNotNil(token.token_type)
+        XCTAssertNotNil(token.access_token, "access token should be assigned")
+        XCTAssertNotNil(token.token_type, "token type should be assigned")
         _ = auth.logout()
-        XCTAssertFalse(auth.isAuthenticated())
+        XCTAssertFalse(auth.isAuthenticated(), "should not be authenticated")
     }
     
 }

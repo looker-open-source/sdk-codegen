@@ -269,12 +269,12 @@ describe('LookerNodeSDK', () => {
       'login/logout',
       async () => {
         const sdk = new LookerSDK(session)
-        const apiUser = await sdk.ok(sdk.me())
         let all = await sdk.ok(
           sdk.all_users({
             fields: 'id,is_disabled'
           })
         )
+        const apiUser = await sdk.ok(sdk.me())
 
         // find users who are not the API user
         const others = all

@@ -73,17 +73,17 @@ struct DefaultSettings : IApiSettings {
  *  - <environmentPrefix>_TIMEOUT
  */
 func ValueSettings(_ values: StringDictionary<String>) -> IApiSettings {
-    var settings = DefaultSettings()
-    settings.api_version = values[strLookerApiVersion] ?? settings.api_version
-    settings.base_url = values[strLookerBaseUrl] ?? settings.base_url
+    var defaults = DefaultSettings()
+    defaults.api_version = values[strLookerApiVersion] ?? defaults.api_version
+    defaults.base_url = values[strLookerBaseUrl] ?? defaults.base_url
     if (values[strLookerVerifySsl] != nil) {
         let v = values[strLookerVerifySsl]!.lowercased()
-        settings.verify_ssl = v == "true" || v == "1"
+        defaults.verify_ssl = v == "true" || v == "1"
     }
     if (values[strLookerTimeout] != nil) {
-        settings.timeout = Int(values[strLookerTimeout]!)!
+        defaults.timeout = Int(values[strLookerTimeout]!)!
     }
-    return settings
+    return defaults
 }
 
 /**
@@ -103,9 +103,7 @@ struct ApiSettings: IApiSettings {
     var headers: Headers?
     var encoding: String?
     
-    init() {
-        
-    }
+    init() { }
     
     init(_ settings: IApiSettings) throws {
         let defaults = DefaultSettings()

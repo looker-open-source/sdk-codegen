@@ -71,6 +71,7 @@ export interface IAuthSession extends IAuthorizer {
 }
 
 export class NodeSession implements IAuthSession {
+  private apiPath = ""
   _authToken: AuthToken = new AuthToken()
   _sudoToken: AuthToken = new AuthToken()
   sudoId: string = ''
@@ -79,6 +80,7 @@ export class NodeSession implements IAuthSession {
   constructor(public settings: IApiSettingsConfig, transport?: ITransport) {
     this.settings = settings
     this.transport = transport || new NodeTransport(settings)
+    this.apiPath = `/api/${settings.api_version}`
   }
 
   /**
@@ -209,7 +211,7 @@ export class NodeSession implements IAuthSession {
       const token = await this.ok(
         this.transport.request<IAccessToken, IError>(
           strPost,
-          '/login',
+          `${this.apiPath}/login`,
           {
             client_id,
             client_secret,
@@ -224,6 +226,7 @@ export class NodeSession implements IAuthSession {
       let token = this.activeToken
       const promise = this.transport.request<IAccessToken, IError>(
         strPost,
+        // Don't use api path here since authenticator presence will cause it to be added
         encodeURI(`/login/${newId}`),
         null,
         null,
@@ -249,6 +252,7 @@ export class NodeSession implements IAuthSession {
     const token = this.activeToken
     const promise = this.transport.request<string, IError>(
       strDelete,
+      // Do not add api path here, since the authenticator will cause the request method to add it automatically
       '/logout',
       null,
       null,

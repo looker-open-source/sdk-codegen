@@ -133,11 +133,12 @@ class UserSession(val apiSettings: ApiSettings,
         }
 
         if (!authToken.isActive()) {
+            val apiPath = "/api/${apiSettings.apiVersion}"
             val clientId = System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_ID") ?: apiSettings.clientId
             val clientSecret = System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_SECRET") ?: apiSettings.clientSecret
             val token = ok<AuthToken>(
                     transport.request<AuthToken>(HttpMethod.POST,
-                            "/login",
+                            "${apiPath}/login",
                             mapOf("client_id" to clientId, "client_secret" to clientSecret)
                     )
             )
