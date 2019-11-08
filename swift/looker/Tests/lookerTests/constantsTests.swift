@@ -18,6 +18,27 @@ class constantsTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func testStringBool() {
+        XCTAssertEqual("".bool, nil)
+        XCTAssertEqual("boo".bool, nil)
+        XCTAssertEqual("1".bool, true)
+        XCTAssertEqual("Y".bool, true)
+        XCTAssertEqual("yes".bool, true)
+        XCTAssertEqual("0".bool, false)
+        XCTAssertEqual("n".bool, false)
+        XCTAssertEqual("NO".bool, false)
+    }
+    
+    func testStringInt() {
+        XCTAssertEqual("".int, nil)
+        XCTAssertEqual("0".int, 0)
+        XCTAssertEqual("1".int, 1)
+        XCTAssertEqual("-1".int, -1)
+        XCTAssertEqual("6,000".int, nil, "6,000 doesn't cast to Int")
+        XCTAssertEqual("6000".int, 6000)
+        XCTAssertEqual("-i".int, nil)
+    }
+    
     func testAsQ() {
         var val: Any? = "foo bar"
         XCTAssertEqual(asQ(val), "foo%20bar")

@@ -35,6 +35,7 @@ protocol IAuthSession: IAuthorizer {
 @available(OSX 10.15, *)
 class AuthSession: IAuthSession {
   
+    private var apiPath = ""
     var _authToken = AuthToken()
     var _sudoToken = AuthToken()
     var sudoId: String = ""
@@ -52,6 +53,7 @@ class AuthSession: IAuthSession {
     init(_ settings: IApiSettings, _ transport: ITransport? = nil) {
         self.settings = settings
         self.transport = transport ?? BaseTransport(settings)
+        self.apiPath = "/api/\(settings.api_version!)"
     }
     
     func getToken() -> AuthToken {
@@ -131,7 +133,7 @@ class AuthSession: IAuthSession {
             }
             let response : SDKResponse<AccessToken, SDKError> = self.transport.request(
                 HttpMethod.POST,
-                "/login",
+                "\(self.apiPath)/login",
                 ["client_id": client_id!, "client_secret": client_secret!],
                 nil,
                 nil,
@@ -145,6 +147,7 @@ class AuthSession: IAuthSession {
             let token = self.activeToken
             let response : SDKResponse<AccessToken, SDKError> = self.transport.request(
                 HttpMethod.POST,
+                // Don't set Api path here since authenticator presence will cause it to be added in request
                 "/login/\(newId)",
                 nil,
                 nil,
@@ -175,6 +178,7 @@ class AuthSession: IAuthSession {
         let token = self.activeToken
         let response : SDKResponse<Voidable, SDKError> = self.transport.request(
             HttpMethod.DELETE,
+            // Because this request uses an authenticator call back, api path will be automatically added. Don't add it here.
             "/logout",
             nil,
             nil,
