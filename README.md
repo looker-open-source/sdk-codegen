@@ -84,7 +84,7 @@ The generator will:
 
 * by default, call the code generator for each active language configured in [`languages.ts`](src/languages.ts)
 
-  * If you want to legacy for one specific language, use `yarn sdk {language}`. Currently, supported `{language}` values are `python` and `typescript`
+  * If you want to legacy for one specific language, use `yarn sdk {language}`. Currently, supported `{language}` values are `kotlin`, `python`, `swift` and `typescript`
 
 When the generator completes successfully, the output will be similar to:
 
