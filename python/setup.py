@@ -17,10 +17,11 @@ setup(
     license="MIT",
     long_description=open("README.rst").read(),
     long_description_content_type="text/x-rst",
-    keywords=["looker_sdk", "Looker API 3.1"],
+    keywords=["Looker", "Looker API", "looker_sdk", "Looker API 3.1"],
     name=NAME,
     package_data={"looker_sdk": ["py.typed", "looker_sdk/looker-sample.ini"]},
     packages=find_packages(),
+    python_requires=">=3.7.0, <3.8",
     url="https://pypi.python.org/pypi/looker_sdk",
     version=VERSION,
 )
