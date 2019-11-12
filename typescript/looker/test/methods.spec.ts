@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import { IAuthSession, NodeSession } from '../rtl/nodeSession'
+import { NodeSession } from '../rtl/nodeSession'
 import { LookerSDK } from '../sdk/methods'
 import {
   // IDashboardElement,
@@ -33,7 +33,7 @@ import {
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 // import FileType from 'file-type'
-import { ApiConfig, NodeSettingsEnv, NodeSettingsIniFile } from '../rtl/nodeSettings'
+import { ApiConfig, NodeSettings, NodeSettingsIniFile } from '../rtl/nodeSettings'
 import { DelimArray } from '../rtl/delimArray'
 import { Readable } from 'readable-stream'
 import { boolDefault, utf8 } from '../rtl/constants'
@@ -285,7 +285,7 @@ describe('LookerNodeSDK', () => {
           // pick two other active users for `sudo` tests
           const [sudoA, sudoB] = others
           // get auth support for login()
-          const auth = sdk.authSession as IAuthSession
+          const auth = sdk.authSession
 
           // login as sudoA
           await auth.login(sudoA.id!.toString())
@@ -528,7 +528,7 @@ describe('LookerNodeSDK', () => {
         const sdk = new LookerSDK(session)
         for (const q of queries) {
           // default the result limit to 10
-          const limit = q.limit ? parseInt(q.limit) : 10
+          const limit = q.limit ? parseInt(q.limit, 10) : 10
           const request = createQueryRequest(q, limit)
           const query = await sdk.ok(sdk.create_query(request))
           const sql = await sdk.ok(
@@ -574,7 +574,7 @@ describe('LookerNodeSDK', () => {
         let streamed = false
         for (const q of queries) {
           // default the result limit to 10
-          const limit = q.limit ? parseInt(q.limit) : 10
+          const limit = q.limit ? parseInt(q.limit, 10) : 10
           const request: IRequestRunInlineQuery = {
             body: {
               model: q.model,
@@ -659,7 +659,7 @@ describe('LookerNodeSDK', () => {
     ): number | undefined => {
       if (!id) return id
       if (id.startsWith('#')) id = id.substr(1)
-      else return id ? parseInt(id) : undefined
+      else return id ? parseInt(id, 10) : undefined
       const result = qhash[id]
       if (result) return result.id
       // default to first query. test data is bad
@@ -682,7 +682,7 @@ describe('LookerNodeSDK', () => {
         // create query hash
         for (const q of queries) {
           qcount++
-          const limit = q.limit ? parseInt(q.limit) : 10
+          const limit = q.limit ? parseInt(q.limit, 10) : 10
           const request = createQueryRequest(q, limit)
           qhash[q.id || qcount.toString()] = await sdk.ok(
             sdk.create_query(request)
@@ -721,20 +721,25 @@ describe('LookerNodeSDK', () => {
           )
           expect(dashboard).toBeDefined()
           expect(dashboard.title).toEqual(d.title)
-          if (d.background_color)
+          if (d.background_color) {
             expect(dashboard.background_color).toEqual(d.background_color)
-          if (d.text_tile_text_color)
+          }
+          if (d.text_tile_text_color) {
             expect(dashboard.text_tile_text_color).toEqual(
               d.text_tile_text_color
             )
-          if (d.tile_background_color)
+          }
+          if (d.tile_background_color) {
             expect(dashboard.tile_background_color).toEqual(
               d.tile_background_color
             )
-          if (d.tile_text_color)
+          }
+          if (d.tile_text_color) {
             expect(dashboard.tile_text_color).toEqual(d.tile_text_color)
-          if (d.title_color)
+          }
+          if (d.title_color) {
             expect(dashboard.title_color).toEqual(d.title_color)
+          }
           let actual = await sdk.ok(
             sdk.update_dashboard(dashboard.id!, {
               deleted: true
@@ -829,6 +834,7 @@ describe('LookerNodeSDK', () => {
   describe('Node environment', () => {
     beforeAll(() => {
       const section = ApiConfig(fs.readFileSync(localIni, utf8))['Looker']
+      // tslint:disable-next-line:variable-name
       const verify_ssl = boolDefault(section['verify_ssl'], false).toString()
       // populate environment variables
       process.env[strLookerTimeout] = section['timeout'] || defaultTimeout.toString()
@@ -850,7 +856,7 @@ describe('LookerNodeSDK', () => {
     })
 
     it('no INI', async () =>{
-      const sdk = LookerNodeSDK.createClient(new NodeSettingsEnv())
+      const sdk = LookerNodeSDK.createClient(new NodeSettings())
       const me = await sdk.ok(sdk.me())
       expect(me).not.toBeUndefined()
       expect(me.id).not.toBeUndefined()

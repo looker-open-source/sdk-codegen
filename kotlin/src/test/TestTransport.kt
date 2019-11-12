@@ -23,7 +23,6 @@
  */
 
 import com.looker.rtl.*
-import com.looker.sdk.LookerSDK
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import org.junit.Test as test
@@ -56,14 +55,6 @@ class TestTransport {
         assertEquals("$base/api/$apiVersion$userPath", actual)
         actual = xp.makePath(userPath, qp, mockAuth)
         assertEquals("$base/api/$apiVersion$userPath$params", actual)
-    }
-
-    fun <T> ok(response: SDKResponse): T {
-        when(response) {
-            is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
-            is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
-            else -> throw Error("Fail!!")
-        }
     }
 
     @test fun testFullRequest() {

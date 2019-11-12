@@ -24,6 +24,7 @@
 
 import { agentTag, defaultTimeout, ITransportSettings } from './transport'
 import { boolDefault, environmentPrefix, isTrue } from './constants'
+import { IApiSection } from './nodeSettings'
 
 export interface IValueSettings {
   [name: string]: string;
@@ -50,7 +51,20 @@ Missing required configuration values like base_url and api_version
 `
 
 export interface IApiSettings extends ITransportSettings {
-  isConfigured(): boolean;
+  /**
+   * Reading API settings on demand from some configuration source
+   */
+  readConfig(section?: string): IApiSection
+
+  /**
+   * Checks to see if minimal configuration values are assigned.
+   *
+   * If this function returns `false`, the Api configuration class will typically throw a run-time
+   * error so the implementer knows required configuration values are missing
+   *
+   * @returns true or false
+   */
+  isConfigured(): boolean
 }
 
 /**
@@ -134,5 +148,15 @@ export class ApiSettings implements IApiSettings {
 
   isConfigured() {
     return !!(this.base_url && this.api_version)
+  }
+
+  /**
+   * Default dynamic configuration reader
+   * @param section key/name of configuration section to read
+   * @returns an empty `IAPISection`
+   */
+  // @ts-ignore
+  readConfig(section?: string): IApiSection {
+    return {}
   }
 }

@@ -28,7 +28,7 @@
  * Simple factory for the browser version of the Looker SDK. Provides default connectivity for SDK methods
  */
 import { BrowserTransport } from './browserTransport'
-import { IAuthorizer, ITransport } from './transport'
+import { IAuthSession, ITransport } from './transport'
 import { BrowserSession } from './browserSession'
 import { DefaultSettings, IApiSettings } from './apiSettings'
 import { LookerSDK } from '../sdk/methods'
@@ -41,9 +41,9 @@ export const BrowserSettings = (): IApiSettings => {
 
 export class LookerBrowserSDK {
   /**
-   * Creates an [[LookerSDK]] object.
+   * Creates a [[LookerSDK]] object.
    *
-   * @param settings Defaults to the settings from LookerIni
+   * @param settings Defaults to the settings for the Browser
    *
    * @param transport Defaults to a `NodeTransport` object
    *
@@ -52,7 +52,7 @@ export class LookerBrowserSDK {
   static createClient(
     settings?: IApiSettings,
     transport?: ITransport,
-    session?: IAuthorizer,
+    session?: IAuthSession,
   ) {
     settings = settings || BrowserSettings()
     transport = transport || new BrowserTransport(settings)

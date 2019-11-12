@@ -22,40 +22,57 @@
  * THE SOFTWARE.
  */
 
-import { IApiSettings } from './apiSettings'
-import { IRequestProps, ITransport } from './transport'
-import { BrowserTransport } from './browserTransport'
-import { AuthToken } from './authToken'
 import { AuthSession } from './authSession'
+import { BrowserTransport } from './browserTransport'
+import { ITransport } from './transport'
+import { IApiSettings } from './apiSettings'
+import { AuthToken } from './authToken'
 
-export class BrowserSession extends AuthSession {
+/**
+ * An AuthSession class intended for use with proxied authentication
+ *
+ * Override the `authenticate()` method to implement a browser authentication hook
+ *
+ * Override `logout()` if you want to support session logout
+ *
+ */
+export abstract class ProxySession extends AuthSession {
+  activeToken = new AuthToken()
 
-  constructor(public settings: IApiSettings, transport?: ITransport) {
+  constructor(public settings: IApiSettings, public proxyUrl: string, transport?: ITransport) {
     super(settings, transport || new BrowserTransport(settings))
   }
 
-  get activeToken() {
-    const meta = document.head.querySelector(
-      '[name=csrf-token]',
-    ) as HTMLMetaElement
-    return meta ? meta.content : ''
-  }
-
-  // Determines if the authentication token exists and has not expired
+  /**
+   * Is the session active and authenticated?
+   * @returns `true` if the session is active
+   */
   isAuthenticated() {
-    const token = this.activeToken
-    if (!token) return false
-    return true
+    return this.activeToken.isActive()
   }
 
-  async authenticate(props: IRequestProps) {
-    const token = this.activeToken
-    if (token) props.headers['X-CSRF-TOKEN'] = token
+  /**
+   * Decorate the request properties with the required authentication information
+   *
+   * Override this class with the implementation for a specific proxied authentication workflow
+   *
+   * The default implementation swaps the request's path with the proxy url, and puts the original
+   * request path in the `X-Forwarded-For` header
+   *
+   * @param props the properties of the request
+   * @returns the same properties with authentication added
+   */
+  async authenticate(props: any) {
+    props['X-Forwarded-For'] = props['path']
+    props['path'] = this.proxyUrl
     return props
   }
 
   /**
-   * Logout must be overridden for a Browser Session
+   * Logout does nothing for a proxy session by default.
+   *
+   * Override to support using the proxy to log out the session
+   *
    * @returns a false Promise
    */
   async logout(): Promise<boolean> {
@@ -63,3 +80,4 @@ export class BrowserSession extends AuthSession {
   }
 
 }
+

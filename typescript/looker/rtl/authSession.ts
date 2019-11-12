@@ -22,37 +22,52 @@
  * THE SOFTWARE.
  */
 
-import { IAuthSession, ITransport } from './transport'
-import { NodeSettingsIniFile } from './nodeSettings'
-import { LookerSDK } from '../sdk/methods'
-import { NodeSession } from './nodeSession'
-import { NodeTransport } from './nodeTransport'
+import { IAuthSession, IRequestProps, ITransport } from './transport'
 import { IApiSettings } from './apiSettings'
 
-/**
- * @class SDK
- *
- * Simple factory for the Node version of the Looker SDK. Provides default connectivity for SDK methods
- *
- */
-export class LookerNodeSDK {
-  /**
-   * Creates an [[LookerSDK]] object.
-   *
-   * @param settings Defaults to the settings from LookerIni
-   *
-   * @param transport Defaults to a `NodeTransport` object
-   *
-   * @param session Defaults to `NodeSession` which logs in the user
-   */
-  static createClient(
-    settings?: IApiSettings,
-    transport?: ITransport,
-    session?: IAuthSession,
-  ) {
-    settings = settings || new NodeSettingsIniFile('looker.ini')
-    transport = transport || new NodeTransport(settings)
-    session = session || new NodeSession(settings, transport)
-    return new LookerSDK(session)
+export class AuthSession implements IAuthSession {
+  static TBD = "Not implemented in AuthSession"
+  settings: IApiSettings
+  sudoId: string = ''
+  transport: ITransport
+
+  constructor(settings: IApiSettings, transport: ITransport) {
+    this.settings = settings
+    this.transport = transport
+  }
+
+  // @ts-ignore
+  authenticate(props: IRequestProps): Promise<IRequestProps> {
+    this.notImplemented()
+  }
+
+  // @ts-ignore
+  getToken(): Promise<any> {
+    this.notImplemented()
+  }
+
+  isAuthenticated(): boolean {
+    return false
+  }
+
+  isSudo(): boolean {
+    return (this.sudoId !== '') && (this.isAuthenticated())
+  }
+
+  // @ts-ignore
+  login(sudoId?: string | number): Promise<any> {
+    this.notImplemented()
+  }
+
+  logout(): Promise<boolean> {
+    return new Promise<boolean>(() => false)
+  }
+
+  reset(): void {
+    this.sudoId = ''
+  }
+
+  private notImplemented() {
+    throw new Error(AuthSession.TBD)
   }
 }

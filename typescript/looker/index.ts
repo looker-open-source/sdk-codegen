@@ -25,6 +25,7 @@
 export * from './rtl/apiMethods'
 export * from './rtl/apiSettings'
 export * from './rtl/authToken'
+export * from './rtl/authSession'
 export * from './rtl/browserSdk'
 export * from './rtl/browserSession'
 export * from './rtl/browserTransport'
@@ -32,12 +33,13 @@ export * from './rtl/nodeSdk'
 export * from './rtl/nodeSession'
 export * from './rtl/nodeSettings'
 export * from './rtl/nodeTransport'
+export * from './rtl/proxySession'
 export * from './rtl/transport'
 export * from './rtl/constants'
 export * from './sdk/methods'
 export * from './sdk/models'
 
-import { IAuthorizer } from './rtl/transport'
+import { IAuthSession } from './rtl/transport'
 import { LookerSDK } from './sdk/methods'
 
 /**
@@ -52,7 +54,7 @@ export class SDK {
    *
    * @param session {IAuthSession} SDK session manager to use
    */
-  static createClient(session: IAuthorizer) {
+  static createClient(session: IAuthSession) {
     return new LookerSDK(session)
   }
 }

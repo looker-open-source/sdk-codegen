@@ -102,6 +102,7 @@ export type HttpMethod =
 /**
  * HTTP status codes
  * https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for reference
+ * TODO is there a platform-agnostic list of these that can be used instead of this static declaration?
  */
 export enum StatusCode {
   OK = 200,
@@ -165,7 +166,20 @@ export enum StatusCode {
   NetworkAuthRequired
 }
 
+/**
+ * Transport plug-in interface
+ */
 export interface ITransport {
+  /**
+   * HTTP request function for atomic, fully downloaded responses
+   * @param method of HTTP request
+   * @param path request path, either relative or fully specified
+   * @param queryParams name/value pairs to pass as part of the URL
+   * @param body data for the body of the request
+   * @param authenticator authenticator callback, typically from `IAuthSession` implementation
+   * @param options overrides of default transport settings
+   * @returns typed response of `TSuccess`, or `TError` result
+   */
   request<TSuccess, TError>(
     method: HttpMethod,
     path: string,
@@ -175,6 +189,18 @@ export interface ITransport {
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>>
 
+  /**
+   * HTTP request function for a streamable response
+   * @param callback that receives the stream response and pipes it somewhere
+   * @param method of HTTP request
+   * @param path request path, either relative or fully specified
+   * @param queryParams name/value pairs to pass as part of the URL
+   * @param body data for the body of the request
+   * @param authenticator authenticator callback, typically from `IAuthSession` implementation
+   * @param options overrides of default transport settings
+   * @returns `T` upon success
+   * @throws `ISDKErrorResponse` on failure
+   */
   stream<T>(
     callback: (readable: Readable) => Promise<T>,
     method: HttpMethod,
@@ -190,23 +216,23 @@ export interface ITransport {
 /** A successful SDK call. */
 interface ISDKSuccessResponse<T> {
   /** Whether the SDK call was successful. */
-  ok: true;
+  ok: true
   /** The object returned by the SDK call. */
-  value: T;
+  value: T
 }
 
 /** An erroring SDK call. */
 interface ISDKErrorResponse<T> {
   /** Whether the SDK call was successful. */
-  ok: false;
+  ok: false
   /** The error object returned by the SDK call. */
-  error: T;
+  error: T
 }
 
 /** An error representing an issue in the SDK, like a network or parsing error. */
 export interface ISDKError {
-  type: 'sdk_error';
-  message: string;
+  type: 'sdk_error'
+  message: string
 }
 
 export type SDKResponse<TSuccess, TError> =
@@ -214,22 +240,68 @@ export type SDKResponse<TSuccess, TError> =
   | ISDKErrorResponse<TError | ISDKError>
 
 /**
- * Base authorization interface
+ * Basic authorization session interface for most API authentication scenarios
  */
-export interface IAuthorizer {
-  settings: IApiSettings;
-  transport: ITransport;
+export interface IAuthSession  {
 
-  /** is the current session authenticated? */
-  isAuthenticated(): boolean;
+  settings: IApiSettings
+  transport: ITransport
+  /**
+   * ID of sudo user
+   */
+  sudoId: string
 
-  authenticate(init: IRequestInit): Promise<IRequestInit>;
+  /**
+   * is the current session authenticated?
+   */
+  isAuthenticated(): boolean
 
-  logout(): Promise<boolean>;
+  /**
+   * Decorate the request with authentication information
+   * @param props Properties of request to use or update in callback
+   * @returns the request properties with authentication information added
+   */
+  authenticate(props: IRequestProps): Promise<IRequestProps>
+
+  /**
+   * Log out the current user
+   *
+   * - if the current user is a sudo user, the API user becomes the active user
+   * - if the current user is the API user, the API session is logged out
+   *   - any subsequent SDK method calls will automatically log the API user back in for this scenario
+   * @returns {Promise<boolean>} `true` if a logout happened, `false` otherwise
+   */
+  logout(): Promise<boolean>
+
+
+  /**
+   * Typically returns an `IAccessToken` but could be any data used for auth
+   * @returns {Promise<any>} authentication information
+   */
+  getToken(): Promise<any>
+
+  /**
+   *
+   * @returns `true` if the auth session is in sudo mode
+   */
+  isSudo(): boolean
+
+  /**
+   * Login to the auth session, optionally as a sudo user
+   * @param {string | number} sudoId
+   * @returns {Promise<any>} authentication data
+   */
+  login(sudoId?: string | number): Promise<any>
+
+  /**
+   * Clears all authentication tracking. Does **not** log the API user out in default implementations.
+   */
+  reset(): void
 }
 
+
 /** Generic http request property collection */
-export interface IRequestInit {
+export interface IRequestProps {
   /** body of request. optional */
   body?: any;
   /** headers for request. optional */

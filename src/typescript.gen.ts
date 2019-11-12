@@ -65,7 +65,7 @@ export class TypescriptGen extends CodeGen {
     return `
 // ${warnEditing}
 import { APIMethods } from '../rtl/apiMethods'
-import { IAuthorizer, ITransportSettings } from '../rtl/transport'
+import { IAuthSession, ITransportSettings } from '../rtl/transport'
 import { ${this.packageName}Stream } from './streams'
 /**
  * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
@@ -77,7 +77,7 @@ export class ${this.packageName} extends APIMethods {
 
   public stream: LookerSDKStream
   
-  constructor(authSession: IAuthorizer) {
+  constructor(authSession: IAuthSession) {
     super(authSession)
     this.stream = new LookerSDKStream(authSession)  
   }
