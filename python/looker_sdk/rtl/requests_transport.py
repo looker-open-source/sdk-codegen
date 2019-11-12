@@ -24,6 +24,7 @@
 """
 
 import logging
+import urllib.parse
 from typing import cast, Callable, Dict, MutableMapping, Optional
 
 import requests
@@ -64,8 +65,6 @@ class RequestsTransport(transport.Transport):
         headers: Optional[MutableMapping[str, str]] = None,
         transport_options: Optional[transport.TransportSettings] = None,
     ) -> transport.Response:
-
-        url = f"{self.api_path}{path}"
         if headers is None:
             headers = {}
         if authenticator:
@@ -73,22 +72,22 @@ class RequestsTransport(transport.Transport):
         timeout = self.settings.timeout
         if transport_options:
             timeout = transport_options.timeout
-        logging.info("%s(%s)", method.name, url)
+        request_path = self.make_path(
+            path, query_params, authenticator, transport_options
+        )
+        logging.info("%s(%s)", method.name, request_path)
         try:
             resp = self.session.request(
                 method.name,
-                url,
+                request_path,
                 auth=NullAuth(),
-                params=query_params,
                 data=body,
                 headers=headers,
                 timeout=timeout,
             )
         except IOError as exc:
             ret = transport.Response(
-                False,
-                bytes(str(exc), encoding="utf-8"),
-                transport.ResponseMode.STRING,
+                False, bytes(str(exc), encoding="utf-8"), transport.ResponseMode.STRING,
             )
         else:
             ret = transport.Response(
@@ -103,6 +102,28 @@ class RequestsTransport(transport.Transport):
                 ret.encoding = encoding
 
         return ret
+
+    def make_path(
+        self,
+        path: str,
+        query_params: Optional[MutableMapping[str, str]],
+        authenticator: Optional[Callable[[], Dict[str, str]]] = None,
+        transport_options: Optional[transport.TransportSettings] = None,
+    ) -> str:
+        base = self.api_path if authenticator else transport_options.base_url
+        if not path.startswith(("https:", "http:")):
+            path = f"{base}{path}"
+        path = self.add_query_params(path, query_params)
+        return path
+
+    def add_query_params(self, path: str, params: Optional[MutableMapping[str, str]]):
+        if params:
+            path += f"?{self.encode_params(params)}"
+        return path
+
+    def encode_params(self, values: MutableMapping[str, str]) -> str:
+        params = urllib.parse.urlencode(values)
+        return params
 
 
 class NullAuth(requests.auth.AuthBase):
