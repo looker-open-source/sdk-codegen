@@ -80,44 +80,56 @@ def csrf():
 @app.route("/register", methods=["POST"])
 def register() -> Any:
     form = RegistrationForm()
-    if form.validate_on_submit():
-        response = {"ok": True, "message": "Congratulations!"}
-        hackathon = form.data["hackathon"]
-        first_name = form.data["first_name"]
-        last_name = form.data["last_name"]
-        email = form.data["email"]
-        register_user = sheets.RegisterUser(
-            hackathon=hackathon,
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            organization=form.data["organization"],
-            role=form.data["role"],
-            tshirt_size=form.data["tshirt_size"],
-        )
-        sheets_client = sheets.Sheets(
-            spreadsheet_id=app.config["GOOGLE_SHEET_ID"],
-            cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
-        )
+    if not form.validate_on_submit():
+        errors = {}
+        for field, field_errors in form.errors.items():
+            if field == "csrf_token":
+                field = "validation"
+                field_errors = ["Form is invalid"]
+            errors[field] = ", ".join(field_errors)
+        return {
+            "ok": False,
+            "message": "; ".join(f"{k}: {v}" for k, v in errors.items()),
+        }
+
+    response = {"ok": True, "message": "Congratulations!"}
+    hackathon = form.data["hackathon"]
+    first_name = form.data["first_name"]
+    last_name = form.data["last_name"]
+    email = form.data["email"]
+    register_user = sheets.RegisterUser(
+        hackathon=hackathon,
+        first_name=first_name,
+        last_name=last_name,
+        email=email,
+        organization=form.data["organization"],
+        role=form.data["role"],
+        tshirt_size=form.data["tshirt_size"],
+    )
+    sheets_client = sheets.Sheets(
+        spreadsheet_id=app.config["GOOGLE_SHEET_ID"],
+        cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
+    )
+    try:
+        sheets_user = sheets_client.register_user(register_user)
+    except sheets.SheetError as ex:
+        app.logger.error(ex, exc_info=True)
+        response = {"ok": False, "message": "There was a problem, try again later."}
+    else:
         try:
-            sheets_user = sheets_client.register_user(register_user)
-        except sheets.SheetError as ex:
+            client_id = looker.register_user(
+                hackathon=hackathon,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+            )
+        except looker.RegisterError as ex:
             app.logger.error(ex, exc_info=True)
-            response = {"ok": False, "message": "There was a problem, try again later."}
+            response = {
+                "ok": False,
+                "message": "There was a problem, try again later.",
+            }
         else:
-            try:
-                client_id = looker.register_user(
-                    hackathon=hackathon,
-                    first_name=first_name,
-                    last_name=last_name,
-                    email=email,
-                )
-            except looker.RegisterError as ex:
-                app.logger.error(ex, exc_info=True)
-                response = {
-                    "ok": False,
-                    "message": "There was a problem, try again later.",
-                }
             try:
                 sheets_user.client_id = client_id
                 sheets_client.users.save(sheets_user)
@@ -127,17 +139,6 @@ def register() -> Any:
                     "ok": False,
                     "message": "There was a problem, try again later.",
                 }
-    else:
-        errors = {}
-        for field, field_errors in form.errors.items():
-            if field == "csrf_token":
-                field = "validation"
-                field_errors = ["Form is invalid"]
-            errors[field] = ", ".join(field_errors)
-        response = {
-            "ok": False,
-            "message": "; ".join(f"{k}: {v}" for k, v in errors.items()),
-        }
     return flask.jsonify(response)
 
 
