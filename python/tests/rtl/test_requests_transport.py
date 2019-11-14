@@ -58,10 +58,19 @@ class Session:
         return self.ret_val
 
 
+def mock_auth():
+    return
+
+
+@pytest.fixture()
+def rtp(settings):
+    return requests_transport.RequestsTransport.configure(settings)
+
+
 @pytest.fixture
 def settings():
     return transport.TransportSettings(
-        base_url="/some/path", api_version="3.1", headers=None, verify_ssl=True
+        base_url="https://looker.sdk", api_version="3.1", headers=None, verify_ssl=True
     )
 
 
@@ -113,7 +122,7 @@ def test_request_ok(
     )
     session = cast(requests.Session, Session(ret_val))
     test = requests_transport.RequestsTransport(settings, session)
-    resp = test.request(transport.HttpMethod.GET, "/some/path")
+    resp = test.request(transport.HttpMethod.GET, "https://looker.sdk")
     assert isinstance(resp, transport.Response)
     assert resp.value == value
     assert resp.ok is True
@@ -140,7 +149,7 @@ def test_request_not_ok(
     )
     session = cast(requests.Session, Session(ret_val))
     test = requests_transport.RequestsTransport(settings, session)
-    resp = test.request(transport.HttpMethod.GET, "/some/path")
+    resp = test.request(transport.HttpMethod.GET, "https://looker.sdk")
     assert isinstance(resp, transport.Response)
     assert resp.value == value
     assert resp.ok is False
@@ -153,7 +162,38 @@ def test_request_error(settings):
     """
     session = cast(requests.Session, Session(None, True))
     test = requests_transport.RequestsTransport(settings, session)
-    resp = test.request(transport.HttpMethod.GET, "/some/path")
+    resp = test.request(transport.HttpMethod.GET, "https://looker.sdk")
     assert isinstance(resp, transport.Response)
     assert resp.value == b"(54, 'Connection reset by peer')"
     assert resp.ok is False
+
+
+def test_retrieves_fully_qualified_url(rtp):
+    resp = rtp.request(
+        transport.HttpMethod.GET, "https://github.com/looker-open-source/sdk-codegen"
+    )
+    assert isinstance(resp, transport.Response)
+    assert resp.ok
+    if resp.ok:
+        content = str(resp.value)
+        assert "One SDK to rule them all, and in the codegen bind them" in content
+
+
+def test_relative_path_without_authenticator_is_just_base(rtp):
+    actual = rtp.make_path("/login")
+    assert actual == "https://looker.sdk/login"
+
+
+def test_relative_path_with_authenticator_is_api_path(rtp):
+    actual = rtp.make_path("/login", mock_auth)
+    assert actual == "https://looker.sdk/api/3.1/login"
+
+
+def test_full_path_without_auth_is_just_full_path(rtp):
+    actual = rtp.make_path("https://looker.sdk/login")
+    assert actual == "https://looker.sdk/login"
+
+
+def test_full_path_with_auth_is_just_full_path(rtp):
+    actual = rtp.make_path("https://looker.sdk/login", mock_auth)
+    assert actual == "https://looker.sdk/login"

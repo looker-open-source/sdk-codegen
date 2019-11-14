@@ -65,6 +65,7 @@ class RequestsTransport(transport.Transport):
         headers: Optional[MutableMapping[str, str]] = None,
         transport_options: Optional[transport.TransportSettings] = None,
     ) -> transport.Response:
+        request_path = self.make_path(path, authenticator)
         if headers is None:
             headers = {}
         if authenticator:
@@ -72,15 +73,13 @@ class RequestsTransport(transport.Transport):
         timeout = self.settings.timeout
         if transport_options:
             timeout = transport_options.timeout
-        request_path = self.make_path(
-            path, query_params, authenticator, transport_options
-        )
         logging.info("%s(%s)", method.name, request_path)
         try:
             resp = self.session.request(
                 method.name,
                 request_path,
                 auth=NullAuth(),
+                params=query_params,
                 data=body,
                 headers=headers,
                 timeout=timeout,
@@ -104,26 +103,12 @@ class RequestsTransport(transport.Transport):
         return ret
 
     def make_path(
-        self,
-        path: str,
-        query_params: Optional[MutableMapping[str, str]],
-        authenticator: Optional[Callable[[], Dict[str, str]]] = None,
-        transport_options: Optional[transport.TransportSettings] = None,
+        self, path: str, authenticator: Optional[Callable[[], Dict[str, str]]] = None
     ) -> str:
-        base = self.api_path if authenticator else transport_options.base_url
-        if not path.startswith(("https:", "http:")):
+        base = self.api_path if authenticator else self.settings.base_url
+        if not urllib.parse.urlparse(path).scheme:
             path = f"{base}{path}"
-        path = self.add_query_params(path, query_params)
         return path
-
-    def add_query_params(self, path: str, params: Optional[MutableMapping[str, str]]):
-        if params:
-            path += f"?{self.encode_params(params)}"
-        return path
-
-    def encode_params(self, values: MutableMapping[str, str]) -> str:
-        params = urllib.parse.urlencode(values)
-        return params
 
 
 class NullAuth(requests.auth.AuthBase):
