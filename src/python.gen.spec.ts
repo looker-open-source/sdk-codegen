@@ -292,47 +292,91 @@ class ApiVersion(model.Model):
     current_version: Optional["ApiVersionElement"] = None
     supported_versions: Optional[Sequence["ApiVersionElement"]] = None`)
     })
-    it('write model', () => {
-      // cause dynamic WriteApiSession
-      const method = apiModel.methods['create_query_task']
+    it('input models', () => {
+      // run method generation to populate inputTypes
+      const method = apiModel.methods['create_merge_query']
       const param = method.bodyParams[0]
       gen.declareParameter(indent, param)
 
-      const writeType = apiModel.types['WriteCreateQueryTask']
-      const actual = gen.declareType(indent, writeType)
+      const inputType = apiModel.types['WriteMergeQuery']
+      const actual = gen.declareType(indent, inputType)
       expect(actual).toEqual(`
 @attr.s(auto_attribs=True, kw_only=True, init=False)
-class WriteCreateQueryTask(model.Model):
+class WriteMergeQuery(model.Model):
     """
-    Dynamically generated writeable type for CreateQueryTask
+    Dynamically generated writeable type for MergeQuery
 
     Attributes:
-        query_id: Id of query to run
-        result_format: Desired result format
-        source: Source of query task
-        deferred: Create the task but defer execution
-        look_id: Id of look associated with query.
-        dashboard_id: Id of dashboard associated with query.
+        column_limit: Column Limit
+        dynamic_fields: Dynamic Fields
+        pivots: Pivots
+        sorts: Sorts
+        source_queries: Source Queries defining the results to be merged.
+        total: Total
+        vis_config: Visualization Config
     """
-    query_id: int
-    result_format: str
-    source: Optional[str] = None
-    deferred: Optional[bool] = None
-    look_id: Optional[int] = None
-    dashboard_id: Optional[str] = None
+    column_limit: Optional[str] = None
+    dynamic_fields: Optional[str] = None
+    pivots: Optional[Sequence[str]] = None
+    sorts: Optional[Sequence[str]] = None
+    source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None
+    total: Optional[bool] = None
+    vis_config: Optional[MutableMapping[str, str]] = None
 
-    def __init__(self, *, query_id: int,
-            result_format: str,
-            source: Optional[str] = None,
-            deferred: Optional[bool] = None,
-            look_id: Optional[int] = None,
-            dashboard_id: Optional[str] = None):
-        self.query_id = query_id
-        self.result_format = result_format
-        self.source = source
-        self.deferred = deferred
-        self.look_id = look_id
-        self.dashboard_id = dashboard_id`)
+    def __init__(self, *, column_limit: Optional[str] = None,
+            dynamic_fields: Optional[str] = None,
+            pivots: Optional[Sequence[str]] = None,
+            sorts: Optional[Sequence[str]] = None,
+            source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None,
+            total: Optional[bool] = None,
+            vis_config: Optional[MutableMapping[str, str]] = None):
+        self.column_limit = column_limit
+        self.dynamic_fields = dynamic_fields
+        self.pivots = pivots
+        self.sorts = sorts
+        self.source_queries = source_queries
+        self.total = total
+        self.vis_config = vis_config`)
+
+      const childInputType = apiModel.types['MergeQuerySourceQuery']
+      const childActual = gen.declareType(indent, childInputType)
+      expect(childActual).toEqual(`
+@attr.s(auto_attribs=True, kw_only=True, init=False)
+class MergeQuerySourceQuery(model.Model):
+    """
+    Attributes:
+        merge_fields: An array defining which fields of the source query are mapped onto fields of the merge query
+        name: Display name
+        query_id: Id of the query to merge
+    """
+    merge_fields: Optional[Sequence["MergeFields"]] = None
+    name: Optional[str] = None
+    query_id: Optional[int] = None
+
+    def __init__(self, *, merge_fields: Optional[Sequence["MergeFields"]] = None,
+            name: Optional[str] = None,
+            query_id: Optional[int] = None):
+        self.merge_fields = merge_fields
+        self.name = name
+        self.query_id = query_id`)
+
+      const grandChildInputType = apiModel.types['MergeFields']
+      const grandChildActual = gen.declareType(indent, grandChildInputType)
+      expect(grandChildActual).toEqual(`
+@attr.s(auto_attribs=True, kw_only=True, init=False)
+class MergeFields(model.Model):
+    """
+    Attributes:
+        field_name: Field name to map onto in the merged results
+        source_field_name: Field name from the source query
+    """
+    field_name: Optional[str] = None
+    source_field_name: Optional[str] = None
+
+    def __init__(self, *, field_name: Optional[str] = None,
+            source_field_name: Optional[str] = None):
+        self.field_name = field_name
+        self.source_field_name = source_field_name`)
     })
   })
 })
