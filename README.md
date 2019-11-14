@@ -220,3 +220,7 @@ The following table describes the environment variables. By default, the SDK "na
 | LOOKERSDK_TIMEOUT | Request timeout in seconds. Defaults to `120` for most platforms. |
 | LOOKERSDK_CLIENT_ID | API3 credentials `client_id`. This and `client_secret` must be provided in some fashion to the Node SDK, or no calls to the API will be authorized. No default value. |
 | LOOKERSDK_CLIENT_SECRET | API3 credentials `client_secret`. No default value. |
+
+## SDK Examples
+
+Looker hosts an open source repository for SDK examples at <https://github.com/looker-open-source/sdk-examples>. We welcome members of the community to submit additional examples.
