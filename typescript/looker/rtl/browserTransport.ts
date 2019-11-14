@@ -27,6 +27,8 @@ import {
   SDKResponse,
   ITransportSettings,
   HttpMethod, Authenticator, agentTag, trace,
+  IRequestProps,
+  IRequestHeaders,
 } from './transport'
 import { PassThrough, Readable } from 'readable-stream'
 import { BaseTransport } from './baseTransport'
@@ -47,9 +49,9 @@ export class BrowserTransport extends BaseTransport {
   ): Promise<SDKResponse<TSuccess, TError>> {
     options = { ... this.options, ...options}
     const requestPath = this.makePath(path, options, queryParams, authenticator)
-    const props = await this.initRequest(method, body, authenticator, options)
+    const props = await this.initRequest(method, requestPath, body, authenticator, options)
     const req = fetch(
-      requestPath,
+      props.url,
       // @ts-ignore
       props, // Weird package issues with unresolved imports for RequestInit :(
     )
@@ -77,12 +79,13 @@ export class BrowserTransport extends BaseTransport {
 
   private async initRequest(
     method: HttpMethod,
+    path: string,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>,
   ) {
     options = options ? {...this.options, ...options} : this.options
-    let headers: {[key:string]: string} = {'x-looker-appid': agentTag}
+    let headers: IRequestHeaders = {'x-looker-appid': agentTag}
     if (options && options.headers) {
       Object.keys(options.headers).forEach(key => {
         headers[key] = options!.headers![key]
@@ -90,11 +93,12 @@ export class BrowserTransport extends BaseTransport {
     }
 
     let props = {
+      url: path,
       body: body ? JSON.stringify(body) : undefined,
       headers: headers,
       credentials: 'same-origin',
       method,
-    }
+    } as IRequestProps
 
     if (authenticator) {
       // Add authentication information to the request
@@ -120,44 +124,44 @@ export class BrowserTransport extends BaseTransport {
     const stream = new PassThrough()
     const requestPath = this.makePath(path, options, queryParams, authenticator)
     const returnPromise = callback(stream)
-    let init = await this.initRequest(
+    let props = await this.initRequest(
       method,
+      requestPath,
       body,
       authenticator,
       options,
     )
-    trace(`requestPath: ${requestPath}`)
 
     const streamPromise = new Promise<void>((resolve, reject) => {
-      trace(`[stream] beginning stream via download url`, init)
+      trace(`[stream] beginning stream via download url`, props)
       let hasResolved = false
       reject('Not implemented yet!')
-      // const req = this.requestor(init)
+      // const req = this.requestor(props)
       //
       // req
       //   .on("error", (err) => {
       //     if (hasResolved && (err as any).code === "ECONNRESET") {
-      //       trace('ignoring ECONNRESET that occurred after streaming finished', init)
+      //       trace('ignoring ECONNRESET that occurred after streaming finished', props)
       //     } else {
       //       trace('streaming error', err)
       //       reject(err)
       //     }
       //   })
       //   .on("finish", () => {
-      //     trace(`[stream] streaming via download url finished`, init)
+      //     trace(`[stream] streaming via download url finished`, props)
       //   })
       //   .on("socket", (socket) => {
-      //     trace(`[stream] setting keepalive on socket`, init)
+      //     trace(`[stream] setting keepalive on socket`, props)
       //     socket.setKeepAlive(true)
       //   })
       //   .on("abort", () => {
-      //     trace(`[stream] streaming via download url aborted`, init)
+      //     trace(`[stream] streaming via download url aborted`, props)
       //   })
       //   .on("response", () => {
-      //     trace(`[stream] got response from download url`, init)
+      //     trace(`[stream] got response from download url`, props)
       //   })
       //   .on("close", () => {
-      //     trace(`[stream] request stream closed`, init)
+      //     trace(`[stream] request stream closed`, props)
       //   })
       //   .pipe(stream)
       //   .on("error", (err) => {
@@ -165,12 +169,12 @@ export class BrowserTransport extends BaseTransport {
       //     reject(err)
       //   })
       //   .on("finish", () => {
-      //     trace(`[stream] PassThrough stream finished`, init)
+      //     trace(`[stream] PassThrough stream finished`, props)
       //     resolve()
       //     hasResolved = true
       //   })
       //   .on("close", () => {
-      //     trace(`[stream] PassThrough stream closed`, init)
+      //     trace(`[stream] PassThrough stream closed`, props)
       //   })
     })
 

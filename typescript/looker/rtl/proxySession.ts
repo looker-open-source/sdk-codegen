@@ -24,59 +24,44 @@
 
 import { AuthSession } from './authSession'
 import { BrowserTransport } from './browserTransport'
-import { ITransport } from './transport'
+import { ITransport, IRequestProps } from './transport'
 import { IApiSettings } from './apiSettings'
-import { AuthToken } from './authToken'
 
 /**
- * An AuthSession class intended for use with proxied authentication
+ * An AuthSession class intended for use with proxied requests
  *
- * Override the `authenticate()` method to implement a browser authentication hook
- *
- * Override `logout()` if you want to support session logout
+ * This session uses `authenticate` to modify all requests to pass through a proxy server with
+ * passing the request to the proxy server specified in the `proxyUrl` parameter, and sets
+ * the original request path as an `X-Forwarded-For` header.
  *
  */
 export abstract class ProxySession extends AuthSession {
-  activeToken = new AuthToken()
-
   constructor(public settings: IApiSettings, public proxyUrl: string, transport?: ITransport) {
     super(settings, transport || new BrowserTransport(settings))
   }
 
   /**
-   * Is the session active and authenticated?
-   * @returns `true` if the session is active
+   * Proxy session is considered to be always authenticated since the proxy handles all auth
+   *
+   * @returns `true` since the proxy handles all authentication
    */
   isAuthenticated() {
-    return this.activeToken.isActive()
+    return true
   }
 
   /**
-   * Decorate the request properties with the required authentication information
-   *
-   * Override this class with the implementation for a specific proxied authentication workflow
-   *
-   * The default implementation swaps the request's path with the proxy url, and puts the original
-   * request path in the `X-Forwarded-For` header
+   * This implementation swaps the request's path with the proxy url, and puts the original
+   * request path in the `X-Forwarded-For` header, presuming that the proxy server will add API authentication
+   * information to the request that gets submitted to the Looker API, then forward the API response to the requestor
    *
    * @param props the properties of the request
-   * @returns the same properties with authentication added
+   * @returns the same request properties with "authentication" data added
+   *
    */
-  async authenticate(props: any) {
-    props['X-Forwarded-For'] = props['path']
-    props['path'] = this.proxyUrl
+  async authenticate(props: IRequestProps) {
+    props.headers['X-Forwarded-For'] = props.url
+    props.url = this.proxyUrl
     return props
-  }
-
-  /**
-   * Logout does nothing for a proxy session by default.
-   *
-   * Override to support using the proxy to log out the session
-   *
-   * @returns a false Promise
-   */
-  async logout(): Promise<boolean> {
-    return new Promise<boolean>(() => false)
   }
 
 }

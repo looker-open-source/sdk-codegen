@@ -200,3 +200,23 @@ If the SDK application using an `.ini` file is available publicly, download or v
 ### Warnings for using Environment variables to configure the SDK
 
 If the host environment for a Looker SDK supports environment variables, the SDK can also read environment variables to retrieve the server url and API credentials. Environment variables could also be visible to intrusive malware that may penetrate your application, so this option for providing credentials should also be used with caution.
+
+## Environment variable configuration
+
+Environment variables can be used for any SDK runtime that supports reading environment variables. Environment variables can be used in the:
+
+* **Node** version of the Typescript/Javascript Looker SDK
+* Python SDK
+* Swift SDK
+* Kotlin SDK
+
+The following table describes the environment variables. By default, the SDK "namespace" is "LookerSDK" which is converted to UPPERCASE when used for naming environment variables.
+
+| Variable name | Description |
+| ------------- | ----------- |
+| LOOKERSDK_BASE_URL | A URL like `https://my.looker.com:19999`. No default value. |
+| LOOKERSDK_API_VERSION | Version of the Looker API to use. Use `3.1` for now, which is the default and used to produce this SDK. |
+| LOOKERSDK_VERIFY_SSL | `true`, `t`, `yes`, `y`, or `1` (case insensitive) to enable SSL verification. Any other value is treated as `false`. Defaults to `true` if not set. |
+| LOOKERSDK_TIMEOUT | Request timeout in seconds. Defaults to `120` for most platforms. |
+| LOOKERSDK_CLIENT_ID | API3 credentials `client_id`. This and `client_secret` must be provided in some fashion to the Node SDK, or no calls to the API will be authorized. No default value. |
+| LOOKERSDK_CLIENT_SECRET | API3 credentials `client_secret`. No default value. |

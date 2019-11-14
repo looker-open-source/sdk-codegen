@@ -214,7 +214,7 @@ export interface ITransport {
 }
 
 /** A successful SDK call. */
-interface ISDKSuccessResponse<T> {
+export interface ISDKSuccessResponse<T> {
   /** Whether the SDK call was successful. */
   ok: true
   /** The object returned by the SDK call. */
@@ -222,7 +222,7 @@ interface ISDKSuccessResponse<T> {
 }
 
 /** An erroring SDK call. */
-interface ISDKErrorResponse<T> {
+export interface ISDKErrorResponse<T> {
   /** Whether the SDK call was successful. */
   ok: false
   /** The error object returned by the SDK call. */
@@ -273,9 +273,11 @@ export interface IAuthSession  {
    */
   logout(): Promise<boolean>
 
-
   /**
-   * Typically returns an `IAccessToken` but could be any data used for auth
+   * Typically returns an `IAccessToken` but could be any data used for auth.
+   *
+   * This method is not used in all session patterns, so it's not abstract in the base AuthSession
+   *
    * @returns {Promise<any>} authentication information
    */
   getToken(): Promise<any>
@@ -299,13 +301,26 @@ export interface IAuthSession  {
   reset(): void
 }
 
+/**
+ * Generic collection
+ */
+export interface IRequestHeaders {
+  [key:string]: string
+}
 
-/** Generic http request property collection */
+/**
+ * Generic http request property collection
+ * TOOD: Trim this down to what is required
+ */
 export interface IRequestProps {
+  [key:string]: any
+  /** full url for request, including any query params */
+  url: string
+
   /** body of request. optional */
   body?: any;
   /** headers for request. optional */
-  headers?: any;
+  headers: IRequestHeaders;
   /** Http method for request. required. */
   method: HttpMethod;
   /** Redirect processing for request. optional */
@@ -317,14 +332,14 @@ export interface IRequestProps {
   compress?: boolean;
   /** maximum redirect count. 0 to not follow redirect */
   follow?: number;
-  /** maximum response body size in bytes. 0 to disable */
+  /** maximum response body size in bytes */
   size?: number;
   /** req/res timeout in ms, it resets on redirect. 0 to disable (OS limit applies) */
   timeout?: number;
 }
 
 /** General purpose authentication callback */
-export type Authenticator = (init: any) => any;
+export type Authenticator = (props: any) => any
 
 /** Interface for API transport values */
 export interface ITransportSettings {

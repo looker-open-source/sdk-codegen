@@ -32,7 +32,7 @@ import {
   responseMode,
   ResponseMode,
   SDKResponse,
-  StatusCode, trace, Values,
+  StatusCode, trace, Values, IRequestHeaders,
 } from './transport'
 
 import rq, { Response, Request } from 'request'
@@ -40,7 +40,7 @@ import rp from 'request-promise-native'
 import { PassThrough, Readable } from 'readable-stream'
 import { BaseTransport } from './baseTransport'
 
-type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
+export type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
 
 export class NodeTransport extends BaseTransport {
 
@@ -70,7 +70,7 @@ export class NodeTransport extends BaseTransport {
       const res = await req
       const resTyped = res as rq.Response
       const contentType = String(resTyped.headers['content-type'])
-      // @ts-ignore have to resolve missing properties of response promise
+      // @ ts-ignore have to resolve missing properties of response promise
       const parsed = await parseResponse(contentType, res)
       if (this.ok(resTyped)) {
         return {ok: true, value: parsed}
@@ -208,15 +208,9 @@ export class NodeTransport extends BaseTransport {
     options?: Partial<ITransportSettings>,
   ) {
     options = options ? {...this.options, ...options} : this.options
-    let headers: any = {
-      'User-Agent': agentTag,
+    const headers: IRequestHeaders = {
+      'x-looker-appid': agentTag,
       ...options.headers,
-    }
-    if (body) {
-      headers = {
-        'User-Agent': agentTag,
-        ...options.headers,
-      }
     }
     const requestPath = this.makePath(path, options, queryParams, authenticator)
     let init: RequestOptions = {
@@ -244,7 +238,6 @@ export class NodeTransport extends BaseTransport {
       res.statusCode >= StatusCode.OK && res.statusCode <= StatusCode.IMUsed
     )
   }
-
 
   // /**
   //  * A streaming helper for the "json" data format. It handles automatically parsing

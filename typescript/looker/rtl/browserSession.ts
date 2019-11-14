@@ -25,41 +25,43 @@
 import { IApiSettings } from './apiSettings'
 import { IRequestProps, ITransport } from './transport'
 import { BrowserTransport } from './browserTransport'
-import { AuthToken } from './authToken'
 import { AuthSession } from './authSession'
 
 export class BrowserSession extends AuthSession {
-
+  _activeToken = ''
   constructor(public settings: IApiSettings, transport?: ITransport) {
     super(settings, transport || new BrowserTransport(settings))
   }
 
   get activeToken() {
-    const meta = document.head.querySelector(
-      '[name=csrf-token]',
-    ) as HTMLMetaElement
-    return meta ? meta.content : ''
+    if (!this._activeToken) {
+      const meta = document.head.querySelector(
+        '[name=csrf-token]',
+      ) as HTMLMetaElement
+      this._activeToken = meta ? meta.content : ''
+    }
+    return this._activeToken
   }
 
-  // Determines if the authentication token exists and has not expired
+  /**
+   * Returns true if the same origin browser session has a CRSF token established
+   * that can be used for API authentication
+   */
   isAuthenticated() {
     const token = this.activeToken
     if (!token) return false
     return true
   }
 
+  /**
+   * Authenticates a request with the CSRF token if it is active
+   *
+   * @param props Request properties to decorate
+   */
   async authenticate(props: IRequestProps) {
     const token = this.activeToken
     if (token) props.headers['X-CSRF-TOKEN'] = token
     return props
-  }
-
-  /**
-   * Logout must be overridden for a Browser Session
-   * @returns a false Promise
-   */
-  async logout(): Promise<boolean> {
-    return new Promise<boolean>(() => false)
   }
 
 }

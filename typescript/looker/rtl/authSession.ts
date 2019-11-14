@@ -25,8 +25,8 @@
 import { IAuthSession, IRequestProps, ITransport } from './transport'
 import { IApiSettings } from './apiSettings'
 
-export class AuthSession implements IAuthSession {
-  static TBD = "Not implemented in AuthSession"
+export abstract class AuthSession implements IAuthSession {
+  static TBD = "Method not implemented in AuthSession"
   settings: IApiSettings
   sudoId: string = ''
   transport: ITransport
@@ -36,38 +36,78 @@ export class AuthSession implements IAuthSession {
     this.transport = transport
   }
 
-  // @ts-ignore
-  authenticate(props: IRequestProps): Promise<IRequestProps> {
-    this.notImplemented()
-  }
+  /**
+   * Decorate request properties with the required authentication information
+   *
+   * Properties could be additional headers, cookies, or some other request property
+   *
+   * @param props Request properties to use and/or modify in authentication method
+   */
+  abstract authenticate(props: IRequestProps): Promise<IRequestProps>
 
-  // @ts-ignore
-  getToken(): Promise<any> {
-    this.notImplemented()
-  }
+  /**
+   * Does the session have active authentication information?
+   */
+  abstract isAuthenticated() : boolean
 
-  isAuthenticated(): boolean {
-    return false
-  }
-
-  isSudo(): boolean {
-    return (this.sudoId !== '') && (this.isAuthenticated())
-  }
-
-  // @ts-ignore
+  /**
+   * Override this method to implement API session login
+   *
+   * @param sudoId ID of sudo user. A missing sudoId means the API credentials are used to login
+   */
+  // @ts-ignore sudoId is not used in this default implementation
   login(sudoId?: string | number): Promise<any> {
-    this.notImplemented()
+    return this.notImplementedAsync()
   }
 
+  /**
+   * Override this method to implement logout
+   *
+   * The base implementation doesn't throw a not implemented error. It just returns a false promise.
+   */
   logout(): Promise<boolean> {
     return new Promise<boolean>(() => false)
   }
 
+  /**
+   * Override this method to implement a authentication retrieval from the server
+   *
+   * The base implementation will throw an error in the promise result saying the method isn't implemented
+   *
+   */
+  getToken(): Promise<any> {
+    return this.notImplementedAsync()
+  }
+
+  /**
+   * Is a sudo user active for this session?
+   */
+  isSudo(): boolean {
+    return (this.sudoId !== '') && (this.isAuthenticated())
+  }
+
+  /**
+   * Resets all authentication status, but standard implementations do NOT log out an API session
+   */
   reset(): void {
     this.sudoId = ''
   }
 
+  /**
+   * utility function not implemented error
+   */
   private notImplemented() {
     throw new Error(AuthSession.TBD)
   }
+
+  /**
+   * utility function not implemented error promise
+   */
+  private notImplementedAsync() {
+    // Use `ctrl` for instance closure in the method reference
+    const ctrl = this
+    // Return a promise that fails with a not implemented error
+    return new Promise<any>(() => ctrl.notImplemented())
+  }
+
 }

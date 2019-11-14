@@ -143,7 +143,7 @@ export class NodeSession extends AuthSession {
   }
 
   /**
-   * Logout the active user. If the active user is impersonated, the session reverts to the API3 user
+   * Logout the active user. If the active user is sudo, the session reverts to the API3 user
    */
   async logout() {
     let result = false
@@ -153,6 +153,7 @@ export class NodeSession extends AuthSession {
     return result
   }
 
+  // TODO should this be moved to `transport.ts` as a generic method?
   private async ok<TSuccess, TError>(
     promise: Promise<SDKResponse<TSuccess, TError>>,
   ) {
