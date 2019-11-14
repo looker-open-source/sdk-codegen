@@ -60,7 +60,7 @@ export abstract class CorsSession extends AuthSession {
   }
 
   /**
-   * This implementation calls the customized `getToken()` method to retrieve the authentication token for
+   * This implementation calls the subclasser-implemented `getToken()` method to retrieve the authentication token for
    * the Looker API server because the `/login` endpoint is not available via CORS for the Looker API.
    *
    * @param props the properties of the request
