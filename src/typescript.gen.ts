@@ -65,7 +65,8 @@ export class TypescriptGen extends CodeGen {
     return `
 // ${warnEditing}
 import { APIMethods } from '../rtl/apiMethods'
-import { IAuthSession, ITransportSettings } from '../rtl/transport'
+import { IAuthSession } from '../rtl/authSession'
+import { ITransportSettings } from '../rtl/transport'
 import { ${this.packageName}Stream } from './streams'
 /**
  * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters

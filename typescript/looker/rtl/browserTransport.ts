@@ -92,13 +92,13 @@ export class BrowserTransport extends BaseTransport {
       })
     }
 
-    let props = {
+    let props: IRequestProps = {
       url: path,
       body: body ? JSON.stringify(body) : undefined,
       headers: headers,
       credentials: 'same-origin',
       method,
-    } as IRequestProps
+    }
 
     if (authenticator) {
       // Add authentication information to the request

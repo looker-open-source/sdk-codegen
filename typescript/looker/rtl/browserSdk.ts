@@ -28,10 +28,11 @@
  * Simple factory for the browser version of the Looker SDK. Provides default connectivity for SDK methods
  */
 import { BrowserTransport } from './browserTransport'
-import { IAuthSession, ITransport } from './transport'
+import { ITransport } from './transport'
 import { BrowserSession } from './browserSession'
 import { DefaultSettings, IApiSettings } from './apiSettings'
 import { LookerSDK } from '../sdk/methods'
+import { IAuthSession } from './authSession'
 
 export const BrowserSettings = (): IApiSettings => {
   const settings = DefaultSettings()

@@ -26,10 +26,10 @@ import {
   SDKResponse,
   HttpMethod,
   sdkError,
-  IAuthSession,
   ITransportSettings, Values,
 } from './transport'
 import { Readable } from 'readable-stream'
+import { IAuthSession } from './authSession'
 
 export class APIMethods {
   constructor(public authSession: IAuthSession) {

@@ -22,8 +22,70 @@
  * THE SOFTWARE.
  */
 
-import { IAuthSession, IRequestProps, ITransport } from './transport'
+import { IRequestProps, ITransport } from './transport'
 import { IApiSettings } from './apiSettings'
+
+/**
+ * Basic authorization session interface for most API authentication scenarios
+ */
+export interface IAuthSession  {
+
+  settings: IApiSettings
+  transport: ITransport
+  /**
+   * ID of sudo user
+   */
+  sudoId: string
+
+  /**
+   * is the current session authenticated?
+   */
+  isAuthenticated(): boolean
+
+  /**
+   * Decorate the request with authentication information
+   * @param props Properties of request to use or update in callback
+   * @returns the request properties with authentication information added
+   */
+  authenticate(props: IRequestProps): Promise<IRequestProps>
+
+  /**
+   * Log out the current user
+   *
+   * - if the current user is a sudo user, the API user becomes the active user
+   * - if the current user is the API user, the API session is logged out
+   *   - any subsequent SDK method calls will automatically log the API user back in for this scenario
+   * @returns {Promise<boolean>} `true` if a logout happened, `false` otherwise
+   */
+  logout(): Promise<boolean>
+
+  /**
+   * Typically returns an `IAccessToken` but could be any data used for auth.
+   *
+   * This method is not used in all session patterns, so it's not abstract in the base AuthSession
+   *
+   * @returns {Promise<any>} authentication information
+   */
+  getToken(): Promise<any>
+
+  /**
+   *
+   * @returns `true` if the auth session is in sudo mode
+   */
+  isSudo(): boolean
+
+  /**
+   * Login to the auth session, optionally as a sudo user
+   * @param {string | number} sudoId
+   * @returns {Promise<any>} authentication data
+   */
+  login(sudoId?: string | number): Promise<any>
+
+  /**
+   * Clears all authentication tracking. Does **not** log the API user out in default implementations.
+   */
+  reset(): void
+}
 
 export abstract class AuthSession implements IAuthSession {
   static TBD = "Method not implemented in AuthSession"

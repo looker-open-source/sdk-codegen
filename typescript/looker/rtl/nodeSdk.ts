@@ -22,12 +22,13 @@
  * THE SOFTWARE.
  */
 
-import { IAuthSession, ITransport } from './transport'
+import { ITransport } from './transport'
 import { NodeSettingsIniFile } from './nodeSettings'
 import { LookerSDK } from '../sdk/methods'
 import { NodeSession } from './nodeSession'
 import { NodeTransport } from './nodeTransport'
 import { IApiSettings } from './apiSettings'
+import { IAuthSession } from './authSession'
 
 /**
  * @class SDK

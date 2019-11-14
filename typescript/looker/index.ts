@@ -40,7 +40,7 @@ export * from './rtl/transport'
 export * from './sdk/methods'
 export * from './sdk/models'
 
-import { IAuthSession } from './rtl/transport'
+import { IAuthSession } from './rtl/authSession'
 import { LookerSDK } from './sdk/methods'
 
 /**
