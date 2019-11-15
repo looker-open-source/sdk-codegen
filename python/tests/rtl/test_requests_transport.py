@@ -71,7 +71,9 @@ def test_configure(settings):
 
     test = requests_transport.RequestsTransport.configure(settings)
     assert isinstance(test, requests_transport.RequestsTransport)
-    assert test.session.headers.get("User-Agent") == f"PY-SDK {constants.sdk_version}"
+    assert (
+        test.session.headers.get("x-looker-appid") == f"PY-SDK {constants.sdk_version}"
+    )
 
 
 parametrize = [

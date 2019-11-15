@@ -39,7 +39,7 @@ class RequestsTransport(transport.Transport):
         self, settings: transport.TransportSettings, session: requests.Session
     ):
         self.settings = settings
-        headers: Dict[str, str] = {"User-Agent": settings.agent_tag}
+        headers: Dict[str, str] = {"x-looker-appid": settings.agent_tag}
         if settings.headers:
             headers.update(settings.headers)
         session.headers.update(headers)
@@ -47,7 +47,6 @@ class RequestsTransport(transport.Transport):
         self.session = session
 
         self.api_path: str = f"{settings.base_url}/api/{settings.api_version}"
-        self.agent: str = f"LookerSDK Python {settings.api_version}"
         self.logger = logging.getLogger(__name__)
 
     @classmethod
@@ -86,9 +85,7 @@ class RequestsTransport(transport.Transport):
             )
         except IOError as exc:
             ret = transport.Response(
-                False,
-                bytes(str(exc), encoding="utf-8"),
-                transport.ResponseMode.STRING,
+                False, bytes(str(exc), encoding="utf-8"), transport.ResponseMode.STRING,
             )
         else:
             ret = transport.Response(
