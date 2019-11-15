@@ -47,7 +47,6 @@ class RequestsTransport(transport.Transport):
         self.session = session
 
         self.api_path: str = f"{settings.base_url}/api/{settings.api_version}"
-        self.agent: str = f"LookerSDK Python {settings.api_version}"
         self.logger = logging.getLogger(__name__)
 
     @classmethod
