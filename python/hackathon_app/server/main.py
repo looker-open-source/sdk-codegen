@@ -60,7 +60,7 @@ def get_hackathons():
         cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
     )
     try:
-        hackathons = [h.name for h in sheets_client.get_hackathons()]
+        hackathons = {h.name: h.label for h in sheets_client.get_hackathons()}
     except sheets.SheetError as ex:
         app.logger.error(ex, exc_info=True)
         hackathons = [""]

@@ -233,6 +233,7 @@ class Users(WhollySheet[User]):
 @attr.s(auto_attribs=True, kw_only=True)
 class Hackathon(Model):
     name: str
+    label: str
     location: str
     date: datetime.datetime
     duration_in_days: int

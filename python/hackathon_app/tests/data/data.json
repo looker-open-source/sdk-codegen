@@ -222,6 +222,11 @@
                                 },
                                 {
                                     "userEnteredValue": {
+                                        "stringValue": "label"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
                                         "stringValue": "location"
                                     }
                                 },
@@ -242,6 +247,11 @@
                                 {
                                     "userEnteredValue": {
                                         "stringValue": "sfo_2025"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "San Francisco 2025"
                                     }
                                 },
                                 {
@@ -270,6 +280,11 @@
                                 },
                                 {
                                     "userEnteredValue": {
+                                        "stringValue": "San Francisco 2026"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
                                         "stringValue": "San Francisco"
                                     }
                                 },
@@ -290,6 +305,11 @@
                                 {
                                     "userEnteredValue": {
                                         "stringValue": "sfo_2027"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "San Francisco 2027"
                                     }
                                 },
                                 {
@@ -318,6 +338,11 @@
                                 },
                                 {
                                     "userEnteredValue": {
+                                        "stringValue": "San Francisco 2028"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
                                         "stringValue": "San Francisco"
                                     }
                                 },
@@ -338,6 +363,11 @@
                                 {
                                     "userEnteredValue": {
                                         "stringValue": "chicago_2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "Chicago 2019"
                                     }
                                 },
                                 {
@@ -366,6 +396,11 @@
                                 },
                                 {
                                     "userEnteredValue": {
+                                        "stringValue": "London 2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
                                         "stringValue": "London"
                                     }
                                 },
@@ -386,6 +421,11 @@
                                 {
                                     "userEnteredValue": {
                                         "stringValue": "sfo_2019"
+                                    }
+                                },
+                                {
+                                    "userEnteredValue": {
+                                        "stringValue": "San Francisco 2019"
                                     }
                                 },
                                 {

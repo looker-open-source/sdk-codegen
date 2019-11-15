@@ -103,8 +103,8 @@ const ValidatedFieldSelect: React.FC<FieldProps> = ({
 const HackathonSelect: React.FC<{hackathons: string[]}> = ({hackathons}) => {
   //let options = [{value: '', label: 'Select Hack'}]
   let options = []
-  for (let hack of hackathons) {
-    options.push({value: hack, label: hack})
+  for (let [name, label] of Object.entries(hackathons)) {
+    options.push({value: name, label: label})
   }
   return (
     <Field
