@@ -268,7 +268,7 @@ ${this.hooks.join('\n')}
     if (!this.inputTypes.has(type)) return ''
     indent = this.bumper(indent)
     const bump = this.bumper(indent)
-    let result = `\n\n${indent}def __init__(self, *, `
+    let result = `\n\n${indent}def __init__(self, *${this.argDelimiter}`
     let args: string[] = []
     let inits: string[] = []
     Object.values(type.properties)

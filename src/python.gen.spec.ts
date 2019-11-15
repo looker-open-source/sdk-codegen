@@ -323,7 +323,8 @@ class WriteMergeQuery(model.Model):
     total: Optional[bool] = None
     vis_config: Optional[MutableMapping[str, str]] = None
 
-    def __init__(self, *, column_limit: Optional[str] = None,
+    def __init__(self, *,
+            column_limit: Optional[str] = None,
             dynamic_fields: Optional[str] = None,
             pivots: Optional[Sequence[str]] = None,
             sorts: Optional[Sequence[str]] = None,
@@ -353,7 +354,8 @@ class MergeQuerySourceQuery(model.Model):
     name: Optional[str] = None
     query_id: Optional[int] = None
 
-    def __init__(self, *, merge_fields: Optional[Sequence["MergeFields"]] = None,
+    def __init__(self, *,
+            merge_fields: Optional[Sequence["MergeFields"]] = None,
             name: Optional[str] = None,
             query_id: Optional[int] = None):
         self.merge_fields = merge_fields
@@ -373,7 +375,8 @@ class MergeFields(model.Model):
     field_name: Optional[str] = None
     source_field_name: Optional[str] = None
 
-    def __init__(self, *, field_name: Optional[str] = None,
+    def __init__(self, *,
+            field_name: Optional[str] = None,
             source_field_name: Optional[str] = None):
         self.field_name = field_name
         self.source_field_name = source_field_name`)
