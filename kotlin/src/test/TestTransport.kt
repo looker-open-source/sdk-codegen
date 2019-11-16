@@ -23,7 +23,6 @@
  */
 
 import com.looker.rtl.*
-import com.looker.sdk.LookerSDK
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import org.junit.Test as test
@@ -37,24 +36,24 @@ class TestTransport {
     val options = TransportSettings(base, apiVersion)
     val xp = Transport(options)
     val qp: Values = mapOf("a" to 1, "b" to false, "c" to "d e", "skip" to null)
-    val mockAuth: Authenticator = { init: RequestSettings -> RequestSettings(HttpMethod.GET, "bogus") }
+    val mockAuth: Authenticator = { RequestSettings(HttpMethod.GET, "bogus") }
     val params = "?a=1&b=false&c=d+e"
 
     @test fun testFullPath() {
-        var actual = xp.makePath(fullPath)
+        var actual = xp.makeUrl(fullPath)
         assertEquals(fullPath, actual)
-        actual = xp.makePath(fullPath, authenticator = mockAuth)
+        actual = xp.makeUrl(fullPath, authenticator = mockAuth)
         assertEquals(fullPath, actual)
-        actual = xp.makePath(fullPath, qp, mockAuth)
+        actual = xp.makeUrl(fullPath, qp, mockAuth)
         assertEquals(fullPath+params, actual)
     }
 
     @test fun testRelativePath() {
-        var actual = xp.makePath(userPath)
+        var actual = xp.makeUrl(userPath)
         assertEquals("$base$userPath", actual)
-        actual = xp.makePath(userPath, authenticator = mockAuth)
+        actual = xp.makeUrl(userPath, authenticator = mockAuth)
         assertEquals("$base/api/$apiVersion$userPath", actual)
-        actual = xp.makePath(userPath, qp, mockAuth)
+        actual = xp.makeUrl(userPath, qp, mockAuth)
         assertEquals("$base/api/$apiVersion$userPath$params", actual)
     }
 

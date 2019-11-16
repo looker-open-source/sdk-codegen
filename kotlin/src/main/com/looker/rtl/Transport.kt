@@ -83,13 +83,15 @@ fun defaultAuthenticator(requestSettings: RequestSettings): RequestSettings = re
 
 open class TransportSettings(
         var baseUrl: String = "",
-        var apiVersion: String = "",
+        var apiVersion: String = DEFAULT_API_VERSION,
+        var verifySSL: Boolean = true,
+        var timeout: Int = DEFAULT_TIMEOUT,
         var headers: Map<String, String> = mapOf())
 
 fun encodeValues(params: Values = mapOf()): String {
     @Suppress("UNCHECKED_CAST")
     return params
-            .filter { (k, v) -> v !== null }
+            .filter { (_, v) -> v !== null }
             .map { (k, v) -> "$k=${URLEncoder.encode("$v", "utf-8")}"}
             .joinToString("&")
 
@@ -138,7 +140,7 @@ class Transport(val options: TransportSettings) {
      * @param authenticator optional authenticator callback for API requests
      * @return a fully qualified path that is the base url, the api path, or a pass through request url
      */
-    fun makePath(
+    fun makeUrl(
             path: String,
             queryParams: Values = mapOf(),
             authenticator: Authenticator? = null // TODO figure out why ::defaultAuthenticator is matching when it shouldn't
@@ -175,7 +177,7 @@ class Transport(val options: TransportSettings) {
         val headers = options.headers.toMutableMap()
         headers["User-Agent"] = agentTag
 
-        val requestPath = makePath(path, queryParams, authenticator)
+        val requestPath = makeUrl(path, queryParams, authenticator)
 
         // TODO review this kludge
         val auth = if (authenticator === null) { ::defaultAuthenticator } else { authenticator }
