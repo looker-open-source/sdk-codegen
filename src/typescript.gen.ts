@@ -186,8 +186,9 @@ export interface IDictionary<T> {
 
     if (requestType) {
       // use the request type that will be generated in models.ts
-      // No longer using Partial<T> here because required and optional are supposed to be accurate
-      fragment = `request: I${requestType}`
+      // No longer using Partial<T> by default here because required and optional are supposed to be accurate
+      // However, for update methods (iow, patch) Partial<T> is still necessary since only the delta gets set
+      fragment = method.httpMethod === 'PATCH' ? `request: Partial<I${requestType}>` : `request: I${requestType}`
     } else {
       let params: string[] = []
       const args = method.allParams // get the params in signature order
