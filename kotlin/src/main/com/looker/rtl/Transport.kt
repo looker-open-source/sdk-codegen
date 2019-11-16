@@ -166,16 +166,16 @@ class Transport(val options: TransportSettings) {
 
         // Request body
         val json = io.ktor.client.features.json.defaultSerializer()
-        // TODO make our request body form encoded
 
         val builder = HttpRequestBuilder()
         // Set the request method
         builder.method = method.value
 
         // Handle the headers
-        val agentTag = "LookerSDK Kotlin ${options.apiVersion}"
+        val agentTag = "KT-SDK ${options.apiVersion}"
         val headers = options.headers.toMutableMap()
         headers["User-Agent"] = agentTag
+        headers["x-looker-appid"] = agentTag
 
         val requestPath = makeUrl(path, queryParams, authenticator)
 

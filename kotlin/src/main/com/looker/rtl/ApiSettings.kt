@@ -60,7 +60,7 @@ open class ApiSettings(contents: String, var section: String = ""): TransportSet
             throw Error("No section named '$section' was found")
         }
 
-        apiVersion = config[section]?.get("api_version") ?: ""
+        apiVersion = config[section]?.get("api_version") ?: DEFAULT_API_VERSION
         baseUrl = config[section]?.get("base_url") ?: ""
         clientId = config[section]?.get("client_id") ?: ""
         clientSecret = config[section]?.get("client_secret") ?: ""
