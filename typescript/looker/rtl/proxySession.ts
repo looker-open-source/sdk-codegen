@@ -24,7 +24,7 @@
 
 import { AuthSession } from './authSession'
 import { BrowserTransport } from './browserTransport'
-import { ITransport, IRequestProps } from './transport'
+import { ITransport, IRequestProps, agentTag, LookerAppId } from './transport'
 import { IApiSettings } from './apiSettings'
 
 /**
@@ -59,7 +59,11 @@ export abstract class ProxySession extends AuthSession {
    *
    */
   async authenticate(props: IRequestProps) {
+    if (!props.headers) {
+      props.headers = {}
+    }
     props.headers['X-Forwarded-For'] = props.url
+    props.headers[LookerAppId] = agentTag
     props.url = this.proxyUrl
     return props
   }

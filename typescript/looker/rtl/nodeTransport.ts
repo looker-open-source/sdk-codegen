@@ -32,7 +32,7 @@ import {
   responseMode,
   ResponseMode,
   SDKResponse,
-  StatusCode, trace, Values, IRequestHeaders,
+  StatusCode, trace, Values, IRequestHeaders, LookerAppId,
 } from './transport'
 
 import rq, { Response, Request } from 'request'
@@ -209,10 +209,10 @@ export class NodeTransport extends BaseTransport {
   ) {
     options = options ? {...this.options, ...options} : this.options
     const headers: IRequestHeaders = {
-      'x-looker-appid': agentTag,
+      [LookerAppId]: agentTag,
       ...options.headers,
     }
-    const requestPath = this.makePath(path, options, queryParams, authenticator)
+    const requestPath = this.makeUrl(path, options, queryParams, authenticator)
     let init: RequestOptions = {
       url: requestPath,
       headers: headers,

@@ -24,16 +24,15 @@
 
 import { AuthSession } from './authSession'
 import { BrowserTransport } from './browserTransport'
-import { ITransport, IRequestProps, agentTag } from './transport'
+import { ITransport, IRequestProps, agentTag, LookerAppId } from './transport'
 import { IApiSettings } from './apiSettings'
 import { AuthToken } from './authToken'
 
 /**
  * An AuthSession class intended for use with CORS requests
  *
- * This session uses `authenticate` to modify all requests to pass through a proxy server with
- * passing the request to the proxy server specified in the `proxyUrl` parameter, and sets
- * the original request path as an `X-Forwarded-For` header.
+ * This session uses `authenticate()` to establish a token via the overridden `getToken()` before
+ * decorating the requests with the authentication information to call the API endpoint.
  *
  * The Looker API `login` endpoint is not available via CORS calls, so `getToken()` needs to be
  * implemented in the descendant of this class that's instantiated for the browser run-time. This
@@ -51,16 +50,14 @@ export abstract class CorsSession extends AuthSession {
   /**
    * Is the session active and authenticated?
    *
-   * For a proxy session, it is presumed that the proxy will handle all authentication so this returns
-   * `true`
-   * @returns `true` since the proxy handles all authentication
+   * @returns `true` if the current token is authenticated
    */
   isAuthenticated() {
     return this.activeToken.isActive()
   }
 
   /**
-   * This implementation calls the subclasser-implemented `getToken()` method to retrieve the authentication token for
+   * This implementation calls the inheritor-implemented `getToken()` method to retrieve the authentication token for
    * the Looker API server because the `/login` endpoint is not available via CORS for the Looker API.
    *
    * @param props the properties of the request
@@ -69,6 +66,10 @@ export abstract class CorsSession extends AuthSession {
    */
   async authenticate(props: IRequestProps) {
     if (!this.isAuthenticated()) {
+      /**
+       * This authentication call should be implemented in the inheritor
+       * @type {any} retrieves the authorization token
+       */
       const token = await this.getToken()
       if (token) {
         /**
@@ -77,29 +78,30 @@ export abstract class CorsSession extends AuthSession {
         this.activeToken.setToken(token)
       }
     }
-      if (this.isAuthenticated()) {
-        /**
-         * Session is authenticated
-         * set CORS mode
-         */
-        props.mode = 'cors'
 
-        /**
-         * remove any credentials attribute that may have been set
-         */
-        delete props['credentials']
+    if (this.isAuthenticated()) {
+      /**
+       * Session is authenticated
+       * set CORS mode
+       */
+      props.mode = 'cors'
 
-        /**
-         * replace the headers argument with required values
-         * Note: using new Headers() to construct the headers breaks CORS for the Looker API. Don't know why yet
-         */
-        props.headers = {
-          /** Provide the authentication information */
-          'Authorization': `Bearer ${this.activeToken.access_token}`,
-          /** Identify the SDK */
-          'x-looker-appid': agentTag
-        }
+      /**
+       * remove any credentials attribute that may have been set
+       */
+      delete props['credentials']
+
+      /**
+       * replace the headers argument with required values
+       * Note: using new Headers() to construct the headers breaks CORS for the Looker API. Don't know why yet
+       */
+      props.headers = {
+        /** Provide the authentication information */
+        'Authorization': `Bearer ${this.activeToken.access_token}`,
+        /** Identify the SDK */
+        [LookerAppId]: agentTag
       }
+    }
 
     return props
   }

@@ -23,49 +23,47 @@
  */
 
 import { IApiSettings } from './apiSettings'
-import { IRequestProps, ITransport } from './transport'
-import { BrowserTransport } from './browserTransport'
+import { agentTag, IRequestProps, ITransport, LookerAppId } from './transport'
+import { ProxySession } from './proxySession'
 import { AuthSession } from './authSession'
 
-export class BrowserSession extends AuthSession {
-  _activeToken = ''
+/**
+ * Mocking setup for ProxySession getToken() tests
+ */
+const mockToken = 'mocked'
+
+const proxyUrl = 'https://my.proxy'
+class ProxyMock extends ProxySession {
   constructor(public settings: IApiSettings, transport?: ITransport) {
-    super(settings, transport || new BrowserTransport(settings))
+    super(settings, proxyUrl, transport)
   }
 
-  get activeToken() {
-    if (!this._activeToken) {
-      const meta = document.head.querySelector(
-        '[name=csrf-token]',
-      ) as HTMLMetaElement
-      this._activeToken = meta ? meta.content : ''
-    }
-    return this._activeToken
-  }
-
-  async getToken() {
-    return this.activeToken
-  }
-
-  /**
-   * Returns true if the same origin browser session has a CRSF token established
-   * that can be used for API authentication
-   */
-  isAuthenticated() {
-    const token = this.activeToken
-    if (!token) return false
-    return true
-  }
-
-  /**
-   * Authenticates a request with the CSRF token if it is active
-   *
-   * @param props Request properties to decorate
-   */
-  async authenticate(props: IRequestProps) {
-    const token = this.activeToken
-    if (token) props.headers['X-CSRF-TOKEN'] = token
-    return props
+  async getToken(): Promise<any> {
+    return Promise.resolve(mockToken)
   }
 
 }
+
+describe("Proxy session", () => {
+  it("initialization", async () => {
+    const mock = new ProxyMock({} as IApiSettings)
+    await expect(mock.login()).rejects.toEqual(AuthSession.TBD)
+    expect(mock.isAuthenticated()).toEqual(true)
+    expect(mock.isSudo()).toEqual(false)
+    const logout = await mock.logout()
+    expect(logout).toEqual(false)
+  })
+
+  it("getToken is mocked", async () => {
+    const mock = new ProxyMock({} as IApiSettings)
+    await expect(mock.getToken()).resolves.toEqual(mockToken)
+  })
+
+  it("authenticate causes authentication", async () => {
+    const mock = new ProxyMock({} as IApiSettings)
+    const props = await mock.authenticate({url: 'mock.com'} as IRequestProps)
+    expect(props.url).toEqual(proxyUrl)
+    expect(props.headers['X-Forwarded-For']).toEqual('mock.com')
+    expect(props.headers[LookerAppId]).toEqual(agentTag)
+  })
+})

@@ -49,27 +49,27 @@ describe('NodeTransport', () => {
   })
 
   it('relative path without auth is just base', () => {
-    const actual = xp.makePath('/login', settings)
+    const actual = xp.makeUrl('/login', settings)
     expect(actual).toEqual(`${hostname}/login`)
   })
 
   it('relative path with auth is api path', () => {
-    const actual = xp.makePath('/login', settings, null, mockAuth)
+    const actual = xp.makeUrl('/login', settings, null, mockAuth)
     expect(actual).toEqual(`${hostname}/api/${apiVersion}/login`)
   })
 
   it('full path without auth is just full path', () => {
-    const actual = xp.makePath(fullPath, settings)
+    const actual = xp.makeUrl(fullPath, settings)
     expect(actual).toEqual(fullPath)
   })
 
   it('full path with query has params', () => {
-    const actual = xp.makePath(fullPath, settings, queryParams)
+    const actual = xp.makeUrl(fullPath, settings, queryParams)
     expect(actual).toEqual(`${fullPath}?a=b%20c&d=false&nil=null`)
   })
 
   it('full path with auth is just full path', () => {
-    const actual = xp.makePath(fullPath, settings, undefined, mockAuth)
+    const actual = xp.makeUrl(fullPath, settings, undefined, mockAuth)
     expect(actual).toEqual(fullPath)
   })
 })

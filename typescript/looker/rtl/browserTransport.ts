@@ -28,7 +28,7 @@ import {
   ITransportSettings,
   HttpMethod, Authenticator, agentTag, trace,
   IRequestProps,
-  IRequestHeaders,
+  IRequestHeaders, LookerAppId,
 } from './transport'
 import { PassThrough, Readable } from 'readable-stream'
 import { BaseTransport } from './baseTransport'
@@ -48,7 +48,7 @@ export class BrowserTransport extends BaseTransport {
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
     options = { ... this.options, ...options}
-    const requestPath = this.makePath(path, options, queryParams, authenticator)
+    const requestPath = this.makeUrl(path, options, queryParams, authenticator)
     const props = await this.initRequest(method, requestPath, body, authenticator, options)
     const req = fetch(
       props.url,
@@ -85,7 +85,7 @@ export class BrowserTransport extends BaseTransport {
     options?: Partial<ITransportSettings>,
   ) {
     options = options ? {...this.options, ...options} : this.options
-    let headers: IRequestHeaders = {'x-looker-appid': agentTag}
+    let headers: IRequestHeaders = {[LookerAppId]: agentTag}
     if (options && options.headers) {
       Object.keys(options.headers).forEach(key => {
         headers[key] = options!.headers![key]
@@ -122,7 +122,7 @@ export class BrowserTransport extends BaseTransport {
 
     options = options ? {...this.options, ...options} : this.options
     const stream = new PassThrough()
-    const requestPath = this.makePath(path, options, queryParams, authenticator)
+    const requestPath = this.makeUrl(path, options, queryParams, authenticator)
     const returnPromise = callback(stream)
     let props = await this.initRequest(
       method,
@@ -132,10 +132,11 @@ export class BrowserTransport extends BaseTransport {
       options,
     )
 
+    // @ts-ignore resolve not being used for now
     const streamPromise = new Promise<void>((resolve, reject) => {
       trace(`[stream] beginning stream via download url`, props)
-      let hasResolved = false
       reject('Not implemented yet!')
+      // let hasResolved = false
       // const req = this.requestor(props)
       //
       // req

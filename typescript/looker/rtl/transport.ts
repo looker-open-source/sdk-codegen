@@ -32,6 +32,7 @@ import { matchCharsetUtf8, matchModeBinary, matchModeString, sdkVersion } from '
 import { Readable } from "readable-stream"
 
 export const agentTag = `TS-SDK ${sdkVersion}`
+export const LookerAppId = 'x-looker-appid'
 
 /**
  * Set to `true` to follow streaming process

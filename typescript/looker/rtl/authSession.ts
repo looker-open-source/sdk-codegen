@@ -87,6 +87,12 @@ export interface IAuthSession  {
   reset(): void
 }
 
+/**
+ * Base implementation of automatically authenticated sessions for calling API endpoints
+ *
+ * All "auth session" components can descend from this class
+ *
+ */
 export abstract class AuthSession implements IAuthSession {
   static TBD = "Method not implemented in AuthSession"
   settings: IApiSettings
@@ -113,32 +119,27 @@ export abstract class AuthSession implements IAuthSession {
   abstract isAuthenticated() : boolean
 
   /**
+   * Override this method to implement a authentication retrieval from the server
+   */
+  abstract getToken(): Promise<any>
+
+  /**
    * Override this method to implement API session login
    *
    * @param sudoId ID of sudo user. A missing sudoId means the API credentials are used to login
    */
   // @ts-ignore sudoId is not used in this default implementation
   login(sudoId?: string | number): Promise<any> {
-    return this.notImplementedAsync()
+    return Promise.reject(AuthSession.TBD)
   }
 
   /**
    * Override this method to implement logout
    *
-   * The base implementation doesn't throw a not implemented error. It just returns a false promise.
+   * The base implementation just returns a false promise.
    */
   logout(): Promise<boolean> {
-    return new Promise<boolean>(() => false)
-  }
-
-  /**
-   * Override this method to implement a authentication retrieval from the server
-   *
-   * The base implementation will throw an error in the promise result saying the method isn't implemented
-   *
-   */
-  getToken(): Promise<any> {
-    return this.notImplementedAsync()
+    return Promise.resolve(false)
   }
 
   /**
@@ -153,23 +154,6 @@ export abstract class AuthSession implements IAuthSession {
    */
   reset(): void {
     this.sudoId = ''
-  }
-
-  /**
-   * utility function not implemented error
-   */
-  private notImplemented() {
-    throw new Error(AuthSession.TBD)
-  }
-
-  /**
-   * utility function not implemented error promise
-   */
-  private notImplementedAsync() {
-    // Use `ctrl` for instance closure in the method reference
-    const ctrl = this
-    // Return a promise that fails with a not implemented error
-    return new Promise<any>(() => ctrl.notImplemented())
   }
 
 }

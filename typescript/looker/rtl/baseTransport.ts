@@ -84,14 +84,14 @@ export abstract class BaseTransport implements ITransport {
     : Promise<TSuccess>
 
   /**
-   * Determine whether the path should be an API path, a fully specified override, or relative from base_url
+   * Determine whether the url should be an API path, relative from base_url, or is already fully specified override
    * @param path Request path
    * @param options Transport settings
    * @param queryParams Collection of query Params
    * @param authenticator optional callback
    * @returns the fully specified request path including any query string parameters
    */
-  makePath(
+  makeUrl(
     path: string,
     options: Partial<ITransportSettings>,
     queryParams?: Values,
