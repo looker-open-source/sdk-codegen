@@ -172,10 +172,9 @@ class Transport(val options: TransportSettings) {
         builder.method = method.value
 
         // Handle the headers
-        val agentTag = "KT-SDK ${options.apiVersion}"
         val headers = options.headers.toMutableMap()
-        headers["User-Agent"] = agentTag
-        headers["x-looker-appid"] = agentTag
+        headers["User-Agent"] = AGENT_TAG
+        headers[LOOKER_APPID] = AGENT_TAG
 
         val requestPath = makeUrl(path, queryParams, authenticator)
 
