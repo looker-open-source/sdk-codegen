@@ -57,14 +57,6 @@ class TestTransport {
         assertEquals("$base/api/$apiVersion$userPath$params", actual)
     }
 
-    fun <T> ok(response: SDKResponse): T {
-        when(response) {
-            is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
-            is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
-            else -> throw Error("Fail!!")
-        }
-    }
-
     @test fun testFullRequest() {
         val actual = ok<String>(xp.request<String>(HttpMethod.GET,fullPath))
         assertTrue(actual.contains("One SDK to rule them all, and in the codegen bind them"))

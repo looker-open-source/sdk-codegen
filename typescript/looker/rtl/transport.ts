@@ -29,10 +29,10 @@
 import { Agent } from 'https'
 import { Headers } from 'request'
 import { matchCharsetUtf8, matchModeBinary, matchModeString, sdkVersion } from './constants'
-import { IApiSettings } from './apiSettings'
 import { Readable } from "readable-stream"
 
 export const agentTag = `TS-SDK ${sdkVersion}`
+export const LookerAppId = 'x-looker-appid'
 
 /**
  * Set to `true` to follow streaming process
@@ -102,6 +102,7 @@ export type HttpMethod =
 /**
  * HTTP status codes
  * https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for reference
+ * TODO is there a platform-agnostic list of these that can be used instead of this static declaration?
  */
 export enum StatusCode {
   OK = 200,
@@ -165,7 +166,20 @@ export enum StatusCode {
   NetworkAuthRequired
 }
 
+/**
+ * Transport plug-in interface
+ */
 export interface ITransport {
+  /**
+   * HTTP request function for atomic, fully downloaded responses
+   * @param method of HTTP request
+   * @param path request path, either relative or fully specified
+   * @param queryParams name/value pairs to pass as part of the URL
+   * @param body data for the body of the request
+   * @param authenticator authenticator callback, typically from `IAuthSession` implementation
+   * @param options overrides of default transport settings
+   * @returns typed response of `TSuccess`, or `TError` result
+   */
   request<TSuccess, TError>(
     method: HttpMethod,
     path: string,
@@ -175,6 +189,18 @@ export interface ITransport {
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>>
 
+  /**
+   * HTTP request function for a streamable response
+   * @param callback that receives the stream response and pipes it somewhere
+   * @param method of HTTP request
+   * @param path request path, either relative or fully specified
+   * @param queryParams name/value pairs to pass as part of the URL
+   * @param body data for the body of the request
+   * @param authenticator authenticator callback, typically from `IAuthSession` implementation
+   * @param options overrides of default transport settings
+   * @returns `T` upon success
+   * @throws `ISDKErrorResponse` on failure
+   */
   stream<T>(
     callback: (readable: Readable) => Promise<T>,
     method: HttpMethod,
@@ -188,25 +214,25 @@ export interface ITransport {
 }
 
 /** A successful SDK call. */
-interface ISDKSuccessResponse<T> {
+export interface ISDKSuccessResponse<T> {
   /** Whether the SDK call was successful. */
-  ok: true;
+  ok: true
   /** The object returned by the SDK call. */
-  value: T;
+  value: T
 }
 
 /** An erroring SDK call. */
-interface ISDKErrorResponse<T> {
+export interface ISDKErrorResponse<T> {
   /** Whether the SDK call was successful. */
-  ok: false;
+  ok: false
   /** The error object returned by the SDK call. */
-  error: T;
+  error: T
 }
 
 /** An error representing an issue in the SDK, like a network or parsing error. */
 export interface ISDKError {
-  type: 'sdk_error';
-  message: string;
+  type: 'sdk_error'
+  message: string
 }
 
 export type SDKResponse<TSuccess, TError> =
@@ -214,26 +240,25 @@ export type SDKResponse<TSuccess, TError> =
   | ISDKErrorResponse<TError | ISDKError>
 
 /**
- * Base authorization interface
+ * Generic collection
  */
-export interface IAuthorizer {
-  settings: IApiSettings;
-  transport: ITransport;
-
-  /** is the current session authenticated? */
-  isAuthenticated(): boolean;
-
-  authenticate(init: IRequestInit): Promise<IRequestInit>;
-
-  logout(): Promise<boolean>;
+export interface IRequestHeaders {
+  [key:string]: string
 }
 
-/** Generic http request property collection */
-export interface IRequestInit {
+/**
+ * Generic http request property collection
+ * TOOD: Trim this down to what is required
+ */
+export interface IRequestProps {
+  [key:string]: any
+  /** full url for request, including any query params */
+  url: string
+
   /** body of request. optional */
   body?: any;
   /** headers for request. optional */
-  headers?: any;
+  headers: IRequestHeaders;
   /** Http method for request. required. */
   method: HttpMethod;
   /** Redirect processing for request. optional */
@@ -245,14 +270,14 @@ export interface IRequestInit {
   compress?: boolean;
   /** maximum redirect count. 0 to not follow redirect */
   follow?: number;
-  /** maximum response body size in bytes. 0 to disable */
+  /** maximum response body size in bytes */
   size?: number;
   /** req/res timeout in ms, it resets on redirect. 0 to disable (OS limit applies) */
   timeout?: number;
 }
 
 /** General purpose authentication callback */
-export type Authenticator = (init: any) => any;
+export type Authenticator = (props: any) => any
 
 /** Interface for API transport values */
 export interface ITransportSettings {

@@ -26,13 +26,13 @@ import {
   SDKResponse,
   HttpMethod,
   sdkError,
-  IAuthorizer,
   ITransportSettings, Values,
 } from './transport'
-import { Readable } from "readable-stream"
+import { Readable } from 'readable-stream'
+import { IAuthSession } from './authSession'
 
 export class APIMethods {
-  constructor(public authSession: IAuthorizer) {
+  constructor(public authSession: IAuthSession) {
     this.authSession = authSession
   }
 

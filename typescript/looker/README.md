@@ -2,7 +2,7 @@
 
 The Looker SDK for Typescript/Javascript works with Node and browser run-times. The SDK provides a convenient way to communicate with a Looker server's APIs.
 
-The SDK uses a plug-in architecture (also known as dependency injection) for initializing that supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, and `ProxySession`).
+The SDK uses a plug-in architecture (also known as dependency injection) for initializing that supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `CorsSession`).
 
 **DISCLAIMER**: This is a _beta_ version of the Looker SDK, using a completely new code generator developed by Looker. Implementations are still subject to change, but we expect most SDK method calls to work correctly. If you run into problems with the SDK, please feel free to [report an issue](https://github.com/looker-open-source/sdk-codegen/issues), and please indicate which language SDK you're using in the report.
 
@@ -36,7 +36,7 @@ Create a `looker.ini` file with your server URL and API credentials assigned as 
 
 ```ini
 [Looker]
-# API version is required. 3.1 and 3.0 are currently supported. 3.1 is highly recommended.
+# API version defaults to 3.1. 3.1 and 3.0 are currently supported. 3.1 is highly recommended.
 api_version=3.1
 # Base URL for API. Do not include /api/* in the url
 base_url=https://<your-looker-server>:19999
@@ -154,23 +154,14 @@ describe('sudo', () => {
 })
 ```
 
-## Configuring the SDK with environment variables
+## Environment variable configuration
 
-Environment variables can be used for the Node version of the Looker SDK.
-
-| Variable name | Description |
-| ------------- | ----------- |
-| LOOKERSDK_BASE_URL | A URL like `https://my.looker.com:19999`. No default value. |
-| LOOKERSDK_API_VERSION | Version of the Looker API to use. Use `3.1` for now, which is the default and used to produce this SDK. |
-| LOOKERSDK_VERIFY_SSL | `true`, `t`, `yes`, `y`, or `1` (case insensitive) to enable. Any other value is treated as `false`. Defaults to `true` if not set. |
-| LOOKERSDK_TIMEOUT | Request timeout in seconds. Defaults to `120` for Node. |
-| LOOKERSDK_CLIENT_ID | API3 credentials `client_id`. This and `client_secret` must be provided in some fashion to the Node SDK, or no calls to the API will be authorized. No default value. |
-| LOOKERSDK_CLIENT_SECRET | API3 credentials `client_secret`. No default value. |
+[Environment variables](https://github.com/looker-open-source/sdk-codegen#environment-variable-configuration) can be used to configure access for the **Node** version of the Looker SDK.
 
 Once the desired environment variables are set, the following code is all that's required to initialize the Looker SDK and retrieve the API credential's `User` information.
 
 ```typescript
-const sdk = LookerNodeSDK.createClient(new NodeSettingsEnv())
+const sdk = LookerNodeSDK.createClient(new NodeSettings())
 const me = await sdk.ok(sdk.me())
 ```
 
@@ -185,7 +176,7 @@ With the introduction of CORS support in the Looker API (coming soon to a releas
   * Sets CORS mode
   * Sets the auth token header
   * Identifies the Looker SDK version for the Looker server
-  
+
 By writing your own `getProxyToken()` visible to this class, any proxied authentication workflow is supported.
 
 ```typescript
@@ -231,4 +222,4 @@ Looker's open source repository of [SDK Examples](https://github.com/looker-open
 
 ## A note about security
 
-Any script or configuration file used to provide credentials to your Looker SDK instance [needs to be secured](https://github.com/looker-open-source/sdk-codegen#securing-your-sdk-credentials). 
+Any script or configuration file used to provide credentials to your Looker SDK instance [needs to be secured](https://github.com/looker-open-source/sdk-codegen#securing-your-sdk-credentials).

@@ -38,14 +38,6 @@ export interface IApiSection {
 }
 
 /**
- * Interface that supports reading the API settings on demand from a configuration store
- *
- */
-export interface IApiSettingsConfig extends IApiSettings {
-  readConfig(section?: string): IApiSection;
-}
-
-/**
  * Parses `.ini` formatted content
  * @param contents formatted as an `.ini` file
  * @constructor
@@ -72,35 +64,6 @@ export const ApiConfigSection = (
     throw new Error(`No section named "${section}" was found`)
   }
   return settings
-}
-
-/**
- * Configuration initializer for Node applications
- *
- * This class can be used directly when configuration settings should NOT come
- * from the default environment variables or a configuration file
- *
- */
-export class NodeSettings extends ApiSettings {
-  constructor(contents: string | IApiSettings, section?: string) {
-    const settings = typeof contents === 'string' ? ApiConfigSection(contents, section) : contents
-    super(settings)
-  }
-
-  /**
-   * All descendants of NodeSettings must implement readConfig to retrieve API credentials
-   * since credentials are not stored in memory
-   *
-   * @param {string} section
-   * @returns {IApiSection} is not returned and an error is thrown instead
-   *
-   * @throws sdkError
-   *
-   */
-  // @ts-ignore
-  readConfig(section?: string) : IApiSection {
-    throw sdkError({message: 'NodeSettings has no config to read'})
-  }
 }
 
 /**
@@ -148,7 +111,7 @@ const readIniConfig = (fileName: string, section?: string) => {
  * with the same key
  *
  */
-export class NodeSettingsEnv extends NodeSettings {
+export class NodeSettings extends ApiSettings {
   constructor(contents?: string | IApiSettings, section?: string) {
     let settings: IApiSettings
     if (contents) {
@@ -185,8 +148,7 @@ export class NodeSettingsEnv extends NodeSettings {
  * file does not exist. In that case, configuration from environment variables will be required.
  *
  */
-export class NodeSettingsIniFile extends NodeSettingsEnv
-  implements IApiSettingsConfig {
+export class NodeSettingsIniFile extends NodeSettings {
   private readonly fileName!: string
 
   constructor(fileName: string = '', section?: string) {

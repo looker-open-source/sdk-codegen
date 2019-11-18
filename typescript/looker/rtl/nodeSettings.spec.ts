@@ -24,7 +24,7 @@
 
 import {
   ApiConfig,
-  NodeSettings, NodeSettingsEnv,
+  NodeSettings,
   NodeSettingsIniFile,
 } from './nodeSettings'
 import * as fs from 'fs'
@@ -130,7 +130,7 @@ timeout=30
     })
 
     it('settings are retrieved from environment variables', () => {
-      const settings = new NodeSettingsEnv('')
+      const settings = new NodeSettings('')
       expect(settings.api_version).toEqual('3.1')
       expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
       expect(settings.timeout).toEqual(31)
@@ -146,7 +146,7 @@ timeout=30
     })
 
     it('partial INI uses environment variables', () => {
-      const settings = new NodeSettingsEnv({base_url: section['base_url']} as IApiSettings)
+      const settings = new NodeSettings({base_url: section['base_url']} as IApiSettings)
       expect(settings.api_version).toEqual('3.1')
       expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
       expect(settings.timeout).toEqual(31)

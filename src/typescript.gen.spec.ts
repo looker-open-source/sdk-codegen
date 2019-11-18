@@ -228,7 +228,7 @@ async all_datagroups(
         expect(actual).toEqual(`/**
  * body parameter for dynamically created request type
  */
-body?: Partial<ICreateDashboardRenderTask>`)
+body?: ICreateDashboardRenderTask`)
 //         const actual = gen.declareType(indent, type!)
 //         expect(actual).toEqual(`// Dynamically generated request type for create_dashboard_render_task
 // export interface IRequestcreate_dashboard_render_task{

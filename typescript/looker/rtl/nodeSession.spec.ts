@@ -24,7 +24,7 @@
 
 import { NodeTransport } from './nodeTransport'
 import { NodeSession } from './nodeSession'
-import { ApiConfig, NodeSettingsEnv, NodeSettingsIniFile } from './nodeSettings'
+import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings'
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
 import {
@@ -81,6 +81,7 @@ describe('NodeSession', () => {
   describe('environmental configuration', () => {
     it('no INI file', async () => {
       const section = ApiConfig(fs.readFileSync(localIni, utf8))['Looker']
+      // tslint:disable-next-line:variable-name
       const verify_ssl = boolDefault(section['verify_ssl'], false).toString()
       // populate environment variables
       process.env[strLookerTimeout] = section['timeout'] || defaultTimeout.toString()
@@ -90,7 +91,7 @@ describe('NodeSession', () => {
       process.env[strLookerApiVersion] = section['api_version'] || '3.1'
       process.env[strLookerVerifySsl] = verify_ssl.toString()
 
-      const settings = new NodeSettingsEnv()
+      const settings = new NodeSettings()
       expect(settings.base_url).toEqual(section['base_url'])
       expect(settings.api_version).toEqual(section['api_version'] || '3.1')
       expect(settings.timeout.toString()).toEqual(section['timeout'] || defaultTimeout.toString())

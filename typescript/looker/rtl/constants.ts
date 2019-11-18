@@ -73,3 +73,13 @@ export const boolDefault = (value: string, defaultBool: boolean = false) => {
   if (isFalse(value)) return false
   return defaultBool
 }
+
+/**
+ * Documented type alias because URL assignment construction is not compatible with API parameters
+ */
+export type Url = string
+
+/**
+ * Documented type alias for password spec
+ */
+export type Password = string

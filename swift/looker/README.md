@@ -58,7 +58,7 @@ import looker
 let config = try? ApiConfig("looker.ini")
 
 /// unwrap optional config results
-let settings = config! 
+let settings = config!
 
 /// Use the standard transport based on URLSession
 let xp = BaseTransport(settings)
@@ -87,9 +87,9 @@ The `settings` provided to the `AuthSession` class include the base URL for the 
 
 API users with appropriate permissions can `sudo` as another user by specifying a specific user ID in the `AuthSession.login()` method. Only one user can be impersonated at a time via `AuthSession`. When a `sudo` session is active, all SDK methods will be processed as that user.
 
-### Sudo behavior with AuthSession
+## Environment variable configuration
 
-The rest of this section shows sample code for typical use cases for authentication and sudo. This code sample is extracted directly from the sdk methods Jest tests, and assumes `apiUser` is the default authenticated user record with `sudo` abilities, and `sudoA` and `sudoB` are other enabled Looker user records.
+[Environment variables](https://github.com/looker-open-source/sdk-codegen#environment-variable-configuration) can be used to configure access for the Looker SDK.
 
 ## THIS IS AN ALPHA VERSION!!!
 

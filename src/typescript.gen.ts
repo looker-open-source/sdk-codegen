@@ -65,7 +65,8 @@ export class TypescriptGen extends CodeGen {
     return `
 // ${warnEditing}
 import { APIMethods } from '../rtl/apiMethods'
-import { IAuthorizer, ITransportSettings } from '../rtl/transport'
+import { IAuthSession } from '../rtl/authSession'
+import { ITransportSettings } from '../rtl/transport'
 import { ${this.packageName}Stream } from './streams'
 /**
  * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
@@ -77,7 +78,7 @@ export class ${this.packageName} extends APIMethods {
 
   public stream: LookerSDKStream
   
-  constructor(authSession: IAuthorizer) {
+  constructor(authSession: IAuthSession) {
     super(authSession)
     this.stream = new LookerSDKStream(authSession)  
   }
@@ -112,7 +113,7 @@ export class ${this.packageName}Stream extends APIMethods {
     return `
 // ${warnEditing}
 
-import { URL } from 'url'
+import { Url } from '../rtl/constants'
 import { DelimArray } from '../rtl/delimArray'
 
 export interface IDictionary<T> {
@@ -136,8 +137,9 @@ export interface IDictionary<T> {
     if (property.name === strBody) {
       // TODO refactor this hack to track context when the body parameter is created for the request type
       property.type.refCount++
+      // No longer using Partial<T> because required and optional are supposed to be accurate
       return this.commentHeader(indent, property.description || 'body parameter for dynamically created request type')
-        + `${indent}${property.name}${optional}: Partial<I${property.type.name}>`
+        + `${indent}${property.name}${optional}: I${property.type.name}`
     }
     const type = this.typeMap(property.type)
     return this.commentHeader(indent, this.describeProperty(property))
@@ -184,7 +186,9 @@ export interface IDictionary<T> {
 
     if (requestType) {
       // use the request type that will be generated in models.ts
-      fragment = `request: Partial<I${requestType}>`
+      // No longer using Partial<T> by default here because required and optional are supposed to be accurate
+      // However, for update methods (iow, patch) Partial<T> is still necessary since only the delta gets set
+      fragment = method.httpMethod === 'PATCH' ? `request: Partial<I${requestType}>` : `request: I${requestType}`
     } else {
       let params: string[] = []
       const args = method.allParams // get the params in signature order
@@ -372,10 +376,11 @@ export interface IDictionary<T> {
       'int64': {name: 'number', default: mt},
       'string': {name: 'string', default: mt},
       'password': {name: 'Password', default: mt},
+      // TODO can we use blob for binary somehow? https://developer.mozilla.org/en-US/docs/Web/API/Blob
       'byte': {name: 'binary', default: mt},
       'boolean': {name: 'boolean', default: mt},
-      'uri': {name: 'URL', default: mt},
-      'url': {name: 'URL', default: mt},
+      'uri': {name: 'Url', default: mt},
+      'url': {name: 'Url', default: mt},
       'datetime': {name: 'Date', default: mt}, // TODO is there a default expression for datetime?
       'date': {name: 'Date', default: mt}, // TODO is there a default expression for date?
       'object': {name: 'any', default: mt},

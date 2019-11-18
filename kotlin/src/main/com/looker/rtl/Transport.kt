@@ -61,6 +61,17 @@ sealed class SDKResponse {
     }
 }
 
+/**
+ * Response handler that throws an error on error response, returns success result on success
+ */
+fun <T> ok(response: SDKResponse): T {
+    when(response) {
+        is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
+        is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
+        else -> throw Error("Fail!!")
+    }
+}
+
 enum class HttpMethod(val value: io.ktor.http.HttpMethod) {
     GET(io.ktor.http.HttpMethod.Get),
     POST(io.ktor.http.HttpMethod.Post),

@@ -24,22 +24,23 @@
 
 import { IError } from '../sdk/models'
 import {
-  IRequestInit,
+  IRequestProps,
   ITransport,
   SDKResponse,
   sdkError,
-  IAuthorizer,
+  HttpMethod,
 } from './transport'
 import { AuthToken } from './authToken'
 import { NodeTransport } from './nodeTransport'
-import { IApiSettingsConfig } from './nodeSettings'
-import { strLookerClientId, strLookerClientSecret } from './apiSettings'
+import { IApiSettings, strLookerClientId, strLookerClientSecret } from './apiSettings'
+import { AuthSession } from './authSession'
 
-const strPost = 'POST'
-const strDelete = 'DELETE'
+const strPost: HttpMethod = 'POST'
+const strDelete: HttpMethod = 'DELETE'
 
 /**
  * Same as the Looker API access token object
+ * Re-declared here to be independent of model generation
  */
 interface IAccessToken {
   /**
@@ -57,29 +58,13 @@ interface IAccessToken {
   expires_in?: number;
 }
 
-export interface IAuthSession extends IAuthorizer {
-  sudoId: string;
-
-  // Authentication token
-  getToken(): Promise<IAccessToken>
-
-  isSudo(): boolean
-
-  login(sudoId?: string | number): Promise<IAccessToken>
-
-  reset(): void
-}
-
-export class NodeSession implements IAuthSession {
-  private apiPath = ""
+export class NodeSession extends AuthSession {
+  private readonly apiPath: string = ''
   _authToken: AuthToken = new AuthToken()
   _sudoToken: AuthToken = new AuthToken()
-  sudoId: string = ''
-  transport: ITransport
 
-  constructor(public settings: IApiSettingsConfig, transport?: ITransport) {
-    this.settings = settings
-    this.transport = transport || new NodeTransport(settings)
+  constructor(public settings: IApiSettings, transport?: ITransport) {
+    super(settings, transport || new NodeTransport(settings))
     this.apiPath = `/api/${settings.api_version}`
   }
 
@@ -105,15 +90,16 @@ export class NodeSession implements IAuthSession {
 
   /**
    * Add authentication data to the pending API request
-   * @param init {IRequestInit} initialized API request properties
+   * @param props initialized API request properties
    *
-   * @returns the updated request properties"
+   * @returns the updated request properties
    */
-  async authenticate(init: IRequestInit) {
+  async authenticate(props: IRequestProps) {
     const token = await this.getToken()
-    if (token && token.access_token)
-      init.headers.Authorization = `Bearer ${token.access_token}`
-    return init
+    if (token && token.access_token) {
+      props.headers.Authorization = `Bearer ${token.access_token}`
+    }
+    return props
   }
 
   isSudo() {
@@ -157,7 +143,7 @@ export class NodeSession implements IAuthSession {
   }
 
   /**
-   * Logout the active user. If the active user is impersonated, the session reverts to the API3 user
+   * Logout the active user. If the active user is sudo, the session reverts to the API3 user
    */
   async logout() {
     let result = false
@@ -167,6 +153,7 @@ export class NodeSession implements IAuthSession {
     return result
   }
 
+  // TODO should this be moved to `transport.ts` as a generic method?
   private async ok<TSuccess, TError>(
     promise: Promise<SDKResponse<TSuccess, TError>>,
   ) {
@@ -201,7 +188,9 @@ export class NodeSession implements IAuthSession {
       this.reset()
       // only retain client API3 credentials for the lifetime of the login request
       const section = this.settings.readConfig()
+      // tslint:disable-next-line:variable-name
       const client_id = process.env[strLookerClientId] || section['client_id']
+      // tslint:disable-next-line:variable-name
       const client_secret =
         process.env[strLookerClientSecret] || section['client_secret']
       if (!client_id || !client_secret) {
@@ -231,7 +220,7 @@ export class NodeSession implements IAuthSession {
         null,
         null,
         // ensure the auth token is included in the sudo request
-        (init: IRequestInit) => {
+        (init: IRequestProps) => {
           if (token.access_token) {
             init.headers.Authorization = `Bearer ${token.access_token}`
           }
@@ -257,7 +246,7 @@ export class NodeSession implements IAuthSession {
       null,
       null,
       // ensure the auth token is included in the logout promise
-      (init: IRequestInit) => {
+      (init: IRequestProps) => {
         if (token.access_token) {
           init.headers.Authorization = `Bearer ${token.access_token}`
         }
