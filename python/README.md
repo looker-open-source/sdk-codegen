@@ -11,6 +11,7 @@ You can find Python language examples in this folder.
 
 ## Manage Render Tasks
 - [Download dashboard tile in specified format](download_tile.py)
+- [Download look in specified format](download_look.py)
 - [Generate and download dashboard PDFs](download_dashboard_pdf.py)
 
 ## User Management
