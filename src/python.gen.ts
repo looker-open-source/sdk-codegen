@@ -41,7 +41,7 @@ import { run, warn, isFileSync, success, readFileSync } from './utils'
 import { utf8 } from '../typescript/looker/rtl/constants'
 
 export class PythonGen extends CodeGen {
-  inputTypes: Set<IType> = new Set()
+  methodInputModelTypes: Set<IType> = new Set()
   codePath = './python/'
   packagePath = 'looker_sdk'
   itself = 'self'
@@ -226,11 +226,11 @@ ${this.hooks.join('\n')}
       + `${indent}) -> ${returnType}:\n`
   }
 
-  private addInputType(type: IType) {
-    this.inputTypes.add(type)
+  private addMethodInputModelType(type: IType) {
+    this.methodInputModelTypes.add(type)
     for (const prop of Object.values(type.properties)) {
       if (prop.type.elementType) {
-        this.addInputType(prop.type.elementType)
+        this.addMethodInputModelType(prop.type.elementType)
       }
     }
   }
@@ -239,7 +239,7 @@ ${this.hooks.join('\n')}
     let type: IType
     if (param.location === strBody) {
       type = this.writeableType(param.type) || param.type
-      this.addInputType(type)
+      this.addMethodInputModelType(type)
     } else {
       type = param.type
     }
@@ -265,7 +265,7 @@ ${this.hooks.join('\n')}
    */
   construct(indent: string, type: IType) {
     // Skip read-only parameters
-    if (!this.inputTypes.has(type)) return ''
+    if (!this.methodInputModelTypes.has(type)) return ''
     indent = this.bumper(indent)
     const bump = this.bumper(indent)
     let result = `\n\n${indent}def __init__(self, *${this.argDelimiter}`
@@ -389,7 +389,7 @@ ${this.hooks.join('\n')}
     }
 
     let attrsArgs = 'auto_attribs=True, kw_only=True'
-    if (this.inputTypes.has(type)) {
+    if (this.methodInputModelTypes.has(type)) {
       attrsArgs += ', init=False'
     }
 
