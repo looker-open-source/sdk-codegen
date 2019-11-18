@@ -30,12 +30,12 @@ class DelimArray<T> : Array<T>() {
 
 fun isTrue(value: String?) : Boolean {
     val low = value?.toLowerCase()
-    return low === "true" || low === "1" || low === "t" || low === "y" || low === "yes"
+    return low == "true" || low == "1" || low == "t" || low == "y" || low == "yes"
 }
 
 fun isFalse(value: String?) : Boolean {
     val low = value?.toLowerCase()
-    return low === "false" || low === "0" || low === "f" || low === "n" || low === "no"
+    return low == "false" || low == "0" || low == "f" || low == "n" || low == "no"
 }
 
 fun asBoolean(value: String?) : Boolean? {
