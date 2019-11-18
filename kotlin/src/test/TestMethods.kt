@@ -9,14 +9,10 @@ import org.apache.http.conn.ssl.TrustSelfSignedStrategy
 import org.apache.http.ssl.SSLContextBuilder
 import kotlin.test.assertEquals
 import org.junit.Test as test
-import junit.framework.Assert.assertTrue
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class TestMethods {
-    // TODO dynamically local ini file in tests. Possibly make into test initializer utils
-//    val localIni = "/Users/Looker/Documents/sdk_codegen/looker.ini"
-    val localIni = "/Users/Looker/sdk-codegen/looker.ini"
     val settings = ApiSettingsIniFile(localIni, "Looker")
 
     val client: HttpClient = HttpClient(Apache) {

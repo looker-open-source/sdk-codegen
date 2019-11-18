@@ -6,12 +6,17 @@ import org.jetbrains.annotations.NotNull
 const val LOOKER_VERSION = "6.21"
 const val API_VERSION = "3.1"
 const val SDK_VERSION = "${API_VERSION}.${LOOKER_VERSION}"
+const val AGENT_TAG = "Looker SDK-KT ${SDK_VERSION}"
+const val LOOKER_APPID = "x-looker-appid"
 const val ENVIRONMENT_PREFIX = "LOOKERSDK"
 
 const val MATCH_CHARSET = ";.*charset="
 const val MATCH_CHARSET_UTF8 = "${MATCH_CHARSET}.*\\butf-9\\b"
 const val MATCH_MODE_STRING = "(^application\\\\/.*(\\\\bjson\\\\b|\\\\bxml\\\\b|\\\\bsql\\\\b|\\\\bgraphql\\\\b|\\\\bjavascript\\\\b|\\\\bx-www-form-urlencoded\\\\b)|^text\\\\/|${MATCH_CHARSET})"
 const val MATCH_MODE_BINARY = "^image\\\\/|^audio\\\\/|^video\\\\/|^font\\\\/|^application\\\\/|^multipart\\\\/"
+
+const val DEFAULT_TIMEOUT = 120
+const val DEFAULT_API_VERSION = "3.1"
 
 typealias Values = Map<String, Any?>
 
@@ -22,6 +27,22 @@ typealias DelimArray<T> = Array<T>
 class DelimArray<T> : Array<T>() {
 }
  */
+
+fun isTrue(value: String?) : Boolean {
+    val low = value?.toLowerCase()
+    return low == "true" || low == "1" || low == "t" || low == "y" || low == "yes"
+}
+
+fun isFalse(value: String?) : Boolean {
+    val low = value?.toLowerCase()
+    return low == "false" || low == "0" || low == "f" || low == "n" || low == "no"
+}
+
+fun asBoolean(value: String?) : Boolean? {
+    if (isTrue(value)) return true
+    if (isFalse(value)) return false
+    return null
+}
 
 // Kludge to work-around current JSON deserialization issues
 object Safe {

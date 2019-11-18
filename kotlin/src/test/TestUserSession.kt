@@ -35,13 +35,23 @@ import org.apache.http.ssl.SSLContextBuilder
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import org.junit.Test as test
+import java.io.File
 
+
+val rootPath = File("./").absoluteFile.parentFile.parentFile.absolutePath
+val testPath  = "${rootPath}/test"
+val dataFile = testFile("data.yml")
+val localIni = rootFile("looker.ini")
+
+fun rootFile(fileName: String): String {
+    return "${rootPath}/${fileName}"
+}
+
+fun testFile(fileName: String) : String {
+    return "${testPath}/${fileName}"
+}
 
 class TestUserSession {
-    // TODO dynamically local ini file in tests. Possibly make into test initializer utils
-
-    //    val localIni = "/Users/looker/Documents/sdk_codegen/looker.ini"
-    val localIni = "/Users/looker/sdk-codegen/looker.ini"
     val settings = ApiSettingsIniFile(localIni, "Looker")
 
     val client: HttpClient = HttpClient(Apache) {
@@ -59,6 +69,11 @@ class TestUserSession {
                 setSSLHostnameVerifier(NoopHostnameVerifier())
             }
         }
+    }
+
+    @test fun testTestFiles() {
+        assertTrue(File(dataFile).exists(), "${dataFile} should exist")
+        assertTrue(File(localIni).exists(), "${localIni} should exist")
     }
 
     @test fun testIsAuthenticated() {

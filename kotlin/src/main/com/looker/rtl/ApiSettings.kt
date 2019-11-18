@@ -45,13 +45,12 @@ class ApiSettingsIniFile(filename: String = "./looker.ini",
                          section: String = "") : ApiSettings(File(filename).readText(), section)
 
 
-// TODO why not @JvmOverloads here?
+// TODO why no @JvmOverloads here?
 open class ApiSettings(contents: String, var section: String = ""): TransportSettings() {
 
     val clientId: String
     val clientSecret: String
     val embedSecret: String
-    val userId: String
 
     init {
         val config = apiConfig(contents)
@@ -61,11 +60,12 @@ open class ApiSettings(contents: String, var section: String = ""): TransportSet
             throw Error("No section named '$section' was found")
         }
 
-        apiVersion = config[section]?.get("api_version") ?: ""
+        apiVersion = config[section]?.get("api_version") ?: DEFAULT_API_VERSION
         baseUrl = config[section]?.get("base_url") ?: ""
         clientId = config[section]?.get("client_id") ?: ""
         clientSecret = config[section]?.get("client_secret") ?: ""
         embedSecret = config[section]?.get("embed_secret") ?: ""
-        userId = config[section]?.get("user_id") ?: ""
+        verifySSL = asBoolean(config[section]?.get("verify_ssl")) ?: true
+        timeout = config[section]?.get("timeout")?.toInt() ?: DEFAULT_TIMEOUT
     }
 }
