@@ -6,7 +6,10 @@ You can find Python language examples in this folder.
 ## Connection management
 - [Test all connections](test_connections.py)
 
-## Manager Render Tasks
+## Manage Dashboards
+- [Soft delete dashboard](soft_delete_dashboard.py)
+
+## Manage Render Tasks
 - [Download dashboard tile in specified format](download_tile.py)
 - [Generate and download dashboard PDFs](download_dashboard_pdf.py)
 
