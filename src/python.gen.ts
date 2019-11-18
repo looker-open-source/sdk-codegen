@@ -34,7 +34,6 @@ import {
   IProperty,
   IType,
   strBody,
-  WriteType,
 } from './sdkModels'
 import { CodeGen, warnEditing } from './codeGen'
 import * as fs from 'fs'
@@ -42,6 +41,7 @@ import { run, warn, isFileSync, success, readFileSync } from './utils'
 import { utf8 } from '../typescript/looker/rtl/constants'
 
 export class PythonGen extends CodeGen {
+  methodInputModelTypes: Set<IType> = new Set()
   codePath = './python/'
   packagePath = 'looker_sdk'
   itself = 'self'
@@ -226,10 +226,23 @@ ${this.hooks.join('\n')}
       + `${indent}) -> ${returnType}:\n`
   }
 
+  private addMethodInputModelType(type: IType) {
+    this.methodInputModelTypes.add(type)
+    for (const prop of Object.values(type.properties)) {
+      if (prop.type.elementType) {
+        this.addMethodInputModelType(prop.type.elementType)
+      }
+    }
+  }
+
   declareParameter(indent: string, param: IParameter) {
-    let type = (param.location === strBody)
-      ? this.writeableType(param.type) || param.type
-      : param.type
+    let type: IType
+    if (param.location === strBody) {
+      type = this.writeableType(param.type) || param.type
+      this.addMethodInputModelType(type)
+    } else {
+      type = param.type
+    }
     const mapped = this.typeMapMethods(type)
     const paramType = (param.required ? mapped.name : `Optional[${mapped.name}]`)
     return this.commentHeader(indent, param.description)
@@ -252,10 +265,10 @@ ${this.hooks.join('\n')}
    */
   construct(indent: string, type: IType) {
     // Skip read-only parameters
-    if (!(type instanceof WriteType)) return ''
+    if (!this.methodInputModelTypes.has(type)) return ''
     indent = this.bumper(indent)
     const bump = this.bumper(indent)
-    let result = `\n\n${indent}def __init__(self, *, `
+    let result = `\n\n${indent}def __init__(self, *${this.argDelimiter}`
     let args: string[] = []
     let inits: string[] = []
     Object.values(type.properties)
@@ -376,7 +389,7 @@ ${this.hooks.join('\n')}
     }
 
     let attrsArgs = 'auto_attribs=True, kw_only=True'
-    if (type instanceof WriteType) {
+    if (this.methodInputModelTypes.has(type)) {
       attrsArgs += ', init=False'
     }
 
