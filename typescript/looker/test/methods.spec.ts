@@ -577,8 +577,8 @@ describe('LookerNodeSDK', () => {
           const limit = q.limit ? parseInt(q.limit, 10) : 10
           const request: IRequestRunInlineQuery = {
             body: {
-              model: q.model,
-              view: q.view,
+              model: q.model!,
+              view: q.view!,
               limit: limit.toString(10),
               fields: q.fields || undefined,
               pivots: q.pivots || undefined,
