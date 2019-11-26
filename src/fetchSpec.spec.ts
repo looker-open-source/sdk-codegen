@@ -25,7 +25,7 @@
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
 import { SDKConfig } from './sdkConfig'
-import { getVersionInfo } from './fetchSpec'
+import { authGetUrl, getVersionInfo, login, specFileUrl } from './fetchSpec'
 import { readFileSync } from './utils'
 
 const dataFile = 'test/data.yml'
@@ -34,18 +34,31 @@ const root = fs.existsSync(dataFile) ? '' : '../../'
 const testData = yaml.safeLoad(readFileSync(`${root}${dataFile}`))
 const localIni = `${root}${testData['iniFile']}`
 const config = SDKConfig(localIni)
+const props = config['Looker']
 
 describe('fetch operations', () => {
-  describe('Version Info', () => {
-    it('talks to server', async () => {
-      const props = config['Looker']
-      expect(props).toBeDefined()
-      const version = await getVersionInfo(props)
-      expect(version).toBeDefined()
-      if (version) {
-        expect(version.lookerVersion).toBeDefined()
-        expect(version.apiVersion).toBeDefined()
-      }
-    })
+  it('gets version info', async () => {
+    expect(props).toBeDefined()
+    const version = await getVersionInfo(props)
+    expect(version).toBeDefined()
+    if (version) {
+      expect(version.lookerVersion).toBeDefined()
+      expect(version.apiVersion).toBeDefined()
+    }
+  })
+
+  it('can login', async () => {
+    expect(props).toBeDefined()
+    const token = await login(props)
+    expect(token).toBeDefined()
+  })
+
+  it('authGetUrl', async () => {
+    expect(props).toBeDefined()
+    let fileUrl = specFileUrl(props)
+    const content = await authGetUrl(props, fileUrl)
+    expect(content).toBeDefined()
+    expect(content.swagger).toBeDefined()
+    expect(content.swagger).toEqual('2.0')
   })
 })

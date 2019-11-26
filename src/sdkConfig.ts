@@ -30,6 +30,7 @@ export interface ISDKConfigProps {
   base_url: string
   client_id: string
   client_secret: string
+  verify_ssl: boolean
 }
 
 export interface ISDKConfigSection {
@@ -37,6 +38,11 @@ export interface ISDKConfigSection {
 }
 
 export const SDKConfig = (fileName = './looker.ini') => {
-  const config = ini.parse(readFileSync(fileName)) as ISDKConfigSection
+  const settings = ini.parse(readFileSync(fileName))
+  const config = settings as ISDKConfigSection
+  Object.keys(config).forEach(key => {
+    const props: ISDKConfigProps = config[key]
+    if (props.verify_ssl === undefined) props.verify_ssl  = true
+  })
   return config
 }

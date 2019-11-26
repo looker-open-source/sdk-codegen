@@ -22,44 +22,32 @@
  * THE SOFTWARE.
  */
 
-import fetch from 'node-fetch'
 import { SDKConfig, ISDKConfigProps } from './sdkConfig'
-import { URLSearchParams } from 'url'
 import * as fs from 'fs'
 import { fail, quit, log, isFileSync, warn } from './utils'
 import { IVersionInfo } from './codeGen'
+import { NodeTransport } from '../typescript/looker/rtl/nodeTransport'
+import { defaultTimeout, ITransportSettings, sdkOk } from '../typescript/looker/rtl/transport'
 
-const specFileUrl = (props: ISDKConfigProps) => `${props.base_url}/api/${props.api_version}/swagger.json`
+let transport: NodeTransport
 
-const loginUrl = (props: ISDKConfigProps) => `${props.base_url}/login`
-
-const logoutUrl = (props: ISDKConfigProps) => `${props.base_url}/logout`
-
-const logout = async (props: ISDKConfigProps, token: string) =>
-  fetch(logoutUrl(props), {method: 'DELETE', headers: {'Authorization': `Bearer ${token}`}})
-
-const login = async (props: ISDKConfigProps) => {
-
-  const params = new URLSearchParams()
-  params.append('client_id', props.client_id)
-  params.append('client_secret', props.client_secret)
-
-  try {
-    const response = await fetch(loginUrl(props), {method: 'POST', body: params})
-    const body = await response.json()
-    const accessToken = await body.access_token
-
-    if (accessToken) {
-      return accessToken
-    } else {
-      log('Server Response: ' + JSON.stringify(body))
-      throw new Error('Access token could not be retrieved.')
-    }
-
-  } catch (err) {
-    console.error(err)
+const Transport = (props: ISDKConfigProps) => {
+  if (transport) return transport
+  const options: ITransportSettings = {
+    base_url: props.base_url,
+    api_version: props.api_version,
+    verify_ssl: props.verify_ssl,
+    timeout: defaultTimeout
   }
+  transport = new NodeTransport(options)
+  return transport
 }
+
+const loginUrl = (props: ISDKConfigProps) => `${props.base_url}/api/${props.api_version}/login`
+
+const logoutUrl = (props: ISDKConfigProps) => `${props.base_url}/api/${props.api_version}/logout`
+
+export const specFileUrl = (props: ISDKConfigProps) => `${props.base_url}/api/${props.api_version}/swagger.json`
 
 export const specFileName = (name: string, props: ISDKConfigProps) =>
   `./${name}.${props.api_version}.json`
@@ -67,7 +55,55 @@ export const specFileName = (name: string, props: ISDKConfigProps) =>
 export const openApiFileName = (name: string, props: ISDKConfigProps) =>
   `./${name}.${props.api_version}.oas.json`
 
-const badAuth = (content: string) => content.indexOf('Requires authentication') > 0
+const badAuth = (content: string | object) => {
+  let text = (typeof content === 'object') ? JSON.stringify(content) : content
+  return text.indexOf('Requires authentication') > 0
+}
+
+export const logout = async (props: ISDKConfigProps, token: string) => {
+  const xp = Transport(props)
+
+  return sdkOk<string, Error>(xp.request<string, Error>(
+    'DELETE',
+    logoutUrl(props),
+    undefined,
+    undefined,
+    undefined,
+    { headers: {'Authorization': `Bearer ${token}`}}
+    )
+  )
+}
+
+
+export const login = async (props: ISDKConfigProps) => {
+
+  const xp = Transport(props)
+  const creds = {
+    client_id: props.client_id,
+    client_secret: props.client_secret
+  }
+  const url = loginUrl(props)
+
+  try {
+
+    const response = await sdkOk<any, Error>(xp.request<any, Error>(
+      'POST',
+      url,
+      creds
+    ))
+    const accessToken = await response.access_token
+
+    if (accessToken) {
+      return accessToken
+    } else {
+      log(`Server Response: ${JSON.stringify(response)}`)
+      throw new Error('Access token could not be retrieved.')
+    }
+
+  } catch (err) {
+    console.error(err)
+  }
+}
 
 const checkCertError = (err: Error): boolean => {
   if (err.message && err.message.match(/self signed certificate/gi)) {
@@ -80,39 +116,51 @@ NOTE! Certificate validation can be disabled with:
   return false
 }
 
+export const getUrl = async (props: ISDKConfigProps, url: string, options?: Partial<ITransportSettings>) => {
+  const xp = Transport(props)
+  return sdkOk<string, Error>(xp.request<string, Error>(
+    'GET',
+    url,
+    undefined,
+    undefined,
+    undefined,
+    options)
+  )
+}
+
+export const authGetUrl = async (props: ISDKConfigProps, url: string) => {
+  let token = null
+  let content: any = null
+  try {
+    // Try first without login. Most Looker instances don't require auth for spec retrieval
+    content = await getUrl(props, url)
+  } catch (err) {
+    // Whoops!  Ok, try again with login
+    token = await login(props)
+    content = await getUrl(props, url, {headers: {'Authorization': `Bearer ${token}`}})
+    if (token) {
+      await logout(props, token)
+    }
+
+  }
+
+  if (badAuth(content)) {
+    return quit('Authentication failed')
+  }
+  return content
+
+}
+
 export const fetchSpecFile = async (name: string, props: ISDKConfigProps) => {
   const fileName = specFileName(name, props)
   if (isFileSync(fileName)) return fileName
 
   try {
-    let response = null
-    let token = null
-    let content = null
-    try {
-      // Try first without login. Most Looker instances don't require auth for metadata
-      response = await fetch(specFileUrl(props))
-      content = await response.text()
-      if (badAuth(content)) {
-        token = await login(props)
-        response = await fetch(specFileUrl(props), {headers: {'Authorization': `Bearer ${token}`}})
-        content = await response.text()
-      }
-    } catch (err) {
-      // Whoops!  Ok, try again with login
-      token = await login(props)
-      response = await fetch(specFileUrl(props), {headers: {'Authorization': `Bearer ${token}`}})
-      content = await response.text()
-    }
+    let fileUrl = specFileUrl(props)
+    const content = await authGetUrl(props, fileUrl)
+    const json = JSON.stringify(content, undefined, 2)
 
-    if (badAuth(content)) {
-      return quit('Authentication failed')
-    }
-
-    fs.writeFileSync(fileName, content)
-
-    if (token) {
-      await logout(props, token)
-    }
+    fs.writeFileSync(fileName, json)
 
     return fileName
 
@@ -132,7 +180,7 @@ export const logFetch = async (name: string, props: ISDKConfigProps) => {
 
 export const getVersionInfo = async (props: ISDKConfigProps): Promise<IVersionInfo | undefined> => {
   try {
-    const lookerVersion = await fetchLookerVersion(props.base_url)
+    const lookerVersion = await fetchLookerVersion(props)
     return {
       lookerVersion,
       apiVersion: props.api_version
@@ -145,10 +193,8 @@ export const getVersionInfo = async (props: ISDKConfigProps): Promise<IVersionIn
 }
 
 
-export const fetchLookerVersion = async (url: string) => {
-  const response = await fetch(`${url}/versions`)
-  const content = await response.text()
-  const versions = JSON.parse(content)
+export const fetchLookerVersion = async (props: ISDKConfigProps) => {
+  const versions: any = await getUrl(props,`${props.base_url}/versions`)
   const [lookerVersion] = versions.looker_release_version.match(/^\d+\.\d+/gi)
   return lookerVersion
 }
