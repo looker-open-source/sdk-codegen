@@ -369,3 +369,35 @@ export function sdkError(result: any) {
   const error = JSON.stringify(result)
   return new Error(`Unknown error with SDK method ${error}`)
 }
+
+/** A helper method for simplifying error handling of SDK responses.
+ *
+ * Pass in a promise returned by any SDK method, and it will return a promise
+ * that rejects if the `SDKResponse` is not `ok`. This will swallow the type
+ * information in the error case, but allows you to route all the error cases
+ * into a single promise rejection.
+ *
+ * The promise will have an `Error` rejection reason with a string `message`.
+ * If the server error contains a `message` field, it will be provided, otherwise a
+ * generic message will occur.
+ *
+ * ```ts
+ * const sdk = LookerSDK({...})
+ * let look
+ * try {
+ *    look = await sdkOk(sdk.create_look({...}))
+ *    // do something with look
+ * }
+ * catch(e) {
+ *    // handle error case
+ * }
+ * ```
+ */
+export async function sdkOk<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
+  const result = await promise
+  if (result.ok) {
+    return result.value
+  } else {
+    throw sdkError(result as any)
+  }
+}

@@ -25,8 +25,7 @@
 import {
   SDKResponse,
   HttpMethod,
-  sdkError,
-  ITransportSettings, Values,
+  ITransportSettings, Values, sdkOk,
 } from './transport'
 import { Readable } from 'readable-stream'
 import { IAuthSession } from './authSession'
@@ -60,12 +59,7 @@ export class APIMethods {
    * ```
    */
   async ok<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
-    const result = await promise
-    if (result.ok) {
-      return result.value
-    } else {
-      throw sdkError(result as any)
-    }
+    return sdkOk<TSuccess, TError>(promise)
   }
 
   /**
