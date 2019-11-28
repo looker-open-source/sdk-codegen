@@ -47,22 +47,12 @@ export class ExtensionTransport implements ITransport {
     authenticator?: any,
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
-    let params: any
-    if (queryParams) {
-        params = {}
-        Object.keys(queryParams).forEach(key => {
-            if (queryParams[key]) {
-                params[key] = queryParams[key]
-            }
-        })
-    }
-
     return this.hostConnection.request(
         method,
         path,
-        params,
         body,
-        undefined,
+        queryParams,
+        authenticator,
         options,
     )
   }

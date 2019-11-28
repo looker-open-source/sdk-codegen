@@ -49,12 +49,10 @@ describe('ExtensionTransport', () => {
         queryParams,
         body
       )
-      // empty query params are stripped
-      expect(mockRequest).toHaveBeenCalledWith("POST", "/path", {"a": "b c"}, {"song": "how much is that doggy"}, undefined, undefined)
+      expect(mockRequest).toHaveBeenCalledWith("POST", "/path", {"song": "how much is that doggy"}, {"a": "b c", d: false, nil: null, skip: undefined}, undefined, undefined)
     } catch (error) {
       fail(error)
     }
-
   })
 
   it('stream not supported',  async () => {
