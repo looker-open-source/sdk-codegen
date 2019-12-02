@@ -7,8 +7,9 @@ Welcome to the hackathon app: a web app using a React frontend and a python flas
 
 ### Frontend
 
-Node 10 is required for the frontend. You can use [nvm](https://github.com/creationix/nvm#installation) and [avn](https://github.com/wbyoung/avn#install) to easily switch Node versions between different projects.
+Node 12 is required for the frontend. You can use [nvm](https://github.com/creationix/nvm#installation) and [avn](https://github.com/wbyoung/avn#install) to easily switch Node versions between different projects.
 
+From `sdk-examples/python/hackathon_app/` directory:
 ```sh
 cd frontend/
 yarn install
@@ -18,9 +19,9 @@ You can work on the frontend React app without running the python server or havi
 
 ### Backend
 
-hackathon_app requires python 3.7+ The easiest way to get this installed on a mac is to install [pyenv](https://github.com/pyenv/pyenv#installation) via [homebrew](https://brew.sh/)
+hackathon_app requires python 3.7+ The easiest way to get this installed on a mac is to install [pyenv](https://github.com/pyenv/pyenv#installation) via [homebrew](https://brew.sh/). If you already have pyenv and pipenv installed then skip to the "Install all dependencies" step
 
-
+(note, if you were in the `frontend/` directory above then `cd ..` back to `sdk-examples/python/hackathon_app/`)
 ```sh
 brew install pyenv
 ```
