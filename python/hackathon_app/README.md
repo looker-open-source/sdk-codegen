@@ -2,10 +2,10 @@
 
 Welcome to the hackathon app: a web app using a React frontend and a python flask backend
 
-### Getting setup for local development
+## Getting setup for local development
 
 
-#### Frontend
+### Frontend
 
 Node 10 is required for the frontend. You can use [nvm](https://github.com/creationix/nvm#installation) and [avn](https://github.com/wbyoung/avn#install) to easily switch Node versions between different projects.
 
@@ -16,7 +16,7 @@ yarn start
 ```
 You can work on the frontend React app without running the python server or having any backend google sheets or looker instance dependencies. Simply skip the remaining setup.
 
-#### Backend
+### Backend
 
 hackathon_app requires python 3.7+ The easiest way to get this installed on a mac is to install [pyenv](https://github.com/pyenv/pyenv#installation) via [homebrew](https://brew.sh/)
 
@@ -46,24 +46,27 @@ Install all dependencies.
 pipenv install --dev
 ```
 
-### Create a google spreadsheet
-
-```sh
-./create-test-sheet.sh <email-to-own-sheet@some-gmail-domain.com>
-```
-
-Note the sheet ID (from the output) to use in the `env.list` file below.
-
-### sheets api creds
-Create a GCP project:
+#### Create sheets api creds
+Create a GCP project in your personal google console account:
 - enable Sheets api
 - enable Drive api
 - create a service account
+- download the .json creds file
+- copy the email address for the next step
+
+#### Setup `env.list`
+- Copy `env.list.sample` to `env.list` and modify accordingly (see instructions for base64 encoding your gcp .json credentials in the code comment for `GOOGLE_APPLICATION_CREDENTIAL_ENCODED`)
+- Leave `GOOGLE_SHEET_ID` alone for now, you'll add it after the next step
+
+#### Create a google spreadsheet
+
+```sh
+./create-test-sheet.sh <email-to-own-sheet@same-gmail-domain-as-gcp-project.com>
+```
 - go back to your spreadsheet and "share" it with the email address of the service account
+- Note the sheet ID (from the output) to use in the `env.list` file below.
 
-### Run local dev servers
-
-Copy `env.list.sample` to `env.list` and modify accordingly
+#### Run local dev servers
 
 ```sh
 ./start-dev-flask.sh
