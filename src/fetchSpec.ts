@@ -188,6 +188,7 @@ export const getVersionInfo = async (props: ISDKConfigProps): Promise<IVersionIn
   } catch (e) {
     warn(`Could not retrieve version information. Is ${props.base_url} running?`)
     checkCertError(e)
+    console.error({e})
   }
   return undefined
 }

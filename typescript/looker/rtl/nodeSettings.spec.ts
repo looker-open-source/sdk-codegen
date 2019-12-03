@@ -48,54 +48,48 @@ const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, 'utf-8'))
 const localIni = `${root}${testData['iniFile']}`
 
 describe('NodeSettings', () => {
+  const activeVersion = '4.0'
+  const activeTimeout = 40
+  const activeUrl = 'https://self-signed.looker.com:19999'
   const contents = `
 [Looker]
-# API version is required. 3.1 and 3.0 are currently supported. 3.1 is the current version. 3.0 is deprecated.
+api_version=${activeVersion}
+base_url=${activeUrl}
+client_id=your_API3_client_id
+client_secret=your_API3_client_secret
+timeout=${activeTimeout}
+[Looker31]
 api_version=3.1
-# Base URL for API. Do not include /api/* in the url
 base_url=https://self-signed.looker.com:19999
-# API 3 client id
 client_id=your_API3_client_id
-# API 3 client secret
 client_secret=your_API3_client_secret
-[Looker30]
-# API version is required. 3.1 and 3.0 are currently supported. 3.1 is the current version. 3.0 is deprecated.
-api_version=3.0
-# Base URL for API. Do not include /api/* in the url
-base_url=https://self-signed.looker.com:19999
-# API 3 client id
-client_id=your_API3_client_id
-# API 3 client secret
-client_secret=your_API3_client_secret
-# Set to false only if testing locally against self-signed certs.
 verify_ssl=False
-# timeout in seconds
-timeout=30
+timeout=31
 `
   describe('ApiConfig', () => {
     it('discovers multiple sections', () => {
       const config = ApiConfig(contents)
-      expect(Object.keys(config)).toEqual(['Looker', 'Looker30'])
+      expect(Object.keys(config)).toEqual(['Looker', 'Looker31'])
     })
   })
 
   describe('NodeSettingsIni', () => {
     it('settings default to the first section', () => {
       const settings = new NodeSettings(contents)
-      expect(settings.api_version).toEqual('3.1')
-      expect(settings.timeout).toEqual(defaultTimeout)
+      expect(settings.api_version).toEqual(activeVersion)
+      expect(settings.timeout).toEqual(activeTimeout)
       expect(settings.verify_ssl).toEqual(true)
     })
 
     it('retrieves the first section by name', () => {
       const settings = new NodeSettings(contents, 'Looker')
-      expect(settings.api_version).toEqual('3.1')
+      expect(settings.api_version).toEqual(activeVersion)
     })
 
     it('retrieves the second section by name', () => {
-      const settings = new NodeSettings(contents, 'Looker30')
-      expect(settings.api_version).toEqual('3.0')
-      expect(settings.timeout).toEqual(30)
+      const settings = new NodeSettings(contents, 'Looker31')
+      expect(settings.api_version).toEqual('3.1')
+      expect(settings.timeout).toEqual(31)
       expect(settings.verify_ssl).toEqual(false)
     })
 
@@ -109,17 +103,18 @@ timeout=30
   describe('NodeSettingsEnv', () => {
     const section = ApiConfig(fs.readFileSync(localIni, utf8))['Looker']
     const verifySsl = boolDefault(section['verify_ssl'], false).toString()
+
     beforeAll(() => {
       // populate environment variables
-      process.env[strLookerTimeout] = section['timeout'] || defaultTimeout.toString()
+      process.env[strLookerTimeout] = defaultTimeout.toString()
       process.env[strLookerClientId] = section['client_id']
       process.env[strLookerClientSecret] = section['client_secret']
       process.env[strLookerBaseUrl] = section['base_url']
-      process.env[strLookerApiVersion] = section['api_version'] || '3.1'
+      process.env[strLookerApiVersion] = section['api_version'] || activeVersion
       process.env[strLookerVerifySsl] = verifySsl.toString()
     })
 
-    afterAll( () => {
+    afterAll(() => {
       // reset environment variables
       delete process.env[strLookerTimeout]
       delete process.env[strLookerClientId]
@@ -131,25 +126,25 @@ timeout=30
 
     it('settings are retrieved from environment variables', () => {
       const settings = new NodeSettings('')
-      expect(settings.api_version).toEqual('3.1')
-      expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
-      expect(settings.timeout).toEqual(31)
+      expect(settings.api_version).toEqual(activeVersion)
+      expect(settings.base_url).toEqual(activeUrl)
+      expect(settings.timeout).toEqual(defaultTimeout)
       expect(settings.verify_ssl).toEqual(false)
     })
 
     it('empty file name uses environment variables', () => {
       const settings = new NodeSettingsIniFile('')
-      expect(settings.api_version).toEqual('3.1')
-      expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
-      expect(settings.timeout).toEqual(31)
+      expect(settings.api_version).toEqual(activeVersion)
+      expect(settings.base_url).toEqual(activeUrl)
+      expect(settings.timeout).toEqual(defaultTimeout)
       expect(settings.verify_ssl).toEqual(false)
     })
 
     it('partial INI uses environment variables', () => {
       const settings = new NodeSettings({base_url: section['base_url']} as IApiSettings)
-      expect(settings.api_version).toEqual('3.1')
-      expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
-      expect(settings.timeout).toEqual(31)
+      expect(settings.api_version).toEqual(activeVersion)
+      expect(settings.base_url).toEqual(activeUrl)
+      expect(settings.timeout).toEqual(defaultTimeout)
       expect(settings.verify_ssl).toEqual(false)
       const config = settings.readConfig()
       expect(config['client_id']).toBeDefined()
@@ -160,8 +155,8 @@ timeout=30
       process.env[strLookerTimeout] = '66'
       process.env[strLookerVerifySsl] = '1'
       const settings = new NodeSettingsIniFile(localIni)
-      expect(settings.api_version).toEqual('3.1')
-      expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
+      expect(settings.api_version).toEqual(activeVersion)
+      expect(settings.base_url).toEqual(activeUrl)
       expect(settings.timeout).toEqual(66)
       expect(settings.verify_ssl).toEqual(true)
       process.env[strLookerTimeout] = section['timeout'] || defaultTimeout.toString()
@@ -172,22 +167,22 @@ timeout=30
   describe('NodeSettingsIniFile', () => {
     it('settings default to the first section', () => {
       const settings = new NodeSettingsIniFile(localIni)
-      expect(settings.api_version).toEqual('3.1')
-      expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
-      expect(settings.timeout).toEqual(31)
+      expect(settings.api_version).toEqual(activeVersion)
+      expect(settings.base_url).toEqual(activeUrl)
+      expect(settings.timeout).toEqual(activeTimeout)
       expect(settings.verify_ssl).toEqual(false)
     })
 
     it('retrieves the first section by name', () => {
       const settings = new NodeSettingsIniFile(localIni, 'Looker')
-      expect(settings.api_version).toEqual('3.1')
-      expect(settings.base_url).toEqual('https://self-signed.looker.com:19999')
+      expect(settings.api_version).toEqual(activeVersion)
+      expect(settings.base_url).toEqual(activeUrl)
     })
 
     it('retrieves the second section by name', () => {
-      const settings = new NodeSettingsIniFile(localIni, 'Looker30')
-      expect(settings.api_version).toEqual('3.0')
-      expect(settings.timeout).toEqual(30)
+      const settings = new NodeSettingsIniFile(localIni, 'Looker31')
+      expect(settings.api_version).toEqual('3.1')
+      expect(settings.timeout).toEqual(31)
       expect(settings.verify_ssl).toEqual(false)
     })
 

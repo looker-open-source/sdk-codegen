@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 
 looker_version = "6.25"
-api_version = "3.1"
+api_version = "4.0"
 sdk_version = f"{api_version}.{looker_version}"
 environment_prefix = "LOOKERSDK"
 

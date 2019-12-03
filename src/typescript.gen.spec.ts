@@ -22,12 +22,10 @@
  * THE SOFTWARE.
  */
 
-import * as Models from './sdkModels'
 import { TypescriptGen } from './typescript.gen'
+import { apiTestModel } from './sdkModels.spec'
 
-const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json', './Looker.3.1.json')
-
-const gen = new TypescriptGen(apiModel)
+const gen = new TypescriptGen(apiTestModel)
 const indent = ''
 
 describe('typescript generator', () => {
@@ -44,7 +42,7 @@ describe('typescript generator', () => {
 
   describe('parameter declarations', () => {
     it('required parameter', () => {
-      const param = apiModel.methods['run_query'].params[0]
+      const param = apiTestModel.methods['run_query'].params[0]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`/**
  * @param {number} query_id Id of query
@@ -53,7 +51,7 @@ query_id: number`)
     })
 
     it('optional parameter', () => {
-      const param = apiModel.methods['run_query'].params[2]
+      const param = apiTestModel.methods['run_query'].params[2]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`/**
  * @param {number} limit Row limit (may override the limit in the saved query).
@@ -62,7 +60,7 @@ limit?: number`)
     })
 
     it('required typed parameter', () => {
-      const param = apiModel.methods['create_query_render_task'].params[2]
+      const param = apiTestModel.methods['create_query_render_task'].params[2]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`/**
  * @param {number} width Output width in pixels
@@ -71,7 +69,7 @@ width: number`)
     })
 
     it('csv formatted parameter', () => {
-      const param = apiModel.methods['query_task_multi_results'].params[0]
+      const param = apiTestModel.methods['query_task_multi_results'].params[0]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`/**
  * @param {DelimArray<string>} query_task_ids List of Query Task IDs
@@ -82,7 +80,7 @@ query_task_ids: DelimArray<string>`)
 
   describe('args locations', () => {
     it('path and query args', () => {
-      const method = apiModel.methods['run_query']
+      const method = apiTestModel.methods['run_query']
       expect(method.pathArgs).toEqual(['query_id', 'result_format'])
       expect(method.bodyArg).toEqual('')
       expect(method.queryArgs).toEqual([
@@ -104,7 +102,7 @@ query_task_ids: DelimArray<string>`)
     })
 
     it('body for create_query', () => {
-      const method = apiModel.methods['create_query']
+      const method = apiTestModel.methods['create_query']
       expect(method.pathArgs).toEqual([])
       const body = method.getParams('body')
       expect(body.length).toEqual(1)
@@ -121,7 +119,7 @@ body?: Partial<IWriteQuery>`)
     })
 
     it('body for create_dashboard', () => {
-      const method = apiModel.methods['create_dashboard']
+      const method = apiTestModel.methods['create_dashboard']
       expect(method.pathArgs).toEqual([])
       const body = method.getParams('body')
       expect(body.length).toEqual(1)
@@ -140,17 +138,17 @@ body?: Partial<IWriteDashboard>`)
 
   describe('httpArgs', () => {
     it('add_group_group', () => {
-      const method = apiModel.methods['add_group_group']
+      const method = apiTestModel.methods['add_group_group']
       const args = gen.httpArgs('', method).trim()
       expect(args).toEqual('null, body, options')
     })
     it('create_query', () => {
-      const method = apiModel.methods['create_query']
+      const method = apiTestModel.methods['create_query']
       const args = gen.httpArgs('', method).trim()
       expect(args).toEqual('{fields}, body, options')
     })
     it('create_dashboard', () => {
-      const method = apiModel.methods['create_dashboard']
+      const method = apiTestModel.methods['create_dashboard']
       const args = gen.httpArgs('', method).trim()
       expect(args).toEqual('null, body, options')
     })
@@ -158,7 +156,7 @@ body?: Partial<IWriteDashboard>`)
 
   describe('method signature', () => {
     it('optional body and additional param', () => {
-      const method = apiModel.methods['create_user_credentials_email']
+      const method = apiTestModel.methods['create_user_credentials_email']
       expect(method).toBeDefined()
       const expected = `/**
  * POST /users/{user_id}/credentials_email -> ICredentialsEmail
@@ -182,7 +180,7 @@ async create_user_credentials_email(
       expect(actual).toEqual(expected)
     })
     it('no params', () => {
-      const method = apiModel.methods['all_datagroups']
+      const method = apiTestModel.methods['all_datagroups']
       expect(method).toBeDefined()
       const expected = `/**
  * GET /datagroups -> IDatagroup[]
@@ -197,19 +195,19 @@ async all_datagroups(
 
   describe('method body', () => {
     it('assert response is model add_group_group', () => {
-      const method = apiModel.methods['add_group_group']
+      const method = apiTestModel.methods['add_group_group']
       const expected = 'return this.post<IGroup, IError>(encodeURI(`/groups/${group_id}/groups`), null, body, options)'
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
     it('assert response is None delete_group_from_group', () => {
-      const method = apiModel.methods['delete_group_from_group']
+      const method = apiTestModel.methods['delete_group_from_group']
       const expected = 'return this.delete<void, IError>(encodeURI(`/groups/${group_id}/groups/${deleting_group_id}`), null, null, options)'
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
     it('assert response is list active_themes', () => {
-      const method = apiModel.methods['active_themes']
+      const method = apiTestModel.methods['active_themes']
       const expected = `return this.get<ITheme[], IError>('/themes/active', 
   {name: request.name, ts: request.ts, fields: request.fields}, null, options)`
       const actual = gen.httpCall(indent, method)
@@ -219,8 +217,8 @@ async all_datagroups(
 
   describe('type creation', () => {
     it('request type with body', () => {
-      const method = apiModel.methods['create_dashboard_render_task']
-      const type = apiModel.getRequestType(method)
+      const method = apiTestModel.methods['create_dashboard_render_task']
+      const type = apiTestModel.getRequestType(method)
       expect(type).toBeDefined()
       if (type) {
         const property = type.properties['body']
@@ -251,7 +249,7 @@ body?: ICreateDashboardRenderTask`)
       }
     })
     it('with arrays and hashes', () => {
-      const type = apiModel.types['Workspace']
+      const type = apiTestModel.types['Workspace']
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface IWorkspace{
   /**
@@ -269,7 +267,7 @@ body?: ICreateDashboardRenderTask`)
 }`)
     })
     it('with refs, arrays and nullable', () => {
-      const type = apiModel.types['ApiVersion']
+      const type = apiTestModel.types['ApiVersion']
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface IApiVersion{
   /**
@@ -284,7 +282,7 @@ body?: ICreateDashboardRenderTask`)
 }`)
     })
     it('required properties', () => {
-      const type = apiModel.types['CreateQueryTask']
+      const type = apiTestModel.types['CreateQueryTask']
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface ICreateQueryTask{
   /**

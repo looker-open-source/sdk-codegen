@@ -25,14 +25,12 @@
 import { NodeSession } from '../rtl/nodeSession'
 import { LookerSDK } from '../sdk/methods'
 import {
-  // IDashboardElement,
   IQuery,
   IRequestRunInlineQuery,
   IUser, IWriteQuery,
 } from '../sdk/models'
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
-// import FileType from 'file-type'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from '../rtl/nodeSettings'
 import { DelimArray } from '../rtl/delimArray'
 import { Readable } from 'readable-stream'
@@ -48,7 +46,7 @@ import { defaultTimeout } from '../rtl/transport'
 import { LookerNodeSDK } from '../rtl/nodeSdk'
 
 const dataFile = 'test/data.yml'
-// slightly hackish data path determination for tests
+// TODO abstract this for shared usage across all *.spec.ts files
 const root = fs.existsSync(dataFile) ? '' : '../../'
 const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, utf8))
 const localIni = `${root}${testData['iniFile']}`
