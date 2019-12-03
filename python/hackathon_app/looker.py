@@ -144,13 +144,22 @@ def set_user_group(*, sdk: methods.LookerSDK, user_id: int, hackathon: str):
 
 @try_to
 def set_user_attributes(*, sdk: methods.LookerSDK, user_id, hackathon):
+    main_hackathon = "hackathon"
     user_attrs = sdk.all_user_attributes(fields="name,id")
     for user_attr in user_attrs:
-        if user_attr.name == "hackathon":
+        if user_attr.name == main_hackathon:
             hackathon_attr_id = user_attr.id
             break
     else:
-        raise RegisterError("Could not find 'hackathon' user attribute")
+        attrib = sdk.create_user_attribute(body=models.WriteUserAttribute(
+          name=main_hackathon,
+          label="Looker Hackathon",
+          type="string"
+          ))
+        if not attrib:
+          raise RegisterError(f"Could not find '{main_hackathon}' user attribute")
+        else:
+          hackathon_attr_id = attrib.id
     assert hackathon_attr_id
     sdk.set_user_attribute_user_value(
         user_id=user_id,
