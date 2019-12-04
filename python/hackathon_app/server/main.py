@@ -51,6 +51,23 @@ class RegistrationForm(flask_wtf.FlaskForm):
     )
 
 
+@app.route("/user_info")
+def user_info():
+    response = {}
+    if "looker_hackathon_auth" not in flask.request.cookies:
+        return response
+    auth_code = flask.request.cookies["looker_hackathon_auth"]
+    sheets_client = sheets.Sheets(
+        spreadsheet_id=app.config["GOOGLE_SHEET_ID"],
+        cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
+    )
+    user = sheets_client.auth_user(auth_code)
+    if user:
+        response["first_name"] = user.first_name
+        response["last_name"] = user.last_name
+    return response
+
+
 @app.route("/verify_google_token", methods=["POST"])
 def verify_google_token():
     try:
@@ -167,10 +184,14 @@ def register() -> Any:
                     "ok": False,
                     "message": "There was a problem, try again later.",
                 }
-    if response["ok"] and not email_verified:
-        # TODO try ... catch this because it will throw an error if the email fails to go out
-        code = sheets_client.users.send_auth_message(sheets_user,flask.request.host_url)
-    return flask.jsonify(response)
+    resp = flask.jsonify(response)
+    if response["ok"]:
+        if email_verified:
+            resp.set_cookie("looker_hackathon_auth", sheets_user.auth_code())
+        else:
+            sheets_user.send_activation_code()
+            sheets_client.users.send_auth_message(sheets_user, flask.request.host_url)
+    return response
 
 
 @app.route("/status")
