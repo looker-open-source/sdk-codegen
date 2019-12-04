@@ -3,6 +3,7 @@ import datetime
 import itertools
 import re
 import os
+import urllib.parse
 
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
@@ -24,7 +25,7 @@ def encrypt(value: str) -> str:
     :param value: string value to encrypt
     :return: the encrypted string
     """
-    return value
+    return urllib.parse.quote_plus(value)
 
 
 def decrypt(value: str) -> str:
@@ -33,7 +34,8 @@ def decrypt(value: str) -> str:
     :param value: string value to decrypt
     :return: the decrypted string
     """
-    return value
+    return urllib.parse.unquote_plus(value)
+
 
 def send_email(to_email: str, subject: str, body: str) -> bool:
     sendgrid_api_key=os.environ.get("SENDGRID_API_KEY")
