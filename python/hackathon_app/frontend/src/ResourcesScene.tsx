@@ -7,7 +7,7 @@ export const ResourcesScene: React.FC<{path: string}> = ({path}) => {
   React.useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('/getUser')
+        const response = await fetch('/user_info')
         if (response.ok) {
           const userData = await response.json()
           if (userData.first_name) {

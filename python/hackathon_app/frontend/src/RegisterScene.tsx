@@ -128,6 +128,7 @@ interface State {
   firstName: string
   lastName: string
   hackathons: string[]
+  emailVerified: boolean
 }
 const initialState: State = {
   csrfToken: 'someToken',
@@ -135,6 +136,7 @@ const initialState: State = {
   firstName: '',
   lastName: '',
   hackathons: [],
+  emailVerified: false,
 }
 
 function reducer(
@@ -151,7 +153,7 @@ function reducer(
 
 export const RegisterScene: React.FC<{path: string}> = () => {
   const [
-    {csrfToken, email, firstName, lastName, hackathons},
+    {csrfToken, email, firstName, lastName, hackathons, emailVerified},
     dispatch,
   ] = React.useReducer(reducer, initialState)
 
@@ -177,7 +179,6 @@ export const RegisterScene: React.FC<{path: string}> = () => {
 
   const responseGoogle = React.useCallback(
     (response: GoogleLoginResponseOffline | GoogleLoginResponse) => {
-      console.log(response)
       async function handleGoogleResponse() {
         try {
           const result = await fetch('/verify_google_token', {
@@ -195,6 +196,7 @@ export const RegisterScene: React.FC<{path: string}> = () => {
                 firstName: msg.given_name,
                 lastName: msg.family_name,
                 email: msg.email,
+                emailVerified: true,
               },
             })
           } else {
@@ -235,10 +237,12 @@ export const RegisterScene: React.FC<{path: string}> = () => {
           ndaq: false,
           code_of_conduct: false,
           contributing: false,
+          email_verified: emailVerified,
         }}
         validationSchema={() =>
           yup.object().shape({
             csrf_token: yup.string().required(),
+            email_verified: yup.boolean().required(),
             first_name: yup.string().required(),
             last_name: yup.string().required(),
             email: yup
@@ -356,7 +360,11 @@ export const RegisterScene: React.FC<{path: string}> = () => {
                 component={ValidatedFieldCheckbox}
                 branded
               />
-              <Field name="email_verified" type="hidden" />
+              <Field
+                name="email_verified"
+                type="hidden"
+                value={emailVerified}
+              />
               {status && <div>{status}</div>}
               <Flex alignItems="center" mt="medium">
                 {isSubmitting && <Spinner mr="small" />}

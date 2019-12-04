@@ -49,6 +49,9 @@ class RegistrationForm(flask_wtf.FlaskForm):
     contributing = wtforms.StringField(
         "Contributing", validators=[validators.DataRequired()]
     )
+    email_verified = wtforms.BooleanField(
+        "Email Verified", validators=[validators.DataRequired()]
+    )
 
 
 @app.route("/user_info")
@@ -61,7 +64,7 @@ def user_info():
         spreadsheet_id=app.config["GOOGLE_SHEET_ID"],
         cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
     )
-    user = sheets_client.auth_user(auth_code)
+    user = sheets_client.users.auth_user(auth_code)
     if user:
         response["first_name"] = user.first_name
         response["last_name"] = user.last_name
@@ -189,9 +192,8 @@ def register() -> Any:
         if email_verified:
             resp.set_cookie("looker_hackathon_auth", sheets_user.auth_code())
         else:
-            sheets_user.send_activation_code()
             sheets_client.users.send_auth_message(sheets_user, flask.request.host_url)
-    return response
+    return resp
 
 
 @app.route("/status")
