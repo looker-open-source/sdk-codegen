@@ -1,7 +1,7 @@
 import datetime
 import os
 
-from sheets import User, Users, encrypt, decrypt
+from sheets import User, Users, decrypt
 
 
 def test_rows_returns_users(users: Users, test_users):
@@ -70,7 +70,6 @@ def test_user_auth(users: Users):
     assert user.email in decrypted
     test_host = "https://foo.bar/"
     message = user.auth_message(test_host, code)
-    print(message)
     assert code in message
     assert "Looker Hackathon" in message
     assert test_host in message
@@ -80,6 +79,7 @@ def test_user_auth(users: Users):
 def test_user_send_auth(users: Users):
     """Send email to a looker email address"""
     test_email = os.environ.get("TEST_TO_EMAIL")
+    assert test_email
     user = User(
         first_name="John",
         last_name="Kaster",
@@ -90,4 +90,3 @@ def test_user_send_auth(users: Users):
     )
     test_host = "https://foo.bar/"
     assert users.send_auth_message(user, test_host) is True
-

@@ -6,8 +6,8 @@ import os
 import urllib.parse
 # from cryptography.fernet import Fernet
 
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+from sendgrid import SendGridAPIClient  # type: ignore
+from sendgrid.helpers.mail import Mail  # type: ignore
 
 import attr
 import cattr
@@ -45,19 +45,14 @@ def decrypt(value: str) -> str:
 
 
 def send_email(to_email: str, subject: str, body: str) -> bool:
-    sendgrid_api_key=os.environ.get("SENDGRID_API_KEY")
-    from_email=os.environ.get("FROM_EMAIL")
+    sendgrid_api_key = os.environ.get("SENDGRID_API_KEY")
+    from_email = os.environ.get("FROM_EMAIL")
 
     message = Mail(
-        from_email=from_email,
-        to_emails=to_email,
-        subject=subject,
-        html_content=body)
+        from_email=from_email, to_emails=to_email, subject=subject, html_content=body
+    )
     sg = SendGridAPIClient(sendgrid_api_key)
-    response = sg.send(message)
-#         print(response.status_code)
-#         print(response.body)
-#         print(response.headers)
+    sg.send(message)
 
     return True
 
@@ -117,6 +112,7 @@ class Sheets:
             self.registrations.register(registrant)
 
         return user
+
 
 @attr.s(auto_attribs=True, kw_only=True)
 class Model:
@@ -270,16 +266,16 @@ class User(Model):
         token = f"{self.email}~{datetime.datetime.now(tz=datetime.timezone.utc)}"
         return encrypt(token)
 
-
     def auth_message(self, host_url: str, auth_code: str = None) -> str:
         """email authentication message body"""
         # TODO make this message reference a specific Hackathon?
         if auth_code is None:
             auth_code = self.auth_code()
         return f"""<h1>Welcome to the Looker Hackathon!</h1>
-Please click {host_url}authenticate?code={auth_code} to authenticate your email so you can use the Hackathon application
+Please click {host_url}auth/{auth_code} to authenticate your email so you can use the Hackathon application
 and participate in the Hackathon
 """
+
 
 class Users(WhollySheet[User]):
     def __init__(self, *, client, spreadsheet_id: str):

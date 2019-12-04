@@ -52,6 +52,19 @@ class RegistrationForm(flask_wtf.FlaskForm):
     email_verified = wtforms.BooleanField("Email Verified", validators=[])
 
 
+@app.route("/auth/<auth_code>")
+def auth(auth_code):
+    sheets_client = sheets.Sheets(
+        spreadsheet_id=app.config["GOOGLE_SHEET_ID"],
+        cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
+    )
+    response = flask.make_response(flask.redirect("http://localhost:3000/"))
+    user = sheets_client.users.auth_user(auth_code)
+    if user:
+        response.set_cookie("looker_hackathon_auth", user.auth_code())
+    return response
+
+
 @app.route("/user_info")
 def user_info():
     response = {}

@@ -23,16 +23,22 @@ export const ResourcesScene: React.FC<{path: string}> = ({path}) => {
     fetchData()
   }, [])
 
+  let message = `Welcome${personalizedText}!`
+  if (path === '/thankyou') {
+    message = `Thank you for registering`
+    if (name !== '') {
+      message = `${message}, ${name}!`
+    } else {
+      message = `${message}! Check your email for an authorization link.`
+    }
+  }
+
   return (
     <>
       <Heading as="h1">Looker Hackathons</Heading>
       <Paragraph>Find information on Hackathons below</Paragraph>
       <Divider my="large" />
-      {path === '/thankyou' && name !== '' ? (
-        <Heading>Thank you for registering, {name}!</Heading>
-      ) : (
-        <Heading>Welcome{personalizedText}!</Heading>
-      )}
+      <Heading>{message}</Heading>
       <Paragraph mb="large">
         Explore the links below to find useful documentation and tools for
         participating in a hackathon.
