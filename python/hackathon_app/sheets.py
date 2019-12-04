@@ -282,18 +282,12 @@ class Users(WhollySheet[User]):
             key="email",
         )
 
-    def auth_user(self, auth_code: str) -> bool:
+    def auth_user(self, auth_code: str) -> Optional[User]:
         """Authenticate the user from the auth code
         """
         token = decrypt(auth_code).split("~")
         email = token[0]
-        stamp = datetime.datetime.fromisoformat(token[1])
-        user = self.find(email)
-        if user is None:
-            return False
-
-        super().update(user)
-        return True
+        return self.find(email)
 
     def send_auth_message(self, user: User, host_url: str) -> bool:
         """Send the email authentication link to the user"""
