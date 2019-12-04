@@ -143,7 +143,6 @@ function reducer(
 ) {
   switch (action.type) {
     case 'update':
-      console.log(action)
       return {...state, ...action.payload}
     default:
       throw new Error()
@@ -188,15 +187,19 @@ export const RegisterScene: React.FC<{path: string}> = () => {
             },
             body: JSON.stringify(response),
           })
-          const msg = await result.json()
-          dispatch({
-            type: 'update',
-            payload: {
-              firstName: msg.given_name,
-              lastName: msg.family_name,
-              email: msg.email,
-            },
-          })
+          if (result.ok) {
+            const msg = await result.json()
+            dispatch({
+              type: 'update',
+              payload: {
+                firstName: msg.given_name,
+                lastName: msg.family_name,
+                email: msg.email,
+              },
+            })
+          } else {
+            console.log(result)
+          }
         } catch (e) {
           alert(JSON.stringify(response, null, 2))
         }
@@ -275,7 +278,7 @@ export const RegisterScene: React.FC<{path: string}> = () => {
               })
               const msg = await result.json()
               if (msg.ok) {
-                navigate('/')
+                navigate('/thankyou')
               } else {
                 actions.setStatus(msg.message)
                 actions.setSubmitting(false)

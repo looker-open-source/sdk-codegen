@@ -1,13 +1,4 @@
-import {
-  Button,
-  Heading,
-  Paragraph,
-  theme,
-  GlobalStyle,
-  Card,
-  Flex,
-  Divider,
-} from '@looker/components'
+import {theme, GlobalStyle, Card, Flex} from '@looker/components'
 import {ThemeProvider} from 'styled-components'
 import * as React from 'react'
 import {Router} from '@reach/router'
@@ -31,6 +22,7 @@ const App: React.FC = () => {
           <Router>
             <RegisterScene path="/registration" />
             <ResourcesScene path="/" />
+            <ResourcesScene path="/thankyou" />
           </Router>
         </Card>
       </Flex>
