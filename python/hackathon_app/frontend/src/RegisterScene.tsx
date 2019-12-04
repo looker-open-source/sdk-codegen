@@ -16,6 +16,11 @@ import {
 } from '@looker/components'
 import {navigate} from '@reach/router'
 import {FieldProps, Formik, Form, Field} from 'formik'
+import GoogleLogin from 'react-google-login'
+import {
+  GoogleLoginResponseOffline,
+  GoogleLoginResponse,
+} from 'react-google-login'
 import React from 'react'
 import * as yup from 'yup'
 
@@ -133,12 +138,62 @@ export const RegisterScene: React.FC<{path: string}> = () => {
     fetchData()
   }, [])
 
+  const responseGoogle = (
+    response: GoogleLoginResponseOffline | GoogleLoginResponse
+  ) => {
+    console.log(response)
+    /*
+    at_hash: "ZhSrXLNwx-2BBMPNlwHDlw"
+aud: "280777447286-iigstshu4o2tnkp5fjucrd3nvq03g5hs.apps.googleusercontent.com"
+azp: "280777447286-iigstshu4o2tnkp5fjucrd3nvq03g5hs.apps.googleusercontent.com"
+email: "joel.dodge@looker.com"
+email_verified: true
+exp: 1575486860
+family_name: "Dodge"
+given_name: "Joel"
+hd: "looker.com"
+iat: 1575483260
+iss: "accounts.google.com"
+jti: "6ce7c1e2b9af03ff63816d8fdebdf6377ff60fbd"
+locale: "en"
+name: "Joel Dodge"
+picture: "https://lh3.googleusercontent.com/a-/AAuE7mC79HWJXkT4vQ-jn-zju7eZe-ITIgSK9yveVmlk=s96-c"
+sub: "105488187618484100289"
+*/
+    async function handleGoogleResponse() {
+      try {
+        const result = await fetch('/verify_google_token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(response),
+        })
+        const msg = await result.json()
+        if (msg.ok) {
+          console.log(msg)
+        } else {
+          console.log(msg)
+        }
+      } catch (e) {
+        alert(JSON.stringify(response, null, 2))
+      }
+    }
+    handleGoogleResponse()
+  }
+
   return (
     <>
       <Heading as="h1">Hackathon Registration</Heading>
       <Paragraph>Register for a Hackathon below</Paragraph>
       <Divider my="large" />
       <Heading mb="medium">Registration</Heading>
+      <GoogleLogin
+        clientId="280777447286-iigstshu4o2tnkp5fjucrd3nvq03g5hs.apps.googleusercontent.com"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={'single_host_origin'}
+      />
       <Formik
         enableReinitialize // for csrf token
         initialValues={{
@@ -274,6 +329,7 @@ export const RegisterScene: React.FC<{path: string}> = () => {
                 component={ValidatedFieldCheckbox}
                 branded
               />
+              <Field name="email_verified" type="hidden" />
               {status && <div>{status}</div>}
               <Flex alignItems="center" mt="medium">
                 {isSubmitting && <Spinner mr="small" />}

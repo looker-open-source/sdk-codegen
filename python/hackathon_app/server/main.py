@@ -4,6 +4,8 @@ from typing import Any
 
 import flask
 import flask_wtf  # type: ignore
+from google.oauth2 import id_token
+from google.auth.transport import requests
 import wtforms  # type: ignore
 from wtforms import validators
 
@@ -47,6 +49,36 @@ class RegistrationForm(flask_wtf.FlaskForm):
     contributing = wtforms.StringField(
         "Contributing", validators=[validators.DataRequired()]
     )
+
+
+@app.route("/verify_google_token", methods=["POST"])
+def verify_google_token():
+    try:
+        # Specify the CLIENT_ID of the app that accesses the backend:
+        body = flask.request.json
+        idinfo = id_token.verify_oauth2_token(
+            body["Zi"]["id_token"],
+            requests.Request(),
+            "280777447286-iigstshu4o2tnkp5fjucrd3nvq03g5hs.apps.googleusercontent.com",
+        )
+
+        # Or, if multiple clients access the backend server:
+        # idinfo = id_token.verify_oauth2_token(token, requests.Request())
+        # if idinfo['aud'] not in [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]:
+        #     raise ValueError('Could not verify audience.')
+
+        if idinfo["iss"] not in ["accounts.google.com", "https://accounts.google.com"]:
+            raise ValueError("Wrong issuer.")
+
+        # If auth request is from a G Suite domain:
+        # if idinfo['hd'] != GSUITE_DOMAIN_NAME:
+        #     raise ValueError('Wrong hosted domain.')
+
+        # ID token is valid. Get the user's Google Account ID from the decoded token.
+    except ValueError:
+        # Invalid token
+        return body
+    return idinfo
 
 
 @app.route("/hackathons")
