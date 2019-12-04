@@ -97,6 +97,7 @@ def register() -> Any:
     first_name = form.data["first_name"]
     last_name = form.data["last_name"]
     email = form.data["email"]
+    email_verified = form.data["email_verified"]
     register_user = sheets.RegisterUser(
         hackathon=hackathon,
         first_name=first_name,
@@ -139,6 +140,9 @@ def register() -> Any:
                     "ok": False,
                     "message": "There was a problem, try again later.",
                 }
+    if response.ok and not email_verified:
+        code = sheets_user.send_activation_code()
+        # TODO pass this activation code somewhere, or log/debug it for now
     return flask.jsonify(response)
 
 

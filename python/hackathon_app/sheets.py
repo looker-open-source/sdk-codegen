@@ -14,6 +14,24 @@ NIL = "\x00"
 DATE_FORMAT = "%m/%d/%Y"
 
 
+def encrypt(value: str) -> str:
+    """
+    Encrypt a string, but for realz
+    :param value: string value to encrypt
+    :return: the encrypted string
+    """
+    return value
+
+
+def decrypt(value: str) -> str:
+    """
+    Decrypt a string, but for realz
+    :param value: string value to decrypt
+    :return: the decrypted string
+    """
+    return value
+
+
 @attr.s(auto_attribs=True, kw_only=True)
 class RegisterUser:
     hackathon: str
@@ -78,7 +96,6 @@ class Model:
 
 TModel = TypeVar("TModel", bound=Model)
 
-
 converter = cattr.Converter()
 
 
@@ -105,10 +122,10 @@ class WhollySheet(Generic[TModel]):
         if model.id:
             self.update(model)
         else:
-            self.insert(model)
+            self.create(model)
 
-    def insert(self, model: TModel):
-        """Insert data as rows into sheet"""
+    def create(self, model: TModel):
+        """Create the model data as a row into sheet"""
         try:
             serialized_ = self.converter.unstructure(model)
             serialized = self._convert_to_list(serialized_)
@@ -218,6 +235,12 @@ class User(Model):
     client_secret: str = ""
     setup_link: str = ""
 
+    def auth_code(self) -> str:
+        """Get an authentication code for the user"""
+        # TODO add datetime value to this argument
+        token = f"{self.email}~{datetime.datetime.now(tz=datetime.timezone.utc)}"
+        return encrypt(token)
+
 
 class Users(WhollySheet[User]):
     def __init__(self, *, client, spreadsheet_id: str):
@@ -228,6 +251,19 @@ class Users(WhollySheet[User]):
             structure=User,
             key="email",
         )
+
+    def auth_user(self, auth_code: str) -> bool:
+        """Authenticate the user from the auth code
+        """
+        token = decrypt(auth_code).split("~")
+        email = token[0]
+        stamp = datetime.datetime.fromisoformat(token[1])
+        user = self.find(email)
+        if user is None:
+            return False
+
+        super().update(user)
+        return True
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -298,7 +334,7 @@ class Registrations(WhollySheet[Registrant]):
     def register(self, registrant: Registrant):
         """Register user by inserting registrant details into registrations sheet"""
         registrant.date_registered = datetime.datetime.now(tz=datetime.timezone.utc)
-        super().insert(registrant)
+        super().create(registrant)
 
 
 class SheetError(Exception):
@@ -328,7 +364,6 @@ def _convert_bool(val: str, _: bool) -> Optional[bool]:
 
 converter.register_unstructure_hook(type(None), lambda t: NIL)
 converter.register_structure_hook(bool, _convert_bool)
-
 
 if __name__ == "__main__":
     sheets = Sheets(spreadsheet_id="SHEET_ID", cred_file="CREDS_FILE")

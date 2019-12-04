@@ -4,7 +4,6 @@ Welcome to the hackathon app: a web app using a React frontend and a python flas
 
 ## Getting setup for local development
 
-
 ### Frontend
 
 Node 12 is required for the frontend. You can use [nvm](https://github.com/creationix/nvm#installation) and [avn](https://github.com/wbyoung/avn#install) to easily switch Node versions between different projects.
@@ -15,6 +14,7 @@ cd frontend/
 yarn install
 yarn start
 ```
+
 You can work on the frontend React app without running the python server or having any backend google sheets or looker instance dependencies. Simply skip the remaining setup.
 
 ### Backend
@@ -22,6 +22,7 @@ You can work on the frontend React app without running the python server or havi
 hackathon_app requires python 3.7+ The easiest way to get this installed on a mac is to install [pyenv](https://github.com/pyenv/pyenv#installation) via [homebrew](https://brew.sh/). If you already have pyenv and pipenv installed then skip to the "Install all dependencies" step
 
 (note, if you were in the `frontend/` directory above then `cd ..` back to `sdk-examples/python/hackathon_app/`)
+
 ```sh
 brew install pyenv
 ```
@@ -48,7 +49,9 @@ pipenv install --dev
 ```
 
 #### Create sheets api creds
+
 Create a GCP project in your personal google console account:
+
 - enable Sheets api
 - enable Drive api
 - create a service account
@@ -56,6 +59,7 @@ Create a GCP project in your personal google console account:
 - copy the email address for the next step
 
 #### Setup `env.list`
+
 - Copy `env.list.sample` to `env.list` and modify accordingly (see instructions for base64 encoding your gcp .json credentials in the code comment for `GOOGLE_APPLICATION_CREDENTIAL_ENCODED`)
 - Leave `GOOGLE_SHEET_ID` alone for now, you'll add it after the next step
 
@@ -64,6 +68,7 @@ Create a GCP project in your personal google console account:
 ```sh
 ./create-test-sheet.sh <email-to-own-sheet@same-gmail-domain-as-gcp-project.com>
 ```
+
 - go back to your spreadsheet and "share" it with the email address of the service account
 - Note the sheet ID (from the output) to use in the `env.list` file below.
 
@@ -82,8 +87,8 @@ yarn start
 
 - this launches the frontend static server at http://127.0.0.1:3000 which proxies fetch requests to the backend server
 
-
 ### Build docker image
+
 Make sure to [install docker](https://download.docker.com/mac/stable/Docker.dmg)
 
 ```sh
@@ -91,7 +96,6 @@ Make sure to [install docker](https://download.docker.com/mac/stable/Docker.dmg)
 ```
 
 you can run the docker container locally with
-
 
 ```sh
 ./run-docker.sh

@@ -58,3 +58,14 @@ def test_update_user_updates(users: Users):
 
     user = users.find(updated_user.email)
     assert user == updated_user
+
+
+def test_user_authtoken(users: Users):
+    """Verify that auth token will correctly generate for all user rows, and 'authenticate'"""
+    all_users = users.rows()
+    updated_user = all_users[0]
+    token = updated_user.auth_code()
+    print(token)
+    parts = token.split("~")
+    print(parts)
+    assert users.auth_user(token) is True

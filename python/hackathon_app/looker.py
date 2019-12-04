@@ -6,6 +6,66 @@ from looker_sdk import client, methods, models, error
 
 
 LOOKER_GROUP_PREFIX = "Looker_Hack: "
+# simple caching mechanism until we have a true class for retaining these IDs
+HACKATHON_ATTR_ID = None
+HACKATHON_ROLE = None
+
+
+def try_to(func):
+    """Wrap API calls in try/except
+    """
+
+    @functools.wraps(func)
+    def wrapped_f(**kwargs):
+        try:
+            return func(**kwargs)
+        except error.SDKError as ex:
+            raise RegisterError(f"Failed to {func.__name__}: ({ex})")
+
+    return wrapped_f
+
+
+@try_to
+def get_hackathon_attr_id(*, sdk: methods.LookerSDK) -> int:
+    global HACKATHON_ATTR_ID
+    if HACKATHON_ATTR_ID is not None:
+        return HACKATHON_ATTR_ID
+
+    main_hackathon = "hackathon"
+    user_attrs = sdk.all_user_attributes(fields="name,id")
+    for user_attr in user_attrs:
+        if user_attr.name == main_hackathon:
+            HACKATHON_ATTR_ID = user_attr.id
+            break
+    else:
+        attrib = sdk.create_user_attribute(
+            body=models.WriteUserAttribute(
+                name=main_hackathon, label="Looker Hackathon", type="string"
+            )
+        )
+        if not attrib:
+            raise RegisterError(f"Could not find '{main_hackathon}' user attribute")
+        else:
+            HACKATHON_ATTR_ID = attrib.id
+
+    return HACKATHON_ATTR_ID
+
+
+@try_to
+def get_hackathon_role(*, sdk: methods.LookerSDK) -> models.Role:
+    global HACKATHON_ROLE
+    if HACKATHON_ROLE is not None:
+        return HACKATHON_ROLE
+
+    for role in sdk.all_roles(fields="name,id"):
+        if role.name == "Hackathon":
+            HACKATHON_ROLE = role
+            assert HACKATHON_ROLE.id
+            break
+    else:
+        raise RegisterError("Hackathon role needs to be created")
+
+    return HACKATHON_ROLE
 
 
 def register_user(
@@ -59,6 +119,7 @@ def find_or_create_user(
 
 
 def enable_users_by_hackathons(hackathons: Sequence[str]) -> Dict[str, str]:
+    global LOOKER_GROUP_PREFIX
     sdk = client.setup()
     groups = {g.name: g.id for g in sdk.all_groups(fields="id,name")}
     ret = {}
@@ -80,20 +141,6 @@ def enable_users_by_hackathons(hackathons: Sequence[str]) -> Dict[str, str]:
     return ret
 
 
-def try_to(func):
-    """Wrap API calls in try/except
-    """
-
-    @functools.wraps(func)
-    def wrapped_f(**kwargs):
-        try:
-            return func(**kwargs)
-        except error.SDKError as ex:
-            raise RegisterError(f"Failed to {func.__name__}: ({ex})")
-
-    return wrapped_f
-
-
 @try_to
 def create_email_credentials(*, sdk: methods.LookerSDK, user_id: int, email: str):
     sdk.create_user_credentials_email(
@@ -112,7 +159,7 @@ def create_api3_credentials(
 
 @try_to
 def set_user_group(*, sdk: methods.LookerSDK, user_id: int, hackathon: str):
-
+    global LOOKER_GROUP_PREFIX
     # TODO - switch to sdk.search_groups once that method is live on
     # sandboxcl and hack instances
     groups = sdk.all_groups(fields="id,name")
@@ -121,12 +168,8 @@ def set_user_group(*, sdk: methods.LookerSDK, user_id: int, hackathon: str):
         if group.name == name:
             break
     else:
-        for role in sdk.all_roles(fields="name,id"):
-            if role.name == "Hackathon":
-                assert role.id
-                break
-        else:
-            raise RegisterError("Hackathon role needs to be created")
+        role = get_hackathon_role(sdk=sdk)
+        assert role.id
         role_groups = []
         for g in sdk.role_groups(role_id=role.id, fields="id"):
             assert g.id
@@ -144,22 +187,7 @@ def set_user_group(*, sdk: methods.LookerSDK, user_id: int, hackathon: str):
 
 @try_to
 def set_user_attributes(*, sdk: methods.LookerSDK, user_id, hackathon):
-    main_hackathon = "hackathon"
-    user_attrs = sdk.all_user_attributes(fields="name,id")
-    for user_attr in user_attrs:
-        if user_attr.name == main_hackathon:
-            hackathon_attr_id = user_attr.id
-            break
-    else:
-        attrib = sdk.create_user_attribute(body=models.WriteUserAttribute(
-          name=main_hackathon,
-          label="Looker Hackathon",
-          type="string"
-          ))
-        if not attrib:
-          raise RegisterError(f"Could not find '{main_hackathon}' user attribute")
-        else:
-          hackathon_attr_id = attrib.id
+    hackathon_attr_id = get_hackathon_attr_id(sdk=sdk)
     assert hackathon_attr_id
     sdk.set_user_attribute_user_value(
         user_id=user_id,
