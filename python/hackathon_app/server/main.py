@@ -49,9 +49,7 @@ class RegistrationForm(flask_wtf.FlaskForm):
     contributing = wtforms.StringField(
         "Contributing", validators=[validators.DataRequired()]
     )
-    email_verified = wtforms.BooleanField(
-        "Email Verified", validators=[validators.DataRequired()]
-    )
+    email_verified = wtforms.BooleanField("Email Verified", validators=[])
 
 
 @app.route("/user_info")

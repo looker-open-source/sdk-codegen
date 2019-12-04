@@ -242,7 +242,7 @@ export const RegisterScene: React.FC<{path: string}> = () => {
         validationSchema={() =>
           yup.object().shape({
             csrf_token: yup.string().required(),
-            email_verified: yup.boolean().required(),
+            email_verified: yup.boolean(),
             first_name: yup.string().required(),
             last_name: yup.string().required(),
             email: yup
