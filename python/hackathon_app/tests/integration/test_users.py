@@ -1,7 +1,7 @@
 import datetime
 import os
 
-from sheets import User, Users
+from sheets import User, Users, encrypt, decrypt
 
 
 def test_rows_returns_users(users: Users, test_users):
@@ -64,10 +64,12 @@ def test_update_user_updates(users: Users):
 def test_user_auth(users: Users):
     """Verify that auth token will correctly generate for all user rows, and 'authenticate'"""
     all_users = users.rows()
-    updated_user = all_users[0]
-    code = updated_user.auth_code()
+    user = all_users[0]
+    code = user.auth_code()
+    decrypted = decrypt(code)
+    assert user.email in decrypted
     test_host = "https://foo.bar/"
-    message = updated_user.auth_message(test_host, code)
+    message = user.auth_message(test_host, code)
     print(message)
     assert code in message
     assert "Looker Hackathon" in message

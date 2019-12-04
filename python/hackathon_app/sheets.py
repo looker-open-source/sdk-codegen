@@ -4,6 +4,7 @@ import itertools
 import re
 import os
 import urllib.parse
+# from cryptography.fernet import Fernet
 
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
@@ -18,23 +19,29 @@ NIL = "\x00"
 
 DATE_FORMAT = "%m/%d/%Y"
 
+CRYPTO_KEY = os.environ.get("CRYPTO_KEY")
 
 def encrypt(value: str) -> str:
     """
-    Encrypt a string, but for realz
+    Encrypt a string
     :param value: string value to encrypt
     :return: the encrypted string
     """
+#     cipher = Fernet(CRYPTO_KEY)
+#     value = cipher.encrypt(value)
     return urllib.parse.quote_plus(value)
 
 
 def decrypt(value: str) -> str:
     """
-    Decrypt a string, but for realz
+    Decrypt a string
     :param value: string value to decrypt
     :return: the decrypted string
     """
-    return urllib.parse.unquote_plus(value)
+#     cipher = Fernet(CRYPTO_KEY)
+    value = urllib.parse.unquote_plus(value)
+#     return cipher.decrypt(value)
+    return value
 
 
 def send_email(to_email: str, subject: str, body: str) -> bool:

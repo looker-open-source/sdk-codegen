@@ -108,3 +108,8 @@ to stop:
 ```sh
 sh stop-docker.sh
 ```
+
+# Hackathon email authentication
+
+Email authentication for the Hackathon app is supported via an email link with an auth code, and Google login.
+![Hackitecture](hackitecture.jpg)
