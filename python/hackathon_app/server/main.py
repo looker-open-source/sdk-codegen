@@ -172,9 +172,9 @@ def register() -> Any:
                     "ok": False,
                     "message": "There was a problem, try again later.",
                 }
-    if response.ok and not email_verified:
-        code = sheets_user.send_activation_code()
-        # TODO pass this activation code somewhere, or log/debug it for now
+    if response["ok"] and not email_verified:
+        # TODO try ... catch this because it will throw an error if the email fails to go out
+        code = sheets_client.users.send_auth_message(sheets_user,flask.request.host_url)
     return flask.jsonify(response)
 
 

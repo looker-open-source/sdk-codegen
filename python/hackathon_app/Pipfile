@@ -19,6 +19,7 @@ google-api-python-client = "*"
 google-auth = "*"
 python-json-logger = "*"
 click = "*"
+sendgrid = "*"
 
 [requires]
 python_version = "3.7"

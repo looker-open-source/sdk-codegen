@@ -2,6 +2,10 @@ from typing import Dict, Generic, List, Optional, Union, Sequence, Type, TypeVar
 import datetime
 import itertools
 import re
+import os
+
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 import attr
 import cattr
@@ -30,6 +34,23 @@ def decrypt(value: str) -> str:
     :return: the decrypted string
     """
     return value
+
+def send_email(to_email: str, subject: str, body: str) -> bool:
+    sendgrid_api_key=os.environ.get("SENDGRID_API_KEY")
+    from_email=os.environ.get("FROM_EMAIL")
+
+    message = Mail(
+        from_email=from_email,
+        to_emails=to_email,
+        subject=subject,
+        html_content=body)
+    sg = SendGridAPIClient(sendgrid_api_key)
+    response = sg.send(message)
+#         print(response.status_code)
+#         print(response.body)
+#         print(response.headers)
+
+    return True
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -87,7 +108,6 @@ class Sheets:
             self.registrations.register(registrant)
 
         return user
-
 
 @attr.s(auto_attribs=True, kw_only=True)
 class Model:
@@ -242,6 +262,16 @@ class User(Model):
         return encrypt(token)
 
 
+    def auth_message(self, host_url: str, auth_code: str = None) -> str:
+        """email authentication message body"""
+        # TODO make this message reference a specific Hackathon?
+        if auth_code is None:
+            auth_code = self.auth_code()
+        return f"""<h1>Welcome to the Looker Hackathon!</h1>
+Please click {host_url}authenticate?code={auth_code} to authenticate your email so you can use the Hackathon application
+and participate in the Hackathon
+"""
+
 class Users(WhollySheet[User]):
     def __init__(self, *, client, spreadsheet_id: str):
         super().__init__(
@@ -264,6 +294,12 @@ class Users(WhollySheet[User]):
 
         super().update(user)
         return True
+
+    def send_auth_message(self, user: User, host_url: str) -> bool:
+        """Send the email authentication link to the user"""
+        subject = "Welcome to the Looker Hackathon!"
+        body = user.auth_message(host_url)
+        return send_email(user.email, subject, body)
 
 
 @attr.s(auto_attribs=True, kw_only=True)
