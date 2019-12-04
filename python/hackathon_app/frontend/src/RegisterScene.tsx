@@ -122,65 +122,89 @@ const HackathonSelect: React.FC<{hackathons: string[]}> = ({hackathons}) => {
   )
 }
 
+interface State {
+  csrfToken: string
+  email: string
+  firstName: string
+  lastName: string
+  hackathons: string[]
+}
+const initialState: State = {
+  csrfToken: 'someToken',
+  email: '',
+  firstName: '',
+  lastName: '',
+  hackathons: [],
+}
+
+function reducer(
+  state: State,
+  action: {type: string; payload: Partial<State>}
+) {
+  switch (action.type) {
+    case 'update':
+      console.log(action)
+      return {...state, ...action.payload}
+    default:
+      throw new Error()
+  }
+}
+
 export const RegisterScene: React.FC<{path: string}> = () => {
-  const [hackathons, setHackathons] = React.useState([])
-  const [csrf, setCsrf] = React.useState({token: 'someToken'})
+  const [
+    {csrfToken, email, firstName, lastName, hackathons},
+    dispatch,
+  ] = React.useReducer(reducer, initialState)
 
   React.useEffect(() => {
     async function fetchData() {
       try {
         const newHackathons = await fetch('/hackathons')
-        setHackathons(await newHackathons.json())
+        dispatch({
+          type: 'update',
+          payload: {hackathons: await newHackathons.json()},
+        })
         const newCsrf = await fetch('/csrf')
-        setCsrf(await newCsrf.json())
+        dispatch({
+          type: 'update',
+          payload: {
+            csrfToken: ((await newCsrf.json()) as {token: string}).token,
+          },
+        })
       } catch (e) {} // TODO: hack for local frontend dev
     }
     fetchData()
   }, [])
 
-  const responseGoogle = (
-    response: GoogleLoginResponseOffline | GoogleLoginResponse
-  ) => {
-    console.log(response)
-    /*
-    at_hash: "ZhSrXLNwx-2BBMPNlwHDlw"
-aud: "280777447286-iigstshu4o2tnkp5fjucrd3nvq03g5hs.apps.googleusercontent.com"
-azp: "280777447286-iigstshu4o2tnkp5fjucrd3nvq03g5hs.apps.googleusercontent.com"
-email: "joel.dodge@looker.com"
-email_verified: true
-exp: 1575486860
-family_name: "Dodge"
-given_name: "Joel"
-hd: "looker.com"
-iat: 1575483260
-iss: "accounts.google.com"
-jti: "6ce7c1e2b9af03ff63816d8fdebdf6377ff60fbd"
-locale: "en"
-name: "Joel Dodge"
-picture: "https://lh3.googleusercontent.com/a-/AAuE7mC79HWJXkT4vQ-jn-zju7eZe-ITIgSK9yveVmlk=s96-c"
-sub: "105488187618484100289"
-*/
-    async function handleGoogleResponse() {
-      try {
-        const result = await fetch('/verify_google_token', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(response),
-        })
-        const msg = await result.json()
-        if (msg.ok) {
-          console.log(msg)
-        } else {
-          console.log(msg)
+  const responseGoogle = React.useCallback(
+    (response: GoogleLoginResponseOffline | GoogleLoginResponse) => {
+      console.log(response)
+      async function handleGoogleResponse() {
+        try {
+          const result = await fetch('/verify_google_token', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(response),
+          })
+          const msg = await result.json()
+          dispatch({
+            type: 'update',
+            payload: {
+              firstName: msg.given_name,
+              lastName: msg.family_name,
+              email: msg.email,
+            },
+          })
+        } catch (e) {
+          alert(JSON.stringify(response, null, 2))
         }
-      } catch (e) {
-        alert(JSON.stringify(response, null, 2))
       }
-    }
-    handleGoogleResponse()
-  }
+      handleGoogleResponse()
+    },
+    []
+  )
 
   return (
     <>
@@ -197,10 +221,10 @@ sub: "105488187618484100289"
       <Formik
         enableReinitialize // for csrf token
         initialValues={{
-          csrf_token: csrf.token,
-          first_name: '',
-          last_name: '',
-          email: '',
+          csrf_token: csrfToken,
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
           organization: '',
           role: '',
           hackathon: '',
@@ -268,7 +292,7 @@ sub: "105488187618484100289"
         {({isSubmitting, status, errors, values, touched}) => {
           return (
             <Form>
-              <Field type="hidden" name="csrf_token" value={csrf.token} />
+              <Field type="hidden" name="csrf_token" value={csrfToken} />
               <Field
                 label="First Name"
                 component={ValidatedFieldText}
