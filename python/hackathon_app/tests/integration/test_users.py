@@ -1,5 +1,4 @@
 import datetime
-import os
 
 from sheets import User, Users
 
@@ -59,32 +58,3 @@ def test_update_user_updates(users: Users):
 
     user = users.find(updated_user.email)
     assert user == updated_user
-
-
-def test_user_auth(users: Users):
-    """Verify that auth token will correctly generate for all user rows, and 'authenticate'"""
-    all_users = users.rows()
-    user = all_users[0]
-    code = user.auth_code()
-    test_host = "https://foo.bar/"
-    message = user.auth_message(test_host, code)
-    assert code in message
-    assert "Looker Hackathon" in message
-    assert test_host in message
-    assert users.auth_user(code) is not None
-
-
-def test_user_send_auth(users: Users):
-    """Send email to a looker email address"""
-    test_email = os.environ.get("TEST_TO_EMAIL")
-    assert test_email
-    user = User(
-        first_name="John",
-        last_name="Kaster",
-        email=test_email,
-        organization="Looker",
-        role="Sr Engineer",
-        tshirt_size="L",
-    )
-    test_host = "https://foo.bar/"
-    assert users.send_auth_message(user, test_host) is True

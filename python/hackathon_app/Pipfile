@@ -21,6 +21,7 @@ python-json-logger = "*"
 click = "*"
 sendgrid = "*"
 cryptography = "*"
+typing-extensions = "*"
 
 [requires]
 python_version = "3.7"

@@ -9,6 +9,7 @@ from google.auth.transport import requests  # type: ignore
 import wtforms  # type: ignore
 from wtforms import validators
 
+import authentication
 import looker
 import sheets
 
@@ -58,10 +59,18 @@ def auth(auth_code):
         spreadsheet_id=app.config["GOOGLE_SHEET_ID"],
         cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
     )
+    auth_service = authentication.Authentication.configure(
+        crypto_key=app.config["SECRET_KEY"],
+        from_email=app.config["FROM_EMAIL"],
+        email_key=app.config["SENDGRID_API_KEY"],
+        sheet=sheets_client,
+    )
+    user = auth_service.auth_user(auth_code)
     response = flask.make_response(flask.redirect("http://localhost:3000/"))
-    user = sheets_client.users.auth_user(auth_code)
     if user:
-        response.set_cookie("looker_hackathon_auth", user.auth_code())
+        response.set_cookie(
+            "looker_hackathon_auth", auth_service.get_user_auth_code(user)
+        )
     return response
 
 
@@ -75,7 +84,13 @@ def user_info():
         spreadsheet_id=app.config["GOOGLE_SHEET_ID"],
         cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
     )
-    user = sheets_client.users.auth_user(auth_code)
+    auth_service = authentication.Authentication.configure(
+        crypto_key=app.config["SECRET_KEY"],
+        from_email=app.config["FROM_EMAIL"],
+        email_key=app.config["SENDGRID_API_KEY"],
+        sheet=sheets_client,
+    )
+    user = auth_service.auth_user(auth_code)
     if user:
         response["first_name"] = user.first_name
         response["last_name"] = user.last_name
@@ -200,10 +215,18 @@ def register() -> Any:
                 }
     resp = flask.jsonify(response)
     if response["ok"]:
+        auth_service = authentication.Authentication.configure(
+            crypto_key=app.config["SECRET_KEY"],
+            from_email=app.config["FROM_EMAIL"],
+            email_key=app.config["SENDGRID_API_KEY"],
+            sheet=sheets_client,
+        )
         if email_verified:
-            resp.set_cookie("looker_hackathon_auth", sheets_user.auth_code())
+            resp.set_cookie(
+                "looker_hackathon_auth", auth_service.get_user_auth_code(sheets_user)
+            )
         else:
-            sheets_client.users.send_auth_message(sheets_user, flask.request.host_url)
+            auth_service.send_auth_message(sheets_user, flask.request.host_url)
     return resp
 
 

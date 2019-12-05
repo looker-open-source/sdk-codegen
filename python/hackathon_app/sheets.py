@@ -2,12 +2,6 @@ from typing import Dict, Generic, List, Optional, Union, Sequence, Type, TypeVar
 import datetime
 import itertools
 import re
-import os
-import urllib.parse
-from cryptography.fernet import Fernet
-
-from sendgrid import SendGridAPIClient  # type: ignore
-from sendgrid.helpers.mail import Mail  # type: ignore
 
 import attr
 import cattr
@@ -18,66 +12,6 @@ import googleapiclient.discovery  # type: ignore
 NIL = "\x00"
 
 DATE_FORMAT = "%m/%d/%Y"
-
-CRYPTO_KEY = os.environ.get("CRYPTO_KEY").encode()
-
-def get_crypto_key() -> str:
-    """Retrieve or generate and save crypto key"""
-    global CRYPTO_KEY
-    if not CRYPTO_KEY:
-        CRYPTO_KEY = Fernet.generate_key().decode()
-        # put the crypto key into the environment file
-        env_file = './env.list'
-        with open(env_file, 'r') as file:
-            settings = file.read()
-
-        settings = re.sub(
-            r"export CRYPTO_KEY='.*'",
-            f"export CRYPTO_KEY='{CRYPTO_KEY}'",
-            settings
-        )
-
-        with open(env_file, 'w') as file:
-            file.write(settings)
-
-        # Get the crypto key back as its byte array
-        CRYPTO_KEY = CRYPTO_KEY.encode()
-
-    return CRYPTO_KEY
-
-def encrypt(value: str) -> str:
-    """
-    Encrypt a string
-    :param value: string value to encrypt
-    :return: the encrypted string
-    """
-    cipher = Fernet(get_crypto_key())
-    value = cipher.encrypt(value.encode())
-    return urllib.parse.quote_plus(value)
-
-
-def decrypt(value: str) -> str:
-    """
-    Decrypt a string
-    :param value: string value to decrypt
-    :return: the decrypted string
-    """
-    value = urllib.parse.unquote_plus(value).encode()
-    cipher = Fernet(CRYPTO_KEY)
-    return cipher.decrypt(value).decode()
-
-
-def send_email(to_email: str, subject: str, body: str) -> bool:
-    sendgrid_api_key = os.environ.get("SENDGRID_API_KEY")
-    from_email = os.environ.get("FROM_EMAIL")
-
-    message = Mail(
-        from_email=from_email, to_emails=to_email, subject=subject, html_content=body
-    )
-    sg = SendGridAPIClient(sendgrid_api_key)
-    sg.send(message)
-
-    return True
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -283,22 +217,6 @@ class User(Model):
     client_secret: str = ""
     setup_link: str = ""
 
-    def auth_code(self) -> str:
-        """Get an authentication code for the user"""
-        # TODO add datetime value to this argument
-        token = f"{self.email}~{datetime.datetime.now(tz=datetime.timezone.utc)}"
-        return encrypt(token)
-
-    def auth_message(self, host_url: str, auth_code: str = None) -> str:
-        """email authentication message body"""
-        # TODO make this message reference a specific Hackathon?
-        if auth_code is None:
-            auth_code = self.auth_code()
-        return f"""<h1>Welcome to the Looker Hackathon!</h1>
-Please click {host_url}auth/{auth_code} to authenticate your email so you can use the Hackathon application
-and participate in the Hackathon
-"""
-
 
 class Users(WhollySheet[User]):
     def __init__(self, *, client, spreadsheet_id: str):
@@ -309,19 +227,6 @@ class Users(WhollySheet[User]):
             structure=User,
             key="email",
         )
-
-    def auth_user(self, auth_code: str) -> Optional[User]:
-        """Authenticate the user from the auth code
-        """
-        token = decrypt(auth_code).split("~")
-        email = token[0]
-        return self.find(email)
-
-    def send_auth_message(self, user: User, host_url: str) -> bool:
-        """Send the email authentication link to the user"""
-        subject = "Welcome to the Looker Hackathon!"
-        body = user.auth_message(host_url)
-        return send_email(user.email, subject, body)
 
 
 @attr.s(auto_attribs=True, kw_only=True)
