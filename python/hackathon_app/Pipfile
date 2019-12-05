@@ -20,6 +20,7 @@ google-auth = "*"
 python-json-logger = "*"
 click = "*"
 sendgrid = "*"
+cryptography = "*"
 
 [requires]
 python_version = "3.7"

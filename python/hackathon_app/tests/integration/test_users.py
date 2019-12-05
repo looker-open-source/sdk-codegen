@@ -1,7 +1,7 @@
 import datetime
 import os
 
-from sheets import User, Users, decrypt
+from sheets import User, Users
 
 
 def test_rows_returns_users(users: Users, test_users):
@@ -66,8 +66,6 @@ def test_user_auth(users: Users):
     all_users = users.rows()
     user = all_users[0]
     code = user.auth_code()
-    decrypted = decrypt(code)
-    assert user.email in decrypted
     test_host = "https://foo.bar/"
     message = user.auth_message(test_host, code)
     assert code in message

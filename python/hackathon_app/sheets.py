@@ -4,7 +4,7 @@ import itertools
 import re
 import os
 import urllib.parse
-# from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet
 
 from sendgrid import SendGridAPIClient  # type: ignore
 from sendgrid.helpers.mail import Mail  # type: ignore
@@ -19,7 +19,31 @@ NIL = "\x00"
 
 DATE_FORMAT = "%m/%d/%Y"
 
-CRYPTO_KEY = os.environ.get("CRYPTO_KEY")
+CRYPTO_KEY = os.environ.get("CRYPTO_KEY").encode()
+
+def get_crypto_key() -> str:
+    """Retrieve or generate and save crypto key"""
+    global CRYPTO_KEY
+    if not CRYPTO_KEY:
+        CRYPTO_KEY = Fernet.generate_key().decode()
+        # put the crypto key into the environment file
+        env_file = './env.list'
+        with open(env_file, 'r') as file:
+            settings = file.read()
+
+        settings = re.sub(
+            r"export CRYPTO_KEY='.*'",
+            f"export CRYPTO_KEY='{CRYPTO_KEY}'",
+            settings
+        )
+
+        with open(env_file, 'w') as file:
+            file.write(settings)
+
+        # Get the crypto key back as its byte array
+        CRYPTO_KEY = CRYPTO_KEY.encode()
+
+    return CRYPTO_KEY
 
 def encrypt(value: str) -> str:
     """
@@ -27,8 +51,8 @@ def encrypt(value: str) -> str:
     :param value: string value to encrypt
     :return: the encrypted string
     """
-#     cipher = Fernet(CRYPTO_KEY)
-#     value = cipher.encrypt(value)
+    cipher = Fernet(get_crypto_key())
+    value = cipher.encrypt(value.encode())
     return urllib.parse.quote_plus(value)
 
 
@@ -38,10 +62,9 @@ def decrypt(value: str) -> str:
     :param value: string value to decrypt
     :return: the decrypted string
     """
-#     cipher = Fernet(CRYPTO_KEY)
-    value = urllib.parse.unquote_plus(value)
-#     return cipher.decrypt(value)
-    return value
+    value = urllib.parse.unquote_plus(value).encode()
+    cipher = Fernet(CRYPTO_KEY)
+    return cipher.decrypt(value).decode()
 
 
 def send_email(to_email: str, subject: str, body: str) -> bool:

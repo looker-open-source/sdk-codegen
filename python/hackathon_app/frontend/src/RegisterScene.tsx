@@ -130,6 +130,7 @@ interface State {
   hackathons: string[]
   emailVerified: boolean
 }
+
 const initialState: State = {
   csrfToken: 'someToken',
   email: '',
