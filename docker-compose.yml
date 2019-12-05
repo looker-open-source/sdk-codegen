@@ -18,4 +18,4 @@ services:
       stdin_open: true
       tty: true
       volumes:
-        - '.:/sdk-codegen'
+        - '.:/sdk_codegen'
