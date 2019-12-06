@@ -38,7 +38,10 @@ def test_register_user_registers(
     assert last_registrant.user_email == new_user.email
     assert last_registrant.hackathon_name == "sanfrancisco_2019"
     assert last_registrant.date_registered
-    assert last_registrant.date_registered.date() == datetime.date.today()
+    assert (
+        last_registrant.date_registered.date()
+        == datetime.datetime.now(tz=datetime.timezone.utc).date()
+    )
     assert last_registrant.attended is None
 
 
@@ -74,7 +77,10 @@ def test_register_user_registers_when_user_exists(
     assert last_registrant.user_email == existing_user.email
     assert last_registrant.hackathon_name == "newhackathon_2019"
     assert last_registrant.date_registered
-    assert last_registrant.date_registered.date() == datetime.date.today()
+    assert (
+        last_registrant.date_registered.date()
+        == datetime.datetime.now(tz=datetime.timezone.utc).date()
+    )
     assert last_registrant.attended is None
 
 
