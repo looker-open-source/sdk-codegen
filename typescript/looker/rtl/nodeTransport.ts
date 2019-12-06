@@ -217,7 +217,7 @@ export class NodeTransport extends BaseTransport {
       url: requestPath,
       headers: headers,
       body: body ? body : undefined,
-      json: !!body,
+      json: body && typeof body !== 'string', // If body is a string, pass as is
       resolveWithFullResponse: true,
       rejectUnauthorized: this.verifySsl(options),
       timeout: this.timeout(options) * 1000,

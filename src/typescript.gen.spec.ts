@@ -292,7 +292,7 @@ body?: ICreateDashboardRenderTask`)
    */
   query_id: number
   /**
-   * Desired result format
+   * Desired result format. Result formats supported for async queries are: json, json_detail, json_fe, csv, html, md, txt, xlsx, gsxml
    */
   result_format: string
   /**
