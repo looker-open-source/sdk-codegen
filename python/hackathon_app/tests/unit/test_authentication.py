@@ -1,5 +1,8 @@
-# TODO: real tests against sendgrid and Fernet
+import os
 from typing import List
+
+from cryptography import fernet
+import pytest  # type: ignore
 
 import authentication
 from sheets import Sheets, User
@@ -16,6 +19,26 @@ class NoopCrypto:
 class NoopEmail:
     def send(self, to_email: str, subject: str, body: str) -> None:
         pass
+
+
+def test_send_email():
+    to_email = os.environ.get("TEST_TO_EMAIL")
+    from_email = os.environ.get("FROM_EMAIL")
+    api_key = os.environ.get("SENDGRID_API_KEY")
+    if not (to_email and from_email and api_key):
+        pytest.fail("Missing environment variables")
+
+    emailer = authentication.Email(from_email, api_key)
+    emailer.send(to_email, "hackathon app test", "this is a body")
+
+
+def test_encrypt_decrypt():
+    crypto = authentication.Crypto(fernet.Fernet.generate_key().decode())
+    value = "foobar"
+    encrypted = crypto.encrypt(value)
+    assert encrypted != value
+    decrypted = crypto.decrypt(encrypted)
+    assert decrypted == value
 
 
 def test_get_user_auth_code(sheets: Sheets):
@@ -49,7 +72,7 @@ def test_auth_user(sheets: Sheets, test_users: List[User]):
 def test_send_auth_message(sheets: Sheets, test_users: List[User]):
     user = test_users[0]
 
-    class TestCrypto:
+    class FooCrypto:
         def encrypt(self, value: str) -> str:
             return "foo"
 
@@ -72,6 +95,6 @@ and participate in the Hackathon
             )
 
     auth_service = authentication.Authentication(
-        crypto=TestCrypto(), sheet=sheets, email=TestEmail(user.email)
+        crypto=FooCrypto(), sheet=sheets, email=TestEmail(user.email)
     )
     auth_service.send_auth_message(user, "https://foo.com/")
