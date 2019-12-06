@@ -28,12 +28,17 @@ import {
   ITransport,
   SDKResponse,
   sdkError,
-  HttpMethod,
+  HttpMethod, encodeParams,
 } from './transport'
 import { AuthToken } from './authToken'
 import { NodeTransport } from './nodeTransport'
-import { IApiSettings, strLookerClientId, strLookerClientSecret } from './apiSettings'
+import {
+  IApiSettings,
+  strLookerClientId,
+  strLookerClientSecret
+} from './apiSettings'
 import { AuthSession } from './authSession'
+import { utf8 } from './constants'
 
 const strPost: HttpMethod = 'POST'
 const strDelete: HttpMethod = 'DELETE'
@@ -46,16 +51,16 @@ interface IAccessToken {
   /**
    * Access Token used for API calls
    */
-  access_token?: string;
+  access_token?: string
   /**
    * Type of token
    */
-  token_type?: string;
+  token_type?: string
 
   /**
    * Number of seconds before the token expires
    */
-  expires_in?: number;
+  expires_in?: number
 }
 
 export class NodeSession extends AuthSession {
@@ -155,13 +160,17 @@ export class NodeSession extends AuthSession {
 
   // TODO should this be moved to `transport.ts` as a generic method?
   private async ok<TSuccess, TError>(
-    promise: Promise<SDKResponse<TSuccess, TError>>,
+    promise: Promise<SDKResponse<TSuccess, TError>>
   ) {
     const result = await promise
     if (result.ok) {
       return result.value
     } else {
-      throw sdkError(result as any)
+      if (result instanceof Buffer) {
+        throw sdkError({message: result.toString(utf8)})
+      } else {
+        throw sdkError(result as any)
+      }
     }
   }
 
@@ -194,18 +203,19 @@ export class NodeSession extends AuthSession {
       const client_secret =
         process.env[strLookerClientSecret] || section['client_secret']
       if (!client_id || !client_secret) {
-        throw sdkError({ message: 'API credentials client_id and/or client_secret are not set' })
+        throw sdkError({
+          message: 'API credentials client_id and/or client_secret are not set'
+        })
       }
+      const body = encodeParams({client_id, client_secret})
       // authenticate client
       const token = await this.ok(
         this.transport.request<IAccessToken, IError>(
           strPost,
           `${this.apiPath}/login`,
-          {
-            client_id,
-            client_secret,
-          },
-        ),
+          undefined,
+          body
+        )
       )
       this._authToken.setToken(token)
     }
@@ -226,7 +236,7 @@ export class NodeSession extends AuthSession {
           }
           return init
         },
-        this.settings,
+        this.settings
       )
 
       const accessToken = await this.ok(promise)
@@ -252,7 +262,7 @@ export class NodeSession extends AuthSession {
         }
         return init
       },
-      this.settings,
+      this.settings
     )
 
     await this.ok(promise)
