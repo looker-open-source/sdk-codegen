@@ -201,10 +201,14 @@ export class NodeSession extends AuthSession {
         this.transport.request<IAccessToken, IError>(
           strPost,
           `${this.apiPath}/login`,
+          null,
+          `client_id=${client_id}&client_secret=${client_secret}`,
+          undefined,
           {
-            client_id,
-            client_secret,
-          },
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          }
         ),
       )
       this._authToken.setToken(token)
