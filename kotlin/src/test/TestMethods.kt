@@ -95,9 +95,35 @@ class TestMethods {
     }
 
     @test fun testCreateQuery() {
-        val response = sdk.create_query(WriteQuery("thelook", "users", arrayOf("users.count")))
-        assertTrue(response is SDKResponse.SDKSuccessResponse<*>)
-        assertTrue((response as SDKResponse.SDKSuccessResponse<*>).ok)
+        val query = sdk.ok<Query>(sdk.create_query(WriteQuery("thelook", "users", arrayOf("users.count"))))
+        query.id?.let { id ->
+            val result = sdk.ok<String>(sdk.run_query(id, "sql"))
+            assertTrue(result.startsWith("SELECT"))
+        }
+    }
+
+    @test fun testRunInlineQuery() {
+        val result = sdk.ok<String>(
+                sdk.run_inline_query(
+                        "csv",
+                        WriteQuery(
+                                "thelook",
+                                "users",
+                                arrayOf(
+                                        "users.id",
+                                        "users.age",
+                                        "users.city",
+                                        "users.email",
+                                        "users.first_name",
+                                        "users.last_name",
+                                        "users.zip",
+                                        "users.state",
+                                        "users.country"
+                                )
+                        )
+                )
+        )
+        assertTrue(result.contains("Users ID"))
     }
 
     @test fun testAllColorCollections() {
