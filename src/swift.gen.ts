@@ -145,7 +145,7 @@ import Foundation
     let pOpt = ''
     let line = ''
     if (param.location === strBody) {
-      mapped.name = `Partial<${mapped.name}>`
+      mapped.name = `${mapped.name}` // TODO should this use Partial<T>?
     }
     if (!param.required) {
       pOpt = '?'
@@ -177,7 +177,7 @@ import Foundation
 
     if (requestType) {
       // use the request type that will be generated in models.ts
-      fragment = `request: Partial<I${requestType}>`
+      fragment = `request: I${requestType}` // TODO should this use Partial<T>?
     } else {
       let params: string[] = []
       const args = method.allParams // get the params in signature order
