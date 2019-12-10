@@ -1,7 +1,9 @@
+import json
+import urllib
 import sys
-import time
 import textwrap
-from typing import Optional
+import time
+from typing import cast, Dict, Optional
 
 import exceptions
 from looker_sdk import client, models
@@ -13,26 +15,30 @@ def main():
     """Given a dashboard title, search all dashboards to retrieve its id and use
     it to render the dashboard's pdf.
 
+    Examples of how to use this:
     $ python download_dashboard_pdf.py "A Test Dashboard"
+    $ python download_dashboard_pdf.py "A Test Dashboard" '{"filter1": "value1, value2", "filter2": "value3"}'
+    $ python download_dashboard_pdf.py "A Test Dashboard" {} "single_column"
     """
     dashboard_title = sys.argv[1] if len(sys.argv) > 1 else ""
-    pdf_style = sys.argv[2] if len(sys.argv) > 2 else "tiled"
-    pdf_width = int(sys.argv[3]) if len(sys.argv) > 3 else 545
-    pdf_height = int(sys.argv[4]) if len(sys.argv) > 4 else 842
+    filters = json.loads(sys.argv[2]) if len(sys.argv) > 2 else None
+    pdf_style = sys.argv[3] if len(sys.argv) > 3 else "tiled"
+    pdf_width = int(sys.argv[4]) if len(sys.argv) > 4 else 545
+    pdf_height = int(sys.argv[5]) if len(sys.argv) > 5 else 842
 
     if not dashboard_title:
         raise exceptions.ArgumentError(
             textwrap.dedent(
                 """
-                Please provide: <dashboardTitle> [<dashboard_style>] [<pdf_width>] [<pdf_height>]
+                Please provide: <dashboard_title> [<dashboard_filters>] [<dashboard_style>] [<pdf_width>] [<pdf_height>]
                     dashboard_style defaults to "tiled"
                     pdf_width defaults to 545
                     pdf_height defaults to 842"""
             )
-        )  # noqa: B950
+        )
 
-    dashboard = get_dashboard(dashboard_title)
-    download_dashboard(dashboard, pdf_style, pdf_width, pdf_height)
+    dashboard = cast(models.Dashboard, get_dashboard(dashboard_title))
+    download_dashboard(dashboard, pdf_style, pdf_width, pdf_height, filters)
 
 
 def get_dashboard(title: str) -> Optional[models.Dashboard]:
@@ -46,7 +52,11 @@ def get_dashboard(title: str) -> Optional[models.Dashboard]:
 
 
 def download_dashboard(
-    dashboard: models.Dashboard, style: str, width: int, height: int
+    dashboard: models.Dashboard,
+    style: str = "tiled",
+    width: int = 545,
+    height: int = 842,
+    filters: Optional[Dict[str, str]] = None,
 ):
     """Download specified dashboard as PDF"""
     assert dashboard.id
@@ -54,7 +64,10 @@ def download_dashboard(
     task = sdk.create_dashboard_render_task(
         id,
         "pdf",
-        models.CreateDashboardRenderTask(dashboard_style=style),
+        models.CreateDashboardRenderTask(
+            dashboard_style=style,
+            dashboard_filters=urllib.parse.urlencode(filters) if filters else None,
+        ),
         width,
         height,
     )
