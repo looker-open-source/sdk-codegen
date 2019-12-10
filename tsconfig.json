@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "noFallthroughCasesInSwitch": true,
+    "declaration": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "strict": true,
     "esModuleInterop": true,
     "plugins": [
       {
@@ -12,13 +14,10 @@
         "alwaysShowRuleFailuresAsWarnings": true
       }
     ],
-    "skipLibCheck": true,
-    "strict": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
     "target": "es6",
     "lib": ["es6", "es2017.object", "dom"],
-    "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
     "baseUrl": "./"
   },
   "include": ["./*.ts", "./src/*.ts"]

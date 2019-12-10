@@ -1,20 +1,22 @@
-{
+  {
   "compilerOptions": {
     "declaration": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitReturns": true,
-    "outDir": "dist",
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
     "strict": true,
-    "target": "ES5",
     "esModuleInterop": true,
-    "lib": ["es2015", "es6", "dom", "es2015.promise"],
     "plugins": [
       {
         "name": "typescript-tslint-plugin",
         "alwaysShowRuleFailuresAsWarnings": true
       }
-    ]
+    ],
+    "target": "ES5",
+    "lib": ["es2015", "es6", "dom", "es2015.promise"],
+    "outDir": "dist"
   },
   "exclude": [
     "node_modules"
