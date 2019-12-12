@@ -1,19 +1,6 @@
 {
+  "extends": "./tsconfig.common",
   "compilerOptions": {
-    "declaration": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noImplicitReturns": true,
-    "noImplicitAny": true,
-    "noFallthroughCasesInSwitch": true,
-    "strict": true,
-    "esModuleInterop": true,
-    "plugins": [
-      {
-        "name": "tslint-language-service",
-        "alwaysShowRuleFailuresAsWarnings": true
-      }
-    ],
     "target": "es6",
     "lib": ["es6", "es2017.object", "dom"],
     "allowSyntheticDefaultImports": true,
