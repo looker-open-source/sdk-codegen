@@ -17,6 +17,11 @@ def dashboards(_test_data):
 
 
 @pytest.fixture(scope="session")
+def looks(_test_data):
+    return _test_data["looks"]
+
+
+@pytest.fixture(scope="session")
 def queries(_test_data) -> List[Dict[str, str]]:
     return _test_data["queries"]
 
@@ -51,6 +56,15 @@ def remove_test_dashboards(sdk: mtds.LookerSDK, dashboards):
         if len(search_results) > 0:
             for dashboard in search_results:
                 sdk.delete_dashboard(cast(str, dashboard.id))
+
+
+@pytest.fixture(scope="function")
+def remove_test_looks(sdk: mtds.LookerSDK, looks):
+    for l in looks:
+        search_results = sdk.search_looks(title=l["title"])
+        if len(search_results) > 0:
+            for look in search_results:
+                sdk.delete_look(cast(int, look.id))
 
 
 @pytest.fixture(name="test_users", scope="session")

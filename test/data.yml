@@ -12,28 +12,28 @@ users:
   - first_name: Amanda
     last_name: Aardvark
 queries:
-  - id: '#user_query'
+  - id: "#user_query"
     model: thelook
     view: users
     fields:
-      - 'users.id'
-      - 'users.age'
-      - 'users.city'
-      - 'users.email'
-      - 'users.first_name'
-      - 'users.last_name'
-      - 'users.zip'
-      - 'users.state'
-      - 'users.country'
+      - "users.id"
+      - "users.age"
+      - "users.city"
+      - "users.email"
+      - "users.first_name"
+      - "users.last_name"
+      - "users.zip"
+      - "users.state"
+      - "users.country"
     vis_config:
       type: looker_column
-    limit: '10'
-  - id: '#brand_query'
+    limit: "10"
+  - id: "#brand_query"
     model: thelook
     view: products
     fields:
-      - 'products.brand'
-      - 'products.count'
+      - "products.brand"
+      - "products.count"
     vis_config:
       type: looker_column
     limit: 100
@@ -74,3 +74,14 @@ dashboards:
         body_text: "Data Body"
         # this is a test data convention to reference the query by some identifying tag
         query_id: "#user_query"
+looks:
+  - title: An SDK Look
+    description: An SDK test look about orders
+    query:
+      - id: "#look_query"
+        model: thelook
+        view: orders
+        fields:
+          - "orders.created_date"
+          - "orders.count"
+        limit: 100

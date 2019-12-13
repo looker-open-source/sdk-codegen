@@ -12,8 +12,7 @@ from looker_sdk import models as ml
 
 
 def test_crud_user(sdk: mtds.LookerSDK):
-    """Test creating, retrieving, updating and deleting a user.
-    """
+    """Test creating, retrieving, updating and deleting a user."""
 
     # Create user
     user = sdk.create_user(
@@ -70,8 +69,7 @@ def test_crud_user(sdk: mtds.LookerSDK):
 
 
 def test_me_returns_correct_result(sdk: mtds.LookerSDK):
-    """me() should return the current authenticated user
-    """
+    """me() should return the current authenticated user"""
     me = sdk.me()
     assert isinstance(me, ml.User)
     assert isinstance(me.credentials_api3, list)
@@ -80,8 +78,7 @@ def test_me_returns_correct_result(sdk: mtds.LookerSDK):
 
 
 def test_me_field_filters(sdk: mtds.LookerSDK):
-    """me() should return only the requested fields.
-    """
+    """me() should return only the requested fields."""
     me = sdk.me("id, first_name, last_name")
     assert isinstance(me, ml.User)
     assert isinstance(me.id, int)
@@ -96,8 +93,7 @@ def test_me_field_filters(sdk: mtds.LookerSDK):
 
 @pytest.mark.usefixtures("test_users")
 def test_bad_user_search_returns_no_results(sdk: mtds.LookerSDK):
-    """search_users() should return an empty list when no match is found.
-    """
+    """search_users() should return an empty list when no match is found."""
     resp = sdk.search_users(first_name="Bad", last_name="News")
     assert isinstance(resp, list)
     assert len(resp) == 0
@@ -107,8 +103,7 @@ def test_bad_user_search_returns_no_results(sdk: mtds.LookerSDK):
 def test_search_users_matches_pattern(
     sdk: mtds.LookerSDK, users: List[Dict[str, str]], email_domain: str
 ):
-    """search_users should return a list of all matches.
-    """
+    """search_users should return a list of all matches."""
     user = users[0]
 
     # Search by full email
@@ -168,15 +163,13 @@ def test_delim_sequence(
 
 
 def test_it_retrieves_session(sdk: mtds.LookerSDK):
-    """session() should return the current session.
-    """
+    """session() should return the current session."""
     current_session = sdk.session()
     assert current_session.workspace_id == "production"
 
 
 def test_it_updates_session(sdk: mtds.LookerSDK):
-    """update_session() should allow us to change the current workspace.
-    """
+    """update_session() should allow us to change the current workspace."""
     # Switch workspace to dev mode
     sdk.update_session(ml.WriteApiSession(workspace_id="dev"))
     current_session = sdk.session()
@@ -195,8 +188,7 @@ TQueries = List[Dict[str, Union[str, List[str], Dict[str, str]]]]
 
 
 def test_it_creates_and_runs_query(sdk: mtds.LookerSDK, queries: TQueries):
-    """create_query() creates a query and run_query() returns its result.
-    """
+    """create_query() creates a query and run_query() returns its result."""
     for q in queries:
         limit = cast(str, q["limit"]) or "10"
         request = create_query_request(q, limit)
@@ -225,8 +217,7 @@ def test_it_creates_and_runs_query(sdk: mtds.LookerSDK, queries: TQueries):
 
 
 def test_it_runs_inline_query(sdk: mtds.LookerSDK, queries: TQueries):
-    """run_inline_query() should run a query and return its results.
-    """
+    """run_inline_query() should run a query and return its results."""
     for q in queries:
         limit = cast(str, q["limit"]) or "10"
         request = create_query_request(q, limit)
@@ -254,9 +245,47 @@ def test_it_runs_inline_query(sdk: mtds.LookerSDK, queries: TQueries):
         raise AssertionError("png format failed to return an image")
 
 
+@pytest.mark.usefixtures("remove_test_looks")
+def test_crud_look(sdk: mtds.LookerSDK, looks):
+    """Test creating, retrieving, updating and deleting a look."""
+    for l in looks:
+        request = create_query_request(l["query"][0], "10")
+        query = sdk.create_query(request)
+
+        look = sdk.create_look(
+            ml.WriteLookWithQuery(
+                title=l.get("title"),
+                description=l.get("description"),
+                deleted=l.get("deleted"),
+                is_run_on_load=l.get("is_run_on_load"),
+                public=l.get("public"),
+                query_id=query.id,
+                space_id=l.get("space_id") or str(sdk.me().personal_space_id),
+            )
+        )
+
+        assert isinstance(look, ml.LookWithQuery)
+        assert look.title == l.get("title")
+        assert look.description == l.get("description")
+        assert look.deleted == l.get("deleted", False)
+        assert look.is_run_on_load == l.get("is_run_on_load", True)
+        assert look.public == l.get("public", False)
+        assert look.query_id == query.id
+        assert look.space_id == l.get("space_id") or sdk.me().home_space_id
+        assert look.user_id == l.get("user_id") or sdk.me().id
+
+        # Update
+        assert isinstance(look.id, int)
+        updated_look = sdk.update_look(look.id, ml.WriteLookWithQuery(deleted=True))
+        assert updated_look.deleted
+        assert updated_look.title == look.title
+
+        look = sdk.update_look(look.id, ml.WriteLookWithQuery(deleted=False))
+        assert not look.deleted
+
+
 def test_search_looks_returns_looks(sdk: mtds.LookerSDK):
-    """search_looks() should return a list of looks.
-    """
+    """search_looks() should return a list of looks."""
     search_results = sdk.search_looks()
     assert isinstance(search_results, list)
     assert len(search_results) > 0
@@ -280,15 +309,14 @@ def test_search_looks_fields_filter(sdk: mtds.LookerSDK):
 
 
 def test_search_looks_title_fields_filter(sdk: mtds.LookerSDK):
-    """search_looks() should be able to filter on title.
-    """
-    search_results = sdk.search_looks(title="Order%", fields="id, title")
+    """search_looks() should be able to filter on title."""
+    search_results = sdk.search_looks(title="An SDK%", fields="id, title")
     assert isinstance(search_results, list)
     assert len(search_results) > 0
     look = search_results[0]
     assert isinstance(look.id, int)
     assert look.id > 0
-    assert "Order" in look.title
+    assert "SDK" in look.title
     assert look.description is None
 
 
@@ -298,13 +326,13 @@ def test_search_look_and_run(sdk: mtds.LookerSDK):
     JSON will use column names
     JSON_LABEL will use column descriptions
     """
-    search_results = sdk.search_looks(title="Order%", fields="id, title")
+    search_results = sdk.search_looks(title="An SDK%", fields="id, title")
     assert isinstance(search_results, list)
     assert len(search_results) > 0
     look = search_results[0]
     assert isinstance(look.id, int)
     assert look.id > 0
-    assert "Order" in look.title
+    assert "SDK" in look.title
     assert look.description is None
     actual = sdk.run_look(look_id=look.id, result_format="csv")
     assert "Orders Created Date" in actual
@@ -344,7 +372,7 @@ def create_query_request(q, limit: Optional[str] = None) -> ml.WriteQuery:
 
 @pytest.mark.usefixtures("remove_test_dashboards")
 def test_crud_dashboard(sdk: mtds.LookerSDK, queries, dashboards):
-    """Test creating, retrieving, updating and deleting a user.
+    """Test creating, retrieving, updating and deleting a dashboard.
     """
     qhash: Dict[Union[str, int], ml.Query] = {}
     for idx, q in enumerate(queries):
