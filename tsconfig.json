@@ -1,24 +1,10 @@
 {
+  "extends": "./tsconfig.common",
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "esModuleInterop": true,
-    "plugins": [
-      {
-        "name": "tslint-language-service",
-        "alwaysShowRuleFailuresAsWarnings": true
-      }
-    ],
-    "skipLibCheck": true,
-    "strict": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
     "target": "es6",
     "lib": ["es6", "es2017.object", "dom"],
-    "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
     "baseUrl": "./"
   },
   "include": ["./*.ts", "./src/*.ts"]
