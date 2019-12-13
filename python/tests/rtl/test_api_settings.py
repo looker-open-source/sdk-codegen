@@ -59,6 +59,11 @@ base_url=https://host3.looker.com:19999/
 
 [BARE_MIN_NO_VALUES]
 base_url=""
+
+[QUOTED_CONFIG_VARS]
+base_url="https://host4.looker.com:19999"
+api_version='3.1'
+verify_ssl='false'
 """
     )
     return filename
@@ -86,8 +91,7 @@ def test_settings_defaults_to_looker_section(config_file):
 def test_it_retrieves_section_by_name(
     config_file, test_section, expected_url, expected_api_version
 ):
-    """ApiSettings should return settings of specified section.
-    """
+    """ApiSettings should return settings of specified section."""
     settings = api_settings.ApiSettings.configure(config_file, test_section)
     assert settings.base_url == expected_url
     assert settings.api_version == expected_api_version
@@ -131,8 +135,7 @@ def test_it_fails_with_a_bad_section_name(config_file):
     ],
 )
 def test_versioned_api_url_is_built_properly(config_file, test_url, expected_url):
-    """ApiSettings.url should append the api version to the base url.
-    """
+    """ApiSettings.url should append the api version to the base url."""
     settings = api_settings.ApiSettings.configure(config_file)
     settings.base_url = test_url
     assert settings.url == expected_url
@@ -148,8 +151,7 @@ def test_versioned_api_url_is_built_properly(config_file, test_url, expected_url
 def test_settings_from_env_variables_override_config_file(
     monkeypatch, config_file, test_section
 ):
-    """ApiSettings should read settings defined as env variables.
-    """
+    """ApiSettings should read settings defined as env variables."""
     monkeypatch.setenv("LOOKERSDK_BASE_URL", "https://host1.looker.com:19999")
     monkeypatch.setenv("LOOKERSDK_API_VERSION", "3.0")
     monkeypatch.setenv("LOOKERSDK_VERIFY_SSL", "0")
@@ -211,8 +213,7 @@ def test_configure_with_no_file(monkeypatch):
     ],
 )
 def test_it_fails_if_required_settings_are_not_found(config_file, test_section):
-    """ApiSettings should throw an error if required settings are not found.
-    """
+    """ApiSettings should throw an error if required settings are not found."""
     with pytest.raises(error.SDKError):
         api_settings.ApiSettings.configure(config_file, test_section)
 
@@ -225,3 +226,24 @@ def test_it_fails_when_env_variables_are_defined_but_empty(config_file, monkeypa
 
     with pytest.raises(error.SDKError):
         api_settings.ApiSettings.configure(config_file, "BARE")
+
+
+def test_it_unquotes_quoted_config_file_vars(config_file):
+    """ApiSettings should strip quotes from config file variables."""
+    settings = api_settings.ApiSettings.configure(config_file, "QUOTED_CONFIG_VARS")
+    assert settings.base_url == "https://host4.looker.com:19999"
+    assert settings.api_version == "3.1"
+    assert settings.verify_ssl is False
+
+
+def test_it_unquotes_quoted_env_var_values(monkeypatch):
+    """ApiSettings should strip quotes from env variable values."""
+    monkeypatch.setenv("LOOKERSDK_BASE_URL", "'https://host1.looker.com:19999'")
+    monkeypatch.setenv("LOOKERSDK_API_VERSION", '"3.1"')
+    monkeypatch.setenv("LOOKERSDK_VERIFY_SSL", '"false"')
+
+    settings = api_settings.ApiSettings.configure("no-such-file")
+
+    assert settings.base_url == "https://host1.looker.com:19999"
+    assert settings.api_version == "3.1"
+    assert settings.verify_ssl is False
