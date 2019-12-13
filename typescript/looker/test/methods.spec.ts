@@ -49,7 +49,7 @@ const dataFile = 'test/data.yml'
 // TODO abstract this for shared usage across all *.spec.ts files
 const root = fs.existsSync(dataFile) ? '' : '../../'
 const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, utf8))
-const localIni = `${root}${testData['iniFile']}`
+const localIni = `${root}looker.ini`
 const users: Partial<IUser>[] = testData['users']
 const queries: Partial<IQuery>[] = testData['queries']
 const dashboards: any[] = testData['dashboards']

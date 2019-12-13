@@ -45,11 +45,11 @@ const dataFile = 'test/data.yml'
 // slightly hackish data path determination for tests
 const root = fs.existsSync(dataFile) ? '' : '../../'
 const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, 'utf-8'))
-const localIni = `${root}${testData['iniFile']}`
+const testIni = `${root}${testData['iniFile']}`
 
 describe('NodeSettings', () => {
-  const activeVersion = '4.0'
-  const activeTimeout = 40
+  const activeVersion = '3.1'
+  const activeTimeout = 31
   const activeUrl = 'https://self-signed.looker.com:19999'
   const contents = `
 [Looker]
@@ -58,18 +58,18 @@ base_url=${activeUrl}
 client_id=your_API3_client_id
 client_secret=your_API3_client_secret
 timeout=${activeTimeout}
-[Looker31]
-api_version=3.1
+[Looker30]
+api_version=3.0
 base_url=https://self-signed.looker.com:19999
 client_id=your_API3_client_id
 client_secret=your_API3_client_secret
 verify_ssl=False
-timeout=31
+timeout=30
 `
   describe('ApiConfig', () => {
     it('discovers multiple sections', () => {
       const config = ApiConfig(contents)
-      expect(Object.keys(config)).toEqual(['Looker', 'Looker31'])
+      expect(Object.keys(config)).toEqual(['Looker', 'Looker30'])
     })
   })
 
@@ -87,9 +87,9 @@ timeout=31
     })
 
     it('retrieves the second section by name', () => {
-      const settings = new NodeSettings(contents, 'Looker31')
-      expect(settings.api_version).toEqual('3.1')
-      expect(settings.timeout).toEqual(31)
+      const settings = new NodeSettings(contents, 'Looker30')
+      expect(settings.api_version).toEqual('3.0')
+      expect(settings.timeout).toEqual(30)
       expect(settings.verify_ssl).toEqual(false)
     })
 
@@ -101,7 +101,7 @@ timeout=31
   })
 
   describe('NodeSettingsEnv', () => {
-    const section = ApiConfig(fs.readFileSync(localIni, utf8))['Looker']
+    const section = ApiConfig(fs.readFileSync(testIni, utf8))['Looker']
     const verifySsl = boolDefault(section['verify_ssl'], false).toString()
 
     beforeAll(() => {
@@ -154,7 +154,7 @@ timeout=31
     it('environment variables override ini values', () => {
       process.env[strLookerTimeout] = '66'
       process.env[strLookerVerifySsl] = '1'
-      const settings = new NodeSettingsIniFile(localIni)
+      const settings = new NodeSettingsIniFile(testIni)
       expect(settings.api_version).toEqual(activeVersion)
       expect(settings.base_url).toEqual(activeUrl)
       expect(settings.timeout).toEqual(66)
@@ -166,7 +166,7 @@ timeout=31
 
   describe('NodeSettingsIniFile', () => {
     it('settings default to the first section', () => {
-      const settings = new NodeSettingsIniFile(localIni)
+      const settings = new NodeSettingsIniFile(testIni)
       expect(settings.api_version).toEqual(activeVersion)
       expect(settings.base_url).toEqual(activeUrl)
       expect(settings.timeout).toEqual(activeTimeout)
@@ -174,21 +174,21 @@ timeout=31
     })
 
     it('retrieves the first section by name', () => {
-      const settings = new NodeSettingsIniFile(localIni, 'Looker')
+      const settings = new NodeSettingsIniFile(testIni, 'Looker')
       expect(settings.api_version).toEqual(activeVersion)
       expect(settings.base_url).toEqual(activeUrl)
     })
 
     it('retrieves the second section by name', () => {
-      const settings = new NodeSettingsIniFile(localIni, 'Looker31')
-      expect(settings.api_version).toEqual('3.1')
-      expect(settings.timeout).toEqual(31)
+      const settings = new NodeSettingsIniFile(testIni, 'Looker30')
+      expect(settings.api_version).toEqual('3.0')
+      expect(settings.timeout).toEqual(30)
       expect(settings.verify_ssl).toEqual(false)
     })
 
     it('fails with a bad section name', () => {
       expect(
-        () => new NodeSettingsIniFile(localIni, 'NotAGoodLookForYou'),
+        () => new NodeSettingsIniFile(testIni, 'NotAGoodLookForYou'),
       ).toThrow(/No section named "NotAGoodLookForYou"/)
     })
 

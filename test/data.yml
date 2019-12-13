@@ -1,5 +1,5 @@
 # common test data for the Looker SDKs
-iniFile: looker.ini
+iniFile: test/looker.ini
 users:
   - first_name: Lloyd
     last_name: Llookicorn

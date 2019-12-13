@@ -19,15 +19,35 @@ class methodsTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func jsonEncode(_ object: Any?) -> Data? {
+        if let object = object {
+            return try? JSONSerialization.data(withJSONObject: object, options:[])
+        }
+        return nil
+    }
+    
+    struct WriteQuery2: Codable {
+        var model: String
+        var view: String
+    }
+    
     func testQuery() {
-        let settings = config!
-        let xp = BaseTransport(settings)
-        let auth = AuthSession(settings, xp)
-        let sdk = LookerSDK(auth)
-        let query = sdk.ok(sdk.create_query(body:WriteQuery(model:"thelook", view: "users")))
-        let result = sdk.ok(sdk.run_query(query.id!, "sql"))
-        XCTAssertNotNil(result)
-        XCTAssertTrue(result.contains("SELECT"))
+//        let settings = config!
+//        let xp = BaseTransport(settings)
+//        let auth = AuthSession(settings, xp)
+//        let sdk = LookerSDK(auth)
+//        let body = WriteQuery(model: "thelook", view: "users")
+        let body = WriteQuery2(model: "thelook", view: "users")
+        let json = jsonEncode(body)
+        XCTAssertNotNil(json)
+//        let result: SDKResponse<Query, SDKError> = sdk.post("/queries",
+//            ["fields": nil], body, nil)
+
+//        let req = sdk.create_query(body: body)
+//        let query = sdk.ok(req)
+//        let result = sdk.ok(sdk.run_query(query.id!, "sql"))
+//        XCTAssertNotNil(result)
+//        XCTAssertTrue(result.contains("SELECT"))
     }
     
     func testMe() {
