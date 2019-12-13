@@ -95,6 +95,8 @@ class ApiSettings(transport.TransportSettings):
         if env_verify_ssl:
             config_data["verify_ssl"] = env_verify_ssl
 
+        config_data = cls._clean_input(config_data)
+
         if not config_data.get("base_url"):
             raise error.SDKError(f"Required parameter base_url not found.")
 
@@ -103,8 +105,8 @@ class ApiSettings(transport.TransportSettings):
         settings: ApiSettings = converter.structure(config_data, cls)
         return settings
 
-    @staticmethod
-    def read_ini(filename: str, section: Optional[str] = None) -> Dict[str, str]:
+    @classmethod
+    def read_ini(cls, filename: str, section: Optional[str] = None) -> Dict[str, str]:
         cfg_parser = cp.ConfigParser()
         try:
             cfg_parser.read_file(open(filename))
@@ -114,10 +116,19 @@ class ApiSettings(transport.TransportSettings):
             # If section is not specified, use first section in file
             section = section or cfg_parser.sections()[0]
             config_data = dict(cfg_parser[section])
-            # If setting is an empty string, remove it
-            for setting in list(config_data):
-                if config_data[setting] in ['""', "''", ""]:
-                    config_data.pop(setting)
             config_data["_section"] = cast(str, section)
             config_data["_filename"] = cast(str, filename)
+        return config_data
+
+    @classmethod
+    def _clean_input(cls, config_data: Dict[str, str]) -> Dict[str, str]:
+        for setting, value in list(config_data.items()):
+            # Remove empty setting values
+            if not isinstance(value, str):
+                continue
+            if value in ['""', "''", ""]:
+                config_data.pop(setting)
+            # Strip quotes from setting values
+            elif value.startswith(('"', "'")) or value.endswith(('"', "'")):
+                config_data[setting] = value.strip("\"'")
         return config_data
