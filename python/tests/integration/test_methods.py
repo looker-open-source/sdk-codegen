@@ -296,7 +296,7 @@ def test_search_look_and_run(sdk: mtds.LookerSDK):
     """run_look() should return CSV and JSON
     CSV will use column descriptions
     JSON will use column names
-    JSON_DETAIL will use column descriptions
+    JSON_LABEL will use column descriptions
     """
     search_results = sdk.search_looks(title="Order%", fields="id, title")
     assert isinstance(search_results, list)
@@ -312,7 +312,7 @@ def test_search_look_and_run(sdk: mtds.LookerSDK):
     actual = sdk.run_look(look_id=look.id, result_format="json")
     assert "orders.created_date" in actual
     assert "orders.count" in actual
-    actual = sdk.run_look(look_id=look.id, result_format="json_detail")
+    actual = sdk.run_look(look_id=look.id, result_format="json_label")
     assert "Orders Created Date" in actual
     assert "Orders Count" in actual
 
