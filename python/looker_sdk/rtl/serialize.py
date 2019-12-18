@@ -65,12 +65,12 @@ def deserialize(data: str, structure: TStructure) -> TDeserializeReturn:
     """
     try:
         data = json.loads(data)
-    except json.JSONDecodeError:
-        raise DeserializeError("Bad data")
+    except json.JSONDecodeError as ex:
+        raise DeserializeError(f"Bad json {ex}")
     try:
         response: TDeserializeReturn = cattr.structure(data, structure)  # type: ignore
-    except (TypeError, AttributeError):
-        raise DeserializeError("Bad data")
+    except (TypeError, AttributeError) as ex:
+        raise DeserializeError(f"Bad data {ex}")
     return response
 
 
