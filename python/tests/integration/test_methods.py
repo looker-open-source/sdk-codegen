@@ -267,9 +267,9 @@ def test_crud_look(sdk: mtds.LookerSDK, looks):
         assert isinstance(look, ml.LookWithQuery)
         assert look.title == l.get("title")
         assert look.description == l.get("description")
-        assert look.deleted == l.get("deleted", False)
-        assert look.is_run_on_load == l.get("is_run_on_load", True)
-        assert look.public == l.get("public", False)
+        assert look.deleted == l.get("deleted")
+        assert look.is_run_on_load == l.get("is_run_on_load")
+        assert look.public == l.get("public")
         assert look.query_id == query.id
         assert look.space_id == l.get("space_id") or sdk.me().home_space_id
         assert look.user_id == l.get("user_id") or sdk.me().id
