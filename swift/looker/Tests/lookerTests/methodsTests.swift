@@ -105,6 +105,18 @@ class methodsTests: XCTestCase {
         _ = sdk.authSession.logout()
     }
     
+    func testGetDashboard() {
+        let id = "60"
+        let settings = config!
+        let xp = BaseTransport(settings)
+        let auth = AuthSession(settings, xp)
+        let sdk = LookerSDK(auth)
+        BaseTransport.debugging = true
+        let item = sdk.ok(sdk.dashboard(id))
+        XCTAssertNotNil(item)
+        XCTAssertNotNil(item.id!.getString())
+    }
+    
     func testGetAllDashboards() {
         let settings = config!
         let xp = BaseTransport(settings)
@@ -114,7 +126,8 @@ class methodsTests: XCTestCase {
         for item in list {
             let id = item.id!.getString()
 //            let dashboard = sdk.ok(sdk.dashboard(id))
-            let dashboard = sdk.ok(sdk.dashboard(id, fields:Safe.Dashboard))
+            print("Dashboard: \(id)")
+            let dashboard = sdk.ok(sdk.dashboard(id)) //, fields:Safe.Dashboard))
             XCTAssertNotNil(dashboard, "Dashboard \(id) should be gotten")
             XCTAssertEqual(id, dashboard.id!.getString())
             if (dashboard.created_at == nil) {

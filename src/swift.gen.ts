@@ -221,8 +221,11 @@ import Foundation
   }
 
   typeSignature(indent: string, type: IType) {
-    return this.commentHeader(indent, type.description) +
-      `${indent}struct ${type.name}: SDKModel {\n`
+    const recursive = type.isRecursive()
+    const structOrClass = recursive ? 'class' : 'struct'
+    const needClass = recursive ? "\nRecursive type references must use Class instead of Struct" : ''
+    return this.commentHeader(indent, type.description + needClass) +
+      `${indent}${structOrClass} ${type.name}: SDKModel {\n`
   }
 
   // @ts-ignore
@@ -423,7 +426,7 @@ ${indent}return result`
       } else if (type instanceof HashType) {
         // TODO fix the API endpoints like those that return `User` to correctly encode JSON hashes
         // return {name: `StringDictionary<${map.name}>`, default: 'nil'}
-        return {name: `StringDictionary<Variant>`, default: 'nil'}
+        return {name: `StringDictionary<Variant?>`, default: 'nil'}
       } else if (type instanceof DelimArrayType) {
         return {name: `DelimArray<${map.name}>`, default: 'nil'}
       }

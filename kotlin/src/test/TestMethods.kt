@@ -84,6 +84,97 @@ class TestMethods {
         }
     }
 
+    /*
+    Functions to prepare any data entities that might be missing for testing retrieval and iteration
+     */
+    fun prepLook() : Look {
+        val items = sdk.ok<Array<Look>>(sdk.all_looks())
+        if (items.count() > 0) {
+            return items.first()
+        }
+        val look = sdk.ok<Look>(sdk.create_look(WriteLookWithQuery(
+                description = "SDK Look",
+                query = WriteQuery(
+                        "thelook",
+                        "users",
+                        arrayOf("users.count", "users.id", "users.first_name", "users.last_name"))
+
+        )))
+        print("Prepared Look ${look.id}")
+        return look
+    }
+
+    fun prepDashboard() : Dashboard {
+        val items = sdk.ok<Array<DashboardBase>>(sdk.all_dashboards("id"))
+        if (items.count() > 0) {
+            val base = items.first()
+            return sdk.ok(sdk.dashboard(base.id!!))
+        }
+        val dashboard = sdk.ok<Dashboard>(sdk.create_dashboard(WriteDashboard(
+                description = "SDK Dashboard",
+                title = "SDK Dashboard Title",
+                show_title = true
+        )))
+        print("Prepared Dashboard ${dashboard.id}")
+        return dashboard
+    }
+
+    fun prepHomePage() : Homepage {
+        val items = sdk.ok<Array<Homepage>>(sdk.all_homepages())
+        if (items.count() > 0) {
+            return items.first()
+        }
+        val look = prepLook()
+        val homepage = sdk.ok<Homepage>(sdk.create_homepage(WriteHomepage(
+                description="SDK home page description",
+                title = "SDK Home Page"
+        )
+        ))
+
+        val section = sdk.ok<HomepageSection>(sdk.create_homepage_section(
+                WriteHomepageSection(
+                        homepage_id = homepage.id!!.toLong(),
+                        description="SDK section")))
+        val item = sdk.ok<HomepageItem>(sdk.create_homepage_item(
+                WriteHomepageItem(
+                        homepage_section_id = section.id,
+                        look_id = look.id)))
+        print("Prepared Homepage ${homepage.id} Section ${section.id} Item ${item.id} with Look ${look.id}")
+        return homepage
+    }
+
+    fun prepScheduledPlan() : ScheduledPlan {
+        val items = sdk.ok<Array<ScheduledPlan>>(sdk.all_scheduled_plans())
+        if (items.count() > 0) {
+            return items.first()
+        }
+        val look = prepLook()
+        val destinations = arrayOf(ScheduledPlanDestination(
+                type="sftp",
+                format="csv",
+                address= "sftp://example",
+                secret_parameters= "{\"password\":\"secret\"}",
+                parameters="{\"username\":\"name\"}"
+        ))
+
+        val plan = sdk.ok<ScheduledPlan>(sdk.create_scheduled_plan(WriteScheduledPlan(
+                name ="SDK plans and schemes",
+                look_id = look.id!!.toLong(),
+                require_change = false,
+                require_no_results = false,
+                require_results = true,
+                timezone = "America/Los_Angeles",
+                crontab = "*/15 * * * *",
+                enabled = true,
+                scheduled_plan_destination = destinations)
+        ))
+        print("Prepared scheduled plan ${plan.id}")
+        return plan
+    }
+
+    /*
+    functional tests
+     */
     @test fun testMe() {
         val me = sdk.ok<User>(sdk.me())
         val creds = me.credentials_api3
@@ -149,6 +240,7 @@ class TestMethods {
     }
 
     @test fun testAllDashboards() {
+        prepDashboard()
         testAll<DashboardBase,String,Dashboard>(
                 {sdk.all_dashboards()},
                 {item -> item.id!!},
@@ -176,6 +268,7 @@ class TestMethods {
     }
 
     @test fun testAllHomepageItems() {
+        prepHomePage()
         listGetter<HomepageItem,Long,HomepageItem>(
                 {sdk.all_homepage_items()},
                 {item -> item.id!!.toLong()},
@@ -183,6 +276,7 @@ class TestMethods {
     }
 
     @test fun testAllHomepages() {
+        prepHomePage()
         listGetter<Homepage,Long,Homepage>(
                 {sdk.all_homepages()},
                 {item -> item.id!!.toLong()},
@@ -190,6 +284,7 @@ class TestMethods {
     }
 
     @test fun testAllHomepageSections() {
+        prepHomePage()
         listGetter<HomepageSection,Long,HomepageSection>(
                 {sdk.all_homepage_sections()},
                 {item -> item.id!!.toLong()},
@@ -215,6 +310,7 @@ class TestMethods {
                 {id, fields->sdk.integration(id,fields)})
     }
 
+    // TODO legacyFeature.ID should be string, not number
     @test fun testAllLegacyFeatures() {
         listGetter<LegacyFeature,Long,LegacyFeature>(
                 {sdk.all_legacy_features()},
@@ -235,6 +331,7 @@ class TestMethods {
     }
 
     @test fun testAllLooks() {
+        prepLook()
         testAll<Look,Long,LookWithQuery>(
                 {sdk.all_looks()},
                 {item -> item.id!!},
@@ -281,6 +378,7 @@ class TestMethods {
     }
 
     @test fun testAllSchedulePlans() {
+        prepScheduledPlan()
         testAll<ScheduledPlan,Long,ScheduledPlan>(
                 {sdk.all_scheduled_plans()},
                 {item -> item.id!!},

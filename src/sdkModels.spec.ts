@@ -24,6 +24,14 @@ describe('sdkModels', () => {
       }
     })
 
+    it ('detects recursive types', () => {
+      let type = apiTestModel.types['LookmlModelExploreField']
+      let actual = type.isRecursive()
+      expect(actual).toEqual(true)
+      type = apiTestModel.types['CredentialsApi3']
+      actual = type.isRecursive()
+      expect(actual).toEqual(false)
+    })
   })
 
   describe('response modes', () => {

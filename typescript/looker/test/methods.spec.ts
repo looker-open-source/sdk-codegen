@@ -519,6 +519,15 @@ describe('LookerNodeSDK', () => {
     )
   })
 
+  describe('Datagroups', () => {
+    it('gets all datagroups', async () => {
+      const sdk = new LookerSDK(session)
+      const datagroups = await sdk.ok(sdk.all_datagroups())
+      expect(datagroups).toBeDefined()
+      expect(datagroups.length).not.toEqual(0)
+    }, testTimeout)
+  })
+
   describe('Query calls', () => {
     it(
       'create and run query',
@@ -697,7 +706,6 @@ describe('LookerNodeSDK', () => {
               hidden: typeof d.hidden === 'undefined' ? undefined : d.hidden,
               query_timezone: d.query_timezone || undefined,
               refresh_interval: d.refresh_interval || undefined,
-              space: d.space || undefined,
               title: d.title || undefined,
               background_color: d.background_color || undefined,
               load_configuration: d.load_configuration || undefined,

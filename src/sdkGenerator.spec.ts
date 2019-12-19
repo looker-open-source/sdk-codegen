@@ -10,7 +10,7 @@ describe('sdk generator test', () => {
       `# POST /looks -> models.LookWithQuery
 def create_look(
     self,
-    body: Optional[models.WriteLookWithQuery] = None,
+    body: models.WriteLookWithQuery,
     # Requested fields.
     fields: Optional[str] = None,
     transport_options: Optional[transport.TransportSettings] = None,

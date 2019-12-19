@@ -59,6 +59,7 @@ export interface IType {
   schema: OAS.SchemaObject
 
   asHashString(): string
+  isRecursive(): boolean
 }
 
 export declare type MethodParameterLocation = 'path' | 'body' | 'query' | 'header' | 'cookie'
@@ -536,6 +537,17 @@ class Type implements IType {
         result += prop.asHashString() + ':'
       })
     return result
+  }
+
+  /**
+   * Is this type directly recursive?
+   * @returns {boolean} Does this type contain references to itself as a top-level property?
+   */
+  isRecursive(): boolean {
+    const selfType = this.name
+    // test for directly recursive type references
+    return Object.entries(this.properties)
+      .some(([_, prop]) => prop.type.name === selfType)
   }
 }
 

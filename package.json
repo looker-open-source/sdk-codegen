@@ -15,7 +15,7 @@
         "set-value": "^2.0.1"
     },
     "scripts": {
-        "clean": "rm -rf api/ && rm *.3.?.json && rm *.3.?.oas.json",
+        "clean": "rm -rf api/ && rm *.?.?.json && rm *.?.?.oas.json",
         "fetch": "ts-node src/fetchSpec.ts",
         "convert": "ts-node src/convert.ts",
         "legacy": "ts-node src/legacy.ts",

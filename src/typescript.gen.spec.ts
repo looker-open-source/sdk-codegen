@@ -111,7 +111,7 @@ query_task_ids: DelimArray<string>`)
       expect(param).toEqual(`/**
  * @param {Partial<IWriteQuery>} body
  */
-body?: Partial<IWriteQuery>`)
+body: Partial<IWriteQuery>`)
       expect(method.bodyArg).toEqual('body')
       expect(method.queryArgs).toEqual(['fields'])
       expect(method.headerArgs).toEqual([])
@@ -128,7 +128,7 @@ body?: Partial<IWriteQuery>`)
       expect(param).toEqual(`/**
  * @param {Partial<IWriteDashboard>} body
  */
-body?: Partial<IWriteDashboard>`)
+body: Partial<IWriteDashboard>`)
       expect(method.bodyArg).toEqual('body')
       expect(method.queryArgs).toEqual([])
       expect(method.headerArgs).toEqual([])
@@ -155,6 +155,7 @@ body?: Partial<IWriteDashboard>`)
   })
 
   describe('method signature', () => {
+    // TODO find a new method with an optional body, or modify these tests to use other non-Looker spec input
     it('optional body and additional param', () => {
       const method = apiTestModel.methods['create_user_credentials_email']
       expect(method).toBeDefined()
@@ -169,7 +170,7 @@ async create_user_credentials_email(
   /**
    * @param {Partial<IWriteCredentialsEmail>} body
    */
-  body?: Partial<IWriteCredentialsEmail>,
+  body: Partial<IWriteCredentialsEmail>,
   /**
    * @param {string} fields Requested fields.
    */

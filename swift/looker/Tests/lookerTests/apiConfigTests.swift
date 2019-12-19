@@ -26,10 +26,16 @@ class apiConfigTests: XCTestCase {
 
     func testApiConfigFile() {
         let config = try? ApiConfig(localIni)
-        XCTAssertEqual(config?.api_version, "3.1")
         XCTAssertEqual(config?.base_url, "https://self-signed.looker.com:19999")
         XCTAssertFalse((config?.verify_ssl!)!)
         XCTAssertEqual(config?.timeout, 31)
     }
 
+    func testBadConfigFile() {
+        XCTAssertThrowsError(try ApiConfig("bad.ini")) {
+            let thrownError = $0
+            XCTAssertEqual(thrownError.localizedDescription, "bad.ini does not exist")
+        }
+
+    }
 }

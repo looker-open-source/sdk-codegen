@@ -40,24 +40,53 @@ import {
   strLookerTimeout, strLookerVerifySsl,
 } from './apiSettings'
 
-// TODO create destructurable function for test path resolution
-const dataFile = 'test/data.yml'
-// slightly hackish data path determination for tests
-const root = fs.existsSync(dataFile) ? '' : '../../'
-const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, 'utf-8'))
-const testIni = `${root}${testData['iniFile']}`
+/**
+ * Reads configuration information, returning various test values
+ * @param {string} rootPath
+ * @returns {{testConfig: {[p: string]: any}; localIni: string; baseUrl: any; testData: any; apiVersion: any; testIni: string; configContents: string; rootPath: string; testSection: any; timeout: number}}
+ * @constructor
+ */
+export function TestConfig(rootPath: string = '') {
+  const dataFile = 'test/data.yml'
+  if (!rootPath) {
+    rootPath = fs.existsSync(dataFile) ? '' : '../../'
+  }
+  const localIni = `${rootPath}looker.ini`
+  const testData = yaml.safeLoad(fs.readFileSync(`${rootPath}${dataFile}`, utf8))
+  const testIni = `${rootPath}${testData['iniFile']}`
+  const configContents = fs.readFileSync(localIni, utf8)
+  const config = ApiConfig(configContents)
+  const section = config['Looker']
+  const apiVersion = section['api_version']
+  const baseUrl = section['base_url']
+  const timeout = parseInt(section['timeout'], 10)
+  const testContents = fs.readFileSync(testIni, utf8)
+  const testConfig = ApiConfig(testContents)
+  const testSection = testConfig['Looker']
+  return {
+    rootPath,
+    localIni,
+    apiVersion,
+    baseUrl,
+    timeout,
+    testData,
+    testIni,
+    configContents,
+    testConfig,
+    testSection,
+  }
+}
+
+const config = TestConfig()
 
 describe('NodeSettings', () => {
-  const activeVersion = '3.1'
-  const activeTimeout = 31
-  const activeUrl = 'https://self-signed.looker.com:19999'
   const contents = `
 [Looker]
-api_version=${activeVersion}
-base_url=${activeUrl}
+api_version=${config.apiVersion}
+base_url=${config.baseUrl}
 client_id=your_API3_client_id
 client_secret=your_API3_client_secret
-timeout=${activeTimeout}
+timeout=${config.timeout}
 [Looker30]
 api_version=3.0
 base_url=https://self-signed.looker.com:19999
@@ -76,14 +105,14 @@ timeout=30
   describe('NodeSettingsIni', () => {
     it('settings default to the first section', () => {
       const settings = new NodeSettings(contents)
-      expect(settings.api_version).toEqual(activeVersion)
-      expect(settings.timeout).toEqual(activeTimeout)
+      expect(settings.api_version).toEqual(config.apiVersion)
+      expect(settings.timeout).toEqual(config.timeout)
       expect(settings.verify_ssl).toEqual(true)
     })
 
     it('retrieves the first section by name', () => {
       const settings = new NodeSettings(contents, 'Looker')
-      expect(settings.api_version).toEqual(activeVersion)
+      expect(settings.api_version).toEqual(config.apiVersion)
     })
 
     it('retrieves the second section by name', () => {
@@ -101,16 +130,15 @@ timeout=30
   })
 
   describe('NodeSettingsEnv', () => {
-    const section = ApiConfig(fs.readFileSync(testIni, utf8))['Looker']
-    const verifySsl = boolDefault(section['verify_ssl'], false).toString()
+    const verifySsl = boolDefault(config.testSection['verify_ssl'], false).toString()
 
     beforeAll(() => {
       // populate environment variables
       process.env[strLookerTimeout] = defaultTimeout.toString()
-      process.env[strLookerClientId] = section['client_id']
-      process.env[strLookerClientSecret] = section['client_secret']
-      process.env[strLookerBaseUrl] = section['base_url']
-      process.env[strLookerApiVersion] = section['api_version'] || activeVersion
+      process.env[strLookerClientId] = config.testSection['client_id']
+      process.env[strLookerClientSecret] = config.testSection['client_secret']
+      process.env[strLookerBaseUrl] = config.testSection['base_url']
+      process.env[strLookerApiVersion] = config.testSection['api_version'] || config.apiVersion
       process.env[strLookerVerifySsl] = verifySsl.toString()
     })
 
@@ -126,61 +154,63 @@ timeout=30
 
     it('settings are retrieved from environment variables', () => {
       const settings = new NodeSettings('')
-      expect(settings.api_version).toEqual(activeVersion)
-      expect(settings.base_url).toEqual(activeUrl)
+      expect(settings.api_version).toEqual(config.apiVersion)
+      expect(settings.base_url).toEqual(config.baseUrl)
       expect(settings.timeout).toEqual(defaultTimeout)
       expect(settings.verify_ssl).toEqual(false)
     })
 
     it('empty file name uses environment variables', () => {
       const settings = new NodeSettingsIniFile('')
-      expect(settings.api_version).toEqual(activeVersion)
-      expect(settings.base_url).toEqual(activeUrl)
+      expect(settings.api_version).toEqual(config.apiVersion)
+      expect(settings.base_url).toEqual(config.baseUrl)
       expect(settings.timeout).toEqual(defaultTimeout)
       expect(settings.verify_ssl).toEqual(false)
     })
 
     it('partial INI uses environment variables', () => {
-      const settings = new NodeSettings({base_url: section['base_url']} as IApiSettings)
-      expect(settings.api_version).toEqual(activeVersion)
-      expect(settings.base_url).toEqual(activeUrl)
+      const settings = new NodeSettings({base_url: config.baseUrl} as IApiSettings)
+      expect(settings.api_version).toEqual(config.apiVersion)
+      expect(settings.base_url).toEqual(config.baseUrl)
       expect(settings.timeout).toEqual(defaultTimeout)
       expect(settings.verify_ssl).toEqual(false)
-      const config = settings.readConfig()
-      expect(config['client_id']).toBeDefined()
-      expect(config['client_secret']).toBeDefined()
+      const creds = settings.readConfig()
+      expect(creds['client_id']).toBeDefined()
+      expect(creds['client_secret']).toBeDefined()
     })
 
     it('environment variables override ini values', () => {
       process.env[strLookerTimeout] = '66'
       process.env[strLookerVerifySsl] = '1'
-      const settings = new NodeSettingsIniFile(testIni)
-      expect(settings.api_version).toEqual(activeVersion)
-      expect(settings.base_url).toEqual(activeUrl)
+      const settings = new NodeSettingsIniFile(config.testIni)
+      expect(settings.api_version).toEqual(config.testSection['api_version'])
+      expect(settings.base_url).toEqual(config.testSection['base_url'])
       expect(settings.timeout).toEqual(66)
       expect(settings.verify_ssl).toEqual(true)
-      process.env[strLookerTimeout] = section['timeout'] || defaultTimeout.toString()
-      process.env[strLookerVerifySsl] = verifySsl.toString()
+      // process.env[strLookerTimeout] = config.testSection['timeout'] || defaultTimeout.toString()
+      // process.env[strLookerVerifySsl] = verifySsl.toString()
     })
   })
 
   describe('NodeSettingsIniFile', () => {
     it('settings default to the first section', () => {
-      const settings = new NodeSettingsIniFile(testIni)
-      expect(settings.api_version).toEqual(activeVersion)
-      expect(settings.base_url).toEqual(activeUrl)
-      expect(settings.timeout).toEqual(activeTimeout)
-      expect(settings.verify_ssl).toEqual(false)
+      const settings = new NodeSettingsIniFile(config.testIni)
+      expect(settings.api_version).toEqual(config.testSection['api_version'])
+      expect(settings.base_url).toEqual(config.testSection['base_url'])
+      expect(settings.timeout).toEqual(parseInt(config.testSection['timeout'], 10))
+      expect(settings.verify_ssl).toEqual(config.testSection['verify_ssl'])
     })
 
     it('retrieves the first section by name', () => {
-      const settings = new NodeSettingsIniFile(testIni, 'Looker')
-      expect(settings.api_version).toEqual(activeVersion)
-      expect(settings.base_url).toEqual(activeUrl)
+      const settings = new NodeSettingsIniFile(config.testIni, 'Looker')
+      expect(settings.api_version).toEqual(config.testSection['api_version'])
+      expect(settings.base_url).toEqual(config.testSection['base_url'])
+      expect(settings.timeout).toEqual(parseInt(config.testSection['timeout'], 10))
+      expect(settings.verify_ssl).toEqual(config.testSection['verify_ssl'])
     })
 
     it('retrieves the second section by name', () => {
-      const settings = new NodeSettingsIniFile(testIni, 'Looker30')
+      const settings = new NodeSettingsIniFile(config.testIni, 'Looker30')
       expect(settings.api_version).toEqual('3.0')
       expect(settings.timeout).toEqual(30)
       expect(settings.verify_ssl).toEqual(false)
@@ -188,7 +218,7 @@ timeout=30
 
     it('fails with a bad section name', () => {
       expect(
-        () => new NodeSettingsIniFile(testIni, 'NotAGoodLookForYou'),
+        () => new NodeSettingsIniFile(config.testIni, 'NotAGoodLookForYou'),
       ).toThrow(/No section named "NotAGoodLookForYou"/)
     })
 
