@@ -1,39 +1,10 @@
-import {
-  Button,
-  Heading,
-  Paragraph,
-  theme,
-  GlobalStyle,
-  Card,
-  Flex,
-  Divider,
-} from '@looker/components'
+import {theme, GlobalStyle, Card, Flex} from '@looker/components'
 import {ThemeProvider} from 'styled-components'
 import * as React from 'react'
 import {Router} from '@reach/router'
 import {Logo} from './Logo'
 import {RegisterScene} from './RegisterScene'
-
-const ResourcesScene: React.FC<{path: string}> = () => {
-  return (
-    <>
-      <Heading as="h1">Looker Hackathons</Heading>
-      <Paragraph>Find information on Hackathons below</Paragraph>
-      <Divider my="large" />
-      <Heading>Welcome!</Heading>
-      <Paragraph mb="large">
-        Explore the links below to find useful documentation and tools for
-        participating in a hackathon.
-      </Paragraph>
-      <Button forwardedAs="a" href="/registration" mr="large">
-        Register for a Hackathon
-      </Button>
-      <Button forwardedAs="a" href="//lookerhack.slack.com/">
-        Slack
-      </Button>
-    </>
-  )
-}
+import {ResourcesScene} from './ResourcesScene'
 
 const App: React.FC = () => {
   return (
@@ -51,6 +22,7 @@ const App: React.FC = () => {
           <Router>
             <RegisterScene path="/registration" />
             <ResourcesScene path="/" />
+            <ResourcesScene path="/thankyou" />
           </Router>
         </Card>
       </Flex>

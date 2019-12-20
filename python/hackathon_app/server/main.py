@@ -4,9 +4,12 @@ from typing import Any
 
 import flask
 import flask_wtf  # type: ignore
+from google.oauth2 import id_token  # type: ignore
+from google.auth.transport import requests  # type: ignore
 import wtforms  # type: ignore
 from wtforms import validators
 
+import authentication
 import looker
 import sheets
 
@@ -47,6 +50,76 @@ class RegistrationForm(flask_wtf.FlaskForm):
     contributing = wtforms.StringField(
         "Contributing", validators=[validators.DataRequired()]
     )
+    email_verified = wtforms.BooleanField("Email Verified", validators=[])
+
+
+@app.route("/auth/<auth_code>")
+def auth(auth_code):
+    sheets_client = sheets.Sheets(
+        spreadsheet_id=app.config["GOOGLE_SHEET_ID"],
+        cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
+    )
+    auth_service = authentication.Authentication.configure(
+        crypto_key=app.config["SECRET_KEY"],
+        from_email=app.config["FROM_EMAIL"],
+        email_key=app.config["SENDGRID_API_KEY"],
+        sheet=sheets_client,
+    )
+    user = auth_service.auth_user(auth_code)
+    response = flask.make_response(flask.redirect("http://localhost:3000/"))
+    if user:
+        response.set_cookie(
+            "looker_hackathon_auth", auth_service.get_user_auth_code(user)
+        )
+    return response
+
+
+@app.route("/user_info")
+def user_info():
+    response = {}
+    if "looker_hackathon_auth" not in flask.request.cookies:
+        return response
+    auth_code = flask.request.cookies["looker_hackathon_auth"]
+    sheets_client = sheets.Sheets(
+        spreadsheet_id=app.config["GOOGLE_SHEET_ID"],
+        cred_file=app.config["GOOGLE_APPLICATION_CREDENTIALS"],
+    )
+    auth_service = authentication.Authentication.configure(
+        crypto_key=app.config["SECRET_KEY"],
+        from_email=app.config["FROM_EMAIL"],
+        email_key=app.config["SENDGRID_API_KEY"],
+        sheet=sheets_client,
+    )
+    user = auth_service.auth_user(auth_code)
+    if user:
+        response["first_name"] = user.first_name
+        response["last_name"] = user.last_name
+    return response
+
+
+@app.route("/verify_google_token", methods=["POST"])
+def verify_google_token():
+    try:
+        # Specify the CLIENT_ID of the app that accesses the backend:
+        body = flask.request.json
+        idinfo = id_token.verify_oauth2_token(
+            body["Zi"]["id_token"],
+            requests.Request(),
+            "280777447286-iigstshu4o2tnkp5fjucrd3nvq03g5hs.apps.googleusercontent.com",
+        )
+
+        if idinfo["iss"] not in ["accounts.google.com", "https://accounts.google.com"]:
+            raise ValueError("Wrong issuer.")
+
+        # If auth request is from a G Suite domain:
+        # if idinfo['hd'] != GSUITE_DOMAIN_NAME:
+        #     raise ValueError('Wrong hosted domain.')
+
+        # ID token is valid. Get the user's Google Account ID from the decoded token.
+    except ValueError as ex:
+        # Invalid token
+        return {"error": str(ex)}
+    return idinfo
 
 
 @app.route("/hackathons")
@@ -97,6 +170,7 @@ def register() -> Any:
     first_name = form.data["first_name"]
     last_name = form.data["last_name"]
     email = form.data["email"]
+    email_verified = form.data["email_verified"]
     register_user = sheets.RegisterUser(
         hackathon=hackathon,
         first_name=first_name,
@@ -139,7 +213,21 @@ def register() -> Any:
                     "ok": False,
                     "message": "There was a problem, try again later.",
                 }
-    return flask.jsonify(response)
+    resp = flask.jsonify(response)
+    if response["ok"]:
+        auth_service = authentication.Authentication.configure(
+            crypto_key=app.config["SECRET_KEY"],
+            from_email=app.config["FROM_EMAIL"],
+            email_key=app.config["SENDGRID_API_KEY"],
+            sheet=sheets_client,
+        )
+        if email_verified:
+            resp.set_cookie(
+                "looker_hackathon_auth", auth_service.get_user_auth_code(sheets_user)
+            )
+        else:
+            auth_service.send_auth_message(sheets_user, flask.request.host_url)
+    return resp
 
 
 @app.route("/status")

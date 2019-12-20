@@ -5,6 +5,9 @@ import os
 SECRET_KEY = os.environ.get("FLASK_SECRET_KEY")
 WTF_CSRF_SECRET_KEY = os.environ.get("FLASK_WTF_CSRF_SECRET_KEY")
 
+FROM_EMAIL = os.environ.get("FROM_EMAIL")
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+
 GOOGLE_SHEET_ID = os.environ.get("GOOGLE_SHEET_ID")
 assert GOOGLE_SHEET_ID
 

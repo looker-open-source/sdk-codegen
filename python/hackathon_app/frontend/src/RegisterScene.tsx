@@ -16,6 +16,11 @@ import {
 } from '@looker/components'
 import {navigate} from '@reach/router'
 import {FieldProps, Formik, Form, Field} from 'formik'
+import GoogleLogin from 'react-google-login'
+import {
+  GoogleLoginResponseOffline,
+  GoogleLoginResponse,
+} from 'react-google-login'
 import React from 'react'
 import * as yup from 'yup'
 
@@ -117,21 +122,95 @@ const HackathonSelect: React.FC<{hackathons: string[]}> = ({hackathons}) => {
   )
 }
 
+interface State {
+  csrfToken: string
+  email: string
+  firstName: string
+  lastName: string
+  hackathons: string[]
+  emailVerified: boolean
+}
+
+const initialState: State = {
+  csrfToken: 'someToken',
+  email: '',
+  firstName: '',
+  lastName: '',
+  hackathons: [],
+  emailVerified: false,
+}
+
+function reducer(
+  state: State,
+  action: {type: string; payload: Partial<State>}
+) {
+  switch (action.type) {
+    case 'update':
+      return {...state, ...action.payload}
+    default:
+      throw new Error()
+  }
+}
+
 export const RegisterScene: React.FC<{path: string}> = () => {
-  const [hackathons, setHackathons] = React.useState([])
-  const [csrf, setCsrf] = React.useState({token: 'someToken'})
+  const [
+    {csrfToken, email, firstName, lastName, hackathons, emailVerified},
+    dispatch,
+  ] = React.useReducer(reducer, initialState)
 
   React.useEffect(() => {
     async function fetchData() {
       try {
         const newHackathons = await fetch('/hackathons')
-        setHackathons(await newHackathons.json())
+        dispatch({
+          type: 'update',
+          payload: {hackathons: await newHackathons.json()},
+        })
         const newCsrf = await fetch('/csrf')
-        setCsrf(await newCsrf.json())
+        dispatch({
+          type: 'update',
+          payload: {
+            csrfToken: ((await newCsrf.json()) as {token: string}).token,
+          },
+        })
       } catch (e) {} // TODO: hack for local frontend dev
     }
     fetchData()
   }, [])
+
+  const responseGoogle = React.useCallback(
+    (response: GoogleLoginResponseOffline | GoogleLoginResponse) => {
+      async function handleGoogleResponse() {
+        try {
+          const result = await fetch('/verify_google_token', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(response),
+          })
+          if (result.ok) {
+            const msg = await result.json()
+            dispatch({
+              type: 'update',
+              payload: {
+                firstName: msg.given_name,
+                lastName: msg.family_name,
+                email: msg.email,
+                emailVerified: true,
+              },
+            })
+          } else {
+            console.log(result)
+          }
+        } catch (e) {
+          alert(JSON.stringify(response, null, 2))
+        }
+      }
+      handleGoogleResponse()
+    },
+    []
+  )
 
   return (
     <>
@@ -139,13 +218,20 @@ export const RegisterScene: React.FC<{path: string}> = () => {
       <Paragraph>Register for a Hackathon below</Paragraph>
       <Divider my="large" />
       <Heading mb="medium">Registration</Heading>
+      <GoogleLogin
+        clientId="280777447286-iigstshu4o2tnkp5fjucrd3nvq03g5hs.apps.googleusercontent.com"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={'single_host_origin'}
+      />
+      <Divider my="large" />
       <Formik
         enableReinitialize // for csrf token
         initialValues={{
-          csrf_token: csrf.token,
-          first_name: '',
-          last_name: '',
-          email: '',
+          csrf_token: csrfToken,
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
           organization: '',
           role: '',
           hackathon: '',
@@ -153,10 +239,12 @@ export const RegisterScene: React.FC<{path: string}> = () => {
           ndaq: false,
           code_of_conduct: false,
           contributing: false,
+          email_verified: emailVerified,
         }}
         validationSchema={() =>
           yup.object().shape({
             csrf_token: yup.string().required(),
+            email_verified: yup.boolean(),
             first_name: yup.string().required(),
             last_name: yup.string().required(),
             email: yup
@@ -196,7 +284,7 @@ export const RegisterScene: React.FC<{path: string}> = () => {
               })
               const msg = await result.json()
               if (msg.ok) {
-                navigate('/')
+                navigate('/thankyou')
               } else {
                 actions.setStatus(msg.message)
                 actions.setSubmitting(false)
@@ -213,7 +301,7 @@ export const RegisterScene: React.FC<{path: string}> = () => {
         {({isSubmitting, status, errors, values, touched}) => {
           return (
             <Form>
-              <Field type="hidden" name="csrf_token" value={csrf.token} />
+              <Field type="hidden" name="csrf_token" value={csrfToken} />
               <Field
                 label="First Name"
                 component={ValidatedFieldText}
@@ -273,6 +361,11 @@ export const RegisterScene: React.FC<{path: string}> = () => {
                 labelWidth="auto"
                 component={ValidatedFieldCheckbox}
                 branded
+              />
+              <Field
+                name="email_verified"
+                type="hidden"
+                value={emailVerified}
               />
               {status && <div>{status}</div>}
               <Flex alignItems="center" mt="medium">

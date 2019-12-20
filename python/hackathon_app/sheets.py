@@ -78,7 +78,6 @@ class Model:
 
 TModel = TypeVar("TModel", bound=Model)
 
-
 converter = cattr.Converter()
 
 
@@ -105,10 +104,10 @@ class WhollySheet(Generic[TModel]):
         if model.id:
             self.update(model)
         else:
-            self.insert(model)
+            self.create(model)
 
-    def insert(self, model: TModel):
-        """Insert data as rows into sheet"""
+    def create(self, model: TModel):
+        """Create the model data as a row into sheet"""
         try:
             serialized_ = self.converter.unstructure(model)
             serialized = self._convert_to_list(serialized_)
@@ -298,7 +297,7 @@ class Registrations(WhollySheet[Registrant]):
     def register(self, registrant: Registrant):
         """Register user by inserting registrant details into registrations sheet"""
         registrant.date_registered = datetime.datetime.now(tz=datetime.timezone.utc)
-        super().insert(registrant)
+        super().create(registrant)
 
 
 class SheetError(Exception):
@@ -328,7 +327,6 @@ def _convert_bool(val: str, _: bool) -> Optional[bool]:
 
 converter.register_unstructure_hook(type(None), lambda t: NIL)
 converter.register_structure_hook(bool, _convert_bool)
-
 
 if __name__ == "__main__":
     sheets = Sheets(spreadsheet_id="SHEET_ID", cred_file="CREDS_FILE")
