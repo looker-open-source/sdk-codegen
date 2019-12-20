@@ -224,6 +224,7 @@ export const RegisterScene: React.FC<{path: string}> = () => {
         onFailure={responseGoogle}
         cookiePolicy={'single_host_origin'}
       />
+      <Divider my="large" />
       <Formik
         enableReinitialize // for csrf token
         initialValues={{
