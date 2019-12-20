@@ -4,15 +4,15 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy
 import org.apache.http.ssl.SSLContextBuilder
 import java.lang.Exception
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
+import javax.xml.bind.JAXBElement
+import kotlin.test.*
 import org.junit.Test as test
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 class TestMethods {
     val settings = ApiSettingsIniFile(localIni, "Looker")
@@ -164,8 +164,8 @@ class TestMethods {
                 require_no_results = false,
                 require_results = true,
                 timezone = "America/Los_Angeles",
-                crontab = "*/15 * * * *",
-                enabled = true,
+                crontab = "*/1440 * * * *",
+                enabled = true, // Plan must be enabled to be retrieved by `all_scheduled_plans`
                 scheduled_plan_destination = destinations)
         ))
         print("Prepared scheduled plan ${plan.id}")
@@ -185,6 +185,24 @@ class TestMethods {
         assertNotNull(creds[0].client_id)
     }
 
+    fun simpleQuery() : WriteQuery {
+        return WriteQuery(
+                "thelook",
+                "users",
+                arrayOf(
+                        "users.id",
+                        "users.age",
+                        "users.city",
+                        "users.email",
+                        "users.first_name",
+                        "users.last_name",
+                        "users.zip",
+                        "users.state",
+                        "users.country"
+                )
+        )
+    }
+
     @test fun testCreateQuery() {
         val query = sdk.ok<Query>(sdk.create_query(WriteQuery("thelook", "users", arrayOf("users.count"))))
         query.id?.let { id ->
@@ -195,24 +213,7 @@ class TestMethods {
 
     @test fun testRunInlineQuery() {
         val result = sdk.ok<String>(
-                sdk.run_inline_query(
-                        "csv",
-                        WriteQuery(
-                                "thelook",
-                                "users",
-                                arrayOf(
-                                        "users.id",
-                                        "users.age",
-                                        "users.city",
-                                        "users.email",
-                                        "users.first_name",
-                                        "users.last_name",
-                                        "users.zip",
-                                        "users.state",
-                                        "users.country"
-                                )
-                        )
-                )
+                sdk.run_inline_query("csv", simpleQuery())
         )
         assertTrue(result.contains("Users ID"))
     }
@@ -244,8 +245,7 @@ class TestMethods {
         testAll<DashboardBase,String,Dashboard>(
                 {sdk.all_dashboards()},
                 {item -> item.id!!},
-                {id, fields -> sdk.dashboard(id, fields)},
-                Safe.Dashboard)
+                {id, fields -> sdk.dashboard(id, fields)})
     }
 
     @test fun testAllDialectInfos() {
@@ -298,23 +298,18 @@ class TestMethods {
                 {id, fields->sdk.integration_hub(id,fields)})
     }
 
-    fun idToLong(id: String) : Long {
-        val input = id.substringBefore(":", id)
-        return input.toLong()
-    }
-
     @test fun testAllIntegrations() {
-        listGetter<Integration,Long,Integration>(
+        listGetter<Integration,String,Integration>(
                 {sdk.all_integrations()},
-                {item -> idToLong(item.id!!)},
+                {item -> item.id!!},
                 {id, fields->sdk.integration(id,fields)})
     }
 
     // TODO legacyFeature.ID should be string, not number
     @test fun testAllLegacyFeatures() {
-        listGetter<LegacyFeature,Long,LegacyFeature>(
+        listGetter<LegacyFeature,String,LegacyFeature>(
                 {sdk.all_legacy_features()},
-                {item -> item.id!!.toLong()},
+                {item -> item.id!!},
                 {id, _->sdk.legacy_feature(id)})
     }
 
@@ -324,7 +319,7 @@ class TestMethods {
     }
 
     @test fun testAllLookMLModels() {
-        listGetter<LookmlModel,String,LegacyFeature>(
+        testAll<LookmlModel,String,LegacyFeature>(
                 {sdk.all_lookml_models()},
                 {item -> item.name!!},
                 {id, fields ->sdk.lookml_model(id, fields)})
@@ -335,8 +330,7 @@ class TestMethods {
         testAll<Look,Long,LookWithQuery>(
                 {sdk.all_looks()},
                 {item -> item.id!!},
-                {id, fields -> sdk.look(id, fields)},
-                Safe.Look)
+                {id, fields -> sdk.look(id, fields)})
     }
 
     @test fun testAllModelSets() {
@@ -373,8 +367,23 @@ class TestMethods {
     }
 
     @test fun testAllRunningQueries() {
-        val list = sdk.ok<Array<RunningQueries>>(sdk.all_running_queries())
-        assertNotEquals(list.count(), 0)
+        var running = false
+        GlobalScope.launch {
+            running = true
+            val json = sdk.ok<String>(sdk.run_inline_query("json", simpleQuery()))
+//            val query = sdk.ok<SqlQuery>(sdk.create_sql_query(WriteSqlQueryCreate(model_name = "thelook",sql = "select sleep(30)")))
+//            val json = sdk.ok<String>(sdk.run_sql_query(query.slug!!, "json"))
+            running = false
+            assertNotNull(json)
+        }
+        var tries = 0
+        var list: Array<RunningQueries>
+        do {
+            list = sdk.ok(sdk.all_running_queries())
+            Thread.sleep(100L) // block main thread to ensure query is running
+        } while (running && list.count() === 0 && tries++ < 99)
+//        assertEquals(running, false, "Running should have completed")
+        assertNotEquals(list.count(), 0, "List should have at least one query")
     }
 
     @test fun testAllSchedulePlans() {
@@ -413,11 +422,11 @@ class TestMethods {
 
     @test fun testAllUserLoginLockouts() {
         val list = sdk.ok<Array<UserLoginLockout>>(sdk.all_user_login_lockouts())
-        assertNotEquals(list.count(), 0)
+        assertNotEquals(list.count(), 0, "It's ok if there are no failed logins. It means everyone remembered their creds.")
     }
 
     @test fun testAllUsers() {
-        listGetter<User,Long,User>(
+        testAll<User,Long,User>(
                 {sdk.all_users()},
                 {item -> item.id!!},
                 {id, fields->sdk.user(id, fields)})

@@ -92,12 +92,27 @@ typealias Authenticator = (init: RequestSettings) -> RequestSettings
 
 fun defaultAuthenticator(requestSettings: RequestSettings): RequestSettings = requestSettings
 
-open class TransportSettings(
-        var baseUrl: String = "",
-        var apiVersion: String = DEFAULT_API_VERSION,
-        var verifySSL: Boolean = true,
-        var timeout: Int = DEFAULT_TIMEOUT,
-        var headers: Map<String, String> = mapOf())
+interface TransportOptions {
+    var baseUrl: String
+    var apiVersion: String
+    var verifySSL: Boolean
+    var timeout: Int
+    var headers: Map<String, String>
+}
+
+interface ConfigurationProvider: TransportOptions {
+    fun isConfigured(): Boolean
+    fun readConfig(): Map<String, String>
+}
+
+data class TransportSettings(
+    override var baseUrl: String = "",
+    override var apiVersion: String = DEFAULT_API_VERSION,
+    override var verifySSL: Boolean = true,
+    override var timeout: Int = DEFAULT_TIMEOUT,
+    override var headers: Map<String, String> = mapOf()
+) : TransportOptions
+
 
 fun encodeValues(params: Values = mapOf()): String {
     @Suppress("UNCHECKED_CAST")
@@ -115,13 +130,13 @@ fun addQueryParams(path: String, params: Values = mapOf()): String {
     return "$path?$qp"
 }
 
-class Transport(val options: TransportSettings) {
+class Transport(val options: TransportOptions) {
 
     var httpClient: HttpClient? = null
         private set
 
     // Internal only secondary constructor to support supplying an HTTP client for testing
-    internal constructor(options: TransportSettings, httpClient: HttpClient) : this(options) {
+    internal constructor(options: TransportOptions, httpClient: HttpClient) : this(options) {
         this.httpClient = httpClient
     }
 

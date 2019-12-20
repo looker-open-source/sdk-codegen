@@ -134,12 +134,15 @@ class UserSession(val apiSettings: ApiSettings,
 
         if (!authToken.isActive()) {
             val apiPath = "/api/${apiSettings.apiVersion}"
-            val clientId = System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_ID") ?: apiSettings.clientId
-            val clientSecret = System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_SECRET") ?: apiSettings.clientSecret
+            val client_id = "client_id"
+            val client_secret = "client_secret"
+            val config = apiSettings.readConfig()
+            val clientId = System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_ID") ?: config[client_id]
+            val clientSecret = System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_SECRET") ?: config[client_secret]
             val token = ok<AuthToken>(
                     transport.request<AuthToken>(HttpMethod.POST,
                             "${apiPath}/login",
-                            mapOf("client_id" to clientId, "client_secret" to clientSecret)
+                            mapOf(client_id to clientId, client_secret to clientSecret)
                     )
             )
             authToken = token
@@ -152,7 +155,7 @@ class UserSession(val apiSettings: ApiSettings,
             ) { requestSettings ->
                 val headers = requestSettings.headers.toMutableMap()
                 if (token.accessToken.isNotBlank()) {
-                    headers["Authorization"] = "token ${token.accessToken}"
+                    headers["Authorization"] = "Bearer ${token.accessToken}"
                 }
                 requestSettings.copy(headers = headers)
             }
@@ -166,7 +169,7 @@ class UserSession(val apiSettings: ApiSettings,
         val resp = transport.request<String>(HttpMethod.DELETE,"/logout") {
             val headers = it.headers.toMutableMap()
             if (token.accessToken.isNotBlank()) {
-                headers["Authorization"] = "token ${token.accessToken}"
+                headers["Authorization"] = "Bearer ${token.accessToken}"
             }
             it.copy(headers = headers)
         }
