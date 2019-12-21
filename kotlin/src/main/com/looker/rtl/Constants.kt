@@ -3,7 +3,7 @@ package com.looker.rtl
 
 import org.jetbrains.annotations.NotNull
 
-const val LOOKER_VERSION = "6.21"
+const val LOOKER_VERSION = "6.24"
 const val API_VERSION = "3.1"
 const val SDK_VERSION = "${API_VERSION}.${LOOKER_VERSION}"
 const val AGENT_TAG = "Looker SDK-KT ${SDK_VERSION}"
