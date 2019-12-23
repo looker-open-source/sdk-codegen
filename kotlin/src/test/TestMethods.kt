@@ -233,7 +233,6 @@ class TestMethods {
     }
 
     @test fun testAllDataGroups() {
-        // TODO does the get return exactly the same properties as the all function?
         listGetter<Datagroup,String,Datagroup>(
                 {sdk.all_datagroups()},
                 {item -> item.id!!.toString()},
@@ -305,7 +304,6 @@ class TestMethods {
                 {id, fields->sdk.integration(id,fields)})
     }
 
-    // TODO legacyFeature.ID should be string, not number
     @test fun testAllLegacyFeatures() {
         listGetter<LegacyFeature,String,LegacyFeature>(
                 {sdk.all_legacy_features()},
@@ -422,7 +420,9 @@ class TestMethods {
 
     @test fun testAllUserLoginLockouts() {
         val list = sdk.ok<Array<UserLoginLockout>>(sdk.all_user_login_lockouts())
-        assertNotEquals(list.count(), 0, "It's ok if there are no failed logins. It means everyone remembered their creds.")
+        if (list.count() > 0) {
+            assertNotNull(list.first())
+        }
     }
 
     @test fun testAllUsers() {

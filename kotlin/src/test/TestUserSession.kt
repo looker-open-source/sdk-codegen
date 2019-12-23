@@ -38,19 +38,6 @@ import org.junit.Test as test
 import java.io.File
 
 
-val rootPath = File("./").absoluteFile.parentFile.parentFile.absolutePath
-val testPath  = "${rootPath}/test"
-val dataFile = testFile("data.yml")
-val localIni = rootFile("looker.ini")
-
-fun rootFile(fileName: String): String {
-    return "${rootPath}/${fileName}"
-}
-
-fun testFile(fileName: String) : String {
-    return "${testPath}/${fileName}"
-}
-
 class TestUserSession {
     val settings = ApiSettingsIniFile(localIni, "Looker")
 

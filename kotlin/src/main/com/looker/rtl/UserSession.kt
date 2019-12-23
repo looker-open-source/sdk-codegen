@@ -88,13 +88,13 @@ class UserSession(val apiSettings: ApiSettings,
      */
     fun reset() {
         sudoId = ""
-        authToken.reset() // TODO: Should we just reset this to a new AuthToken object instead?
-        sudoToken.reset() // TODO: Should we just reset this to a new AuthToken object instead?
+        authToken.reset()
+        sudoToken.reset()
     }
 
     /**
      * Activate the authentication token for the API3 or sudo user
-     * @param[sudoId] If provided impersonates the user specified
+     * @param[sudoId] If provided, impersonates the user specified
      */
 
     fun login(sudoId: String = ""): AuthToken = doLogin(sudoId)

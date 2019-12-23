@@ -35,7 +35,7 @@ fun apiConfig(contents: String): ApiSections {
 
     val ret = mutableMapOf<String, Map<String, String>>()
     iniParser.forEach {(section, values) ->
-        ret[section] = values.toMap()
+        ret[section] = values.map {it.key to unQuote(it.value)}.toMap()
     }
 
     return ret
@@ -74,19 +74,20 @@ open class ApiSettings(contents: String, var section: String = ""): Configuratio
 
         config[section]?.let { settings ->
 
+            // Only replace the current values if new values are provided
             settings["base_url"].let { value ->
-                baseUrl = value!!
+                baseUrl = value ?: baseUrl
             }
 
             settings["api_version"].let { value ->
-                apiVersion = value!!
+                apiVersion = value ?: apiVersion
             }
 
             settings["verify_ssl"].let { value ->
-                verifySSL = asBoolean(value) ?: true
+                verifySSL = asBoolean(value) ?: verifySSL
             }
             settings["timeout"].let { value ->
-                timeout = value!!.toInt()
+                timeout = if (value !== null) value!!.toInt() else timeout
             }
 
         }
