@@ -81,6 +81,10 @@ func parseConfig(_ filename : String) -> Config {
 
 struct ApiConfig: IApiSettings {
     func readConfig(_ section: String? = nil) -> IApiSection {
+        if (self.fileName == "") {
+            // No config file to read
+            return [:]
+        }
         let config = parseConfig(self.fileName)
         return config[section ?? self.section] ?? [:]
     }
@@ -113,8 +117,23 @@ struct ApiConfig: IApiSettings {
     }
     
     /// Get SDK settings from a configuration file with environment variable overrides
-    init(_ fileName: String, _ section: String = "Looker") throws {
-        self.fileName = fileName
+    init(_ fileName: String = "", _ section: String = "Looker") throws {
+        let fm = FileManager.default
+        if (fileName == "") {
+            // Default file name to looker.ini?
+            if (fm.fileExists(atPath:"looker.ini")) {
+                self.fileName = "looker.ini"
+            } else {
+                self.fileName = ""
+            }
+        } else {
+            // File must exist
+            if (fm.fileExists(atPath: fileName)) {
+                self.fileName = fileName
+            } else {
+                throw SDKError("\(fileName) does not exist")
+            }
+        }
         self.section = section
         let config = parseConfig(fileName)
         let values = config[section]

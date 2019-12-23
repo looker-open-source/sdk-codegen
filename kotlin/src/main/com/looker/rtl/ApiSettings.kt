@@ -35,22 +35,34 @@ fun apiConfig(contents: String): ApiSections {
 
     val ret = mutableMapOf<String, Map<String, String>>()
     iniParser.forEach {(section, values) ->
-        ret[section] = values.toMap()
+        ret[section] = values.map {it.key to unQuote(it.value)}.toMap()
     }
 
     return ret
 }
 
-class ApiSettingsIniFile(filename: String = "./looker.ini",
+class ApiSettingsIniFile(var filename: String = "./looker.ini",
                          section: String = "") : ApiSettings(File(filename).readText(), section)
+{
+    override fun readConfig(): Map<String, String> {
+        val file = File(filename)
+        if (!file.exists()) return mapOf()
+        val contents = File(filename).readText()
+        val config = apiConfig(contents)
+        section = if (!section.isBlank()) section else config.keys.first()
+        return config[section] ?: mapOf()
+    }
+}
 
 
 // TODO why no @JvmOverloads here?
-open class ApiSettings(contents: String, var section: String = ""): TransportSettings() {
+open class ApiSettings(contents: String, var section: String = ""): ConfigurationProvider {
 
-    val clientId: String
-    val clientSecret: String
-    val embedSecret: String
+    override var baseUrl: String = ""
+    override var apiVersion: String = DEFAULT_API_VERSION
+    override var verifySSL: Boolean = true
+    override var timeout: Int = DEFAULT_TIMEOUT
+    override var headers: Map<String, String> = mapOf()
 
     init {
         val config = apiConfig(contents)
@@ -60,12 +72,41 @@ open class ApiSettings(contents: String, var section: String = ""): TransportSet
             throw Error("No section named '$section' was found")
         }
 
-        apiVersion = config[section]?.get("api_version") ?: DEFAULT_API_VERSION
-        baseUrl = config[section]?.get("base_url") ?: ""
-        clientId = config[section]?.get("client_id") ?: ""
-        clientSecret = config[section]?.get("client_secret") ?: ""
-        embedSecret = config[section]?.get("embed_secret") ?: ""
-        verifySSL = asBoolean(config[section]?.get("verify_ssl")) ?: true
-        timeout = config[section]?.get("timeout")?.toInt() ?: DEFAULT_TIMEOUT
+        config[section]?.let { settings ->
+
+            // Only replace the current values if new values are provided
+            settings["base_url"].let { value ->
+                baseUrl = value ?: baseUrl
+            }
+
+            settings["api_version"].let { value ->
+                apiVersion = value ?: apiVersion
+            }
+
+            settings["verify_ssl"].let { value ->
+                verifySSL = asBoolean(value) ?: verifySSL
+            }
+            settings["timeout"].let { value ->
+                timeout = if (value !== null) value!!.toInt() else timeout
+            }
+
+        }
     }
+
+    override fun isConfigured(): Boolean {
+        return baseUrl.isNotEmpty() && apiVersion.isNotEmpty()
+    }
+
+    override fun readConfig(): Map<String, String> {
+        // Default implementation only knows its own properties
+        return mapOf(
+                "base_url" to baseUrl,
+                "api_version" to apiVersion,
+                "verify_ssl" to verifySSL.toString(),
+                "timeout" to timeout.toString(),
+                "headers" to headers.toString()
+                )
+    }
+
+
 }

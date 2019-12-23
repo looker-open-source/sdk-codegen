@@ -97,7 +97,7 @@ package com.looker.sdk
 
 package com.looker.sdk
 
-import java.net.*
+import com.looker.rtl.*
 import java.util.*
 `
   }
@@ -346,8 +346,8 @@ import java.util.*
       'password': {name: 'Password', default: mt},
       'byte': {name: 'binary', default: mt},
       'boolean': {name: 'Boolean', default: mt},
-      'uri': {name: 'URI', default: mt},
-      'url': {name: 'URL', default: mt},
+      'uri': {name: 'UriString', default: mt},
+      'url': {name: 'UrlString', default: mt},
       'datetime': {name: 'Date', default: mt}, // TODO is there a default expression for datetime?
       'date': {name: 'Date', default: mt}, // TODO is there a default expression for date?
       'object': {name: 'Any', default: mt},
@@ -362,6 +362,7 @@ import java.util.*
       } else if (type instanceof HashType) {
         // TODO figure out this bizarre string template error either in IntelliJ or Typescript
         // return {name: `Map<String,${map.name}>`, default: '{}'}
+        if (map.name === 'String') map.name = "Any" // TODO fix messy hash values
         return {name: 'Map<String' + `,${map.name}>`, default: this.nullStr}
       } else if (type instanceof DelimArrayType) {
         return {name: `DelimArray<${map.name}>`, default: this.nullStr}

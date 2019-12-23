@@ -22,29 +22,27 @@
  * THE SOFTWARE.
  */
 
-import * as Models from './sdkModels'
 import { PythonGen } from './python.gen'
+import { apiTestModel } from './sdkModels.spec'
 
-const apiModel = Models.ApiModel.fromFile('./Looker.3.1.oas.json', './Looker.3.1.json')
-
-const gen = new PythonGen(apiModel)
+const gen = new PythonGen(apiTestModel)
 const indent = ''
 
 describe('python generator', () => {
   describe('parameter declarations', () => {
     it('required parameter', () => {
-      const param = apiModel.methods['run_query'].params[0]
+      const param = apiTestModel.methods['run_query'].params[0]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual('# Id of query\nquery_id: int')
     })
     it('optional parameter', () => {
-      const param = apiModel.methods['run_query'].params[2]
+      const param = apiTestModel.methods['run_query'].params[2]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual('# Row limit (may override the limit in the saved query).\n' +
         'limit: Optional[int] = None')
     })
     it('required typed parameter', () => {
-      const param = apiModel.methods['create_query_render_task'].params[2]
+      const param = apiTestModel.methods['create_query_render_task'].params[2]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`# Output width in pixels\nwidth: int`)
     })
@@ -52,7 +50,7 @@ describe('python generator', () => {
 
   describe('args locations', () => {
     it('path and query args', () => {
-      const method = apiModel.methods['run_query']
+      const method = apiTestModel.methods['run_query']
       expect(method.pathArgs).toEqual(['query_id', 'result_format'])
       expect(method.bodyArg).toEqual('')
       expect(method.queryArgs).toEqual([
@@ -74,7 +72,7 @@ describe('python generator', () => {
     })
     it('body for create_query', () => {
       // TODO get resolution working correctly
-      const method = apiModel.methods['create_query']
+      const method = apiTestModel.methods['create_query']
       expect(method.pathArgs).toEqual([])
       const body = method.getParams('body')
       expect(body.length).toEqual(1)
@@ -86,7 +84,7 @@ describe('python generator', () => {
     })
     it('body for create_dashboard', () => {
       // TODO get resolution working correctly
-      const method = apiModel.methods['create_dashboard']
+      const method = apiTestModel.methods['create_dashboard']
       expect(method.pathArgs).toEqual([])
       const body = method.getParams('body')
       expect(body.length).toEqual(1)
@@ -100,7 +98,7 @@ describe('python generator', () => {
 
   describe('httpArgs', () => {
     it('add_group_group', () => {
-      const method = apiModel.methods['add_group_group']
+      const method = apiTestModel.methods['add_group_group']
       const args = gen.httpArgs('', method).trim()
       const expected = `f"/groups/{group_id}/groups",
             models.Group,
@@ -109,7 +107,7 @@ describe('python generator', () => {
       expect(args).toEqual(expected)
     })
     it('create_query', () => {
-      const method = apiModel.methods['create_query']
+      const method = apiTestModel.methods['create_query']
       const args = gen.httpArgs('', method).trim()
       const expected = `f"/queries",
             models.Query,
@@ -119,7 +117,7 @@ describe('python generator', () => {
       expect(args).toEqual(expected)
     })
     it('create_dashboard', () => {
-      const method = apiModel.methods['create_dashboard']
+      const method = apiTestModel.methods['create_dashboard']
       const args = gen.httpArgs('', method).trim()
       const expected = `f"/dashboards",
             models.Dashboard,
@@ -131,7 +129,7 @@ describe('python generator', () => {
 
   describe('method signature', () => {
     it('no params with all_datagroups', () => {
-      const method = apiModel.methods['all_datagroups']
+      const method = apiTestModel.methods['all_datagroups']
       const expected =
         `# GET /datagroups -> Sequence[models.Datagroup]
 def all_datagroups(
@@ -143,7 +141,7 @@ def all_datagroups(
       expect(actual).toEqual(expected)
     })
     it('binary return type render_task_results', () => {
-      const method = apiModel.methods['render_task_results']
+      const method = apiTestModel.methods['render_task_results']
       const expected =
         `# GET /render_tasks/{render_task_id}/results -> bytes
 def render_task_results(
@@ -157,7 +155,7 @@ def render_task_results(
       expect(actual).toEqual(expected)
     })
     it('binary or string return type run_url_encoded_query', () => {
-      const method = apiModel.methods['run_url_encoded_query']
+      const method = apiTestModel.methods['run_url_encoded_query']
       const expected =
 `# GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> Union[str, bytes]
 def run_url_encoded_query(
@@ -178,7 +176,7 @@ def run_url_encoded_query(
 
   describe('method body', () => {
     it('assert response is model add_group_group', () => {
-      const method = apiModel.methods['add_group_group']
+      const method = apiTestModel.methods['add_group_group']
       const expected =
 `response = self.post(
             f"/groups/{group_id}/groups",
@@ -192,7 +190,7 @@ return response`
       expect(actual).toEqual(expected)
     })
     it('assert response is None delete_group_from_group', () => {
-      const method = apiModel.methods['delete_group_from_group']
+      const method = apiTestModel.methods['delete_group_from_group']
       const expected =
 `response = self.delete(
             f"/groups/{group_id}/groups/{deleting_group_id}",
@@ -205,7 +203,7 @@ return response`
       expect(actual).toEqual(expected)
     })
     it('assert response is list active_themes', () => {
-      const method = apiModel.methods['active_themes']
+      const method = apiTestModel.methods['active_themes']
       const expected =
 `response = self.get(
             f"/themes/active",
@@ -219,7 +217,7 @@ return response`
       expect(actual).toEqual(expected)
     })
     it('assert response is dict query_task_results', () => {
-      const method = apiModel.methods['query_task_results']
+      const method = apiTestModel.methods['query_task_results']
       const expected =
 `response = self.get(
             f"/query_tasks/{query_task_id}/results",
@@ -232,7 +230,7 @@ return response`
       expect(actual).toEqual(expected)
     })
     it('assert response is bytes render_task_results', () => {
-      const method = apiModel.methods['render_task_results']
+      const method = apiTestModel.methods['render_task_results']
       const expected =
 `response = self.get(
             f"/render_tasks/{render_task_id}/results",
@@ -245,7 +243,7 @@ return response`
       expect(actual).toEqual(expected)
     })
     it('assert response is bytes or str run_url_encoded_query', () => {
-      const method = apiModel.methods['run_url_encoded_query']
+      const method = apiTestModel.methods['run_url_encoded_query']
       const expected =
 `response = self.get(
             f"/queries/models/{model_name}/views/{view_name}/run/{result_format}",
@@ -261,7 +259,7 @@ return response`
 
   describe('type creation', () => {
     it('with arrays and hashes', () => {
-      const type = apiModel.types['Workspace']
+      const type = apiTestModel.types['Workspace']
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`
 @attr.s(auto_attribs=True, kw_only=True)
@@ -277,7 +275,7 @@ class Workspace(model.Model):
     can: Optional[MutableMapping[str, bool]] = None`)
     })
     it('with refs, arrays and nullable', () => {
-      const type = apiModel.types['ApiVersion']
+      const type = apiTestModel.types['ApiVersion']
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`
 @attr.s(auto_attribs=True, kw_only=True)
@@ -294,11 +292,11 @@ class ApiVersion(model.Model):
     })
     it('input models', () => {
       // run method generation to populate inputTypes
-      const method = apiModel.methods['create_merge_query']
+      const method = apiTestModel.methods['create_merge_query']
       const param = method.bodyParams[0]
       gen.declareParameter(indent, param)
 
-      const inputType = apiModel.types['WriteMergeQuery']
+      const inputType = apiTestModel.types['WriteMergeQuery']
       const actual = gen.declareType(indent, inputType)
       expect(actual).toEqual(`
 @attr.s(auto_attribs=True, kw_only=True, init=False)
@@ -339,7 +337,7 @@ class WriteMergeQuery(model.Model):
         self.total = total
         self.vis_config = vis_config`)
 
-      const childInputType = apiModel.types['MergeQuerySourceQuery']
+      const childInputType = apiTestModel.types['MergeQuerySourceQuery']
       const childActual = gen.declareType(indent, childInputType)
       expect(childActual).toEqual(`
 @attr.s(auto_attribs=True, kw_only=True, init=False)
@@ -362,7 +360,7 @@ class MergeQuerySourceQuery(model.Model):
         self.name = name
         self.query_id = query_id`)
 
-      const grandChildInputType = apiModel.types['MergeFields']
+      const grandChildInputType = apiTestModel.types['MergeFields']
       const grandChildActual = gen.declareType(indent, grandChildInputType)
       expect(grandChildActual).toEqual(`
 @attr.s(auto_attribs=True, kw_only=True, init=False)

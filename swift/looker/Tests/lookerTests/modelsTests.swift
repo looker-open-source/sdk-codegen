@@ -89,11 +89,11 @@ class modelsTests: XCTestCase {
 
     struct Hacky : Codable {
         var want_string: Variant
-        var want_int: Variant
-        var want_dub: Variant
-        var not_a_date: Variant
-        var is_bool: Variant
-        var nullable: Variant
+        var want_int: Variant?
+        var want_dub: Variant?
+        var not_a_date: Variant?
+        var is_bool: Variant?
+        var nullable: Variant?
     }
         
     struct Simple : Codable {
@@ -112,6 +112,11 @@ class modelsTests: XCTestCase {
             let item : Hacky = try deserialize(#"{"want_string":4}"#)
             XCTAssertNotNil(item)
             XCTAssertEqual(item.want_string.getString(), "4", "Expected '4'")
+            XCTAssertNil(item.want_int)
+            XCTAssertNil(item.want_dub)
+            XCTAssertNil(item.not_a_date)
+            XCTAssertNil(item.is_bool)
+            XCTAssertNil(item.nullable)
         } catch {
             print(error)
             XCTAssertNil(error)
@@ -146,10 +151,10 @@ class modelsTests: XCTestCase {
             print("strict null passed")
             XCTAssertNotNil(item)
             XCTAssertNil(item.want_string, "want_string should be nil")
-            item = try deserialize(#"{"want_string":4}"#)
-            print("lazy passed")
-            XCTAssertNotNil(item)
-            XCTAssertEqual(item.want_string, "4")
+//            item = try deserialize(#"{"want_string":4}"#)
+//            print("lazy passed")
+//            XCTAssertNotNil(item)
+//            XCTAssertEqual(item.want_string, "4")
 
         } catch {
             print(error)

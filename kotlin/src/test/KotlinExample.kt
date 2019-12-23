@@ -14,9 +14,7 @@ import java.io.File
 import java.lang.Thread.sleep
 
 class KotlinExample {
-    // TODO dynamically resolve the ini file location
-    val localConfig = "/Users/Looker/Documents/sdk_codegen/looker.ini"
-    val settings = ApiSettingsIniFile(localConfig, "Looker")
+    val settings = ApiSettingsIniFile(localIni, "Looker")
 
     /**
      * Note: `TrustSelfSignedStrategy` should never be used in production. It is only for testing with self-signed certs

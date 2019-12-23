@@ -63,7 +63,7 @@ struct Constants {
     static let apiVersion = "3.1"
     static let sdkVersion = #"\#(apiVersion).\#(lookerVersion)"#
     static let environmentPrefix = "LOOKERSDK"
-    
+
     static let matchCharset = #";.*charset="#
 
     static let applicationJson = #"^application\/.*\bjson\b"#
@@ -84,7 +84,7 @@ struct Constants {
      * @type {string} Regular expression for matching Content-Type headers
      */
     static let matchModeBinary = #"^image\/|^audio\/|^video\/|^font\/|^application\/|^multipart\/"#
-    
+
 }
 
 /// Homogeneous generic Dictionary with String keys
@@ -189,7 +189,7 @@ extension StringProtocol {
         let end = index(start, offsetBy: bounds.count)
         return self[start...end]
     }
-    
+
     subscript(bounds: CountableRange<Int>) -> SubSequence {
         let start = index(startIndex, offsetBy: bounds.lowerBound)
         let end = index(start, offsetBy: bounds.count)

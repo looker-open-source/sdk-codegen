@@ -1,14 +1,14 @@
 import * as Models from './sdkModels'
 
-const apiModel = Models.ApiModel.fromFile('Looker.3.1.oas.json', 'Looker.3.1.json')
+export const apiTestModel = Models.ApiModel.fromFile('Looker.4.0.oas.json', 'Looker.4.0.json')
 
 describe('sdkModels', () => {
 
   describe('request type determination', () => {
 
     it('search_looks', () => {
-      const method = apiModel.methods['search_looks']
-      const actual = apiModel.getRequestType(method)
+      const method = apiTestModel.methods['search_looks']
+      const actual = apiTestModel.getRequestType(method)
       expect(actual).toBeDefined()
       if (actual) {
         expect(actual.properties['title']).toBeDefined()
@@ -16,34 +16,43 @@ describe('sdkModels', () => {
     })
 
     it('search_spaces', () => {
-      const method = apiModel.methods['search_spaces']
-      const actual = apiModel.getRequestType(method)
+      const method = apiTestModel.methods['search_spaces']
+      const actual = apiTestModel.getRequestType(method)
       expect(actual).toBeDefined()
       if (actual) {
         expect(actual.properties['fields']).toBeDefined()
       }
     })
 
+    // TODO create a mock spec that has a recursive type, since this no longer does
+    // it ('detects recursive types', () => {
+    //   let type = apiTestModel.types['LookmlModelExploreField']
+    //   let actual = type.isRecursive()
+    //   expect(actual).toEqual(true)
+    //   type = apiTestModel.types['CredentialsApi3']
+    //   actual = type.isRecursive()
+    //   expect(actual).toEqual(false)
+    // })
   })
 
   describe('response modes', () => {
 
     it('binary only', () => {
-      const method = apiModel.methods['render_task_results']
+      const method = apiTestModel.methods['render_task_results']
       expect(method.responseIsBinary()).toEqual(true)
       expect(method.responseIsString()).toEqual(false)
       expect(method.responseIsBoth()).toEqual(false)
     })
 
     it('string only', () => {
-      const method = apiModel.methods['add_group_user']
+      const method = apiTestModel.methods['add_group_user']
       expect(method.responseIsBinary()).toEqual(false)
       expect(method.responseIsString()).toEqual(true)
       expect(method.responseIsBoth()).toEqual(false)
     })
 
     it('both modes', () => {
-      const method = apiModel.methods['run_look']
+      const method = apiTestModel.methods['run_look']
       expect(method.responseIsBinary()).toEqual(true)
       expect(method.responseIsString()).toEqual(true)
       expect(method.responseIsBoth()).toEqual(true)
@@ -54,8 +63,8 @@ describe('sdkModels', () => {
   describe('required properties', () => {
 
     it('CreateQueryTask', () => {
-      const type = apiModel.types['CreateQueryTask']
-      const actual = apiModel.getWriteableType(type)
+      const type = apiTestModel.types['CreateQueryTask']
+      const actual = apiTestModel.getWriteableType(type)
       expect(actual).toBeDefined()
       expect(type.properties['query_id'].required).toEqual(true)
       expect(type.properties['result_format'].required).toEqual(true)
@@ -63,7 +72,7 @@ describe('sdkModels', () => {
     })
 
     it('WriteCreateQueryTask', () => {
-      const type = apiModel.getWriteableType(apiModel.types['CreateQueryTask'])
+      const type = apiTestModel.getWriteableType(apiTestModel.types['CreateQueryTask'])
       expect(type).toBeDefined()
       expect(type!.properties['query_id'].required).toEqual(true)
       expect(type!.properties['result_format'].required).toEqual(true)
@@ -74,7 +83,7 @@ describe('sdkModels', () => {
   describe('writeable logic', () => {
 
     it('CredentialsApi3', () => {
-      const type = apiModel.types['CredentialsApi3']
+      const type = apiTestModel.types['CredentialsApi3']
       const writeable = type.writeable
       expect(type.readOnly).toEqual(true)
       expect(writeable.length).toEqual(0)
@@ -82,15 +91,15 @@ describe('sdkModels', () => {
 
     describe('DashboardElement', () => {
       it('writeable', () => {
-        const type = apiModel.types['DashboardElement']
+        const type = apiTestModel.types['DashboardElement']
         const writeable = type.writeable
         expect(type.readOnly).toEqual(false)
         expect(writeable.length).toEqual(17)
       })
 
       it('writeableType', () => {
-        const type = apiModel.types['DashboardElement']
-        const actual = apiModel.getWriteableType(type)
+        const type = apiTestModel.types['DashboardElement']
+        const actual = apiTestModel.getWriteableType(type)
         expect(actual).toBeDefined()
         if (actual) {
           expect(actual.properties['body_text']).toBeDefined()

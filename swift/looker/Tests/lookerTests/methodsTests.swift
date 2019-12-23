@@ -19,15 +19,35 @@ class methodsTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func jsonEncode(_ object: Any?) -> Data? {
+        if let object = object {
+            return try? JSONSerialization.data(withJSONObject: object, options:[])
+        }
+        return nil
+    }
+    
+    struct WriteQuery2: Codable {
+        var model: String
+        var view: String
+    }
+    
     func testQuery() {
-        let settings = config!
-        let xp = BaseTransport(settings)
-        let auth = AuthSession(settings, xp)
-        let sdk = LookerSDK(auth)
-        let query = sdk.ok(sdk.create_query(body:WriteQuery(model:"thelook", view: "users")))
-        let result = sdk.ok(sdk.run_query(query.id!, "sql"))
-        XCTAssertNotNil(result)
-        XCTAssertTrue(result.contains("SELECT"))
+//        let settings = config!
+//        let xp = BaseTransport(settings)
+//        let auth = AuthSession(settings, xp)
+//        let sdk = LookerSDK(auth)
+//        let body = WriteQuery(model: "thelook", view: "users")
+        let body = WriteQuery2(model: "thelook", view: "users")
+        let json = jsonEncode(body)
+        XCTAssertNotNil(json)
+//        let result: SDKResponse<Query, SDKError> = sdk.post("/queries",
+//            ["fields": nil], body, nil)
+
+//        let req = sdk.create_query(body: body)
+//        let query = sdk.ok(req)
+//        let result = sdk.ok(sdk.run_query(query.id!, "sql"))
+//        XCTAssertNotNil(result)
+//        XCTAssertTrue(result.contains("SELECT"))
     }
     
     func testMe() {
@@ -85,6 +105,18 @@ class methodsTests: XCTestCase {
         _ = sdk.authSession.logout()
     }
     
+    func testGetDashboard() {
+        let id = "60"
+        let settings = config!
+        let xp = BaseTransport(settings)
+        let auth = AuthSession(settings, xp)
+        let sdk = LookerSDK(auth)
+        BaseTransport.debugging = true
+        let item = sdk.ok(sdk.dashboard(id))
+        XCTAssertNotNil(item)
+        XCTAssertNotNil(item.id!.getString())
+    }
+    
     func testGetAllDashboards() {
         let settings = config!
         let xp = BaseTransport(settings)
@@ -94,7 +126,8 @@ class methodsTests: XCTestCase {
         for item in list {
             let id = item.id!.getString()
 //            let dashboard = sdk.ok(sdk.dashboard(id))
-            let dashboard = sdk.ok(sdk.dashboard(id, fields:Safe.Dashboard))
+            print("Dashboard: \(id)")
+            let dashboard = sdk.ok(sdk.dashboard(id)) //, fields:Safe.Dashboard))
             XCTAssertNotNil(dashboard, "Dashboard \(id) should be gotten")
             XCTAssertEqual(id, dashboard.id!.getString())
             if (dashboard.created_at == nil) {
