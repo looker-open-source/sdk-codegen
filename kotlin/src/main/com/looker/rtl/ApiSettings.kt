@@ -76,11 +76,11 @@ open class ApiSettings(contents: String, var section: String = ""): Configuratio
 
             // Only replace the current values if new values are provided
             settings["base_url"].let { value ->
-                baseUrl = value ?: baseUrl
+                baseUrl = unQuote(value ?: baseUrl)
             }
 
             settings["api_version"].let { value ->
-                apiVersion = value ?: apiVersion
+                apiVersion = unQuote(value ?: apiVersion)
             }
 
             settings["verify_ssl"].let { value ->

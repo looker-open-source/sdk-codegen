@@ -31,6 +31,7 @@ import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.response.HttpResponse
 import io.ktor.http.takeFrom
 import kotlinx.coroutines.runBlocking
@@ -188,9 +189,6 @@ class Transport(val options: TransportOptions) {
             body: Any? = null,
             noinline authenticator: Authenticator? = null): SDKResponse {
 
-        // Request body
-        val json = io.ktor.client.features.json.defaultSerializer()
-
         val builder = HttpRequestBuilder()
         // Set the request method
         builder.method = method.value
@@ -213,9 +211,17 @@ class Transport(val options: TransportOptions) {
         builder.url.takeFrom(finishedRequest.url)
 
         if (body != null) {
-            val jsonBody = json.write(body)
-            builder.body = jsonBody  // TODO: I think having to do this is a bug? https://github.com/ktorio/ktor/issues/1265
-            headers["Content-Length"] = jsonBody.contentLength.toString()
+            if (body is FormDataContent) {
+                // Encoded form
+                builder.body = body
+            } else {
+                // Request body
+                val json = io.ktor.client.features.json.defaultSerializer()
+
+                val jsonBody = json.write(body)
+                builder.body = jsonBody  // TODO: I think having to do this is a bug? https://github.com/ktorio/ktor/issues/1265
+                headers["Content-Length"] = jsonBody.contentLength.toString()
+            }
         }
 
         return runBlocking {

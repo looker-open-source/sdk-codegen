@@ -24,8 +24,8 @@
 
 package com.looker.rtl
 
-import io.ktor.http.headersOf
-
+import io.ktor.client.request.forms.FormDataContent
+import io.ktor.http.Parameters
 
 class UserSession(val apiSettings: ApiSettings,
                   val transport: Transport = Transport(apiSettings)) {
@@ -110,6 +110,7 @@ class UserSession(val apiSettings: ApiSettings,
     }
 
     private fun <T> ok(response: SDKResponse): T {
+        @Suppress("UNCHECKED_CAST")
         when(response) {
             is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
             is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
@@ -139,10 +140,15 @@ class UserSession(val apiSettings: ApiSettings,
             val config = apiSettings.readConfig()
             val clientId = unQuote(System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_ID") ?: config[client_id])
             val clientSecret = unQuote(System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_SECRET") ?: config[client_secret])
+            val body = FormDataContent(Parameters.build {
+                append(client_id, clientId!!)
+                append(client_secret, clientSecret!!)
+            })
             val token = ok<AuthToken>(
                     transport.request<AuthToken>(HttpMethod.POST,
                             "${apiPath}/login",
-                            mapOf(client_id to clientId, client_secret to clientSecret)
+                            mapOf(),
+                            body
                     )
             )
             authToken = token
