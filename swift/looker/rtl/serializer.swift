@@ -64,8 +64,8 @@ func deserialize<T>(_ json: String) throws -> T where T : Codable {
     return try deserialize(Data(json.utf8))
 }
 
-// Support for converting a struct or class to a Dictionary of values
-// Nifty code taken from https://stackoverflow.com/a/46597941/74137
+/// Support for converting a struct or class to a Dictionary of values
+/// Code from https://stackoverflow.com/a/46597941/74137
 struct JSON {
     static let encoder = JSONEncoder()
 }
