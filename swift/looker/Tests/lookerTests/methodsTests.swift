@@ -19,7 +19,7 @@ class methodsTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 /*
-    func swiftSucks(_ object: Any?) -> Bool {
+    func swiftIsCrazy(_ object: Any?) -> Bool {
         if let object = object {
             return JSONSerialization.isValidJSONObject(object)
         }
@@ -60,7 +60,7 @@ class methodsTests: XCTestCase {
     func testEncode() {
         do {
             let body = WriteQuery2(model: "thelook", view: "users")
-            XCTAssertFalse(swiftSucks(body), "Swift does indeed suck")
+            XCTAssertFalse(swiftIsCrazy(body), "Swift is indeed crazy")
             let jsonData = try JSONEncoder().encode(body)
             var jsonString = String(data: jsonData, encoding: .utf8)!
             XCTAssertEqual(jsonString, #"{"model":"thelook","view":"users"}"#)
@@ -77,9 +77,6 @@ class methodsTests: XCTestCase {
     }
 */
     
-    struct QueryData : SDKModel {
-        
-    }
     func testCreateQueryAndRun() {
         let settings = config!
         let xp = BaseTransport(settings)
