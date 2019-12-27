@@ -130,6 +130,7 @@ class BaseTransport : ITransport  {
             timeoutInterval: TimeInterval(options?.timeout ?? self.options.timeout!))
         req.httpMethod = method.rawValue
         req.addValue(agentTag, forHTTPHeaderField: "User-Agent")
+        req.addValue(agentTag, forHTTPHeaderField: "x-looker-appid")
         if (body != nil) {
             if (body is String) {
                 req.httpBody = (body as! String).data(using: .utf8)
@@ -192,16 +193,19 @@ func processResponse<TSuccess: Codable, TError: Codable> (_ response: RequestRes
     switch mode {
     case .string:
         do {
-            if (isMimeJson(contentType)) {
+            let returnType = String(describing: TSuccess.self)
+            if (isMimeJson(contentType) && returnType != "String") {
+                /// Don't return the response as `String`
                 success = try deserialize(data)
             } else if let dataString = String(data: data, encoding: .utf8) {
                 success = dataString as? TSuccess
             } else {
-                // We shouldn't get here, but if we do, defer to default error handling
+                // We shouldn't get here, but if we do, defer to default response processing
                 success = try deserialize(data)
             }
         } catch {
             ok = false
+            // typeMismatch(Swift.String, Swift.DecodingError.Context(codingPath: [], debugDescription: "Expected to decode String but found an array instead.", underlyingError: nil)): 23 bytes
             fail = SDKError("Error parsing response: \(error): \(data)") as? TError
         }
     case .binary:

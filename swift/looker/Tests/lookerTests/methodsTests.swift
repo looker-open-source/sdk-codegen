@@ -77,7 +77,10 @@ class methodsTests: XCTestCase {
     }
 */
     
-    func testCreateQuery() {
+    struct QueryData : SDKModel {
+        
+    }
+    func testCreateQueryAndRun() {
         let settings = config!
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
@@ -85,9 +88,44 @@ class methodsTests: XCTestCase {
         let body = WriteQuery(model: "thelook", view: "users", fields: ["users.count"])
         let req = sdk.create_query(body)
         let query = sdk.ok(req)
-        let result = sdk.ok(sdk.run_query(query.id!, "sql"))
-        XCTAssertNotNil(result)
-        XCTAssertTrue(result.contains("SELECT"))
+        let sql = sdk.ok(sdk.run_query(query.id!, "sql"))
+        XCTAssertNotNil(sql)
+        XCTAssertTrue(sql.contains("SELECT"), "Got the SQL select statement")
+        let csv = sdk.ok(sdk.run_query(query.id!, "csv"))
+        XCTAssertNotNil(csv)
+        XCTAssertTrue(csv.contains("Users Count"), "Got the CSV header")
+        BaseTransport.debugging = true
+        var json = sdk.ok(sdk.run_query(query.id!, "json"))
+        XCTAssertNotNil(json)
+        XCTAssertTrue(json.contains("users.count"), "json result")
+        /// May want to try https://learnappmaking.com/swift-json-swiftyjson/ or https://github.com/Flight-School/AnyCodable
+        /// Or one of the options discussed at https://stackoverflow.com/questions/46279992/any-when-decoding-json-with-codable
+        var jsonData = try? JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: .allowFragments)
+        XCTAssertNotNil(jsonData)
+        if let data = jsonData as! [[String:Int64]?]? {
+            if let item = data[0] {
+                XCTAssertTrue(item["users.count"]! > 0, "users.count > 0")
+            } else {
+                XCTAssertTrue(false, "Couldn't cast item from data")
+            }
+        } else {
+            XCTAssertTrue(false, "Couldn't cast data from jsonData")
+        }
+        
+        json = sdk.ok(sdk.run_query(query.id!, "json_label"))
+        XCTAssertNotNil(json)
+        XCTAssertTrue(json.contains("Users Count"), "json_label result")
+        jsonData = try? JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: .allowFragments)
+        XCTAssertNotNil(jsonData)
+        if let data = jsonData as! [[String:Int64]?]? {
+            if let item = data[0] {
+                XCTAssertTrue(item["Users Count"]! > 0, "Users Count > 0")
+            } else {
+                XCTAssertTrue(false, "Couldn't cast item from data")
+            }
+        } else {
+            XCTAssertTrue(false, "Couldn't cast data from jsonData")
+        }
     }
     
     func testMe() {
