@@ -126,11 +126,11 @@ import Foundation
     }
     const type = this.typeMap(property.type)
     // TODO fix this HORRIBLE hack once our API JSON results to CORRECTLY represent strings in payloads
-    let variantHack = type.name
-    let low = property.name.toLowerCase()
-    if (type.name === 'String' && (low === "id" || low.endsWith("_id"))) variantHack = 'Variant'
+    // let variantHack = type.name
+    // let low = property.name.toLowerCase()
+    // if (type.name === 'String' && (low === "id" || low.endsWith("_id"))) variantHack = 'Variant'
     return this.commentHeader(indent, this.describeProperty(property))
-      + `${indent}var ${this.reserve(property.name)}: ${variantHack}${optional}`
+      + `${indent}var ${this.reserve(property.name)}: ${type.name}${optional}`
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
@@ -145,7 +145,7 @@ import Foundation
     let pOpt = ''
     let line = ''
     if (param.location === strBody) {
-      mapped.name = `${mapped.name}` // TODO should this use Partial<T>?
+      mapped.name = `${mapped.name}`
     }
     if (!param.required) {
       pOpt = '?'
@@ -328,7 +328,7 @@ import Foundation
     let result = this.argFill('', 'options')
     // let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
     // result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
-    result = this.argFill(result, method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr)
+    result = this.argFill(result, method.bodyArg ? `try! self.encode(${request}${method.bodyArg})` : this.nullStr)
     result = this.argFill(result, this.queryGroup(indent, method, request))
     return result
   }

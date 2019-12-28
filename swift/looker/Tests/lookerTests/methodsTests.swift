@@ -18,10 +18,21 @@ class methodsTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
+/*
+    func swiftIsCrazy(_ object: Any?) -> Bool {
+        if let object = object {
+            return JSONSerialization.isValidJSONObject(object)
+        }
+        return false
+    }
+    
     func jsonEncode(_ object: Any?) -> Data? {
         if let object = object {
-            return try? JSONSerialization.data(withJSONObject: object, options:[])
+            if let data = object as? Data {
+                return try? JSONEncoder().encode(data)
+            } else {
+                return try? JSONSerialization.data(withJSONObject: object, options:[.fragmentsAllowed])
+            }
         }
         return nil
     }
@@ -31,23 +42,87 @@ class methodsTests: XCTestCase {
         var view: String
     }
     
-    func testQuery() {
-//        let settings = config!
-//        let xp = BaseTransport(settings)
-//        let auth = AuthSession(settings, xp)
-//        let sdk = LookerSDK(auth)
-//        let body = WriteQuery(model: "thelook", view: "users")
+    func testAnyData() {
+        var foo: Any?
         let body = WriteQuery2(model: "thelook", view: "users")
-        let json = jsonEncode(body)
-        XCTAssertNotNil(json)
-//        let result: SDKResponse<Query, SDKError> = sdk.post("/queries",
-//            ["fields": nil], body, nil)
+        do {
+            foo = try JSONEncoder().encode(body)
+            XCTAssertTrue(foo is Data, "foo is Data")
+            if let data = foo as? Data {
+                foo = String(data: data, encoding: .utf8)
+                XCTAssertTrue(foo is String, "foo is String")
+            } else {
+                XCTAssertTrue(false, "foo is not data")
+            }
+        } catch { print(error) }
+    }
+    
+    func testEncode() {
+        do {
+            let body = WriteQuery2(model: "thelook", view: "users")
+            XCTAssertFalse(swiftIsCrazy(body), "Swift is indeed crazy")
+            let jsonData = try JSONEncoder().encode(body)
+            var jsonString = String(data: jsonData, encoding: .utf8)!
+            XCTAssertEqual(jsonString, #"{"model":"thelook","view":"users"}"#)
+//            let query: WriteQuery2 = try deserialize(jsonString)
+//            XCTAssertEqual(query.model, "thelook")
+//            XCTAssertEqual(query.view, "users")
 
-//        let req = sdk.create_query(body: body)
-//        let query = sdk.ok(req)
-//        let result = sdk.ok(sdk.run_query(query.id!, "sql"))
-//        XCTAssertNotNil(result)
-//        XCTAssertTrue(result.contains("SELECT"))
+            let json2 = jsonEncode(body)
+            XCTAssertNotNil(json2)
+            jsonString = String(data: json2!, encoding: .utf8)!
+            XCTAssertEqual(jsonString, #"{"model":"thelook","view":"users"}"#)
+
+        } catch { print(error) }
+    }
+*/
+    
+    func testCreateQueryAndRun() {
+        let settings = config!
+        let xp = BaseTransport(settings)
+        let auth = AuthSession(settings, xp)
+        let sdk = LookerSDK(auth)
+        let body = WriteQuery(model: "thelook", view: "users", fields: ["users.count"])
+        let req = sdk.create_query(body)
+        let query = sdk.ok(req)
+        let sql = sdk.ok(sdk.run_query(query.id!, "sql"))
+        XCTAssertNotNil(sql)
+        XCTAssertTrue(sql.contains("SELECT"), "Got the SQL select statement")
+        let csv = sdk.ok(sdk.run_query(query.id!, "csv"))
+        XCTAssertNotNil(csv)
+        XCTAssertTrue(csv.contains("Users Count"), "Got the CSV header")
+        BaseTransport.debugging = true
+        var json = sdk.ok(sdk.run_query(query.id!, "json"))
+        XCTAssertNotNil(json)
+        XCTAssertTrue(json.contains("users.count"), "json result")
+        /// May want to try https://learnappmaking.com/swift-json-swiftyjson/ or https://github.com/Flight-School/AnyCodable
+        /// Or one of the options discussed at https://stackoverflow.com/questions/46279992/any-when-decoding-json-with-codable
+        var jsonData = try? JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: .allowFragments)
+        XCTAssertNotNil(jsonData)
+        if let data = jsonData as! [[String:Int64]?]? {
+            if let item = data[0] {
+                XCTAssertTrue(item["users.count"]! > 0, "users.count > 0")
+            } else {
+                XCTAssertTrue(false, "Couldn't cast item from data")
+            }
+        } else {
+            XCTAssertTrue(false, "Couldn't cast data from jsonData")
+        }
+        
+        json = sdk.ok(sdk.run_query(query.id!, "json_label"))
+        XCTAssertNotNil(json)
+        XCTAssertTrue(json.contains("Users Count"), "json_label result")
+        jsonData = try? JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: .allowFragments)
+        XCTAssertNotNil(jsonData)
+        if let data = jsonData as! [[String:Int64]?]? {
+            if let item = data[0] {
+                XCTAssertTrue(item["Users Count"]! > 0, "Users Count > 0")
+            } else {
+                XCTAssertTrue(false, "Couldn't cast item from data")
+            }
+        } else {
+            XCTAssertTrue(false, "Couldn't cast data from jsonData")
+        }
     }
     
     func testMe() {
@@ -111,10 +186,9 @@ class methodsTests: XCTestCase {
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
-        BaseTransport.debugging = true
         let item = sdk.ok(sdk.dashboard(id))
         XCTAssertNotNil(item)
-        XCTAssertNotNil(item.id!.getString())
+        XCTAssertNotNil(item.id)
     }
     
     func testGetAllDashboards() {
@@ -124,12 +198,12 @@ class methodsTests: XCTestCase {
         let sdk = LookerSDK(auth)
         let list = sdk.ok(sdk.all_dashboards())
         for item in list {
-            let id = item.id!.getString()
+            let id = item.id!
 //            let dashboard = sdk.ok(sdk.dashboard(id))
             print("Dashboard: \(id)")
             let dashboard = sdk.ok(sdk.dashboard(id)) //, fields:Safe.Dashboard))
             XCTAssertNotNil(dashboard, "Dashboard \(id) should be gotten")
-            XCTAssertEqual(id, dashboard.id!.getString())
+            XCTAssertEqual(id, dashboard.id!)
             if (dashboard.created_at == nil) {
                 print("Dashboard \(id) created_at is nil")
             }
@@ -147,10 +221,10 @@ class methodsTests: XCTestCase {
         XCTAssertNotNil(list)
         XCTAssertTrue(list.count > 0, "\(list.count) spaces")
         for item in list {
-            let actual = sdk.ok(sdk.space((item.id?.getString())!))
+            let actual = sdk.ok(sdk.space((item.id)!))
             XCTAssertNotNil(actual)
-            let id = actual.id?.getString()
-            XCTAssertEqual(item.id?.getString(), id!)
+            let id = actual.id
+            XCTAssertEqual(item.id, id!)
         }
         _ = sdk.authSession.logout()
     }
@@ -164,10 +238,10 @@ class methodsTests: XCTestCase {
         XCTAssertNotNil(list)
         XCTAssertTrue(list.count > 0, "\(list.count) folders")
         for item in list {
-            let actual = sdk.ok(sdk.folder((item.id?.getString())!))
+            let actual = sdk.ok(sdk.folder((item.id)!))
             XCTAssertNotNil(actual)
-            let id = actual.id?.getString()
-            XCTAssertEqual(item.id?.getString(), id!)
+            let id = actual.id
+            XCTAssertEqual(item.id, id!)
         }
         _ = sdk.authSession.logout()
     }

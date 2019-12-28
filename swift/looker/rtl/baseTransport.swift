@@ -43,12 +43,12 @@ class BaseTransport : ITransport  {
     let session = URLSession.shared // TODO Should this be something else like `configuration: .default`? or ephemeral?
     var apiPath = ""
     var options: ITransportSettings
-    
+
     init(_ options: ITransportSettings) {
         self.options = options
         self.apiPath = "\(options.base_url!)/api/\(options.api_version!)"
     }
-    
+
     func request<TSuccess: Codable, TError: Codable> (
         _ method: HttpMethod,
         _ path: String,
@@ -70,7 +70,7 @@ class BaseTransport : ITransport  {
         result = processResponse(response)
         return result
     }
-    
+
     func plainRequest(
         _ method: HttpMethod,
         _ path: String,
@@ -92,11 +92,11 @@ class BaseTransport : ITransport  {
             let err = SDKError("The SDK call failed. Invalid properties for request \(method.rawValue) \(path)")
             return RequestResponse(nil, nil, err)
         }
-        
+
         // This is required for requests without a UI for some bogus reason
         // https://stackoverflow.com/a/39064025/74137
         let semi = DispatchSemaphore(value: 0)
-        
+
         var result: RequestResponse? = nil
         let task = self.session.dataTask(with: req!) { data, response, error in
             if let err = error {
@@ -109,7 +109,7 @@ class BaseTransport : ITransport  {
         semi.wait() // wait for request completion
         return result!
     }
-    
+
     private func initRequest(
         _ method: HttpMethod,
         _ path: String,
@@ -130,20 +130,26 @@ class BaseTransport : ITransport  {
             timeoutInterval: TimeInterval(options?.timeout ?? self.options.timeout!))
         req.httpMethod = method.rawValue
         req.addValue(agentTag, forHTTPHeaderField: "User-Agent")
+        req.addValue(agentTag, forHTTPHeaderField: "x-looker-appid")
         if (body != nil) {
-            req.httpBody = try? JSONSerialization.data(withJSONObject: body!)
+            if (body is String) {
+                req.httpBody = (body as! String).data(using: .utf8)
+            } else {
+                /// Only string and encoded JSON (iow`Data`) can be provided for the body
+                req.httpBody = body as? Data
+            }
         }
         if (authenticator != nil) {
             req = authenticator!(req)
         }
         return req
     }
-    
+
     static func ok(_ res: HTTPURLResponse) -> Bool {
         let code = res.statusCode // For visibility in the sucky XCode debugger
         return (200...299).contains(code)
     }
-    
+
 }
 
 @available(OSX 10.12, *)
@@ -156,18 +162,18 @@ func processResponse<TSuccess: Codable, TError: Codable> (_ response: RequestRes
     var ok = true
     var success: TSuccess? = nil
     var fail: TError? = nil
-    
+
     guard let data = response.data else {
         fail = SDKError("No response data for request") as? TError
         return SDKResponse.error(fail!)
     }
-    
+
     if BaseTransport.debugging {
         if let debug = String(data: data, encoding: .utf8) {
             print(debug)
         }
     }
-    
+
     if (!BaseTransport.ok(response.response as! HTTPURLResponse)) {
         do {
             fail = try deserialize(data)
@@ -176,27 +182,30 @@ func processResponse<TSuccess: Codable, TError: Codable> (_ response: RequestRes
         }
         return SDKResponse.error(fail!)
     }
-    
+
     guard let contentType = response.response?.mimeType else {
         /// Hopefully `TSuccess` is a `Voidable`, which is simply a documentation typealias hack for `String`
         return SDKResponse.success("" as! TSuccess)
     }
-    
+
     let mode = responseMode(contentType)
-    
+
     switch mode {
     case .string:
         do {
-            if (isMimeJson(contentType)) {
+            let returnType = String(describing: TSuccess.self)
+            if (isMimeJson(contentType) && returnType != "String") {
+                /// Don't return the response as `String`
                 success = try deserialize(data)
             } else if let dataString = String(data: data, encoding: .utf8) {
-                success = try deserialize(dataString)
+                success = dataString as? TSuccess
             } else {
-                // We shouldn't get here, but if we do, defer to default error handling
+                // We shouldn't get here, but if we do, defer to default response processing
                 success = try deserialize(data)
             }
         } catch {
             ok = false
+            // typeMismatch(Swift.String, Swift.DecodingError.Context(codingPath: [], debugDescription: "Expected to decode String but found an array instead.", underlyingError: nil)): 23 bytes
             fail = SDKError("Error parsing response: \(error): \(data)") as? TError
         }
     case .binary:

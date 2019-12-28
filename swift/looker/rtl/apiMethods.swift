@@ -27,9 +27,14 @@ import Foundation
 @available(OSX 10.15, *)
 class APIMethods {
     var authSession: IAuthorizer
+    var encoder = JSONEncoder()
     
     init(_ authSession: IAuthorizer) {
         self.authSession = authSession
+    }
+    
+    open func encode<T>(_ value: T) throws -> Data where T : Encodable {
+        return try! encoder.encode(value)
     }
     
     func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) -> TSuccess {

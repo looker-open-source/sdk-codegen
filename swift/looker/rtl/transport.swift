@@ -260,6 +260,24 @@ func notAnOption(_ values: Values) -> ValueDictionary<String, Any> {
     return result
 }
 
+func encodeParams(_ params: Values?) -> String {
+    var result = ""
+    if let up = params {
+        // Strip out any values that may be assigned that are nil.
+        let vals = notAnOption(up)
+        result = vals
+            // TODO verify we don't need to filter out unset values
+            //        .filter { (key: String, value: Any) -> Bool in
+            //            guard value != nil { return true } else { return false }
+            //    }
+            .map { (key: String, value: Any ) -> String in
+                "\(key)=\(asQ(value))"
+        }
+        .joined(separator: "&")
+    }
+    return result
+}
+
 /** constructs the path argument including any optional query parameters
  @param path the base path of the request
  
@@ -270,21 +288,8 @@ func addQueryParams(_ path: String, _ params: Values?) -> String {
     if (params == nil || params?.count == 0) {
         return path
     }
-    var qp = ""
-    if let up = params {
-        // Strip out any values that may be assigned that are nil.
-        let vals = notAnOption(up)
-        qp = vals
-            // TODO verify we don't need to filter out unset values
-            //        .filter { (key: String, value: Any) -> Bool in
-            //            guard value != nil { return true } else { return false }
-            //    }
-            .map { (key: String, value: Any ) -> String in
-                "\(key)=\(asQ(value))"
-        }
-        .joined(separator: "&")
-    }
     var result = path
+    let qp = encodeParams(params)
     if (qp != "") { result += "?" + qp }
     return result
 }
