@@ -138,8 +138,8 @@ class UserSession(val apiSettings: ApiSettings,
             val client_id = "client_id"
             val client_secret = "client_secret"
             val config = apiSettings.readConfig()
-            val clientId = System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_ID") ?: config[client_id]
-            val clientSecret = System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_SECRET") ?: config[client_secret]
+            val clientId = unQuote(System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_ID") ?: config[client_id])
+            val clientSecret = unQuote(System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_SECRET") ?: config[client_secret])
             val body = FormDataContent(Parameters.build {
                 append(client_id, clientId!!)
                 append(client_secret, clientSecret!!)

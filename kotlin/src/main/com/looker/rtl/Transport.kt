@@ -154,9 +154,6 @@ class Transport(val options: TransportOptions) {
     val apiPath = "${options.baseUrl}/api/${options.apiVersion}"
 
     private fun ok(res: HttpResponse): Boolean {
-        // TODO: Should this use an enum class like in the ts version?
-        // Enums in Kotlin don't work like c or ts and would require
-        // an explicit numeric value for each enum type
         // Thought: We should use whatever is idiomatic for Kotlin
         return (res.status.value >= 200) && (res.status.value <= 226)
     }
@@ -203,8 +200,7 @@ class Transport(val options: TransportOptions) {
 
         val requestPath = makeUrl(path, queryParams, authenticator)
 
-        // TODO review this kludge
-        val auth = if (authenticator === null) { ::defaultAuthenticator } else { authenticator }
+        val auth = authenticator ?: ::defaultAuthenticator
 
         val finishedRequest = auth(RequestSettings(method, requestPath, headers))
 
