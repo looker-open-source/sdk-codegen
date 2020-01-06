@@ -18,8 +18,9 @@ package-lock.json
 **/Packages
 **/xcuserdata/
 kotlin/.gradle/*
-.gradle/*
+**/.gradle/*
 kotlin/.*
 kotlin/bin/*
 kotlin/build/*
 kotlin/out/*
+
