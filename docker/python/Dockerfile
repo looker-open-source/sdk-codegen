@@ -12,6 +12,11 @@ RUN echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bash_profile
 RUN bash --login -c "pyenv install 3.7.4"
 RUN echo 'pyenv global 3.7.4' >> /home/looker/.bash_profile
 RUN bash --login -c "pip install --upgrade pip setuptools"
+RUN bash --login -c "pip install -U pytest"
+RUN bash --login -c "pip install pyyaml"
+RUN bash --login -c "pip install pillow"
+#Make sure everything is sourced in
+RUN bash --login -c "source /home/looker/.bash_profile"
 
 COPY entrypoint.sh /entrypoint.sh
 
