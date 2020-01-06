@@ -134,8 +134,8 @@ class AuthSession: IAuthSession {
             let response : SDKResponse<AccessToken, SDKError> = self.transport.request(
                 HttpMethod.POST,
                 "\(self.apiPath)/login",
-                ["client_id": client_id!, "client_secret": client_secret!],
                 nil,
+                encodeParams(["client_id": client_id!, "client_secret": client_secret!]),
                 nil,
                 nil
             )
