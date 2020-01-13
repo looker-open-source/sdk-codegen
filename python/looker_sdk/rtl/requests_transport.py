@@ -28,6 +28,7 @@ from typing import cast, Callable, Dict, MutableMapping, Optional
 
 import requests
 
+from looker_sdk.rtl import constants
 from looker_sdk.rtl import transport
 
 
@@ -36,21 +37,21 @@ class RequestsTransport(transport.Transport):
     """
 
     def __init__(
-        self, settings: transport.TransportSettings, session: requests.Session
+        self, settings: transport.PTransportSettings, session: requests.Session
     ):
         self.settings = settings
-        headers: Dict[str, str] = {"x-looker-appid": settings.agent_tag}
+        headers: Dict[str, str] = {"x-looker-appid": f"PY-SDK {constants.sdk_version}"}
         if settings.headers:
             headers.update(settings.headers)
         session.headers.update(headers)
         session.verify = settings.verify_ssl
         self.session = session
-
-        self.api_path: str = f"{settings.base_url}/api/{settings.api_version}"
+        base_url = settings.base_url.strip("/")
+        self.api_path: str = f"{base_url}/api/{settings.api_version}"
         self.logger = logging.getLogger(__name__)
 
     @classmethod
-    def configure(cls, settings: transport.TransportSettings) -> transport.Transport:
+    def configure(cls, settings: transport.PTransportSettings) -> transport.Transport:
         return cls(settings, requests.Session())
 
     def request(
@@ -61,7 +62,7 @@ class RequestsTransport(transport.Transport):
         body: Optional[bytes] = None,
         authenticator: Optional[Callable[[], Dict[str, str]]] = None,
         headers: Optional[MutableMapping[str, str]] = None,
-        transport_options: Optional[transport.TransportSettings] = None,
+        transport_options: Optional[transport.PTransportSettings] = None,
     ) -> transport.Response:
 
         url = f"{self.api_path}{path}"

@@ -28,6 +28,7 @@ import re
 from typing import Callable, Dict, MutableMapping, Optional
 
 import attr
+from typing_extensions import Protocol
 
 from looker_sdk.rtl import constants
 
@@ -45,8 +46,7 @@ class HttpMethod(enum.Enum):
     HEAD = 7
 
 
-@attr.s(auto_attribs=True, kw_only=True)
-class TransportSettings:
+class PTransportSettings(Protocol):
     """Basic transport settings.
     """
 
@@ -56,17 +56,8 @@ class TransportSettings:
     timeout: int = 120
     headers: Optional[MutableMapping[str, str]] = None
 
-    @property
-    def url(self) -> str:
-        """Create and return an API-versioned base endpoint.
-        """
-        return f'{self.base_url.rstrip("/")}/api/{self.api_version}'
-
-    @property
-    def agent_tag(self) -> str:
-        """User Agent value
-        """
-        return f"PY-SDK {constants.sdk_version}"
+    def is_configured(self) -> bool:
+        return bool(self.base_url and self.api_version)
 
 
 TAuthenticator = Optional[Callable[[], Dict[str, str]]]
@@ -116,7 +107,7 @@ class Transport(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def configure(cls, settings: TransportSettings) -> "Transport":
+    def configure(cls, settings: PTransportSettings) -> "Transport":
         """Configure and return an instance of Transport
         """
 
@@ -129,7 +120,7 @@ class Transport(abc.ABC):
         body: Optional[bytes] = None,
         authenticator: TAuthenticator = None,
         headers: Optional[MutableMapping[str, str]] = None,
-        transport_options: Optional[TransportSettings] = None,
+        transport_options: Optional[PTransportSettings] = None,
     ) -> Response:
         """Send API request.
         """
