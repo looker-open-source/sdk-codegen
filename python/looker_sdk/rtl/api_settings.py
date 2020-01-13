@@ -25,10 +25,11 @@ with the settings as attributes
 """
 import configparser as cp
 import os
-from typing import cast, Dict, Optional
+from typing import cast, Dict, MutableMapping, Optional
 
 import attr
 import cattr
+from typing_extensions import Protocol
 
 from looker_sdk import error
 from looker_sdk.rtl import transport
@@ -46,25 +47,28 @@ def _convert_bool(val: str, _: bool) -> bool:
     return converted
 
 
+class PApiSettings(transport.PTransportSettings, Protocol):
+    def get_client_id(self) -> Optional[str]:
+        ...
+
+    def get_client_secret(self) -> Optional[str]:
+        ...
+
+
 @attr.s(auto_attribs=True, kw_only=True)
-class ApiSettings(transport.TransportSettings):
-    """API Configuration Settings.
-
-    This class can be instantiated directly to provide settings.
-    See the configure() method below which provides a convenient
-    entry point using a config file and/or environment variables.
-
-    Note that the parent class also has non-default fields that
-    need to be supplied.
-    """
-
-    _filename: str = ""
-    _section: Optional[str] = None
+class ApiSettings:
+    base_url: str = ""
+    api_version: str = "3.1"
+    verify_ssl: bool = True
+    timeout: int = 120
+    headers: Optional[MutableMapping[str, str]] = None
+    filename: str = ""
+    section: Optional[str] = None
 
     @classmethod
     def configure(
         cls, filename: str = "looker.ini", section: Optional[str] = None
-    ) -> "ApiSettings":
+    ) -> PApiSettings:
         """Configure using a config file and/or environment variables.
 
         Environment variables will override config file settings. Neither
@@ -76,8 +80,27 @@ class ApiSettings(transport.TransportSettings):
             <package-prefix>_BASE_URL -> base_url
             <package-prefix>_VERIFY_SSL -> verify_ssl
         """
+        api_settings = cls(filename=filename, section=section)
+        config_data = api_settings.read_config()
+        converter = cattr.Converter()
+        converter.register_structure_hook(bool, _convert_bool)
+        settings = converter.structure(config_data, ApiSettings)
+        if not settings.is_configured():
+            raise error.SDKError(
+                f"Missing required configuration values like base_url and api_version."
+            )
+        return settings
 
-        config_data = cls.read_ini(filename, section)
+    def read_config(self) -> Dict[str, Optional[str]]:
+        cfg_parser = cp.ConfigParser()
+        try:
+            cfg_parser.read_file(open(self.filename))
+        except FileNotFoundError:
+            config_data: Dict[str, str] = {}
+        else:
+            # If section is not specified, use first section in file
+            section = self.section or cfg_parser.sections()[0]
+            config_data = self._clean_input(dict(cfg_parser[section]))
 
         env_api_version = cast(
             str, os.getenv(f"{constants.environment_prefix}_API_VERSION")
@@ -95,33 +118,13 @@ class ApiSettings(transport.TransportSettings):
         if env_verify_ssl:
             config_data["verify_ssl"] = env_verify_ssl
 
-        config_data = cls._clean_input(config_data)
+        config_data["filename"] = self.filename
+        config_data["section"] = self.section
+        config_data = self._clean_input(config_data)
 
-        if not config_data.get("base_url"):
-            raise error.SDKError(f"Required parameter base_url not found.")
-
-        converter = cattr.Converter()
-        converter.register_structure_hook(bool, _convert_bool)
-        settings: ApiSettings = converter.structure(config_data, cls)
-        return settings
-
-    @classmethod
-    def read_ini(cls, filename: str, section: Optional[str] = None) -> Dict[str, str]:
-        cfg_parser = cp.ConfigParser()
-        try:
-            cfg_parser.read_file(open(filename))
-        except FileNotFoundError:
-            config_data: Dict[str, str] = {}
-        else:
-            # If section is not specified, use first section in file
-            section = section or cfg_parser.sections()[0]
-            config_data = dict(cfg_parser[section])
-            config_data["_section"] = cast(str, section)
-            config_data["_filename"] = cast(str, filename)
         return config_data
 
-    @classmethod
-    def _clean_input(cls, config_data: Dict[str, str]) -> Dict[str, str]:
+    def _clean_input(self, config_data: Dict[str, str]) -> Dict[str, str]:
         for setting, value in list(config_data.items()):
             # Remove empty setting values
             if not isinstance(value, str):
@@ -132,3 +135,16 @@ class ApiSettings(transport.TransportSettings):
             elif value.startswith(('"', "'")) or value.endswith(('"', "'")):
                 config_data[setting] = value.strip("\"'")
         return config_data
+
+    def get_client_id(self) -> Optional[str]:
+        return os.getenv(
+            f"{constants.environment_prefix}_CLIENT_ID"
+        ) or self.read_config().get("client_id")
+
+    def get_client_secret(self) -> Optional[str]:
+        return os.getenv(
+            f"{constants.environment_prefix}_CLIENT_SECRET"
+        ) or self.read_config().get("client_secret")
+
+    def is_configured(self) -> bool:
+        return bool(self.base_url and self.api_version)
