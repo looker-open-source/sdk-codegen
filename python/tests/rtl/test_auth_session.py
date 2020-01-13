@@ -178,6 +178,7 @@ def test_it_fails_with_missing_credentials(
     monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", test_env_client_secret)
 
     settings = api_settings.ApiSettings.configure(config_file, test_section)
+
     auth_session = auth.AuthSession(
         settings, MockTransport.configure(settings), serialize.deserialize
     )

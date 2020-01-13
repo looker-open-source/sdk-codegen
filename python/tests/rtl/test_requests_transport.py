@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from typing import cast, MutableMapping
+from typing import cast, MutableMapping, Optional
 
 import attr
 import pytest  # type: ignore
@@ -58,9 +58,24 @@ class Session:
         return self.ret_val
 
 
+@attr.s(auto_attribs=True, kw_only=True)
+class TransportSettings:
+    """Fake TransportSettings
+    """
+
+    base_url: str = ""
+    api_version: str = "3.1"
+    verify_ssl: bool = True
+    timeout: int = 120
+    headers: Optional[MutableMapping[str, str]] = None
+
+    def is_configured(self) -> bool:
+        return bool(self.base_url and self.api_version)
+
+
 @pytest.fixture
 def settings():
-    return transport.TransportSettings(
+    return TransportSettings(
         base_url="/some/path", api_version="3.1", headers=None, verify_ssl=True
     )
 
@@ -102,7 +117,7 @@ parametrize = [
     "headers, expected_encoding, expected_response_mode", parametrize
 )
 def test_request_ok(
-    settings: transport.TransportSettings,
+    settings: transport.PTransportSettings,
     headers: MutableMapping[str, str],
     expected_response_mode: transport.ResponseMode,
     expected_encoding: str,
@@ -127,7 +142,7 @@ def test_request_ok(
     "headers, expected_encoding, expected_response_mode", parametrize
 )
 def test_request_not_ok(
-    settings: transport.TransportSettings,
+    settings: transport.PTransportSettings,
     headers: MutableMapping[str, str],
     expected_response_mode: transport.ResponseMode,
     expected_encoding: str,
