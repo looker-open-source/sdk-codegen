@@ -199,10 +199,3 @@ export const fetchLookerVersion = async (props: ISDKConfigProps) => {
   const [lookerVersion] = versions.looker_release_version.match(/^\d+\.\d+/gi)
   return lookerVersion
 }
-
-try {
-  const config = SDKConfig()
-  Object.entries(config).forEach(async ([name, props]) => logFetch(name, props))
-} catch (e) {
-  quit(e)
-}

@@ -56,7 +56,7 @@ func parseLine(_ line: String) -> (String, String)? {
     let parts = stripComment(line).split(separator: "=", maxSplits: 1)
     if parts.count == 2 {
         let k = trim(String(parts[0]))
-        let v = trim(String(parts[1]))
+        let v = unquote(trim(String(parts[1])))!
         return (k, v)
     }
     return nil
@@ -138,16 +138,16 @@ struct ApiConfig: IApiSettings {
         let config = parseConfig(fileName)
         let values = config[section]
         let defaults = DefaultSettings()
-        self.base_url = ProcessInfo.processInfo.environment[strLookerBaseUrl]
+        self.base_url = envVar(strLookerBaseUrl)
             ?? values?["base_url"] as String?
             ?? defaults.base_url
-        self.api_version = ProcessInfo.processInfo.environment[strLookerApiVersion]
+        self.api_version = envVar(strLookerApiVersion)
             ?? values?["api_version"] as String?
             ?? defaults.api_version
-        self.verify_ssl = (ProcessInfo.processInfo.environment[strLookerBaseUrl] ?? "").bool
+        self.verify_ssl = (envVar(strLookerVerifySsl) ?? "").bool
             ?? values?["verify_ssl"]?.bool
             ?? defaults.verify_ssl
-        self.timeout = (ProcessInfo.processInfo.environment[strLookerBaseUrl] ?? "").int
+        self.timeout = (envVar(strLookerTimeout) ?? "").int
             ?? Int((values?["timeout"])!)
             ?? defaults.timeout
         self.headers = values?["headers"] as Any? ?? defaults.headers
@@ -156,8 +156,8 @@ struct ApiConfig: IApiSettings {
     
     mutating func assign(_ values: IApiSettings) {
         let defaults = DefaultSettings()
-        self.base_url = values.base_url ?? defaults.base_url
-        self.api_version = values.api_version ?? defaults.api_version
+        self.base_url = unquote(values.base_url) ?? defaults.base_url
+        self.api_version = unquote(values.api_version) ?? defaults.api_version
         self.headers = values.headers ?? defaults.headers
         self.verify_ssl = values.verify_ssl ?? defaults.verify_ssl
         self.timeout = values.timeout ?? defaults.timeout

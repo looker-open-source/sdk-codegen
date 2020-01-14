@@ -143,7 +143,7 @@ extension DateFormatter {
 
 
 // Handling JSON that doesn't QUITE conform to spec https://stackoverflow.com/a/47936036/74137
-enum Variant: Codable {
+enum Variant: Codable, Hashable {
     case string(String)
     case int(Int64)
     case bool(Bool)

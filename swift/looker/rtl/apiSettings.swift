@@ -53,7 +53,7 @@ struct DefaultSettings : IApiSettings {
         return [:]
     }
     var base_url: String? = ""
-    var api_version: String? = "3.1"
+    var api_version: String? = defaultApiVersion
     var verify_ssl: Bool? = true
     var timeout: Int? = defaultTimeout
     var headers: Headers?
