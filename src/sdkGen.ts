@@ -59,7 +59,6 @@ import { IVersionInfo } from './codeGen'
         await logConvert(name, props)
         if (!versions) {
           versions = await getVersionInfo(props)
-          log(versions)
         }
         const oasFile = openApiFileName(name, props)
         const swaggerFile = specFileName(name, props)
