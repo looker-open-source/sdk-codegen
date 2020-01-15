@@ -144,11 +144,10 @@ struct ApiConfig: IApiSettings {
         self.api_version = envVar(strLookerApiVersion)
             ?? values?["api_version"] as String?
             ?? defaults.api_version
-        self.verify_ssl = (envVar(strLookerVerifySsl) ?? "").bool
-            ?? values?["verify_ssl"]?.bool
-            ?? defaults.verify_ssl
+        let ssl = envVar(strLookerVerifySsl) ?? unquote(values?["verify_ssl"]) ?? ""
+        self.verify_ssl = defaultBool(ssl, defaults.verify_ssl!)
         self.timeout = (envVar(strLookerTimeout) ?? "").int
-            ?? Int((values?["timeout"])!)
+            ?? values?["timeout"]!.int
             ?? defaults.timeout
         self.headers = values?["headers"] as Any? ?? defaults.headers
         self.encoding = values?["encoding"] ?? defaults.encoding
