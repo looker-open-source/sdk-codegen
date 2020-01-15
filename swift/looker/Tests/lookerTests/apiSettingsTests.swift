@@ -20,7 +20,7 @@ class apiSettingsTests: XCTestCase {
     
     func testBlankValueSettings() {
         let settings = ValueSettings([:])
-        XCTAssertEqual(settings.api_version, "3.1")
+        XCTAssertEqual(settings.api_version, defaultApiVersion)
         XCTAssertEqual(settings.base_url, "")
         XCTAssertEqual(settings.verify_ssl, true)
         XCTAssertEqual(settings.timeout, defaultTimeout)
@@ -32,6 +32,19 @@ class apiSettingsTests: XCTestCase {
             strLookerBaseUrl:"base",
             strLookerVerifySsl:"0",
             strLookerTimeout:"60"
+        ])
+        XCTAssertEqual(settings.api_version, "3.0")
+        XCTAssertEqual(settings.base_url, "base")
+        XCTAssertEqual(settings.verify_ssl, false)
+        XCTAssertEqual(settings.timeout, 60)
+    }
+        
+    func testQuotedValueSettings() {
+        let settings = ValueSettings([
+            strLookerApiVersion:"`3.0`",
+            strLookerBaseUrl:"'base'",
+            strLookerVerifySsl:"0",
+            strLookerTimeout:"\"60\""
         ])
         XCTAssertEqual(settings.api_version, "3.0")
         XCTAssertEqual(settings.base_url, "base")
