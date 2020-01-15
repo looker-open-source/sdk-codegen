@@ -47,6 +47,18 @@ class HttpMethod(enum.Enum):
 
 
 class PTransportSettings(Protocol):
+    base_url: str
+    api_version: str
+    verify_ssl: bool
+    timeout: int
+    headers: Optional[MutableMapping[str, str]]
+
+    def is_configured(self) -> bool:
+        ...
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class TransportSettings:
     """Basic transport settings.
     """
 

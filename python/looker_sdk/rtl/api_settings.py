@@ -25,7 +25,7 @@ with the settings as attributes
 """
 import configparser as cp
 import os
-from typing import cast, Dict, MutableMapping, Optional
+from typing import cast, Dict, Optional
 
 import attr
 import cattr
@@ -48,6 +48,9 @@ def _convert_bool(val: str, _: bool) -> bool:
 
 
 class PApiSettings(transport.PTransportSettings, Protocol):
+    filename: str
+    section: Optional[str]
+
     def get_client_id(self) -> Optional[str]:
         ...
 
@@ -56,13 +59,8 @@ class PApiSettings(transport.PTransportSettings, Protocol):
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class ApiSettings:
-    base_url: str = ""
-    api_version: str = "3.1"
-    verify_ssl: bool = True
-    timeout: int = 120
-    headers: Optional[MutableMapping[str, str]] = None
-    filename: str = ""
+class ApiSettings(transport.TransportSettings):
+    filename: str
     section: Optional[str] = None
 
     @classmethod
@@ -145,6 +143,3 @@ class ApiSettings:
         return os.getenv(
             f"{constants.environment_prefix}_CLIENT_SECRET"
         ) or self.read_config().get("client_secret")
-
-    def is_configured(self) -> bool:
-        return bool(self.base_url and self.api_version)

@@ -43,17 +43,16 @@ class AuthSession:
         transport: transport.Transport,
         deserialize: serialize.TDeserialize,
     ):
-        self.user_token: auth_token.AuthToken = auth_token.AuthToken()
-        self.admin_token: auth_token.AuthToken = auth_token.AuthToken()
-        self._sudo_id: Optional[int] = None
-        self.settings = settings
-        self.transport = transport
-        self.deserialize = deserialize
-
-        if not self.settings.is_configured():
+        if not settings.is_configured():
             raise error.SDKError(
                 "Missing required configuration values like base_url and api_version."
             )
+        self.settings = settings
+        self.user_token: auth_token.AuthToken = auth_token.AuthToken()
+        self.admin_token: auth_token.AuthToken = auth_token.AuthToken()
+        self._sudo_id: Optional[int] = None
+        self.transport = transport
+        self.deserialize = deserialize
 
     def _is_authenticated(self, token: auth_token.AuthToken) -> bool:
         """Determines if current token is active."""
