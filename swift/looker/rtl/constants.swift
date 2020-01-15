@@ -118,6 +118,37 @@ extension String {
 
 typealias Voidable = String
 
+func unquote(_ value: String?) -> String? {
+    guard let v = value else { return value }
+    let first = v.first
+    if (first == "'" || first == "\"" || first == "`") {
+        let last = v.last
+        if (last == first) {
+            return String(v.dropFirst().dropLast())
+        }
+    }
+    return v
+}
+
+func isTrue(_ value: String?) -> Bool {
+    guard let val = value else { return false }
+    return val.bool == true
+}
+
+func isFalse(_ value: String?) -> Bool {
+    guard let val = value else { return false }
+    return val.bool == false
+}
+
+func defaultBool(_ value: String?, _ defaultVal: Bool = false) -> Bool {
+    if isTrue(value) { return true }
+    if isFalse(value) { return false }
+    return defaultVal
+}
+
+func envVar(_ name: String) -> String? {
+    return unquote(ProcessInfo.processInfo.environment[name])
+}
 
 func isOptional(_ value: Any) -> Bool {
     let mirror = Mirror(reflecting: value)

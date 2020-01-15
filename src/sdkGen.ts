@@ -35,17 +35,17 @@ import { logConvert } from './convert'
 import { IVersionInfo } from './codeGen'
 
 // tslint:disable-next-line: no-floating-promises
-(async () => {
+;(async () => {
   let args = process.argv.slice(2)
-  let languages = Languages
-    .filter(l => l.factory !== undefined)
-    .map(l => l.language)
+  let languages = Languages.filter(l => l.factory !== undefined).map(
+    l => l.language
+  )
   if (args.length > 0) {
     if (args.toString().toLowerCase() !== 'all') {
       languages = []
       for (let arg of args) {
         const values = arg.toString().split(',')
-        values.forEach(v => v.trim() ? languages.push(v.trim()) : null)
+        values.forEach(v => (v.trim() ? languages.push(v.trim()) : null))
       }
     }
   }
@@ -54,8 +54,8 @@ import { IVersionInfo } from './codeGen'
     const config = SDKConfig()
     let versions: IVersionInfo | undefined
     for (let language of languages) {
-      log(`generating ${language} ...`)
       for (let [name, props] of Object.entries(config)) {
+        log(`generating ${language} from ${props.base_url}...`)
         await logConvert(name, props)
         if (!versions) {
           versions = await getVersionInfo(props)
@@ -69,7 +69,7 @@ import { IVersionInfo } from './codeGen'
           continue
         }
         const sdkPath = `${gen.codePath}/${gen.packagePath}/sdk`
-        if (!isDirSync(sdkPath)) fs.mkdirSync(sdkPath, {recursive: true})
+        if (!isDirSync(sdkPath)) fs.mkdirSync(sdkPath, { recursive: true })
         // Generate standard method declarations
         const sdk = new MethodGenerator(apiModel, gen)
         let output = sdk.render(gen.indentStr)

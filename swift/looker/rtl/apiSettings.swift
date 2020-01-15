@@ -53,7 +53,7 @@ struct DefaultSettings : IApiSettings {
         return [:]
     }
     var base_url: String? = ""
-    var api_version: String? = "3.1"
+    var api_version: String? = defaultApiVersion
     var verify_ssl: Bool? = true
     var timeout: Int? = defaultTimeout
     var headers: Headers?
@@ -74,14 +74,11 @@ struct DefaultSettings : IApiSettings {
  */
 func ValueSettings(_ values: StringDictionary<String>) -> IApiSettings {
     var defaults = DefaultSettings()
-    defaults.api_version = values[strLookerApiVersion] ?? defaults.api_version
-    defaults.base_url = values[strLookerBaseUrl] ?? defaults.base_url
-    if (values[strLookerVerifySsl] != nil) {
-        let v = values[strLookerVerifySsl]!.lowercased()
-        defaults.verify_ssl = v == "true" || v == "1"
-    }
+    defaults.api_version = unquote(values[strLookerApiVersion]) ?? defaults.api_version
+    defaults.base_url = unquote(values[strLookerBaseUrl]) ?? defaults.base_url
+    defaults.verify_ssl = defaultBool(unquote(values[strLookerVerifySsl]), true)
     if (values[strLookerTimeout] != nil) {
-        defaults.timeout = Int(values[strLookerTimeout]!)!
+        defaults.timeout = Int(unquote(values[strLookerTimeout])!)!
     }
     return defaults
 }
@@ -108,12 +105,12 @@ struct ApiSettings: IApiSettings {
     init(_ settings: IApiSettings) throws {
         let defaults = DefaultSettings()
         // coerce types to declared types since some paths could have non-conforming settings values
-        self.base_url = settings.base_url ?? defaults.base_url
-        self.api_version = settings.api_version ?? defaults.api_version
+        self.base_url = unquote(settings.base_url) ?? defaults.base_url
+        self.api_version = unquote(settings.api_version) ?? defaults.api_version
         self.verify_ssl = settings.verify_ssl ?? defaults.verify_ssl
         self.timeout = settings.timeout ?? defaults.timeout
         self.headers = settings.headers ?? defaults.headers
-        self.encoding = settings.encoding ?? defaults.encoding
+        self.encoding = unquote(settings.encoding) ?? defaults.encoding
         if (!self.isConfigured()) {
             throw SDKError(strBadConfiguration)
         }

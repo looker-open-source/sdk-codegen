@@ -61,6 +61,8 @@ let applicationJsonPattern = try? NSRegularExpression(Constants.applicationJson)
  */
 let defaultTimeout = 120
 
+let defaultApiVersion = "4.0"
+
 /**
  * Recognized HTTP methods
  */

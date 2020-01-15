@@ -210,8 +210,8 @@ timeout=30
     })
 
     it('retrieves the second section by name', () => {
-      const settings = new NodeSettingsIniFile(config.testIni, 'Looker30')
-      expect(settings.api_version).toEqual('3.0')
+      const settings = new NodeSettingsIniFile(config.testIni, 'Looker31')
+      expect(settings.api_version).toEqual('3.1')
       expect(settings.timeout).toEqual(30)
       expect(settings.verify_ssl).toEqual(false)
     })

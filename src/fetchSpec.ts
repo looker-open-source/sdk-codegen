@@ -27,7 +27,11 @@ import * as fs from 'fs'
 import { fail, quit, log, isFileSync, warn } from './utils'
 import { IVersionInfo } from './codeGen'
 import { NodeTransport } from '../typescript/looker/rtl/nodeTransport'
-import { defaultTimeout, ITransportSettings, sdkOk } from '../typescript/looker/rtl/transport'
+import {
+  defaultTimeout,
+  ITransportSettings,
+  sdkOk
+} from '../typescript/looker/rtl/transport'
 
 let transport: NodeTransport
 
@@ -43,11 +47,14 @@ const Transport = (props: ISDKConfigProps) => {
   return transport
 }
 
-const loginUrl = (props: ISDKConfigProps) => `${props.base_url}/api/${props.api_version}/login`
+const loginUrl = (props: ISDKConfigProps) =>
+  `${props.base_url}/api/${props.api_version}/login`
 
-const logoutUrl = (props: ISDKConfigProps) => `${props.base_url}/api/${props.api_version}/logout`
+const logoutUrl = (props: ISDKConfigProps) =>
+  `${props.base_url}/api/${props.api_version}/logout`
 
-export const specFileUrl = (props: ISDKConfigProps) => `${props.base_url}/api/${props.api_version}/swagger.json`
+export const specFileUrl = (props: ISDKConfigProps) =>
+  `${props.base_url}/api/${props.api_version}/swagger.json`
 
 export const specFileName = (name: string, props: ISDKConfigProps) =>
   `./${name}.${props.api_version}.json`
@@ -56,27 +63,26 @@ export const openApiFileName = (name: string, props: ISDKConfigProps) =>
   `./${name}.${props.api_version}.oas.json`
 
 const badAuth = (content: string | object) => {
-  let text = (typeof content === 'object') ? JSON.stringify(content) : content
+  let text = typeof content === 'object' ? JSON.stringify(content) : content
   return text.indexOf('Requires authentication') > 0
 }
 
 export const logout = async (props: ISDKConfigProps, token: string) => {
   const xp = Transport(props)
 
-  return sdkOk<string, Error>(xp.request<string, Error>(
-    'DELETE',
-    logoutUrl(props),
-    undefined,
-    undefined,
-    undefined,
-    { headers: {'Authorization': `Bearer ${token}`}}
+  return sdkOk<string, Error>(
+    xp.request<string, Error>(
+      'DELETE',
+      logoutUrl(props),
+      undefined,
+      undefined,
+      undefined,
+      { headers: { Authorization: `Bearer ${token}` } }
     )
   )
 }
 
-
 export const login = async (props: ISDKConfigProps) => {
-
   const xp = Transport(props)
   const creds = {
     client_id: props.client_id,
@@ -85,12 +91,9 @@ export const login = async (props: ISDKConfigProps) => {
   const url = loginUrl(props)
 
   try {
-
-    const response = await sdkOk<any, Error>(xp.request<any, Error>(
-      'POST',
-      url,
-      creds
-    ))
+    const response = await sdkOk<any, Error>(
+      xp.request<any, Error>('POST', url, creds)
+    )
     const accessToken = await response.access_token
 
     if (accessToken) {
@@ -99,7 +102,6 @@ export const login = async (props: ISDKConfigProps) => {
       log(`Server Response: ${JSON.stringify(response)}`)
       throw new Error('Access token could not be retrieved.')
     }
-
   } catch (err) {
     console.error(err)
   }
@@ -116,15 +118,22 @@ NOTE! Certificate validation can be disabled with:
   return false
 }
 
-export const getUrl = async (props: ISDKConfigProps, url: string, options?: Partial<ITransportSettings>) => {
+export const getUrl = async (
+  props: ISDKConfigProps,
+  url: string,
+  options?: Partial<ITransportSettings>
+) => {
   const xp = Transport(props)
-  return sdkOk<string, Error>(xp.request<string, Error>(
-    'GET',
-    url,
-    undefined,
-    undefined,
-    undefined,
-    options)
+  // log(`GETting ${url} ...`)
+  return sdkOk<string, Error>(
+    xp.request<string, Error>(
+      'GET',
+      url,
+      undefined,
+      undefined,
+      undefined,
+      options
+    )
   )
 }
 
@@ -137,18 +146,18 @@ export const authGetUrl = async (props: ISDKConfigProps, url: string) => {
   } catch (err) {
     // Whoops!  Ok, try again with login
     token = await login(props)
-    content = await getUrl(props, url, {headers: {'Authorization': `Bearer ${token}`}})
+    content = await getUrl(props, url, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
     if (token) {
       await logout(props, token)
     }
-
   }
 
   if (badAuth(content)) {
     return quit('Authentication failed')
   }
   return content
-
 }
 
 export const fetchSpecFile = async (name: string, props: ISDKConfigProps) => {
@@ -163,7 +172,6 @@ export const fetchSpecFile = async (name: string, props: ISDKConfigProps) => {
     fs.writeFileSync(fileName, json)
 
     return fileName
-
   } catch (err) {
     checkCertError(err)
     return quit(err)
@@ -178,7 +186,9 @@ export const logFetch = async (name: string, props: ISDKConfigProps) => {
   return specFile
 }
 
-export const getVersionInfo = async (props: ISDKConfigProps): Promise<IVersionInfo | undefined> => {
+export const getVersionInfo = async (
+  props: ISDKConfigProps
+): Promise<IVersionInfo | undefined> => {
   try {
     const lookerVersion = await fetchLookerVersion(props)
     return {
@@ -186,23 +196,17 @@ export const getVersionInfo = async (props: ISDKConfigProps): Promise<IVersionIn
       apiVersion: props.api_version
     }
   } catch (e) {
-    warn(`Could not retrieve version information. Is ${props.base_url} running?`)
+    warn(
+      `Could not retrieve version information. Is ${props.base_url} running?`
+    )
     checkCertError(e)
-    console.error({e})
+    console.error({ e })
   }
   return undefined
 }
 
-
 export const fetchLookerVersion = async (props: ISDKConfigProps) => {
-  const versions: any = await getUrl(props,`${props.base_url}/versions`)
+  const versions: any = await getUrl(props, `${props.base_url}/versions`)
   const [lookerVersion] = versions.looker_release_version.match(/^\d+\.\d+/gi)
   return lookerVersion
-}
-
-try {
-  const config = SDKConfig()
-  Object.entries(config).forEach(async ([name, props]) => logFetch(name, props))
-} catch (e) {
-  quit(e)
 }

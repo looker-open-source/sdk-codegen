@@ -32,17 +32,21 @@ import { fail, isFileSync, log, quit, run } from './utils'
 const lintyFresh = false
 
 const lintCheck = async (fileName: string) => {
-  if (!lintyFresh) return ""
+  if (!lintyFresh) return ''
   // return `${fileName} lint checking was skipped`
   try {
     const linter = run('speccy', ['lint', fileName])
     if (!linter) return fail('Lint', 'no response')
-    if (linter.toString().indexOf('Specification is valid, with 0 lint errors') >= 0) return
+    if (
+      linter.toString().indexOf('Specification is valid, with 0 lint errors') >=
+      0
+    ) {
+      return
+    }
     return fail('Lint', linter.toString())
   } catch (e) {
     return quit(e)
   }
-
 }
 
 const convertSpec = async (fileName: string, openApiFile: string) => {
@@ -57,7 +61,9 @@ const convertSpec = async (fileName: string, openApiFile: string) => {
     // output to openApiFile
     // run('swagger2openapi', [fileName, '--resolveInternal', '-p', '-i', '"  "', '-o', openApiFile])
     run('swagger2openapi', [fileName, '-p', '-i', '"  "', '-o', openApiFile])
-    if (!isFileSync(openApiFile)) return fail('convertSpec', `creating ${openApiFile} failed`)
+    if (!isFileSync(openApiFile)) {
+      return fail('convertSpec', `creating ${openApiFile} failed`)
+    }
     return openApiFile
   } catch (e) {
     return quit(e)
@@ -77,11 +83,4 @@ export const logConvert = async (name: string, props: ISDKConfigProps) => {
 
   await lintCheck(openApiFile)
   return openApiFile
-}
-
-try {
-  const config = SDKConfig()
-  Object.entries(config).forEach(async ([name, props]) => logConvert(name, props))
-} catch (e) {
-  quit(e)
 }
