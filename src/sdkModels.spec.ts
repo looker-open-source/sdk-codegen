@@ -1,6 +1,11 @@
 import * as Models from './sdkModels'
+import { TestConfig } from '../typescript/looker/rtl/nodeSettings.spec'
 
-export const apiTestModel = Models.ApiModel.fromFile('Looker.4.0.oas.json', 'Looker.4.0.json')
+const config = TestConfig()
+export const apiTestModel = Models.ApiModel.fromFile(
+  `Looker.${config.apiVersion}.oas.json`,
+  `Looker.${config.apiVersion}.json`
+)
 
 describe('sdkModels', () => {
 
