@@ -36,7 +36,7 @@ import {
   HashType,
   strBody, DelimArrayType,
 } from './sdkModels'
-import { CodeGen, warnEditing } from './codeGen'
+import { CodeGen } from './codeGen'
 import * as fs from 'fs'
 import { warn, isFileSync, success, commentBlock, readFileSync } from './utils'
 import { utf8 } from '../typescript/looker/rtl/constants'
@@ -62,7 +62,7 @@ export class KotlinGen extends CodeGen {
   // @ts-ignore
   methodsPrologue(indent: string) {
     return `
-// ${warnEditing}
+// ${this.warnEditing()}
 package com.looker.sdk
 
 import com.looker.rtl.*
@@ -77,7 +77,7 @@ class ${this.packageName}(authSession: UserSession) : APIMethods(authSession) {
   // @ts-ignore
   streamsPrologue(indent: string): string {
     return `
-// ${warnEditing}
+// ${this.warnEditing()}
 
 package com.looker.sdk
 
@@ -93,7 +93,7 @@ package com.looker.sdk
   // @ts-ignore
   modelsPrologue(indent: string) {
     return `
-// ${warnEditing}
+// ${this.warnEditing()}
 
 package com.looker.sdk
 

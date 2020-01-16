@@ -36,7 +36,7 @@ import {
   HashType,
   strBody, DelimArrayType,
 } from './sdkModels'
-import { CodeGen, warnEditing } from './codeGen'
+import { CodeGen } from './codeGen'
 import * as fs from 'fs'
 import { warn, isFileSync, success, commentBlock, readFileSync } from './utils'
 import { utf8 } from '../typescript/looker/rtl/constants'
@@ -70,7 +70,7 @@ export class SwiftGen extends CodeGen {
   // @ts-ignore
   methodsPrologue(indent: string) {
     return `
-/// ${warnEditing}
+/// ${this.warnEditing()}
 
 import Foundation
 
@@ -92,7 +92,7 @@ class ${this.packageName}: APIMethods {
   // @ts-ignore
   modelsPrologue(indent: string) {
     return `
-/// ${warnEditing}
+/// ${this.warnEditing()}
 
 import Foundation
 

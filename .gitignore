@@ -5,9 +5,6 @@ Looker*.json
 **/.idea/*
 .vscode/*
 api/*
-**/sdk/methods.*
-**/sdk/models.*
-**/sdk/streams.*
 python/venv/*
 venv/*
 package-lock.json
@@ -23,4 +20,3 @@ kotlin/.*
 kotlin/bin/*
 kotlin/build/*
 kotlin/out/*
-

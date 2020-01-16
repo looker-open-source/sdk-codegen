@@ -35,7 +35,7 @@ import {
   IType,
   strBody,
 } from './sdkModels'
-import { CodeGen, warnEditing } from './codeGen'
+import { CodeGen } from './codeGen'
 import * as fs from 'fs'
 import { run, warn, isFileSync, success, readFileSync } from './utils'
 import { utf8 } from '../typescript/looker/rtl/constants'
@@ -116,7 +116,7 @@ export class PythonGen extends CodeGen {
 
   // @ts-ignore
   methodsPrologue = (indent: string) => `
-# ${warnEditing}
+# ${this.warnEditing()}
 import datetime
 from typing import MutableMapping, Optional, Sequence, Union
 
@@ -132,7 +132,7 @@ class ${this.packageName}(api_methods.APIMethods):
 
   // @ts-ignore
   modelsPrologue = (indent: string) => `
-# ${warnEditing}
+# ${this.warnEditing()}
 import datetime
 from typing import MutableMapping, Optional, Sequence
 

@@ -36,7 +36,7 @@ import {
   HashType,
   strBody, DelimArrayType,
 } from './sdkModels'
-import { CodeGen, warnEditing } from './codeGen'
+import { CodeGen } from './codeGen'
 import * as fs from 'fs'
 import * as prettier from 'prettier'
 import { warn, isFileSync, success, commentBlock, readFileSync } from './utils'
@@ -63,7 +63,7 @@ export class TypescriptGen extends CodeGen {
   // @ts-ignore
   methodsPrologue(indent: string) {
     return `
-// ${warnEditing}
+// ${this.warnEditing()}
 import { APIMethods } from '../rtl/apiMethods'
 import { IAuthSession } from '../rtl/authSession'
 import { ITransportSettings } from '../rtl/transport'
@@ -89,7 +89,7 @@ export class ${this.packageName} extends APIMethods {
   // @ts-ignore
   streamsPrologue(indent: string): string {
     return `
-// ${warnEditing}
+// ${this.warnEditing()}
 import { Readable } from 'readable-stream'
 import { APIMethods } from '../rtl/apiMethods'
 import { ITransportSettings } from '../rtl/transport'
@@ -111,7 +111,7 @@ export class ${this.packageName}Stream extends APIMethods {
   // @ts-ignore
   modelsPrologue(indent: string) {
     return `
-// ${warnEditing}
+// ${this.warnEditing()}
 
 import { Url } from '../rtl/constants'
 import { DelimArray } from '../rtl/delimArray'
