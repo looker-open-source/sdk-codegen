@@ -174,3 +174,28 @@ def test_request_error(settings):
     assert isinstance(resp, transport.Response)
     assert resp.value == b"(54, 'Connection reset by peer')"
     assert resp.ok is False
+
+
+@pytest.mark.parametrize(
+    "test_url, expected_url",
+    [
+        pytest.param(
+            "https://host1.looker.com:19999",
+            "https://host1.looker.com:19999/api/3.1",
+            id="Without trailing forward slash",
+        ),
+        pytest.param(
+            "https://host1.looker.com:19999/",
+            "https://host1.looker.com:19999/api/3.1",
+            id="With trailing forward slash",
+        ),
+    ],
+)
+def test_api_versioned_url_is_built_properly(
+    settings: transport.PTransportSettings, test_url: str, expected_url: str
+):
+    """RequestsTransport.api_path should append the api version to the base url."""
+    session = cast(requests.Session, Session(None, True))
+    settings.base_url = test_url
+    rtp = requests_transport.RequestsTransport(settings, session)
+    assert rtp.api_path == expected_url

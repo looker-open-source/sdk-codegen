@@ -119,28 +119,6 @@ def test_it_fails_with_a_bad_section_name(config_file):
     assert exc_info.match("NotAGoodLookForYou")
 
 
-# @pytest.mark.parametrize(
-#     "test_url, expected_url",
-#     [
-#         pytest.param(
-#             "https://host1.looker.com:19999",
-#             "https://host1.looker.com:19999/api/3.1",
-#             id="Without trailing forward slash",
-#         ),
-#         pytest.param(
-#             "https://host1.looker.com:19999/",
-#             "https://host1.looker.com:19999/api/3.1",
-#             id="With trailing forward slash",
-#         ),
-#     ],
-# )
-# def test_versioned_api_url_is_built_properly(config_file, test_url, expected_url):
-#     """ApiSettings.url should append the api version to the base url."""
-#     settings = api_settings.ApiSettings.configure(config_file)
-#     settings.base_url = test_url
-#     assert settings.url == expected_url
-
-
 @pytest.mark.parametrize(
     "test_section",
     [
