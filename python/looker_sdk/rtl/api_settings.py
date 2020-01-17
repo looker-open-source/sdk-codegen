@@ -48,9 +48,6 @@ def _convert_bool(val: str, _: bool) -> bool:
 
 
 class PApiSettings(transport.PTransportSettings, Protocol):
-    filename: str
-    section: Optional[str]
-
     def get_client_id(self) -> Optional[str]:
         ...
 
@@ -94,7 +91,7 @@ class ApiSettings(transport.TransportSettings):
         try:
             cfg_parser.read_file(open(self.filename))
         except FileNotFoundError:
-            config_data: Dict[str, str] = {}
+            config_data: Dict[str, Optional[str]] = {}
         else:
             # If section is not specified, use first section in file
             section = self.section or cfg_parser.sections()[0]
@@ -122,7 +119,9 @@ class ApiSettings(transport.TransportSettings):
 
         return config_data
 
-    def _clean_input(self, config_data: Dict[str, str]) -> Dict[str, str]:
+    def _clean_input(
+        self, config_data: Dict[str, Optional[str]]
+    ) -> Dict[str, Optional[str]]:
         for setting, value in list(config_data.items()):
             # Remove empty setting values
             if not isinstance(value, str):
