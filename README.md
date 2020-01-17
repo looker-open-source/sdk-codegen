@@ -109,6 +109,8 @@ typescript
 
 #### View the specification interactively
 
+**Note:** Interactive specification viewing is temporarily disabled. Please disregard this section for now.
+
 When the specification conversion completes successfully, the OpenAPI 3.x specification file is available locally, so you can search and explore the api using a command similar to the following:
 
 ```bash

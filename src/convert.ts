@@ -26,23 +26,33 @@
 
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { openApiFileName, logFetch } from './fetchSpec'
-import { fail, isFileSync, log, quit, run } from './utils'
+import { fail, isFileSync, log, quit, readFileSync, run } from './utils'
 
-// TODO turn this back on when the spec passes
-const lintyFresh = false
+const { Spectral } = require('@stoplight/spectral')
+const { getLocationForJsonPath, parseWithPointers } = require('@stoplight/json')
+
+const lintyFresh = true
 
 const lintCheck = async (fileName: string) => {
   if (!lintyFresh) return ''
   // return `${fileName} lint checking was skipped`
   try {
-    const linter = run('speccy', ['lint', fileName])
+    // const linter = run('speccy', ['lint', fileName])
+    const linter = new Spectral()
     if (!linter) return fail('Lint', 'no response')
-    if (
-      linter.toString().indexOf('Specification is valid, with 0 lint errors') >=
-      0
-    ) {
-      return
-    }
+    const spec = parseWithPointers(await readFileSync(fileName))
+    linter.run({
+        parsed: spec,
+        getLocationForJsonPath,
+      })
+      .then(console.log)
+    return ""
+    // if (
+    //   linter.toString().indexOf('Specification is valid, with 0 lint errors') >=
+    //   0
+    // ) {
+    //   return
+    // }
     return fail('Lint', linter.toString())
   } catch (e) {
     return quit(e)
