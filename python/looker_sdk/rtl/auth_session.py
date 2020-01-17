@@ -22,14 +22,12 @@
 
 """AuthSession to provide automatic authentication
 """
-import os
 from typing import cast, Dict, Optional
 import urllib.parse
 
 from looker_sdk import error
 from looker_sdk.rtl import api_settings
 from looker_sdk.rtl import auth_token
-from looker_sdk.rtl import constants
 from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
 from looker_sdk.sdk import models
@@ -41,14 +39,18 @@ class AuthSession:
 
     def __init__(
         self,
-        settings: api_settings.ApiSettings,
+        settings: api_settings.PApiSettings,
         transport: transport.Transport,
         deserialize: serialize.TDeserialize,
     ):
+        if not settings.is_configured():
+            raise error.SDKError(
+                "Missing required configuration values like base_url and api_version."
+            )
+        self.settings = settings
         self.user_token: auth_token.AuthToken = auth_token.AuthToken()
         self.admin_token: auth_token.AuthToken = auth_token.AuthToken()
         self._sudo_id: Optional[int] = None
-        self.settings = settings
         self.transport = transport
         self.deserialize = deserialize
 
@@ -119,16 +121,8 @@ class AuthSession:
                 self._login_user()
 
     def _login_admin(self) -> None:
-        config_data = self.settings.read_ini(
-            self.settings._filename, self.settings._section
-        )
-        client_id = os.getenv(
-            f"{constants.environment_prefix}_CLIENT_ID"
-        ) or config_data.get("client_id")
-        client_secret = os.getenv(
-            f"{constants.environment_prefix}_CLIENT_SECRET"
-        ) or config_data.get("client_secret")
-
+        client_id = self.settings.get_client_id()
+        client_secret = self.settings.get_client_secret()
         if not (client_id and client_secret):
             raise error.SDKError("Required auth credentials not found.")
 

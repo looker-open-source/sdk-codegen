@@ -20,6 +20,7 @@ pytest-pudb = "*"
 pytest-mock = "*"
 twine = "*"
 pillow = "*"
+typing-extensions = "*"
 
 [packages]
 requests = "*"

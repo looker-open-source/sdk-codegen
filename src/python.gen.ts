@@ -218,7 +218,7 @@ ${this.hooks.join('\n')}
     if (args && args.length > 0) {
       method.allParams.forEach(p => params.push(this.declareParameter(bump, p)))
     }
-    params.push(`${bump}transport_options: Optional[transport.TransportSettings] = None,`)
+    params.push(`${bump}transport_options: Optional[transport.PTransportSettings] = None,`)
     return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${returnType}`)
       + `${indent}def ${method.name}(\n`
       + `${bump}self${params.length > 0 ? ',\n' : ''}`

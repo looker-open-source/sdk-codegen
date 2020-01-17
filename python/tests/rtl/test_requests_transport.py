@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from typing import cast, MutableMapping
+from typing import cast, MutableMapping, Optional
 
 import attr
 import pytest  # type: ignore
@@ -58,9 +58,24 @@ class Session:
         return self.ret_val
 
 
+@attr.s(auto_attribs=True, kw_only=True)
+class TransportSettings:
+    """Fake TransportSettings
+    """
+
+    base_url: str = ""
+    api_version: str = "3.1"
+    verify_ssl: bool = True
+    timeout: int = 120
+    headers: Optional[MutableMapping[str, str]] = None
+
+    def is_configured(self) -> bool:
+        return bool(self.base_url and self.api_version)
+
+
 @pytest.fixture
 def settings():
-    return transport.TransportSettings(
+    return TransportSettings(
         base_url="/some/path", api_version="3.1", headers=None, verify_ssl=True
     )
 
@@ -102,7 +117,7 @@ parametrize = [
     "headers, expected_encoding, expected_response_mode", parametrize
 )
 def test_request_ok(
-    settings: transport.TransportSettings,
+    settings: transport.PTransportSettings,
     headers: MutableMapping[str, str],
     expected_response_mode: transport.ResponseMode,
     expected_encoding: str,
@@ -127,7 +142,7 @@ def test_request_ok(
     "headers, expected_encoding, expected_response_mode", parametrize
 )
 def test_request_not_ok(
-    settings: transport.TransportSettings,
+    settings: transport.PTransportSettings,
     headers: MutableMapping[str, str],
     expected_response_mode: transport.ResponseMode,
     expected_encoding: str,
@@ -159,3 +174,28 @@ def test_request_error(settings):
     assert isinstance(resp, transport.Response)
     assert resp.value == b"(54, 'Connection reset by peer')"
     assert resp.ok is False
+
+
+@pytest.mark.parametrize(
+    "test_url, expected_url",
+    [
+        pytest.param(
+            "https://host1.looker.com:19999",
+            "https://host1.looker.com:19999/api/3.1",
+            id="Without trailing forward slash",
+        ),
+        pytest.param(
+            "https://host1.looker.com:19999/",
+            "https://host1.looker.com:19999/api/3.1",
+            id="With trailing forward slash",
+        ),
+    ],
+)
+def test_api_versioned_url_is_built_properly(
+    settings: transport.PTransportSettings, test_url: str, expected_url: str
+):
+    """RequestsTransport.api_path should append the api version to the base url."""
+    session = cast(requests.Session, Session(None, True))
+    settings.base_url = test_url
+    rtp = requests_transport.RequestsTransport(settings, session)
+    assert rtp.api_path == expected_url

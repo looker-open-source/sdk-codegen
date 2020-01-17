@@ -118,7 +118,7 @@ class APIMethods:
         path: str,
         structure: TStructure,
         query_params: Optional[TQueryParams] = None,
-        transport_options: Optional[transport.TransportSettings] = None,
+        transport_options: Optional[transport.PTransportSettings] = None,
     ) -> TReturn:
         """GET method
         """
@@ -149,7 +149,7 @@ class APIMethods:
         structure: TStructure,
         query_params: Optional[TQueryParams] = None,
         body: TBody = None,
-        transport_options: Optional[transport.TransportSettings] = None,
+        transport_options: Optional[transport.PTransportSettings] = None,
     ) -> TReturn:
         """POST method
         """
@@ -171,7 +171,7 @@ class APIMethods:
         structure: TStructure,
         query_params: Optional[TQueryParams] = None,
         body: TBody = None,
-        transport_options: Optional[transport.TransportSettings] = None,
+        transport_options: Optional[transport.PTransportSettings] = None,
     ) -> TReturn:
         """PATCH method
         """
@@ -193,7 +193,7 @@ class APIMethods:
         structure: TStructure = None,
         query_params: Optional[TQueryParams] = None,
         body: TBody = None,
-        transport_options: Optional[transport.TransportSettings] = None,
+        transport_options: Optional[transport.PTransportSettings] = None,
     ) -> TReturn:
         """PUT method
         """
@@ -214,7 +214,7 @@ class APIMethods:
         path: str,
         structure: TStructure = None,
         query_params: Optional[MutableMapping[str, str]] = None,
-        transport_options: Optional[transport.TransportSettings] = None,
+        transport_options: Optional[transport.PTransportSettings] = None,
     ) -> TReturn:
         """DELETE method
         """
