@@ -23,7 +23,7 @@
  */
 
 import { agentTag, defaultTimeout, ITransportSettings } from './transport'
-import { boolDefault, environmentPrefix, isTrue } from './constants'
+import { boolDefault, environmentPrefix, isTrue, unquote } from './constants'
 import { IApiSection } from './nodeSettings'
 
 export interface IValueSettings {
@@ -86,8 +86,8 @@ export const DefaultSettings = () =>
  * @param {string} name
  * @returns {string}
  */
-export const configValue = (values: IValueSettings, name: string) => {
-  return values[ApiConfigMap[name]] || values[name]
+export const configValue = (values: IValueSettings, name: string): string => {
+  return unquote(values[ApiConfigMap[name]] || values[name])
 }
 
 /**
@@ -128,18 +128,18 @@ export class ApiSettings implements IApiSettings {
 
   constructor(settings: Partial<IApiSettings>) {
     // coerce types to declared types since some paths could have non-conforming settings values
-    this.base_url = 'base_url' in settings ? settings.base_url! : this.base_url
+    this.base_url = 'base_url' in settings ? unquote(settings.base_url) : this.base_url
     this.api_version =
       'api_version' in settings
-        ? settings.api_version!.toString()
+        ? unquote(settings.api_version)
         : this.api_version
     this.verify_ssl =
       'verify_ssl' in settings
-        ? isTrue(settings.verify_ssl!.toString())
+        ? isTrue(unquote(settings.verify_ssl!.toString()))
         : this.verify_ssl
     this.timeout =
       'timeout' in settings
-        ? parseInt(settings.timeout!.toString(), 10)
+        ? parseInt(unquote(settings.timeout!.toString()), 10)
         : this.timeout
     if (!this.isConfigured()) {
       throw new Error(strBadConfiguration)

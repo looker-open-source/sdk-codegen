@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import { boolDefault, isFalse, isTrue } from './constants'
+import { boolDefault, isFalse, isTrue, unquote } from './constants'
 
 describe('Constants functions', () => {
   it('isTrue', () => {
@@ -72,5 +72,17 @@ describe('Constants functions', () => {
     expect(boolDefault(undefined, false)).toEqual(false)
     // @ts-ignore
     expect(boolDefault(undefined, true)).toEqual(true)
+  })
+
+  it('unquote', () => {
+    expect(unquote("`foo`")).toEqual('foo')
+    expect(unquote("foo`")).toEqual('foo`')
+    expect(unquote("`foo")).toEqual('`foo')
+    expect(unquote("'foo'")).toEqual('foo')
+    expect(unquote("foo'")).toEqual('foo\'')
+    expect(unquote("'foo")).toEqual('\'foo')
+    expect(unquote('"foo"')).toEqual('foo')
+    expect(unquote('foo"')).toEqual('foo"')
+    expect(unquote('"foo')).toEqual('"foo')
   })
 })

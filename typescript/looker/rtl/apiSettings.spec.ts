@@ -55,6 +55,19 @@ describe('SDK configuration', () => {
       expect(settings.verify_ssl).toEqual(false)
       expect(settings.timeout).toEqual(30)
     })
+
+    it('unquotes ValueSettings', () => {
+      const settings = ValueSettings({
+        [strLookerApiVersion]: '`3.0`',
+        [strLookerBaseUrl]: '"base"',
+        [strLookerVerifySsl]: "'false'",
+        [strLookerTimeout]: "'30'",
+      })
+      expect(settings.api_version).toEqual('3.0')
+      expect(settings.base_url).toEqual('base')
+      expect(settings.verify_ssl).toEqual(false)
+      expect(settings.timeout).toEqual(30)
+    })
   })
 
   describe('ApiSettings', () => {
@@ -62,6 +75,19 @@ describe('SDK configuration', () => {
       const settings = new ApiSettings({
         api_version: '3.1',
         base_url: 'base',
+        verify_ssl: false,
+        timeout: 30,
+      })
+      expect(settings.api_version).toEqual('3.1')
+      expect(settings.base_url).toEqual('base')
+      expect(settings.verify_ssl).toEqual(false)
+      expect(settings.timeout).toEqual(30)
+    })
+
+    it('unquotes initialization', () => {
+      const settings = new ApiSettings({
+        api_version: '`3.1`',
+        base_url: '"base"',
         verify_ssl: false,
         timeout: 30,
       })

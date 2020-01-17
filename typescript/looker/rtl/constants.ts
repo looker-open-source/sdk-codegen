@@ -74,6 +74,22 @@ export const boolDefault = (value: string, defaultBool: boolean = false) => {
   return defaultBool
 }
 
+
+/**
+ * strip surrounding quotes from a string if it is uniformly quoted
+ * @param {string | null} value to unquote
+ * @returns {string | null} unquoted string if it begins and ends with the same character out of `\` " '`
+ */
+export const unquote = (value: string | undefined | null) : string => {
+  if (!value) return ''
+  if (/^['\"`]/.test(value)) {
+    const quote = value.substring(0, 1)
+    // Strip surrounding quotes?
+    if (value.endsWith(quote)) return value.substring(1, value.length - 1)
+  }
+  return value
+}
+
 /**
  * Documented type alias because URL assignment construction is not compatible with API parameters
  */

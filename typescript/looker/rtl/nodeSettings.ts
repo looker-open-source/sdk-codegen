@@ -30,7 +30,7 @@ import {
   IApiSettings,
   ValueSettings,
 } from './apiSettings'
-import { utf8 } from './constants'
+import { unquote, utf8 } from './constants'
 import { sdkError } from './transport'
 
 export interface IApiSection {
@@ -77,7 +77,7 @@ const readEnvConfig = () => {
     const envKey = ApiConfigMap[key]
     if (process.env[envKey] !== undefined) {
       // map environment variable keys to config variable keys
-      values[key] = process.env[envKey]!
+      values[key] = unquote(process.env[envKey])
     }
   })
   return values
@@ -98,6 +98,10 @@ const readIniConfig = (fileName: string, section?: string) => {
     // override any config file settings with environment values if the environment value is set
     config  = {...ApiConfigSection(fs.readFileSync(fileName, utf8), section), ...config}
   }
+  // Unquote any quoted configuration values
+  Object.keys(config).forEach(key => {
+    config[key] = unquote(config[key])
+  })
   return config
 }
 
