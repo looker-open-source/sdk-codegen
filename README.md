@@ -12,14 +12,14 @@ The Looker API is defined with the [OpenAPI specification](https://github.com/OA
 
 A Looker SDK has several parts:
 
-* **Looker API** OpenAPI specification (e.g., found at
+- **Looker API** OpenAPI specification (e.g., found at
   `https://<your-looker-endpoint>:19999/api/3.1/swagger.json`, although this is still the Swagger 2.x representation)
 
-* The **Looker API Explorer**, provided in the Looker web app directly from our version-specific OpenAPI specification, available in each Looker server instance.
+- The **Looker API Explorer**, provided in the Looker web app directly from our version-specific OpenAPI specification, available in each Looker server instance.
 
-* **Language SDKs**, "smarter" client language classes and methods to improve the experience of calling the Looker API in various popular coding languages. Looker has created a code generator for specific languages in this repository, which is invoked by the command `yarn sdk [language]`.
+- **Language SDKs**, "smarter" client language classes and methods to improve the experience of calling the Looker API in various popular coding languages. Looker has created a code generator for specific languages in this repository, which is invoked by the command `yarn sdk [language]`.
 
-* **API bindings** using the legacy [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) can also be produced. This process converts the API specification to language-specific code. Most of these template-based generators are written by different language enthusiasts, so the pattern and quality of the generated code varies widely, even though most generated code tends to work acceptably.
+- **API bindings** using the legacy [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) can also be produced. This process converts the API specification to language-specific code. Most of these template-based generators are written by different language enthusiasts, so the pattern and quality of the generated code varies widely, even though most generated code tends to work acceptably.
 
 ## Using existing, pre-generated SDKs
 
@@ -39,13 +39,13 @@ If you do want to use the generation options for another language, read on.
 
 There are three steps for generating an SDK with this project:
 
-* configure a `looker.ini` file so the Looker API specification can be retrieved from your Looker server
+- configure a `looker.ini` file so the Looker API specification can be retrieved from your Looker server
 
-* install the code generator dependencies by running `yarn`.
+- install the code generator dependencies by running `yarn`.
 
-* run the SDK generator with `yarn sdk`
+- run the SDK generator with `yarn sdk`
 
-* **Note**: [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185) describes the legacy, manual steps for generating an API language binding. This project replaces these manual steps, and uses an improved code generator.
+- **Note**: [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185) describes the legacy, manual steps for generating an API language binding. This project replaces these manual steps, and uses an improved code generator.
 
 ## Configuring `looker.ini`
 
@@ -60,7 +60,7 @@ All SDKs provided by Looker are designed to receive the credentials required to 
 
 ### Using the code generator
 
-If `yarn` is not installed, use [these instructions to install](https://yarnpkg.com/lang/en/docs/install/) it. 
+If `yarn` is not installed, use [these instructions to install](https://yarnpkg.com/lang/en/docs/install/) it.
 
 After yarn is installed, just run `yarn` from your terminal window/command line, and it will download or update all the packages required to run the code generator. The resources required to run the code generator are listed in [package.json](package.json).
 
@@ -72,19 +72,19 @@ yarn sdk
 
 The code generator will:
 
-* read the Looker API configuration(s) from the `looker.ini` file.
+- read the Looker API configuration(s) from the `looker.ini` file.
 
-  * **Note**: Normally there should only be one (1) entry in `looker.ini`, configured for the latest API version (currently 3.1).
+  - **Note**: Normally there should only be one (1) entry in `looker.ini`, configured for the latest API version (currently 3.1).
 
-* download (if the specification file is not already present) the Looker API specification file(s) from the configured Looker server(s)
+- download (if the specification file is not already present) the Looker API specification file(s) from the configured Looker server(s)
 
-* convert (if the converted file is not already present) the downloaded Swagger 2 specification file(s) to OpenAPI 3.x
+- convert (if the converted file is not already present) the downloaded Swagger 2 specification file(s) to OpenAPI 3.x
 
-* validate the OpenAPI 3.x file(s)
+- validate the OpenAPI 3.x file(s)
 
-* by default, call the code generator for each active language configured in [`languages.ts`](src/languages.ts)
+- by default, call the code generator for each active language configured in [`languages.ts`](src/languages.ts)
 
-  * If you want to generate for one specific language, use `yarn sdk {language}`. Currently, supported `{language}` values are `kotlin`, `python`, `swift` and `typescript`
+  - If you want to generate for one specific language, use `yarn sdk {language}`. Currently, supported `{language}` values are `kotlin`, `python`, `swift` and `typescript`
 
 When the generator completes successfully, the output will be similar to:
 
@@ -109,15 +109,13 @@ typescript
 
 #### View the specification interactively
 
-**Note:** Interactive specification viewing is temporarily disabled. Please disregard this section for now.
-
 When the specification conversion completes successfully, the OpenAPI 3.x specification file is available locally, so you can search and explore the api using a command similar to the following:
 
 ```bash
 yarn view Looker.3.1.oas.json
 ```
 
-This command will start a web server on `http://localhost:5000` that allows you to browse and search the local specification file for the indicated specification file.
+This command will start a local web server that allows you to browse and search the indicated specification file.
 
 **Tip**: search for `query` or `dashboard` in the UI and see what you get!
 
@@ -125,9 +123,9 @@ This command will start a web server on `http://localhost:5000` that allows you 
 
 To generate a language currently not supported by Looker's SDK code generator with the OpenAPI generator:
 
-* configure the desired language in [`languages.ts`](src/languages.ts)
+- configure the desired language in [`languages.ts`](src/languages.ts)
 
-* use `yarn legacy` to call the OpenAPI generator
+- use `yarn legacy` to call the OpenAPI generator
 
 #### Additional scripts
 
@@ -149,13 +147,13 @@ These are notes for the integration tests Looker is developing and are left here
 
 In order to run the integration tests you will need:
 
-* [docker](https://docs.docker.com/install/#support)
-* [docker-compose](https://docs.docker.com/compose/install/)
+- [docker](https://docs.docker.com/install/#support)
+- [docker-compose](https://docs.docker.com/compose/install/)
 
 Which we use to isolate the various supporting libraries required to test the SDK in a given language.
 
 You will also need to copy the `looker-sample.ini` to `looker.ini` and fill out
-the necessary details so it can reach your running *Looker* instance.
+the necessary details so it can reach your running _Looker_ instance.
 
 First, you will need to build the base:
 
@@ -203,21 +201,21 @@ If the host environment for a Looker SDK supports environment variables, the SDK
 
 Environment variables can be used for any SDK runtime that supports reading environment variables. Environment variables can be used in the:
 
-* **Node** version of the Typescript/Javascript Looker SDK
-* Python SDK
-* Swift SDK
-* Kotlin SDK
+- **Node** version of the Typescript/Javascript Looker SDK
+- Python SDK
+- Swift SDK
+- Kotlin SDK
 
 The following table describes the environment variables. By default, the SDK "namespace" is "LookerSDK" which is converted to UPPERCASE when used for naming environment variables.
 
-| Variable name | Description |
-| ------------- | ----------- |
-| LOOKERSDK_BASE_URL | A URL like `https://my.looker.com:19999`. No default value. |
-| LOOKERSDK_API_VERSION | Version of the Looker API to use. Use `3.1` for now, which is the default and used to produce this SDK. |
-| LOOKERSDK_VERIFY_SSL | `true`, `t`, `yes`, `y`, or `1` (case insensitive) to enable SSL verification. Any other value is treated as `false`. Defaults to `true` if not set. |
-| LOOKERSDK_TIMEOUT | Request timeout in seconds. Defaults to `120` for most platforms. |
-| LOOKERSDK_CLIENT_ID | API3 credentials `client_id`. This and `client_secret` must be provided in some fashion to the Node SDK, or no calls to the API will be authorized. No default value. |
-| LOOKERSDK_CLIENT_SECRET | API3 credentials `client_secret`. No default value. |
+| Variable name           | Description                                                                                                                                                           |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LOOKERSDK_BASE_URL      | A URL like `https://my.looker.com:19999`. No default value.                                                                                                           |
+| LOOKERSDK_API_VERSION   | Version of the Looker API to use. Use `3.1` for now, which is the default and used to produce this SDK.                                                               |
+| LOOKERSDK_VERIFY_SSL    | `true`, `t`, `yes`, `y`, or `1` (case insensitive) to enable SSL verification. Any other value is treated as `false`. Defaults to `true` if not set.                  |
+| LOOKERSDK_TIMEOUT       | Request timeout in seconds. Defaults to `120` for most platforms.                                                                                                     |
+| LOOKERSDK_CLIENT_ID     | API3 credentials `client_id`. This and `client_secret` must be provided in some fashion to the Node SDK, or no calls to the API will be authorized. No default value. |
+| LOOKERSDK_CLIENT_SECRET | API3 credentials `client_secret`. No default value.                                                                                                                   |
 
 ## SDK Examples
 
