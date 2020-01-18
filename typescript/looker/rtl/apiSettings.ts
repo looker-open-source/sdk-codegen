@@ -86,8 +86,9 @@ export const DefaultSettings = () =>
  * @param {string} name
  * @returns {string}
  */
-export const configValue = (values: IValueSettings, name: string): string => {
-  return unquote(values[ApiConfigMap[name]] || values[name])
+export const configValue = (values: IValueSettings, name: string) => {
+  const val = values[ApiConfigMap[name]] || values[name]
+  return typeof val === 'string' ? unquote(val) : val
 }
 
 /**

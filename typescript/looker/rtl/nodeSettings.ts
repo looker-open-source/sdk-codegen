@@ -100,7 +100,10 @@ const readIniConfig = (fileName: string, section?: string) => {
   }
   // Unquote any quoted configuration values
   Object.keys(config).forEach(key => {
-    config[key] = unquote(config[key])
+    const val = config[key]
+    if (typeof val === 'string') {
+      config[key] = unquote(val)
+    }
   })
   return config
 }
