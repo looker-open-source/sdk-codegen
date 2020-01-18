@@ -355,20 +355,13 @@ async function parseResponse(contentType: string, res: Response) {
         return Promise.reject(error)
       }
     }
-    // if (!isUtf8(contentType)) {
-    //   // always convert to UTF-8 from whatever it was
-    //   result = if (result instanceof Buffer) result.toString(utf8)
-    // }
     if (result instanceof Buffer) {
       result = result.toString(utf8)
     }
     return result.toString()
   } else {
     try {
-      // TODO Return ArrayBuffer from buffer without any character encoding?
-      // See https://stackoverflow.com/a/31394257/74137 for more info
-      // return result.buffer.slice(result.byteOffset, result.byteOffset + result.byteLength)
-      return result.toString()
+      return (result as Buffer).toString('binary')
     } catch (error) {
       return Promise.reject(error)
     }
