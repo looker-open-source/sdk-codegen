@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import { SDKConfig, ISDKConfigProps } from './sdkConfig'
+import { ISDKConfigProps } from './sdkConfig'
 import * as fs from 'fs'
 import { fail, quit, log, isFileSync, warn } from './utils'
 import { IVersionInfo } from './codeGen'
@@ -33,6 +33,7 @@ import {
   sdkOk
 } from '../typescript/looker/rtl/transport'
 
+const agentTag = 'SDK Codegen'
 let transport: NodeTransport
 
 const Transport = (props: ISDKConfigProps) => {
@@ -77,7 +78,8 @@ export const logout = async (props: ISDKConfigProps, token: string) => {
       undefined,
       undefined,
       undefined,
-      { headers: { Authorization: `Bearer ${token}` } }
+      { headers: { Authorization: `Bearer ${token}` } },
+      agentTag
     )
   )
 }
@@ -92,7 +94,7 @@ export const login = async (props: ISDKConfigProps) => {
 
   try {
     const response = await sdkOk<any, Error>(
-      xp.request<any, Error>('POST', url, creds)
+      xp.request<any, Error>('POST', url, creds, undefined, undefined, undefined, agentTag)
     )
     const accessToken = await response.access_token
 
@@ -132,7 +134,8 @@ export const getUrl = async (
       undefined,
       undefined,
       undefined,
-      options
+      options,
+      agentTag
     )
   )
 }
@@ -206,7 +209,7 @@ export const getVersionInfo = async (
 }
 
 export const fetchLookerVersion = async (props: ISDKConfigProps) => {
-  const versions: any = await getUrl(props, `${props.base_url}/versions`)
+  const versions: any = await authGetUrl(props, `${props.base_url}/versions`)
   const [lookerVersion] = versions.looker_release_version.match(/^\d+\.\d+/gi)
   return lookerVersion
 }

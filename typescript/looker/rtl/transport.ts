@@ -31,7 +31,7 @@ import { Headers } from 'request'
 import { matchCharsetUtf8, matchModeBinary, matchModeString, sdkVersion } from './constants'
 import { Readable } from "readable-stream"
 
-export const agentTag = `TS-SDK ${sdkVersion}`
+export const agentPrefix = 'TS-SDK'
 export const LookerAppId = 'x-looker-appid'
 
 /**
@@ -187,6 +187,7 @@ export interface ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>,
+    agentTag?: string,
   ): Promise<SDKResponse<TSuccess, TError>>
 
   /**
@@ -209,6 +210,7 @@ export interface ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>,
+    agentTag?: string,
   ): Promise<T>
 
 }
@@ -248,7 +250,7 @@ export interface IRequestHeaders {
 
 /**
  * Generic http request property collection
- * TOOD: Trim this down to what is required
+ * TODO: Trim this down to what is required
  */
 export interface IRequestProps {
   [key:string]: any
@@ -256,24 +258,24 @@ export interface IRequestProps {
   url: string
 
   /** body of request. optional */
-  body?: any;
+  body?: any
   /** headers for request. optional */
-  headers: IRequestHeaders;
+  headers: IRequestHeaders
   /** Http method for request. required. */
-  method: HttpMethod;
+  method: HttpMethod
   /** Redirect processing for request. optional */
-  redirect?: any;
+  redirect?: any
 
   /** http.Agent instance, allows custom proxy, certificate etc. */
-  agent?: Agent;
+  agent?: Agent
   /** support gzip/deflate content encoding. false to disable */
-  compress?: boolean;
+  compress?: boolean
   /** maximum redirect count. 0 to not follow redirect */
-  follow?: number;
+  follow?: number
   /** maximum response body size in bytes */
-  size?: number;
+  size?: number
   /** req/res timeout in ms, it resets on redirect. 0 to disable (OS limit applies) */
-  timeout?: number;
+  timeout?: number
 }
 
 /** General purpose authentication callback */
@@ -281,17 +283,17 @@ export type Authenticator = (props: any) => any
 
 /** Interface for API transport values */
 export interface ITransportSettings {
-  [key:string] : any,
+  [key:string] : any
   /** base URL of host address */
-  base_url: string;
+  base_url: string
   /** api version */
-  api_version: string;
+  api_version: string
   /** standard headers to provide in all transport requests */
-  headers?: Headers;
+  headers?: Headers
   /** whether to verify ssl certs or not. Defaults to true */
-  verify_ssl: boolean;
+  verify_ssl: boolean
   /** request timeout in seconds. Default to 30 */
-  timeout: number;
+  timeout: number
   /** encoding override */
   encoding?: string | null
 }

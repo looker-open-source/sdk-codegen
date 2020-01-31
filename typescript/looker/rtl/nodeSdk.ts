@@ -24,7 +24,8 @@
 
 import { ITransport } from './transport'
 import { NodeSettingsIniFile } from './nodeSettings'
-import { LookerSDK } from '../sdk/methods'
+import { Looker40SDK } from '../sdk/4.0/methods'
+import { Looker31SDK } from '../sdk/3.1/methods'
 import { NodeSession } from './nodeSession'
 import { NodeTransport } from './nodeTransport'
 import { IApiSettings } from './apiSettings'
@@ -49,11 +50,12 @@ export class LookerNodeSDK {
   static createClient(
     settings?: IApiSettings,
     transport?: ITransport,
-    session?: IAuthSession,
-  ) {
+    session?: IAuthSession)
+  {
     settings = settings || new NodeSettingsIniFile('looker.ini')
     transport = transport || new NodeTransport(settings)
     session = session || new NodeSession(settings, transport)
-    return new LookerSDK(session)
+    if ((settings.api_version ?? '4.0') === '3.1') return new Looker31SDK(session)
+    return new Looker40SDK(session)
   }
 }

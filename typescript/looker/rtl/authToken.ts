@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import { IAccessToken } from '../sdk/models'
+import { IAccessToken } from '../sdk/4.0/models'
 
 export class AuthToken implements IAccessToken {
   // tslint:disable-next-line: variable-name

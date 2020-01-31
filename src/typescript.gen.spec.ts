@@ -254,6 +254,10 @@ body?: ICreateDashboardRenderTask`)
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface IWorkspace{
   /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>
+  /**
    * The unique id of this user workspace. Predefined workspace ids include "production" and "dev" (read-only)
    */
   id?: string
@@ -261,10 +265,6 @@ body?: ICreateDashboardRenderTask`)
    * The local state of each project in the workspace (read-only)
    */
   projects?: IProject[]
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
-  can?: IDictionary<boolean>
 }`)
     })
     it('with refs, arrays and nullable', () => {
@@ -287,11 +287,15 @@ body?: ICreateDashboardRenderTask`)
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface ICreateQueryTask{
   /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>
+  /**
    * Id of query to run
    */
   query_id: number
   /**
-   * Desired result format. Result formats supported for async queries are: json, json_detail, json_fe, csv, html, md, txt, xlsx, gsxml
+   * Desired async query result format. Valid values are: "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
   result_format: string
   /**
@@ -310,10 +314,6 @@ body?: ICreateDashboardRenderTask`)
    * Id of dashboard associated with query.
    */
   dashboard_id?: string
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
-  can?: IDictionary<boolean>
 }`)
     })
   })

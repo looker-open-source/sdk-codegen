@@ -27,6 +27,7 @@ import { readFileSync } from './utils'
 
 export interface ISDKConfigProps {
   api_version: string
+  api_versions: string
   base_url: string
   client_id: string
   client_secret: string

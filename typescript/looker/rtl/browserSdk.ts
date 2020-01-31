@@ -31,7 +31,8 @@ import { BrowserTransport } from './browserTransport'
 import { ITransport } from './transport'
 import { BrowserSession } from './browserSession'
 import { DefaultSettings, IApiSettings } from './apiSettings'
-import { LookerSDK } from '../sdk/methods'
+import { Looker31SDK } from '../sdk/3.1/methods'
+import { Looker40SDK } from '../sdk/4.0/methods'
 import { IAuthSession } from './authSession'
 
 export const BrowserSettings = (): IApiSettings => {
@@ -58,6 +59,7 @@ export class LookerBrowserSDK {
     settings = settings || BrowserSettings()
     transport = transport || new BrowserTransport(settings)
     session = session || new BrowserSession(settings, transport)
-    return new LookerSDK(session)
+    if ((settings.api_version ?? '4.0') === '3.1') return new Looker31SDK(session)
+    return new Looker40SDK(session)
   }
 }

@@ -25,14 +25,17 @@
 import {
   SDKResponse,
   HttpMethod,
-  ITransportSettings, Values, sdkOk,
+  ITransportSettings, Values, sdkOk, agentPrefix,
 } from './transport'
 import { Readable } from 'readable-stream'
 import { IAuthSession } from './authSession'
+import { lookerVersion } from './constants'
 
 export class APIMethods {
-  constructor(public authSession: IAuthSession) {
+  agentTag = `${agentPrefix} ${lookerVersion}.`
+  constructor(public authSession: IAuthSession, apiVersion: string = '') {
     this.authSession = authSession
+    this.agentTag = `${agentPrefix} ${lookerVersion}.${apiVersion}`
   }
 
   /** A helper method for simplifying error handling of SDK responses.
@@ -88,6 +91,7 @@ export class APIMethods {
         return this.authSession.authenticate(init)
       },
       options,
+      this.agentTag,
     )
   }
 

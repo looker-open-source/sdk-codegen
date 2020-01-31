@@ -26,12 +26,13 @@ import {
   ISDKError,
   SDKResponse,
   ITransportSettings,
-  HttpMethod, Authenticator, agentTag, trace,
+  HttpMethod, Authenticator, trace,
   IRequestProps,
-  IRequestHeaders, LookerAppId,
+  IRequestHeaders, LookerAppId, agentPrefix,
 } from './transport'
 import { PassThrough, Readable } from 'readable-stream'
 import { BaseTransport } from './baseTransport'
+import { lookerVersion } from './constants'
 
 export class BrowserTransport extends BaseTransport {
 
@@ -46,10 +47,11 @@ export class BrowserTransport extends BaseTransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>,
+    agentTag: string = `${agentPrefix} ${lookerVersion}`
   ): Promise<SDKResponse<TSuccess, TError>> {
     options = { ... this.options, ...options}
     const requestPath = this.makeUrl(path, options, queryParams, authenticator)
-    const props = await this.initRequest(method, requestPath, body, authenticator, options)
+    const props = await this.initRequest(agentTag, method, requestPath, body, authenticator, options)
     const req = fetch(
       props.url,
       // @ts-ignore
@@ -78,6 +80,7 @@ export class BrowserTransport extends BaseTransport {
   }
 
   private async initRequest(
+    agentTag: string,
     method: HttpMethod,
     path: string,
     body?: any,
@@ -85,7 +88,7 @@ export class BrowserTransport extends BaseTransport {
     options?: Partial<ITransportSettings>,
   ) {
     options = options ? {...this.options, ...options} : this.options
-    let headers: IRequestHeaders = {[LookerAppId]: agentTag}
+    let headers: IRequestHeaders = {[LookerAppId]: agentTag }
     if (options && options.headers) {
       Object.keys(options.headers).forEach(key => {
         headers[key] = options!.headers![key]
@@ -116,7 +119,8 @@ export class BrowserTransport extends BaseTransport {
     queryParams?: any,
     body?: any,
     authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>
+    options?: Partial<ITransportSettings>,
+    agentTag: string = `${agentPrefix} ${lookerVersion}`
   )
     : Promise<TSuccess> {
 
@@ -125,6 +129,7 @@ export class BrowserTransport extends BaseTransport {
     const requestPath = this.makeUrl(path, options, queryParams, authenticator)
     const returnPromise = callback(stream)
     let props = await this.initRequest(
+      agentTag,
       method,
       requestPath,
       body,

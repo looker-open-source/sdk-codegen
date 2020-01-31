@@ -47,12 +47,14 @@ import {
  * @constructor
  */
 export function TestConfig(rootPath: string = '') {
-  const dataFile = 'test/data.yml'
+  const testFile = 'test/data.yml'
   if (!rootPath) {
-    rootPath = fs.existsSync(dataFile) ? '' : '../../'
+    rootPath = fs.existsSync(testFile) ? '' : '../../'
   }
   const localIni = `${rootPath}looker.ini`
-  const testData = yaml.safeLoad(fs.readFileSync(`${rootPath}${dataFile}`, utf8))
+  const testPath = `${rootPath}test/`
+  const dataFile = `${testPath}data.yml`
+  const testData = yaml.safeLoad(fs.readFileSync(dataFile, utf8))
   const testIni = `${rootPath}${testData['iniFile']}`
   const configContents = fs.readFileSync(localIni, utf8)
   const config = ApiConfig(configContents)
@@ -65,6 +67,8 @@ export function TestConfig(rootPath: string = '') {
   const testSection = testConfig['Looker']
   return {
     rootPath,
+    testPath,
+    dataFile,
     localIni,
     apiVersion,
     baseUrl,

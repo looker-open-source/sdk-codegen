@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import { agentTag, defaultTimeout, ITransportSettings } from './transport'
+import { agentPrefix, defaultTimeout, ITransportSettings } from './transport'
 import { boolDefault, environmentPrefix, isTrue, unquote } from './constants'
 import { IApiSection } from './nodeSettings'
 
@@ -46,7 +46,7 @@ export const ApiConfigMap: IValueSettings = {
   'client_secret': strLookerClientSecret
 }
 
-export const strBadConfiguration = `${agentTag} configuration error:
+export const strBadConfiguration = `${agentPrefix} configuration error:
 Missing required configuration values like base_url and api_version
 `
 

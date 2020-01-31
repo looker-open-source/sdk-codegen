@@ -40,11 +40,16 @@ export * from './rtl/nodeSettings'
 export * from './rtl/nodeTransport'
 export * from './rtl/proxySession'
 export * from './rtl/transport'
-export * from './sdk/methods'
-export * from './sdk/models'
+export * from './sdk/3.1/methods'
+// export * from './sdk/3.1/models'
+export * from './sdk/3.1/streams'
+export * from './sdk/4.0/methods'
+export * from './sdk/4.0/models'
+export * from './sdk/4.0/streams'
 
 import { IAuthSession } from './rtl/authSession'
-import { LookerSDK } from './sdk/methods'
+import { Looker31SDK } from './sdk/3.1/methods'
+import { Looker40SDK } from './sdk/4.0/methods'
 
 /**
  * @class SDK
@@ -54,11 +59,15 @@ import { LookerSDK } from './sdk/methods'
  */
 export class SDK {
   /**
-   * Creates an [[LookerSDK]] object.
+   * Creates a [[LookerSDK]] object.
    *
    * @param session {IAuthSession} SDK session manager to use
+   * @param apiVersion Version of API to initialize. Defaults to 4.0
    */
-  static createClient(session: IAuthSession) {
-    return new LookerSDK(session)
+  static createClient(session: IAuthSession, apiVersion: string = '4.0') {
+    if (apiVersion === '3.1') {
+      return new Looker31SDK(session)
+    }
+    return new Looker40SDK(session)
   }
 }

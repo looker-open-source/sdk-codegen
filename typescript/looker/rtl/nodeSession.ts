@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import { IError } from '../sdk/models'
+import { IError } from '../sdk/4.0/models'
 import {
   IRequestProps,
   ITransport,

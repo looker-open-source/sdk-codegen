@@ -23,12 +23,12 @@
  */
 
 import { NodeSession } from '../rtl/nodeSession'
-import { LookerSDK } from '../sdk/methods'
+import { Looker40SDK as LookerSDK } from '../sdk/4.0/methods'
 import {
   IQuery,
   IRequestRunInlineQuery,
   IUser, IWriteQuery,
-} from '../sdk/models'
+} from '../sdk/4.0/models'
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from '../rtl/nodeSettings'

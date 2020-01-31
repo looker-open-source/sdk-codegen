@@ -134,7 +134,7 @@ describe('python generator', () => {
         `# GET /datagroups -> Sequence[models.Datagroup]
 def all_datagroups(
     self,
-    transport_options: Optional[transport.TransportSettings] = None,
+    transport_options: Optional[transport.PTransportSettings] = None,
 ) -> Sequence[models.Datagroup]:
 `
       const actual = gen.methodSignature('', method)
@@ -148,7 +148,7 @@ def render_task_results(
     self,
     # Id of render task
     render_task_id: str,
-    transport_options: Optional[transport.TransportSettings] = None,
+    transport_options: Optional[transport.PTransportSettings] = None,
 ) -> bytes:
 `
       const actual = gen.methodSignature('', method)
@@ -166,7 +166,7 @@ def run_url_encoded_query(
     view_name: str,
     # Format of result
     result_format: str,
-    transport_options: Optional[transport.TransportSettings] = None,
+    transport_options: Optional[transport.PTransportSettings] = None,
 ) -> Union[str, bytes]:
 `
       const actual = gen.methodSignature('', method)
@@ -221,10 +221,10 @@ return response`
       const expected =
 `response = self.get(
             f"/query_tasks/{query_task_id}/results",
-            MutableMapping[str, str],
+            str,
             transport_options=transport_options
 )
-assert isinstance(response, dict)
+assert isinstance(response, str)
 return response`
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
@@ -266,13 +266,13 @@ return response`
 class Workspace(model.Model):
     """
     Attributes:
+        can: Operations the current user is able to perform on this object
         id: The unique id of this user workspace. Predefined workspace ids include "production" and "dev"
         projects: The local state of each project in the workspace
-        can: Operations the current user is able to perform on this object
     """
+    can: Optional[MutableMapping[str, bool]] = None
     id: Optional[str] = None
-    projects: Optional[Sequence["Project"]] = None
-    can: Optional[MutableMapping[str, bool]] = None`)
+    projects: Optional[Sequence["Project"]] = None`)
     })
     it('with refs, arrays and nullable', () => {
       const type = apiTestModel.types['ApiVersion']

@@ -40,7 +40,7 @@ const lintCheck = async (fileName: string) => {
     // const linter = run('speccy', ['lint', fileName])
     const linter = new Spectral()
     if (!linter) return fail('Lint', 'no response')
-    const spec = parseWithPointers(await readFileSync(fileName))
+    const spec = parseWithPointers(readFileSync(fileName))
     linter.run({
         parsed: spec,
         getLocationForJsonPath,
