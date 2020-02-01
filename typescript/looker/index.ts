@@ -22,9 +22,6 @@
  * THE SOFTWARE.
  */
 
-import * as models31 from './sdk/3.1/models'
-export { models31 }
-
 export * from './rtl/apiMethods'
 export * from './rtl/apiSettings'
 export * from './rtl/authToken'
@@ -44,6 +41,8 @@ export * from './rtl/nodeTransport'
 export * from './rtl/proxySession'
 export * from './rtl/transport'
 export * from './sdk/3.1/methods'
+import * as models31 from './sdk/3.1/models'
+export { models31 }
 export * from './sdk/3.1/streams'
 export * from './sdk/4.0/methods'
 export * from './sdk/4.0/models'
