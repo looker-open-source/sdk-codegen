@@ -20,12 +20,12 @@ pytest-pudb = "*"
 pytest-mock = "*"
 twine = "*"
 pillow = "*"
-typing-extensions = "*"
 
 [packages]
 requests = "*"
 attrs = "*"
 cattrs = "*"
+typing-extensions = "*"
 
 [requires]
 python_version = "3.7"
