@@ -20,8 +20,7 @@ Create a `looker.ini` file with your server URL and API credentials assigned as 
 
 ```ini
 [Looker]
-# API version defaults to 3.1. 3.1 and 3.0 are currently supported. 3.1 is highly recommended.
-api_version=3.1
+api_version=4.0
 # Base URL for API. Do not include /api/* in the url
 base_url=https://<your-looker-server>:19999
 # API 3 client id
@@ -55,7 +54,7 @@ Verify authentication works and that API calls will succeed with code similar to
 val localIni = "./looker.ini"
 val settings = ApiSettingsIniFile(localIni, "Looker")
 val session = UserSession(settings, Transport(settings))
-val sdk = LookerSDK(session)
+val sdk = Looker40SDK(session)
 // Verify minimal SDK call works
 val me = sdk.ok<User>(sdk.me())
 
