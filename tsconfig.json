@@ -5,7 +5,10 @@
     "lib": ["es6", "es2017.object", "dom"],
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "baseUrl": "./"
+    "baseUrl": ".",
+    "paths": {
+      "rtl/*": ["typescript/looker/rtl/*"]
+    }
   },
-  "include": ["./*.ts", "./src/*.ts"]
+  "include": ["*.ts", "src/*.ts"]
 }

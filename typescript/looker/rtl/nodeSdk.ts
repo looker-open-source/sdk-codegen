@@ -32,7 +32,7 @@ import { IApiSettings } from './apiSettings'
 import { IAuthSession } from './authSession'
 
 /**
- * @class SDK
+ * @class LookerNodeSDK
  *
  * Simple factory for the Node version of the Looker SDK. Provides default connectivity for SDK methods
  *

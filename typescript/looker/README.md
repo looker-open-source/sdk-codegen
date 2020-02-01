@@ -216,6 +216,59 @@ export class EmbedSession extends ProxySession {
 }
 ```
 
+
+## Developing with multiple API versions ###
+
+The Looker SDK package now supports multiple API versions for the generated SDK classes.
+
+In the `looker.ini` used by the code generator, multiple api versions can be indicated with:
+
+```ini
+api_versions=3.1,4.0
+```
+
+for example, which will generate files to
+
+```bash
+/sdk
+  /3.1
+    models.ts
+    methods.ts
+    streams.ts
+  /4.0
+    models.ts
+    methods.ts
+    streams.ts
+```
+
+`LookerNodeSDK.createClient()` `LookerBrowserSDK.createClient()` and `SDK.createClient()` will return either the 3.1 or 
+4.0 version of the SDK bindings
+
+By default, all of these factories will return the `4.0` version unless `3.1` is explicitly specified for the API version
+
+To develop with both 3.1 and 4.0 SDKs in the same source file, you can use a technique similar to the following:
+
+```typescript
+import { Looker40SDK, Looker31SDK, NodeSession, NodeSettingsIniFile } from '@looker/sdk'
+
+// Presume these default to API 4.0 configuration
+const settings40 = new NodeSettingsIniFile()
+const session40 = new NodeSession(settings40)
+
+// These are for API 3.1
+const settings31 = new NodeSettingsIniFile('./looker.ini', 'Looker31')
+const session31 = new NodeSession(settings31)
+
+// SDK.createClient(session40) would also return a 4.0 SDK object
+const sdk = new Looker40SDK(session40)
+
+// SDK.createClient(session31) would also return a 3.1 SDK object
+const sdk31 = new Looker31SDK(session31)
+
+const me40 = sdk.ok(sdk.me())
+
+const me31 = sdk.ok(sdk31.me())
+```
 ## Additional examples
 
 Looker's open source repository of [SDK Examples](https://github.com/looker-open-source/sdk-examples/tree/master/typescript) has more example scripts and applications that show how to use the Looker SDK.

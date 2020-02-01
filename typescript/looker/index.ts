@@ -22,6 +22,9 @@
  * THE SOFTWARE.
  */
 
+import * as models31 from './sdk/3.1/models'
+export { models31 }
+
 export * from './rtl/apiMethods'
 export * from './rtl/apiSettings'
 export * from './rtl/authToken'
@@ -41,7 +44,6 @@ export * from './rtl/nodeTransport'
 export * from './rtl/proxySession'
 export * from './rtl/transport'
 export * from './sdk/3.1/methods'
-// export * from './sdk/3.1/models'
 export * from './sdk/3.1/streams'
 export * from './sdk/4.0/methods'
 export * from './sdk/4.0/models'
@@ -64,7 +66,8 @@ export class SDK {
    * @param session {IAuthSession} SDK session manager to use
    * @param apiVersion Version of API to initialize. Defaults to 4.0
    */
-  static createClient(session: IAuthSession, apiVersion: string = '4.0') {
+  static createClient(session: IAuthSession) {
+    const apiVersion = session.settings.api_version ?? '4.0'
     if (apiVersion === '3.1') {
       return new Looker31SDK(session)
     }
