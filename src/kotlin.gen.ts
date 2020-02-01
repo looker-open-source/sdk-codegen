@@ -68,6 +68,9 @@ package com.looker.sdk
 import com.looker.rtl.*
 import com.looker.rtl.UserSession
 import java.util.*
+import com.looker.sdk.api${this.apiRef}.*
+// TODO can this single import override be avoided in any way?
+import com.looker.sdk.api${this.apiRef}.Locale
 
 class ${this.packageName}(authSession: UserSession) : APIMethods(authSession) {
 
@@ -81,6 +84,7 @@ class ${this.packageName}(authSession: UserSession) : APIMethods(authSession) {
 
 package com.looker.sdk
 
+import com.looker.sdk.api${this.apiRef}.*
 // nothing to see here, yet
 `
   }
@@ -95,7 +99,7 @@ package com.looker.sdk
     return `
 // ${this.warnEditing()}
 
-package com.looker.sdk
+package com.looker.sdk.api${this.apiRef}
 
 import com.looker.rtl.*
 import java.util.*

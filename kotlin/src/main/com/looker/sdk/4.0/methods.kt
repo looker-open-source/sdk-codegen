@@ -6,6 +6,9 @@ package com.looker.sdk
 import com.looker.rtl.*
 import com.looker.rtl.UserSession
 import java.util.*
+import com.looker.sdk.api40.*
+// TODO can this single import override be avoided in any way?
+import com.looker.sdk.api40.Locale
 
 class Looker40SDK(authSession: UserSession) : APIMethods(authSession) {
 

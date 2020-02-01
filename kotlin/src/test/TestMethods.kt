@@ -1,5 +1,8 @@
-import com.looker.rtl.*
-import com.looker.sdk.*
+import com.looker.rtl.ApiSettingsIniFile
+import com.looker.rtl.SDKResponse
+import com.looker.rtl.Transport
+import com.looker.rtl.UserSession
+import com.looker.sdk.Looker40SDK
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.json.JacksonSerializer
@@ -9,10 +12,13 @@ import kotlinx.coroutines.launch
 import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy
 import org.apache.http.ssl.SSLContextBuilder
-import java.lang.Exception
-import javax.xml.bind.JAXBElement
-import kotlin.test.*
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import org.junit.Test as test
+import com.looker.sdk.api40.*
+
 
 class TestMethods {
     val settings = ApiSettingsIniFile(localIni, "Looker")
@@ -35,7 +41,7 @@ class TestMethods {
     }
     val session = UserSession(settings, Transport(settings, client))
 
-    val sdk = LookerSDK(session)
+    val sdk = Looker40SDK(session)
 
     inline fun <TAll,TId, reified TEntity> listGetter(
             lister: () -> SDKResponse,
@@ -84,6 +90,21 @@ class TestMethods {
         }
     }
 
+    fun simpleQuery() : WriteQuery {
+        return WriteQuery(
+                "system__activity",
+                "dashboard",
+                arrayOf("dashboard.id", "dashboard.title", "dashboard.count"),
+                limit="100")
+    }
+
+    fun slowQuery() : WriteQuery {
+        return WriteQuery(
+                "system__activity",
+                "dashboard",
+                arrayOf("dashboard.id", "dashboard.title", "dashboard.count"),
+                limit="5000")
+    }
     /*
     Functions to prepare any data entities that might be missing for testing retrieval and iteration
      */
@@ -94,11 +115,7 @@ class TestMethods {
         }
         val look = sdk.ok<Look>(sdk.create_look(WriteLookWithQuery(
                 description = "SDK Look",
-                query = WriteQuery(
-                        "thelook",
-                        "users",
-                        arrayOf("users.count", "users.id", "users.first_name", "users.last_name"))
-
+                query = simpleQuery()
         )))
         print("Prepared Look ${look.id}")
         return look
@@ -185,26 +202,8 @@ class TestMethods {
         assertNotNull(creds[0].client_id)
     }
 
-    fun simpleQuery() : WriteQuery {
-        return WriteQuery(
-                "thelook",
-                "users",
-                arrayOf(
-                        "users.id",
-                        "users.age",
-                        "users.city",
-                        "users.email",
-                        "users.first_name",
-                        "users.last_name",
-                        "users.zip",
-                        "users.state",
-                        "users.country"
-                )
-        )
-    }
-
     @test fun testCreateQuery() {
-        val query = sdk.ok<Query>(sdk.create_query(WriteQuery("thelook", "users", arrayOf("users.count"))))
+        val query = sdk.ok<Query>(sdk.create_query(simpleQuery()))
         query.id?.let { id ->
             val result = sdk.ok<String>(sdk.run_query(id, "sql"))
             assertTrue(result.startsWith("SELECT"))
@@ -215,7 +214,7 @@ class TestMethods {
         val result = sdk.ok<String>(
                 sdk.run_inline_query("csv", simpleQuery())
         )
-        assertTrue(result.contains("Users ID"))
+        assertTrue(result.contains("Dashboard ID"))
     }
 
     @test fun testAllColorCollections() {
@@ -233,9 +232,9 @@ class TestMethods {
     }
 
     @test fun testAllDataGroups() {
-        listGetter<Datagroup,String,Datagroup>(
+        listGetter<Datagroup,Long,Datagroup>(
                 {sdk.all_datagroups()},
-                {item -> item.id!!.toString()},
+                {item -> item.id!!},
                 {id,_ -> sdk.datagroup(id)})
     }
 
@@ -368,9 +367,8 @@ class TestMethods {
         var running = false
         GlobalScope.launch {
             running = true
-            val json = sdk.ok<String>(sdk.run_inline_query("json", simpleQuery()))
-//            val query = sdk.ok<SqlQuery>(sdk.create_sql_query(WriteSqlQueryCreate(model_name = "thelook",sql = "select sleep(30)")))
-//            val json = sdk.ok<String>(sdk.run_sql_query(query.slug!!, "json"))
+            val json = sdk.ok<String>(sdk.run_inline_query("json_detail", slowQuery()))
+            print("slow query complete")
             running = false
             assertNotNull(json)
         }
@@ -379,7 +377,7 @@ class TestMethods {
         do {
             list = sdk.ok(sdk.all_running_queries())
             Thread.sleep(100L) // block main thread to ensure query is running
-        } while (running && list.count() === 0 && tries++ < 99)
+        } while (running && list.count() == 0 && tries++ < 99)
 //        assertEquals(running, false, "Running should have completed")
         assertNotEquals(list.count(), 0, "List should have at least one query")
     }
@@ -400,9 +398,9 @@ class TestMethods {
     }
 
     @test fun testAllThemes() {
-        testAll<Theme,String,Theme>(
+        testAll<Theme,Long,Theme>(
                 {sdk.all_themes()},
-                {item -> item.id!!.toString()},
+                {item -> item.id!!},
                 {id, fields -> sdk.theme(id, fields)})
     }
 
