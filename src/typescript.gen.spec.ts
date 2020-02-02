@@ -188,7 +188,6 @@ async create_user_credentials_email(
       const expected = `/**
  * ### Get information about all datagroups.
  * 
- * 
  * GET /datagroups -> IDatagroup[]
  */
 async all_datagroups(

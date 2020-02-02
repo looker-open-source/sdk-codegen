@@ -131,7 +131,9 @@ describe('python generator', () => {
     it('no params with all_datagroups', () => {
       const method = apiTestModel.methods['all_datagroups']
       const expected =
-        `# GET /datagroups -> Sequence[models.Datagroup]
+        `# ### Get information about all datagroups.
+# 
+# GET /datagroups -> Sequence[models.Datagroup]
 def all_datagroups(
     self,
     transport_options: Optional[transport.PTransportSettings] = None,
@@ -143,7 +145,25 @@ def all_datagroups(
     it('binary return type render_task_results', () => {
       const method = apiTestModel.methods['render_task_results']
       const expected =
-        `# GET /render_tasks/{render_task_id}/results -> bytes
+        `# ### Get the document or image produced by a completed render task.
+# 
+# Note that the PDF or image result will be a binary blob in the HTTP response, as indicated by the
+# Content-Type in the response headers. This may require specialized (or at least different) handling than text
+# responses such as JSON. You may need to tell your HTTP client that the response is binary so that it does not
+# attempt to parse the binary data as text.
+# 
+# If the render task exists but has not finished rendering the results, the response HTTP status will be
+# **202 Accepted**, the response body will be empty, and the response will have a Retry-After header indicating
+# that the caller should repeat the request at a later time.
+# 
+# Returns 404 if the render task cannot be found, if the cached result has expired, or if the caller
+# does not have permission to view the results.
+# 
+# For detailed information about the status of the render task, use [Render Task](#!/RenderTask/render_task).
+# Polling loops waiting for completion of a render task would be better served by polling **render_task(id)** until
+# the task status reaches completion (or error) instead of polling **render_task_results(id)** alone.
+# 
+# GET /render_tasks/{render_task_id}/results -> bytes
 def render_task_results(
     self,
     # Id of render task
@@ -154,10 +174,64 @@ def render_task_results(
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
     })
+
     it('binary or string return type run_url_encoded_query', () => {
       const method = apiTestModel.methods['run_url_encoded_query']
       const expected =
-`# GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> Union[str, bytes]
+`# ### Run an URL encoded query.
+# 
+# This requires the caller to encode the specifiers for the query into the URL query part using
+# Looker-specific syntax as explained below.
+# 
+# Generally, you would want to use one of the methods that takes the parameters as json in the POST body
+# for creating and/or running queries. This method exists for cases where one really needs to encode the
+# parameters into the URL of a single 'GET' request. This matches the way that the Looker UI formats
+# 'explore' URLs etc.
+# 
+# The parameters here are very similar to the json body formatting except that the filter syntax is
+# tricky. Unfortunately, this format makes this method not currently callible via the 'Try it out!' button
+# in this documentation page. But, this is callable  when creating URLs manually or when using the Looker SDK.
+# 
+# Here is an example inline query URL:
+# 
+# \`\`\`
+# https://looker.mycompany.com:19999/api/3.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles
+# \`\`\`
+# 
+# When invoking this endpoint with the Ruby SDK, pass the query parameter parts as a hash. The hash to match the above would look like:
+# 
+# \`\`\`ruby
+# query_params =
+# {
+#   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+#   :"f[category.name]" => "socks",
+#   :sorts => "products.count desc 0",
+#   :limit => "500",
+#   :query_timezone => "America/Los_Angeles"
+# }
+# response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
+# 
+# \`\`\`
+# 
+# Again, it is generally easier to use the variant of this method that passes the full query in the POST body.
+# This method is available for cases where other alternatives won't fit the need.
+# 
+# Supported formats:
+# 
+# | result_format | Description
+# | :-----------: | :--- |
+# | json | Plain json
+# | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+# | csv | Comma separated values with a header
+# | txt | Tab separated values with a header
+# | html | Simple html
+# | md | Simple markdown
+# | xlsx | MS Excel spreadsheet
+# | sql | Returns the generated SQL rather than running the query
+# | png | A PNG image of the visualization of the query
+# | jpg | A JPG image of the visualization of the query
+# 
+# GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> Union[str, bytes]
 def run_url_encoded_query(
     self,
     # Model name
