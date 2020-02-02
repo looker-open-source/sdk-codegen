@@ -24,7 +24,7 @@ let package = Package(
             name: "looker",
             dependencies: [],
             path: ".",
-            sources: ["rtl", "sdk"]),
+            sources: ["rtl", "sdk/3.1", "sdk/4.0"]),
         .testTarget(
             name: "lookerTests",
             dependencies: ["looker"]),

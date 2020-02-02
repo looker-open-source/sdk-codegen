@@ -55,7 +55,7 @@ export class SwiftGen extends CodeGen {
   propDelimiter = '\n'
 
   indentStr = '    '
-  endTypeStr = '\n}'
+  endTypeStr = `\n${this.bumper('')}}`
   needsRequestTypes = false
   willItStream = false
   keywords = 'associatedtype,class,deinit,enum,extension,fileprivate,func,import,init,inout,internal,let,open,'
@@ -73,6 +73,7 @@ export class SwiftGen extends CodeGen {
 /// ${this.warnEditing()}
 
 import Foundation
+import api${this.apiRef}
 
 @available(OSX 10.15, *)
 class ${this.packageName}: APIMethods {
@@ -96,12 +97,13 @@ class ${this.packageName}: APIMethods {
 
 import Foundation
 
+struct api${this.apiRef} {
 `
   }
 
   // @ts-ignore
   modelsEpilogue(indent: string) {
-    return ''
+    return '\n}\n'
   }
 
   private reserve(name: string) {
@@ -170,7 +172,8 @@ import Foundation
   methodHeaderDeclaration(indent: string, method: IMethod, streamer: boolean = false) {
     const type = this.typeMap(method.type)
     let returnType = type.name === 'Void' ? 'Void' : `SDKResponse<${type.name}, SDKError>`
-    let headComment = `${method.httpMethod} ${method.endpoint} -> ${returnType}`
+    const head = method.description?.trim()
+    let headComment = (head ? `${head}\n\n` : '')  +`${method.httpMethod} ${method.endpoint} -> ${type.name}`
     let fragment = ''
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
@@ -218,6 +221,10 @@ import Foundation
     return this.streamerSignature(indent, method)
       + this.streamCall(bump, method)
       + `\n${indent}}`
+  }
+
+  declareType(indent: string, type: IType): string {
+    return super.declareType(this.bumper(indent), type)
   }
 
   typeSignature(indent: string, type: IType) {
@@ -398,6 +405,7 @@ ${indent}return result`
 
   typeMap(type: IType): IMappedType {
     super.typeMap(type)
+    const ns = `api${this.apiRef}`
 
     const swiftTypes: Record<string, IMappedType> = {
       'number': {name: 'Double', default: this.nullStr},
@@ -412,10 +420,12 @@ ${indent}return result`
       'boolean': {name: 'Bool', default: this.nullStr},
       'uri': {name: 'URI', default: this.nullStr},
       'url': {name: 'URL', default: this.nullStr},
-      'datetime': {name: 'Date', default: this.nullStr}, // TODO is there a default expression for datetime?
-      'date': {name: 'Date', default: this.nullStr}, // TODO is there a default expression for date?
+      'datetime': {name: 'Date', default: this.nullStr},
+      'date': {name: 'Date', default: this.nullStr},
       'object': {name: 'Any', default: this.nullStr},
       'void': {name: 'Voidable', default: ''},
+      'Error': {name: `${ns}.Error`, default: ''},
+      'Group': {name: `${ns}.Group`, default: ''},
     }
 
     if (type.elementType) {
@@ -424,9 +434,8 @@ ${indent}return result`
       if (type instanceof ArrayType) {
         return {name: `[${map.name}]`, default: '[]'}
       } else if (type instanceof HashType) {
-        // TODO fix the API endpoints like those that return `User` to correctly encode JSON hashes
-        // return {name: `StringDictionary<${map.name}>`, default: 'nil'}
-        return {name: `StringDictionary<Variant?>`, default: 'nil'}
+        return {name: `StringDictionary<${map.name}>`, default: 'nil'}
+        // return {name: `StringDictionary<Variant?>`, default: 'nil'}
       } else if (type instanceof DelimArrayType) {
         return {name: `DelimArray<${map.name}>`, default: 'nil'}
       }

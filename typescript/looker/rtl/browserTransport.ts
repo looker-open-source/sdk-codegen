@@ -97,7 +97,7 @@ export class BrowserTransport extends BaseTransport {
 
     let props: IRequestProps = {
       url: path,
-      body: body ? JSON.stringify(body) : undefined,
+      body: body ? (typeof body === 'string' ? body : JSON.stringify(body)) : undefined,
       headers: headers,
       credentials: 'same-origin',
       method,

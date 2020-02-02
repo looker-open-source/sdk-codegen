@@ -152,7 +152,8 @@ import java.util.*
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer: boolean = false) {
     const type = this.typeMap(method.type)
-    let headComment = `${method.httpMethod} ${method.endpoint} -> ${type.name}`
+    const head = method.description?.trim()
+    let headComment = (head ? `${head}\n\n` : '')  +`${method.httpMethod} ${method.endpoint} -> ${type.name}`
     let fragment = ''
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr

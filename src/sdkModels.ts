@@ -663,11 +663,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
   }
 
   get version(): string {
-    return (this.schema && this.schema.version) || ''
+    return this.schema?.version || ''
   }
 
   get description(): string {
-    return (this.schema && this.schema.description) || ''
+    return this.schema?.decription?.trim() || ''
   }
 
   static fromFile(specFile: string, swaggerFile: string): ApiModel {
@@ -805,7 +805,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   }
 
   private load(): void {
-    if (this.schema && this.schema.components && this.schema.components.schemas) {
+    if (this.schema?.components?.schemas) {
       Object.entries(this.schema.components.schemas).forEach(([name, schema]) => {
         const t = new Type(schema, name)
         // types[n] and corresponding refs[ref] MUST reference the same type instance!
@@ -817,7 +817,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       })
     }
 
-    if (this.schema && this.schema.paths) {
+    if (this.schema?.paths) {
       Object.entries(this.schema.paths).forEach(([path, schema]) => {
         const methods = this.loadMethods(path, schema)
         methods.forEach((method) => {

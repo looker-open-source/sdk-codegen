@@ -160,6 +160,8 @@ body: Partial<IWriteDashboard>`)
       const method = apiTestModel.methods['create_user_credentials_email']
       expect(method).toBeDefined()
       const expected = `/**
+ * ### Email/password login information for the specified user.
+ * 
  * POST /users/{user_id}/credentials_email -> ICredentialsEmail
  */
 async create_user_credentials_email(
@@ -184,6 +186,9 @@ async create_user_credentials_email(
       const method = apiTestModel.methods['all_datagroups']
       expect(method).toBeDefined()
       const expected = `/**
+ * ### Get information about all datagroups.
+ * 
+ * 
  * GET /datagroups -> IDatagroup[]
  */
 async all_datagroups(
