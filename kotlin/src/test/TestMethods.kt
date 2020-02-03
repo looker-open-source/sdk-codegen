@@ -160,6 +160,8 @@ class TestMethods {
         return homepage
     }
 
+    val scheduleName = "SDK plans and schemes"
+
     fun prepScheduledPlan() : ScheduledPlan {
         val items = sdk.ok<Array<ScheduledPlan>>(sdk.all_scheduled_plans())
         if (items.count() > 0) {
@@ -175,7 +177,7 @@ class TestMethods {
         ))
 
         val plan = sdk.ok<ScheduledPlan>(sdk.create_scheduled_plan(WriteScheduledPlan(
-                name ="SDK plans and schemes",
+                name = scheduleName,
                 look_id = look.id!!.toLong(),
                 require_change = false,
                 require_no_results = false,
@@ -189,6 +191,16 @@ class TestMethods {
         return plan
     }
 
+    fun clearScheduledPlan() {
+        val items = sdk.ok<Array<ScheduledPlan>>(sdk.all_scheduled_plans())
+        if (items.count() > 0) {
+            val sked : ScheduledPlan? = items.find { p -> p.name == scheduleName }
+            sked?.let { plan ->
+                sdk.ok<Boolean>(sdk.delete_scheduled_plan(plan.id!!))
+                print("Cleared scheduled plan ${plan.id!!}")
+            }
+        }
+    }
     /*
     functional tests
      */
@@ -388,6 +400,7 @@ class TestMethods {
                 {sdk.all_scheduled_plans()},
                 {item -> item.id!!},
                 {id, fields -> sdk.scheduled_plan(id, fields)})
+        clearScheduledPlan()
     }
 
     @test fun testAllSpaces() {
