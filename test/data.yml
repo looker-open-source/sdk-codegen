@@ -11,6 +11,32 @@ users:
     last_name: Aardvark
   - first_name: Amanda
     last_name: Aardvark
+queries:
+  - id: "#user_query"
+    model: thelook
+    view: users
+    fields:
+      - "users.id"
+      - "users.age"
+      - "users.city"
+      - "users.email"
+      - "users.first_name"
+      - "users.last_name"
+      - "users.zip"
+      - "users.state"
+      - "users.country"
+    vis_config:
+      type: looker_column
+    limit: "10"
+  - id: "#brand_query"
+    model: thelook
+    view: products
+    fields:
+      - "products.brand"
+      - "products.count"
+    vis_config:
+      type: looker_column
+    limit: 100
 queries_system_activity:
   - id: "#dashboard_query_system_activity"
     model: system__activity
