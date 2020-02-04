@@ -187,9 +187,9 @@ def test_it_updates_session(sdk: mtds.LookerSDK):
 TQueries = List[Dict[str, Union[str, List[str], Dict[str, str]]]]
 
 
-def test_it_creates_and_runs_query(sdk: mtds.LookerSDK, queries: TQueries):
+def test_it_creates_and_runs_query(sdk: mtds.LookerSDK, queries_system_activity: TQueries):
     """create_query() creates a query and run_query() returns its result."""
-    for q in queries:
+    for q in queries_system_activity:
         limit = cast(str, q["limit"]) or "10"
         request = create_query_request(q, limit)
         query = sdk.create_query(request)
@@ -216,9 +216,9 @@ def test_it_creates_and_runs_query(sdk: mtds.LookerSDK, queries: TQueries):
         assert len(re.findall(r"\n", csv)) == int(limit) + 1
 
 
-def test_it_runs_inline_query(sdk: mtds.LookerSDK, queries: TQueries):
+def test_it_runs_inline_query(sdk: mtds.LookerSDK, queries_system_activity: TQueries):
     """run_inline_query() should run a query and return its results."""
-    for q in queries:
+    for q in queries_system_activity:
         limit = cast(str, q["limit"]) or "10"
         request = create_query_request(q, limit)
 
@@ -326,7 +326,7 @@ def test_search_look_and_run(sdk: mtds.LookerSDK):
     JSON will use column names
     JSON_LABEL will use column descriptions
     """
-    search_results = sdk.search_looks(title="An SDK%", fields="id, title")
+    search_results = sdk.search_looks(title="An SDK Look", fields="id, title")
     assert isinstance(search_results, list)
     assert len(search_results) > 0
     look = search_results[0]
@@ -335,14 +335,14 @@ def test_search_look_and_run(sdk: mtds.LookerSDK):
     assert "SDK" in look.title
     assert look.description is None
     actual = sdk.run_look(look_id=look.id, result_format="csv")
-    assert "Orders Created Date" in actual
-    assert "Orders Count" in actual
+    assert "Dashboard Count" in actual
+    assert "Dashboard ID" in actual
     actual = sdk.run_look(look_id=look.id, result_format="json")
-    assert "orders.created_date" in actual
-    assert "orders.count" in actual
+    assert "dashboard.count" in actual
+    assert "dashboard.id" in actual
     actual = sdk.run_look(look_id=look.id, result_format="json_label")
-    assert "Orders Created Date" in actual
-    assert "Orders Count" in actual
+    assert "Dashboard Count" in actual
+    assert "Dashboard ID" in actual
 
 
 def create_query_request(q, limit: Optional[str] = None) -> ml.WriteQuery:
@@ -371,11 +371,11 @@ def create_query_request(q, limit: Optional[str] = None) -> ml.WriteQuery:
 
 
 @pytest.mark.usefixtures("remove_test_dashboards")
-def test_crud_dashboard(sdk: mtds.LookerSDK, queries, dashboards):
+def test_crud_dashboard(sdk: mtds.LookerSDK, queries_system_activity, dashboards):
     """Test creating, retrieving, updating and deleting a dashboard.
     """
     qhash: Dict[Union[str, int], ml.Query] = {}
-    for idx, q in enumerate(queries):
+    for idx, q in enumerate(queries_system_activity):
         limit = "10"
         request = create_query_request(q, limit)
         key = q.get("id") or str(idx)

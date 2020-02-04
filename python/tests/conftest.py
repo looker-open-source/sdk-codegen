@@ -27,6 +27,11 @@ def queries(_test_data) -> List[Dict[str, str]]:
 
 
 @pytest.fixture(scope="session")
+def queries_system_activity(_test_data) -> List[Dict[str, str]]:
+    return _test_data["queries_system_activity"]
+
+
+@pytest.fixture(scope="session")
 def users(_test_data) -> List[Dict[str, str]]:
     return _test_data["users"]
 

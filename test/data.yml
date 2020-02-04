@@ -37,6 +37,17 @@ queries:
     vis_config:
       type: looker_column
     limit: 100
+queries_system_activity:
+  - id: "#dashboard_query_system_activity"
+    model: system__activity
+    view: dashboard
+    fields:
+      - "dashboard.id"
+      - "dashboard.title"
+      - "dashboard.count"
+    vis_config:
+      type: looker_column
+    limit: "10"
 dashboards:
   - title: An SDK dashboard
     background_color: green
@@ -76,15 +87,15 @@ dashboards:
         query_id: "#user_query"
 looks:
   - title: An SDK Look
-    description: An SDK test look about orders
+    description: An SDK test look about system activity
     deleted: false
     is_run_on_load: true
-    public: false
+    public: true
     query:
-      - id: "#look_query"
-        model: thelook
-        view: orders
+      - id: "#dashboard_query_system_activity"
+        model: system__activity
+        view: dashboard
         fields:
-          - "orders.created_date"
-          - "orders.count"
+          - "dashboard.count"
+          - "dashboard.id"
         limit: 100
