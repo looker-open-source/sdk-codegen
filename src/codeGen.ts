@@ -131,6 +131,14 @@ export abstract class CodeGen implements ICodeGen {
     return `${property.description}${property.readOnly?' (read-only)':''}`
   }
 
+  sdkPath() {
+    return `${this.codePath}${this.packagePath}/sdk/${this.apiVersion}`
+  }
+
+  sdkFileName(baseFileName: string) {
+    return this.fileName(`sdk/${this.apiVersion}/${baseFileName}`)
+  }
+
   fileName(base: string) {
     return `${this.codePath}${this.packagePath}/${base}${this.fileExtension}`
   }
@@ -286,11 +294,11 @@ export abstract class CodeGen implements ICodeGen {
   // Reformat source files after generation
   reformat() {
     const result: string[] = []
-    let files = [`sdk${this.apiPath}/methods`, `sdk${this.apiPath}/models`]
-    if (this.willItStream) files.push(`sdk${this.apiPath}/streams`)
+    let files = [ this.sdkFileName('methods'), this.sdkFileName('models')]
+    if (this.willItStream) files.push(this.sdkFileName('streams'))
     for (const name of files) {
-      const sourceFile = this.fileName(name)
-      const output = this.reformatFile(sourceFile)
+      // const sourceFile = this.fileName(name)
+      const output = this.reformatFile(name)
       if (output) {
         result.push(output)
       }

@@ -222,6 +222,11 @@ class TestMethods {
         }
     }
 
+    @test fun testSearchDashboards() {
+        val search = sdk.ok<Array<Dashboard>>(sdk.search_dashboards(limit = 3))
+        assertNotNull(search)
+    }
+
     @test fun testRunInlineQuery() {
         val result = sdk.ok<String>(
                 sdk.run_inline_query("csv", simpleQuery())

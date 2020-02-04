@@ -1106,13 +1106,38 @@ export interface ICodeGen {
   // standard code to insert at the top of the generated "streams" file(s)
   streamsPrologue(indent: string): string
 
-  // standard code to insert at the top of the generated "models" file(s)
+  /**
+   * standard code to insert at the top of the generated "models" file(s)
+   * @param {string} indent indentation string
+   * @returns {string}
+   */
   modelsPrologue(indent: string): string
 
-  // standard code to append to the bottom of the generated "models" file(s)
+  /**
+   * standard code to append to the bottom of the generated "models" file(s)
+   * @param {string} indent indentation string
+   * @returns {string}
+   */
   modelsEpilogue(indent: string): string
 
-  // provide the name for a file with the appropriate language code extension
+  /**
+   * Get the path where API-specific SDK files should go
+   * @returns {string}
+   */
+  sdkPath() : string
+
+  /**
+   * Get the name of an SDK file complete with API version
+   * @param {string} baseFileName e.g. "methods" or "models"
+   * @returns {string} fully specified, API-version-specific file name
+   */
+  sdkFileName(baseFileName: string) : string
+
+  /**
+   * provide the name for a file with the appropriate language code extension
+   * @param {string} base eg "methods" or "models"
+   * @returns {string} full sdk file name complete with extension
+   */
   fileName(base: string): string
 
   // generate an optional comment header if the comment is not empty

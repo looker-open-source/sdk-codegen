@@ -73,7 +73,7 @@ export class SwiftGen extends CodeGen {
 /// ${this.warnEditing()}
 
 import Foundation
-import api${this.apiRef}
+import models${this.apiRef}
 
 @available(OSX 10.15, *)
 class ${this.packageName}: APIMethods {
@@ -96,14 +96,12 @@ class ${this.packageName}: APIMethods {
 /// ${this.warnEditing()}
 
 import Foundation
-
-struct api${this.apiRef} {
 `
   }
 
   // @ts-ignore
   modelsEpilogue(indent: string) {
-    return '\n}\n'
+    return '\n'
   }
 
   private reserve(name: string) {
@@ -112,6 +110,15 @@ struct api${this.apiRef} {
     }
     return name
   }
+
+  sdkPath() {
+    return `${this.codePath}${this.packagePath}/sdk`
+  }
+
+  sdkFileName(baseFileName: string) {
+    return this.fileName(`sdk/${baseFileName}${this.apiRef}`)
+  }
+
 
   commentHeader(indent: string, text: string | undefined) {
     return text ? `${indent}/**\n${commentBlock(text, indent, ' * ')}\n${indent} */\n` : ''
@@ -224,6 +231,7 @@ struct api${this.apiRef} {
   }
 
   declareType(indent: string, type: IType): string {
+    return super.declareType('', type)
     return super.declareType(this.bumper(indent), type)
   }
 

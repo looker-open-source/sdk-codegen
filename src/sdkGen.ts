@@ -82,23 +82,24 @@ const apiVersions = (props: any) => {
             danger(`${language} does not have a code generator defined`)
             continue
           }
-          const sdkPath = `${gen.codePath}/${gen.packagePath}/sdk/${api}/`
+
+          const sdkPath = gen.sdkPath()
           if (!isDirSync(sdkPath)) fs.mkdirSync(sdkPath, {recursive: true})
           // Generate standard method declarations
           const sdk = new MethodGenerator(apiModel, gen)
           let output = sdk.render(gen.indentStr)
-          fs.writeFileSync(gen.fileName(`sdk/${api}/methods`), output)
+          fs.writeFileSync(gen.sdkFileName(`methods`), output)
 
           if (gen.willItStream) {
             // Generate streaming method declarations
             const s = new StreamGenerator(apiModel, gen)
             let output = s.render(gen.indentStr)
-            fs.writeFileSync(gen.fileName(`sdk/${api}/streams`), output)
+            fs.writeFileSync(gen.sdkFileName(`streams`), output)
           }
 
           const types = new TypeGenerator(apiModel, gen)
           output = types.render('')
-          fs.writeFileSync(gen.fileName(`sdk/${api}/models`), output)
+          fs.writeFileSync(gen.sdkFileName(`models`), output)
           const reformatted = gen.reformat()
           if (reformatted.length > 0) {
             success(`reformatted ${reformatted.join(',')}`)
