@@ -5749,7 +5749,7 @@ class Looker31SDK(api_methods.APIMethods):
         limit: Optional[int] = None,
         # Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
         offset: Optional[int] = None,
-        # One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at]
+        # One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]
         sorts: Optional[str] = None,
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
@@ -6043,7 +6043,7 @@ class Looker31SDK(api_methods.APIMethods):
         limit: Optional[int] = None,
         # Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
         offset: Optional[int] = None,
-        # One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :query_id]
+        # One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :query_id]
         sorts: Optional[str] = None,
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,

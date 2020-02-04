@@ -55,7 +55,7 @@ export class SwiftGen extends CodeGen {
   propDelimiter = '\n'
 
   indentStr = '    '
-  endTypeStr = `\n${this.bumper('')}}`
+  endTypeStr = `\n}`
   needsRequestTypes = false
   willItStream = false
   keywords = 'associatedtype,class,deinit,enum,extension,fileprivate,func,import,init,inout,internal,let,open,'
@@ -67,13 +67,16 @@ export class SwiftGen extends CodeGen {
     + 'lazy,left,mutating,none,nonmutating,optional,override,postfix,precedence,prefix,Protocol,required,right,'
     + 'set,Type,unowned,weak,willSet'.split(',')
 
+  supportsMultiApi(): boolean {
+    return false
+  }
+
   // @ts-ignore
   methodsPrologue(indent: string) {
     return `
 /// ${this.warnEditing()}
 
 import Foundation
-import models${this.apiRef}
 
 @available(OSX 10.15, *)
 class ${this.packageName}: APIMethods {
@@ -116,9 +119,9 @@ import Foundation
   }
 
   sdkFileName(baseFileName: string) {
-    return this.fileName(`sdk/${baseFileName}${this.apiRef}`)
+    // return this.fileName(`sdk/${baseFileName}${this.apiRef}`)
+    return this.fileName(`sdk/${baseFileName}`)
   }
-
 
   commentHeader(indent: string, text: string | undefined) {
     return text ? `${indent}/**\n${commentBlock(text, indent, ' * ')}\n${indent} */\n` : ''
@@ -230,17 +233,17 @@ import Foundation
       + `\n${indent}}`
   }
 
-  declareType(indent: string, type: IType): string {
-    return super.declareType('', type)
-    return super.declareType(this.bumper(indent), type)
-  }
+  // declareType(indent: string, type: IType): string {
+  //   return super.declareType(this.bumper(indent), type)
+  // }
 
   typeSignature(indent: string, type: IType) {
     const recursive = type.isRecursive()
     const structOrClass = recursive ? 'class' : 'struct'
     const needClass = recursive ? "\nRecursive type references must use Class instead of Struct" : ''
+    const mapped = this.typeMap(type)
     return this.commentHeader(indent, type.description + needClass) +
-      `${indent}${structOrClass} ${type.name}: SDKModel {\n`
+      `${indent}${structOrClass} ${mapped.name}: SDKModel {\n`
   }
 
   // @ts-ignore
@@ -413,7 +416,9 @@ ${indent}return result`
 
   typeMap(type: IType): IMappedType {
     super.typeMap(type)
-    const ns = `api${this.apiRef}`
+    // const ns = `api${this.apiRef}.`
+    // const ns = `Looker.`
+    const ns = 'Lk'
 
     const swiftTypes: Record<string, IMappedType> = {
       'number': {name: 'Double', default: this.nullStr},
@@ -432,8 +437,8 @@ ${indent}return result`
       'date': {name: 'Date', default: this.nullStr},
       'object': {name: 'Any', default: this.nullStr},
       'void': {name: 'Voidable', default: ''},
-      'Error': {name: `${ns}.Error`, default: ''},
-      'Group': {name: `${ns}.Group`, default: ''},
+      'Error': {name: `${ns}Error`, default: ''},
+      'Group': {name: `${ns}Group`, default: ''},
     }
 
     if (type.elementType) {
@@ -442,8 +447,8 @@ ${indent}return result`
       if (type instanceof ArrayType) {
         return {name: `[${map.name}]`, default: '[]'}
       } else if (type instanceof HashType) {
-        return {name: `StringDictionary<${map.name}>`, default: 'nil'}
-        // return {name: `StringDictionary<Variant?>`, default: 'nil'}
+        // return {name: `StringDictionary<${map.name}>`, default: 'nil'}
+        return {name: `StringDictionary<Variant?>`, default: 'nil'}
       } else if (type instanceof DelimArrayType) {
         return {name: `DelimArray<${map.name}>`, default: 'nil'}
       }

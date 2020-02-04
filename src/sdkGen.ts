@@ -28,7 +28,7 @@ import * as fs from 'fs'
 import * as Models from './sdkModels'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { danger, isDirSync, log, quit, success } from './utils'
-import { fetchLookerVersion, getVersionInfo, openApiFileName, specFileName } from './fetchSpec'
+import { fetchLookerVersion, openApiFileName, specFileName } from './fetchSpec'
 import { MethodGenerator, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
 import { logConvert } from './convert'
@@ -65,8 +65,8 @@ const apiVersions = (props: any) => {
         const lookerVersion = await fetchLookerVersion(props)
         // Iterate through all specified API versions
         const apis = apiVersions(props)
+        const lastApi = apis[apis.length-1]
         for (const api of apis) {
-          log(`generating ${language} from ${props.base_url} ${api}...`)
           let p = JSON.parse(JSON.stringify(props)) as ISDKConfigProps
           p.api_version = api
           const versions: IVersionInfo = {
@@ -82,6 +82,11 @@ const apiVersions = (props: any) => {
             danger(`${language} does not have a code generator defined`)
             continue
           }
+          if (api !== lastApi && !gen.supportsMultiApi()) {
+            danger(`skipping API ${api} for ${language} because it doesn't support multiple APIs`)
+            continue
+          }
+          log(`generating ${language} from ${props.base_url} ${api}...`)
 
           const sdkPath = gen.sdkPath()
           if (!isDirSync(sdkPath)) fs.mkdirSync(sdkPath, {recursive: true})

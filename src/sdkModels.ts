@@ -1080,30 +1080,66 @@ export interface ICodeGen {
   // property delimiter. Typically, ",\n"
   propDelimiter: string
 
-  // Does this language require request types to be generated because it doesn't
-  // conveniently support named default parameters?
+  /**
+   * Does this language require request types to be generated because it doesn't
+   * conveniently support named default parameters?
+   */
   needsRequestTypes: boolean
 
-  // Does this language support specific streaming methods?
+  /**
+   * Does this language support specific streaming methods?
+   */
   willItStream: boolean
 
-  // Stamps the version files with server and api version
+  /**
+   * Stamps the version file (typically rtl/constants.xx) with server and api version
+   * @returns {IVersionInfo | undefined}
+   */
   versionStamp(): IVersionInfo | undefined
 
-  // Returns the name of the RequestType if this language AND method require it.
-  // Otherwise return empty string.
+  /**
+   * Returns true if the SDK supports multiple API versions of models
+   * @returns {boolean} True if multi-API is supported
+   */
+  supportsMultiApi() : boolean
+
+  /**
+   * Returns the name of the RequestType if this language AND method require it.
+   * Otherwise return empty string.
+   * @param {IMethod} method
+   * @returns {string}
+   */
   requestTypeName(method: IMethod): string
 
-  // Returns the WriteType if the passed type has any readOnly properties or types
+  //
+  /**
+   * Returns the WriteType if the passed type has any readOnly properties or types
+   * @param {IType} type
+   * @returns {IType | undefined}
+   */
   writeableType(type: IType): IType | undefined
 
-  // standard code to insert at the top of the generated "methods" file(s)
+  //
+  /**
+   * standard code to insert at the top of the generated "methods" file(s)
+   * @param {string} indent
+   * @returns {string}
+   */
   methodsPrologue(indent: string): string
 
-  // standard code to append to the bottom of the generated "methods" file(s)
+  //
+  /**
+   * standard code to append to the bottom of the generated "methods" file(s)
+   * @param {string} indent
+   * @returns {string}
+   */
   methodsEpilogue(indent: string): string
 
-  // standard code to insert at the top of the generated "streams" file(s)
+  /**
+   * standard code to insert at the top of the generated "streams" file(s)
+   * @param {string} indent
+   * @returns {string}
+   */
   streamsPrologue(indent: string): string
 
   /**

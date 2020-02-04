@@ -67,15 +67,33 @@ export abstract class CodeGen implements ICodeGen {
       this.apiVersion = versions.apiVersion
       this.apiRef = this.apiVersion.replace('.', '')
       this.apiPath = `/${this.apiVersion}`
-      this.packageName = `Looker${this.apiRef}SDK`
+      this.packageName = this.supportsMultiApi() ? `Looker${this.apiRef}SDK` : `LookerSDK`
       this.packagePath += this.apiPath
     }
   }
 
 
-  // abstractions requiring overrides in language-specific formatters
+  /**
+   * Returns true if the SDK supports multiple API versions of models
+   * @returns {boolean} True if multi-API is supported
+   */
+  supportsMultiApi() {
+    // Currently, all but Swift support multiple APIs
+    return true
+  }
+
+  /**
+   * beginning of the "methods" file for a language
+   * @param {string} indent
+   * @returns {string}
+   */
   abstract methodsPrologue(indent: string): string
 
+  /**
+   * ending of the "methods" file for a language
+   * @param {string} indent
+   * @returns {string}
+   */
   abstract methodsEpilogue(indent: string): string
 
   // @ts-ignore
@@ -83,8 +101,18 @@ export abstract class CodeGen implements ICodeGen {
     return ''
   }
 
+  /**
+   * beginning of the "models" file for a language
+   * @param {string} indent
+   * @returns {string}
+   */
   abstract modelsPrologue(indent: string): string
 
+  /**
+   * ending of the "models" file for a language
+   * @param {string} indent
+   * @returns {string}
+   */
   abstract modelsEpilogue(indent: string): string
 
   abstract declareParameter(indent: string, param: IParameter): string

@@ -5120,7 +5120,7 @@ class Looker40SDK(authSession: UserSession) : APIMethods(authSession) {
      */
     offset: Long? = null,
     /**
-     * @param {String} sorts One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at]
+     * @param {String} sorts One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]
      */
     sorts: String? = null,
     /**
@@ -5430,7 +5430,7 @@ class Looker40SDK(authSession: UserSession) : APIMethods(authSession) {
      */
     offset: Long? = null,
     /**
-     * @param {String} sorts One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :query_id]
+     * @param {String} sorts One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :query_id]
      */
     sorts: String? = null,
     /**
