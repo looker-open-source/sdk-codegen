@@ -90,7 +90,7 @@ looks:
     description: An SDK test look about system activity
     deleted: false
     is_run_on_load: true
-    public: false
+    public: true
     query:
       - id: "#dashboard_query_system_activity"
         model: system__activity
