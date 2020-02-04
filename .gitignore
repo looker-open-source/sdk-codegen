@@ -20,3 +20,4 @@ kotlin/.*
 kotlin/bin/*
 kotlin/build/*
 kotlin/out/*
+junit.xml
