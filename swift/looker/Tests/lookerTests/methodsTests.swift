@@ -25,7 +25,7 @@ class methodsTests: XCTestCase {
         }
         return false
     }
-    
+
     func jsonEncode(_ object: Any?) -> Data? {
         if let object = object {
             if let data = object as? Data {
@@ -36,12 +36,12 @@ class methodsTests: XCTestCase {
         }
         return nil
     }
-    
+
     struct WriteQuery2: Codable {
         var model: String
         var view: String
     }
-    
+
     func testAnyData() {
         var foo: Any?
         let body = WriteQuery2(model: "thelook", view: "users")
@@ -56,7 +56,7 @@ class methodsTests: XCTestCase {
             }
         } catch { print(error) }
     }
-    
+
     func testEncode() {
         do {
             let body = WriteQuery2(model: "thelook", view: "users")
@@ -76,7 +76,7 @@ class methodsTests: XCTestCase {
         } catch { print(error) }
     }
 */
-  
+
     func simpleQuery() -> WriteQuery {
         return WriteQuery(
             model: "system__activity",
@@ -93,7 +93,7 @@ class methodsTests: XCTestCase {
             limit: "100"
         )
     }
-    
+
     func testCreateQueryAndRun() {
         let settings = config!
         let xp = BaseTransport(settings)
@@ -126,7 +126,7 @@ class methodsTests: XCTestCase {
         } else {
             XCTAssertTrue(false, "Couldn't cast data from jsonData")
         }
-        
+
         json = sdk.ok(sdk.run_query(query.id!, "json_label"))
         XCTAssertNotNil(json)
         XCTAssertTrue(json.contains("Dashboard Count"), "json_label result")
@@ -142,7 +142,7 @@ class methodsTests: XCTestCase {
             XCTAssertTrue(false, "Couldn't cast data from jsonData")
         }
     }
-    
+
     func testMe() {
         let settings = config!
         let xp = BaseTransport(settings)
@@ -168,7 +168,7 @@ class methodsTests: XCTestCase {
         }
         _ = sdk.authSession.logout()
     }
-    
+
     func testUserSearch() {
         let settings = config!
         let xp = BaseTransport(settings)
@@ -197,7 +197,7 @@ class methodsTests: XCTestCase {
         }
         _ = sdk.authSession.logout()
     }
-    
+
     func testGetAllDashboards() {
         let settings = config!
         let xp = BaseTransport(settings)
@@ -206,9 +206,8 @@ class methodsTests: XCTestCase {
         let list = sdk.ok(sdk.all_dashboards())
         for item in list {
             let id = item.id!
-//            let dashboard = sdk.ok(sdk.dashboard(id))
             print("Dashboard: \(id)")
-            let dashboard = sdk.ok(sdk.dashboard(id)) //, fields:Safe.Dashboard))
+            let dashboard = sdk.ok(sdk.dashboard(id))
             XCTAssertNotNil(dashboard, "Dashboard \(id) should be gotten")
             XCTAssertEqual(id, dashboard.id!)
             if (dashboard.created_at == nil) {
@@ -235,7 +234,7 @@ class methodsTests: XCTestCase {
         }
         _ = sdk.authSession.logout()
     }
-    
+
     func testGetAllFolders() {
         let settings = config!
         let xp = BaseTransport(settings)
