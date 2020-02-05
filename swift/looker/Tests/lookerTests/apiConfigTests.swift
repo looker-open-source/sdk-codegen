@@ -26,7 +26,6 @@ class apiConfigTests: XCTestCase {
 
     func testApiConfigFile() {
         let config = try? ApiConfig(localIni)
-        XCTAssertEqual(config?.base_url, "https://self-signed.looker.com:19999")
         XCTAssertFalse((config?.verify_ssl!)!)
         XCTAssertEqual(config?.timeout, 31)
     }
