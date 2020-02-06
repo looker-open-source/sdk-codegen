@@ -27,12 +27,13 @@
 import * as fs from 'fs'
 import * as Models from './sdkModels'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { danger, isDirSync, log, quit, success } from './utils'
+import { danger, log, quit, success } from './utils'
 import { fetchLookerVersion, openApiFileName, specFileName } from './fetchSpec'
 import { MethodGenerator, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
 import { logConvert } from './convert'
 import { IVersionInfo } from './codeGen'
+import { getEnabledCategories } from 'trace_events'
 
 const apiVersions = (props: any) => {
   const versions = props.api_versions ?? '3.1,4.0'
@@ -85,8 +86,7 @@ const apiVersions = (props: any) => {
           }
           log(`generating ${language} from ${props.base_url} ${api}...`)
 
-          const sdkPath = gen.sdkPath()
-          if (!isDirSync(sdkPath)) fs.mkdirSync(sdkPath, {recursive: true})
+          gen.sdkPathPrep()
           // Generate standard method declarations
           const sdk = new MethodGenerator(apiModel, gen)
           let output = sdk.render(gen.indentStr)

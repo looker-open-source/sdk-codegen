@@ -2,8 +2,8 @@ import os
 import pytest  # type: ignore
 from urllib.parse import urlparse
 
-from looker_sdk.sdk import methods as mtds
-from looker_sdk.sdk import models as ml
+from looker_sdk.sdk.api31 import methods as mtds
+from looker_sdk.sdk.api31 import models as ml
 
 NETRC_LOCATION = os.path.expanduser("~/.netrc")
 

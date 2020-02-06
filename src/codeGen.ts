@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 
+import * as fs from 'fs'
 import {
   Arg,
   ICodeGen,
@@ -33,7 +34,7 @@ import {
   ApiModel,
   IntrinsicType
 } from './sdkModels'
-import { commentBlock, isFileSync, warn } from './utils'
+import { commentBlock, isDirSync, isFileSync, warn } from './utils'
 
 export interface IVersionInfo {
   lookerVersion: string
@@ -158,8 +159,9 @@ export abstract class CodeGen implements ICodeGen {
     return `${property.description}${property.readOnly?' (read-only)':''}`
   }
 
-  sdkPath() {
-    return `${this.codePath}${this.packagePath}/sdk/${this.apiVersion}`
+  sdkPathPrep() {
+    const path = `${this.codePath}${this.packagePath}/sdk/${this.apiVersion}`
+    if (!isDirSync(path)) fs.mkdirSync(path, {recursive: true})
   }
 
   sdkFileName(baseFileName: string) {

@@ -80,10 +80,6 @@ class ApiSettings(transport.TransportSettings):
         converter = cattr.Converter()
         converter.register_structure_hook(bool, _convert_bool)
         settings = converter.structure(config_data, ApiSettings)
-        if not settings.is_configured():
-            raise error.SDKError(
-                f"Missing required configuration values like base_url and api_version."
-            )
         return settings
 
     def read_config(self) -> Dict[str, Optional[str]]:

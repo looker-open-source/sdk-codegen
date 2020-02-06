@@ -38,7 +38,7 @@ import {
 } from './sdkModels'
 import { CodeGen } from './codeGen'
 import * as fs from 'fs'
-import { warn, isFileSync, success, commentBlock, readFileSync } from './utils'
+import { warn, isDirSync, isFileSync, success, commentBlock, readFileSync } from './utils'
 import { utf8 } from '../typescript/looker/rtl/constants'
 
 export class SwiftGen extends CodeGen {
@@ -114,8 +114,9 @@ import Foundation
     return name
   }
 
-  sdkPath() {
-    return `${this.codePath}${this.packagePath}/sdk`
+  sdkPrepPath() {
+    const path =`${this.codePath}${this.packagePath}/sdk`
+    if (!isDirSync(path)) fs.mkdirSync(path, {recursive: true})
   }
 
   sdkFileName(baseFileName: string) {

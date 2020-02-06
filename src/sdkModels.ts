@@ -1157,10 +1157,10 @@ export interface ICodeGen {
   modelsEpilogue(indent: string): string
 
   /**
-   * Get the path where API-specific SDK files should go
+   * Prepare the path where API-specific SDK files should go
    * @returns {string}
    */
-  sdkPath() : string
+  sdkPathPrep() : void
 
   /**
    * Get the name of an SDK file complete with API version

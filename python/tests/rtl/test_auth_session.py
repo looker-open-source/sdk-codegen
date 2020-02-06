@@ -64,8 +64,9 @@ client_secret=
 @pytest.fixture(scope="function")
 def auth_session(config_file):
     settings = api_settings.ApiSettings.configure(config_file)
+    settings.api_version = "3.1"
     return auth.AuthSession(
-        settings, MockTransport.configure(settings), serialize.deserialize
+        settings, MockTransport.configure(settings), serialize.deserialize31
     )
 
 
@@ -178,9 +179,10 @@ def test_it_fails_with_missing_credentials(
     monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", test_env_client_secret)
 
     settings = api_settings.ApiSettings.configure(config_file, test_section)
+    settings.api_version = "3.1"
 
     auth_session = auth.AuthSession(
-        settings, MockTransport.configure(settings), serialize.deserialize
+        settings, MockTransport.configure(settings), serialize.deserialize31
     )
 
     with pytest.raises(error.SDKError) as exc_info:

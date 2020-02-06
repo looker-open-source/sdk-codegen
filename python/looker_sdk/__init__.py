@@ -21,7 +21,9 @@
 # THE SOFTWARE.
 
 # shortcut to generated models
-from looker_sdk.sdk import models  # noqa:F401
+from looker_sdk.sdk.api31 import models, models as models31  # noqa:F401
+from looker_sdk.sdk.api40 import models as models40  # noqa: F401
 
 # shortcut to generated methods
-from looker_sdk.sdk import methods  # noqa: F401
+from looker_sdk.sdk.api31 import methods, methods as methods31  # noqa: F401
+from looker_sdk.sdk.api40 import methods as methods40  # noqa: F401

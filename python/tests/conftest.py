@@ -8,7 +8,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from looker_sdk import client  # noqa: E402
 from looker_sdk import models as ml  # noqa: E402
-from looker_sdk.sdk import methods as mtds  # noqa: E402
+from looker_sdk.sdk.api31 import methods as mtds  # noqa: E402
 
 
 @pytest.fixture(scope="session")
