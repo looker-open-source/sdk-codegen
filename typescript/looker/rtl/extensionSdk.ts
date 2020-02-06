@@ -24,7 +24,6 @@
 
 import { DefaultSettings } from './apiSettings'
 import { Looker31SDK } from '../sdk/3.1/methods'
-import { Looker40SDK } from '../sdk/4.0/methods'
 import { ExtensionSession } from './extensionSession'
 import { ExtensionTransport } from './extensionTransport'
 import {
@@ -51,7 +50,6 @@ export class LookerExtensionSDK {
     const settings = DefaultSettings()
     const transport = new ExtensionTransport(settings, hostConnection)
     const session = new ExtensionSession(settings, transport)
-    if ((settings.api_version ?? '4.0') === '3.1') return new Looker31SDK(session)
-    return new Looker40SDK(session)
+    return new Looker31SDK(session)
   }
 }

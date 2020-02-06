@@ -323,12 +323,12 @@ import java.util.*
         warn(`${stampFile} was not found. Skipping version update.`)
       }
       let content = readFileSync(stampFile)
-      const lookerPattern = /lookerVersion = ['"].*['"]/i
-      const apiPattern = /apiVersion = ['"].*['"]/i
-      const envPattern = /environmentPrefix = ['"].*['"]/i
-      content = content.replace(lookerPattern, `lookerVersion = '${this.versions.lookerVersion}'`)
-      content = content.replace(apiPattern, `apiVersion = '${this.versions.apiVersion}'`)
-      content = content.replace(envPattern, `environmentPrefix = '${this.packageName.toUpperCase()}'`)
+      const lookerPattern = /\bLOOKER_VERSION = ['"].*['"]/i
+      const apiPattern = /\bAPI_VERSION = ['"].*['"]/i
+      const envPattern = /\bENVIRONMENT_PREFIX = ['"].*['"]/i
+      content = content.replace(lookerPattern, `LOOKER_VERSION = "${this.versions.lookerVersion}"`)
+      content = content.replace(apiPattern, `API_VERSION = "${this.versions.apiVersion}"`)
+      content = content.replace(envPattern, `ENVIRONMENT_PREFIX = "${this.packageName.toUpperCase()}"`)
       fs.writeFileSync(stampFile, content, {encoding: utf8})
       success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}`)
     } else {

@@ -36,7 +36,6 @@ import { DelimArray } from '../rtl/delimArray'
 import { Readable } from 'readable-stream'
 import { boolDefault, utf8 } from '../rtl/constants'
 import {
-  strLookerApiVersion,
   strLookerBaseUrl,
   strLookerClientId,
   strLookerClientSecret,
@@ -149,9 +148,9 @@ describe('LookerNodeSDK', () => {
   }
 
   const createTestUsers = async () => {
+    const sdk = new LookerSDK(session)
     // Ensure all test users are populated and enabled
     let user: IUser
-    const sdk = new LookerSDK(session)
     // create test users
     for (const u of users) {
       let searched = await sdk.ok(
@@ -574,8 +573,7 @@ describe('LookerNodeSDK', () => {
       testTimeout
     )
 
-    it(
-      'run_inline_query',
+    it('run_inline_query',
       async () => {
         const sdk = new LookerSDK(session)
         let streamed = false
@@ -679,8 +677,7 @@ describe('LookerNodeSDK', () => {
       await removeTestDashboards()
     }, testTimeout)
 
-    it(
-      'create and update dashboard',
+    it('create and update dashboard',
       async () => {
         const sdk = new LookerSDK(session)
         const me = await sdk.ok(sdk.me())
@@ -847,7 +844,6 @@ describe('LookerNodeSDK', () => {
       process.env[strLookerClientId] = section['client_id']
       process.env[strLookerClientSecret] = section['client_secret']
       process.env[strLookerBaseUrl] = section['base_url']
-      process.env[strLookerApiVersion] = section['api_version'] || '3.1'
       process.env[strLookerVerifySsl] = verify_ssl.toString()
     })
 
@@ -857,7 +853,6 @@ describe('LookerNodeSDK', () => {
       delete process.env[strLookerClientId]
       delete process.env[strLookerClientSecret]
       delete process.env[strLookerBaseUrl]
-      delete process.env[strLookerApiVersion]
       delete process.env[strLookerVerifySsl]
     })
 

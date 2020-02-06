@@ -186,8 +186,7 @@ export interface ITransport {
     queryParams?: Values,
     body?: any,
     authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>,
-    agentTag?: string,
+    options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>>
 
   /**
@@ -209,8 +208,7 @@ export interface ITransport {
     queryParams?: Values,
     body?: any,
     authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>,
-    agentTag?: string,
+    options?: Partial<ITransportSettings>
   ): Promise<T>
 
 }
@@ -286,8 +284,6 @@ export interface ITransportSettings {
   [key:string] : any
   /** base URL of host address */
   base_url: string
-  /** api version */
-  api_version: string
   /** standard headers to provide in all transport requests */
   headers?: Headers
   /** whether to verify ssl certs or not. Defaults to true */
@@ -296,6 +292,8 @@ export interface ITransportSettings {
   timeout: number
   /** encoding override */
   encoding?: string | null
+  /** agent tag to use for the SDK requests */
+  agentTag: string
 }
 
 /**

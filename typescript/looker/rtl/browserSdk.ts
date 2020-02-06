@@ -32,7 +32,6 @@ import { ITransport } from './transport'
 import { BrowserSession } from './browserSession'
 import { DefaultSettings, IApiSettings } from './apiSettings'
 import { Looker31SDK } from '../sdk/3.1/methods'
-import { Looker40SDK } from '../sdk/4.0/methods'
 import { IAuthSession } from './authSession'
 
 export const BrowserSettings = (): IApiSettings => {
@@ -47,9 +46,9 @@ export class LookerBrowserSDK {
    *
    * @param settings Defaults to the settings for the Browser
    *
-   * @param transport Defaults to a `NodeTransport` object
+   * @param transport Defaults to a `BrowserTransport` object
    *
-   * @param session Defaults to `NodeSession` which logs in the user
+   * @param session Defaults to `BrowserSession` which defers user authentication
    */
   static createClient(
     settings?: IApiSettings,
@@ -59,7 +58,6 @@ export class LookerBrowserSDK {
     settings = settings || BrowserSettings()
     transport = transport || new BrowserTransport(settings)
     session = session || new BrowserSession(settings, transport)
-    if ((settings.api_version ?? '4.0') === '3.1') return new Looker31SDK(session)
-    return new Looker40SDK(session)
+    return new Looker31SDK(session)
   }
 }

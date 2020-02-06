@@ -38,7 +38,6 @@ import rq, { Response, Request } from 'request'
 import rp from 'request-promise-native'
 import { PassThrough, Readable } from 'readable-stream'
 import { BaseTransport } from './baseTransport'
-import { lookerVersion } from './constants'
 
 export type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
 
@@ -54,12 +53,10 @@ export class NodeTransport extends BaseTransport {
     queryParams?: Values,
     body?: any,
     authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>,
-    agentTag: string = `${agentPrefix} ${lookerVersion}`,
+    options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
 
     let init = await this.initRequest(
-      agentTag,
       method,
       path,
       queryParams,
@@ -117,15 +114,13 @@ export class NodeTransport extends BaseTransport {
     queryParams?: Values,
     body?: any,
     authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>,
-    agentTag: string = `${agentPrefix} ${lookerVersion}`,
+    options?: Partial<ITransportSettings>
   )
     : Promise<TSuccess> {
 
     const stream = new PassThrough()
     const returnPromise = callback(stream)
     let init = await this.initRequest(
-      agentTag,
       method,
       path,
       queryParams,
@@ -205,7 +200,6 @@ export class NodeTransport extends BaseTransport {
   }
 
   private async initRequest(
-    agentTag: string,
     method: HttpMethod,
     path: string,
     queryParams?: any,
@@ -215,11 +209,11 @@ export class NodeTransport extends BaseTransport {
   ) {
     options = options ? {...this.options, ...options} : this.options
     const headers: IRequestHeaders = {
-      [LookerAppId]: agentTag,
+      [LookerAppId]: options.agentTag!,
       ...options.headers,
     }
 
-    const requestPath = this.makeUrl(path, options, queryParams, authenticator)
+    const requestPath = this.makeUrl(path, options, queryParams)
     let init: RequestOptions = {
       url: requestPath,
       headers: headers,

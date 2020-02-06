@@ -22,38 +22,42 @@
  * THE SOFTWARE.
  */
 
-import { ITransport } from './transport'
-import { NodeSettingsIniFile } from './nodeSettings'
-import { Looker31SDK } from '../sdk/3.1/methods'
-import { NodeSession } from './nodeSession'
+import { Authenticator } from './transport'
+import { defaultApiVersion } from './constants'
 import { NodeTransport } from './nodeTransport'
-import { IApiSettings } from './apiSettings'
+import { APIMethods } from './apiMethods'
 import { IAuthSession } from './authSession'
+import { IApiSettings } from './apiSettings'
 
-/**
- * @class LookerNodeSDK
- *
- * Simple factory for the Node version of the Looker SDK. Provides default connectivity for SDK methods
- *
- */
-export class LookerNodeSDK {
-  /**
-   * Creates an [[LookerSDK]] object.
-   *
-   * @param settings Defaults to the settings from LookerIni
-   *
-   * @param transport Defaults to a `NodeTransport` object
-   *
-   * @param session Defaults to `NodeSession` which logs in the user
-   */
-  static createClient(
-    settings?: IApiSettings,
-    transport?: ITransport,
-    session?: IAuthSession)
-  {
-    settings = settings || new NodeSettingsIniFile('looker.ini')
-    transport = transport || new NodeTransport(settings)
-    session = session || new NodeSession(settings, transport)
-    return new Looker31SDK(session)
-  }
-}
+describe('NodeTransport', () => {
+
+  const hostname = 'https://looker.sdk'
+  const apiVersion = defaultApiVersion
+  const settings = { base_url: hostname } as IApiSettings
+  const session = { settings : settings } as IAuthSession
+  const fullPath = 'https://github.com/looker-open-source/sdk-codegen'
+  const mockAuth: Authenticator = (props:any) => props
+  const api = new APIMethods(session, apiVersion)
+
+  it('relative path without auth is just base', () => {
+    const actual = api.makePath('/login', settings)
+    expect(actual).toEqual(`${hostname}/login`)
+  })
+
+  it('relative path with auth is api path', () => {
+    const actual = api.makePath('/login', settings, mockAuth)
+    expect(actual).toEqual(`${hostname}/api/${apiVersion}/login`)
+  })
+
+  it('full path without auth is just full path', () => {
+    const actual = api.makePath(fullPath, settings)
+    expect(actual).toEqual(fullPath)
+  })
+
+  it('full path with auth is just full path', () => {
+    const actual = api.makePath(fullPath, settings, mockAuth)
+    expect(actual).toEqual(fullPath)
+  })
+
+})
+

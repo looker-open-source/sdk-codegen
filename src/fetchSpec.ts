@@ -33,16 +33,15 @@ import {
   sdkOk
 } from '../typescript/looker/rtl/transport'
 
-const agentTag = 'SDK Codegen'
 let transport: NodeTransport
 
 const Transport = (props: ISDKConfigProps) => {
   if (transport) return transport
   const options: ITransportSettings = {
     base_url: props.base_url,
-    api_version: props.api_version,
     verify_ssl: props.verify_ssl,
-    timeout: defaultTimeout
+    timeout: defaultTimeout,
+    agentTag: 'SDK Codegen',
   }
   transport = new NodeTransport(options)
   return transport
@@ -79,7 +78,6 @@ export const logout = async (props: ISDKConfigProps, token: string) => {
       undefined,
       undefined,
       { headers: { Authorization: `Bearer ${token}` } },
-      agentTag
     )
   )
 }
@@ -94,7 +92,7 @@ export const login = async (props: ISDKConfigProps) => {
 
   try {
     const response = await sdkOk<any, Error>(
-      xp.request<any, Error>('POST', url, creds, undefined, undefined, undefined, agentTag)
+      xp.request<any, Error>('POST', url, creds, undefined, undefined, undefined)
     )
     const accessToken = await response.access_token
 
@@ -134,8 +132,7 @@ export const getUrl = async (
       undefined,
       undefined,
       undefined,
-      options,
-      agentTag
+      options
     )
   )
 }

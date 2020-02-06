@@ -33,7 +33,6 @@ import { defaultTimeout } from './transport'
 import { boolDefault, utf8 } from './constants'
 import {
   IApiSettings,
-  strLookerApiVersion,
   strLookerBaseUrl,
   strLookerClientId,
   strLookerClientSecret,
@@ -59,7 +58,6 @@ export function TestConfig(rootPath: string = '') {
   const configContents = fs.readFileSync(localIni, utf8)
   const config = ApiConfig(configContents)
   const section = config['Looker']
-  const apiVersion = section['api_version']
   const baseUrl = section['base_url']
   const timeout = parseInt(section['timeout'], 10)
   const testContents = fs.readFileSync(testIni, utf8)
@@ -70,7 +68,6 @@ export function TestConfig(rootPath: string = '') {
     testPath,
     dataFile,
     localIni,
-    apiVersion,
     baseUrl,
     timeout,
     testData,
@@ -86,7 +83,6 @@ const config = TestConfig()
 describe('NodeSettings', () => {
   const contents = `
 [Looker]
-api_version=${config.apiVersion}
 base_url=${config.baseUrl}
 client_id=your_API3_client_id
 client_secret=your_API3_client_secret
@@ -109,19 +105,17 @@ timeout=30
   describe('NodeSettingsIni', () => {
     it('settings default to the first section', () => {
       const settings = new NodeSettings(contents)
-      expect(settings.api_version).toEqual(config.apiVersion)
       expect(settings.timeout).toEqual(config.timeout)
       expect(settings.verify_ssl).toEqual(true)
     })
 
     it('retrieves the first section by name', () => {
       const settings = new NodeSettings(contents, 'Looker')
-      expect(settings.api_version).toEqual(config.apiVersion)
+      expect(settings.timeout).toEqual(config.timeout)
     })
 
     it('retrieves the second section by name', () => {
       const settings = new NodeSettings(contents, 'Looker30')
-      expect(settings.api_version).toEqual('3.0')
       expect(settings.timeout).toEqual(30)
       expect(settings.verify_ssl).toEqual(false)
     })
@@ -142,7 +136,6 @@ timeout=30
       process.env[strLookerClientId] = config.testSection['client_id']
       process.env[strLookerClientSecret] = config.testSection['client_secret']
       process.env[strLookerBaseUrl] = config.testSection['base_url']
-      process.env[strLookerApiVersion] = config.testSection['api_version'] || config.apiVersion
       process.env[strLookerVerifySsl] = verifySsl.toString()
     })
 
@@ -152,13 +145,11 @@ timeout=30
       delete process.env[strLookerClientId]
       delete process.env[strLookerClientSecret]
       delete process.env[strLookerBaseUrl]
-      delete process.env[strLookerApiVersion]
       delete process.env[strLookerVerifySsl]
     })
 
     it('settings are retrieved from environment variables', () => {
       const settings = new NodeSettings('')
-      expect(settings.api_version).toEqual(config.apiVersion)
       expect(settings.base_url).toEqual(config.baseUrl)
       expect(settings.timeout).toEqual(defaultTimeout)
       expect(settings.verify_ssl).toEqual(false)
@@ -166,7 +157,6 @@ timeout=30
 
     it('empty file name uses environment variables', () => {
       const settings = new NodeSettingsIniFile('')
-      expect(settings.api_version).toEqual(config.apiVersion)
       expect(settings.base_url).toEqual(config.baseUrl)
       expect(settings.timeout).toEqual(defaultTimeout)
       expect(settings.verify_ssl).toEqual(false)
@@ -174,7 +164,6 @@ timeout=30
 
     it('partial INI uses environment variables', () => {
       const settings = new NodeSettings({base_url: config.baseUrl} as IApiSettings)
-      expect(settings.api_version).toEqual(config.apiVersion)
       expect(settings.base_url).toEqual(config.baseUrl)
       expect(settings.timeout).toEqual(defaultTimeout)
       expect(settings.verify_ssl).toEqual(false)
@@ -187,7 +176,6 @@ timeout=30
       process.env[strLookerTimeout] = '66'
       process.env[strLookerVerifySsl] = '1'
       const settings = new NodeSettingsIniFile(config.testIni)
-      expect(settings.api_version).toEqual(config.testSection['api_version'])
       expect(settings.base_url).toEqual(config.testSection['base_url'])
       expect(settings.timeout).toEqual(66)
       expect(settings.verify_ssl).toEqual(true)
@@ -199,7 +187,6 @@ timeout=30
   describe('NodeSettingsIniFile', () => {
     it('settings default to the first section', () => {
       const settings = new NodeSettingsIniFile(config.testIni)
-      expect(settings.api_version).toEqual(config.testSection['api_version'])
       expect(settings.base_url).toEqual(config.testSection['base_url'])
       expect(settings.timeout).toEqual(parseInt(config.testSection['timeout'], 10))
       expect(settings.verify_ssl).toEqual(config.testSection['verify_ssl'])
@@ -207,7 +194,6 @@ timeout=30
 
     it('retrieves the first section by name', () => {
       const settings = new NodeSettingsIniFile(config.testIni, 'Looker')
-      expect(settings.api_version).toEqual(config.testSection['api_version'])
       expect(settings.base_url).toEqual(config.testSection['base_url'])
       expect(settings.timeout).toEqual(parseInt(config.testSection['timeout'], 10))
       expect(settings.verify_ssl).toEqual(config.testSection['verify_ssl'])
@@ -215,7 +201,6 @@ timeout=30
 
     it('retrieves the second section by name', () => {
       const settings = new NodeSettingsIniFile(config.testIni, 'Looker31')
-      expect(settings.api_version).toEqual('3.1')
       expect(settings.timeout).toEqual(30)
       expect(settings.verify_ssl).toEqual(false)
     })

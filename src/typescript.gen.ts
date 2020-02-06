@@ -357,7 +357,7 @@ export interface IDictionary<T> {
       }
       let content = readFileSync(stampFile)
       const lookerPattern = /lookerVersion = ['"].*['"]/i
-      const apiPattern = /apiVersion = ['"].*['"]/i
+      const apiPattern = /\bapiVersion = ['"].*['"]/i
       const envPattern = /environmentPrefix = ['"].*['"]/i
       content = content.replace(lookerPattern, `lookerVersion = '${this.versions.lookerVersion}'`)
       content = content.replace(apiPattern, `apiVersion = '${this.versions.apiVersion}'`)
