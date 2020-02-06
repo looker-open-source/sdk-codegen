@@ -22,8 +22,6 @@
  * THE SOFTWARE.
  */
 
-// TypeScript code generator
-
 import {
   Arg,
   IMappedType,
@@ -42,6 +40,9 @@ import * as prettier from 'prettier'
 import { warn, isFileSync, success, commentBlock, readFileSync } from './utils'
 const utf8Encoding = { encoding: 'utf-8' }
 
+/**
+ * TypeScript code generator
+ */
 export class TypescriptGen extends CodeGen {
   codePath = './typescript/'
   packagePath = 'looker'

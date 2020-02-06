@@ -72,7 +72,6 @@ export abstract class CodeGen implements ICodeGen {
     }
   }
 
-
   /**
    * Returns true if the SDK supports multiple API versions of models
    * @returns {boolean} True if multi-API is supported

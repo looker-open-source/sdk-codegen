@@ -35,7 +35,8 @@ import { logConvert } from './convert'
 import { IVersionInfo } from './codeGen'
 
 const apiVersions = (props: any) => {
-  return props['api_versions'].split(',')
+  const versions = props.api_versions ?? '3.1,4.0'
+  return versions.split(',')
 }
 
 // tslint:disable-next-line: no-floating-promises

@@ -1134,11 +1134,42 @@ data class Dashboard (
    * Number of times viewed in the Looker web UI (read-only)
    */
   var view_count: Long? = null,
-  var settings: DashboardSettings? = null,
+  var appearance: DashboardAppearance? = null,
   /**
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */
   var preferred_viewer: String? = null
+)
+
+data class DashboardAppearance (
+  /**
+   * Page margin (side) width
+   */
+  var page_side_margins: Long? = null,
+  /**
+   * Background color for the dashboard
+   */
+  var page_background_color: String? = null,
+  /**
+   * Title alignment on dashboard tiles
+   */
+  var tile_title_alignment: String? = null,
+  /**
+   * Space between tiles
+   */
+  var tile_space_between: Long? = null,
+  /**
+   * Background color for tiles
+   */
+  var tile_background_color: String? = null,
+  /**
+   * Tile shadow on/off
+   */
+  var tile_shadow: Boolean? = null,
+  /**
+   * Key color
+   */
+  var key_color: String? = null
 )
 
 data class DashboardBase (
@@ -1463,37 +1494,6 @@ data class DashboardLookml (
    * lookml of UDD (read-only)
    */
   var lookml: String? = null
-)
-
-data class DashboardSettings (
-  /**
-   * Page margin (side) width
-   */
-  var page_side_margins: Long? = null,
-  /**
-   * Background color for the dashboard
-   */
-  var page_background_color: String? = null,
-  /**
-   * Title alignment on dashboard tiles
-   */
-  var tile_title_alignment: String? = null,
-  /**
-   * Space between tiles
-   */
-  var tile_space_between: Long? = null,
-  /**
-   * Background color for tiles
-   */
-  var tile_background_color: String? = null,
-  /**
-   * Tile shadow on/off
-   */
-  var tile_shadow: Boolean? = null,
-  /**
-   * Key color
-   */
-  var key_color: String? = null
 )
 
 data class DataActionForm (
@@ -5327,6 +5327,10 @@ data class ResultMakerWithIdVisConfigAndDynamicFields (
    * ID of query if this is a query. (read-only)
    */
   var query_id: Long? = null,
+  /**
+   * ID of SQL Query if this is a SQL Runner Query (read-only)
+   */
+  var sql_query_id: String? = null,
   var query: Query? = null,
   /**
    * Vis config of the constituent Query, or Merge Query. (read-only)
@@ -6983,7 +6987,7 @@ data class WriteDashboard (
    * Title color
    */
   var title_color: String? = null,
-  var settings: DashboardSettings? = null,
+  var appearance: DashboardAppearance? = null,
   /**
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */

@@ -1131,11 +1131,42 @@ struct Dashboard: SDKModel {
      * Number of times viewed in the Looker web UI (read-only)
      */
     var view_count: Int64?
-    var settings: DashboardSettings?
+    var appearance: DashboardAppearance?
     /**
      * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
      */
     var preferred_viewer: String?
+}
+
+struct DashboardAppearance: SDKModel {
+    /**
+     * Page margin (side) width
+     */
+    var page_side_margins: Int64?
+    /**
+     * Background color for the dashboard
+     */
+    var page_background_color: String?
+    /**
+     * Title alignment on dashboard tiles
+     */
+    var tile_title_alignment: String?
+    /**
+     * Space between tiles
+     */
+    var tile_space_between: Int64?
+    /**
+     * Background color for tiles
+     */
+    var tile_background_color: String?
+    /**
+     * Tile shadow on/off
+     */
+    var tile_shadow: Bool?
+    /**
+     * Key color
+     */
+    var key_color: String?
 }
 
 struct DashboardBase: SDKModel {
@@ -1460,37 +1491,6 @@ struct DashboardLookml: SDKModel {
      * lookml of UDD (read-only)
      */
     var lookml: String?
-}
-
-struct DashboardSettings: SDKModel {
-    /**
-     * Page margin (side) width
-     */
-    var page_side_margins: Int64?
-    /**
-     * Background color for the dashboard
-     */
-    var page_background_color: String?
-    /**
-     * Title alignment on dashboard tiles
-     */
-    var tile_title_alignment: String?
-    /**
-     * Space between tiles
-     */
-    var tile_space_between: Int64?
-    /**
-     * Background color for tiles
-     */
-    var tile_background_color: String?
-    /**
-     * Tile shadow on/off
-     */
-    var tile_shadow: Bool?
-    /**
-     * Key color
-     */
-    var key_color: String?
 }
 
 struct DataActionForm: SDKModel {
@@ -5324,6 +5324,10 @@ struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
      * ID of query if this is a query. (read-only)
      */
     var query_id: Int64?
+    /**
+     * ID of SQL Query if this is a SQL Runner Query (read-only)
+     */
+    var sql_query_id: String?
     var query: Query?
     /**
      * Vis config of the constituent Query, or Merge Query. (read-only)
@@ -6980,7 +6984,7 @@ struct WriteDashboard: SDKModel {
      * Title color
      */
     var title_color: String?
-    var settings: DashboardSettings?
+    var appearance: DashboardAppearance?
     /**
      * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
      */

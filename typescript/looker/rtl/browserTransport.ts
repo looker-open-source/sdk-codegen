@@ -50,7 +50,7 @@ export class BrowserTransport extends BaseTransport {
     agentTag: string = `${agentPrefix} ${lookerVersion}`
   ): Promise<SDKResponse<TSuccess, TError>> {
     options = { ... this.options, ...options}
-    const requestPath = this.makeUrl(path, options, queryParams, authenticator)
+    const requestPath = this.makeUrl(path, options, queryParams)
     const props = await this.initRequest(agentTag, method, requestPath, body, authenticator, options)
     const req = fetch(
       props.url,
@@ -126,7 +126,7 @@ export class BrowserTransport extends BaseTransport {
 
     options = options ? {...this.options, ...options} : this.options
     const stream = new PassThrough()
-    const requestPath = this.makeUrl(path, options, queryParams, authenticator)
+    const requestPath = this.makeUrl(path, options, queryParams)
     const returnPromise = callback(stream)
     let props = await this.initRequest(
       agentTag,

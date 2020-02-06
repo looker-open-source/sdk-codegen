@@ -1136,11 +1136,42 @@ export interface IDashboard {
    * Number of times viewed in the Looker web UI (read-only)
    */
   view_count?: number
-  settings?: IDashboardSettings
+  appearance?: IDashboardAppearance
   /**
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */
   preferred_viewer?: string
+}
+
+export interface IDashboardAppearance {
+  /**
+   * Page margin (side) width
+   */
+  page_side_margins?: number
+  /**
+   * Background color for the dashboard
+   */
+  page_background_color?: string
+  /**
+   * Title alignment on dashboard tiles
+   */
+  tile_title_alignment?: string
+  /**
+   * Space between tiles
+   */
+  tile_space_between?: number
+  /**
+   * Background color for tiles
+   */
+  tile_background_color?: string
+  /**
+   * Tile shadow on/off
+   */
+  tile_shadow?: boolean
+  /**
+   * Key color
+   */
+  key_color?: string
 }
 
 export interface IDashboardBase {
@@ -1465,37 +1496,6 @@ export interface IDashboardLookml {
    * lookml of UDD (read-only)
    */
   lookml?: string
-}
-
-export interface IDashboardSettings {
-  /**
-   * Page margin (side) width
-   */
-  page_side_margins?: number
-  /**
-   * Background color for the dashboard
-   */
-  page_background_color?: string
-  /**
-   * Title alignment on dashboard tiles
-   */
-  tile_title_alignment?: string
-  /**
-   * Space between tiles
-   */
-  tile_space_between?: number
-  /**
-   * Background color for tiles
-   */
-  tile_background_color?: string
-  /**
-   * Tile shadow on/off
-   */
-  tile_shadow?: boolean
-  /**
-   * Key color
-   */
-  key_color?: string
 }
 
 export interface IDataActionForm {
@@ -6829,6 +6829,10 @@ export interface IResultMakerWithIdVisConfigAndDynamicFields {
    * ID of query if this is a query. (read-only)
    */
   query_id?: number
+  /**
+   * ID of SQL Query if this is a SQL Runner Query (read-only)
+   */
+  sql_query_id?: string
   query?: IQuery
   /**
    * Vis config of the constituent Query, or Merge Query. (read-only)
@@ -8485,7 +8489,7 @@ export interface IWriteDashboard {
    * Title color
    */
   title_color?: string
-  settings?: IDashboardSettings
+  appearance?: IDashboardAppearance
   /**
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */

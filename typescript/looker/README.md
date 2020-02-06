@@ -36,8 +36,6 @@ Create a `looker.ini` file with your server URL and API credentials assigned as 
 
 ```ini
 [Looker]
-# API version defaults to 3.1. 3.1 and 3.0 are currently supported. 3.1 is highly recommended.
-api_version=3.1
 # Base URL for API. Do not include /api/* in the url
 base_url=https://<your-looker-server>:19999
 # API 3 client id
@@ -83,9 +81,50 @@ import { LookerNodeSDK } from '@looker/sdk'
 })()
 ```
 
-## Using NodeSession for automatic authentication
+### Developing with multiple API versions ###
 
-**NOTE**: As we secure the design of the Looker SDK's authentication practices, the authentication behavior described in this section will likely change.
+Starting with Looker release 7.2, the experimental version of API 4.0 is available. To support iterative migration to API 4.0 from API 3.1, the single Looker SDK package now supports multiple API versions for the generated SDK classes. Both API 3.1 and API 4.0 are supported for Node and browser-based use.
+
+In the `looker.ini` used by the code generator, multiple api versions can be indicated with:
+
+```ini
+# default values API versions to generate
+api_versions=3.1,4.0
+```
+
+for example, which will generate files to
+
+```bash
+/sdk
+  /3.1
+    models.ts
+    methods.ts
+    streams.ts
+  /4.0
+    models.ts
+    methods.ts
+    streams.ts
+```
+
+`LookerNodeSDK.createClient()` `LookerBrowserSDK.createClient()` will return either the API 3.1 implementation of the client.
+
+`Looker40SDK()` and `Looker31SDK()` can be used to compose the initialization of either the 4.0 or 3.1 SDK clients.
+
+Code similar to the following can be used to develop with both the 3.1 and 4.0 SDKs in the same source file:
+
+```typescript
+import { Looker40SDK, Looker31SDK, NodeSession, NodeSettingsIniFile } from '@looker/sdk'
+
+const settings = new NodeSettingsIniFile()
+const session = new NodeSession(settings)
+const sdk = new Looker40SDK(session)
+const sdk31 = new Looker31SDK(session)
+
+const me40 = await sdk.ok(sdk.me())
+const me31 = await sdk.ok(sdk31.me()) // or sdk31.ok(sdk31.me())
+```
+
+## Using NodeSession for automatic authentication
 
 Almost all requests to Looker's API require an access token. This token is established when the `login` endpoint is called with correct API3 credentials for `client_id` and `client_secret`. When `login` is successful, the user whose API3 credentials are provided is considered the active user. For this discussion of `NodeSession`, we'll
 call this user the **API User**.
@@ -93,6 +132,7 @@ call this user the **API User**.
 The `settings` provided to the `NodeSession` class include the base URL for the Looker instance and the desired API version. When API requests are made, if the auth session is not yet established, `NodeSession` will automatically authenticate the **API User**. The `NodeSession` also directly supports logging in as another user, usually called `sudo as` another user in the Looker browser application.
 
 API users with appropriate permissions can `sudo` as another user by specifying a specific user ID in the `NodeSession.login()` method. Only one user can be impersonated at a time via `NodeSession`. When a `sudo` session is active, all SDK methods will be processed as that user.
+
 
 ### Sudo behavior with NodeSession
 
@@ -216,63 +256,11 @@ export class EmbedSession extends ProxySession {
 }
 ```
 
-
-## Developing with multiple API versions ###
-
-The Looker SDK package now supports multiple API versions for the generated SDK classes.
-
-In the `looker.ini` used by the code generator, multiple api versions can be indicated with:
-
-```ini
-api_versions=3.1,4.0
-```
-
-for example, which will generate files to
-
-```bash
-/sdk
-  /3.1
-    models.ts
-    methods.ts
-    streams.ts
-  /4.0
-    models.ts
-    methods.ts
-    streams.ts
-```
-
-`LookerNodeSDK.createClient()` `LookerBrowserSDK.createClient()` and `SDK.createClient()` will return either the 3.1 or 
-4.0 version of the SDK bindings
-
-By default, all of these factories will return the `4.0` version unless `3.1` is explicitly specified for the API version
-
-To develop with both 3.1 and 4.0 SDKs in the same source file, you can use a technique similar to the following:
-
-```typescript
-import { Looker40SDK, Looker31SDK, NodeSession, NodeSettingsIniFile } from '@looker/sdk'
-
-// Presume these default to API 4.0 configuration
-const settings40 = new NodeSettingsIniFile()
-const session40 = new NodeSession(settings40)
-
-// These are for API 3.1
-const settings31 = new NodeSettingsIniFile('./looker.ini', 'Looker31')
-const session31 = new NodeSession(settings31)
-
-// SDK.createClient(session40) would also return a 4.0 SDK object
-const sdk = new Looker40SDK(session40)
-
-// SDK.createClient(session31) would also return a 3.1 SDK object
-const sdk31 = new Looker31SDK(session31)
-
-const me40 = sdk.ok(sdk.me())
-
-const me31 = sdk.ok(sdk31.me())
-```
-## Additional examples
+### More examples
 
 Looker's open source repository of [SDK Examples](https://github.com/looker-open-source/sdk-examples/tree/master/typescript) has more example scripts and applications that show how to use the Looker SDK.
 
 ## A note about security
 
 Any script or configuration file used to provide credentials to your Looker SDK instance [needs to be secured](https://github.com/looker-open-source/sdk-codegen#securing-your-sdk-credentials).
+
