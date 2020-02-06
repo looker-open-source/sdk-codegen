@@ -23,7 +23,7 @@
 looker_version = "7.3"
 api_version = "4.0"
 sdk_version = f"{api_version}.{looker_version}"
-environment_prefix = "LOOKER40SDK"
+environment_prefix = "LOOKERSDK"
 
 RESPONSE_STRING_MODE = (
     r"(^application/.*"
