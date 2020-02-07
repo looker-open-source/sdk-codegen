@@ -20,10 +20,69 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-# shortcut to generated models
+from typing import Optional
+import warnings
+
+from looker_sdk.rtl import api_settings
+from looker_sdk.rtl import requests_transport
+from looker_sdk.rtl import serialize
+from looker_sdk.rtl import auth_session
+
+# F401 - providing convenience shortcut for methods/models at top level
+from looker_sdk.sdk.api31 import methods, methods as methods31  # noqa:F401
+from looker_sdk.sdk.api40 import methods as methods40
 from looker_sdk.sdk.api31 import models, models as models31  # noqa:F401
 from looker_sdk.sdk.api40 import models as models40  # noqa: F401
 
-# shortcut to generated methods
-from looker_sdk.sdk.api31 import methods, methods as methods31  # noqa: F401
-from looker_sdk.sdk.api40 import methods as methods40  # noqa: F401
+
+API_SETTINGS_API_VERSION_DEPRECATED = "API_VERSION config value is no longer needed."
+
+
+class InitError(Exception):
+    pass
+
+
+def init31(
+    config_file: str = "looker.ini", section: Optional[str] = None
+) -> methods31.Looker31SDK:
+    """Default dependency configuration
+    """
+    settings = api_settings.ApiSettings.configure(config_file, section)
+    if settings.api_version is not None:
+        warnings.warn(message=DeprecationWarning(API_SETTINGS_API_VERSION_DEPRECATED))
+    settings.api_version = "3.1"
+    settings.headers = {"Content-Type": "application/json"}
+    if not settings.is_configured():
+        raise InitError(
+            f"Missing required configuration values like base_url and api_version."
+        )
+    transport = requests_transport.RequestsTransport.configure(settings)
+    return methods31.Looker31SDK(
+        auth_session.AuthSession(settings, transport, serialize.deserialize31),
+        serialize.deserialize31,
+        serialize.serialize,
+        transport,
+    )
+
+
+def init40(
+    config_file: str = "looker.ini", section: Optional[str] = None
+) -> methods40.Looker40SDK:
+    """Default dependency configuration
+    """
+    settings = api_settings.ApiSettings.configure(config_file, section)
+    if settings.api_version is not None:
+        warnings.warn(message=DeprecationWarning(API_SETTINGS_API_VERSION_DEPRECATED))
+    settings.api_version = "4.0"
+    settings.headers = {"Content-Type": "application/json"}
+    if not settings.is_configured():
+        raise InitError(
+            f"Missing required configuration values like base_url and api_version."
+        )
+    transport = requests_transport.RequestsTransport.configure(settings)
+    return methods40.Looker40SDK(
+        auth_session.AuthSession(settings, transport, serialize.deserialize40),
+        serialize.deserialize40,
+        serialize.serialize,
+        transport,
+    )

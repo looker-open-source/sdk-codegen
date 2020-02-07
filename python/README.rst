@@ -13,7 +13,21 @@ problems with the SDK, please feel free to
 `report an issue <https://github.com/looker-open-source/sdk-codegen/issues>`_,
 and please indicate which language SDK you're using in the report.
 
-Sample project setup
+Basic Usage
+===========
+.. code-block:: python
+
+    import looker_sdk
+
+
+    sdk = looker_sdk.init31()  # or init40() for v4.0 API
+    # and away you go
+    my_user = sdk.me()
+    new_user = looker_sdk.models.WriteUser(first_name="Jane", last_name="Doe")
+    sdk.create_user(body=new_user)
+
+
+sample project setup
 ====================
 
 Install python 3.7. We highly recommend using
@@ -59,7 +73,7 @@ Install looker_sdk using pipenv
 
 .. code-block:: bash
 
-    pipenv install --python 3.7 --pre looker_sdk
+    pipenv install --python 3.7 looker_sdk
 
 
 Configuring the SDK
