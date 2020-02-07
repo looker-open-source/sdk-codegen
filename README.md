@@ -43,6 +43,21 @@ Please review the following table for a breakdown of the options to initialize t
 | Kotlin  | Do not use | `Looker40SDK()` | API 4.0 was specifically created to correct the endpoint payloads for strongly-typed languages like Kotlin and Swift |
 | Swift | Not applicable | `Looker40SDK()` | Swift only has SDK definitions for API 4.0 |                                                                                                     |
 
+By supporting both API versions in the same SDK package, we hope the migration path to the latest API is simplified. Both SDK versions can be used at the same time, in the same source file, which should allow for iterative work to move to the new API version.
+ 
+For example:
+
+```typescript
+import { Looker40SDK, Looker31SDK, NodeSession, NodeSettingsIniFile } from '@looker/sdk'
+
+const settings = new NodeSettingsIniFile()
+const session = new NodeSession(settings)
+const sdk = new Looker40SDK(session)
+const sdk31 = new Looker31SDK(session)
+
+const me40 = await sdk.ok(sdk.me())
+const me31 = await sdk.ok(sdk31.me()) // or sdk31.ok(sdk31.me())
+```
 
 ## Using existing, pre-generated SDKs
 
