@@ -139,6 +139,11 @@ export class APIMethods {
     options?: Partial<ITransportSettings>
   )
     : Promise<T> {
+    options = { ...this.authSession.settings, ...options}
+    const authenticator = (init: any) => {
+      return this.authSession.authenticate(init)
+    }
+    path = this.makePath(path, options, authenticator)
     return this.authSession.transport.stream<T>(
       callback,
       method,

@@ -47,6 +47,7 @@ export abstract class CodeGen implements ICodeGen {
   codePath = './'
   packagePath = 'looker'
   packageName = 'LookerSDK'
+  environmentPrefix = this.packageName.toUpperCase()
   itself = ''
   fileExtension = '.code'
   argDelimiter = ', '

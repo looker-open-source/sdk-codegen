@@ -443,7 +443,7 @@ ${this.hooks.join('\n')}
       const envPattern = /environment_prefix = ['"].*['"]/i
       content = content.replace(lookerPattern, `looker_version = "${this.versions.lookerVersion}"`)
       content = content.replace(apiPattern, `api_version = "${this.versions.apiVersion}"`)
-      content = content.replace(envPattern, `environment_prefix = "${this.packageName.toUpperCase()}"`)
+      content = content.replace(envPattern, `environment_prefix = "${this.environmentPrefix}"`)
       fs.writeFileSync(stampFile, content, {encoding: utf8})
       success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}` )
     } else {

@@ -1045,8 +1045,16 @@ export interface ICodeGen {
   // e.g. 'python' for Python
   codePath: string
 
-  // folder for the Looker SDK reference
-  // e.g. 'looker_sdk' for Python. All python source would end up under `python/looker_sdk`
+  /**
+   * beginning name pattern for all environment variables
+   * e.g. LOOKERSDK
+   */
+  environmentPrefix: string
+
+  /**
+   * folder for the Looker SDK reference
+   * e.g. 'looker_sdk' for Python. All python source would end up under `python/looker_sdk`
+   */
   packagePath: string
 
   // folder for the Looker SDK reference

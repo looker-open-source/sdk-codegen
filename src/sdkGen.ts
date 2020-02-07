@@ -33,7 +33,6 @@ import { MethodGenerator, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
 import { logConvert } from './convert'
 import { IVersionInfo } from './codeGen'
-import { getEnabledCategories } from 'trace_events'
 
 const apiVersions = (props: any) => {
   const versions = props.api_versions ?? '3.1,4.0'

@@ -328,7 +328,7 @@ import java.util.*
       const envPattern = /\bENVIRONMENT_PREFIX = ['"].*['"]/i
       content = content.replace(lookerPattern, `LOOKER_VERSION = "${this.versions.lookerVersion}"`)
       content = content.replace(apiPattern, `API_VERSION = "${this.versions.apiVersion}"`)
-      content = content.replace(envPattern, `ENVIRONMENT_PREFIX = "${this.packageName.toUpperCase()}"`)
+      content = content.replace(envPattern, `ENVIRONMENT_PREFIX = "${this.environmentPrefix}"`)
       fs.writeFileSync(stampFile, content, {encoding: utf8})
       success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}`)
     } else {

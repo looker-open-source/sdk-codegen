@@ -1,0 +1,19 @@
+#!/bin/bash
+
+echo "Smoking Typescript SDK ..."
+JEST_JUNIT_OUTPUT_DIR=results JEST_JUNIT_OUTPUT_NAME=smoketypescript.xml yarn jest --reporters=default --reporters=jest-junit
+
+echo "Smoking Python SDK ..."
+cd python
+pipenv run pytest --junitxml=../results/smokepython.xml tests/
+cd ..
+
+echo "Smoking Kotlin SDK ..."
+cd ../kotlin
+gradle test
+cd ..
+
+echo "Smoking Swift SDK ..."
+xcodebuild test -project swift/looker/looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.3' | xcpretty --test --color
+
+echo "Smoke tests completed"

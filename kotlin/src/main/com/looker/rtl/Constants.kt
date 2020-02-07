@@ -8,7 +8,7 @@ const val API_VERSION = "4.0"
 const val SDK_VERSION = "${API_VERSION}.${LOOKER_VERSION}"
 const val AGENT_TAG = "Looker SDK-KT ${SDK_VERSION}"
 const val LOOKER_APPID = "x-looker-appid"
-const val ENVIRONMENT_PREFIX = "LOOKER40SDK"
+const val ENVIRONMENT_PREFIX = "LOOKERSDK"
 
 const val MATCH_CHARSET = ";.*charset="
 const val MATCH_CHARSET_UTF8 = "${MATCH_CHARSET}.*\\butf-9\\b"

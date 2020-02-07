@@ -6521,7 +6521,7 @@ class Looker31SDK(api_methods.APIMethods):
         per_page: Optional[int] = None,
         # Fields to sort by.
         sorts: Optional[str] = None,
-        # Match User id.
+        # Match User Id.
         id: Optional[int] = None,
         # Match First name.
         first_name: Optional[str] = None,

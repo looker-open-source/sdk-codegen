@@ -882,7 +882,7 @@ class Dashboard(model.Model):
         tile_text_color: Tile text color
         title_color: Title color
         view_count: Number of times viewed in the Looker web UI
-        settings:
+        appearance:
         preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
     """
 
@@ -925,8 +925,30 @@ class Dashboard(model.Model):
     tile_text_color: Optional[str] = None
     title_color: Optional[str] = None
     view_count: Optional[int] = None
-    settings: Optional["DashboardSettings"] = None
+    appearance: Optional["DashboardAppearance"] = None
     preferred_viewer: Optional[str] = None
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class DashboardAppearance(model.Model):
+    """
+    Attributes:
+        page_side_margins: Page margin (side) width
+        page_background_color: Background color for the dashboard
+        tile_title_alignment: Title alignment on dashboard tiles
+        tile_space_between: Space between tiles
+        tile_background_color: Background color for tiles
+        tile_shadow: Tile shadow on/off
+        key_color: Key color
+    """
+
+    page_side_margins: Optional[int] = None
+    page_background_color: Optional[str] = None
+    tile_title_alignment: Optional[str] = None
+    tile_space_between: Optional[int] = None
+    tile_background_color: Optional[str] = None
+    tile_shadow: Optional[bool] = None
+    key_color: Optional[str] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -1137,28 +1159,6 @@ class DashboardLookml(model.Model):
 
     dashboard_id: Optional[str] = None
     lookml: Optional[str] = None
-
-
-@attr.s(auto_attribs=True, kw_only=True)
-class DashboardSettings(model.Model):
-    """
-    Attributes:
-        page_side_margins: Page margin (side) width
-        page_background_color: Background color for the dashboard
-        tile_title_alignment: Title alignment on dashboard tiles
-        tile_space_between: Space between tiles
-        tile_background_color: Background color for tiles
-        tile_shadow: Tile shadow on/off
-        key_color: Key color
-    """
-
-    page_side_margins: Optional[int] = None
-    page_background_color: Optional[str] = None
-    tile_title_alignment: Optional[str] = None
-    tile_space_between: Optional[int] = None
-    tile_background_color: Optional[str] = None
-    tile_shadow: Optional[bool] = None
-    key_color: Optional[str] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -3942,6 +3942,7 @@ class ResultMakerWithIdVisConfigAndDynamicFields(model.Model):
         merge_result_id: ID of merge result if this is a merge_result.
         total: Total of the constituent Look, Query, or Merge Query
         query_id: ID of query if this is a query.
+        sql_query_id: ID of SQL Query if this is a SQL Runner Query
         query:
         vis_config: Vis config of the constituent Query, or Merge Query.
     """
@@ -3953,6 +3954,7 @@ class ResultMakerWithIdVisConfigAndDynamicFields(model.Model):
     merge_result_id: Optional[str] = None
     total: Optional[bool] = None
     query_id: Optional[int] = None
+    sql_query_id: Optional[str] = None
     query: Optional["Query"] = None
     vis_config: Optional[MutableMapping[str, str]] = None
 
@@ -5286,7 +5288,7 @@ class WriteDashboard(model.Model):
         tile_background_color: Tile background color
         tile_text_color: Tile text color
         title_color: Title color
-        settings:
+        appearance:
         preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
     """
 
@@ -5310,7 +5312,7 @@ class WriteDashboard(model.Model):
     tile_background_color: Optional[str] = None
     tile_text_color: Optional[str] = None
     title_color: Optional[str] = None
-    settings: Optional["DashboardSettings"] = None
+    appearance: Optional["DashboardAppearance"] = None
     preferred_viewer: Optional[str] = None
 
     def __init__(
@@ -5336,7 +5338,7 @@ class WriteDashboard(model.Model):
         tile_background_color: Optional[str] = None,
         tile_text_color: Optional[str] = None,
         title_color: Optional[str] = None,
-        settings: Optional["DashboardSettings"] = None,
+        appearance: Optional["DashboardAppearance"] = None,
         preferred_viewer: Optional[str] = None
     ):
         self.description = description
@@ -5359,7 +5361,7 @@ class WriteDashboard(model.Model):
         self.tile_background_color = tile_background_color
         self.tile_text_color = tile_text_color
         self.title_color = title_color
-        self.settings = settings
+        self.appearance = appearance
         self.preferred_viewer = preferred_viewer
 
 
@@ -7364,6 +7366,10 @@ sr.converter31.register_structure_hook(
     structure_hook,  # type:ignore
 )
 sr.converter31.register_structure_hook(
+    ForwardRef("DashboardAppearance"),  # type: ignore
+    structure_hook,  # type:ignore
+)
+sr.converter31.register_structure_hook(
     ForwardRef("DashboardBase"),  # type: ignore
     structure_hook,  # type:ignore
 )
@@ -7385,10 +7391,6 @@ sr.converter31.register_structure_hook(
 )
 sr.converter31.register_structure_hook(
     ForwardRef("DashboardLookml"),  # type: ignore
-    structure_hook,  # type:ignore
-)
-sr.converter31.register_structure_hook(
-    ForwardRef("DashboardSettings"),  # type: ignore
     structure_hook,  # type:ignore
 )
 sr.converter31.register_structure_hook(

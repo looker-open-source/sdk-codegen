@@ -5721,7 +5721,7 @@ class Looker40SDK(api_methods.APIMethods):
     def search_dashboards(
         self,
         # Match dashboard id.
-        id: Optional[str] = None,
+        id: Optional[int] = None,
         # Match dashboard slug.
         slug: Optional[str] = None,
         # Match Dashboard title.
@@ -5729,7 +5729,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Match Dashboard description.
         description: Optional[str] = None,
         # Filter on a content favorite id.
-        content_favorite_id: Optional[str] = None,
+        content_favorite_id: Optional[int] = None,
         # Filter on a particular space.
         space_id: Optional[str] = None,
         # Filter on dashboards deleted status.
@@ -5739,7 +5739,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Filter on a particular value of view_count
         view_count: Optional[str] = None,
         # Filter on a content favorite id.
-        content_metadata_id: Optional[str] = None,
+        content_metadata_id: Optional[int] = None,
         # Exclude items that exist only in personal spaces other than the users
         curate: Optional[bool] = None,
         # Requested fields.
@@ -6524,8 +6524,8 @@ class Looker40SDK(api_methods.APIMethods):
         per_page: Optional[int] = None,
         # Fields to sort by.
         sorts: Optional[str] = None,
-        # Match User id.
-        id: Optional[str] = None,
+        # Match User Id.
+        id: Optional[int] = None,
         # Match First name.
         first_name: Optional[str] = None,
         # Match Last name.
@@ -6539,9 +6539,9 @@ class Looker40SDK(api_methods.APIMethods):
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
         # Search for users who have access to this content_metadata item
-        content_metadata_id: Optional[str] = None,
+        content_metadata_id: Optional[int] = None,
         # Search for users who are direct members of this group
-        group_id: Optional[str] = None,
+        group_id: Optional[int] = None,
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.User]:
         """Search Users"""

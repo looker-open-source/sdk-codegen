@@ -605,8 +605,6 @@ describe('LookerNodeSDK', () => {
             result_format: 'json'
           }
           const json = await sdk.ok(sdk.run_inline_query(request))
-          request.result_format = 'csv'
-          const csv = await sdk.ok(sdk.run_inline_query(request))
           expect(json).toBeDefined()
           expect(json.length).toEqual(limit)
           const row = json[0] as any
@@ -615,7 +613,10 @@ describe('LookerNodeSDK', () => {
               expect(row.hasOwnProperty(field)).toBeTruthy()
             })
           }
+          request.result_format = 'csv'
+          const csv = await sdk.ok(sdk.run_inline_query(request))
           expect(csv).toBeDefined()
+          // Check the number of rows returned from the CSV response
           expect((csv.match(/\n/g) || []).length).toEqual(limit + 1)
           if (!streamed) {
             // Only test the first query for streaming support to avoid redundant long processes

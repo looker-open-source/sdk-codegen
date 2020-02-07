@@ -362,7 +362,7 @@ export interface IDictionary<T> {
       const envPattern = /environmentPrefix = ['"].*['"]/i
       content = content.replace(lookerPattern, `lookerVersion = '${this.versions.lookerVersion}'`)
       content = content.replace(apiPattern, `apiVersion = '${this.versions.apiVersion}'`)
-      content = content.replace(envPattern, `environmentPrefix = '${this.packageName.toUpperCase()}'`)
+      content = content.replace(envPattern, `environmentPrefix = '${this.environmentPrefix}'`)
       fs.writeFileSync(stampFile, content, utf8Encoding)
       success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}`)
     } else {
