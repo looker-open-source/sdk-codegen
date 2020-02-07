@@ -56,8 +56,8 @@ Verify authentication works and that API calls will succeed with code similar to
 ```typescript
 import { LookerNodeSDK } from '@looker/sdk'
 (async () => {
-  // create a Node SDK client that reads from an INI file
-  const sdk = LookerNodeSDK.createClient()
+  // create a Node SDK object for API 3.1
+  const sdk = LookerNodeSDK.init31()
   // retrieve your user account to verify correct credentials
   const me = await sdk.ok(sdk.me(
     "id, first_name, last_name, display_name, email, personal_space_id, home_space_id, group_ids, role_ids"))
@@ -106,9 +106,9 @@ for example, which will generate files to
     streams.ts
 ```
 
-`LookerNodeSDK.createClient()` `LookerBrowserSDK.createClient()` will return either the API 3.1 implementation of the client.
+`LookerNodeSDK.init31()` `LookerBrowserSDK.init31()` and `Looker31SDK()` all initialize the API 3.1 implementation of the SDK.
 
-`Looker40SDK()` and `Looker31SDK()` can be used to compose the initialization of either the 4.0 or 3.1 SDK clients.
+`LookerNodeSDK.init40()` `LookerBrowserSDK.init40()` and `Looker40SDK()` all initalize the API 4.1 implementation of the SDK.
 
 Code similar to the following can be used to develop with both the 3.1 and 4.0 SDKs in the same source file:
 
@@ -201,7 +201,7 @@ describe('sudo', () => {
 Once the desired environment variables are set, the following code is all that's required to initialize the Looker SDK and retrieve the API credential's `User` information.
 
 ```typescript
-const sdk = LookerNodeSDK.createClient(new NodeSettings())
+const sdk = LookerNodeSDK.init31(new NodeSettings())
 const me = await sdk.ok(sdk.me())
 ```
 

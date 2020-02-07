@@ -17,9 +17,32 @@ A Looker SDK has several parts:
 
 - The **Looker API Explorer**, provided in the Looker web app directly from our version-specific OpenAPI specification, available in each Looker server instance.
 
-- **Language SDKs**, "smarter" client language classes and methods to improve the experience of calling the Looker API in various popular coding languages. Looker has created a code generator for specific languages in this repository, which is invoked by the command `yarn sdk [language]`.
+- **Language SDKs**, "smarter" client language classes and methods to improve the experience of calling the Looker API in various popular coding languages. Looker has created a code generator for specific languages in this repository, which is invoked by the command available in this repository, `yarn sdk [language]`.
 
 - **API bindings** using the legacy [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) can also be produced. This process converts the API specification to language-specific code. Most of these template-based generators are written by different language enthusiasts, so the pattern and quality of the generated code varies widely, even though most generated code tends to work acceptably.
+
+
+## Multi-API support with Looker 7.2 and later
+
+Looker 7.2 introduces an **Experimental** version of API 4.0. Therefore, the SDKs now support multiple API versions in the same SDK package.
+ 
+The main change to the SDKs is that `api_version` is no longer used from any configuration value. Instead, for all SDKs but Swift, API-specific SDKs are now created and put in the same SDK package, and share the same run-time code.
+
+API 3.0 is not included. At the time of this writing, API 3.1 and API 4.0 are included in most SDK packages. For an SDK that supports multiple API versions, there will be a `methods.*` and `models.*` generated for each API version. 
+
+The class names representing these API versions are distinct, and factories for creating initialized SDK objects are also distinctly named.
+
+These API-specific files still use all the same Run-Time Library (RTL) code in the SDK package, so code duplication is minimized.
+
+Please review the following table for a breakdown of the options to initialize the desired SDK object.
+
+| SDK | API 3.1 | API 4.0 | Notes                                                                                                                                                           |
+| ---- | ------ | --------| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Python  | `looker_sdk.init31()` | `looker_sdk.init40()` | Both API 3.1 and 4.0 are supported, and can be initialized with the functions shown                                                   |
+| Typescript | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()` | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | Both API 3.1 and 4.0 are supported and can be initialized with the functions shown | 
+| Kotlin  | Do not use | `Looker40SDK()` | API 4.0 was specifically created to correct the endpoint payloads for strongly-typed languages like Kotlin and Swift |
+| Swift | Not applicable | `Looker40SDK()` | Swift only has SDK definitions for API 4.0 |                                                                                                     |
+
 
 ## Using existing, pre-generated SDKs
 
@@ -39,7 +62,9 @@ If you do want to use the generation options for another language, read on.
 
 There are three steps for generating an SDK with this project:
 
-- configure a `looker.ini` file so the Looker API specification can be retrieved from your Looker server
+- configure a `looker.ini` file so the Looker API specification can be retrieved from your Looker server.
+
+  - **Note**: previous versions of the `looker.ini` file had an `api_version` entry. This is no longer required. The code generator project will read an `api_versions` value if that is found, but the SDKs ignore this value. If `api_versions` is not found in the `ini` file, it defaults to "3.1,4.0" for the generator to produce the definitions for the supported API versions.
 
 - install the code generator dependencies by running `yarn`.
 
@@ -74,9 +99,9 @@ The code generator will:
 
 - read the Looker API configuration(s) from the `looker.ini` file.
 
-  - **Note**: Normally there should only be one (1) entry in `looker.ini`, configured for the latest API version (currently 3.1).
+  - **Note**: Normally there should only be one (1) entry in `looker.ini`. This first ini section is what is used for the SDKs by default, and also by the code generator.
 
-- download (if the specification file is not already present) the Looker API specification file(s) from the configured Looker server(s)
+- download (if the API specification file is not already present) the Looker API specification file(s) from the configured Looker server(s)
 
 - convert (if the converted file is not already present) the downloaded Swagger 2 specification file(s) to OpenAPI 3.x
 

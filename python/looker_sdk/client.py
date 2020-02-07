@@ -35,7 +35,7 @@ from looker_sdk.sdk.api40 import methods as methods40
 
 SPECIFIC_FACTORY = (
     "Please use a version specific function such as "
-    "client.setup31() or client.setup40()"
+    "client.init31() or client.init40()"
 )
 API_SETTINGS_API_VERSION_DEPRECATED = (
     f"API_VERSION config value is no longer needed. {SPECIFIC_FACTORY}"
@@ -78,7 +78,7 @@ def setup(
     )
 
 
-def setup31(
+def init31(
     config_file: str = "looker.ini", section: Optional[str] = None
 ) -> methods31.Looker31SDK:
     """Default dependency configuration
@@ -101,7 +101,7 @@ def setup31(
     )
 
 
-def setup40(
+def init40(
     config_file: str = "looker.ini", section: Optional[str] = None
 ) -> methods40.Looker40SDK:
     """Default dependency configuration

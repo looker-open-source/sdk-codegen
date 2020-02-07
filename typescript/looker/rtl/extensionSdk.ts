@@ -42,6 +42,7 @@ export interface IHostConnection {
   ): Promise<any>
 }
 
+// TODO update this to init31() and init40() explicit calls
 export class LookerExtensionSDK {
   /**
    * Creates a [[LookerSDK]] object.
