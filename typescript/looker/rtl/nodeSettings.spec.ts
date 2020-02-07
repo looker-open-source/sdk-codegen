@@ -50,7 +50,8 @@ export function TestConfig(rootPath: string = '') {
   if (!rootPath) {
     rootPath = fs.existsSync(testFile) ? '' : '../../'
   }
-  const localIni = `${rootPath}looker.ini`
+  const envIni = process.env['LOOKERSDK_INI']
+  const localIni = envIni || `${rootPath}looker.ini`
   const testPath = `${rootPath}test/`
   const dataFile = `${testPath}data.yml`
   const testData = yaml.safeLoad(fs.readFileSync(dataFile, utf8))

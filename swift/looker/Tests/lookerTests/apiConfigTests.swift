@@ -12,7 +12,7 @@ fileprivate let testRootPath = URL(fileURLWithPath: #file).pathComponents
     .prefix(while: { $0 != "Tests" }).joined(separator: "/").dropFirst()
 
 fileprivate let repoPath : String = testRootPath + "/../../"
-fileprivate let localIni : String = repoPath + "looker.ini"
+fileprivate let localIni : String = ProcessInfo.processInfo.environment["LOOKERSDK_INI"] ?? (repoPath + "looker.ini")
 
 class apiConfigTests: XCTestCase {
 

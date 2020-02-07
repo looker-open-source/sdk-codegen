@@ -63,6 +63,9 @@ export const ApiConfigSection = (
   if (!settings) {
     throw new Error(`No section named "${section}" was found`)
   }
+  if (settings.api_version) {
+    console.warn("api_version is no longer read from a configuration file by the SDK")
+  }
   return settings
 }
 

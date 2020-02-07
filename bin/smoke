@@ -9,7 +9,7 @@ pipenv run pytest --junitxml=../results/smokepython.xml tests/
 cd ..
 
 echo "Smoking Kotlin SDK ..."
-cd ../kotlin
+cd kotlin
 gradle test
 cd ..
 
