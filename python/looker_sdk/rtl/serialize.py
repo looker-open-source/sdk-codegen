@@ -60,7 +60,9 @@ TDeserialize = Callable[[str, TStructure], TDeserializeReturn]
 TSerialize = Callable[[TModelOrSequence], bytes]
 
 
-def deserialize(data: str, structure: TStructure) -> TDeserializeReturn:
+def deserialize(
+    *, data: str, structure: TStructure, converter: cattr.Converter
+) -> TDeserializeReturn:
     """Translate API data into models.
     """
     try:
@@ -68,10 +70,18 @@ def deserialize(data: str, structure: TStructure) -> TDeserializeReturn:
     except json.JSONDecodeError as ex:
         raise DeserializeError(f"Bad json {ex}")
     try:
-        response: TDeserializeReturn = cattr.structure(data, structure)  # type: ignore
+        response: TDeserializeReturn = converter.structure(  # type: ignore
+            data, structure
+        )
     except (TypeError, AttributeError) as ex:
         raise DeserializeError(f"Bad data {ex}")
     return response
+
+
+converter31 = cattr.Converter()
+deserialize31 = functools.partial(deserialize, converter=converter31)
+converter40 = cattr.Converter()
+deserialize40 = functools.partial(deserialize, converter=converter40)
 
 
 def serialize(api_model: TModelOrSequence) -> bytes:
@@ -81,7 +91,7 @@ def serialize(api_model: TModelOrSequence) -> bytes:
     return json.dumps(data).encode("utf-8")  # type: ignore
 
 
-def structure_hook(context, data, type_):
+def structure_hook(context, converter, data, type_):
     """cattr structure hook
 
     - Map reserved words in json keys to approriate (safe) names in model.
@@ -95,7 +105,7 @@ def structure_hook(context, data, type_):
             data[f"{reserved}_"] = data.pop(reserved)
     if isinstance(type_, ForwardRef):
         type_ = eval(type_.__forward_arg__, context, locals())
-    instance = cattr.structure_attrs_fromdict(data, type_)
+    instance = converter.structure_attrs_fromdict(data, type_)
     return instance
 
 
@@ -119,9 +129,15 @@ def unstructure_hook(api_model):
     return data
 
 
-structure_hook_func = functools.partial(structure_hook, globals())  # type: ignore
-cattr.register_structure_hook(model.Model, structure_hook_func)  # type: ignore
-cattr.register_structure_hook(
+# structure_hook_func = functools.partial(structure_hook, globals())  # type: ignore
+# cattr.register_structure_hook(model.Model, structure_hook_func)  # type: ignore
+converter31.register_structure_hook(
+    datetime.datetime,
+    lambda d, _: datetime.datetime.strptime(  # type: ignore
+        d, "%Y-%m-%dT%H:%M:%S.%f%z"
+    ),
+)
+converter40.register_structure_hook(
     datetime.datetime,
     lambda d, _: datetime.datetime.strptime(  # type: ignore
         d, "%Y-%m-%dT%H:%M:%S.%f%z"

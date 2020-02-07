@@ -25,14 +25,20 @@
 import {
   SDKResponse,
   HttpMethod,
-  ITransportSettings, Values, sdkOk,
+  ITransportSettings, Values, sdkOk, agentPrefix, Authenticator, addQueryParams,
 } from './transport'
 import { Readable } from 'readable-stream'
 import { IAuthSession } from './authSession'
+import { defaultApiVersion, lookerVersion } from './constants'
 
 export class APIMethods {
-  constructor(public authSession: IAuthSession) {
+  private readonly apiPath: string = ''
+  apiVersion : string = defaultApiVersion
+  constructor(public authSession: IAuthSession, apiVersion: string = defaultApiVersion) {
     this.authSession = authSession
+    this.apiVersion = apiVersion
+    this.authSession.settings.agentTag = `${agentPrefix} ${lookerVersion}.${this.apiVersion}`
+    this.apiPath = `${authSession.settings.base_url}/api/${this.apiVersion}`
   }
 
   /** A helper method for simplifying error handling of SDK responses.
@@ -63,6 +69,26 @@ export class APIMethods {
   }
 
   /**
+   * Determine whether the url should be an API path, relative from base_url, or is already fully specified override
+   * @param path Request path
+   * @param options Transport settings
+   * @param authenticator optional callback
+   * @returns the fully specified request path including any query string parameters
+   */
+  makePath(
+    path: string,
+    options: Partial<ITransportSettings>,
+    authenticator?: Authenticator,
+  ) {
+    // is this an API-versioned call?
+    let base = (authenticator ? this.apiPath : options.base_url)!
+    if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {
+      path = `${base}${path}` // path was relative
+    }
+    return path
+  }
+
+  /**
    *
    * A helper method to add authentication to an API request for deserialization
    *
@@ -79,14 +105,17 @@ export class APIMethods {
     body?: any,
     options?: Partial<ITransportSettings>,
   ): Promise<SDKResponse<TSuccess, TError>> {
+    options = { ...this.authSession.settings, ...options}
+    const authenticator = (init: any) => {
+      return this.authSession.authenticate(init)
+    }
+    path = this.makePath(path, options, authenticator)
     return this.authSession.transport.request<TSuccess, TError>(
       method,
       path,
       queryParams,
       body,
-      (init: any) => {
-        return this.authSession.authenticate(init)
-      },
+      authenticator,
       options,
     )
   }
@@ -110,6 +139,11 @@ export class APIMethods {
     options?: Partial<ITransportSettings>
   )
     : Promise<T> {
+    options = { ...this.authSession.settings, ...options}
+    const authenticator = (init: any) => {
+      return this.authSession.authenticate(init)
+    }
+    path = this.makePath(path, options, authenticator)
     return this.authSession.transport.stream<T>(
       callback,
       method,

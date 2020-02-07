@@ -7,7 +7,7 @@ from typing import Any, cast, Dict, List, Optional, Union
 from PIL import Image  # type: ignore
 import pytest  # type: ignore
 
-from looker_sdk.sdk import methods as mtds
+from looker_sdk.sdk.api31 import methods as mtds
 from looker_sdk import models as ml
 
 
@@ -187,7 +187,9 @@ def test_it_updates_session(sdk: mtds.LookerSDK):
 TQueries = List[Dict[str, Union[str, List[str], Dict[str, str]]]]
 
 
-def test_it_creates_and_runs_query(sdk: mtds.LookerSDK, queries_system_activity: TQueries):
+def test_it_creates_and_runs_query(
+    sdk: mtds.LookerSDK, queries_system_activity: TQueries
+):
     """create_query() creates a query and run_query() returns its result."""
     for q in queries_system_activity:
         limit = cast(str, q["limit"]) or "10"

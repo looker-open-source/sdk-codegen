@@ -27,7 +27,8 @@ import java.io.File
 val rootPath = File("./").absoluteFile.parentFile.parentFile.absolutePath
 val testPath  = "${rootPath}/test"
 val dataFile = testFile("data.yml")
-val localIni = rootFile("looker.ini")
+val envIni = System.getenv("LOOKERSDK_INI")
+val localIni = if (envIni === "") rootFile("looker.ini") else envIni
 
 fun rootFile(fileName: String): String {
     return "${rootPath}/${fileName}"

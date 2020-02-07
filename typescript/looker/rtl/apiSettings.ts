@@ -22,8 +22,8 @@
  * THE SOFTWARE.
  */
 
-import { agentTag, defaultTimeout, ITransportSettings } from './transport'
-import { boolDefault, environmentPrefix, isTrue, unquote } from './constants'
+import { agentPrefix, defaultTimeout, ITransportSettings } from './transport'
+import { lookerVersion, boolDefault, environmentPrefix, isTrue, unquote, defaultApiVersion } from './constants'
 import { IApiSection } from './nodeSettings'
 
 export interface IValueSettings {
@@ -31,7 +31,6 @@ export interface IValueSettings {
 }
 
 export const strLookerBaseUrl = `${environmentPrefix}_BASE_URL`
-export const strLookerApiVersion = `${environmentPrefix}_API_VERSION`
 export const strLookerVerifySsl = `${environmentPrefix}_VERIFY_SSL`
 export const strLookerTimeout = `${environmentPrefix}_TIMEOUT`
 export const strLookerClientId =`${environmentPrefix}_CLIENT_ID`
@@ -39,15 +38,14 @@ export const strLookerClientSecret = `${environmentPrefix}_CLIENT_SECRET`
 
 export const ApiConfigMap: IValueSettings = {
   'base_url': strLookerBaseUrl,
-  'api_version': strLookerApiVersion,
   'verify_ssl': strLookerVerifySsl,
   'timeout': strLookerTimeout,
   'client_id': strLookerClientId,
   'client_secret': strLookerClientSecret
 }
 
-export const strBadConfiguration = `${agentTag} configuration error:
-Missing required configuration values like base_url and api_version
+export const strBadConfiguration = `${agentPrefix} configuration error:
+Missing required configuration values like base_url
 `
 
 export interface IApiSettings extends ITransportSettings {
@@ -75,9 +73,9 @@ export interface IApiSettings extends ITransportSettings {
 export const DefaultSettings = () =>
   ({
     base_url: '',
-    api_version: '3.1', // default to API 3.1
     verify_ssl: true,
     timeout: defaultTimeout,
+    agentTag: `${agentPrefix} ${lookerVersion}`,
   } as IApiSettings)
 
 /**
@@ -97,7 +95,6 @@ export const configValue = (values: IValueSettings, name: string) => {
  *
  * The keys for the values are:
  *  - <environmentPrefix>_BASE_URL or `base_url`
- *  - <environmentPrefix>_API_VERSION or `api_version`
  *  - <environmentPrefix>_CLIENT_ID or `client_id`
  *  - <environmentPrefix>_CLIENT_SECRET or `client_secret`
  *  - <environmentPrefix>_VERIFY_SSL or `verify_ssl`
@@ -105,9 +102,9 @@ export const configValue = (values: IValueSettings, name: string) => {
  */
 export const ValueSettings = (values: IValueSettings): IApiSettings => {
   const settings = DefaultSettings()
-  settings.api_version = configValue(values, 'api_version') || settings.api_version
   settings.base_url = configValue(values, 'base_url') || settings.base_url
   settings.verify_ssl = boolDefault(configValue(values, 'verify_ssl'), true)
+  settings.agentTag = `${agentPrefix} ${lookerVersion}`
   const timeout = configValue(values, 'timeout')
   settings.timeout = timeout ? parseInt(timeout, 10) : defaultTimeout
   return settings
@@ -122,18 +119,13 @@ export class ApiSettings implements IApiSettings {
   // tslint:disable-next-line: variable-name
   base_url: string = ''
   // tslint:disable-next-line: variable-name
-  api_version: string = '3.1'
-  // tslint:disable-next-line: variable-name
   verify_ssl: boolean = true
   timeout: number = defaultTimeout
+  agentTag: string = `${agentPrefix} ${lookerVersion}`
 
   constructor(settings: Partial<IApiSettings>) {
     // coerce types to declared types since some paths could have non-conforming settings values
     this.base_url = 'base_url' in settings ? unquote(settings.base_url) : this.base_url
-    this.api_version =
-      'api_version' in settings
-        ? unquote(settings.api_version)
-        : this.api_version
     this.verify_ssl =
       'verify_ssl' in settings
         ? isTrue(unquote(settings.verify_ssl!.toString()))
@@ -148,7 +140,7 @@ export class ApiSettings implements IApiSettings {
   }
 
   isConfigured() {
-    return !!(this.base_url && this.api_version)
+    return !!(this.base_url)
   }
 
   /**

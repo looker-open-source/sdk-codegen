@@ -68,6 +68,9 @@ package com.looker.sdk
 import com.looker.rtl.*
 import com.looker.rtl.UserSession
 import java.util.*
+import com.looker.sdk.api${this.apiRef}.*
+// TODO can this single import override be avoided in any way?
+import com.looker.sdk.api${this.apiRef}.Locale
 
 class ${this.packageName}(authSession: UserSession) : APIMethods(authSession) {
 
@@ -81,6 +84,7 @@ class ${this.packageName}(authSession: UserSession) : APIMethods(authSession) {
 
 package com.looker.sdk
 
+import com.looker.sdk.api${this.apiRef}.*
 // nothing to see here, yet
 `
   }
@@ -95,7 +99,7 @@ package com.looker.sdk
     return `
 // ${this.warnEditing()}
 
-package com.looker.sdk
+package com.looker.sdk.api${this.apiRef}
 
 import com.looker.rtl.*
 import java.util.*
@@ -148,7 +152,8 @@ import java.util.*
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer: boolean = false) {
     const type = this.typeMap(method.type)
-    let headComment = `${method.httpMethod} ${method.endpoint} -> ${type.name}`
+    const head = method.description?.trim()
+    let headComment = (head ? `${head}\n\n` : '')  +`${method.httpMethod} ${method.endpoint} -> ${type.name}`
     let fragment = ''
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
@@ -318,12 +323,12 @@ import java.util.*
         warn(`${stampFile} was not found. Skipping version update.`)
       }
       let content = readFileSync(stampFile)
-      const lookerPattern = /lookerVersion = ['"].*['"]/i
-      const apiPattern = /apiVersion = ['"].*['"]/i
-      const envPattern = /environmentPrefix = ['"].*['"]/i
-      content = content.replace(lookerPattern, `lookerVersion = '${this.versions.lookerVersion}'`)
-      content = content.replace(apiPattern, `apiVersion = '${this.versions.apiVersion}'`)
-      content = content.replace(envPattern, `environmentPrefix = '${this.packageName.toUpperCase()}'`)
+      const lookerPattern = /\bLOOKER_VERSION = ['"].*['"]/i
+      const apiPattern = /\bAPI_VERSION = ['"].*['"]/i
+      const envPattern = /\bENVIRONMENT_PREFIX = ['"].*['"]/i
+      content = content.replace(lookerPattern, `LOOKER_VERSION = "${this.versions.lookerVersion}"`)
+      content = content.replace(apiPattern, `API_VERSION = "${this.versions.apiVersion}"`)
+      content = content.replace(envPattern, `ENVIRONMENT_PREFIX = "${this.environmentPrefix}"`)
       fs.writeFileSync(stampFile, content, {encoding: utf8})
       success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}`)
     } else {

@@ -80,9 +80,13 @@ class WriteChildModel(ml.Model):
         self.import_ = import_
 
 
-structure_hook = functools.partial(sr.structure_hook, globals())
-cattr.register_structure_hook(ForwardRef("ChildModel"), structure_hook)
-cattr.register_structure_hook(ForwardRef("WriteChildModel"), structure_hook)
+converter = cattr.Converter()
+structure_hook = functools.partial(sr.structure_hook, globals(), converter)
+converter.register_structure_hook(ForwardRef("Model"), structure_hook)
+converter.register_structure_hook(ForwardRef("ChildModel"), structure_hook)
+converter.register_structure_hook(ForwardRef("WriteModel"), structure_hook)
+converter.register_structure_hook(ForwardRef("WriteChildModel"), structure_hook)
+converter.register_structure_hook(Model, structure_hook)
 
 MODEL_DATA = {
     "id": 1,
@@ -102,12 +106,14 @@ def test_deserialize_single():
     data = copy.deepcopy(MODEL_DATA)
     data["finally"][0]["id"] = "1"
 
-    model = sr.deserialize(json.dumps(data), Model)
+    model = sr.deserialize(data=json.dumps(data), structure=Model, converter=converter)
     assert isinstance(model, Model)
     assert isinstance(model.id, int)
     assert model.id == 1
     assert isinstance(model.name, str)
     assert model.name == "my-name"
+    assert isinstance(model.class_, str)
+    assert model.class_ == "model-name"
     assert isinstance(model.finally_, list)
     assert len(model.finally_) == 2
     for child in model.finally_:
@@ -119,7 +125,9 @@ def test_deserialize_list():
     # check that type conversion happens
     data = [MODEL_DATA, MODEL_DATA]
 
-    models = sr.deserialize(json.dumps(data), Sequence[Model])
+    models = sr.deserialize(
+        data=json.dumps(data), structure=Sequence[Model], converter=converter
+    )
     assert isinstance(models, list)
     assert len(models) == 2
     for model in models:
@@ -135,7 +143,7 @@ def test_deserialize_partial():
     del data["id"]
     del data["finally"][0]["id"]
 
-    model = sr.deserialize(json.dumps(data), Model)
+    model = sr.deserialize(data=json.dumps(data), structure=Model, converter=converter)
     assert isinstance(model, Model)
     assert model.id is None
     assert isinstance(model.name, str)
@@ -153,7 +161,7 @@ def test_deserialize_with_null():
     data["id"] = None
     data["finally"][0]["id"] = None
 
-    model = sr.deserialize(json.dumps(data), Model)
+    model = sr.deserialize(data=json.dumps(data), structure=Model, converter=converter)
     assert isinstance(model, Model)
     assert model.id is None
     assert isinstance(model.name, str)
@@ -170,7 +178,7 @@ def test_deserialize_with_null():
 def test_deserialize_data_structure_mismatch(data, structure):
     data = json.dumps(data)
     with pytest.raises(sr.DeserializeError):
-        sr.deserialize(data, structure)
+        sr.deserialize(data=data, structure=structure, converter=converter)
 
 
 def test_serialize_single():

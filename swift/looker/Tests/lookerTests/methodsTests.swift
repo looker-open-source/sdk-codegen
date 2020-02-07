@@ -25,7 +25,7 @@ class methodsTests: XCTestCase {
         }
         return false
     }
-    
+
     func jsonEncode(_ object: Any?) -> Data? {
         if let object = object {
             if let data = object as? Data {
@@ -36,12 +36,12 @@ class methodsTests: XCTestCase {
         }
         return nil
     }
-    
+
     struct WriteQuery2: Codable {
         var model: String
         var view: String
     }
-    
+
     func testAnyData() {
         var foo: Any?
         let body = WriteQuery2(model: "thelook", view: "users")
@@ -56,7 +56,7 @@ class methodsTests: XCTestCase {
             }
         } catch { print(error) }
     }
-    
+
     func testEncode() {
         do {
             let body = WriteQuery2(model: "thelook", view: "users")
@@ -76,47 +76,65 @@ class methodsTests: XCTestCase {
         } catch { print(error) }
     }
 */
-    
+
+    func simpleQuery() -> WriteQuery {
+        return WriteQuery(
+            model: "system__activity",
+            view: "dashboard",
+            fields: ["dashboard.id", "dashboard.title", "dashboard.count"],
+            limit: "100")
+    }
+
+    func countQuery() -> WriteQuery {
+        return WriteQuery(
+            model: "system__activity",
+            view: "dashboard",
+            fields: ["dashboard.count"],
+            limit: "100"
+        )
+    }
+
     func testCreateQueryAndRun() {
         let settings = config!
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
-        let body = WriteQuery(model: "thelook", view: "users", fields: ["users.count"])
+        let body = simpleQuery()
         let req = sdk.create_query(body)
-        let query = sdk.ok(req)
+        var query = sdk.ok(req)
         let sql = sdk.ok(sdk.run_query(query.id!, "sql"))
         XCTAssertNotNil(sql)
         XCTAssertTrue(sql.contains("SELECT"), "Got the SQL select statement")
+//        BaseTransport.debugging = true
         let csv = sdk.ok(sdk.run_query(query.id!, "csv"))
         XCTAssertNotNil(csv)
-        XCTAssertTrue(csv.contains("Users Count"), "Got the CSV header")
-        BaseTransport.debugging = true
+        XCTAssertTrue(csv.contains("Dashboard ID"), "Got the CSV header")
+        query = sdk.ok(sdk.create_query(countQuery()))
         var json = sdk.ok(sdk.run_query(query.id!, "json"))
         XCTAssertNotNil(json)
-        XCTAssertTrue(json.contains("users.count"), "json result")
+        XCTAssertTrue(json.contains("dashboard.count"), "json result")
         /// May want to try https://learnappmaking.com/swift-json-swiftyjson/ or https://github.com/Flight-School/AnyCodable
         /// Or one of the options discussed at https://stackoverflow.com/questions/46279992/any-when-decoding-json-with-codable
         var jsonData = try? JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: .allowFragments)
         XCTAssertNotNil(jsonData)
         if let data = jsonData as! [[String:Int64]?]? {
             if let item = data[0] {
-                XCTAssertTrue(item["users.count"]! > 0, "users.count > 0")
+                XCTAssertTrue(item["dashboard.count"]! > 0, "dashboard.count > 0")
             } else {
                 XCTAssertTrue(false, "Couldn't cast item from data")
             }
         } else {
             XCTAssertTrue(false, "Couldn't cast data from jsonData")
         }
-        
+
         json = sdk.ok(sdk.run_query(query.id!, "json_label"))
         XCTAssertNotNil(json)
-        XCTAssertTrue(json.contains("Users Count"), "json_label result")
+        XCTAssertTrue(json.contains("Dashboard Count"), "json_label result")
         jsonData = try? JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: .allowFragments)
         XCTAssertNotNil(jsonData)
         if let data = jsonData as! [[String:Int64]?]? {
             if let item = data[0] {
-                XCTAssertTrue(item["Users Count"]! > 0, "Users Count > 0")
+                XCTAssertTrue(item["Dashboard Count"]! > 0, "Dashboard Count > 0")
             } else {
                 XCTAssertTrue(false, "Couldn't cast item from data")
             }
@@ -124,7 +142,7 @@ class methodsTests: XCTestCase {
             XCTAssertTrue(false, "Couldn't cast data from jsonData")
         }
     }
-    
+
     func testMe() {
         let settings = config!
         let xp = BaseTransport(settings)
@@ -150,7 +168,7 @@ class methodsTests: XCTestCase {
         }
         _ = sdk.authSession.logout()
     }
-    
+
     func testUserSearch() {
         let settings = config!
         let xp = BaseTransport(settings)
@@ -179,18 +197,7 @@ class methodsTests: XCTestCase {
         }
         _ = sdk.authSession.logout()
     }
-    
-    func testGetDashboard() {
-        let id = "60"
-        let settings = config!
-        let xp = BaseTransport(settings)
-        let auth = AuthSession(settings, xp)
-        let sdk = LookerSDK(auth)
-        let item = sdk.ok(sdk.dashboard(id))
-        XCTAssertNotNil(item)
-        XCTAssertNotNil(item.id)
-    }
-    
+
     func testGetAllDashboards() {
         let settings = config!
         let xp = BaseTransport(settings)
@@ -199,9 +206,8 @@ class methodsTests: XCTestCase {
         let list = sdk.ok(sdk.all_dashboards())
         for item in list {
             let id = item.id!
-//            let dashboard = sdk.ok(sdk.dashboard(id))
             print("Dashboard: \(id)")
-            let dashboard = sdk.ok(sdk.dashboard(id)) //, fields:Safe.Dashboard))
+            let dashboard = sdk.ok(sdk.dashboard(id))
             XCTAssertNotNil(dashboard, "Dashboard \(id) should be gotten")
             XCTAssertEqual(id, dashboard.id!)
             if (dashboard.created_at == nil) {
@@ -228,7 +234,7 @@ class methodsTests: XCTestCase {
         }
         _ = sdk.authSession.logout()
     }
-    
+
     func testGetAllFolders() {
         let settings = config!
         let xp = BaseTransport(settings)

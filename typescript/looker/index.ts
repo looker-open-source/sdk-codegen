@@ -40,25 +40,10 @@ export * from './rtl/nodeSettings'
 export * from './rtl/nodeTransport'
 export * from './rtl/proxySession'
 export * from './rtl/transport'
-export * from './sdk/methods'
-export * from './sdk/models'
-
-import { IAuthSession } from './rtl/authSession'
-import { LookerSDK } from './sdk/methods'
-
-/**
- * @class SDK
- *
- * Simple factory for the Typescript version of the Looker SDK. Provides default connectivity for SDK methods
- *
- */
-export class SDK {
-  /**
-   * Creates an [[LookerSDK]] object.
-   *
-   * @param session {IAuthSession} SDK session manager to use
-   */
-  static createClient(session: IAuthSession) {
-    return new LookerSDK(session)
-  }
-}
+export * from './sdk/3.1/methods'
+import * as models31 from './sdk/3.1/models'
+export { models31 }
+export * from './sdk/3.1/streams'
+export * from './sdk/4.0/methods'
+export * from './sdk/4.0/models'
+export * from './sdk/4.0/streams'

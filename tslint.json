@@ -7,7 +7,8 @@
   "rules": {
     "interface-name": [true, "always-prefix"],
     "jsx-boolean-value": false,
-    "no-namespace": [true, "allow-declarations"]
+    "no-namespace": [true, "allow-declarations"],
+    "variable-name": false
   },
   "rulesDirectory": []
 }

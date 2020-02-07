@@ -24,8 +24,8 @@
 
 import { CorsSession } from './corsSession'
 import { IApiSettings } from './apiSettings'
-import { agentTag, IRequestProps, ITransport, LookerAppId } from './transport'
-import { IAccessToken } from '../sdk/models'
+import { IRequestProps, ITransport, LookerAppId } from './transport'
+import { IAccessToken } from '../sdk/4.0/models'
 import { AuthSession } from './authSession'
 
 const mockToken : IAccessToken = {
@@ -70,7 +70,6 @@ describe("CORS session", () => {
     expect(mock.isAuthenticated()).toEqual(true)
     expect(props.mode).toEqual('cors')
     expect(props.headers.Authorization).toEqual('Bearer mocked')
-    expect(props.headers[LookerAppId]).toEqual(agentTag)
   })
 
 })

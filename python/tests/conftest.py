@@ -6,9 +6,8 @@ from typing import cast, Dict, List, Union
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from looker_sdk import client  # noqa: E402
-from looker_sdk import models as ml  # noqa: E402
-from looker_sdk.sdk import methods as mtds  # noqa: E402
+import looker_sdk  # noqa: E402
+from looker_sdk.sdk.api31 import methods as mtds  # noqa: E402
 
 
 @pytest.fixture(scope="session")
@@ -80,14 +79,16 @@ def create_test_users(
 
     for u in users:
         user = sdk.create_user(
-            ml.WriteUser(first_name=u["first_name"], last_name=u["last_name"])
+            looker_sdk.models.WriteUser(
+                first_name=u["first_name"], last_name=u["last_name"]
+            )
         )
 
         if user.id:
             user_ids.append(user.id)
             email = f"{u['first_name']}.{u['last_name']}{email_domain}"
             sdk.create_user_credentials_email(
-                user.id, ml.WriteCredentialsEmail(email=email)
+                user.id, looker_sdk.models.WriteCredentialsEmail(email=email)
             )
 
     yield
@@ -98,6 +99,7 @@ def create_test_users(
 
 @pytest.fixture(scope="session")
 def sdk():
-    sdk = client.setup("../looker.ini")
+    # TODO multiplex this fixture for both init31 and init40
+    sdk = looker_sdk.init31("../looker.ini")
     yield sdk
     sdk.logout()

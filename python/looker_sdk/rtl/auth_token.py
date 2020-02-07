@@ -25,7 +25,7 @@
 from typing import Optional
 import datetime
 
-from looker_sdk.sdk import models as ml
+from looker_sdk.sdk.api31 import models as ml
 
 
 class AuthToken:

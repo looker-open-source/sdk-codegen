@@ -20,8 +20,6 @@ Create a `looker.ini` file with your server URL and API credentials assigned as 
 
 ```ini
 [Looker]
-# API version defaults to 3.1. 3.1 and 3.0 are currently supported. 3.1 is highly recommended.
-api_version=3.1
 # Base URL for API. Do not include /api/* in the url
 base_url=https://<your-looker-server>:19999
 # API 3 client id
@@ -35,7 +33,7 @@ client_secret=your_API3_client_secret
 
 ### Install the Looker SDK for Swift
 
-The alpha version of the Looker SDK is not published to the Swift Package Manager. It's way too early for that. Currently, the only way to get the source code is by cloning the Looker SDK Codegen repository and use the source code in the `swift` folder.
+The alpha version of the Looker SDK is not published to the Swift Package Manager. Currently, the only way to get the source code is by cloning the Looker SDK Codegen repository and use the source code in the `swift` folder.
 
 To ensure you have the version of the SDK that matches your Looker version, you can regenerate `methods.swift` and `models.swift` from the root of the repository with the command:
 
@@ -76,6 +74,10 @@ let me = sdk.ok(sdk.me())
 /// continue making SDK calls
 ```
 
+### More examples
+
+Additional Swift SDK usage examples may be found in the [SDK Examples repository](https://github.com/looker-open-source/sdk-examples/tree/master/swift).
+
 ## Using AuthSession for automatic authentication
 
 **NOTE**: As we secure the design of the Looker SDK's authentication practices, the authentication behavior described in this section will likely change.
@@ -91,23 +93,9 @@ API users with appropriate permissions can `sudo` as another user by specifying 
 
 [Environment variables](https://github.com/looker-open-source/sdk-codegen#environment-variable-configuration) can be used to configure access for the Looker SDK.
 
-## THIS IS AN ALPHA VERSION!!!
+## A note about security
 
-There are still some issues processing the full return values of some of the more complex structures returned by Looker API endpoints. While these JSON parsing issues are being resolved, restricting the set of fields to be returned by the problematic endpoint is a simple work-around. To save time, some constants for currently supported fields are defined in the SDK.
-
-```swift
-/// safely get a dashboard via the SDK
-let dashboard = sdk.ok(sdk.dashboard(id, fields:Safe.Dashboard))
-
-```
-
-**IMPORTANT**: You'll also want to ensure the <sdk/models.swift> property `parent_id` is optional in the `FolderBase`, `Folder`, `SpaceBase` and `Space` structs. If it's not, make it look like this:
-
-```swift
-    var parent_id: Variant?
-```
-
-The `Variant` enum was created to tolerate discrepancies in JSON payloads that don't always match the strict structure format specification. This is primarily for IDs that are specified as `String` but sometimes appear as `Int` in the JSON payload. This will be addressed before the Swift SDK is out of beta.
+Any script or configuration file used to provide credentials to your Looker SDK instance [needs to be secured](https://github.com/looker-open-source/sdk-codegen#securing-your-sdk-credentials).
 
 ## Classes vs. Structs
 

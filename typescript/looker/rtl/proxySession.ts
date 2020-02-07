@@ -24,8 +24,9 @@
 
 import { AuthSession } from './authSession'
 import { BrowserTransport } from './browserTransport'
-import { ITransport, IRequestProps, agentTag, LookerAppId } from './transport'
+import { ITransport, IRequestProps, LookerAppId, agentPrefix } from './transport'
 import { IApiSettings } from './apiSettings'
+import { lookerVersion } from './constants'
 
 /**
  * An AuthSession class intended for use with proxied requests
@@ -63,7 +64,7 @@ export abstract class ProxySession extends AuthSession {
       props.headers = {}
     }
     props.headers['X-Forwarded-For'] = props.url
-    props.headers[LookerAppId] = agentTag
+    props.headers[LookerAppId] = `${agentPrefix} ${lookerVersion}`
     props.url = this.proxyUrl
     return props
   }

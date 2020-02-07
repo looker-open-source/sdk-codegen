@@ -34,11 +34,9 @@ import {
 import { Readable } from 'readable-stream'
 
 export abstract class BaseTransport implements ITransport {
-  apiPath = ''
 
   constructor(protected readonly options: ITransportSettings) {
     this.options = options
-    this.apiPath = `${options.base_url}/api/${options.api_version}`
   }
 
   /**
@@ -95,10 +93,9 @@ export abstract class BaseTransport implements ITransport {
     path: string,
     options: Partial<ITransportSettings>,
     queryParams?: Values,
-    authenticator?: Authenticator,
   ) {
     // is this an API-versioned call?
-    let base = (authenticator ? this.apiPath : options.base_url)!
+    let base = options.base_url!
     if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {
       path = `${base}${path}` // path was relative
     }

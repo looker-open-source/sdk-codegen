@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import { IError } from '../sdk/models'
+import { IError } from '../sdk/4.0/models'
 import {
   IRequestProps,
   ITransport,
@@ -38,7 +38,7 @@ import {
   strLookerClientSecret
 } from './apiSettings'
 import { AuthSession } from './authSession'
-import { utf8 } from './constants'
+import { defaultApiVersion, utf8 } from './constants'
 
 const strPost: HttpMethod = 'POST'
 const strDelete: HttpMethod = 'DELETE'
@@ -70,7 +70,7 @@ export class NodeSession extends AuthSession {
 
   constructor(public settings: IApiSettings, transport?: ITransport) {
     super(settings, transport || new NodeTransport(settings))
-    this.apiPath = `/api/${settings.api_version}`
+    this.apiPath = `/api/${defaultApiVersion}`
   }
 
   /**
@@ -225,8 +225,7 @@ export class NodeSession extends AuthSession {
       let token = this.activeToken
       const promise = this.transport.request<IAccessToken, IError>(
         strPost,
-        // Don't use api path here since authenticator presence will cause it to be added
-        encodeURI(`/login/${newId}`),
+        encodeURI(`${this.apiPath}/login/${newId}`),
         null,
         null,
         // ensure the auth token is included in the sudo request
@@ -251,8 +250,7 @@ export class NodeSession extends AuthSession {
     const token = this.activeToken
     const promise = this.transport.request<string, IError>(
       strDelete,
-      // Do not add api path here, since the authenticator will cause the request method to add it automatically
-      '/logout',
+      `${this.apiPath}/logout`,
       null,
       null,
       // ensure the auth token is included in the logout promise

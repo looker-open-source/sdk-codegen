@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 
 from looker_sdk.rtl import auth_token
-from looker_sdk.sdk import models
+from looker_sdk.sdk.api31 import models
 
 
 def test_defaults_with_empty_token():

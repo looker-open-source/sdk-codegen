@@ -35,6 +35,8 @@ const testData = yaml.safeLoad(readFileSync(`${root}${dataFile}`))
 const localIni = `${root}${testData['iniFile']}`
 const config = SDKConfig(localIni)
 const props = config['Looker']
+// api_version is no longer part of the INI, now set by sdkGen iterator
+props.api_version = '3.1'
 
 describe('fetch operations', () => {
   it('gets version info', async () => {

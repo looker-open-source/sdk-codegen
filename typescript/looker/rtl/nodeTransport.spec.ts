@@ -23,16 +23,16 @@
  */
 
 import { NodeTransport } from './nodeTransport'
-import { Authenticator, ITransportSettings } from './transport'
+import { ITransportSettings } from './transport'
+import { defaultApiVersion } from './constants'
 
 describe('NodeTransport', () => {
 
   const hostname = 'https://looker.sdk'
-  const apiVersion = '3.1'
-  const settings = { base_url: hostname, api_version: apiVersion } as ITransportSettings
+  const apiVersion = defaultApiVersion
+  const settings = { base_url: hostname } as ITransportSettings
   const xp = new NodeTransport(settings)
   const fullPath = 'https://github.com/looker-open-source/sdk-codegen'
-  const mockAuth: Authenticator = (props:any) => props
   const queryParams = {a:"b c", d: false, nil: null, skip: undefined}
 
   it('retrieves fully qualified url', async () => {
@@ -48,28 +48,4 @@ describe('NodeTransport', () => {
     }
   })
 
-  it('relative path without auth is just base', () => {
-    const actual = xp.makeUrl('/login', settings)
-    expect(actual).toEqual(`${hostname}/login`)
-  })
-
-  it('relative path with auth is api path', () => {
-    const actual = xp.makeUrl('/login', settings, null, mockAuth)
-    expect(actual).toEqual(`${hostname}/api/${apiVersion}/login`)
-  })
-
-  it('full path without auth is just full path', () => {
-    const actual = xp.makeUrl(fullPath, settings)
-    expect(actual).toEqual(fullPath)
-  })
-
-  it('full path with query has params', () => {
-    const actual = xp.makeUrl(fullPath, settings, queryParams)
-    expect(actual).toEqual(`${fullPath}?a=b%20c&d=false&nil=null`)
-  })
-
-  it('full path with auth is just full path', () => {
-    const actual = xp.makeUrl(fullPath, settings, undefined, mockAuth)
-    expect(actual).toEqual(fullPath)
-  })
 })

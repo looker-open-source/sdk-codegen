@@ -24,21 +24,22 @@
 
 import { ITransport } from './transport'
 import { NodeSettingsIniFile } from './nodeSettings'
-import { LookerSDK } from '../sdk/methods'
+import { Looker31SDK } from '../sdk/3.1/methods'
 import { NodeSession } from './nodeSession'
 import { NodeTransport } from './nodeTransport'
 import { IApiSettings } from './apiSettings'
 import { IAuthSession } from './authSession'
+import { Looker40SDK } from '../sdk/4.0/methods'
 
 /**
- * @class SDK
+ * @class LookerNodeSDK
  *
  * Simple factory for the Node version of the Looker SDK. Provides default connectivity for SDK methods
  *
  */
 export class LookerNodeSDK {
   /**
-   * Creates an [[LookerSDK]] object.
+   * Creates a [[Looker31SDK]] object.
    *
    * @param settings Defaults to the settings from LookerIni
    *
@@ -46,14 +47,34 @@ export class LookerNodeSDK {
    *
    * @param session Defaults to `NodeSession` which logs in the user
    */
-  static createClient(
+  static init31(
     settings?: IApiSettings,
     transport?: ITransport,
-    session?: IAuthSession,
-  ) {
+    session?: IAuthSession)
+  {
     settings = settings || new NodeSettingsIniFile('looker.ini')
     transport = transport || new NodeTransport(settings)
     session = session || new NodeSession(settings, transport)
-    return new LookerSDK(session)
+    return new Looker31SDK(session)
+  }
+
+  /**
+   * Creates a [[Looker40SDK]] object.
+   *
+   * @param settings Defaults to the settings from LookerIni
+   *
+   * @param transport Defaults to a `NodeTransport` object
+   *
+   * @param session Defaults to `NodeSession` which logs in the user
+   */
+  static init40(
+    settings?: IApiSettings,
+    transport?: ITransport,
+    session?: IAuthSession)
+  {
+    settings = settings || new NodeSettingsIniFile('looker.ini')
+    transport = transport || new NodeTransport(settings)
+    session = session ?? new NodeSession(settings, transport)
+    return new Looker40SDK(session)
   }
 }

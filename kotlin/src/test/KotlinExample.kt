@@ -3,6 +3,7 @@ import com.looker.rtl.ApiSettingsIniFile
 import com.looker.rtl.Transport
 import com.looker.rtl.UserSession
 import com.looker.sdk.*
+import com.looker.sdk.api40.*
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.json.JacksonSerializer
@@ -39,7 +40,7 @@ class KotlinExample {
 
     val session = UserSession(settings, Transport(settings, client))
 
-    val sdk = LookerSDK(session)
+    val sdk = Looker40SDK(session)
 
     fun findDashboardsByTitle(title: String): Array<Dashboard> {
         val dashboards = sdk.ok<Array<Dashboard>>(sdk.search_dashboards(title = title))

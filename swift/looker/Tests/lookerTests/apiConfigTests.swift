@@ -12,7 +12,7 @@ fileprivate let testRootPath = URL(fileURLWithPath: #file).pathComponents
     .prefix(while: { $0 != "Tests" }).joined(separator: "/").dropFirst()
 
 fileprivate let repoPath : String = testRootPath + "/../../"
-fileprivate let localIni : String = repoPath + "looker.ini"
+fileprivate let localIni : String = ProcessInfo.processInfo.environment["LOOKERSDK_INI"] ?? (repoPath + "looker.ini")
 
 class apiConfigTests: XCTestCase {
 
@@ -26,7 +26,6 @@ class apiConfigTests: XCTestCase {
 
     func testApiConfigFile() {
         let config = try? ApiConfig(localIni)
-        XCTAssertEqual(config?.base_url, "https://self-signed.looker.com:19999")
         XCTAssertFalse((config?.verify_ssl!)!)
         XCTAssertEqual(config?.timeout, 31)
     }

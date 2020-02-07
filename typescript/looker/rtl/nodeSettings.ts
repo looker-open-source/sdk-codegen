@@ -63,6 +63,9 @@ export const ApiConfigSection = (
   if (!settings) {
     throw new Error(`No section named "${section}" was found`)
   }
+  if (settings.api_version) {
+    console.warn("api_version is no longer read from a configuration file by the SDK")
+  }
   return settings
 }
 
@@ -148,7 +151,7 @@ export class NodeSettings extends ApiSettings {
  * **Warning**: `.ini` files storing credentials should be secured in the run-time environment, and
  * ignored by version control systems so credentials never get checked in to source code repositories.
  * A recommended pattern is using Node environment variables to specify confidential API credentials
- * while using an `.ini` file for values like `base_url` and `api_version`.
+ * while using an `.ini` file for values like `base_url`.
  *
  * **Note**: If the configuration file is specified but does **not** exist, an error will be thrown.
  * No error is thrown if the fileName defaulted to `./looker.ini` inside the constructor and that

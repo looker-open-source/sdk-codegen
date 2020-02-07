@@ -3,8 +3,8 @@ import { TestConfig } from '../typescript/looker/rtl/nodeSettings.spec'
 
 const config = TestConfig()
 export const apiTestModel = Models.ApiModel.fromFile(
-  `Looker.${config.apiVersion}.oas.json`,
-  `Looker.${config.apiVersion}.json`
+  `${config.testPath}openApiRef.json`,
+  `${config.testPath}swaggerRef.json`
 )
 
 describe('sdkModels', () => {
