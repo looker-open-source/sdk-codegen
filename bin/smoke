@@ -14,6 +14,8 @@ gradle test
 cd ..
 
 echo "Smoking Swift SDK ..."
-xcodebuild test -project swift/looker/looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.3' | xcpretty --test --color
+cd swift/looker
+xcodebuild test -project looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.3' | xcpretty --test --color
+cd ../..
 
 echo "Smoke tests completed"
