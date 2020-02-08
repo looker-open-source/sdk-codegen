@@ -266,26 +266,26 @@ enum Variant: Codable, Hashable {
         do {
 //            str = try decoder.unkeyedContainer() as! Stringß
             self = try .string(container.decode(String.self))
-        } catch DecodingError.typeMismatch {
+        } catch {
             do {
                 self = try .int(container.decode(Int64.self))
-            } catch DecodingError.typeMismatch {
+            } catch {
                 do {
-                    self = try .bool(container.decode(Bool.self))
-                } catch DecodingError.typeMismatch {
+                    self = try .double(container.decode(Double.self))
+                } catch {
                     do {
                         self = try .bool(container.decode(Bool.self))
                     } catch {
                         do {
                             self = try .date(container.decode(Date.self))
-                        } catch DecodingError.typeMismatch {
+                        } catch {
                             do {
                                 // coerce value to String
                                 // let str : String = try container.decode(String.self)
                                 str = "Error at: \(container.codingPath)"
-//                                str = try decoder.unkeyedContainer() as! String
-                                self = .string(str)
-                            } catch DecodingError.typeMismatch {
+                                // str = try decoder.unkeyedContainer() as! String
+                                self = try .string(str)
+                            } catch {
                                 throw DecodingError.typeMismatch(
                                     Variant.self,
                                     DecodingError.Context(

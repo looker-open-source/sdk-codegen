@@ -86,7 +86,7 @@ class APIMethods:
             if structure is Union[str, bytes] or structure is str:  # type: ignore
                 ret = value
             else:
-                ret = self.deserialize(value, structure)
+                ret = self.deserialize(data=value, structure=structure)
         return ret
 
     def _convert_query_params(

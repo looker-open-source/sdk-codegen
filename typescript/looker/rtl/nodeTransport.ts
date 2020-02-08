@@ -23,7 +23,6 @@
  */
 
 import {
-  agentTag,
   Authenticator,
   defaultTimeout,
   HttpMethod,
@@ -32,7 +31,7 @@ import {
   responseMode,
   ResponseMode,
   SDKResponse,
-  StatusCode, trace, Values, IRequestHeaders, LookerAppId,
+  StatusCode, trace, Values, IRequestHeaders, LookerAppId, agentPrefix,
 } from './transport'
 
 import rq, { Response, Request } from 'request'
@@ -54,8 +53,9 @@ export class NodeTransport extends BaseTransport {
     queryParams?: Values,
     body?: any,
     authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
+
     let init = await this.initRequest(
       method,
       path,
@@ -209,10 +209,11 @@ export class NodeTransport extends BaseTransport {
   ) {
     options = options ? {...this.options, ...options} : this.options
     const headers: IRequestHeaders = {
-      [LookerAppId]: agentTag,
+      [LookerAppId]: options.agentTag!,
       ...options.headers,
     }
-    const requestPath = this.makeUrl(path, options, queryParams, authenticator)
+
+    const requestPath = this.makeUrl(path, options, queryParams)
     let init: RequestOptions = {
       url: requestPath,
       headers: headers,

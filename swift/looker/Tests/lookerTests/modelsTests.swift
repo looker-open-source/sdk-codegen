@@ -90,7 +90,7 @@ class modelsTests: XCTestCase {
     // Parsing String as Date Swift bug https://bugs.swift.org/browse/SR-7461
     func testJsonHackyString() {
         do {
-            let item : Hacky = try deserialize(#"{"want_string":4}"#)
+            var item : Hacky = try deserialize(#"{"want_string":4}"#)
             XCTAssertNotNil(item)
             XCTAssertEqual(item.want_string.getString(), "4", "Expected '4'")
             XCTAssertNil(item.want_int)
@@ -98,6 +98,9 @@ class modelsTests: XCTestCase {
             XCTAssertNil(item.not_a_date)
             XCTAssertNil(item.is_bool)
             XCTAssertNil(item.nullable)
+            item = try deserialize(#"{"want_string":"foo","want_dub":4.0}"#)
+            XCTAssertEqual(item.want_string.getString(), "foo", "Expected 'foo'")
+            XCTAssertEqual(item.want_dub?.getDouble(), 4.0, "Expected 4.0")
         } catch {
             print(error)
             XCTAssertNil(error)

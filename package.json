@@ -20,6 +20,7 @@
         "sdk": "ts-node src/sdkGen.ts",
         "lint": "tslint -p tsconfig.json --format stylish",
         "test": "yarn jest --reporters=default --reporters=jest-junit",
+        "test:iphone": "xcodebuild test -project swift/looker/looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.3' | xcpretty --test --color",
         "view": "npx redoc-cli serve",
         "prettier:base": "prettier --parser typescript --single-quote",
         "prettier:check": "npm run prettier:base -- --list-different \"**/*.{ts,tsx}\"",

@@ -87,7 +87,7 @@ open class ApiSettings(contents: String, var section: String = ""): Configuratio
                 verifySSL = asBoolean(value) ?: verifySSL
             }
             settings["timeout"].let { value ->
-                timeout = if (value !== null) value!!.toInt() else timeout
+                timeout = if (value !== null) value.toInt() else timeout
             }
 
         }

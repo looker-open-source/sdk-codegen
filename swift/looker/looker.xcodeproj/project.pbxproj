@@ -135,6 +135,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		95770B4323EA036300437554 /* sdk */ = {
+			isa = PBXGroup;
+			children = (
+				95974CD22363A2A30061F13F /* methods.swift */,
+				95974CD12363A2A30061F13F /* models.swift */,
+			);
+			path = sdk;
+			sourceTree = "<group>";
+		};
 		OBJ_11 /* rtl */ = {
 			isa = PBXGroup;
 			children = (
@@ -146,8 +155,6 @@
 				9503C28C2355254400C10EEE /* baseTransport.swift */,
 				9578B261234D3A840048FD2A /* constants.swift */,
 				OBJ_12 /* looker.swift */,
-				95974CD22363A2A30061F13F /* methods.swift */,
-				95974CD12363A2A30061F13F /* models.swift */,
 				95FA444C234EB2A90053027C /* partial.swift */,
 				95974CDB23694F9B0061F13F /* serializer.swift */,
 				9578B263234D3A8A0048FD2A /* transport.swift */,
@@ -214,6 +221,7 @@
 		OBJ_8 /* looker */ = {
 			isa = PBXGroup;
 			children = (
+				95770B4323EA036300437554 /* sdk */,
 				OBJ_9 /* README.md */,
 				OBJ_10 /* README.md */,
 				OBJ_11 /* rtl */,

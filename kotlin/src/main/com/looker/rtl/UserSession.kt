@@ -141,8 +141,8 @@ class UserSession(val apiSettings: ApiSettings,
             val clientId = unQuote(System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_ID") ?: config[client_id])
             val clientSecret = unQuote(System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_SECRET") ?: config[client_secret])
             val body = FormDataContent(Parameters.build {
-                append(client_id, clientId!!)
-                append(client_secret, clientSecret!!)
+                append(client_id, clientId)
+                append(client_secret, clientSecret)
             })
             val token = ok<AuthToken>(
                     transport.request<AuthToken>(HttpMethod.POST,

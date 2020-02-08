@@ -3,8 +3,8 @@ package com.looker.rtl
 
 import org.jetbrains.annotations.NotNull
 
-const val LOOKER_VERSION = "6.24"
-const val API_VERSION = "3.1"
+const val LOOKER_VERSION = "7.2"
+const val API_VERSION = "4.0"
 const val SDK_VERSION = "${API_VERSION}.${LOOKER_VERSION}"
 const val AGENT_TAG = "Looker SDK-KT ${SDK_VERSION}"
 const val LOOKER_APPID = "x-looker-appid"
@@ -16,7 +16,7 @@ const val MATCH_MODE_STRING = "(^application\\\\/.*(\\\\bjson\\\\b|\\\\bxml\\\\b
 const val MATCH_MODE_BINARY = "^image\\\\/|^audio\\\\/|^video\\\\/|^font\\\\/|^application\\\\/|^multipart\\\\/"
 
 const val DEFAULT_TIMEOUT = 120
-const val DEFAULT_API_VERSION = "3.1"
+const val DEFAULT_API_VERSION = "4.0" // Kotlin requires API 4.0
 
 typealias Values = Map<String, Any?>
 

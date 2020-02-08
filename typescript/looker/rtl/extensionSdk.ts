@@ -23,7 +23,7 @@
  */
 
 import { DefaultSettings } from './apiSettings'
-import { LookerSDK } from '../sdk/methods'
+import { Looker31SDK } from '../sdk/3.1/methods'
 import { ExtensionSession } from './extensionSession'
 import { ExtensionTransport } from './extensionTransport'
 import {
@@ -42,6 +42,7 @@ export interface IHostConnection {
   ): Promise<any>
 }
 
+// TODO update this to init31() and init40() explicit calls
 export class LookerExtensionSDK {
   /**
    * Creates a [[LookerSDK]] object.
@@ -50,6 +51,6 @@ export class LookerExtensionSDK {
     const settings = DefaultSettings()
     const transport = new ExtensionTransport(settings, hostConnection)
     const session = new ExtensionSession(settings, transport)
-    return new LookerSDK(session)
+    return new Looker31SDK(session)
   }
 }

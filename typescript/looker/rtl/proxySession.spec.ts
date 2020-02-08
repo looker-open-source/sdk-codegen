@@ -23,9 +23,10 @@
  */
 
 import { IApiSettings } from './apiSettings'
-import { agentTag, IRequestProps, ITransport, LookerAppId } from './transport'
+import { agentPrefix, IRequestProps, ITransport, LookerAppId } from './transport'
 import { ProxySession } from './proxySession'
 import { AuthSession } from './authSession'
+import { lookerVersion } from './constants'
 
 /**
  * Mocking setup for ProxySession getToken() tests
@@ -64,6 +65,6 @@ describe("Proxy session", () => {
     const props = await mock.authenticate({url: 'mock.com'} as IRequestProps)
     expect(props.url).toEqual(proxyUrl)
     expect(props.headers['X-Forwarded-For']).toEqual('mock.com')
-    expect(props.headers[LookerAppId]).toEqual(agentTag)
+    expect(props.headers[LookerAppId]).toEqual(`${agentPrefix} ${lookerVersion}`)
   })
 })

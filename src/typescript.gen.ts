@@ -22,8 +22,6 @@
  * THE SOFTWARE.
  */
 
-// TypeScript code generator
-
 import {
   Arg,
   IMappedType,
@@ -40,8 +38,11 @@ import { CodeGen } from './codeGen'
 import * as fs from 'fs'
 import * as prettier from 'prettier'
 import { warn, isFileSync, success, commentBlock, readFileSync } from './utils'
-import { utf8 } from '../typescript/looker/rtl/constants'
+const utf8Encoding = { encoding: 'utf-8' }
 
+/**
+ * TypeScript code generator
+ */
 export class TypescriptGen extends CodeGen {
   codePath = './typescript/'
   packagePath = 'looker'
@@ -62,25 +63,26 @@ export class TypescriptGen extends CodeGen {
 
   // @ts-ignore
   methodsPrologue(indent: string) {
+// TODO get the rtl path alias to work correctly in all scenarios! !!
     return `
 // ${this.warnEditing()}
-import { APIMethods } from '../rtl/apiMethods'
-import { IAuthSession } from '../rtl/authSession'
-import { ITransportSettings } from '../rtl/transport'
-import { ${this.packageName}Stream } from './streams'
+import { APIMethods } from '../../rtl/apiMethods'
+import { IAuthSession } from '../../rtl/authSession'
+import { ITransportSettings } from '../../rtl/transport'
 /**
  * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
  */
-import { DelimArray } from '../rtl/delimArray'
+import { DelimArray } from '../../rtl/delimArray'
+import { ${this.packageName}Stream } from './streams'
 import { IDictionary, ${this.typeNames().join(', ')} } from './models'
 
 export class ${this.packageName} extends APIMethods {
 
-  public stream: LookerSDKStream
+  public stream: ${this.packageName}Stream
   
   constructor(authSession: IAuthSession) {
-    super(authSession)
-    this.stream = new LookerSDKStream(authSession)  
+    super(authSession, '${this.apiVersion}')
+    this.stream = new ${this.packageName}Stream(authSession)  
   }
   
 `
@@ -91,15 +93,19 @@ export class ${this.packageName} extends APIMethods {
     return `
 // ${this.warnEditing()}
 import { Readable } from 'readable-stream'
-import { APIMethods } from '../rtl/apiMethods'
-import { ITransportSettings } from '../rtl/transport'
+import { APIMethods } from '../../rtl/apiMethods'
+import { IAuthSession } from '../../rtl/authSession'
+import { ITransportSettings } from '../../rtl/transport'
 /**
  * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
  */
-import { DelimArray } from '../rtl/delimArray'
+import { DelimArray } from '../../rtl/delimArray'
 import { IDictionary, ${this.typeNames(false).join(', ')} } from './models'
 
 export class ${this.packageName}Stream extends APIMethods {
+  constructor(authSession: IAuthSession) {
+    super(authSession, '${this.apiVersion}')
+  }
 `
   }
 
@@ -113,8 +119,8 @@ export class ${this.packageName}Stream extends APIMethods {
     return `
 // ${this.warnEditing()}
 
-import { Url } from '../rtl/constants'
-import { DelimArray } from '../rtl/delimArray'
+import { Url } from '../../rtl/constants'
+import { DelimArray } from '../../rtl/delimArray'
 
 export interface IDictionary<T> {
   [key: string]: T
@@ -179,7 +185,9 @@ export interface IDictionary<T> {
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer: boolean = false) {
     const type = this.typeMap(method.type)
-    let headComment = `${method.httpMethod} ${method.endpoint} -> ${type.name}`
+    const head = method.description?.trim()
+    let headComment = (head ? `${head}\n\n` : '')
+      + `${method.httpMethod} ${method.endpoint} -> ${type.name}`
     let fragment = ''
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
@@ -350,12 +358,12 @@ export interface IDictionary<T> {
       }
       let content = readFileSync(stampFile)
       const lookerPattern = /lookerVersion = ['"].*['"]/i
-      const apiPattern = /apiVersion = ['"].*['"]/i
+      const apiPattern = /\bapiVersion = ['"].*['"]/i
       const envPattern = /environmentPrefix = ['"].*['"]/i
       content = content.replace(lookerPattern, `lookerVersion = '${this.versions.lookerVersion}'`)
       content = content.replace(apiPattern, `apiVersion = '${this.versions.apiVersion}'`)
-      content = content.replace(envPattern, `environmentPrefix = '${this.packageName.toUpperCase()}'`)
-      fs.writeFileSync(stampFile, content, {encoding: utf8})
+      content = content.replace(envPattern, `environmentPrefix = '${this.environmentPrefix}'`)
+      fs.writeFileSync(stampFile, content, utf8Encoding)
       success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}`)
     } else {
       warn('Version information was not retrieved. Skipping SDK version updating.')
@@ -422,7 +430,7 @@ export interface IDictionary<T> {
     if (name) {
       const source = prettier.format(readFileSync(name), formatOptions)
       if (source) {
-        fs.writeFileSync(name, source, {encoding: utf8})
+        fs.writeFileSync(name, source, utf8Encoding)
         return name
       }
     }

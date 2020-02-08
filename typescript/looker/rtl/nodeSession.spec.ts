@@ -28,7 +28,6 @@ import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings'
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
 import {
-  strLookerApiVersion,
   strLookerBaseUrl,
   strLookerClientId, strLookerClientSecret,
   strLookerTimeout,
@@ -88,12 +87,10 @@ describe('NodeSession', () => {
       process.env[strLookerClientId] = section['client_id']
       process.env[strLookerClientSecret] = section['client_secret']
       process.env[strLookerBaseUrl] = section['base_url']
-      process.env[strLookerApiVersion] = section['api_version'] || '3.1'
       process.env[strLookerVerifySsl] = verify_ssl.toString()
 
       const settings = new NodeSettings()
       expect(settings.base_url).toEqual(section['base_url'])
-      expect(settings.api_version).toEqual(section['api_version'] || '3.1')
       expect(settings.timeout.toString()).toEqual(section['timeout'] || defaultTimeout.toString())
       expect(settings.verify_ssl.toString()).toEqual(verify_ssl)
 
@@ -112,7 +109,6 @@ describe('NodeSession', () => {
       delete process.env[strLookerClientId]
       delete process.env[strLookerClientSecret]
       delete process.env[strLookerBaseUrl]
-      delete process.env[strLookerApiVersion]
       delete process.env[strLookerVerifySsl]
     })
   })

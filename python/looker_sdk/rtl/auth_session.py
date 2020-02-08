@@ -30,7 +30,7 @@ from looker_sdk.rtl import api_settings
 from looker_sdk.rtl import auth_token
 from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
-from looker_sdk.sdk import models
+from looker_sdk.sdk.api31 import models
 
 
 class AuthSession:
@@ -142,7 +142,7 @@ class AuthSession:
             )
         )
 
-        access_token = self.deserialize(response, models.AccessToken)
+        access_token = self.deserialize(data=response, structure=models.AccessToken)
         assert isinstance(access_token, models.AccessToken)
         self.admin_token = auth_token.AuthToken(access_token)
 
@@ -156,7 +156,7 @@ class AuthSession:
                 },
             )
         )
-        access_token = self.deserialize(response, models.AccessToken)
+        access_token = self.deserialize(data=response, structure=models.AccessToken)
         assert isinstance(access_token, models.AccessToken)
         self.user_token = auth_token.AuthToken(access_token)
 

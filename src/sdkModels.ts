@@ -663,11 +663,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
   }
 
   get version(): string {
-    return (this.schema && this.schema.version) || ''
+    return this.schema?.version || ''
   }
 
   get description(): string {
-    return (this.schema && this.schema.description) || ''
+    return this.schema?.decription?.trim() || ''
   }
 
   static fromFile(specFile: string, swaggerFile: string): ApiModel {
@@ -805,7 +805,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   }
 
   private load(): void {
-    if (this.schema && this.schema.components && this.schema.components.schemas) {
+    if (this.schema?.components?.schemas) {
       Object.entries(this.schema.components.schemas).forEach(([name, schema]) => {
         const t = new Type(schema, name)
         // types[n] and corresponding refs[ref] MUST reference the same type instance!
@@ -817,7 +817,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       })
     }
 
-    if (this.schema && this.schema.paths) {
+    if (this.schema?.paths) {
       Object.entries(this.schema.paths).forEach(([path, schema]) => {
         const methods = this.loadMethods(path, schema)
         methods.forEach((method) => {
@@ -1045,8 +1045,16 @@ export interface ICodeGen {
   // e.g. 'python' for Python
   codePath: string
 
-  // folder for the Looker SDK reference
-  // e.g. 'looker_sdk' for Python. All python source would end up under `python/looker_sdk`
+  /**
+   * beginning name pattern for all environment variables
+   * e.g. LOOKERSDK
+   */
+  environmentPrefix: string
+
+  /**
+   * folder for the Looker SDK reference
+   * e.g. 'looker_sdk' for Python. All python source would end up under `python/looker_sdk`
+   */
   packagePath: string
 
   // folder for the Looker SDK reference
@@ -1080,39 +1088,100 @@ export interface ICodeGen {
   // property delimiter. Typically, ",\n"
   propDelimiter: string
 
-  // Does this language require request types to be generated because it doesn't
-  // conveniently support named default parameters?
+  /**
+   * Does this language require request types to be generated because it doesn't
+   * conveniently support named default parameters?
+   */
   needsRequestTypes: boolean
 
-  // Does this language support specific streaming methods?
+  /**
+   * Does this language support specific streaming methods?
+   */
   willItStream: boolean
 
-  // Stamps the version files with server and api version
+  /**
+   * Stamps the version file (typically rtl/constants.xx) with server and api version
+   * @returns {IVersionInfo | undefined}
+   */
   versionStamp(): IVersionInfo | undefined
 
-  // Returns the name of the RequestType if this language AND method require it.
-  // Otherwise return empty string.
+  /**
+   * Returns true if the SDK supports multiple API versions of models
+   * @returns {boolean} True if multi-API is supported
+   */
+  supportsMultiApi() : boolean
+
+  /**
+   * Returns the name of the RequestType if this language AND method require it.
+   * Otherwise return empty string.
+   * @param {IMethod} method
+   * @returns {string}
+   */
   requestTypeName(method: IMethod): string
 
-  // Returns the WriteType if the passed type has any readOnly properties or types
+  //
+  /**
+   * Returns the WriteType if the passed type has any readOnly properties or types
+   * @param {IType} type
+   * @returns {IType | undefined}
+   */
   writeableType(type: IType): IType | undefined
 
-  // standard code to insert at the top of the generated "methods" file(s)
+  //
+  /**
+   * standard code to insert at the top of the generated "methods" file(s)
+   * @param {string} indent
+   * @returns {string}
+   */
   methodsPrologue(indent: string): string
 
-  // standard code to append to the bottom of the generated "methods" file(s)
+  //
+  /**
+   * standard code to append to the bottom of the generated "methods" file(s)
+   * @param {string} indent
+   * @returns {string}
+   */
   methodsEpilogue(indent: string): string
 
-  // standard code to insert at the top of the generated "streams" file(s)
+  /**
+   * standard code to insert at the top of the generated "streams" file(s)
+   * @param {string} indent
+   * @returns {string}
+   */
   streamsPrologue(indent: string): string
 
-  // standard code to insert at the top of the generated "models" file(s)
+  /**
+   * standard code to insert at the top of the generated "models" file(s)
+   * @param {string} indent indentation string
+   * @returns {string}
+   */
   modelsPrologue(indent: string): string
 
-  // standard code to append to the bottom of the generated "models" file(s)
+  /**
+   * standard code to append to the bottom of the generated "models" file(s)
+   * @param {string} indent indentation string
+   * @returns {string}
+   */
   modelsEpilogue(indent: string): string
 
-  // provide the name for a file with the appropriate language code extension
+  /**
+   * Prepare the path where API-specific SDK files should go
+   * @returns {string}
+   */
+  sdkPathPrep() : void
+
+  /**
+   * Get the name of an SDK file complete with API version
+   * @param {string} baseFileName e.g. "methods" or "models"
+   * @returns {string} fully specified, API-version-specific file name
+   */
+  sdkFileName(baseFileName: string) : string
+
+  /**
+   * provide the name for a file with the appropriate language code extension
+   * @param {string} base eg "methods" or "models"
+   * @returns {string} full sdk file name complete with extension
+   */
   fileName(base: string): string
 
   // generate an optional comment header if the comment is not empty

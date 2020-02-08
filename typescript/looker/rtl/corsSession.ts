@@ -24,7 +24,7 @@
 
 import { AuthSession } from './authSession'
 import { BrowserTransport } from './browserTransport'
-import { ITransport, IRequestProps, agentTag, LookerAppId } from './transport'
+import { ITransport, IRequestProps, LookerAppId, agentPrefix } from './transport'
 import { IApiSettings } from './apiSettings'
 import { AuthToken } from './authToken'
 
@@ -99,7 +99,7 @@ export abstract class CorsSession extends AuthSession {
         /** Provide the authentication information */
         'Authorization': `Bearer ${this.activeToken.access_token}`,
         /** Identify the SDK */
-        [LookerAppId]: agentTag
+        [LookerAppId]: agentPrefix
       }
     }
 

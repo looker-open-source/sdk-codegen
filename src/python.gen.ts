@@ -37,7 +37,7 @@ import {
 } from './sdkModels'
 import { CodeGen } from './codeGen'
 import * as fs from 'fs'
-import { run, warn, isFileSync, success, readFileSync } from './utils'
+import { run, warn, isDirSync, isFileSync, success, readFileSync } from './utils'
 import { utf8 } from '../typescript/looker/rtl/constants'
 
 export class PythonGen extends CodeGen {
@@ -113,6 +113,7 @@ export class PythonGen extends CodeGen {
   // cattrs [un]structure hooks for model [de]serialization
   hooks: string[] = []
   structureHook: string = 'structure_hook'
+  pythonReservedKeywordClasses: Set<String> = new Set()
 
   // @ts-ignore
   methodsPrologue = (indent: string) => `
@@ -120,7 +121,7 @@ export class PythonGen extends CodeGen {
 import datetime
 from typing import MutableMapping, Optional, Sequence, Union
 
-from ${this.packagePath}.sdk import models
+from . import models
 from ${this.packagePath}.rtl import api_methods
 from ${this.packagePath}.rtl import transport
 
@@ -128,7 +129,7 @@ class ${this.packageName}(api_methods.APIMethods):
 `
 
   // @ts-ignore
-  methodsEpilogue = (indent: string) => ''
+  methodsEpilogue = (indent: string) => this.apiVersion === '3.1' ? `LookerSDK = ${this.packageName}` : ''
 
   // @ts-ignore
   modelsPrologue = (indent: string) => `
@@ -156,10 +157,19 @@ DelimSequence = model.DelimSequence
 import functools  # noqa:E402
 from typing import ForwardRef  # type: ignore  # noqa:E402
 
-${this.structureHook} = functools.partial(sr.structure_hook, globals())  # type: ignore
+${this.structureHook} = functools.partial(sr.structure_hook, globals(), sr.converter${this.apiRef})
 ${this.hooks.join('\n')}
 `
 
+  sdkPathPrep() {
+    const path = `${this.codePath}${this.packagePath}/sdk/api${this.apiRef}`
+    if (!isDirSync(path)) fs.mkdirSync(path, {recursive: true})
+    fs.writeFileSync(`${path}/__init__.py`, '# Generated file.')
+  }
+
+  sdkFileName(baseFileName: string) {
+    return this.fileName(`sdk/api${this.apiRef}/${baseFileName}`)
+  }
 
   // @ts-ignore
   argGroup(indent: string, args: Arg[]) {
@@ -218,8 +228,10 @@ ${this.hooks.join('\n')}
     if (args && args.length > 0) {
       method.allParams.forEach(p => params.push(this.declareParameter(bump, p)))
     }
+    let head = method.description?.trim()
+    head = (head ? `${head}\n\n` : '') + `${method.httpMethod} ${method.endpoint} -> ${returnType}`
     params.push(`${bump}transport_options: Optional[transport.PTransportSettings] = None,`)
-    return this.commentHeader(indent, `${method.httpMethod} ${method.endpoint} -> ${returnType}`)
+    return this.commentHeader(indent, head)
       + `${indent}def ${method.name}(\n`
       + `${bump}self${params.length > 0 ? ',\n' : ''}`
       + `${params.join(this.paramDelimiter)}\n`
@@ -376,10 +388,12 @@ ${this.hooks.join('\n')}
     const bump = this.bumper(indent)
     const b2 = this.bumper(bump)
     const attrs: string[] = []
+    let usesReservedPythonKeyword = false
     for (const prop of Object.values(type.properties)) {
       let propName = prop.name
       if (this.pythonKeywords.includes(propName)) {
         propName = propName + '_'
+        usesReservedPythonKeyword = true
       }
       let attr = `${b2}${propName}:`
       if (prop.description) {
@@ -395,8 +409,14 @@ ${this.hooks.join('\n')}
 
     const forwardRef = `ForwardRef("${type.name}")`
     this.hooks.push(
-      `cattr.register_structure_hook(\n${bump}${forwardRef},  # type: ignore\n${bump}${this.structureHook}  # type:ignore\n)`
+      `sr.converter${this.apiRef}.register_structure_hook(\n${bump}${forwardRef},  # type: ignore\n${bump}${this.structureHook}  # type:ignore\n)`
     )
+    if (usesReservedPythonKeyword) {
+      this.hooks.push(
+        `sr.converter${this.apiRef}.register_structure_hook(\n${bump}${type.name},  # type: ignore\n${bump}${this.structureHook}  # type:ignore\n)`
+      )
+
+    }
     return `\n` +
       `${indent}@attr.s(${attrsArgs})\n` +
       `${indent}class ${type.name}(model.Model):\n` +
@@ -423,7 +443,7 @@ ${this.hooks.join('\n')}
       const envPattern = /environment_prefix = ['"].*['"]/i
       content = content.replace(lookerPattern, `looker_version = "${this.versions.lookerVersion}"`)
       content = content.replace(apiPattern, `api_version = "${this.versions.apiVersion}"`)
-      content = content.replace(envPattern, `environment_prefix = "${this.packageName.toUpperCase()}"`)
+      content = content.replace(envPattern, `environment_prefix = "${this.environmentPrefix}"`)
       fs.writeFileSync(stampFile, content, {encoding: utf8})
       success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}` )
     } else {

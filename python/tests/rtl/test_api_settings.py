@@ -34,7 +34,6 @@ def config_file(tmpdir_factory):
         """
 [Looker]
 # API version
-api_version=3.1
 # Base URL for API. Do not include /api/* in the url
 base_url=https://host1.looker.com:19999
 # API 3 client id
@@ -45,7 +44,6 @@ client_secret=your_API3_client_secret
 verify_ssl=True
 
 [OLD_API]
-api_version=3.0
 base_url=https://host2.looker.com:19999
 client_id=your_API3_client_id
 client_secret=your_API3_client_secret
@@ -62,7 +60,6 @@ base_url=""
 
 [QUOTED_CONFIG_VARS]
 base_url="https://host4.looker.com:19999"
-api_version='3.1'
 verify_ssl='false'
 """
     )
@@ -81,20 +78,17 @@ def test_settings_defaults_to_looker_section(config_file):
 
 
 @pytest.mark.parametrize(
-    "test_section, expected_url, expected_api_version",
+    "test_section, expected_url",
     [
-        ("Looker", "https://host1.looker.com:19999", "3.1"),
-        ("OLD_API", "https://host2.looker.com:19999", "3.0"),
+        ("Looker", "https://host1.looker.com:19999"),
+        ("OLD_API", "https://host2.looker.com:19999"),
     ],
     ids=["section=Looker", "section=OLD_API"],
 )
-def test_it_retrieves_section_by_name(
-    config_file, test_section, expected_url, expected_api_version
-):
+def test_it_retrieves_section_by_name(config_file, test_section, expected_url):
     """ApiSettings should return settings of specified section."""
     settings = api_settings.ApiSettings.configure(config_file, test_section)
     assert settings.base_url == expected_url
-    assert settings.api_version == expected_api_version
     assert settings.verify_ssl
     assert not hasattr(settings, "client_id")
     assert not hasattr(settings, "client_secret")
@@ -105,7 +99,6 @@ def test_it_assigns_defaults_to_empty_settings(config_file):
     config file.
     """
     settings = api_settings.ApiSettings.configure(config_file, "BARE_MINIMUM")
-    assert settings.api_version == "3.1"
     assert settings.base_url == "https://host3.looker.com:19999/"
     assert settings.verify_ssl
     assert not hasattr(settings, "client_id")
@@ -138,7 +131,6 @@ def test_settings_from_env_variables_override_config_file(
 
     settings = api_settings.ApiSettings.configure(config_file, section=test_section)
     assert settings.base_url == "https://host1.looker.com:19999"
-    assert settings.api_version == "3.0"
     assert not settings.verify_ssl
     # API credentials are still not set as attributes when read from env variables
     assert not hasattr(settings, "client_id")
@@ -192,8 +184,10 @@ def test_configure_with_no_file(monkeypatch):
 )
 def test_it_fails_if_required_settings_are_not_found(config_file, test_section):
     """ApiSettings should throw an error if required settings are not found."""
-    with pytest.raises(error.SDKError):
-        api_settings.ApiSettings.configure(config_file, test_section)
+    assert (
+        api_settings.ApiSettings.configure(config_file, test_section).is_configured()
+        is False
+    )
 
 
 def test_it_fails_when_env_variables_are_defined_but_empty(config_file, monkeypatch):
@@ -202,15 +196,15 @@ def test_it_fails_when_env_variables_are_defined_but_empty(config_file, monkeypa
     """
     monkeypatch.setenv("LOOKERSDK_BASE_URL", "")
 
-    with pytest.raises(error.SDKError):
-        api_settings.ApiSettings.configure(config_file, "BARE")
+    assert (
+        api_settings.ApiSettings.configure(config_file, "BARE").is_configured() is False
+    )
 
 
 def test_it_unquotes_quoted_config_file_vars(config_file):
     """ApiSettings should strip quotes from config file variables."""
     settings = api_settings.ApiSettings.configure(config_file, "QUOTED_CONFIG_VARS")
     assert settings.base_url == "https://host4.looker.com:19999"
-    assert settings.api_version == "3.1"
     assert settings.verify_ssl is False
 
 
@@ -223,5 +217,4 @@ def test_it_unquotes_quoted_env_var_values(monkeypatch):
     settings = api_settings.ApiSettings.configure("no-such-file")
 
     assert settings.base_url == "https://host1.looker.com:19999"
-    assert settings.api_version == "3.1"
     assert settings.verify_ssl is False

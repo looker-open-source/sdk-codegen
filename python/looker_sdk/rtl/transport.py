@@ -63,7 +63,7 @@ class TransportSettings:
     """
 
     base_url: str = ""
-    api_version: str = "3.1"
+    api_version: str = ""
     verify_ssl: bool = True
     timeout: int = 120
     headers: Optional[MutableMapping[str, str]] = None
