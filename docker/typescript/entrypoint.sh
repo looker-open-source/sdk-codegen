@@ -10,3 +10,4 @@ NODE_TLS_REJECT_UNAUTHORIZED='0' yarn sdk
 # now here run whatever tests!
 source /home/looker/.bash_profile
 #Your test
+yarn test

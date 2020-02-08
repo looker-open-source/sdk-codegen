@@ -19,3 +19,17 @@ services:
       tty: true
       volumes:
         - '.:/sdk_codegen'
+
+    typescript:
+      environment:
+        - LOOKERSDK_BASE_URL=${LOOKERSDK_BASE_URL}
+        - LOOKERSDK_API_VERSION=${LOOKERSDK_API_VERSION}
+        - LOOKERSDK_VERIFY_SSL=${LOOKERSDK_VERIFY_SSL}
+        - LOOKERSDK_TIMEOUT=${LOOKERSDK_TIMEOUT}
+        - LOOKERSDK_CLIENT_ID=${LOOKERSDK_CLIENT_ID}
+        - LOOKERSDK_CLIENT_SECRET=${LOOKERSDK_CLIENT_SECRET}
+      build: docker/typescript/
+      stdin_open: true
+      tty: true
+      volumes:
+        - '.:/sdk_codegen'
