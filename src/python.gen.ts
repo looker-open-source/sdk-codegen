@@ -367,6 +367,18 @@ ${this.hooks.join('\n')}
       + `${returnStmt}`
   }
 
+  bodyParamsTypeAssertions(indent: string, bodyParams: IParameter[]): string {
+    let assertion: string = ""
+    for (const param of bodyParams) {
+      if (param.location === "body") {
+        let conditionStr = param.required ? '' : `${indent}if ${param.name}:\n${indent}`
+        let type = this.writeableType(param.type) || param.type
+        assertion += (`${conditionStr}${indent}assert isinstance(${param.name}, ${this.typeMapMethods(type).name})`)
+      }
+    }
+    return `${assertion}\n`
+  }
+
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
 
@@ -381,6 +393,7 @@ ${this.hooks.join('\n')}
 
     return this.methodSignature(indent, method)
       + this.summary(bump, method.summary)
+      + (method.bodyParams.length > 0 ? this.bodyParamsTypeAssertions(bump, method.bodyParams) : '')
       + this.httpCall(bump, method)
   }
 
