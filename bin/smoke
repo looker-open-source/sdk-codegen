@@ -1,21 +1,52 @@
 #!/bin/bash
 
-echo "Smoking Typescript SDK ..."
-JEST_JUNIT_OUTPUT_DIR=results JEST_JUNIT_OUTPUT_NAME=smoketypescript.xml yarn jest --reporters=default --reporters=jest-junit
+for arg in "$@"
+do
+    if [ "$arg" == "--help" ] || [ "$arg" == "-h" ]
+    then
+        echo "Test options: all, typescript, kotlin, swift, python"
+        echo "Multiple languages can be specified at the same time"
+        echo "'all' is the default"
+    fi
+done
 
-echo "Smoking Python SDK ..."
-cd python
-pipenv run pytest --junitxml=../results/smokepython.xml tests/
-cd ..
+if [ $# == 0 ] || [ "$1" == "all" ]
+then
+  tests="typescript kotlin swift python"
+else
+  tests="$*"
+fi
 
-echo "Smoking Kotlin SDK ..."
-cd kotlin
-gradle test
-cd ..
+echo "Smoking SDKs: ${tests} ..."
 
-echo "Smoking Swift SDK ..."
-cd swift/looker
-xcodebuild test -project looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.3' | xcpretty --test --color
-cd ../..
+if [[ $tests == *typescript* ]]
+then
+  echo "Smoking Typescript SDK ..."
+  JEST_JUNIT_OUTPUT_DIR=results JEST_JUNIT_OUTPUT_NAME=smoketypescript.xml yarn jest --reporters=default --reporters=jest-junit
+fi
+
+if [[ $tests == *python* ]]
+then
+  echo "Smoking Python SDK ..."
+  cd python
+  pipenv run pytest --junitxml=../results/smokepython.xml tests/
+  cd ..
+fi
+
+if [[ $tests == *kotlin* ]]
+then
+  echo "Smoking Kotlin SDK ..."
+  cd kotlin
+  gradle test
+  cd ..
+fi
+
+if [[ $tests == *swift* ]]
+then
+  echo "Smoking Swift SDK ..."
+  cd swift/looker
+  xcodebuild test -project looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.3' | xcpretty --test --color
+  cd ../..
+fi
 
 echo "Smoke tests completed"
