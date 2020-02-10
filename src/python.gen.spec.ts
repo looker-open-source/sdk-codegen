@@ -248,6 +248,25 @@ def run_url_encoded_query(
     })
   })
 
+  describe('body params type assertions' , () => {
+    it('asserts input body type for required body params', () => {
+      const method = apiTestModel.methods['run_inline_query']
+      const expected = `assert isinstance(body, models.WriteQuery)\n`
+      const actual = gen.bodyParamsTypeAssertions('', method.bodyParams)
+      expect(actual).toEqual(expected)
+    })
+
+    it('asserts input body type for optional body params', () => {
+      const method = apiTestModel.methods["import_lookml_dashboard"]
+      const expected = 
+` if body:
+  assert isinstance(body, models.WriteDashboard)
+`
+      const actual = gen.bodyParamsTypeAssertions(' ', method.bodyParams)
+      expect(actual).toEqual(expected)
+    })
+  })
+
   describe('method body', () => {
     it('assert response is model add_group_group', () => {
       const method = apiTestModel.methods['add_group_group']
