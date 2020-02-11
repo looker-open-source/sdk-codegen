@@ -28,7 +28,7 @@ val rootPath = File("./").absoluteFile.parentFile.parentFile.absolutePath
 val testPath  = "${rootPath}/test"
 val dataFile = testFile("data.yml")
 val envIni = System.getenv("LOOKERSDK_INI")
-val localIni = if (envIni === "") rootFile("looker.ini") else envIni
+val localIni = if (envIni === null) rootFile("looker.ini") else envIni
 
 fun rootFile(fileName: String): String {
     return "${rootPath}/${fileName}"
