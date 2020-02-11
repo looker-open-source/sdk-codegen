@@ -368,15 +368,19 @@ ${this.hooks.join('\n')}
   }
 
   bodyParamsTypeAssertions(indent: string, bodyParams: IParameter[]): string {
-    let assertion: string = ""
-    for (const param of bodyParams) {
-      if (param.location === "body") {
-        let conditionStr = param.required ? '' : `${indent}if ${param.name}:\n${indent}`
-        let type = this.writeableType(param.type) || param.type
-        assertion += (`${conditionStr}${indent}assert isinstance(${param.name}, ${this.typeMapMethods(type).name})`)
+    const bump = indent + this.indentStr
+    let assertions: string = ''
+    if (bodyParams.length > 0) {
+      for (const param of bodyParams) {
+        if (param.location === "body") {
+          let conditionStr = param.required ? '' : `${indent}if ${param.name}:\n${bump}`
+          let type = this.writeableType(param.type) || param.type
+          assertions += (`${conditionStr}${indent}assert isinstance(${param.name}, ${this.typeMapMethods(type).name})`)
+        }
       }
+      assertions += "\n"
     }
-    return `${assertion}\n`
+    return assertions
   }
 
   declareMethod(indent: string, method: IMethod) {
@@ -393,7 +397,7 @@ ${this.hooks.join('\n')}
 
     return this.methodSignature(indent, method)
       + this.summary(bump, method.summary)
-      + (method.bodyParams.length > 0 ? this.bodyParamsTypeAssertions(bump, method.bodyParams) : '')
+      + this.bodyParamsTypeAssertions(bump, method.bodyParams)
       + this.httpCall(bump, method)
   }
 
