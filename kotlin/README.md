@@ -47,7 +47,7 @@ If this command fails the first time, read the [instructions for setting up `yar
 
 Looker 7.2 introduces an experimental API 4.0 that should be used for strongly-typed languages like Kotlin. (In fact, 4.0 was explicitly created to support languages like Swift and Kotlin.)
 
-**NOTE**: For the Kotlin SDK, to correctly deserialize the JSON payloads from the Looker API, you **must** use the 4.0 client `Looker40SDK`, not `Looker31SDK`.
+**NOTE**: For the Kotlin SDK, to correctly deserialize the JSON payloads from the Looker API, you **must** use the 4.0 client `LookerSDK`, not `Looker31SDK`.
 
 When the SDK is installed and the server location and API credentials are configured in your `looker.ini` file, it's ready to be used.
 

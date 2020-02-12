@@ -40,7 +40,7 @@ Please review the following table for a breakdown of the options to initialize t
 | ---- | ------ | --------| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Python  | `looker_sdk.init31()` | `looker_sdk.init40()` | Both API 3.1 and 4.0 are supported, and can be initialized with the functions shown                                                   |
 | Typescript | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()` | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | Both API 3.1 and 4.0 are supported and can be initialized with the functions shown | 
-| Kotlin  | Do not use | `Looker40SDK()` | API 4.0 was specifically created to correct the endpoint payloads for strongly-typed languages like Kotlin and Swift |
+| Kotlin  | Do not use | `LookerSDK()` | API 4.0 was specifically created to correct the endpoint payloads for strongly-typed languages like Kotlin and Swift. Because Kotlin really requires API 4.0, API 4.0 is the default namespace for it |
 | Swift | Not applicable | `Looker40SDK()` | Swift only has SDK definitions for API 4.0 |                                                                                                     |
 
 By supporting both API versions in the same SDK package, we hope the migration path to the latest API is simplified. Both SDK versions can be used at the same time, in the same source file, which should allow for iterative work to move to the new API version.

@@ -3,7 +3,6 @@ import com.looker.rtl.ApiSettingsIniFile
 import com.looker.rtl.Transport
 import com.looker.rtl.UserSession
 import com.looker.sdk.*
-import com.looker.sdk.api40.*
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.json.JacksonSerializer
@@ -40,7 +39,7 @@ class KotlinExample {
 
     val session = UserSession(settings, Transport(settings, client))
 
-    val sdk = Looker40SDK(session)
+    val sdk = LookerSDK(session)
 
     fun findDashboardsByTitle(title: String): Array<Dashboard> {
         val dashboards = sdk.ok<Array<Dashboard>>(sdk.search_dashboards(title = title))
@@ -55,7 +54,7 @@ class KotlinExample {
         if(dash.dashboard_elements.isNullOrEmpty()) {
             return null
         }
-        val element = dash.dashboard_elements!!.filter { element -> (element.title?.toLowerCase() ?: "") == title }
+        val element = dash.dashboard_elements!!.filter { element -> (element.title?.toLowerCase() ?: "") == lowerTitle }
         if (element.isEmpty()) {
             throw Error("No tile with title $title found on ${dash.title}.")
         }
@@ -100,11 +99,12 @@ class KotlinExample {
     }
 }
 
-fun main(args: List<String>) {
-    val x = KotlinExample()
-    val dash = x.findDashboardsByTitle("Test")
-    val tile = x.getDashboardTile(dash[0], "Test")
-    if (tile != null) {
-        val down = x.downloadTile(tile, "txt")
-    }
-}
+// TODO convert this to a functional test
+//fun main(args: List<String>) {
+//    val x = KotlinExample()
+//    val dash = x.findDashboardsByTitle("Test")
+//    val tile = x.getDashboardTile(dash[0], "Test")
+//    if (tile != null) {
+//        val down = x.downloadTile(tile, "txt")
+//    }
+//}
