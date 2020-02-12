@@ -3569,7 +3569,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DataActionForm:
         """Fetch Remote Data Action Form"""
-        assert isinstance(body, MutableMapping[str, str])
+        assert isinstance(body, MutableMapping)
         response = self.post(
             f"/data_actions/form",
             models.DataActionForm,
@@ -6077,7 +6077,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Match Look description.
         description: Optional[str] = None,
         # Select looks with a particular content favorite id
-        content_favorite_id: Optional[str] = None,
+        content_favorite_id: Optional[int] = None,
         # Select looks in a particular space.
         space_id: Optional[str] = None,
         # Select looks created by a particular user.
@@ -6769,7 +6769,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.Group]:
         """Update Role Groups"""
-        assert isinstance(body, Sequence[int])
+        assert isinstance(body, Sequence)
         response = self.put(
             f"/roles/{role_id}/groups",
             Sequence[models.Group],
@@ -6790,7 +6790,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.User]:
         """Update Role Users"""
-        assert isinstance(body, Sequence[int])
+        assert isinstance(body, Sequence)
         response = self.put(
             f"/roles/{role_id}/users",
             Sequence[models.User],
@@ -6830,7 +6830,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.UserAttributeGroupValue]:
         """Set User Attribute Group Values"""
-        assert isinstance(body, Sequence[models.UserAttributeGroupValue])
+        assert isinstance(body, Sequence)
         response = self.post(
             f"/user_attributes/{user_attribute_id}/group_values",
             Sequence[models.UserAttributeGroupValue],
@@ -6878,7 +6878,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.Role]:
         """Set User Roles"""
-        assert isinstance(body, Sequence[int])
+        assert isinstance(body, Sequence)
         response = self.put(
             f"/users/{user_id}/roles",
             Sequence[models.Role],
