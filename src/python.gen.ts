@@ -138,7 +138,6 @@ import datetime
 from typing import MutableMapping, Optional, Sequence
 
 import attr
-import cattr
 
 from ${this.packagePath}.rtl import model
 from ${this.packagePath}.rtl import serialize as sr
