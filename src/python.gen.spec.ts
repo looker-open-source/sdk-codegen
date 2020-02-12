@@ -266,6 +266,18 @@ def run_url_encoded_query(
       expect(actual).toEqual(expected)
     })
 
+    it('body type assertions have generic subscripts stripped away', () => {
+      const sequenceBodyMethod = apiTestModel.methods["set_role_groups"]
+      let expected = `assert isinstance(body, Sequence)\n`
+      let actual = gen.bodyParamsTypeAssertions('', sequenceBodyMethod.bodyParams)
+      expect(actual).toEqual(expected)
+
+      const mutableMappingBodyMethod = apiTestModel.methods["fetch_remote_data_action_form"]
+      expected = `assert isinstance(body, MutableMapping)\n`
+      actual = gen.bodyParamsTypeAssertions('', mutableMappingBodyMethod.bodyParams)
+      expect(actual).toEqual(expected)
+    })
+
     it('does not assert type of query/path params', () => {
       const method = apiTestModel.methods["lookml_model_explore"]
       const expected = ''
