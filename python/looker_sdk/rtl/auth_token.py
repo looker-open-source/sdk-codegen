@@ -25,22 +25,27 @@
 from typing import Optional
 import datetime
 
-from looker_sdk.sdk.api31 import models as ml
+from looker_sdk.rtl import constants
+
+if constants.api_version == "3.1":
+    from looker_sdk.sdk.api31 import models
+elif constants.api_version == "4.0":
+    from looker_sdk.sdk.api40 import models  # type: ignore
 
 
 class AuthToken:
     """Used to instantiate or check expiry of an AccessToken object"""
 
-    def __init__(self, token: Optional[ml.AccessToken] = None):
+    def __init__(self, token: Optional[models.AccessToken] = None):
         self.access_token: str = ""
         self.token_type: str = ""
         self.expires_in: int = 0
         self.expires_at = datetime.datetime.now()
         if token is None:
-            token = ml.AccessToken()
+            token = models.AccessToken()
         self.set_token(token)
 
-    def set_token(self, token: ml.AccessToken):
+    def set_token(self, token: models.AccessToken):
         """Assign the token and set its expiration."""
         self.access_token = token.access_token or ""
         self.token_type = token.token_type or ""

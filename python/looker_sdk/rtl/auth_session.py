@@ -28,9 +28,14 @@ import urllib.parse
 from looker_sdk import error
 from looker_sdk.rtl import api_settings
 from looker_sdk.rtl import auth_token
+from looker_sdk.rtl import constants
 from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
-from looker_sdk.sdk.api31 import models
+
+if constants.api_version == "3.1":
+    from looker_sdk.sdk.api31 import models
+elif constants.api_version == "4.0":
+    from looker_sdk.sdk.api40 import models  # type: ignore
 
 
 class AuthSession:
