@@ -59,20 +59,40 @@ export class KotlinGen extends CodeGen {
   needsRequestTypes = false
   willItStream = false
 
+  private readonly defaultApi = '4.0'
+
+  isDefaultApi() {
+    return this.apiVersion === this.defaultApi
+  }
+
+  // TODO create `defaultPackageName` property in CodeGen
+  sdkClassName() {
+    return this.isDefaultApi() ? 'LookerSDK' : `Looker${this.apiRef}SDK`
+  }
+
+  /**
+   * Return either api versioned namespace text or empty string if current API is the default
+   * @returns {string} 'api31' or '', for example
+   */
+  apiNamespace() {
+    if (this.apiVersion === this.defaultApi) return ''
+    return `.api${this.apiRef}`
+  }
+
   // @ts-ignore
   methodsPrologue(indent: string) {
     return `
 // ${this.warnEditing()}
-package com.looker.sdk
+package com.looker.sdk${this.apiNamespace()}
 
 import com.looker.rtl.*
 import com.looker.rtl.UserSession
 import java.util.*
-import com.looker.sdk.api${this.apiRef}.*
+import com.looker.sdk${this.apiNamespace()}.*
 // TODO can this single import override be avoided in any way?
-import com.looker.sdk.api${this.apiRef}.Locale
+import com.looker.sdk${this.apiNamespace()}.Locale
 
-class ${this.packageName}(authSession: UserSession) : APIMethods(authSession) {
+class ${this.sdkClassName()}(authSession: UserSession) : APIMethods(authSession) {
 
 `
   }
@@ -82,9 +102,9 @@ class ${this.packageName}(authSession: UserSession) : APIMethods(authSession) {
     return `
 // ${this.warnEditing()}
 
-package com.looker.sdk
+package com.looker.sdk${this.apiNamespace()}
 
-import com.looker.sdk.api${this.apiRef}.*
+import com.looker.sdk${this.apiNamespace()}.*
 // nothing to see here, yet
 `
   }
@@ -99,7 +119,7 @@ import com.looker.sdk.api${this.apiRef}.*
     return `
 // ${this.warnEditing()}
 
-package com.looker.sdk.api${this.apiRef}
+package com.looker.sdk${this.apiNamespace()}
 
 import com.looker.rtl.*
 import java.util.*

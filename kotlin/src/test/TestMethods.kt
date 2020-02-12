@@ -2,7 +2,6 @@ import com.looker.rtl.ApiSettingsIniFile
 import com.looker.rtl.SDKResponse
 import com.looker.rtl.Transport
 import com.looker.rtl.UserSession
-import com.looker.sdk.Looker40SDK
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.json.JacksonSerializer
@@ -17,7 +16,7 @@ import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.Test as test
-import com.looker.sdk.api40.*
+import com.looker.sdk.*
 
 
 class TestMethods {
@@ -41,7 +40,7 @@ class TestMethods {
     }
     val session = UserSession(settings, Transport(settings, client))
 
-    val sdk = Looker40SDK(session)
+    val sdk = LookerSDK(session)
 
     inline fun <TAll,TId, reified TEntity> listGetter(
             lister: () -> SDKResponse,
@@ -202,6 +201,25 @@ class TestMethods {
             }
         }
     }
+
+    // TODO revive when last_viewed_at is available on the search endpoints
+//    @test fun testRecent() {
+//        val limit: Long? = 5
+//        val recentDashboards = sdk.ok<Array<Dashboard>>(sdk.search_dashboards(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc"))
+//        val dash2 = sdk.ok<Array<Dashboard>>(sdk.search_dashboards(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc"))
+//        val recentLooks = sdk.ok<Array<Look>>(sdk.search_looks(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc"))
+//        val look2 = sdk.ok<Array<Look>>(sdk.search_looks(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc"))
+//        assertNotNull(recentDashboards)
+//        assertNotNull(dash2)
+//        assertNotNull(recentLooks)
+//        assertNotNull(look2)
+//        val l = limit!!.toInt()
+//        assertEquals(l, recentDashboards.count(), "5 Dashboards")
+//        assertEquals(l, dash2.count(),"5 Dashboards")
+//        assertEquals(l, recentLooks.count(), "5 Looks")
+//        assertEquals(l, look2.count(), "5 Looks")
+//    }
+
     /*
     functional tests
      */
