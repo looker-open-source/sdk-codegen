@@ -376,11 +376,11 @@ ${this.hooks.join('\n')}
           let type = this.writeableType(param.type) || param.type
           let bodyType = this.typeMapMethods(type).name
           if (bodyType.startsWith('Sequence')) {
-            bodyType = "Sequence"
+            bodyType = 'Sequence'
           } else if (bodyType.startsWith('MutableMapping')) {
-            bodyType = "MutableMapping"
-          } else if (bodyType.startsWith("models.DelimSequence")) {
-            bodyType = "models.DelimSequence"
+            bodyType = 'MutableMapping'
+          } else if (bodyType.startsWith('models.DelimSequence')) {
+            bodyType = 'models.DelimSequence'
           }
           assertions += (`${conditionStr}${indent}assert isinstance(${param.name}, ${bodyType})`)
         }
