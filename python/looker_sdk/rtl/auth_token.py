@@ -22,25 +22,36 @@
 
 """AuthToken
 """
-from typing import Optional
+from typing import Optional, Type, Union
 import datetime
 
-from looker_sdk.sdk.api31 import models as ml
+from looker_sdk.rtl import constants
+from looker_sdk.sdk.api31 import models as models31
+from looker_sdk.sdk.api40 import models as models40
+
+
+token_model: Union[Type[models31.AccessToken], Type[models40.AccessToken]]
+if constants.api_version == "3.1":
+    token_model = models31.AccessToken
+elif constants.api_version == "4.0":
+    token_model = models40.AccessToken
 
 
 class AuthToken:
     """Used to instantiate or check expiry of an AccessToken object"""
 
-    def __init__(self, token: Optional[ml.AccessToken] = None):
+    def __init__(
+        self, token: Optional[Union[models31.AccessToken, models40.AccessToken]] = None
+    ):
         self.access_token: str = ""
         self.token_type: str = ""
         self.expires_in: int = 0
         self.expires_at = datetime.datetime.now()
         if token is None:
-            token = ml.AccessToken()
+            token = token_model()
         self.set_token(token)
 
-    def set_token(self, token: ml.AccessToken):
+    def set_token(self, token: Union[models31.AccessToken, models40.AccessToken]):
         """Assign the token and set its expiration."""
         self.access_token = token.access_token or ""
         self.token_type = token.token_type or ""
