@@ -5,7 +5,6 @@ import datetime
 from typing import MutableMapping, Optional, Sequence
 
 import attr
-import cattr
 
 from looker_sdk.rtl import model
 from looker_sdk.rtl import serialize as sr

@@ -138,7 +138,6 @@ import datetime
 from typing import MutableMapping, Optional, Sequence
 
 import attr
-import cattr
 
 from ${this.packagePath}.rtl import model
 from ${this.packagePath}.rtl import serialize as sr
@@ -367,6 +366,29 @@ ${this.hooks.join('\n')}
       + `${returnStmt}`
   }
 
+  bodyParamsTypeAssertions(indent: string, bodyParams: IParameter[]): string {
+    const bump = indent + this.indentStr
+    let assertions: string = ''
+    if (bodyParams.length > 0) {
+      for (const param of bodyParams) {
+        if (param.location === strBody) {
+          let conditionStr = param.required ? '' : `${indent}if ${param.name}:\n${bump}`
+          let type = this.writeableType(param.type) || param.type
+          let bodyType = this.typeMapMethods(type).name
+          if (bodyType.startsWith('Sequence')) {
+            bodyType = 'Sequence'
+          } else if (bodyType.startsWith('MutableMapping')) {
+            bodyType = 'MutableMapping'
+          } else if (bodyType.startsWith('models.DelimSequence')) {
+            bodyType = 'models.DelimSequence'
+          }
+          assertions += (`${conditionStr}${indent}assert isinstance(${param.name}, ${bodyType})\n`)
+        }
+      }
+    }
+    return assertions
+  }
+
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
 
@@ -381,6 +403,7 @@ ${this.hooks.join('\n')}
 
     return this.methodSignature(indent, method)
       + this.summary(bump, method.summary)
+      + this.bodyParamsTypeAssertions(bump, method.bodyParams)
       + this.httpCall(bump, method)
   }
 
