@@ -22,7 +22,7 @@
 
 """AuthSession to provide automatic authentication
 """
-from typing import cast, Dict, Optional
+from typing import cast, Dict, Optional, Type, Union
 import urllib.parse
 
 from looker_sdk import error
@@ -31,11 +31,22 @@ from looker_sdk.rtl import auth_token
 from looker_sdk.rtl import constants
 from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
+from looker_sdk.sdk.api31 import models as models31
+from looker_sdk.sdk.api40 import models as models40
 
+
+# I'd expect the following line to be sufficient to tell mypy that `access_token`
+# is a Union[models31.AccessToken, models40.AccessToken] but it isn't.
+#
+# `isinstance(access_token, token_model)`
+#
+# hence the explicit tuple instead
+token_model_isinstances = models31.AccessToken, models40.AccessToken
+token_model: Union[Type[models31.AccessToken], Type[models40.AccessToken]]
 if constants.api_version == "3.1":
-    from looker_sdk.sdk.api31 import models
+    token_model = models31.AccessToken
 elif constants.api_version == "4.0":
-    from looker_sdk.sdk.api40 import models  # type: ignore
+    token_model = models40.AccessToken
 
 
 class AuthSession:
@@ -147,8 +158,8 @@ class AuthSession:
             )
         )
 
-        access_token = self.deserialize(data=response, structure=models.AccessToken)
-        assert isinstance(access_token, models.AccessToken)
+        access_token = self.deserialize(data=response, structure=token_model)
+        assert isinstance(access_token, token_model_isinstances)
         self.admin_token = auth_token.AuthToken(access_token)
 
     def _login_user(self) -> None:
@@ -161,8 +172,8 @@ class AuthSession:
                 },
             )
         )
-        access_token = self.deserialize(data=response, structure=models.AccessToken)
-        assert isinstance(access_token, models.AccessToken)
+        access_token = self.deserialize(data=response, structure=token_model)
+        assert isinstance(access_token, token_model_isinstances)
         self.user_token = auth_token.AuthToken(access_token)
 
     def logout(self, full: bool = False) -> None:
