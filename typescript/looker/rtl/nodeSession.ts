@@ -39,6 +39,7 @@ import {
 } from './apiSettings'
 import { AuthSession } from './authSession'
 import { defaultApiVersion, utf8 } from './constants'
+import { getenv } from './nodeSettings'
 
 const strPost: HttpMethod = 'POST'
 const strDelete: HttpMethod = 'DELETE'
@@ -198,10 +199,9 @@ export class NodeSession extends AuthSession {
       // only retain client API3 credentials for the lifetime of the login request
       const section = this.settings.readConfig()
       // tslint:disable-next-line:variable-name
-      const client_id = process.env[strLookerClientId] || section['client_id']
+      const client_id = getenv(strLookerClientId, section['client_id'])
       // tslint:disable-next-line:variable-name
-      const client_secret =
-        process.env[strLookerClientSecret] || section['client_secret']
+      const client_secret = getenv(strLookerClientSecret, section['client_secret'])
       if (!client_id || !client_secret) {
         throw sdkError({
           message: 'API credentials client_id and/or client_secret are not set'

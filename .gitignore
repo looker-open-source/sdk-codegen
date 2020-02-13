@@ -1,4 +1,5 @@
 looker.ini
+looker.ini.*
 lookerapi*.json
 Looker*.json
 **/node_modules/*

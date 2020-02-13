@@ -100,6 +100,7 @@ def create_test_users(
 @pytest.fixture(scope="session")
 def sdk():
     # TODO multiplex this fixture for both init31 and init40
-    sdk = looker_sdk.init31("../looker.ini")
+    filename = os.getenv("LOOKERSDK_INI", "../looker.ini")
+    sdk = looker_sdk.init31(filename)
     yield sdk
     sdk.logout()

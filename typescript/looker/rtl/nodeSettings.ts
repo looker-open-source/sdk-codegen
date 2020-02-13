@@ -27,7 +27,7 @@ import * as ini from 'ini'
 import {
   ApiConfigMap,
   ApiSettings, DefaultSettings,
-  IApiSettings,
+  IApiSettings, strLookerClientId,
   ValueSettings,
 } from './apiSettings'
 import { unquote, utf8 } from './constants'
@@ -35,6 +35,17 @@ import { sdkError } from './transport'
 
 export interface IApiSection {
   [key: string]: string;
+}
+
+/**
+ * Read an environment key. Use defaultValue if it doesn't exist
+ * @param {string} name Environment variable name
+ * @param {string | undefined} defaultValue
+ * @returns {string | undefined} The value of the environment variable if it exists, or defaultValue
+ */
+export const getenv = (name: string, defaultValue: string | undefined = undefined) => {
+  const val = process.env[name]
+  return val === undefined ? defaultValue : val
 }
 
 /**
@@ -79,7 +90,7 @@ const readEnvConfig = () => {
   Object.keys(ApiConfigMap).forEach(key => {
     const envKey = ApiConfigMap[key]
     if (process.env[envKey] !== undefined) {
-      // map environment variable keys to config variable keys
+      // Value exists. Map environment variable keys to config variable keys
       values[key] = unquote(process.env[envKey])
     }
   })
