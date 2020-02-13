@@ -382,10 +382,9 @@ ${this.hooks.join('\n')}
           } else if (bodyType.startsWith('models.DelimSequence')) {
             bodyType = 'models.DelimSequence'
           }
-          assertions += (`${conditionStr}${indent}assert isinstance(${param.name}, ${bodyType})`)
+          assertions += (`${conditionStr}${indent}assert isinstance(${param.name}, ${bodyType})\n`)
         }
       }
-      assertions += "\n"
     }
     return assertions
   }
