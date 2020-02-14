@@ -23,7 +23,7 @@ struct ApiSession: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * The id of active workspace for this session
      */
@@ -69,7 +69,7 @@ struct BackupConfiguration: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Type of backup: looker-s3 or custom-s3
      */
@@ -163,7 +163,7 @@ struct ContentMeta: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -214,7 +214,7 @@ struct ContentMetaGroupUser: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -452,7 +452,7 @@ struct ContentView: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -554,7 +554,7 @@ struct CreateDashboardFilter: SDKModel {
     /**
      * Field information (read-only)
      */
-    var field: StringDictionary<Variant?>?
+    var field: StringDictionary<AnyCodable>?
     /**
      * Display order of this filter relative to other filters
      */
@@ -574,7 +574,7 @@ struct CreateDashboardFilter: SDKModel {
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
-    var ui_config: StringDictionary<Variant?>?
+    var ui_config: StringDictionary<AnyCodable>?
 }
 
 struct CreateDashboardRenderTask: SDKModel {
@@ -603,7 +603,7 @@ struct CreateQueryTask: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Id of query to run
      */
@@ -645,7 +645,7 @@ struct CredentialsApi3: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -676,7 +676,7 @@ struct CredentialsEmail: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -719,7 +719,7 @@ struct CredentialsEmbed: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -758,7 +758,7 @@ struct CredentialsGoogle: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -797,7 +797,7 @@ struct CredentialsLDAP: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -836,7 +836,7 @@ struct CredentialsLookerOpenid: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -875,7 +875,7 @@ struct CredentialsOIDC: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -910,7 +910,7 @@ struct CredentialsSaml: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -945,7 +945,7 @@ struct CredentialsTotp: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -972,7 +972,7 @@ struct CustomWelcomeEmail: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * If true, custom email content will replace the default body of welcome emails
      */
@@ -987,7 +987,7 @@ struct Dashboard: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Content Favorite Id (read-only)
      */
@@ -1142,7 +1142,7 @@ struct DashboardBase: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Content Favorite Id (read-only)
      */
@@ -1196,7 +1196,7 @@ struct DashboardElement: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Text tile body text
      */
@@ -1294,7 +1294,7 @@ struct DashboardFilter: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -1334,7 +1334,7 @@ struct DashboardFilter: SDKModel {
     /**
      * Field information (read-only)
      */
-    var field: StringDictionary<Variant?>?
+    var field: StringDictionary<AnyCodable>?
     /**
      * Display order of this filter relative to other filters
      */
@@ -1354,14 +1354,14 @@ struct DashboardFilter: SDKModel {
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
-    var ui_config: StringDictionary<Variant?>?
+    var ui_config: StringDictionary<AnyCodable>?
 }
 
 struct DashboardLayout: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -1404,7 +1404,7 @@ struct DashboardLayoutComponent: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -1555,11 +1555,11 @@ struct DataActionRequest: SDKModel {
     /**
      * The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.
      */
-    var action: StringDictionary<Variant?>?
+    var action: StringDictionary<AnyCodable>?
     /**
      * User input for any form values the data action might use.
      */
-    var form_values: StringDictionary<Variant?>?
+    var form_values: StringDictionary<AnyCodable>?
 }
 
 struct DataActionResponse: SDKModel {
@@ -1597,7 +1597,7 @@ struct Datagroup: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * UNIX timestamp at which this entry was created. (read-only)
      */
@@ -1640,7 +1640,7 @@ struct DBConnection: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Name of the connection. Also used as the unique identifier
      */
@@ -1777,7 +1777,7 @@ struct DBConnectionBase: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Name of the connection. Also used as the unique identifier (read-only)
      */
@@ -1844,7 +1844,7 @@ struct DBConnectionTestResult: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * JDBC connection string. (only populated in the 'connect' test) (read-only)
      */
@@ -1922,7 +1922,7 @@ struct DialectInfo: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Default number max connections (read-only)
      */
@@ -2067,7 +2067,7 @@ struct EmbedSsoUrlParams: SDKModel {
     /**
      * A dictionary of name-value pairs associating a Looker user attribute name with a value.
      */
-    var user_attributes: StringDictionary<Variant?>?
+    var user_attributes: StringDictionary<AnyCodable>?
     /**
      * Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
      */
@@ -2149,7 +2149,7 @@ struct Folder: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Dashboards (read-only)
      */
@@ -2224,14 +2224,14 @@ struct FolderBase: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
 }
 
 struct GitBranch: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * The short name on the local. Updating `name` results in `git checkout <new_name>`
      */
@@ -2302,7 +2302,7 @@ struct GitConnectionTest: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Human readable string describing the test (read-only)
      */
@@ -2317,7 +2317,7 @@ struct GitConnectionTestResult: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * A short string, uniquely naming this test (read-only)
      */
@@ -2355,7 +2355,7 @@ struct LkGroup: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Group can be used in content access controls
      */
@@ -2408,7 +2408,7 @@ struct Homepage: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Id of associated content_metadata record (read-only)
      */
@@ -2459,7 +2459,7 @@ struct HomepageItem: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Name of user who created the content this item is based on (read-only)
      */
@@ -2574,7 +2574,7 @@ struct HomepageSection: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Time at which this section was created. (read-only)
      */
@@ -2644,7 +2644,7 @@ struct Integration: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * ID of the integration. (read-only)
      */
@@ -2715,7 +2715,7 @@ struct IntegrationHub: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * ID of the hub. (read-only)
      */
@@ -2831,7 +2831,7 @@ struct InternalHelpResources: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
      */
@@ -2842,7 +2842,7 @@ struct InternalHelpResourcesContent: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Text to display in the help menu item which will display the internal help resources
      */
@@ -2857,7 +2857,7 @@ struct LDAPConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
@@ -3093,7 +3093,7 @@ struct LDAPUser: SDKModel {
     /**
      * Dictionary of user's attributes (name/value) (read-only)
      */
-    var attributes: StringDictionary<Variant?>?
+    var attributes: StringDictionary<AnyCodable>?
     /**
      * Primary email address (read-only)
      */
@@ -3170,7 +3170,7 @@ struct LegacyFeature: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -3251,7 +3251,7 @@ struct Look: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Id of content metadata (read-only)
      */
@@ -3373,7 +3373,7 @@ struct LookBasic: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Id of content metadata (read-only)
      */
@@ -3392,7 +3392,7 @@ struct LookmlModel: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Array of names of connections this model is allowed to use
      */
@@ -4018,7 +4018,7 @@ struct LookmlTest: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Name of model containing this test. (read-only)
      */
@@ -4049,7 +4049,7 @@ struct LookmlTestResult: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Name of model containing this test. (read-only)
      */
@@ -4095,7 +4095,7 @@ struct LookWithDashboards: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Id of content metadata (read-only)
      */
@@ -4221,7 +4221,7 @@ struct LookWithQuery: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Id of content metadata (read-only)
      */
@@ -4348,7 +4348,7 @@ struct Manifest: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Manifest project name (read-only)
      */
@@ -4375,7 +4375,7 @@ struct MergeQuery: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Column Limit
      */
@@ -4411,7 +4411,7 @@ struct MergeQuery: SDKModel {
     /**
      * Visualization Config
      */
-    var vis_config: StringDictionary<Variant?>?
+    var vis_config: StringDictionary<AnyCodable>?
 }
 
 struct MergeQuerySourceQuery: SDKModel {
@@ -4433,7 +4433,7 @@ struct ModelSet: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * (read-only)
      */
@@ -4472,7 +4472,7 @@ struct OIDCConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
@@ -4647,7 +4647,7 @@ struct PasswordConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Minimum number of characters required for a new password.  Must be between 7 and 100
      */
@@ -4670,7 +4670,7 @@ struct Permission: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Permission symbol (read-only)
      */
@@ -4689,7 +4689,7 @@ struct PermissionSet: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * (read-only)
      */
@@ -4717,7 +4717,7 @@ struct Project: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Project Id (read-only)
      */
@@ -4828,7 +4828,7 @@ struct ProjectError: SDKModel {
     /**
      * Error parameters (read-only)
      */
-    var params: StringDictionary<Variant?>?
+    var params: StringDictionary<AnyCodable>?
     /**
      * A version of the error message that does not contain potentially sensitive information. Suitable for situations in which messages are stored or sent to consumers outside of Looker, such as external logs. Sanitized messages will display "(?)" where sensitive information would appear in the corresponding non-sanitized message (read-only)
      */
@@ -4839,7 +4839,7 @@ struct ProjectFile: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * An opaque token uniquely identifying a file within a project. Avoid parsing or decomposing the text of this token. This token is stable within a Looker release but may change between Looker releases (read-only)
      */
@@ -4917,7 +4917,7 @@ struct ProjectWorkspace: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * The id of the project (read-only)
      */
@@ -4945,7 +4945,7 @@ struct Query: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -4973,7 +4973,7 @@ struct Query: SDKModel {
     /**
      * Filters
      */
-    var filters: StringDictionary<Variant?>?
+    var filters: StringDictionary<AnyCodable>?
     /**
      * Filter Expression
      */
@@ -5009,11 +5009,11 @@ struct Query: SDKModel {
     /**
      * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
      */
-    var vis_config: StringDictionary<Variant?>?
+    var vis_config: StringDictionary<AnyCodable>?
     /**
      * The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
      */
-    var filter_config: StringDictionary<Variant?>?
+    var filter_config: StringDictionary<AnyCodable>?
     /**
      * Visible UI Sections
      */
@@ -5056,7 +5056,7 @@ struct QueryTask: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -5132,7 +5132,7 @@ struct RenderTask: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Date/Time render task was created (read-only)
      */
@@ -5211,7 +5211,7 @@ struct RepositoryCredential: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -5305,14 +5305,14 @@ struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
     /**
      * Vis config of the constituent Query, or Merge Query. (read-only)
      */
-    var vis_config: StringDictionary<Variant?>?
+    var vis_config: StringDictionary<AnyCodable>?
 }
 
 struct Role: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -5345,7 +5345,7 @@ struct RunningQueries: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -5420,7 +5420,7 @@ struct SamlConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Enable/Disable Saml authentication for the server
      */
@@ -5573,7 +5573,7 @@ struct SamlMetadataParseResult: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Identify Provider Issuer (read-only)
      */
@@ -5755,7 +5755,7 @@ struct ScheduledPlan: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
 }
 
 struct ScheduledPlanDestination: SDKModel {
@@ -5809,7 +5809,7 @@ struct Session: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -5872,7 +5872,7 @@ struct SessionConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Allow users to have persistent sessions when they login
      */
@@ -5974,7 +5974,7 @@ struct Space: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Dashboards (read-only)
      */
@@ -6049,14 +6049,14 @@ struct SpaceBase: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
 }
 
 struct SqlQuery: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * The identifier of the SQL query (read-only)
      */
@@ -6098,7 +6098,7 @@ struct SqlQuery: SDKModel {
     /**
      * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
      */
-    var vis_config: StringDictionary<Variant?>?
+    var vis_config: StringDictionary<AnyCodable>?
 }
 
 struct SqlQueryCreate: SDKModel {
@@ -6121,14 +6121,14 @@ struct SqlQueryCreate: SDKModel {
     /**
      * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
      */
-    var vis_config: StringDictionary<Variant?>?
+    var vis_config: StringDictionary<AnyCodable>?
 }
 
 struct Theme: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Timestamp for when this theme becomes active. Null=always
      */
@@ -6252,7 +6252,7 @@ struct User: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * URL for the avatar image (may be generic) (read-only)
      */
@@ -6351,7 +6351,7 @@ struct User: SDKModel {
     /**
      * Per user dictionary of undocumented state information owned by the Looker UI.
      */
-    var ui_state: StringDictionary<Variant?>?
+    var ui_state: StringDictionary<AnyCodable>?
     /**
      * User is identified as an employee of Looker who has been verified via Looker corporate authentication (read-only)
      */
@@ -6370,7 +6370,7 @@ struct UserAttribute: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -6421,7 +6421,7 @@ struct UserAttributeGroupValue: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id of this group-attribute relation (read-only)
      */
@@ -6452,7 +6452,7 @@ struct UserAttributeWithValue: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Name of user attribute (read-only)
      */
@@ -6499,7 +6499,7 @@ struct UserLoginLockout: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Hash of user's client id (read-only)
      */
@@ -6542,7 +6542,7 @@ struct UserPublic: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -6607,7 +6607,7 @@ struct WelcomeEmailTest: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * The content that will be sent as part of a custom welcome email
      */
@@ -6618,7 +6618,7 @@ struct WhitelabelConfiguration: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * Unique Id (read-only)
      */
@@ -6669,7 +6669,7 @@ struct Workspace: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Variant?>?
+    var can: StringDictionary<AnyCodable>?
     /**
      * The unique id of this user workspace. Predefined workspace ids include "production" and "dev" (read-only)
      */
@@ -6818,7 +6818,7 @@ struct WriteCreateDashboardFilter: SDKModel {
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
-    var ui_config: StringDictionary<Variant?>?
+    var ui_config: StringDictionary<AnyCodable>?
 }
 
 /**
@@ -7088,7 +7088,7 @@ struct WriteDashboardFilter: SDKModel {
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
-    var ui_config: StringDictionary<Variant?>?
+    var ui_config: StringDictionary<AnyCodable>?
 }
 
 /**
@@ -7756,7 +7756,7 @@ struct WriteMergeQuery: SDKModel {
     /**
      * Visualization Config
      */
-    var vis_config: StringDictionary<Variant?>?
+    var vis_config: StringDictionary<AnyCodable>?
 }
 
 /**
@@ -7978,7 +7978,7 @@ struct WriteQuery: SDKModel {
     /**
      * Filters
      */
-    var filters: StringDictionary<Variant?>?
+    var filters: StringDictionary<AnyCodable>?
     /**
      * Filter Expression
      */
@@ -8014,11 +8014,11 @@ struct WriteQuery: SDKModel {
     /**
      * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
      */
-    var vis_config: StringDictionary<Variant?>?
+    var vis_config: StringDictionary<AnyCodable>?
     /**
      * The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
      */
-    var filter_config: StringDictionary<Variant?>?
+    var filter_config: StringDictionary<AnyCodable>?
     /**
      * Visible UI Sections
      */
@@ -8373,7 +8373,7 @@ struct WriteUser: SDKModel {
     /**
      * Per user dictionary of undocumented state information owned by the Looker UI.
      */
-    var ui_state: StringDictionary<Variant?>?
+    var ui_state: StringDictionary<AnyCodable>?
 }
 
 /**
