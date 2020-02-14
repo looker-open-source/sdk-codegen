@@ -177,7 +177,7 @@ class transportTests: XCTestCase {
             XCTAssertTrue(false, "nada should be nil, not '\(nada!)'")
         }
         let dub = vis_config["dub"] as! Double
-        XCTAssertEqual(dub, 2.3)
+        XCTAssertEqual(dub, 2.3, accuracy: 0.0001, "dub should be 2.3")
         let str = vis_config["str"] as! String
         XCTAssertEqual(str, "Simple string")
         XCTAssertTrue(json.contains(str), "\(str) should be in json")
