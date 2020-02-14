@@ -3422,9 +3422,9 @@ class LookerSDK: APIMethods {
      */
     func fetch_remote_data_action_form(
         /**
-         * @param {StringDictionary<Variant?>} body
+         * @param {StringDictionary<AnyCodable>} body
          */
-        _ body: StringDictionary<Variant?>,
+        _ body: StringDictionary<AnyCodable>,
         options: ITransportSettings? = nil
     ) -> SDKResponse<DataActionForm, SDKError> {
         let result: SDKResponse<DataActionForm, SDKError> = self.post("/data_actions/form", nil, try! self.encode(body), options)
@@ -4493,7 +4493,7 @@ class LookerSDK: APIMethods {
      * Query Tasks whose results have expired will have a status of 'expired'.
      * If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
      * 
-     * GET /query_tasks/multi_results -> StringDictionary<Variant?>
+     * GET /query_tasks/multi_results -> StringDictionary<AnyCodable>
      */
     func query_task_multi_results(
         /**
@@ -4501,8 +4501,8 @@ class LookerSDK: APIMethods {
          */
         _ query_task_ids: DelimArray<String>,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<StringDictionary<Variant?>, SDKError> {
-        let result: SDKResponse<StringDictionary<Variant?>, SDKError> = self.get("/query_tasks/multi_results", 
+    ) -> SDKResponse<StringDictionary<AnyCodable>, SDKError> {
+        let result: SDKResponse<StringDictionary<AnyCodable>, SDKError> = self.get("/query_tasks/multi_results", 
             ["query_task_ids": query_task_ids as Any?], nil, options)
         return result
     }

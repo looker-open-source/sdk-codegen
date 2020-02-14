@@ -35,8 +35,16 @@ extension DateFormatter {
     }()
 }
 
-/// Convert a JSON string into the type `T`
+let encoder = JSONEncoder()
+
+/// Converts an object to a JSON string
 /// @throws errors if deserialization fails
+func serialize<T>(_ value: T) throws -> Data where T : Encodable {
+    return try! encoder.encode(value)
+}
+
+/// Convert a JSON string into the type `T`
+/// @throws errors if deserialization failsœ
 /// some interesting date decoding options here: https://stackoverflow.com/questions/44682626/swifts-jsondecoder-with-multiple-date-formats-in-a-json-string
 /// https://benscheirman.com/2017/06/swift-json/ excplores lots of options, none that help with strings misrepresented as int
 func deserialize<T>(_ data: Data) throws -> T where T : Codable {
@@ -142,7 +150,11 @@ extension DateFormatter {
 }
 
 
+
 // Handling JSON that doesn't QUITE conform to spec https://stackoverflow.com/a/47936036/74137
+/*
+ TODO archive this code if we don't need it any more
+ Commenting this out in favor of AnyCodable project source
 enum Variant: Codable, Hashable {
     case string(String)
     case int(Int64)
@@ -209,6 +221,22 @@ enum Variant: Codable, Hashable {
         case .date(let date):
             return DateFormatter.iso8601Full.string(from: date)
         }
+    }
+    
+    func getJson() -> String {
+        switch self {
+        case .string(let string):
+            return "\"\(string)\""
+        case .int(let int):
+            return String(int)
+        case .bool(let bool):
+            return bool ? "true" : "false"
+        case .double(let double):
+            return String(double)
+        case .date(let date):
+            return "\"\(DateFormatter.iso8601Full.string(from: date))\""
+        }
+
     }
     
     func getBool() -> Bool? {
@@ -299,3 +327,4 @@ enum Variant: Codable, Hashable {
         }
     }
 }
+ */

@@ -20,27 +20,27 @@ class modelsTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func deserialize<T>(_ data: Data) throws -> T where T : Codable {
-        let decoder = JSONDecoder()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
-        formatter.calendar = Calendar(identifier: .iso8601)
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        formatter.locale = Foundation.Locale(identifier: "en_US_POSIX")
-        decoder.dateDecodingStrategy = .formatted(formatter)
-        do {
-            let result: T = try decoder.decode(T.self, from: data)
-            return result
-        } catch {
-            throw error
-        }
-        
-    }
-    /// Convert a JSON string into the type `T`
-    /// @throws errors if deserialization fails
-    func deserialize<T>(_ json: String) throws -> T where T : Codable {
-        return try deserialize(Data(json.utf8))
-    }
+//    func deserialize<T>(_ data: Data) throws -> T where T : Codable {
+//        let decoder = JSONDecoder()
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+//        formatter.calendar = Calendar(identifier: .iso8601)
+//        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+//        formatter.locale = Foundation.Locale(identifier: "en_US_POSIX")
+//        decoder.dateDecodingStrategy = .formatted(formatter)
+//        do {
+//            let result: T = try decoder.decode(T.self, from: data)
+//            return result
+//        } catch {
+//            throw error
+//        }
+//
+//    }
+//    /// Convert a JSON string into the type `T`
+//    /// @throws errors if deserialization fails
+//    func deserialize<T>(_ json: String) throws -> T where T : Codable {
+//        return try deserialize(Data(json.utf8))
+//    }
 
     func testDateParse() {
         let value = "2018-03-15T13:16:34.692-07:00"
@@ -57,6 +57,8 @@ class modelsTests: XCTestCase {
         XCTAssertNotNil(dateString)
     }
     
+    /*
+     TODO remove this code, which is commented out in favor of AnyCodable
     let json = #"""
     {
     "want_string": 4,
@@ -162,5 +164,6 @@ class modelsTests: XCTestCase {
             XCTAssertNil(error)
         }
     }
+ */
 
 }

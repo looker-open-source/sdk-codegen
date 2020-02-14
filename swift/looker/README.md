@@ -110,3 +110,7 @@ The SDK generator uses both classes and structs. Classes are used where required
 Otherwise, `struct`s, `enum`s, or `protocol`s are used for the declaration of complex method inputs, such as `body` parameters and the complex API structures returned from API endpoints.
 
 Enjoy, and thanks for trying out the bleeding edge!
+
+## Use of AnyCodable
+
+There's a decent JSON encode/decode solution from [AnyCodable](https://github.com/Flight-School/AnyCodable) directly imported into this project because I haven't yet been able to figure out how to get the package reference to work. My apologies for that. I'll fix it when I figure out how to use Swift packages better!

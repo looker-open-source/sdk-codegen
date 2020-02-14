@@ -449,7 +449,7 @@ ${indent}return result`
         return {name: `[${map.name}]`, default: '[]'}
       } else if (type instanceof HashType) {
         // return {name: `StringDictionary<${map.name}>`, default: 'nil'}
-        return {name: `StringDictionary<Variant?>`, default: 'nil'}
+        return {name: `StringDictionary<AnyCodable>`, default: 'nil'}
       } else if (type instanceof DelimArrayType) {
         return {name: `DelimArray<${map.name}>`, default: 'nil'}
       }

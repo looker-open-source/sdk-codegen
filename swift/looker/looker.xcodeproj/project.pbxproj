@@ -24,6 +24,9 @@
 		9503C28B235510C100C10EEE /* apiConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9503C28A235510C100C10EEE /* apiConfigTests.swift */; };
 		9503C28D2355254400C10EEE /* baseTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9503C28C2355254400C10EEE /* baseTransport.swift */; };
 		9503C28F23554E9100C10EEE /* transportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9503C28E23554E9100C10EEE /* transportTests.swift */; };
+		951D365A23F5FFBE007EBBC0 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D365923F5FFBE007EBBC0 /* AnyCodable.swift */; };
+		951D365C23F60018007EBBC0 /* AnyDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D365B23F60018007EBBC0 /* AnyDecodable.swift */; };
+		951D365E23F60045007EBBC0 /* AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D365D23F60045007EBBC0 /* AnyEncodable.swift */; };
 		9545D06A235A77F8003AA551 /* baseTransportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9545D069235A77F8003AA551 /* baseTransportTests.swift */; };
 		9578B256234D01CE0048FD2A /* looker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "looker::looker::Product" /* looker.framework */; };
 		9578B25E234D064F0048FD2A /* authTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9578B25D234D064F0048FD2A /* authTokenTests.swift */; };
@@ -78,6 +81,9 @@
 		9503C28A235510C100C10EEE /* apiConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = apiConfigTests.swift; sourceTree = "<group>"; };
 		9503C28C2355254400C10EEE /* baseTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = baseTransport.swift; sourceTree = "<group>"; };
 		9503C28E23554E9100C10EEE /* transportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = transportTests.swift; sourceTree = "<group>"; };
+		951D365923F5FFBE007EBBC0 /* AnyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
+		951D365B23F60018007EBBC0 /* AnyDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyDecodable.swift; sourceTree = "<group>"; };
+		951D365D23F60045007EBBC0 /* AnyEncodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyEncodable.swift; sourceTree = "<group>"; };
 		9545D069235A77F8003AA551 /* baseTransportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = baseTransportTests.swift; sourceTree = "<group>"; };
 		9578B251234D01CE0048FD2A /* authTokenTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = authTokenTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9578B25D234D064F0048FD2A /* authTokenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = authTokenTests.swift; sourceTree = "<group>"; };
@@ -158,6 +164,9 @@
 				95FA444C234EB2A90053027C /* partial.swift */,
 				95974CDB23694F9B0061F13F /* serializer.swift */,
 				9578B263234D3A8A0048FD2A /* transport.swift */,
+				951D365923F5FFBE007EBBC0 /* AnyCodable.swift */,
+				951D365B23F60018007EBBC0 /* AnyDecodable.swift */,
+				951D365D23F60045007EBBC0 /* AnyEncodable.swift */,
 			);
 			path = rtl;
 			sourceTree = "<group>";
@@ -357,6 +366,8 @@
 			buildActionMask = 0;
 			files = (
 				95E86572234DA4D8008FF9B4 /* apiConfig.swift in Sources */,
+				951D365A23F5FFBE007EBBC0 /* AnyCodable.swift in Sources */,
+				951D365E23F60045007EBBC0 /* AnyEncodable.swift in Sources */,
 				OBJ_26 /* looker.swift in Sources */,
 				95974CDC23694F9B0061F13F /* serializer.swift in Sources */,
 				95974CCE236263260061F13F /* authSession.swift in Sources */,
@@ -364,6 +375,7 @@
 				9578B260234D07260048FD2A /* authToken.swift in Sources */,
 				95A775D32360E0BB00E388B8 /* apiMethods.swift in Sources */,
 				95FA444D234EB2AA0053027C /* partial.swift in Sources */,
+				951D365C23F60018007EBBC0 /* AnyDecodable.swift in Sources */,
 				9578B262234D3A840048FD2A /* constants.swift in Sources */,
 				95974CD42363A2A30061F13F /* methods.swift in Sources */,
 				9503C28D2355254400C10EEE /* baseTransport.swift in Sources */,
