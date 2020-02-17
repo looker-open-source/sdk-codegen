@@ -87,7 +87,7 @@ def create_test_users(
             user_ids.append(user.id)
             email = f"{u['first_name']}.{u['last_name']}{email_domain}"
             sdk40.create_user_credentials_email(
-                user_id=user.id, body=models40.WriteCredentialsEmail(email=email)
+                user.id, models40.WriteCredentialsEmail(email=email)
             )
 
     yield
