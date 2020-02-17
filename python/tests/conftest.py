@@ -1,13 +1,15 @@
 import os.path
-import pytest  # type: ignore
 import sys
-import yaml
-from typing import cast, Dict, List, Union
+from typing import Dict, List, Union, cast
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import pytest  # type: ignore
+import yaml
 
 import looker_sdk  # noqa: E402
-from looker_sdk.sdk.api31 import methods as mtds  # noqa: E402
+from looker_sdk.sdk.api40 import methods as methods40
+from looker_sdk.sdk.api40 import models as models40  # noqa: E402
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 @pytest.fixture(scope="session")
@@ -52,55 +54,70 @@ def _get_test_data() -> TTestData:
 
 
 @pytest.fixture(scope="function")
-def remove_test_dashboards(sdk: mtds.LookerSDK, dashboards):
+def remove_test_dashboards(sdk40: methods40.Looker40SDK, dashboards):
     # Clean up any test dashboards that may exist. We do this at the beginning
     # instead of the end of tests in case we want to view the dashboards after the test
     for d in dashboards:
-        search_results = sdk.search_dashboards(title=d["title"])
+        search_results = sdk40.search_dashboards(title=d["title"])
         if len(search_results) > 0:
             for dashboard in search_results:
-                sdk.delete_dashboard(cast(str, dashboard.id))
+                sdk40.delete_dashboard(cast(str, dashboard.id))
 
 
 @pytest.fixture(scope="function")
-def remove_test_looks(sdk: mtds.LookerSDK, looks):
+def remove_test_looks(sdk40: methods40.Looker40SDK, looks):
     for l in looks:
-        search_results = sdk.search_looks(title=l["title"])
+        search_results = sdk40.search_looks(title=l["title"])
         if len(search_results) > 0:
             for look in search_results:
-                sdk.delete_look(cast(int, look.id))
+                sdk40.delete_look(cast(int, look.id))
 
 
 @pytest.fixture(name="test_users", scope="session")
 def create_test_users(
-    sdk: mtds.LookerSDK, users: List[Dict[str, str]], email_domain: str
+    sdk40: methods40.Looker40SDK, users: List[Dict[str, str]], email_domain: str
 ):
     user_ids: List[int] = []
-
     for u in users:
-        user = sdk.create_user(
-            looker_sdk.models.WriteUser(
-                first_name=u["first_name"], last_name=u["last_name"]
-            )
+        user = sdk40.create_user(
+            models40.WriteUser(first_name=u["first_name"], last_name=u["last_name"])
         )
 
         if user.id:
             user_ids.append(user.id)
             email = f"{u['first_name']}.{u['last_name']}{email_domain}"
-            sdk.create_user_credentials_email(
-                user.id, looker_sdk.models.WriteCredentialsEmail(email=email)
+            sdk40.create_user_credentials_email(
+                user.id, models40.WriteCredentialsEmail(email=email)
             )
 
     yield
 
     for user_id in user_ids:
-        sdk.delete_user(user_id)
+        sdk40.delete_user(user_id)
 
 
 @pytest.fixture(scope="session")
-def sdk():
-    # TODO multiplex this fixture for both init31 and init40
-    filename = os.getenv("LOOKERSDK_INI", "../looker.ini")
-    sdk = looker_sdk.init31(filename)
+def sdk31(init_sdk):
+    sdk = init_sdk(3.1)
     yield sdk
     sdk.logout()
+
+
+@pytest.fixture(scope="session")
+def sdk40(init_sdk):
+    sdk = init_sdk(4.0)
+    yield sdk
+    sdk.logout()
+
+
+@pytest.fixture(scope="session")
+def init_sdk():
+    def _sdk(api_version):
+        filename = os.getenv("LOOKERSDK_INI", "../looker.ini")
+        if api_version == 4.0:
+            sdk = looker_sdk.init40(filename)
+        elif api_version == 3.1:
+            sdk = looker_sdk.init31(filename)
+        return sdk
+
+    return _sdk

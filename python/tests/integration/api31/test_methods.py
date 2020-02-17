@@ -2,16 +2,21 @@ import io
 import json
 from operator import itemgetter
 import re
-from typing import Any, cast, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, cast
 
-from PIL import Image  # type: ignore
 import pytest  # type: ignore
+from PIL import Image  # type: ignore
 
 from looker_sdk.sdk.api31 import methods as mtds
-from looker_sdk import models as ml
+from looker_sdk.sdk.api31 import models as ml
 
 
-def test_crud_user(sdk: mtds.LookerSDK):
+@pytest.fixture(scope="module")
+def sdk(sdk31) -> mtds.Looker31SDK:
+    return sdk31
+
+
+def test_crud_user(sdk: mtds.Looker31SDK):
     """Test creating, retrieving, updating and deleting a user."""
 
     # Create user
@@ -68,7 +73,7 @@ def test_crud_user(sdk: mtds.LookerSDK):
     assert resp == ""
 
 
-def test_me_returns_correct_result(sdk: mtds.LookerSDK):
+def test_me_returns_correct_result(sdk: mtds.Looker31SDK):
     """me() should return the current authenticated user"""
     me = sdk.me()
     assert isinstance(me, ml.User)
@@ -77,7 +82,7 @@ def test_me_returns_correct_result(sdk: mtds.LookerSDK):
     assert isinstance(me.credentials_api3[0], ml.CredentialsApi3)
 
 
-def test_me_field_filters(sdk: mtds.LookerSDK):
+def test_me_field_filters(sdk: mtds.Looker31SDK):
     """me() should return only the requested fields."""
     me = sdk.me("id, first_name, last_name")
     assert isinstance(me, ml.User)
@@ -92,7 +97,7 @@ def test_me_field_filters(sdk: mtds.LookerSDK):
 
 
 @pytest.mark.usefixtures("test_users")
-def test_bad_user_search_returns_no_results(sdk: mtds.LookerSDK):
+def test_bad_user_search_returns_no_results(sdk: mtds.Looker31SDK):
     """search_users() should return an empty list when no match is found."""
     resp = sdk.search_users(first_name="Bad", last_name="News")
     assert isinstance(resp, list)
@@ -101,7 +106,7 @@ def test_bad_user_search_returns_no_results(sdk: mtds.LookerSDK):
 
 @pytest.mark.usefixtures("test_users")
 def test_search_users_matches_pattern(
-    sdk: mtds.LookerSDK, users: List[Dict[str, str]], email_domain: str
+    sdk: mtds.Looker31SDK, users: List[Dict[str, str]], email_domain: str
 ):
     """search_users should return a list of all matches."""
     user = users[0]
@@ -134,7 +139,7 @@ def test_search_users_matches_pattern(
 
 @pytest.mark.usefixtures("test_users")
 def test_it_matches_email_domain_and_returns_sorted(
-    sdk: mtds.LookerSDK, email_domain: str, users: List[Dict[str, str]]
+    sdk: mtds.Looker31SDK, email_domain: str, users: List[Dict[str, str]]
 ):
     """search_users_names() should search users matching a given pattern and return
     sorted results if sort fields are specified.
@@ -153,7 +158,7 @@ def test_it_matches_email_domain_and_returns_sorted(
 
 @pytest.mark.usefixtures("test_users")
 def test_delim_sequence(
-    sdk: mtds.LookerSDK, email_domain: str, users: List[Dict[str, str]]
+    sdk: mtds.Looker31SDK, email_domain: str, users: List[Dict[str, str]]
 ):
     search_results = sdk.search_users_names(pattern=f"%{email_domain}")
     assert len(search_results) == len(users)
@@ -162,13 +167,13 @@ def test_delim_sequence(
     assert len(all_users) == len(users)
 
 
-def test_it_retrieves_session(sdk: mtds.LookerSDK):
+def test_it_retrieves_session(sdk: mtds.Looker31SDK):
     """session() should return the current session."""
     current_session = sdk.session()
     assert current_session.workspace_id == "production"
 
 
-def test_it_updates_session(sdk: mtds.LookerSDK):
+def test_it_updates_session(sdk: mtds.Looker31SDK):
     """update_session() should allow us to change the current workspace."""
     # Switch workspace to dev mode
     sdk.update_session(ml.WriteApiSession(workspace_id="dev"))
@@ -188,7 +193,7 @@ TQueries = List[Dict[str, Union[str, List[str], Dict[str, str]]]]
 
 
 def test_it_creates_and_runs_query(
-    sdk: mtds.LookerSDK, queries_system_activity: TQueries
+    sdk: mtds.Looker31SDK, queries_system_activity: TQueries
 ):
     """create_query() creates a query and run_query() returns its result."""
     for q in queries_system_activity:
@@ -218,7 +223,7 @@ def test_it_creates_and_runs_query(
         assert len(re.findall(r"\n", csv)) == int(limit) + 1
 
 
-def test_it_runs_inline_query(sdk: mtds.LookerSDK, queries_system_activity: TQueries):
+def test_it_runs_inline_query(sdk: mtds.Looker31SDK, queries_system_activity: TQueries):
     """run_inline_query() should run a query and return its results."""
     for q in queries_system_activity:
         limit = cast(str, q["limit"]) or "10"
@@ -248,7 +253,7 @@ def test_it_runs_inline_query(sdk: mtds.LookerSDK, queries_system_activity: TQue
 
 
 @pytest.mark.usefixtures("remove_test_looks")
-def test_crud_look(sdk: mtds.LookerSDK, looks):
+def test_crud_look(sdk: mtds.Looker31SDK, looks):
     """Test creating, retrieving, updating and deleting a look."""
     for l in looks:
         request = create_query_request(l["query"][0], "10")
@@ -286,7 +291,7 @@ def test_crud_look(sdk: mtds.LookerSDK, looks):
         assert not look.deleted
 
 
-def test_search_looks_returns_looks(sdk: mtds.LookerSDK):
+def test_search_looks_returns_looks(sdk: mtds.Looker31SDK):
     """search_looks() should return a list of looks."""
     search_results = sdk.search_looks()
     assert isinstance(search_results, list)
@@ -297,7 +302,7 @@ def test_search_looks_returns_looks(sdk: mtds.LookerSDK):
     assert look.created_at is not None
 
 
-def test_search_looks_fields_filter(sdk: mtds.LookerSDK):
+def test_search_looks_fields_filter(sdk: mtds.Looker31SDK):
     """search_looks() should only return the requested fields passed in the fields
     argument of the request.
     """
@@ -310,7 +315,7 @@ def test_search_looks_fields_filter(sdk: mtds.LookerSDK):
     assert look.created_at is None
 
 
-def test_search_looks_title_fields_filter(sdk: mtds.LookerSDK):
+def test_search_looks_title_fields_filter(sdk: mtds.Looker31SDK):
     """search_looks() should be able to filter on title."""
     search_results = sdk.search_looks(title="An SDK%", fields="id, title")
     assert isinstance(search_results, list)
@@ -322,7 +327,7 @@ def test_search_looks_title_fields_filter(sdk: mtds.LookerSDK):
     assert look.description is None
 
 
-def test_search_look_and_run(sdk: mtds.LookerSDK):
+def test_search_look_and_run(sdk: mtds.Looker31SDK):
     """run_look() should return CSV and JSON
     CSV will use column descriptions
     JSON will use column names
@@ -373,7 +378,7 @@ def create_query_request(q, limit: Optional[str] = None) -> ml.WriteQuery:
 
 
 @pytest.mark.usefixtures("remove_test_dashboards")
-def test_crud_dashboard(sdk: mtds.LookerSDK, queries_system_activity, dashboards):
+def test_crud_dashboard(sdk: mtds.Looker31SDK, queries_system_activity, dashboards):
     """Test creating, retrieving, updating and deleting a dashboard.
     """
     qhash: Dict[Union[str, int], ml.Query] = {}
