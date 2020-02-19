@@ -23,6 +23,47 @@
  */
 
 import { boolDefault, isFalse, isTrue, unquote } from './constants'
+import { ResponseMode, responseMode } from './transport'
+
+const binaryTypes = `
+application/zip
+application/pdf
+application/msword
+application/vnd.ms-excel
+application/vnd.openxmlformats-officedocument.wordprocessingml.document
+application/vnd.ms-excel
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+application/vnd.ms-powerpoint
+application/vnd.openxmlformats-officedocument.presentationml.presentation
+application/vnd.oasis.opendocument.text
+multipart/form-data
+audio/mpeg
+audio/ogg
+image/png
+image/jpeg
+image/gif
+font/
+audio/
+video/
+image/
+`.trim().split("\n")
+
+let textTypes = `
+image/svg+xml
+application/javascript
+application/json
+application/x-www-form-urlencoded
+application/xml
+application/sql
+application/graphql
+application/ld+json
+text/css
+text/html
+text/xml
+text/csv
+text/plain
+application/vnd.api+json
+`.trim().split("\n")
 
 describe('Constants functions', () => {
   it('isTrue', () => {
@@ -84,5 +125,19 @@ describe('Constants functions', () => {
     expect(unquote('"foo"')).toEqual('foo')
     expect(unquote('foo"')).toEqual('foo"')
     expect(unquote('"foo')).toEqual('"foo')
+  })
+
+  it('string types match', () => {
+    textTypes.forEach(t => {
+      const mode = responseMode(t)
+      expect(mode).toEqual(ResponseMode.string)
+    })
+  })
+
+  it('binary types match', () => {
+    binaryTypes.forEach(t => {
+      const mode = responseMode(t)
+      expect(responseMode(t)).toEqual(ResponseMode.binary)
+    })
   })
 })

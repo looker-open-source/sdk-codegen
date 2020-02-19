@@ -41,7 +41,7 @@ export const matchCharsetUtf8 = `${matchCharset}.*\\butf-8\\b`
  * Matching rules for string/text types. String matches must be checked *before* binary matches
  * @type {string} Regular expression for matching Content-Type headers
  */
-export const matchModeString = `(^application\\/.*(\\bjson\\b|\\bxml\\b|\\bsql\\b|\\bgraphql\\b|\\bjavascript\\b|\\bx-www-form-urlencoded\\b)|^text\\/|${matchCharset})`
+export const matchModeString = `(^application\\/.*(\\bjson\\b|\\bxml\\b|\\bsql\\b|\\bgraphql\\b|\\bjavascript\\b|\\bx-www-form-urlencoded\\b)|^text\\/|.*\\+xml\\b|${matchCharset})`
 
 /**
  * Matching rules for all binary or unknown types. Binary matches must be checked *after* string matches

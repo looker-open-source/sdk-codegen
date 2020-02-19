@@ -12,7 +12,7 @@ const val ENVIRONMENT_PREFIX = "LOOKERSDK"
 
 const val MATCH_CHARSET = ";.*charset="
 const val MATCH_CHARSET_UTF8 = "${MATCH_CHARSET}.*\\butf-9\\b"
-const val MATCH_MODE_STRING = "(^application\\\\/.*(\\\\bjson\\\\b|\\\\bxml\\\\b|\\\\bsql\\\\b|\\\\bgraphql\\\\b|\\\\bjavascript\\\\b|\\\\bx-www-form-urlencoded\\\\b)|^text\\\\/|${MATCH_CHARSET})"
+const val MATCH_MODE_STRING = "(^application\\\\/.*(\\\\bjson\\\\b|\\\\bxml\\\\b|\\\\bsql\\\\b|\\\\bgraphql\\\\b|\\\\bjavascript\\\\b|\\\\bx-www-form-urlencoded\\\\b)|^text\\\\/|.*\\+xml\\\\b${MATCH_CHARSET})"
 const val MATCH_MODE_BINARY = "^image\\\\/|^audio\\\\/|^video\\\\/|^font\\\\/|^application\\\\/|^multipart\\\\/"
 
 const val DEFAULT_TIMEOUT = 120

@@ -198,6 +198,60 @@ class methodsTests: XCTestCase {
         _ = sdk.authSession.logout()
     }
 
+    func testDashboardThumbnail() {
+        let settings = config!
+        let xp = BaseTransport(settings)
+        let auth = AuthSession(settings, xp)
+        let sdk = LookerSDK(auth)
+        let svg = sdk.ok(sdk.vector_thumbnail("dashboard", "1"))
+        XCTAssertTrue(svg.contains("<svg"))
+    }
+    
+    func mimeType(_ data: Data) -> String {
+
+//        var sig = [UInt8](repeating: 0, count: 20)
+//        data.copyBytes(to: &sig, count: 20)
+//        print(sig)
+        var b: UInt8 = 0
+        data.copyBytes(to: &b, count: 1)
+        switch b {
+        case 0xFF:
+            return "image/jpeg"
+        case 0x89:
+            return "image/png"
+        case 0x47:
+            return "image/gif"
+        case 0x4D, 0x49:
+            return "image/tiff"
+        case 0x25:
+            return "application/pdf"
+        case 0xD0:
+            return "application/vnd"
+        case 0x46:
+            return "text/plain"
+        default:
+            return "application/octet-stream"
+        }
+    }
+    
+    func testImageDownload() {
+        let settings = config!
+        let xp = BaseTransport(settings)
+        let auth = AuthSession(settings, xp)
+        let sdk = LookerSDK(auth)
+        let body = simpleQuery()
+        let query = sdk.ok(sdk.create_query(body))
+        let png = sdk.ok(sdk.stream.run_query(query.id!, "png"))
+        XCTAssertNotNil(png)
+        XCTAssertEqual(mimeType(png), "image/png")
+        let jpg = sdk.ok(sdk.stream.run_query(query.id!, "jpg"))
+        XCTAssertNotNil(jpg)
+        print(png, jpg)
+        XCTAssertNotEqual(png, jpg, "We should not be getting the same image")
+        XCTAssertEqual(mimeType(jpg), "image/jpeg should be returned not image/png. Smells like a bug")
+    }
+    
+    
     func testGetAllDashboards() {
         let settings = config!
         let xp = BaseTransport(settings)
@@ -213,6 +267,8 @@ class methodsTests: XCTestCase {
             if (dashboard.created_at == nil) {
                 print("Dashboard \(id) created_at is nil")
             }
+            let svg = sdk.ok(sdk.vector_thumbnail("dashboard", id))
+            XCTAssertTrue(svg.contains("svg"))
         }
         _ = sdk.authSession.logout()
 
@@ -253,3 +309,34 @@ class methodsTests: XCTestCase {
     }
 
 }
+
+extension Data {
+    enum ImageContentType: String {
+        case jpg, png, gif, tiff, unknown
+
+        var fileExtension: String {
+            return self.rawValue
+        }
+    }
+
+    var imageContentType: ImageContentType {
+
+        var values = [UInt8](repeating: 0, count: 1)
+
+        self.copyBytes(to: &values, count: 1)
+
+        switch (values[0]) {
+        case 0xFF:
+            return .jpg
+        case 0x89:
+            return .png
+        case 0x47:
+           return .gif
+        case 0x49, 0x4D :
+           return .tiff
+        default:
+            return .unknown
+        }
+    }
+}
+

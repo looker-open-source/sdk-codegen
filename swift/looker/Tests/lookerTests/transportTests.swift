@@ -32,6 +32,7 @@ image/
 """.split(separator: "\n")
 
 let textTypes = """
+image/svg+xml
 application/javascript
 application/json
 application/x-www-form-urlencoded

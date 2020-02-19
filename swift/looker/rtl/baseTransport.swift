@@ -189,11 +189,11 @@ func processResponse<TSuccess: Codable, TError: Codable> (_ response: RequestRes
     }
 
     let mode = responseMode(contentType)
+    let returnType = String(describing: TSuccess.self)
 
-    switch mode {
-    case .string:
-        do {
-            let returnType = String(describing: TSuccess.self)
+    do {
+        switch mode {
+        case .string:
             if (isMimeJson(contentType) && returnType != "String") {
                 /// Don't return the response as `String`
                 success = try deserialize(data)
@@ -203,17 +203,22 @@ func processResponse<TSuccess: Codable, TError: Codable> (_ response: RequestRes
                 // We shouldn't get here, but if we do, defer to default response processing
                 success = try deserialize(data)
             }
-        } catch {
-            ok = false
-            // typeMismatch(Swift.String, Swift.DecodingError.Context(codingPath: [], debugDescription: "Expected to decode String but found an array instead.", underlyingError: nil)): 23 bytes
-            fail = SDKError("Error parsing response: \(error): \(data)") as? TError
+            break
+        case .binary, .unknown:
+            if (returnType == "String") {
+                if let dataString = String(data: data, encoding: .utf8) {
+                    success = dataString as? TSuccess
+                } else {
+                    success = data as? TSuccess
+                }
+            } else {
+                success = data as? TSuccess
+            }
+            break
         }
-    case .binary:
-        success = data as? TSuccess
-        break
-    case .unknown:
-        success = data as? TSuccess
-        break
+    } catch {
+        ok = false
+        fail = SDKError("Error handling \(contentType) response: \(error) with \(data)") as? TError
     }
     return ok
         ? SDKResponse.success(success!)

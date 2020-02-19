@@ -57,7 +57,7 @@ export class SwiftGen extends CodeGen {
   indentStr = '    '
   endTypeStr = `\n}`
   needsRequestTypes = false
-  willItStream = false
+  willItStream = true
   keywords = 'associatedtype,class,deinit,enum,extension,fileprivate,func,import,init,inout,internal,let,open,'
     + 'operator,private,protocol,public,static,struct,subscript,typealias,var,break,case,continue,default,'
     + 'defer,do,else,fallthrough,for,guard,if,in,repeat,return,switch,where,while,'
@@ -80,12 +80,21 @@ import Foundation
 
 @available(OSX 10.15, *)
 class ${this.packageName}: APIMethods {
+
+${this.indentStr}lazy var stream = ${this.packageName}Stream(authSession)
 `
   }
 
   // @ts-ignore
   streamsPrologue(indent: string): string {
-    return ''
+    return `
+/// ${this.warnEditing()}
+
+import Foundation
+
+@available(OSX 10.15, *)
+class ${this.packageName}Stream: APIMethods {
+`
   }
 
   // @ts-ignore
@@ -112,11 +121,6 @@ import Foundation
       return `\`${name}\``
     }
     return name
-  }
-
-  sdkPrepPath() {
-    const path =`${this.codePath}${this.packagePath}/sdk`
-    if (!isDirSync(path)) fs.mkdirSync(path, {recursive: true})
   }
 
   sdkFileName(baseFileName: string) {
@@ -182,7 +186,8 @@ import Foundation
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer: boolean = false) {
     const type = this.typeMap(method.type)
-    let returnType = type.name === 'Void' ? 'Void' : `SDKResponse<${type.name}, SDKError>`
+    const resultType = streamer ? 'Data' : type.name
+    let returnType = type.name === 'Void' ? 'Voidable' : `SDKResponse<${resultType}, SDKError>`
     const head = method.description?.trim()
     let headComment = (head ? `${head}\n\n` : '')  +`${method.httpMethod} ${method.endpoint} -> ${type.name}`
     let fragment = ''
@@ -191,7 +196,7 @@ import Foundation
 
     if (requestType) {
       // use the request type that will be generated in models.ts
-      fragment = `request: I${requestType}` // TODO should this use Partial<T>?
+      fragment = `request: I${requestType}`
     } else {
       let params: string[] = []
       const args = method.allParams // get the params in signature order
@@ -203,10 +208,8 @@ import Foundation
     } else if (method.responseIsBinary()) {
       headComment += `\n\n**Note**: Binary content is returned by this method.\n`
     }
-    const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
     const header = this.commentHeader(indent, headComment)
     + `${indent}func ${method.name}(`
-    + (streamer ? `\n${bump}${callback}` : '')
 
     return header + fragment
       + `${fragment? ',' : ''}\n${bump}options: ITransportSettings? = nil\n${indent}) -> ${returnType} {\n`
@@ -364,11 +367,12 @@ ${indent}return result`
 
   streamCall(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
-    const type = this.typeMap(method.type)
+    // const type = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
-    // const errors = this.errorResponses(indent, method)
-    return `${indent}return ${this.it('authStream')}<${type.name}>(callback, '${method.httpMethod.toUpperCase()}', ${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
+    const errors = this.errorResponses(indent, method)
+    return `${indent}let result: SDKResponse<Data, ${errors}> = ${this.it(method.httpMethod.toLowerCase())}(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})
+${indent}return result`
   }
 
   summary(indent: string, text: string | undefined) {

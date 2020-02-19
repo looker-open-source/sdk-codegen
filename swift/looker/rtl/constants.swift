@@ -78,7 +78,7 @@ struct Constants {
      * Matching rules for string/text types. String matches must be checked *before* binary matches
      * @type Regular expression for matching Content-Type headers
      */
-    static let matchModeString = #"(^application\/.*(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b|\bjavascript\b|\bx-www-form-urlencoded\b))|^text\/|\#(matchCharset)"#
+    static let matchModeString = #"(^application\/.*(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b|\bjavascript\b|\bx-www-form-urlencoded\b))|^text\/|.*\+xml\b|\#(matchCharset)"#
 
     /**
      * Matching rules for all binary or unknown types. Binary matches must be checked *after* string matches
