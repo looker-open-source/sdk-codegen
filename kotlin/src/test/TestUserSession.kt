@@ -39,7 +39,8 @@ import java.io.File
 
 
 class TestUserSession {
-    val settings = ApiSettingsIniFile(localIni, "Looker")
+    val config = TestConfig()
+    val settings = ApiSettingsIniFile(config.localIni, "Looker")
 
     val client: HttpClient = HttpClient(Apache) {
         install(JsonFeature) {
@@ -59,8 +60,8 @@ class TestUserSession {
     }
 
     @test fun testTestFiles() {
-        assertTrue(File(dataFile).exists(), "${dataFile} should exist")
-        assertTrue(File(localIni).exists(), "${localIni} should exist")
+        assertTrue(File(config.dataFile).exists(), "${config.dataFile} should exist")
+        assertTrue(File(config.localIni).exists(), "${config.localIni} should exist")
     }
 
     @test fun testIsAuthenticated() {

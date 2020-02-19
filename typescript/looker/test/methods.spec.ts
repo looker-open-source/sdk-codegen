@@ -43,15 +43,12 @@ import {
 } from '../rtl/apiSettings'
 import { defaultTimeout } from '../rtl/transport'
 import { LookerNodeSDK } from '../rtl/nodeSdk'
+import { TestConfig } from '../rtl/nodeSettings.spec'
 
-const dataFile = 'test/data.yml'
-// TODO abstract this for shared usage across all *.spec.ts files
-const root = fs.existsSync(dataFile) ? '' : '../../'
-const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, utf8))
-const localIni = `${root}looker.ini`
-const users: Partial<IUser>[] = testData['users']
-const queries: Partial<IQuery>[] = testData['queries']
-const dashboards: any[] = testData['dashboards']
+const config = TestConfig()
+const users: Partial<IUser>[] = config.testData['users']
+const queries: Partial<IQuery>[] = config.testData['queries']
+const dashboards: any[] = config.testData['dashboards']
 const emailDomain = '@foo.com'
 const testTimeout = 36000000 // 1 hour
 
@@ -119,7 +116,7 @@ const testTimeout = 36000000 // 1 hour
 // }
 
 describe('LookerNodeSDK', () => {
-  const settings = new NodeSettingsIniFile(localIni, 'Looker')
+  const settings = new NodeSettingsIniFile(config.localIni, 'Looker')
   const session = new NodeSession(settings)
 
   const createQueryRequest = (q: any, limit: number) => {
@@ -837,7 +834,7 @@ describe('LookerNodeSDK', () => {
 
   describe('Node environment', () => {
     beforeAll(() => {
-      const section = ApiConfig(fs.readFileSync(localIni, utf8))['Looker']
+      const section = ApiConfig(fs.readFileSync(config.localIni, utf8))['Looker']
       // tslint:disable-next-line:variable-name
       const verify_ssl = boolDefault(section['verify_ssl'], false).toString()
       // populate environment variables

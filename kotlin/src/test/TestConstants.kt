@@ -22,13 +22,14 @@
  * THE SOFTWARE.
  */
 
-import com.looker.rtl.asBoolean
-import com.looker.rtl.unQuote
+import com.looker.rtl.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import org.junit.Test as test
+
+val config = TestConfig()
 
 class TestConstants {
     @test fun unquoteMatchingPairs() {
@@ -66,4 +67,23 @@ class TestConstants {
         asBoolean("boo")?.let { assertNull(it) }
     }
 
+    @test
+    fun testStringTypes() {
+        val contentTypes = config.testData.get("content_types") as jsonDict
+        val types = contentTypes.get("string") as ArrayList<String>
+        types.forEach { t ->
+            val mode = responseMode(t)
+            assertEquals(ResponseMode.String, mode, t)
+        }
+    }
+
+    @test
+    fun testBinaryTypes() {
+        val contentTypes = config.testData.get("content_types") as jsonDict
+        val types = contentTypes.get("binary") as ArrayList<String>
+        types.forEach { t ->
+            val mode = responseMode(t)
+            assertEquals(ResponseMode.Binary, mode, t)
+        }
+    }
 }

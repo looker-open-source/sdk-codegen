@@ -17,6 +17,8 @@ else
   tests="$*"
 fi
 
+yarn jsonify test/data.yml
+
 echo "Smoking SDKs: ${tests} ..."
 
 if [[ $tests == *typescript* ]]

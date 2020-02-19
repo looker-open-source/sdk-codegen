@@ -24,7 +24,8 @@
         "view": "npx redoc-cli serve",
         "prettier:base": "prettier --parser typescript --single-quote",
         "prettier:check": "npm run prettier:base -- --list-different \"**/*.{ts,tsx}\"",
-        "prettier:write": "npm run prettier:base -- --write \"**/*.{ts,tsx}\""
+        "prettier:write": "npm run prettier:base -- --write \"**/*.{ts,tsx}\"",
+        "jsonify": "ts-node src/yamlToJson.ts"
     },
     "repository": {
         "type": "git",

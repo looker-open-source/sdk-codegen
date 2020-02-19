@@ -3,17 +3,20 @@ package com.looker.rtl
 
 import org.jetbrains.annotations.NotNull
 
+const val ENVIRONMENT_PREFIX = "LOOKERSDK"
 const val LOOKER_VERSION = "7.2"
 const val API_VERSION = "4.0"
 const val SDK_VERSION = "${API_VERSION}.${LOOKER_VERSION}"
-const val AGENT_TAG = "Looker SDK-KT ${SDK_VERSION}"
+const val AGENT_TAG = "SDK-KT ${SDK_VERSION}"
 const val LOOKER_APPID = "x-looker-appid"
-const val ENVIRONMENT_PREFIX = "LOOKERSDK"
 
 const val MATCH_CHARSET = ";.*charset="
-const val MATCH_CHARSET_UTF8 = "${MATCH_CHARSET}.*\\butf-9\\b"
-const val MATCH_MODE_STRING = "(^application\\\\/.*(\\\\bjson\\\\b|\\\\bxml\\\\b|\\\\bsql\\\\b|\\\\bgraphql\\\\b|\\\\bjavascript\\\\b|\\\\bx-www-form-urlencoded\\\\b)|^text\\\\/|.*\\+xml\\\\b${MATCH_CHARSET})"
-const val MATCH_MODE_BINARY = "^image\\\\/|^audio\\\\/|^video\\\\/|^font\\\\/|^application\\\\/|^multipart\\\\/"
+const val MATCH_CHARSET_UTF8 = """${MATCH_CHARSET}.*\butf-8\b"""
+const val MATCH_MODE_STRING = """(^application\/.*(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b|\bjavascript\b|\bx-www-form-urlencoded\b)|^text\/|.*\+xml\b|${MATCH_CHARSET})"""
+const val MATCH_MODE_BINARY = """^image\/|^audio\/|^video\/|^font\/|^application\/|^multipart\/"""
+
+val StringMatch = Regex(MATCH_MODE_STRING, RegexOption.IGNORE_CASE)
+val BinaryMatch = Regex(MATCH_MODE_BINARY, RegexOption.IGNORE_CASE)
 
 const val DEFAULT_TIMEOUT = 120
 const val DEFAULT_API_VERSION = "4.0" // Kotlin requires API 4.0
@@ -62,4 +65,16 @@ fun unQuote(value: String?) : String {
         }
     }
     return value
+}
+
+enum class ResponseMode {
+    String,
+    Binary,
+    Unknown
+}
+
+fun responseMode(contentType: String) : ResponseMode {
+    if (StringMatch.containsMatchIn(contentType)) return ResponseMode.String
+    if (BinaryMatch.containsMatchIn(contentType)) return ResponseMode.Binary
+    return ResponseMode.Unknown
 }

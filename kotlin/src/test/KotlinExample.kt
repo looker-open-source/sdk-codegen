@@ -14,7 +14,8 @@ import java.io.File
 import java.lang.Thread.sleep
 
 class KotlinExample {
-    val settings = ApiSettingsIniFile(localIni, "Looker")
+    val config = TestConfig()
+    val settings = ApiSettingsIniFile(config.localIni, "Looker")
 
     /**
      * Note: `TrustSelfSignedStrategy` should never be used in production. It is only for testing with self-signed certs

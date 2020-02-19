@@ -20,7 +20,8 @@ import com.looker.sdk.*
 
 
 class TestMethods {
-    val settings = ApiSettingsIniFile(localIni, "Looker")
+    val config = TestConfig()
+    val settings = ApiSettingsIniFile(config.localIni, "Looker")
 
     val client: HttpClient = HttpClient(Apache) {
         install(JsonFeature) {
