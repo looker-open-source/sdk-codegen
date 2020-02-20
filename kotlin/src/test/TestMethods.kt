@@ -226,13 +226,11 @@ class TestMethods {
 //        assertEquals(l, look2.count(), "5 Looks")
 //    }
 
-    fun mimeType(data: String) : String {
+    @ExperimentalUnsignedTypes
+    fun mimeType(data: UByteArray) : String {
 
-//        var sig = [UInt8](repeating: 0, count: 20)
-//        data.copyBytes(to: &sig, count: 20)
-//        print(sig)
-        val b: Char = data[0]
-        val n = b.toInt()
+        val b = data.get(0)
+        val n = b.toUInt().toInt()
         return when(n)  {
             0xFF -> "image/jpeg"
             0x89 -> "image/png"
@@ -253,10 +251,10 @@ class TestMethods {
             val sql = sdk.ok<String>(sdk.run_query(id, "sql"))
             assertNotNull(sql)
             assertTrue(sql.contains("SELECT"), "Select statement returned")
-            val png = sdk.ok<String>(sdk.run_query(id, "png"))
+            val png = sdk.ok<ByteArray>(sdk.run_query_binary(id, "png")).toUByteArray()
             assertNotNull(png)
             assertEquals(mimeType(png), "image/png", "png is png?")
-            val jpg = sdk.ok<String>(sdk.run_query(id, "jpg"))
+            val jpg = sdk.ok<ByteArray>(sdk.run_query_binary(id, "jpg")).toUByteArray()
             assertNotNull(jpg)
             assertNotEquals(png, jpg, "We should not be getting the same image")
             assertEquals(mimeType(jpg), "image/jpeg should be returned not image/png. Smells like a bug")
