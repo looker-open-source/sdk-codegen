@@ -18,6 +18,8 @@ import kotlin.test.assertTrue
 import org.junit.Test as test
 import com.looker.sdk.*
 
+// Test timeout in seconds
+val testTimeout = 60_000
 
 class TestMethods {
     val config = TestConfig()
@@ -36,6 +38,9 @@ class TestMethods {
                                 .build()
                 )
                 setSSLHostnameVerifier(NoopHostnameVerifier())
+                connectTimeout = testTimeout
+                connectionRequestTimeout = testTimeout
+                socketTimeout = testTimeout
             }
         }
     }
@@ -220,6 +225,43 @@ class TestMethods {
 //        assertEquals(l, recentLooks.count(), "5 Looks")
 //        assertEquals(l, look2.count(), "5 Looks")
 //    }
+
+    fun mimeType(data: String) : String {
+
+//        var sig = [UInt8](repeating: 0, count: 20)
+//        data.copyBytes(to: &sig, count: 20)
+//        print(sig)
+        val b: Char = data[0]
+        val n = b.toInt()
+        return when(n)  {
+            0xFF -> "image/jpeg"
+            0x89 -> "image/png"
+            0x47 -> "image/gif"
+            0x4D, 0x49 -> "image/tiff"
+            0x25 -> "application/pdf"
+            0xD0 -> "application/vnd"
+            0x46 -> "text/plain"
+            else -> "application/octet-stream"
+        }
+    }
+
+    @test fun testImageDownload() {
+        val body = simpleQuery()
+        val query = sdk.ok<Query>(sdk.create_query(body))
+        query.id?.let { id ->
+            // sanity check to make sure the query is valid first
+            val sql = sdk.ok<String>(sdk.run_query(id, "sql"))
+            assertNotNull(sql)
+            assertTrue(sql.contains("SELECT"), "Select statement returned")
+            val png = sdk.ok<String>(sdk.run_query(id, "png"))
+            assertNotNull(png)
+            assertEquals(mimeType(png), "image/png", "png is png?")
+            val jpg = sdk.ok<String>(sdk.run_query(id, "jpg"))
+            assertNotNull(jpg)
+            assertNotEquals(png, jpg, "We should not be getting the same image")
+            assertEquals(mimeType(jpg), "image/jpeg should be returned not image/png. Smells like a bug")
+        }
+    }
 
     /*
     functional tests

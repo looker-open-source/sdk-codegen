@@ -864,4 +864,43 @@ describe('LookerNodeSDK', () => {
       expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     })
   })
+
+  function mimeType(data: String) {
+
+//        var sig = [UInt8](repeating: 0, count: 20)
+//        data.copyBytes(to: &sig, count: 20)
+//        print(sig)
+    const b = data.charCodeAt(0)
+    switch (b) {
+      case 0xFF: return "image/jpg"
+        case 0x89: return "image/png"
+        case 0x47: return "image/gif"
+        case 0x4D: case 0x49: return "image/tiff"
+        case 0x25: return "application/pdf"
+        case 0xD0: return "application/vnd"
+        case 0x46: return "text/plain"
+      default: return "application/octet-stream"
+    }
+  }
+
+  function simpleQuery() : Partial<IWriteQuery> {
+    return {
+      model: 'system__activity',
+      view: 'dashboard',
+      fields: ["dashboard.id", "dashboard.title", "dashboard.count"],
+      limit: "100"
+    }
+  }
+
+  describe('Binary download', () => {
+    it('PNG and JPG download', async () => {
+      const sdk = new LookerSDK(session)
+      const query = await sdk.ok(sdk.create_query(simpleQuery()))
+      const png = await sdk.ok(sdk.run_query({query_id: query.id, result_format: 'png'}))
+      const jpg = await sdk.ok(sdk.run_query({query_id: query.id, result_format: 'jpg'}))
+      expect(mimeType(png)).toEqual('image/png')
+      expect(mimeType(jpg)).toEqual('image/jpeg') // Houston, we have a problem with jpg being a png
+    }, testTimeout)
+
+  })
 })
