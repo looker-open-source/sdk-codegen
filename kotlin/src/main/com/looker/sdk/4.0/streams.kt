@@ -10,21 +10,20 @@ import com.looker.sdk.*
 // TODO can this single import override be avoided in any way?
 import com.looker.sdk.Locale
 
-class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
+class LookerSDKStream(authSession: UserSession) : APIMethods(authSession) {
 
-  val stream by lazy { LookerSDKStream(this.authSession) }
 
   /**
    * Accepts the legal agreement for a given integration hub. This only works for integration hubs that have legal_agreement_required set to true and legal_agreement_signed set to false.
    * 
-   * POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> IntegrationHub
+   * POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> ByteArray
    */
   fun accept_integration_hub_legal_agreement(
     /**
      * @param {Long} integration_hub_id Id of integration_hub
      */
     integration_hub_id: Long) : SDKResponse {
-    return this.post<IntegrationHub>("/integration_hubs/${integration_hub_id}/accept_legal_agreement", mapOf())
+    return this.post<ByteArray>("/integration_hubs/${integration_hub_id}/accept_legal_agreement", mapOf())
   }
 
   /**
@@ -38,7 +37,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
    * 
-   * GET /themes/active -> Array<Theme>
+   * GET /themes/active -> ByteArray
    */
   @JvmOverloads fun active_themes(
     /**
@@ -53,14 +52,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Theme>>("/themes/active", 
+    return this.get<ByteArray>("/themes/active", 
       mapOf("name" to name, "ts" to ts, "fields" to fields))
   }
 
   /**
    * ### Adds a new group to a group.
    * 
-   * POST /groups/{group_id}/groups -> Group
+   * POST /groups/{group_id}/groups -> ByteArray
    */
   fun add_group_group(
     /**
@@ -71,13 +70,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {GroupIdForGroupInclusion} body
      */
     body: GroupIdForGroupInclusion) : SDKResponse {
-    return this.post<Group>("/groups/${group_id}/groups", mapOf(), body)
+    return this.post<ByteArray>("/groups/${group_id}/groups", mapOf(), body)
   }
 
   /**
    * ### Adds a new user to a group.
    * 
-   * POST /groups/{group_id}/users -> User
+   * POST /groups/{group_id}/users -> ByteArray
    */
   fun add_group_user(
     /**
@@ -88,7 +87,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {GroupIdForGroupUserInclusion} body
      */
     body: GroupIdForGroupUserInclusion) : SDKResponse {
-    return this.post<User>("/groups/${group_id}/users", mapOf(), body)
+    return this.post<ByteArray>("/groups/${group_id}/users", mapOf(), body)
   }
 
   /**
@@ -101,35 +100,35 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
    * 
-   * GET /color_collections -> Array<ColorCollection>
+   * GET /color_collections -> ByteArray
    */
   @JvmOverloads fun all_color_collections(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ColorCollection>>("/color_collections", 
+    return this.get<ByteArray>("/color_collections", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all connections.
    * 
-   * GET /connections -> Array<DBConnection>
+   * GET /connections -> ByteArray
    */
   @JvmOverloads fun all_connections(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<DBConnection>>("/connections", 
+    return this.get<ByteArray>("/connections", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### All content metadata access records for a content metadata item.
    * 
-   * GET /content_metadata_access -> Array<ContentMetaGroupUser>
+   * GET /content_metadata_access -> ByteArray
    */
   @JvmOverloads fun all_content_metadata_accesses(
     /**
@@ -140,14 +139,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ContentMetaGroupUser>>("/content_metadata_access", 
+    return this.get<ByteArray>("/content_metadata_access", 
       mapOf("content_metadata_id" to content_metadata_id, "fields" to fields))
   }
 
   /**
    * ### Get information about all content metadata in a space.
    * 
-   * GET /content_metadata -> Array<ContentMeta>
+   * GET /content_metadata -> ByteArray
    */
   @JvmOverloads fun all_content_metadatas(
     /**
@@ -158,7 +157,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ContentMeta>>("/content_metadata", 
+    return this.get<ByteArray>("/content_metadata", 
       mapOf("parent_id" to parent_id, "fields" to fields))
   }
 
@@ -171,51 +170,51 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Find **deleted dashboards** with [search_dashboards()](#!/Dashboard/search_dashboards)
    * 
-   * GET /dashboards -> Array<DashboardBase>
+   * GET /dashboards -> ByteArray
    */
   @JvmOverloads fun all_dashboards(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<DashboardBase>>("/dashboards", 
+    return this.get<ByteArray>("/dashboards", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all datagroups.
    * 
-   * GET /datagroups -> Array<Datagroup>
+   * GET /datagroups -> ByteArray
    */
   fun all_datagroups() : SDKResponse {
-    return this.get<Array<Datagroup>>("/datagroups", mapOf())
+    return this.get<ByteArray>("/datagroups", mapOf())
   }
 
   /**
    * ### Get information about all dialects.
    * 
-   * GET /dialect_info -> Array<DialectInfo>
+   * GET /dialect_info -> ByteArray
    */
   @JvmOverloads fun all_dialect_infos(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<DialectInfo>>("/dialect_info", 
+    return this.get<ByteArray>("/dialect_info", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all folders.
    * 
-   * GET /folders -> Array<Folder>
+   * GET /folders -> ByteArray
    */
   @JvmOverloads fun all_folders(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Folder>>("/folders", 
+    return this.get<ByteArray>("/folders", 
       mapOf("fields" to fields))
   }
 
@@ -224,14 +223,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns a list of git branches in the project repository
    * 
-   * GET /projects/{project_id}/git_branches -> Array<GitBranch>
+   * GET /projects/{project_id}/git_branches -> ByteArray
    */
   fun all_git_branches(
     /**
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
-    return this.get<Array<GitBranch>>("/projects/${project_id}/git_branches", mapOf())
+    return this.get<ByteArray>("/projects/${project_id}/git_branches", mapOf())
   }
 
   /**
@@ -246,7 +245,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * For example, a late-stage test for write access is meaningless if connecting to the git server (an early test) is failing.
    * 
-   * GET /projects/{project_id}/git_connection_tests -> Array<GitConnectionTest>
+   * GET /projects/{project_id}/git_connection_tests -> ByteArray
    */
   @JvmOverloads fun all_git_connection_tests(
     /**
@@ -257,14 +256,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
      */
     remote_url: String? = null) : SDKResponse {
-    return this.get<Array<GitConnectionTest>>("/projects/${project_id}/git_connection_tests", 
+    return this.get<ByteArray>("/projects/${project_id}/git_connection_tests", 
       mapOf("remote_url" to remote_url))
   }
 
   /**
    * ### Get information about all the groups in a group
    * 
-   * GET /groups/{group_id}/groups -> Array<Group>
+   * GET /groups/{group_id}/groups -> ByteArray
    */
   @JvmOverloads fun all_group_groups(
     /**
@@ -275,14 +274,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Group>>("/groups/${group_id}/groups", 
+    return this.get<ByteArray>("/groups/${group_id}/groups", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all the users directly included in a group.
    * 
-   * GET /groups/{group_id}/users -> Array<User>
+   * GET /groups/{group_id}/users -> ByteArray
    */
   @JvmOverloads fun all_group_users(
     /**
@@ -305,14 +304,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} sorts Fields to sort by.
      */
     sorts: String? = null) : SDKResponse {
-    return this.get<Array<User>>("/groups/${group_id}/users", 
+    return this.get<ByteArray>("/groups/${group_id}/users", 
       mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts))
   }
 
   /**
    * ### Get information about all groups.
    * 
-   * GET /groups -> Array<Group>
+   * GET /groups -> ByteArray
    */
   @JvmOverloads fun all_groups(
     /**
@@ -343,14 +342,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} can_add_to_content_metadata Select only groups that either can/cannot be given access to content.
      */
     can_add_to_content_metadata: Boolean? = null) : SDKResponse {
-    return this.get<Array<Group>>("/groups", 
+    return this.get<ByteArray>("/groups", 
       mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts, "ids" to ids, "content_metadata_id" to content_metadata_id, "can_add_to_content_metadata" to can_add_to_content_metadata))
   }
 
   /**
    * ### Get information about all homepage items.
    * 
-   * GET /homepage_items -> Array<HomepageItem>
+   * GET /homepage_items -> ByteArray
    */
   @JvmOverloads fun all_homepage_items(
     /**
@@ -365,14 +364,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} homepage_section_id Filter to a specific homepage section
      */
     homepage_section_id: String? = null) : SDKResponse {
-    return this.get<Array<HomepageItem>>("/homepage_items", 
+    return this.get<ByteArray>("/homepage_items", 
       mapOf("fields" to fields, "sorts" to sorts, "homepage_section_id" to homepage_section_id))
   }
 
   /**
    * ### Get information about all homepage sections.
    * 
-   * GET /homepage_sections -> Array<HomepageSection>
+   * GET /homepage_sections -> ByteArray
    */
   @JvmOverloads fun all_homepage_sections(
     /**
@@ -383,42 +382,42 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} sorts Fields to sort by.
      */
     sorts: String? = null) : SDKResponse {
-    return this.get<Array<HomepageSection>>("/homepage_sections", 
+    return this.get<ByteArray>("/homepage_sections", 
       mapOf("fields" to fields, "sorts" to sorts))
   }
 
   /**
    * ### Get information about all homepages.
    * 
-   * GET /homepages -> Array<Homepage>
+   * GET /homepages -> ByteArray
    */
   @JvmOverloads fun all_homepages(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Homepage>>("/homepages", 
+    return this.get<ByteArray>("/homepages", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all Integration Hubs.
    * 
-   * GET /integration_hubs -> Array<IntegrationHub>
+   * GET /integration_hubs -> ByteArray
    */
   @JvmOverloads fun all_integration_hubs(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<IntegrationHub>>("/integration_hubs", 
+    return this.get<ByteArray>("/integration_hubs", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all Integrations.
    * 
-   * GET /integrations -> Array<Integration>
+   * GET /integrations -> ByteArray
    */
   @JvmOverloads fun all_integrations(
     /**
@@ -429,39 +428,39 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} integration_hub_id Filter to a specific provider
      */
     integration_hub_id: String? = null) : SDKResponse {
-    return this.get<Array<Integration>>("/integrations", 
+    return this.get<ByteArray>("/integrations", 
       mapOf("fields" to fields, "integration_hub_id" to integration_hub_id))
   }
 
   /**
    * ### Get all legacy features.
    * 
-   * GET /legacy_features -> Array<LegacyFeature>
+   * GET /legacy_features -> ByteArray
    */
   fun all_legacy_features() : SDKResponse {
-    return this.get<Array<LegacyFeature>>("/legacy_features", mapOf())
+    return this.get<ByteArray>("/legacy_features", mapOf())
   }
 
   /**
    * ### Get a list of locales that Looker supports.
    * 
-   * GET /locales -> Array<Locale>
+   * GET /locales -> ByteArray
    */
   fun all_locales() : SDKResponse {
-    return this.get<Array<Locale>>("/locales", mapOf())
+    return this.get<ByteArray>("/locales", mapOf())
   }
 
   /**
    * ### Get information about all lookml models.
    * 
-   * GET /lookml_models -> Array<LookmlModel>
+   * GET /lookml_models -> ByteArray
    */
   @JvmOverloads fun all_lookml_models(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<LookmlModel>>("/lookml_models", 
+    return this.get<ByteArray>("/lookml_models", 
       mapOf("fields" to fields))
   }
 
@@ -472,7 +471,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * optionally filtered by the file id.
    * Call [Run LookML Test](#!/Project/run_lookml_test) to execute tests.
    * 
-   * GET /projects/{project_id}/lookml_tests -> Array<LookmlTest>
+   * GET /projects/{project_id}/lookml_tests -> ByteArray
    */
   @JvmOverloads fun all_lookml_tests(
     /**
@@ -483,7 +482,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} file_id File Id
      */
     file_id: String? = null) : SDKResponse {
-    return this.get<Array<LookmlTest>>("/projects/${project_id}/lookml_tests", 
+    return this.get<ByteArray>("/projects/${project_id}/lookml_tests", 
       mapOf("file_id" to file_id))
   }
 
@@ -496,52 +495,52 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Find **soft-deleted looks** with [search_looks()](#!/Look/search_looks)
    * 
-   * GET /looks -> Array<Look>
+   * GET /looks -> ByteArray
    */
   @JvmOverloads fun all_looks(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Look>>("/looks", 
+    return this.get<ByteArray>("/looks", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all model sets.
    * 
-   * GET /model_sets -> Array<ModelSet>
+   * GET /model_sets -> ByteArray
    */
   @JvmOverloads fun all_model_sets(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ModelSet>>("/model_sets", 
+    return this.get<ByteArray>("/model_sets", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all permission sets.
    * 
-   * GET /permission_sets -> Array<PermissionSet>
+   * GET /permission_sets -> ByteArray
    */
   @JvmOverloads fun all_permission_sets(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<PermissionSet>>("/permission_sets", 
+    return this.get<ByteArray>("/permission_sets", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get all supported permissions.
    * 
-   * GET /permissions -> Array<Permission>
+   * GET /permissions -> ByteArray
    */
   fun all_permissions() : SDKResponse {
-    return this.get<Array<Permission>>("/permissions", mapOf())
+    return this.get<ByteArray>("/permissions", mapOf())
   }
 
   /**
@@ -549,7 +548,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns a list of the files in the project
    * 
-   * GET /projects/{project_id}/files -> Array<ProjectFile>
+   * GET /projects/{project_id}/files -> ByteArray
    */
   @JvmOverloads fun all_project_files(
     /**
@@ -560,7 +559,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ProjectFile>>("/projects/${project_id}/files", 
+    return this.get<ByteArray>("/projects/${project_id}/files", 
       mapOf("fields" to fields))
   }
 
@@ -569,21 +568,21 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns all projects visible to the current user
    * 
-   * GET /projects -> Array<Project>
+   * GET /projects -> ByteArray
    */
   @JvmOverloads fun all_projects(
     /**
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Project>>("/projects", 
+    return this.get<ByteArray>("/projects", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all roles.
    * 
-   * GET /roles -> Array<Role>
+   * GET /roles -> ByteArray
    */
   @JvmOverloads fun all_roles(
     /**
@@ -594,17 +593,17 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {DelimArray<Long>} ids Optional list of ids to get specific roles.
      */
     ids: DelimArray<Long>? = null) : SDKResponse {
-    return this.get<Array<Role>>("/roles", 
+    return this.get<ByteArray>("/roles", 
       mapOf("fields" to fields, "ids" to ids))
   }
 
   /**
    * Get information about all running queries.
    * 
-   * GET /running_queries -> Array<RunningQueries>
+   * GET /running_queries -> ByteArray
    */
   fun all_running_queries() : SDKResponse {
-    return this.get<Array<RunningQueries>>("/running_queries", mapOf())
+    return this.get<ByteArray>("/running_queries", mapOf())
   }
 
   /**
@@ -620,7 +619,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * The caller must have `see_schedules` permission to see other users' scheduled plans.
    * 
-   * GET /scheduled_plans -> Array<ScheduledPlan>
+   * GET /scheduled_plans -> ByteArray
    */
   @JvmOverloads fun all_scheduled_plans(
     /**
@@ -635,21 +634,21 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} all_users Return scheduled plans belonging to all users (caller needs see_schedules permission)
      */
     all_users: Boolean? = null) : SDKResponse {
-    return this.get<Array<ScheduledPlan>>("/scheduled_plans", 
+    return this.get<ByteArray>("/scheduled_plans", 
       mapOf("user_id" to user_id, "fields" to fields, "all_users" to all_users))
   }
 
   /**
    * ### Get information about all spaces.
    * 
-   * GET /spaces -> Array<SpaceBase>
+   * GET /spaces -> ByteArray
    */
   @JvmOverloads fun all_spaces(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<SpaceBase>>("/spaces", 
+    return this.get<ByteArray>("/spaces", 
       mapOf("fields" to fields))
   }
 
@@ -662,24 +661,24 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
    * 
-   * GET /themes -> Array<Theme>
+   * GET /themes -> ByteArray
    */
   @JvmOverloads fun all_themes(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Theme>>("/themes", 
+    return this.get<ByteArray>("/themes", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
    * 
-   * GET /timezones -> Array<Timezone>
+   * GET /timezones -> ByteArray
    */
   fun all_timezones() : SDKResponse {
-    return this.get<Array<Timezone>>("/timezones", mapOf())
+    return this.get<ByteArray>("/timezones", mapOf())
   }
 
   /**
@@ -691,7 +690,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Results will only include groups that the caller's user account has permission to see.
    * 
-   * GET /user_attributes/{user_attribute_id}/group_values -> Array<UserAttributeGroupValue>
+   * GET /user_attributes/{user_attribute_id}/group_values -> ByteArray
    */
   @JvmOverloads fun all_user_attribute_group_values(
     /**
@@ -702,14 +701,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<UserAttributeGroupValue>>("/user_attributes/${user_attribute_id}/group_values", 
+    return this.get<ByteArray>("/user_attributes/${user_attribute_id}/group_values", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all user attributes.
    * 
-   * GET /user_attributes -> Array<UserAttribute>
+   * GET /user_attributes -> ByteArray
    */
   @JvmOverloads fun all_user_attributes(
     /**
@@ -720,14 +719,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} sorts Fields to order the results by. Sortable fields include: name, label
      */
     sorts: String? = null) : SDKResponse {
-    return this.get<Array<UserAttribute>>("/user_attributes", 
+    return this.get<ByteArray>("/user_attributes", 
       mapOf("fields" to fields, "sorts" to sorts))
   }
 
   /**
    * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
    * 
-   * GET /users/{user_id}/credentials_api3 -> Array<CredentialsApi3>
+   * GET /users/{user_id}/credentials_api3 -> ByteArray
    */
   @JvmOverloads fun all_user_credentials_api3s(
     /**
@@ -738,14 +737,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<CredentialsApi3>>("/users/${user_id}/credentials_api3", 
+    return this.get<ByteArray>("/users/${user_id}/credentials_api3", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Embed login information for the specified user.
    * 
-   * GET /users/{user_id}/credentials_embed -> Array<CredentialsEmbed>
+   * GET /users/{user_id}/credentials_embed -> ByteArray
    */
   @JvmOverloads fun all_user_credentials_embeds(
     /**
@@ -756,28 +755,28 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<CredentialsEmbed>>("/users/${user_id}/credentials_embed", 
+    return this.get<ByteArray>("/users/${user_id}/credentials_embed", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get currently locked-out users.
    * 
-   * GET /user_login_lockouts -> Array<UserLoginLockout>
+   * GET /user_login_lockouts -> ByteArray
    */
   @JvmOverloads fun all_user_login_lockouts(
     /**
      * @param {String} fields Include only these fields in the response
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<UserLoginLockout>>("/user_login_lockouts", 
+    return this.get<ByteArray>("/user_login_lockouts", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Web login session for the specified user.
    * 
-   * GET /users/{user_id}/sessions -> Array<Session>
+   * GET /users/{user_id}/sessions -> ByteArray
    */
   @JvmOverloads fun all_user_sessions(
     /**
@@ -788,14 +787,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Session>>("/users/${user_id}/sessions", 
+    return this.get<ByteArray>("/users/${user_id}/sessions", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all users.
    * 
-   * GET /users -> Array<User>
+   * GET /users -> ByteArray
    */
   @JvmOverloads fun all_users(
     /**
@@ -818,7 +817,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {DelimArray<Long>} ids Optional list of ids to get specific users.
      */
     ids: DelimArray<Long>? = null) : SDKResponse {
-    return this.get<Array<User>>("/users", 
+    return this.get<ByteArray>("/users", 
       mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts, "ids" to ids))
   }
 
@@ -827,19 +826,19 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns all workspaces available to the calling user.
    * 
-   * GET /workspaces -> Array<Workspace>
+   * GET /workspaces -> ByteArray
    */
   fun all_workspaces() : SDKResponse {
-    return this.get<Array<Workspace>>("/workspaces", mapOf())
+    return this.get<ByteArray>("/workspaces", mapOf())
   }
 
   /**
    * ### Get the current Looker internal database backup configuration.
    * 
-   * GET /backup_configuration -> BackupConfiguration
+   * GET /backup_configuration -> ByteArray
    */
   fun backup_configuration() : SDKResponse {
-    return this.get<BackupConfiguration>("/backup_configuration", mapOf())
+    return this.get<ByteArray>("/backup_configuration", mapOf())
   }
 
   /**
@@ -854,7 +853,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
    * 
-   * GET /color_collections/{collection_id} -> ColorCollection
+   * GET /color_collections/{collection_id} -> ByteArray
    */
   @JvmOverloads fun color_collection(
     /**
@@ -865,7 +864,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ColorCollection>("/color_collections/${collection_id}", 
+    return this.get<ByteArray>("/color_collections/${collection_id}", 
       mapOf("fields" to fields))
   }
 
@@ -877,14 +876,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
    * 
-   * GET /color_collections/custom -> Array<ColorCollection>
+   * GET /color_collections/custom -> ByteArray
    */
   @JvmOverloads fun color_collections_custom(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ColorCollection>>("/color_collections/custom", 
+    return this.get<ByteArray>("/color_collections/custom", 
       mapOf("fields" to fields))
   }
 
@@ -896,21 +895,21 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
    * 
-   * GET /color_collections/standard -> Array<ColorCollection>
+   * GET /color_collections/standard -> ByteArray
    */
   @JvmOverloads fun color_collections_standard(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ColorCollection>>("/color_collections/standard", 
+    return this.get<ByteArray>("/color_collections/standard", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about a connection.
    * 
-   * GET /connections/{connection_name} -> DBConnection
+   * GET /connections/{connection_name} -> ByteArray
    */
   @JvmOverloads fun connection(
     /**
@@ -921,14 +920,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<DBConnection>("/connections/${connection_name}", 
+    return this.get<ByteArray>("/connections/${connection_name}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get favorite content by its id
    * 
-   * GET /content_favorite/{content_favorite_id} -> ContentFavorite
+   * GET /content_favorite/{content_favorite_id} -> ByteArray
    */
   @JvmOverloads fun content_favorite(
     /**
@@ -939,14 +938,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ContentFavorite>("/content_favorite/${content_favorite_id}", 
+    return this.get<ByteArray>("/content_favorite/${content_favorite_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about an individual content metadata record.
    * 
-   * GET /content_metadata/{content_metadata_id} -> ContentMeta
+   * GET /content_metadata/{content_metadata_id} -> ByteArray
    */
   @JvmOverloads fun content_metadata(
     /**
@@ -957,7 +956,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ContentMeta>("/content_metadata/${content_metadata_id}", 
+    return this.get<ByteArray>("/content_metadata/${content_metadata_id}", 
       mapOf("fields" to fields))
   }
 
@@ -968,14 +967,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * Performs validation of all looks and dashboards
    * Returns a list of errors found as well as metadata about the content validation run.
    * 
-   * GET /content_validation -> ContentValidation
+   * GET /content_validation -> ByteArray
    */
   @JvmOverloads fun content_validation(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ContentValidation>("/content_validation", 
+    return this.get<ByteArray>("/content_validation", 
       mapOf("fields" to fields))
   }
 
@@ -990,46 +989,46 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
    * 
-   * POST /color_collections -> ColorCollection
+   * POST /color_collections -> ByteArray
    */
   fun create_color_collection(
     /**
      * @param {WriteColorCollection} body
      */
     body: WriteColorCollection) : SDKResponse {
-    return this.post<ColorCollection>("/color_collections", mapOf(), body)
+    return this.post<ByteArray>("/color_collections", mapOf(), body)
   }
 
   /**
    * ### Create a connection using the specified configuration.
    * 
-   * POST /connections -> DBConnection
+   * POST /connections -> ByteArray
    */
   fun create_connection(
     /**
      * @param {WriteDBConnection} body
      */
     body: WriteDBConnection) : SDKResponse {
-    return this.post<DBConnection>("/connections", mapOf(), body)
+    return this.post<ByteArray>("/connections", mapOf(), body)
   }
 
   /**
    * ### Create favorite content
    * 
-   * POST /content_favorite -> ContentFavorite
+   * POST /content_favorite -> ByteArray
    */
   fun create_content_favorite(
     /**
      * @param {WriteContentFavorite} body
      */
     body: WriteContentFavorite) : SDKResponse {
-    return this.post<ContentFavorite>("/content_favorite", mapOf(), body)
+    return this.post<ByteArray>("/content_favorite", mapOf(), body)
   }
 
   /**
    * ### Create content metadata access.
    * 
-   * POST /content_metadata_access -> ContentMetaGroupUser
+   * POST /content_metadata_access -> ByteArray
    */
   @JvmOverloads fun create_content_metadata_access(
     /**
@@ -1040,7 +1039,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} send_boards_notification_email Optionally sends notification email when granting access to a board.
      */
     send_boards_notification_email: Boolean? = null) : SDKResponse {
-    return this.post<ContentMetaGroupUser>("/content_metadata_access", 
+    return this.post<ByteArray>("/content_metadata_access", 
       mapOf("send_boards_notification_email" to send_boards_notification_email), body)
   }
 
@@ -1060,20 +1059,20 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * You can **permanently delete** an existing dashboard with [delete_dashboard()](#!/Dashboard/delete_dashboard)
    * 
-   * POST /dashboards -> Dashboard
+   * POST /dashboards -> ByteArray
    */
   fun create_dashboard(
     /**
      * @param {WriteDashboard} body
      */
     body: WriteDashboard) : SDKResponse {
-    return this.post<Dashboard>("/dashboards", mapOf(), body)
+    return this.post<ByteArray>("/dashboards", mapOf(), body)
   }
 
   /**
    * ### Create a dashboard element on the dashboard with a specific id.
    * 
-   * POST /dashboard_elements -> DashboardElement
+   * POST /dashboard_elements -> ByteArray
    */
   @JvmOverloads fun create_dashboard_element(
     /**
@@ -1084,14 +1083,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<DashboardElement>("/dashboard_elements", 
+    return this.post<ByteArray>("/dashboard_elements", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Create a dashboard filter on the dashboard with a specific id.
    * 
-   * POST /dashboard_filters -> DashboardFilter
+   * POST /dashboard_filters -> ByteArray
    */
   @JvmOverloads fun create_dashboard_filter(
     /**
@@ -1102,14 +1101,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.post<DashboardFilter>("/dashboard_filters", 
+    return this.post<ByteArray>("/dashboard_filters", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Create a dashboard layout on the dashboard with a specific id.
    * 
-   * POST /dashboard_layouts -> DashboardLayout
+   * POST /dashboard_layouts -> ByteArray
    */
   @JvmOverloads fun create_dashboard_layout(
     /**
@@ -1120,7 +1119,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<DashboardLayout>("/dashboard_layouts", 
+    return this.post<ByteArray>("/dashboard_layouts", 
       mapOf("fields" to fields), body)
   }
 
@@ -1131,7 +1130,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
    * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
    * 
-   * POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> RenderTask
+   * POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> ByteArray
    */
   @JvmOverloads fun create_dashboard_render_task(
     /**
@@ -1166,7 +1165,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} pdf_landscape Whether to render pdf in landscape
      */
     pdf_landscape: Boolean? = null) : SDKResponse {
-    return this.post<RenderTask>("/render_tasks/dashboards/${dashboard_id}/${result_format}", 
+    return this.post<ByteArray>("/render_tasks/dashboards/${dashboard_id}/${result_format}", 
       mapOf("width" to width, "height" to height, "fields" to fields, "pdf_paper_size" to pdf_paper_size, "pdf_landscape" to pdf_landscape), body)
   }
 
@@ -1176,14 +1175,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * Caller must have permission to edit the parent folder and to create folders, otherwise the request
    * returns 404 Not Found.
    * 
-   * POST /folders -> Folder
+   * POST /folders -> ByteArray
    */
   fun create_folder(
     /**
      * @param {CreateFolder} body
      */
     body: CreateFolder) : SDKResponse {
-    return this.post<Folder>("/folders", mapOf(), body)
+    return this.post<ByteArray>("/folders", mapOf(), body)
   }
 
   /**
@@ -1196,7 +1195,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * Optionally specify a branch name, tag name or commit SHA as the start point in the ref field.
    *   If no ref is specified, HEAD of the current branch will be used as the start point for the new branch.
    * 
-   * POST /projects/{project_id}/git_branch -> GitBranch
+   * POST /projects/{project_id}/git_branch -> ByteArray
    */
   fun create_git_branch(
     /**
@@ -1207,7 +1206,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteGitBranch} body
      */
     body: WriteGitBranch) : SDKResponse {
-    return this.post<GitBranch>("/projects/${project_id}/git_branch", mapOf(), body)
+    return this.post<ByteArray>("/projects/${project_id}/git_branch", mapOf(), body)
   }
 
   /**
@@ -1221,20 +1220,20 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * Copy this public key to your remote git repository's ssh keys configuration so that the remote git service can
    * validate and accept git requests from the Looker server.
    * 
-   * POST /projects/{project_id}/git/deploy_key -> String
+   * POST /projects/{project_id}/git/deploy_key -> ByteArray
    */
   fun create_git_deploy_key(
     /**
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
-    return this.post<String>("/projects/${project_id}/git/deploy_key", mapOf())
+    return this.post<ByteArray>("/projects/${project_id}/git/deploy_key", mapOf())
   }
 
   /**
    * ### Creates a new group (admin only).
    * 
-   * POST /groups -> Group
+   * POST /groups -> ByteArray
    */
   @JvmOverloads fun create_group(
     /**
@@ -1245,14 +1244,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<Group>("/groups", 
+    return this.post<ByteArray>("/groups", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Create a new homepage.
    * 
-   * POST /homepages -> Homepage
+   * POST /homepages -> ByteArray
    */
   @JvmOverloads fun create_homepage(
     /**
@@ -1263,14 +1262,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<Homepage>("/homepages", 
+    return this.post<ByteArray>("/homepages", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Create a new homepage item.
    * 
-   * POST /homepage_items -> HomepageItem
+   * POST /homepage_items -> ByteArray
    */
   @JvmOverloads fun create_homepage_item(
     /**
@@ -1281,14 +1280,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<HomepageItem>("/homepage_items", 
+    return this.post<ByteArray>("/homepage_items", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Create a new homepage section.
    * 
-   * POST /homepage_sections -> HomepageSection
+   * POST /homepage_sections -> ByteArray
    */
   @JvmOverloads fun create_homepage_section(
     /**
@@ -1299,7 +1298,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<HomepageSection>("/homepage_sections", 
+    return this.post<ByteArray>("/homepage_sections", 
       mapOf("fields" to fields), body)
   }
 
@@ -1308,7 +1307,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * This API is rate limited to prevent it from being used for SSRF attacks
    * 
-   * POST /integration_hubs -> IntegrationHub
+   * POST /integration_hubs -> ByteArray
    */
   @JvmOverloads fun create_integration_hub(
     /**
@@ -1319,7 +1318,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<IntegrationHub>("/integration_hubs", 
+    return this.post<ByteArray>("/integration_hubs", 
       mapOf("fields" to fields), body)
   }
 
@@ -1332,7 +1331,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * To place the look into a particular space, assign the space's id to the `space_id` property
    * in the call to `create_look()`.
    * 
-   * POST /looks -> LookWithQuery
+   * POST /looks -> ByteArray
    */
   @JvmOverloads fun create_look(
     /**
@@ -1343,7 +1342,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<LookWithQuery>("/looks", 
+    return this.post<ByteArray>("/looks", 
       mapOf("fields" to fields), body)
   }
 
@@ -1354,7 +1353,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
    * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
    * 
-   * POST /render_tasks/looks/{look_id}/{result_format} -> RenderTask
+   * POST /render_tasks/looks/{look_id}/{result_format} -> ByteArray
    */
   @JvmOverloads fun create_look_render_task(
     /**
@@ -1377,7 +1376,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<RenderTask>("/render_tasks/looks/${look_id}/${result_format}", 
+    return this.post<ByteArray>("/render_tasks/looks/${look_id}/${result_format}", 
       mapOf("width" to width, "height" to height, "fields" to fields))
   }
 
@@ -1388,7 +1387,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
    * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
    * 
-   * POST /render_tasks/lookml_dashboards/{dashboard_id}/{result_format} -> RenderTask
+   * POST /render_tasks/lookml_dashboards/{dashboard_id}/{result_format} -> ByteArray
    */
   @JvmOverloads fun create_lookml_dashboard_render_task(
     /**
@@ -1423,21 +1422,21 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} pdf_landscape Whether to render pdf in landscape
      */
     pdf_landscape: Boolean? = null) : SDKResponse {
-    return this.post<RenderTask>("/render_tasks/lookml_dashboards/${dashboard_id}/${result_format}", 
+    return this.post<ByteArray>("/render_tasks/lookml_dashboards/${dashboard_id}/${result_format}", 
       mapOf("width" to width, "height" to height, "fields" to fields, "pdf_paper_size" to pdf_paper_size, "pdf_landscape" to pdf_landscape), body)
   }
 
   /**
    * ### Create a lookml model using the specified configuration.
    * 
-   * POST /lookml_models -> LookmlModel
+   * POST /lookml_models -> ByteArray
    */
   fun create_lookml_model(
     /**
      * @param {WriteLookmlModel} body
      */
     body: WriteLookmlModel) : SDKResponse {
-    return this.post<LookmlModel>("/lookml_models", mapOf(), body)
+    return this.post<ByteArray>("/lookml_models", mapOf(), body)
   }
 
   /**
@@ -1459,7 +1458,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * the existing merge query will be returned instead of creating a duplicate. Conversely, any
    * change to the contents of a merge query will produce a new object with a new id.
    * 
-   * POST /merge_queries -> MergeQuery
+   * POST /merge_queries -> ByteArray
    */
   @JvmOverloads fun create_merge_query(
     /**
@@ -1470,47 +1469,47 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.post<MergeQuery>("/merge_queries", 
+    return this.post<ByteArray>("/merge_queries", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Create a model set with the specified information. Model sets are used by Roles.
    * 
-   * POST /model_sets -> ModelSet
+   * POST /model_sets -> ByteArray
    */
   fun create_model_set(
     /**
      * @param {WriteModelSet} body
      */
     body: WriteModelSet) : SDKResponse {
-    return this.post<ModelSet>("/model_sets", mapOf(), body)
+    return this.post<ByteArray>("/model_sets", mapOf(), body)
   }
 
   /**
    * ### Create a OIDC test configuration.
    * 
-   * POST /oidc_test_configs -> OIDCConfig
+   * POST /oidc_test_configs -> ByteArray
    */
   fun create_oidc_test_config(
     /**
      * @param {WriteOIDCConfig} body
      */
     body: WriteOIDCConfig) : SDKResponse {
-    return this.post<OIDCConfig>("/oidc_test_configs", mapOf(), body)
+    return this.post<ByteArray>("/oidc_test_configs", mapOf(), body)
   }
 
   /**
    * ### Create a permission set with the specified information. Permission sets are used by Roles.
    * 
-   * POST /permission_sets -> PermissionSet
+   * POST /permission_sets -> ByteArray
    */
   fun create_permission_set(
     /**
      * @param {WritePermissionSet} body
      */
     body: WritePermissionSet) : SDKResponse {
-    return this.post<PermissionSet>("/permission_sets", mapOf(), body)
+    return this.post<ByteArray>("/permission_sets", mapOf(), body)
   }
 
   /**
@@ -1522,14 +1521,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * `name` is required.
    * `git_remote_url` is not allowed. To configure Git for the newly created project, follow the instructions in `update_project`.
    * 
-   * POST /projects -> Project
+   * POST /projects -> ByteArray
    */
   fun create_project(
     /**
      * @param {WriteProject} body
      */
     body: WriteProject) : SDKResponse {
-    return this.post<Project>("/projects", mapOf(), body)
+    return this.post<ByteArray>("/projects", mapOf(), body)
   }
 
   /**
@@ -1542,7 +1541,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * The query parameters are passed as json in the body of the request.
    * 
-   * POST /queries -> Query
+   * POST /queries -> ByteArray
    */
   @JvmOverloads fun create_query(
     /**
@@ -1553,7 +1552,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<Query>("/queries", 
+    return this.post<ByteArray>("/queries", 
       mapOf("fields" to fields), body)
   }
 
@@ -1564,7 +1563,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
    * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
    * 
-   * POST /render_tasks/queries/{query_id}/{result_format} -> RenderTask
+   * POST /render_tasks/queries/{query_id}/{result_format} -> ByteArray
    */
   @JvmOverloads fun create_query_render_task(
     /**
@@ -1587,7 +1586,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<RenderTask>("/render_tasks/queries/${query_id}/${result_format}", 
+    return this.post<ByteArray>("/render_tasks/queries/${query_id}/${result_format}", 
       mapOf("width" to width, "height" to height, "fields" to fields))
   }
 
@@ -1599,7 +1598,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * Use [query_task(query_task_id)](#!/Query/query_task) to check the execution status of the query task.
    * After the query task status reaches "Complete", use [query_task_results(query_task_id)](#!/Query/query_task_results) to fetch the results of the query.
    * 
-   * POST /query_tasks -> QueryTask
+   * POST /query_tasks -> ByteArray
    */
   @JvmOverloads fun create_query_task(
     /**
@@ -1658,34 +1657,34 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.post<QueryTask>("/query_tasks", 
+    return this.post<ByteArray>("/query_tasks", 
       mapOf("limit" to limit, "apply_formatting" to apply_formatting, "apply_vis" to apply_vis, "cache" to cache, "image_width" to image_width, "image_height" to image_height, "generate_drill_links" to generate_drill_links, "force_production" to force_production, "cache_only" to cache_only, "path_prefix" to path_prefix, "rebuild_pdts" to rebuild_pdts, "server_table_calcs" to server_table_calcs, "fields" to fields), body)
   }
 
   /**
    * ### Create a role with the specified information.
    * 
-   * POST /roles -> Role
+   * POST /roles -> ByteArray
    */
   fun create_role(
     /**
      * @param {WriteRole} body
      */
     body: WriteRole) : SDKResponse {
-    return this.post<Role>("/roles", mapOf(), body)
+    return this.post<ByteArray>("/roles", mapOf(), body)
   }
 
   /**
    * ### Create a SAML test configuration.
    * 
-   * POST /saml_test_configs -> SamlConfig
+   * POST /saml_test_configs -> ByteArray
    */
   fun create_saml_test_config(
     /**
      * @param {WriteSamlConfig} body
      */
     body: WriteSamlConfig) : SDKResponse {
-    return this.post<SamlConfig>("/saml_test_configs", mapOf(), body)
+    return this.post<ByteArray>("/saml_test_configs", mapOf(), body)
   }
 
   /**
@@ -1748,14 +1747,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
    * 
-   * POST /scheduled_plans -> ScheduledPlan
+   * POST /scheduled_plans -> ByteArray
    */
   fun create_scheduled_plan(
     /**
      * @param {WriteScheduledPlan} body
      */
     body: WriteScheduledPlan) : SDKResponse {
-    return this.post<ScheduledPlan>("/scheduled_plans", mapOf(), body)
+    return this.post<ByteArray>("/scheduled_plans", mapOf(), body)
   }
 
   /**
@@ -1764,14 +1763,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * Caller must have permission to edit the parent space and to create spaces, otherwise the request
    * returns 404 Not Found.
    * 
-   * POST /spaces -> Space
+   * POST /spaces -> ByteArray
    */
   fun create_space(
     /**
      * @param {CreateSpace} body
      */
     body: CreateSpace) : SDKResponse {
-    return this.post<Space>("/spaces", mapOf(), body)
+    return this.post<ByteArray>("/spaces", mapOf(), body)
   }
 
   /**
@@ -1779,14 +1778,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Either the `connection_name` or `model_name` parameter MUST be provided.
    * 
-   * POST /sql_queries -> SqlQuery
+   * POST /sql_queries -> ByteArray
    */
   fun create_sql_query(
     /**
      * @param {SqlQueryCreate} body
      */
     body: SqlQueryCreate) : SDKResponse {
-    return this.post<SqlQuery>("/sql_queries", mapOf(), body)
+    return this.post<ByteArray>("/sql_queries", mapOf(), body)
   }
 
   /**
@@ -1825,14 +1824,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
    * encrypted transport.
    * 
-   * POST /embed/sso_url -> EmbedSsoUrl
+   * POST /embed/sso_url -> ByteArray
    */
   fun create_sso_embed_url(
     /**
      * @param {EmbedSsoUrlParams} body
      */
     body: EmbedSsoUrlParams) : SDKResponse {
-    return this.post<EmbedSsoUrl>("/embed/sso_url", mapOf(), body)
+    return this.post<ByteArray>("/embed/sso_url", mapOf(), body)
   }
 
   /**
@@ -1852,20 +1851,20 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
    * 
-   * POST /themes -> Theme
+   * POST /themes -> ByteArray
    */
   fun create_theme(
     /**
      * @param {WriteTheme} body
      */
     body: WriteTheme) : SDKResponse {
-    return this.post<Theme>("/themes", mapOf(), body)
+    return this.post<ByteArray>("/themes", mapOf(), body)
   }
 
   /**
    * ### Create a user with the specified information.
    * 
-   * POST /users -> User
+   * POST /users -> ByteArray
    */
   @JvmOverloads fun create_user(
     /**
@@ -1876,7 +1875,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<User>("/users", 
+    return this.post<ByteArray>("/users", 
       mapOf("fields" to fields), body)
   }
 
@@ -1892,7 +1891,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * Attempting to create a new user attribute with a name or label that duplicates an existing
    * user attribute will fail with a 422 error.
    * 
-   * POST /user_attributes -> UserAttribute
+   * POST /user_attributes -> ByteArray
    */
   @JvmOverloads fun create_user_attribute(
     /**
@@ -1903,14 +1902,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<UserAttribute>("/user_attributes", 
+    return this.post<ByteArray>("/user_attributes", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
    * 
-   * POST /users/{user_id}/credentials_api3 -> CredentialsApi3
+   * POST /users/{user_id}/credentials_api3 -> ByteArray
    */
   @JvmOverloads fun create_user_credentials_api3(
     /**
@@ -1925,14 +1924,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<CredentialsApi3>("/users/${user_id}/credentials_api3", 
+    return this.post<ByteArray>("/users/${user_id}/credentials_api3", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Email/password login information for the specified user.
    * 
-   * POST /users/{user_id}/credentials_email -> CredentialsEmail
+   * POST /users/{user_id}/credentials_email -> ByteArray
    */
   @JvmOverloads fun create_user_credentials_email(
     /**
@@ -1947,7 +1946,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<CredentialsEmail>("/users/${user_id}/credentials_email", 
+    return this.post<ByteArray>("/users/${user_id}/credentials_email", 
       mapOf("fields" to fields), body)
   }
 
@@ -1962,7 +1961,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * The expire period is always 60 minutes when expires is enabled.
    * This method can be called with an empty body.
    * 
-   * POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
+   * POST /users/{user_id}/credentials_email/password_reset -> ByteArray
    */
   @JvmOverloads fun create_user_credentials_email_password_reset(
     /**
@@ -1977,14 +1976,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<CredentialsEmail>("/users/${user_id}/credentials_email/password_reset", 
+    return this.post<ByteArray>("/users/${user_id}/credentials_email/password_reset", 
       mapOf("expires" to expires, "fields" to fields))
   }
 
   /**
    * ### Two-factor login information for the specified user.
    * 
-   * POST /users/{user_id}/credentials_totp -> CredentialsTotp
+   * POST /users/{user_id}/credentials_totp -> ByteArray
    */
   @JvmOverloads fun create_user_credentials_totp(
     /**
@@ -1999,17 +1998,17 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<CredentialsTotp>("/users/${user_id}/credentials_totp", 
+    return this.post<ByteArray>("/users/${user_id}/credentials_totp", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Get the current status and content of custom welcome emails
    * 
-   * GET /custom_welcome_email -> CustomWelcomeEmail
+   * GET /custom_welcome_email -> ByteArray
    */
   fun custom_welcome_email() : SDKResponse {
-    return this.get<CustomWelcomeEmail>("/custom_welcome_email", mapOf())
+    return this.get<ByteArray>("/custom_welcome_email", mapOf())
   }
 
   /**
@@ -2021,7 +2020,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * You can **Search** for dashboards with [search_dashboards()](#!/Dashboard/search_dashboards)
    * 
-   * GET /dashboards/{dashboard_id} -> Dashboard
+   * GET /dashboards/{dashboard_id} -> ByteArray
    */
   @JvmOverloads fun dashboard(
     /**
@@ -2032,14 +2031,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Dashboard>("/dashboards/${dashboard_id}", 
+    return this.get<ByteArray>("/dashboards/${dashboard_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all the dashboard elements on a dashboard with a specific id.
    * 
-   * GET /dashboards/{dashboard_id}/dashboard_elements -> Array<DashboardElement>
+   * GET /dashboards/{dashboard_id}/dashboard_elements -> ByteArray
    */
   @JvmOverloads fun dashboard_dashboard_elements(
     /**
@@ -2050,14 +2049,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<DashboardElement>>("/dashboards/${dashboard_id}/dashboard_elements", 
+    return this.get<ByteArray>("/dashboards/${dashboard_id}/dashboard_elements", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all the dashboard filters on a dashboard with a specific id.
    * 
-   * GET /dashboards/{dashboard_id}/dashboard_filters -> Array<DashboardFilter>
+   * GET /dashboards/{dashboard_id}/dashboard_filters -> ByteArray
    */
   @JvmOverloads fun dashboard_dashboard_filters(
     /**
@@ -2068,14 +2067,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<DashboardFilter>>("/dashboards/${dashboard_id}/dashboard_filters", 
+    return this.get<ByteArray>("/dashboards/${dashboard_id}/dashboard_filters", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all the dashboard elements on a dashboard with a specific id.
    * 
-   * GET /dashboards/{dashboard_id}/dashboard_layouts -> Array<DashboardLayout>
+   * GET /dashboards/{dashboard_id}/dashboard_layouts -> ByteArray
    */
   @JvmOverloads fun dashboard_dashboard_layouts(
     /**
@@ -2086,14 +2085,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<DashboardLayout>>("/dashboards/${dashboard_id}/dashboard_layouts", 
+    return this.get<ByteArray>("/dashboards/${dashboard_id}/dashboard_layouts", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about the dashboard element with a specific id.
    * 
-   * GET /dashboard_elements/{dashboard_element_id} -> DashboardElement
+   * GET /dashboard_elements/{dashboard_element_id} -> ByteArray
    */
   @JvmOverloads fun dashboard_element(
     /**
@@ -2104,14 +2103,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<DashboardElement>("/dashboard_elements/${dashboard_element_id}", 
+    return this.get<ByteArray>("/dashboard_elements/${dashboard_element_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about the dashboard filters with a specific id.
    * 
-   * GET /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
+   * GET /dashboard_filters/{dashboard_filter_id} -> ByteArray
    */
   @JvmOverloads fun dashboard_filter(
     /**
@@ -2122,14 +2121,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<DashboardFilter>("/dashboard_filters/${dashboard_filter_id}", 
+    return this.get<ByteArray>("/dashboard_filters/${dashboard_filter_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about the dashboard layouts with a specific id.
    * 
-   * GET /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
+   * GET /dashboard_layouts/{dashboard_layout_id} -> ByteArray
    */
   @JvmOverloads fun dashboard_layout(
     /**
@@ -2140,14 +2139,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<DashboardLayout>("/dashboard_layouts/${dashboard_layout_id}", 
+    return this.get<ByteArray>("/dashboard_layouts/${dashboard_layout_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about the dashboard elements with a specific id.
    * 
-   * GET /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
+   * GET /dashboard_layout_components/{dashboard_layout_component_id} -> ByteArray
    */
   @JvmOverloads fun dashboard_layout_component(
     /**
@@ -2158,14 +2157,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<DashboardLayoutComponent>("/dashboard_layout_components/${dashboard_layout_component_id}", 
+    return this.get<ByteArray>("/dashboard_layout_components/${dashboard_layout_component_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all the dashboard layout components for a dashboard layout with a specific id.
    * 
-   * GET /dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components -> Array<DashboardLayoutComponent>
+   * GET /dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components -> ByteArray
    */
   @JvmOverloads fun dashboard_layout_dashboard_layout_components(
     /**
@@ -2176,7 +2175,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<DashboardLayoutComponent>>("/dashboard_layouts/${dashboard_layout_id}/dashboard_layout_components", 
+    return this.get<ByteArray>("/dashboard_layouts/${dashboard_layout_id}/dashboard_layout_components", 
       mapOf("fields" to fields))
   }
 
@@ -2185,27 +2184,27 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns a JSON object that contains the dashboard id and the full lookml
    * 
-   * GET /dashboards/lookml/{dashboard_id} -> DashboardLookml
+   * GET /dashboards/lookml/{dashboard_id} -> ByteArray
    */
   fun dashboard_lookml(
     /**
      * @param {String} dashboard_id Id of dashboard
      */
     dashboard_id: String) : SDKResponse {
-    return this.get<DashboardLookml>("/dashboards/lookml/${dashboard_id}", mapOf())
+    return this.get<ByteArray>("/dashboards/lookml/${dashboard_id}", mapOf())
   }
 
   /**
    * ### Get information about a datagroup.
    * 
-   * GET /datagroups/{datagroup_id} -> Datagroup
+   * GET /datagroups/{datagroup_id} -> ByteArray
    */
   fun datagroup(
     /**
      * @param {Long} datagroup_id ID of datagroup.
      */
     datagroup_id: Long) : SDKResponse {
-    return this.get<Datagroup>("/datagroups/${datagroup_id}", mapOf())
+    return this.get<ByteArray>("/datagroups/${datagroup_id}", mapOf())
   }
 
   /**
@@ -2215,10 +2214,10 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Set the default color collection with [ColorCollection](#!/ColorCollection/set_default_color_collection)
    * 
-   * GET /color_collections/default -> ColorCollection
+   * GET /color_collections/default -> ByteArray
    */
   fun default_color_collection() : SDKResponse {
-    return this.get<ColorCollection>("/color_collections/default", mapOf())
+    return this.get<ByteArray>("/color_collections/default", mapOf())
   }
 
   /**
@@ -2230,14 +2229,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * The optional `ts` parameter can specify a different timestamp than "now." If specified, it returns the default theme at the time indicated.
    * 
-   * GET /themes/default -> Theme
+   * GET /themes/default -> ByteArray
    */
   @JvmOverloads fun default_theme(
     /**
      * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
      */
     ts: Date? = null) : SDKResponse {
-    return this.get<Theme>("/themes/default", 
+    return this.get<ByteArray>("/themes/default", 
       mapOf("ts" to ts))
   }
 
@@ -2251,33 +2250,33 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * Because multiple color collections can have the same label, they must be deleted by ID, not name.
    * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
    * 
-   * DELETE /color_collections/{collection_id} -> String
+   * DELETE /color_collections/{collection_id} -> ByteArray
    */
   fun delete_color_collection(
     /**
      * @param {String} collection_id Id of Color Collection
      */
     collection_id: String) : SDKResponse {
-    return this.delete<String>("/color_collections/${collection_id}", mapOf())
+    return this.delete<ByteArray>("/color_collections/${collection_id}", mapOf())
   }
 
   /**
    * ### Delete a connection.
    * 
-   * DELETE /connections/{connection_name} -> String
+   * DELETE /connections/{connection_name} -> ByteArray
    */
   fun delete_connection(
     /**
      * @param {String} connection_name Name of connection
      */
     connection_name: String) : SDKResponse {
-    return this.delete<String>("/connections/${connection_name}", mapOf())
+    return this.delete<ByteArray>("/connections/${connection_name}", mapOf())
   }
 
   /**
    * ### Delete a connection override.
    * 
-   * DELETE /connections/{connection_name}/connection_override/{override_context} -> String
+   * DELETE /connections/{connection_name}/connection_override/{override_context} -> ByteArray
    */
   fun delete_connection_override(
     /**
@@ -2288,33 +2287,33 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} override_context Context of connection override
      */
     override_context: String) : SDKResponse {
-    return this.delete<String>("/connections/${connection_name}/connection_override/${override_context}", mapOf())
+    return this.delete<ByteArray>("/connections/${connection_name}/connection_override/${override_context}", mapOf())
   }
 
   /**
    * ### Delete favorite content
    * 
-   * DELETE /content_favorite/{content_favorite_id} -> String
+   * DELETE /content_favorite/{content_favorite_id} -> ByteArray
    */
   fun delete_content_favorite(
     /**
      * @param {Long} content_favorite_id Id of favorite content
      */
     content_favorite_id: Long) : SDKResponse {
-    return this.delete<String>("/content_favorite/${content_favorite_id}", mapOf())
+    return this.delete<ByteArray>("/content_favorite/${content_favorite_id}", mapOf())
   }
 
   /**
    * ### Remove content metadata access.
    * 
-   * DELETE /content_metadata_access/{content_metadata_access_id} -> String
+   * DELETE /content_metadata_access/{content_metadata_access_id} -> ByteArray
    */
   fun delete_content_metadata_access(
     /**
      * @param {Long} content_metadata_access_id Id of content metadata access
      */
     content_metadata_access_id: Long) : SDKResponse {
-    return this.delete<String>("/content_metadata_access/${content_metadata_access_id}", mapOf())
+    return this.delete<ByteArray>("/content_metadata_access/${content_metadata_access_id}", mapOf())
   }
 
   /**
@@ -2326,67 +2325,67 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Note: When a dashboard is deleted in the UI, it is soft deleted. Use this API call to permanently remove it, if desired.
    * 
-   * DELETE /dashboards/{dashboard_id} -> String
+   * DELETE /dashboards/{dashboard_id} -> ByteArray
    */
   fun delete_dashboard(
     /**
      * @param {String} dashboard_id Id of dashboard
      */
     dashboard_id: String) : SDKResponse {
-    return this.delete<String>("/dashboards/${dashboard_id}", mapOf())
+    return this.delete<ByteArray>("/dashboards/${dashboard_id}", mapOf())
   }
 
   /**
    * ### Delete a dashboard element with a specific id.
    * 
-   * DELETE /dashboard_elements/{dashboard_element_id} -> String
+   * DELETE /dashboard_elements/{dashboard_element_id} -> ByteArray
    */
   fun delete_dashboard_element(
     /**
      * @param {String} dashboard_element_id Id of dashboard element
      */
     dashboard_element_id: String) : SDKResponse {
-    return this.delete<String>("/dashboard_elements/${dashboard_element_id}", mapOf())
+    return this.delete<ByteArray>("/dashboard_elements/${dashboard_element_id}", mapOf())
   }
 
   /**
    * ### Delete a dashboard filter with a specific id.
    * 
-   * DELETE /dashboard_filters/{dashboard_filter_id} -> String
+   * DELETE /dashboard_filters/{dashboard_filter_id} -> ByteArray
    */
   fun delete_dashboard_filter(
     /**
      * @param {String} dashboard_filter_id Id of dashboard filter
      */
     dashboard_filter_id: String) : SDKResponse {
-    return this.delete<String>("/dashboard_filters/${dashboard_filter_id}", mapOf())
+    return this.delete<ByteArray>("/dashboard_filters/${dashboard_filter_id}", mapOf())
   }
 
   /**
    * ### Delete a dashboard layout with a specific id.
    * 
-   * DELETE /dashboard_layouts/{dashboard_layout_id} -> String
+   * DELETE /dashboard_layouts/{dashboard_layout_id} -> ByteArray
    */
   fun delete_dashboard_layout(
     /**
      * @param {String} dashboard_layout_id Id of dashboard layout
      */
     dashboard_layout_id: String) : SDKResponse {
-    return this.delete<String>("/dashboard_layouts/${dashboard_layout_id}", mapOf())
+    return this.delete<ByteArray>("/dashboard_layouts/${dashboard_layout_id}", mapOf())
   }
 
   /**
    * ### Delete the folder with a specific id including any children folders.
    * **DANGER** this will delete all looks and dashboards in the folder.
    * 
-   * DELETE /folders/{folder_id} -> String
+   * DELETE /folders/{folder_id} -> ByteArray
    */
   fun delete_folder(
     /**
      * @param {String} folder_id Id of folder
      */
     folder_id: String) : SDKResponse {
-    return this.delete<String>("/folders/${folder_id}", mapOf())
+    return this.delete<ByteArray>("/folders/${folder_id}", mapOf())
   }
 
   /**
@@ -2394,7 +2393,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Delete git branch specified in branch_name path param from local and remote of specified project repository
    * 
-   * DELETE /projects/{project_id}/git_branch/{branch_name} -> String
+   * DELETE /projects/{project_id}/git_branch/{branch_name} -> ByteArray
    */
   fun delete_git_branch(
     /**
@@ -2405,26 +2404,26 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} branch_name Branch Name
      */
     branch_name: String) : SDKResponse {
-    return this.delete<String>("/projects/${project_id}/git_branch/${branch_name}", mapOf())
+    return this.delete<ByteArray>("/projects/${project_id}/git_branch/${branch_name}", mapOf())
   }
 
   /**
    * ### Deletes a group (admin only).
    * 
-   * DELETE /groups/{group_id} -> String
+   * DELETE /groups/{group_id} -> ByteArray
    */
   fun delete_group(
     /**
      * @param {Long} group_id Id of group
      */
     group_id: Long) : SDKResponse {
-    return this.delete<String>("/groups/${group_id}", mapOf())
+    return this.delete<ByteArray>("/groups/${group_id}", mapOf())
   }
 
   /**
    * ### Removes a group from a group.
    * 
-   * DELETE /groups/{group_id}/groups/{deleting_group_id} -> Void
+   * DELETE /groups/{group_id}/groups/{deleting_group_id} -> ByteArray
    */
   fun delete_group_from_group(
     /**
@@ -2435,13 +2434,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} deleting_group_id Id of group to delete
      */
     deleting_group_id: Long) : SDKResponse {
-    return this.delete<Void>("/groups/${group_id}/groups/${deleting_group_id}", mapOf())
+    return this.delete<ByteArray>("/groups/${group_id}/groups/${deleting_group_id}", mapOf())
   }
 
   /**
    * ### Removes a user from a group.
    * 
-   * DELETE /groups/{group_id}/users/{user_id} -> Void
+   * DELETE /groups/{group_id}/users/{user_id} -> ByteArray
    */
   fun delete_group_user(
     /**
@@ -2452,59 +2451,59 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_id Id of user to remove from group
      */
     user_id: Long) : SDKResponse {
-    return this.delete<Void>("/groups/${group_id}/users/${user_id}", mapOf())
+    return this.delete<ByteArray>("/groups/${group_id}/users/${user_id}", mapOf())
   }
 
   /**
    * ### Delete a homepage.
    * 
-   * DELETE /homepages/{homepage_id} -> String
+   * DELETE /homepages/{homepage_id} -> ByteArray
    */
   fun delete_homepage(
     /**
      * @param {Long} homepage_id Id of homepage
      */
     homepage_id: Long) : SDKResponse {
-    return this.delete<String>("/homepages/${homepage_id}", mapOf())
+    return this.delete<ByteArray>("/homepages/${homepage_id}", mapOf())
   }
 
   /**
    * ### Delete a homepage item.
    * 
-   * DELETE /homepage_items/{homepage_item_id} -> String
+   * DELETE /homepage_items/{homepage_item_id} -> ByteArray
    */
   fun delete_homepage_item(
     /**
      * @param {Long} homepage_item_id Id of homepage_item
      */
     homepage_item_id: Long) : SDKResponse {
-    return this.delete<String>("/homepage_items/${homepage_item_id}", mapOf())
+    return this.delete<ByteArray>("/homepage_items/${homepage_item_id}", mapOf())
   }
 
   /**
    * ### Delete a homepage section.
    * 
-   * DELETE /homepage_sections/{homepage_section_id} -> String
+   * DELETE /homepage_sections/{homepage_section_id} -> ByteArray
    */
   fun delete_homepage_section(
     /**
      * @param {Long} homepage_section_id Id of homepage_section
      */
     homepage_section_id: Long) : SDKResponse {
-    return this.delete<String>("/homepage_sections/${homepage_section_id}", mapOf())
+    return this.delete<ByteArray>("/homepage_sections/${homepage_section_id}", mapOf())
   }
 
   /**
    * ### Delete a Integration Hub.
    * 
-   * DELETE /integration_hubs/{integration_hub_id} -> String
+   * DELETE /integration_hubs/{integration_hub_id} -> ByteArray
    */
   fun delete_integration_hub(
     /**
      * @param {Long} integration_hub_id Id of integration_hub
      */
     integration_hub_id: Long) : SDKResponse {
-    return this.delete<String>("/integration_hubs/${integration_hub_id}", mapOf())
+    return this.delete<ByteArray>("/integration_hubs/${integration_hub_id}", mapOf())
   }
 
   /**
@@ -2516,66 +2515,66 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * For information about soft-delete (which can be undone) see [update_look()](#!/Look/update_look).
    * 
-   * DELETE /looks/{look_id} -> String
+   * DELETE /looks/{look_id} -> ByteArray
    */
   fun delete_look(
     /**
      * @param {Long} look_id Id of look
      */
     look_id: Long) : SDKResponse {
-    return this.delete<String>("/looks/${look_id}", mapOf())
+    return this.delete<ByteArray>("/looks/${look_id}", mapOf())
   }
 
   /**
    * ### Delete a lookml model.
    * 
-   * DELETE /lookml_models/{lookml_model_name} -> String
+   * DELETE /lookml_models/{lookml_model_name} -> ByteArray
    */
   fun delete_lookml_model(
     /**
      * @param {String} lookml_model_name Name of lookml model.
      */
     lookml_model_name: String) : SDKResponse {
-    return this.delete<String>("/lookml_models/${lookml_model_name}", mapOf())
+    return this.delete<ByteArray>("/lookml_models/${lookml_model_name}", mapOf())
   }
 
   /**
    * ### Delete the model set with a specific id.
    * 
-   * DELETE /model_sets/{model_set_id} -> String
+   * DELETE /model_sets/{model_set_id} -> ByteArray
    */
   fun delete_model_set(
     /**
      * @param {Long} model_set_id id of model set
      */
     model_set_id: Long) : SDKResponse {
-    return this.delete<String>("/model_sets/${model_set_id}", mapOf())
+    return this.delete<ByteArray>("/model_sets/${model_set_id}", mapOf())
   }
 
   /**
    * ### Delete a OIDC test configuration.
    * 
-   * DELETE /oidc_test_configs/{test_slug} -> String
+   * DELETE /oidc_test_configs/{test_slug} -> ByteArray
    */
   fun delete_oidc_test_config(
     /**
      * @param {String} test_slug Slug of test config
      */
     test_slug: String) : SDKResponse {
-    return this.delete<String>("/oidc_test_configs/${test_slug}", mapOf())
+    return this.delete<ByteArray>("/oidc_test_configs/${test_slug}", mapOf())
   }
 
   /**
    * ### Delete the permission set with a specific id.
    * 
-   * DELETE /permission_sets/{permission_set_id} -> String
+   * DELETE /permission_sets/{permission_set_id} -> ByteArray
    */
   fun delete_permission_set(
     /**
      * @param {Long} permission_set_id Id of permission set
      */
     permission_set_id: Long) : SDKResponse {
-    return this.delete<String>("/permission_sets/${permission_set_id}", mapOf())
+    return this.delete<ByteArray>("/permission_sets/${permission_set_id}", mapOf())
   }
 
   /**
@@ -2586,7 +2585,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * `root_project_id` is required.
    * `credential_id` is required.
    * 
-   * DELETE /projects/{root_project_id}/credential/{credential_id} -> String
+   * DELETE /projects/{root_project_id}/credential/{credential_id} -> ByteArray
    */
   fun delete_repository_credential(
     /**
@@ -2597,33 +2596,33 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} credential_id Credential Id
      */
     credential_id: String) : SDKResponse {
-    return this.delete<String>("/projects/${root_project_id}/credential/${credential_id}", mapOf())
+    return this.delete<ByteArray>("/projects/${root_project_id}/credential/${credential_id}", mapOf())
   }
 
   /**
    * ### Delete the role with a specific id.
    * 
-   * DELETE /roles/{role_id} -> String
+   * DELETE /roles/{role_id} -> ByteArray
    */
   fun delete_role(
     /**
      * @param {Long} role_id id of role
      */
     role_id: Long) : SDKResponse {
-    return this.delete<String>("/roles/${role_id}", mapOf())
+    return this.delete<ByteArray>("/roles/${role_id}", mapOf())
   }
 
   /**
    * ### Delete a SAML test configuration.
    * 
-   * DELETE /saml_test_configs/{test_slug} -> String
+   * DELETE /saml_test_configs/{test_slug} -> ByteArray
    */
   fun delete_saml_test_config(
     /**
      * @param {String} test_slug Slug of test config
      */
     test_slug: String) : SDKResponse {
-    return this.delete<String>("/saml_test_configs/${test_slug}", mapOf())
+    return this.delete<ByteArray>("/saml_test_configs/${test_slug}", mapOf())
   }
 
   /**
@@ -2633,28 +2632,28 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * Admins can delete other users' scheduled plans.
    * This delete cannot be undone.
    * 
-   * DELETE /scheduled_plans/{scheduled_plan_id} -> String
+   * DELETE /scheduled_plans/{scheduled_plan_id} -> ByteArray
    */
   fun delete_scheduled_plan(
     /**
      * @param {Long} scheduled_plan_id Scheduled Plan Id
      */
     scheduled_plan_id: Long) : SDKResponse {
-    return this.delete<String>("/scheduled_plans/${scheduled_plan_id}", mapOf())
+    return this.delete<ByteArray>("/scheduled_plans/${scheduled_plan_id}", mapOf())
   }
 
   /**
    * ### Delete the space with a specific id including any children spaces.
    * **DANGER** this will delete all looks and dashboards in the space.
    * 
-   * DELETE /spaces/{space_id} -> String
+   * DELETE /spaces/{space_id} -> ByteArray
    */
   fun delete_space(
     /**
      * @param {String} space_id Id of space
      */
     space_id: String) : SDKResponse {
-    return this.delete<String>("/spaces/${space_id}", mapOf())
+    return this.delete<ByteArray>("/spaces/${space_id}", mapOf())
   }
 
   /**
@@ -2668,14 +2667,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
    * 
-   * DELETE /themes/{theme_id} -> String
+   * DELETE /themes/{theme_id} -> ByteArray
    */
   fun delete_theme(
     /**
      * @param {String} theme_id Id of theme
      */
     theme_id: String) : SDKResponse {
-    return this.delete<String>("/themes/${theme_id}", mapOf())
+    return this.delete<ByteArray>("/themes/${theme_id}", mapOf())
   }
 
   /**
@@ -2683,33 +2682,33 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **DANGER** this will delete the user and all looks and other information owned by the user.
    * 
-   * DELETE /users/{user_id} -> String
+   * DELETE /users/{user_id} -> ByteArray
    */
   fun delete_user(
     /**
      * @param {Long} user_id Id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}", mapOf())
+    return this.delete<ByteArray>("/users/${user_id}", mapOf())
   }
 
   /**
    * ### Delete a user attribute (admin only).
    * 
-   * DELETE /user_attributes/{user_attribute_id} -> String
+   * DELETE /user_attributes/{user_attribute_id} -> ByteArray
    */
   fun delete_user_attribute(
     /**
      * @param {Long} user_attribute_id Id of user_attribute
      */
     user_attribute_id: Long) : SDKResponse {
-    return this.delete<String>("/user_attributes/${user_attribute_id}", mapOf())
+    return this.delete<ByteArray>("/user_attributes/${user_attribute_id}", mapOf())
   }
 
   /**
    * ### Remove a user attribute value from a group.
    * 
-   * DELETE /groups/{group_id}/attribute_values/{user_attribute_id} -> Void
+   * DELETE /groups/{group_id}/attribute_values/{user_attribute_id} -> ByteArray
    */
   fun delete_user_attribute_group_value(
     /**
@@ -2720,7 +2719,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_attribute_id Id of user attribute
      */
     user_attribute_id: Long) : SDKResponse {
-    return this.delete<Void>("/groups/${group_id}/attribute_values/${user_attribute_id}", mapOf())
+    return this.delete<ByteArray>("/groups/${group_id}/attribute_values/${user_attribute_id}", mapOf())
   }
 
   /**
@@ -2731,7 +2730,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * value of the user attribute. See [Get User Attribute Values](#!/User/user_attribute_user_values) for more
    * information about how user attribute values are resolved.
    * 
-   * DELETE /users/{user_id}/attribute_values/{user_attribute_id} -> Void
+   * DELETE /users/{user_id}/attribute_values/{user_attribute_id} -> ByteArray
    */
   fun delete_user_attribute_user_value(
     /**
@@ -2742,13 +2741,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_attribute_id Id of user attribute
      */
     user_attribute_id: Long) : SDKResponse {
-    return this.delete<Void>("/users/${user_id}/attribute_values/${user_attribute_id}", mapOf())
+    return this.delete<ByteArray>("/users/${user_id}/attribute_values/${user_attribute_id}", mapOf())
   }
 
   /**
    * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
    * 
-   * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> String
+   * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> ByteArray
    */
   fun delete_user_credentials_api3(
     /**
@@ -2759,26 +2758,26 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} credentials_api3_id id of API 3 Credential
      */
     credentials_api3_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_api3/${credentials_api3_id}", mapOf())
+    return this.delete<ByteArray>("/users/${user_id}/credentials_api3/${credentials_api3_id}", mapOf())
   }
 
   /**
    * ### Email/password login information for the specified user.
    * 
-   * DELETE /users/{user_id}/credentials_email -> String
+   * DELETE /users/{user_id}/credentials_email -> ByteArray
    */
   fun delete_user_credentials_email(
     /**
      * @param {Long} user_id id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_email", mapOf())
+    return this.delete<ByteArray>("/users/${user_id}/credentials_email", mapOf())
   }
 
   /**
    * ### Embed login information for the specified user.
    * 
-   * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> String
+   * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> ByteArray
    */
   fun delete_user_credentials_embed(
     /**
@@ -2789,104 +2788,104 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} credentials_embed_id id of Embedding Credential
      */
     credentials_embed_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_embed/${credentials_embed_id}", mapOf())
+    return this.delete<ByteArray>("/users/${user_id}/credentials_embed/${credentials_embed_id}", mapOf())
   }
 
   /**
    * ### Google authentication login information for the specified user.
    * 
-   * DELETE /users/{user_id}/credentials_google -> String
+   * DELETE /users/{user_id}/credentials_google -> ByteArray
    */
   fun delete_user_credentials_google(
     /**
      * @param {Long} user_id id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_google", mapOf())
+    return this.delete<ByteArray>("/users/${user_id}/credentials_google", mapOf())
   }
 
   /**
    * ### LDAP login information for the specified user.
    * 
-   * DELETE /users/{user_id}/credentials_ldap -> String
+   * DELETE /users/{user_id}/credentials_ldap -> ByteArray
    */
   fun delete_user_credentials_ldap(
     /**
      * @param {Long} user_id id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_ldap", mapOf())
+    return this.delete<ByteArray>("/users/${user_id}/credentials_ldap", mapOf())
   }
 
   /**
    * ### Looker Openid login information for the specified user. Used by Looker Analysts.
    * 
-   * DELETE /users/{user_id}/credentials_looker_openid -> String
+   * DELETE /users/{user_id}/credentials_looker_openid -> ByteArray
    */
   fun delete_user_credentials_looker_openid(
     /**
      * @param {Long} user_id id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_looker_openid", mapOf())
+    return this.delete<ByteArray>("/users/${user_id}/credentials_looker_openid", mapOf())
   }
 
   /**
    * ### OpenID Connect (OIDC) authentication login information for the specified user.
    * 
-   * DELETE /users/{user_id}/credentials_oidc -> String
+   * DELETE /users/{user_id}/credentials_oidc -> ByteArray
    */
   fun delete_user_credentials_oidc(
     /**
      * @param {Long} user_id id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_oidc", mapOf())
+    return this.delete<ByteArray>("/users/${user_id}/credentials_oidc", mapOf())
   }
 
   /**
    * ### Saml authentication login information for the specified user.
    * 
-   * DELETE /users/{user_id}/credentials_saml -> String
+   * DELETE /users/{user_id}/credentials_saml -> ByteArray
    */
   fun delete_user_credentials_saml(
     /**
      * @param {Long} user_id id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_saml", mapOf())
+    return this.delete<ByteArray>("/users/${user_id}/credentials_saml", mapOf())
   }
 
   /**
    * ### Two-factor login information for the specified user.
    * 
-   * DELETE /users/{user_id}/credentials_totp -> String
+   * DELETE /users/{user_id}/credentials_totp -> ByteArray
    */
   fun delete_user_credentials_totp(
     /**
      * @param {Long} user_id id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_totp", mapOf())
+    return this.delete<ByteArray>("/users/${user_id}/credentials_totp", mapOf())
   }
 
   /**
    * ### Removes login lockout for the associated user.
    * 
-   * DELETE /user_login_lockout/{key} -> String
+   * DELETE /user_login_lockout/{key} -> ByteArray
    */
   fun delete_user_login_lockout(
     /**
      * @param {String} key The key associated with the locked user
      */
     key: String) : SDKResponse {
-    return this.delete<String>("/user_login_lockout/${key}", mapOf())
+    return this.delete<ByteArray>("/user_login_lockout/${key}", mapOf())
   }
 
   /**
    * ### Web login session for the specified user.
    * 
-   * DELETE /users/{user_id}/sessions/{session_id} -> String
+   * DELETE /users/{user_id}/sessions/{session_id} -> ByteArray
    */
   fun delete_user_session(
     /**
@@ -2897,7 +2896,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} session_id id of Web Login Session
      */
     session_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/sessions/${session_id}", mapOf())
+    return this.delete<ByteArray>("/users/${user_id}/sessions/${session_id}", mapOf())
   }
 
   /**
@@ -2913,14 +2912,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 2. If this is the first deploy of this project, create the production project with git repository.
    * 3. Pull the production branch into the production project.
    * 
-   * POST /projects/{project_id}/deploy_to_production -> String
+   * POST /projects/{project_id}/deploy_to_production -> ByteArray
    */
   fun deploy_to_production(
     /**
      * @param {String} project_id Id of project
      */
     project_id: String) : SDKResponse {
-    return this.post<String>("/projects/${project_id}/deploy_to_production", mapOf())
+    return this.post<ByteArray>("/projects/${project_id}/deploy_to_production", mapOf())
   }
 
   /**
@@ -2928,40 +2927,40 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * Note that this requires that the url be public or at least at a location where the Looker instance
    * can fetch it without requiring any special authentication.
    * 
-   * POST /fetch_and_parse_saml_idp_metadata -> SamlMetadataParseResult
+   * POST /fetch_and_parse_saml_idp_metadata -> ByteArray
    */
   fun fetch_and_parse_saml_idp_metadata(
     /**
      * @param {String} body
      */
     body: String) : SDKResponse {
-    return this.post<SamlMetadataParseResult>("/fetch_and_parse_saml_idp_metadata", mapOf(), body)
+    return this.post<ByteArray>("/fetch_and_parse_saml_idp_metadata", mapOf(), body)
   }
 
   /**
    * Returns the Integration form for presentation to the user.
    * 
-   * POST /integrations/{integration_id}/form -> DataActionForm
+   * POST /integrations/{integration_id}/form -> ByteArray
    */
   fun fetch_integration_form(
     /**
      * @param {String} integration_id Id of integration
      */
     integration_id: String) : SDKResponse {
-    return this.post<DataActionForm>("/integrations/${integration_id}/form", mapOf())
+    return this.post<ByteArray>("/integrations/${integration_id}/form", mapOf())
   }
 
   /**
    * For some data actions, the remote server may supply a form requesting further user input. This endpoint takes a data action, asks the remote server to generate a form for it, and returns that form to you for presentation to the user.
    * 
-   * POST /data_actions/form -> DataActionForm
+   * POST /data_actions/form -> ByteArray
    */
   fun fetch_remote_data_action_form(
     /**
      * @param {Map<String,Any>} body
      */
     body: Map<String,Any>) : SDKResponse {
-    return this.post<DataActionForm>("/data_actions/form", mapOf(), body)
+    return this.post<ByteArray>("/data_actions/form", mapOf(), body)
   }
 
   /**
@@ -2969,7 +2968,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns the git branch specified in branch_name path param if it exists in the given project repository
    * 
-   * GET /projects/{project_id}/git_branch/{branch_name} -> GitBranch
+   * GET /projects/{project_id}/git_branch/{branch_name} -> ByteArray
    */
   fun find_git_branch(
     /**
@@ -2980,13 +2979,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} branch_name Branch Name
      */
     branch_name: String) : SDKResponse {
-    return this.get<GitBranch>("/projects/${project_id}/git_branch/${branch_name}", mapOf())
+    return this.get<ByteArray>("/projects/${project_id}/git_branch/${branch_name}", mapOf())
   }
 
   /**
    * ### Get information about the folder with a specific id.
    * 
-   * GET /folders/{folder_id} -> Folder
+   * GET /folders/{folder_id} -> ByteArray
    */
   @JvmOverloads fun folder(
     /**
@@ -2997,14 +2996,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Folder>("/folders/${folder_id}", 
+    return this.get<ByteArray>("/folders/${folder_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get the ancestors of a folder
    * 
-   * GET /folders/{folder_id}/ancestors -> Array<Folder>
+   * GET /folders/{folder_id}/ancestors -> ByteArray
    */
   @JvmOverloads fun folder_ancestors(
     /**
@@ -3015,14 +3014,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Folder>>("/folders/${folder_id}/ancestors", 
+    return this.get<ByteArray>("/folders/${folder_id}/ancestors", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get the children of a folder.
    * 
-   * GET /folders/{folder_id}/children -> Array<Folder>
+   * GET /folders/{folder_id}/children -> ByteArray
    */
   @JvmOverloads fun folder_children(
     /**
@@ -3045,14 +3044,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} sorts Fields to sort by.
      */
     sorts: String? = null) : SDKResponse {
-    return this.get<Array<Folder>>("/folders/${folder_id}/children", 
+    return this.get<ByteArray>("/folders/${folder_id}/children", 
       mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts))
   }
 
   /**
    * ### Search the children of a folder
    * 
-   * GET /folders/{folder_id}/children/search -> Array<Folder>
+   * GET /folders/{folder_id}/children/search -> ByteArray
    */
   @JvmOverloads fun folder_children_search(
     /**
@@ -3071,14 +3070,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} name Match folder name.
      */
     name: String? = null) : SDKResponse {
-    return this.get<Array<Folder>>("/folders/${folder_id}/children/search", 
+    return this.get<ByteArray>("/folders/${folder_id}/children/search", 
       mapOf("fields" to fields, "sorts" to sorts, "name" to name))
   }
 
   /**
    * ### Get the dashboards in a folder
    * 
-   * GET /folders/{folder_id}/dashboards -> Array<Dashboard>
+   * GET /folders/{folder_id}/dashboards -> ByteArray
    */
   @JvmOverloads fun folder_dashboards(
     /**
@@ -3089,14 +3088,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Dashboard>>("/folders/${folder_id}/dashboards", 
+    return this.get<ByteArray>("/folders/${folder_id}/dashboards", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get the looks in a folder
    * 
-   * GET /folders/{folder_id}/looks -> Array<LookWithQuery>
+   * GET /folders/{folder_id}/looks -> ByteArray
    */
   @JvmOverloads fun folder_looks(
     /**
@@ -3107,14 +3106,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<LookWithQuery>>("/folders/${folder_id}/looks", 
+    return this.get<ByteArray>("/folders/${folder_id}/looks", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get the parent of a folder
    * 
-   * GET /folders/{folder_id}/parent -> Folder
+   * GET /folders/{folder_id}/parent -> ByteArray
    */
   @JvmOverloads fun folder_parent(
     /**
@@ -3125,17 +3124,17 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Folder>("/folders/${folder_id}/parent", 
+    return this.get<ByteArray>("/folders/${folder_id}/parent", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Force all credentials_email users to reset their login passwords upon their next login.
    * 
-   * PUT /password_config/force_password_reset_at_next_login_for_all_users -> String
+   * PUT /password_config/force_password_reset_at_next_login_for_all_users -> ByteArray
    */
   fun force_password_reset_at_next_login_for_all_users() : SDKResponse {
-    return this.put<String>("/password_config/force_password_reset_at_next_login_for_all_users", mapOf())
+    return this.put<ByteArray>("/password_config/force_password_reset_at_next_login_for_all_users", mapOf())
   }
 
   /**
@@ -3143,14 +3142,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * `root_project_id` is required.
    * 
-   * GET /projects/{root_project_id}/credentials -> Array<RepositoryCredential>
+   * GET /projects/{root_project_id}/credentials -> ByteArray
    */
   fun get_all_repository_credentials(
     /**
      * @param {String} root_project_id Root Project Id
      */
     root_project_id: String) : SDKResponse {
-    return this.get<Array<RepositoryCredential>>("/projects/${root_project_id}/credentials", mapOf())
+    return this.get<ByteArray>("/projects/${root_project_id}/credentials", mapOf())
   }
 
   /**
@@ -3158,14 +3157,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns the git branch currently checked out in the given project repository
    * 
-   * GET /projects/{project_id}/git_branch -> GitBranch
+   * GET /projects/{project_id}/git_branch -> ByteArray
    */
   fun git_branch(
     /**
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
-    return this.get<GitBranch>("/projects/${project_id}/git_branch", mapOf())
+    return this.get<ByteArray>("/projects/${project_id}/git_branch", mapOf())
   }
 
   /**
@@ -3173,20 +3172,20 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns the ssh public key previously created for a project's git repository.
    * 
-   * GET /projects/{project_id}/git/deploy_key -> String
+   * GET /projects/{project_id}/git/deploy_key -> ByteArray
    */
   fun git_deploy_key(
     /**
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
-    return this.get<String>("/projects/${project_id}/git/deploy_key", mapOf())
+    return this.get<ByteArray>("/projects/${project_id}/git/deploy_key", mapOf())
   }
 
   /**
    * ### Get information about a group.
    * 
-   * GET /groups/{group_id} -> Group
+   * GET /groups/{group_id} -> ByteArray
    */
   @JvmOverloads fun group(
     /**
@@ -3197,14 +3196,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Group>("/groups/${group_id}", 
+    return this.get<ByteArray>("/groups/${group_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about a homepage.
    * 
-   * GET /homepages/{homepage_id} -> Homepage
+   * GET /homepages/{homepage_id} -> ByteArray
    */
   @JvmOverloads fun homepage(
     /**
@@ -3215,14 +3214,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Homepage>("/homepages/${homepage_id}", 
+    return this.get<ByteArray>("/homepages/${homepage_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about a homepage item.
    * 
-   * GET /homepage_items/{homepage_item_id} -> HomepageItem
+   * GET /homepage_items/{homepage_item_id} -> ByteArray
    */
   @JvmOverloads fun homepage_item(
     /**
@@ -3233,14 +3232,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<HomepageItem>("/homepage_items/${homepage_item_id}", 
+    return this.get<ByteArray>("/homepage_items/${homepage_item_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about a homepage section.
    * 
-   * GET /homepage_sections/{homepage_section_id} -> HomepageSection
+   * GET /homepage_sections/{homepage_section_id} -> ByteArray
    */
   @JvmOverloads fun homepage_section(
     /**
@@ -3251,7 +3250,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<HomepageSection>("/homepage_sections/${homepage_section_id}", 
+    return this.get<ByteArray>("/homepage_sections/${homepage_section_id}", 
       mapOf("fields" to fields))
   }
 
@@ -3269,7 +3268,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * **Sync** a linked UDD with [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard)
    * **Unlink** a linked UDD by setting lookml_link_id to null with [update_dashboard()](#!/Dashboard/update_dashboard)
    * 
-   * POST /dashboards/{lookml_dashboard_id}/import/{space_id} -> Dashboard
+   * POST /dashboards/{lookml_dashboard_id}/import/{space_id} -> ByteArray
    */
   @JvmOverloads fun import_lookml_dashboard(
     /**
@@ -3288,14 +3287,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
      */
     raw_locale: Boolean? = null) : SDKResponse {
-    return this.post<Dashboard>("/dashboards/${lookml_dashboard_id}/import/${space_id}", 
+    return this.post<ByteArray>("/dashboards/${lookml_dashboard_id}/import/${space_id}", 
       mapOf("raw_locale" to raw_locale), body)
   }
 
   /**
    * ### Get information about a Integration.
    * 
-   * GET /integrations/{integration_id} -> Integration
+   * GET /integrations/{integration_id} -> ByteArray
    */
   @JvmOverloads fun integration(
     /**
@@ -3306,14 +3305,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Integration>("/integrations/${integration_id}", 
+    return this.get<ByteArray>("/integrations/${integration_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about a Integration Hub.
    * 
-   * GET /integration_hubs/{integration_hub_id} -> IntegrationHub
+   * GET /integration_hubs/{integration_hub_id} -> ByteArray
    */
   @JvmOverloads fun integration_hub(
     /**
@@ -3324,39 +3323,39 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<IntegrationHub>("/integration_hubs/${integration_hub_id}", 
+    return this.get<ByteArray>("/integration_hubs/${integration_hub_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get and set the options for internal help resources
    * 
-   * GET /internal_help_resources_enabled -> InternalHelpResources
+   * GET /internal_help_resources_enabled -> ByteArray
    */
   fun internal_help_resources() : SDKResponse {
-    return this.get<InternalHelpResources>("/internal_help_resources_enabled", mapOf())
+    return this.get<ByteArray>("/internal_help_resources_enabled", mapOf())
   }
 
   /**
    * ### Set the menu item name and content for internal help resources
    * 
-   * GET /internal_help_resources_content -> InternalHelpResourcesContent
+   * GET /internal_help_resources_content -> ByteArray
    */
   fun internal_help_resources_content() : SDKResponse {
-    return this.get<InternalHelpResourcesContent>("/internal_help_resources_content", mapOf())
+    return this.get<ByteArray>("/internal_help_resources_content", mapOf())
   }
 
   /**
    * Kill a query with a specific query_task_id.
    * 
-   * DELETE /running_queries/{query_task_id} -> String
+   * DELETE /running_queries/{query_task_id} -> ByteArray
    */
   fun kill_query(
     /**
      * @param {String} query_task_id Query task id.
      */
     query_task_id: String) : SDKResponse {
-    return this.delete<String>("/running_queries/${query_task_id}", mapOf())
+    return this.delete<ByteArray>("/running_queries/${query_task_id}", mapOf())
   }
 
   /**
@@ -3377,23 +3376,23 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
    * 
-   * GET /ldap_config -> LDAPConfig
+   * GET /ldap_config -> ByteArray
    */
   fun ldap_config() : SDKResponse {
-    return this.get<LDAPConfig>("/ldap_config", mapOf())
+    return this.get<ByteArray>("/ldap_config", mapOf())
   }
 
   /**
    * ### Get information about the legacy feature with a specific id.
    * 
-   * GET /legacy_features/{legacy_feature_id} -> LegacyFeature
+   * GET /legacy_features/{legacy_feature_id} -> ByteArray
    */
   fun legacy_feature(
     /**
      * @param {String} legacy_feature_id id of legacy feature
      */
     legacy_feature_id: String) : SDKResponse {
-    return this.get<LegacyFeature>("/legacy_features/${legacy_feature_id}", mapOf())
+    return this.get<ByteArray>("/legacy_features/${legacy_feature_id}", mapOf())
   }
 
   /**
@@ -3426,7 +3425,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API3](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
    * 
-   * POST /login -> AccessToken
+   * POST /login -> ByteArray
    */
   @JvmOverloads fun login(
     /**
@@ -3437,7 +3436,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} client_secret client_secret part of API3 Key.
      */
     client_secret: String? = null) : SDKResponse {
-    return this.post<AccessToken>("/login", 
+    return this.post<ByteArray>("/login", 
       mapOf("client_id" to client_id, "client_secret" to client_secret))
   }
 
@@ -3459,7 +3458,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * See 'login' for more detail on the access token and how to use it.
    * 
-   * POST /login/{user_id} -> AccessToken
+   * POST /login/{user_id} -> ByteArray
    */
   @JvmOverloads fun login_user(
     /**
@@ -3470,17 +3469,17 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
      */
     associative: Boolean? = null) : SDKResponse {
-    return this.post<AccessToken>("/login/${user_id}", 
+    return this.post<ByteArray>("/login/${user_id}", 
       mapOf("associative" to associative))
   }
 
   /**
    * ### Logout of the API and invalidate the current access token.
    * 
-   * DELETE /logout -> String
+   * DELETE /logout -> ByteArray
    */
   fun logout() : SDKResponse {
-    return this.delete<String>("/logout", mapOf())
+    return this.delete<ByteArray>("/logout", mapOf())
   }
 
   /**
@@ -3488,7 +3487,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns detailed information about a Look and its associated Query.
    * 
-   * GET /looks/{look_id} -> LookWithQuery
+   * GET /looks/{look_id} -> ByteArray
    */
   @JvmOverloads fun look(
     /**
@@ -3499,14 +3498,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<LookWithQuery>("/looks/${look_id}", 
+    return this.get<ByteArray>("/looks/${look_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about a lookml model.
    * 
-   * GET /lookml_models/{lookml_model_name} -> LookmlModel
+   * GET /lookml_models/{lookml_model_name} -> ByteArray
    */
   @JvmOverloads fun lookml_model(
     /**
@@ -3517,14 +3516,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<LookmlModel>("/lookml_models/${lookml_model_name}", 
+    return this.get<ByteArray>("/lookml_models/${lookml_model_name}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about a lookml model explore.
    * 
-   * GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> LookmlModelExplore
+   * GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> ByteArray
    */
   @JvmOverloads fun lookml_model_explore(
     /**
@@ -3539,7 +3538,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<LookmlModelExplore>("/lookml_models/${lookml_model_name}/explores/${explore_name}", 
+    return this.get<ByteArray>("/lookml_models/${lookml_model_name}/explores/${explore_name}", 
       mapOf("fields" to fields))
   }
 
@@ -3548,27 +3547,27 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns the project with the given project id
    * 
-   * GET /projects/{project_id}/manifest -> Manifest
+   * GET /projects/{project_id}/manifest -> ByteArray
    */
   fun manifest(
     /**
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
-    return this.get<Manifest>("/projects/${project_id}/manifest", mapOf())
+    return this.get<ByteArray>("/projects/${project_id}/manifest", mapOf())
   }
 
   /**
    * ### Get information about the current user; i.e. the user account currently calling the API.
    * 
-   * GET /user -> User
+   * GET /user -> ByteArray
    */
   @JvmOverloads fun me(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<User>("/user", 
+    return this.get<ByteArray>("/user", 
       mapOf("fields" to fields))
   }
 
@@ -3577,7 +3576,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns a merge query object given its id.
    * 
-   * GET /merge_queries/{merge_query_id} -> MergeQuery
+   * GET /merge_queries/{merge_query_id} -> ByteArray
    */
   @JvmOverloads fun merge_query(
     /**
@@ -3588,14 +3587,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.get<MergeQuery>("/merge_queries/${merge_query_id}", 
+    return this.get<ByteArray>("/merge_queries/${merge_query_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about the model set with a specific id.
    * 
-   * GET /model_sets/{model_set_id} -> ModelSet
+   * GET /model_sets/{model_set_id} -> ByteArray
    */
   @JvmOverloads fun model_set(
     /**
@@ -3606,7 +3605,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ModelSet>("/model_sets/${model_set_id}", 
+    return this.get<ByteArray>("/model_sets/${model_set_id}", 
       mapOf("fields" to fields))
   }
 
@@ -3624,64 +3623,64 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * OIDC is enabled or disabled for Looker using the **enabled** field.
    * 
-   * GET /oidc_config -> OIDCConfig
+   * GET /oidc_config -> ByteArray
    */
   fun oidc_config() : SDKResponse {
-    return this.get<OIDCConfig>("/oidc_config", mapOf())
+    return this.get<ByteArray>("/oidc_config", mapOf())
   }
 
   /**
    * ### Get a OIDC test configuration by test_slug.
    * 
-   * GET /oidc_test_configs/{test_slug} -> OIDCConfig
+   * GET /oidc_test_configs/{test_slug} -> ByteArray
    */
   fun oidc_test_config(
     /**
      * @param {String} test_slug Slug of test config
      */
     test_slug: String) : SDKResponse {
-    return this.get<OIDCConfig>("/oidc_test_configs/${test_slug}", mapOf())
+    return this.get<ByteArray>("/oidc_test_configs/${test_slug}", mapOf())
   }
 
   /**
    * ### Parse the given xml as a SAML IdP metadata document and return the result.
    * 
-   * POST /parse_saml_idp_metadata -> SamlMetadataParseResult
+   * POST /parse_saml_idp_metadata -> ByteArray
    */
   fun parse_saml_idp_metadata(
     /**
      * @param {String} body
      */
     body: String) : SDKResponse {
-    return this.post<SamlMetadataParseResult>("/parse_saml_idp_metadata", mapOf(), body)
+    return this.post<ByteArray>("/parse_saml_idp_metadata", mapOf(), body)
   }
 
   /**
    * ### Get password config.
    * 
-   * GET /password_config -> PasswordConfig
+   * GET /password_config -> ByteArray
    */
   fun password_config() : SDKResponse {
-    return this.get<PasswordConfig>("/password_config", mapOf())
+    return this.get<ByteArray>("/password_config", mapOf())
   }
 
   /**
    * Perform a data action. The data action object can be obtained from query results, and used to perform an arbitrary action.
    * 
-   * POST /data_actions -> DataActionResponse
+   * POST /data_actions -> ByteArray
    */
   fun perform_data_action(
     /**
      * @param {DataActionRequest} body
      */
     body: DataActionRequest) : SDKResponse {
-    return this.post<DataActionResponse>("/data_actions", mapOf(), body)
+    return this.post<ByteArray>("/data_actions", mapOf(), body)
   }
 
   /**
    * ### Get information about the permission set with a specific id.
    * 
-   * GET /permission_sets/{permission_set_id} -> PermissionSet
+   * GET /permission_sets/{permission_set_id} -> ByteArray
    */
   @JvmOverloads fun permission_set(
     /**
@@ -3692,7 +3691,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<PermissionSet>("/permission_sets/${permission_set_id}", 
+    return this.get<ByteArray>("/permission_sets/${permission_set_id}", 
       mapOf("fields" to fields))
   }
 
@@ -3701,7 +3700,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns the project with the given project id
    * 
-   * GET /projects/{project_id} -> Project
+   * GET /projects/{project_id} -> ByteArray
    */
   @JvmOverloads fun project(
     /**
@@ -3712,7 +3711,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Project>("/projects/${project_id}", 
+    return this.get<ByteArray>("/projects/${project_id}", 
       mapOf("fields" to fields))
   }
 
@@ -3721,7 +3720,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns information about a file in the project
    * 
-   * GET /projects/{project_id}/files/file -> ProjectFile
+   * GET /projects/{project_id}/files/file -> ByteArray
    */
   @JvmOverloads fun project_file(
     /**
@@ -3736,7 +3735,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ProjectFile>("/projects/${project_id}/files/file", 
+    return this.get<ByteArray>("/projects/${project_id}/files/file", 
       mapOf("file_id" to file_id, "fields" to fields))
   }
 
@@ -3754,7 +3753,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * the cached validation results were computed. The cached validation results may no longer
    * reflect the current state of the project.
    * 
-   * GET /projects/{project_id}/validate -> ProjectValidationCache
+   * GET /projects/{project_id}/validate -> ByteArray
    */
   @JvmOverloads fun project_validation_results(
     /**
@@ -3765,7 +3764,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ProjectValidationCache>("/projects/${project_id}/validate", 
+    return this.get<ByteArray>("/projects/${project_id}/validate", 
       mapOf("fields" to fields))
   }
 
@@ -3774,7 +3773,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns information about the state of the project files in the currently selected workspace
    * 
-   * GET /projects/{project_id}/current_workspace -> ProjectWorkspace
+   * GET /projects/{project_id}/current_workspace -> ByteArray
    */
   @JvmOverloads fun project_workspace(
     /**
@@ -3785,7 +3784,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ProjectWorkspace>("/projects/${project_id}/current_workspace", 
+    return this.get<ByteArray>("/projects/${project_id}/current_workspace", 
       mapOf("fields" to fields))
   }
 
@@ -3808,7 +3807,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * builds queries and visualizations and are not generally useful for API use. They are not required when
    * creating new queries and can usually just be ignored.
    * 
-   * GET /queries/{query_id} -> Query
+   * GET /queries/{query_id} -> ByteArray
    */
   @JvmOverloads fun query(
     /**
@@ -3819,7 +3818,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Query>("/queries/${query_id}", 
+    return this.get<ByteArray>("/queries/${query_id}", 
       mapOf("fields" to fields))
   }
 
@@ -3842,7 +3841,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 'https://looker.yourcompany/explore/ecommerce/orders?qid=aogBgL6o3cKK1jN3RoZl5s'. In this case
    * 'aogBgL6o3cKK1jN3RoZl5s' is the slug.
    * 
-   * GET /queries/slug/{slug} -> Query
+   * GET /queries/slug/{slug} -> ByteArray
    */
   @JvmOverloads fun query_for_slug(
     /**
@@ -3853,7 +3852,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Query>("/queries/slug/${slug}", 
+    return this.get<ByteArray>("/queries/slug/${slug}", 
       mapOf("fields" to fields))
   }
 
@@ -3866,7 +3865,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Use [create_query_task()](#!/Query/create_query_task) to create an async query task.
    * 
-   * GET /query_tasks/{query_task_id} -> QueryTask
+   * GET /query_tasks/{query_task_id} -> ByteArray
    */
   @JvmOverloads fun query_task(
     /**
@@ -3877,7 +3876,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<QueryTask>("/query_tasks/${query_task_id}", 
+    return this.get<ByteArray>("/query_tasks/${query_task_id}", 
       mapOf("fields" to fields))
   }
 
@@ -3890,14 +3889,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * Query Tasks whose results have expired will have a status of 'expired'.
    * If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
    * 
-   * GET /query_tasks/multi_results -> Map<String,Any>
+   * GET /query_tasks/multi_results -> ByteArray
    */
   fun query_task_multi_results(
     /**
      * @param {DelimArray<String>} query_task_ids List of Query Task IDs
      */
     query_task_ids: DelimArray<String>) : SDKResponse {
-    return this.get<Map<String,Any>>("/query_tasks/multi_results", 
+    return this.get<ByteArray>("/query_tasks/multi_results", 
       mapOf("query_task_ids" to query_task_ids))
   }
 
@@ -3926,14 +3925,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
    * These data formats can only carry row data, and error info is not row data.
    * 
-   * GET /query_tasks/{query_task_id}/results -> String
+   * GET /query_tasks/{query_task_id}/results -> ByteArray
    */
   fun query_task_results(
     /**
      * @param {String} query_task_id ID of the Query Task
      */
     query_task_id: String) : SDKResponse {
-    return this.get<String>("/query_tasks/${query_task_id}/results", mapOf())
+    return this.get<ByteArray>("/query_tasks/${query_task_id}/results", mapOf())
   }
 
   /**
@@ -3943,7 +3942,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
    * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
    * 
-   * GET /render_tasks/{render_task_id} -> RenderTask
+   * GET /render_tasks/{render_task_id} -> ByteArray
    */
   @JvmOverloads fun render_task(
     /**
@@ -3954,7 +3953,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<RenderTask>("/render_tasks/${render_task_id}", 
+    return this.get<ByteArray>("/render_tasks/${render_task_id}", 
       mapOf("fields" to fields))
   }
 
@@ -3977,7 +3976,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * Polling loops waiting for completion of a render task would be better served by polling **render_task(id)** until
    * the task status reaches completion (or error) instead of polling **render_task_results(id)** alone.
    * 
-   * GET /render_tasks/{render_task_id}/results -> String
+   * GET /render_tasks/{render_task_id}/results -> ByteArray
    * 
    * **Note**: Binary content is returned by this method.
    */
@@ -3986,7 +3985,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} render_task_id Id of render task
      */
     render_task_id: String) : SDKResponse {
-    return this.get<String>("/render_tasks/${render_task_id}/results", mapOf())
+    return this.get<ByteArray>("/render_tasks/${render_task_id}/results", mapOf())
   }
 
   /**
@@ -3994,14 +3993,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **DANGER** this will delete any changes that have not been pushed to a remote repository.
    * 
-   * POST /projects/{project_id}/reset_to_production -> String
+   * POST /projects/{project_id}/reset_to_production -> ByteArray
    */
   fun reset_project_to_production(
     /**
      * @param {String} project_id Id of project
      */
     project_id: String) : SDKResponse {
-    return this.post<String>("/projects/${project_id}/reset_to_production", mapOf())
+    return this.post<ByteArray>("/projects/${project_id}/reset_to_production", mapOf())
   }
 
   /**
@@ -4009,33 +4008,33 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **DANGER** this will delete any changes that have not been pushed to a remote repository.
    * 
-   * POST /projects/{project_id}/reset_to_remote -> String
+   * POST /projects/{project_id}/reset_to_remote -> ByteArray
    */
   fun reset_project_to_remote(
     /**
      * @param {String} project_id Id of project
      */
     project_id: String) : SDKResponse {
-    return this.post<String>("/projects/${project_id}/reset_to_remote", mapOf())
+    return this.post<ByteArray>("/projects/${project_id}/reset_to_remote", mapOf())
   }
 
   /**
    * ### Get information about the role with a specific id.
    * 
-   * GET /roles/{role_id} -> Role
+   * GET /roles/{role_id} -> ByteArray
    */
   fun role(
     /**
      * @param {Long} role_id id of role
      */
     role_id: Long) : SDKResponse {
-    return this.get<Role>("/roles/${role_id}", mapOf())
+    return this.get<ByteArray>("/roles/${role_id}", mapOf())
   }
 
   /**
    * ### Get information about all the groups with the role that has a specific id.
    * 
-   * GET /roles/{role_id}/groups -> Array<Group>
+   * GET /roles/{role_id}/groups -> ByteArray
    */
   @JvmOverloads fun role_groups(
     /**
@@ -4046,14 +4045,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Group>>("/roles/${role_id}/groups", 
+    return this.get<ByteArray>("/roles/${role_id}/groups", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about all the users with the role that has a specific id.
    * 
-   * GET /roles/{role_id}/users -> Array<User>
+   * GET /roles/{role_id}/users -> ByteArray
    */
   @JvmOverloads fun role_users(
     /**
@@ -4068,7 +4067,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} direct_association_only Get only users associated directly with the role: exclude those only associated through groups.
      */
     direct_association_only: Boolean? = null) : SDKResponse {
-    return this.get<Array<User>>("/roles/${role_id}/users", 
+    return this.get<ByteArray>("/roles/${role_id}/users", 
       mapOf("fields" to fields, "direct_association_only" to direct_association_only))
   }
 
@@ -4081,7 +4080,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Tests should be run in the order they are returned by [Get All Git Connection Tests](#!/Project/all_git_connection_tests).
    * 
-   * GET /projects/{project_id}/git_connection_tests/{test_id} -> GitConnectionTestResult
+   * GET /projects/{project_id}/git_connection_tests/{test_id} -> ByteArray
    */
   @JvmOverloads fun run_git_connection_test(
     /**
@@ -4096,7 +4095,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
      */
     remote_url: String? = null) : SDKResponse {
-    return this.get<GitConnectionTestResult>("/projects/${project_id}/git_connection_tests/${test_id}", 
+    return this.get<ByteArray>("/projects/${project_id}/git_connection_tests/${test_id}", 
       mapOf("remote_url" to remote_url))
   }
 
@@ -4152,7 +4151,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * | png | A PNG image of the visualization of the query
    * | jpg | A JPG image of the visualization of the query
    * 
-   * POST /queries/run/{result_format} -> String
+   * POST /queries/run/{result_format} -> ByteArray
    * 
    * **Note**: Binary content may be returned by this method.
    */
@@ -4213,7 +4212,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} server_table_calcs Perform table calculations on query results
      */
     server_table_calcs: Boolean? = null) : SDKResponse {
-    return this.post<String>("/queries/run/${result_format}", 
+    return this.post<ByteArray>("/queries/run/${result_format}", 
       mapOf("limit" to limit, "apply_formatting" to apply_formatting, "apply_vis" to apply_vis, "cache" to cache, "image_width" to image_width, "image_height" to image_height, "generate_drill_links" to generate_drill_links, "force_production" to force_production, "cache_only" to cache_only, "path_prefix" to path_prefix, "rebuild_pdts" to rebuild_pdts, "server_table_calcs" to server_table_calcs), body)
   }
 
@@ -4237,7 +4236,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * | png | A PNG image of the visualization of the query
    * | jpg | A JPG image of the visualization of the query
    * 
-   * GET /looks/{look_id}/run/{result_format} -> String
+   * GET /looks/{look_id}/run/{result_format} -> ByteArray
    * 
    * **Note**: Binary content may be returned by this method.
    */
@@ -4298,7 +4297,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} server_table_calcs Perform table calculations on query results
      */
     server_table_calcs: Boolean? = null) : SDKResponse {
-    return this.get<String>("/looks/${look_id}/run/${result_format}", 
+    return this.get<ByteArray>("/looks/${look_id}/run/${result_format}", 
       mapOf("limit" to limit, "apply_formatting" to apply_formatting, "apply_vis" to apply_vis, "cache" to cache, "image_width" to image_width, "image_height" to image_height, "generate_drill_links" to generate_drill_links, "force_production" to force_production, "cache_only" to cache_only, "path_prefix" to path_prefix, "rebuild_pdts" to rebuild_pdts, "server_table_calcs" to server_table_calcs))
   }
 
@@ -4307,7 +4306,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Runs all tests in the project, optionally filtered by file, test, and/or model.
    * 
-   * GET /projects/{project_id}/lookml_tests/run -> Array<LookmlTestResult>
+   * GET /projects/{project_id}/lookml_tests/run -> ByteArray
    */
   @JvmOverloads fun run_lookml_test(
     /**
@@ -4326,7 +4325,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} model Model Name
      */
     model: String? = null) : SDKResponse {
-    return this.get<Array<LookmlTestResult>>("/projects/${project_id}/lookml_tests/run", 
+    return this.get<ByteArray>("/projects/${project_id}/lookml_tests/run", 
       mapOf("file_id" to file_id, "test" to test, "model" to model))
   }
 
@@ -4353,7 +4352,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * | png | A PNG image of the visualization of the query
    * | jpg | A JPG image of the visualization of the query
    * 
-   * GET /queries/{query_id}/run/{result_format} -> String
+   * GET /queries/{query_id}/run/{result_format} -> ByteArray
    * 
    * **Note**: Binary content may be returned by this method.
    */
@@ -4414,14 +4413,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} server_table_calcs Perform table calculations on query results
      */
     server_table_calcs: Boolean? = null) : SDKResponse {
-    return this.get<String>("/queries/${query_id}/run/${result_format}", 
+    return this.get<ByteArray>("/queries/${query_id}/run/${result_format}", 
       mapOf("limit" to limit, "apply_formatting" to apply_formatting, "apply_vis" to apply_vis, "cache" to cache, "image_width" to image_width, "image_height" to image_height, "generate_drill_links" to generate_drill_links, "force_production" to force_production, "cache_only" to cache_only, "path_prefix" to path_prefix, "rebuild_pdts" to rebuild_pdts, "server_table_calcs" to server_table_calcs))
   }
 
   /**
    * Execute a SQL Runner query in a given result_format.
    * 
-   * POST /sql_queries/{slug}/run/{result_format} -> String
+   * POST /sql_queries/{slug}/run/{result_format} -> ByteArray
    * 
    * **Note**: Binary content may be returned by this method.
    */
@@ -4438,7 +4437,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
      */
     download: String? = null) : SDKResponse {
-    return this.post<String>("/sql_queries/${slug}/run/${result_format}", 
+    return this.post<ByteArray>("/sql_queries/${slug}/run/${result_format}", 
       mapOf("download" to download))
   }
 
@@ -4496,7 +4495,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * | png | A PNG image of the visualization of the query
    * | jpg | A JPG image of the visualization of the query
    * 
-   * GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> String
+   * GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> ByteArray
    * 
    * **Note**: Binary content may be returned by this method.
    */
@@ -4513,7 +4512,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} result_format Format of result
      */
     result_format: String) : SDKResponse {
-    return this.get<String>("/queries/models/${model_name}/views/${view_name}/run/${result_format}", mapOf())
+    return this.get<ByteArray>("/queries/models/${model_name}/views/${view_name}/run/${result_format}", mapOf())
   }
 
   /**
@@ -4530,23 +4529,23 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * SAML is enabled or disabled for Looker using the **enabled** field.
    * 
-   * GET /saml_config -> SamlConfig
+   * GET /saml_config -> ByteArray
    */
   fun saml_config() : SDKResponse {
-    return this.get<SamlConfig>("/saml_config", mapOf())
+    return this.get<ByteArray>("/saml_config", mapOf())
   }
 
   /**
    * ### Get a SAML test configuration by test_slug.
    * 
-   * GET /saml_test_configs/{test_slug} -> SamlConfig
+   * GET /saml_test_configs/{test_slug} -> ByteArray
    */
   fun saml_test_config(
     /**
      * @param {String} test_slug Slug of test config
      */
     test_slug: String) : SDKResponse {
-    return this.get<SamlConfig>("/saml_test_configs/${test_slug}", mapOf())
+    return this.get<ByteArray>("/saml_test_configs/${test_slug}", mapOf())
   }
 
   /**
@@ -4554,7 +4553,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Admins can fetch information about other users' Scheduled Plans.
    * 
-   * GET /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
+   * GET /scheduled_plans/{scheduled_plan_id} -> ByteArray
    */
   @JvmOverloads fun scheduled_plan(
     /**
@@ -4565,7 +4564,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ScheduledPlan>("/scheduled_plans/${scheduled_plan_id}", 
+    return this.get<ByteArray>("/scheduled_plans/${scheduled_plan_id}", 
       mapOf("fields" to fields))
   }
 
@@ -4608,14 +4607,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
    * 
-   * POST /scheduled_plans/run_once -> ScheduledPlan
+   * POST /scheduled_plans/run_once -> ByteArray
    */
   fun scheduled_plan_run_once(
     /**
      * @param {WriteScheduledPlan} body
      */
     body: WriteScheduledPlan) : SDKResponse {
-    return this.post<ScheduledPlan>("/scheduled_plans/run_once", mapOf(), body)
+    return this.post<ByteArray>("/scheduled_plans/run_once", mapOf(), body)
   }
 
   /**
@@ -4666,7 +4665,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * This API is rate limited to prevent it from being used for relay spam or DoS attacks
    * 
-   * POST /scheduled_plans/{scheduled_plan_id}/run_once -> ScheduledPlan
+   * POST /scheduled_plans/{scheduled_plan_id}/run_once -> ByteArray
    */
   @JvmOverloads fun scheduled_plan_run_once_by_id(
     /**
@@ -4677,7 +4676,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteScheduledPlan} body
      */
     body: WriteScheduledPlan? = null) : SDKResponse {
-    return this.post<ScheduledPlan>("/scheduled_plans/${scheduled_plan_id}/run_once", mapOf(), body)
+    return this.post<ByteArray>("/scheduled_plans/${scheduled_plan_id}/run_once", mapOf(), body)
   }
 
   /**
@@ -4693,7 +4692,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * The caller must have `see_schedules` permission to see other users' scheduled plans.
    * 
-   * GET /scheduled_plans/dashboard/{dashboard_id} -> Array<ScheduledPlan>
+   * GET /scheduled_plans/dashboard/{dashboard_id} -> ByteArray
    */
   @JvmOverloads fun scheduled_plans_for_dashboard(
     /**
@@ -4712,7 +4711,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ScheduledPlan>>("/scheduled_plans/dashboard/${dashboard_id}", 
+    return this.get<ByteArray>("/scheduled_plans/dashboard/${dashboard_id}", 
       mapOf("user_id" to user_id, "all_users" to all_users, "fields" to fields))
   }
 
@@ -4729,7 +4728,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * The caller must have `see_schedules` permission to see other users' scheduled plans.
    * 
-   * GET /scheduled_plans/look/{look_id} -> Array<ScheduledPlan>
+   * GET /scheduled_plans/look/{look_id} -> ByteArray
    */
   @JvmOverloads fun scheduled_plans_for_look(
     /**
@@ -4748,7 +4747,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} all_users Return scheduled plans belonging to all users for the look
      */
     all_users: Boolean? = null) : SDKResponse {
-    return this.get<Array<ScheduledPlan>>("/scheduled_plans/look/${look_id}", 
+    return this.get<ByteArray>("/scheduled_plans/look/${look_id}", 
       mapOf("user_id" to user_id, "fields" to fields, "all_users" to all_users))
   }
 
@@ -4765,7 +4764,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * The caller must have `see_schedules` permission to see other users' scheduled plans.
    * 
-   * GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id} -> Array<ScheduledPlan>
+   * GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id} -> ByteArray
    */
   @JvmOverloads fun scheduled_plans_for_lookml_dashboard(
     /**
@@ -4784,7 +4783,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} all_users Return scheduled plans belonging to all users for the dashboard
      */
     all_users: Boolean? = null) : SDKResponse {
-    return this.get<Array<ScheduledPlan>>("/scheduled_plans/lookml_dashboard/${lookml_dashboard_id}", 
+    return this.get<ByteArray>("/scheduled_plans/lookml_dashboard/${lookml_dashboard_id}", 
       mapOf("user_id" to user_id, "fields" to fields, "all_users" to all_users))
   }
 
@@ -4793,7 +4792,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns scheduled plans owned by the caller for a given space id.
    * 
-   * GET /scheduled_plans/space/{space_id} -> Array<ScheduledPlan>
+   * GET /scheduled_plans/space/{space_id} -> ByteArray
    */
   @JvmOverloads fun scheduled_plans_for_space(
     /**
@@ -4804,7 +4803,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ScheduledPlan>>("/scheduled_plans/space/${space_id}", 
+    return this.get<ByteArray>("/scheduled_plans/space/${space_id}", 
       mapOf("fields" to fields))
   }
 
@@ -4832,7 +4831,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Boolean search params accept only "true" and "false" as values.
    * 
-   * GET /content_favorite/search -> Array<ContentFavorite>
+   * GET /content_favorite/search -> ByteArray
    */
   @JvmOverloads fun search_content_favorites(
     /**
@@ -4879,7 +4878,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<ContentFavorite>>("/content_favorite/search", 
+    return this.get<ByteArray>("/content_favorite/search", 
       mapOf("id" to id, "user_id" to user_id, "content_metadata_id" to content_metadata_id, "dashboard_id" to dashboard_id, "look_id" to look_id, "board_id" to board_id, "limit" to limit, "offset" to offset, "sorts" to sorts, "fields" to fields, "filter_or" to filter_or))
   }
 
@@ -4907,7 +4906,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Boolean search params accept only "true" and "false" as values.
    * 
-   * GET /content_view/search -> Array<ContentView>
+   * GET /content_view/search -> ByteArray
    */
   @JvmOverloads fun search_content_views(
     /**
@@ -4962,7 +4961,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<ContentView>>("/content_view/search", 
+    return this.get<ByteArray>("/content_view/search", 
       mapOf("view_count" to view_count, "group_id" to group_id, "look_id" to look_id, "dashboard_id" to dashboard_id, "content_metadata_id" to content_metadata_id, "start_of_week_date" to start_of_week_date, "all_time" to all_time, "user_id" to user_id, "fields" to fields, "limit" to limit, "offset" to offset, "sorts" to sorts, "filter_or" to filter_or))
   }
 
@@ -4992,7 +4991,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Boolean search params accept only "true" and "false" as values.
    * 
-   * GET /dashboard_elements/search -> Array<DashboardElement>
+   * GET /dashboard_elements/search -> ByteArray
    */
   @JvmOverloads fun search_dashboard_elements(
     /**
@@ -5023,7 +5022,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} sorts Fields to sort by. Sortable fields: [:look_id, :dashboard_id, :deleted, :title]
      */
     sorts: String? = null) : SDKResponse {
-    return this.get<Array<DashboardElement>>("/dashboard_elements/search", 
+    return this.get<ByteArray>("/dashboard_elements/search", 
       mapOf("dashboard_id" to dashboard_id, "look_id" to look_id, "title" to title, "deleted" to deleted, "fields" to fields, "filter_or" to filter_or, "sorts" to sorts))
   }
 
@@ -5058,7 +5057,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Get a **single dashboard** by id with [dashboard()](#!/Dashboard/dashboard)
    * 
-   * GET /dashboards/search -> Array<Dashboard>
+   * GET /dashboards/search -> ByteArray
    */
   @JvmOverloads fun search_dashboards(
     /**
@@ -5137,14 +5136,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<Dashboard>>("/dashboards/search", 
+    return this.get<ByteArray>("/dashboards/search", 
       mapOf("id" to id, "slug" to slug, "title" to title, "description" to description, "content_favorite_id" to content_favorite_id, "space_id" to space_id, "deleted" to deleted, "user_id" to user_id, "view_count" to view_count, "content_metadata_id" to content_metadata_id, "curate" to curate, "last_viewed_at" to last_viewed_at, "fields" to fields, "page" to page, "per_page" to per_page, "limit" to limit, "offset" to offset, "sorts" to sorts, "filter_or" to filter_or))
   }
 
   /**
    * Search for folders by creator id, parent id, name, etc
    * 
-   * GET /folders/search -> Array<Folder>
+   * GET /folders/search -> ByteArray
    */
   @JvmOverloads fun search_folders(
     /**
@@ -5191,7 +5190,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<Folder>>("/folders/search", 
+    return this.get<ByteArray>("/folders/search", 
       mapOf("fields" to fields, "page" to page, "per_page" to per_page, "limit" to limit, "offset" to offset, "sorts" to sorts, "name" to name, "id" to id, "parent_id" to parent_id, "creator_id" to creator_id, "filter_or" to filter_or))
   }
 
@@ -5221,7 +5220,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Boolean search params accept only "true" and "false" as values.
    * 
-   * GET /groups/search -> Array<Group>
+   * GET /groups/search -> ByteArray
    */
   @JvmOverloads fun search_groups(
     /**
@@ -5264,7 +5263,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} externally_orphaned Match group externally_orphaned.
      */
     externally_orphaned: Boolean? = null) : SDKResponse {
-    return this.get<Array<Group>>("/groups/search", 
+    return this.get<ByteArray>("/groups/search", 
       mapOf("fields" to fields, "limit" to limit, "offset" to offset, "sorts" to sorts, "filter_or" to filter_or, "id" to id, "name" to name, "external_group_id" to external_group_id, "externally_managed" to externally_managed, "externally_orphaned" to externally_orphaned))
   }
 
@@ -5292,7 +5291,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Boolean search params accept only "true" and "false" as values.
    * 
-   * GET /homepages/search -> Array<Homepage>
+   * GET /homepages/search -> ByteArray
    */
   @JvmOverloads fun search_homepages(
     /**
@@ -5347,7 +5346,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<Homepage>>("/homepages/search", 
+    return this.get<ByteArray>("/homepages/search", 
       mapOf("title" to title, "created_at" to created_at, "first_name" to first_name, "last_name" to last_name, "fields" to fields, "favorited" to favorited, "creator_id" to creator_id, "sorts" to sorts, "page" to page, "per_page" to per_page, "offset" to offset, "limit" to limit, "filter_or" to filter_or))
   }
 
@@ -5380,7 +5379,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Get a **single look** by id with [look(id)](#!/Look/look)
    * 
-   * GET /looks/search -> Array<Look>
+   * GET /looks/search -> ByteArray
    */
   @JvmOverloads fun search_looks(
     /**
@@ -5455,7 +5454,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<Look>>("/looks/search", 
+    return this.get<ByteArray>("/looks/search", 
       mapOf("id" to id, "title" to title, "description" to description, "content_favorite_id" to content_favorite_id, "space_id" to space_id, "user_id" to user_id, "view_count" to view_count, "deleted" to deleted, "query_id" to query_id, "curate" to curate, "last_viewed_at" to last_viewed_at, "fields" to fields, "page" to page, "per_page" to per_page, "limit" to limit, "offset" to offset, "sorts" to sorts, "filter_or" to filter_or))
   }
 
@@ -5483,7 +5482,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Boolean search params accept only "true" and "false" as values.
    * 
-   * GET /model_sets/search -> Array<ModelSet>
+   * GET /model_sets/search -> ByteArray
    */
   @JvmOverloads fun search_model_sets(
     /**
@@ -5522,7 +5521,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression.
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<ModelSet>>("/model_sets/search", 
+    return this.get<ByteArray>("/model_sets/search", 
       mapOf("fields" to fields, "limit" to limit, "offset" to offset, "sorts" to sorts, "id" to id, "name" to name, "all_access" to all_access, "built_in" to built_in, "filter_or" to filter_or))
   }
 
@@ -5550,7 +5549,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Boolean search params accept only "true" and "false" as values.
    * 
-   * GET /permission_sets/search -> Array<PermissionSet>
+   * GET /permission_sets/search -> ByteArray
    */
   @JvmOverloads fun search_permission_sets(
     /**
@@ -5589,7 +5588,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression.
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<PermissionSet>>("/permission_sets/search", 
+    return this.get<ByteArray>("/permission_sets/search", 
       mapOf("fields" to fields, "limit" to limit, "offset" to offset, "sorts" to sorts, "id" to id, "name" to name, "all_access" to all_access, "built_in" to built_in, "filter_or" to filter_or))
   }
 
@@ -5619,7 +5618,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Boolean search params accept only "true" and "false" as values.
    * 
-   * GET /roles/search -> Array<Role>
+   * GET /roles/search -> ByteArray
    */
   @JvmOverloads fun search_roles(
     /**
@@ -5654,7 +5653,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression.
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<Role>>("/roles/search", 
+    return this.get<ByteArray>("/roles/search", 
       mapOf("fields" to fields, "limit" to limit, "offset" to offset, "sorts" to sorts, "id" to id, "name" to name, "built_in" to built_in, "filter_or" to filter_or))
   }
 
@@ -5689,7 +5688,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    *   Get a **single space** by id with [Space](#!/Space/space)
    * 
-   * GET /spaces/search -> Array<Space>
+   * GET /spaces/search -> ByteArray
    */
   @JvmOverloads fun search_spaces(
     /**
@@ -5736,7 +5735,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<Space>>("/spaces/search", 
+    return this.get<ByteArray>("/spaces/search", 
       mapOf("fields" to fields, "page" to page, "per_page" to per_page, "limit" to limit, "offset" to offset, "sorts" to sorts, "name" to name, "id" to id, "parent_id" to parent_id, "creator_id" to creator_id, "filter_or" to filter_or))
   }
 
@@ -5780,7 +5779,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
    * 
-   * GET /themes/search -> Array<Theme>
+   * GET /themes/search -> ByteArray
    */
   @JvmOverloads fun search_themes(
     /**
@@ -5819,14 +5818,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<Theme>>("/themes/search", 
+    return this.get<ByteArray>("/themes/search", 
       mapOf("id" to id, "name" to name, "begin_at" to begin_at, "end_at" to end_at, "limit" to limit, "offset" to offset, "sorts" to sorts, "fields" to fields, "filter_or" to filter_or))
   }
 
   /**
    * ### Search currently locked-out users.
    * 
-   * GET /user_login_lockouts/search -> Array<UserLoginLockout>
+   * GET /user_login_lockouts/search -> ByteArray
    */
   @JvmOverloads fun search_user_login_lockouts(
     /**
@@ -5865,7 +5864,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<UserLoginLockout>>("/user_login_lockouts/search", 
+    return this.get<ByteArray>("/user_login_lockouts/search", 
       mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts, "auth_type" to auth_type, "full_name" to full_name, "email" to email, "remote_id" to remote_id, "filter_or" to filter_or))
   }
 
@@ -5901,7 +5900,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * names of other users but no details; normal users in a closed system can only see
    * names of other users who are members of the same group as the user.
    * 
-   * GET /users/search -> Array<User>
+   * GET /users/search -> ByteArray
    */
   @JvmOverloads fun search_users(
     /**
@@ -5956,7 +5955,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} group_id Search for users who are direct members of this group
      */
     group_id: String? = null) : SDKResponse {
-    return this.get<Array<User>>("/users/search", 
+    return this.get<ByteArray>("/users/search", 
       mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts, "id" to id, "first_name" to first_name, "last_name" to last_name, "verified_looker_employee" to verified_looker_employee, "email" to email, "is_disabled" to is_disabled, "filter_or" to filter_or, "content_metadata_id" to content_metadata_id, "group_id" to group_id))
   }
 
@@ -5968,7 +5967,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Any additional search params will be combined into a logical AND expression.
    * 
-   * GET /users/search/names/{pattern} -> Array<User>
+   * GET /users/search/names/{pattern} -> ByteArray
    */
   @JvmOverloads fun search_users_names(
     /**
@@ -6015,7 +6014,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} is_disabled Include or exclude disabled accounts in the results
      */
     is_disabled: Boolean? = null) : SDKResponse {
-    return this.get<Array<User>>("/users/search/names/${pattern}", 
+    return this.get<ByteArray>("/users/search/names/${pattern}", 
       mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts, "id" to id, "first_name" to first_name, "last_name" to last_name, "verified_looker_employee" to verified_looker_employee, "email" to email, "is_disabled" to is_disabled))
   }
 
@@ -6024,19 +6023,19 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Returns information about the current API session, such as which workspace is selected for the session.
    * 
-   * GET /session -> ApiSession
+   * GET /session -> ByteArray
    */
   fun session() : SDKResponse {
-    return this.get<ApiSession>("/session", mapOf())
+    return this.get<ByteArray>("/session", mapOf())
   }
 
   /**
    * ### Get session config.
    * 
-   * GET /session_config -> SessionConfig
+   * GET /session_config -> ByteArray
    */
   fun session_config() : SDKResponse {
-    return this.get<SessionConfig>("/session_config", mapOf())
+    return this.get<ByteArray>("/session_config", mapOf())
   }
 
   /**
@@ -6045,14 +6044,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * Returns the new specified default Color Collection object.
    * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
    * 
-   * PUT /color_collections/default -> ColorCollection
+   * PUT /color_collections/default -> ByteArray
    */
   fun set_default_color_collection(
     /**
      * @param {String} collection_id ID of color collection to set as default
      */
     collection_id: String) : SDKResponse {
-    return this.put<ColorCollection>("/color_collections/default", 
+    return this.put<ByteArray>("/color_collections/default", 
       mapOf("collection_id" to collection_id))
   }
 
@@ -6069,21 +6068,21 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
    * 
-   * PUT /themes/default -> Theme
+   * PUT /themes/default -> ByteArray
    */
   fun set_default_theme(
     /**
      * @param {String} name Name of theme to set as default
      */
     name: String) : SDKResponse {
-    return this.put<Theme>("/themes/default", 
+    return this.put<ByteArray>("/themes/default", 
       mapOf("name" to name))
   }
 
   /**
    * ### Set all groups for a role, removing all existing group associations from that role.
    * 
-   * PUT /roles/{role_id}/groups -> Array<Group>
+   * PUT /roles/{role_id}/groups -> ByteArray
    */
   fun set_role_groups(
     /**
@@ -6094,13 +6093,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Array<Long>} body
      */
     body: Array<Long>) : SDKResponse {
-    return this.put<Array<Group>>("/roles/${role_id}/groups", mapOf(), body)
+    return this.put<ByteArray>("/roles/${role_id}/groups", mapOf(), body)
   }
 
   /**
    * ### Set all the users of the role with a specific id.
    * 
-   * PUT /roles/{role_id}/users -> Array<User>
+   * PUT /roles/{role_id}/users -> ByteArray
    */
   fun set_role_users(
     /**
@@ -6111,7 +6110,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Array<Long>} body
      */
     body: Array<Long>) : SDKResponse {
-    return this.put<Array<User>>("/roles/${role_id}/users", mapOf(), body)
+    return this.put<ByteArray>("/roles/${role_id}/users", mapOf(), body)
   }
 
   /**
@@ -6136,7 +6135,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    *   To set a user attribute value for a single user, see [Set User Attribute User Value](#!/User/set_user_attribute_user_value).
    * To set a user attribute value for all members of a group, see [Set User Attribute Group Value](#!/Group/update_user_attribute_group_value).
    * 
-   * POST /user_attributes/{user_attribute_id}/group_values -> Array<UserAttributeGroupValue>
+   * POST /user_attributes/{user_attribute_id}/group_values -> ByteArray
    */
   fun set_user_attribute_group_values(
     /**
@@ -6147,7 +6146,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Array<UserAttributeGroupValue>} body
      */
     body: Array<UserAttributeGroupValue>) : SDKResponse {
-    return this.post<Array<UserAttributeGroupValue>>("/user_attributes/${user_attribute_id}/group_values", mapOf(), body)
+    return this.post<ByteArray>("/user_attributes/${user_attribute_id}/group_values", mapOf(), body)
   }
 
   /**
@@ -6155,7 +6154,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Per-user user attribute values take precedence over group or default values.
    * 
-   * PATCH /users/{user_id}/attribute_values/{user_attribute_id} -> UserAttributeWithValue
+   * PATCH /users/{user_id}/attribute_values/{user_attribute_id} -> ByteArray
    */
   fun set_user_attribute_user_value(
     /**
@@ -6170,13 +6169,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteUserAttributeWithValue} body
      */
     body: WriteUserAttributeWithValue) : SDKResponse {
-    return this.patch<UserAttributeWithValue>("/users/${user_id}/attribute_values/${user_attribute_id}", mapOf(), body)
+    return this.patch<ByteArray>("/users/${user_id}/attribute_values/${user_attribute_id}", mapOf(), body)
   }
 
   /**
    * ### Set roles of the user with a specific id.
    * 
-   * PUT /users/{user_id}/roles -> Array<Role>
+   * PUT /users/{user_id}/roles -> ByteArray
    */
   @JvmOverloads fun set_user_roles(
     /**
@@ -6191,14 +6190,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.put<Array<Role>>("/users/${user_id}/roles", 
+    return this.put<ByteArray>("/users/${user_id}/roles", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Get information about the space with a specific id.
    * 
-   * GET /spaces/{space_id} -> Space
+   * GET /spaces/{space_id} -> ByteArray
    */
   @JvmOverloads fun space(
     /**
@@ -6209,14 +6208,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Space>("/spaces/${space_id}", 
+    return this.get<ByteArray>("/spaces/${space_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get the ancestors of a space
    * 
-   * GET /spaces/{space_id}/ancestors -> Array<Space>
+   * GET /spaces/{space_id}/ancestors -> ByteArray
    */
   @JvmOverloads fun space_ancestors(
     /**
@@ -6227,14 +6226,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Space>>("/spaces/${space_id}/ancestors", 
+    return this.get<ByteArray>("/spaces/${space_id}/ancestors", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get the children of a space.
    * 
-   * GET /spaces/{space_id}/children -> Array<Space>
+   * GET /spaces/{space_id}/children -> ByteArray
    */
   @JvmOverloads fun space_children(
     /**
@@ -6257,14 +6256,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} sorts Fields to sort by.
      */
     sorts: String? = null) : SDKResponse {
-    return this.get<Array<Space>>("/spaces/${space_id}/children", 
+    return this.get<ByteArray>("/spaces/${space_id}/children", 
       mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts))
   }
 
   /**
    * ### Search the children of a space
    * 
-   * GET /spaces/{space_id}/children/search -> Array<Space>
+   * GET /spaces/{space_id}/children/search -> ByteArray
    */
   @JvmOverloads fun space_children_search(
     /**
@@ -6283,14 +6282,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} name Match Space name.
      */
     name: String? = null) : SDKResponse {
-    return this.get<Array<Space>>("/spaces/${space_id}/children/search", 
+    return this.get<ByteArray>("/spaces/${space_id}/children/search", 
       mapOf("fields" to fields, "sorts" to sorts, "name" to name))
   }
 
   /**
    * ### Get the dashboards in a space
    * 
-   * GET /spaces/{space_id}/dashboards -> Array<Dashboard>
+   * GET /spaces/{space_id}/dashboards -> ByteArray
    */
   @JvmOverloads fun space_dashboards(
     /**
@@ -6301,14 +6300,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Dashboard>>("/spaces/${space_id}/dashboards", 
+    return this.get<ByteArray>("/spaces/${space_id}/dashboards", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get the looks in a space
    * 
-   * GET /spaces/{space_id}/looks -> Array<LookWithQuery>
+   * GET /spaces/{space_id}/looks -> ByteArray
    */
   @JvmOverloads fun space_looks(
     /**
@@ -6319,14 +6318,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<LookWithQuery>>("/spaces/${space_id}/looks", 
+    return this.get<ByteArray>("/spaces/${space_id}/looks", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get the parent of a space
    * 
-   * GET /spaces/{space_id}/parent -> Space
+   * GET /spaces/{space_id}/parent -> ByteArray
    */
   @JvmOverloads fun space_parent(
     /**
@@ -6337,21 +6336,21 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Space>("/spaces/${space_id}/parent", 
+    return this.get<ByteArray>("/spaces/${space_id}/parent", 
       mapOf("fields" to fields))
   }
 
   /**
    * Get a SQL Runner query.
    * 
-   * GET /sql_queries/{slug} -> SqlQuery
+   * GET /sql_queries/{slug} -> ByteArray
    */
   fun sql_query(
     /**
      * @param {String} slug slug of query
      */
     slug: String) : SDKResponse {
-    return this.get<SqlQuery>("/sql_queries/${slug}", mapOf())
+    return this.get<ByteArray>("/sql_queries/${slug}", mapOf())
   }
 
   /**
@@ -6365,7 +6364,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * To **link** or **unlink** a UDD set the `lookml_link_id` property with [update_dashboard()](#!/Dashboard/update_dashboard)
    * 
-   * PATCH /dashboards/{lookml_dashboard_id}/sync -> Array<Long>
+   * PATCH /dashboards/{lookml_dashboard_id}/sync -> ByteArray
    */
   @JvmOverloads fun sync_lookml_dashboard(
     /**
@@ -6380,7 +6379,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
      */
     raw_locale: Boolean? = null) : SDKResponse {
-    return this.patch<Array<Long>>("/dashboards/${lookml_dashboard_id}/sync", 
+    return this.patch<ByteArray>("/dashboards/${lookml_dashboard_id}/sync", 
       mapOf("raw_locale" to raw_locale), body)
   }
 
@@ -6394,7 +6393,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Unsupported tests in the request will be ignored.
    * 
-   * PUT /connections/{connection_name}/test -> Array<DBConnectionTestResult>
+   * PUT /connections/{connection_name}/test -> ByteArray
    */
   @JvmOverloads fun test_connection(
     /**
@@ -6405,7 +6404,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {DelimArray<String>} tests Array of names of tests to run
      */
     tests: DelimArray<String>? = null) : SDKResponse {
-    return this.put<Array<DBConnectionTestResult>>("/connections/${connection_name}/test", 
+    return this.put<ByteArray>("/connections/${connection_name}/test", 
       mapOf("tests" to tests))
   }
 
@@ -6419,7 +6418,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Unsupported tests in the request will be ignored.
    * 
-   * PUT /connections/test -> Array<DBConnectionTestResult>
+   * PUT /connections/test -> ByteArray
    */
   @JvmOverloads fun test_connection_config(
     /**
@@ -6430,21 +6429,21 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {DelimArray<String>} tests Array of names of tests to run
      */
     tests: DelimArray<String>? = null) : SDKResponse {
-    return this.put<Array<DBConnectionTestResult>>("/connections/test", 
+    return this.put<ByteArray>("/connections/test", 
       mapOf("tests" to tests), body)
   }
 
   /**
    * Tests the integration to make sure all the settings are working.
    * 
-   * POST /integrations/{integration_id}/test -> IntegrationTestResult
+   * POST /integrations/{integration_id}/test -> ByteArray
    */
   fun test_integration(
     /**
      * @param {String} integration_id Id of integration
      */
     integration_id: String) : SDKResponse {
-    return this.post<IntegrationTestResult>("/integrations/${integration_id}/test", mapOf())
+    return this.post<ByteArray>("/integrations/${integration_id}/test", mapOf())
   }
 
   /**
@@ -6469,14 +6468,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * The active LDAP settings are not modified.
    * 
-   * PUT /ldap_config/test_auth -> LDAPConfigTestResult
+   * PUT /ldap_config/test_auth -> ByteArray
    */
   fun test_ldap_config_auth(
     /**
      * @param {WriteLDAPConfig} body
      */
     body: WriteLDAPConfig) : SDKResponse {
-    return this.put<LDAPConfigTestResult>("/ldap_config/test_auth", mapOf(), body)
+    return this.put<ByteArray>("/ldap_config/test_auth", mapOf(), body)
   }
 
   /**
@@ -6499,14 +6498,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * The active LDAP settings are not modified.
    * 
-   * PUT /ldap_config/test_connection -> LDAPConfigTestResult
+   * PUT /ldap_config/test_connection -> ByteArray
    */
   fun test_ldap_config_connection(
     /**
      * @param {WriteLDAPConfig} body
      */
     body: WriteLDAPConfig) : SDKResponse {
-    return this.put<LDAPConfigTestResult>("/ldap_config/test_connection", mapOf(), body)
+    return this.put<ByteArray>("/ldap_config/test_connection", mapOf(), body)
   }
 
   /**
@@ -6520,14 +6519,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * The active LDAP settings are not modified.
    * 
-   * PUT /ldap_config/test_user_auth -> LDAPConfigTestResult
+   * PUT /ldap_config/test_user_auth -> ByteArray
    */
   fun test_ldap_config_user_auth(
     /**
      * @param {WriteLDAPConfig} body
      */
     body: WriteLDAPConfig) : SDKResponse {
-    return this.put<LDAPConfigTestResult>("/ldap_config/test_user_auth", mapOf(), body)
+    return this.put<ByteArray>("/ldap_config/test_user_auth", mapOf(), body)
   }
 
   /**
@@ -6541,14 +6540,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * The active LDAP settings are not modified.
    * 
-   * PUT /ldap_config/test_user_info -> LDAPConfigTestResult
+   * PUT /ldap_config/test_user_info -> ByteArray
    */
   fun test_ldap_config_user_info(
     /**
      * @param {WriteLDAPConfig} body
      */
     body: WriteLDAPConfig) : SDKResponse {
-    return this.put<LDAPConfigTestResult>("/ldap_config/test_user_info", mapOf(), body)
+    return this.put<ByteArray>("/ldap_config/test_user_info", mapOf(), body)
   }
 
   /**
@@ -6558,7 +6557,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
    * 
-   * GET /themes/{theme_id} -> Theme
+   * GET /themes/{theme_id} -> ByteArray
    */
   @JvmOverloads fun theme(
     /**
@@ -6569,7 +6568,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Theme>("/themes/${theme_id}", 
+    return this.get<ByteArray>("/themes/${theme_id}", 
       mapOf("fields" to fields))
   }
 
@@ -6581,7 +6580,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
    * 
-   * GET /themes/theme_or_default -> Theme
+   * GET /themes/theme_or_default -> ByteArray
    */
   @JvmOverloads fun theme_or_default(
     /**
@@ -6592,28 +6591,28 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
      */
     ts: Date? = null) : SDKResponse {
-    return this.get<Theme>("/themes/theme_or_default", 
+    return this.get<ByteArray>("/themes/theme_or_default", 
       mapOf("name" to name, "ts" to ts))
   }
 
   /**
    * ### Update the Looker internal database backup configuration.
    * 
-   * PATCH /backup_configuration -> BackupConfiguration
+   * PATCH /backup_configuration -> ByteArray
    */
   fun update_backup_configuration(
     /**
      * @param {WriteBackupConfiguration} body
      */
     body: WriteBackupConfiguration) : SDKResponse {
-    return this.patch<BackupConfiguration>("/backup_configuration", mapOf(), body)
+    return this.patch<ByteArray>("/backup_configuration", mapOf(), body)
   }
 
   /**
    * ### Update a custom color collection by id.
    * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
    * 
-   * PATCH /color_collections/{collection_id} -> ColorCollection
+   * PATCH /color_collections/{collection_id} -> ByteArray
    */
   fun update_color_collection(
     /**
@@ -6624,13 +6623,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteColorCollection} body
      */
     body: WriteColorCollection) : SDKResponse {
-    return this.patch<ColorCollection>("/color_collections/${collection_id}", mapOf(), body)
+    return this.patch<ByteArray>("/color_collections/${collection_id}", mapOf(), body)
   }
 
   /**
    * ### Update a connection using the specified configuration.
    * 
-   * PATCH /connections/{connection_name} -> DBConnection
+   * PATCH /connections/{connection_name} -> ByteArray
    */
   fun update_connection(
     /**
@@ -6641,13 +6640,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteDBConnection} body
      */
     body: WriteDBConnection) : SDKResponse {
-    return this.patch<DBConnection>("/connections/${connection_name}", mapOf(), body)
+    return this.patch<ByteArray>("/connections/${connection_name}", mapOf(), body)
   }
 
   /**
    * ### Move a piece of content.
    * 
-   * PATCH /content_metadata/{content_metadata_id} -> ContentMeta
+   * PATCH /content_metadata/{content_metadata_id} -> ByteArray
    */
   fun update_content_metadata(
     /**
@@ -6658,13 +6657,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteContentMeta} body
      */
     body: WriteContentMeta) : SDKResponse {
-    return this.patch<ContentMeta>("/content_metadata/${content_metadata_id}", mapOf(), body)
+    return this.patch<ByteArray>("/content_metadata/${content_metadata_id}", mapOf(), body)
   }
 
   /**
    * ### Update type of access for content metadata.
    * 
-   * PUT /content_metadata_access/{content_metadata_access_id} -> ContentMetaGroupUser
+   * PUT /content_metadata_access/{content_metadata_access_id} -> ByteArray
    */
   fun update_content_metadata_access(
     /**
@@ -6675,13 +6674,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {ContentMetaGroupUser} body
      */
     body: ContentMetaGroupUser) : SDKResponse {
-    return this.put<ContentMetaGroupUser>("/content_metadata_access/${content_metadata_access_id}", mapOf(), body)
+    return this.put<ByteArray>("/content_metadata_access/${content_metadata_access_id}", mapOf(), body)
   }
 
   /**
    * Update custom welcome email setting and values. Optionally send a test email with the new content to the currently logged in user.
    * 
-   * PATCH /custom_welcome_email -> CustomWelcomeEmail
+   * PATCH /custom_welcome_email -> ByteArray
    */
   @JvmOverloads fun update_custom_welcome_email(
     /**
@@ -6692,21 +6691,21 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
      */
     send_test_welcome_email: Boolean? = null) : SDKResponse {
-    return this.patch<CustomWelcomeEmail>("/custom_welcome_email", 
+    return this.patch<ByteArray>("/custom_welcome_email", 
       mapOf("send_test_welcome_email" to send_test_welcome_email), body)
   }
 
   /**
    * Requests to this endpoint will send a welcome email with the custom content provided in the body to the currently logged in user.
    * 
-   * PUT /custom_welcome_email_test -> WelcomeEmailTest
+   * PUT /custom_welcome_email_test -> ByteArray
    */
   fun update_custom_welcome_email_test(
     /**
      * @param {WriteWelcomeEmailTest} body
      */
     body: WriteWelcomeEmailTest) : SDKResponse {
-    return this.put<WelcomeEmailTest>("/custom_welcome_email_test", mapOf(), body)
+    return this.put<ByteArray>("/custom_welcome_email_test", mapOf(), body)
   }
 
   /**
@@ -6721,7 +6720,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * If you receive a 422 error response when updating a dashboard, be sure to look at the
    * response body for information about exactly which fields are missing or contain invalid data.
    * 
-   * PATCH /dashboards/{dashboard_id} -> Dashboard
+   * PATCH /dashboards/{dashboard_id} -> ByteArray
    */
   fun update_dashboard(
     /**
@@ -6732,13 +6731,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteDashboard} body
      */
     body: WriteDashboard) : SDKResponse {
-    return this.patch<Dashboard>("/dashboards/${dashboard_id}", mapOf(), body)
+    return this.patch<ByteArray>("/dashboards/${dashboard_id}", mapOf(), body)
   }
 
   /**
    * ### Update the dashboard element with a specific id.
    * 
-   * PATCH /dashboard_elements/{dashboard_element_id} -> DashboardElement
+   * PATCH /dashboard_elements/{dashboard_element_id} -> ByteArray
    */
   @JvmOverloads fun update_dashboard_element(
     /**
@@ -6753,14 +6752,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<DashboardElement>("/dashboard_elements/${dashboard_element_id}", 
+    return this.patch<ByteArray>("/dashboard_elements/${dashboard_element_id}", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Update the dashboard filter with a specific id.
    * 
-   * PATCH /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
+   * PATCH /dashboard_filters/{dashboard_filter_id} -> ByteArray
    */
   @JvmOverloads fun update_dashboard_filter(
     /**
@@ -6775,14 +6774,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<DashboardFilter>("/dashboard_filters/${dashboard_filter_id}", 
+    return this.patch<ByteArray>("/dashboard_filters/${dashboard_filter_id}", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Update the dashboard layout with a specific id.
    * 
-   * PATCH /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
+   * PATCH /dashboard_layouts/{dashboard_layout_id} -> ByteArray
    */
   @JvmOverloads fun update_dashboard_layout(
     /**
@@ -6797,14 +6796,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<DashboardLayout>("/dashboard_layouts/${dashboard_layout_id}", 
+    return this.patch<ByteArray>("/dashboard_layouts/${dashboard_layout_id}", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Update the dashboard element with a specific id.
    * 
-   * PATCH /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
+   * PATCH /dashboard_layout_components/{dashboard_layout_component_id} -> ByteArray
    */
   @JvmOverloads fun update_dashboard_layout_component(
     /**
@@ -6819,14 +6818,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<DashboardLayoutComponent>("/dashboard_layout_components/${dashboard_layout_component_id}", 
+    return this.patch<ByteArray>("/dashboard_layout_components/${dashboard_layout_component_id}", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Update a datagroup using the specified params.
    * 
-   * PATCH /datagroups/{datagroup_id} -> Datagroup
+   * PATCH /datagroups/{datagroup_id} -> ByteArray
    */
   fun update_datagroup(
     /**
@@ -6837,13 +6836,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteDatagroup} body
      */
     body: WriteDatagroup) : SDKResponse {
-    return this.patch<Datagroup>("/datagroups/${datagroup_id}", mapOf(), body)
+    return this.patch<ByteArray>("/datagroups/${datagroup_id}", mapOf(), body)
   }
 
   /**
    * ### Update the folder with a specific id.
    * 
-   * PATCH /folders/{folder_id} -> Folder
+   * PATCH /folders/{folder_id} -> ByteArray
    */
   fun update_folder(
     /**
@@ -6854,7 +6853,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {UpdateFolder} body
      */
     body: UpdateFolder) : SDKResponse {
-    return this.patch<Folder>("/folders/${folder_id}", mapOf(), body)
+    return this.patch<ByteArray>("/folders/${folder_id}", mapOf(), body)
   }
 
   /**
@@ -6868,7 +6867,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * Optionally specify a branch name, tag name or commit SHA to which the branch should be reset.
    *   **DANGER** hard reset will be force pushed to the remote. Unsaved changes and commits may be permanently lost.
    * 
-   * PUT /projects/{project_id}/git_branch -> GitBranch
+   * PUT /projects/{project_id}/git_branch -> ByteArray
    */
   fun update_git_branch(
     /**
@@ -6879,13 +6878,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteGitBranch} body
      */
     body: WriteGitBranch) : SDKResponse {
-    return this.put<GitBranch>("/projects/${project_id}/git_branch", mapOf(), body)
+    return this.put<ByteArray>("/projects/${project_id}/git_branch", mapOf(), body)
   }
 
   /**
    * ### Updates the a group (admin only).
    * 
-   * PATCH /groups/{group_id} -> Group
+   * PATCH /groups/{group_id} -> ByteArray
    */
   @JvmOverloads fun update_group(
     /**
@@ -6900,14 +6899,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<Group>("/groups/${group_id}", 
+    return this.patch<ByteArray>("/groups/${group_id}", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Update a homepage definition.
    * 
-   * PATCH /homepages/{homepage_id} -> Homepage
+   * PATCH /homepages/{homepage_id} -> ByteArray
    */
   @JvmOverloads fun update_homepage(
     /**
@@ -6922,14 +6921,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<Homepage>("/homepages/${homepage_id}", 
+    return this.patch<ByteArray>("/homepages/${homepage_id}", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Update a homepage item definition.
    * 
-   * PATCH /homepage_items/{homepage_item_id} -> HomepageItem
+   * PATCH /homepage_items/{homepage_item_id} -> ByteArray
    */
   @JvmOverloads fun update_homepage_item(
     /**
@@ -6944,14 +6943,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<HomepageItem>("/homepage_items/${homepage_item_id}", 
+    return this.patch<ByteArray>("/homepage_items/${homepage_item_id}", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Update a homepage section definition.
    * 
-   * PATCH /homepage_sections/{homepage_section_id} -> HomepageSection
+   * PATCH /homepage_sections/{homepage_section_id} -> ByteArray
    */
   @JvmOverloads fun update_homepage_section(
     /**
@@ -6966,14 +6965,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<HomepageSection>("/homepage_sections/${homepage_section_id}", 
+    return this.patch<ByteArray>("/homepage_sections/${homepage_section_id}", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Update parameters on a Integration.
    * 
-   * PATCH /integrations/{integration_id} -> Integration
+   * PATCH /integrations/{integration_id} -> ByteArray
    */
   @JvmOverloads fun update_integration(
     /**
@@ -6988,7 +6987,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<Integration>("/integrations/${integration_id}", 
+    return this.patch<ByteArray>("/integrations/${integration_id}", 
       mapOf("fields" to fields), body)
   }
 
@@ -6997,7 +6996,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * This API is rate limited to prevent it from being used for SSRF attacks
    * 
-   * PATCH /integration_hubs/{integration_hub_id} -> IntegrationHub
+   * PATCH /integration_hubs/{integration_hub_id} -> ByteArray
    */
   @JvmOverloads fun update_integration_hub(
     /**
@@ -7012,34 +7011,34 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<IntegrationHub>("/integration_hubs/${integration_hub_id}", 
+    return this.patch<ByteArray>("/integration_hubs/${integration_hub_id}", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * Update internal help resources settings
    * 
-   * PATCH /internal_help_resources -> InternalHelpResources
+   * PATCH /internal_help_resources -> ByteArray
    */
   fun update_internal_help_resources(
     /**
      * @param {WriteInternalHelpResources} body
      */
     body: WriteInternalHelpResources) : SDKResponse {
-    return this.patch<InternalHelpResources>("/internal_help_resources", mapOf(), body)
+    return this.patch<ByteArray>("/internal_help_resources", mapOf(), body)
   }
 
   /**
    * Update internal help resources content
    * 
-   * PATCH /internal_help_resources_content -> InternalHelpResourcesContent
+   * PATCH /internal_help_resources_content -> ByteArray
    */
   fun update_internal_help_resources_content(
     /**
      * @param {WriteInternalHelpResourcesContent} body
      */
     body: WriteInternalHelpResourcesContent) : SDKResponse {
-    return this.patch<InternalHelpResourcesContent>("/internal_help_resources_content", mapOf(), body)
+    return this.patch<ByteArray>("/internal_help_resources_content", mapOf(), body)
   }
 
   /**
@@ -7055,20 +7054,20 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
    * 
-   * PATCH /ldap_config -> LDAPConfig
+   * PATCH /ldap_config -> ByteArray
    */
   fun update_ldap_config(
     /**
      * @param {WriteLDAPConfig} body
      */
     body: WriteLDAPConfig) : SDKResponse {
-    return this.patch<LDAPConfig>("/ldap_config", mapOf(), body)
+    return this.patch<ByteArray>("/ldap_config", mapOf(), body)
   }
 
   /**
    * ### Update information about the legacy feature with a specific id.
    * 
-   * PATCH /legacy_features/{legacy_feature_id} -> LegacyFeature
+   * PATCH /legacy_features/{legacy_feature_id} -> ByteArray
    */
   fun update_legacy_feature(
     /**
@@ -7079,7 +7078,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteLegacyFeature} body
      */
     body: WriteLegacyFeature) : SDKResponse {
-    return this.patch<LegacyFeature>("/legacy_features/${legacy_feature_id}", mapOf(), body)
+    return this.patch<ByteArray>("/legacy_features/${legacy_feature_id}", mapOf(), body)
   }
 
   /**
@@ -7104,7 +7103,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * NOTE: [delete_look()](#!/Look/delete_look) performs a "hard delete" - the look data is removed from the Looker
    * database and destroyed. There is no "undo" for `delete_look()`.
    * 
-   * PATCH /looks/{look_id} -> LookWithQuery
+   * PATCH /looks/{look_id} -> ByteArray
    */
   @JvmOverloads fun update_look(
     /**
@@ -7119,14 +7118,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<LookWithQuery>("/looks/${look_id}", 
+    return this.patch<ByteArray>("/looks/${look_id}", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Update a lookml model using the specified configuration.
    * 
-   * PATCH /lookml_models/{lookml_model_name} -> LookmlModel
+   * PATCH /lookml_models/{lookml_model_name} -> ByteArray
    */
   fun update_lookml_model(
     /**
@@ -7137,13 +7136,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteLookmlModel} body
      */
     body: WriteLookmlModel) : SDKResponse {
-    return this.patch<LookmlModel>("/lookml_models/${lookml_model_name}", mapOf(), body)
+    return this.patch<ByteArray>("/lookml_models/${lookml_model_name}", mapOf(), body)
   }
 
   /**
    * ### Update information about the model set with a specific id.
    * 
-   * PATCH /model_sets/{model_set_id} -> ModelSet
+   * PATCH /model_sets/{model_set_id} -> ByteArray
    */
   fun update_model_set(
     /**
@@ -7154,7 +7153,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteModelSet} body
      */
     body: WriteModelSet) : SDKResponse {
-    return this.patch<ModelSet>("/model_sets/${model_set_id}", mapOf(), body)
+    return this.patch<ByteArray>("/model_sets/${model_set_id}", mapOf(), body)
   }
 
   /**
@@ -7168,33 +7167,33 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
    * 
-   * PATCH /oidc_config -> OIDCConfig
+   * PATCH /oidc_config -> ByteArray
    */
   fun update_oidc_config(
     /**
      * @param {WriteOIDCConfig} body
      */
     body: WriteOIDCConfig) : SDKResponse {
-    return this.patch<OIDCConfig>("/oidc_config", mapOf(), body)
+    return this.patch<ByteArray>("/oidc_config", mapOf(), body)
   }
 
   /**
    * ### Update password config.
    * 
-   * PATCH /password_config -> PasswordConfig
+   * PATCH /password_config -> ByteArray
    */
   fun update_password_config(
     /**
      * @param {WritePasswordConfig} body
      */
     body: WritePasswordConfig) : SDKResponse {
-    return this.patch<PasswordConfig>("/password_config", mapOf(), body)
+    return this.patch<ByteArray>("/password_config", mapOf(), body)
   }
 
   /**
    * ### Update information about the permission set with a specific id.
    * 
-   * PATCH /permission_sets/{permission_set_id} -> PermissionSet
+   * PATCH /permission_sets/{permission_set_id} -> ByteArray
    */
   fun update_permission_set(
     /**
@@ -7205,7 +7204,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WritePermissionSet} body
      */
     body: WritePermissionSet) : SDKResponse {
-    return this.patch<PermissionSet>("/permission_sets/${permission_set_id}", mapOf(), body)
+    return this.patch<ByteArray>("/permission_sets/${permission_set_id}", mapOf(), body)
   }
 
   /**
@@ -7231,7 +7230,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 1. Call `update_session` to select the 'dev' workspace.
    * 1. Call `update_project` setting `git_remote_url` to nil and `git_service_name` to "bare".
    * 
-   * PATCH /projects/{project_id} -> Project
+   * PATCH /projects/{project_id} -> ByteArray
    */
   @JvmOverloads fun update_project(
     /**
@@ -7246,7 +7245,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<Project>("/projects/${project_id}", 
+    return this.patch<ByteArray>("/projects/${project_id}", 
       mapOf("fields" to fields), body)
   }
 
@@ -7258,7 +7257,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * `root_project_id` is required.
    * `credential_id` is required.
    * 
-   * PUT /projects/{root_project_id}/credential/{credential_id} -> RepositoryCredential
+   * PUT /projects/{root_project_id}/credential/{credential_id} -> ByteArray
    */
   fun update_repository_credential(
     /**
@@ -7273,13 +7272,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteRepositoryCredential} body
      */
     body: WriteRepositoryCredential) : SDKResponse {
-    return this.put<RepositoryCredential>("/projects/${root_project_id}/credential/${credential_id}", mapOf(), body)
+    return this.put<ByteArray>("/projects/${root_project_id}/credential/${credential_id}", mapOf(), body)
   }
 
   /**
    * ### Update information about the role with a specific id.
    * 
-   * PATCH /roles/{role_id} -> Role
+   * PATCH /roles/{role_id} -> ByteArray
    */
   fun update_role(
     /**
@@ -7290,7 +7289,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteRole} body
      */
     body: WriteRole) : SDKResponse {
-    return this.patch<Role>("/roles/${role_id}", mapOf(), body)
+    return this.patch<ByteArray>("/roles/${role_id}", mapOf(), body)
   }
 
   /**
@@ -7304,14 +7303,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
    * 
-   * PATCH /saml_config -> SamlConfig
+   * PATCH /saml_config -> ByteArray
    */
   fun update_saml_config(
     /**
      * @param {WriteSamlConfig} body
      */
     body: WriteSamlConfig) : SDKResponse {
-    return this.patch<SamlConfig>("/saml_config", mapOf(), body)
+    return this.patch<ByteArray>("/saml_config", mapOf(), body)
   }
 
   /**
@@ -7358,7 +7357,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
    * 
-   * PATCH /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
+   * PATCH /scheduled_plans/{scheduled_plan_id} -> ByteArray
    */
   fun update_scheduled_plan(
     /**
@@ -7369,7 +7368,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteScheduledPlan} body
      */
     body: WriteScheduledPlan) : SDKResponse {
-    return this.patch<ScheduledPlan>("/scheduled_plans/${scheduled_plan_id}", mapOf(), body)
+    return this.patch<ByteArray>("/scheduled_plans/${scheduled_plan_id}", mapOf(), body)
   }
 
   /**
@@ -7394,33 +7393,33 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * If your Looker API client application needs to work in a dev workspace across multiple
    * API sessions, be sure to select the dev workspace after each login.
    * 
-   * PATCH /session -> ApiSession
+   * PATCH /session -> ByteArray
    */
   fun update_session(
     /**
      * @param {WriteApiSession} body
      */
     body: WriteApiSession) : SDKResponse {
-    return this.patch<ApiSession>("/session", mapOf(), body)
+    return this.patch<ByteArray>("/session", mapOf(), body)
   }
 
   /**
    * ### Update session config.
    * 
-   * PATCH /session_config -> SessionConfig
+   * PATCH /session_config -> ByteArray
    */
   fun update_session_config(
     /**
      * @param {WriteSessionConfig} body
      */
     body: WriteSessionConfig) : SDKResponse {
-    return this.patch<SessionConfig>("/session_config", mapOf(), body)
+    return this.patch<ByteArray>("/session_config", mapOf(), body)
   }
 
   /**
    * ### Update the space with a specific id.
    * 
-   * PATCH /spaces/{space_id} -> Space
+   * PATCH /spaces/{space_id} -> ByteArray
    */
   fun update_space(
     /**
@@ -7431,7 +7430,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {UpdateSpace} body
      */
     body: UpdateSpace) : SDKResponse {
-    return this.patch<Space>("/spaces/${space_id}", mapOf(), body)
+    return this.patch<ByteArray>("/spaces/${space_id}", mapOf(), body)
   }
 
   /**
@@ -7439,7 +7438,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
    * 
-   * PATCH /themes/{theme_id} -> Theme
+   * PATCH /themes/{theme_id} -> ByteArray
    */
   fun update_theme(
     /**
@@ -7450,13 +7449,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteTheme} body
      */
     body: WriteTheme) : SDKResponse {
-    return this.patch<Theme>("/themes/${theme_id}", mapOf(), body)
+    return this.patch<ByteArray>("/themes/${theme_id}", mapOf(), body)
   }
 
   /**
    * ### Update information about the user with a specific id.
    * 
-   * PATCH /users/{user_id} -> User
+   * PATCH /users/{user_id} -> ByteArray
    */
   @JvmOverloads fun update_user(
     /**
@@ -7471,14 +7470,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<User>("/users/${user_id}", 
+    return this.patch<ByteArray>("/users/${user_id}", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Update a user attribute definition.
    * 
-   * PATCH /user_attributes/{user_attribute_id} -> UserAttribute
+   * PATCH /user_attributes/{user_attribute_id} -> ByteArray
    */
   @JvmOverloads fun update_user_attribute(
     /**
@@ -7493,7 +7492,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<UserAttribute>("/user_attributes/${user_attribute_id}", 
+    return this.patch<ByteArray>("/user_attributes/${user_attribute_id}", 
       mapOf("fields" to fields), body)
   }
 
@@ -7502,7 +7501,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * For information about how user attribute values are calculated, see [Set User Attribute Group Values](#!/UserAttribute/set_user_attribute_group_values).
    * 
-   * PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> UserAttributeGroupValue
+   * PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> ByteArray
    */
   fun update_user_attribute_group_value(
     /**
@@ -7517,13 +7516,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {UserAttributeGroupValue} body
      */
     body: UserAttributeGroupValue) : SDKResponse {
-    return this.patch<UserAttributeGroupValue>("/groups/${group_id}/attribute_values/${user_attribute_id}", mapOf(), body)
+    return this.patch<ByteArray>("/groups/${group_id}/attribute_values/${user_attribute_id}", mapOf(), body)
   }
 
   /**
    * ### Email/password login information for the specified user.
    * 
-   * PATCH /users/{user_id}/credentials_email -> CredentialsEmail
+   * PATCH /users/{user_id}/credentials_email -> ByteArray
    */
   @JvmOverloads fun update_user_credentials_email(
     /**
@@ -7538,21 +7537,21 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<CredentialsEmail>("/users/${user_id}/credentials_email", 
+    return this.patch<ByteArray>("/users/${user_id}/credentials_email", 
       mapOf("fields" to fields), body)
   }
 
   /**
    * ### Update the whitelabel configuration
    * 
-   * PUT /whitelabel_configuration -> WhitelabelConfiguration
+   * PUT /whitelabel_configuration -> ByteArray
    */
   fun update_whitelabel_configuration(
     /**
      * @param {WriteWhitelabelConfiguration} body
      */
     body: WriteWhitelabelConfiguration) : SDKResponse {
-    return this.put<WhitelabelConfiguration>("/whitelabel_configuration", mapOf(), body)
+    return this.put<ByteArray>("/whitelabel_configuration", mapOf(), body)
   }
 
   /**
@@ -7562,7 +7561,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * be returned. Otherwise, a minimal 'public' variant of the user information will be returned. This contains
    * The user name and avatar url, but no sensitive information.
    * 
-   * GET /users/{user_id} -> User
+   * GET /users/{user_id} -> ByteArray
    */
   @JvmOverloads fun user(
     /**
@@ -7573,14 +7572,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<User>("/users/${user_id}", 
+    return this.get<ByteArray>("/users/${user_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about a user attribute.
    * 
-   * GET /user_attributes/{user_attribute_id} -> UserAttribute
+   * GET /user_attributes/{user_attribute_id} -> ByteArray
    */
   @JvmOverloads fun user_attribute(
     /**
@@ -7591,7 +7590,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<UserAttribute>("/user_attributes/${user_attribute_id}", 
+    return this.get<ByteArray>("/user_attributes/${user_attribute_id}", 
       mapOf("fields" to fields))
   }
 
@@ -7612,7 +7611,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * The value of all hidden user attributes will be blank.
    * 
-   * GET /users/{user_id}/attribute_values -> Array<UserAttributeWithValue>
+   * GET /users/{user_id}/attribute_values -> ByteArray
    */
   @JvmOverloads fun user_attribute_user_values(
     /**
@@ -7635,14 +7634,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} include_unset If true, returns an empty record for each requested attribute that has no user, group, or default value.
      */
     include_unset: Boolean? = null) : SDKResponse {
-    return this.get<Array<UserAttributeWithValue>>("/users/${user_id}/attribute_values", 
+    return this.get<ByteArray>("/users/${user_id}/attribute_values", 
       mapOf("fields" to fields, "user_attribute_ids" to user_attribute_ids, "all_values" to all_values, "include_unset" to include_unset))
   }
 
   /**
    * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
    * 
-   * GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
+   * GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> ByteArray
    */
   @JvmOverloads fun user_credentials_api3(
     /**
@@ -7657,14 +7656,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsApi3>("/users/${user_id}/credentials_api3/${credentials_api3_id}", 
+    return this.get<ByteArray>("/users/${user_id}/credentials_api3/${credentials_api3_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Email/password login information for the specified user.
    * 
-   * GET /users/{user_id}/credentials_email -> CredentialsEmail
+   * GET /users/{user_id}/credentials_email -> ByteArray
    */
   @JvmOverloads fun user_credentials_email(
     /**
@@ -7675,14 +7674,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsEmail>("/users/${user_id}/credentials_email", 
+    return this.get<ByteArray>("/users/${user_id}/credentials_email", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Embed login information for the specified user.
    * 
-   * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
+   * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> ByteArray
    */
   @JvmOverloads fun user_credentials_embed(
     /**
@@ -7697,14 +7696,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsEmbed>("/users/${user_id}/credentials_embed/${credentials_embed_id}", 
+    return this.get<ByteArray>("/users/${user_id}/credentials_embed/${credentials_embed_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Google authentication login information for the specified user.
    * 
-   * GET /users/{user_id}/credentials_google -> CredentialsGoogle
+   * GET /users/{user_id}/credentials_google -> ByteArray
    */
   @JvmOverloads fun user_credentials_google(
     /**
@@ -7715,14 +7714,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsGoogle>("/users/${user_id}/credentials_google", 
+    return this.get<ByteArray>("/users/${user_id}/credentials_google", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### LDAP login information for the specified user.
    * 
-   * GET /users/{user_id}/credentials_ldap -> CredentialsLDAP
+   * GET /users/{user_id}/credentials_ldap -> ByteArray
    */
   @JvmOverloads fun user_credentials_ldap(
     /**
@@ -7733,14 +7732,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsLDAP>("/users/${user_id}/credentials_ldap", 
+    return this.get<ByteArray>("/users/${user_id}/credentials_ldap", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Looker Openid login information for the specified user. Used by Looker Analysts.
    * 
-   * GET /users/{user_id}/credentials_looker_openid -> CredentialsLookerOpenid
+   * GET /users/{user_id}/credentials_looker_openid -> ByteArray
    */
   @JvmOverloads fun user_credentials_looker_openid(
     /**
@@ -7751,14 +7750,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsLookerOpenid>("/users/${user_id}/credentials_looker_openid", 
+    return this.get<ByteArray>("/users/${user_id}/credentials_looker_openid", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### OpenID Connect (OIDC) authentication login information for the specified user.
    * 
-   * GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
+   * GET /users/{user_id}/credentials_oidc -> ByteArray
    */
   @JvmOverloads fun user_credentials_oidc(
     /**
@@ -7769,14 +7768,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsOIDC>("/users/${user_id}/credentials_oidc", 
+    return this.get<ByteArray>("/users/${user_id}/credentials_oidc", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Saml authentication login information for the specified user.
    * 
-   * GET /users/{user_id}/credentials_saml -> CredentialsSaml
+   * GET /users/{user_id}/credentials_saml -> ByteArray
    */
   @JvmOverloads fun user_credentials_saml(
     /**
@@ -7787,14 +7786,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsSaml>("/users/${user_id}/credentials_saml", 
+    return this.get<ByteArray>("/users/${user_id}/credentials_saml", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Two-factor login information for the specified user.
    * 
-   * GET /users/{user_id}/credentials_totp -> CredentialsTotp
+   * GET /users/{user_id}/credentials_totp -> ByteArray
    */
   @JvmOverloads fun user_credentials_totp(
     /**
@@ -7805,7 +7804,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsTotp>("/users/${user_id}/credentials_totp", 
+    return this.get<ByteArray>("/users/${user_id}/credentials_totp", 
       mapOf("fields" to fields))
   }
 
@@ -7839,7 +7838,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * NOTE: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
    * 
-   * GET /users/credential/{credential_type}/{credential_id} -> User
+   * GET /users/credential/{credential_type}/{credential_id} -> ByteArray
    */
   @JvmOverloads fun user_for_credential(
     /**
@@ -7854,14 +7853,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<User>("/users/credential/${credential_type}/${credential_id}", 
+    return this.get<ByteArray>("/users/credential/${credential_type}/${credential_id}", 
       mapOf("fields" to fields))
   }
 
   /**
    * ### Get information about roles of a given user
    * 
-   * GET /users/{user_id}/roles -> Array<Role>
+   * GET /users/{user_id}/roles -> ByteArray
    */
   @JvmOverloads fun user_roles(
     /**
@@ -7876,14 +7875,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} direct_association_only Get only roles associated directly with the user: exclude those only associated through groups.
      */
     direct_association_only: Boolean? = null) : SDKResponse {
-    return this.get<Array<Role>>("/users/${user_id}/roles", 
+    return this.get<ByteArray>("/users/${user_id}/roles", 
       mapOf("fields" to fields, "direct_association_only" to direct_association_only))
   }
 
   /**
    * ### Web login session for the specified user.
    * 
-   * GET /users/{user_id}/sessions/{session_id} -> Session
+   * GET /users/{user_id}/sessions/{session_id} -> ByteArray
    */
   @JvmOverloads fun user_session(
     /**
@@ -7898,7 +7897,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Session>("/users/${user_id}/sessions/${session_id}", 
+    return this.get<ByteArray>("/users/${user_id}/sessions/${session_id}", 
       mapOf("fields" to fields))
   }
 
@@ -7913,7 +7912,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * when you really want to recompute project validation. To quickly display the results of
    * the most recent project validation (without recomputing), use `project_validation_results(project_id)`
    * 
-   * POST /projects/{project_id}/validate -> ProjectValidation
+   * POST /projects/{project_id}/validate -> ByteArray
    */
   @JvmOverloads fun validate_project(
     /**
@@ -7924,7 +7923,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.post<ProjectValidation>("/projects/${project_id}/validate", 
+    return this.post<ByteArray>("/projects/${project_id}/validate", 
       mapOf("fields" to fields))
   }
 
@@ -7937,14 +7936,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
    * 
-   * POST /themes/validate -> ValidationError
+   * POST /themes/validate -> ByteArray
    */
   fun validate_theme(
     /**
      * @param {WriteTheme} body
      */
     body: WriteTheme) : SDKResponse {
-    return this.post<ValidationError>("/themes/validate", mapOf(), body)
+    return this.post<ByteArray>("/themes/validate", mapOf(), body)
   }
 
   /**
@@ -7953,7 +7952,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
    * reflect the actual data displayed in the respective visualizations.
    * 
-   * GET /vector_thumbnail/{type}/{resource_id} -> String
+   * GET /vector_thumbnail/{type}/{resource_id} -> ByteArray
    */
   @JvmOverloads fun vector_thumbnail(
     /**
@@ -7968,21 +7967,21 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} reload Whether or not to refresh the rendered image with the latest content
      */
     reload: String? = null) : SDKResponse {
-    return this.get<String>("/vector_thumbnail/${type}/${resource_id}", 
+    return this.get<ByteArray>("/vector_thumbnail/${type}/${resource_id}", 
       mapOf("reload" to reload))
   }
 
   /**
    * ### Get information about all API versions supported by this Looker instance.
    * 
-   * GET /versions -> ApiVersion
+   * GET /versions -> ByteArray
    */
   @JvmOverloads fun versions(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ApiVersion>("/versions", 
+    return this.get<ByteArray>("/versions", 
       mapOf("fields" to fields))
   }
 
@@ -7990,14 +7989,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * ### This feature is enabled only by special license.
    * ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
    * 
-   * GET /whitelabel_configuration -> WhitelabelConfiguration
+   * GET /whitelabel_configuration -> ByteArray
    */
   @JvmOverloads fun whitelabel_configuration(
     /**
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<WhitelabelConfiguration>("/whitelabel_configuration", 
+    return this.get<ByteArray>("/whitelabel_configuration", 
       mapOf("fields" to fields))
   }
 
@@ -8032,14 +8031,14 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * reside in a special user-specific directory on the Looker server and will still be there when you login in again
    * later and use update_session(workspace_id: "dev") to select the dev workspace for the new API session.
    * 
-   * GET /workspaces/{workspace_id} -> Workspace
+   * GET /workspaces/{workspace_id} -> ByteArray
    */
   fun workspace(
     /**
      * @param {String} workspace_id Id of the workspace
      */
     workspace_id: String) : SDKResponse {
-    return this.get<Workspace>("/workspaces/${workspace_id}", mapOf())
+    return this.get<ByteArray>("/workspaces/${workspace_id}", mapOf())
   }
 
 }

@@ -208,23 +208,22 @@ class TestMethods {
         }
     }
 
-    // TODO revive when last_viewed_at is available on the search endpoints
-//    @test fun testRecent() {
-//        val limit: Long? = 5
-//        val recentDashboards = sdk.ok<Array<Dashboard>>(sdk.search_dashboards(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc"))
-//        val dash2 = sdk.ok<Array<Dashboard>>(sdk.search_dashboards(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc"))
-//        val recentLooks = sdk.ok<Array<Look>>(sdk.search_looks(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc"))
-//        val look2 = sdk.ok<Array<Look>>(sdk.search_looks(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc"))
-//        assertNotNull(recentDashboards)
-//        assertNotNull(dash2)
-//        assertNotNull(recentLooks)
-//        assertNotNull(look2)
-//        val l = limit!!.toInt()
-//        assertEquals(l, recentDashboards.count(), "5 Dashboards")
-//        assertEquals(l, dash2.count(),"5 Dashboards")
-//        assertEquals(l, recentLooks.count(), "5 Looks")
-//        assertEquals(l, look2.count(), "5 Looks")
-//    }
+    @test fun testRecent() {
+        val limit: Long? = 9
+        val recentDashboards = sdk.ok<Array<Dashboard>>(sdk.search_dashboards(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc"))
+        val dash2 = sdk.ok<Array<Dashboard>>(sdk.search_dashboards(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc"))
+        val recentLooks = sdk.ok<Array<Look>>(sdk.search_looks(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc"))
+        val look2 = sdk.ok<Array<Look>>(sdk.search_looks(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc"))
+        assertNotNull(recentDashboards)
+        assertNotNull(dash2)
+        assertNotNull(recentLooks)
+        assertNotNull(look2)
+        val l = limit!!.toInt()
+        assertEquals(l, recentDashboards.count(), "$l Dashboards")
+        assertEquals(l, dash2.count(),"$l Dashboards")
+        assertEquals(l, recentLooks.count(), "$l Looks")
+        assertEquals(l, look2.count(), "$l Looks")
+    }
 
     @ExperimentalUnsignedTypes
     fun mimeType(data: UByteArray) : String {
@@ -243,6 +242,16 @@ class TestMethods {
         }
     }
 
+    @test fun testThumbnailDownload() {
+        val dashboards = sdk.ok<Array<DashboardBase>>(sdk.all_dashboards("id"))
+        dashboards.forEach { d ->
+            d.id?.let { id ->
+                val svg = sdk.ok<String>(sdk.vector_thumbnail("dashboard", id))
+                assertTrue(svg.contains("<svg"), "Dashboard ${id} should have '<svg'")
+            }
+        }
+    }
+
     @test fun testImageDownload() {
         val body = simpleQuery()
         val query = sdk.ok<Query>(sdk.create_query(body))
@@ -251,13 +260,13 @@ class TestMethods {
             val sql = sdk.ok<String>(sdk.run_query(id, "sql"))
             assertNotNull(sql)
             assertTrue(sql.contains("SELECT"), "Select statement returned")
-            val png = sdk.ok<ByteArray>(sdk.run_query_binary(id, "png")).toUByteArray()
+            val png = sdk.ok<ByteArray>(sdk.stream.run_query(id, "png")).toUByteArray()
             assertNotNull(png)
             assertEquals(mimeType(png), "image/png", "png is png?")
-            val jpg = sdk.ok<ByteArray>(sdk.run_query_binary(id, "jpg")).toUByteArray()
+            val jpg = sdk.ok<ByteArray>(sdk.stream.run_query(id, "jpg")).toUByteArray()
             assertNotNull(jpg)
             assertNotEquals(png, jpg, "We should not be getting the same image")
-            assertEquals(mimeType(jpg), "image/jpeg should be returned not image/png. Smells like a bug")
+            assertEquals(mimeType(jpg), "image/jpeg should be returned not image/png. Definitely a bug")
         }
     }
 
