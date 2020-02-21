@@ -35,6 +35,9 @@ import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.response.HttpResponse
 import io.ktor.http.takeFrom
 import kotlinx.coroutines.runBlocking
+import org.apache.http.conn.ssl.NoopHostnameVerifier
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy
+import org.apache.http.ssl.SSLContextBuilder
 import java.net.URLEncoder
 
 sealed class SDKResponse {
@@ -132,6 +135,33 @@ fun addQueryParams(path: String, params: Values = mapOf()): String {
     return "$path?$qp"
 }
 
+fun customClient(options: TransportOptions): HttpClient {
+    // Timeout is passed in as seconds
+    val timeout = options.timeout * 1000
+
+    return HttpClient(Apache) {
+        install(JsonFeature) {
+            serializer = JacksonSerializer()
+        }
+        engine {
+            customizeClient {
+                if (!options.verifySSL) {
+                    setSSLContext(
+                            SSLContextBuilder
+                                    .create()
+                                    .loadTrustMaterial(TrustSelfSignedStrategy())
+                                    .build()
+                    )
+                    setSSLHostnameVerifier(NoopHostnameVerifier())
+                }
+                connectTimeout = timeout
+                connectionRequestTimeout = timeout
+                socketTimeout = timeout
+            }
+        }
+    }
+}
+
 class Transport(val options: TransportOptions) {
 
     var httpClient: HttpClient? = null
@@ -143,15 +173,10 @@ class Transport(val options: TransportOptions) {
     }
 
     init {
-        if (httpClient == null)
-            httpClient = HttpClient(Apache) {
-                install(JsonFeature) {
-                    serializer = JacksonSerializer()
-                }
-            }
+        if (httpClient == null) httpClient = customClient(options)
     }
 
-    val apiPath = "${options.baseUrl}/api/${options.apiVersion}"
+    private val apiPath = "${options.baseUrl}/api/${options.apiVersion}"
 
     private fun ok(res: HttpResponse): Boolean {
         // Thought: We should use whatever is idiomatic for Kotlin
@@ -187,7 +212,9 @@ class Transport(val options: TransportOptions) {
             path: String,
             queryParams: Values = mapOf(),
             body: Any? = null,
-            noinline authenticator: Authenticator? = null): SDKResponse {
+            noinline authenticator: Authenticator? = null) : SDKResponse {
+        // TODO get overrides parameter to work without causing compilation errors in UserSession
+//            overrides: TransportOptions? = null): SDKResponse {
 
         val builder = HttpRequestBuilder()
         // Set the request method
@@ -224,9 +251,20 @@ class Transport(val options: TransportOptions) {
             }
         }
 
-        return runBlocking {
-            SDKResponse.SDKSuccessResponse(httpClient!!.call(builder).response.receive<T>())
+        // TODO fix this after debugging
+        val client = customClient(options) //this.httpClient!!
+//        overrides?.let { o ->
+//            if (options.verifySSL != o.verifySSL || options.timeout != o.timeout) {
+//                // need an HTTP client with custom options
+//                client = customClient(o)
+//            }
+//        }
+
+        val result = runBlocking {
+            SDKResponse.SDKSuccessResponse(client.call(builder).response.receive<T>())
         }
+        client.close()
+        return result
     }
 
 }

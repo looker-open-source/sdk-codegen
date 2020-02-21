@@ -2945,7 +2945,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    */
   fun fetch_integration_form(
     /**
-     * @param {String} integration_id Id of integration
+     * @param {String} integration_id Id of Integration
      */
     integration_id: String) : SDKResponse {
     return this.post<DataActionForm>("/integrations/${integration_id}/form", mapOf())
@@ -3299,7 +3299,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    */
   @JvmOverloads fun integration(
     /**
-     * @param {String} integration_id Id of integration
+     * @param {String} integration_id Id of Integration
      */
     integration_id: String,
     /**
@@ -3442,7 +3442,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
   }
 
   /**
-   * ### Create an access token that runs as a given user.
+   * ### Create an access token for a given user.
    * 
    * This can only be called by an authenticated admin user. It allows that admin to generate a new
    * authentication token for the user with the given user id. That token can then be used for subsequent
@@ -3461,17 +3461,12 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    * 
    * POST /login/{user_id} -> AccessToken
    */
-  @JvmOverloads fun login_user(
+  fun login_user(
     /**
      * @param {Long} user_id Id of user.
      */
-    user_id: Long,
-    /**
-     * @param {Boolean} associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
-     */
-    associative: Boolean? = null) : SDKResponse {
-    return this.post<AccessToken>("/login/${user_id}", 
-      mapOf("associative" to associative))
+    user_id: Long) : SDKResponse {
+    return this.post<AccessToken>("/login/${user_id}", mapOf())
   }
 
   /**
@@ -6441,7 +6436,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    */
   fun test_integration(
     /**
-     * @param {String} integration_id Id of integration
+     * @param {String} integration_id Id of Integration
      */
     integration_id: String) : SDKResponse {
     return this.post<IntegrationTestResult>("/integrations/${integration_id}/test", mapOf())
@@ -6977,7 +6972,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    */
   @JvmOverloads fun update_integration(
     /**
-     * @param {String} integration_id Id of integration
+     * @param {String} integration_id Id of Integration
      */
     integration_id: String,
     /**

@@ -1295,7 +1295,7 @@ data class DashboardElement (
   var refresh_interval_to_i: Long? = null,
   var result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = null,
   /**
-   * ID of the ResultMakerLookup entry.
+   * ID of the ResultMakerLookup entry. (read-only)
    */
   var result_maker_id: Long? = null,
   /**
@@ -2750,7 +2750,7 @@ data class Integration (
   /**
    * Whether the integration is available to users.
    */
-  var installed_delegate_oauth_targets: Array<Long>? = null
+  var installed_delegate_oauth_targets: Array<String>? = null
 )
 
 data class IntegrationHub (
@@ -6179,11 +6179,7 @@ data class SqlQuery (
   /**
    * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
    */
-  var vis_config: Map<String,Any>? = null,
-  /**
-   * ID of the ResultMakerLookup entry.
-   */
-  var result_maker_id: Long? = null
+  var vis_config: Map<String,Any>? = null
 )
 
 data class SqlQueryCreate (
@@ -7120,10 +7116,6 @@ data class WriteDashboardElement (
   var refresh_interval: String? = null,
   var result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = null,
   /**
-   * ID of the ResultMakerLookup entry.
-   */
-  var result_maker_id: Long? = null,
-  /**
    * Text tile subtitle text
    */
   var subtitle_text: String? = null,
@@ -7585,7 +7577,7 @@ data class WriteIntegration (
   /**
    * Whether the integration is available to users.
    */
-  var installed_delegate_oauth_targets: Array<Long>? = null
+  var installed_delegate_oauth_targets: Array<String>? = null
 )
 
 /**

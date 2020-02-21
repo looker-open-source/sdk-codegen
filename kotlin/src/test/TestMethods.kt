@@ -1,7 +1,4 @@
-import com.looker.rtl.ApiSettingsIniFile
-import com.looker.rtl.SDKResponse
-import com.looker.rtl.Transport
-import com.looker.rtl.UserSession
+import com.looker.rtl.*
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.json.JacksonSerializer
@@ -18,35 +15,22 @@ import kotlin.test.assertTrue
 import org.junit.Test as test
 import com.looker.sdk.*
 
-// Test timeout in seconds
-val testTimeout = 60_000
-
 class TestMethods {
     val config = TestConfig()
-    val settings = ApiSettingsIniFile(config.localIni, "Looker")
+    var settings = ApiSettingsIniFile(config.localIni, "Looker")
 
-    val client: HttpClient = HttpClient(Apache) {
-        install(JsonFeature) {
-            serializer = JacksonSerializer()
-        }
-        engine {
-            customizeClient {
-                setSSLContext(
-                        SSLContextBuilder
-                                .create()
-                                .loadTrustMaterial(TrustSelfSignedStrategy())
-                                .build()
-                )
-                setSSLHostnameVerifier(NoopHostnameVerifier())
-                connectTimeout = testTimeout
-                connectionRequestTimeout = testTimeout
-                socketTimeout = testTimeout
-            }
-        }
-    }
+    val client = customClient(testSettings(settings))
     val session = UserSession(settings, Transport(settings, client))
 
     val sdk = LookerSDK(session)
+
+    private fun testSettings(options: TransportOptions) : TransportOptions {
+        var result = options
+        // Set timeout to 120 seconds
+        result.timeout = 120
+        result.verifySSL = false
+        return result
+    }
 
     inline fun <TAll,TId, reified TEntity> listGetter(
             lister: () -> SDKResponse,
@@ -59,7 +43,7 @@ class TestMethods {
         val list = sdk.ok<Array<TAll>>(lister())
         var errors = StringBuilder("")
         var errorCount = 0
-        assertNotEquals(list.count(), 0, "Got ${entityName}s")
+        assertNotEquals(0, list.count(), "Got ${entityName}s")
         for (item in list) {
             getId(item).let { id ->
                 try {
@@ -73,7 +57,9 @@ class TestMethods {
             if (errorCount > maxErrors) break
         }
         val result = errors.toString()
-        assertEquals(errors.length, 0, result)
+        if (errors.isNotEmpty()) {
+            assertEquals(0, errors.length, result)
+        }
         return result
     }
 
@@ -266,7 +252,7 @@ class TestMethods {
             val jpg = sdk.ok<ByteArray>(sdk.stream.run_query(id, "jpg")).toUByteArray()
             assertNotNull(jpg)
             assertNotEquals(png, jpg, "We should not be getting the same image")
-            assertEquals(mimeType(jpg), "image/jpeg should be returned not image/png. Definitely a bug")
+            assertEquals(mimeType(jpg), "image/jpeg should be returned not image/png. Definitely an API bug, not SDK")
         }
     }
 
@@ -357,6 +343,12 @@ class TestMethods {
                 {sdk.all_homepage_items()},
                 {item -> item.id!!.toLong()},
                 {id, fields->sdk.homepage_item(id,fields)})
+    }
+
+    @test fun testSearchHomepages() {
+        val searched = sdk.ok<Array<Homepage>>(sdk.search_homepages(favorited = true))
+        assertNotNull(searched)
+        assertNotEquals(searched.count(), 0, "There should be homepages")
     }
 
     @test fun testAllHomepages() {
