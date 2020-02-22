@@ -16,6 +16,53 @@ fileprivate let localIni : String = ProcessInfo.processInfo.environment["LOOKERS
 
 let config = try? ApiConfig(localIni)
 
+TODO create TestConfig() based on Kotlin or Typescript's version
+
+typealias jsonDict = Map<String, Any>
+val jsonDictType = object : TypeToken<jsonDict>() {}.type
+
+open class TestConfig() {
+    val rootPath: String = File("./").absoluteFile.parentFile.parentFile.absolutePath
+    val testPath  = "${rootPath}/test"
+    val dataFile = testFile("data.yml.json")
+    val envIni = System.getenv("LOOKERSDK_INI")
+    val localIni = if (envIni === null) rootFile("looker.ini") else envIni
+    private val gson = Gson()
+    private val dataContents = File(dataFile).readText()
+    val testData = gson.fromJson<jsonDict>(dataContents, jsonDictType)
+    val testIni = rootFile(testData.get("iniFile") as String)
+    val configContents = File(localIni).readText()
+    val config = apiConfig(configContents)
+    val section = config["Looker"]
+    val baseUrl = section?.get("base_url")
+    val timeout = section?.get("timeout")?.toInt(10)
+    val testContents = File(testIni).readText()
+    val testConfig = apiConfig(testContents)
+    val testSection = testConfig["Looker"]
+//    return {
+//        rootPath,
+//        testPath,
+//        dataFile,
+//        localIni,
+//        baseUrl,
+//        timeout,
+//        testData,
+//        testIni,
+//        configContents,
+//        testConfig,
+//        testSection,
+//    }
+
+    fun rootFile(fileName: String): String {
+        return "${rootPath}/${fileName}"
+    }
+
+    fun testFile(fileName: String) : String {
+        return "${testPath}/${fileName}"
+    }
+}
+
+
 @available(OSX 10.12, *)
 class baseTransportTests: XCTestCase {
     

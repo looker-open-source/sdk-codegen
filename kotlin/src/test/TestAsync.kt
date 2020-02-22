@@ -4,7 +4,6 @@ import com.looker.sdk.Look
 import com.looker.sdk.LookerSDK
 import kotlinx.coroutines.*
 import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import org.junit.Test as test
 
@@ -23,55 +22,6 @@ class TestAsync {
         result.timeout = 120
         result.verifySSL = false
         return result
-    }
-
-    inline fun <TAll,TId, reified TEntity> listGetter(
-            lister: () -> SDKResponse,
-            getId: (item:TAll) -> TId,
-            getEntity: (id:TId, fields: String?) -> SDKResponse,
-            fields: String? = null,
-            maxErrors: Int = 3
-    ): String {
-        val entityName = TEntity::class.simpleName!!
-        val list = sdk.ok<Array<TAll>>(lister())
-        var errors = StringBuilder("")
-        var errorCount = 0
-        assertNotEquals(0, list.count(), "Got ${entityName}s")
-        for (item in list) {
-            getId(item).let { id ->
-                try {
-                    val actual = sdk.ok<TEntity>(getEntity(id, fields))
-                } catch (e: Exception) {
-                    if (++errorCount <= maxErrors) {
-                        errors.append("Failed to get $entityName $id\nError: $e\n")
-                    }
-                }
-            }
-            if (errorCount > maxErrors) break
-        }
-        val result = errors.toString()
-        if (errors.isNotEmpty()) {
-            assertEquals(0, errors.length, result)
-        }
-        return result
-    }
-
-    inline fun <TAll, TId, reified TEntity> testAll(
-            lister: () -> SDKResponse,
-            getId: (item:TAll) -> TId,
-            getEntity: (id:TId, fields: String?) -> SDKResponse,
-            fields: String? = null,
-            maxErrors: Int = 3
-    ) {
-        val entityName = TEntity::class.simpleName!!
-        var result = listGetter<TAll, TId, TEntity>(lister, getId, getEntity, null, maxErrors)
-        if (result !== "" && fields !== null) {
-            print("Safely getting $entityName ...\n")
-            result = listGetter<TAll, TId, TEntity>(lister, getId, getEntity, fields, maxErrors)
-            if (result == "") {
-                print("Safely got all $entityName entries\n")
-            }
-        }
     }
 
     // see https://kotlinlang.org/docs/reference/coroutines/composing-suspending-functions.html#structured-concurrency-with-async
