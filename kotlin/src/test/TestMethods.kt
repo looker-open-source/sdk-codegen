@@ -1,19 +1,11 @@
 import com.looker.rtl.*
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.apache.Apache
-import io.ktor.client.features.json.JacksonSerializer
-import io.ktor.client.features.json.JsonFeature
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.apache.http.conn.ssl.NoopHostnameVerifier
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy
-import org.apache.http.ssl.SSLContextBuilder
+import com.looker.sdk.*
+import kotlinx.coroutines.*
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.Test as test
-import com.looker.sdk.*
 
 class TestMethods {
     val config = TestConfig()
@@ -191,6 +183,49 @@ class TestMethods {
                 sdk.ok<Boolean>(sdk.delete_scheduled_plan(plan.id!!))
                 print("Cleared scheduled plan ${plan.id!!}")
             }
+        }
+    }
+
+    // see https://kotlinlang.org/docs/reference/coroutines/composing-suspending-functions.html#structured-concurrency-with-async
+    private suspend fun recentParallel(limit: Long? = 9) : Pair<Array<Dashboard>, Array<Look>> = coroutineScope {
+        val recentDashboards = async { sdk.ok<Array<Dashboard>>(sdk.search_dashboards(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc")) }
+        val recentLooks = async { sdk.ok<Array<Look>>(sdk.search_looks(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc")) }
+        Pair(recentDashboards.await(), recentLooks.await())
+    }
+
+    @test
+    fun testRecentParallel() {
+        val limit: Long? = 9
+        runBlocking {
+            val pair = recentParallel(limit)
+            val dashboards = pair.first
+            val looks = pair.second
+            assertNotNull(dashboards)
+            assertNotNull(looks)
+            val l = limit!!.toInt()
+            assertEquals(l, dashboards.count(), "$l Dashboards")
+            assertEquals(l, looks.count(), "$l Looks")
+        }
+    }
+
+    private suspend fun recentSerial(limit: Long? = 9) : Pair<Array<Dashboard>, Array<Look>> = coroutineScope {
+        val recentDashboards = withContext(Dispatchers.Default) { sdk.ok<Array<Dashboard>>(sdk.search_dashboards(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc")) }
+        val recentLooks = withContext(Dispatchers.Default) { sdk.ok<Array<Look>>(sdk.search_looks(limit = limit, last_viewed_at = "not null", sorts = "last_viewed_at desc")) }
+        Pair(recentDashboards, recentLooks)
+    }
+
+    @test
+    fun testRecentSerial() {
+        val limit: Long? = 9
+        runBlocking {
+            val pair = recentSerial(limit)
+            val dashboards = pair.first
+            val looks = pair.second
+            assertNotNull(dashboards)
+            assertNotNull(looks)
+            val l = limit!!.toInt()
+            assertEquals(l, dashboards.count(), "$l Dashboards")
+            assertEquals(l, looks.count(), "$l Looks")
         }
     }
 

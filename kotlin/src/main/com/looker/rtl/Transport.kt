@@ -30,6 +30,7 @@ import io.ktor.client.call.receive
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.features.json.defaultSerializer
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.response.HttpResponse
@@ -216,40 +217,7 @@ class Transport(val options: TransportOptions) {
         // TODO get overrides parameter to work without causing compilation errors in UserSession
 //            overrides: TransportOptions? = null): SDKResponse {
 
-        val builder = HttpRequestBuilder()
-        // Set the request method
-        builder.method = method.value
-
-        // Handle the headers
-        val headers = options.headers.toMutableMap()
-        headers["User-Agent"] = AGENT_TAG
-        headers[LOOKER_APPID] = AGENT_TAG
-
-        val requestPath = makeUrl(path, queryParams, authenticator)
-
-        val auth = authenticator ?: ::defaultAuthenticator
-
-        val finishedRequest = auth(RequestSettings(method, requestPath, headers))
-
-        builder.method = finishedRequest.method.value
-        finishedRequest.headers.forEach {(k, v) ->
-            builder.headers.append(k,v)
-        }
-        builder.url.takeFrom(finishedRequest.url)
-
-        if (body != null) {
-            if (body is FormDataContent) {
-                // Encoded form
-                builder.body = body
-            } else {
-                // Request body
-                val json = io.ktor.client.features.json.defaultSerializer()
-
-                val jsonBody = json.write(body)
-                builder.body = jsonBody  // TODO: I think having to do this is a bug? https://github.com/ktorio/ktor/issues/1265
-                headers["Content-Length"] = jsonBody.contentLength.toString()
-            }
-        }
+        val builder = httpRequestBuilder(method, path, queryParams, authenticator, body)
 
         // TODO fix this after debugging
         val client = customClient(options) //this.httpClient!!
@@ -267,4 +235,47 @@ class Transport(val options: TransportOptions) {
         return result
     }
 
+    fun httpRequestBuilder(method: HttpMethod, path: String, queryParams: Values, authenticator: Authenticator?, body: Any?): HttpRequestBuilder {
+        val builder = HttpRequestBuilder()
+        // Set the request method
+        builder.method = method.value
+
+        // Handle the headers
+        val headers = options.headers.toMutableMap()
+        headers["User-Agent"] = AGENT_TAG
+        headers[LOOKER_APPID] = AGENT_TAG
+
+        val requestPath = makeUrl(path, queryParams, authenticator)
+
+        val auth = authenticator ?: ::defaultAuthenticator
+
+        val finishedRequest = auth(RequestSettings(method, requestPath, headers))
+
+        builder.method = finishedRequest.method.value
+        finishedRequest.headers.forEach { (k, v) ->
+            builder.headers.append(k, v)
+        }
+        builder.url.takeFrom(finishedRequest.url)
+
+        if (body != null) {
+            if (body is FormDataContent) {
+                // Encoded form
+                builder.body = body
+            } else {
+                // Request body
+                val json = defaultSerializer()
+
+                val jsonBody = json.write(body)
+                builder.body = jsonBody  // TODO: I think having to do this is a bug? https://github.com/ktorio/ktor/issues/1265
+                headers["Content-Length"] = jsonBody.contentLength.toString()
+            }
+        }
+        return builder
+    }
+
+
+//    typealias SDKRequest =
+//    suspend inline fun <reified T> requests(calls: Array<SDKRequest>) : Array<SDKResponse> {
+//
+//    }
 }
