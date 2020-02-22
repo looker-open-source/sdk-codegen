@@ -8,6 +8,8 @@
 import XCTest
 @testable import looker
 
+let config = TestConfig()
+
 @available(OSX 10.15, *)
 class methodsTests: XCTestCase {
 
@@ -95,7 +97,7 @@ class methodsTests: XCTestCase {
     }
 
     func testCreateQueryAndRun() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
@@ -144,7 +146,7 @@ class methodsTests: XCTestCase {
     }
 
     func testMe() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
@@ -154,7 +156,7 @@ class methodsTests: XCTestCase {
     }
 
     func testGetAllUsers() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
@@ -170,7 +172,7 @@ class methodsTests: XCTestCase {
     }
 
     func testUserSearch() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
@@ -183,7 +185,7 @@ class methodsTests: XCTestCase {
     }
 
     func testGetAllLooks() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
@@ -199,7 +201,7 @@ class methodsTests: XCTestCase {
     }
 
     func testDashboardThumbnail() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
@@ -235,7 +237,7 @@ class methodsTests: XCTestCase {
     }
     
     func testImageDownload() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
@@ -248,12 +250,12 @@ class methodsTests: XCTestCase {
         XCTAssertNotNil(jpg)
         print(png, jpg)
         XCTAssertNotEqual(png, jpg, "We should not be getting the same image")
-        XCTAssertEqual(mimeType(jpg), "image/jpeg should be returned not image/png. Smells like a bug")
+        XCTAssertEqual(mimeType(jpg), "image/jpeg should be returned not image/png. Smells like an API bug, not SDK issue")
     }
     
     
     func testGetAllDashboards() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
@@ -275,7 +277,7 @@ class methodsTests: XCTestCase {
     }
 
     func testGetAllSpaces() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)
@@ -292,7 +294,7 @@ class methodsTests: XCTestCase {
     }
 
     func testGetAllFolders() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         let sdk = LookerSDK(auth)

@@ -11,6 +11,7 @@ import XCTest
 @available(OSX 10.15, *)
 class authSessionTests: XCTestCase {
 
+    let config = TestConfig()
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -21,7 +22,7 @@ class authSessionTests: XCTestCase {
 
     // integration test against Looker instance to verify authSession handles basic authentication
     func testLogin() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         XCTAssertFalse(auth.isAuthenticated(), "should not be authenticated")

@@ -14,51 +14,25 @@ fileprivate let testRootPath = URL(fileURLWithPath: #file).pathComponents
 fileprivate let repoPath : String = testRootPath + "/../../"
 fileprivate let localIni : String = ProcessInfo.processInfo.environment["LOOKERSDK_INI"] ?? (repoPath + "looker.ini")
 
-let config = try? ApiConfig(localIni)
 
-TODO create TestConfig() based on Kotlin or Typescript's version
-
-typealias jsonDict = Map<String, Any>
-val jsonDictType = object : TypeToken<jsonDict>() {}.type
-
-open class TestConfig() {
-    val rootPath: String = File("./").absoluteFile.parentFile.parentFile.absolutePath
-    val testPath  = "${rootPath}/test"
-    val dataFile = testFile("data.yml.json")
-    val envIni = System.getenv("LOOKERSDK_INI")
-    val localIni = if (envIni === null) rootFile("looker.ini") else envIni
-    private val gson = Gson()
-    private val dataContents = File(dataFile).readText()
-    val testData = gson.fromJson<jsonDict>(dataContents, jsonDictType)
-    val testIni = rootFile(testData.get("iniFile") as String)
-    val configContents = File(localIni).readText()
-    val config = apiConfig(configContents)
-    val section = config["Looker"]
-    val baseUrl = section?.get("base_url")
-    val timeout = section?.get("timeout")?.toInt(10)
-    val testContents = File(testIni).readText()
-    val testConfig = apiConfig(testContents)
-    val testSection = testConfig["Looker"]
-//    return {
-//        rootPath,
-//        testPath,
-//        dataFile,
-//        localIni,
-//        baseUrl,
-//        timeout,
-//        testData,
-//        testIni,
-//        configContents,
-//        testConfig,
-//        testSection,
-//    }
-
-    fun rootFile(fileName: String): String {
-        return "${rootPath}/${fileName}"
+class TestConfig {
+    
+    var rootPath = repoPath
+    var testPath = testRootPath
+    lazy var dataFile = testFile("data.yml.json")
+    lazy var localIni = envVar("LOOKERSDK_INI", self.rootFile("looker.ini"))!
+    lazy var dataContents = try! Data(String(contentsOfFile: dataFile).utf8)
+    lazy var testData = try! JSONSerialization.jsonObject(with: dataContents, options: []) as! AnyCodable
+    lazy var testIni = rootFile((testData["iniFile"] as? String)!)
+    lazy var config = try! ApiConfig(localIni, "Looker")
+    lazy var testConfig = try! ApiConfig(testIni)
+    
+    func rootFile(_ fileName: String) -> String {
+        return "\(rootPath)/\(fileName)"
     }
 
-    fun testFile(fileName: String) : String {
-        return "${testPath}/${fileName}"
+    func testFile(_ fileName: String) -> String {
+        return "\(testPath)/\(fileName)"
     }
 }
 
@@ -66,6 +40,7 @@ open class TestConfig() {
 @available(OSX 10.12, *)
 class baseTransportTests: XCTestCase {
     
+    let config = TestConfig()
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -75,7 +50,7 @@ class baseTransportTests: XCTestCase {
     }
         
     func testPlainRelativePath() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let requestPath = "/versions"
         let response = xp.plainRequest(HttpMethod.GET, requestPath, nil, nil, nil, nil)
@@ -91,7 +66,7 @@ class baseTransportTests: XCTestCase {
     }
     
     func testPlainAbsolutePath() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let requestPath = settings.base_url! + "/versions"
         let response = xp.plainRequest(HttpMethod.GET, requestPath, nil, nil, nil, nil)
@@ -107,7 +82,7 @@ class baseTransportTests: XCTestCase {
     }
     
     func testPlainLogin() {
-        let settings = config!
+        let settings = config.config
         let values = settings.readConfig()
         let client_id = values["client_id"]
         let client_secret = values["client_secret"]

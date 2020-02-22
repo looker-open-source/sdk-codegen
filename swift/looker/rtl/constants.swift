@@ -59,7 +59,7 @@ extension String {
 }
 
 struct Constants {
-    static let lookerVersion = "7.3"
+    static let lookerVersion = "7.2"
     static let apiVersion = "4.0"
     static let defaultApiVersion = "4.0" // Swift requires API 4.0
     static let sdkVersion = #"\#(apiVersion).\#(lookerVersion)"#
@@ -147,8 +147,12 @@ func defaultBool(_ value: String?, _ defaultVal: Bool = false) -> Bool {
     return defaultVal
 }
 
-func envVar(_ name: String) -> String? {
-    return unquote(ProcessInfo.processInfo.environment[name])
+func envVar(_ name: String, _ defaultVal: String? = nil) -> String? {
+    if let val = unquote(ProcessInfo.processInfo.environment[name]) {
+        return val
+    } else {
+        return defaultVal
+    }
 }
 
 func isOptional(_ value: Any) -> Bool {
