@@ -218,7 +218,7 @@ class TestMethods {
             val jpg = sdk.ok<ByteArray>(sdk.stream.run_query(id, "jpg")).toUByteArray()
             assertNotNull(jpg)
             assertNotEquals(png, jpg, "We should not be getting the same image")
-            assertEquals(mimeType(jpg), "image/jpeg should be returned not image/png. Definitely an API bug, not SDK")
+            assertEquals(mimeType(jpg), "image/jpeg", "image/jpeg should be returned not image/png. Definitely an API bug, not SDK")
         }
     }
 
@@ -232,7 +232,7 @@ class TestMethods {
         assertNotNull(me)
         assertNotNull(me.id)
         assertNotNull(creds)
-        assertTrue(creds.count() > 0)
+        assertNotEquals(0, creds.count(), "We should have some credentials for the API user")
         assertNotNull(creds[0].client_id)
     }
 
