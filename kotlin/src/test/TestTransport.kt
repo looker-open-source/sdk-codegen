@@ -39,16 +39,18 @@ class TestTransport {
     val mockAuth: Authenticator = { RequestSettings(HttpMethod.GET, "bogus") }
     val params = "?a=1&b=false&c=d+e"
 
-    @test fun testFullPath() {
+    @test
+    fun testFullPath() {
         var actual = xp.makeUrl(fullPath)
         assertEquals(fullPath, actual)
         actual = xp.makeUrl(fullPath, authenticator = mockAuth)
         assertEquals(fullPath, actual)
         actual = xp.makeUrl(fullPath, qp, mockAuth)
-        assertEquals(fullPath+params, actual)
+        assertEquals(fullPath + params, actual)
     }
 
-    @test fun testRelativePath() {
+    @test
+    fun testRelativePath() {
         var actual = xp.makeUrl(userPath)
         assertEquals("$base$userPath", actual)
         actual = xp.makeUrl(userPath, authenticator = mockAuth)
@@ -57,8 +59,9 @@ class TestTransport {
         assertEquals("$base/api/$apiVersion$userPath$params", actual)
     }
 
-    @test fun testFullRequest() {
-        val actual = ok<String>(xp.request<String>(HttpMethod.GET,fullPath))
+    @test
+    fun testFullRequest() {
+        val actual = ok<String>(xp.request<String>(HttpMethod.GET, fullPath))
         assertTrue(actual.contains("One SDK to rule them all, and in the codegen bind them"))
     }
 

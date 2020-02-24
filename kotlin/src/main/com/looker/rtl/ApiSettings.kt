@@ -34,16 +34,15 @@ fun apiConfig(contents: String): ApiSections {
     val iniParser = Ini(ByteArrayInputStream(contents.toByteArray()))
 
     val ret = mutableMapOf<String, Map<String, String>>()
-    iniParser.forEach {(section, values) ->
-        ret[section] = values.map {it.key to unQuote(it.value)}.toMap()
+    iniParser.forEach { (section, values) ->
+        ret[section] = values.map { it.key to unQuote(it.value) }.toMap()
     }
 
     return ret
 }
 
 class ApiSettingsIniFile(var filename: String = "./looker.ini",
-                         section: String = "") : ApiSettings(File(filename).readText(), section)
-{
+                         section: String = "") : ApiSettings(File(filename).readText(), section) {
     override fun readConfig(): Map<String, String> {
         val file = File(filename)
         if (!file.exists()) return mapOf()
@@ -56,7 +55,7 @@ class ApiSettingsIniFile(var filename: String = "./looker.ini",
 
 
 // TODO why no @JvmOverloads here?
-open class ApiSettings(contents: String, var section: String = ""): ConfigurationProvider {
+open class ApiSettings(contents: String, var section: String = "") : ConfigurationProvider {
 
     override var baseUrl: String = ""
     override var apiVersion: String = DEFAULT_API_VERSION
@@ -105,7 +104,7 @@ open class ApiSettings(contents: String, var section: String = ""): Configuratio
                 "verify_ssl" to verifySSL.toString(),
                 "timeout" to timeout.toString(),
                 "headers" to headers.toString()
-                )
+        )
     }
 
 

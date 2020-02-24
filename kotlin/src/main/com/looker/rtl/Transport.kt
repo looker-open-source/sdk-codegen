@@ -46,7 +46,7 @@ sealed class SDKResponse {
     data class SDKSuccessResponse<T>(
             /** The object returned by the SDK call. */
             val value: T
-    ): SDKResponse() {
+    ) : SDKResponse() {
         /** Whether the SDK call was successful. */
         val ok: Boolean = true
     }
@@ -55,13 +55,13 @@ sealed class SDKResponse {
     data class SDKErrorResponse<T>(
             /** The error object returned by the SDK call. */
             val value: T
-    ): SDKResponse() {
+    ) : SDKResponse() {
         /** Whether the SDK call was successful. */
         val ok: Boolean = false
     }
 
     /** An error representing an issue in the SDK, like a network or parsing error. */
-    data class SDKError(val message: String): SDKResponse() {
+    data class SDKError(val message: String) : SDKResponse() {
         val type: String = "sdk_error"
     }
 }
@@ -71,7 +71,7 @@ sealed class SDKResponse {
  */
 fun <T> ok(response: SDKResponse): T {
     @Suppress("UNCHECKED_CAST")
-    when(response) {
+    when (response) {
         is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
         is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
         else -> throw Error("Fail!!")
@@ -106,17 +106,17 @@ interface TransportOptions {
     var headers: Map<String, String>
 }
 
-interface ConfigurationProvider: TransportOptions {
+interface ConfigurationProvider : TransportOptions {
     fun isConfigured(): Boolean
     fun readConfig(): Map<String, String>
 }
 
 data class TransportSettings(
-    override var baseUrl: String = "",
-    override var apiVersion: String = DEFAULT_API_VERSION,
-    override var verifySSL: Boolean = true,
-    override var timeout: Int = DEFAULT_TIMEOUT,
-    override var headers: Map<String, String> = mapOf()
+        override var baseUrl: String = "",
+        override var apiVersion: String = DEFAULT_API_VERSION,
+        override var verifySSL: Boolean = true,
+        override var timeout: Int = DEFAULT_TIMEOUT,
+        override var headers: Map<String, String> = mapOf()
 ) : TransportOptions
 
 
@@ -124,7 +124,7 @@ fun encodeValues(params: Values = mapOf()): String {
     @Suppress("UNCHECKED_CAST")
     return params
             .filter { (_, v) -> v !== null }
-            .map { (k, v) -> "$k=${URLEncoder.encode("$v", "utf-8")}"}
+            .map { (k, v) -> "$k=${URLEncoder.encode("$v", "utf-8")}" }
             .joinToString("&")
 
 }
@@ -165,18 +165,6 @@ fun customClient(options: TransportOptions): HttpClient {
 
 class Transport(val options: TransportOptions) {
 
-    var httpClient: HttpClient? = null
-        private set
-
-    // Internal only secondary constructor to support supplying an HTTP client for testing
-    internal constructor(options: TransportOptions, httpClient: HttpClient) : this(options) {
-        this.httpClient = httpClient
-    }
-
-    init {
-        if (httpClient == null) httpClient = customClient(options)
-    }
-
     private val apiPath = "${options.baseUrl}/api/${options.apiVersion}"
 
     private fun ok(res: HttpResponse): Boolean {
@@ -200,7 +188,7 @@ class Transport(val options: TransportOptions) {
                 || path.startsWith("https://", true)) {
             "" // full path was passed in
         } else {
-            if (authenticator === null)  {
+            if (authenticator === null) {
                 options.baseUrl
             } else {
                 apiPath
@@ -213,14 +201,14 @@ class Transport(val options: TransportOptions) {
             path: String,
             queryParams: Values = mapOf(),
             body: Any? = null,
-            noinline authenticator: Authenticator? = null) : SDKResponse {
+            noinline authenticator: Authenticator? = null): SDKResponse {
         // TODO get overrides parameter to work without causing compilation errors in UserSession
 //            overrides: TransportOptions? = null): SDKResponse {
 
         val builder = httpRequestBuilder(method, path, queryParams, authenticator, body)
 
-        // TODO fix this after debugging
-        val client = customClient(options) //this.httpClient!!
+        val client = customClient(options)
+        // TODO get overrides parameter working
 //        overrides?.let { o ->
 //            if (options.verifySSL != o.verifySSL || options.timeout != o.timeout) {
 //                // need an HTTP client with custom options
@@ -273,9 +261,4 @@ class Transport(val options: TransportOptions) {
         return builder
     }
 
-
-//    typealias SDKRequest =
-//    suspend inline fun <reified T> requests(calls: Array<SDKRequest>) : Array<SDKResponse> {
-//
-//    }
 }

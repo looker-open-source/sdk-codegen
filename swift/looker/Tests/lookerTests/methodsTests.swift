@@ -155,6 +155,23 @@ class methodsTests: XCTestCase {
         _ = sdk.authSession.logout()
     }
 
+    func testOkThrowsError() {
+        let settings = config.config
+        let xp = BaseTransport(settings)
+        let auth = AuthSession(settings, xp)
+        let sdk = LookerSDK(auth)
+        let msg = "Not found"
+        
+        var lookml = try? okt(sdk.lookml_model("no such model"))
+        XCTAssertNil(lookml)
+        do {
+            lookml = try okt(sdk.lookml_model("no such model"))
+            XCTAssertFalse(true, "This line should not be reached")
+        } catch {
+            XCTAssertEqual(error.localizedDescription, msg)
+        }
+    }
+    
     func testGetAllUsers() {
         let settings = config.config
         let xp = BaseTransport(settings)
@@ -200,14 +217,14 @@ class methodsTests: XCTestCase {
         _ = sdk.authSession.logout()
     }
 
-    func testDashboardThumbnail() {
-        let settings = config.config
-        let xp = BaseTransport(settings)
-        let auth = AuthSession(settings, xp)
-        let sdk = LookerSDK(auth)
-        let svg = sdk.ok(sdk.vector_thumbnail("dashboard", "1"))
-        XCTAssertTrue(svg.contains("<svg"))
-    }
+//    func testDashboardThumbnail() {
+//        let settings = config.config
+//        let xp = BaseTransport(settings)
+//        let auth = AuthSession(settings, xp)
+//        let sdk = LookerSDK(auth)
+//        let svg = sdk.ok(sdk.vector_thumbnail("dashboard", "1"))
+//        XCTAssertTrue(svg.contains("<svg"))
+//    }
     
     func mimeType(_ data: Data) -> String {
 
@@ -269,8 +286,8 @@ class methodsTests: XCTestCase {
             if (dashboard.created_at == nil) {
                 print("Dashboard \(id) created_at is nil")
             }
-            let svg = sdk.ok(sdk.vector_thumbnail("dashboard", id))
-            XCTAssertTrue(svg.contains("svg"))
+//            let svg = sdk.ok(sdk.vector_thumbnail("dashboard", id))
+//            XCTAssertTrue(svg.contains("svg"))
         }
         _ = sdk.authSession.logout()
 

@@ -27,7 +27,8 @@ import kotlin.test.assertEquals
 import org.junit.Test as test
 
 class TestAuthToken {
-    @test fun defaultsWithEmptyToken() {
+    @test
+    fun defaultsWithEmptyToken() {
         val testToken = AuthToken()
         assertEquals(testToken.accessToken, "")
         assertEquals(testToken.tokenType, "")
@@ -35,7 +36,8 @@ class TestAuthToken {
         assertEquals(testToken.isActive(), false)
     }
 
-    @test fun isActiveWithFullToken() {
+    @test
+    fun isActiveWithFullToken() {
         val testToken = AuthToken(
                 accessToken = "all-access",
                 tokenType = "backstage",

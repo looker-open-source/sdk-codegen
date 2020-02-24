@@ -22,67 +22,47 @@
  * THE SOFTWARE.
  */
 
-import com.looker.rtl.ApiSettingsIniFile
 import com.looker.rtl.Transport
 import com.looker.rtl.UserSession
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.apache.Apache
-import io.ktor.client.features.json.JacksonSerializer
-import io.ktor.client.features.json.JsonFeature
-import org.apache.http.conn.ssl.NoopHostnameVerifier
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy
-import org.apache.http.ssl.SSLContextBuilder
+import java.io.File
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import org.junit.Test as test
-import java.io.File
-
 
 class TestUserSession {
     val config = TestConfig()
-    val settings = ApiSettingsIniFile(config.localIni, "Looker")
+    val settings = config.settings
+    val testSettings = config.testSettings(settings)
 
-    val client: HttpClient = HttpClient(Apache) {
-        install(JsonFeature) {
-            serializer = JacksonSerializer()
-        }
-        engine {
-            customizeClient {
-                setSSLContext(
-                        SSLContextBuilder
-                                .create()
-                                .loadTrustMaterial(TrustSelfSignedStrategy())
-                                .build()
-                )
-                setSSLHostnameVerifier(NoopHostnameVerifier())
-            }
-        }
-    }
-
-    @test fun testTestFiles() {
+    @test
+    fun testTestFiles() {
         assertTrue(File(config.dataFile).exists(), "${config.dataFile} should exist")
         assertTrue(File(config.localIni).exists(), "${config.localIni} should exist")
     }
 
-    @test fun testIsAuthenticated() {
-        val session = UserSession(settings, Transport(settings, client))
+    @test
+    fun testIsAuthenticated() {
+        val session = UserSession(settings, Transport(testSettings))
         assertFalse(session.isAuthenticated())
     }
 
-    @test fun testLoginWithValidCreds() {
-        val session = UserSession(settings, Transport(settings, client))
+    @test
+    fun testLoginWithValidCreds() {
+        val session = UserSession(settings, Transport(testSettings))
         session.login()
         assertTrue(session.isAuthenticated())
     }
 
-    @test fun testUnauthenticatedLogout() {
-        val session = UserSession(settings, Transport(settings, client))
+    @test
+    fun testUnauthenticatedLogout() {
+        val session = UserSession(settings, Transport(testSettings))
         assertFalse(session.isAuthenticated())
         assertFalse(session.logout())
     }
 
-    @test fun testLogsInAndOutWithGoodCreds() {
-        val session = UserSession(settings, Transport(settings, client))
+    @test
+    fun testLogsInAndOutWithGoodCreds() {
+        val session = UserSession(settings, Transport(testSettings))
         assertFalse(session.isAuthenticated())
         session.login()
         assertTrue(session.isAuthenticated())

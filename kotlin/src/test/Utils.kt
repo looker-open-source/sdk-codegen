@@ -24,15 +24,19 @@
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.looker.rtl.apiConfig
+import com.looker.rtl.*
+import com.looker.sdk.LookerSDK
+import io.ktor.client.HttpClient
 import java.io.File
 
+
 typealias jsonDict = Map<String, Any>
+
 val jsonDictType = object : TypeToken<jsonDict>() {}.type
 
 open class TestConfig() {
     val rootPath: String = File("./").absoluteFile.parentFile.parentFile.absolutePath
-    val testPath  = "${rootPath}/test"
+    val testPath = "${rootPath}/test"
     val dataFile = testFile("data.yml.json")
     val envIni = System.getenv("LOOKERSDK_INI")
     val localIni = if (envIni === null) rootFile("looker.ini") else envIni
@@ -43,31 +47,37 @@ open class TestConfig() {
     val configContents = File(localIni).readText()
     val config = apiConfig(configContents)
     val section = config["Looker"]
+    var settings = ApiSettingsIniFile(localIni, "Looker")
     val baseUrl = section?.get("base_url")
     val timeout = section?.get("timeout")?.toInt(10)
     val testContents = File(testIni).readText()
     val testConfig = apiConfig(testContents)
     val testSection = testConfig["Looker"]
-//    return {
-//        rootPath,
-//        testPath,
-//        dataFile,
-//        localIni,
-//        baseUrl,
-//        timeout,
-//        testData,
-//        testIni,
-//        configContents,
-//        testConfig,
-//        testSection,
-//    }
+    val session = UserSession(settings, Transport(testSettings(settings)))
+    val sdk = LookerSDK(session)
 
     fun rootFile(fileName: String): String {
         return "${rootPath}/${fileName}"
     }
 
-    fun testFile(fileName: String) : String {
+    fun testFile(fileName: String): String {
         return "${testPath}/${fileName}"
+    }
+
+    fun testSettings(options: TransportOptions): TransportOptions {
+        var result = options
+        // Set timeout to 120 seconds
+        result.timeout = 120
+        result.verifySSL = false
+        return result
+    }
+
+    /**
+     * Return an HTTP test client
+     */
+    fun testClient(): HttpClient {
+
+        return customClient(testSettings(settings))
     }
 }
 

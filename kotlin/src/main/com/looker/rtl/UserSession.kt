@@ -111,7 +111,7 @@ class UserSession(val apiSettings: ApiSettings,
 
     private fun <T> ok(response: SDKResponse): T {
         @Suppress("UNCHECKED_CAST")
-        when(response) {
+        when (response) {
             is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
             is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
             else -> throw Error("Fail!!")
@@ -172,7 +172,7 @@ class UserSession(val apiSettings: ApiSettings,
 
     private fun doLogout(): Boolean {
         val token = activeToken()
-        val resp = transport.request<String>(HttpMethod.DELETE,"/logout") {
+        val resp = transport.request<String>(HttpMethod.DELETE, "/logout") {
             val headers = it.headers.toMutableMap()
             if (token.accessToken.isNotBlank()) {
                 headers["Authorization"] = "Bearer ${token.accessToken}"
@@ -180,7 +180,7 @@ class UserSession(val apiSettings: ApiSettings,
             it.copy(headers = headers)
         }
 
-        val success = when(resp) {
+        val success = when (resp) {
             is SDKResponse.SDKSuccessResponse<*> -> true
             is SDKResponse.SDKErrorResponse<*> -> false
             else -> false

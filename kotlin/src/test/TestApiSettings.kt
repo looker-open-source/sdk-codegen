@@ -31,7 +31,8 @@ class MockSettings(contents: String) : ApiSettings(contents) {
 }
 
 class TestApiSettings {
-    @Test fun testApiSettingsDefaults() {
+    @Test
+    fun testApiSettingsDefaults() {
         val settings = ApiSettings(bareMinimum)
         val config = settings.readConfig()
         assertEquals(settings.baseUrl, "https://my.looker.com:19999", "Base URL is read")
@@ -41,14 +42,16 @@ class TestApiSettings {
         assertEquals(config["client_secret"], null)
     }
 
-    @Test fun testApiSettingsQuotes() {
+    @Test
+    fun testApiSettingsQuotes() {
         val settings = ApiSettings(quotedMinimum)
         assertEquals(settings.baseUrl, "https://my.looker.com:19999", "Base URL has no quotes")
         assertEquals(settings.verifySSL, true)
         assertEquals(settings.timeout, DEFAULT_TIMEOUT)
     }
 
-    @Test fun testApiSettingsOverrides() {
+    @Test
+    fun testApiSettingsOverrides() {
         val settings = MockSettings(bareMinimum)
         val config = settings.readConfig()
         assertEquals(settings.baseUrl, "https://my.looker.com:19999", "Base URL is read")
@@ -58,7 +61,8 @@ class TestApiSettings {
         assertEquals(config["client_secret"], mockSecret)
     }
 
-    @Test fun testSessionOverride() {
+    @Test
+    fun testSessionOverride() {
         val settings = MockSettings(bareMinimum)
         val session = UserSession(settings)
         val config = session.apiSettings.readConfig()

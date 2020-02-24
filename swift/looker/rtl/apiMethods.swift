@@ -42,15 +42,15 @@ class APIMethods {
         case .success(let response):
             return response
         case .error(let error):
+            // TODO implement logging
             let message = error.errorDescription
                 ?? error.failureReason
                 ?? error.recoverySuggestion
                 ?? error.helpAnchor
                 ?? "Unknown SDK Error"
             print("Error: \(message)")
+            return "" as! TSuccess
         }
-        return () as! TSuccess
-//        return SDKResponse<TSuccess, TError>.success(<#TSuccess#>) as! TSuccess
     }
     
     func authRequest<TSuccess: Codable, TError: Codable>(

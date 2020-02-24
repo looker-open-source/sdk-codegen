@@ -1,46 +1,11 @@
-
-import com.looker.rtl.ApiSettingsIniFile
-import com.looker.rtl.Transport
-import com.looker.rtl.UserSession
-import com.looker.sdk.*
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.apache.Apache
-import io.ktor.client.features.json.JacksonSerializer
-import io.ktor.client.features.json.JsonFeature
-import org.apache.http.conn.ssl.NoopHostnameVerifier
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy
-import org.apache.http.ssl.SSLContextBuilder
+import com.looker.sdk.Dashboard
+import com.looker.sdk.DashboardElement
+import com.looker.sdk.RenderTask
 import java.io.File
 import java.lang.Thread.sleep
 
 class KotlinExample {
-    val config = TestConfig()
-    val settings = ApiSettingsIniFile(config.localIni, "Looker")
-
-    /**
-     * Note: `TrustSelfSignedStrategy` should never be used in production. It is only for testing with self-signed certs
-     * on local instances.
-     */
-    val client: HttpClient = HttpClient(Apache) {
-        install(JsonFeature) {
-            serializer = JacksonSerializer()
-        }
-        engine {
-            customizeClient {
-                setSSLContext(
-                        SSLContextBuilder
-                                .create()
-                                .loadTrustMaterial(TrustSelfSignedStrategy())
-                                .build()
-                )
-                setSSLHostnameVerifier(NoopHostnameVerifier())
-            }
-        }
-    }
-
-    val session = UserSession(settings, Transport(settings, client))
-
-    val sdk = LookerSDK(session)
+    private val sdk = TestConfig().sdk
 
     fun findDashboardsByTitle(title: String): Array<Dashboard> {
         val dashboards = sdk.ok<Array<Dashboard>>(sdk.search_dashboards(title = title))
@@ -52,7 +17,7 @@ class KotlinExample {
 
     fun getDashboardTile(dash: Dashboard, title: String): DashboardElement? {
         val lowerTitle = title.toLowerCase()
-        if(dash.dashboard_elements.isNullOrEmpty()) {
+        if (dash.dashboard_elements.isNullOrEmpty()) {
             return null
         }
         val element = dash.dashboard_elements!!.filter { element -> (element.title?.toLowerCase() ?: "") == lowerTitle }
@@ -64,7 +29,7 @@ class KotlinExample {
 
     fun downloadTile(tile: DashboardElement, format: String): String {
         val fileName = "$tile.${format}"
-        if(tile.query_id == null) {
+        if (tile.query_id == null) {
             throw Error("No query found on ${tile.title}.")
         }
         try {
@@ -92,7 +57,7 @@ class KotlinExample {
             val result = sdk.ok<String>(sdk.render_task_results(task.id!!))
             val outFile = File("/Users/Looker/Downloads/$fileName")
             outFile.writeBytes(result.toByteArray())
-        } catch(error: Throwable) {
+        } catch (error: Throwable) {
             println("FAIL! ${error.message}")
         }
 
