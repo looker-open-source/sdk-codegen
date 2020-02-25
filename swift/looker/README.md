@@ -68,8 +68,8 @@ let auth = AuthSession(settings, xp)
 /// Create you Looker SDK instance
 let sdk = LookerSDK(auth)
 
-/// Retrieve the API user record. If this fails, your Looker server or credentials are bad
-let me = sdk.ok(sdk.me())
+/// Retrieve the API user record. If this return nil, your Looker server or credentials are bad
+let me = try? sdk.ok(sdk.me())
 
 /// continue making SDK calls
 ```
@@ -126,9 +126,9 @@ let xp = BaseTransport(settings)
 let auth = AuthSession(settings, xp)
 let sdk = LookerSDK(auth)
 let body = simpleQuery() // However you want to express your query
-let query = sdk.ok(sdk.create_query(body))
-let png = sdk.ok(sdk.stream.run_query(query.id!, "png"))
-let jpg = sdk.ok(sdk.stream.run_query(query.id!, "jpg"))
+let query = try! sdk.ok(sdk.create_query(body))
+let png = try! sdk.ok(sdk.stream.run_query(query.id!, "png"))
+let jpg = try! sdk.ok(sdk.stream.run_query(query.id!, "jpg"))
 ```
 
 

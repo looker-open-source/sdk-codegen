@@ -37,19 +37,19 @@ class APIMethods {
         return try! encoder.encode(value)
     }
     
-    func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) -> TSuccess {
+    func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
         switch response {
         case .success(let response):
             return response
         case .error(let error):
             // TODO implement logging
-            let message = error.errorDescription
-                ?? error.failureReason
-                ?? error.recoverySuggestion
-                ?? error.helpAnchor
-                ?? "Unknown SDK Error"
-            print("Error: \(message)")
-            return "" as! TSuccess
+//            let message = error.errorDescription
+//                ?? error.failureReason
+//                ?? error.recoverySuggestion
+//                ?? error.helpAnchor
+//                ?? "Unknown SDK Error"
+//            print("Error: \(message)")
+            throw error
         }
     }
     

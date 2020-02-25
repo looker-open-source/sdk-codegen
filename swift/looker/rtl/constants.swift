@@ -219,37 +219,6 @@ func asQ(_ value: Any?) -> String {
     return result
 }
 
-///
-/// OK with `try` that will throw an error
-/// Use with
-/// ```
-/// let me = try? oke(sdk.me()
-/// ```
-/// or
-/// ```
-/// do {
-///   let me = try oke(sdk.me()
-/// } catch {
-///   // handle error here
-/// }
-/// ```
-func okt<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
-    switch response {
-    case .success(let response):
-        return response
-    case .error(let error):
-        // TODO implement logging
-//        let message = error.errorDescription
-//            ?? error.failureReason
-//            ?? error.recoverySuggestion
-//            ?? error.helpAnchor
-//            ?? "Unknown SDK Error"
-        throw error
-    }
-}
-
-
-
 extension StringProtocol {
     subscript(bounds: CountableClosedRange<Int>) -> SubSequence {
         let start = index(startIndex, offsetBy: bounds.lowerBound)

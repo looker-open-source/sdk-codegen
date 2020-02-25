@@ -8,7 +8,10 @@
 import XCTest
 @testable import looker
 
+@available(OSX 10.15, *)
 let config = TestConfig()
+@available(OSX 10.15, *)
+let sdk = config.sdk
 
 @available(OSX 10.15, *)
 class methodsTests: XCTestCase {
@@ -39,22 +42,19 @@ class methodsTests: XCTestCase {
     }
 
     func testCreateQueryAndRun() {
-        let settings = config.config
-        let xp = BaseTransport(settings)
-        let auth = AuthSession(settings, xp)
-        let sdk = LookerSDK(auth)
         let body = simpleQuery()
         let req = sdk.create_query(body)
-        var query = sdk.ok(req)
-        let sql = sdk.ok(sdk.run_query(query.id!, "sql"))
+        do {
+        var query = try sdk.ok(req)
+        let sql = try sdk.ok(sdk.run_query(query.id!, "sql"))
         XCTAssertNotNil(sql)
         XCTAssertTrue(sql.contains("SELECT"), "Got the SQL select statement")
 //        BaseTransport.debugging = true
-        let csv = sdk.ok(sdk.run_query(query.id!, "csv"))
+        let csv = try sdk.ok(sdk.run_query(query.id!, "csv"))
         XCTAssertNotNil(csv)
         XCTAssertTrue(csv.contains("Dashboard ID"), "Got the CSV header")
-        query = sdk.ok(sdk.create_query(countQuery()))
-        var json = sdk.ok(sdk.run_query(query.id!, "json"))
+        query = try sdk.ok(sdk.create_query(countQuery()))
+        var json = try sdk.ok(sdk.run_query(query.id!, "json"))
         XCTAssertNotNil(json)
         XCTAssertTrue(json.contains("dashboard.count"), "json result")
         /// May want to try https://learnappmaking.com/swift-json-swiftyjson/ or https://github.com/Flight-School/AnyCodable
@@ -71,7 +71,7 @@ class methodsTests: XCTestCase {
             XCTAssertTrue(false, "Couldn't cast data from jsonData")
         }
 
-        json = sdk.ok(sdk.run_query(query.id!, "json_label"))
+        json = try sdk.ok(sdk.run_query(query.id!, "json_label"))
         XCTAssertNotNil(json)
         XCTAssertTrue(json.contains("Dashboard Count"), "json_label result")
         jsonData = try? JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: .allowFragments)
@@ -85,78 +85,94 @@ class methodsTests: XCTestCase {
         } else {
             XCTAssertTrue(false, "Couldn't cast data from jsonData")
         }
+                
+        } catch {
+            print(error)
+        }
+
     }
 
     func testMe() {
-        let settings = config.config
-        let xp = BaseTransport(settings)
-        let auth = AuthSession(settings, xp)
-        let sdk = LookerSDK(auth)
-        let me = sdk.ok(sdk.me())
+        let me = try! sdk.ok(sdk.me())
         XCTAssertNotNil(me)
         _ = sdk.authSession.logout()
     }
 
     func testOkThrowsError() {
-        let settings = config.config
-        let xp = BaseTransport(settings)
-        let auth = AuthSession(settings, xp)
-        let sdk = LookerSDK(auth)
         let msg = "Not found"
         
-        var lookml = try? okt(sdk.lookml_model("no such model"))
+        var lookml = try? sdk.ok(sdk.lookml_model("no such model"))
         XCTAssertNil(lookml)
         do {
-            lookml = try okt(sdk.lookml_model("no such model"))
+            lookml = try sdk.ok(sdk.lookml_model("no such model"))
             XCTAssertFalse(true, "This line should not be reached")
         } catch {
             XCTAssertEqual(error.localizedDescription, msg)
         }
     }
     
-    func testGetAllUsers() {
-        let settings = config.config
-        let xp = BaseTransport(settings)
-        let auth = AuthSession(settings, xp)
-        let sdk = LookerSDK(auth)
-        let users = sdk.ok(sdk.all_users())
-        XCTAssertNotNil(users)
-        XCTAssertTrue(users.count > 0, "\(users.count) users found")
-        for item in users {
-            let user = sdk.ok(sdk.user(item.id!))
-            XCTAssertNotNil(user)
-            XCTAssertEqual(user.id, item.id)
-        }
-        _ = sdk.authSession.logout()
-    }
-
     func testUserSearch() {
-        let settings = config.config
-        let xp = BaseTransport(settings)
-        let auth = AuthSession(settings, xp)
-        let sdk = LookerSDK(auth)
-        let list = sdk.ok(sdk.search_users(
+        let list = try? sdk.ok(sdk.search_users(
             first_name:"%",
             last_name:"%"))
         XCTAssertNotNil(list)
-        XCTAssertTrue(list.count > 0, "\(list.count) users found")
+        XCTAssertTrue(list!.count > 0, "\(list!.count) users found")
         _ = sdk.authSession.logout()
     }
 
-    func testGetAllLooks() {
-        let settings = config.config
-        let xp = BaseTransport(settings)
-        let auth = AuthSession(settings, xp)
-        let sdk = LookerSDK(auth)
-        let list = sdk.ok(sdk.all_looks())
+    /// generic list getter testing function
+    func listGetter<TAll, TId, TEntity> (
+        lister: () -> SDKResponse<[TAll], SDKError>,
+        getId: (_ item: TAll) -> TId,
+        getEntity: (_ id: TId, _ fields: String?) -> SDKResponse<TEntity, SDKError>,
+        fields: String? = nil,
+        maxErrors: Int = 3,
+        track: Bool = false
+    ) -> String {
+        let entityName = String(describing: TEntity.self)
+        let list = try? sdk.ok(lister())
+        var errors = ""
+        var errorCount = 0
         XCTAssertNotNil(list)
-        XCTAssertTrue(list.count > 0, "\(list.count) looks")
-        for item in list {
-            let look = sdk.ok(sdk.look(item.id!))
-            XCTAssertNotNil(look)
-            XCTAssertEqual(item.id!, look.id!)
+        XCTAssertNotEqual(0, list?.count, "Got \(entityName)s")
+        if let all = list {
+            for item in all {
+                let id = getId(item)
+                do {
+                    let actual = try sdk.ok(getEntity(id, fields))
+                    if (track) {
+                        print("Got \(entityName) \(id)")
+                    }
+                    XCTAssertNotNil(actual, "\(entityName) \(id) should be assigned")
+                } catch {
+                    errorCount += 1
+                    if (errorCount > maxErrors) { break }
+                    errors += "Failed to get \(entityName) \(id)\nError: \(error.localizedDescription)\n"
+                }
+            }
         }
-        _ = sdk.authSession.logout()
+        if (!errors.isEmpty) {
+            XCTAssertEqual(0, errors.count, errors)
+        }
+        return errors
+    }
+
+    func testGetAllUsers() {
+        let result = listGetter(
+            lister: { sdk.all_users() },
+            getId: { item in item.id! },
+            getEntity: { (id, fields) in sdk.user(id, fields:fields)}
+        )
+        XCTAssertEqual("", result, result)
+    }
+
+    func testGetAllLooks() {
+        let result = listGetter(
+            lister: { sdk.all_looks() },
+            getId: { item in item.id! },
+            getEntity: { (id, fields) in sdk.look(id, fields:fields)}
+        )
+        XCTAssertEqual("", result, result)
     }
 
 //    func testDashboardThumbnail() {
@@ -196,16 +212,12 @@ class methodsTests: XCTestCase {
     }
     
     func testImageDownload() {
-        let settings = config.config
-        let xp = BaseTransport(settings)
-        let auth = AuthSession(settings, xp)
-        let sdk = LookerSDK(auth)
         let body = simpleQuery()
-        let query = sdk.ok(sdk.create_query(body))
-        let png = sdk.ok(sdk.stream.run_query(query.id!, "png"))
+        let query = try! sdk.ok(sdk.create_query(body))
+        let png = try! sdk.ok(sdk.stream.run_query(query.id!, "png"))
         XCTAssertNotNil(png)
         XCTAssertEqual(mimeType(png), "image/png")
-        let jpg = sdk.ok(sdk.stream.run_query(query.id!, "jpg"))
+        let jpg = try! sdk.ok(sdk.stream.run_query(query.id!, "jpg"))
         XCTAssertNotNil(jpg)
         XCTAssertNotEqual(png, jpg, "We should not be getting the same image")
         XCTAssertEqual(mimeType(jpg), "image/jpeg should be returned not image/png. Smells like an API bug, not SDK issue")
@@ -213,59 +225,29 @@ class methodsTests: XCTestCase {
     
     
     func testGetAllDashboards() {
-        let settings = config.config
-        let xp = BaseTransport(settings)
-        let auth = AuthSession(settings, xp)
-        let sdk = LookerSDK(auth)
-        let list = sdk.ok(sdk.all_dashboards())
-        for item in list {
-            let id = item.id!
-            print("Dashboard: \(id)")
-            let dashboard = sdk.ok(sdk.dashboard(id))
-            XCTAssertNotNil(dashboard, "Dashboard \(id) should be gotten")
-            XCTAssertEqual(id, dashboard.id!)
-            if (dashboard.created_at == nil) {
-                print("Dashboard \(id) created_at is nil")
-            }
-//            let svg = sdk.ok(sdk.vector_thumbnail("dashboard", id))
-//            XCTAssertTrue(svg.contains("svg"))
-        }
-        _ = sdk.authSession.logout()
-
+        let result = listGetter(
+            lister: { sdk.all_dashboards()},
+            getId: { item in item.id! },
+            getEntity: { (id, fields) in sdk.dashboard(id, fields:fields)}
+        )
+        XCTAssertEqual("", result, result)
     }
 
     func testGetAllSpaces() {
-        let settings = config.config
-        let xp = BaseTransport(settings)
-        let auth = AuthSession(settings, xp)
-        let sdk = LookerSDK(auth)
-        let list = sdk.ok(sdk.all_spaces())
-        XCTAssertNotNil(list)
-        XCTAssertTrue(list.count > 0, "\(list.count) spaces")
-        for item in list {
-            let actual = sdk.ok(sdk.space((item.id)!))
-            XCTAssertNotNil(actual)
-            let id = actual.id
-            XCTAssertEqual(item.id, id!)
-        }
-        _ = sdk.authSession.logout()
+        let result = listGetter(
+            lister: { sdk.all_spaces() },
+            getId: { item in item.id! },
+            getEntity: { (id, fields) in sdk.space(id, fields: fields) })
+        XCTAssertEqual("", result, result)
     }
 
     func testGetAllFolders() {
-        let settings = config.config
-        let xp = BaseTransport(settings)
-        let auth = AuthSession(settings, xp)
-        let sdk = LookerSDK(auth)
-        let list = sdk.ok(sdk.all_folders())
-        XCTAssertNotNil(list)
-        XCTAssertTrue(list.count > 0, "\(list.count) folders")
-        for item in list {
-            let actual = sdk.ok(sdk.folder((item.id)!))
-            XCTAssertNotNil(actual)
-            let id = actual.id
-            XCTAssertEqual(item.id, id!)
-        }
-        _ = sdk.authSession.logout()
+        let result = listGetter(
+            lister: { sdk.all_folders() },
+            getId: { item in item.id! },
+            getEntity: { (id, fields) in sdk.folder(id, fields:fields)}
+        )
+        XCTAssertEqual("", result, result)
     }
 
 }
