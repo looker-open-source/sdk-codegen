@@ -214,11 +214,11 @@ class TestMethods {
             assertTrue(sql.contains("SELECT"), "Select statement returned")
             val png = sdk.ok<ByteArray>(sdk.stream.run_query(id, "png")).toUByteArray()
             assertNotNull(png)
-            assertEquals(mimeType(png), "image/png", "png is png?")
+            assertEquals("image/png", mimeType(png), "png is png?")
             val jpg = sdk.ok<ByteArray>(sdk.stream.run_query(id, "jpg")).toUByteArray()
             assertNotNull(jpg)
             assertNotEquals(png, jpg, "We should not be getting the same image")
-            assertEquals(mimeType(jpg), "image/jpeg", "image/jpeg should be returned not image/png. Definitely an API bug, not SDK")
+            assertEquals("image/jpeg", mimeType(jpg), "image/jpeg should be returned, not image/png. Definitely an API bug, not SDK")
         }
     }
 
