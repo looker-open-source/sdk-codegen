@@ -22,7 +22,7 @@ class authSessionTests: XCTestCase {
 
     // integration test against Looker instance to verify authSession handles basic authentication
     func testLogin() {
-        let settings = config.config
+        let settings = config.settings
         let xp = BaseTransport(settings)
         let auth = AuthSession(settings, xp)
         XCTAssertFalse(auth.isAuthenticated(), "should not be authenticated")

@@ -15,6 +15,7 @@ fileprivate let repoPath : String = testRootPath + "/../../"
 fileprivate let localIni : String = ProcessInfo.processInfo.environment["LOOKERSDK_INI"] ?? (repoPath + "looker.ini")
 
 
+@available(OSX 10.15, *)
 class TestConfig {
     
     var rootPath = repoPath
@@ -24,9 +25,12 @@ class TestConfig {
     lazy var dataContents = try! Data(String(contentsOfFile: dataFile).utf8)
     lazy var testData = try! JSONSerialization.jsonObject(with: dataContents, options: []) as! AnyCodable
     lazy var testIni = rootFile((testData["iniFile"] as? String)!)
-    lazy var config = try! ApiConfig(localIni, "Looker")
-    lazy var testConfig = try! ApiConfig(testIni)
-    
+    lazy var settings = try! ApiConfig(localIni, "Looker")
+    lazy var testsettings = try! ApiConfig(testIni)
+    lazy var xp = BaseTransport(settings)
+    lazy var auth = AuthSession(settings, xp)
+    lazy var sdk = LookerSDK(auth)
+
     func rootFile(_ fileName: String) -> String {
         return "\(rootPath)/\(fileName)"
     }
@@ -37,7 +41,7 @@ class TestConfig {
 }
 
 
-@available(OSX 10.12, *)
+@available(OSX 10.15, *)
 class baseTransportTests: XCTestCase {
     
     let config = TestConfig()
@@ -50,8 +54,7 @@ class baseTransportTests: XCTestCase {
     }
         
     func testPlainRelativePath() {
-        let settings = config.config
-        let xp = BaseTransport(settings)
+        let xp = BaseTransport(config.settings)
         let requestPath = "/versions"
         let response = xp.plainRequest(HttpMethod.GET, requestPath, nil, nil, nil, nil)
         XCTAssertNotNil(response)
@@ -66,7 +69,7 @@ class baseTransportTests: XCTestCase {
     }
     
     func testPlainAbsolutePath() {
-        let settings = config.config
+        let settings = config.settings
         let xp = BaseTransport(settings)
         let requestPath = settings.base_url! + "/versions"
         let response = xp.plainRequest(HttpMethod.GET, requestPath, nil, nil, nil, nil)
@@ -82,7 +85,7 @@ class baseTransportTests: XCTestCase {
     }
     
     func testPlainLogin() {
-        let settings = config.config
+        let settings = config.settings
         let values = settings.readConfig()
         let client_id = values["client_id"]
         let client_secret = values["client_secret"]
