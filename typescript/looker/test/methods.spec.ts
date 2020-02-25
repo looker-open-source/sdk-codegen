@@ -24,12 +24,7 @@
 
 import { NodeSession } from '../rtl/nodeSession'
 import { Looker40SDK as LookerSDK } from '../sdk/4.0/methods'
-import {
-  IQuery,
-  IRequestRunInlineQuery,
-  IUser, IWriteQuery,
-} from '../sdk/4.0/models'
-import * as yaml from 'js-yaml'
+import { IQuery, IRequestRunInlineQuery, IUser, IWriteQuery } from '../sdk/4.0/models'
 import * as fs from 'fs'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from '../rtl/nodeSettings'
 import { DelimArray } from '../rtl/delimArray'
@@ -39,19 +34,17 @@ import {
   strLookerBaseUrl,
   strLookerClientId,
   strLookerClientSecret,
-  strLookerTimeout, strLookerVerifySsl,
+  strLookerTimeout,
+  strLookerVerifySsl,
 } from '../rtl/apiSettings'
 import { defaultTimeout } from '../rtl/transport'
 import { LookerNodeSDK } from '../rtl/nodeSdk'
+import { TestConfig } from '../rtl/nodeSettings.spec'
 
-const dataFile = 'test/data.yml'
-// TODO abstract this for shared usage across all *.spec.ts files
-const root = fs.existsSync(dataFile) ? '' : '../../'
-const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, utf8))
-const localIni = `${root}looker.ini`
-const users: Partial<IUser>[] = testData['users']
-const queries: Partial<IQuery>[] = testData['queries']
-const dashboards: any[] = testData['dashboards']
+const config = TestConfig()
+const users: Partial<IUser>[] = config.testData['users']
+const queries: Partial<IQuery>[] = config.testData['queries']
+const dashboards: any[] = config.testData['dashboards']
 const emailDomain = '@foo.com'
 const testTimeout = 36000000 // 1 hour
 
@@ -119,7 +112,7 @@ const testTimeout = 36000000 // 1 hour
 // }
 
 describe('LookerNodeSDK', () => {
-  const settings = new NodeSettingsIniFile(localIni, 'Looker')
+  const settings = new NodeSettingsIniFile(config.localIni, 'Looker')
   const session = new NodeSession(settings)
 
   const createQueryRequest = (q: any, limit: number) => {
@@ -142,7 +135,7 @@ describe('LookerNodeSDK', () => {
       visible_ui_sections: q.visible_ui_sections || undefined,
       dynamic_fields: q.dynamic_fields || undefined,
       client_id: q.client_id || undefined,
-      query_timezone: q.query_timezone || undefined
+      query_timezone: q.query_timezone || undefined,
     }
     return result
   }
@@ -154,7 +147,7 @@ describe('LookerNodeSDK', () => {
     // create test users
     for (const u of users) {
       let searched = await sdk.ok(
-        sdk.search_users({first_name: u.first_name, last_name: u.last_name})
+        sdk.search_users({first_name: u.first_name, last_name: u.last_name}),
       )
       if (searched.length === 0) {
         // Look for disabled user
@@ -162,8 +155,8 @@ describe('LookerNodeSDK', () => {
           sdk.search_users({
             first_name: u.first_name,
             last_name: u.last_name,
-            is_disabled: true
-          })
+            is_disabled: true,
+          }),
         )
         for (const user of searched) {
           // enable user if found
@@ -175,11 +168,11 @@ describe('LookerNodeSDK', () => {
         user = await sdk.ok(
           sdk.create_user({
               first_name: u.first_name,
-                last_name: u.last_name,
-                is_disabled: false,
-                locale: 'en'
-            }
-        )
+              last_name: u.last_name,
+              is_disabled: false,
+              locale: 'en',
+            },
+          ),
         )
       } else {
         user = searched[0]
@@ -188,7 +181,7 @@ describe('LookerNodeSDK', () => {
         // Ensure email credentials are created
         const email = `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
         await sdk.ok(
-          sdk.create_user_credentials_email(user.id!, {email})
+          sdk.create_user_credentials_email(user.id!, {email}),
         )
         user = await sdk.ok(sdk.user(user.id!))
       }
@@ -201,15 +194,15 @@ describe('LookerNodeSDK', () => {
     const sdk = new LookerSDK(session)
     for (const u of users) {
       let searched = await sdk.ok(
-        sdk.search_users({first_name: u.first_name, last_name: u.last_name})
+        sdk.search_users({first_name: u.first_name, last_name: u.last_name}),
       )
       if (searched.length === 0) {
         searched = await sdk.ok(
           sdk.search_users({
             first_name: u.first_name,
             last_name: u.last_name,
-            is_disabled: true
-          })
+            is_disabled: true,
+          }),
         )
       }
       if (searched.length > 0) {
@@ -268,8 +261,8 @@ describe('LookerNodeSDK', () => {
         const sdk = new LookerSDK(session)
         let all = await sdk.ok(
           sdk.all_users({
-            fields: 'id,is_disabled'
-          })
+            fields: 'id,is_disabled',
+          }),
         )
         const apiUser = await sdk.ok(sdk.me())
 
@@ -314,7 +307,7 @@ describe('LookerNodeSDK', () => {
         await sdk.authSession.logout()
         expect(sdk.authSession.isAuthenticated()).toEqual(false)
       },
-      testTimeout
+      testTimeout,
     )
   })
 
@@ -333,7 +326,7 @@ describe('LookerNodeSDK', () => {
     it('search_looks fields filter', async () => {
       const sdk = new LookerSDK(session)
       const actual = await sdk.ok(
-        sdk.search_looks({fields: 'id,title,description'})
+        sdk.search_looks({fields: 'id,title,description'}),
       )
       expect(actual).toBeDefined()
       expect(actual.length).toBeGreaterThan(0)
@@ -351,8 +344,8 @@ describe('LookerNodeSDK', () => {
       const actual = await sdk.ok(
         sdk.search_looks({
           title: 'Order%',
-          fields: 'id,title'
-        })
+          fields: 'id,title',
+        }),
       )
       expect(actual).toBeDefined()
       expect(actual.length).toBeGreaterThan(1)
@@ -386,8 +379,8 @@ describe('LookerNodeSDK', () => {
               first_name: u.first_name,
               last_name: u.last_name,
               is_disabled: false,
-              locale: 'fr'
-            })
+              locale: 'fr',
+            }),
           )
           expect(user).toBeDefined()
           expect(user.first_name).toEqual(u.first_name)
@@ -397,8 +390,8 @@ describe('LookerNodeSDK', () => {
           let actual = await sdk.ok(
             sdk.update_user(user.id!, {
               is_disabled: true,
-              locale: 'en'
-            })
+              locale: 'en',
+            }),
           )
           expect(actual.is_disabled).toEqual(true)
           expect(actual.locale).toEqual('en')
@@ -408,13 +401,13 @@ describe('LookerNodeSDK', () => {
           user = await sdk.ok(
             sdk.update_user(user.id!, {
               is_disabled: false,
-              locale: 'en'
-            })
+              locale: 'en',
+            }),
           )
           expect(user.is_disabled).toEqual(false)
           const email = `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
           let creds = await sdk.ok(
-            sdk.create_user_credentials_email(user.id!, {email: email})
+            sdk.create_user_credentials_email(user.id!, {email: email}),
           )
           expect(creds.email).toEqual(email)
           const result = await sdk.ok(sdk.delete_user(user.id!))
@@ -423,7 +416,7 @@ describe('LookerNodeSDK', () => {
         await sdk.authSession.logout()
         expect(sdk.authSession.isAuthenticated()).toBeFalsy()
       },
-      testTimeout
+      testTimeout,
     )
   })
 
@@ -436,7 +429,7 @@ describe('LookerNodeSDK', () => {
     it('bad search returns no results', async () => {
       const sdk = new LookerSDK(session)
       let actual = await sdk.ok(
-        sdk.search_users({first_name: 'Bad', last_name: 'News'})
+        sdk.search_users({first_name: 'Bad', last_name: 'News'}),
       )
       expect(actual.length).toEqual(0)
       await sdk.authSession.logout()
@@ -448,13 +441,13 @@ describe('LookerNodeSDK', () => {
         const sdk = new LookerSDK(session)
         let actual = await sdk.ok(
           sdk.search_users_names({
-            pattern: `%${emailDomain}`
-          })
+            pattern: `%${emailDomain}`,
+          }),
         )
         expect(actual.length).toEqual(users.length)
         await sdk.authSession.logout()
       },
-      testTimeout
+      testTimeout,
     )
 
     it(
@@ -463,16 +456,16 @@ describe('LookerNodeSDK', () => {
         const sdk = new LookerSDK(session)
         const searched = await sdk.ok(
           sdk.search_users_names({
-            pattern: `%${emailDomain}`
-          })
+            pattern: `%${emailDomain}`,
+          }),
         )
         expect(searched.length).toEqual(users.length)
-        const ids : DelimArray<number> = new DelimArray<number>(searched.map(u => u.id!))
+        const ids: DelimArray<number> = new DelimArray<number>(searched.map(u => u.id!))
         const all = await sdk.ok(sdk.all_users({ids}))
         expect(all.length).toEqual(users.length)
         await sdk.authSession.logout()
       },
-      testTimeout
+      testTimeout,
     )
 
     it(
@@ -480,20 +473,20 @@ describe('LookerNodeSDK', () => {
       async () => {
         const lastFirst = users.sort((a: Partial<IUser>, b: Partial<IUser>) =>
           `${a.last_name} ${a.first_name}`.localeCompare(
-            `${b.last_name} ${b.first_name}`
-          )
+            `${b.last_name} ${b.first_name}`,
+          ),
         )
         const firstLast = users.sort((a: Partial<IUser>, b: Partial<IUser>) =>
           `${a.first_name} ${a.last_name}`.localeCompare(
-            `${b.first_name} ${b.last_name}`
-          )
+            `${b.first_name} ${b.last_name}`,
+          ),
         )
         const sdk = new LookerSDK(session)
         let actual = await sdk.ok(
           sdk.search_users_names({
             pattern: `%${emailDomain}`,
-            sorts: 'last_name,first_name'
-          })
+            sorts: 'last_name,first_name',
+          }),
         )
         expect(actual.length).toEqual(users.length)
         for (let i = 0; i < users.length; i++) {
@@ -503,8 +496,8 @@ describe('LookerNodeSDK', () => {
         actual = await sdk.ok(
           sdk.search_users_names({
             pattern: `%${emailDomain}`,
-            sorts: 'first_name,last_name'
-          })
+            sorts: 'first_name,last_name',
+          }),
         )
         expect(actual.length).toEqual(users.length)
         for (let i = 0; i < users.length; i++) {
@@ -514,7 +507,7 @@ describe('LookerNodeSDK', () => {
 
         await sdk.authSession.logout()
       },
-      testTimeout
+      testTimeout,
     )
   })
 
@@ -538,7 +531,7 @@ describe('LookerNodeSDK', () => {
           const request = createQueryRequest(q, limit)
           const query = await sdk.ok(sdk.create_query(request))
           const sql = await sdk.ok(
-            sdk.run_query({query_id: query.id, result_format: 'sql'})
+            sdk.run_query({query_id: query.id, result_format: 'sql'}),
           )
           expect(sql).toContain('SELECT')
           if (query.fields) {
@@ -548,10 +541,10 @@ describe('LookerNodeSDK', () => {
           }
 
           const json = await sdk.ok(
-            sdk.run_query({query_id: query.id, result_format: 'json'})
+            sdk.run_query({query_id: query.id, result_format: 'json'}),
           )
           const csv = await sdk.ok(
-            sdk.run_query({query_id: query.id, result_format: 'csv'})
+            sdk.run_query({query_id: query.id, result_format: 'csv'}),
           )
           expect(query).toBeDefined()
           expect(query.id).toBeDefined()
@@ -570,7 +563,7 @@ describe('LookerNodeSDK', () => {
         await sdk.authSession.logout()
         expect(sdk.authSession.isAuthenticated()).toBeFalsy()
       },
-      testTimeout
+      testTimeout,
     )
 
     it('run_inline_query',
@@ -600,9 +593,9 @@ describe('LookerNodeSDK', () => {
               visible_ui_sections: q.visible_ui_sections || undefined,
               dynamic_fields: q.dynamic_fields || undefined,
               client_id: q.client_id || undefined,
-              query_timezone: q.query_timezone || undefined
+              query_timezone: q.query_timezone || undefined,
             },
-            result_format: 'json'
+            result_format: 'json',
           }
           const json = await sdk.ok(sdk.run_inline_query(request))
           expect(json).toBeDefined()
@@ -654,14 +647,14 @@ describe('LookerNodeSDK', () => {
         await sdk.authSession.logout()
         expect(sdk.authSession.isAuthenticated()).toBeFalsy()
       },
-      testTimeout
+      testTimeout,
     )
   })
 
   describe('Dashboard endpoints', () => {
     const getQueryId = (
       qhash: { [id: string]: IQuery },
-      id: any
+      id: any,
     ): number | undefined => {
       if (!id) return id
       if (id.startsWith('#')) id = id.substr(1)
@@ -690,7 +683,7 @@ describe('LookerNodeSDK', () => {
           const limit = q.limit ? parseInt(q.limit, 10) : 10
           const request = createQueryRequest(q, limit)
           qhash[q.id || qcount.toString()] = await sdk.ok(
-            sdk.create_query(request)
+            sdk.create_query(request),
           )
         }
         let dashboard
@@ -720,8 +713,8 @@ describe('LookerNodeSDK', () => {
               text_tile_text_color: d.text_tile_text_color || undefined,
               tile_background_color: d.tile_background_color || undefined,
               tile_text_color: d.tile_text_color || undefined,
-              title_color: d.title_color || undefined
-            })
+              title_color: d.title_color || undefined,
+            }),
           )
           expect(dashboard).toBeDefined()
           expect(dashboard.title).toEqual(d.title)
@@ -730,12 +723,12 @@ describe('LookerNodeSDK', () => {
           }
           if (d.text_tile_text_color) {
             expect(dashboard.text_tile_text_color).toEqual(
-              d.text_tile_text_color
+              d.text_tile_text_color,
             )
           }
           if (d.tile_background_color) {
             expect(dashboard.tile_background_color).toEqual(
-              d.tile_background_color
+              d.tile_background_color,
             )
           }
           if (d.tile_text_color) {
@@ -746,16 +739,16 @@ describe('LookerNodeSDK', () => {
           }
           let actual = await sdk.ok(
             sdk.update_dashboard(dashboard.id!, {
-              deleted: true
-            })
+              deleted: true,
+            }),
           )
           expect(actual.deleted).toEqual(true)
           // Ensure update *only* updates what it's supposed to
           expect(actual.title).toEqual(dashboard.title)
           dashboard = await sdk.ok(
             sdk.update_dashboard(dashboard.id!, {
-              deleted: false
-            })
+              deleted: false,
+            }),
           )
           expect(dashboard.deleted).toEqual(false)
           for (const f of d.filters) {
@@ -770,8 +763,8 @@ describe('LookerNodeSDK', () => {
                 explore: f.explore,
                 dimension: f.dimension,
                 allow_multiple_values: f.allow_multiple_values,
-                default_value: f.default_value
-              })
+                default_value: f.default_value,
+              }),
             )
             expect(filter).toBeDefined()
             expect(filter.name).toEqual(f.name)
@@ -782,7 +775,7 @@ describe('LookerNodeSDK', () => {
             expect(filter.explore).toEqual(f.explore)
             expect(filter.dimension).toEqual(f.dimension)
             expect(filter.allow_multiple_values).toEqual(
-              f.allow_multiple_values
+              f.allow_multiple_values,
             )
             expect(filter.default_value).toEqual(f.default_value)
           }
@@ -808,8 +801,8 @@ describe('LookerNodeSDK', () => {
                 title: t.title,
                 title_hidden: t.title_hidden,
                 title_text: t.title_text,
-                type: t.type
-              })
+                type: t.type,
+              }),
             )
             expect(tile).toBeDefined()
             expect(tile.dashboard_id).toEqual(dashboard.id)
@@ -830,14 +823,14 @@ describe('LookerNodeSDK', () => {
         await sdk.authSession.logout()
         expect(sdk.authSession.isAuthenticated()).toBeFalsy()
       },
-      testTimeout
+      testTimeout,
     )
 
   })
 
   describe('Node environment', () => {
     beforeAll(() => {
-      const section = ApiConfig(fs.readFileSync(localIni, utf8))['Looker']
+      const section = ApiConfig(fs.readFileSync(config.localIni, utf8))['Looker']
       // tslint:disable-next-line:variable-name
       const verify_ssl = boolDefault(section['verify_ssl'], false).toString()
       // populate environment variables
@@ -848,7 +841,7 @@ describe('LookerNodeSDK', () => {
       process.env[strLookerVerifySsl] = verify_ssl.toString()
     })
 
-    afterAll( () => {
+    afterAll(() => {
       // reset environment variables
       delete process.env[strLookerTimeout]
       delete process.env[strLookerClientId]
@@ -857,7 +850,7 @@ describe('LookerNodeSDK', () => {
       delete process.env[strLookerVerifySsl]
     })
 
-    it('no INI', async () =>{
+    it('no INI', async () => {
       const sdk = LookerNodeSDK.init31(new NodeSettings())
       const me = await sdk.ok(sdk.me())
       expect(me).not.toBeUndefined()
@@ -866,5 +859,53 @@ describe('LookerNodeSDK', () => {
       await sdk.authSession.logout()
       expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     })
+  })
+
+  function mimeType(data: String) {
+
+//        var sig = [UInt8](repeating: 0, count: 20)
+//        data.copyBytes(to: &sig, count: 20)
+//        print(sig)
+    const b = data.charCodeAt(0)
+    switch (b) {
+      case 0xFF:
+        return 'image/jpg'
+      case 0x89:
+        return 'image/png'
+      case 0x47:
+        return 'image/gif'
+      case 0x4D:
+      case 0x49:
+        return 'image/tiff'
+      case 0x25:
+        return 'application/pdf'
+      case 0xD0:
+        return 'application/vnd'
+      case 0x46:
+        return 'text/plain'
+      default:
+        return 'application/octet-stream'
+    }
+  }
+
+  function simpleQuery(): Partial<IWriteQuery> {
+    return {
+      model: 'system__activity',
+      view: 'dashboard',
+      fields: ['dashboard.id', 'dashboard.title', 'dashboard.count'],
+      limit: '100',
+    }
+  }
+
+  describe('Binary download', () => {
+    it('PNG and JPG download', async () => {
+      const sdk = new LookerSDK(session)
+      const query = await sdk.ok(sdk.create_query(simpleQuery()))
+      const png = await sdk.ok(sdk.run_query({query_id: query.id, result_format: 'png'}))
+      const jpg = await sdk.ok(sdk.run_query({query_id: query.id, result_format: 'jpg'}))
+      expect(mimeType(png)).toEqual('image/png')
+      expect(mimeType(jpg)).toEqual('image/jpeg') // Houston, we have a problem with jpg being a png
+    }, testTimeout)
+
   })
 })

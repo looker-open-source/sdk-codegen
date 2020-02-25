@@ -12,6 +12,7 @@ import com.looker.sdk.Locale
 
 class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
 
+  val stream by lazy { LookerSDKStream(this.authSession) }
 
   /**
    * Accepts the legal agreement for a given integration hub. This only works for integration hubs that have legal_agreement_required set to true and legal_agreement_signed set to false.

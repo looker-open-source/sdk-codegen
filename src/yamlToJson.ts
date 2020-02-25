@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /*
  * The MIT License (MIT)
  *
@@ -22,31 +24,23 @@
  * THE SOFTWARE.
  */
 
-import com.looker.rtl.AuthToken
-import kotlin.test.assertEquals
-import org.junit.Test as test
+import * as yaml from 'js-yaml'
+import * as fs from "fs"
+import { quit } from './utils'
 
-class TestAuthToken {
-    @test
-    fun defaultsWithEmptyToken() {
-        val testToken = AuthToken()
-        assertEquals(testToken.accessToken, "")
-        assertEquals(testToken.tokenType, "")
-        assertEquals(testToken.expiresIn, 0)
-        assertEquals(testToken.isActive(), false)
-    }
-
-    @test
-    fun isActiveWithFullToken() {
-        val testToken = AuthToken(
-                accessToken = "all-access",
-                tokenType = "backstage",
-                expiresIn = 3600
-        )
-
-        assertEquals(testToken.accessToken, "all-access")
-        assertEquals(testToken.tokenType, "backstage")
-        assertEquals(testToken.expiresIn, 3600)
-        assertEquals(testToken.isActive(), true)
-    }
+/**
+ * Use this script to convert any valid YAML file to pretty-printed JSON
+ */
+const utf8 = 'utf-8'
+const args = process.argv.slice(2)
+if (args.length < 1) {
+  quit('Yaml file name is required')
 }
+
+const yamlFile = args[0]
+const jsonFile = args.length > 1 ? args[1] : yamlFile + '.json'
+
+const data = yaml.safeLoad(fs.readFileSync(yamlFile, utf8))
+const json = JSON.stringify(data, undefined, 2)
+fs.writeFileSync(jsonFile, json, utf8)
+console.log(`Converted ${yamlFile} to ${jsonFile}`)

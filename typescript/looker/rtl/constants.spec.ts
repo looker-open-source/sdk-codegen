@@ -23,6 +23,13 @@
  */
 
 import { boolDefault, isFalse, isTrue, unquote } from './constants'
+import { ResponseMode, responseMode } from './transport'
+import { TestConfig } from './nodeSettings.spec'
+
+const config = TestConfig()
+const contentTypes = config.testData["content_types"]
+const binaryTypes : string[] = contentTypes["binary"]
+const stringTypes : string[] = contentTypes["string"]
 
 describe('Constants functions', () => {
   it('isTrue', () => {
@@ -84,5 +91,19 @@ describe('Constants functions', () => {
     expect(unquote('"foo"')).toEqual('foo')
     expect(unquote('foo"')).toEqual('foo"')
     expect(unquote('"foo')).toEqual('"foo')
+  })
+
+  it('string types match', () => {
+    stringTypes.forEach(t => {
+      const mode = responseMode(t)
+      expect(mode).toEqual(ResponseMode.string)
+    })
+  })
+
+  it('binary types match', () => {
+    binaryTypes.forEach(t => {
+      const mode = responseMode(t)
+      expect(responseMode(t)).toEqual(ResponseMode.binary)
+    })
   })
 })

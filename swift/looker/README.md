@@ -111,6 +111,27 @@ Otherwise, `struct`s, `enum`s, or `protocol`s are used for the declaration of co
 
 Enjoy, and thanks for trying out the bleeding edge!
 
+## Downloading binary responses (images)
+
+In a step toward streaming support, the Swift SDK now has `LookerSDKStream` which is not **truly** a set of streaming functions, but will return binary payloads as a `Data` object for all SDK requests.
+
+The contents of this `Data` object can be used to initialize an image using Swift UI components. The use of `Data` responses was adopted for Swift because conversion of `Data` to a true binary `String` representation is problematic.
+
+The primary SDK methods class `LookerSDK` now has a property called `stream` that is a reference to an initialized `LookerSDKStream` class.
+
+Requests for *image* types like **PNG** and **JPEG** should use this kind of pattern:
+
+```swift
+let xp = BaseTransport(settings)
+let auth = AuthSession(settings, xp)
+let sdk = LookerSDK(auth)
+let body = simpleQuery() // However you want to express your query
+let query = sdk.ok(sdk.create_query(body))
+let png = sdk.ok(sdk.stream.run_query(query.id!, "png"))
+let jpg = sdk.ok(sdk.stream.run_query(query.id!, "jpg"))
+```
+
+
 ## Use of AnyCodable
 
-There's a decent JSON encode/decode solution from [AnyCodable](https://github.com/Flight-School/AnyCodable) directly imported into this project because I haven't yet been able to figure out how to get the package reference to work. My apologies for that. I'll fix it when I figure out how to use Swift packages better!
+There's a decent JSON encode/decode solution for JSON with ambiguously typed values from [AnyCodable](https://github.com/Flight-School/AnyCodable) directly imported into this project because I haven't yet been able to figure out how to get the package reference to work. My apologies for that. I'll fix it when I figure out how to use Swift packages better!

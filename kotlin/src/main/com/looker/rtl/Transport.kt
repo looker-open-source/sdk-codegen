@@ -30,11 +30,15 @@ import io.ktor.client.call.receive
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.features.json.defaultSerializer
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.response.HttpResponse
 import io.ktor.http.takeFrom
 import kotlinx.coroutines.runBlocking
+import org.apache.http.conn.ssl.NoopHostnameVerifier
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy
+import org.apache.http.ssl.SSLContextBuilder
 import java.net.URLEncoder
 
 sealed class SDKResponse {
@@ -42,7 +46,7 @@ sealed class SDKResponse {
     data class SDKSuccessResponse<T>(
             /** The object returned by the SDK call. */
             val value: T
-    ): SDKResponse() {
+    ) : SDKResponse() {
         /** Whether the SDK call was successful. */
         val ok: Boolean = true
     }
@@ -51,13 +55,13 @@ sealed class SDKResponse {
     data class SDKErrorResponse<T>(
             /** The error object returned by the SDK call. */
             val value: T
-    ): SDKResponse() {
+    ) : SDKResponse() {
         /** Whether the SDK call was successful. */
         val ok: Boolean = false
     }
 
     /** An error representing an issue in the SDK, like a network or parsing error. */
-    data class SDKError(val message: String): SDKResponse() {
+    data class SDKError(val message: String) : SDKResponse() {
         val type: String = "sdk_error"
     }
 }
@@ -67,7 +71,7 @@ sealed class SDKResponse {
  */
 fun <T> ok(response: SDKResponse): T {
     @Suppress("UNCHECKED_CAST")
-    when(response) {
+    when (response) {
         is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
         is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
         else -> throw Error("Fail!!")
@@ -102,17 +106,17 @@ interface TransportOptions {
     var headers: Map<String, String>
 }
 
-interface ConfigurationProvider: TransportOptions {
+interface ConfigurationProvider : TransportOptions {
     fun isConfigured(): Boolean
     fun readConfig(): Map<String, String>
 }
 
 data class TransportSettings(
-    override var baseUrl: String = "",
-    override var apiVersion: String = DEFAULT_API_VERSION,
-    override var verifySSL: Boolean = true,
-    override var timeout: Int = DEFAULT_TIMEOUT,
-    override var headers: Map<String, String> = mapOf()
+        override var baseUrl: String = "",
+        override var apiVersion: String = DEFAULT_API_VERSION,
+        override var verifySSL: Boolean = true,
+        override var timeout: Int = DEFAULT_TIMEOUT,
+        override var headers: Map<String, String> = mapOf()
 ) : TransportOptions
 
 
@@ -120,7 +124,7 @@ fun encodeValues(params: Values = mapOf()): String {
     @Suppress("UNCHECKED_CAST")
     return params
             .filter { (_, v) -> v !== null }
-            .map { (k, v) -> "$k=${URLEncoder.encode("$v", "utf-8")}"}
+            .map { (k, v) -> "$k=${URLEncoder.encode("$v", "utf-8")}" }
             .joinToString("&")
 
 }
@@ -132,26 +136,36 @@ fun addQueryParams(path: String, params: Values = mapOf()): String {
     return "$path?$qp"
 }
 
+fun customClient(options: TransportOptions): HttpClient {
+    // Timeout is passed in as seconds
+    val timeout = options.timeout * 1000
+
+    return HttpClient(Apache) {
+        install(JsonFeature) {
+            serializer = JacksonSerializer()
+        }
+        engine {
+            customizeClient {
+                if (!options.verifySSL) {
+                    setSSLContext(
+                            SSLContextBuilder
+                                    .create()
+                                    .loadTrustMaterial(TrustSelfSignedStrategy())
+                                    .build()
+                    )
+                    setSSLHostnameVerifier(NoopHostnameVerifier())
+                }
+                connectTimeout = timeout
+                connectionRequestTimeout = timeout
+                socketTimeout = timeout
+            }
+        }
+    }
+}
+
 class Transport(val options: TransportOptions) {
 
-    var httpClient: HttpClient? = null
-        private set
-
-    // Internal only secondary constructor to support supplying an HTTP client for testing
-    internal constructor(options: TransportOptions, httpClient: HttpClient) : this(options) {
-        this.httpClient = httpClient
-    }
-
-    init {
-        if (httpClient == null)
-            httpClient = HttpClient(Apache) {
-                install(JsonFeature) {
-                    serializer = JacksonSerializer()
-                }
-            }
-    }
-
-    val apiPath = "${options.baseUrl}/api/${options.apiVersion}"
+    private val apiPath = "${options.baseUrl}/api/${options.apiVersion}"
 
     private fun ok(res: HttpResponse): Boolean {
         // Thought: We should use whatever is idiomatic for Kotlin
@@ -174,7 +188,7 @@ class Transport(val options: TransportOptions) {
                 || path.startsWith("https://", true)) {
             "" // full path was passed in
         } else {
-            if (authenticator === null)  {
+            if (authenticator === null) {
                 options.baseUrl
             } else {
                 apiPath
@@ -188,7 +202,28 @@ class Transport(val options: TransportOptions) {
             queryParams: Values = mapOf(),
             body: Any? = null,
             noinline authenticator: Authenticator? = null): SDKResponse {
+        // TODO get overrides parameter to work without causing compilation errors in UserSession
+//            overrides: TransportOptions? = null): SDKResponse {
 
+        val builder = httpRequestBuilder(method, path, queryParams, authenticator, body)
+
+        val client = customClient(options)
+        // TODO get overrides parameter working
+//        overrides?.let { o ->
+//            if (options.verifySSL != o.verifySSL || options.timeout != o.timeout) {
+//                // need an HTTP client with custom options
+//                client = customClient(o)
+//            }
+//        }
+
+        val result = runBlocking {
+            SDKResponse.SDKSuccessResponse(client.call(builder).response.receive<T>())
+        }
+        client.close()
+        return result
+    }
+
+    fun httpRequestBuilder(method: HttpMethod, path: String, queryParams: Values, authenticator: Authenticator?, body: Any?): HttpRequestBuilder {
         val builder = HttpRequestBuilder()
         // Set the request method
         builder.method = method.value
@@ -205,8 +240,8 @@ class Transport(val options: TransportOptions) {
         val finishedRequest = auth(RequestSettings(method, requestPath, headers))
 
         builder.method = finishedRequest.method.value
-        finishedRequest.headers.forEach {(k, v) ->
-            builder.headers.append(k,v)
+        finishedRequest.headers.forEach { (k, v) ->
+            builder.headers.append(k, v)
         }
         builder.url.takeFrom(finishedRequest.url)
 
@@ -216,17 +251,14 @@ class Transport(val options: TransportOptions) {
                 builder.body = body
             } else {
                 // Request body
-                val json = io.ktor.client.features.json.defaultSerializer()
+                val json = defaultSerializer()
 
                 val jsonBody = json.write(body)
                 builder.body = jsonBody  // TODO: I think having to do this is a bug? https://github.com/ktorio/ktor/issues/1265
                 headers["Content-Length"] = jsonBody.contentLength.toString()
             }
         }
-
-        return runBlocking {
-            SDKResponse.SDKSuccessResponse(httpClient!!.call(builder).response.receive<T>())
-        }
+        return builder
     }
 
 }

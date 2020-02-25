@@ -14,11 +14,33 @@ fileprivate let testRootPath = URL(fileURLWithPath: #file).pathComponents
 fileprivate let repoPath : String = testRootPath + "/../../"
 fileprivate let localIni : String = ProcessInfo.processInfo.environment["LOOKERSDK_INI"] ?? (repoPath + "looker.ini")
 
-let config = try? ApiConfig(localIni)
+
+class TestConfig {
+    
+    var rootPath = repoPath
+    var testPath = testRootPath
+    lazy var dataFile = testFile("data.yml.json")
+    lazy var localIni = envVar("LOOKERSDK_INI", self.rootFile("looker.ini"))!
+    lazy var dataContents = try! Data(String(contentsOfFile: dataFile).utf8)
+    lazy var testData = try! JSONSerialization.jsonObject(with: dataContents, options: []) as! AnyCodable
+    lazy var testIni = rootFile((testData["iniFile"] as? String)!)
+    lazy var config = try! ApiConfig(localIni, "Looker")
+    lazy var testConfig = try! ApiConfig(testIni)
+    
+    func rootFile(_ fileName: String) -> String {
+        return "\(rootPath)/\(fileName)"
+    }
+
+    func testFile(_ fileName: String) -> String {
+        return "\(testPath)/\(fileName)"
+    }
+}
+
 
 @available(OSX 10.12, *)
 class baseTransportTests: XCTestCase {
     
+    let config = TestConfig()
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -28,7 +50,7 @@ class baseTransportTests: XCTestCase {
     }
         
     func testPlainRelativePath() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let requestPath = "/versions"
         let response = xp.plainRequest(HttpMethod.GET, requestPath, nil, nil, nil, nil)
@@ -44,7 +66,7 @@ class baseTransportTests: XCTestCase {
     }
     
     func testPlainAbsolutePath() {
-        let settings = config!
+        let settings = config.config
         let xp = BaseTransport(settings)
         let requestPath = settings.base_url! + "/versions"
         let response = xp.plainRequest(HttpMethod.GET, requestPath, nil, nil, nil, nil)
@@ -60,7 +82,7 @@ class baseTransportTests: XCTestCase {
     }
     
     func testPlainLogin() {
-        let settings = config!
+        let settings = config.config
         let values = settings.readConfig()
         let client_id = values["client_id"]
         let client_secret = values["client_secret"]

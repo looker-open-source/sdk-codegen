@@ -78,7 +78,7 @@ struct Constants {
      * Matching rules for string/text types. String matches must be checked *before* binary matches
      * @type Regular expression for matching Content-Type headers
      */
-    static let matchModeString = #"(^application\/.*(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b|\bjavascript\b|\bx-www-form-urlencoded\b))|^text\/|\#(matchCharset)"#
+    static let matchModeString = #"(^application\/.*(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b|\bjavascript\b|\bx-www-form-urlencoded\b))|^text\/|.*\+xml\b|\#(matchCharset)"#
 
     /**
      * Matching rules for all binary or unknown types. Binary matches must be checked *after* string matches
@@ -147,8 +147,12 @@ func defaultBool(_ value: String?, _ defaultVal: Bool = false) -> Bool {
     return defaultVal
 }
 
-func envVar(_ name: String) -> String? {
-    return unquote(ProcessInfo.processInfo.environment[name])
+func envVar(_ name: String, _ defaultVal: String? = nil) -> String? {
+    if let val = unquote(ProcessInfo.processInfo.environment[name]) {
+        return val
+    } else {
+        return defaultVal
+    }
 }
 
 func isOptional(_ value: Any) -> Bool {
@@ -214,6 +218,37 @@ func asQ(_ value: Any?) -> String {
     }
     return result
 }
+
+///
+/// OK with `try` that will throw an error
+/// Use with
+/// ```
+/// let me = try? oke(sdk.me()
+/// ```
+/// or
+/// ```
+/// do {
+///   let me = try oke(sdk.me()
+/// } catch {
+///   // handle error here
+/// }
+/// ```
+func okt<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
+    switch response {
+    case .success(let response):
+        return response
+    case .error(let error):
+        // TODO implement logging
+//        let message = error.errorDescription
+//            ?? error.failureReason
+//            ?? error.recoverySuggestion
+//            ?? error.helpAnchor
+//            ?? "Unknown SDK Error"
+        throw error
+    }
+}
+
+
 
 extension StringProtocol {
     subscript(bounds: CountableClosedRange<Int>) -> SubSequence {

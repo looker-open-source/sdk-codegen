@@ -1,13 +1,3 @@
-package com.looker.rtl
-
-import com.looker.rtl.HttpMethod
-import com.looker.rtl.SDKResponse
-import com.looker.rtl.UserSession
-import kotlinx.coroutines.Deferred
-import java.io.UnsupportedEncodingException
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
-
 /*
  * The MIT License (MIT)
  *
@@ -32,13 +22,19 @@ import java.nio.charset.StandardCharsets
  * THE SOFTWARE.
  */
 
+package com.looker.rtl
+
+import java.io.UnsupportedEncodingException
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
+
 @Suppress("UNCHECKED_CAST")
 open class APIMethods(val authSession: UserSession) {
 
     val authRequest = authSession::authenticate
 
     fun <T> ok(response: SDKResponse): T {
-        when(response) {
+        when (response) {
             is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
             is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
             else -> throw Error("Fail!!")

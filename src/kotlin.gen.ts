@@ -57,7 +57,7 @@ export class KotlinGen extends CodeGen {
   indentStr = '  '
   endTypeStr = '\n)'
   needsRequestTypes = false
-  willItStream = false
+  willItStream = true
 
   private readonly defaultApi = '4.0'
 
@@ -94,6 +94,7 @@ import com.looker.sdk${this.apiNamespace()}.Locale
 
 class ${this.sdkClassName()}(authSession: UserSession) : APIMethods(authSession) {
 
+  val stream by lazy { ${this.sdkClassName()}Stream(this.authSession) }
 `
   }
 
@@ -101,11 +102,17 @@ class ${this.sdkClassName()}(authSession: UserSession) : APIMethods(authSession)
   streamsPrologue(indent: string): string {
     return `
 // ${this.warnEditing()}
-
 package com.looker.sdk${this.apiNamespace()}
 
+import com.looker.rtl.*
+import com.looker.rtl.UserSession
+import java.util.*
 import com.looker.sdk${this.apiNamespace()}.*
-// nothing to see here, yet
+// TODO can this single import override be avoided in any way?
+import com.looker.sdk${this.apiNamespace()}.Locale
+
+class ${this.sdkClassName()}Stream(authSession: UserSession) : APIMethods(authSession) {
+
 `
   }
 
@@ -172,14 +179,15 @@ import java.util.*
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer: boolean = false) {
     const type = this.typeMap(method.type)
+    const resultType = streamer ? 'ByteArray' : type.name
     const head = method.description?.trim()
-    let headComment = (head ? `${head}\n\n` : '')  +`${method.httpMethod} ${method.endpoint} -> ${type.name}`
+    let headComment = (head ? `${head}\n\n` : '')  +`${method.httpMethod} ${method.endpoint} -> ${resultType}`
     let fragment = ''
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
 
     if (requestType) {
-      // use the request type that will be generated in models.ts
+      // TODO remove this cruft from Typescript)
       fragment = `request: Partial<${requestType}>`
     } else {
       let params: string[] = []
@@ -193,10 +201,10 @@ import java.util.*
       headComment += `\n\n**Note**: Binary content is returned by this method.\n`
     }
     const jvmOverloads = method.optionalParams.length > 0 ? '@JvmOverloads ' : ''
-    const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
+    // const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
     const header = this.commentHeader(indent, headComment)
       + `${indent}${jvmOverloads}fun ${method.name}(`
-      + (streamer ? `\n${bump}${callback}` : '')
+      // + (streamer ? `\n${bump}${callback}` : '')
 
     return header + fragment + `) : SDKResponse {\n`
   }
@@ -306,11 +314,11 @@ import java.util.*
 
   streamCall(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
-    const type = this.typeMap(method.type)
+    // const type = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     // const errors = this.errorResponses(indent, method)
-    return `${indent}return ${this.it('authStream')}<${type.name}>(callback, '${method.httpMethod.toUpperCase()}', ${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
+    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<ByteArray>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
   }
 
   summary(indent: string, text: string | undefined) {

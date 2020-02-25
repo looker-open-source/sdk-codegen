@@ -5,9 +5,7 @@
 import Foundation
 
 @available(OSX 10.15, *)
-class LookerSDK: APIMethods {
-
-    lazy var stream = LookerSDKStream(authSession)
+class LookerSDKStream: APIMethods {
 
     /**
      * Accepts the legal agreement for a given integration hub. This only works for integration hubs that have legal_agreement_required set to true and legal_agreement_signed set to false.
@@ -20,8 +18,8 @@ class LookerSDK: APIMethods {
          */
         _ integration_hub_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<IntegrationHub, SDKError> {
-        let result: SDKResponse<IntegrationHub, SDKError> = self.post("/integration_hubs/\(integration_hub_id)/accept_legal_agreement".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/integration_hubs/\(integration_hub_id)/accept_legal_agreement".encodePath(), nil, nil, options)
         return result
     }
 
@@ -52,8 +50,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Theme], SDKError> {
-        let result: SDKResponse<[Theme], SDKError> = self.get("/themes/active", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/themes/active", 
             ["name": name, "ts": ts as Any?, "fields": fields], nil, options)
         return result
     }
@@ -73,8 +71,8 @@ class LookerSDK: APIMethods {
          */
         _ body: GroupIdForGroupInclusion,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LkGroup, SDKError> {
-        let result: SDKResponse<LkGroup, SDKError> = self.post("/groups/\(group_id)/groups".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/groups/\(group_id)/groups".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -93,8 +91,8 @@ class LookerSDK: APIMethods {
          */
         _ body: GroupIdForGroupUserInclusion,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<User, SDKError> {
-        let result: SDKResponse<User, SDKError> = self.post("/groups/\(group_id)/users".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/groups/\(group_id)/users".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -116,8 +114,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ColorCollection], SDKError> {
-        let result: SDKResponse<[ColorCollection], SDKError> = self.get("/color_collections", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/color_collections", 
             ["fields": fields], nil, options)
         return result
     }
@@ -133,8 +131,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[DBConnection], SDKError> {
-        let result: SDKResponse<[DBConnection], SDKError> = self.get("/connections", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/connections", 
             ["fields": fields], nil, options)
         return result
     }
@@ -154,8 +152,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ContentMetaGroupUser], SDKError> {
-        let result: SDKResponse<[ContentMetaGroupUser], SDKError> = self.get("/content_metadata_access", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/content_metadata_access", 
             ["content_metadata_id": content_metadata_id, "fields": fields], nil, options)
         return result
     }
@@ -175,8 +173,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ContentMeta], SDKError> {
-        let result: SDKResponse<[ContentMeta], SDKError> = self.get("/content_metadata", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/content_metadata", 
             ["parent_id": parent_id, "fields": fields], nil, options)
         return result
     }
@@ -198,8 +196,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[DashboardBase], SDKError> {
-        let result: SDKResponse<[DashboardBase], SDKError> = self.get("/dashboards", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dashboards", 
             ["fields": fields], nil, options)
         return result
     }
@@ -211,8 +209,8 @@ class LookerSDK: APIMethods {
      */
     func all_datagroups(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Datagroup], SDKError> {
-        let result: SDKResponse<[Datagroup], SDKError> = self.get("/datagroups", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/datagroups", nil, nil, options)
         return result
     }
 
@@ -227,8 +225,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[DialectInfo], SDKError> {
-        let result: SDKResponse<[DialectInfo], SDKError> = self.get("/dialect_info", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dialect_info", 
             ["fields": fields], nil, options)
         return result
     }
@@ -244,8 +242,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Folder], SDKError> {
-        let result: SDKResponse<[Folder], SDKError> = self.get("/folders", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/folders", 
             ["fields": fields], nil, options)
         return result
     }
@@ -263,8 +261,8 @@ class LookerSDK: APIMethods {
          */
         _ project_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[GitBranch], SDKError> {
-        let result: SDKResponse<[GitBranch], SDKError> = self.get("/projects/\(project_id)/git_branches".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(project_id)/git_branches".encodePath(), nil, nil, options)
         return result
     }
 
@@ -292,8 +290,8 @@ class LookerSDK: APIMethods {
          */
         remote_url: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[GitConnectionTest], SDKError> {
-        let result: SDKResponse<[GitConnectionTest], SDKError> = self.get("/projects/\(project_id)/git_connection_tests".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(project_id)/git_connection_tests".encodePath(), 
             ["remote_url": remote_url], nil, options)
         return result
     }
@@ -313,8 +311,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[LkGroup], SDKError> {
-        let result: SDKResponse<[LkGroup], SDKError> = self.get("/groups/\(group_id)/groups".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/groups/\(group_id)/groups".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -346,8 +344,8 @@ class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[User], SDKError> {
-        let result: SDKResponse<[User], SDKError> = self.get("/groups/\(group_id)/users".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/groups/\(group_id)/users".encodePath(), 
             ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts], nil, options)
         return result
     }
@@ -387,8 +385,8 @@ class LookerSDK: APIMethods {
          */
         can_add_to_content_metadata: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[LkGroup], SDKError> {
-        let result: SDKResponse<[LkGroup], SDKError> = self.get("/groups", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/groups", 
             ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts, "ids": ids as Any?, "content_metadata_id": content_metadata_id, "can_add_to_content_metadata": can_add_to_content_metadata as Any?], nil, options)
         return result
     }
@@ -412,8 +410,8 @@ class LookerSDK: APIMethods {
          */
         homepage_section_id: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[HomepageItem], SDKError> {
-        let result: SDKResponse<[HomepageItem], SDKError> = self.get("/homepage_items", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/homepage_items", 
             ["fields": fields, "sorts": sorts, "homepage_section_id": homepage_section_id], nil, options)
         return result
     }
@@ -433,8 +431,8 @@ class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[HomepageSection], SDKError> {
-        let result: SDKResponse<[HomepageSection], SDKError> = self.get("/homepage_sections", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/homepage_sections", 
             ["fields": fields, "sorts": sorts], nil, options)
         return result
     }
@@ -450,8 +448,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Homepage], SDKError> {
-        let result: SDKResponse<[Homepage], SDKError> = self.get("/homepages", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/homepages", 
             ["fields": fields], nil, options)
         return result
     }
@@ -467,8 +465,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[IntegrationHub], SDKError> {
-        let result: SDKResponse<[IntegrationHub], SDKError> = self.get("/integration_hubs", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/integration_hubs", 
             ["fields": fields], nil, options)
         return result
     }
@@ -488,8 +486,8 @@ class LookerSDK: APIMethods {
          */
         integration_hub_id: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Integration], SDKError> {
-        let result: SDKResponse<[Integration], SDKError> = self.get("/integrations", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/integrations", 
             ["fields": fields, "integration_hub_id": integration_hub_id], nil, options)
         return result
     }
@@ -501,8 +499,8 @@ class LookerSDK: APIMethods {
      */
     func all_legacy_features(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[LegacyFeature], SDKError> {
-        let result: SDKResponse<[LegacyFeature], SDKError> = self.get("/legacy_features", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/legacy_features", nil, nil, options)
         return result
     }
 
@@ -513,8 +511,8 @@ class LookerSDK: APIMethods {
      */
     func all_locales(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Locale], SDKError> {
-        let result: SDKResponse<[Locale], SDKError> = self.get("/locales", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/locales", nil, nil, options)
         return result
     }
 
@@ -529,8 +527,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[LookmlModel], SDKError> {
-        let result: SDKResponse<[LookmlModel], SDKError> = self.get("/lookml_models", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/lookml_models", 
             ["fields": fields], nil, options)
         return result
     }
@@ -554,8 +552,8 @@ class LookerSDK: APIMethods {
          */
         file_id: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[LookmlTest], SDKError> {
-        let result: SDKResponse<[LookmlTest], SDKError> = self.get("/projects/\(project_id)/lookml_tests".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(project_id)/lookml_tests".encodePath(), 
             ["file_id": file_id], nil, options)
         return result
     }
@@ -577,8 +575,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Look], SDKError> {
-        let result: SDKResponse<[Look], SDKError> = self.get("/looks", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/looks", 
             ["fields": fields], nil, options)
         return result
     }
@@ -594,8 +592,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ModelSet], SDKError> {
-        let result: SDKResponse<[ModelSet], SDKError> = self.get("/model_sets", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/model_sets", 
             ["fields": fields], nil, options)
         return result
     }
@@ -611,8 +609,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[PermissionSet], SDKError> {
-        let result: SDKResponse<[PermissionSet], SDKError> = self.get("/permission_sets", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/permission_sets", 
             ["fields": fields], nil, options)
         return result
     }
@@ -624,8 +622,8 @@ class LookerSDK: APIMethods {
      */
     func all_permissions(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Permission], SDKError> {
-        let result: SDKResponse<[Permission], SDKError> = self.get("/permissions", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/permissions", nil, nil, options)
         return result
     }
 
@@ -646,8 +644,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ProjectFile], SDKError> {
-        let result: SDKResponse<[ProjectFile], SDKError> = self.get("/projects/\(project_id)/files".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(project_id)/files".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -665,8 +663,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Project], SDKError> {
-        let result: SDKResponse<[Project], SDKError> = self.get("/projects", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects", 
             ["fields": fields], nil, options)
         return result
     }
@@ -686,8 +684,8 @@ class LookerSDK: APIMethods {
          */
         ids: DelimArray<Int64>? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Role], SDKError> {
-        let result: SDKResponse<[Role], SDKError> = self.get("/roles", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/roles", 
             ["fields": fields, "ids": ids as Any?], nil, options)
         return result
     }
@@ -699,8 +697,8 @@ class LookerSDK: APIMethods {
      */
     func all_running_queries(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[RunningQueries], SDKError> {
-        let result: SDKResponse<[RunningQueries], SDKError> = self.get("/running_queries", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/running_queries", nil, nil, options)
         return result
     }
 
@@ -733,8 +731,8 @@ class LookerSDK: APIMethods {
          */
         all_users: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ScheduledPlan], SDKError> {
-        let result: SDKResponse<[ScheduledPlan], SDKError> = self.get("/scheduled_plans", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/scheduled_plans", 
             ["user_id": user_id, "fields": fields, "all_users": all_users as Any?], nil, options)
         return result
     }
@@ -750,8 +748,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[SpaceBase], SDKError> {
-        let result: SDKResponse<[SpaceBase], SDKError> = self.get("/spaces", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/spaces", 
             ["fields": fields], nil, options)
         return result
     }
@@ -773,8 +771,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Theme], SDKError> {
-        let result: SDKResponse<[Theme], SDKError> = self.get("/themes", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/themes", 
             ["fields": fields], nil, options)
         return result
     }
@@ -786,8 +784,8 @@ class LookerSDK: APIMethods {
      */
     func all_timezones(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Timezone], SDKError> {
-        let result: SDKResponse<[Timezone], SDKError> = self.get("/timezones", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/timezones", nil, nil, options)
         return result
     }
 
@@ -812,8 +810,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[UserAttributeGroupValue], SDKError> {
-        let result: SDKResponse<[UserAttributeGroupValue], SDKError> = self.get("/user_attributes/\(user_attribute_id)/group_values".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/user_attributes/\(user_attribute_id)/group_values".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -833,8 +831,8 @@ class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[UserAttribute], SDKError> {
-        let result: SDKResponse<[UserAttribute], SDKError> = self.get("/user_attributes", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/user_attributes", 
             ["fields": fields, "sorts": sorts], nil, options)
         return result
     }
@@ -854,8 +852,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[CredentialsApi3], SDKError> {
-        let result: SDKResponse<[CredentialsApi3], SDKError> = self.get("/users/\(user_id)/credentials_api3".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/credentials_api3".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -875,8 +873,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[CredentialsEmbed], SDKError> {
-        let result: SDKResponse<[CredentialsEmbed], SDKError> = self.get("/users/\(user_id)/credentials_embed".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/credentials_embed".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -892,8 +890,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[UserLoginLockout], SDKError> {
-        let result: SDKResponse<[UserLoginLockout], SDKError> = self.get("/user_login_lockouts", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/user_login_lockouts", 
             ["fields": fields], nil, options)
         return result
     }
@@ -913,8 +911,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Session], SDKError> {
-        let result: SDKResponse<[Session], SDKError> = self.get("/users/\(user_id)/sessions".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/sessions".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -946,8 +944,8 @@ class LookerSDK: APIMethods {
          */
         ids: DelimArray<Int64>? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[User], SDKError> {
-        let result: SDKResponse<[User], SDKError> = self.get("/users", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users", 
             ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts, "ids": ids as Any?], nil, options)
         return result
     }
@@ -961,8 +959,8 @@ class LookerSDK: APIMethods {
      */
     func all_workspaces(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Workspace], SDKError> {
-        let result: SDKResponse<[Workspace], SDKError> = self.get("/workspaces", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/workspaces", nil, nil, options)
         return result
     }
 
@@ -973,8 +971,8 @@ class LookerSDK: APIMethods {
      */
     func backup_configuration(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<BackupConfiguration, SDKError> {
-        let result: SDKResponse<BackupConfiguration, SDKError> = self.get("/backup_configuration", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/backup_configuration", nil, nil, options)
         return result
     }
 
@@ -1002,8 +1000,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ColorCollection, SDKError> {
-        let result: SDKResponse<ColorCollection, SDKError> = self.get("/color_collections/\(collection_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/color_collections/\(collection_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -1024,8 +1022,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ColorCollection], SDKError> {
-        let result: SDKResponse<[ColorCollection], SDKError> = self.get("/color_collections/custom", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/color_collections/custom", 
             ["fields": fields], nil, options)
         return result
     }
@@ -1046,8 +1044,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ColorCollection], SDKError> {
-        let result: SDKResponse<[ColorCollection], SDKError> = self.get("/color_collections/standard", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/color_collections/standard", 
             ["fields": fields], nil, options)
         return result
     }
@@ -1067,8 +1065,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DBConnection, SDKError> {
-        let result: SDKResponse<DBConnection, SDKError> = self.get("/connections/\(connection_name)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/connections/\(connection_name)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -1088,8 +1086,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ContentFavorite, SDKError> {
-        let result: SDKResponse<ContentFavorite, SDKError> = self.get("/content_favorite/\(content_favorite_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/content_favorite/\(content_favorite_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -1109,8 +1107,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ContentMeta, SDKError> {
-        let result: SDKResponse<ContentMeta, SDKError> = self.get("/content_metadata/\(content_metadata_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/content_metadata/\(content_metadata_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -1130,8 +1128,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ContentValidation, SDKError> {
-        let result: SDKResponse<ContentValidation, SDKError> = self.get("/content_validation", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/content_validation", 
             ["fields": fields], nil, options)
         return result
     }
@@ -1155,8 +1153,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteColorCollection,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ColorCollection, SDKError> {
-        let result: SDKResponse<ColorCollection, SDKError> = self.post("/color_collections", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/color_collections", nil, try! self.encode(body), options)
         return result
     }
 
@@ -1171,8 +1169,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteDBConnection,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DBConnection, SDKError> {
-        let result: SDKResponse<DBConnection, SDKError> = self.post("/connections", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/connections", nil, try! self.encode(body), options)
         return result
     }
 
@@ -1187,8 +1185,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteContentFavorite,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ContentFavorite, SDKError> {
-        let result: SDKResponse<ContentFavorite, SDKError> = self.post("/content_favorite", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/content_favorite", nil, try! self.encode(body), options)
         return result
     }
 
@@ -1207,8 +1205,8 @@ class LookerSDK: APIMethods {
          */
         send_boards_notification_email: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ContentMetaGroupUser, SDKError> {
-        let result: SDKResponse<ContentMetaGroupUser, SDKError> = self.post("/content_metadata_access", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/content_metadata_access", 
             ["send_boards_notification_email": send_boards_notification_email as Any?], try! self.encode(body), options)
         return result
     }
@@ -1237,8 +1235,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteDashboard,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Dashboard, SDKError> {
-        let result: SDKResponse<Dashboard, SDKError> = self.post("/dashboards", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/dashboards", nil, try! self.encode(body), options)
         return result
     }
 
@@ -1257,8 +1255,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DashboardElement, SDKError> {
-        let result: SDKResponse<DashboardElement, SDKError> = self.post("/dashboard_elements", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/dashboard_elements", 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -1278,8 +1276,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DashboardFilter, SDKError> {
-        let result: SDKResponse<DashboardFilter, SDKError> = self.post("/dashboard_filters", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/dashboard_filters", 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -1299,8 +1297,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DashboardLayout, SDKError> {
-        let result: SDKResponse<DashboardLayout, SDKError> = self.post("/dashboard_layouts", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/dashboard_layouts", 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -1348,8 +1346,8 @@ class LookerSDK: APIMethods {
          */
         pdf_landscape: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<RenderTask, SDKError> {
-        let result: SDKResponse<RenderTask, SDKError> = self.post("/render_tasks/dashboards/\(dashboard_id)/\(result_format)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/render_tasks/dashboards/\(dashboard_id)/\(result_format)".encodePath(), 
             ["width": width, "height": height, "fields": fields, "pdf_paper_size": pdf_paper_size, "pdf_landscape": pdf_landscape as Any?], try! self.encode(body), options)
         return result
     }
@@ -1368,8 +1366,8 @@ class LookerSDK: APIMethods {
          */
         _ body: CreateFolder,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Folder, SDKError> {
-        let result: SDKResponse<Folder, SDKError> = self.post("/folders", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/folders", nil, try! self.encode(body), options)
         return result
     }
 
@@ -1395,8 +1393,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteGitBranch,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<GitBranch, SDKError> {
-        let result: SDKResponse<GitBranch, SDKError> = self.post("/projects/\(project_id)/git_branch".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/projects/\(project_id)/git_branch".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -1419,8 +1417,8 @@ class LookerSDK: APIMethods {
          */
         _ project_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.post("/projects/\(project_id)/git/deploy_key".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/projects/\(project_id)/git/deploy_key".encodePath(), nil, nil, options)
         return result
     }
 
@@ -1439,8 +1437,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LkGroup, SDKError> {
-        let result: SDKResponse<LkGroup, SDKError> = self.post("/groups", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/groups", 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -1460,8 +1458,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Homepage, SDKError> {
-        let result: SDKResponse<Homepage, SDKError> = self.post("/homepages", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/homepages", 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -1481,8 +1479,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<HomepageItem, SDKError> {
-        let result: SDKResponse<HomepageItem, SDKError> = self.post("/homepage_items", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/homepage_items", 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -1502,8 +1500,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<HomepageSection, SDKError> {
-        let result: SDKResponse<HomepageSection, SDKError> = self.post("/homepage_sections", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/homepage_sections", 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -1525,8 +1523,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<IntegrationHub, SDKError> {
-        let result: SDKResponse<IntegrationHub, SDKError> = self.post("/integration_hubs", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/integration_hubs", 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -1552,8 +1550,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LookWithQuery, SDKError> {
-        let result: SDKResponse<LookWithQuery, SDKError> = self.post("/looks", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/looks", 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -1589,8 +1587,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<RenderTask, SDKError> {
-        let result: SDKResponse<RenderTask, SDKError> = self.post("/render_tasks/looks/\(look_id)/\(result_format)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/render_tasks/looks/\(look_id)/\(result_format)".encodePath(), 
             ["width": width, "height": height, "fields": fields], nil, options)
         return result
     }
@@ -1638,8 +1636,8 @@ class LookerSDK: APIMethods {
          */
         pdf_landscape: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<RenderTask, SDKError> {
-        let result: SDKResponse<RenderTask, SDKError> = self.post("/render_tasks/lookml_dashboards/\(dashboard_id)/\(result_format)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/render_tasks/lookml_dashboards/\(dashboard_id)/\(result_format)".encodePath(), 
             ["width": width, "height": height, "fields": fields, "pdf_paper_size": pdf_paper_size, "pdf_landscape": pdf_landscape as Any?], try! self.encode(body), options)
         return result
     }
@@ -1655,8 +1653,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteLookmlModel,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LookmlModel, SDKError> {
-        let result: SDKResponse<LookmlModel, SDKError> = self.post("/lookml_models", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/lookml_models", nil, try! self.encode(body), options)
         return result
     }
 
@@ -1691,8 +1689,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<MergeQuery, SDKError> {
-        let result: SDKResponse<MergeQuery, SDKError> = self.post("/merge_queries", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/merge_queries", 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -1708,8 +1706,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteModelSet,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ModelSet, SDKError> {
-        let result: SDKResponse<ModelSet, SDKError> = self.post("/model_sets", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/model_sets", nil, try! self.encode(body), options)
         return result
     }
 
@@ -1724,8 +1722,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteOIDCConfig,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<OIDCConfig, SDKError> {
-        let result: SDKResponse<OIDCConfig, SDKError> = self.post("/oidc_test_configs", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/oidc_test_configs", nil, try! self.encode(body), options)
         return result
     }
 
@@ -1740,8 +1738,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WritePermissionSet,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<PermissionSet, SDKError> {
-        let result: SDKResponse<PermissionSet, SDKError> = self.post("/permission_sets", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/permission_sets", nil, try! self.encode(body), options)
         return result
     }
 
@@ -1762,8 +1760,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteProject,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Project, SDKError> {
-        let result: SDKResponse<Project, SDKError> = self.post("/projects", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/projects", nil, try! self.encode(body), options)
         return result
     }
 
@@ -1789,8 +1787,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Query, SDKError> {
-        let result: SDKResponse<Query, SDKError> = self.post("/queries", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/queries", 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -1826,8 +1824,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<RenderTask, SDKError> {
-        let result: SDKResponse<RenderTask, SDKError> = self.post("/render_tasks/queries/\(query_id)/\(result_format)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/render_tasks/queries/\(query_id)/\(result_format)".encodePath(), 
             ["width": width, "height": height, "fields": fields], nil, options)
         return result
     }
@@ -1900,8 +1898,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<QueryTask, SDKError> {
-        let result: SDKResponse<QueryTask, SDKError> = self.post("/query_tasks", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/query_tasks", 
             ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "fields": fields], try! self.encode(body), options)
         return result
     }
@@ -1917,8 +1915,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteRole,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Role, SDKError> {
-        let result: SDKResponse<Role, SDKError> = self.post("/roles", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/roles", nil, try! self.encode(body), options)
         return result
     }
 
@@ -1933,8 +1931,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteSamlConfig,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<SamlConfig, SDKError> {
-        let result: SDKResponse<SamlConfig, SDKError> = self.post("/saml_test_configs", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/saml_test_configs", nil, try! self.encode(body), options)
         return result
     }
 
@@ -2006,8 +2004,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteScheduledPlan,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ScheduledPlan, SDKError> {
-        let result: SDKResponse<ScheduledPlan, SDKError> = self.post("/scheduled_plans", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/scheduled_plans", nil, try! self.encode(body), options)
         return result
     }
 
@@ -2025,8 +2023,8 @@ class LookerSDK: APIMethods {
          */
         _ body: CreateSpace,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Space, SDKError> {
-        let result: SDKResponse<Space, SDKError> = self.post("/spaces", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/spaces", nil, try! self.encode(body), options)
         return result
     }
 
@@ -2043,8 +2041,8 @@ class LookerSDK: APIMethods {
          */
         _ body: SqlQueryCreate,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<SqlQuery, SDKError> {
-        let result: SDKResponse<SqlQuery, SDKError> = self.post("/sql_queries", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/sql_queries", nil, try! self.encode(body), options)
         return result
     }
 
@@ -2092,8 +2090,8 @@ class LookerSDK: APIMethods {
          */
         _ body: EmbedSsoUrlParams,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<EmbedSsoUrl, SDKError> {
-        let result: SDKResponse<EmbedSsoUrl, SDKError> = self.post("/embed/sso_url", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/embed/sso_url", nil, try! self.encode(body), options)
         return result
     }
 
@@ -2122,8 +2120,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteTheme,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Theme, SDKError> {
-        let result: SDKResponse<Theme, SDKError> = self.post("/themes", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/themes", nil, try! self.encode(body), options)
         return result
     }
 
@@ -2142,8 +2140,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<User, SDKError> {
-        let result: SDKResponse<User, SDKError> = self.post("/users", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/users", 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -2172,8 +2170,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<UserAttribute, SDKError> {
-        let result: SDKResponse<UserAttribute, SDKError> = self.post("/user_attributes", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/user_attributes", 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -2197,8 +2195,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsApi3, SDKError> {
-        let result: SDKResponse<CredentialsApi3, SDKError> = self.post("/users/\(user_id)/credentials_api3".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/users/\(user_id)/credentials_api3".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -2222,8 +2220,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsEmail, SDKError> {
-        let result: SDKResponse<CredentialsEmail, SDKError> = self.post("/users/\(user_id)/credentials_email".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/users/\(user_id)/credentials_email".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -2255,8 +2253,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsEmail, SDKError> {
-        let result: SDKResponse<CredentialsEmail, SDKError> = self.post("/users/\(user_id)/credentials_email/password_reset".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/users/\(user_id)/credentials_email/password_reset".encodePath(), 
             ["expires": expires as Any?, "fields": fields], nil, options)
         return result
     }
@@ -2280,8 +2278,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsTotp, SDKError> {
-        let result: SDKResponse<CredentialsTotp, SDKError> = self.post("/users/\(user_id)/credentials_totp".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/users/\(user_id)/credentials_totp".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -2293,8 +2291,8 @@ class LookerSDK: APIMethods {
      */
     func custom_welcome_email(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CustomWelcomeEmail, SDKError> {
-        let result: SDKResponse<CustomWelcomeEmail, SDKError> = self.get("/custom_welcome_email", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/custom_welcome_email", nil, nil, options)
         return result
     }
 
@@ -2319,8 +2317,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Dashboard, SDKError> {
-        let result: SDKResponse<Dashboard, SDKError> = self.get("/dashboards/\(dashboard_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dashboards/\(dashboard_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -2340,8 +2338,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[DashboardElement], SDKError> {
-        let result: SDKResponse<[DashboardElement], SDKError> = self.get("/dashboards/\(dashboard_id)/dashboard_elements".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dashboards/\(dashboard_id)/dashboard_elements".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -2361,8 +2359,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[DashboardFilter], SDKError> {
-        let result: SDKResponse<[DashboardFilter], SDKError> = self.get("/dashboards/\(dashboard_id)/dashboard_filters".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dashboards/\(dashboard_id)/dashboard_filters".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -2382,8 +2380,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[DashboardLayout], SDKError> {
-        let result: SDKResponse<[DashboardLayout], SDKError> = self.get("/dashboards/\(dashboard_id)/dashboard_layouts".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dashboards/\(dashboard_id)/dashboard_layouts".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -2403,8 +2401,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DashboardElement, SDKError> {
-        let result: SDKResponse<DashboardElement, SDKError> = self.get("/dashboard_elements/\(dashboard_element_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dashboard_elements/\(dashboard_element_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -2424,8 +2422,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DashboardFilter, SDKError> {
-        let result: SDKResponse<DashboardFilter, SDKError> = self.get("/dashboard_filters/\(dashboard_filter_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dashboard_filters/\(dashboard_filter_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -2445,8 +2443,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DashboardLayout, SDKError> {
-        let result: SDKResponse<DashboardLayout, SDKError> = self.get("/dashboard_layouts/\(dashboard_layout_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dashboard_layouts/\(dashboard_layout_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -2466,8 +2464,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DashboardLayoutComponent, SDKError> {
-        let result: SDKResponse<DashboardLayoutComponent, SDKError> = self.get("/dashboard_layout_components/\(dashboard_layout_component_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dashboard_layout_components/\(dashboard_layout_component_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -2487,8 +2485,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[DashboardLayoutComponent], SDKError> {
-        let result: SDKResponse<[DashboardLayoutComponent], SDKError> = self.get("/dashboard_layouts/\(dashboard_layout_id)/dashboard_layout_components".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dashboard_layouts/\(dashboard_layout_id)/dashboard_layout_components".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -2506,8 +2504,8 @@ class LookerSDK: APIMethods {
          */
         _ dashboard_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DashboardLookml, SDKError> {
-        let result: SDKResponse<DashboardLookml, SDKError> = self.get("/dashboards/lookml/\(dashboard_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dashboards/lookml/\(dashboard_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2522,8 +2520,8 @@ class LookerSDK: APIMethods {
          */
         _ datagroup_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Datagroup, SDKError> {
-        let result: SDKResponse<Datagroup, SDKError> = self.get("/datagroups/\(datagroup_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/datagroups/\(datagroup_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2538,8 +2536,8 @@ class LookerSDK: APIMethods {
      */
     func default_color_collection(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ColorCollection, SDKError> {
-        let result: SDKResponse<ColorCollection, SDKError> = self.get("/color_collections/default", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/color_collections/default", nil, nil, options)
         return result
     }
 
@@ -2560,8 +2558,8 @@ class LookerSDK: APIMethods {
          */
         ts: Date? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Theme, SDKError> {
-        let result: SDKResponse<Theme, SDKError> = self.get("/themes/default", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/themes/default", 
             ["ts": ts as Any?], nil, options)
         return result
     }
@@ -2584,8 +2582,8 @@ class LookerSDK: APIMethods {
          */
         _ collection_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/color_collections/\(collection_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/color_collections/\(collection_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2600,8 +2598,8 @@ class LookerSDK: APIMethods {
          */
         _ connection_name: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/connections/\(connection_name)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/connections/\(connection_name)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2620,8 +2618,8 @@ class LookerSDK: APIMethods {
          */
         _ override_context: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/connections/\(connection_name)/connection_override/\(override_context)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/connections/\(connection_name)/connection_override/\(override_context)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2636,8 +2634,8 @@ class LookerSDK: APIMethods {
          */
         _ content_favorite_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/content_favorite/\(content_favorite_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/content_favorite/\(content_favorite_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2652,8 +2650,8 @@ class LookerSDK: APIMethods {
          */
         _ content_metadata_access_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/content_metadata_access/\(content_metadata_access_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/content_metadata_access/\(content_metadata_access_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2674,8 +2672,8 @@ class LookerSDK: APIMethods {
          */
         _ dashboard_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/dashboards/\(dashboard_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/dashboards/\(dashboard_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2690,8 +2688,8 @@ class LookerSDK: APIMethods {
          */
         _ dashboard_element_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/dashboard_elements/\(dashboard_element_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/dashboard_elements/\(dashboard_element_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2706,8 +2704,8 @@ class LookerSDK: APIMethods {
          */
         _ dashboard_filter_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/dashboard_filters/\(dashboard_filter_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/dashboard_filters/\(dashboard_filter_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2722,8 +2720,8 @@ class LookerSDK: APIMethods {
          */
         _ dashboard_layout_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/dashboard_layouts/\(dashboard_layout_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/dashboard_layouts/\(dashboard_layout_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2739,8 +2737,8 @@ class LookerSDK: APIMethods {
          */
         _ folder_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/folders/\(folder_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/folders/\(folder_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2761,8 +2759,8 @@ class LookerSDK: APIMethods {
          */
         _ branch_name: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/projects/\(project_id)/git_branch/\(branch_name)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/projects/\(project_id)/git_branch/\(branch_name)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2777,8 +2775,8 @@ class LookerSDK: APIMethods {
          */
         _ group_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/groups/\(group_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/groups/\(group_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2797,8 +2795,8 @@ class LookerSDK: APIMethods {
          */
         _ deleting_group_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Voidable, SDKError> {
-        let result: SDKResponse<Voidable, SDKError> = self.delete("/groups/\(group_id)/groups/\(deleting_group_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/groups/\(group_id)/groups/\(deleting_group_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2817,8 +2815,8 @@ class LookerSDK: APIMethods {
          */
         _ user_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Voidable, SDKError> {
-        let result: SDKResponse<Voidable, SDKError> = self.delete("/groups/\(group_id)/users/\(user_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/groups/\(group_id)/users/\(user_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2833,8 +2831,8 @@ class LookerSDK: APIMethods {
          */
         _ homepage_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/homepages/\(homepage_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/homepages/\(homepage_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2849,8 +2847,8 @@ class LookerSDK: APIMethods {
          */
         _ homepage_item_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/homepage_items/\(homepage_item_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/homepage_items/\(homepage_item_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2865,8 +2863,8 @@ class LookerSDK: APIMethods {
          */
         _ homepage_section_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/homepage_sections/\(homepage_section_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/homepage_sections/\(homepage_section_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2881,8 +2879,8 @@ class LookerSDK: APIMethods {
          */
         _ integration_hub_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/integration_hubs/\(integration_hub_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/integration_hubs/\(integration_hub_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2903,8 +2901,8 @@ class LookerSDK: APIMethods {
          */
         _ look_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/looks/\(look_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/looks/\(look_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2919,8 +2917,8 @@ class LookerSDK: APIMethods {
          */
         _ lookml_model_name: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/lookml_models/\(lookml_model_name)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/lookml_models/\(lookml_model_name)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2935,8 +2933,8 @@ class LookerSDK: APIMethods {
          */
         _ model_set_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/model_sets/\(model_set_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/model_sets/\(model_set_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2951,8 +2949,8 @@ class LookerSDK: APIMethods {
          */
         _ test_slug: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/oidc_test_configs/\(test_slug)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/oidc_test_configs/\(test_slug)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2967,8 +2965,8 @@ class LookerSDK: APIMethods {
          */
         _ permission_set_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/permission_sets/\(permission_set_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/permission_sets/\(permission_set_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -2992,8 +2990,8 @@ class LookerSDK: APIMethods {
          */
         _ credential_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/projects/\(root_project_id)/credential/\(credential_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/projects/\(root_project_id)/credential/\(credential_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3008,8 +3006,8 @@ class LookerSDK: APIMethods {
          */
         _ role_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/roles/\(role_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/roles/\(role_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3024,8 +3022,8 @@ class LookerSDK: APIMethods {
          */
         _ test_slug: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/saml_test_configs/\(test_slug)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/saml_test_configs/\(test_slug)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3044,8 +3042,8 @@ class LookerSDK: APIMethods {
          */
         _ scheduled_plan_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/scheduled_plans/\(scheduled_plan_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/scheduled_plans/\(scheduled_plan_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3061,8 +3059,8 @@ class LookerSDK: APIMethods {
          */
         _ space_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/spaces/\(space_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/spaces/\(space_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3085,8 +3083,8 @@ class LookerSDK: APIMethods {
          */
         _ theme_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/themes/\(theme_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/themes/\(theme_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3103,8 +3101,8 @@ class LookerSDK: APIMethods {
          */
         _ user_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/users/\(user_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(user_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3119,8 +3117,8 @@ class LookerSDK: APIMethods {
          */
         _ user_attribute_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/user_attributes/\(user_attribute_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/user_attributes/\(user_attribute_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3139,8 +3137,8 @@ class LookerSDK: APIMethods {
          */
         _ user_attribute_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Voidable, SDKError> {
-        let result: SDKResponse<Voidable, SDKError> = self.delete("/groups/\(group_id)/attribute_values/\(user_attribute_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/groups/\(group_id)/attribute_values/\(user_attribute_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3164,8 +3162,8 @@ class LookerSDK: APIMethods {
          */
         _ user_attribute_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Voidable, SDKError> {
-        let result: SDKResponse<Voidable, SDKError> = self.delete("/users/\(user_id)/attribute_values/\(user_attribute_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(user_id)/attribute_values/\(user_attribute_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3184,8 +3182,8 @@ class LookerSDK: APIMethods {
          */
         _ credentials_api3_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/users/\(user_id)/credentials_api3/\(credentials_api3_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(user_id)/credentials_api3/\(credentials_api3_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3200,8 +3198,8 @@ class LookerSDK: APIMethods {
          */
         _ user_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/users/\(user_id)/credentials_email".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(user_id)/credentials_email".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3220,8 +3218,8 @@ class LookerSDK: APIMethods {
          */
         _ credentials_embed_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/users/\(user_id)/credentials_embed/\(credentials_embed_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(user_id)/credentials_embed/\(credentials_embed_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3236,8 +3234,8 @@ class LookerSDK: APIMethods {
          */
         _ user_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/users/\(user_id)/credentials_google".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(user_id)/credentials_google".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3252,8 +3250,8 @@ class LookerSDK: APIMethods {
          */
         _ user_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/users/\(user_id)/credentials_ldap".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(user_id)/credentials_ldap".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3268,8 +3266,8 @@ class LookerSDK: APIMethods {
          */
         _ user_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/users/\(user_id)/credentials_looker_openid".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(user_id)/credentials_looker_openid".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3284,8 +3282,8 @@ class LookerSDK: APIMethods {
          */
         _ user_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/users/\(user_id)/credentials_oidc".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(user_id)/credentials_oidc".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3300,8 +3298,8 @@ class LookerSDK: APIMethods {
          */
         _ user_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/users/\(user_id)/credentials_saml".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(user_id)/credentials_saml".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3316,8 +3314,8 @@ class LookerSDK: APIMethods {
          */
         _ user_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/users/\(user_id)/credentials_totp".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(user_id)/credentials_totp".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3332,8 +3330,8 @@ class LookerSDK: APIMethods {
          */
         _ key: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/user_login_lockout/\(key)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/user_login_lockout/\(key)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3352,8 +3350,8 @@ class LookerSDK: APIMethods {
          */
         _ session_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/users/\(user_id)/sessions/\(session_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(user_id)/sessions/\(session_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3378,8 +3376,8 @@ class LookerSDK: APIMethods {
          */
         _ project_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.post("/projects/\(project_id)/deploy_to_production".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/projects/\(project_id)/deploy_to_production".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3396,8 +3394,8 @@ class LookerSDK: APIMethods {
          */
         _ body: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<SamlMetadataParseResult, SDKError> {
-        let result: SDKResponse<SamlMetadataParseResult, SDKError> = self.post("/fetch_and_parse_saml_idp_metadata", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/fetch_and_parse_saml_idp_metadata", nil, try! self.encode(body), options)
         return result
     }
 
@@ -3412,8 +3410,8 @@ class LookerSDK: APIMethods {
          */
         _ integration_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DataActionForm, SDKError> {
-        let result: SDKResponse<DataActionForm, SDKError> = self.post("/integrations/\(integration_id)/form".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/integrations/\(integration_id)/form".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3428,8 +3426,8 @@ class LookerSDK: APIMethods {
          */
         _ body: StringDictionary<AnyCodable>,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DataActionForm, SDKError> {
-        let result: SDKResponse<DataActionForm, SDKError> = self.post("/data_actions/form", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/data_actions/form", nil, try! self.encode(body), options)
         return result
     }
 
@@ -3450,8 +3448,8 @@ class LookerSDK: APIMethods {
          */
         _ branch_name: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<GitBranch, SDKError> {
-        let result: SDKResponse<GitBranch, SDKError> = self.get("/projects/\(project_id)/git_branch/\(branch_name)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(project_id)/git_branch/\(branch_name)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3470,8 +3468,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Folder, SDKError> {
-        let result: SDKResponse<Folder, SDKError> = self.get("/folders/\(folder_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/folders/\(folder_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -3491,8 +3489,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Folder], SDKError> {
-        let result: SDKResponse<[Folder], SDKError> = self.get("/folders/\(folder_id)/ancestors".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/folders/\(folder_id)/ancestors".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -3524,8 +3522,8 @@ class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Folder], SDKError> {
-        let result: SDKResponse<[Folder], SDKError> = self.get("/folders/\(folder_id)/children".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/folders/\(folder_id)/children".encodePath(), 
             ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts], nil, options)
         return result
     }
@@ -3553,8 +3551,8 @@ class LookerSDK: APIMethods {
          */
         name: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Folder], SDKError> {
-        let result: SDKResponse<[Folder], SDKError> = self.get("/folders/\(folder_id)/children/search".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/folders/\(folder_id)/children/search".encodePath(), 
             ["fields": fields, "sorts": sorts, "name": name], nil, options)
         return result
     }
@@ -3574,8 +3572,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Dashboard], SDKError> {
-        let result: SDKResponse<[Dashboard], SDKError> = self.get("/folders/\(folder_id)/dashboards".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/folders/\(folder_id)/dashboards".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -3595,8 +3593,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[LookWithQuery], SDKError> {
-        let result: SDKResponse<[LookWithQuery], SDKError> = self.get("/folders/\(folder_id)/looks".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/folders/\(folder_id)/looks".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -3616,8 +3614,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Folder, SDKError> {
-        let result: SDKResponse<Folder, SDKError> = self.get("/folders/\(folder_id)/parent".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/folders/\(folder_id)/parent".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -3629,8 +3627,8 @@ class LookerSDK: APIMethods {
      */
     func force_password_reset_at_next_login_for_all_users(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.put("/password_config/force_password_reset_at_next_login_for_all_users", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/password_config/force_password_reset_at_next_login_for_all_users", nil, nil, options)
         return result
     }
 
@@ -3647,8 +3645,8 @@ class LookerSDK: APIMethods {
          */
         _ root_project_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[RepositoryCredential], SDKError> {
-        let result: SDKResponse<[RepositoryCredential], SDKError> = self.get("/projects/\(root_project_id)/credentials".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(root_project_id)/credentials".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3665,8 +3663,8 @@ class LookerSDK: APIMethods {
          */
         _ project_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<GitBranch, SDKError> {
-        let result: SDKResponse<GitBranch, SDKError> = self.get("/projects/\(project_id)/git_branch".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(project_id)/git_branch".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3683,8 +3681,8 @@ class LookerSDK: APIMethods {
          */
         _ project_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.get("/projects/\(project_id)/git/deploy_key".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(project_id)/git/deploy_key".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3703,8 +3701,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LkGroup, SDKError> {
-        let result: SDKResponse<LkGroup, SDKError> = self.get("/groups/\(group_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/groups/\(group_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -3724,8 +3722,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Homepage, SDKError> {
-        let result: SDKResponse<Homepage, SDKError> = self.get("/homepages/\(homepage_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/homepages/\(homepage_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -3745,8 +3743,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<HomepageItem, SDKError> {
-        let result: SDKResponse<HomepageItem, SDKError> = self.get("/homepage_items/\(homepage_item_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/homepage_items/\(homepage_item_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -3766,8 +3764,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<HomepageSection, SDKError> {
-        let result: SDKResponse<HomepageSection, SDKError> = self.get("/homepage_sections/\(homepage_section_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/homepage_sections/\(homepage_section_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -3806,8 +3804,8 @@ class LookerSDK: APIMethods {
          */
         raw_locale: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Dashboard, SDKError> {
-        let result: SDKResponse<Dashboard, SDKError> = self.post("/dashboards/\(lookml_dashboard_id)/import/\(space_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/dashboards/\(lookml_dashboard_id)/import/\(space_id)".encodePath(), 
             ["raw_locale": raw_locale as Any?], try! self.encode(body), options)
         return result
     }
@@ -3827,8 +3825,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Integration, SDKError> {
-        let result: SDKResponse<Integration, SDKError> = self.get("/integrations/\(integration_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/integrations/\(integration_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -3848,8 +3846,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<IntegrationHub, SDKError> {
-        let result: SDKResponse<IntegrationHub, SDKError> = self.get("/integration_hubs/\(integration_hub_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/integration_hubs/\(integration_hub_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -3861,8 +3859,8 @@ class LookerSDK: APIMethods {
      */
     func internal_help_resources(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<InternalHelpResources, SDKError> {
-        let result: SDKResponse<InternalHelpResources, SDKError> = self.get("/internal_help_resources_enabled", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/internal_help_resources_enabled", nil, nil, options)
         return result
     }
 
@@ -3873,8 +3871,8 @@ class LookerSDK: APIMethods {
      */
     func internal_help_resources_content(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<InternalHelpResourcesContent, SDKError> {
-        let result: SDKResponse<InternalHelpResourcesContent, SDKError> = self.get("/internal_help_resources_content", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/internal_help_resources_content", nil, nil, options)
         return result
     }
 
@@ -3889,8 +3887,8 @@ class LookerSDK: APIMethods {
          */
         _ query_task_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/running_queries/\(query_task_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/running_queries/\(query_task_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3916,8 +3914,8 @@ class LookerSDK: APIMethods {
      */
     func ldap_config(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LDAPConfig, SDKError> {
-        let result: SDKResponse<LDAPConfig, SDKError> = self.get("/ldap_config", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/ldap_config", nil, nil, options)
         return result
     }
 
@@ -3932,8 +3930,8 @@ class LookerSDK: APIMethods {
          */
         _ legacy_feature_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LegacyFeature, SDKError> {
-        let result: SDKResponse<LegacyFeature, SDKError> = self.get("/legacy_features/\(legacy_feature_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/legacy_features/\(legacy_feature_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -3979,8 +3977,8 @@ class LookerSDK: APIMethods {
          */
         client_secret: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<AccessToken, SDKError> {
-        let result: SDKResponse<AccessToken, SDKError> = self.post("/login", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/login", 
             ["client_id": client_id, "client_secret": client_secret], nil, options)
         return result
     }
@@ -4011,8 +4009,8 @@ class LookerSDK: APIMethods {
          */
         _ user_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<AccessToken, SDKError> {
-        let result: SDKResponse<AccessToken, SDKError> = self.post("/login/\(user_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/login/\(user_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -4023,8 +4021,8 @@ class LookerSDK: APIMethods {
      */
     func logout(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.delete("/logout", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.delete("/logout", nil, nil, options)
         return result
     }
 
@@ -4045,8 +4043,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LookWithQuery, SDKError> {
-        let result: SDKResponse<LookWithQuery, SDKError> = self.get("/looks/\(look_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/looks/\(look_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -4066,8 +4064,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LookmlModel, SDKError> {
-        let result: SDKResponse<LookmlModel, SDKError> = self.get("/lookml_models/\(lookml_model_name)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/lookml_models/\(lookml_model_name)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -4091,8 +4089,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LookmlModelExplore, SDKError> {
-        let result: SDKResponse<LookmlModelExplore, SDKError> = self.get("/lookml_models/\(lookml_model_name)/explores/\(explore_name)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/lookml_models/\(lookml_model_name)/explores/\(explore_name)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -4110,8 +4108,8 @@ class LookerSDK: APIMethods {
          */
         _ project_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Manifest, SDKError> {
-        let result: SDKResponse<Manifest, SDKError> = self.get("/projects/\(project_id)/manifest".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(project_id)/manifest".encodePath(), nil, nil, options)
         return result
     }
 
@@ -4126,8 +4124,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<User, SDKError> {
-        let result: SDKResponse<User, SDKError> = self.get("/user", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/user", 
             ["fields": fields], nil, options)
         return result
     }
@@ -4149,8 +4147,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<MergeQuery, SDKError> {
-        let result: SDKResponse<MergeQuery, SDKError> = self.get("/merge_queries/\(merge_query_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/merge_queries/\(merge_query_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -4170,8 +4168,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ModelSet, SDKError> {
-        let result: SDKResponse<ModelSet, SDKError> = self.get("/model_sets/\(model_set_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/model_sets/\(model_set_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -4194,8 +4192,8 @@ class LookerSDK: APIMethods {
      */
     func oidc_config(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<OIDCConfig, SDKError> {
-        let result: SDKResponse<OIDCConfig, SDKError> = self.get("/oidc_config", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/oidc_config", nil, nil, options)
         return result
     }
 
@@ -4210,8 +4208,8 @@ class LookerSDK: APIMethods {
          */
         _ test_slug: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<OIDCConfig, SDKError> {
-        let result: SDKResponse<OIDCConfig, SDKError> = self.get("/oidc_test_configs/\(test_slug)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/oidc_test_configs/\(test_slug)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -4226,8 +4224,8 @@ class LookerSDK: APIMethods {
          */
         _ body: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<SamlMetadataParseResult, SDKError> {
-        let result: SDKResponse<SamlMetadataParseResult, SDKError> = self.post("/parse_saml_idp_metadata", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/parse_saml_idp_metadata", nil, try! self.encode(body), options)
         return result
     }
 
@@ -4238,8 +4236,8 @@ class LookerSDK: APIMethods {
      */
     func password_config(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<PasswordConfig, SDKError> {
-        let result: SDKResponse<PasswordConfig, SDKError> = self.get("/password_config", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/password_config", nil, nil, options)
         return result
     }
 
@@ -4254,8 +4252,8 @@ class LookerSDK: APIMethods {
          */
         _ body: DataActionRequest,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DataActionResponse, SDKError> {
-        let result: SDKResponse<DataActionResponse, SDKError> = self.post("/data_actions", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/data_actions", nil, try! self.encode(body), options)
         return result
     }
 
@@ -4274,8 +4272,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<PermissionSet, SDKError> {
-        let result: SDKResponse<PermissionSet, SDKError> = self.get("/permission_sets/\(permission_set_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/permission_sets/\(permission_set_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -4297,8 +4295,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Project, SDKError> {
-        let result: SDKResponse<Project, SDKError> = self.get("/projects/\(project_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(project_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -4324,8 +4322,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ProjectFile, SDKError> {
-        let result: SDKResponse<ProjectFile, SDKError> = self.get("/projects/\(project_id)/files/file".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(project_id)/files/file".encodePath(), 
             ["file_id": file_id, "fields": fields], nil, options)
         return result
     }
@@ -4356,8 +4354,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ProjectValidationCache, SDKError> {
-        let result: SDKResponse<ProjectValidationCache, SDKError> = self.get("/projects/\(project_id)/validate".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(project_id)/validate".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -4379,8 +4377,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ProjectWorkspace, SDKError> {
-        let result: SDKResponse<ProjectWorkspace, SDKError> = self.get("/projects/\(project_id)/current_workspace".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(project_id)/current_workspace".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -4416,8 +4414,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Query, SDKError> {
-        let result: SDKResponse<Query, SDKError> = self.get("/queries/\(query_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/queries/\(query_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -4453,8 +4451,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Query, SDKError> {
-        let result: SDKResponse<Query, SDKError> = self.get("/queries/slug/\(slug)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/queries/slug/\(slug)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -4480,8 +4478,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<QueryTask, SDKError> {
-        let result: SDKResponse<QueryTask, SDKError> = self.get("/query_tasks/\(query_task_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/query_tasks/\(query_task_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -4503,8 +4501,8 @@ class LookerSDK: APIMethods {
          */
         _ query_task_ids: DelimArray<String>,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<StringDictionary<AnyCodable>, SDKError> {
-        let result: SDKResponse<StringDictionary<AnyCodable>, SDKError> = self.get("/query_tasks/multi_results", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/query_tasks/multi_results", 
             ["query_task_ids": query_task_ids as Any?], nil, options)
         return result
     }
@@ -4542,8 +4540,8 @@ class LookerSDK: APIMethods {
          */
         _ query_task_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.get("/query_tasks/\(query_task_id)/results".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/query_tasks/\(query_task_id)/results".encodePath(), nil, nil, options)
         return result
     }
 
@@ -4566,8 +4564,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<RenderTask, SDKError> {
-        let result: SDKResponse<RenderTask, SDKError> = self.get("/render_tasks/\(render_task_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/render_tasks/\(render_task_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -4601,8 +4599,8 @@ class LookerSDK: APIMethods {
          */
         _ render_task_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.get("/render_tasks/\(render_task_id)/results".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/render_tasks/\(render_task_id)/results".encodePath(), nil, nil, options)
         return result
     }
 
@@ -4619,8 +4617,8 @@ class LookerSDK: APIMethods {
          */
         _ project_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.post("/projects/\(project_id)/reset_to_production".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/projects/\(project_id)/reset_to_production".encodePath(), nil, nil, options)
         return result
     }
 
@@ -4637,8 +4635,8 @@ class LookerSDK: APIMethods {
          */
         _ project_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.post("/projects/\(project_id)/reset_to_remote".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/projects/\(project_id)/reset_to_remote".encodePath(), nil, nil, options)
         return result
     }
 
@@ -4653,8 +4651,8 @@ class LookerSDK: APIMethods {
          */
         _ role_id: Int64,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Role, SDKError> {
-        let result: SDKResponse<Role, SDKError> = self.get("/roles/\(role_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/roles/\(role_id)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -4673,8 +4671,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[LkGroup], SDKError> {
-        let result: SDKResponse<[LkGroup], SDKError> = self.get("/roles/\(role_id)/groups".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/roles/\(role_id)/groups".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -4698,8 +4696,8 @@ class LookerSDK: APIMethods {
          */
         direct_association_only: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[User], SDKError> {
-        let result: SDKResponse<[User], SDKError> = self.get("/roles/\(role_id)/users".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/roles/\(role_id)/users".encodePath(), 
             ["fields": fields, "direct_association_only": direct_association_only as Any?], nil, options)
         return result
     }
@@ -4729,8 +4727,8 @@ class LookerSDK: APIMethods {
          */
         remote_url: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<GitConnectionTestResult, SDKError> {
-        let result: SDKResponse<GitConnectionTestResult, SDKError> = self.get("/projects/\(project_id)/git_connection_tests/\(test_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(project_id)/git_connection_tests/\(test_id)".encodePath(), 
             ["remote_url": remote_url], nil, options)
         return result
     }
@@ -4849,8 +4847,8 @@ class LookerSDK: APIMethods {
          */
         server_table_calcs: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.post("/queries/run/\(result_format)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/queries/run/\(result_format)".encodePath(), 
             ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?], try! self.encode(body), options)
         return result
     }
@@ -4937,8 +4935,8 @@ class LookerSDK: APIMethods {
          */
         server_table_calcs: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.get("/looks/\(look_id)/run/\(result_format)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/looks/\(look_id)/run/\(result_format)".encodePath(), 
             ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?], nil, options)
         return result
     }
@@ -4968,8 +4966,8 @@ class LookerSDK: APIMethods {
          */
         model: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[LookmlTestResult], SDKError> {
-        let result: SDKResponse<[LookmlTestResult], SDKError> = self.get("/projects/\(project_id)/lookml_tests/run".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(project_id)/lookml_tests/run".encodePath(), 
             ["file_id": file_id, "test": test, "model": model], nil, options)
         return result
     }
@@ -5059,8 +5057,8 @@ class LookerSDK: APIMethods {
          */
         server_table_calcs: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.get("/queries/\(query_id)/run/\(result_format)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/queries/\(query_id)/run/\(result_format)".encodePath(), 
             ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?], nil, options)
         return result
     }
@@ -5086,8 +5084,8 @@ class LookerSDK: APIMethods {
          */
         download: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.post("/sql_queries/\(slug)/run/\(result_format)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/sql_queries/\(slug)/run/\(result_format)".encodePath(), 
             ["download": download], nil, options)
         return result
     }
@@ -5164,8 +5162,8 @@ class LookerSDK: APIMethods {
          */
         _ result_format: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
-        let result: SDKResponse<String, SDKError> = self.get("/queries/models/\(model_name)/views/\(view_name)/run/\(result_format)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/queries/models/\(model_name)/views/\(view_name)/run/\(result_format)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -5187,8 +5185,8 @@ class LookerSDK: APIMethods {
      */
     func saml_config(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<SamlConfig, SDKError> {
-        let result: SDKResponse<SamlConfig, SDKError> = self.get("/saml_config", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/saml_config", nil, nil, options)
         return result
     }
 
@@ -5203,8 +5201,8 @@ class LookerSDK: APIMethods {
          */
         _ test_slug: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<SamlConfig, SDKError> {
-        let result: SDKResponse<SamlConfig, SDKError> = self.get("/saml_test_configs/\(test_slug)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/saml_test_configs/\(test_slug)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -5225,8 +5223,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ScheduledPlan, SDKError> {
-        let result: SDKResponse<ScheduledPlan, SDKError> = self.get("/scheduled_plans/\(scheduled_plan_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/scheduled_plans/\(scheduled_plan_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -5278,8 +5276,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteScheduledPlan,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ScheduledPlan, SDKError> {
-        let result: SDKResponse<ScheduledPlan, SDKError> = self.post("/scheduled_plans/run_once", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/scheduled_plans/run_once", nil, try! self.encode(body), options)
         return result
     }
 
@@ -5343,8 +5341,8 @@ class LookerSDK: APIMethods {
          */
         body: WriteScheduledPlan?,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ScheduledPlan, SDKError> {
-        let result: SDKResponse<ScheduledPlan, SDKError> = self.post("/scheduled_plans/\(scheduled_plan_id)/run_once".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/scheduled_plans/\(scheduled_plan_id)/run_once".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -5381,8 +5379,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ScheduledPlan], SDKError> {
-        let result: SDKResponse<[ScheduledPlan], SDKError> = self.get("/scheduled_plans/dashboard/\(dashboard_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/scheduled_plans/dashboard/\(dashboard_id)".encodePath(), 
             ["user_id": user_id, "all_users": all_users as Any?, "fields": fields], nil, options)
         return result
     }
@@ -5420,8 +5418,8 @@ class LookerSDK: APIMethods {
          */
         all_users: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ScheduledPlan], SDKError> {
-        let result: SDKResponse<[ScheduledPlan], SDKError> = self.get("/scheduled_plans/look/\(look_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/scheduled_plans/look/\(look_id)".encodePath(), 
             ["user_id": user_id, "fields": fields, "all_users": all_users as Any?], nil, options)
         return result
     }
@@ -5459,8 +5457,8 @@ class LookerSDK: APIMethods {
          */
         all_users: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ScheduledPlan], SDKError> {
-        let result: SDKResponse<[ScheduledPlan], SDKError> = self.get("/scheduled_plans/lookml_dashboard/\(lookml_dashboard_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/scheduled_plans/lookml_dashboard/\(lookml_dashboard_id)".encodePath(), 
             ["user_id": user_id, "fields": fields, "all_users": all_users as Any?], nil, options)
         return result
     }
@@ -5482,8 +5480,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ScheduledPlan], SDKError> {
-        let result: SDKResponse<[ScheduledPlan], SDKError> = self.get("/scheduled_plans/space/\(space_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/scheduled_plans/space/\(space_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -5560,8 +5558,8 @@ class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ContentFavorite], SDKError> {
-        let result: SDKResponse<[ContentFavorite], SDKError> = self.get("/content_favorite/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/content_favorite/search", 
             ["id": id, "user_id": user_id, "content_metadata_id": content_metadata_id, "dashboard_id": dashboard_id, "look_id": look_id, "board_id": board_id, "limit": limit, "offset": offset, "sorts": sorts, "fields": fields, "filter_or": filter_or as Any?], nil, options)
         return result
     }
@@ -5646,8 +5644,8 @@ class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ContentView], SDKError> {
-        let result: SDKResponse<[ContentView], SDKError> = self.get("/content_view/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/content_view/search", 
             ["view_count": view_count, "group_id": group_id, "look_id": look_id, "dashboard_id": dashboard_id, "content_metadata_id": content_metadata_id, "start_of_week_date": start_of_week_date, "all_time": all_time as Any?, "user_id": user_id, "fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or as Any?], nil, options)
         return result
     }
@@ -5710,8 +5708,8 @@ class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[DashboardElement], SDKError> {
-        let result: SDKResponse<[DashboardElement], SDKError> = self.get("/dashboard_elements/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dashboard_elements/search", 
             ["dashboard_id": dashboard_id, "look_id": look_id, "title": title, "deleted": deleted as Any?, "fields": fields, "filter_or": filter_or as Any?, "sorts": sorts], nil, options)
         return result
     }
@@ -5823,8 +5821,8 @@ class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Dashboard], SDKError> {
-        let result: SDKResponse<[Dashboard], SDKError> = self.get("/dashboards/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dashboards/search", 
             ["id": id, "slug": slug, "title": title, "description": description, "content_favorite_id": content_favorite_id, "space_id": space_id, "deleted": deleted, "user_id": user_id, "view_count": view_count, "content_metadata_id": content_metadata_id, "curate": curate as Any?, "fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or as Any?], nil, options)
         return result
     }
@@ -5880,8 +5878,8 @@ class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Folder], SDKError> {
-        let result: SDKResponse<[Folder], SDKError> = self.get("/folders/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/folders/search", 
             ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or as Any?], nil, options)
         return result
     }
@@ -5956,8 +5954,8 @@ class LookerSDK: APIMethods {
          */
         externally_orphaned: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[LkGroup], SDKError> {
-        let result: SDKResponse<[LkGroup], SDKError> = self.get("/groups/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/groups/search", 
             ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or as Any?, "id": id, "name": name, "external_group_id": external_group_id as Any?, "externally_managed": externally_managed as Any?, "externally_orphaned": externally_orphaned as Any?], nil, options)
         return result
     }
@@ -6042,8 +6040,8 @@ class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Homepage], SDKError> {
-        let result: SDKResponse<[Homepage], SDKError> = self.get("/homepages/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/homepages/search", 
             ["title": title, "created_at": created_at, "first_name": first_name, "last_name": last_name, "fields": fields, "favorited": favorited as Any?, "creator_id": creator_id, "sorts": sorts, "page": page, "per_page": per_page, "offset": offset, "limit": limit, "filter_or": filter_or as Any?], nil, options)
         return result
     }
@@ -6145,8 +6143,8 @@ class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Look], SDKError> {
-        let result: SDKResponse<[Look], SDKError> = self.get("/looks/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/looks/search", 
             ["title": title, "description": description, "content_favorite_id": content_favorite_id, "space_id": space_id, "user_id": user_id, "view_count": view_count, "deleted": deleted as Any?, "query_id": query_id, "curate": curate as Any?, "fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or as Any?], nil, options)
         return result
     }
@@ -6215,8 +6213,8 @@ class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[ModelSet], SDKError> {
-        let result: SDKResponse<[ModelSet], SDKError> = self.get("/model_sets/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/model_sets/search", 
             ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "all_access": all_access as Any?, "built_in": built_in as Any?, "filter_or": filter_or as Any?], nil, options)
         return result
     }
@@ -6285,8 +6283,8 @@ class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[PermissionSet], SDKError> {
-        let result: SDKResponse<[PermissionSet], SDKError> = self.get("/permission_sets/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/permission_sets/search", 
             ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "all_access": all_access as Any?, "built_in": built_in as Any?, "filter_or": filter_or as Any?], nil, options)
         return result
     }
@@ -6353,8 +6351,8 @@ class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Role], SDKError> {
-        let result: SDKResponse<[Role], SDKError> = self.get("/roles/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/roles/search", 
             ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "built_in": built_in as Any?, "filter_or": filter_or as Any?], nil, options)
         return result
     }
@@ -6438,8 +6436,8 @@ class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Space], SDKError> {
-        let result: SDKResponse<[Space], SDKError> = self.get("/spaces/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/spaces/search", 
             ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or as Any?], nil, options)
         return result
     }
@@ -6524,8 +6522,8 @@ class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Theme], SDKError> {
-        let result: SDKResponse<[Theme], SDKError> = self.get("/themes/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/themes/search", 
             ["id": id, "name": name, "begin_at": begin_at as Any?, "end_at": end_at as Any?, "limit": limit, "offset": offset, "sorts": sorts, "fields": fields, "filter_or": filter_or as Any?], nil, options)
         return result
     }
@@ -6573,8 +6571,8 @@ class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[UserLoginLockout], SDKError> {
-        let result: SDKResponse<[UserLoginLockout], SDKError> = self.get("/user_login_lockouts/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/user_login_lockouts/search", 
             ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts, "auth_type": auth_type, "full_name": full_name, "email": email, "remote_id": remote_id, "filter_or": filter_or as Any?], nil, options)
         return result
     }
@@ -6667,8 +6665,8 @@ class LookerSDK: APIMethods {
          */
         group_id: Int64? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[User], SDKError> {
-        let result: SDKResponse<[User], SDKError> = self.get("/users/search", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/search", 
             ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "email": email, "is_disabled": is_disabled as Any?, "filter_or": filter_or as Any?, "content_metadata_id": content_metadata_id, "group_id": group_id], nil, options)
         return result
     }
@@ -6729,8 +6727,8 @@ class LookerSDK: APIMethods {
          */
         is_disabled: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[User], SDKError> {
-        let result: SDKResponse<[User], SDKError> = self.get("/users/search/names/\(pattern)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/search/names/\(pattern)".encodePath(), 
             ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "email": email, "is_disabled": is_disabled as Any?], nil, options)
         return result
     }
@@ -6744,8 +6742,8 @@ class LookerSDK: APIMethods {
      */
     func session(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ApiSession, SDKError> {
-        let result: SDKResponse<ApiSession, SDKError> = self.get("/session", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/session", nil, nil, options)
         return result
     }
 
@@ -6756,8 +6754,8 @@ class LookerSDK: APIMethods {
      */
     func session_config(
         options: ITransportSettings? = nil
-    ) -> SDKResponse<SessionConfig, SDKError> {
-        let result: SDKResponse<SessionConfig, SDKError> = self.get("/session_config", nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/session_config", nil, nil, options)
         return result
     }
 
@@ -6775,8 +6773,8 @@ class LookerSDK: APIMethods {
          */
         _ collection_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ColorCollection, SDKError> {
-        let result: SDKResponse<ColorCollection, SDKError> = self.put("/color_collections/default", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/color_collections/default", 
             ["collection_id": collection_id], nil, options)
         return result
     }
@@ -6802,8 +6800,8 @@ class LookerSDK: APIMethods {
          */
         _ name: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Theme, SDKError> {
-        let result: SDKResponse<Theme, SDKError> = self.put("/themes/default", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/themes/default", 
             ["name": name], nil, options)
         return result
     }
@@ -6823,8 +6821,8 @@ class LookerSDK: APIMethods {
          */
         _ body: [Int64],
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[LkGroup], SDKError> {
-        let result: SDKResponse<[LkGroup], SDKError> = self.put("/roles/\(role_id)/groups".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/roles/\(role_id)/groups".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -6843,8 +6841,8 @@ class LookerSDK: APIMethods {
          */
         _ body: [Int64],
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[User], SDKError> {
-        let result: SDKResponse<[User], SDKError> = self.put("/roles/\(role_id)/users".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/roles/\(role_id)/users".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -6882,8 +6880,8 @@ class LookerSDK: APIMethods {
          */
         _ body: [UserAttributeGroupValue],
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[UserAttributeGroupValue], SDKError> {
-        let result: SDKResponse<[UserAttributeGroupValue], SDKError> = self.post("/user_attributes/\(user_attribute_id)/group_values".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/user_attributes/\(user_attribute_id)/group_values".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -6908,8 +6906,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteUserAttributeWithValue,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<UserAttributeWithValue, SDKError> {
-        let result: SDKResponse<UserAttributeWithValue, SDKError> = self.patch("/users/\(user_id)/attribute_values/\(user_attribute_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/users/\(user_id)/attribute_values/\(user_attribute_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -6932,8 +6930,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Role], SDKError> {
-        let result: SDKResponse<[Role], SDKError> = self.put("/users/\(user_id)/roles".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/users/\(user_id)/roles".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -6953,8 +6951,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Space, SDKError> {
-        let result: SDKResponse<Space, SDKError> = self.get("/spaces/\(space_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/spaces/\(space_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -6974,8 +6972,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Space], SDKError> {
-        let result: SDKResponse<[Space], SDKError> = self.get("/spaces/\(space_id)/ancestors".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/spaces/\(space_id)/ancestors".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -7007,8 +7005,8 @@ class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Space], SDKError> {
-        let result: SDKResponse<[Space], SDKError> = self.get("/spaces/\(space_id)/children".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/spaces/\(space_id)/children".encodePath(), 
             ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts], nil, options)
         return result
     }
@@ -7036,8 +7034,8 @@ class LookerSDK: APIMethods {
          */
         name: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Space], SDKError> {
-        let result: SDKResponse<[Space], SDKError> = self.get("/spaces/\(space_id)/children/search".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/spaces/\(space_id)/children/search".encodePath(), 
             ["fields": fields, "sorts": sorts, "name": name], nil, options)
         return result
     }
@@ -7057,8 +7055,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Dashboard], SDKError> {
-        let result: SDKResponse<[Dashboard], SDKError> = self.get("/spaces/\(space_id)/dashboards".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/spaces/\(space_id)/dashboards".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -7078,8 +7076,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[LookWithQuery], SDKError> {
-        let result: SDKResponse<[LookWithQuery], SDKError> = self.get("/spaces/\(space_id)/looks".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/spaces/\(space_id)/looks".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -7099,8 +7097,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Space, SDKError> {
-        let result: SDKResponse<Space, SDKError> = self.get("/spaces/\(space_id)/parent".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/spaces/\(space_id)/parent".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -7116,8 +7114,8 @@ class LookerSDK: APIMethods {
          */
         _ slug: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<SqlQuery, SDKError> {
-        let result: SDKResponse<SqlQuery, SDKError> = self.get("/sql_queries/\(slug)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/sql_queries/\(slug)".encodePath(), nil, nil, options)
         return result
     }
 
@@ -7148,8 +7146,8 @@ class LookerSDK: APIMethods {
          */
         raw_locale: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Int64], SDKError> {
-        let result: SDKResponse<[Int64], SDKError> = self.patch("/dashboards/\(lookml_dashboard_id)/sync".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/dashboards/\(lookml_dashboard_id)/sync".encodePath(), 
             ["raw_locale": raw_locale as Any?], try! self.encode(body), options)
         return result
     }
@@ -7176,8 +7174,8 @@ class LookerSDK: APIMethods {
          */
         tests: DelimArray<String>? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[DBConnectionTestResult], SDKError> {
-        let result: SDKResponse<[DBConnectionTestResult], SDKError> = self.put("/connections/\(connection_name)/test".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/connections/\(connection_name)/test".encodePath(), 
             ["tests": tests as Any?], nil, options)
         return result
     }
@@ -7204,8 +7202,8 @@ class LookerSDK: APIMethods {
          */
         tests: DelimArray<String>? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[DBConnectionTestResult], SDKError> {
-        let result: SDKResponse<[DBConnectionTestResult], SDKError> = self.put("/connections/test", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/connections/test", 
             ["tests": tests as Any?], try! self.encode(body), options)
         return result
     }
@@ -7221,8 +7219,8 @@ class LookerSDK: APIMethods {
          */
         _ integration_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<IntegrationTestResult, SDKError> {
-        let result: SDKResponse<IntegrationTestResult, SDKError> = self.post("/integrations/\(integration_id)/test".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/integrations/\(integration_id)/test".encodePath(), nil, nil, options)
         return result
     }
 
@@ -7256,8 +7254,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteLDAPConfig,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LDAPConfigTestResult, SDKError> {
-        let result: SDKResponse<LDAPConfigTestResult, SDKError> = self.put("/ldap_config/test_auth", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/ldap_config/test_auth", nil, try! self.encode(body), options)
         return result
     }
 
@@ -7289,8 +7287,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteLDAPConfig,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LDAPConfigTestResult, SDKError> {
-        let result: SDKResponse<LDAPConfigTestResult, SDKError> = self.put("/ldap_config/test_connection", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/ldap_config/test_connection", nil, try! self.encode(body), options)
         return result
     }
 
@@ -7313,8 +7311,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteLDAPConfig,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LDAPConfigTestResult, SDKError> {
-        let result: SDKResponse<LDAPConfigTestResult, SDKError> = self.put("/ldap_config/test_user_auth", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/ldap_config/test_user_auth", nil, try! self.encode(body), options)
         return result
     }
 
@@ -7337,8 +7335,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteLDAPConfig,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LDAPConfigTestResult, SDKError> {
-        let result: SDKResponse<LDAPConfigTestResult, SDKError> = self.put("/ldap_config/test_user_info", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/ldap_config/test_user_info", nil, try! self.encode(body), options)
         return result
     }
 
@@ -7361,8 +7359,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Theme, SDKError> {
-        let result: SDKResponse<Theme, SDKError> = self.get("/themes/\(theme_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/themes/\(theme_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -7387,8 +7385,8 @@ class LookerSDK: APIMethods {
          */
         ts: Date? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Theme, SDKError> {
-        let result: SDKResponse<Theme, SDKError> = self.get("/themes/theme_or_default", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/themes/theme_or_default", 
             ["name": name, "ts": ts as Any?], nil, options)
         return result
     }
@@ -7404,8 +7402,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteBackupConfiguration,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<BackupConfiguration, SDKError> {
-        let result: SDKResponse<BackupConfiguration, SDKError> = self.patch("/backup_configuration", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/backup_configuration", nil, try! self.encode(body), options)
         return result
     }
 
@@ -7425,8 +7423,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteColorCollection,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ColorCollection, SDKError> {
-        let result: SDKResponse<ColorCollection, SDKError> = self.patch("/color_collections/\(collection_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/color_collections/\(collection_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -7445,8 +7443,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteDBConnection,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DBConnection, SDKError> {
-        let result: SDKResponse<DBConnection, SDKError> = self.patch("/connections/\(connection_name)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/connections/\(connection_name)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -7465,8 +7463,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteContentMeta,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ContentMeta, SDKError> {
-        let result: SDKResponse<ContentMeta, SDKError> = self.patch("/content_metadata/\(content_metadata_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/content_metadata/\(content_metadata_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -7485,8 +7483,8 @@ class LookerSDK: APIMethods {
          */
         _ body: ContentMetaGroupUser,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ContentMetaGroupUser, SDKError> {
-        let result: SDKResponse<ContentMetaGroupUser, SDKError> = self.put("/content_metadata_access/\(content_metadata_access_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/content_metadata_access/\(content_metadata_access_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -7505,8 +7503,8 @@ class LookerSDK: APIMethods {
          */
         send_test_welcome_email: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CustomWelcomeEmail, SDKError> {
-        let result: SDKResponse<CustomWelcomeEmail, SDKError> = self.patch("/custom_welcome_email", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/custom_welcome_email", 
             ["send_test_welcome_email": send_test_welcome_email as Any?], try! self.encode(body), options)
         return result
     }
@@ -7522,8 +7520,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteWelcomeEmailTest,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<WelcomeEmailTest, SDKError> {
-        let result: SDKResponse<WelcomeEmailTest, SDKError> = self.put("/custom_welcome_email_test", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/custom_welcome_email_test", nil, try! self.encode(body), options)
         return result
     }
 
@@ -7551,8 +7549,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteDashboard,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Dashboard, SDKError> {
-        let result: SDKResponse<Dashboard, SDKError> = self.patch("/dashboards/\(dashboard_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/dashboards/\(dashboard_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -7575,8 +7573,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DashboardElement, SDKError> {
-        let result: SDKResponse<DashboardElement, SDKError> = self.patch("/dashboard_elements/\(dashboard_element_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/dashboard_elements/\(dashboard_element_id)".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -7600,8 +7598,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DashboardFilter, SDKError> {
-        let result: SDKResponse<DashboardFilter, SDKError> = self.patch("/dashboard_filters/\(dashboard_filter_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/dashboard_filters/\(dashboard_filter_id)".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -7625,8 +7623,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DashboardLayout, SDKError> {
-        let result: SDKResponse<DashboardLayout, SDKError> = self.patch("/dashboard_layouts/\(dashboard_layout_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/dashboard_layouts/\(dashboard_layout_id)".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -7650,8 +7648,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DashboardLayoutComponent, SDKError> {
-        let result: SDKResponse<DashboardLayoutComponent, SDKError> = self.patch("/dashboard_layout_components/\(dashboard_layout_component_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/dashboard_layout_components/\(dashboard_layout_component_id)".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -7671,8 +7669,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteDatagroup,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Datagroup, SDKError> {
-        let result: SDKResponse<Datagroup, SDKError> = self.patch("/datagroups/\(datagroup_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/datagroups/\(datagroup_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -7691,8 +7689,8 @@ class LookerSDK: APIMethods {
          */
         _ body: UpdateFolder,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Folder, SDKError> {
-        let result: SDKResponse<Folder, SDKError> = self.patch("/folders/\(folder_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/folders/\(folder_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -7719,8 +7717,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteGitBranch,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<GitBranch, SDKError> {
-        let result: SDKResponse<GitBranch, SDKError> = self.put("/projects/\(project_id)/git_branch".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/projects/\(project_id)/git_branch".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -7743,8 +7741,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LkGroup, SDKError> {
-        let result: SDKResponse<LkGroup, SDKError> = self.patch("/groups/\(group_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/groups/\(group_id)".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -7768,8 +7766,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Homepage, SDKError> {
-        let result: SDKResponse<Homepage, SDKError> = self.patch("/homepages/\(homepage_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/homepages/\(homepage_id)".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -7793,8 +7791,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<HomepageItem, SDKError> {
-        let result: SDKResponse<HomepageItem, SDKError> = self.patch("/homepage_items/\(homepage_item_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/homepage_items/\(homepage_item_id)".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -7818,8 +7816,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<HomepageSection, SDKError> {
-        let result: SDKResponse<HomepageSection, SDKError> = self.patch("/homepage_sections/\(homepage_section_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/homepage_sections/\(homepage_section_id)".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -7843,8 +7841,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Integration, SDKError> {
-        let result: SDKResponse<Integration, SDKError> = self.patch("/integrations/\(integration_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/integrations/\(integration_id)".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -7870,8 +7868,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<IntegrationHub, SDKError> {
-        let result: SDKResponse<IntegrationHub, SDKError> = self.patch("/integration_hubs/\(integration_hub_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/integration_hubs/\(integration_hub_id)".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -7887,8 +7885,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteInternalHelpResources,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<InternalHelpResources, SDKError> {
-        let result: SDKResponse<InternalHelpResources, SDKError> = self.patch("/internal_help_resources", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/internal_help_resources", nil, try! self.encode(body), options)
         return result
     }
 
@@ -7903,8 +7901,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteInternalHelpResourcesContent,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<InternalHelpResourcesContent, SDKError> {
-        let result: SDKResponse<InternalHelpResourcesContent, SDKError> = self.patch("/internal_help_resources_content", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/internal_help_resources_content", nil, try! self.encode(body), options)
         return result
     }
 
@@ -7929,8 +7927,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteLDAPConfig,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LDAPConfig, SDKError> {
-        let result: SDKResponse<LDAPConfig, SDKError> = self.patch("/ldap_config", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/ldap_config", nil, try! self.encode(body), options)
         return result
     }
 
@@ -7949,8 +7947,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteLegacyFeature,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LegacyFeature, SDKError> {
-        let result: SDKResponse<LegacyFeature, SDKError> = self.patch("/legacy_features/\(legacy_feature_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/legacy_features/\(legacy_feature_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -7992,8 +7990,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LookWithQuery, SDKError> {
-        let result: SDKResponse<LookWithQuery, SDKError> = self.patch("/looks/\(look_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/looks/\(look_id)".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -8013,8 +8011,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteLookmlModel,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<LookmlModel, SDKError> {
-        let result: SDKResponse<LookmlModel, SDKError> = self.patch("/lookml_models/\(lookml_model_name)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/lookml_models/\(lookml_model_name)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -8033,8 +8031,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteModelSet,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ModelSet, SDKError> {
-        let result: SDKResponse<ModelSet, SDKError> = self.patch("/model_sets/\(model_set_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/model_sets/\(model_set_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -8057,8 +8055,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteOIDCConfig,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<OIDCConfig, SDKError> {
-        let result: SDKResponse<OIDCConfig, SDKError> = self.patch("/oidc_config", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/oidc_config", nil, try! self.encode(body), options)
         return result
     }
 
@@ -8073,8 +8071,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WritePasswordConfig,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<PasswordConfig, SDKError> {
-        let result: SDKResponse<PasswordConfig, SDKError> = self.patch("/password_config", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/password_config", nil, try! self.encode(body), options)
         return result
     }
 
@@ -8093,8 +8091,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WritePermissionSet,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<PermissionSet, SDKError> {
-        let result: SDKResponse<PermissionSet, SDKError> = self.patch("/permission_sets/\(permission_set_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/permission_sets/\(permission_set_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -8137,8 +8135,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Project, SDKError> {
-        let result: SDKResponse<Project, SDKError> = self.patch("/projects/\(project_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/projects/\(project_id)".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -8167,8 +8165,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteRepositoryCredential,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<RepositoryCredential, SDKError> {
-        let result: SDKResponse<RepositoryCredential, SDKError> = self.put("/projects/\(root_project_id)/credential/\(credential_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/projects/\(root_project_id)/credential/\(credential_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -8187,8 +8185,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteRole,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Role, SDKError> {
-        let result: SDKResponse<Role, SDKError> = self.patch("/roles/\(role_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/roles/\(role_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -8211,8 +8209,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteSamlConfig,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<SamlConfig, SDKError> {
-        let result: SDKResponse<SamlConfig, SDKError> = self.patch("/saml_config", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/saml_config", nil, try! self.encode(body), options)
         return result
     }
 
@@ -8272,8 +8270,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteScheduledPlan,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ScheduledPlan, SDKError> {
-        let result: SDKResponse<ScheduledPlan, SDKError> = self.patch("/scheduled_plans/\(scheduled_plan_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/scheduled_plans/\(scheduled_plan_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -8307,8 +8305,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteApiSession,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ApiSession, SDKError> {
-        let result: SDKResponse<ApiSession, SDKError> = self.patch("/session", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/session", nil, try! self.encode(body), options)
         return result
     }
 
@@ -8323,8 +8321,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteSessionConfig,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<SessionConfig, SDKError> {
-        let result: SDKResponse<SessionConfig, SDKError> = self.patch("/session_config", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/session_config", nil, try! self.encode(body), options)
         return result
     }
 
@@ -8343,8 +8341,8 @@ class LookerSDK: APIMethods {
          */
         _ body: UpdateSpace,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Space, SDKError> {
-        let result: SDKResponse<Space, SDKError> = self.patch("/spaces/\(space_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/spaces/\(space_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -8365,8 +8363,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteTheme,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Theme, SDKError> {
-        let result: SDKResponse<Theme, SDKError> = self.patch("/themes/\(theme_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/themes/\(theme_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -8389,8 +8387,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<User, SDKError> {
-        let result: SDKResponse<User, SDKError> = self.patch("/users/\(user_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/users/\(user_id)".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -8414,8 +8412,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<UserAttribute, SDKError> {
-        let result: SDKResponse<UserAttribute, SDKError> = self.patch("/user_attributes/\(user_attribute_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/user_attributes/\(user_attribute_id)".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -8441,8 +8439,8 @@ class LookerSDK: APIMethods {
          */
         _ body: UserAttributeGroupValue,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<UserAttributeGroupValue, SDKError> {
-        let result: SDKResponse<UserAttributeGroupValue, SDKError> = self.patch("/groups/\(group_id)/attribute_values/\(user_attribute_id)".encodePath(), nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/groups/\(group_id)/attribute_values/\(user_attribute_id)".encodePath(), nil, try! self.encode(body), options)
         return result
     }
 
@@ -8465,8 +8463,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsEmail, SDKError> {
-        let result: SDKResponse<CredentialsEmail, SDKError> = self.patch("/users/\(user_id)/credentials_email".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.patch("/users/\(user_id)/credentials_email".encodePath(), 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
@@ -8482,8 +8480,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteWhitelabelConfiguration,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<WhitelabelConfiguration, SDKError> {
-        let result: SDKResponse<WhitelabelConfiguration, SDKError> = self.put("/whitelabel_configuration", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/whitelabel_configuration", nil, try! self.encode(body), options)
         return result
     }
 
@@ -8506,8 +8504,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<User, SDKError> {
-        let result: SDKResponse<User, SDKError> = self.get("/users/\(user_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -8527,8 +8525,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<UserAttribute, SDKError> {
-        let result: SDKResponse<UserAttribute, SDKError> = self.get("/user_attributes/\(user_attribute_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/user_attributes/\(user_attribute_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -8574,8 +8572,8 @@ class LookerSDK: APIMethods {
          */
         include_unset: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[UserAttributeWithValue], SDKError> {
-        let result: SDKResponse<[UserAttributeWithValue], SDKError> = self.get("/users/\(user_id)/attribute_values".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/attribute_values".encodePath(), 
             ["fields": fields, "user_attribute_ids": user_attribute_ids as Any?, "all_values": all_values as Any?, "include_unset": include_unset as Any?], nil, options)
         return result
     }
@@ -8599,8 +8597,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsApi3, SDKError> {
-        let result: SDKResponse<CredentialsApi3, SDKError> = self.get("/users/\(user_id)/credentials_api3/\(credentials_api3_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/credentials_api3/\(credentials_api3_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -8620,8 +8618,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsEmail, SDKError> {
-        let result: SDKResponse<CredentialsEmail, SDKError> = self.get("/users/\(user_id)/credentials_email".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/credentials_email".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -8645,8 +8643,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsEmbed, SDKError> {
-        let result: SDKResponse<CredentialsEmbed, SDKError> = self.get("/users/\(user_id)/credentials_embed/\(credentials_embed_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/credentials_embed/\(credentials_embed_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -8666,8 +8664,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsGoogle, SDKError> {
-        let result: SDKResponse<CredentialsGoogle, SDKError> = self.get("/users/\(user_id)/credentials_google".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/credentials_google".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -8687,8 +8685,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsLDAP, SDKError> {
-        let result: SDKResponse<CredentialsLDAP, SDKError> = self.get("/users/\(user_id)/credentials_ldap".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/credentials_ldap".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -8708,8 +8706,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsLookerOpenid, SDKError> {
-        let result: SDKResponse<CredentialsLookerOpenid, SDKError> = self.get("/users/\(user_id)/credentials_looker_openid".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/credentials_looker_openid".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -8729,8 +8727,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsOIDC, SDKError> {
-        let result: SDKResponse<CredentialsOIDC, SDKError> = self.get("/users/\(user_id)/credentials_oidc".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/credentials_oidc".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -8750,8 +8748,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsSaml, SDKError> {
-        let result: SDKResponse<CredentialsSaml, SDKError> = self.get("/users/\(user_id)/credentials_saml".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/credentials_saml".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -8771,8 +8769,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsTotp, SDKError> {
-        let result: SDKResponse<CredentialsTotp, SDKError> = self.get("/users/\(user_id)/credentials_totp".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/credentials_totp".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -8823,8 +8821,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<User, SDKError> {
-        let result: SDKResponse<User, SDKError> = self.get("/users/credential/\(credential_type)/\(credential_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/credential/\(credential_type)/\(credential_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -8848,8 +8846,8 @@ class LookerSDK: APIMethods {
          */
         direct_association_only: Bool? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Role], SDKError> {
-        let result: SDKResponse<[Role], SDKError> = self.get("/users/\(user_id)/roles".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/roles".encodePath(), 
             ["fields": fields, "direct_association_only": direct_association_only as Any?], nil, options)
         return result
     }
@@ -8873,8 +8871,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Session, SDKError> {
-        let result: SDKResponse<Session, SDKError> = self.get("/users/\(user_id)/sessions/\(session_id)".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(user_id)/sessions/\(session_id)".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -8902,8 +8900,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ProjectValidation, SDKError> {
-        let result: SDKResponse<ProjectValidation, SDKError> = self.post("/projects/\(project_id)/validate".encodePath(), 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/projects/\(project_id)/validate".encodePath(), 
             ["fields": fields], nil, options)
         return result
     }
@@ -8925,8 +8923,8 @@ class LookerSDK: APIMethods {
          */
         _ body: WriteTheme,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ValidationError, SDKError> {
-        let result: SDKResponse<ValidationError, SDKError> = self.post("/themes/validate", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/themes/validate", nil, try! self.encode(body), options)
         return result
     }
 
@@ -8941,8 +8939,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ApiVersion, SDKError> {
-        let result: SDKResponse<ApiVersion, SDKError> = self.get("/versions", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/versions", 
             ["fields": fields], nil, options)
         return result
     }
@@ -8959,8 +8957,8 @@ class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<WhitelabelConfiguration, SDKError> {
-        let result: SDKResponse<WhitelabelConfiguration, SDKError> = self.get("/whitelabel_configuration", 
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/whitelabel_configuration", 
             ["fields": fields], nil, options)
         return result
     }
@@ -9004,8 +9002,8 @@ class LookerSDK: APIMethods {
          */
         _ workspace_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<Workspace, SDKError> {
-        let result: SDKResponse<Workspace, SDKError> = self.get("/workspaces/\(workspace_id)".encodePath(), nil, nil, options)
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/workspaces/\(workspace_id)".encodePath(), nil, nil, options)
         return result
     }
 
