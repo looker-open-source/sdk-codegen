@@ -20,65 +20,7 @@ class methodsTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-/*
-    func swiftIsCrazy(_ object: Any?) -> Bool {
-        if let object = object {
-            return JSONSerialization.isValidJSONObject(object)
-        }
-        return false
-    }
-
-    func jsonEncode(_ object: Any?) -> Data? {
-        if let object = object {
-            if let data = object as? Data {
-                return try? JSONEncoder().encode(data)
-            } else {
-                return try? JSONSerialization.data(withJSONObject: object, options:[.fragmentsAllowed])
-            }
-        }
-        return nil
-    }
-
-    struct WriteQuery2: Codable {
-        var model: String
-        var view: String
-    }
-
-    func testAnyData() {
-        var foo: Any?
-        let body = WriteQuery2(model: "thelook", view: "users")
-        do {
-            foo = try JSONEncoder().encode(body)
-            XCTAssertTrue(foo is Data, "foo is Data")
-            if let data = foo as? Data {
-                foo = String(data: data, encoding: .utf8)
-                XCTAssertTrue(foo is String, "foo is String")
-            } else {
-                XCTAssertTrue(false, "foo is not data")
-            }
-        } catch { print(error) }
-    }
-
-    func testEncode() {
-        do {
-            let body = WriteQuery2(model: "thelook", view: "users")
-            XCTAssertFalse(swiftIsCrazy(body), "Swift is indeed crazy")
-            let jsonData = try JSONEncoder().encode(body)
-            var jsonString = String(data: jsonData, encoding: .utf8)!
-            XCTAssertEqual(jsonString, #"{"model":"thelook","view":"users"}"#)
-//            let query: WriteQuery2 = try deserialize(jsonString)
-//            XCTAssertEqual(query.model, "thelook")
-//            XCTAssertEqual(query.view, "users")
-
-            let json2 = jsonEncode(body)
-            XCTAssertNotNil(json2)
-            jsonString = String(data: json2!, encoding: .utf8)!
-            XCTAssertEqual(jsonString, #"{"model":"thelook","view":"users"}"#)
-
-        } catch { print(error) }
-    }
-*/
-
+    
     func simpleQuery() -> WriteQuery {
         return WriteQuery(
             model: "system__activity",
@@ -265,7 +207,6 @@ class methodsTests: XCTestCase {
         XCTAssertEqual(mimeType(png), "image/png")
         let jpg = sdk.ok(sdk.stream.run_query(query.id!, "jpg"))
         XCTAssertNotNil(jpg)
-        print(png, jpg)
         XCTAssertNotEqual(png, jpg, "We should not be getting the same image")
         XCTAssertEqual(mimeType(jpg), "image/jpeg should be returned not image/png. Smells like an API bug, not SDK issue")
     }
