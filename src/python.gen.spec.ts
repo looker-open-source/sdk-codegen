@@ -256,6 +256,25 @@ def run_url_encoded_query(
       expect(actual).toEqual(expected)
     })
 
+    it('encodes string path params', () => {
+      const method = apiTestModel.methods['run_url_encoded_query']
+      const expected =
+`model_name = self.encode_path_param(model_name)
+view_name = self.encode_path_param(view_name)
+result_format = self.encode_path_param(result_format)
+`
+      const actual = gen.encodePathParams('', method.pathParams)
+      expect(actual).toEqual(expected)
+    })
+
+    it('encodes only string path params', () => {
+      const method = apiTestModel.methods['run_look']
+      // should NOT escape look_id (int)
+      const expected = 'result_format = self.encode_path_param(result_format)\n'
+      const actual = gen.encodePathParams('', method.pathParams)
+      expect(actual).toEqual(expected)
+    })
+
     it('asserts type of optional body params', () => {
       const method = apiTestModel.methods["import_lookml_dashboard"]
       const expected = 

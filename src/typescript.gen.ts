@@ -221,9 +221,24 @@ export interface IDictionary<T> {
     return this.methodHeaderDeclaration(indent, method, false)
   }
 
+  encodePathParams(indent: string, method: IMethod): string {
+    const bump = indent + this.indentStr
+    let encodings: string = ''
+    if (method.pathParams.length > 0) {
+      for (const param of method.pathParams) {
+        if (param.type.name == 'string') {
+          const name = this.useRequest(method) ? `request.${param.name}` : param.name
+          encodings += `${name} = this.encodePathParam(${name})\n`
+        }
+      }
+    }
+    return encodings
+  }
+
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
     return this.methodSignature(indent, method)
+      + this.encodePathParams(bump, method)
       + this.httpCall(bump, method)
       + `\n${indent}}`
   }
@@ -235,6 +250,7 @@ export interface IDictionary<T> {
   declareStreamer(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
     return this.streamerSignature(indent, method)
+      + this.encodePathParams(bump, method)
       + this.streamCall(bump, method)
       + `\n${indent}}`
   }
@@ -253,7 +269,7 @@ export interface IDictionary<T> {
 
   httpPath(path: string, prefix?: string) {
     prefix = prefix || ''
-    if (path.indexOf('{') >= 0) return 'encodeURI(`' + path.replace(/{/gi, '${' + prefix) + '`)'
+    if (path.indexOf('{') >= 0) return `\`${path.replace(/{/gi, '${' + prefix)}\``
     return `'${path}'`
   }
 

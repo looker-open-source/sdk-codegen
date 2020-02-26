@@ -89,6 +89,29 @@ export class APIMethods {
   }
 
   /**
+   * Encode path parameter if not already encoded
+   * @param value value of path parameter
+   * @returns URI encoded value
+   */
+  encodePathParam(value: string) {
+    let encoded = ""
+    // decodeURIComponent throws URIError if there is a % character
+    // without it being part of an encoded
+    try {
+      if (value == decodeURIComponent(value)) {
+        encoded = encodeURIComponent(value)
+      }
+    } catch (e) {
+      if (e instanceof URIError) {
+        encoded = encodeURIComponent(value)
+      } else {
+        throw e
+      }
+    }
+    return encoded
+  }
+
+  /**
    *
    * A helper method to add authentication to an API request for deserialization
    *
