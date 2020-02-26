@@ -232,6 +232,7 @@ export interface IMethod extends ISymbol {
   // All optional parameters
   optionalParams: IParameter[]
   bodyParams: IParameter[]
+  pathParams: IParameter[]
   responseModes: Set<ResponseMode>
 
   getParams(location?: MethodParameterLocation): IParameter[]

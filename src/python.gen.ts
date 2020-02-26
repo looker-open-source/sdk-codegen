@@ -366,6 +366,19 @@ ${this.hooks.join('\n')}
       + `${returnStmt}`
   }
 
+  encodePathParams(indent: string, pathParams: IParameter[]): string {
+    const bump = indent + this.indentStr
+    let encodings: string = ''
+    if (pathParams.length > 0) {
+      for (const param of pathParams) {
+        if (param.type.name == 'string') {
+          encodings += `${indent}${param.name} = self.encode_path_param(${param.name})\n`
+        }
+      }
+    }
+    return encodings
+  }
+
   bodyParamsTypeAssertions(indent: string, bodyParams: IParameter[]): string {
     const bump = indent + this.indentStr
     let assertions: string = ''
@@ -403,6 +416,7 @@ ${this.hooks.join('\n')}
 
     return this.methodSignature(indent, method)
       + this.summary(bump, method.summary)
+      + this.encodePathParams(bump, method.pathParams)
       + this.bodyParamsTypeAssertions(bump, method.bodyParams)
       + this.httpCall(bump, method)
   }
