@@ -30,7 +30,7 @@ const val ENVIRONMENT_PREFIX = "LOOKERSDK"
 const val LOOKER_VERSION = "7.2"
 const val API_VERSION = "4.0"
 const val SDK_VERSION = "${API_VERSION}.${LOOKER_VERSION}"
-const val AGENT_TAG = "SDK-KT ${SDK_VERSION}"
+const val AGENT_TAG = "KT-SDK ${SDK_VERSION}"
 const val LOOKER_APPID = "x-looker-appid"
 
 const val MATCH_CHARSET = ";.*charset="

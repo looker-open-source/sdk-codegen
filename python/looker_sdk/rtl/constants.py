@@ -28,7 +28,7 @@ environment_prefix = "LOOKERSDK"
 RESPONSE_STRING_MODE = (
     r"(^application/.*"
     r"(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b|\bjavascript\b|\bx-www-form-urlencoded\b)"
-    r"|^text/|.*\+xml\b;.*charset=)"
+    r"|^text/|.*\+xml\b|;.*charset=)"
 )
 
 # note: string mode must be checked first

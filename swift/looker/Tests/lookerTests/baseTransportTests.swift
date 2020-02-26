@@ -8,10 +8,12 @@
 import XCTest
 @testable import looker
 
-fileprivate let testRootPath = URL(fileURLWithPath: #file).pathComponents
-    .prefix(while: { $0 != "Tests" }).joined(separator: "/").dropFirst()
+fileprivate let rootPath = URL(fileURLWithPath: #file).pathComponents
+    .prefix(while: { $0 != "swift" })
+    .joined(separator: "/").dropFirst()
 
-fileprivate let repoPath : String = testRootPath + "/../../"
+fileprivate let testRootPath: String = rootPath + "/test"
+fileprivate let repoPath : String = rootPath + ""
 fileprivate let localIni : String = ProcessInfo.processInfo.environment["LOOKERSDK_INI"] ?? (repoPath + "looker.ini")
 
 
@@ -23,8 +25,8 @@ class TestConfig {
     lazy var dataFile = testFile("data.yml.json")
     lazy var localIni = envVar("LOOKERSDK_INI", self.rootFile("looker.ini"))!
     lazy var dataContents = try! Data(String(contentsOfFile: dataFile).utf8)
-    lazy var testData = try! JSONSerialization.jsonObject(with: dataContents, options: []) as! AnyCodable
-    lazy var testIni = rootFile((testData["iniFile"] as? String)!)
+    lazy var testData = try! JSONDecoder().decode([String: AnyCodable].self, from: dataContents)
+    lazy var testIni = rootFile((testData["iniFile"]?.value as! String))
     lazy var settings = try! ApiConfig(localIni, "Looker")
     lazy var testsettings = try! ApiConfig(testIni)
     lazy var xp = BaseTransport(settings)

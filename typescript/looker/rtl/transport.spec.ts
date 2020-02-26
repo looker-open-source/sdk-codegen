@@ -25,41 +25,11 @@
 // Discussion of MIME types at https://en.wikipedia.org/wiki/Media_type#Mime.types
 
 import { ResponseMode, responseMode } from './transport'
+import { TestConfig } from './nodeSettings.spec'
 
-const binaryTypes = `application/zip
-application/pdf
-application/msword
-application/vnd.ms-excel
-application/vnd.openxmlformats-officedocument.wordprocessingml.document
-application/vnd.ms-excel
-application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-application/vnd.ms-powerpoint
-application/vnd.openxmlformats-officedocument.presentationml.presentation
-application/vnd.oasis.opendocument.text
-multipart/form-data
-audio/mpeg
-audio/ogg
-image/png
-image/jpeg
-image/gif
-font/
-audio/
-video/
-image/`.split('\n')
-
-const textTypes = `application/javascript
-application/json
-application/x-www-form-urlencoded
-application/xml
-application/sql
-application/graphql
-application/ld+json
-text/css
-text/html
-text/xml
-text/csv
-text/plain
-application/vnd.api+json`.split('\n')
+const config = TestConfig()
+const binaryTypes = config.testData["content_types"]["binary"] as [string]
+const textTypes = config.testData["content_types"]["string"] as [string]
 
 describe('Transport', () => {
 
