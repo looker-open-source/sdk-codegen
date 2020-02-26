@@ -25,18 +25,6 @@ import pytest  # type: ignore
 from looker_sdk.rtl import transport
 
 
-# @pytest.mark.parametrize(
-#     "content_type, expected_response_mode",
-#     [
-#         ("application/json", transport.ResponseMode.STRING),
-#         ("image/png", transport.ResponseMode.BINARY),
-#         ("text/xml", transport.ResponseMode.STRING),
-#         ("audio/gzip", transport.ResponseMode.BINARY),
-#     ],
-# )
-# def test_response_mode(content_type, expected_response_mode):
-#     assert transport.response_mode(content_type) == expected_response_mode
-
 def test_string_mode(string_content_types):
     for content_type in string_content_types:
         assert transport.response_mode(content_type) == transport.ResponseMode.STRING
