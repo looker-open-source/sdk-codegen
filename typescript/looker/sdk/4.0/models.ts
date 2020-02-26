@@ -5306,7 +5306,7 @@ export interface IRequestAllGroupUsers {
   /**
    * Id of group
    */
-  group_id?: number
+  group_id: number
   /**
    * Requested fields.
    */
@@ -5436,23 +5436,23 @@ export interface IRequestCreateDashboardRenderTask {
   /**
    * Id of dashboard to render
    */
-  dashboard_id?: number
+  dashboard_id: number
   /**
    * Output type: pdf, png, or jpg
    */
-  result_format?: string
+  result_format: string
   /**
    * body parameter for dynamically created request type
    */
-  body?: ICreateDashboardRenderTask
+  body: ICreateDashboardRenderTask
   /**
    * Output width in pixels
    */
-  width?: number
+  width: number
   /**
    * Output height in pixels
    */
-  height?: number
+  height: number
   /**
    * Requested fields.
    */
@@ -5474,23 +5474,23 @@ export interface IRequestCreateLookmlDashboardRenderTask {
   /**
    * Id of lookml dashboard to render
    */
-  dashboard_id?: string
+  dashboard_id: string
   /**
    * Output type: pdf, png, or jpg
    */
-  result_format?: string
+  result_format: string
   /**
    * body parameter for dynamically created request type
    */
-  body?: ICreateDashboardRenderTask
+  body: ICreateDashboardRenderTask
   /**
    * Output width in pixels
    */
-  width?: number
+  width: number
   /**
    * Output height in pixels
    */
-  height?: number
+  height: number
   /**
    * Requested fields.
    */
@@ -5512,7 +5512,7 @@ export interface IRequestCreateQueryTask {
   /**
    * body parameter for dynamically created request type
    */
-  body?: IWriteCreateQueryTask
+  body: IWriteCreateQueryTask
   /**
    * Row limit (may override the limit in the saved query).
    */
@@ -5574,7 +5574,7 @@ export interface IRequestCreateUserCredentialsEmailPasswordReset {
   /**
    * Id of user
    */
-  user_id?: number
+  user_id: number
   /**
    * Expiring token.
    */
@@ -5592,7 +5592,7 @@ export interface IRequestFolderChildren {
   /**
    * Id of folder
    */
-  folder_id?: string
+  folder_id: string
   /**
    * Requested fields.
    */
@@ -5618,7 +5618,7 @@ export interface IRequestFolderChildrenSearch {
   /**
    * Id of folder
    */
-  folder_id?: string
+  folder_id: string
   /**
    * Requested fields.
    */
@@ -5654,7 +5654,7 @@ export interface IRequestRoleUsers {
   /**
    * id of user
    */
-  role_id?: number
+  role_id: number
   /**
    * Requested fields.
    */
@@ -5672,11 +5672,11 @@ export interface IRequestRunInlineQuery {
   /**
    * Format of result
    */
-  result_format?: string
+  result_format: string
   /**
    * body parameter for dynamically created request type
    */
-  body?: IWriteQuery
+  body: IWriteQuery
   /**
    * Row limit (may override the limit in the saved query).
    */
@@ -5734,11 +5734,11 @@ export interface IRequestRunLook {
   /**
    * Id of look
    */
-  look_id?: number
+  look_id: number
   /**
    * Format of result
    */
-  result_format?: string
+  result_format: string
   /**
    * Row limit (may override the limit in the saved query).
    */
@@ -5796,7 +5796,7 @@ export interface IRequestRunLookmlTest {
   /**
    * Project Id
    */
-  project_id?: string
+  project_id: string
   /**
    * File Name
    */
@@ -5818,11 +5818,11 @@ export interface IRequestRunQuery {
   /**
    * Id of query
    */
-  query_id?: number
+  query_id: number
   /**
    * Format of result
    */
-  result_format?: string
+  result_format: string
   /**
    * Row limit (may override the limit in the saved query).
    */
@@ -5880,7 +5880,7 @@ export interface IRequestScheduledPlansForDashboard {
   /**
    * Dashboard Id
    */
-  dashboard_id?: number
+  dashboard_id: number
   /**
    * User Id (default is requesting user if not specified)
    */
@@ -5902,7 +5902,7 @@ export interface IRequestScheduledPlansForLook {
   /**
    * Look Id
    */
-  look_id?: number
+  look_id: number
   /**
    * User Id (default is requesting user if not specified)
    */
@@ -5924,7 +5924,7 @@ export interface IRequestScheduledPlansForLookmlDashboard {
   /**
    * LookML Dashboard Id
    */
-  lookml_dashboard_id?: number
+  lookml_dashboard_id: number
   /**
    * User Id (default is requesting user if not specified)
    */
@@ -6612,7 +6612,7 @@ export interface IRequestSearchUsersNames {
   /**
    * Pattern to match
    */
-  pattern?: string
+  pattern: string
   /**
    * Include only these fields in the response
    */
@@ -6662,7 +6662,7 @@ export interface IRequestSpaceChildren {
   /**
    * Id of space
    */
-  space_id?: string
+  space_id: string
   /**
    * Requested fields.
    */
@@ -6688,7 +6688,7 @@ export interface IRequestSpaceChildrenSearch {
   /**
    * Id of space
    */
-  space_id?: string
+  space_id: string
   /**
    * Requested fields.
    */
@@ -6710,7 +6710,7 @@ export interface IRequestUserAttributeUserValues {
   /**
    * Id of user
    */
-  user_id?: number
+  user_id: number
   /**
    * Requested fields.
    */
@@ -6736,7 +6736,7 @@ export interface IRequestUserRoles {
   /**
    * id of user
    */
-  user_id?: number
+  user_id: number
   /**
    * Requested fields.
    */

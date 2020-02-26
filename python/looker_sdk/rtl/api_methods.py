@@ -25,6 +25,7 @@
 import datetime
 import json
 from typing import MutableMapping, Optional, Sequence, Type, Union
+import urllib.parse
 
 from looker_sdk import error
 from looker_sdk.rtl import model
@@ -112,6 +113,12 @@ class APIMethods:
 
     def logout(self) -> None:
         self.auth.logout()
+
+    @staticmethod
+    def encode_path_param(value: str) -> str:
+        if value == urllib.parse.unquote(value):
+            value = urllib.parse.quote(value, safe="")
+        return value
 
     def get(
         self,

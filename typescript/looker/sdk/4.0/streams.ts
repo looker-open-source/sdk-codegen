@@ -225,9 +225,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IIntegrationHub>(
       callback,
       'POST',
-      encodeURI(
-        `/integration_hubs/${integration_hub_id}/accept_legal_agreement`,
-      ),
+      `/integration_hubs/${integration_hub_id}/accept_legal_agreement`,
       null,
       null,
       options,
@@ -282,7 +280,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IGroup>(
       callback,
       'POST',
-      encodeURI(`/groups/${group_id}/groups`),
+      `/groups/${group_id}/groups`,
       null,
       body,
       options,
@@ -309,7 +307,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IUser>(
       callback,
       'POST',
-      encodeURI(`/groups/${group_id}/users`),
+      `/groups/${group_id}/users`,
       null,
       body,
       options,
@@ -532,10 +530,11 @@ export class Looker40SDKStream extends APIMethods {
     project_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<IGitBranch[]>(
       callback,
       'GET',
-      encodeURI(`/projects/${project_id}/git_branches`),
+      `/projects/${project_id}/git_branches`,
       null,
       null,
       options,
@@ -568,10 +567,11 @@ export class Looker40SDKStream extends APIMethods {
     remote_url?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<IGitConnectionTest[]>(
       callback,
       'GET',
-      encodeURI(`/projects/${project_id}/git_connection_tests`),
+      `/projects/${project_id}/git_connection_tests`,
       { remote_url },
       null,
       options,
@@ -598,7 +598,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IGroup[]>(
       callback,
       'GET',
-      encodeURI(`/groups/${group_id}/groups`),
+      `/groups/${group_id}/groups`,
       { fields },
       null,
       options,
@@ -618,7 +618,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IUser[]>(
       callback,
       'GET',
-      encodeURI(`/groups/${request.group_id}/users`),
+      `/groups/${request.group_id}/users`,
       {
         fields: request.fields,
         page: request.page,
@@ -853,10 +853,11 @@ export class Looker40SDKStream extends APIMethods {
     file_id?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<ILookmlTest[]>(
       callback,
       'GET',
-      encodeURI(`/projects/${project_id}/lookml_tests`),
+      `/projects/${project_id}/lookml_tests`,
       { file_id },
       null,
       options,
@@ -976,10 +977,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<IProjectFile[]>(
       callback,
       'GET',
-      encodeURI(`/projects/${project_id}/files`),
+      `/projects/${project_id}/files`,
       { fields },
       null,
       options,
@@ -1181,7 +1183,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IUserAttributeGroupValue[]>(
       callback,
       'GET',
-      encodeURI(`/user_attributes/${user_attribute_id}/group_values`),
+      `/user_attributes/${user_attribute_id}/group_values`,
       { fields },
       null,
       options,
@@ -1228,7 +1230,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsApi3[]>(
       callback,
       'GET',
-      encodeURI(`/users/${user_id}/credentials_api3`),
+      `/users/${user_id}/credentials_api3`,
       { fields },
       null,
       options,
@@ -1255,7 +1257,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsEmbed[]>(
       callback,
       'GET',
-      encodeURI(`/users/${user_id}/credentials_embed`),
+      `/users/${user_id}/credentials_embed`,
       { fields },
       null,
       options,
@@ -1305,7 +1307,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ISession[]>(
       callback,
       'GET',
-      encodeURI(`/users/${user_id}/sessions`),
+      `/users/${user_id}/sessions`,
       { fields },
       null,
       options,
@@ -1404,10 +1406,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    collection_id = this.encodePathParam(collection_id)
     return this.authStream<IColorCollection>(
       callback,
       'GET',
-      encodeURI(`/color_collections/${collection_id}`),
+      `/color_collections/${collection_id}`,
       { fields },
       null,
       options,
@@ -1487,10 +1490,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    connection_name = this.encodePathParam(connection_name)
     return this.authStream<IDBConnection>(
       callback,
       'GET',
-      encodeURI(`/connections/${connection_name}`),
+      `/connections/${connection_name}`,
       { fields },
       null,
       options,
@@ -1517,7 +1521,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IContentFavorite>(
       callback,
       'GET',
-      encodeURI(`/content_favorite/${content_favorite_id}`),
+      `/content_favorite/${content_favorite_id}`,
       { fields },
       null,
       options,
@@ -1544,7 +1548,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IContentMeta>(
       callback,
       'GET',
-      encodeURI(`/content_metadata/${content_metadata_id}`),
+      `/content_metadata/${content_metadata_id}`,
       { fields },
       null,
       options,
@@ -1813,12 +1817,11 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestCreateDashboardRenderTask,
     options?: Partial<ITransportSettings>,
   ) {
+    request.result_format = this.encodePathParam(request.result_format)
     return this.authStream<IRenderTask>(
       callback,
       'POST',
-      encodeURI(
-        `/render_tasks/dashboards/${request.dashboard_id}/${request.result_format}`,
-      ),
+      `/render_tasks/dashboards/${request.dashboard_id}/${request.result_format}`,
       {
         width: request.width,
         height: request.height,
@@ -1881,10 +1884,11 @@ export class Looker40SDKStream extends APIMethods {
     body: Partial<IWriteGitBranch>,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<IGitBranch>(
       callback,
       'POST',
-      encodeURI(`/projects/${project_id}/git_branch`),
+      `/projects/${project_id}/git_branch`,
       null,
       body,
       options,
@@ -1912,10 +1916,11 @@ export class Looker40SDKStream extends APIMethods {
     project_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<string>(
       callback,
       'POST',
-      encodeURI(`/projects/${project_id}/git/deploy_key`),
+      `/projects/${project_id}/git/deploy_key`,
       null,
       null,
       options,
@@ -2125,10 +2130,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    result_format = this.encodePathParam(result_format)
     return this.authStream<IRenderTask>(
       callback,
       'POST',
-      encodeURI(`/render_tasks/looks/${look_id}/${result_format}`),
+      `/render_tasks/looks/${look_id}/${result_format}`,
       { width, height, fields },
       null,
       options,
@@ -2149,12 +2155,12 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestCreateLookmlDashboardRenderTask,
     options?: Partial<ITransportSettings>,
   ) {
+    request.dashboard_id = this.encodePathParam(request.dashboard_id)
+    request.result_format = this.encodePathParam(request.result_format)
     return this.authStream<IRenderTask>(
       callback,
       'POST',
-      encodeURI(
-        `/render_tasks/lookml_dashboards/${request.dashboard_id}/${request.result_format}`,
-      ),
+      `/render_tasks/lookml_dashboards/${request.dashboard_id}/${request.result_format}`,
       {
         width: request.width,
         height: request.height,
@@ -2398,10 +2404,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    result_format = this.encodePathParam(result_format)
     return this.authStream<IRenderTask>(
       callback,
       'POST',
-      encodeURI(`/render_tasks/queries/${query_id}/${result_format}`),
+      `/render_tasks/queries/${query_id}/${result_format}`,
       { width, height, fields },
       null,
       options,
@@ -2804,7 +2811,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsApi3>(
       callback,
       'POST',
-      encodeURI(`/users/${user_id}/credentials_api3`),
+      `/users/${user_id}/credentials_api3`,
       { fields },
       body,
       options,
@@ -2835,7 +2842,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsEmail>(
       callback,
       'POST',
-      encodeURI(`/users/${user_id}/credentials_email`),
+      `/users/${user_id}/credentials_email`,
       { fields },
       body,
       options,
@@ -2863,7 +2870,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsEmail>(
       callback,
       'POST',
-      encodeURI(`/users/${request.user_id}/credentials_email/password_reset`),
+      `/users/${request.user_id}/credentials_email/password_reset`,
       { expires: request.expires, fields: request.fields },
       null,
       options,
@@ -2894,7 +2901,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsTotp>(
       callback,
       'POST',
-      encodeURI(`/users/${user_id}/credentials_totp`),
+      `/users/${user_id}/credentials_totp`,
       { fields },
       body,
       options,
@@ -2943,10 +2950,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_id = this.encodePathParam(dashboard_id)
     return this.authStream<IDashboard>(
       callback,
       'GET',
-      encodeURI(`/dashboards/${dashboard_id}`),
+      `/dashboards/${dashboard_id}`,
       { fields },
       null,
       options,
@@ -2970,10 +2978,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_id = this.encodePathParam(dashboard_id)
     return this.authStream<IDashboardElement[]>(
       callback,
       'GET',
-      encodeURI(`/dashboards/${dashboard_id}/dashboard_elements`),
+      `/dashboards/${dashboard_id}/dashboard_elements`,
       { fields },
       null,
       options,
@@ -2997,10 +3006,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_id = this.encodePathParam(dashboard_id)
     return this.authStream<IDashboardFilter[]>(
       callback,
       'GET',
-      encodeURI(`/dashboards/${dashboard_id}/dashboard_filters`),
+      `/dashboards/${dashboard_id}/dashboard_filters`,
       { fields },
       null,
       options,
@@ -3024,10 +3034,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_id = this.encodePathParam(dashboard_id)
     return this.authStream<IDashboardLayout[]>(
       callback,
       'GET',
-      encodeURI(`/dashboards/${dashboard_id}/dashboard_layouts`),
+      `/dashboards/${dashboard_id}/dashboard_layouts`,
       { fields },
       null,
       options,
@@ -3051,10 +3062,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_element_id = this.encodePathParam(dashboard_element_id)
     return this.authStream<IDashboardElement>(
       callback,
       'GET',
-      encodeURI(`/dashboard_elements/${dashboard_element_id}`),
+      `/dashboard_elements/${dashboard_element_id}`,
       { fields },
       null,
       options,
@@ -3078,10 +3090,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_filter_id = this.encodePathParam(dashboard_filter_id)
     return this.authStream<IDashboardFilter>(
       callback,
       'GET',
-      encodeURI(`/dashboard_filters/${dashboard_filter_id}`),
+      `/dashboard_filters/${dashboard_filter_id}`,
       { fields },
       null,
       options,
@@ -3105,10 +3118,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_layout_id = this.encodePathParam(dashboard_layout_id)
     return this.authStream<IDashboardLayout>(
       callback,
       'GET',
-      encodeURI(`/dashboard_layouts/${dashboard_layout_id}`),
+      `/dashboard_layouts/${dashboard_layout_id}`,
       { fields },
       null,
       options,
@@ -3132,12 +3146,13 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_layout_component_id = this.encodePathParam(
+      dashboard_layout_component_id,
+    )
     return this.authStream<IDashboardLayoutComponent>(
       callback,
       'GET',
-      encodeURI(
-        `/dashboard_layout_components/${dashboard_layout_component_id}`,
-      ),
+      `/dashboard_layout_components/${dashboard_layout_component_id}`,
       { fields },
       null,
       options,
@@ -3161,12 +3176,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_layout_id = this.encodePathParam(dashboard_layout_id)
     return this.authStream<IDashboardLayoutComponent[]>(
       callback,
       'GET',
-      encodeURI(
-        `/dashboard_layouts/${dashboard_layout_id}/dashboard_layout_components`,
-      ),
+      `/dashboard_layouts/${dashboard_layout_id}/dashboard_layout_components`,
       { fields },
       null,
       options,
@@ -3188,10 +3202,11 @@ export class Looker40SDKStream extends APIMethods {
     dashboard_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_id = this.encodePathParam(dashboard_id)
     return this.authStream<IDashboardLookml>(
       callback,
       'GET',
-      encodeURI(`/dashboards/lookml/${dashboard_id}`),
+      `/dashboards/lookml/${dashboard_id}`,
       null,
       null,
       options,
@@ -3214,7 +3229,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IDatagroup>(
       callback,
       'GET',
-      encodeURI(`/datagroups/${datagroup_id}`),
+      `/datagroups/${datagroup_id}`,
       null,
       null,
       options,
@@ -3293,10 +3308,11 @@ export class Looker40SDKStream extends APIMethods {
     collection_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    collection_id = this.encodePathParam(collection_id)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/color_collections/${collection_id}`),
+      `/color_collections/${collection_id}`,
       null,
       null,
       options,
@@ -3316,10 +3332,11 @@ export class Looker40SDKStream extends APIMethods {
     connection_name: string,
     options?: Partial<ITransportSettings>,
   ) {
+    connection_name = this.encodePathParam(connection_name)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/connections/${connection_name}`),
+      `/connections/${connection_name}`,
       null,
       null,
       options,
@@ -3343,12 +3360,12 @@ export class Looker40SDKStream extends APIMethods {
     override_context: string,
     options?: Partial<ITransportSettings>,
   ) {
+    connection_name = this.encodePathParam(connection_name)
+    override_context = this.encodePathParam(override_context)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(
-        `/connections/${connection_name}/connection_override/${override_context}`,
-      ),
+      `/connections/${connection_name}/connection_override/${override_context}`,
       null,
       null,
       options,
@@ -3371,7 +3388,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/content_favorite/${content_favorite_id}`),
+      `/content_favorite/${content_favorite_id}`,
       null,
       null,
       options,
@@ -3394,7 +3411,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/content_metadata_access/${content_metadata_access_id}`),
+      `/content_metadata_access/${content_metadata_access_id}`,
       null,
       null,
       options,
@@ -3420,10 +3437,11 @@ export class Looker40SDKStream extends APIMethods {
     dashboard_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_id = this.encodePathParam(dashboard_id)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/dashboards/${dashboard_id}`),
+      `/dashboards/${dashboard_id}`,
       null,
       null,
       options,
@@ -3443,10 +3461,11 @@ export class Looker40SDKStream extends APIMethods {
     dashboard_element_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_element_id = this.encodePathParam(dashboard_element_id)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/dashboard_elements/${dashboard_element_id}`),
+      `/dashboard_elements/${dashboard_element_id}`,
       null,
       null,
       options,
@@ -3466,10 +3485,11 @@ export class Looker40SDKStream extends APIMethods {
     dashboard_filter_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_filter_id = this.encodePathParam(dashboard_filter_id)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/dashboard_filters/${dashboard_filter_id}`),
+      `/dashboard_filters/${dashboard_filter_id}`,
       null,
       null,
       options,
@@ -3489,10 +3509,11 @@ export class Looker40SDKStream extends APIMethods {
     dashboard_layout_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_layout_id = this.encodePathParam(dashboard_layout_id)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/dashboard_layouts/${dashboard_layout_id}`),
+      `/dashboard_layouts/${dashboard_layout_id}`,
       null,
       null,
       options,
@@ -3513,10 +3534,11 @@ export class Looker40SDKStream extends APIMethods {
     folder_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    folder_id = this.encodePathParam(folder_id)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/folders/${folder_id}`),
+      `/folders/${folder_id}`,
       null,
       null,
       options,
@@ -3542,10 +3564,12 @@ export class Looker40SDKStream extends APIMethods {
     branch_name: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
+    branch_name = this.encodePathParam(branch_name)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/projects/${project_id}/git_branch/${branch_name}`),
+      `/projects/${project_id}/git_branch/${branch_name}`,
       null,
       null,
       options,
@@ -3568,7 +3592,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/groups/${group_id}`),
+      `/groups/${group_id}`,
       null,
       null,
       options,
@@ -3595,7 +3619,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<void>(
       callback,
       'DELETE',
-      encodeURI(`/groups/${group_id}/groups/${deleting_group_id}`),
+      `/groups/${group_id}/groups/${deleting_group_id}`,
       null,
       null,
       options,
@@ -3622,7 +3646,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<void>(
       callback,
       'DELETE',
-      encodeURI(`/groups/${group_id}/users/${user_id}`),
+      `/groups/${group_id}/users/${user_id}`,
       null,
       null,
       options,
@@ -3645,7 +3669,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/homepages/${homepage_id}`),
+      `/homepages/${homepage_id}`,
       null,
       null,
       options,
@@ -3668,7 +3692,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/homepage_items/${homepage_item_id}`),
+      `/homepage_items/${homepage_item_id}`,
       null,
       null,
       options,
@@ -3691,7 +3715,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/homepage_sections/${homepage_section_id}`),
+      `/homepage_sections/${homepage_section_id}`,
       null,
       null,
       options,
@@ -3714,7 +3738,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/integration_hubs/${integration_hub_id}`),
+      `/integration_hubs/${integration_hub_id}`,
       null,
       null,
       options,
@@ -3743,7 +3767,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/looks/${look_id}`),
+      `/looks/${look_id}`,
       null,
       null,
       options,
@@ -3763,10 +3787,11 @@ export class Looker40SDKStream extends APIMethods {
     lookml_model_name: string,
     options?: Partial<ITransportSettings>,
   ) {
+    lookml_model_name = this.encodePathParam(lookml_model_name)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/lookml_models/${lookml_model_name}`),
+      `/lookml_models/${lookml_model_name}`,
       null,
       null,
       options,
@@ -3789,7 +3814,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/model_sets/${model_set_id}`),
+      `/model_sets/${model_set_id}`,
       null,
       null,
       options,
@@ -3809,10 +3834,11 @@ export class Looker40SDKStream extends APIMethods {
     test_slug: string,
     options?: Partial<ITransportSettings>,
   ) {
+    test_slug = this.encodePathParam(test_slug)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/oidc_test_configs/${test_slug}`),
+      `/oidc_test_configs/${test_slug}`,
       null,
       null,
       options,
@@ -3835,7 +3861,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/permission_sets/${permission_set_id}`),
+      `/permission_sets/${permission_set_id}`,
       null,
       null,
       options,
@@ -3864,10 +3890,12 @@ export class Looker40SDKStream extends APIMethods {
     credential_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    root_project_id = this.encodePathParam(root_project_id)
+    credential_id = this.encodePathParam(credential_id)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/projects/${root_project_id}/credential/${credential_id}`),
+      `/projects/${root_project_id}/credential/${credential_id}`,
       null,
       null,
       options,
@@ -3890,7 +3918,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/roles/${role_id}`),
+      `/roles/${role_id}`,
       null,
       null,
       options,
@@ -3910,10 +3938,11 @@ export class Looker40SDKStream extends APIMethods {
     test_slug: string,
     options?: Partial<ITransportSettings>,
   ) {
+    test_slug = this.encodePathParam(test_slug)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/saml_test_configs/${test_slug}`),
+      `/saml_test_configs/${test_slug}`,
       null,
       null,
       options,
@@ -3940,7 +3969,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/scheduled_plans/${scheduled_plan_id}`),
+      `/scheduled_plans/${scheduled_plan_id}`,
       null,
       null,
       options,
@@ -3961,10 +3990,11 @@ export class Looker40SDKStream extends APIMethods {
     space_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    space_id = this.encodePathParam(space_id)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/spaces/${space_id}`),
+      `/spaces/${space_id}`,
       null,
       null,
       options,
@@ -3992,10 +4022,11 @@ export class Looker40SDKStream extends APIMethods {
     theme_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    theme_id = this.encodePathParam(theme_id)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/themes/${theme_id}`),
+      `/themes/${theme_id}`,
       null,
       null,
       options,
@@ -4020,7 +4051,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/users/${user_id}`),
+      `/users/${user_id}`,
       null,
       null,
       options,
@@ -4043,7 +4074,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/user_attributes/${user_attribute_id}`),
+      `/user_attributes/${user_attribute_id}`,
       null,
       null,
       options,
@@ -4070,7 +4101,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<void>(
       callback,
       'DELETE',
-      encodeURI(`/groups/${group_id}/attribute_values/${user_attribute_id}`),
+      `/groups/${group_id}/attribute_values/${user_attribute_id}`,
       null,
       null,
       options,
@@ -4102,7 +4133,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<void>(
       callback,
       'DELETE',
-      encodeURI(`/users/${user_id}/attribute_values/${user_attribute_id}`),
+      `/users/${user_id}/attribute_values/${user_attribute_id}`,
       null,
       null,
       options,
@@ -4129,7 +4160,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/users/${user_id}/credentials_api3/${credentials_api3_id}`),
+      `/users/${user_id}/credentials_api3/${credentials_api3_id}`,
       null,
       null,
       options,
@@ -4152,7 +4183,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/users/${user_id}/credentials_email`),
+      `/users/${user_id}/credentials_email`,
       null,
       null,
       options,
@@ -4179,7 +4210,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/users/${user_id}/credentials_embed/${credentials_embed_id}`),
+      `/users/${user_id}/credentials_embed/${credentials_embed_id}`,
       null,
       null,
       options,
@@ -4202,7 +4233,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/users/${user_id}/credentials_google`),
+      `/users/${user_id}/credentials_google`,
       null,
       null,
       options,
@@ -4225,7 +4256,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/users/${user_id}/credentials_ldap`),
+      `/users/${user_id}/credentials_ldap`,
       null,
       null,
       options,
@@ -4248,7 +4279,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/users/${user_id}/credentials_looker_openid`),
+      `/users/${user_id}/credentials_looker_openid`,
       null,
       null,
       options,
@@ -4271,7 +4302,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/users/${user_id}/credentials_oidc`),
+      `/users/${user_id}/credentials_oidc`,
       null,
       null,
       options,
@@ -4294,7 +4325,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/users/${user_id}/credentials_saml`),
+      `/users/${user_id}/credentials_saml`,
       null,
       null,
       options,
@@ -4317,7 +4348,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/users/${user_id}/credentials_totp`),
+      `/users/${user_id}/credentials_totp`,
       null,
       null,
       options,
@@ -4337,10 +4368,11 @@ export class Looker40SDKStream extends APIMethods {
     key: string,
     options?: Partial<ITransportSettings>,
   ) {
+    key = this.encodePathParam(key)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/user_login_lockout/${key}`),
+      `/user_login_lockout/${key}`,
       null,
       null,
       options,
@@ -4367,7 +4399,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/users/${user_id}/sessions/${session_id}`),
+      `/users/${user_id}/sessions/${session_id}`,
       null,
       null,
       options,
@@ -4397,10 +4429,11 @@ export class Looker40SDKStream extends APIMethods {
     project_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<string>(
       callback,
       'POST',
-      encodeURI(`/projects/${project_id}/deploy_to_production`),
+      `/projects/${project_id}/deploy_to_production`,
       null,
       null,
       options,
@@ -4445,10 +4478,11 @@ export class Looker40SDKStream extends APIMethods {
     integration_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    integration_id = this.encodePathParam(integration_id)
     return this.authStream<IDataActionForm>(
       callback,
       'POST',
-      encodeURI(`/integrations/${integration_id}/form`),
+      `/integrations/${integration_id}/form`,
       null,
       null,
       options,
@@ -4497,10 +4531,12 @@ export class Looker40SDKStream extends APIMethods {
     branch_name: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
+    branch_name = this.encodePathParam(branch_name)
     return this.authStream<IGitBranch>(
       callback,
       'GET',
-      encodeURI(`/projects/${project_id}/git_branch/${branch_name}`),
+      `/projects/${project_id}/git_branch/${branch_name}`,
       null,
       null,
       options,
@@ -4524,10 +4560,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    folder_id = this.encodePathParam(folder_id)
     return this.authStream<IFolder>(
       callback,
       'GET',
-      encodeURI(`/folders/${folder_id}`),
+      `/folders/${folder_id}`,
       { fields },
       null,
       options,
@@ -4551,10 +4588,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    folder_id = this.encodePathParam(folder_id)
     return this.authStream<IFolder[]>(
       callback,
       'GET',
-      encodeURI(`/folders/${folder_id}/ancestors`),
+      `/folders/${folder_id}/ancestors`,
       { fields },
       null,
       options,
@@ -4571,10 +4609,11 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestFolderChildren,
     options?: Partial<ITransportSettings>,
   ) {
+    request.folder_id = this.encodePathParam(request.folder_id)
     return this.authStream<IFolder[]>(
       callback,
       'GET',
-      encodeURI(`/folders/${request.folder_id}/children`),
+      `/folders/${request.folder_id}/children`,
       {
         fields: request.fields,
         page: request.page,
@@ -4596,10 +4635,11 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestFolderChildrenSearch,
     options?: Partial<ITransportSettings>,
   ) {
+    request.folder_id = this.encodePathParam(request.folder_id)
     return this.authStream<IFolder[]>(
       callback,
       'GET',
-      encodeURI(`/folders/${request.folder_id}/children/search`),
+      `/folders/${request.folder_id}/children/search`,
       { fields: request.fields, sorts: request.sorts, name: request.name },
       null,
       options,
@@ -4623,10 +4663,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    folder_id = this.encodePathParam(folder_id)
     return this.authStream<IDashboard[]>(
       callback,
       'GET',
-      encodeURI(`/folders/${folder_id}/dashboards`),
+      `/folders/${folder_id}/dashboards`,
       { fields },
       null,
       options,
@@ -4650,10 +4691,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    folder_id = this.encodePathParam(folder_id)
     return this.authStream<ILookWithQuery[]>(
       callback,
       'GET',
-      encodeURI(`/folders/${folder_id}/looks`),
+      `/folders/${folder_id}/looks`,
       { fields },
       null,
       options,
@@ -4677,10 +4719,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    folder_id = this.encodePathParam(folder_id)
     return this.authStream<IFolder>(
       callback,
       'GET',
-      encodeURI(`/folders/${folder_id}/parent`),
+      `/folders/${folder_id}/parent`,
       { fields },
       null,
       options,
@@ -4721,10 +4764,11 @@ export class Looker40SDKStream extends APIMethods {
     root_project_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    root_project_id = this.encodePathParam(root_project_id)
     return this.authStream<IRepositoryCredential[]>(
       callback,
       'GET',
-      encodeURI(`/projects/${root_project_id}/credentials`),
+      `/projects/${root_project_id}/credentials`,
       null,
       null,
       options,
@@ -4746,10 +4790,11 @@ export class Looker40SDKStream extends APIMethods {
     project_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<IGitBranch>(
       callback,
       'GET',
-      encodeURI(`/projects/${project_id}/git_branch`),
+      `/projects/${project_id}/git_branch`,
       null,
       null,
       options,
@@ -4771,10 +4816,11 @@ export class Looker40SDKStream extends APIMethods {
     project_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<string>(
       callback,
       'GET',
-      encodeURI(`/projects/${project_id}/git/deploy_key`),
+      `/projects/${project_id}/git/deploy_key`,
       null,
       null,
       options,
@@ -4801,7 +4847,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IGroup>(
       callback,
       'GET',
-      encodeURI(`/groups/${group_id}`),
+      `/groups/${group_id}`,
       { fields },
       null,
       options,
@@ -4828,7 +4874,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IHomepage>(
       callback,
       'GET',
-      encodeURI(`/homepages/${homepage_id}`),
+      `/homepages/${homepage_id}`,
       { fields },
       null,
       options,
@@ -4855,7 +4901,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IHomepageItem>(
       callback,
       'GET',
-      encodeURI(`/homepage_items/${homepage_item_id}`),
+      `/homepage_items/${homepage_item_id}`,
       { fields },
       null,
       options,
@@ -4882,7 +4928,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IHomepageSection>(
       callback,
       'GET',
-      encodeURI(`/homepage_sections/${homepage_section_id}`),
+      `/homepage_sections/${homepage_section_id}`,
       { fields },
       null,
       options,
@@ -4925,10 +4971,12 @@ export class Looker40SDKStream extends APIMethods {
     raw_locale?: boolean,
     options?: Partial<ITransportSettings>,
   ) {
+    lookml_dashboard_id = this.encodePathParam(lookml_dashboard_id)
+    space_id = this.encodePathParam(space_id)
     return this.authStream<IDashboard>(
       callback,
       'POST',
-      encodeURI(`/dashboards/${lookml_dashboard_id}/import/${space_id}`),
+      `/dashboards/${lookml_dashboard_id}/import/${space_id}`,
       { raw_locale },
       body,
       options,
@@ -4952,10 +5000,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    integration_id = this.encodePathParam(integration_id)
     return this.authStream<IIntegration>(
       callback,
       'GET',
-      encodeURI(`/integrations/${integration_id}`),
+      `/integrations/${integration_id}`,
       { fields },
       null,
       options,
@@ -4982,7 +5031,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IIntegrationHub>(
       callback,
       'GET',
-      encodeURI(`/integration_hubs/${integration_hub_id}`),
+      `/integration_hubs/${integration_hub_id}`,
       { fields },
       null,
       options,
@@ -5040,10 +5089,11 @@ export class Looker40SDKStream extends APIMethods {
     query_task_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    query_task_id = this.encodePathParam(query_task_id)
     return this.authStream<string>(
       callback,
       'DELETE',
-      encodeURI(`/running_queries/${query_task_id}`),
+      `/running_queries/${query_task_id}`,
       null,
       null,
       options,
@@ -5097,10 +5147,11 @@ export class Looker40SDKStream extends APIMethods {
     legacy_feature_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    legacy_feature_id = this.encodePathParam(legacy_feature_id)
     return this.authStream<ILegacyFeature>(
       callback,
       'GET',
-      encodeURI(`/legacy_features/${legacy_feature_id}`),
+      `/legacy_features/${legacy_feature_id}`,
       null,
       null,
       options,
@@ -5185,7 +5236,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IAccessToken>(
       callback,
       'POST',
-      encodeURI(`/login/${user_id}`),
+      `/login/${user_id}`,
       null,
       null,
       options,
@@ -5233,7 +5284,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ILookWithQuery>(
       callback,
       'GET',
-      encodeURI(`/looks/${look_id}`),
+      `/looks/${look_id}`,
       { fields },
       null,
       options,
@@ -5257,10 +5308,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    lookml_model_name = this.encodePathParam(lookml_model_name)
     return this.authStream<ILookmlModel>(
       callback,
       'GET',
-      encodeURI(`/lookml_models/${lookml_model_name}`),
+      `/lookml_models/${lookml_model_name}`,
       { fields },
       null,
       options,
@@ -5288,10 +5340,12 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    lookml_model_name = this.encodePathParam(lookml_model_name)
+    explore_name = this.encodePathParam(explore_name)
     return this.authStream<ILookmlModelExplore>(
       callback,
       'GET',
-      encodeURI(`/lookml_models/${lookml_model_name}/explores/${explore_name}`),
+      `/lookml_models/${lookml_model_name}/explores/${explore_name}`,
       { fields },
       null,
       options,
@@ -5313,10 +5367,11 @@ export class Looker40SDKStream extends APIMethods {
     project_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<IManifest>(
       callback,
       'GET',
-      encodeURI(`/projects/${project_id}/manifest`),
+      `/projects/${project_id}/manifest`,
       null,
       null,
       options,
@@ -5365,10 +5420,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    merge_query_id = this.encodePathParam(merge_query_id)
     return this.authStream<IMergeQuery>(
       callback,
       'GET',
-      encodeURI(`/merge_queries/${merge_query_id}`),
+      `/merge_queries/${merge_query_id}`,
       { fields },
       null,
       options,
@@ -5395,7 +5451,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IModelSet>(
       callback,
       'GET',
-      encodeURI(`/model_sets/${model_set_id}`),
+      `/model_sets/${model_set_id}`,
       { fields },
       null,
       options,
@@ -5445,10 +5501,11 @@ export class Looker40SDKStream extends APIMethods {
     test_slug: string,
     options?: Partial<ITransportSettings>,
   ) {
+    test_slug = this.encodePathParam(test_slug)
     return this.authStream<IOIDCConfig>(
       callback,
       'GET',
-      encodeURI(`/oidc_test_configs/${test_slug}`),
+      `/oidc_test_configs/${test_slug}`,
       null,
       null,
       options,
@@ -5540,7 +5597,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IPermissionSet>(
       callback,
       'GET',
-      encodeURI(`/permission_sets/${permission_set_id}`),
+      `/permission_sets/${permission_set_id}`,
       { fields },
       null,
       options,
@@ -5566,10 +5623,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<IProject>(
       callback,
       'GET',
-      encodeURI(`/projects/${project_id}`),
+      `/projects/${project_id}`,
       { fields },
       null,
       options,
@@ -5599,10 +5657,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<IProjectFile>(
       callback,
       'GET',
-      encodeURI(`/projects/${project_id}/files/file`),
+      `/projects/${project_id}/files/file`,
       { file_id, fields },
       null,
       options,
@@ -5637,10 +5696,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<IProjectValidationCache>(
       callback,
       'GET',
-      encodeURI(`/projects/${project_id}/validate`),
+      `/projects/${project_id}/validate`,
       { fields },
       null,
       options,
@@ -5666,10 +5726,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<IProjectWorkspace>(
       callback,
       'GET',
-      encodeURI(`/projects/${project_id}/current_workspace`),
+      `/projects/${project_id}/current_workspace`,
       { fields },
       null,
       options,
@@ -5712,7 +5773,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IQuery>(
       callback,
       'GET',
-      encodeURI(`/queries/${query_id}`),
+      `/queries/${query_id}`,
       { fields },
       null,
       options,
@@ -5752,10 +5813,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    slug = this.encodePathParam(slug)
     return this.authStream<IQuery>(
       callback,
       'GET',
-      encodeURI(`/queries/slug/${slug}`),
+      `/queries/slug/${slug}`,
       { fields },
       null,
       options,
@@ -5785,10 +5847,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    query_task_id = this.encodePathParam(query_task_id)
     return this.authStream<IQueryTask>(
       callback,
       'GET',
-      encodeURI(`/query_tasks/${query_task_id}`),
+      `/query_tasks/${query_task_id}`,
       { fields },
       null,
       options,
@@ -5859,10 +5922,11 @@ export class Looker40SDKStream extends APIMethods {
     query_task_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    query_task_id = this.encodePathParam(query_task_id)
     return this.authStream<string>(
       callback,
       'GET',
-      encodeURI(`/query_tasks/${query_task_id}/results`),
+      `/query_tasks/${query_task_id}/results`,
       null,
       null,
       options,
@@ -5890,10 +5954,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    render_task_id = this.encodePathParam(render_task_id)
     return this.authStream<IRenderTask>(
       callback,
       'GET',
-      encodeURI(`/render_tasks/${render_task_id}`),
+      `/render_tasks/${render_task_id}`,
       { fields },
       null,
       options,
@@ -5931,10 +5996,11 @@ export class Looker40SDKStream extends APIMethods {
     render_task_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    render_task_id = this.encodePathParam(render_task_id)
     return this.authStream<string>(
       callback,
       'GET',
-      encodeURI(`/render_tasks/${render_task_id}/results`),
+      `/render_tasks/${render_task_id}/results`,
       null,
       null,
       options,
@@ -5956,10 +6022,11 @@ export class Looker40SDKStream extends APIMethods {
     project_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<string>(
       callback,
       'POST',
-      encodeURI(`/projects/${project_id}/reset_to_production`),
+      `/projects/${project_id}/reset_to_production`,
       null,
       null,
       options,
@@ -5981,10 +6048,11 @@ export class Looker40SDKStream extends APIMethods {
     project_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<string>(
       callback,
       'POST',
-      encodeURI(`/projects/${project_id}/reset_to_remote`),
+      `/projects/${project_id}/reset_to_remote`,
       null,
       null,
       options,
@@ -6007,7 +6075,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IRole>(
       callback,
       'GET',
-      encodeURI(`/roles/${role_id}`),
+      `/roles/${role_id}`,
       null,
       null,
       options,
@@ -6034,7 +6102,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IGroup[]>(
       callback,
       'GET',
-      encodeURI(`/roles/${role_id}/groups`),
+      `/roles/${role_id}/groups`,
       { fields },
       null,
       options,
@@ -6054,7 +6122,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IUser[]>(
       callback,
       'GET',
-      encodeURI(`/roles/${request.role_id}/users`),
+      `/roles/${request.role_id}/users`,
       {
         fields: request.fields,
         direct_association_only: request.direct_association_only,
@@ -6091,10 +6159,12 @@ export class Looker40SDKStream extends APIMethods {
     remote_url?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
+    test_id = this.encodePathParam(test_id)
     return this.authStream<IGitConnectionTestResult>(
       callback,
       'GET',
-      encodeURI(`/projects/${project_id}/git_connection_tests/${test_id}`),
+      `/projects/${project_id}/git_connection_tests/${test_id}`,
       { remote_url },
       null,
       options,
@@ -6162,10 +6232,11 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestRunInlineQuery,
     options?: Partial<ITransportSettings>,
   ) {
+    request.result_format = this.encodePathParam(request.result_format)
     return this.authStream<string>(
       callback,
       'POST',
-      encodeURI(`/queries/run/${request.result_format}`),
+      `/queries/run/${request.result_format}`,
       {
         limit: request.limit,
         apply_formatting: request.apply_formatting,
@@ -6214,10 +6285,11 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestRunLook,
     options?: Partial<ITransportSettings>,
   ) {
+    request.result_format = this.encodePathParam(request.result_format)
     return this.authStream<string>(
       callback,
       'GET',
-      encodeURI(`/looks/${request.look_id}/run/${request.result_format}`),
+      `/looks/${request.look_id}/run/${request.result_format}`,
       {
         limit: request.limit,
         apply_formatting: request.apply_formatting,
@@ -6249,10 +6321,11 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestRunLookmlTest,
     options?: Partial<ITransportSettings>,
   ) {
+    request.project_id = this.encodePathParam(request.project_id)
     return this.authStream<ILookmlTestResult[]>(
       callback,
       'GET',
-      encodeURI(`/projects/${request.project_id}/lookml_tests/run`),
+      `/projects/${request.project_id}/lookml_tests/run`,
       { file_id: request.file_id, test: request.test, model: request.model },
       null,
       options,
@@ -6291,10 +6364,11 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestRunQuery,
     options?: Partial<ITransportSettings>,
   ) {
+    request.result_format = this.encodePathParam(request.result_format)
     return this.authStream<string>(
       callback,
       'GET',
-      encodeURI(`/queries/${request.query_id}/run/${request.result_format}`),
+      `/queries/${request.query_id}/run/${request.result_format}`,
       {
         limit: request.limit,
         apply_formatting: request.apply_formatting,
@@ -6337,10 +6411,12 @@ export class Looker40SDKStream extends APIMethods {
     download?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    slug = this.encodePathParam(slug)
+    result_format = this.encodePathParam(result_format)
     return this.authStream<string>(
       callback,
       'POST',
-      encodeURI(`/sql_queries/${slug}/run/${result_format}`),
+      `/sql_queries/${slug}/run/${result_format}`,
       { download },
       null,
       options,
@@ -6421,12 +6497,13 @@ export class Looker40SDKStream extends APIMethods {
     result_format: string,
     options?: Partial<ITransportSettings>,
   ) {
+    model_name = this.encodePathParam(model_name)
+    view_name = this.encodePathParam(view_name)
+    result_format = this.encodePathParam(result_format)
     return this.authStream<string>(
       callback,
       'GET',
-      encodeURI(
-        `/queries/models/${model_name}/views/${view_name}/run/${result_format}`,
-      ),
+      `/queries/models/${model_name}/views/${view_name}/run/${result_format}`,
       null,
       null,
       options,
@@ -6476,10 +6553,11 @@ export class Looker40SDKStream extends APIMethods {
     test_slug: string,
     options?: Partial<ITransportSettings>,
   ) {
+    test_slug = this.encodePathParam(test_slug)
     return this.authStream<ISamlConfig>(
       callback,
       'GET',
-      encodeURI(`/saml_test_configs/${test_slug}`),
+      `/saml_test_configs/${test_slug}`,
       null,
       null,
       options,
@@ -6508,7 +6586,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IScheduledPlan>(
       callback,
       'GET',
-      encodeURI(`/scheduled_plans/${scheduled_plan_id}`),
+      `/scheduled_plans/${scheduled_plan_id}`,
       { fields },
       null,
       options,
@@ -6639,7 +6717,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IScheduledPlan>(
       callback,
       'POST',
-      encodeURI(`/scheduled_plans/${scheduled_plan_id}/run_once`),
+      `/scheduled_plans/${scheduled_plan_id}/run_once`,
       null,
       body,
       options,
@@ -6669,7 +6747,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IScheduledPlan[]>(
       callback,
       'GET',
-      encodeURI(`/scheduled_plans/dashboard/${request.dashboard_id}`),
+      `/scheduled_plans/dashboard/${request.dashboard_id}`,
       {
         user_id: request.user_id,
         all_users: request.all_users,
@@ -6703,7 +6781,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IScheduledPlan[]>(
       callback,
       'GET',
-      encodeURI(`/scheduled_plans/look/${request.look_id}`),
+      `/scheduled_plans/look/${request.look_id}`,
       {
         user_id: request.user_id,
         fields: request.fields,
@@ -6737,9 +6815,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IScheduledPlan[]>(
       callback,
       'GET',
-      encodeURI(
-        `/scheduled_plans/lookml_dashboard/${request.lookml_dashboard_id}`,
-      ),
+      `/scheduled_plans/lookml_dashboard/${request.lookml_dashboard_id}`,
       {
         user_id: request.user_id,
         fields: request.fields,
@@ -6772,7 +6848,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IScheduledPlan[]>(
       callback,
       'GET',
-      encodeURI(`/scheduled_plans/space/${space_id}`),
+      `/scheduled_plans/space/${space_id}`,
       { fields },
       null,
       options,
@@ -7598,10 +7674,11 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestSearchUsersNames,
     options?: Partial<ITransportSettings>,
   ) {
+    request.pattern = this.encodePathParam(request.pattern)
     return this.authStream<IUser[]>(
       callback,
       'GET',
-      encodeURI(`/users/search/names/${request.pattern}`),
+      `/users/search/names/${request.pattern}`,
       {
         fields: request.fields,
         page: request.page,
@@ -7738,7 +7815,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IGroup[]>(
       callback,
       'PUT',
-      encodeURI(`/roles/${role_id}/groups`),
+      `/roles/${role_id}/groups`,
       null,
       body,
       options,
@@ -7765,7 +7842,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IUser[]>(
       callback,
       'PUT',
-      encodeURI(`/roles/${role_id}/users`),
+      `/roles/${role_id}/users`,
       null,
       body,
       options,
@@ -7811,7 +7888,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IUserAttributeGroupValue[]>(
       callback,
       'POST',
-      encodeURI(`/user_attributes/${user_attribute_id}/group_values`),
+      `/user_attributes/${user_attribute_id}/group_values`,
       null,
       body,
       options,
@@ -7844,7 +7921,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IUserAttributeWithValue>(
       callback,
       'PATCH',
-      encodeURI(`/users/${user_id}/attribute_values/${user_attribute_id}`),
+      `/users/${user_id}/attribute_values/${user_attribute_id}`,
       null,
       body,
       options,
@@ -7875,7 +7952,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IRole[]>(
       callback,
       'PUT',
-      encodeURI(`/users/${user_id}/roles`),
+      `/users/${user_id}/roles`,
       { fields },
       body,
       options,
@@ -7899,10 +7976,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    space_id = this.encodePathParam(space_id)
     return this.authStream<ISpace>(
       callback,
       'GET',
-      encodeURI(`/spaces/${space_id}`),
+      `/spaces/${space_id}`,
       { fields },
       null,
       options,
@@ -7926,10 +8004,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    space_id = this.encodePathParam(space_id)
     return this.authStream<ISpace[]>(
       callback,
       'GET',
-      encodeURI(`/spaces/${space_id}/ancestors`),
+      `/spaces/${space_id}/ancestors`,
       { fields },
       null,
       options,
@@ -7946,10 +8025,11 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestSpaceChildren,
     options?: Partial<ITransportSettings>,
   ) {
+    request.space_id = this.encodePathParam(request.space_id)
     return this.authStream<ISpace[]>(
       callback,
       'GET',
-      encodeURI(`/spaces/${request.space_id}/children`),
+      `/spaces/${request.space_id}/children`,
       {
         fields: request.fields,
         page: request.page,
@@ -7971,10 +8051,11 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestSpaceChildrenSearch,
     options?: Partial<ITransportSettings>,
   ) {
+    request.space_id = this.encodePathParam(request.space_id)
     return this.authStream<ISpace[]>(
       callback,
       'GET',
-      encodeURI(`/spaces/${request.space_id}/children/search`),
+      `/spaces/${request.space_id}/children/search`,
       { fields: request.fields, sorts: request.sorts, name: request.name },
       null,
       options,
@@ -7998,10 +8079,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    space_id = this.encodePathParam(space_id)
     return this.authStream<IDashboard[]>(
       callback,
       'GET',
-      encodeURI(`/spaces/${space_id}/dashboards`),
+      `/spaces/${space_id}/dashboards`,
       { fields },
       null,
       options,
@@ -8025,10 +8107,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    space_id = this.encodePathParam(space_id)
     return this.authStream<ILookWithQuery[]>(
       callback,
       'GET',
-      encodeURI(`/spaces/${space_id}/looks`),
+      `/spaces/${space_id}/looks`,
       { fields },
       null,
       options,
@@ -8052,10 +8135,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    space_id = this.encodePathParam(space_id)
     return this.authStream<ISpace>(
       callback,
       'GET',
-      encodeURI(`/spaces/${space_id}/parent`),
+      `/spaces/${space_id}/parent`,
       { fields },
       null,
       options,
@@ -8075,10 +8159,11 @@ export class Looker40SDKStream extends APIMethods {
     slug: string,
     options?: Partial<ITransportSettings>,
   ) {
+    slug = this.encodePathParam(slug)
     return this.authStream<ISqlQuery>(
       callback,
       'GET',
-      encodeURI(`/sql_queries/${slug}`),
+      `/sql_queries/${slug}`,
       null,
       null,
       options,
@@ -8114,10 +8199,11 @@ export class Looker40SDKStream extends APIMethods {
     raw_locale?: boolean,
     options?: Partial<ITransportSettings>,
   ) {
+    lookml_dashboard_id = this.encodePathParam(lookml_dashboard_id)
     return this.authStream<number[]>(
       callback,
       'PATCH',
-      encodeURI(`/dashboards/${lookml_dashboard_id}/sync`),
+      `/dashboards/${lookml_dashboard_id}/sync`,
       { raw_locale },
       body,
       options,
@@ -8148,10 +8234,11 @@ export class Looker40SDKStream extends APIMethods {
     tests?: DelimArray<string>,
     options?: Partial<ITransportSettings>,
   ) {
+    connection_name = this.encodePathParam(connection_name)
     return this.authStream<IDBConnectionTestResult[]>(
       callback,
       'PUT',
-      encodeURI(`/connections/${connection_name}/test`),
+      `/connections/${connection_name}/test`,
       { tests },
       null,
       options,
@@ -8205,10 +8292,11 @@ export class Looker40SDKStream extends APIMethods {
     integration_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    integration_id = this.encodePathParam(integration_id)
     return this.authStream<IIntegrationTestResult>(
       callback,
       'POST',
-      encodeURI(`/integrations/${integration_id}/test`),
+      `/integrations/${integration_id}/test`,
       null,
       null,
       options,
@@ -8383,7 +8471,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ITheme>(
       callback,
       'GET',
-      encodeURI(`/themes/${theme_id}`),
+      `/themes/${theme_id}`,
       { fields },
       null,
       options,
@@ -8463,10 +8551,11 @@ export class Looker40SDKStream extends APIMethods {
     body: Partial<IWriteColorCollection>,
     options?: Partial<ITransportSettings>,
   ) {
+    collection_id = this.encodePathParam(collection_id)
     return this.authStream<IColorCollection>(
       callback,
       'PATCH',
-      encodeURI(`/color_collections/${collection_id}`),
+      `/color_collections/${collection_id}`,
       null,
       body,
       options,
@@ -8490,10 +8579,11 @@ export class Looker40SDKStream extends APIMethods {
     body: Partial<IWriteDBConnection>,
     options?: Partial<ITransportSettings>,
   ) {
+    connection_name = this.encodePathParam(connection_name)
     return this.authStream<IDBConnection>(
       callback,
       'PATCH',
-      encodeURI(`/connections/${connection_name}`),
+      `/connections/${connection_name}`,
       null,
       body,
       options,
@@ -8520,7 +8610,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IContentMeta>(
       callback,
       'PATCH',
-      encodeURI(`/content_metadata/${content_metadata_id}`),
+      `/content_metadata/${content_metadata_id}`,
       null,
       body,
       options,
@@ -8544,10 +8634,13 @@ export class Looker40SDKStream extends APIMethods {
     body: Partial<IContentMetaGroupUser>,
     options?: Partial<ITransportSettings>,
   ) {
+    content_metadata_access_id = this.encodePathParam(
+      content_metadata_access_id,
+    )
     return this.authStream<IContentMetaGroupUser>(
       callback,
       'PUT',
-      encodeURI(`/content_metadata_access/${content_metadata_access_id}`),
+      `/content_metadata_access/${content_metadata_access_id}`,
       null,
       body,
       options,
@@ -8630,10 +8723,11 @@ export class Looker40SDKStream extends APIMethods {
     body: Partial<IWriteDashboard>,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_id = this.encodePathParam(dashboard_id)
     return this.authStream<IDashboard>(
       callback,
       'PATCH',
-      encodeURI(`/dashboards/${dashboard_id}`),
+      `/dashboards/${dashboard_id}`,
       null,
       body,
       options,
@@ -8661,10 +8755,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_element_id = this.encodePathParam(dashboard_element_id)
     return this.authStream<IDashboardElement>(
       callback,
       'PATCH',
-      encodeURI(`/dashboard_elements/${dashboard_element_id}`),
+      `/dashboard_elements/${dashboard_element_id}`,
       { fields },
       body,
       options,
@@ -8692,10 +8787,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_filter_id = this.encodePathParam(dashboard_filter_id)
     return this.authStream<IDashboardFilter>(
       callback,
       'PATCH',
-      encodeURI(`/dashboard_filters/${dashboard_filter_id}`),
+      `/dashboard_filters/${dashboard_filter_id}`,
       { fields },
       body,
       options,
@@ -8723,10 +8819,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_layout_id = this.encodePathParam(dashboard_layout_id)
     return this.authStream<IDashboardLayout>(
       callback,
       'PATCH',
-      encodeURI(`/dashboard_layouts/${dashboard_layout_id}`),
+      `/dashboard_layouts/${dashboard_layout_id}`,
       { fields },
       body,
       options,
@@ -8754,12 +8851,13 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    dashboard_layout_component_id = this.encodePathParam(
+      dashboard_layout_component_id,
+    )
     return this.authStream<IDashboardLayoutComponent>(
       callback,
       'PATCH',
-      encodeURI(
-        `/dashboard_layout_components/${dashboard_layout_component_id}`,
-      ),
+      `/dashboard_layout_components/${dashboard_layout_component_id}`,
       { fields },
       body,
       options,
@@ -8786,7 +8884,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IDatagroup>(
       callback,
       'PATCH',
-      encodeURI(`/datagroups/${datagroup_id}`),
+      `/datagroups/${datagroup_id}`,
       null,
       body,
       options,
@@ -8810,10 +8908,11 @@ export class Looker40SDKStream extends APIMethods {
     body: Partial<IUpdateFolder>,
     options?: Partial<ITransportSettings>,
   ) {
+    folder_id = this.encodePathParam(folder_id)
     return this.authStream<IFolder>(
       callback,
       'PATCH',
-      encodeURI(`/folders/${folder_id}`),
+      `/folders/${folder_id}`,
       null,
       body,
       options,
@@ -8845,10 +8944,11 @@ export class Looker40SDKStream extends APIMethods {
     body: Partial<IWriteGitBranch>,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<IGitBranch>(
       callback,
       'PUT',
-      encodeURI(`/projects/${project_id}/git_branch`),
+      `/projects/${project_id}/git_branch`,
       null,
       body,
       options,
@@ -8879,7 +8979,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IGroup>(
       callback,
       'PATCH',
-      encodeURI(`/groups/${group_id}`),
+      `/groups/${group_id}`,
       { fields },
       body,
       options,
@@ -8910,7 +9010,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IHomepage>(
       callback,
       'PATCH',
-      encodeURI(`/homepages/${homepage_id}`),
+      `/homepages/${homepage_id}`,
       { fields },
       body,
       options,
@@ -8941,7 +9041,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IHomepageItem>(
       callback,
       'PATCH',
-      encodeURI(`/homepage_items/${homepage_item_id}`),
+      `/homepage_items/${homepage_item_id}`,
       { fields },
       body,
       options,
@@ -8972,7 +9072,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IHomepageSection>(
       callback,
       'PATCH',
-      encodeURI(`/homepage_sections/${homepage_section_id}`),
+      `/homepage_sections/${homepage_section_id}`,
       { fields },
       body,
       options,
@@ -9000,10 +9100,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    integration_id = this.encodePathParam(integration_id)
     return this.authStream<IIntegration>(
       callback,
       'PATCH',
-      encodeURI(`/integrations/${integration_id}`),
+      `/integrations/${integration_id}`,
       { fields },
       body,
       options,
@@ -9036,7 +9137,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IIntegrationHub>(
       callback,
       'PATCH',
-      encodeURI(`/integration_hubs/${integration_hub_id}`),
+      `/integration_hubs/${integration_hub_id}`,
       { fields },
       body,
       options,
@@ -9139,10 +9240,11 @@ export class Looker40SDKStream extends APIMethods {
     body: Partial<IWriteLegacyFeature>,
     options?: Partial<ITransportSettings>,
   ) {
+    legacy_feature_id = this.encodePathParam(legacy_feature_id)
     return this.authStream<ILegacyFeature>(
       callback,
       'PATCH',
-      encodeURI(`/legacy_features/${legacy_feature_id}`),
+      `/legacy_features/${legacy_feature_id}`,
       null,
       body,
       options,
@@ -9192,7 +9294,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ILookWithQuery>(
       callback,
       'PATCH',
-      encodeURI(`/looks/${look_id}`),
+      `/looks/${look_id}`,
       { fields },
       body,
       options,
@@ -9216,10 +9318,11 @@ export class Looker40SDKStream extends APIMethods {
     body: Partial<IWriteLookmlModel>,
     options?: Partial<ITransportSettings>,
   ) {
+    lookml_model_name = this.encodePathParam(lookml_model_name)
     return this.authStream<ILookmlModel>(
       callback,
       'PATCH',
-      encodeURI(`/lookml_models/${lookml_model_name}`),
+      `/lookml_models/${lookml_model_name}`,
       null,
       body,
       options,
@@ -9246,7 +9349,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IModelSet>(
       callback,
       'PATCH',
-      encodeURI(`/model_sets/${model_set_id}`),
+      `/model_sets/${model_set_id}`,
       null,
       body,
       options,
@@ -9327,7 +9430,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IPermissionSet>(
       callback,
       'PATCH',
-      encodeURI(`/permission_sets/${permission_set_id}`),
+      `/permission_sets/${permission_set_id}`,
       null,
       body,
       options,
@@ -9375,10 +9478,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<IProject>(
       callback,
       'PATCH',
-      encodeURI(`/projects/${project_id}`),
+      `/projects/${project_id}`,
       { fields },
       body,
       options,
@@ -9411,10 +9515,12 @@ export class Looker40SDKStream extends APIMethods {
     body: Partial<IWriteRepositoryCredential>,
     options?: Partial<ITransportSettings>,
   ) {
+    root_project_id = this.encodePathParam(root_project_id)
+    credential_id = this.encodePathParam(credential_id)
     return this.authStream<IRepositoryCredential>(
       callback,
       'PUT',
-      encodeURI(`/projects/${root_project_id}/credential/${credential_id}`),
+      `/projects/${root_project_id}/credential/${credential_id}`,
       null,
       body,
       options,
@@ -9441,7 +9547,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IRole>(
       callback,
       'PATCH',
-      encodeURI(`/roles/${role_id}`),
+      `/roles/${role_id}`,
       null,
       body,
       options,
@@ -9540,7 +9646,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IScheduledPlan>(
       callback,
       'PATCH',
-      encodeURI(`/scheduled_plans/${scheduled_plan_id}`),
+      `/scheduled_plans/${scheduled_plan_id}`,
       null,
       body,
       options,
@@ -9629,10 +9735,11 @@ export class Looker40SDKStream extends APIMethods {
     body: Partial<IUpdateSpace>,
     options?: Partial<ITransportSettings>,
   ) {
+    space_id = this.encodePathParam(space_id)
     return this.authStream<ISpace>(
       callback,
       'PATCH',
-      encodeURI(`/spaces/${space_id}`),
+      `/spaces/${space_id}`,
       null,
       body,
       options,
@@ -9661,7 +9768,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ITheme>(
       callback,
       'PATCH',
-      encodeURI(`/themes/${theme_id}`),
+      `/themes/${theme_id}`,
       null,
       body,
       options,
@@ -9692,7 +9799,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IUser>(
       callback,
       'PATCH',
-      encodeURI(`/users/${user_id}`),
+      `/users/${user_id}`,
       { fields },
       body,
       options,
@@ -9723,7 +9830,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IUserAttribute>(
       callback,
       'PATCH',
-      encodeURI(`/user_attributes/${user_attribute_id}`),
+      `/user_attributes/${user_attribute_id}`,
       { fields },
       body,
       options,
@@ -9756,7 +9863,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IUserAttributeGroupValue>(
       callback,
       'PATCH',
-      encodeURI(`/groups/${group_id}/attribute_values/${user_attribute_id}`),
+      `/groups/${group_id}/attribute_values/${user_attribute_id}`,
       null,
       body,
       options,
@@ -9787,7 +9894,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsEmail>(
       callback,
       'PATCH',
-      encodeURI(`/users/${user_id}/credentials_email`),
+      `/users/${user_id}/credentials_email`,
       { fields },
       body,
       options,
@@ -9841,7 +9948,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IUser>(
       callback,
       'GET',
-      encodeURI(`/users/${user_id}`),
+      `/users/${user_id}`,
       { fields },
       null,
       options,
@@ -9868,7 +9975,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IUserAttribute>(
       callback,
       'GET',
-      encodeURI(`/user_attributes/${user_attribute_id}`),
+      `/user_attributes/${user_attribute_id}`,
       { fields },
       null,
       options,
@@ -9902,7 +10009,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IUserAttributeWithValue[]>(
       callback,
       'GET',
-      encodeURI(`/users/${request.user_id}/attribute_values`),
+      `/users/${request.user_id}/attribute_values`,
       {
         fields: request.fields,
         user_attribute_ids: request.user_attribute_ids,
@@ -9938,7 +10045,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsApi3>(
       callback,
       'GET',
-      encodeURI(`/users/${user_id}/credentials_api3/${credentials_api3_id}`),
+      `/users/${user_id}/credentials_api3/${credentials_api3_id}`,
       { fields },
       null,
       options,
@@ -9965,7 +10072,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsEmail>(
       callback,
       'GET',
-      encodeURI(`/users/${user_id}/credentials_email`),
+      `/users/${user_id}/credentials_email`,
       { fields },
       null,
       options,
@@ -9996,7 +10103,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsEmbed>(
       callback,
       'GET',
-      encodeURI(`/users/${user_id}/credentials_embed/${credentials_embed_id}`),
+      `/users/${user_id}/credentials_embed/${credentials_embed_id}`,
       { fields },
       null,
       options,
@@ -10023,7 +10130,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsGoogle>(
       callback,
       'GET',
-      encodeURI(`/users/${user_id}/credentials_google`),
+      `/users/${user_id}/credentials_google`,
       { fields },
       null,
       options,
@@ -10050,7 +10157,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsLDAP>(
       callback,
       'GET',
-      encodeURI(`/users/${user_id}/credentials_ldap`),
+      `/users/${user_id}/credentials_ldap`,
       { fields },
       null,
       options,
@@ -10077,7 +10184,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsLookerOpenid>(
       callback,
       'GET',
-      encodeURI(`/users/${user_id}/credentials_looker_openid`),
+      `/users/${user_id}/credentials_looker_openid`,
       { fields },
       null,
       options,
@@ -10104,7 +10211,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsOIDC>(
       callback,
       'GET',
-      encodeURI(`/users/${user_id}/credentials_oidc`),
+      `/users/${user_id}/credentials_oidc`,
       { fields },
       null,
       options,
@@ -10131,7 +10238,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsSaml>(
       callback,
       'GET',
-      encodeURI(`/users/${user_id}/credentials_saml`),
+      `/users/${user_id}/credentials_saml`,
       { fields },
       null,
       options,
@@ -10158,7 +10265,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ICredentialsTotp>(
       callback,
       'GET',
-      encodeURI(`/users/${user_id}/credentials_totp`),
+      `/users/${user_id}/credentials_totp`,
       { fields },
       null,
       options,
@@ -10213,10 +10320,12 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    credential_type = this.encodePathParam(credential_type)
+    credential_id = this.encodePathParam(credential_id)
     return this.authStream<IUser>(
       callback,
       'GET',
-      encodeURI(`/users/credential/${credential_type}/${credential_id}`),
+      `/users/credential/${credential_type}/${credential_id}`,
       { fields },
       null,
       options,
@@ -10236,7 +10345,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IRole[]>(
       callback,
       'GET',
-      encodeURI(`/users/${request.user_id}/roles`),
+      `/users/${request.user_id}/roles`,
       {
         fields: request.fields,
         direct_association_only: request.direct_association_only,
@@ -10270,7 +10379,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<ISession>(
       callback,
       'GET',
-      encodeURI(`/users/${user_id}/sessions/${session_id}`),
+      `/users/${user_id}/sessions/${session_id}`,
       { fields },
       null,
       options,
@@ -10302,10 +10411,11 @@ export class Looker40SDKStream extends APIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>,
   ) {
+    project_id = this.encodePathParam(project_id)
     return this.authStream<IProjectValidation>(
       callback,
       'POST',
-      encodeURI(`/projects/${project_id}/validate`),
+      `/projects/${project_id}/validate`,
       { fields },
       null,
       options,
@@ -10429,10 +10539,11 @@ export class Looker40SDKStream extends APIMethods {
     workspace_id: string,
     options?: Partial<ITransportSettings>,
   ) {
+    workspace_id = this.encodePathParam(workspace_id)
     return this.authStream<IWorkspace>(
       callback,
       'GET',
-      encodeURI(`/workspaces/${workspace_id}`),
+      `/workspaces/${workspace_id}`,
       null,
       null,
       options,

@@ -279,6 +279,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.GitBranch]:
         """Get All Git Branches"""
+        project_id = self.encode_path_param(project_id)
         response = self.get(
             f"/projects/{project_id}/git_branches",
             Sequence[models.GitBranch],
@@ -308,6 +309,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.GitConnectionTest]:
         """Get All Git Connection Tests"""
+        project_id = self.encode_path_param(project_id)
         response = self.get(
             f"/projects/{project_id}/git_connection_tests",
             Sequence[models.GitConnectionTest],
@@ -579,6 +581,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.LookmlTest]:
         """Get All LookML Tests"""
+        project_id = self.encode_path_param(project_id)
         response = self.get(
             f"/projects/{project_id}/lookml_tests",
             Sequence[models.LookmlTest],
@@ -680,6 +683,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.ProjectFile]:
         """Get All Project Files"""
+        project_id = self.encode_path_param(project_id)
         response = self.get(
             f"/projects/{project_id}/files",
             Sequence[models.ProjectFile],
@@ -1054,6 +1058,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ColorCollection:
         """Get Color Collection by ID"""
+        collection_id = self.encode_path_param(collection_id)
         response = self.get(
             f"/color_collections/{collection_id}",
             models.ColorCollection,
@@ -1123,6 +1128,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DBConnection:
         """Get Connection"""
+        connection_name = self.encode_path_param(connection_name)
         response = self.get(
             f"/connections/{connection_name}",
             models.DBConnection,
@@ -1411,6 +1417,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.RenderTask:
         """Create Dashboard Render Task"""
+        result_format = self.encode_path_param(result_format)
         assert isinstance(body, models.CreateDashboardRenderTask)
         response = self.post(
             f"/render_tasks/dashboards/{dashboard_id}/{result_format}",
@@ -1465,6 +1472,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.GitBranch:
         """Checkout New Git Branch"""
+        project_id = self.encode_path_param(project_id)
         assert isinstance(body, models.WriteGitBranch)
         response = self.post(
             f"/projects/{project_id}/git_branch",
@@ -1493,6 +1501,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Create Deploy Key"""
+        project_id = self.encode_path_param(project_id)
         response = self.post(
             f"/projects/{project_id}/git/deploy_key",
             str,
@@ -1663,6 +1672,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.RenderTask:
         """Create Look Render Task"""
+        result_format = self.encode_path_param(result_format)
         response = self.post(
             f"/render_tasks/looks/{look_id}/{result_format}",
             models.RenderTask,
@@ -1699,6 +1709,8 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.RenderTask:
         """Create Lookml Dashboard Render Task"""
+        dashboard_id = self.encode_path_param(dashboard_id)
+        result_format = self.encode_path_param(result_format)
         assert isinstance(body, models.CreateDashboardRenderTask)
         response = self.post(
             f"/render_tasks/lookml_dashboards/{dashboard_id}/{result_format}",
@@ -1904,6 +1916,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.RenderTask:
         """Create Query Render Task"""
+        result_format = self.encode_path_param(result_format)
         response = self.post(
             f"/render_tasks/queries/{query_id}/{result_format}",
             models.RenderTask,
@@ -2403,6 +2416,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Dashboard:
         """Get Dashboard"""
+        dashboard_id = self.encode_path_param(dashboard_id)
         response = self.get(
             f"/dashboards/{dashboard_id}",
             models.Dashboard,
@@ -2424,6 +2438,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.DashboardElement]:
         """Get All DashboardElements"""
+        dashboard_id = self.encode_path_param(dashboard_id)
         response = self.get(
             f"/dashboards/{dashboard_id}/dashboard_elements",
             Sequence[models.DashboardElement],
@@ -2445,6 +2460,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.DashboardFilter]:
         """Get All Dashboard Filters"""
+        dashboard_id = self.encode_path_param(dashboard_id)
         response = self.get(
             f"/dashboards/{dashboard_id}/dashboard_filters",
             Sequence[models.DashboardFilter],
@@ -2466,6 +2482,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.DashboardLayout]:
         """Get All DashboardLayouts"""
+        dashboard_id = self.encode_path_param(dashboard_id)
         response = self.get(
             f"/dashboards/{dashboard_id}/dashboard_layouts",
             Sequence[models.DashboardLayout],
@@ -2487,6 +2504,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DashboardElement:
         """Get DashboardElement"""
+        dashboard_element_id = self.encode_path_param(dashboard_element_id)
         response = self.get(
             f"/dashboard_elements/{dashboard_element_id}",
             models.DashboardElement,
@@ -2508,6 +2526,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DashboardFilter:
         """Get Dashboard Filter"""
+        dashboard_filter_id = self.encode_path_param(dashboard_filter_id)
         response = self.get(
             f"/dashboard_filters/{dashboard_filter_id}",
             models.DashboardFilter,
@@ -2529,6 +2548,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DashboardLayout:
         """Get DashboardLayout"""
+        dashboard_layout_id = self.encode_path_param(dashboard_layout_id)
         response = self.get(
             f"/dashboard_layouts/{dashboard_layout_id}",
             models.DashboardLayout,
@@ -2550,6 +2570,9 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DashboardLayoutComponent:
         """Get DashboardLayoutComponent"""
+        dashboard_layout_component_id = self.encode_path_param(
+            dashboard_layout_component_id
+        )
         response = self.get(
             f"/dashboard_layout_components/{dashboard_layout_component_id}",
             models.DashboardLayoutComponent,
@@ -2571,6 +2594,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.DashboardLayoutComponent]:
         """Get All DashboardLayoutComponents"""
+        dashboard_layout_id = self.encode_path_param(dashboard_layout_id)
         response = self.get(
             f"/dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components",
             Sequence[models.DashboardLayoutComponent],
@@ -2592,6 +2616,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DashboardLookml:
         """Get lookml of a UDD"""
+        dashboard_id = self.encode_path_param(dashboard_id)
         response = self.get(
             f"/dashboards/lookml/{dashboard_id}",
             models.DashboardLookml,
@@ -2679,6 +2704,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete ColorCollection"""
+        collection_id = self.encode_path_param(collection_id)
         response = self.delete(
             f"/color_collections/{collection_id}",
             str,
@@ -2697,6 +2723,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete Connection"""
+        connection_name = self.encode_path_param(connection_name)
         response = self.delete(
             f"/connections/{connection_name}", str, transport_options=transport_options
         )
@@ -2715,6 +2742,8 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete Connection Override"""
+        connection_name = self.encode_path_param(connection_name)
+        override_context = self.encode_path_param(override_context)
         response = self.delete(
             f"/connections/{connection_name}/connection_override/{override_context}",
             str,
@@ -2775,6 +2804,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete Dashboard"""
+        dashboard_id = self.encode_path_param(dashboard_id)
         response = self.delete(
             f"/dashboards/{dashboard_id}", str, transport_options=transport_options
         )
@@ -2791,6 +2821,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete DashboardElement"""
+        dashboard_element_id = self.encode_path_param(dashboard_element_id)
         response = self.delete(
             f"/dashboard_elements/{dashboard_element_id}",
             str,
@@ -2809,6 +2840,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete Dashboard Filter"""
+        dashboard_filter_id = self.encode_path_param(dashboard_filter_id)
         response = self.delete(
             f"/dashboard_filters/{dashboard_filter_id}",
             str,
@@ -2827,6 +2859,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete DashboardLayout"""
+        dashboard_layout_id = self.encode_path_param(dashboard_layout_id)
         response = self.delete(
             f"/dashboard_layouts/{dashboard_layout_id}",
             str,
@@ -2846,6 +2879,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete Folder"""
+        folder_id = self.encode_path_param(folder_id)
         response = self.delete(
             f"/folders/{folder_id}", str, transport_options=transport_options
         )
@@ -2866,6 +2900,8 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete a Git Branch"""
+        project_id = self.encode_path_param(project_id)
+        branch_name = self.encode_path_param(branch_name)
         response = self.delete(
             f"/projects/{project_id}/git_branch/{branch_name}",
             str,
@@ -3032,6 +3068,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete LookML Model"""
+        lookml_model_name = self.encode_path_param(lookml_model_name)
         response = self.delete(
             f"/lookml_models/{lookml_model_name}",
             str,
@@ -3066,6 +3103,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete OIDC Test Configuration"""
+        test_slug = self.encode_path_param(test_slug)
         response = self.delete(
             f"/oidc_test_configs/{test_slug}", str, transport_options=transport_options
         )
@@ -3107,6 +3145,8 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete Repository Credential"""
+        root_project_id = self.encode_path_param(root_project_id)
+        credential_id = self.encode_path_param(credential_id)
         response = self.delete(
             f"/projects/{root_project_id}/credential/{credential_id}",
             str,
@@ -3141,6 +3181,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete SAML Test Configuration"""
+        test_slug = self.encode_path_param(test_slug)
         response = self.delete(
             f"/saml_test_configs/{test_slug}", str, transport_options=transport_options
         )
@@ -3180,6 +3221,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete Space"""
+        space_id = self.encode_path_param(space_id)
         response = self.delete(
             f"/spaces/{space_id}", str, transport_options=transport_options
         )
@@ -3204,6 +3246,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete Theme"""
+        theme_id = self.encode_path_param(theme_id)
         response = self.delete(
             f"/themes/{theme_id}", str, transport_options=transport_options
         )
@@ -3467,6 +3510,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Delete User Login Lockout"""
+        key = self.encode_path_param(key)
         response = self.delete(
             f"/user_login_lockout/{key}", str, transport_options=transport_options
         )
@@ -3513,6 +3557,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Deploy To Production"""
+        project_id = self.encode_path_param(project_id)
         response = self.post(
             f"/projects/{project_id}/deploy_to_production",
             str,
@@ -3552,6 +3597,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DataActionForm:
         """Fetch Remote Integration Form"""
+        integration_id = self.encode_path_param(integration_id)
         response = self.post(
             f"/integrations/{integration_id}/form",
             models.DataActionForm,
@@ -3593,6 +3639,8 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.GitBranch:
         """Find a Git Branch"""
+        project_id = self.encode_path_param(project_id)
+        branch_name = self.encode_path_param(branch_name)
         response = self.get(
             f"/projects/{project_id}/git_branch/{branch_name}",
             models.GitBranch,
@@ -3613,6 +3661,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Folder:
         """Get Folder"""
+        folder_id = self.encode_path_param(folder_id)
         response = self.get(
             f"/folders/{folder_id}",
             models.Folder,
@@ -3634,6 +3683,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.Folder]:
         """Get Folder Ancestors"""
+        folder_id = self.encode_path_param(folder_id)
         response = self.get(
             f"/folders/{folder_id}/ancestors",
             Sequence[models.Folder],
@@ -3661,6 +3711,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.Folder]:
         """Get Folder Children"""
+        folder_id = self.encode_path_param(folder_id)
         response = self.get(
             f"/folders/{folder_id}/children",
             Sequence[models.Folder],
@@ -3691,6 +3742,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.Folder]:
         """Search Folder Children"""
+        folder_id = self.encode_path_param(folder_id)
         response = self.get(
             f"/folders/{folder_id}/children/search",
             Sequence[models.Folder],
@@ -3712,6 +3764,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.Dashboard]:
         """Get Folder Dashboards"""
+        folder_id = self.encode_path_param(folder_id)
         response = self.get(
             f"/folders/{folder_id}/dashboards",
             Sequence[models.Dashboard],
@@ -3733,6 +3786,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.LookWithQuery]:
         """Get Folder Looks"""
+        folder_id = self.encode_path_param(folder_id)
         response = self.get(
             f"/folders/{folder_id}/looks",
             Sequence[models.LookWithQuery],
@@ -3754,6 +3808,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Folder:
         """Get Folder Parent"""
+        folder_id = self.encode_path_param(folder_id)
         response = self.get(
             f"/folders/{folder_id}/parent",
             models.Folder,
@@ -3790,6 +3845,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.RepositoryCredential]:
         """Get All Repository Credentials"""
+        root_project_id = self.encode_path_param(root_project_id)
         response = self.get(
             f"/projects/{root_project_id}/credentials",
             Sequence[models.RepositoryCredential],
@@ -3810,6 +3866,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.GitBranch:
         """Get Active Git Branch"""
+        project_id = self.encode_path_param(project_id)
         response = self.get(
             f"/projects/{project_id}/git_branch",
             models.GitBranch,
@@ -3830,6 +3887,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Git Deploy Key"""
+        project_id = self.encode_path_param(project_id)
         response = self.get(
             f"/projects/{project_id}/git/deploy_key",
             str,
@@ -3948,6 +4006,8 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Dashboard:
         """Import LookML Dashboard"""
+        lookml_dashboard_id = self.encode_path_param(lookml_dashboard_id)
+        space_id = self.encode_path_param(space_id)
         if body:
             assert isinstance(body, models.WriteDashboard)
         response = self.post(
@@ -3972,6 +4032,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Integration:
         """Get Integration"""
+        integration_id = self.encode_path_param(integration_id)
         response = self.get(
             f"/integrations/{integration_id}",
             models.Integration,
@@ -4042,6 +4103,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Kill Running Query"""
+        query_task_id = self.encode_path_param(query_task_id)
         response = self.delete(
             f"/running_queries/{query_task_id}",
             str,
@@ -4088,6 +4150,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.LegacyFeature:
         """Get Legacy Feature"""
+        legacy_feature_id = self.encode_path_param(legacy_feature_id)
         response = self.get(
             f"/legacy_features/{legacy_feature_id}",
             models.LegacyFeature,
@@ -4139,6 +4202,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.LookmlModel:
         """Get LookML Model"""
+        lookml_model_name = self.encode_path_param(lookml_model_name)
         response = self.get(
             f"/lookml_models/{lookml_model_name}",
             models.LookmlModel,
@@ -4162,6 +4226,8 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.LookmlModelExplore:
         """Get LookML Model Explore"""
+        lookml_model_name = self.encode_path_param(lookml_model_name)
+        explore_name = self.encode_path_param(explore_name)
         response = self.get(
             f"/lookml_models/{lookml_model_name}/explores/{explore_name}",
             models.LookmlModelExplore,
@@ -4183,6 +4249,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Manifest:
         """Get Manifest"""
+        project_id = self.encode_path_param(project_id)
         response = self.get(
             f"/projects/{project_id}/manifest",
             models.Manifest,
@@ -4224,6 +4291,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.MergeQuery:
         """Get Merge Query"""
+        merge_query_id = self.encode_path_param(merge_query_id)
         response = self.get(
             f"/merge_queries/{merge_query_id}",
             models.MergeQuery,
@@ -4288,6 +4356,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.OIDCConfig:
         """Get OIDC Test Configuration"""
+        test_slug = self.encode_path_param(test_slug)
         response = self.get(
             f"/oidc_test_configs/{test_slug}",
             models.OIDCConfig,
@@ -4384,6 +4453,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Project:
         """Get Project"""
+        project_id = self.encode_path_param(project_id)
         response = self.get(
             f"/projects/{project_id}",
             models.Project,
@@ -4409,6 +4479,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ProjectFile:
         """Get Project File"""
+        project_id = self.encode_path_param(project_id)
         response = self.get(
             f"/projects/{project_id}/files/file",
             models.ProjectFile,
@@ -4441,6 +4512,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ProjectValidationCache:
         """Cached Project Validation Results"""
+        project_id = self.encode_path_param(project_id)
         response = self.get(
             f"/projects/{project_id}/validate",
             models.ProjectValidationCache,
@@ -4464,6 +4536,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ProjectWorkspace:
         """Get Project Workspace"""
+        project_id = self.encode_path_param(project_id)
         response = self.get(
             f"/projects/{project_id}/current_workspace",
             models.ProjectWorkspace,
@@ -4538,6 +4611,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Query:
         """Get Query for Slug"""
+        slug = self.encode_path_param(slug)
         response = self.get(
             f"/queries/slug/{slug}",
             models.Query,
@@ -4565,6 +4639,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.QueryTask:
         """Get Async Query Info"""
+        query_task_id = self.encode_path_param(query_task_id)
         response = self.get(
             f"/query_tasks/{query_task_id}",
             models.QueryTask,
@@ -4631,6 +4706,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Get Async Query Results"""
+        query_task_id = self.encode_path_param(query_task_id)
         response = self.get(
             f"/query_tasks/{query_task_id}/results",
             str,
@@ -4655,6 +4731,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.RenderTask:
         """Get Render Task"""
+        render_task_id = self.encode_path_param(render_task_id)
         response = self.get(
             f"/render_tasks/{render_task_id}",
             models.RenderTask,
@@ -4690,6 +4767,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> bytes:
         """Render Task Results"""
+        render_task_id = self.encode_path_param(render_task_id)
         response = self.get(
             f"/render_tasks/{render_task_id}/results",
             bytes,
@@ -4710,6 +4788,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Reset To Production"""
+        project_id = self.encode_path_param(project_id)
         response = self.post(
             f"/projects/{project_id}/reset_to_production",
             str,
@@ -4730,6 +4809,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> str:
         """Reset To Remote"""
+        project_id = self.encode_path_param(project_id)
         response = self.post(
             f"/projects/{project_id}/reset_to_remote",
             str,
@@ -4821,6 +4901,8 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.GitConnectionTestResult:
         """Run Git Connection Test"""
+        project_id = self.encode_path_param(project_id)
+        test_id = self.encode_path_param(test_id)
         response = self.get(
             f"/projects/{project_id}/git_connection_tests/{test_id}",
             models.GitConnectionTestResult,
@@ -4914,6 +4996,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Union[str, bytes]:
         """Run Inline Query"""
+        result_format = self.encode_path_param(result_format)
         assert isinstance(body, models.WriteQuery)
         response = self.post(
             f"/queries/run/{result_format}",
@@ -4991,6 +5074,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Union[str, bytes]:
         """Run Look"""
+        result_format = self.encode_path_param(result_format)
         response = self.get(
             f"/looks/{look_id}/run/{result_format}",
             Union[str, bytes],  # type: ignore
@@ -5031,6 +5115,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.LookmlTestResult]:
         """Run LookML Test"""
+        project_id = self.encode_path_param(project_id)
         response = self.get(
             f"/projects/{project_id}/lookml_tests/run",
             Sequence[models.LookmlTestResult],
@@ -5096,6 +5181,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Union[str, bytes]:
         """Run Query"""
+        result_format = self.encode_path_param(result_format)
         response = self.get(
             f"/queries/{query_id}/run/{result_format}",
             Union[str, bytes],  # type: ignore
@@ -5132,6 +5218,8 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Union[str, bytes]:
         """Run SQL Runner Query"""
+        slug = self.encode_path_param(slug)
+        result_format = self.encode_path_param(result_format)
         response = self.post(
             f"/sql_queries/{slug}/run/{result_format}",
             Union[str, bytes],  # type: ignore
@@ -5206,6 +5294,9 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Union[str, bytes]:
         """Run Url Encoded Query"""
+        model_name = self.encode_path_param(model_name)
+        view_name = self.encode_path_param(view_name)
+        result_format = self.encode_path_param(result_format)
         response = self.get(
             f"/queries/models/{model_name}/views/{view_name}/run/{result_format}",
             Union[str, bytes],  # type: ignore
@@ -5248,6 +5339,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.SamlConfig:
         """Get SAML Test Configuration"""
+        test_slug = self.encode_path_param(test_slug)
         response = self.get(
             f"/saml_test_configs/{test_slug}",
             models.SamlConfig,
@@ -6657,6 +6749,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.User]:
         """Search User Names"""
+        pattern = self.encode_path_param(pattern)
         response = self.get(
             f"/users/search/names/{pattern}",
             Sequence[models.User],
@@ -6901,6 +6994,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Space:
         """Get Space"""
+        space_id = self.encode_path_param(space_id)
         response = self.get(
             f"/spaces/{space_id}",
             models.Space,
@@ -6922,6 +7016,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.Space]:
         """Get Space Ancestors"""
+        space_id = self.encode_path_param(space_id)
         response = self.get(
             f"/spaces/{space_id}/ancestors",
             Sequence[models.Space],
@@ -6949,6 +7044,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.Space]:
         """Get Space Children"""
+        space_id = self.encode_path_param(space_id)
         response = self.get(
             f"/spaces/{space_id}/children",
             Sequence[models.Space],
@@ -6979,6 +7075,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.Space]:
         """Search Space Children"""
+        space_id = self.encode_path_param(space_id)
         response = self.get(
             f"/spaces/{space_id}/children/search",
             Sequence[models.Space],
@@ -7000,6 +7097,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.Dashboard]:
         """Get Space Dashboards"""
+        space_id = self.encode_path_param(space_id)
         response = self.get(
             f"/spaces/{space_id}/dashboards",
             Sequence[models.Dashboard],
@@ -7021,6 +7119,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.LookWithQuery]:
         """Get Space Looks"""
+        space_id = self.encode_path_param(space_id)
         response = self.get(
             f"/spaces/{space_id}/looks",
             Sequence[models.LookWithQuery],
@@ -7042,6 +7141,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Space:
         """Get Space Parent"""
+        space_id = self.encode_path_param(space_id)
         response = self.get(
             f"/spaces/{space_id}/parent",
             models.Space,
@@ -7061,6 +7161,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.SqlQuery:
         """Get SQL Runner Query"""
+        slug = self.encode_path_param(slug)
         response = self.get(
             f"/sql_queries/{slug}", models.SqlQuery, transport_options=transport_options
         )
@@ -7088,6 +7189,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[int]:
         """Sync LookML Dashboard"""
+        lookml_dashboard_id = self.encode_path_param(lookml_dashboard_id)
         assert isinstance(body, models.WriteDashboard)
         response = self.patch(
             f"/dashboards/{lookml_dashboard_id}/sync",
@@ -7118,6 +7220,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.DBConnectionTestResult]:
         """Test Connection"""
+        connection_name = self.encode_path_param(connection_name)
         response = self.put(
             f"/connections/{connection_name}/test",
             Sequence[models.DBConnectionTestResult],
@@ -7166,6 +7269,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.IntegrationTestResult:
         """Test integration"""
+        integration_id = self.encode_path_param(integration_id)
         response = self.post(
             f"/integrations/{integration_id}/test",
             models.IntegrationTestResult,
@@ -7384,6 +7488,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ColorCollection:
         """Update Custom Color collection"""
+        collection_id = self.encode_path_param(collection_id)
         assert isinstance(body, models.WriteColorCollection)
         response = self.patch(
             f"/color_collections/{collection_id}",
@@ -7405,6 +7510,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DBConnection:
         """Update Connection"""
+        connection_name = self.encode_path_param(connection_name)
         assert isinstance(body, models.WriteDBConnection)
         response = self.patch(
             f"/connections/{connection_name}",
@@ -7447,6 +7553,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ContentMetaGroupUser:
         """Update Content Metadata Access"""
+        content_metadata_access_id = self.encode_path_param(content_metadata_access_id)
         assert isinstance(body, models.ContentMetaGroupUser)
         response = self.put(
             f"/content_metadata_access/{content_metadata_access_id}",
@@ -7518,6 +7625,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Dashboard:
         """Update Dashboard"""
+        dashboard_id = self.encode_path_param(dashboard_id)
         assert isinstance(body, models.WriteDashboard)
         response = self.patch(
             f"/dashboards/{dashboard_id}",
@@ -7541,6 +7649,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DashboardElement:
         """Update DashboardElement"""
+        dashboard_element_id = self.encode_path_param(dashboard_element_id)
         assert isinstance(body, models.WriteDashboardElement)
         response = self.patch(
             f"/dashboard_elements/{dashboard_element_id}",
@@ -7565,6 +7674,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DashboardFilter:
         """Update Dashboard Filter"""
+        dashboard_filter_id = self.encode_path_param(dashboard_filter_id)
         assert isinstance(body, models.WriteDashboardFilter)
         response = self.patch(
             f"/dashboard_filters/{dashboard_filter_id}",
@@ -7589,6 +7699,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DashboardLayout:
         """Update DashboardLayout"""
+        dashboard_layout_id = self.encode_path_param(dashboard_layout_id)
         assert isinstance(body, models.WriteDashboardLayout)
         response = self.patch(
             f"/dashboard_layouts/{dashboard_layout_id}",
@@ -7613,6 +7724,9 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DashboardLayoutComponent:
         """Update DashboardLayoutComponent"""
+        dashboard_layout_component_id = self.encode_path_param(
+            dashboard_layout_component_id
+        )
         assert isinstance(body, models.WriteDashboardLayoutComponent)
         response = self.patch(
             f"/dashboard_layout_components/{dashboard_layout_component_id}",
@@ -7656,6 +7770,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Folder:
         """Update Folder"""
+        folder_id = self.encode_path_param(folder_id)
         assert isinstance(body, models.UpdateFolder)
         response = self.patch(
             f"/folders/{folder_id}",
@@ -7685,6 +7800,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.GitBranch:
         """Update Project Git Branch"""
+        project_id = self.encode_path_param(project_id)
         assert isinstance(body, models.WriteGitBranch)
         response = self.put(
             f"/projects/{project_id}/git_branch",
@@ -7804,6 +7920,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Integration:
         """Update Integration"""
+        integration_id = self.encode_path_param(integration_id)
         assert isinstance(body, models.WriteIntegration)
         response = self.patch(
             f"/integrations/{integration_id}",
@@ -7919,6 +8036,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.LegacyFeature:
         """Update Legacy Feature"""
+        legacy_feature_id = self.encode_path_param(legacy_feature_id)
         assert isinstance(body, models.WriteLegacyFeature)
         response = self.patch(
             f"/legacy_features/{legacy_feature_id}",
@@ -7983,6 +8101,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.LookmlModel:
         """Update LookML Model"""
+        lookml_model_name = self.encode_path_param(lookml_model_name)
         assert isinstance(body, models.WriteLookmlModel)
         response = self.patch(
             f"/lookml_models/{lookml_model_name}",
@@ -8114,6 +8233,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Project:
         """Update Project"""
+        project_id = self.encode_path_param(project_id)
         assert isinstance(body, models.WriteProject)
         response = self.patch(
             f"/projects/{project_id}",
@@ -8143,6 +8263,8 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.RepositoryCredential:
         """Create Repository Credential"""
+        root_project_id = self.encode_path_param(root_project_id)
+        credential_id = self.encode_path_param(credential_id)
         assert isinstance(body, models.WriteRepositoryCredential)
         response = self.put(
             f"/projects/{root_project_id}/credential/{credential_id}",
@@ -8331,6 +8453,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Space:
         """Update Space"""
+        space_id = self.encode_path_param(space_id)
         assert isinstance(body, models.UpdateSpace)
         response = self.patch(
             f"/spaces/{space_id}",
@@ -8806,6 +8929,8 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.User:
         """Get User by Credential Id"""
+        credential_type = self.encode_path_param(credential_type)
+        credential_id = self.encode_path_param(credential_id)
         response = self.get(
             f"/users/credential/{credential_type}/{credential_id}",
             models.User,
@@ -8884,6 +9009,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ProjectValidation:
         """Validate Project"""
+        project_id = self.encode_path_param(project_id)
         response = self.post(
             f"/projects/{project_id}/validate",
             models.ProjectValidation,
@@ -8995,6 +9121,7 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Workspace:
         """Get Workspace"""
+        workspace_id = self.encode_path_param(workspace_id)
         response = self.get(
             f"/workspaces/{workspace_id}",
             models.Workspace,
