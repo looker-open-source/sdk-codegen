@@ -531,7 +531,7 @@ describe('LookerNodeSDK', () => {
           const request = createQueryRequest(q, limit)
           const query = await sdk.ok(sdk.create_query(request))
           const sql = await sdk.ok(
-            sdk.run_query({query_id: query.id, result_format: 'sql'}),
+            sdk.run_query({query_id: query.id!, result_format: 'sql'}),
           )
           expect(sql).toContain('SELECT')
           if (query.fields) {
@@ -541,10 +541,10 @@ describe('LookerNodeSDK', () => {
           }
 
           const json = await sdk.ok(
-            sdk.run_query({query_id: query.id, result_format: 'json'}),
+            sdk.run_query({query_id: query.id!, result_format: 'json'}),
           )
           const csv = await sdk.ok(
-            sdk.run_query({query_id: query.id, result_format: 'csv'}),
+            sdk.run_query({query_id: query.id!, result_format: 'csv'}),
           )
           expect(query).toBeDefined()
           expect(query.id).toBeDefined()
@@ -901,8 +901,8 @@ describe('LookerNodeSDK', () => {
     it('PNG and JPG download', async () => {
       const sdk = new LookerSDK(session)
       const query = await sdk.ok(sdk.create_query(simpleQuery()))
-      const png = await sdk.ok(sdk.run_query({query_id: query.id, result_format: 'png'}))
-      const jpg = await sdk.ok(sdk.run_query({query_id: query.id, result_format: 'jpg'}))
+      const png = await sdk.ok(sdk.run_query({query_id: query.id!, result_format: 'png'}))
+      const jpg = await sdk.ok(sdk.run_query({query_id: query.id!, result_format: 'jpg'}))
       expect(mimeType(png)).toEqual('image/png')
       expect(mimeType(jpg)).toEqual('image/jpeg') // Houston, we have a problem with jpg being a png
     }, testTimeout)
