@@ -145,7 +145,7 @@ class Property extends SchemadSymbol implements IProperty {
 
   constructor(name: string, type: IType, schema: OAS.SchemaObject, required: string[] = []) {
     super(name, type, schema)
-    this.required = required.includes(name)
+    this.required = !!(required.includes(name) || schema.required?.includes(name))
   }
 
   get nullable(): boolean {

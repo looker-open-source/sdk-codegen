@@ -226,12 +226,18 @@ async all_datagroups(
       const type = apiTestModel.getRequestType(method)
       expect(type).toBeDefined()
       if (type) {
-        const property = type.properties['body']
-        const actual = gen.declareProperty(indent, property)
-        expect(actual).toEqual(`/**
+        const dashboard_id = type.properties['dashboard_id']
+        const actual_dashboard_id = gen.declareProperty(indent, dashboard_id)
+        expect(actual_dashboard_id).toEqual(`/**
+ * Id of dashboard to render
+ */
+dashboard_id: number`)
+        const body = type.properties['body']
+        const actual_body = gen.declareProperty(indent, body)
+        expect(actual_body).toEqual(`/**
  * body parameter for dynamically created request type
  */
-body?: ICreateDashboardRenderTask`)
+body: ICreateDashboardRenderTask`)
 //         const actual = gen.declareType(indent, type!)
 //         expect(actual).toEqual(`// Dynamically generated request type for create_dashboard_render_task
 // export interface IRequestcreate_dashboard_render_task{
