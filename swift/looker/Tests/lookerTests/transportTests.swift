@@ -8,53 +8,13 @@
 import XCTest
 @testable import looker
 
-let binaryTypes = """
-application/zip
-application/pdf
-application/msword
-application/vnd.ms-excel
-application/vnd.openxmlformats-officedocument.wordprocessingml.document
-application/vnd.ms-excel
-application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-application/vnd.ms-powerpoint
-application/vnd.openxmlformats-officedocument.presentationml.presentation
-application/vnd.oasis.opendocument.text
-multipart/form-data
-audio/mpeg
-audio/ogg
-image/png
-image/jpeg
-image/gif
-font/
-audio/
-video/
-image/
-""".split(separator: "\n")
-
-let textTypes = """
-image/svg+xml
-application/javascript
-application/json
-application/x-www-form-urlencoded
-application/xml
-application/sql
-application/graphql
-application/ld+json
-text/css
-text/html
-text/xml
-text/csv
-text/plain
-application/vnd.api+json
-""".split(separator: "\n")
-
 struct SimpleUser : SDKModel {
     var first: String
     var last: String
     var email : String?
 }
 
-@available(OSX 10.12, *)
+@available(OSX 10.15, *)
 class transportTests: XCTestCase {
 
     override func setUp() {
@@ -92,20 +52,23 @@ class transportTests: XCTestCase {
         XCTAssertNotNil(contentPatternString, "String should be compiled")
     }
 
-    func testBinaryMode() {
-        for (item) in binaryTypes {
-            let val = String(item)
-            let actual = responseMode(val)
-            XCTAssertEqual(actual, .binary, val)
+    func testStringMode() {
+        let data = config.testData["content_types"]?.value
+        let contentTypes = data as! [String:[String]]
+        let types = contentTypes["string"]!
+        for t in types {
+            let mode = responseMode(t)
+            XCTAssertEqual(ResponseMode.string, mode, "\(t) should be string")
         }
     }
-
-    func testStringMode() {
-        print(Constants.matchModeString)
-        for (item) in textTypes {
-            let val = String(item)
-            let actual = responseMode(val)
-            XCTAssertEqual(actual, .string, val)
+    
+    func testBinaryMode() {
+        let data = config.testData["content_types"]?.value
+        let contentTypes = data as! [String:[String]]
+        let types = contentTypes["binary"]!
+        for t in types {
+            let mode = responseMode(t)
+            XCTAssertEqual(ResponseMode.binary, mode, "\(t) should be binary")
         }
     }
 

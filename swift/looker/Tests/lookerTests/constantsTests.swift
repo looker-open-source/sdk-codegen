@@ -8,6 +8,7 @@
 import XCTest
 @testable import looker
 
+@available(OSX 10.15, *)
 class constantsTests: XCTestCase {
 
     override func setUp() {
