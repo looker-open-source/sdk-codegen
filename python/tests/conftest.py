@@ -41,6 +41,13 @@ def users(_test_data) -> List[Dict[str, str]]:
 def email_domain(_test_data) -> str:
     return _test_data["email_domain"]
 
+@pytest.fixture(scope="session")
+def string_content_types(_test_data) -> List[str]:
+    return _test_data["content_types"]["string"]
+
+@pytest.fixture(scope="session")
+def binary_content_types(_test_data) -> List[str]:
+    return _test_data["content_types"]["binary"]
 
 TTestData = Dict[str, Union[str, List[Dict[str, str]]]]
 
