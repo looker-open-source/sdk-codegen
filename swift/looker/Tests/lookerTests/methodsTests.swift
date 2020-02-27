@@ -120,6 +120,16 @@ class methodsTests: XCTestCase {
         _ = sdk.authSession.logout()
     }
 
+    func testEmptyResult() {
+        let spaces = try! sdk.ok(sdk.search_spaces(limit: 1))
+        XCTAssertEqual(1, spaces.count)
+        let id = (spaces.first?.id!)!
+        var space = try? sdk.ok(sdk.space(id))
+        XCTAssertEqual(id, space?.id, "Found my space")
+        space = try? sdk.ok(sdk.space("IDON'TEXIST"))
+        XCTAssertNil(space, "Space should be nil")
+    }
+    
     /// generic list getter testing function
     func listGetter<TAll, TId, TEntity> (
         lister: () -> SDKResponse<[TAll], SDKError>,
