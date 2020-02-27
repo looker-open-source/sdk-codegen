@@ -111,26 +111,29 @@ protocol ISDKErrorResponse {
 }
 
 protocol ISDKError: LocalizedError {
+    var code: Int {get set }
     var message: String? { get set }
     var documentation_url: String? { get set }
 }
 
 /// Common ancestor for all error responses
 struct SDKError: ISDKError, Codable {
+    var code: Int = 0
     var message : String?
     var documentation_url: String?
     private var reason: String?
     private var suggestion: String?
     private var help: String?
-    
+
     init() { }
-    init(_ message: String, documentation_url: String? = "", reason: String? = "", suggestion: String? = "", help: String? = "") {
+    init(_ message: String, code: Int = 0, documentation_url: String? = "", reason: String? = "", suggestion: String? = "", help: String? = "") {
+        self.code = code
         self.message = message
         self.reason = reason
         self.suggestion = suggestion
         self.help = help
     }
-    
+
     /// A localized message describing the error
     var errorDescription: String? { get { return self.message } }
 
@@ -177,7 +180,7 @@ protocol IRequestInit {
     var method: HttpMethod { get set }
     /** Redirect processing for request. optional */
     var redirect: Any? { get set }
-    
+
     /** http.Agent instance, allows custom proxy, certificate etc. */
     var agent: Agent? { get set }
     /** support gzip/deflate content encoding. false to disable */
@@ -198,12 +201,12 @@ typealias Authenticator = (_ req: URLRequest) -> URLRequest
 protocol IAuthorizer {
     var settings: IApiSettings { get set }
     var transport: ITransport { get set }
-    
+
     /** is the current session authenticated? */
     func isAuthenticated() -> Bool
-    
+
     func authenticate(_ props: URLRequest) -> URLRequest
-    
+
     func logout() -> Bool
 }
 
@@ -282,9 +285,9 @@ func encodeParams(_ params: Values?) -> String {
 
 /** constructs the path argument including any optional query parameters
  @param path the base path of the request
- 
+
  @param params optional collection of query parameters to encode and append to the path
- 
+
  */
 func addQueryParams(_ path: String, _ params: Values?) -> String {
     if (params == nil || params?.count == 0) {
