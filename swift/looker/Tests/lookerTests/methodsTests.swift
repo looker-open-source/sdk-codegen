@@ -23,7 +23,7 @@ class methodsTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-    
+
     func simpleQuery() -> WriteQuery {
         return WriteQuery(
             model: "system__activity",
@@ -85,7 +85,7 @@ class methodsTests: XCTestCase {
         } else {
             XCTAssertTrue(false, "Couldn't cast data from jsonData")
         }
-                
+
         } catch {
             print(error)
         }
@@ -98,19 +98,6 @@ class methodsTests: XCTestCase {
         _ = sdk.authSession.logout()
     }
 
-    func testOkThrowsError() {
-        let msg = "Not found"
-        
-        var lookml = try? sdk.ok(sdk.lookml_model("no such model"))
-        XCTAssertNil(lookml)
-        do {
-            lookml = try sdk.ok(sdk.lookml_model("no such model"))
-            XCTAssertFalse(true, "This line should not be reached")
-        } catch {
-            XCTAssertEqual(error.localizedDescription, msg)
-        }
-    }
-    
     func testUserSearch() {
         let list = try? sdk.ok(sdk.search_users(
             first_name:"%",
@@ -120,16 +107,20 @@ class methodsTests: XCTestCase {
         _ = sdk.authSession.logout()
     }
 
-    func testEmptyResult() {
-        let spaces = try! sdk.ok(sdk.search_spaces(limit: 1))
-        XCTAssertEqual(1, spaces.count)
-        let id = (spaces.first?.id!)!
-        var space = try? sdk.ok(sdk.space(id))
-        XCTAssertEqual(id, space?.id, "Found my space")
-        space = try? sdk.ok(sdk.space("IDON'TEXIST"))
-        XCTAssertNil(space, "Space should be nil")
+    func testErrorsAreHandled() {
+        do {
+            let missing1 = try sdk.ok(sdk.space("can't find me!"))
+            XCTAssertNil(missing1)
+            XCTAssertTrue(false, "We should never get here!")
+        } catch {
+            let sdkError = error as! SDKError
+            XCTAssertEqual(404, sdkError.code)
+            XCTAssertTrue(sdkError.localizedDescription.contains("Not found"), sdkError.localizedDescription)
+        }
+        let missing2 = try? sdk.ok(sdk.space("IDON'TEXIST"))
+        XCTAssertNil(missing2, "Space should be nil")
     }
-    
+
     /// generic list getter testing function
     func listGetter<TAll, TId, TEntity> (
         lister: () -> SDKResponse<[TAll], SDKError>,
@@ -185,6 +176,7 @@ class methodsTests: XCTestCase {
         XCTAssertEqual("", result, result)
     }
 
+    // for >7.2
 //    func testDashboardThumbnail() {
 //        let settings = config.config
 //        let xp = BaseTransport(settings)
@@ -193,7 +185,7 @@ class methodsTests: XCTestCase {
 //        let svg = sdk.ok(sdk.vector_thumbnail("dashboard", "1"))
 //        XCTAssertTrue(svg.contains("<svg"))
 //    }
-    
+
     func mimeType(_ data: Data) -> String {
 
 //        var sig = [UInt8](repeating: 0, count: 20)
@@ -220,7 +212,7 @@ class methodsTests: XCTestCase {
             return "application/octet-stream"
         }
     }
-    
+
     func testImageDownload() {
         let body = simpleQuery()
         let query = try! sdk.ok(sdk.create_query(body))
@@ -232,8 +224,8 @@ class methodsTests: XCTestCase {
         XCTAssertNotEqual(png, jpg, "We should not be getting the same image")
         XCTAssertEqual(mimeType(jpg), "image/jpeg should be returned not image/png. Smells like an API bug, not SDK issue")
     }
-    
-    
+
+
     func testGetAllDashboards() {
         let result = listGetter(
             lister: { sdk.all_dashboards()},
