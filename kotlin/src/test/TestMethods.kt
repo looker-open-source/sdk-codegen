@@ -191,16 +191,17 @@ class TestMethods {
         }
     }
 
-    @test
-    fun testThumbnailDownload() {
-        val dashboards = sdk.ok<Array<DashboardBase>>(sdk.all_dashboards("id"))
-        dashboards.forEach { d ->
-            d.id?.let { id ->
-                val svg = sdk.ok<String>(sdk.vector_thumbnail("dashboard", id))
-                assertTrue(svg.contains("<svg"), "Dashboard ${id} should have '<svg'")
-            }
-        }
-    }
+    // For >7.2
+//    @test
+//    fun testThumbnailDownload() {
+//        val dashboards = sdk.ok<Array<DashboardBase>>(sdk.all_dashboards("id"))
+//        dashboards.forEach { d ->
+//            d.id?.let { id ->
+//                val svg = sdk.ok<String>(sdk.vector_thumbnail("dashboard", id))
+//                assertTrue(svg.contains("<svg"), "Dashboard ${id} should have '<svg'")
+//            }
+//        }
+//    }
 
     @ExperimentalUnsignedTypes
     @test

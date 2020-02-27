@@ -155,7 +155,6 @@ class BaseTransport : ITransport  {
 @available(OSX 10.12, *)
 func processResponse<TSuccess: Codable, TError: Codable> (_ response: RequestResponse) -> SDKResponse<TSuccess,TError> {
     if let error = response.error {
-        print("Error: \(error)")
         return SDKResponse.error((error as? TError)!)
     }
 

@@ -5,6 +5,7 @@
 package com.looker.sdk
 
 import com.looker.rtl.*
+import java.io.*
 import java.util.*
 
 data class AccessToken (
@@ -20,7 +21,7 @@ data class AccessToken (
    * Number of seconds before the token expires (read-only)
    */
   var expires_in: Long? = null
-)
+) : Serializable
 
 data class ApiSession (
   /**
@@ -35,7 +36,7 @@ data class ApiSession (
    * The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)
    */
   var sudo_user_id: Long? = null
-)
+) : Serializable
 
 data class ApiVersion (
   /**
@@ -47,7 +48,7 @@ data class ApiVersion (
    * Array of versions supported by this Looker instance (read-only)
    */
   var supported_versions: Array<ApiVersionElement>? = null
-)
+) : Serializable
 
 data class ApiVersionElement (
   /**
@@ -66,7 +67,7 @@ data class ApiVersionElement (
    * Url for swagger.json for this version (read-only)
    */
   var swagger_url: UriString? = null
-)
+) : Serializable
 
 data class BackupConfiguration (
   /**
@@ -97,7 +98,7 @@ data class BackupConfiguration (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class ColorCollection (
   /**
@@ -120,7 +121,7 @@ data class ColorCollection (
    * Array of diverging palette definitions
    */
   var divergingPalettes: Array<ContinuousPalette>? = null
-)
+) : Serializable
 
 data class ColorStop (
   /**
@@ -131,7 +132,7 @@ data class ColorStop (
    * Offset in continuous palette (0 to 100)
    */
   var offset: Long? = null
-)
+) : Serializable
 
 data class ContentFavorite (
   /**
@@ -160,7 +161,7 @@ data class ContentFavorite (
    * Id of a board (read-only)
    */
   var board_id: Long? = null
-)
+) : Serializable
 
 data class ContentMeta (
   /**
@@ -211,7 +212,7 @@ data class ContentMeta (
    * Content Slug (read-only)
    */
   var slug: String? = null
-)
+) : Serializable
 
 data class ContentMetaGroupUser (
   /**
@@ -238,7 +239,7 @@ data class ContentMetaGroupUser (
    * ID of associated user (read-only)
    */
   var user_id: Long? = null
-)
+) : Serializable
 
 data class ContentValidation (
   /**
@@ -261,7 +262,7 @@ data class ContentValidation (
    * The number of explores used across all content validated (read-only)
    */
   var total_explores_validated: Long? = null
-)
+) : Serializable
 
 data class ContentValidationDashboard (
   /**
@@ -278,7 +279,7 @@ data class ContentValidationDashboard (
    * Dashboard Title
    */
   var title: String? = null
-)
+) : Serializable
 
 data class ContentValidationDashboardElement (
   /**
@@ -337,7 +338,7 @@ data class ContentValidationDashboardElement (
    * Type
    */
   var type: String? = null
-)
+) : Serializable
 
 data class ContentValidationDashboardFilter (
   /**
@@ -376,7 +377,7 @@ data class ContentValidationDashboardFilter (
    * Dimension of filter (required if type = field)
    */
   var dimension: String? = null
-)
+) : Serializable
 
 data class ContentValidationError (
   /**
@@ -399,7 +400,7 @@ data class ContentValidationError (
    * Whether this validation error is removable (read-only)
    */
   var removable: Boolean? = null
-)
+) : Serializable
 
 data class ContentValidationFolder (
   /**
@@ -410,7 +411,7 @@ data class ContentValidationFolder (
    * Unique Id (read-only)
    */
   var id: String? = null
-)
+) : Serializable
 
 data class ContentValidationLook (
   /**
@@ -423,7 +424,7 @@ data class ContentValidationLook (
   var title: String? = null,
   var space: ContentValidationSpace? = null,
   var folder: ContentValidationFolder? = null
-)
+) : Serializable
 
 data class ContentValidationSpace (
   /**
@@ -434,7 +435,7 @@ data class ContentValidationSpace (
    * Unique Id (read-only)
    */
   var id: String? = null
-)
+) : Serializable
 
 data class ContentValidatorError (
   var look: ContentValidationLook? = null,
@@ -449,7 +450,7 @@ data class ContentValidatorError (
    * An id unique to this piece of content for this validation run (read-only)
    */
   var id: String? = null
-)
+) : Serializable
 
 data class ContentView (
   /**
@@ -496,7 +497,7 @@ data class ContentView (
    * Week start date for the view and favorite count during that given week (read-only)
    */
   var start_of_week_date: String? = null
-)
+) : Serializable
 
 data class ContinuousPalette (
   /**
@@ -515,7 +516,7 @@ data class ContinuousPalette (
    * Array of ColorStops in the palette
    */
   var stops: Array<ColorStop>? = null
-)
+) : Serializable
 
 data class CreateDashboardFilter (
   /**
@@ -578,7 +579,7 @@ data class CreateDashboardFilter (
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
   var ui_config: Map<String,Any>? = null
-)
+) : Serializable
 
 data class CreateDashboardRenderTask (
   /**
@@ -589,7 +590,7 @@ data class CreateDashboardRenderTask (
    * Dashboard layout style: single_column or tiled
    */
   var dashboard_style: String? = null
-)
+) : Serializable
 
 data class CreateFolder (
   /**
@@ -600,7 +601,7 @@ data class CreateFolder (
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
   var parent_id: String
-)
+) : Serializable
 
 data class CreateQueryTask (
   /**
@@ -631,7 +632,7 @@ data class CreateQueryTask (
    * Id of dashboard associated with query.
    */
   var dashboard_id: String? = null
-)
+) : Serializable
 
 data class CreateSpace (
   /**
@@ -642,7 +643,7 @@ data class CreateSpace (
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
   var parent_id: String
-)
+) : Serializable
 
 data class CredentialsApi3 (
   /**
@@ -673,7 +674,7 @@ data class CredentialsApi3 (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class CredentialsEmail (
   /**
@@ -716,7 +717,7 @@ data class CredentialsEmail (
    * Link to get this user (read-only)
    */
   var user_url: UriString? = null
-)
+) : Serializable
 
 data class CredentialsEmbed (
   /**
@@ -755,7 +756,7 @@ data class CredentialsEmbed (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class CredentialsGoogle (
   /**
@@ -794,7 +795,7 @@ data class CredentialsGoogle (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class CredentialsLDAP (
   /**
@@ -833,7 +834,7 @@ data class CredentialsLDAP (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class CredentialsLookerOpenid (
   /**
@@ -872,7 +873,7 @@ data class CredentialsLookerOpenid (
    * Link to get this user (read-only)
    */
   var user_url: UriString? = null
-)
+) : Serializable
 
 data class CredentialsOIDC (
   /**
@@ -907,7 +908,7 @@ data class CredentialsOIDC (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class CredentialsSaml (
   /**
@@ -942,7 +943,7 @@ data class CredentialsSaml (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class CredentialsTotp (
   /**
@@ -969,7 +970,7 @@ data class CredentialsTotp (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class CustomWelcomeEmail (
   /**
@@ -984,7 +985,7 @@ data class CustomWelcomeEmail (
    * The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
    */
   var content: String? = null
-)
+) : Serializable
 
 data class Dashboard (
   /**
@@ -1139,7 +1140,7 @@ data class Dashboard (
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */
   var preferred_viewer: String? = null
-)
+) : Serializable
 
 data class DashboardBase (
   /**
@@ -1193,7 +1194,7 @@ data class DashboardBase (
    * Id of User (read-only)
    */
   var user_id: Long? = null
-)
+) : Serializable
 
 data class DashboardElement (
   /**
@@ -1291,7 +1292,7 @@ data class DashboardElement (
    * Count of Alerts associated to a dashboard element (read-only)
    */
   var alert_count: Long? = null
-)
+) : Serializable
 
 data class DashboardFilter (
   /**
@@ -1358,7 +1359,7 @@ data class DashboardFilter (
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
   var ui_config: Map<String,Any>? = null
-)
+) : Serializable
 
 data class DashboardLayout (
   /**
@@ -1401,7 +1402,7 @@ data class DashboardLayout (
    * Components (read-only)
    */
   var dashboard_layout_components: Array<DashboardLayoutComponent>? = null
-)
+) : Serializable
 
 data class DashboardLayoutComponent (
   /**
@@ -1452,7 +1453,7 @@ data class DashboardLayoutComponent (
    * Visualization type, extracted from a query's vis_config (read-only)
    */
   var vis_type: String? = null
-)
+) : Serializable
 
 data class DashboardLookml (
   /**
@@ -1463,7 +1464,7 @@ data class DashboardLookml (
    * lookml of UDD (read-only)
    */
   var lookml: String? = null
-)
+) : Serializable
 
 data class DashboardSettings (
   /**
@@ -1494,7 +1495,7 @@ data class DashboardSettings (
    * Key color
    */
   var key_color: String? = null
-)
+) : Serializable
 
 data class DataActionForm (
   var state: DataActionUserState? = null,
@@ -1502,7 +1503,7 @@ data class DataActionForm (
    * Array of form fields. (read-only)
    */
   var fields: Array<DataActionFormField>? = null
-)
+) : Serializable
 
 data class DataActionFormField (
   /**
@@ -1541,7 +1542,7 @@ data class DataActionFormField (
    * If the form type is 'select', a list of options to be selected from. (read-only)
    */
   var options: Array<DataActionFormSelectOption>? = null
-)
+) : Serializable
 
 data class DataActionFormSelectOption (
   /**
@@ -1552,7 +1553,7 @@ data class DataActionFormSelectOption (
    * Human-readable label (read-only)
    */
   var label: String? = null
-)
+) : Serializable
 
 data class DataActionRequest (
   /**
@@ -1563,7 +1564,7 @@ data class DataActionRequest (
    * User input for any form values the data action might use.
    */
   var form_values: Map<String,Any>? = null
-)
+) : Serializable
 
 data class DataActionResponse (
   /**
@@ -1583,7 +1584,7 @@ data class DataActionResponse (
    * Optional message returned by the data action server describing the state of the action that took place. This can be used to implement custom failure messages. If a failure is related to a particular form field, the server should send back a validation error instead. The Looker web UI does not currently display any message if the action indicates 'success', but may do so in the future. (read-only)
    */
   var message: String? = null
-)
+) : Serializable
 
 data class DataActionUserState (
   /**
@@ -1594,7 +1595,7 @@ data class DataActionUserState (
    * Time in seconds until the state needs to be refreshed (read-only)
    */
   var refresh_time: Long? = null
-)
+) : Serializable
 
 data class Datagroup (
   /**
@@ -1637,7 +1638,7 @@ data class Datagroup (
    * UNIX timestamp at which this entry became triggered. Cannot be in the future.
    */
   var triggered_at: Long? = null
-)
+) : Serializable
 
 data class DBConnection (
   /**
@@ -1774,7 +1775,7 @@ data class DBConnection (
    * Is this connection created and managed by Looker (read-only)
    */
   var managed: Boolean? = null
-)
+) : Serializable
 
 data class DBConnectionBase (
   /**
@@ -1790,7 +1791,7 @@ data class DBConnectionBase (
    * SQL Runner snippets for this connection (read-only)
    */
   var snippets: Array<Snippet>? = null
-)
+) : Serializable
 
 data class DBConnectionOverride (
   /**
@@ -1841,7 +1842,7 @@ data class DBConnectionOverride (
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
   var after_connect_statements: String? = null
-)
+) : Serializable
 
 data class DBConnectionTestResult (
   /**
@@ -1864,7 +1865,7 @@ data class DBConnectionTestResult (
    * Result code of test (read-only)
    */
   var status: String? = null
-)
+) : Serializable
 
 data class Dialect (
   /**
@@ -1919,7 +1920,7 @@ data class Dialect (
    * Does the database have client SSL support settable through the JDBC string explicitly? (read-only)
    */
   var has_ssl_support: Boolean? = null
-)
+) : Serializable
 
 data class DialectInfo (
   /**
@@ -1951,7 +1952,7 @@ data class DialectInfo (
    */
   var name: String? = null,
   var supported_options: DialectInfoOptions? = null
-)
+) : Serializable
 
 data class DialectInfoOptions (
   /**
@@ -1994,7 +1995,7 @@ data class DialectInfoOptions (
    * Username is required (read-only)
    */
   var username_required: Boolean? = null
-)
+) : Serializable
 
 data class DiscretePalette (
   /**
@@ -2013,14 +2014,14 @@ data class DiscretePalette (
    * Array of colors in the palette
    */
   var colors: Array<String>? = null
-)
+) : Serializable
 
 data class EmbedSsoUrl (
   /**
    * The signed embed URL. Any modification to this string will invalidate the signature and make the URL unusable. (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class EmbedSsoUrlParams (
   /**
@@ -2075,7 +2076,7 @@ data class EmbedSsoUrlParams (
    * Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
    */
   var secret_id: Long? = null
-)
+) : Serializable
 
 data class Error (
   /**
@@ -2086,7 +2087,7 @@ data class Error (
    * Documentation link (read-only)
    */
   var documentation_url: UriString
-)
+) : Serializable
 
 data class Folder (
   /**
@@ -2161,7 +2162,7 @@ data class Folder (
    * Looks (read-only)
    */
   var looks: Array<LookWithDashboards>? = null
-)
+) : Serializable
 
 data class FolderBase (
   /**
@@ -2228,7 +2229,7 @@ data class FolderBase (
    * Operations the current user is able to perform on this object (read-only)
    */
   var can: Map<String,Boolean>? = null
-)
+) : Serializable
 
 data class GitBranch (
   /**
@@ -2299,7 +2300,7 @@ data class GitBranch (
    * The resolved ref of this branch remote. (read-only)
    */
   var remote_ref: String? = null
-)
+) : Serializable
 
 data class GitConnectionTest (
   /**
@@ -2314,7 +2315,7 @@ data class GitConnectionTest (
    * A short string, uniquely naming this test (read-only)
    */
   var id: String? = null
-)
+) : Serializable
 
 data class GitConnectionTestResult (
   /**
@@ -2333,7 +2334,7 @@ data class GitConnectionTestResult (
    * Either 'pass' or 'fail' (read-only)
    */
   var status: String? = null
-)
+) : Serializable
 
 data class GitStatus (
   /**
@@ -2352,7 +2353,7 @@ data class GitStatus (
    * Git description of the action (read-only)
    */
   var text: String? = null
-)
+) : Serializable
 
 data class Group (
   /**
@@ -2391,21 +2392,21 @@ data class Group (
    * Number of users included in this group (read-only)
    */
   var user_count: Long? = null
-)
+) : Serializable
 
 data class GroupIdForGroupInclusion (
   /**
    * Id of group (read-only)
    */
   var group_id: Long? = null
-)
+) : Serializable
 
 data class GroupIdForGroupUserInclusion (
   /**
    * Id of user (read-only)
    */
   var user_id: Long? = null
-)
+) : Serializable
 
 data class Homepage (
   /**
@@ -2456,7 +2457,7 @@ data class Homepage (
    * Whether the homepage is the primary homepage or not (read-only)
    */
   var primary_homepage: Boolean? = null
-)
+) : Serializable
 
 data class HomepageItem (
   /**
@@ -2571,7 +2572,7 @@ data class HomepageItem (
    * Number of times content has been viewed, if present (read-only)
    */
   var view_count: Long? = null
-)
+) : Serializable
 
 data class HomepageSection (
   /**
@@ -2622,7 +2623,7 @@ data class HomepageSection (
    * Description of the content found in this section.
    */
   var description: String? = null
-)
+) : Serializable
 
 data class ImportedProject (
   /**
@@ -2641,7 +2642,7 @@ data class ImportedProject (
    * Flag signifying if a dependency is remote or local (read-only)
    */
   var is_remote: Boolean? = null
-)
+) : Serializable
 
 data class Integration (
   /**
@@ -2712,7 +2713,7 @@ data class Integration (
    * Whether the integration is available to users.
    */
   var installed_delegate_oauth_targets: Array<String>? = null
-)
+) : Serializable
 
 data class IntegrationHub (
   /**
@@ -2759,7 +2760,7 @@ data class IntegrationHub (
    * The legal agreement text for this integration hub. (read-only)
    */
   var legal_agreement_text: String? = null
-)
+) : Serializable
 
 data class IntegrationParam (
   /**
@@ -2802,7 +2803,7 @@ data class IntegrationParam (
    * When present, the param represents the oauth url the user will be taken to. (read-only)
    */
   var delegate_oauth_url: String? = null
-)
+) : Serializable
 
 data class IntegrationRequiredField (
   /**
@@ -2817,7 +2818,7 @@ data class IntegrationRequiredField (
    * If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)
    */
   var all_tags: Array<String>? = null
-)
+) : Serializable
 
 data class IntegrationTestResult (
   /**
@@ -2828,7 +2829,7 @@ data class IntegrationTestResult (
    * A message representing the results of the test. (read-only)
    */
   var message: String? = null
-)
+) : Serializable
 
 data class InternalHelpResources (
   /**
@@ -2839,7 +2840,7 @@ data class InternalHelpResources (
    * If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
    */
   var enabled: Boolean? = null
-)
+) : Serializable
 
 data class InternalHelpResourcesContent (
   /**
@@ -2854,7 +2855,7 @@ data class InternalHelpResourcesContent (
    * Content to be displayed in the internal help resources page/modal
    */
   var markdown_content: String? = null
-)
+) : Serializable
 
 data class LDAPConfig (
   /**
@@ -3017,7 +3018,7 @@ data class LDAPConfig (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class LDAPConfigTestIssue (
   /**
@@ -3028,7 +3029,7 @@ data class LDAPConfigTestIssue (
    * Message describing the issue (read-only)
    */
   var message: String? = null
-)
+) : Serializable
 
 data class LDAPConfigTestResult (
   /**
@@ -3056,7 +3057,7 @@ data class LDAPConfigTestResult (
    * Link to ldap config (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class LDAPGroupRead (
   /**
@@ -3071,7 +3072,7 @@ data class LDAPGroupRead (
    * Link to ldap config (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class LDAPGroupWrite (
   /**
@@ -3086,7 +3087,7 @@ data class LDAPGroupWrite (
    * Link to ldap config (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class LDAPUser (
   /**
@@ -3129,7 +3130,7 @@ data class LDAPUser (
    * Link to ldap config (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class LDAPUserAttributeRead (
   /**
@@ -3148,7 +3149,7 @@ data class LDAPUserAttributeRead (
    * Link to ldap config (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class LDAPUserAttributeWrite (
   /**
@@ -3167,7 +3168,7 @@ data class LDAPUserAttributeWrite (
    * Link to ldap config (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class LegacyFeature (
   /**
@@ -3222,7 +3223,7 @@ data class LegacyFeature (
    * Whether this legacy feature may have been automatically disabled when upgrading to the current version. (read-only)
    */
   var has_disabled_on_upgrade: Boolean? = null
-)
+) : Serializable
 
 data class Locale (
   /**
@@ -3237,7 +3238,7 @@ data class Locale (
    * Name of Locale in English (read-only)
    */
   var english_name: String? = null
-)
+) : Serializable
 
 data class LocalizationSettings (
   /**
@@ -3248,7 +3249,7 @@ data class LocalizationSettings (
    * Localization level - strict or permissive (read-only)
    */
   var localization_level: String? = null
-)
+) : Serializable
 
 data class Look (
   /**
@@ -3370,7 +3371,7 @@ data class Look (
    * Number of times viewed in the Looker web UI (read-only)
    */
   var view_count: Long? = null
-)
+) : Serializable
 
 data class LookBasic (
   /**
@@ -3389,7 +3390,7 @@ data class LookBasic (
    * Look Title (read-only)
    */
   var title: String? = null
-)
+) : Serializable
 
 data class LookmlModel (
   /**
@@ -3424,7 +3425,7 @@ data class LookmlModel (
    * Is this model allowed to use all current and future connections
    */
   var unlimited_db_connections: Boolean? = null
-)
+) : Serializable
 
 data class LookmlModelExplore (
   /**
@@ -3560,7 +3561,7 @@ data class LookmlModelExplore (
    * An array of items describing which custom measure types are supported for creating a custom measure 'baed_on' each possible dimension type. (read-only)
    */
   var supported_measure_types: Array<LookmlModelExploreSupportedMeasureType>? = null
-)
+) : Serializable
 
 data class LookmlModelExploreAccessFilter (
   /**
@@ -3571,7 +3572,7 @@ data class LookmlModelExploreAccessFilter (
    * User attribute name (read-only)
    */
   var user_attribute: String? = null
-)
+) : Serializable
 
 data class LookmlModelExploreAlias (
   /**
@@ -3582,7 +3583,7 @@ data class LookmlModelExploreAlias (
    * Value (read-only)
    */
   var value: String? = null
-)
+) : Serializable
 
 data class LookmlModelExploreAlwaysFilter (
   /**
@@ -3593,7 +3594,7 @@ data class LookmlModelExploreAlwaysFilter (
    * Value (read-only)
    */
   var value: String? = null
-)
+) : Serializable
 
 data class LookmlModelExploreConditionallyFilter (
   /**
@@ -3604,7 +3605,7 @@ data class LookmlModelExploreConditionallyFilter (
    * Value (read-only)
    */
   var value: String? = null
-)
+) : Serializable
 
 data class LookmlModelExploreError (
   /**
@@ -3623,7 +3624,7 @@ data class LookmlModelExploreError (
    * Is this a field error (read-only)
    */
   var field_error: Boolean? = null
-)
+) : Serializable
 
 data class LookmlModelExploreField (
   /**
@@ -3820,7 +3821,7 @@ data class LookmlModelExploreField (
    * The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (read-only)
    */
   var week_start_day: String? = null
-)
+) : Serializable
 
 data class LookmlModelExploreFieldEnumeration (
   /**
@@ -3831,7 +3832,7 @@ data class LookmlModelExploreFieldEnumeration (
    * Value (read-only)
    */
   var value: String? = null
-)
+) : Serializable
 
 data class LookmlModelExploreFieldMapLayer (
   /**
@@ -3874,7 +3875,7 @@ data class LookmlModelExploreFieldMapLayer (
    * The maximum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)
    */
   var min_zoom_level: Long? = null
-)
+) : Serializable
 
 data class LookmlModelExploreFieldset (
   /**
@@ -3893,7 +3894,7 @@ data class LookmlModelExploreFieldset (
    * Array of parameters (read-only)
    */
   var parameters: Array<LookmlModelExploreField>? = null
-)
+) : Serializable
 
 data class LookmlModelExploreFieldSqlCase (
   /**
@@ -3904,7 +3905,7 @@ data class LookmlModelExploreFieldSqlCase (
    * SQL Case condition expression (read-only)
    */
   var condition: String? = null
-)
+) : Serializable
 
 data class LookmlModelExploreFieldTimeInterval (
   /**
@@ -3915,7 +3916,7 @@ data class LookmlModelExploreFieldTimeInterval (
    * The number of intervals this field represents a grouping of. (read-only)
    */
   var count: Long? = null
-)
+) : Serializable
 
 data class LookmlModelExploreJoins (
   /**
@@ -3970,7 +3971,7 @@ data class LookmlModelExploreJoins (
    * Label to display in UI selectors (read-only)
    */
   var view_label: String? = null
-)
+) : Serializable
 
 data class LookmlModelExploreSet (
   /**
@@ -3981,7 +3982,7 @@ data class LookmlModelExploreSet (
    * Value set (read-only)
    */
   var value: Array<String>? = null
-)
+) : Serializable
 
 data class LookmlModelExploreSupportedMeasureType (
   /**
@@ -3992,7 +3993,7 @@ data class LookmlModelExploreSupportedMeasureType (
    * (read-only)
    */
   var measure_types: Array<String>? = null
-)
+) : Serializable
 
 data class LookmlModelNavExplore (
   /**
@@ -4015,7 +4016,7 @@ data class LookmlModelNavExplore (
    * Label used to group explores in the navigation menus (read-only)
    */
   var group_label: String? = null
-)
+) : Serializable
 
 data class LookmlTest (
   /**
@@ -4046,7 +4047,7 @@ data class LookmlTest (
    * Line number of this test in LookML. (read-only)
    */
   var line: Long? = null
-)
+) : Serializable
 
 data class LookmlTestResult (
   /**
@@ -4081,7 +4082,7 @@ data class LookmlTestResult (
    * True if this test passsed without errors. (read-only)
    */
   var success: Boolean? = null
-)
+) : Serializable
 
 data class LookModel (
   /**
@@ -4092,7 +4093,7 @@ data class LookModel (
    * Model Label (read-only)
    */
   var label: String? = null
-)
+) : Serializable
 
 data class LookWithDashboards (
   /**
@@ -4218,7 +4219,7 @@ data class LookWithDashboards (
    * Dashboards (read-only)
    */
   var dashboards: Array<DashboardBase>? = null
-)
+) : Serializable
 
 data class LookWithQuery (
   /**
@@ -4345,7 +4346,7 @@ data class LookWithQuery (
    * Url (read-only)
    */
   var url: String? = null
-)
+) : Serializable
 
 data class Manifest (
   /**
@@ -4361,7 +4362,7 @@ data class Manifest (
    */
   var imports: Array<ImportedProject>? = null,
   var localization_settings: LocalizationSettings? = null
-)
+) : Serializable
 
 data class MergeFields (
   /**
@@ -4372,7 +4373,7 @@ data class MergeFields (
    * Field name from the source query
    */
   var source_field_name: String? = null
-)
+) : Serializable
 
 data class MergeQuery (
   /**
@@ -4415,7 +4416,7 @@ data class MergeQuery (
    * Visualization Config
    */
   var vis_config: Map<String,Any>? = null
-)
+) : Serializable
 
 data class MergeQuerySourceQuery (
   /**
@@ -4430,7 +4431,7 @@ data class MergeQuerySourceQuery (
    * Id of the query to merge
    */
   var query_id: Long? = null
-)
+) : Serializable
 
 data class ModelSet (
   /**
@@ -4458,7 +4459,7 @@ data class ModelSet (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class ModelsNotValidated (
   /**
@@ -4469,7 +4470,7 @@ data class ModelsNotValidated (
    * Project file (read-only)
    */
   var project_file_id: String? = null
-)
+) : Serializable
 
 data class OIDCConfig (
   /**
@@ -4592,7 +4593,7 @@ data class OIDCConfig (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class OIDCGroupRead (
   /**
@@ -4603,7 +4604,7 @@ data class OIDCGroupRead (
    * Looker Roles (read-only)
    */
   var roles: Array<Role>? = null
-)
+) : Serializable
 
 data class OIDCGroupWrite (
   /**
@@ -4614,7 +4615,7 @@ data class OIDCGroupWrite (
    * Looker Role Ids
    */
   var role_ids: Array<Long>? = null
-)
+) : Serializable
 
 data class OIDCUserAttributeRead (
   /**
@@ -4629,7 +4630,7 @@ data class OIDCUserAttributeRead (
    * Looker User Attributes (read-only)
    */
   var user_attributes: Array<UserAttribute>? = null
-)
+) : Serializable
 
 data class OIDCUserAttributeWrite (
   /**
@@ -4644,7 +4645,7 @@ data class OIDCUserAttributeWrite (
    * Looker User Attribute Ids
    */
   var user_attribute_ids: Array<Long>? = null
-)
+) : Serializable
 
 data class PasswordConfig (
   /**
@@ -4667,7 +4668,7 @@ data class PasswordConfig (
    * Require at least one special character
    */
   var require_special: Boolean? = null
-)
+) : Serializable
 
 data class Permission (
   /**
@@ -4686,7 +4687,7 @@ data class Permission (
    * Description (read-only)
    */
   var description: String? = null
-)
+) : Serializable
 
 data class PermissionSet (
   /**
@@ -4714,7 +4715,7 @@ data class PermissionSet (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class Project (
   /**
@@ -4785,7 +4786,7 @@ data class Project (
    * If true the project is an example project and cannot be modified (read-only)
    */
   var is_example: Boolean? = null
-)
+) : Serializable
 
 data class ProjectError (
   /**
@@ -4836,7 +4837,7 @@ data class ProjectError (
    * A version of the error message that does not contain potentially sensitive information. Suitable for situations in which messages are stored or sent to consumers outside of Looker, such as external logs. Sanitized messages will display "(?)" where sensitive information would appear in the corresponding non-sanitized message (read-only)
    */
   var sanitized_message: String? = null
-)
+) : Serializable
 
 data class ProjectFile (
   /**
@@ -4872,7 +4873,7 @@ data class ProjectFile (
    */
   var editable: Boolean? = null,
   var git_status: GitStatus? = null
-)
+) : Serializable
 
 data class ProjectValidation (
   /**
@@ -4891,7 +4892,7 @@ data class ProjectValidation (
    * Duration of project validation in seconds (read-only)
    */
   var computation_time: Float? = null
-)
+) : Serializable
 
 data class ProjectValidationCache (
   /**
@@ -4914,7 +4915,7 @@ data class ProjectValidationCache (
    * If true, the cached project validation results are no longer accurate because the project has changed since the cached results were calculated (read-only)
    */
   var stale: Boolean? = null
-)
+) : Serializable
 
 data class ProjectWorkspace (
   /**
@@ -4942,7 +4943,7 @@ data class ProjectWorkspace (
    * The lookml syntax used by all files in this project (read-only)
    */
   var lookml_type: String? = null
-)
+) : Serializable
 
 data class Query (
   /**
@@ -5053,7 +5054,7 @@ data class Query (
    * Has Table Calculations (read-only)
    */
   var has_table_calculations: Boolean? = null
-)
+) : Serializable
 
 data class QueryTask (
   /**
@@ -5129,7 +5130,7 @@ data class QueryTask (
    * The data format of the query results. (read-only)
    */
   var result_format: String? = null
-)
+) : Serializable
 
 data class RenderTask (
   /**
@@ -5208,7 +5209,7 @@ data class RenderTask (
    * Output width in pixels (read-only)
    */
   var width: Long? = null
-)
+) : Serializable
 
 data class RepositoryCredential (
   /**
@@ -5243,7 +5244,7 @@ data class RepositoryCredential (
    * Whether the credentials have been configured for the Git Repository. (read-only)
    */
   var is_configured: Boolean? = null
-)
+) : Serializable
 
 data class ResultMakerFilterables (
   /**
@@ -5262,7 +5263,7 @@ data class ResultMakerFilterables (
    * array of dashboard_filter_name: and field: objects. (read-only)
    */
   var listen: Array<ResultMakerFilterablesListen>? = null
-)
+) : Serializable
 
 data class ResultMakerFilterablesListen (
   /**
@@ -5273,7 +5274,7 @@ data class ResultMakerFilterablesListen (
    * The name of the field in the filterable to filter with the value of the dashboard filter.
    */
   var field: String? = null
-)
+) : Serializable
 
 data class ResultMakerWithIdVisConfigAndDynamicFields (
   /**
@@ -5309,7 +5310,7 @@ data class ResultMakerWithIdVisConfigAndDynamicFields (
    * Vis config of the constituent Query, or Merge Query. (read-only)
    */
   var vis_config: Map<String,Any>? = null
-)
+) : Serializable
 
 data class Role (
   /**
@@ -5342,7 +5343,7 @@ data class Role (
    * Link to get list of users with this role (read-only)
    */
   var users_url: UriString? = null
-)
+) : Serializable
 
 data class RunningQueries (
   /**
@@ -5417,7 +5418,7 @@ data class RunningQueries (
    * SQL text of the query as run (read-only)
    */
   var sql: String? = null
-)
+) : Serializable
 
 data class SamlConfig (
   /**
@@ -5540,7 +5541,7 @@ data class SamlConfig (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class SamlGroupRead (
   /**
@@ -5555,7 +5556,7 @@ data class SamlGroupRead (
    * Link to saml config (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class SamlGroupWrite (
   /**
@@ -5570,7 +5571,7 @@ data class SamlGroupWrite (
    * Link to saml config (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class SamlMetadataParseResult (
   /**
@@ -5589,7 +5590,7 @@ data class SamlMetadataParseResult (
    * Identify Provider Certificate (read-only)
    */
   var idp_cert: String? = null
-)
+) : Serializable
 
 data class SamlUserAttributeRead (
   /**
@@ -5608,7 +5609,7 @@ data class SamlUserAttributeRead (
    * Link to saml config (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class SamlUserAttributeWrite (
   /**
@@ -5627,7 +5628,7 @@ data class SamlUserAttributeWrite (
    * Link to saml config (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class ScheduledPlan (
   /**
@@ -5759,7 +5760,7 @@ data class ScheduledPlan (
    * Operations the current user is able to perform on this object (read-only)
    */
   var can: Map<String,Boolean>? = null
-)
+) : Serializable
 
 data class ScheduledPlanDestination (
   /**
@@ -5806,7 +5807,7 @@ data class ScheduledPlanDestination (
    * Optional message to be included in scheduled emails
    */
   var message: String? = null
-)
+) : Serializable
 
 data class Session (
   /**
@@ -5869,7 +5870,7 @@ data class Session (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class SessionConfig (
   /**
@@ -5896,7 +5897,7 @@ data class SessionConfig (
    * Track location of session when user logs in.
    */
   var track_session_location: Boolean? = null
-)
+) : Serializable
 
 data class Snippet (
   /**
@@ -5911,7 +5912,7 @@ data class Snippet (
    * SQL text of the snippet (read-only)
    */
   var sql: String? = null
-)
+) : Serializable
 
 data class Space (
   /**
@@ -5986,7 +5987,7 @@ data class Space (
    * Looks (read-only)
    */
   var looks: Array<LookWithDashboards>? = null
-)
+) : Serializable
 
 data class SpaceBase (
   /**
@@ -6053,7 +6054,7 @@ data class SpaceBase (
    * Operations the current user is able to perform on this object (read-only)
    */
   var can: Map<String,Boolean>? = null
-)
+) : Serializable
 
 data class SqlQuery (
   /**
@@ -6102,7 +6103,7 @@ data class SqlQuery (
    * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
    */
   var vis_config: Map<String,Any>? = null
-)
+) : Serializable
 
 data class SqlQueryCreate (
   /**
@@ -6125,7 +6126,7 @@ data class SqlQueryCreate (
    * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
    */
   var vis_config: Map<String,Any>? = null
-)
+) : Serializable
 
 data class Theme (
   /**
@@ -6149,7 +6150,7 @@ data class Theme (
    */
   var name: String? = null,
   var settings: ThemeSettings? = null
-)
+) : Serializable
 
 data class ThemeSettings (
   /**
@@ -6212,7 +6213,7 @@ data class ThemeSettings (
    * Warning button color
    */
   var warn_button_color: String? = null
-)
+) : Serializable
 
 data class Timezone (
   /**
@@ -6227,7 +6228,7 @@ data class Timezone (
    * Timezone group (e.g Common, Other, etc.) (read-only)
    */
   var group: String? = null
-)
+) : Serializable
 
 data class UpdateFolder (
   /**
@@ -6238,7 +6239,7 @@ data class UpdateFolder (
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
   var parent_id: String? = null
-)
+) : Serializable
 
 data class UpdateSpace (
   /**
@@ -6249,7 +6250,7 @@ data class UpdateSpace (
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
   var parent_id: String? = null
-)
+) : Serializable
 
 data class User (
   /**
@@ -6367,7 +6368,7 @@ data class User (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class UserAttribute (
   /**
@@ -6418,7 +6419,7 @@ data class UserAttribute (
    * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
    */
   var hidden_value_domain_whitelist: String? = null
-)
+) : Serializable
 
 data class UserAttributeGroupValue (
   /**
@@ -6449,7 +6450,7 @@ data class UserAttributeGroupValue (
    * Value of user attribute for group (read-only)
    */
   var value: String? = null
-)
+) : Serializable
 
 data class UserAttributeWithValue (
   /**
@@ -6496,7 +6497,7 @@ data class UserAttributeWithValue (
    * If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
    */
   var hidden_value_domain_whitelist: String? = null
-)
+) : Serializable
 
 data class UserLoginLockout (
   /**
@@ -6539,7 +6540,7 @@ data class UserLoginLockout (
    * Time when lockout was triggered (read-only)
    */
   var lockout_at: Date? = null
-)
+) : Serializable
 
 data class UserPublic (
   /**
@@ -6570,7 +6571,7 @@ data class UserPublic (
    * Link to get this item (read-only)
    */
   var url: UriString? = null
-)
+) : Serializable
 
 data class ValidationError (
   /**
@@ -6585,7 +6586,7 @@ data class ValidationError (
    * Documentation link (read-only)
    */
   var documentation_url: UriString
-)
+) : Serializable
 
 data class ValidationErrorDetail (
   /**
@@ -6604,7 +6605,7 @@ data class ValidationErrorDetail (
    * Documentation link (read-only)
    */
   var documentation_url: UriString
-)
+) : Serializable
 
 data class WelcomeEmailTest (
   /**
@@ -6615,7 +6616,7 @@ data class WelcomeEmailTest (
    * The content that will be sent as part of a custom welcome email
    */
   var content: String? = null
-)
+) : Serializable
 
 data class WhitelabelConfiguration (
   /**
@@ -6666,7 +6667,7 @@ data class WhitelabelConfiguration (
    * Boolean to toggle links to Looker in emails
    */
   var allow_looker_links: Boolean? = null
-)
+) : Serializable
 
 data class Workspace (
   /**
@@ -6681,7 +6682,7 @@ data class Workspace (
    * The local state of each project in the workspace (read-only)
    */
   var projects: Array<Project>? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for ApiSession
@@ -6691,7 +6692,7 @@ data class WriteApiSession (
    * The id of active workspace for this session
    */
   var workspace_id: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for BackupConfiguration
@@ -6717,7 +6718,7 @@ data class WriteBackupConfiguration (
    * (Write-Only) AWS S3 secret used for custom-s3 backups
    */
   var custom_s3_secret: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for ColorCollection
@@ -6739,7 +6740,7 @@ data class WriteColorCollection (
    * Array of diverging palette definitions
    */
   var divergingPalettes: Array<ContinuousPalette>? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for ContentFavorite
@@ -6754,7 +6755,7 @@ data class WriteContentFavorite (
    */
   var content_metadata_id: Long? = null,
   var dashboard: WriteDashboardBase? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for ContentMeta
@@ -6764,7 +6765,7 @@ data class WriteContentMeta (
    * Whether content inherits its access levels from parent
    */
   var inherits: Boolean? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for CreateDashboardFilter
@@ -6822,7 +6823,7 @@ data class WriteCreateDashboardFilter (
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
   var ui_config: Map<String,Any>? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for CreateQueryTask
@@ -6852,7 +6853,7 @@ data class WriteCreateQueryTask (
    * Id of dashboard associated with query.
    */
   var dashboard_id: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for CredentialsEmail
@@ -6866,7 +6867,7 @@ data class WriteCredentialsEmail (
    * Force the user to change their password upon their next login
    */
   var forced_password_reset_at_next_login: Boolean? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for CustomWelcomeEmail
@@ -6880,7 +6881,7 @@ data class WriteCustomWelcomeEmail (
    * The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
    */
   var content: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for Dashboard
@@ -6965,7 +6966,7 @@ data class WriteDashboard (
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */
   var preferred_viewer: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for DashboardBase
@@ -6973,7 +6974,7 @@ data class WriteDashboard (
 data class WriteDashboardBase (
   var space: WriteSpaceBase? = null,
   var folder: WriteFolderBase? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for DashboardElement
@@ -7038,7 +7039,7 @@ data class WriteDashboardElement (
    * Type
    */
   var type: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for DashboardFilter
@@ -7092,7 +7093,7 @@ data class WriteDashboardFilter (
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
   var ui_config: Map<String,Any>? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for DashboardLayout
@@ -7118,7 +7119,7 @@ data class WriteDashboardLayout (
    * Width
    */
   var width: Long? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for DashboardLayoutComponent
@@ -7148,7 +7149,7 @@ data class WriteDashboardLayoutComponent (
    * Height
    */
   var height: Long? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for Datagroup
@@ -7162,7 +7163,7 @@ data class WriteDatagroup (
    * UNIX timestamp at which this entry became triggered. Cannot be in the future.
    */
   var triggered_at: Long? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for DBConnection
@@ -7265,7 +7266,7 @@ data class WriteDBConnection (
    */
   var after_connect_statements: String? = null,
   var pdt_context_override: WriteDBConnectionOverride? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for DBConnectionOverride
@@ -7315,7 +7316,7 @@ data class WriteDBConnectionOverride (
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
   var after_connect_statements: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for FolderBase
@@ -7329,7 +7330,7 @@ data class WriteFolderBase (
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
   var parent_id: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for GitBranch
@@ -7343,7 +7344,7 @@ data class WriteGitBranch (
    * The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
    */
   var ref: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for Group
@@ -7357,7 +7358,7 @@ data class WriteGroup (
    * Name of group
    */
   var name: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for Homepage
@@ -7379,7 +7380,7 @@ data class WriteHomepage (
    * Title of homepage
    */
   var title: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for HomepageItem
@@ -7437,7 +7438,7 @@ data class WriteHomepageItem (
    * Whether the custom url should be used instead of the content url, if the item is associated with content
    */
   var use_custom_url: Boolean? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for HomepageSection
@@ -7463,7 +7464,7 @@ data class WriteHomepageSection (
    * Description of the content found in this section.
    */
   var description: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for Integration
@@ -7481,7 +7482,7 @@ data class WriteIntegration (
    * Whether the integration is available to users.
    */
   var installed_delegate_oauth_targets: Array<String>? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for IntegrationHub
@@ -7495,7 +7496,7 @@ data class WriteIntegrationHub (
    * (Write-Only) An authorization key that will be sent to the integration hub on every request.
    */
   var authorization_token: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for InternalHelpResources
@@ -7505,7 +7506,7 @@ data class WriteInternalHelpResources (
    * If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
    */
   var enabled: Boolean? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for InternalHelpResourcesContent
@@ -7519,7 +7520,7 @@ data class WriteInternalHelpResourcesContent (
    * Content to be displayed in the internal help resources page/modal
    */
   var markdown_content: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for LDAPConfig
@@ -7649,7 +7650,7 @@ data class WriteLDAPConfig (
    * (Optional) Name of user record objectclass used for finding user during login id
    */
   var user_objectclass: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for LegacyFeature
@@ -7659,7 +7660,7 @@ data class WriteLegacyFeature (
    * Whether this feature has been enabled by a user
    */
   var enabled_locally: Boolean? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for LookmlModel
@@ -7681,7 +7682,7 @@ data class WriteLookmlModel (
    * Is this model allowed to use all current and future connections
    */
   var unlimited_db_connections: Boolean? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for LookWithQuery
@@ -7726,7 +7727,7 @@ data class WriteLookWithQuery (
    */
   var user_id: Long? = null,
   var query: WriteQuery? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for MergeQuery
@@ -7760,7 +7761,7 @@ data class WriteMergeQuery (
    * Visualization Config
    */
   var vis_config: Map<String,Any>? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for ModelSet
@@ -7771,7 +7772,7 @@ data class WriteModelSet (
    * Name of ModelSet
    */
   var name: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for OIDCConfig
@@ -7861,7 +7862,7 @@ data class WriteOIDCConfig (
    * OpenID Provider User Information Url
    */
   var userinfo_endpoint: UriString? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for PasswordConfig
@@ -7883,7 +7884,7 @@ data class WritePasswordConfig (
    * Require at least one special character
    */
   var require_special: Boolean? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for PermissionSet
@@ -7894,7 +7895,7 @@ data class WritePermissionSet (
    */
   var name: String? = null,
   var permissions: Array<String>? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for Project
@@ -7952,7 +7953,7 @@ data class WriteProject (
    * Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
    */
   var allow_warnings: Boolean? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for Query
@@ -8038,7 +8039,7 @@ data class WriteQuery (
    * Query Timezone
    */
   var query_timezone: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for RepositoryCredential
@@ -8056,14 +8057,14 @@ data class WriteRepositoryCredential (
    * Public deploy key for SSH authentication.
    */
   var ssh_public_key: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields
  */
 data class WriteResultMakerWithIdVisConfigAndDynamicFields (
   var query: WriteQuery? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for Role
@@ -8083,7 +8084,7 @@ data class WriteRole (
    * (Write-Only) Id of model set
    */
   var model_set_id: Long? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for SamlConfig
@@ -8173,7 +8174,7 @@ data class WriteSamlConfig (
    * Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
    */
   var bypass_login_page: Boolean? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for ScheduledPlan
@@ -8279,7 +8280,7 @@ data class WriteScheduledPlan (
    * Whether or not to expand table vis to full length
    */
   var long_tables: Boolean? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for SessionConfig
@@ -8305,7 +8306,7 @@ data class WriteSessionConfig (
    * Track location of session when user logs in.
    */
   var track_session_location: Boolean? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for SpaceBase
@@ -8319,7 +8320,7 @@ data class WriteSpaceBase (
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
   var parent_id: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for Theme
@@ -8338,7 +8339,7 @@ data class WriteTheme (
    */
   var name: String? = null,
   var settings: ThemeSettings? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for User
@@ -8377,7 +8378,7 @@ data class WriteUser (
    * Per user dictionary of undocumented state information owned by the Looker UI.
    */
   var ui_state: Map<String,Any>? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for UserAttribute
@@ -8415,7 +8416,7 @@ data class WriteUserAttribute (
    * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
    */
   var hidden_value_domain_whitelist: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for UserAttributeWithValue
@@ -8425,7 +8426,7 @@ data class WriteUserAttributeWithValue (
    * Value of attribute for user
    */
   var value: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for WelcomeEmailTest
@@ -8435,7 +8436,7 @@ data class WriteWelcomeEmailTest (
    * The content that will be sent as part of a custom welcome email
    */
   var content: String? = null
-)
+) : Serializable
 
 /**
  * Dynamically generated writeable type for WhitelabelConfiguration
@@ -8473,4 +8474,4 @@ data class WriteWhitelabelConfiguration (
    * Boolean to toggle links to Looker in emails
    */
   var allow_looker_links: Boolean? = null
-)
+) : Serializable

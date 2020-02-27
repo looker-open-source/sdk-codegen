@@ -55,7 +55,7 @@ export class KotlinGen extends CodeGen {
   propDelimiter = ',\n'
 
   indentStr = '  '
-  endTypeStr = '\n)'
+  endTypeStr = '\n) : Serializable'
   needsRequestTypes = false
   willItStream = true
 
@@ -129,6 +129,7 @@ class ${this.sdkClassName()}Stream(authSession: UserSession) : APIMethods(authSe
 package com.looker.sdk${this.apiNamespace()}
 
 import com.looker.rtl.*
+import java.io.*
 import java.util.*
 `
   }
