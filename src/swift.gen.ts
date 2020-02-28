@@ -142,10 +142,6 @@ import Foundation
         + `${indent}var ${this.reserve(property.name)}: ${property.type.name}${optional}`
     }
     const type = this.typeMap(property.type)
-    // TODO fix this HORRIBLE hack once our API JSON results to CORRECTLY represent strings in payloads
-    // let variantHack = type.name
-    // let low = property.name.toLowerCase()
-    // if (type.name === 'String' && (low === "id" || low.endsWith("_id"))) variantHack = 'Variant'
     return this.commentHeader(indent, this.describeProperty(property))
       + `${indent}var ${this.reserve(property.name)}: ${type.name}${optional}`
   }

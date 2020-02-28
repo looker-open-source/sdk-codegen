@@ -69,7 +69,7 @@ class TestTransport {
 
     @test
     fun testEncodeParam() {
-        val today = ZonedDateTime.parse("2020-01-01T14:48:00.00Z", ISO_OFFSET_DATE_TIME)
+        val today = ZonedDateTime("2020-01-01T14:48:00.00Z")
         assertEquals("2020-01-01T14%3A48%3A00.000Z", encodeParam(today))
         assertEquals("foo%2Fbar", encodeParam("foo%2Fbar"))
         assertEquals("foo%2Fbar", encodeParam("foo/bar"))

@@ -59,6 +59,12 @@ const me40 = await sdk.ok(sdk.me())
 const me31 = await sdk.ok(sdk31.me()) // or sdk31.ok(sdk31.me())
 ```
 
+## Automatic URL encoding for input values
+
+TL;DR: don't URL encode your inputs because the SDKs will automatically handle it.
+
+All SDKs URL encode (also known as [percent encoding](https://en.wikipedia.org/wiki/Percent-encoding)) input values for passing to the API endpoints automatically. Furthermore, except for Swift, which has problematic URL decoding support, the other SDKs will avoid double-encoding inputs that may already be encoded. 
+
 ## Using existing, pre-generated SDKs
 
 When a specific language SDK has been developed, Looker makes that SDK available using the standard package manager for by that platform. Currently, there are two client language SDKs Looker has deployed to package managers. If you want to use our Python or Node/Typescript/Javascript SDKs, you don't need to run the generator in this repository at all. You can add it using `pip` or `node/yarn` and start writing your Looker SDK application.

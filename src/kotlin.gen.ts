@@ -222,9 +222,7 @@ import java.time.*
     let encodings: string = ''
     if (method.pathParams.length > 0) {
       for (const param of method.pathParams) {
-        if (param.doEncode()) {
-          encodings += `${bump}${param.name} = encodeParam(${param.name})\n`
-        }
+        encodings += `${bump}val path_${param.name} = encodeParam(${param.name})\n`
       }
     }
     return encodings
@@ -265,7 +263,7 @@ import java.time.*
 
   httpPath(path: string, prefix?: string) {
     prefix = prefix || ''
-    if (path.indexOf('{') >= 0) return '"' + path.replace(/{/gi, '${' + prefix) + '"'
+    if (path.indexOf('{') >= 0) return '"' + path.replace(/{/gi, '${path_' + prefix) + '"'
     return `"${path}"`
   }
 
@@ -280,7 +278,10 @@ import java.time.*
         hash.push(`"${arg}" to ${arg}`)
       }
     }
-    return `\n${indent}mapOf(${hash.join(this.argDelimiter)})`
+    let bump = this.bumper(indent)
+    let argBump = this.bumper(bump)
+    const argWrapper = `,\n ${argBump}`
+    return `\n${bump}mapOf(${hash.join(argWrapper)})`
   }
 
   // @ts-ignore
@@ -328,7 +329,7 @@ import java.time.*
     const args = this.httpArgs(bump, method)
     // TODO don't currently need these for Kotlin
     // const errors = this.errorResponses(indent, method)
-    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
+    return `${bump}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
   }
 
   streamCall(indent: string, method: IMethod) {
@@ -337,7 +338,7 @@ import java.time.*
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     // const errors = this.errorResponses(indent, method)
-    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<ByteArray>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
+    return `${bump}return ${this.it(method.httpMethod.toLowerCase())}<ByteArray>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
   }
 
   summary(indent: string, text: string | undefined) {
@@ -400,8 +401,8 @@ import java.time.*
       'boolean': {name: 'Boolean', default: mt},
       'uri': {name: 'UriString', default: mt},
       'url': {name: 'UrlString', default: mt},
-      'datetime': {name: 'ZonedDateTime', default: mt}, // TODO is there a default expression for datetime?
-      'date': {name: 'ZonedDateTime', default: mt}, // TODO is there a default expression for date?
+      'datetime': {name: 'Date', default: mt},
+      'date': {name: 'Date', default: mt},
       'object': {name: 'Any', default: mt},
       'void': {name: 'Void', default: mt}
     }

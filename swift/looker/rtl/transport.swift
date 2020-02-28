@@ -337,12 +337,14 @@ func encodeParam(_ value: Any?) -> String {
 //        }
     }
     
-    let decoded = encoded.decodeUri()
+    // TODO haven't found a way to properly decode the input for a full round-trip so this is function
+    // always encodes its input for now
+//    let decoded = encoded.decodeUri()
     // Make concession for unencoded %s in input
-    if (encoded == decoded || encoded.contains("%")) {
-        encoded = encoded.encodeUri()
-    }
-    return encoded
+//    if (encoded == decoded || encoded.contains("%")) {
+//        encoded = encoded.encodeUri()
+//    }
+    return encoded.encodeUri()
 }
 
 func encodeParams(_ params: Values?) -> String {

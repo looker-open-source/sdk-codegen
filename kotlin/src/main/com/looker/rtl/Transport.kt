@@ -136,9 +136,15 @@ fun encodeParam(value: Any?) : String {
     } else {
         "$value"
     }
-    val decoded = URLDecoder.decode(encoded, utf8)
-    if (encoded == decoded) {
+    try {
+        val decoded = URLDecoder.decode(encoded, utf8)
+        if (encoded == decoded) {
+            encoded = URLEncoder.encode(encoded, utf8)
+        }
+    } catch (e: IllegalArgumentException) {
         encoded = URLEncoder.encode(encoded, utf8)
+    } catch (e: Exception) {
+        throw e
     }
     return encoded
 }

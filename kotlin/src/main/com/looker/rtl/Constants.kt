@@ -26,6 +26,9 @@
 
 package com.looker.rtl
 
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+
 const val ENVIRONMENT_PREFIX = "LOOKERSDK"
 const val LOOKER_VERSION = "7.2"
 const val API_VERSION = "4.0"
@@ -100,4 +103,8 @@ fun responseMode(contentType: String): ResponseMode {
     if (StringMatch.containsMatchIn(contentType)) return ResponseMode.String
     if (BinaryMatch.containsMatchIn(contentType)) return ResponseMode.Binary
     return ResponseMode.Unknown
+}
+
+internal fun ZonedDateTime(utcDateTime: String): ZonedDateTime {
+    return ZonedDateTime.parse(utcDateTime, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
 }
