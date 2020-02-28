@@ -209,6 +209,7 @@ result_format = encodeParam(result_format)
       const actual = gen.encodePathParams('', method)
       expect(actual).toEqual(expected)
     })
+    // TODO eventually add method that has a date type path param
     it('encodes only string or date path params', () => {
       const method = apiTestModel.methods['run_look']
       // should NOT escape request.look_id (int)
