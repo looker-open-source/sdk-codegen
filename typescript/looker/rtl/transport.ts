@@ -364,7 +364,7 @@ export function encodeParams(values?: Values) {
   const keys = Object.keys(values)
   const params = keys
     .filter(k => values[k] !== undefined) // `null` and `false` will both be passe
-    .map(k => k + '=' + encodeParam(values[k].toString()))
+    .map(k => k + '=' + encodeParam(values[k]))
     .join('&')
   return params
 }
