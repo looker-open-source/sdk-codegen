@@ -27,7 +27,7 @@ import { defaultApiVersion } from './constants'
 import { NodeTransport } from './nodeTransport'
 import { APIMethods } from './apiMethods'
 import { IAuthSession } from './authSession'
-import { IApiSettings } from './apiSettings'
+import { DefaultSettings, IApiSettings } from './apiSettings'
 
 describe('NodeTransport', () => {
 
@@ -57,6 +57,11 @@ describe('NodeTransport', () => {
   it('full path with auth is just full path', () => {
     const actual = api.makePath(fullPath, settings, mockAuth)
     expect(actual).toEqual(fullPath)
+  })
+
+  it('path not prefixed if base url not set', () => {
+    const actual = api.makePath('/all_connections', DefaultSettings())
+    expect(actual).toEqual(`/all_connections`)
   })
 
 })
