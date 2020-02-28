@@ -38,7 +38,7 @@ export class APIMethods {
     this.authSession = authSession
     this.apiVersion = apiVersion
     this.authSession.settings.agentTag = `${agentPrefix} ${lookerVersion}.${this.apiVersion}`
-    this.apiPath = `${authSession.settings.base_url}/api/${this.apiVersion}`
+    this.apiPath = authSession.settings.base_url === '' ? '' : `${authSession.settings.base_url}/api/${this.apiVersion}`
   }
 
   /** A helper method for simplifying error handling of SDK responses.
