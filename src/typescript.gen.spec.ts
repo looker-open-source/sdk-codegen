@@ -202,17 +202,17 @@ async all_datagroups(
     it('encodes string path params', () => {
       const method = apiTestModel.methods['run_url_encoded_query']
       const expected =
-`model_name = this.encodePathParam(model_name)
-view_name = this.encodePathParam(view_name)
-result_format = this.encodePathParam(result_format)
+`model_name = encodeParam(model_name)
+view_name = encodeParam(view_name)
+result_format = encodeParam(result_format)
 `
       const actual = gen.encodePathParams('', method)
       expect(actual).toEqual(expected)
     })
-    it('encodes only string path params', () => {
+    it('encodes only string or date path params', () => {
       const method = apiTestModel.methods['run_look']
       // should NOT escape request.look_id (int)
-      const expected = 'request.result_format = this.encodePathParam(request.result_format)\n'
+      const expected = 'request.result_format = encodeParam(request.result_format)\n'
       const actual = gen.encodePathParams('', method)
       expect(actual).toEqual(expected)
     })

@@ -48,16 +48,6 @@ extension String {
     }
 }
 
-// Convenience extension for an encodeURI() function similar to other SDKs
-extension String {
-    func encodePath() -> String {
-        return self.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-    }
-    func encodeQuery() -> String {
-        return self.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
-    }
-}
-
 struct Constants {
     static let lookerVersion = "7.2"
     static let apiVersion = "4.0"
@@ -172,51 +162,6 @@ func unwrap(_ any:Any) -> Any? {
     let (_, some) = mi.children.first!
     return some
 
-}
-
-// Convert any value to its Query Param equivalent
-func asQ(_ value: Any?) -> String {
-    var result = ""
-    if let val = value {
-        switch (val) {
-        case is DelimArray<Double>:
-            let x = val as! DelimArray<Double>
-            result = x.toString().encodeQuery()
-            break
-        case is DelimArray<Float>:
-            let x = val as! DelimArray<Float>
-            result = x.toString().encodeQuery()
-            break
-        case is DelimArray<Int>:
-            let x = val as! DelimArray<Int>
-            result = x.toString().encodeQuery()
-            break
-        case is DelimArray<Int32>:
-            let x = val as! DelimArray<Int32>
-            result = x.toString().encodeQuery()
-            break
-        case is DelimArray<Int64>:
-            let x = val as! DelimArray<Int64>
-            result = x.toString().encodeQuery()
-            break
-        case is DelimArray<String>:
-            let x = val as! DelimArray<String>
-            result = x.toString().encodeQuery()
-            break
-        case is DelimArray<Bool>:
-            let x = val as! DelimArray<Bool>
-            result = x.toString().encodeQuery()
-            break
-        default:
-            result = "\(val)".encodeQuery()
-        }
-//        if val is Array<Any> {
-//            let a = val as! Array<Any>
-//            result = a.toString().encodeQuery()
-//        } else {
-//        }
-    }
-    return result
 }
 
 extension StringProtocol {

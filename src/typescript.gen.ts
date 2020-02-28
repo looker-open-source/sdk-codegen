@@ -68,7 +68,7 @@ export class TypescriptGen extends CodeGen {
 // ${this.warnEditing()}
 import { APIMethods } from '../../rtl/apiMethods'
 import { IAuthSession } from '../../rtl/authSession'
-import { ITransportSettings } from '../../rtl/transport'
+import { ITransportSettings, encodeParam } from '../../rtl/transport'
 /**
  * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
  */
@@ -95,7 +95,7 @@ export class ${this.packageName} extends APIMethods {
 import { Readable } from 'readable-stream'
 import { APIMethods } from '../../rtl/apiMethods'
 import { IAuthSession } from '../../rtl/authSession'
-import { ITransportSettings } from '../../rtl/transport'
+import { ITransportSettings, encodeParam } from '../../rtl/transport'
 /**
  * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
  */
@@ -221,14 +221,14 @@ export interface IDictionary<T> {
     return this.methodHeaderDeclaration(indent, method, false)
   }
 
-  encodePathParams(indent: string, method: IMethod): string {
+  encodePathParams(indent: string, method: IMethod) {
     const bump = indent + this.indentStr
     let encodings: string = ''
     if (method.pathParams.length > 0) {
       for (const param of method.pathParams) {
-        if (param.type.name == 'string') {
+        if (param.doEncode()) {
           const name = this.useRequest(method) ? `request.${param.name}` : param.name
-          encodings += `${name} = this.encodePathParam(${name})\n`
+          encodings += `${bump}${name} = encodeParam(${name})\n`
         }
       }
     }

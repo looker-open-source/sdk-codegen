@@ -219,9 +219,21 @@ import Foundation
     return this.methodHeaderDeclaration(indent, method, false)
   }
 
+  encodePathParams(indent: string, method: IMethod) {
+    let encodings: string = ''
+    if (method.pathParams.length > 0) {
+      for (const param of method.pathParams) {
+        // For swift, just encode all path params because of awkward variable renames
+        encodings += `${indent}let path_${param.name} = encodeParam(${param.name})\n`
+      }
+    }
+    return encodings
+  }
+
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
     return this.methodSignature(indent, method)
+      + this.encodePathParams(bump, method)
       + this.httpCall(bump, method)
       + `\n${indent}}`
   }
@@ -233,6 +245,7 @@ import Foundation
   declareStreamer(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
     return this.streamerSignature(indent, method)
+      + this.encodePathParams(bump, method)
       + this.streamCall(bump, method)
       + `\n${indent}}`
   }
@@ -262,9 +275,9 @@ import Foundation
   httpPath(path: string, prefix?: string) {
     prefix = prefix || ''
     if (path.indexOf('{') >= 0) {
-      let tweak = path.replace(/{/gi, '\\(' + prefix)
+      let tweak = path.replace(/{/gi, '\\(path_' + prefix)
       tweak = tweak.replace(/}/gi, ')')
-      return `"${tweak}".encodePath()`
+      return `"${tweak}"`
     }
     return `"${path}"`
   }

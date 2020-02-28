@@ -75,7 +75,6 @@ export const boolDefault = (value: string, defaultBool: boolean = false) => {
   return defaultBool
 }
 
-
 /**
  * strip surrounding quotes from a string if it is uniformly quoted
  * @param {string | null} value to unquote

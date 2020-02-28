@@ -88,6 +88,7 @@ package com.looker.sdk${this.apiNamespace()}
 import com.looker.rtl.*
 import com.looker.rtl.UserSession
 import java.util.*
+import java.time.*
 import com.looker.sdk${this.apiNamespace()}.*
 // TODO can this single import override be avoided in any way?
 import com.looker.sdk${this.apiNamespace()}.Locale
@@ -107,6 +108,7 @@ package com.looker.sdk${this.apiNamespace()}
 import com.looker.rtl.*
 import com.looker.rtl.UserSession
 import java.util.*
+import java.time.*
 import com.looker.sdk${this.apiNamespace()}.*
 // TODO can this single import override be avoided in any way?
 import com.looker.sdk${this.apiNamespace()}.Locale
@@ -131,6 +133,7 @@ package com.looker.sdk${this.apiNamespace()}
 import com.looker.rtl.*
 import java.io.*
 import java.util.*
+import java.time.*
 `
   }
 
@@ -188,7 +191,7 @@ import java.util.*
     const bump = indent + this.indentStr
 
     if (requestType) {
-      // TODO remove this cruft from Typescript)
+      // TODO remove this Typescript cruft
       fragment = `request: Partial<${requestType}>`
     } else {
       let params: string[] = []
@@ -214,9 +217,23 @@ import java.util.*
     return this.methodHeaderDeclaration(indent, method, false)
   }
 
+  encodePathParams(indent: string, method: IMethod) {
+    const bump = indent + this.indentStr
+    let encodings: string = ''
+    if (method.pathParams.length > 0) {
+      for (const param of method.pathParams) {
+        if (param.doEncode()) {
+          encodings += `${bump}${param.name} = encodeParam(${param.name})\n`
+        }
+      }
+    }
+    return encodings
+  }
+
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
     return this.methodSignature(indent, method)
+      + this.encodePathParams(bump, method)
       + this.httpCall(bump, method)
       + `\n${indent}}`
   }
@@ -228,6 +245,7 @@ import java.util.*
   declareStreamer(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
     return this.streamerSignature(indent, method)
+      + this.encodePathParams(bump, method)
       + this.streamCall(bump, method)
       + `\n${indent}}`
   }
@@ -382,8 +400,8 @@ import java.util.*
       'boolean': {name: 'Boolean', default: mt},
       'uri': {name: 'UriString', default: mt},
       'url': {name: 'UrlString', default: mt},
-      'datetime': {name: 'Date', default: mt}, // TODO is there a default expression for datetime?
-      'date': {name: 'Date', default: mt}, // TODO is there a default expression for date?
+      'datetime': {name: 'ZonedDateTime', default: mt}, // TODO is there a default expression for datetime?
+      'date': {name: 'ZonedDateTime', default: mt}, // TODO is there a default expression for date?
       'object': {name: 'Any', default: mt},
       'void': {name: 'Void', default: mt}
     }

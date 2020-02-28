@@ -39,7 +39,15 @@ import kotlinx.coroutines.runBlocking
 import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy
 import org.apache.http.ssl.SSLContextBuilder
+import java.net.URLDecoder
 import java.net.URLEncoder
+import java.text.SimpleDateFormat
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME
+import java.util.*
 
 sealed class SDKResponse {
     /** A successful SDK call. */
@@ -119,12 +127,27 @@ data class TransportSettings(
         override var headers: Map<String, String> = mapOf()
 ) : TransportOptions
 
+private val utcFormat by lazy { DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") }
+
+fun encodeParam(value: Any?) : String {
+    val utf8 = "utf-8"
+    var encoded = if (value is ZonedDateTime) {
+        value.toOffsetDateTime().format(utcFormat)
+    } else {
+        "$value"
+    }
+    val decoded = URLDecoder.decode(encoded, utf8)
+    if (encoded == decoded) {
+        encoded = URLEncoder.encode(encoded, utf8)
+    }
+    return encoded
+}
 
 fun encodeValues(params: Values = mapOf()): String {
     @Suppress("UNCHECKED_CAST")
     return params
             .filter { (_, v) -> v !== null }
-            .map { (k, v) -> "$k=${URLEncoder.encode("$v", "utf-8")}" }
+            .map { (k, v) -> "$k=${encodeParam(v)}" }
             .joinToString("&")
 
 }

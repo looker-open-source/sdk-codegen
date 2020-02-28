@@ -326,6 +326,34 @@ export function isUtf8(contentType: string) {
 export type Values = {[key:string]: any} | null | undefined
 
 /**
+ * Encode parameter if not already encoded
+ * @param value value of parameter
+ * @returns URI encoded value
+ */
+export function encodeParam(value: any) {
+  if (value instanceof Date) {
+    value = value.toISOString()
+  }
+  let encoded = value.toString()
+
+  // decodeURIComponent throws URIError if there is a % character
+  // without it being part of an encoded
+  try {
+    const decoded = decodeURIComponent(value)
+    if (value === decoded) {
+      encoded = encodeURIComponent(value)
+    }
+  } catch (e) {
+    if (e instanceof URIError) {
+      encoded = encodeURIComponent(value)
+    } else {
+      throw e
+    }
+  }
+  return encoded
+}
+
+/**
  * Converts `Values` to query string parameter format
  * @param values Name/value collection to encode
  * @returns {string} query string parameter formatted values. Both `false` and `null` are included. Only `undefined` are omitted.
@@ -336,7 +364,7 @@ export function encodeParams(values?: Values) {
   const keys = Object.keys(values)
   const params = keys
     .filter(k => values[k] !== undefined) // `null` and `false` will both be passe
-    .map(k => k + '=' + encodeURIComponent(values[k]))
+    .map(k => k + '=' + encodeParam(values[k].toString()))
     .join('&')
   return params
 }

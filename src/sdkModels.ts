@@ -73,6 +73,8 @@ export interface IParameter extends ISymbol {
   asProperty(): IProperty
 
   asHashString(): string
+
+  doEncode() : boolean
 }
 
 export interface IMethodResponse {
@@ -208,6 +210,10 @@ export class Parameter implements IParameter {
 
   asHashString() {
     return `${this.name}:${this.type.name}${this.required ? '' : '?'}${this.location}`
+  }
+
+  doEncode() {
+    return this.type.name === 'string' || this.type.name === 'datetime' || this.type.name === 'date'
   }
 }
 
@@ -1239,6 +1245,14 @@ export interface ICodeGen {
 
   // generates the method signature including parameter list and return type.
   methodSignature(indent: string, method: IMethod): string
+
+  /**
+   * Handles the encoding call for path parameters within method declarations
+   * @param {string} indent how much indent
+   * @param {IMethod} method structure of method to declare
+   * @returns {string} indentation strings
+   */
+  encodePathParams(indent: string, method: IMethod): string
 
   // generates the entire method
   declareMethod(indent: string, method: IMethod): string

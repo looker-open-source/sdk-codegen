@@ -6,6 +6,7 @@ package com.looker.sdk
 import com.looker.rtl.*
 import com.looker.rtl.UserSession
 import java.util.*
+import java.time.*
 import com.looker.sdk.*
 // TODO can this single import override be avoided in any way?
 import com.looker.sdk.Locale
@@ -46,9 +47,9 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      */
     name: String? = null,
     /**
-     * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
+     * @param {ZonedDateTime} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
      */
-    ts: Date? = null,
+    ts: ZonedDateTime? = null,
     /**
      * @param {String} fields Requested fields.
      */
@@ -231,6 +232,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.get<Array<GitBranch>>("/projects/${project_id}/git_branches", mapOf())
   }
 
@@ -257,6 +259,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
      */
     remote_url: String? = null) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.get<Array<GitConnectionTest>>("/projects/${project_id}/git_connection_tests", 
       mapOf("remote_url" to remote_url))
   }
@@ -483,6 +486,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} file_id File Id
      */
     file_id: String? = null) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.get<Array<LookmlTest>>("/projects/${project_id}/lookml_tests", 
       mapOf("file_id" to file_id))
   }
@@ -560,6 +564,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.get<Array<ProjectFile>>("/projects/${project_id}/files", 
       mapOf("fields" to fields))
   }
@@ -865,6 +870,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      collection_id = encodeParam(collection_id)
     return this.get<ColorCollection>("/color_collections/${collection_id}", 
       mapOf("fields" to fields))
   }
@@ -921,6 +927,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      connection_name = encodeParam(connection_name)
     return this.get<DBConnection>("/connections/${connection_name}", 
       mapOf("fields" to fields))
   }
@@ -1166,6 +1173,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} pdf_landscape Whether to render pdf in landscape
      */
     pdf_landscape: Boolean? = null) : SDKResponse {
+      result_format = encodeParam(result_format)
     return this.post<RenderTask>("/render_tasks/dashboards/${dashboard_id}/${result_format}", 
       mapOf("width" to width, "height" to height, "fields" to fields, "pdf_paper_size" to pdf_paper_size, "pdf_landscape" to pdf_landscape), body)
   }
@@ -1207,6 +1215,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteGitBranch} body
      */
     body: WriteGitBranch) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.post<GitBranch>("/projects/${project_id}/git_branch", mapOf(), body)
   }
 
@@ -1228,6 +1237,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.post<String>("/projects/${project_id}/git/deploy_key", mapOf())
   }
 
@@ -1377,6 +1387,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      result_format = encodeParam(result_format)
     return this.post<RenderTask>("/render_tasks/looks/${look_id}/${result_format}", 
       mapOf("width" to width, "height" to height, "fields" to fields))
   }
@@ -1423,6 +1434,8 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} pdf_landscape Whether to render pdf in landscape
      */
     pdf_landscape: Boolean? = null) : SDKResponse {
+      dashboard_id = encodeParam(dashboard_id)
+      result_format = encodeParam(result_format)
     return this.post<RenderTask>("/render_tasks/lookml_dashboards/${dashboard_id}/${result_format}", 
       mapOf("width" to width, "height" to height, "fields" to fields, "pdf_paper_size" to pdf_paper_size, "pdf_landscape" to pdf_landscape), body)
   }
@@ -1587,6 +1600,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      result_format = encodeParam(result_format)
     return this.post<RenderTask>("/render_tasks/queries/${query_id}/${result_format}", 
       mapOf("width" to width, "height" to height, "fields" to fields))
   }
@@ -2032,6 +2046,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      dashboard_id = encodeParam(dashboard_id)
     return this.get<Dashboard>("/dashboards/${dashboard_id}", 
       mapOf("fields" to fields))
   }
@@ -2050,6 +2065,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      dashboard_id = encodeParam(dashboard_id)
     return this.get<Array<DashboardElement>>("/dashboards/${dashboard_id}/dashboard_elements", 
       mapOf("fields" to fields))
   }
@@ -2068,6 +2084,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      dashboard_id = encodeParam(dashboard_id)
     return this.get<Array<DashboardFilter>>("/dashboards/${dashboard_id}/dashboard_filters", 
       mapOf("fields" to fields))
   }
@@ -2086,6 +2103,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      dashboard_id = encodeParam(dashboard_id)
     return this.get<Array<DashboardLayout>>("/dashboards/${dashboard_id}/dashboard_layouts", 
       mapOf("fields" to fields))
   }
@@ -2104,6 +2122,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      dashboard_element_id = encodeParam(dashboard_element_id)
     return this.get<DashboardElement>("/dashboard_elements/${dashboard_element_id}", 
       mapOf("fields" to fields))
   }
@@ -2122,6 +2141,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      dashboard_filter_id = encodeParam(dashboard_filter_id)
     return this.get<DashboardFilter>("/dashboard_filters/${dashboard_filter_id}", 
       mapOf("fields" to fields))
   }
@@ -2140,6 +2160,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      dashboard_layout_id = encodeParam(dashboard_layout_id)
     return this.get<DashboardLayout>("/dashboard_layouts/${dashboard_layout_id}", 
       mapOf("fields" to fields))
   }
@@ -2158,6 +2179,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      dashboard_layout_component_id = encodeParam(dashboard_layout_component_id)
     return this.get<DashboardLayoutComponent>("/dashboard_layout_components/${dashboard_layout_component_id}", 
       mapOf("fields" to fields))
   }
@@ -2176,6 +2198,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      dashboard_layout_id = encodeParam(dashboard_layout_id)
     return this.get<Array<DashboardLayoutComponent>>("/dashboard_layouts/${dashboard_layout_id}/dashboard_layout_components", 
       mapOf("fields" to fields))
   }
@@ -2192,6 +2215,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} dashboard_id Id of dashboard
      */
     dashboard_id: String) : SDKResponse {
+      dashboard_id = encodeParam(dashboard_id)
     return this.get<DashboardLookml>("/dashboards/lookml/${dashboard_id}", mapOf())
   }
 
@@ -2234,9 +2258,9 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
    */
   @JvmOverloads fun default_theme(
     /**
-     * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
+     * @param {ZonedDateTime} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
      */
-    ts: Date? = null) : SDKResponse {
+    ts: ZonedDateTime? = null) : SDKResponse {
     return this.get<Theme>("/themes/default", 
       mapOf("ts" to ts))
   }
@@ -2258,6 +2282,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} collection_id Id of Color Collection
      */
     collection_id: String) : SDKResponse {
+      collection_id = encodeParam(collection_id)
     return this.delete<String>("/color_collections/${collection_id}", mapOf())
   }
 
@@ -2271,6 +2296,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} connection_name Name of connection
      */
     connection_name: String) : SDKResponse {
+      connection_name = encodeParam(connection_name)
     return this.delete<String>("/connections/${connection_name}", mapOf())
   }
 
@@ -2288,6 +2314,8 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} override_context Context of connection override
      */
     override_context: String) : SDKResponse {
+      connection_name = encodeParam(connection_name)
+      override_context = encodeParam(override_context)
     return this.delete<String>("/connections/${connection_name}/connection_override/${override_context}", mapOf())
   }
 
@@ -2333,6 +2361,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} dashboard_id Id of dashboard
      */
     dashboard_id: String) : SDKResponse {
+      dashboard_id = encodeParam(dashboard_id)
     return this.delete<String>("/dashboards/${dashboard_id}", mapOf())
   }
 
@@ -2346,6 +2375,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} dashboard_element_id Id of dashboard element
      */
     dashboard_element_id: String) : SDKResponse {
+      dashboard_element_id = encodeParam(dashboard_element_id)
     return this.delete<String>("/dashboard_elements/${dashboard_element_id}", mapOf())
   }
 
@@ -2359,6 +2389,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} dashboard_filter_id Id of dashboard filter
      */
     dashboard_filter_id: String) : SDKResponse {
+      dashboard_filter_id = encodeParam(dashboard_filter_id)
     return this.delete<String>("/dashboard_filters/${dashboard_filter_id}", mapOf())
   }
 
@@ -2372,6 +2403,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} dashboard_layout_id Id of dashboard layout
      */
     dashboard_layout_id: String) : SDKResponse {
+      dashboard_layout_id = encodeParam(dashboard_layout_id)
     return this.delete<String>("/dashboard_layouts/${dashboard_layout_id}", mapOf())
   }
 
@@ -2386,6 +2418,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} folder_id Id of folder
      */
     folder_id: String) : SDKResponse {
+      folder_id = encodeParam(folder_id)
     return this.delete<String>("/folders/${folder_id}", mapOf())
   }
 
@@ -2405,6 +2438,8 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} branch_name Branch Name
      */
     branch_name: String) : SDKResponse {
+      project_id = encodeParam(project_id)
+      branch_name = encodeParam(branch_name)
     return this.delete<String>("/projects/${project_id}/git_branch/${branch_name}", mapOf())
   }
 
@@ -2536,6 +2571,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} lookml_model_name Name of lookml model.
      */
     lookml_model_name: String) : SDKResponse {
+      lookml_model_name = encodeParam(lookml_model_name)
     return this.delete<String>("/lookml_models/${lookml_model_name}", mapOf())
   }
 
@@ -2562,6 +2598,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} test_slug Slug of test config
      */
     test_slug: String) : SDKResponse {
+      test_slug = encodeParam(test_slug)
     return this.delete<String>("/oidc_test_configs/${test_slug}", mapOf())
   }
 
@@ -2597,6 +2634,8 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} credential_id Credential Id
      */
     credential_id: String) : SDKResponse {
+      root_project_id = encodeParam(root_project_id)
+      credential_id = encodeParam(credential_id)
     return this.delete<String>("/projects/${root_project_id}/credential/${credential_id}", mapOf())
   }
 
@@ -2623,6 +2662,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} test_slug Slug of test config
      */
     test_slug: String) : SDKResponse {
+      test_slug = encodeParam(test_slug)
     return this.delete<String>("/saml_test_configs/${test_slug}", mapOf())
   }
 
@@ -2654,6 +2694,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} space_id Id of space
      */
     space_id: String) : SDKResponse {
+      space_id = encodeParam(space_id)
     return this.delete<String>("/spaces/${space_id}", mapOf())
   }
 
@@ -2675,6 +2716,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} theme_id Id of theme
      */
     theme_id: String) : SDKResponse {
+      theme_id = encodeParam(theme_id)
     return this.delete<String>("/themes/${theme_id}", mapOf())
   }
 
@@ -2880,6 +2922,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} key The key associated with the locked user
      */
     key: String) : SDKResponse {
+      key = encodeParam(key)
     return this.delete<String>("/user_login_lockout/${key}", mapOf())
   }
 
@@ -2920,6 +2963,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Id of project
      */
     project_id: String) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.post<String>("/projects/${project_id}/deploy_to_production", mapOf())
   }
 
@@ -2948,6 +2992,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} integration_id Id of Integration
      */
     integration_id: String) : SDKResponse {
+      integration_id = encodeParam(integration_id)
     return this.post<DataActionForm>("/integrations/${integration_id}/form", mapOf())
   }
 
@@ -2980,6 +3025,8 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} branch_name Branch Name
      */
     branch_name: String) : SDKResponse {
+      project_id = encodeParam(project_id)
+      branch_name = encodeParam(branch_name)
     return this.get<GitBranch>("/projects/${project_id}/git_branch/${branch_name}", mapOf())
   }
 
@@ -2997,6 +3044,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      folder_id = encodeParam(folder_id)
     return this.get<Folder>("/folders/${folder_id}", 
       mapOf("fields" to fields))
   }
@@ -3015,6 +3063,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      folder_id = encodeParam(folder_id)
     return this.get<Array<Folder>>("/folders/${folder_id}/ancestors", 
       mapOf("fields" to fields))
   }
@@ -3045,6 +3094,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} sorts Fields to sort by.
      */
     sorts: String? = null) : SDKResponse {
+      folder_id = encodeParam(folder_id)
     return this.get<Array<Folder>>("/folders/${folder_id}/children", 
       mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts))
   }
@@ -3071,6 +3121,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} name Match folder name.
      */
     name: String? = null) : SDKResponse {
+      folder_id = encodeParam(folder_id)
     return this.get<Array<Folder>>("/folders/${folder_id}/children/search", 
       mapOf("fields" to fields, "sorts" to sorts, "name" to name))
   }
@@ -3089,6 +3140,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      folder_id = encodeParam(folder_id)
     return this.get<Array<Dashboard>>("/folders/${folder_id}/dashboards", 
       mapOf("fields" to fields))
   }
@@ -3107,6 +3159,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      folder_id = encodeParam(folder_id)
     return this.get<Array<LookWithQuery>>("/folders/${folder_id}/looks", 
       mapOf("fields" to fields))
   }
@@ -3125,6 +3178,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      folder_id = encodeParam(folder_id)
     return this.get<Folder>("/folders/${folder_id}/parent", 
       mapOf("fields" to fields))
   }
@@ -3150,6 +3204,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} root_project_id Root Project Id
      */
     root_project_id: String) : SDKResponse {
+      root_project_id = encodeParam(root_project_id)
     return this.get<Array<RepositoryCredential>>("/projects/${root_project_id}/credentials", mapOf())
   }
 
@@ -3165,6 +3220,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.get<GitBranch>("/projects/${project_id}/git_branch", mapOf())
   }
 
@@ -3180,6 +3236,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.get<String>("/projects/${project_id}/git/deploy_key", mapOf())
   }
 
@@ -3288,6 +3345,8 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
      */
     raw_locale: Boolean? = null) : SDKResponse {
+      lookml_dashboard_id = encodeParam(lookml_dashboard_id)
+      space_id = encodeParam(space_id)
     return this.post<Dashboard>("/dashboards/${lookml_dashboard_id}/import/${space_id}", 
       mapOf("raw_locale" to raw_locale), body)
   }
@@ -3306,6 +3365,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      integration_id = encodeParam(integration_id)
     return this.get<Integration>("/integrations/${integration_id}", 
       mapOf("fields" to fields))
   }
@@ -3356,6 +3416,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} query_task_id Query task id.
      */
     query_task_id: String) : SDKResponse {
+      query_task_id = encodeParam(query_task_id)
     return this.delete<String>("/running_queries/${query_task_id}", mapOf())
   }
 
@@ -3393,6 +3454,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} legacy_feature_id id of legacy feature
      */
     legacy_feature_id: String) : SDKResponse {
+      legacy_feature_id = encodeParam(legacy_feature_id)
     return this.get<LegacyFeature>("/legacy_features/${legacy_feature_id}", mapOf())
   }
 
@@ -3512,6 +3574,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      lookml_model_name = encodeParam(lookml_model_name)
     return this.get<LookmlModel>("/lookml_models/${lookml_model_name}", 
       mapOf("fields" to fields))
   }
@@ -3534,6 +3597,8 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      lookml_model_name = encodeParam(lookml_model_name)
+      explore_name = encodeParam(explore_name)
     return this.get<LookmlModelExplore>("/lookml_models/${lookml_model_name}/explores/${explore_name}", 
       mapOf("fields" to fields))
   }
@@ -3550,6 +3615,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.get<Manifest>("/projects/${project_id}/manifest", mapOf())
   }
 
@@ -3583,6 +3649,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
+      merge_query_id = encodeParam(merge_query_id)
     return this.get<MergeQuery>("/merge_queries/${merge_query_id}", 
       mapOf("fields" to fields))
   }
@@ -3635,6 +3702,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} test_slug Slug of test config
      */
     test_slug: String) : SDKResponse {
+      test_slug = encodeParam(test_slug)
     return this.get<OIDCConfig>("/oidc_test_configs/${test_slug}", mapOf())
   }
 
@@ -3707,6 +3775,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.get<Project>("/projects/${project_id}", 
       mapOf("fields" to fields))
   }
@@ -3731,6 +3800,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.get<ProjectFile>("/projects/${project_id}/files/file", 
       mapOf("file_id" to file_id, "fields" to fields))
   }
@@ -3760,6 +3830,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.get<ProjectValidationCache>("/projects/${project_id}/validate", 
       mapOf("fields" to fields))
   }
@@ -3780,6 +3851,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.get<ProjectWorkspace>("/projects/${project_id}/current_workspace", 
       mapOf("fields" to fields))
   }
@@ -3848,6 +3920,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      slug = encodeParam(slug)
     return this.get<Query>("/queries/slug/${slug}", 
       mapOf("fields" to fields))
   }
@@ -3872,6 +3945,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      query_task_id = encodeParam(query_task_id)
     return this.get<QueryTask>("/query_tasks/${query_task_id}", 
       mapOf("fields" to fields))
   }
@@ -3928,6 +4002,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} query_task_id ID of the Query Task
      */
     query_task_id: String) : SDKResponse {
+      query_task_id = encodeParam(query_task_id)
     return this.get<String>("/query_tasks/${query_task_id}/results", mapOf())
   }
 
@@ -3949,6 +4024,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      render_task_id = encodeParam(render_task_id)
     return this.get<RenderTask>("/render_tasks/${render_task_id}", 
       mapOf("fields" to fields))
   }
@@ -3981,6 +4057,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} render_task_id Id of render task
      */
     render_task_id: String) : SDKResponse {
+      render_task_id = encodeParam(render_task_id)
     return this.get<String>("/render_tasks/${render_task_id}/results", mapOf())
   }
 
@@ -3996,6 +4073,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Id of project
      */
     project_id: String) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.post<String>("/projects/${project_id}/reset_to_production", mapOf())
   }
 
@@ -4011,6 +4089,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Id of project
      */
     project_id: String) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.post<String>("/projects/${project_id}/reset_to_remote", mapOf())
   }
 
@@ -4091,6 +4170,8 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
      */
     remote_url: String? = null) : SDKResponse {
+      project_id = encodeParam(project_id)
+      test_id = encodeParam(test_id)
     return this.get<GitConnectionTestResult>("/projects/${project_id}/git_connection_tests/${test_id}", 
       mapOf("remote_url" to remote_url))
   }
@@ -4208,6 +4289,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} server_table_calcs Perform table calculations on query results
      */
     server_table_calcs: Boolean? = null) : SDKResponse {
+      result_format = encodeParam(result_format)
     return this.post<String>("/queries/run/${result_format}", 
       mapOf("limit" to limit, "apply_formatting" to apply_formatting, "apply_vis" to apply_vis, "cache" to cache, "image_width" to image_width, "image_height" to image_height, "generate_drill_links" to generate_drill_links, "force_production" to force_production, "cache_only" to cache_only, "path_prefix" to path_prefix, "rebuild_pdts" to rebuild_pdts, "server_table_calcs" to server_table_calcs), body)
   }
@@ -4293,6 +4375,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} server_table_calcs Perform table calculations on query results
      */
     server_table_calcs: Boolean? = null) : SDKResponse {
+      result_format = encodeParam(result_format)
     return this.get<String>("/looks/${look_id}/run/${result_format}", 
       mapOf("limit" to limit, "apply_formatting" to apply_formatting, "apply_vis" to apply_vis, "cache" to cache, "image_width" to image_width, "image_height" to image_height, "generate_drill_links" to generate_drill_links, "force_production" to force_production, "cache_only" to cache_only, "path_prefix" to path_prefix, "rebuild_pdts" to rebuild_pdts, "server_table_calcs" to server_table_calcs))
   }
@@ -4321,6 +4404,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} model Model Name
      */
     model: String? = null) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.get<Array<LookmlTestResult>>("/projects/${project_id}/lookml_tests/run", 
       mapOf("file_id" to file_id, "test" to test, "model" to model))
   }
@@ -4409,6 +4493,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} server_table_calcs Perform table calculations on query results
      */
     server_table_calcs: Boolean? = null) : SDKResponse {
+      result_format = encodeParam(result_format)
     return this.get<String>("/queries/${query_id}/run/${result_format}", 
       mapOf("limit" to limit, "apply_formatting" to apply_formatting, "apply_vis" to apply_vis, "cache" to cache, "image_width" to image_width, "image_height" to image_height, "generate_drill_links" to generate_drill_links, "force_production" to force_production, "cache_only" to cache_only, "path_prefix" to path_prefix, "rebuild_pdts" to rebuild_pdts, "server_table_calcs" to server_table_calcs))
   }
@@ -4433,6 +4518,8 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
      */
     download: String? = null) : SDKResponse {
+      slug = encodeParam(slug)
+      result_format = encodeParam(result_format)
     return this.post<String>("/sql_queries/${slug}/run/${result_format}", 
       mapOf("download" to download))
   }
@@ -4508,6 +4595,9 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} result_format Format of result
      */
     result_format: String) : SDKResponse {
+      model_name = encodeParam(model_name)
+      view_name = encodeParam(view_name)
+      result_format = encodeParam(result_format)
     return this.get<String>("/queries/models/${model_name}/views/${view_name}/run/${result_format}", mapOf())
   }
 
@@ -4541,6 +4631,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} test_slug Slug of test config
      */
     test_slug: String) : SDKResponse {
+      test_slug = encodeParam(test_slug)
     return this.get<SamlConfig>("/saml_test_configs/${test_slug}", mapOf())
   }
 
@@ -5775,13 +5866,13 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      */
     name: String? = null,
     /**
-     * @param {Date} begin_at Timestamp for activation.
+     * @param {ZonedDateTime} begin_at Timestamp for activation.
      */
-    begin_at: Date? = null,
+    begin_at: ZonedDateTime? = null,
     /**
-     * @param {Date} end_at Timestamp for expiration.
+     * @param {ZonedDateTime} end_at Timestamp for expiration.
      */
-    end_at: Date? = null,
+    end_at: ZonedDateTime? = null,
     /**
      * @param {Long} limit Number of results to return (used with `offset`).
      */
@@ -5998,6 +6089,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} is_disabled Include or exclude disabled accounts in the results
      */
     is_disabled: Boolean? = null) : SDKResponse {
+      pattern = encodeParam(pattern)
     return this.get<Array<User>>("/users/search/names/${pattern}", 
       mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts, "id" to id, "first_name" to first_name, "last_name" to last_name, "verified_looker_employee" to verified_looker_employee, "email" to email, "is_disabled" to is_disabled))
   }
@@ -6192,6 +6284,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      space_id = encodeParam(space_id)
     return this.get<Space>("/spaces/${space_id}", 
       mapOf("fields" to fields))
   }
@@ -6210,6 +6303,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      space_id = encodeParam(space_id)
     return this.get<Array<Space>>("/spaces/${space_id}/ancestors", 
       mapOf("fields" to fields))
   }
@@ -6240,6 +6334,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} sorts Fields to sort by.
      */
     sorts: String? = null) : SDKResponse {
+      space_id = encodeParam(space_id)
     return this.get<Array<Space>>("/spaces/${space_id}/children", 
       mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts))
   }
@@ -6266,6 +6361,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} name Match Space name.
      */
     name: String? = null) : SDKResponse {
+      space_id = encodeParam(space_id)
     return this.get<Array<Space>>("/spaces/${space_id}/children/search", 
       mapOf("fields" to fields, "sorts" to sorts, "name" to name))
   }
@@ -6284,6 +6380,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      space_id = encodeParam(space_id)
     return this.get<Array<Dashboard>>("/spaces/${space_id}/dashboards", 
       mapOf("fields" to fields))
   }
@@ -6302,6 +6399,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      space_id = encodeParam(space_id)
     return this.get<Array<LookWithQuery>>("/spaces/${space_id}/looks", 
       mapOf("fields" to fields))
   }
@@ -6320,6 +6418,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      space_id = encodeParam(space_id)
     return this.get<Space>("/spaces/${space_id}/parent", 
       mapOf("fields" to fields))
   }
@@ -6334,6 +6433,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} slug slug of query
      */
     slug: String) : SDKResponse {
+      slug = encodeParam(slug)
     return this.get<SqlQuery>("/sql_queries/${slug}", mapOf())
   }
 
@@ -6363,6 +6463,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
      */
     raw_locale: Boolean? = null) : SDKResponse {
+      lookml_dashboard_id = encodeParam(lookml_dashboard_id)
     return this.patch<Array<Long>>("/dashboards/${lookml_dashboard_id}/sync", 
       mapOf("raw_locale" to raw_locale), body)
   }
@@ -6388,6 +6489,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {DelimArray<String>} tests Array of names of tests to run
      */
     tests: DelimArray<String>? = null) : SDKResponse {
+      connection_name = encodeParam(connection_name)
     return this.put<Array<DBConnectionTestResult>>("/connections/${connection_name}/test", 
       mapOf("tests" to tests))
   }
@@ -6427,6 +6529,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} integration_id Id of Integration
      */
     integration_id: String) : SDKResponse {
+      integration_id = encodeParam(integration_id)
     return this.post<IntegrationTestResult>("/integrations/${integration_id}/test", mapOf())
   }
 
@@ -6572,9 +6675,9 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      */
     name: String,
     /**
-     * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
+     * @param {ZonedDateTime} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
      */
-    ts: Date? = null) : SDKResponse {
+    ts: ZonedDateTime? = null) : SDKResponse {
     return this.get<Theme>("/themes/theme_or_default", 
       mapOf("name" to name, "ts" to ts))
   }
@@ -6607,6 +6710,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteColorCollection} body
      */
     body: WriteColorCollection) : SDKResponse {
+      collection_id = encodeParam(collection_id)
     return this.patch<ColorCollection>("/color_collections/${collection_id}", mapOf(), body)
   }
 
@@ -6624,6 +6728,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteDBConnection} body
      */
     body: WriteDBConnection) : SDKResponse {
+      connection_name = encodeParam(connection_name)
     return this.patch<DBConnection>("/connections/${connection_name}", mapOf(), body)
   }
 
@@ -6658,6 +6763,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {ContentMetaGroupUser} body
      */
     body: ContentMetaGroupUser) : SDKResponse {
+      content_metadata_access_id = encodeParam(content_metadata_access_id)
     return this.put<ContentMetaGroupUser>("/content_metadata_access/${content_metadata_access_id}", mapOf(), body)
   }
 
@@ -6715,6 +6821,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteDashboard} body
      */
     body: WriteDashboard) : SDKResponse {
+      dashboard_id = encodeParam(dashboard_id)
     return this.patch<Dashboard>("/dashboards/${dashboard_id}", mapOf(), body)
   }
 
@@ -6736,6 +6843,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      dashboard_element_id = encodeParam(dashboard_element_id)
     return this.patch<DashboardElement>("/dashboard_elements/${dashboard_element_id}", 
       mapOf("fields" to fields), body)
   }
@@ -6758,6 +6866,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      dashboard_filter_id = encodeParam(dashboard_filter_id)
     return this.patch<DashboardFilter>("/dashboard_filters/${dashboard_filter_id}", 
       mapOf("fields" to fields), body)
   }
@@ -6780,6 +6889,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      dashboard_layout_id = encodeParam(dashboard_layout_id)
     return this.patch<DashboardLayout>("/dashboard_layouts/${dashboard_layout_id}", 
       mapOf("fields" to fields), body)
   }
@@ -6802,6 +6912,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      dashboard_layout_component_id = encodeParam(dashboard_layout_component_id)
     return this.patch<DashboardLayoutComponent>("/dashboard_layout_components/${dashboard_layout_component_id}", 
       mapOf("fields" to fields), body)
   }
@@ -6837,6 +6948,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {UpdateFolder} body
      */
     body: UpdateFolder) : SDKResponse {
+      folder_id = encodeParam(folder_id)
     return this.patch<Folder>("/folders/${folder_id}", mapOf(), body)
   }
 
@@ -6862,6 +6974,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteGitBranch} body
      */
     body: WriteGitBranch) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.put<GitBranch>("/projects/${project_id}/git_branch", mapOf(), body)
   }
 
@@ -6971,6 +7084,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      integration_id = encodeParam(integration_id)
     return this.patch<Integration>("/integrations/${integration_id}", 
       mapOf("fields" to fields), body)
   }
@@ -7062,6 +7176,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteLegacyFeature} body
      */
     body: WriteLegacyFeature) : SDKResponse {
+      legacy_feature_id = encodeParam(legacy_feature_id)
     return this.patch<LegacyFeature>("/legacy_features/${legacy_feature_id}", mapOf(), body)
   }
 
@@ -7120,6 +7235,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteLookmlModel} body
      */
     body: WriteLookmlModel) : SDKResponse {
+      lookml_model_name = encodeParam(lookml_model_name)
     return this.patch<LookmlModel>("/lookml_models/${lookml_model_name}", mapOf(), body)
   }
 
@@ -7229,6 +7345,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.patch<Project>("/projects/${project_id}", 
       mapOf("fields" to fields), body)
   }
@@ -7256,6 +7373,8 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteRepositoryCredential} body
      */
     body: WriteRepositoryCredential) : SDKResponse {
+      root_project_id = encodeParam(root_project_id)
+      credential_id = encodeParam(credential_id)
     return this.put<RepositoryCredential>("/projects/${root_project_id}/credential/${credential_id}", mapOf(), body)
   }
 
@@ -7414,6 +7533,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {UpdateSpace} body
      */
     body: UpdateSpace) : SDKResponse {
+      space_id = encodeParam(space_id)
     return this.patch<Space>("/spaces/${space_id}", mapOf(), body)
   }
 
@@ -7837,6 +7957,8 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
+      credential_type = encodeParam(credential_type)
+      credential_id = encodeParam(credential_id)
     return this.get<User>("/users/credential/${credential_type}/${credential_id}", 
       mapOf("fields" to fields))
   }
@@ -7907,6 +8029,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
+      project_id = encodeParam(project_id)
     return this.post<ProjectValidation>("/projects/${project_id}/validate", 
       mapOf("fields" to fields))
   }
@@ -7997,6 +8120,7 @@ class LookerSDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} workspace_id Id of the workspace
      */
     workspace_id: String) : SDKResponse {
+      workspace_id = encodeParam(workspace_id)
     return this.get<Workspace>("/workspaces/${workspace_id}", mapOf())
   }
 

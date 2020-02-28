@@ -7,6 +7,7 @@ package com.looker.sdk
 import com.looker.rtl.*
 import java.io.*
 import java.util.*
+import java.time.*
 
 data class AccessToken (
   /**
@@ -1046,7 +1047,7 @@ data class Dashboard (
   /**
    * Time that the Dashboard was created. (read-only)
    */
-  var created_at: Date? = null,
+  var created_at: ZonedDateTime? = null,
   /**
    * Elements (read-only)
    */
@@ -1066,7 +1067,7 @@ data class Dashboard (
   /**
    * Time that the Dashboard was 'soft' deleted. (read-only)
    */
-  var deleted_at: Date? = null,
+  var deleted_at: ZonedDateTime? = null,
   /**
    * Id of User that 'soft' deleted the dashboard. (read-only)
    */
@@ -1082,11 +1083,11 @@ data class Dashboard (
   /**
    * Time the dashboard was last accessed (read-only)
    */
-  var last_accessed_at: Date? = null,
+  var last_accessed_at: ZonedDateTime? = null,
   /**
    * Time last viewed in the Looker web UI (read-only)
    */
-  var last_viewed_at: Date? = null,
+  var last_viewed_at: ZonedDateTime? = null,
   /**
    * configuration option that governs how dashboard loading will happen.
    */
@@ -2109,7 +2110,7 @@ data class Folder (
   /**
    * Time the space was created (read-only)
    */
-  var created_at: Date? = null,
+  var created_at: ZonedDateTime? = null,
   /**
    * User Id of Creator (read-only)
    */
@@ -2184,7 +2185,7 @@ data class FolderBase (
   /**
    * Time the folder was created (read-only)
    */
-  var created_at: Date? = null,
+  var created_at: ZonedDateTime? = null,
   /**
    * User Id of Creator (read-only)
    */
@@ -2420,11 +2421,11 @@ data class Homepage (
   /**
    * Date of homepage creatopm (read-only)
    */
-  var created_at: Date? = null,
+  var created_at: ZonedDateTime? = null,
   /**
    * Date of homepage deletion
    */
-  var deleted_at: Date? = null,
+  var deleted_at: ZonedDateTime? = null,
   /**
    * Description of homepage
    */
@@ -2448,7 +2449,7 @@ data class Homepage (
   /**
    * Date of last homepage update (read-only)
    */
-  var updated_at: Date? = null,
+  var updated_at: ZonedDateTime? = null,
   /**
    * User id of homepage creator (read-only)
    */
@@ -2582,11 +2583,11 @@ data class HomepageSection (
   /**
    * Time at which this section was created. (read-only)
    */
-  var created_at: Date? = null,
+  var created_at: ZonedDateTime? = null,
   /**
    * Time at which this section was deleted.
    */
-  var deleted_at: Date? = null,
+  var deleted_at: ZonedDateTime? = null,
   /**
    * A URL pointing to a page showing further information about the content in the section. (read-only)
    */
@@ -2618,7 +2619,7 @@ data class HomepageSection (
   /**
    * Time at which this section was last updated. (read-only)
    */
-  var updated_at: Date? = null,
+  var updated_at: ZonedDateTime? = null,
   /**
    * Description of the content found in this section.
    */
@@ -3214,11 +3215,11 @@ data class LegacyFeature (
   /**
    * Approximate date that this feature will be automatically disabled. (read-only)
    */
-  var approximate_disable_date: Date? = null,
+  var approximate_disable_date: ZonedDateTime? = null,
   /**
    * Approximate date that this feature will be removed. (read-only)
    */
-  var approximate_end_of_life_date: Date? = null,
+  var approximate_end_of_life_date: ZonedDateTime? = null,
   /**
    * Whether this legacy feature may have been automatically disabled when upgrading to the current version. (read-only)
    */
@@ -3275,7 +3276,7 @@ data class Look (
   /**
    * Time that the Look was created. (read-only)
    */
-  var created_at: Date? = null,
+  var created_at: ZonedDateTime? = null,
   /**
    * Whether or not a look is 'soft' deleted.
    */
@@ -3283,7 +3284,7 @@ data class Look (
   /**
    * Time that the Look was deleted. (read-only)
    */
-  var deleted_at: Date? = null,
+  var deleted_at: ZonedDateTime? = null,
   /**
    * Id of User that deleted the look. (read-only)
    */
@@ -3319,7 +3320,7 @@ data class Look (
   /**
    * Time that the Look was last accessed by any user (read-only)
    */
-  var last_accessed_at: Date? = null,
+  var last_accessed_at: ZonedDateTime? = null,
   /**
    * Id of User that last updated the look. (read-only)
    */
@@ -3327,7 +3328,7 @@ data class Look (
   /**
    * Time last viewed in the Looker web UI (read-only)
    */
-  var last_viewed_at: Date? = null,
+  var last_viewed_at: ZonedDateTime? = null,
   var model: LookModel? = null,
   /**
    * Is Public
@@ -3362,7 +3363,7 @@ data class Look (
   /**
    * Time that the Look was updated. (read-only)
    */
-  var updated_at: Date? = null,
+  var updated_at: ZonedDateTime? = null,
   /**
    * User Id
    */
@@ -4119,7 +4120,7 @@ data class LookWithDashboards (
   /**
    * Time that the Look was created. (read-only)
    */
-  var created_at: Date? = null,
+  var created_at: ZonedDateTime? = null,
   /**
    * Whether or not a look is 'soft' deleted.
    */
@@ -4127,7 +4128,7 @@ data class LookWithDashboards (
   /**
    * Time that the Look was deleted. (read-only)
    */
-  var deleted_at: Date? = null,
+  var deleted_at: ZonedDateTime? = null,
   /**
    * Id of User that deleted the look. (read-only)
    */
@@ -4163,7 +4164,7 @@ data class LookWithDashboards (
   /**
    * Time that the Look was last accessed by any user (read-only)
    */
-  var last_accessed_at: Date? = null,
+  var last_accessed_at: ZonedDateTime? = null,
   /**
    * Id of User that last updated the look. (read-only)
    */
@@ -4171,7 +4172,7 @@ data class LookWithDashboards (
   /**
    * Time last viewed in the Looker web UI (read-only)
    */
-  var last_viewed_at: Date? = null,
+  var last_viewed_at: ZonedDateTime? = null,
   var model: LookModel? = null,
   /**
    * Is Public
@@ -4206,7 +4207,7 @@ data class LookWithDashboards (
   /**
    * Time that the Look was updated. (read-only)
    */
-  var updated_at: Date? = null,
+  var updated_at: ZonedDateTime? = null,
   /**
    * User Id
    */
@@ -4245,7 +4246,7 @@ data class LookWithQuery (
   /**
    * Time that the Look was created. (read-only)
    */
-  var created_at: Date? = null,
+  var created_at: ZonedDateTime? = null,
   /**
    * Whether or not a look is 'soft' deleted.
    */
@@ -4253,7 +4254,7 @@ data class LookWithQuery (
   /**
    * Time that the Look was deleted. (read-only)
    */
-  var deleted_at: Date? = null,
+  var deleted_at: ZonedDateTime? = null,
   /**
    * Id of User that deleted the look. (read-only)
    */
@@ -4289,7 +4290,7 @@ data class LookWithQuery (
   /**
    * Time that the Look was last accessed by any user (read-only)
    */
-  var last_accessed_at: Date? = null,
+  var last_accessed_at: ZonedDateTime? = null,
   /**
    * Id of User that last updated the look. (read-only)
    */
@@ -4297,7 +4298,7 @@ data class LookWithQuery (
   /**
    * Time last viewed in the Looker web UI (read-only)
    */
-  var last_viewed_at: Date? = null,
+  var last_viewed_at: ZonedDateTime? = null,
   var model: LookModel? = null,
   /**
    * Is Public
@@ -4332,7 +4333,7 @@ data class LookWithQuery (
   /**
    * Time that the Look was updated. (read-only)
    */
-  var updated_at: Date? = null,
+  var updated_at: ZonedDateTime? = null,
   /**
    * User Id
    */
@@ -4536,7 +4537,7 @@ data class OIDCConfig (
   /**
    * When this config was last modified (read-only)
    */
-  var modified_at: Date? = null,
+  var modified_at: ZonedDateTime? = null,
   /**
    * User id of user who last modified this config (read-only)
    */
@@ -5738,11 +5739,11 @@ data class ScheduledPlan (
   /**
    * Date and time when ScheduledPlan was created (read-only)
    */
-  var created_at: Date? = null,
+  var created_at: ZonedDateTime? = null,
   /**
    * Date and time when ScheduledPlan was last updated (read-only)
    */
-  var updated_at: Date? = null,
+  var updated_at: ZonedDateTime? = null,
   /**
    * Title (read-only)
    */
@@ -5751,11 +5752,11 @@ data class ScheduledPlan (
   /**
    * When the ScheduledPlan will next run (null if running once) (read-only)
    */
-  var next_run_at: Date? = null,
+  var next_run_at: ZonedDateTime? = null,
   /**
    * When the ScheduledPlan was last run (read-only)
    */
-  var last_run_at: Date? = null,
+  var last_run_at: ZonedDateTime? = null,
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
@@ -5934,7 +5935,7 @@ data class Space (
   /**
    * Time the space was created (read-only)
    */
-  var created_at: Date? = null,
+  var created_at: ZonedDateTime? = null,
   /**
    * User Id of Creator (read-only)
    */
@@ -6009,7 +6010,7 @@ data class SpaceBase (
   /**
    * Time the space was created (read-only)
    */
-  var created_at: Date? = null,
+  var created_at: ZonedDateTime? = null,
   /**
    * User Id of Creator (read-only)
    */
@@ -6136,11 +6137,11 @@ data class Theme (
   /**
    * Timestamp for when this theme becomes active. Null=always
    */
-  var begin_at: Date? = null,
+  var begin_at: ZonedDateTime? = null,
   /**
    * Timestamp for when this theme expires. Null=never
    */
-  var end_at: Date? = null,
+  var end_at: ZonedDateTime? = null,
   /**
    * Unique Id (read-only)
    */
@@ -6539,7 +6540,7 @@ data class UserLoginLockout (
   /**
    * Time when lockout was triggered (read-only)
    */
-  var lockout_at: Date? = null
+  var lockout_at: ZonedDateTime? = null
 ) : Serializable
 
 data class UserPublic (
@@ -7367,7 +7368,7 @@ data class WriteHomepage (
   /**
    * Date of homepage deletion
    */
-  var deleted_at: Date? = null,
+  var deleted_at: ZonedDateTime? = null,
   /**
    * Description of homepage
    */
@@ -7447,7 +7448,7 @@ data class WriteHomepageSection (
   /**
    * Time at which this section was deleted.
    */
-  var deleted_at: Date? = null,
+  var deleted_at: ZonedDateTime? = null,
   /**
    * Id reference to parent homepage
    */
@@ -8329,11 +8330,11 @@ data class WriteTheme (
   /**
    * Timestamp for when this theme becomes active. Null=always
    */
-  var begin_at: Date? = null,
+  var begin_at: ZonedDateTime? = null,
   /**
    * Timestamp for when this theme expires. Null=never
    */
-  var end_at: Date? = null,
+  var end_at: ZonedDateTime? = null,
   /**
    * Name of theme. Can only be alphanumeric and underscores.
    */
