@@ -23,11 +23,10 @@
  */
 
 import com.looker.rtl.*
-import java.time.*
-import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import org.junit.Test as test
+
 
 class TestTransport {
     val fullPath = "https://github.com/looker-open-source/sdk-codegen/"
@@ -69,7 +68,10 @@ class TestTransport {
 
     @test
     fun testEncodeParam() {
-        val today = ZonedDateTime("2020-01-01T14:48:00.00Z")
+        val dateStr = "2020-01-01T14:48:00.00Z"
+        val oldDate = Date(dateStr)
+        val today = ZonedDateTime(dateStr)
+        assertEquals("2020-01-01T14%3A48%3A00.000Z", encodeParam(oldDate))
         assertEquals("2020-01-01T14%3A48%3A00.000Z", encodeParam(today))
         assertEquals("foo%2Fbar", encodeParam("foo%2Fbar"))
         assertEquals("foo%2Fbar", encodeParam("foo/bar"))

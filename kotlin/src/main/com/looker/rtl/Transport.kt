@@ -35,6 +35,9 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.response.HttpResponse
 import io.ktor.http.takeFrom
+import io.ktor.util.InternalAPI
+import io.ktor.util.toLocalDateTime
+import io.ktor.util.toZonedDateTime
 import kotlinx.coroutines.runBlocking
 import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy
@@ -133,6 +136,8 @@ fun encodeParam(value: Any?) : String {
     val utf8 = "utf-8"
     var encoded = if (value is ZonedDateTime) {
         value.toOffsetDateTime().format(utcFormat)
+    } else if (value is Date) {
+        value.toInstant().atZone(ZoneOffset.UTC).format(utcFormat)
     } else {
         "$value"
     }

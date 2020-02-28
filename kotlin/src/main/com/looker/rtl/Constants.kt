@@ -26,8 +26,10 @@
 
 package com.looker.rtl
 
+import java.text.SimpleDateFormat
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 const val ENVIRONMENT_PREFIX = "LOOKERSDK"
 const val LOOKER_VERSION = "7.2"
@@ -107,4 +109,10 @@ fun responseMode(contentType: String): ResponseMode {
 
 internal fun ZonedDateTime(utcDateTime: String): ZonedDateTime {
     return ZonedDateTime.parse(utcDateTime, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+}
+
+internal fun Date(utcDateTime: String): Date {
+    val utcFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    utcFormat.timeZone = TimeZone.getTimeZone("UTC")
+    return utcFormat.parse(utcDateTime)
 }
