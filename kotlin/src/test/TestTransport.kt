@@ -27,6 +27,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import org.junit.Test as test
 
+
 class TestTransport {
     val fullPath = "https://github.com/looker-open-source/sdk-codegen/"
     val base = "https://my.looker.com:19999"
@@ -65,4 +66,16 @@ class TestTransport {
         assertTrue(actual.contains("One SDK to rule them all, and in the codegen bind them"))
     }
 
+    @test
+    fun testEncodeParam() {
+        val dateStr = "2020-01-01T14:48:00.00Z"
+        val oldDate = Date(dateStr)
+        val today = ZonedDateTime(dateStr)
+        assertEquals("2020-01-01T14%3A48%3A00.000Z", encodeParam(oldDate))
+        assertEquals("2020-01-01T14%3A48%3A00.000Z", encodeParam(today))
+        assertEquals("foo%2Fbar", encodeParam("foo%2Fbar"))
+        assertEquals("foo%2Fbar", encodeParam("foo/bar"))
+        assertEquals("true", encodeParam(true))
+        assertEquals("2.3", encodeParam(2.3))
+    }
 }

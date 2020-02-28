@@ -24,7 +24,7 @@
 
 // Discussion of MIME types at https://en.wikipedia.org/wiki/Media_type#Mime.types
 
-import { ResponseMode, responseMode } from './transport'
+import { encodeParam, ResponseMode, responseMode } from './transport'
 import { TestConfig } from './nodeSettings.spec'
 
 const config = TestConfig()
@@ -53,6 +53,16 @@ describe('Transport', () => {
         expect(actual).toEqual(ResponseMode.string)
       })
     })
+
+  })
+
+  it('encodeParam', () => {
+    let today = new Date('01 January 2020 14:48 UTC')
+    expect(encodeParam(today)).toEqual("2020-01-01T14%3A48%3A00.000Z")
+    expect(encodeParam('foo%2Fbar')).toEqual('foo%2Fbar')
+    expect(encodeParam('foo/bar')).toEqual('foo%2Fbar')
+    expect(encodeParam(true)).toEqual('true')
+    expect(encodeParam(2.3)).toEqual('2.3')
   })
 
 })

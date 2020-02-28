@@ -194,77 +194,146 @@ class transportTests: XCTestCase {
         let ids: DelimArray<Int> = [1,2,3]
         var values: Values = [ "Ids": ids ]
         var actual = addQueryParams("Int", values)
-        XCTAssertEqual(actual, "Int?Ids=1,2,3")
+        XCTAssertEqual(actual, "Int?Ids=1%2C2%2C3")
         let opts: DelimArray<Int?>? = [1,2,3]
         values = [ "Ids": opts ]
         actual = addQueryParams("Int", values)
-        XCTAssertEqual(actual, "Int?Ids=1,2,3")
+        XCTAssertEqual(actual, "Int?Ids=1%2C2%2C3")
     }
 
     func testQueryParamsDelimArrayInt32() {
         let ids: DelimArray<Int32> = [1,2,3]
         var values: Values = [ "Ids": ids ]
         var actual = addQueryParams("Int", values)
-        XCTAssertEqual(actual, "Int?Ids=1,2,3")
+        XCTAssertEqual(actual, "Int?Ids=1%2C2%2C3")
         let opts: DelimArray<Int32?>? = [1,2,3]
         values = [ "Ids": opts ]
         actual = addQueryParams("Int", values)
-        XCTAssertEqual(actual, "Int?Ids=1,2,3")
+        XCTAssertEqual(actual, "Int?Ids=1%2C2%2C3")
     }
 
     func testQueryParamsDelimArrayInt64() {
         let ids: DelimArray<Int64> = [1,2,3]
         var values: Values = [ "Ids": ids ]
         var actual = addQueryParams("Int", values)
-        XCTAssertEqual(actual, "Int?Ids=1,2,3")
+        XCTAssertEqual(actual, "Int?Ids=1%2C2%2C3")
         let opts: DelimArray<Int64?>? = [1,2,3]
         values = [ "Ids": opts ]
         actual = addQueryParams("Int", values)
-        XCTAssertEqual(actual, "Int?Ids=1,2,3")
+        XCTAssertEqual(actual, "Int?Ids=1%2C2%2C3")
     }
 
     func testQueryParamsDelimString() {
         let names: DelimArray<String> = ["LLoyd?", "ZZooey#"]
         var values: Values = [ "Names": names]
         var actual = addQueryParams("String", values)
-        XCTAssertEqual(actual, "String?Names=LLoyd%3F,ZZooey%23")
+        XCTAssertEqual(actual, "String?Names=LLoyd%3F%2CZZooey%23")
         let opts: DelimArray<String?>? = ["LLoyd?", "ZZooey#"]
         values = ["Names": opts]
         actual = addQueryParams("String", values)
-        XCTAssertEqual(actual, "String?Names=LLoyd%3F,ZZooey%23")
+        XCTAssertEqual(actual, "String?Names=LLoyd%3F%2CZZooey%23")
     }
 
     func testQueryParamsDelimArrayDouble() {
         let nums: DelimArray<Double> = [2.2,3.3]
         var values: Values = [ "Nums": nums]
         var actual = addQueryParams("Double", values)
-        XCTAssertEqual(actual, "Double?Nums=2.2,3.3")
+        XCTAssertEqual(actual, "Double?Nums=2.2%2C3.3")
         let opts: DelimArray<Double?>? = [2.2,3.3]
         values = [ "Nums": opts]
         actual = addQueryParams("Double", values)
-        XCTAssertEqual(actual, "Double?Nums=2.2,3.3")
+        XCTAssertEqual(actual, "Double?Nums=2.2%2C3.3")
     }
 
     func testQueryParamsDelimArrayFloat() {
         let nums: DelimArray<Float> = [2.2,3.3]
         var values: Values = [ "Nums": nums]
         var actual = addQueryParams("Float", values)
-        XCTAssertEqual(actual, "Float?Nums=2.2,3.3")
+        XCTAssertEqual(actual, "Float?Nums=2.2%2C3.3")
         let opts: DelimArray<Float?>? = [2.2,3.3]
         values = [ "Nums": opts]
         actual = addQueryParams("Float", values)
-        XCTAssertEqual(actual, "Float?Nums=2.2,3.3")
+        XCTAssertEqual(actual, "Float?Nums=2.2%2C3.3")
     }
 
     func testQueryParamsDelimArrayBool() {
         let flags: DelimArray<Bool> = [false, true]
         var values: Values = [ "Flags": flags]
         var actual = addQueryParams("Bool", values)
-        XCTAssertEqual(actual, "Bool?Flags=false,true")
+        XCTAssertEqual(actual, "Bool?Flags=false%2Ctrue")
         let opts: DelimArray<Bool?>? = [false,true]
         values = [ "Flags": opts]
         actual = addQueryParams("Bool", values)
-        XCTAssertEqual(actual, "Bool?Flags=false,true")
+        XCTAssertEqual(actual, "Bool?Flags=false%2Ctrue")
     }
 
+    func testPerc() {
+        var url = URLComponents()
+        url.setQueryItems(with: ["foo": "%"])
+        let foo = url.percentEncodedQuery
+        XCTAssertEqual(foo, "foo=%25")
+        let perc = encodeParam("%")
+        XCTAssertEqual("%25", perc)
+        XCTAssertEqual(encodeParam("%%"), "%25%25")
+        XCTAssertEqual(encodeParam("cat%"), "cat%25")
+        XCTAssertEqual(encodeParam("%cat"), "%25cat")
+        
+    }
+    
+    func testEncodeParam() {
+        let today = DateFormatter.iso8601Full.date(from: "2020-01-01T14:48:00.00Z")
+        XCTAssertEqual(encodeParam(today), "2020-01-01T14%3A48%3A00.000Z")
+        XCTAssertEqual(encodeParam("foo/bar"), "foo%2Fbar")
+        XCTAssertEqual(encodeParam(true), "true")
+        XCTAssertEqual(encodeParam(2.3), "2.3")
+        var val: Any? = #"foo"bar"#
+        XCTAssertEqual(encodeParam(val), "foo%22bar")
+        val = "foo?bar"
+        XCTAssertEqual(encodeParam(val), "foo%3Fbar")
+        val = true
+        XCTAssertEqual(encodeParam(val), "true")
+        val = nil
+        XCTAssertEqual(encodeParam(val), "")
+        let checks = [
+            [" ", "%20"],
+            ["/", "%2F"],
+            ["?", "%3F"],
+            ["\"", "%22"],
+            ["\\", "%5C"],
+            ["<", "%3C"],
+            [">", "%3E"],
+            ["#", "%23"],
+            ["%", "%25"],
+            ["|", "%7C"],
+            ["[", "%5B"],
+            ["]", "%5D"],
+            ["{", "%7B"],
+            ["}", "%7D"],
+            ["!", "%21"]
+        ]
+        for e in checks {
+//            XCTAssertEqual(e[0], e[1].decodeUri(), "Value: '\(e[0])'")
+            XCTAssertEqual(encodeParam(e[0]), e[1], "Value: '\(e[0])'")
+        }
+        let ids: DelimArray<Int64> = [1,2,3]
+        XCTAssertEqual(ids.toString(), "1,2,3")
+        XCTAssertEqual(encodeParam(ids), "1%2C2%2C3")
+        var x: Any = ids
+        XCTAssertEqual(encodeParam(x), "1%2C2%2C3")
+        if (x is DelimArray<Int64>) {
+            let v = x as! DelimArray<Int64>
+            XCTAssertEqual(v.toString(), "1,2,3")
+            XCTAssertEqual(encodeParam(v), "1%2C2%2C3")
+        }
+        let names: DelimArray<String> = ["George", "Ringo", "Paul", "John"]
+        XCTAssertEqual(names.toString(), "George,Ringo,Paul,John")
+        XCTAssertEqual(encodeParam(names), "George%2CRingo%2CPaul%2CJohn")
+        x = names
+        XCTAssertEqual(encodeParam(x), "George%2CRingo%2CPaul%2CJohn")
+        if (x is DelimArray<String>) {
+            let v = x as! DelimArray<String>
+            XCTAssertEqual(v.toString(), "George,Ringo,Paul,John")
+            XCTAssertEqual(encodeParam(v), "George%2CRingo%2CPaul%2CJohn")
+        }
+    }
 }

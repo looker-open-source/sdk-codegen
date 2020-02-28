@@ -7,6 +7,7 @@ package com.looker.sdk.api31
 import com.looker.rtl.*
 import java.io.*
 import java.util.*
+import java.time.*
 
 data class AccessToken (
   /**

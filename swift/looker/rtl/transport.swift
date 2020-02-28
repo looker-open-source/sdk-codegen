@@ -265,6 +265,88 @@ func notAnOption(_ values: Values) -> ValueDictionary<String, Any> {
     return result
 }
 
+
+extension URLComponents {
+    mutating func setQueryItems(with parameters: [String: Any]) {
+        self.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value as? String) }
+    }
+}
+
+// Convenience extension for an encodeURI() function similar to other SDKs
+extension String {
+    func encodePath() -> String {
+        return self.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
+    }
+    func encodeQuery() -> String {
+        return self.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+    }
+    func decodeUri() -> String {
+        return self == "%" ? "%" : (self.removingPercentEncoding ?? "")
+    }
+    func encodeUri() -> String {
+        let unreservedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~"
+        let unreservedCharset = CharacterSet(charactersIn: unreservedChars)
+        return self.addingPercentEncoding(withAllowedCharacters: unreservedCharset) ?? ""
+    }
+}
+
+// Convert any value to its Query Param equivalent
+func encodeParam(_ value: Any?) -> String {
+    var encoded = ""
+    if let val = value {
+        switch (val) {
+        case is DelimArray<Double>:
+            let x = val as! DelimArray<Double>
+            encoded = x.toString()
+            break
+        case is DelimArray<Float>:
+            let x = val as! DelimArray<Float>
+            encoded = x.toString()
+            break
+        case is DelimArray<Int>:
+            let x = val as! DelimArray<Int>
+            encoded = x.toString()
+            break
+        case is DelimArray<Int32>:
+            let x = val as! DelimArray<Int32>
+            encoded = x.toString()
+            break
+        case is DelimArray<Int64>:
+            let x = val as! DelimArray<Int64>
+            encoded = x.toString()
+            break
+        case is DelimArray<String>:
+            let x = val as! DelimArray<String>
+            encoded = x.toString()
+            break
+        case is DelimArray<Bool>:
+            let x = val as! DelimArray<Bool>
+            encoded = x.toString()
+            break
+        case is Date:
+            let x = val as! Date
+            encoded = DateFormatter.iso8601Full.string(from: x)
+            break
+        default:
+            encoded = "\(val)"
+        }
+//        if val is Array<Any> {
+//            let a = val as! Array<Any>
+//            result = a.toString().encodeQuery()
+//        } else {
+//        }
+    }
+    
+    // TODO haven't found a way to properly decode the input for a full round-trip so this is function
+    // always encodes its input for now
+//    let decoded = encoded.decodeUri()
+    // Make concession for unencoded %s in input
+//    if (encoded == decoded || encoded.contains("%")) {
+//        encoded = encoded.encodeUri()
+//    }
+    return encoded.encodeUri()
+}
+
 func encodeParams(_ params: Values?) -> String {
     var result = ""
     if let up = params {
@@ -276,7 +358,7 @@ func encodeParams(_ params: Values?) -> String {
             //            guard value != nil { return true } else { return false }
             //    }
             .map { (key: String, value: Any ) -> String in
-                "\(key)=\(asQ(value))"
+                "\(key)=\(encodeParam(value))"
         }
         .joined(separator: "&")
     }

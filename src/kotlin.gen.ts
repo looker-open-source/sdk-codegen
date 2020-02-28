@@ -88,6 +88,7 @@ package com.looker.sdk${this.apiNamespace()}
 import com.looker.rtl.*
 import com.looker.rtl.UserSession
 import java.util.*
+import java.time.*
 import com.looker.sdk${this.apiNamespace()}.*
 // TODO can this single import override be avoided in any way?
 import com.looker.sdk${this.apiNamespace()}.Locale
@@ -107,6 +108,7 @@ package com.looker.sdk${this.apiNamespace()}
 import com.looker.rtl.*
 import com.looker.rtl.UserSession
 import java.util.*
+import java.time.*
 import com.looker.sdk${this.apiNamespace()}.*
 // TODO can this single import override be avoided in any way?
 import com.looker.sdk${this.apiNamespace()}.Locale
@@ -131,6 +133,7 @@ package com.looker.sdk${this.apiNamespace()}
 import com.looker.rtl.*
 import java.io.*
 import java.util.*
+import java.time.*
 `
   }
 
@@ -188,7 +191,7 @@ import java.util.*
     const bump = indent + this.indentStr
 
     if (requestType) {
-      // TODO remove this cruft from Typescript)
+      // TODO remove this Typescript cruft
       fragment = `request: Partial<${requestType}>`
     } else {
       let params: string[] = []
@@ -214,9 +217,21 @@ import java.util.*
     return this.methodHeaderDeclaration(indent, method, false)
   }
 
+  encodePathParams(indent: string, method: IMethod) {
+    const bump = indent + this.indentStr
+    let encodings: string = ''
+    if (method.pathParams.length > 0) {
+      for (const param of method.pathParams) {
+        encodings += `${bump}val path_${param.name} = encodeParam(${param.name})\n`
+      }
+    }
+    return encodings
+  }
+
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
     return this.methodSignature(indent, method)
+      + this.encodePathParams(bump, method)
       + this.httpCall(bump, method)
       + `\n${indent}}`
   }
@@ -228,6 +243,7 @@ import java.util.*
   declareStreamer(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
     return this.streamerSignature(indent, method)
+      + this.encodePathParams(bump, method)
       + this.streamCall(bump, method)
       + `\n${indent}}`
   }
@@ -247,7 +263,7 @@ import java.util.*
 
   httpPath(path: string, prefix?: string) {
     prefix = prefix || ''
-    if (path.indexOf('{') >= 0) return '"' + path.replace(/{/gi, '${' + prefix) + '"'
+    if (path.indexOf('{') >= 0) return '"' + path.replace(/{/gi, '${path_' + prefix) + '"'
     return `"${path}"`
   }
 
@@ -262,7 +278,10 @@ import java.util.*
         hash.push(`"${arg}" to ${arg}`)
       }
     }
-    return `\n${indent}mapOf(${hash.join(this.argDelimiter)})`
+    let bump = this.bumper(indent)
+    let argBump = this.bumper(bump)
+    const argWrapper = `,\n ${argBump}`
+    return `\n${bump}mapOf(${hash.join(argWrapper)})`
   }
 
   // @ts-ignore
@@ -310,7 +329,7 @@ import java.util.*
     const args = this.httpArgs(bump, method)
     // TODO don't currently need these for Kotlin
     // const errors = this.errorResponses(indent, method)
-    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
+    return `${bump}return ${this.it(method.httpMethod.toLowerCase())}<${type.name}>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
   }
 
   streamCall(indent: string, method: IMethod) {
@@ -319,7 +338,7 @@ import java.util.*
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     // const errors = this.errorResponses(indent, method)
-    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<ByteArray>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
+    return `${bump}return ${this.it(method.httpMethod.toLowerCase())}<ByteArray>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
   }
 
   summary(indent: string, text: string | undefined) {
@@ -382,8 +401,8 @@ import java.util.*
       'boolean': {name: 'Boolean', default: mt},
       'uri': {name: 'UriString', default: mt},
       'url': {name: 'UrlString', default: mt},
-      'datetime': {name: 'Date', default: mt}, // TODO is there a default expression for datetime?
-      'date': {name: 'Date', default: mt}, // TODO is there a default expression for date?
+      'datetime': {name: 'Date', default: mt},
+      'date': {name: 'Date', default: mt},
       'object': {name: 'Any', default: mt},
       'void': {name: 'Void', default: mt}
     }

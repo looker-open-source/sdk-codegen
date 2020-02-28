@@ -6,6 +6,7 @@ package com.looker.sdk.api31
 import com.looker.rtl.*
 import com.looker.rtl.UserSession
 import java.util.*
+import java.time.*
 import com.looker.sdk.api31.*
 // TODO can this single import override be avoided in any way?
 import com.looker.sdk.api31.Locale
@@ -24,7 +25,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} integration_hub_id Id of integration_hub
      */
     integration_hub_id: Long) : SDKResponse {
-    return this.post<IntegrationHub>("/integration_hubs/${integration_hub_id}/accept_legal_agreement", mapOf())
+      val path_integration_hub_id = encodeParam(integration_hub_id)
+      return this.post<IntegrationHub>("/integration_hubs/${path_integration_hub_id}/accept_legal_agreement", mapOf())
   }
 
   /**
@@ -53,8 +55,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Theme>>("/themes/active", 
-      mapOf("name" to name, "ts" to ts, "fields" to fields))
+      return this.get<Array<Theme>>("/themes/active", 
+        mapOf("name" to name,
+           "ts" to ts,
+           "fields" to fields))
   }
 
   /**
@@ -71,7 +75,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {GroupIdForGroupInclusion} body
      */
     body: GroupIdForGroupInclusion) : SDKResponse {
-    return this.post<Group>("/groups/${group_id}/groups", mapOf(), body)
+      val path_group_id = encodeParam(group_id)
+      return this.post<Group>("/groups/${path_group_id}/groups", mapOf(), body)
   }
 
   /**
@@ -88,7 +93,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {GroupIdForGroupUserInclusion} body
      */
     body: GroupIdForGroupUserInclusion) : SDKResponse {
-    return this.post<User>("/groups/${group_id}/users", mapOf(), body)
+      val path_group_id = encodeParam(group_id)
+      return this.post<User>("/groups/${path_group_id}/users", mapOf(), body)
   }
 
   /**
@@ -108,8 +114,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ColorCollection>>("/color_collections", 
-      mapOf("fields" to fields))
+      return this.get<Array<ColorCollection>>("/color_collections", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -122,8 +128,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<DBConnection>>("/connections", 
-      mapOf("fields" to fields))
+      return this.get<Array<DBConnection>>("/connections", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -140,8 +146,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ContentMetaGroupUser>>("/content_metadata_access", 
-      mapOf("content_metadata_id" to content_metadata_id, "fields" to fields))
+      return this.get<Array<ContentMetaGroupUser>>("/content_metadata_access", 
+        mapOf("content_metadata_id" to content_metadata_id,
+           "fields" to fields))
   }
 
   /**
@@ -158,8 +165,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ContentMeta>>("/content_metadata", 
-      mapOf("parent_id" to parent_id, "fields" to fields))
+      return this.get<Array<ContentMeta>>("/content_metadata", 
+        mapOf("parent_id" to parent_id,
+           "fields" to fields))
   }
 
   /**
@@ -178,8 +186,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<DashboardBase>>("/dashboards", 
-      mapOf("fields" to fields))
+      return this.get<Array<DashboardBase>>("/dashboards", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -188,7 +196,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /datagroups -> Array<Datagroup>
    */
   fun all_datagroups() : SDKResponse {
-    return this.get<Array<Datagroup>>("/datagroups", mapOf())
+      return this.get<Array<Datagroup>>("/datagroups", mapOf())
   }
 
   /**
@@ -201,8 +209,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<DialectInfo>>("/dialect_info", 
-      mapOf("fields" to fields))
+      return this.get<Array<DialectInfo>>("/dialect_info", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -215,8 +223,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Folder>>("/folders", 
-      mapOf("fields" to fields))
+      return this.get<Array<Folder>>("/folders", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -231,7 +239,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
-    return this.get<Array<GitBranch>>("/projects/${project_id}/git_branches", mapOf())
+      val path_project_id = encodeParam(project_id)
+      return this.get<Array<GitBranch>>("/projects/${path_project_id}/git_branches", mapOf())
   }
 
   /**
@@ -257,8 +266,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
      */
     remote_url: String? = null) : SDKResponse {
-    return this.get<Array<GitConnectionTest>>("/projects/${project_id}/git_connection_tests", 
-      mapOf("remote_url" to remote_url))
+      val path_project_id = encodeParam(project_id)
+      return this.get<Array<GitConnectionTest>>("/projects/${path_project_id}/git_connection_tests", 
+        mapOf("remote_url" to remote_url))
   }
 
   /**
@@ -275,8 +285,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Group>>("/groups/${group_id}/groups", 
-      mapOf("fields" to fields))
+      val path_group_id = encodeParam(group_id)
+      return this.get<Array<Group>>("/groups/${path_group_id}/groups", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -305,8 +316,12 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} sorts Fields to sort by.
      */
     sorts: String? = null) : SDKResponse {
-    return this.get<Array<User>>("/groups/${group_id}/users", 
-      mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts))
+      val path_group_id = encodeParam(group_id)
+      return this.get<Array<User>>("/groups/${path_group_id}/users", 
+        mapOf("fields" to fields,
+           "page" to page,
+           "per_page" to per_page,
+           "sorts" to sorts))
   }
 
   /**
@@ -343,8 +358,14 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} can_add_to_content_metadata Select only groups that either can/cannot be given access to content.
      */
     can_add_to_content_metadata: Boolean? = null) : SDKResponse {
-    return this.get<Array<Group>>("/groups", 
-      mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts, "ids" to ids, "content_metadata_id" to content_metadata_id, "can_add_to_content_metadata" to can_add_to_content_metadata))
+      return this.get<Array<Group>>("/groups", 
+        mapOf("fields" to fields,
+           "page" to page,
+           "per_page" to per_page,
+           "sorts" to sorts,
+           "ids" to ids,
+           "content_metadata_id" to content_metadata_id,
+           "can_add_to_content_metadata" to can_add_to_content_metadata))
   }
 
   /**
@@ -365,8 +386,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} homepage_section_id Filter to a specific homepage section
      */
     homepage_section_id: String? = null) : SDKResponse {
-    return this.get<Array<HomepageItem>>("/homepage_items", 
-      mapOf("fields" to fields, "sorts" to sorts, "homepage_section_id" to homepage_section_id))
+      return this.get<Array<HomepageItem>>("/homepage_items", 
+        mapOf("fields" to fields,
+           "sorts" to sorts,
+           "homepage_section_id" to homepage_section_id))
   }
 
   /**
@@ -383,8 +406,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} sorts Fields to sort by.
      */
     sorts: String? = null) : SDKResponse {
-    return this.get<Array<HomepageSection>>("/homepage_sections", 
-      mapOf("fields" to fields, "sorts" to sorts))
+      return this.get<Array<HomepageSection>>("/homepage_sections", 
+        mapOf("fields" to fields,
+           "sorts" to sorts))
   }
 
   /**
@@ -397,8 +421,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Homepage>>("/homepages", 
-      mapOf("fields" to fields))
+      return this.get<Array<Homepage>>("/homepages", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -411,8 +435,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<IntegrationHub>>("/integration_hubs", 
-      mapOf("fields" to fields))
+      return this.get<Array<IntegrationHub>>("/integration_hubs", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -429,8 +453,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} integration_hub_id Filter to a specific provider
      */
     integration_hub_id: String? = null) : SDKResponse {
-    return this.get<Array<Integration>>("/integrations", 
-      mapOf("fields" to fields, "integration_hub_id" to integration_hub_id))
+      return this.get<Array<Integration>>("/integrations", 
+        mapOf("fields" to fields,
+           "integration_hub_id" to integration_hub_id))
   }
 
   /**
@@ -439,7 +464,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /legacy_features -> Array<LegacyFeature>
    */
   fun all_legacy_features() : SDKResponse {
-    return this.get<Array<LegacyFeature>>("/legacy_features", mapOf())
+      return this.get<Array<LegacyFeature>>("/legacy_features", mapOf())
   }
 
   /**
@@ -448,7 +473,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /locales -> Array<Locale>
    */
   fun all_locales() : SDKResponse {
-    return this.get<Array<Locale>>("/locales", mapOf())
+      return this.get<Array<Locale>>("/locales", mapOf())
   }
 
   /**
@@ -461,8 +486,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<LookmlModel>>("/lookml_models", 
-      mapOf("fields" to fields))
+      return this.get<Array<LookmlModel>>("/lookml_models", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -483,8 +508,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} file_id File Id
      */
     file_id: String? = null) : SDKResponse {
-    return this.get<Array<LookmlTest>>("/projects/${project_id}/lookml_tests", 
-      mapOf("file_id" to file_id))
+      val path_project_id = encodeParam(project_id)
+      return this.get<Array<LookmlTest>>("/projects/${path_project_id}/lookml_tests", 
+        mapOf("file_id" to file_id))
   }
 
   /**
@@ -503,8 +529,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Look>>("/looks", 
-      mapOf("fields" to fields))
+      return this.get<Array<Look>>("/looks", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -517,8 +543,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ModelSet>>("/model_sets", 
-      mapOf("fields" to fields))
+      return this.get<Array<ModelSet>>("/model_sets", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -531,8 +557,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<PermissionSet>>("/permission_sets", 
-      mapOf("fields" to fields))
+      return this.get<Array<PermissionSet>>("/permission_sets", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -541,7 +567,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /permissions -> Array<Permission>
    */
   fun all_permissions() : SDKResponse {
-    return this.get<Array<Permission>>("/permissions", mapOf())
+      return this.get<Array<Permission>>("/permissions", mapOf())
   }
 
   /**
@@ -560,8 +586,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ProjectFile>>("/projects/${project_id}/files", 
-      mapOf("fields" to fields))
+      val path_project_id = encodeParam(project_id)
+      return this.get<Array<ProjectFile>>("/projects/${path_project_id}/files", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -576,8 +603,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Project>>("/projects", 
-      mapOf("fields" to fields))
+      return this.get<Array<Project>>("/projects", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -594,8 +621,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {DelimArray<Long>} ids Optional list of ids to get specific roles.
      */
     ids: DelimArray<Long>? = null) : SDKResponse {
-    return this.get<Array<Role>>("/roles", 
-      mapOf("fields" to fields, "ids" to ids))
+      return this.get<Array<Role>>("/roles", 
+        mapOf("fields" to fields,
+           "ids" to ids))
   }
 
   /**
@@ -604,7 +632,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /running_queries -> Array<RunningQueries>
    */
   fun all_running_queries() : SDKResponse {
-    return this.get<Array<RunningQueries>>("/running_queries", mapOf())
+      return this.get<Array<RunningQueries>>("/running_queries", mapOf())
   }
 
   /**
@@ -635,8 +663,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} all_users Return scheduled plans belonging to all users (caller needs see_schedules permission)
      */
     all_users: Boolean? = null) : SDKResponse {
-    return this.get<Array<ScheduledPlan>>("/scheduled_plans", 
-      mapOf("user_id" to user_id, "fields" to fields, "all_users" to all_users))
+      return this.get<Array<ScheduledPlan>>("/scheduled_plans", 
+        mapOf("user_id" to user_id,
+           "fields" to fields,
+           "all_users" to all_users))
   }
 
   /**
@@ -649,8 +679,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<SpaceBase>>("/spaces", 
-      mapOf("fields" to fields))
+      return this.get<Array<SpaceBase>>("/spaces", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -669,8 +699,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Theme>>("/themes", 
-      mapOf("fields" to fields))
+      return this.get<Array<Theme>>("/themes", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -679,7 +709,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /timezones -> Array<Timezone>
    */
   fun all_timezones() : SDKResponse {
-    return this.get<Array<Timezone>>("/timezones", mapOf())
+      return this.get<Array<Timezone>>("/timezones", mapOf())
   }
 
   /**
@@ -702,8 +732,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<UserAttributeGroupValue>>("/user_attributes/${user_attribute_id}/group_values", 
-      mapOf("fields" to fields))
+      val path_user_attribute_id = encodeParam(user_attribute_id)
+      return this.get<Array<UserAttributeGroupValue>>("/user_attributes/${path_user_attribute_id}/group_values", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -720,8 +751,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} sorts Fields to order the results by. Sortable fields include: name, label
      */
     sorts: String? = null) : SDKResponse {
-    return this.get<Array<UserAttribute>>("/user_attributes", 
-      mapOf("fields" to fields, "sorts" to sorts))
+      return this.get<Array<UserAttribute>>("/user_attributes", 
+        mapOf("fields" to fields,
+           "sorts" to sorts))
   }
 
   /**
@@ -738,8 +770,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<CredentialsApi3>>("/users/${user_id}/credentials_api3", 
-      mapOf("fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      return this.get<Array<CredentialsApi3>>("/users/${path_user_id}/credentials_api3", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -756,8 +789,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<CredentialsEmbed>>("/users/${user_id}/credentials_embed", 
-      mapOf("fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      return this.get<Array<CredentialsEmbed>>("/users/${path_user_id}/credentials_embed", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -770,8 +804,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Include only these fields in the response
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<UserLoginLockout>>("/user_login_lockouts", 
-      mapOf("fields" to fields))
+      return this.get<Array<UserLoginLockout>>("/user_login_lockouts", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -788,8 +822,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Session>>("/users/${user_id}/sessions", 
-      mapOf("fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      return this.get<Array<Session>>("/users/${path_user_id}/sessions", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -818,8 +853,12 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {DelimArray<Long>} ids Optional list of ids to get specific users.
      */
     ids: DelimArray<Long>? = null) : SDKResponse {
-    return this.get<Array<User>>("/users", 
-      mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts, "ids" to ids))
+      return this.get<Array<User>>("/users", 
+        mapOf("fields" to fields,
+           "page" to page,
+           "per_page" to per_page,
+           "sorts" to sorts,
+           "ids" to ids))
   }
 
   /**
@@ -830,7 +869,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /workspaces -> Array<Workspace>
    */
   fun all_workspaces() : SDKResponse {
-    return this.get<Array<Workspace>>("/workspaces", mapOf())
+      return this.get<Array<Workspace>>("/workspaces", mapOf())
   }
 
   /**
@@ -839,7 +878,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /backup_configuration -> BackupConfiguration
    */
   fun backup_configuration() : SDKResponse {
-    return this.get<BackupConfiguration>("/backup_configuration", mapOf())
+      return this.get<BackupConfiguration>("/backup_configuration", mapOf())
   }
 
   /**
@@ -865,8 +904,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ColorCollection>("/color_collections/${collection_id}", 
-      mapOf("fields" to fields))
+      val path_collection_id = encodeParam(collection_id)
+      return this.get<ColorCollection>("/color_collections/${path_collection_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -884,8 +924,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ColorCollection>>("/color_collections/custom", 
-      mapOf("fields" to fields))
+      return this.get<Array<ColorCollection>>("/color_collections/custom", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -903,8 +943,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ColorCollection>>("/color_collections/standard", 
-      mapOf("fields" to fields))
+      return this.get<Array<ColorCollection>>("/color_collections/standard", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -921,8 +961,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<DBConnection>("/connections/${connection_name}", 
-      mapOf("fields" to fields))
+      val path_connection_name = encodeParam(connection_name)
+      return this.get<DBConnection>("/connections/${path_connection_name}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -939,8 +980,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ContentFavorite>("/content_favorite/${content_favorite_id}", 
-      mapOf("fields" to fields))
+      val path_content_favorite_id = encodeParam(content_favorite_id)
+      return this.get<ContentFavorite>("/content_favorite/${path_content_favorite_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -957,8 +999,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ContentMeta>("/content_metadata/${content_metadata_id}", 
-      mapOf("fields" to fields))
+      val path_content_metadata_id = encodeParam(content_metadata_id)
+      return this.get<ContentMeta>("/content_metadata/${path_content_metadata_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -975,8 +1018,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ContentValidation>("/content_validation", 
-      mapOf("fields" to fields))
+      return this.get<ContentValidation>("/content_validation", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -997,7 +1040,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteColorCollection} body
      */
     body: WriteColorCollection) : SDKResponse {
-    return this.post<ColorCollection>("/color_collections", mapOf(), body)
+      return this.post<ColorCollection>("/color_collections", mapOf(), body)
   }
 
   /**
@@ -1010,7 +1053,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteDBConnection} body
      */
     body: WriteDBConnection) : SDKResponse {
-    return this.post<DBConnection>("/connections", mapOf(), body)
+      return this.post<DBConnection>("/connections", mapOf(), body)
   }
 
   /**
@@ -1023,7 +1066,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteContentFavorite} body
      */
     body: WriteContentFavorite) : SDKResponse {
-    return this.post<ContentFavorite>("/content_favorite", mapOf(), body)
+      return this.post<ContentFavorite>("/content_favorite", mapOf(), body)
   }
 
   /**
@@ -1040,8 +1083,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} send_boards_notification_email Optionally sends notification email when granting access to a board.
      */
     send_boards_notification_email: Boolean? = null) : SDKResponse {
-    return this.post<ContentMetaGroupUser>("/content_metadata_access", 
-      mapOf("send_boards_notification_email" to send_boards_notification_email), body)
+      return this.post<ContentMetaGroupUser>("/content_metadata_access", 
+        mapOf("send_boards_notification_email" to send_boards_notification_email), body)
   }
 
   /**
@@ -1067,7 +1110,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteDashboard} body
      */
     body: WriteDashboard) : SDKResponse {
-    return this.post<Dashboard>("/dashboards", mapOf(), body)
+      return this.post<Dashboard>("/dashboards", mapOf(), body)
   }
 
   /**
@@ -1084,8 +1127,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<DashboardElement>("/dashboard_elements", 
-      mapOf("fields" to fields), body)
+      return this.post<DashboardElement>("/dashboard_elements", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1102,8 +1145,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.post<DashboardFilter>("/dashboard_filters", 
-      mapOf("fields" to fields), body)
+      return this.post<DashboardFilter>("/dashboard_filters", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1120,8 +1163,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<DashboardLayout>("/dashboard_layouts", 
-      mapOf("fields" to fields), body)
+      return this.post<DashboardLayout>("/dashboard_layouts", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1166,8 +1209,14 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} pdf_landscape Whether to render pdf in landscape
      */
     pdf_landscape: Boolean? = null) : SDKResponse {
-    return this.post<RenderTask>("/render_tasks/dashboards/${dashboard_id}/${result_format}", 
-      mapOf("width" to width, "height" to height, "fields" to fields, "pdf_paper_size" to pdf_paper_size, "pdf_landscape" to pdf_landscape), body)
+      val path_dashboard_id = encodeParam(dashboard_id)
+      val path_result_format = encodeParam(result_format)
+      return this.post<RenderTask>("/render_tasks/dashboards/${path_dashboard_id}/${path_result_format}", 
+        mapOf("width" to width,
+           "height" to height,
+           "fields" to fields,
+           "pdf_paper_size" to pdf_paper_size,
+           "pdf_landscape" to pdf_landscape), body)
   }
 
   /**
@@ -1183,7 +1232,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {CreateFolder} body
      */
     body: CreateFolder) : SDKResponse {
-    return this.post<Folder>("/folders", mapOf(), body)
+      return this.post<Folder>("/folders", mapOf(), body)
   }
 
   /**
@@ -1207,7 +1256,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteGitBranch} body
      */
     body: WriteGitBranch) : SDKResponse {
-    return this.post<GitBranch>("/projects/${project_id}/git_branch", mapOf(), body)
+      val path_project_id = encodeParam(project_id)
+      return this.post<GitBranch>("/projects/${path_project_id}/git_branch", mapOf(), body)
   }
 
   /**
@@ -1228,7 +1278,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
-    return this.post<String>("/projects/${project_id}/git/deploy_key", mapOf())
+      val path_project_id = encodeParam(project_id)
+      return this.post<String>("/projects/${path_project_id}/git/deploy_key", mapOf())
   }
 
   /**
@@ -1245,8 +1296,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<Group>("/groups", 
-      mapOf("fields" to fields), body)
+      return this.post<Group>("/groups", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1263,8 +1314,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<Homepage>("/homepages", 
-      mapOf("fields" to fields), body)
+      return this.post<Homepage>("/homepages", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1281,8 +1332,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<HomepageItem>("/homepage_items", 
-      mapOf("fields" to fields), body)
+      return this.post<HomepageItem>("/homepage_items", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1299,8 +1350,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<HomepageSection>("/homepage_sections", 
-      mapOf("fields" to fields), body)
+      return this.post<HomepageSection>("/homepage_sections", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1319,8 +1370,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<IntegrationHub>("/integration_hubs", 
-      mapOf("fields" to fields), body)
+      return this.post<IntegrationHub>("/integration_hubs", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1343,8 +1394,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<LookWithQuery>("/looks", 
-      mapOf("fields" to fields), body)
+      return this.post<LookWithQuery>("/looks", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1377,8 +1428,12 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<RenderTask>("/render_tasks/looks/${look_id}/${result_format}", 
-      mapOf("width" to width, "height" to height, "fields" to fields))
+      val path_look_id = encodeParam(look_id)
+      val path_result_format = encodeParam(result_format)
+      return this.post<RenderTask>("/render_tasks/looks/${path_look_id}/${path_result_format}", 
+        mapOf("width" to width,
+           "height" to height,
+           "fields" to fields))
   }
 
   /**
@@ -1423,8 +1478,14 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} pdf_landscape Whether to render pdf in landscape
      */
     pdf_landscape: Boolean? = null) : SDKResponse {
-    return this.post<RenderTask>("/render_tasks/lookml_dashboards/${dashboard_id}/${result_format}", 
-      mapOf("width" to width, "height" to height, "fields" to fields, "pdf_paper_size" to pdf_paper_size, "pdf_landscape" to pdf_landscape), body)
+      val path_dashboard_id = encodeParam(dashboard_id)
+      val path_result_format = encodeParam(result_format)
+      return this.post<RenderTask>("/render_tasks/lookml_dashboards/${path_dashboard_id}/${path_result_format}", 
+        mapOf("width" to width,
+           "height" to height,
+           "fields" to fields,
+           "pdf_paper_size" to pdf_paper_size,
+           "pdf_landscape" to pdf_landscape), body)
   }
 
   /**
@@ -1437,7 +1498,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteLookmlModel} body
      */
     body: WriteLookmlModel) : SDKResponse {
-    return this.post<LookmlModel>("/lookml_models", mapOf(), body)
+      return this.post<LookmlModel>("/lookml_models", mapOf(), body)
   }
 
   /**
@@ -1470,8 +1531,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.post<MergeQuery>("/merge_queries", 
-      mapOf("fields" to fields), body)
+      return this.post<MergeQuery>("/merge_queries", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1484,7 +1545,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteModelSet} body
      */
     body: WriteModelSet) : SDKResponse {
-    return this.post<ModelSet>("/model_sets", mapOf(), body)
+      return this.post<ModelSet>("/model_sets", mapOf(), body)
   }
 
   /**
@@ -1497,7 +1558,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteOIDCConfig} body
      */
     body: WriteOIDCConfig) : SDKResponse {
-    return this.post<OIDCConfig>("/oidc_test_configs", mapOf(), body)
+      return this.post<OIDCConfig>("/oidc_test_configs", mapOf(), body)
   }
 
   /**
@@ -1510,7 +1571,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WritePermissionSet} body
      */
     body: WritePermissionSet) : SDKResponse {
-    return this.post<PermissionSet>("/permission_sets", mapOf(), body)
+      return this.post<PermissionSet>("/permission_sets", mapOf(), body)
   }
 
   /**
@@ -1529,7 +1590,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteProject} body
      */
     body: WriteProject) : SDKResponse {
-    return this.post<Project>("/projects", mapOf(), body)
+      return this.post<Project>("/projects", mapOf(), body)
   }
 
   /**
@@ -1553,8 +1614,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<Query>("/queries", 
-      mapOf("fields" to fields), body)
+      return this.post<Query>("/queries", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1587,8 +1648,12 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<RenderTask>("/render_tasks/queries/${query_id}/${result_format}", 
-      mapOf("width" to width, "height" to height, "fields" to fields))
+      val path_query_id = encodeParam(query_id)
+      val path_result_format = encodeParam(result_format)
+      return this.post<RenderTask>("/render_tasks/queries/${path_query_id}/${path_result_format}", 
+        mapOf("width" to width,
+           "height" to height,
+           "fields" to fields))
   }
 
   /**
@@ -1658,8 +1723,20 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.post<QueryTask>("/query_tasks", 
-      mapOf("limit" to limit, "apply_formatting" to apply_formatting, "apply_vis" to apply_vis, "cache" to cache, "image_width" to image_width, "image_height" to image_height, "generate_drill_links" to generate_drill_links, "force_production" to force_production, "cache_only" to cache_only, "path_prefix" to path_prefix, "rebuild_pdts" to rebuild_pdts, "server_table_calcs" to server_table_calcs, "fields" to fields), body)
+      return this.post<QueryTask>("/query_tasks", 
+        mapOf("limit" to limit,
+           "apply_formatting" to apply_formatting,
+           "apply_vis" to apply_vis,
+           "cache" to cache,
+           "image_width" to image_width,
+           "image_height" to image_height,
+           "generate_drill_links" to generate_drill_links,
+           "force_production" to force_production,
+           "cache_only" to cache_only,
+           "path_prefix" to path_prefix,
+           "rebuild_pdts" to rebuild_pdts,
+           "server_table_calcs" to server_table_calcs,
+           "fields" to fields), body)
   }
 
   /**
@@ -1672,7 +1749,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteRole} body
      */
     body: WriteRole) : SDKResponse {
-    return this.post<Role>("/roles", mapOf(), body)
+      return this.post<Role>("/roles", mapOf(), body)
   }
 
   /**
@@ -1685,7 +1762,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteSamlConfig} body
      */
     body: WriteSamlConfig) : SDKResponse {
-    return this.post<SamlConfig>("/saml_test_configs", mapOf(), body)
+      return this.post<SamlConfig>("/saml_test_configs", mapOf(), body)
   }
 
   /**
@@ -1755,7 +1832,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteScheduledPlan} body
      */
     body: WriteScheduledPlan) : SDKResponse {
-    return this.post<ScheduledPlan>("/scheduled_plans", mapOf(), body)
+      return this.post<ScheduledPlan>("/scheduled_plans", mapOf(), body)
   }
 
   /**
@@ -1771,7 +1848,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {CreateSpace} body
      */
     body: CreateSpace) : SDKResponse {
-    return this.post<Space>("/spaces", mapOf(), body)
+      return this.post<Space>("/spaces", mapOf(), body)
   }
 
   /**
@@ -1786,7 +1863,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {SqlQueryCreate} body
      */
     body: SqlQueryCreate) : SDKResponse {
-    return this.post<SqlQuery>("/sql_queries", mapOf(), body)
+      return this.post<SqlQuery>("/sql_queries", mapOf(), body)
   }
 
   /**
@@ -1832,7 +1909,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {EmbedSsoUrlParams} body
      */
     body: EmbedSsoUrlParams) : SDKResponse {
-    return this.post<EmbedSsoUrl>("/embed/sso_url", mapOf(), body)
+      return this.post<EmbedSsoUrl>("/embed/sso_url", mapOf(), body)
   }
 
   /**
@@ -1859,7 +1936,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteTheme} body
      */
     body: WriteTheme) : SDKResponse {
-    return this.post<Theme>("/themes", mapOf(), body)
+      return this.post<Theme>("/themes", mapOf(), body)
   }
 
   /**
@@ -1876,8 +1953,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<User>("/users", 
-      mapOf("fields" to fields), body)
+      return this.post<User>("/users", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1903,8 +1980,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<UserAttribute>("/user_attributes", 
-      mapOf("fields" to fields), body)
+      return this.post<UserAttribute>("/user_attributes", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1925,8 +2002,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<CredentialsApi3>("/users/${user_id}/credentials_api3", 
-      mapOf("fields" to fields), body)
+      val path_user_id = encodeParam(user_id)
+      return this.post<CredentialsApi3>("/users/${path_user_id}/credentials_api3", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1947,8 +2025,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<CredentialsEmail>("/users/${user_id}/credentials_email", 
-      mapOf("fields" to fields), body)
+      val path_user_id = encodeParam(user_id)
+      return this.post<CredentialsEmail>("/users/${path_user_id}/credentials_email", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -1977,8 +2056,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<CredentialsEmail>("/users/${user_id}/credentials_email/password_reset", 
-      mapOf("expires" to expires, "fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      return this.post<CredentialsEmail>("/users/${path_user_id}/credentials_email/password_reset", 
+        mapOf("expires" to expires,
+           "fields" to fields))
   }
 
   /**
@@ -1999,8 +2080,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.post<CredentialsTotp>("/users/${user_id}/credentials_totp", 
-      mapOf("fields" to fields), body)
+      val path_user_id = encodeParam(user_id)
+      return this.post<CredentialsTotp>("/users/${path_user_id}/credentials_totp", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -2009,7 +2091,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /custom_welcome_email -> CustomWelcomeEmail
    */
   fun custom_welcome_email() : SDKResponse {
-    return this.get<CustomWelcomeEmail>("/custom_welcome_email", mapOf())
+      return this.get<CustomWelcomeEmail>("/custom_welcome_email", mapOf())
   }
 
   /**
@@ -2032,8 +2114,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Dashboard>("/dashboards/${dashboard_id}", 
-      mapOf("fields" to fields))
+      val path_dashboard_id = encodeParam(dashboard_id)
+      return this.get<Dashboard>("/dashboards/${path_dashboard_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -2050,8 +2133,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<DashboardElement>>("/dashboards/${dashboard_id}/dashboard_elements", 
-      mapOf("fields" to fields))
+      val path_dashboard_id = encodeParam(dashboard_id)
+      return this.get<Array<DashboardElement>>("/dashboards/${path_dashboard_id}/dashboard_elements", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -2068,8 +2152,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<DashboardFilter>>("/dashboards/${dashboard_id}/dashboard_filters", 
-      mapOf("fields" to fields))
+      val path_dashboard_id = encodeParam(dashboard_id)
+      return this.get<Array<DashboardFilter>>("/dashboards/${path_dashboard_id}/dashboard_filters", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -2086,8 +2171,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<DashboardLayout>>("/dashboards/${dashboard_id}/dashboard_layouts", 
-      mapOf("fields" to fields))
+      val path_dashboard_id = encodeParam(dashboard_id)
+      return this.get<Array<DashboardLayout>>("/dashboards/${path_dashboard_id}/dashboard_layouts", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -2104,8 +2190,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<DashboardElement>("/dashboard_elements/${dashboard_element_id}", 
-      mapOf("fields" to fields))
+      val path_dashboard_element_id = encodeParam(dashboard_element_id)
+      return this.get<DashboardElement>("/dashboard_elements/${path_dashboard_element_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -2122,8 +2209,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<DashboardFilter>("/dashboard_filters/${dashboard_filter_id}", 
-      mapOf("fields" to fields))
+      val path_dashboard_filter_id = encodeParam(dashboard_filter_id)
+      return this.get<DashboardFilter>("/dashboard_filters/${path_dashboard_filter_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -2140,8 +2228,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<DashboardLayout>("/dashboard_layouts/${dashboard_layout_id}", 
-      mapOf("fields" to fields))
+      val path_dashboard_layout_id = encodeParam(dashboard_layout_id)
+      return this.get<DashboardLayout>("/dashboard_layouts/${path_dashboard_layout_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -2158,8 +2247,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<DashboardLayoutComponent>("/dashboard_layout_components/${dashboard_layout_component_id}", 
-      mapOf("fields" to fields))
+      val path_dashboard_layout_component_id = encodeParam(dashboard_layout_component_id)
+      return this.get<DashboardLayoutComponent>("/dashboard_layout_components/${path_dashboard_layout_component_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -2176,8 +2266,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<DashboardLayoutComponent>>("/dashboard_layouts/${dashboard_layout_id}/dashboard_layout_components", 
-      mapOf("fields" to fields))
+      val path_dashboard_layout_id = encodeParam(dashboard_layout_id)
+      return this.get<Array<DashboardLayoutComponent>>("/dashboard_layouts/${path_dashboard_layout_id}/dashboard_layout_components", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -2192,7 +2283,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} dashboard_id Id of dashboard
      */
     dashboard_id: String) : SDKResponse {
-    return this.get<DashboardLookml>("/dashboards/lookml/${dashboard_id}", mapOf())
+      val path_dashboard_id = encodeParam(dashboard_id)
+      return this.get<DashboardLookml>("/dashboards/lookml/${path_dashboard_id}", mapOf())
   }
 
   /**
@@ -2205,7 +2297,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} datagroup_id ID of datagroup.
      */
     datagroup_id: String) : SDKResponse {
-    return this.get<Datagroup>("/datagroups/${datagroup_id}", mapOf())
+      val path_datagroup_id = encodeParam(datagroup_id)
+      return this.get<Datagroup>("/datagroups/${path_datagroup_id}", mapOf())
   }
 
   /**
@@ -2218,7 +2311,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /color_collections/default -> ColorCollection
    */
   fun default_color_collection() : SDKResponse {
-    return this.get<ColorCollection>("/color_collections/default", mapOf())
+      return this.get<ColorCollection>("/color_collections/default", mapOf())
   }
 
   /**
@@ -2237,8 +2330,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
      */
     ts: Date? = null) : SDKResponse {
-    return this.get<Theme>("/themes/default", 
-      mapOf("ts" to ts))
+      return this.get<Theme>("/themes/default", 
+        mapOf("ts" to ts))
   }
 
   /**
@@ -2258,7 +2351,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} collection_id Id of Color Collection
      */
     collection_id: String) : SDKResponse {
-    return this.delete<String>("/color_collections/${collection_id}", mapOf())
+      val path_collection_id = encodeParam(collection_id)
+      return this.delete<String>("/color_collections/${path_collection_id}", mapOf())
   }
 
   /**
@@ -2271,7 +2365,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} connection_name Name of connection
      */
     connection_name: String) : SDKResponse {
-    return this.delete<String>("/connections/${connection_name}", mapOf())
+      val path_connection_name = encodeParam(connection_name)
+      return this.delete<String>("/connections/${path_connection_name}", mapOf())
   }
 
   /**
@@ -2288,7 +2383,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} override_context Context of connection override
      */
     override_context: String) : SDKResponse {
-    return this.delete<String>("/connections/${connection_name}/connection_override/${override_context}", mapOf())
+      val path_connection_name = encodeParam(connection_name)
+      val path_override_context = encodeParam(override_context)
+      return this.delete<String>("/connections/${path_connection_name}/connection_override/${path_override_context}", mapOf())
   }
 
   /**
@@ -2301,7 +2398,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} content_favorite_id Id of favorite content
      */
     content_favorite_id: Long) : SDKResponse {
-    return this.delete<String>("/content_favorite/${content_favorite_id}", mapOf())
+      val path_content_favorite_id = encodeParam(content_favorite_id)
+      return this.delete<String>("/content_favorite/${path_content_favorite_id}", mapOf())
   }
 
   /**
@@ -2314,7 +2412,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} content_metadata_access_id Id of content metadata access
      */
     content_metadata_access_id: Long) : SDKResponse {
-    return this.delete<String>("/content_metadata_access/${content_metadata_access_id}", mapOf())
+      val path_content_metadata_access_id = encodeParam(content_metadata_access_id)
+      return this.delete<String>("/content_metadata_access/${path_content_metadata_access_id}", mapOf())
   }
 
   /**
@@ -2333,7 +2432,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} dashboard_id Id of dashboard
      */
     dashboard_id: String) : SDKResponse {
-    return this.delete<String>("/dashboards/${dashboard_id}", mapOf())
+      val path_dashboard_id = encodeParam(dashboard_id)
+      return this.delete<String>("/dashboards/${path_dashboard_id}", mapOf())
   }
 
   /**
@@ -2346,7 +2446,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} dashboard_element_id Id of dashboard element
      */
     dashboard_element_id: String) : SDKResponse {
-    return this.delete<String>("/dashboard_elements/${dashboard_element_id}", mapOf())
+      val path_dashboard_element_id = encodeParam(dashboard_element_id)
+      return this.delete<String>("/dashboard_elements/${path_dashboard_element_id}", mapOf())
   }
 
   /**
@@ -2359,7 +2460,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} dashboard_filter_id Id of dashboard filter
      */
     dashboard_filter_id: String) : SDKResponse {
-    return this.delete<String>("/dashboard_filters/${dashboard_filter_id}", mapOf())
+      val path_dashboard_filter_id = encodeParam(dashboard_filter_id)
+      return this.delete<String>("/dashboard_filters/${path_dashboard_filter_id}", mapOf())
   }
 
   /**
@@ -2372,7 +2474,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} dashboard_layout_id Id of dashboard layout
      */
     dashboard_layout_id: String) : SDKResponse {
-    return this.delete<String>("/dashboard_layouts/${dashboard_layout_id}", mapOf())
+      val path_dashboard_layout_id = encodeParam(dashboard_layout_id)
+      return this.delete<String>("/dashboard_layouts/${path_dashboard_layout_id}", mapOf())
   }
 
   /**
@@ -2386,7 +2489,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} folder_id Id of folder
      */
     folder_id: String) : SDKResponse {
-    return this.delete<String>("/folders/${folder_id}", mapOf())
+      val path_folder_id = encodeParam(folder_id)
+      return this.delete<String>("/folders/${path_folder_id}", mapOf())
   }
 
   /**
@@ -2405,7 +2509,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} branch_name Branch Name
      */
     branch_name: String) : SDKResponse {
-    return this.delete<String>("/projects/${project_id}/git_branch/${branch_name}", mapOf())
+      val path_project_id = encodeParam(project_id)
+      val path_branch_name = encodeParam(branch_name)
+      return this.delete<String>("/projects/${path_project_id}/git_branch/${path_branch_name}", mapOf())
   }
 
   /**
@@ -2418,7 +2524,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} group_id Id of group
      */
     group_id: Long) : SDKResponse {
-    return this.delete<String>("/groups/${group_id}", mapOf())
+      val path_group_id = encodeParam(group_id)
+      return this.delete<String>("/groups/${path_group_id}", mapOf())
   }
 
   /**
@@ -2435,7 +2542,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} deleting_group_id Id of group to delete
      */
     deleting_group_id: Long) : SDKResponse {
-    return this.delete<Void>("/groups/${group_id}/groups/${deleting_group_id}", mapOf())
+      val path_group_id = encodeParam(group_id)
+      val path_deleting_group_id = encodeParam(deleting_group_id)
+      return this.delete<Void>("/groups/${path_group_id}/groups/${path_deleting_group_id}", mapOf())
   }
 
   /**
@@ -2452,7 +2561,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_id Id of user to remove from group
      */
     user_id: Long) : SDKResponse {
-    return this.delete<Void>("/groups/${group_id}/users/${user_id}", mapOf())
+      val path_group_id = encodeParam(group_id)
+      val path_user_id = encodeParam(user_id)
+      return this.delete<Void>("/groups/${path_group_id}/users/${path_user_id}", mapOf())
   }
 
   /**
@@ -2465,7 +2576,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} homepage_id Id of homepage
      */
     homepage_id: Long) : SDKResponse {
-    return this.delete<String>("/homepages/${homepage_id}", mapOf())
+      val path_homepage_id = encodeParam(homepage_id)
+      return this.delete<String>("/homepages/${path_homepage_id}", mapOf())
   }
 
   /**
@@ -2478,7 +2590,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} homepage_item_id Id of homepage_item
      */
     homepage_item_id: Long) : SDKResponse {
-    return this.delete<String>("/homepage_items/${homepage_item_id}", mapOf())
+      val path_homepage_item_id = encodeParam(homepage_item_id)
+      return this.delete<String>("/homepage_items/${path_homepage_item_id}", mapOf())
   }
 
   /**
@@ -2491,7 +2604,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} homepage_section_id Id of homepage_section
      */
     homepage_section_id: Long) : SDKResponse {
-    return this.delete<String>("/homepage_sections/${homepage_section_id}", mapOf())
+      val path_homepage_section_id = encodeParam(homepage_section_id)
+      return this.delete<String>("/homepage_sections/${path_homepage_section_id}", mapOf())
   }
 
   /**
@@ -2504,7 +2618,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} integration_hub_id Id of integration_hub
      */
     integration_hub_id: Long) : SDKResponse {
-    return this.delete<String>("/integration_hubs/${integration_hub_id}", mapOf())
+      val path_integration_hub_id = encodeParam(integration_hub_id)
+      return this.delete<String>("/integration_hubs/${path_integration_hub_id}", mapOf())
   }
 
   /**
@@ -2523,7 +2638,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} look_id Id of look
      */
     look_id: Long) : SDKResponse {
-    return this.delete<String>("/looks/${look_id}", mapOf())
+      val path_look_id = encodeParam(look_id)
+      return this.delete<String>("/looks/${path_look_id}", mapOf())
   }
 
   /**
@@ -2536,7 +2652,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} lookml_model_name Name of lookml model.
      */
     lookml_model_name: String) : SDKResponse {
-    return this.delete<String>("/lookml_models/${lookml_model_name}", mapOf())
+      val path_lookml_model_name = encodeParam(lookml_model_name)
+      return this.delete<String>("/lookml_models/${path_lookml_model_name}", mapOf())
   }
 
   /**
@@ -2549,7 +2666,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} model_set_id id of model set
      */
     model_set_id: Long) : SDKResponse {
-    return this.delete<String>("/model_sets/${model_set_id}", mapOf())
+      val path_model_set_id = encodeParam(model_set_id)
+      return this.delete<String>("/model_sets/${path_model_set_id}", mapOf())
   }
 
   /**
@@ -2562,7 +2680,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} test_slug Slug of test config
      */
     test_slug: String) : SDKResponse {
-    return this.delete<String>("/oidc_test_configs/${test_slug}", mapOf())
+      val path_test_slug = encodeParam(test_slug)
+      return this.delete<String>("/oidc_test_configs/${path_test_slug}", mapOf())
   }
 
   /**
@@ -2575,7 +2694,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} permission_set_id Id of permission set
      */
     permission_set_id: Long) : SDKResponse {
-    return this.delete<String>("/permission_sets/${permission_set_id}", mapOf())
+      val path_permission_set_id = encodeParam(permission_set_id)
+      return this.delete<String>("/permission_sets/${path_permission_set_id}", mapOf())
   }
 
   /**
@@ -2597,7 +2717,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} credential_id Credential Id
      */
     credential_id: String) : SDKResponse {
-    return this.delete<String>("/projects/${root_project_id}/credential/${credential_id}", mapOf())
+      val path_root_project_id = encodeParam(root_project_id)
+      val path_credential_id = encodeParam(credential_id)
+      return this.delete<String>("/projects/${path_root_project_id}/credential/${path_credential_id}", mapOf())
   }
 
   /**
@@ -2610,7 +2732,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} role_id id of role
      */
     role_id: Long) : SDKResponse {
-    return this.delete<String>("/roles/${role_id}", mapOf())
+      val path_role_id = encodeParam(role_id)
+      return this.delete<String>("/roles/${path_role_id}", mapOf())
   }
 
   /**
@@ -2623,7 +2746,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} test_slug Slug of test config
      */
     test_slug: String) : SDKResponse {
-    return this.delete<String>("/saml_test_configs/${test_slug}", mapOf())
+      val path_test_slug = encodeParam(test_slug)
+      return this.delete<String>("/saml_test_configs/${path_test_slug}", mapOf())
   }
 
   /**
@@ -2640,7 +2764,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} scheduled_plan_id Scheduled Plan Id
      */
     scheduled_plan_id: Long) : SDKResponse {
-    return this.delete<String>("/scheduled_plans/${scheduled_plan_id}", mapOf())
+      val path_scheduled_plan_id = encodeParam(scheduled_plan_id)
+      return this.delete<String>("/scheduled_plans/${path_scheduled_plan_id}", mapOf())
   }
 
   /**
@@ -2654,7 +2779,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} space_id Id of space
      */
     space_id: String) : SDKResponse {
-    return this.delete<String>("/spaces/${space_id}", mapOf())
+      val path_space_id = encodeParam(space_id)
+      return this.delete<String>("/spaces/${path_space_id}", mapOf())
   }
 
   /**
@@ -2675,7 +2801,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} theme_id Id of theme
      */
     theme_id: String) : SDKResponse {
-    return this.delete<String>("/themes/${theme_id}", mapOf())
+      val path_theme_id = encodeParam(theme_id)
+      return this.delete<String>("/themes/${path_theme_id}", mapOf())
   }
 
   /**
@@ -2690,7 +2817,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_id Id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}", mapOf())
+      val path_user_id = encodeParam(user_id)
+      return this.delete<String>("/users/${path_user_id}", mapOf())
   }
 
   /**
@@ -2703,7 +2831,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_attribute_id Id of user_attribute
      */
     user_attribute_id: Long) : SDKResponse {
-    return this.delete<String>("/user_attributes/${user_attribute_id}", mapOf())
+      val path_user_attribute_id = encodeParam(user_attribute_id)
+      return this.delete<String>("/user_attributes/${path_user_attribute_id}", mapOf())
   }
 
   /**
@@ -2720,7 +2849,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_attribute_id Id of user attribute
      */
     user_attribute_id: Long) : SDKResponse {
-    return this.delete<Void>("/groups/${group_id}/attribute_values/${user_attribute_id}", mapOf())
+      val path_group_id = encodeParam(group_id)
+      val path_user_attribute_id = encodeParam(user_attribute_id)
+      return this.delete<Void>("/groups/${path_group_id}/attribute_values/${path_user_attribute_id}", mapOf())
   }
 
   /**
@@ -2742,7 +2873,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_attribute_id Id of user attribute
      */
     user_attribute_id: Long) : SDKResponse {
-    return this.delete<Void>("/users/${user_id}/attribute_values/${user_attribute_id}", mapOf())
+      val path_user_id = encodeParam(user_id)
+      val path_user_attribute_id = encodeParam(user_attribute_id)
+      return this.delete<Void>("/users/${path_user_id}/attribute_values/${path_user_attribute_id}", mapOf())
   }
 
   /**
@@ -2759,7 +2892,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} credentials_api3_id id of API 3 Credential
      */
     credentials_api3_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_api3/${credentials_api3_id}", mapOf())
+      val path_user_id = encodeParam(user_id)
+      val path_credentials_api3_id = encodeParam(credentials_api3_id)
+      return this.delete<String>("/users/${path_user_id}/credentials_api3/${path_credentials_api3_id}", mapOf())
   }
 
   /**
@@ -2772,7 +2907,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_id id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_email", mapOf())
+      val path_user_id = encodeParam(user_id)
+      return this.delete<String>("/users/${path_user_id}/credentials_email", mapOf())
   }
 
   /**
@@ -2789,7 +2925,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} credentials_embed_id id of Embedding Credential
      */
     credentials_embed_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_embed/${credentials_embed_id}", mapOf())
+      val path_user_id = encodeParam(user_id)
+      val path_credentials_embed_id = encodeParam(credentials_embed_id)
+      return this.delete<String>("/users/${path_user_id}/credentials_embed/${path_credentials_embed_id}", mapOf())
   }
 
   /**
@@ -2802,7 +2940,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_id id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_google", mapOf())
+      val path_user_id = encodeParam(user_id)
+      return this.delete<String>("/users/${path_user_id}/credentials_google", mapOf())
   }
 
   /**
@@ -2815,7 +2954,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_id id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_ldap", mapOf())
+      val path_user_id = encodeParam(user_id)
+      return this.delete<String>("/users/${path_user_id}/credentials_ldap", mapOf())
   }
 
   /**
@@ -2828,7 +2968,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_id id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_looker_openid", mapOf())
+      val path_user_id = encodeParam(user_id)
+      return this.delete<String>("/users/${path_user_id}/credentials_looker_openid", mapOf())
   }
 
   /**
@@ -2841,7 +2982,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_id id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_oidc", mapOf())
+      val path_user_id = encodeParam(user_id)
+      return this.delete<String>("/users/${path_user_id}/credentials_oidc", mapOf())
   }
 
   /**
@@ -2854,7 +2996,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_id id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_saml", mapOf())
+      val path_user_id = encodeParam(user_id)
+      return this.delete<String>("/users/${path_user_id}/credentials_saml", mapOf())
   }
 
   /**
@@ -2867,7 +3010,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_id id of user
      */
     user_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/credentials_totp", mapOf())
+      val path_user_id = encodeParam(user_id)
+      return this.delete<String>("/users/${path_user_id}/credentials_totp", mapOf())
   }
 
   /**
@@ -2880,7 +3024,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} key The key associated with the locked user
      */
     key: String) : SDKResponse {
-    return this.delete<String>("/user_login_lockout/${key}", mapOf())
+      val path_key = encodeParam(key)
+      return this.delete<String>("/user_login_lockout/${path_key}", mapOf())
   }
 
   /**
@@ -2897,7 +3042,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} session_id id of Web Login Session
      */
     session_id: Long) : SDKResponse {
-    return this.delete<String>("/users/${user_id}/sessions/${session_id}", mapOf())
+      val path_user_id = encodeParam(user_id)
+      val path_session_id = encodeParam(session_id)
+      return this.delete<String>("/users/${path_user_id}/sessions/${path_session_id}", mapOf())
   }
 
   /**
@@ -2920,7 +3067,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Id of project
      */
     project_id: String) : SDKResponse {
-    return this.post<String>("/projects/${project_id}/deploy_to_production", mapOf())
+      val path_project_id = encodeParam(project_id)
+      return this.post<String>("/projects/${path_project_id}/deploy_to_production", mapOf())
   }
 
   /**
@@ -2935,7 +3083,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} body
      */
     body: String) : SDKResponse {
-    return this.post<SamlMetadataParseResult>("/fetch_and_parse_saml_idp_metadata", mapOf(), body)
+      return this.post<SamlMetadataParseResult>("/fetch_and_parse_saml_idp_metadata", mapOf(), body)
   }
 
   /**
@@ -2948,7 +3096,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} integration_id Id of integration
      */
     integration_id: Long) : SDKResponse {
-    return this.post<DataActionForm>("/integrations/${integration_id}/form", mapOf())
+      val path_integration_id = encodeParam(integration_id)
+      return this.post<DataActionForm>("/integrations/${path_integration_id}/form", mapOf())
   }
 
   /**
@@ -2961,7 +3110,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Map<String,Any>} body
      */
     body: Map<String,Any>) : SDKResponse {
-    return this.post<DataActionForm>("/data_actions/form", mapOf(), body)
+      return this.post<DataActionForm>("/data_actions/form", mapOf(), body)
   }
 
   /**
@@ -2980,7 +3129,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} branch_name Branch Name
      */
     branch_name: String) : SDKResponse {
-    return this.get<GitBranch>("/projects/${project_id}/git_branch/${branch_name}", mapOf())
+      val path_project_id = encodeParam(project_id)
+      val path_branch_name = encodeParam(branch_name)
+      return this.get<GitBranch>("/projects/${path_project_id}/git_branch/${path_branch_name}", mapOf())
   }
 
   /**
@@ -2997,8 +3148,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Folder>("/folders/${folder_id}", 
-      mapOf("fields" to fields))
+      val path_folder_id = encodeParam(folder_id)
+      return this.get<Folder>("/folders/${path_folder_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3015,8 +3167,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Folder>>("/folders/${folder_id}/ancestors", 
-      mapOf("fields" to fields))
+      val path_folder_id = encodeParam(folder_id)
+      return this.get<Array<Folder>>("/folders/${path_folder_id}/ancestors", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3045,8 +3198,12 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} sorts Fields to sort by.
      */
     sorts: String? = null) : SDKResponse {
-    return this.get<Array<Folder>>("/folders/${folder_id}/children", 
-      mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts))
+      val path_folder_id = encodeParam(folder_id)
+      return this.get<Array<Folder>>("/folders/${path_folder_id}/children", 
+        mapOf("fields" to fields,
+           "page" to page,
+           "per_page" to per_page,
+           "sorts" to sorts))
   }
 
   /**
@@ -3071,8 +3228,11 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} name Match folder name.
      */
     name: String? = null) : SDKResponse {
-    return this.get<Array<Folder>>("/folders/${folder_id}/children/search", 
-      mapOf("fields" to fields, "sorts" to sorts, "name" to name))
+      val path_folder_id = encodeParam(folder_id)
+      return this.get<Array<Folder>>("/folders/${path_folder_id}/children/search", 
+        mapOf("fields" to fields,
+           "sorts" to sorts,
+           "name" to name))
   }
 
   /**
@@ -3089,8 +3249,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Dashboard>>("/folders/${folder_id}/dashboards", 
-      mapOf("fields" to fields))
+      val path_folder_id = encodeParam(folder_id)
+      return this.get<Array<Dashboard>>("/folders/${path_folder_id}/dashboards", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3107,8 +3268,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<LookWithQuery>>("/folders/${folder_id}/looks", 
-      mapOf("fields" to fields))
+      val path_folder_id = encodeParam(folder_id)
+      return this.get<Array<LookWithQuery>>("/folders/${path_folder_id}/looks", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3125,8 +3287,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Folder>("/folders/${folder_id}/parent", 
-      mapOf("fields" to fields))
+      val path_folder_id = encodeParam(folder_id)
+      return this.get<Folder>("/folders/${path_folder_id}/parent", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3135,7 +3298,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * PUT /password_config/force_password_reset_at_next_login_for_all_users -> String
    */
   fun force_password_reset_at_next_login_for_all_users() : SDKResponse {
-    return this.put<String>("/password_config/force_password_reset_at_next_login_for_all_users", mapOf())
+      return this.put<String>("/password_config/force_password_reset_at_next_login_for_all_users", mapOf())
   }
 
   /**
@@ -3150,7 +3313,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} root_project_id Root Project Id
      */
     root_project_id: String) : SDKResponse {
-    return this.get<Array<RepositoryCredential>>("/projects/${root_project_id}/credentials", mapOf())
+      val path_root_project_id = encodeParam(root_project_id)
+      return this.get<Array<RepositoryCredential>>("/projects/${path_root_project_id}/credentials", mapOf())
   }
 
   /**
@@ -3165,7 +3329,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
-    return this.get<GitBranch>("/projects/${project_id}/git_branch", mapOf())
+      val path_project_id = encodeParam(project_id)
+      return this.get<GitBranch>("/projects/${path_project_id}/git_branch", mapOf())
   }
 
   /**
@@ -3180,7 +3345,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
-    return this.get<String>("/projects/${project_id}/git/deploy_key", mapOf())
+      val path_project_id = encodeParam(project_id)
+      return this.get<String>("/projects/${path_project_id}/git/deploy_key", mapOf())
   }
 
   /**
@@ -3197,8 +3363,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Group>("/groups/${group_id}", 
-      mapOf("fields" to fields))
+      val path_group_id = encodeParam(group_id)
+      return this.get<Group>("/groups/${path_group_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3215,8 +3382,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Homepage>("/homepages/${homepage_id}", 
-      mapOf("fields" to fields))
+      val path_homepage_id = encodeParam(homepage_id)
+      return this.get<Homepage>("/homepages/${path_homepage_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3233,8 +3401,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<HomepageItem>("/homepage_items/${homepage_item_id}", 
-      mapOf("fields" to fields))
+      val path_homepage_item_id = encodeParam(homepage_item_id)
+      return this.get<HomepageItem>("/homepage_items/${path_homepage_item_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3251,8 +3420,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<HomepageSection>("/homepage_sections/${homepage_section_id}", 
-      mapOf("fields" to fields))
+      val path_homepage_section_id = encodeParam(homepage_section_id)
+      return this.get<HomepageSection>("/homepage_sections/${path_homepage_section_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3288,8 +3458,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
      */
     raw_locale: Boolean? = null) : SDKResponse {
-    return this.post<Dashboard>("/dashboards/${lookml_dashboard_id}/import/${space_id}", 
-      mapOf("raw_locale" to raw_locale), body)
+      val path_lookml_dashboard_id = encodeParam(lookml_dashboard_id)
+      val path_space_id = encodeParam(space_id)
+      return this.post<Dashboard>("/dashboards/${path_lookml_dashboard_id}/import/${path_space_id}", 
+        mapOf("raw_locale" to raw_locale), body)
   }
 
   /**
@@ -3306,8 +3478,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Integration>("/integrations/${integration_id}", 
-      mapOf("fields" to fields))
+      val path_integration_id = encodeParam(integration_id)
+      return this.get<Integration>("/integrations/${path_integration_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3324,8 +3497,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<IntegrationHub>("/integration_hubs/${integration_hub_id}", 
-      mapOf("fields" to fields))
+      val path_integration_hub_id = encodeParam(integration_hub_id)
+      return this.get<IntegrationHub>("/integration_hubs/${path_integration_hub_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3334,7 +3508,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /internal_help_resources_enabled -> InternalHelpResources
    */
   fun internal_help_resources() : SDKResponse {
-    return this.get<InternalHelpResources>("/internal_help_resources_enabled", mapOf())
+      return this.get<InternalHelpResources>("/internal_help_resources_enabled", mapOf())
   }
 
   /**
@@ -3343,7 +3517,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /internal_help_resources_content -> InternalHelpResourcesContent
    */
   fun internal_help_resources_content() : SDKResponse {
-    return this.get<InternalHelpResourcesContent>("/internal_help_resources_content", mapOf())
+      return this.get<InternalHelpResourcesContent>("/internal_help_resources_content", mapOf())
   }
 
   /**
@@ -3356,7 +3530,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} query_task_id Query task id.
      */
     query_task_id: String) : SDKResponse {
-    return this.delete<String>("/running_queries/${query_task_id}", mapOf())
+      val path_query_task_id = encodeParam(query_task_id)
+      return this.delete<String>("/running_queries/${path_query_task_id}", mapOf())
   }
 
   /**
@@ -3380,7 +3555,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /ldap_config -> LDAPConfig
    */
   fun ldap_config() : SDKResponse {
-    return this.get<LDAPConfig>("/ldap_config", mapOf())
+      return this.get<LDAPConfig>("/ldap_config", mapOf())
   }
 
   /**
@@ -3393,7 +3568,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} legacy_feature_id id of legacy feature
      */
     legacy_feature_id: Long) : SDKResponse {
-    return this.get<LegacyFeature>("/legacy_features/${legacy_feature_id}", mapOf())
+      val path_legacy_feature_id = encodeParam(legacy_feature_id)
+      return this.get<LegacyFeature>("/legacy_features/${path_legacy_feature_id}", mapOf())
   }
 
   /**
@@ -3437,8 +3613,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} client_secret client_secret part of API3 Key.
      */
     client_secret: String? = null) : SDKResponse {
-    return this.post<AccessToken>("/login", 
-      mapOf("client_id" to client_id, "client_secret" to client_secret))
+      return this.post<AccessToken>("/login", 
+        mapOf("client_id" to client_id,
+           "client_secret" to client_secret))
   }
 
   /**
@@ -3466,7 +3643,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} user_id Id of user.
      */
     user_id: Long) : SDKResponse {
-    return this.post<AccessToken>("/login/${user_id}", mapOf())
+      val path_user_id = encodeParam(user_id)
+      return this.post<AccessToken>("/login/${path_user_id}", mapOf())
   }
 
   /**
@@ -3475,7 +3653,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * DELETE /logout -> String
    */
   fun logout() : SDKResponse {
-    return this.delete<String>("/logout", mapOf())
+      return this.delete<String>("/logout", mapOf())
   }
 
   /**
@@ -3494,8 +3672,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<LookWithQuery>("/looks/${look_id}", 
-      mapOf("fields" to fields))
+      val path_look_id = encodeParam(look_id)
+      return this.get<LookWithQuery>("/looks/${path_look_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3512,8 +3691,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<LookmlModel>("/lookml_models/${lookml_model_name}", 
-      mapOf("fields" to fields))
+      val path_lookml_model_name = encodeParam(lookml_model_name)
+      return this.get<LookmlModel>("/lookml_models/${path_lookml_model_name}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3534,8 +3714,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<LookmlModelExplore>("/lookml_models/${lookml_model_name}/explores/${explore_name}", 
-      mapOf("fields" to fields))
+      val path_lookml_model_name = encodeParam(lookml_model_name)
+      val path_explore_name = encodeParam(explore_name)
+      return this.get<LookmlModelExplore>("/lookml_models/${path_lookml_model_name}/explores/${path_explore_name}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3550,7 +3732,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Project Id
      */
     project_id: String) : SDKResponse {
-    return this.get<Manifest>("/projects/${project_id}/manifest", mapOf())
+      val path_project_id = encodeParam(project_id)
+      return this.get<Manifest>("/projects/${path_project_id}/manifest", mapOf())
   }
 
   /**
@@ -3563,8 +3746,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<User>("/user", 
-      mapOf("fields" to fields))
+      return this.get<User>("/user", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3583,8 +3766,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.get<MergeQuery>("/merge_queries/${merge_query_id}", 
-      mapOf("fields" to fields))
+      val path_merge_query_id = encodeParam(merge_query_id)
+      return this.get<MergeQuery>("/merge_queries/${path_merge_query_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3601,8 +3785,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ModelSet>("/model_sets/${model_set_id}", 
-      mapOf("fields" to fields))
+      val path_model_set_id = encodeParam(model_set_id)
+      return this.get<ModelSet>("/model_sets/${path_model_set_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3622,7 +3807,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /oidc_config -> OIDCConfig
    */
   fun oidc_config() : SDKResponse {
-    return this.get<OIDCConfig>("/oidc_config", mapOf())
+      return this.get<OIDCConfig>("/oidc_config", mapOf())
   }
 
   /**
@@ -3635,7 +3820,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} test_slug Slug of test config
      */
     test_slug: String) : SDKResponse {
-    return this.get<OIDCConfig>("/oidc_test_configs/${test_slug}", mapOf())
+      val path_test_slug = encodeParam(test_slug)
+      return this.get<OIDCConfig>("/oidc_test_configs/${path_test_slug}", mapOf())
   }
 
   /**
@@ -3648,7 +3834,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} body
      */
     body: String) : SDKResponse {
-    return this.post<SamlMetadataParseResult>("/parse_saml_idp_metadata", mapOf(), body)
+      return this.post<SamlMetadataParseResult>("/parse_saml_idp_metadata", mapOf(), body)
   }
 
   /**
@@ -3657,7 +3843,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /password_config -> PasswordConfig
    */
   fun password_config() : SDKResponse {
-    return this.get<PasswordConfig>("/password_config", mapOf())
+      return this.get<PasswordConfig>("/password_config", mapOf())
   }
 
   /**
@@ -3670,7 +3856,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {DataActionRequest} body
      */
     body: DataActionRequest) : SDKResponse {
-    return this.post<DataActionResponse>("/data_actions", mapOf(), body)
+      return this.post<DataActionResponse>("/data_actions", mapOf(), body)
   }
 
   /**
@@ -3687,8 +3873,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<PermissionSet>("/permission_sets/${permission_set_id}", 
-      mapOf("fields" to fields))
+      val path_permission_set_id = encodeParam(permission_set_id)
+      return this.get<PermissionSet>("/permission_sets/${path_permission_set_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3707,8 +3894,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Project>("/projects/${project_id}", 
-      mapOf("fields" to fields))
+      val path_project_id = encodeParam(project_id)
+      return this.get<Project>("/projects/${path_project_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3731,8 +3919,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ProjectFile>("/projects/${project_id}/files/file", 
-      mapOf("file_id" to file_id, "fields" to fields))
+      val path_project_id = encodeParam(project_id)
+      return this.get<ProjectFile>("/projects/${path_project_id}/files/file", 
+        mapOf("file_id" to file_id,
+           "fields" to fields))
   }
 
   /**
@@ -3760,8 +3950,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ProjectValidationCache>("/projects/${project_id}/validate", 
-      mapOf("fields" to fields))
+      val path_project_id = encodeParam(project_id)
+      return this.get<ProjectValidationCache>("/projects/${path_project_id}/validate", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3780,8 +3971,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ProjectWorkspace>("/projects/${project_id}/current_workspace", 
-      mapOf("fields" to fields))
+      val path_project_id = encodeParam(project_id)
+      return this.get<ProjectWorkspace>("/projects/${path_project_id}/current_workspace", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3814,8 +4006,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Query>("/queries/${query_id}", 
-      mapOf("fields" to fields))
+      val path_query_id = encodeParam(query_id)
+      return this.get<Query>("/queries/${path_query_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3848,8 +4041,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Query>("/queries/slug/${slug}", 
-      mapOf("fields" to fields))
+      val path_slug = encodeParam(slug)
+      return this.get<Query>("/queries/slug/${path_slug}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3872,8 +4066,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<QueryTask>("/query_tasks/${query_task_id}", 
-      mapOf("fields" to fields))
+      val path_query_task_id = encodeParam(query_task_id)
+      return this.get<QueryTask>("/query_tasks/${path_query_task_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3892,8 +4087,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {DelimArray<String>} query_task_ids List of Query Task IDs
      */
     query_task_ids: DelimArray<String>) : SDKResponse {
-    return this.get<Map<String,Any>>("/query_tasks/multi_results", 
-      mapOf("query_task_ids" to query_task_ids))
+      return this.get<Map<String,Any>>("/query_tasks/multi_results", 
+        mapOf("query_task_ids" to query_task_ids))
   }
 
   /**
@@ -3928,7 +4123,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} query_task_id ID of the Query Task
      */
     query_task_id: String) : SDKResponse {
-    return this.get<String>("/query_tasks/${query_task_id}/results", mapOf())
+      val path_query_task_id = encodeParam(query_task_id)
+      return this.get<String>("/query_tasks/${path_query_task_id}/results", mapOf())
   }
 
   /**
@@ -3949,8 +4145,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<RenderTask>("/render_tasks/${render_task_id}", 
-      mapOf("fields" to fields))
+      val path_render_task_id = encodeParam(render_task_id)
+      return this.get<RenderTask>("/render_tasks/${path_render_task_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -3981,7 +4178,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} render_task_id Id of render task
      */
     render_task_id: String) : SDKResponse {
-    return this.get<String>("/render_tasks/${render_task_id}/results", mapOf())
+      val path_render_task_id = encodeParam(render_task_id)
+      return this.get<String>("/render_tasks/${path_render_task_id}/results", mapOf())
   }
 
   /**
@@ -3996,7 +4194,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Id of project
      */
     project_id: String) : SDKResponse {
-    return this.post<String>("/projects/${project_id}/reset_to_production", mapOf())
+      val path_project_id = encodeParam(project_id)
+      return this.post<String>("/projects/${path_project_id}/reset_to_production", mapOf())
   }
 
   /**
@@ -4011,7 +4210,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} project_id Id of project
      */
     project_id: String) : SDKResponse {
-    return this.post<String>("/projects/${project_id}/reset_to_remote", mapOf())
+      val path_project_id = encodeParam(project_id)
+      return this.post<String>("/projects/${path_project_id}/reset_to_remote", mapOf())
   }
 
   /**
@@ -4024,7 +4224,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} role_id id of role
      */
     role_id: Long) : SDKResponse {
-    return this.get<Role>("/roles/${role_id}", mapOf())
+      val path_role_id = encodeParam(role_id)
+      return this.get<Role>("/roles/${path_role_id}", mapOf())
   }
 
   /**
@@ -4041,8 +4242,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Group>>("/roles/${role_id}/groups", 
-      mapOf("fields" to fields))
+      val path_role_id = encodeParam(role_id)
+      return this.get<Array<Group>>("/roles/${path_role_id}/groups", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -4063,8 +4265,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} direct_association_only Get only users associated directly with the role: exclude those only associated through groups.
      */
     direct_association_only: Boolean? = null) : SDKResponse {
-    return this.get<Array<User>>("/roles/${role_id}/users", 
-      mapOf("fields" to fields, "direct_association_only" to direct_association_only))
+      val path_role_id = encodeParam(role_id)
+      return this.get<Array<User>>("/roles/${path_role_id}/users", 
+        mapOf("fields" to fields,
+           "direct_association_only" to direct_association_only))
   }
 
   /**
@@ -4091,8 +4295,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
      */
     remote_url: String? = null) : SDKResponse {
-    return this.get<GitConnectionTestResult>("/projects/${project_id}/git_connection_tests/${test_id}", 
-      mapOf("remote_url" to remote_url))
+      val path_project_id = encodeParam(project_id)
+      val path_test_id = encodeParam(test_id)
+      return this.get<GitConnectionTestResult>("/projects/${path_project_id}/git_connection_tests/${path_test_id}", 
+        mapOf("remote_url" to remote_url))
   }
 
   /**
@@ -4208,8 +4414,20 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} server_table_calcs Perform table calculations on query results
      */
     server_table_calcs: Boolean? = null) : SDKResponse {
-    return this.post<String>("/queries/run/${result_format}", 
-      mapOf("limit" to limit, "apply_formatting" to apply_formatting, "apply_vis" to apply_vis, "cache" to cache, "image_width" to image_width, "image_height" to image_height, "generate_drill_links" to generate_drill_links, "force_production" to force_production, "cache_only" to cache_only, "path_prefix" to path_prefix, "rebuild_pdts" to rebuild_pdts, "server_table_calcs" to server_table_calcs), body)
+      val path_result_format = encodeParam(result_format)
+      return this.post<String>("/queries/run/${path_result_format}", 
+        mapOf("limit" to limit,
+           "apply_formatting" to apply_formatting,
+           "apply_vis" to apply_vis,
+           "cache" to cache,
+           "image_width" to image_width,
+           "image_height" to image_height,
+           "generate_drill_links" to generate_drill_links,
+           "force_production" to force_production,
+           "cache_only" to cache_only,
+           "path_prefix" to path_prefix,
+           "rebuild_pdts" to rebuild_pdts,
+           "server_table_calcs" to server_table_calcs), body)
   }
 
   /**
@@ -4293,8 +4511,21 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} server_table_calcs Perform table calculations on query results
      */
     server_table_calcs: Boolean? = null) : SDKResponse {
-    return this.get<String>("/looks/${look_id}/run/${result_format}", 
-      mapOf("limit" to limit, "apply_formatting" to apply_formatting, "apply_vis" to apply_vis, "cache" to cache, "image_width" to image_width, "image_height" to image_height, "generate_drill_links" to generate_drill_links, "force_production" to force_production, "cache_only" to cache_only, "path_prefix" to path_prefix, "rebuild_pdts" to rebuild_pdts, "server_table_calcs" to server_table_calcs))
+      val path_look_id = encodeParam(look_id)
+      val path_result_format = encodeParam(result_format)
+      return this.get<String>("/looks/${path_look_id}/run/${path_result_format}", 
+        mapOf("limit" to limit,
+           "apply_formatting" to apply_formatting,
+           "apply_vis" to apply_vis,
+           "cache" to cache,
+           "image_width" to image_width,
+           "image_height" to image_height,
+           "generate_drill_links" to generate_drill_links,
+           "force_production" to force_production,
+           "cache_only" to cache_only,
+           "path_prefix" to path_prefix,
+           "rebuild_pdts" to rebuild_pdts,
+           "server_table_calcs" to server_table_calcs))
   }
 
   /**
@@ -4321,8 +4552,11 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} model Model Name
      */
     model: String? = null) : SDKResponse {
-    return this.get<Array<LookmlTestResult>>("/projects/${project_id}/lookml_tests/run", 
-      mapOf("file_id" to file_id, "test" to test, "model" to model))
+      val path_project_id = encodeParam(project_id)
+      return this.get<Array<LookmlTestResult>>("/projects/${path_project_id}/lookml_tests/run", 
+        mapOf("file_id" to file_id,
+           "test" to test,
+           "model" to model))
   }
 
   /**
@@ -4409,8 +4643,21 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} server_table_calcs Perform table calculations on query results
      */
     server_table_calcs: Boolean? = null) : SDKResponse {
-    return this.get<String>("/queries/${query_id}/run/${result_format}", 
-      mapOf("limit" to limit, "apply_formatting" to apply_formatting, "apply_vis" to apply_vis, "cache" to cache, "image_width" to image_width, "image_height" to image_height, "generate_drill_links" to generate_drill_links, "force_production" to force_production, "cache_only" to cache_only, "path_prefix" to path_prefix, "rebuild_pdts" to rebuild_pdts, "server_table_calcs" to server_table_calcs))
+      val path_query_id = encodeParam(query_id)
+      val path_result_format = encodeParam(result_format)
+      return this.get<String>("/queries/${path_query_id}/run/${path_result_format}", 
+        mapOf("limit" to limit,
+           "apply_formatting" to apply_formatting,
+           "apply_vis" to apply_vis,
+           "cache" to cache,
+           "image_width" to image_width,
+           "image_height" to image_height,
+           "generate_drill_links" to generate_drill_links,
+           "force_production" to force_production,
+           "cache_only" to cache_only,
+           "path_prefix" to path_prefix,
+           "rebuild_pdts" to rebuild_pdts,
+           "server_table_calcs" to server_table_calcs))
   }
 
   /**
@@ -4433,8 +4680,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
      */
     download: String? = null) : SDKResponse {
-    return this.post<String>("/sql_queries/${slug}/run/${result_format}", 
-      mapOf("download" to download))
+      val path_slug = encodeParam(slug)
+      val path_result_format = encodeParam(result_format)
+      return this.post<String>("/sql_queries/${path_slug}/run/${path_result_format}", 
+        mapOf("download" to download))
   }
 
   /**
@@ -4508,7 +4757,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} result_format Format of result
      */
     result_format: String) : SDKResponse {
-    return this.get<String>("/queries/models/${model_name}/views/${view_name}/run/${result_format}", mapOf())
+      val path_model_name = encodeParam(model_name)
+      val path_view_name = encodeParam(view_name)
+      val path_result_format = encodeParam(result_format)
+      return this.get<String>("/queries/models/${path_model_name}/views/${path_view_name}/run/${path_result_format}", mapOf())
   }
 
   /**
@@ -4528,7 +4780,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /saml_config -> SamlConfig
    */
   fun saml_config() : SDKResponse {
-    return this.get<SamlConfig>("/saml_config", mapOf())
+      return this.get<SamlConfig>("/saml_config", mapOf())
   }
 
   /**
@@ -4541,7 +4793,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} test_slug Slug of test config
      */
     test_slug: String) : SDKResponse {
-    return this.get<SamlConfig>("/saml_test_configs/${test_slug}", mapOf())
+      val path_test_slug = encodeParam(test_slug)
+      return this.get<SamlConfig>("/saml_test_configs/${path_test_slug}", mapOf())
   }
 
   /**
@@ -4560,8 +4813,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ScheduledPlan>("/scheduled_plans/${scheduled_plan_id}", 
-      mapOf("fields" to fields))
+      val path_scheduled_plan_id = encodeParam(scheduled_plan_id)
+      return this.get<ScheduledPlan>("/scheduled_plans/${path_scheduled_plan_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -4610,7 +4864,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteScheduledPlan} body
      */
     body: WriteScheduledPlan) : SDKResponse {
-    return this.post<ScheduledPlan>("/scheduled_plans/run_once", mapOf(), body)
+      return this.post<ScheduledPlan>("/scheduled_plans/run_once", mapOf(), body)
   }
 
   /**
@@ -4672,7 +4926,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteScheduledPlan} body
      */
     body: WriteScheduledPlan? = null) : SDKResponse {
-    return this.post<ScheduledPlan>("/scheduled_plans/${scheduled_plan_id}/run_once", mapOf(), body)
+      val path_scheduled_plan_id = encodeParam(scheduled_plan_id)
+      return this.post<ScheduledPlan>("/scheduled_plans/${path_scheduled_plan_id}/run_once", mapOf(), body)
   }
 
   /**
@@ -4707,8 +4962,11 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ScheduledPlan>>("/scheduled_plans/dashboard/${dashboard_id}", 
-      mapOf("user_id" to user_id, "all_users" to all_users, "fields" to fields))
+      val path_dashboard_id = encodeParam(dashboard_id)
+      return this.get<Array<ScheduledPlan>>("/scheduled_plans/dashboard/${path_dashboard_id}", 
+        mapOf("user_id" to user_id,
+           "all_users" to all_users,
+           "fields" to fields))
   }
 
   /**
@@ -4743,8 +5001,11 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} all_users Return scheduled plans belonging to all users for the look
      */
     all_users: Boolean? = null) : SDKResponse {
-    return this.get<Array<ScheduledPlan>>("/scheduled_plans/look/${look_id}", 
-      mapOf("user_id" to user_id, "fields" to fields, "all_users" to all_users))
+      val path_look_id = encodeParam(look_id)
+      return this.get<Array<ScheduledPlan>>("/scheduled_plans/look/${path_look_id}", 
+        mapOf("user_id" to user_id,
+           "fields" to fields,
+           "all_users" to all_users))
   }
 
   /**
@@ -4779,8 +5040,11 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} all_users Return scheduled plans belonging to all users for the dashboard
      */
     all_users: Boolean? = null) : SDKResponse {
-    return this.get<Array<ScheduledPlan>>("/scheduled_plans/lookml_dashboard/${lookml_dashboard_id}", 
-      mapOf("user_id" to user_id, "fields" to fields, "all_users" to all_users))
+      val path_lookml_dashboard_id = encodeParam(lookml_dashboard_id)
+      return this.get<Array<ScheduledPlan>>("/scheduled_plans/lookml_dashboard/${path_lookml_dashboard_id}", 
+        mapOf("user_id" to user_id,
+           "fields" to fields,
+           "all_users" to all_users))
   }
 
   /**
@@ -4799,8 +5063,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<ScheduledPlan>>("/scheduled_plans/space/${space_id}", 
-      mapOf("fields" to fields))
+      val path_space_id = encodeParam(space_id)
+      return this.get<Array<ScheduledPlan>>("/scheduled_plans/space/${path_space_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -4870,8 +5135,17 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<ContentFavorite>>("/content_favorite/search", 
-      mapOf("id" to id, "user_id" to user_id, "content_metadata_id" to content_metadata_id, "dashboard_id" to dashboard_id, "look_id" to look_id, "limit" to limit, "offset" to offset, "sorts" to sorts, "fields" to fields, "filter_or" to filter_or))
+      return this.get<Array<ContentFavorite>>("/content_favorite/search", 
+        mapOf("id" to id,
+           "user_id" to user_id,
+           "content_metadata_id" to content_metadata_id,
+           "dashboard_id" to dashboard_id,
+           "look_id" to look_id,
+           "limit" to limit,
+           "offset" to offset,
+           "sorts" to sorts,
+           "fields" to fields,
+           "filter_or" to filter_or))
   }
 
   /**
@@ -4953,8 +5227,20 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<ContentView>>("/content_view/search", 
-      mapOf("view_count" to view_count, "group_id" to group_id, "look_id" to look_id, "dashboard_id" to dashboard_id, "content_metadata_id" to content_metadata_id, "start_of_week_date" to start_of_week_date, "all_time" to all_time, "user_id" to user_id, "fields" to fields, "limit" to limit, "offset" to offset, "sorts" to sorts, "filter_or" to filter_or))
+      return this.get<Array<ContentView>>("/content_view/search", 
+        mapOf("view_count" to view_count,
+           "group_id" to group_id,
+           "look_id" to look_id,
+           "dashboard_id" to dashboard_id,
+           "content_metadata_id" to content_metadata_id,
+           "start_of_week_date" to start_of_week_date,
+           "all_time" to all_time,
+           "user_id" to user_id,
+           "fields" to fields,
+           "limit" to limit,
+           "offset" to offset,
+           "sorts" to sorts,
+           "filter_or" to filter_or))
   }
 
   /**
@@ -5014,8 +5300,14 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} sorts Fields to sort by. Sortable fields: [:look_id, :dashboard_id, :deleted, :title]
      */
     sorts: String? = null) : SDKResponse {
-    return this.get<Array<DashboardElement>>("/dashboard_elements/search", 
-      mapOf("dashboard_id" to dashboard_id, "look_id" to look_id, "title" to title, "deleted" to deleted, "fields" to fields, "filter_or" to filter_or, "sorts" to sorts))
+      return this.get<Array<DashboardElement>>("/dashboard_elements/search", 
+        mapOf("dashboard_id" to dashboard_id,
+           "look_id" to look_id,
+           "title" to title,
+           "deleted" to deleted,
+           "fields" to fields,
+           "filter_or" to filter_or,
+           "sorts" to sorts))
   }
 
   /**
@@ -5124,8 +5416,25 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<Dashboard>>("/dashboards/search", 
-      mapOf("id" to id, "slug" to slug, "title" to title, "description" to description, "content_favorite_id" to content_favorite_id, "space_id" to space_id, "deleted" to deleted, "user_id" to user_id, "view_count" to view_count, "content_metadata_id" to content_metadata_id, "curate" to curate, "fields" to fields, "page" to page, "per_page" to per_page, "limit" to limit, "offset" to offset, "sorts" to sorts, "filter_or" to filter_or))
+      return this.get<Array<Dashboard>>("/dashboards/search", 
+        mapOf("id" to id,
+           "slug" to slug,
+           "title" to title,
+           "description" to description,
+           "content_favorite_id" to content_favorite_id,
+           "space_id" to space_id,
+           "deleted" to deleted,
+           "user_id" to user_id,
+           "view_count" to view_count,
+           "content_metadata_id" to content_metadata_id,
+           "curate" to curate,
+           "fields" to fields,
+           "page" to page,
+           "per_page" to per_page,
+           "limit" to limit,
+           "offset" to offset,
+           "sorts" to sorts,
+           "filter_or" to filter_or))
   }
 
   /**
@@ -5178,8 +5487,18 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<Folder>>("/folders/search", 
-      mapOf("fields" to fields, "page" to page, "per_page" to per_page, "limit" to limit, "offset" to offset, "sorts" to sorts, "name" to name, "id" to id, "parent_id" to parent_id, "creator_id" to creator_id, "filter_or" to filter_or))
+      return this.get<Array<Folder>>("/folders/search", 
+        mapOf("fields" to fields,
+           "page" to page,
+           "per_page" to per_page,
+           "limit" to limit,
+           "offset" to offset,
+           "sorts" to sorts,
+           "name" to name,
+           "id" to id,
+           "parent_id" to parent_id,
+           "creator_id" to creator_id,
+           "filter_or" to filter_or))
   }
 
   /**
@@ -5251,8 +5570,17 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} externally_orphaned Match group externally_orphaned.
      */
     externally_orphaned: Boolean? = null) : SDKResponse {
-    return this.get<Array<Group>>("/groups/search", 
-      mapOf("fields" to fields, "limit" to limit, "offset" to offset, "sorts" to sorts, "filter_or" to filter_or, "id" to id, "name" to name, "external_group_id" to external_group_id, "externally_managed" to externally_managed, "externally_orphaned" to externally_orphaned))
+      return this.get<Array<Group>>("/groups/search", 
+        mapOf("fields" to fields,
+           "limit" to limit,
+           "offset" to offset,
+           "sorts" to sorts,
+           "filter_or" to filter_or,
+           "id" to id,
+           "name" to name,
+           "external_group_id" to external_group_id,
+           "externally_managed" to externally_managed,
+           "externally_orphaned" to externally_orphaned))
   }
 
   /**
@@ -5334,8 +5662,20 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<Homepage>>("/homepages/search", 
-      mapOf("title" to title, "created_at" to created_at, "first_name" to first_name, "last_name" to last_name, "fields" to fields, "favorited" to favorited, "creator_id" to creator_id, "sorts" to sorts, "page" to page, "per_page" to per_page, "offset" to offset, "limit" to limit, "filter_or" to filter_or))
+      return this.get<Array<Homepage>>("/homepages/search", 
+        mapOf("title" to title,
+           "created_at" to created_at,
+           "first_name" to first_name,
+           "last_name" to last_name,
+           "fields" to fields,
+           "favorited" to favorited,
+           "creator_id" to creator_id,
+           "sorts" to sorts,
+           "page" to page,
+           "per_page" to per_page,
+           "offset" to offset,
+           "limit" to limit,
+           "filter_or" to filter_or))
   }
 
   /**
@@ -5434,8 +5774,23 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<Look>>("/looks/search", 
-      mapOf("title" to title, "description" to description, "content_favorite_id" to content_favorite_id, "space_id" to space_id, "user_id" to user_id, "view_count" to view_count, "deleted" to deleted, "query_id" to query_id, "curate" to curate, "fields" to fields, "page" to page, "per_page" to per_page, "limit" to limit, "offset" to offset, "sorts" to sorts, "filter_or" to filter_or))
+      return this.get<Array<Look>>("/looks/search", 
+        mapOf("title" to title,
+           "description" to description,
+           "content_favorite_id" to content_favorite_id,
+           "space_id" to space_id,
+           "user_id" to user_id,
+           "view_count" to view_count,
+           "deleted" to deleted,
+           "query_id" to query_id,
+           "curate" to curate,
+           "fields" to fields,
+           "page" to page,
+           "per_page" to per_page,
+           "limit" to limit,
+           "offset" to offset,
+           "sorts" to sorts,
+           "filter_or" to filter_or))
   }
 
   /**
@@ -5501,8 +5856,16 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression.
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<ModelSet>>("/model_sets/search", 
-      mapOf("fields" to fields, "limit" to limit, "offset" to offset, "sorts" to sorts, "id" to id, "name" to name, "all_access" to all_access, "built_in" to built_in, "filter_or" to filter_or))
+      return this.get<Array<ModelSet>>("/model_sets/search", 
+        mapOf("fields" to fields,
+           "limit" to limit,
+           "offset" to offset,
+           "sorts" to sorts,
+           "id" to id,
+           "name" to name,
+           "all_access" to all_access,
+           "built_in" to built_in,
+           "filter_or" to filter_or))
   }
 
   /**
@@ -5568,8 +5931,16 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression.
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<PermissionSet>>("/permission_sets/search", 
-      mapOf("fields" to fields, "limit" to limit, "offset" to offset, "sorts" to sorts, "id" to id, "name" to name, "all_access" to all_access, "built_in" to built_in, "filter_or" to filter_or))
+      return this.get<Array<PermissionSet>>("/permission_sets/search", 
+        mapOf("fields" to fields,
+           "limit" to limit,
+           "offset" to offset,
+           "sorts" to sorts,
+           "id" to id,
+           "name" to name,
+           "all_access" to all_access,
+           "built_in" to built_in,
+           "filter_or" to filter_or))
   }
 
   /**
@@ -5633,8 +6004,15 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression.
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<Role>>("/roles/search", 
-      mapOf("fields" to fields, "limit" to limit, "offset" to offset, "sorts" to sorts, "id" to id, "name" to name, "built_in" to built_in, "filter_or" to filter_or))
+      return this.get<Array<Role>>("/roles/search", 
+        mapOf("fields" to fields,
+           "limit" to limit,
+           "offset" to offset,
+           "sorts" to sorts,
+           "id" to id,
+           "name" to name,
+           "built_in" to built_in,
+           "filter_or" to filter_or))
   }
 
   /**
@@ -5715,8 +6093,18 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<Space>>("/spaces/search", 
-      mapOf("fields" to fields, "page" to page, "per_page" to per_page, "limit" to limit, "offset" to offset, "sorts" to sorts, "name" to name, "id" to id, "parent_id" to parent_id, "creator_id" to creator_id, "filter_or" to filter_or))
+      return this.get<Array<Space>>("/spaces/search", 
+        mapOf("fields" to fields,
+           "page" to page,
+           "per_page" to per_page,
+           "limit" to limit,
+           "offset" to offset,
+           "sorts" to sorts,
+           "name" to name,
+           "id" to id,
+           "parent_id" to parent_id,
+           "creator_id" to creator_id,
+           "filter_or" to filter_or))
   }
 
   /**
@@ -5798,8 +6186,16 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<Theme>>("/themes/search", 
-      mapOf("id" to id, "name" to name, "begin_at" to begin_at, "end_at" to end_at, "limit" to limit, "offset" to offset, "sorts" to sorts, "fields" to fields, "filter_or" to filter_or))
+      return this.get<Array<Theme>>("/themes/search", 
+        mapOf("id" to id,
+           "name" to name,
+           "begin_at" to begin_at,
+           "end_at" to end_at,
+           "limit" to limit,
+           "offset" to offset,
+           "sorts" to sorts,
+           "fields" to fields,
+           "filter_or" to filter_or))
   }
 
   /**
@@ -5844,8 +6240,16 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      */
     filter_or: Boolean? = null) : SDKResponse {
-    return this.get<Array<UserLoginLockout>>("/user_login_lockouts/search", 
-      mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts, "auth_type" to auth_type, "full_name" to full_name, "email" to email, "remote_id" to remote_id, "filter_or" to filter_or))
+      return this.get<Array<UserLoginLockout>>("/user_login_lockouts/search", 
+        mapOf("fields" to fields,
+           "page" to page,
+           "per_page" to per_page,
+           "sorts" to sorts,
+           "auth_type" to auth_type,
+           "full_name" to full_name,
+           "email" to email,
+           "remote_id" to remote_id,
+           "filter_or" to filter_or))
   }
 
   /**
@@ -5935,8 +6339,20 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} group_id Search for users who are direct members of this group
      */
     group_id: Long? = null) : SDKResponse {
-    return this.get<Array<User>>("/users/search", 
-      mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts, "id" to id, "first_name" to first_name, "last_name" to last_name, "verified_looker_employee" to verified_looker_employee, "email" to email, "is_disabled" to is_disabled, "filter_or" to filter_or, "content_metadata_id" to content_metadata_id, "group_id" to group_id))
+      return this.get<Array<User>>("/users/search", 
+        mapOf("fields" to fields,
+           "page" to page,
+           "per_page" to per_page,
+           "sorts" to sorts,
+           "id" to id,
+           "first_name" to first_name,
+           "last_name" to last_name,
+           "verified_looker_employee" to verified_looker_employee,
+           "email" to email,
+           "is_disabled" to is_disabled,
+           "filter_or" to filter_or,
+           "content_metadata_id" to content_metadata_id,
+           "group_id" to group_id))
   }
 
   /**
@@ -5994,8 +6410,18 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} is_disabled Include or exclude disabled accounts in the results
      */
     is_disabled: Boolean? = null) : SDKResponse {
-    return this.get<Array<User>>("/users/search/names/${pattern}", 
-      mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts, "id" to id, "first_name" to first_name, "last_name" to last_name, "verified_looker_employee" to verified_looker_employee, "email" to email, "is_disabled" to is_disabled))
+      val path_pattern = encodeParam(pattern)
+      return this.get<Array<User>>("/users/search/names/${path_pattern}", 
+        mapOf("fields" to fields,
+           "page" to page,
+           "per_page" to per_page,
+           "sorts" to sorts,
+           "id" to id,
+           "first_name" to first_name,
+           "last_name" to last_name,
+           "verified_looker_employee" to verified_looker_employee,
+           "email" to email,
+           "is_disabled" to is_disabled))
   }
 
   /**
@@ -6006,7 +6432,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /session -> ApiSession
    */
   fun session() : SDKResponse {
-    return this.get<ApiSession>("/session", mapOf())
+      return this.get<ApiSession>("/session", mapOf())
   }
 
   /**
@@ -6015,7 +6441,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
    * GET /session_config -> SessionConfig
    */
   fun session_config() : SDKResponse {
-    return this.get<SessionConfig>("/session_config", mapOf())
+      return this.get<SessionConfig>("/session_config", mapOf())
   }
 
   /**
@@ -6031,8 +6457,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} collection_id ID of color collection to set as default
      */
     collection_id: String) : SDKResponse {
-    return this.put<ColorCollection>("/color_collections/default", 
-      mapOf("collection_id" to collection_id))
+      return this.put<ColorCollection>("/color_collections/default", 
+        mapOf("collection_id" to collection_id))
   }
 
   /**
@@ -6055,8 +6481,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} name Name of theme to set as default
      */
     name: String) : SDKResponse {
-    return this.put<Theme>("/themes/default", 
-      mapOf("name" to name))
+      return this.put<Theme>("/themes/default", 
+        mapOf("name" to name))
   }
 
   /**
@@ -6073,7 +6499,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Array<Long>} body
      */
     body: Array<Long>) : SDKResponse {
-    return this.put<Array<Group>>("/roles/${role_id}/groups", mapOf(), body)
+      val path_role_id = encodeParam(role_id)
+      return this.put<Array<Group>>("/roles/${path_role_id}/groups", mapOf(), body)
   }
 
   /**
@@ -6090,7 +6517,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Array<Long>} body
      */
     body: Array<Long>) : SDKResponse {
-    return this.put<Array<User>>("/roles/${role_id}/users", mapOf(), body)
+      val path_role_id = encodeParam(role_id)
+      return this.put<Array<User>>("/roles/${path_role_id}/users", mapOf(), body)
   }
 
   /**
@@ -6126,7 +6554,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Array<UserAttributeGroupValue>} body
      */
     body: Array<UserAttributeGroupValue>) : SDKResponse {
-    return this.post<Array<UserAttributeGroupValue>>("/user_attributes/${user_attribute_id}/group_values", mapOf(), body)
+      val path_user_attribute_id = encodeParam(user_attribute_id)
+      return this.post<Array<UserAttributeGroupValue>>("/user_attributes/${path_user_attribute_id}/group_values", mapOf(), body)
   }
 
   /**
@@ -6149,7 +6578,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteUserAttributeWithValue} body
      */
     body: WriteUserAttributeWithValue) : SDKResponse {
-    return this.patch<UserAttributeWithValue>("/users/${user_id}/attribute_values/${user_attribute_id}", mapOf(), body)
+      val path_user_id = encodeParam(user_id)
+      val path_user_attribute_id = encodeParam(user_attribute_id)
+      return this.patch<UserAttributeWithValue>("/users/${path_user_id}/attribute_values/${path_user_attribute_id}", mapOf(), body)
   }
 
   /**
@@ -6170,8 +6601,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.put<Array<Role>>("/users/${user_id}/roles", 
-      mapOf("fields" to fields), body)
+      val path_user_id = encodeParam(user_id)
+      return this.put<Array<Role>>("/users/${path_user_id}/roles", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -6188,8 +6620,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Space>("/spaces/${space_id}", 
-      mapOf("fields" to fields))
+      val path_space_id = encodeParam(space_id)
+      return this.get<Space>("/spaces/${path_space_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -6206,8 +6639,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Space>>("/spaces/${space_id}/ancestors", 
-      mapOf("fields" to fields))
+      val path_space_id = encodeParam(space_id)
+      return this.get<Array<Space>>("/spaces/${path_space_id}/ancestors", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -6236,8 +6670,12 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} sorts Fields to sort by.
      */
     sorts: String? = null) : SDKResponse {
-    return this.get<Array<Space>>("/spaces/${space_id}/children", 
-      mapOf("fields" to fields, "page" to page, "per_page" to per_page, "sorts" to sorts))
+      val path_space_id = encodeParam(space_id)
+      return this.get<Array<Space>>("/spaces/${path_space_id}/children", 
+        mapOf("fields" to fields,
+           "page" to page,
+           "per_page" to per_page,
+           "sorts" to sorts))
   }
 
   /**
@@ -6262,8 +6700,11 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} name Match Space name.
      */
     name: String? = null) : SDKResponse {
-    return this.get<Array<Space>>("/spaces/${space_id}/children/search", 
-      mapOf("fields" to fields, "sorts" to sorts, "name" to name))
+      val path_space_id = encodeParam(space_id)
+      return this.get<Array<Space>>("/spaces/${path_space_id}/children/search", 
+        mapOf("fields" to fields,
+           "sorts" to sorts,
+           "name" to name))
   }
 
   /**
@@ -6280,8 +6721,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<Dashboard>>("/spaces/${space_id}/dashboards", 
-      mapOf("fields" to fields))
+      val path_space_id = encodeParam(space_id)
+      return this.get<Array<Dashboard>>("/spaces/${path_space_id}/dashboards", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -6298,8 +6740,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Array<LookWithQuery>>("/spaces/${space_id}/looks", 
-      mapOf("fields" to fields))
+      val path_space_id = encodeParam(space_id)
+      return this.get<Array<LookWithQuery>>("/spaces/${path_space_id}/looks", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -6316,8 +6759,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Space>("/spaces/${space_id}/parent", 
-      mapOf("fields" to fields))
+      val path_space_id = encodeParam(space_id)
+      return this.get<Space>("/spaces/${path_space_id}/parent", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -6330,7 +6774,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} slug slug of query
      */
     slug: String) : SDKResponse {
-    return this.get<SqlQuery>("/sql_queries/${slug}", mapOf())
+      val path_slug = encodeParam(slug)
+      return this.get<SqlQuery>("/sql_queries/${path_slug}", mapOf())
   }
 
   /**
@@ -6359,8 +6804,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
      */
     raw_locale: Boolean? = null) : SDKResponse {
-    return this.patch<Array<Long>>("/dashboards/${lookml_dashboard_id}/sync", 
-      mapOf("raw_locale" to raw_locale), body)
+      val path_lookml_dashboard_id = encodeParam(lookml_dashboard_id)
+      return this.patch<Array<Long>>("/dashboards/${path_lookml_dashboard_id}/sync", 
+        mapOf("raw_locale" to raw_locale), body)
   }
 
   /**
@@ -6384,8 +6830,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {DelimArray<String>} tests Array of names of tests to run
      */
     tests: DelimArray<String>? = null) : SDKResponse {
-    return this.put<Array<DBConnectionTestResult>>("/connections/${connection_name}/test", 
-      mapOf("tests" to tests))
+      val path_connection_name = encodeParam(connection_name)
+      return this.put<Array<DBConnectionTestResult>>("/connections/${path_connection_name}/test", 
+        mapOf("tests" to tests))
   }
 
   /**
@@ -6409,8 +6856,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {DelimArray<String>} tests Array of names of tests to run
      */
     tests: DelimArray<String>? = null) : SDKResponse {
-    return this.put<Array<DBConnectionTestResult>>("/connections/test", 
-      mapOf("tests" to tests), body)
+      return this.put<Array<DBConnectionTestResult>>("/connections/test", 
+        mapOf("tests" to tests), body)
   }
 
   /**
@@ -6423,7 +6870,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Long} integration_id Id of integration
      */
     integration_id: Long) : SDKResponse {
-    return this.post<IntegrationTestResult>("/integrations/${integration_id}/test", mapOf())
+      val path_integration_id = encodeParam(integration_id)
+      return this.post<IntegrationTestResult>("/integrations/${path_integration_id}/test", mapOf())
   }
 
   /**
@@ -6455,7 +6903,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteLDAPConfig} body
      */
     body: WriteLDAPConfig) : SDKResponse {
-    return this.put<LDAPConfigTestResult>("/ldap_config/test_auth", mapOf(), body)
+      return this.put<LDAPConfigTestResult>("/ldap_config/test_auth", mapOf(), body)
   }
 
   /**
@@ -6485,7 +6933,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteLDAPConfig} body
      */
     body: WriteLDAPConfig) : SDKResponse {
-    return this.put<LDAPConfigTestResult>("/ldap_config/test_connection", mapOf(), body)
+      return this.put<LDAPConfigTestResult>("/ldap_config/test_connection", mapOf(), body)
   }
 
   /**
@@ -6506,7 +6954,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteLDAPConfig} body
      */
     body: WriteLDAPConfig) : SDKResponse {
-    return this.put<LDAPConfigTestResult>("/ldap_config/test_user_auth", mapOf(), body)
+      return this.put<LDAPConfigTestResult>("/ldap_config/test_user_auth", mapOf(), body)
   }
 
   /**
@@ -6527,7 +6975,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteLDAPConfig} body
      */
     body: WriteLDAPConfig) : SDKResponse {
-    return this.put<LDAPConfigTestResult>("/ldap_config/test_user_info", mapOf(), body)
+      return this.put<LDAPConfigTestResult>("/ldap_config/test_user_info", mapOf(), body)
   }
 
   /**
@@ -6548,8 +6996,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Theme>("/themes/${theme_id}", 
-      mapOf("fields" to fields))
+      val path_theme_id = encodeParam(theme_id)
+      return this.get<Theme>("/themes/${path_theme_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -6571,8 +7020,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
      */
     ts: Date? = null) : SDKResponse {
-    return this.get<Theme>("/themes/theme_or_default", 
-      mapOf("name" to name, "ts" to ts))
+      return this.get<Theme>("/themes/theme_or_default", 
+        mapOf("name" to name,
+           "ts" to ts))
   }
 
   /**
@@ -6585,7 +7035,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteBackupConfiguration} body
      */
     body: WriteBackupConfiguration) : SDKResponse {
-    return this.patch<BackupConfiguration>("/backup_configuration", mapOf(), body)
+      return this.patch<BackupConfiguration>("/backup_configuration", mapOf(), body)
   }
 
   /**
@@ -6603,7 +7053,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteColorCollection} body
      */
     body: WriteColorCollection) : SDKResponse {
-    return this.patch<ColorCollection>("/color_collections/${collection_id}", mapOf(), body)
+      val path_collection_id = encodeParam(collection_id)
+      return this.patch<ColorCollection>("/color_collections/${path_collection_id}", mapOf(), body)
   }
 
   /**
@@ -6620,7 +7071,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteDBConnection} body
      */
     body: WriteDBConnection) : SDKResponse {
-    return this.patch<DBConnection>("/connections/${connection_name}", mapOf(), body)
+      val path_connection_name = encodeParam(connection_name)
+      return this.patch<DBConnection>("/connections/${path_connection_name}", mapOf(), body)
   }
 
   /**
@@ -6637,7 +7089,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteContentMeta} body
      */
     body: WriteContentMeta) : SDKResponse {
-    return this.patch<ContentMeta>("/content_metadata/${content_metadata_id}", mapOf(), body)
+      val path_content_metadata_id = encodeParam(content_metadata_id)
+      return this.patch<ContentMeta>("/content_metadata/${path_content_metadata_id}", mapOf(), body)
   }
 
   /**
@@ -6654,7 +7107,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {ContentMetaGroupUser} body
      */
     body: ContentMetaGroupUser) : SDKResponse {
-    return this.put<ContentMetaGroupUser>("/content_metadata_access/${content_metadata_access_id}", mapOf(), body)
+      val path_content_metadata_access_id = encodeParam(content_metadata_access_id)
+      return this.put<ContentMetaGroupUser>("/content_metadata_access/${path_content_metadata_access_id}", mapOf(), body)
   }
 
   /**
@@ -6671,8 +7125,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
      */
     send_test_welcome_email: Boolean? = null) : SDKResponse {
-    return this.patch<CustomWelcomeEmail>("/custom_welcome_email", 
-      mapOf("send_test_welcome_email" to send_test_welcome_email), body)
+      return this.patch<CustomWelcomeEmail>("/custom_welcome_email", 
+        mapOf("send_test_welcome_email" to send_test_welcome_email), body)
   }
 
   /**
@@ -6685,7 +7139,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteWelcomeEmailTest} body
      */
     body: WriteWelcomeEmailTest) : SDKResponse {
-    return this.put<WelcomeEmailTest>("/custom_welcome_email_test", mapOf(), body)
+      return this.put<WelcomeEmailTest>("/custom_welcome_email_test", mapOf(), body)
   }
 
   /**
@@ -6711,7 +7165,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteDashboard} body
      */
     body: WriteDashboard) : SDKResponse {
-    return this.patch<Dashboard>("/dashboards/${dashboard_id}", mapOf(), body)
+      val path_dashboard_id = encodeParam(dashboard_id)
+      return this.patch<Dashboard>("/dashboards/${path_dashboard_id}", mapOf(), body)
   }
 
   /**
@@ -6732,8 +7187,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<DashboardElement>("/dashboard_elements/${dashboard_element_id}", 
-      mapOf("fields" to fields), body)
+      val path_dashboard_element_id = encodeParam(dashboard_element_id)
+      return this.patch<DashboardElement>("/dashboard_elements/${path_dashboard_element_id}", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -6754,8 +7210,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<DashboardFilter>("/dashboard_filters/${dashboard_filter_id}", 
-      mapOf("fields" to fields), body)
+      val path_dashboard_filter_id = encodeParam(dashboard_filter_id)
+      return this.patch<DashboardFilter>("/dashboard_filters/${path_dashboard_filter_id}", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -6776,8 +7233,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<DashboardLayout>("/dashboard_layouts/${dashboard_layout_id}", 
-      mapOf("fields" to fields), body)
+      val path_dashboard_layout_id = encodeParam(dashboard_layout_id)
+      return this.patch<DashboardLayout>("/dashboard_layouts/${path_dashboard_layout_id}", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -6798,8 +7256,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<DashboardLayoutComponent>("/dashboard_layout_components/${dashboard_layout_component_id}", 
-      mapOf("fields" to fields), body)
+      val path_dashboard_layout_component_id = encodeParam(dashboard_layout_component_id)
+      return this.patch<DashboardLayoutComponent>("/dashboard_layout_components/${path_dashboard_layout_component_id}", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -6816,7 +7275,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteDatagroup} body
      */
     body: WriteDatagroup) : SDKResponse {
-    return this.patch<Datagroup>("/datagroups/${datagroup_id}", mapOf(), body)
+      val path_datagroup_id = encodeParam(datagroup_id)
+      return this.patch<Datagroup>("/datagroups/${path_datagroup_id}", mapOf(), body)
   }
 
   /**
@@ -6833,7 +7293,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {UpdateFolder} body
      */
     body: UpdateFolder) : SDKResponse {
-    return this.patch<Folder>("/folders/${folder_id}", mapOf(), body)
+      val path_folder_id = encodeParam(folder_id)
+      return this.patch<Folder>("/folders/${path_folder_id}", mapOf(), body)
   }
 
   /**
@@ -6858,7 +7319,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteGitBranch} body
      */
     body: WriteGitBranch) : SDKResponse {
-    return this.put<GitBranch>("/projects/${project_id}/git_branch", mapOf(), body)
+      val path_project_id = encodeParam(project_id)
+      return this.put<GitBranch>("/projects/${path_project_id}/git_branch", mapOf(), body)
   }
 
   /**
@@ -6879,8 +7341,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<Group>("/groups/${group_id}", 
-      mapOf("fields" to fields), body)
+      val path_group_id = encodeParam(group_id)
+      return this.patch<Group>("/groups/${path_group_id}", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -6901,8 +7364,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<Homepage>("/homepages/${homepage_id}", 
-      mapOf("fields" to fields), body)
+      val path_homepage_id = encodeParam(homepage_id)
+      return this.patch<Homepage>("/homepages/${path_homepage_id}", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -6923,8 +7387,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<HomepageItem>("/homepage_items/${homepage_item_id}", 
-      mapOf("fields" to fields), body)
+      val path_homepage_item_id = encodeParam(homepage_item_id)
+      return this.patch<HomepageItem>("/homepage_items/${path_homepage_item_id}", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -6945,8 +7410,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<HomepageSection>("/homepage_sections/${homepage_section_id}", 
-      mapOf("fields" to fields), body)
+      val path_homepage_section_id = encodeParam(homepage_section_id)
+      return this.patch<HomepageSection>("/homepage_sections/${path_homepage_section_id}", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -6967,8 +7433,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<Integration>("/integrations/${integration_id}", 
-      mapOf("fields" to fields), body)
+      val path_integration_id = encodeParam(integration_id)
+      return this.patch<Integration>("/integrations/${path_integration_id}", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -6991,8 +7458,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<IntegrationHub>("/integration_hubs/${integration_hub_id}", 
-      mapOf("fields" to fields), body)
+      val path_integration_hub_id = encodeParam(integration_hub_id)
+      return this.patch<IntegrationHub>("/integration_hubs/${path_integration_hub_id}", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -7005,7 +7473,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteInternalHelpResources} body
      */
     body: WriteInternalHelpResources) : SDKResponse {
-    return this.patch<InternalHelpResources>("/internal_help_resources", mapOf(), body)
+      return this.patch<InternalHelpResources>("/internal_help_resources", mapOf(), body)
   }
 
   /**
@@ -7018,7 +7486,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteInternalHelpResourcesContent} body
      */
     body: WriteInternalHelpResourcesContent) : SDKResponse {
-    return this.patch<InternalHelpResourcesContent>("/internal_help_resources_content", mapOf(), body)
+      return this.patch<InternalHelpResourcesContent>("/internal_help_resources_content", mapOf(), body)
   }
 
   /**
@@ -7041,7 +7509,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteLDAPConfig} body
      */
     body: WriteLDAPConfig) : SDKResponse {
-    return this.patch<LDAPConfig>("/ldap_config", mapOf(), body)
+      return this.patch<LDAPConfig>("/ldap_config", mapOf(), body)
   }
 
   /**
@@ -7058,7 +7526,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteLegacyFeature} body
      */
     body: WriteLegacyFeature) : SDKResponse {
-    return this.patch<LegacyFeature>("/legacy_features/${legacy_feature_id}", mapOf(), body)
+      val path_legacy_feature_id = encodeParam(legacy_feature_id)
+      return this.patch<LegacyFeature>("/legacy_features/${path_legacy_feature_id}", mapOf(), body)
   }
 
   /**
@@ -7098,8 +7567,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<LookWithQuery>("/looks/${look_id}", 
-      mapOf("fields" to fields), body)
+      val path_look_id = encodeParam(look_id)
+      return this.patch<LookWithQuery>("/looks/${path_look_id}", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -7116,7 +7586,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteLookmlModel} body
      */
     body: WriteLookmlModel) : SDKResponse {
-    return this.patch<LookmlModel>("/lookml_models/${lookml_model_name}", mapOf(), body)
+      val path_lookml_model_name = encodeParam(lookml_model_name)
+      return this.patch<LookmlModel>("/lookml_models/${path_lookml_model_name}", mapOf(), body)
   }
 
   /**
@@ -7133,7 +7604,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteModelSet} body
      */
     body: WriteModelSet) : SDKResponse {
-    return this.patch<ModelSet>("/model_sets/${model_set_id}", mapOf(), body)
+      val path_model_set_id = encodeParam(model_set_id)
+      return this.patch<ModelSet>("/model_sets/${path_model_set_id}", mapOf(), body)
   }
 
   /**
@@ -7154,7 +7626,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteOIDCConfig} body
      */
     body: WriteOIDCConfig) : SDKResponse {
-    return this.patch<OIDCConfig>("/oidc_config", mapOf(), body)
+      return this.patch<OIDCConfig>("/oidc_config", mapOf(), body)
   }
 
   /**
@@ -7167,7 +7639,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WritePasswordConfig} body
      */
     body: WritePasswordConfig) : SDKResponse {
-    return this.patch<PasswordConfig>("/password_config", mapOf(), body)
+      return this.patch<PasswordConfig>("/password_config", mapOf(), body)
   }
 
   /**
@@ -7184,7 +7656,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WritePermissionSet} body
      */
     body: WritePermissionSet) : SDKResponse {
-    return this.patch<PermissionSet>("/permission_sets/${permission_set_id}", mapOf(), body)
+      val path_permission_set_id = encodeParam(permission_set_id)
+      return this.patch<PermissionSet>("/permission_sets/${path_permission_set_id}", mapOf(), body)
   }
 
   /**
@@ -7225,8 +7698,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<Project>("/projects/${project_id}", 
-      mapOf("fields" to fields), body)
+      val path_project_id = encodeParam(project_id)
+      return this.patch<Project>("/projects/${path_project_id}", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -7252,7 +7726,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteRepositoryCredential} body
      */
     body: WriteRepositoryCredential) : SDKResponse {
-    return this.put<RepositoryCredential>("/projects/${root_project_id}/credential/${credential_id}", mapOf(), body)
+      val path_root_project_id = encodeParam(root_project_id)
+      val path_credential_id = encodeParam(credential_id)
+      return this.put<RepositoryCredential>("/projects/${path_root_project_id}/credential/${path_credential_id}", mapOf(), body)
   }
 
   /**
@@ -7269,7 +7745,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteRole} body
      */
     body: WriteRole) : SDKResponse {
-    return this.patch<Role>("/roles/${role_id}", mapOf(), body)
+      val path_role_id = encodeParam(role_id)
+      return this.patch<Role>("/roles/${path_role_id}", mapOf(), body)
   }
 
   /**
@@ -7290,7 +7767,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteSamlConfig} body
      */
     body: WriteSamlConfig) : SDKResponse {
-    return this.patch<SamlConfig>("/saml_config", mapOf(), body)
+      return this.patch<SamlConfig>("/saml_config", mapOf(), body)
   }
 
   /**
@@ -7348,7 +7825,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteScheduledPlan} body
      */
     body: WriteScheduledPlan) : SDKResponse {
-    return this.patch<ScheduledPlan>("/scheduled_plans/${scheduled_plan_id}", mapOf(), body)
+      val path_scheduled_plan_id = encodeParam(scheduled_plan_id)
+      return this.patch<ScheduledPlan>("/scheduled_plans/${path_scheduled_plan_id}", mapOf(), body)
   }
 
   /**
@@ -7380,7 +7858,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteApiSession} body
      */
     body: WriteApiSession) : SDKResponse {
-    return this.patch<ApiSession>("/session", mapOf(), body)
+      return this.patch<ApiSession>("/session", mapOf(), body)
   }
 
   /**
@@ -7393,7 +7871,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteSessionConfig} body
      */
     body: WriteSessionConfig) : SDKResponse {
-    return this.patch<SessionConfig>("/session_config", mapOf(), body)
+      return this.patch<SessionConfig>("/session_config", mapOf(), body)
   }
 
   /**
@@ -7410,7 +7888,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {UpdateSpace} body
      */
     body: UpdateSpace) : SDKResponse {
-    return this.patch<Space>("/spaces/${space_id}", mapOf(), body)
+      val path_space_id = encodeParam(space_id)
+      return this.patch<Space>("/spaces/${path_space_id}", mapOf(), body)
   }
 
   /**
@@ -7429,7 +7908,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteTheme} body
      */
     body: WriteTheme) : SDKResponse {
-    return this.patch<Theme>("/themes/${theme_id}", mapOf(), body)
+      val path_theme_id = encodeParam(theme_id)
+      return this.patch<Theme>("/themes/${path_theme_id}", mapOf(), body)
   }
 
   /**
@@ -7450,8 +7930,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<User>("/users/${user_id}", 
-      mapOf("fields" to fields), body)
+      val path_user_id = encodeParam(user_id)
+      return this.patch<User>("/users/${path_user_id}", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -7472,8 +7953,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<UserAttribute>("/user_attributes/${user_attribute_id}", 
-      mapOf("fields" to fields), body)
+      val path_user_attribute_id = encodeParam(user_attribute_id)
+      return this.patch<UserAttribute>("/user_attributes/${path_user_attribute_id}", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -7496,7 +7978,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {UserAttributeGroupValue} body
      */
     body: UserAttributeGroupValue) : SDKResponse {
-    return this.patch<UserAttributeGroupValue>("/groups/${group_id}/attribute_values/${user_attribute_id}", mapOf(), body)
+      val path_group_id = encodeParam(group_id)
+      val path_user_attribute_id = encodeParam(user_attribute_id)
+      return this.patch<UserAttributeGroupValue>("/groups/${path_group_id}/attribute_values/${path_user_attribute_id}", mapOf(), body)
   }
 
   /**
@@ -7517,8 +8001,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.patch<CredentialsEmail>("/users/${user_id}/credentials_email", 
-      mapOf("fields" to fields), body)
+      val path_user_id = encodeParam(user_id)
+      return this.patch<CredentialsEmail>("/users/${path_user_id}/credentials_email", 
+        mapOf("fields" to fields), body)
   }
 
   /**
@@ -7531,7 +8016,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteWhitelabelConfiguration} body
      */
     body: WriteWhitelabelConfiguration) : SDKResponse {
-    return this.put<WhitelabelConfiguration>("/whitelabel_configuration", mapOf(), body)
+      return this.put<WhitelabelConfiguration>("/whitelabel_configuration", mapOf(), body)
   }
 
   /**
@@ -7552,8 +8037,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<User>("/users/${user_id}", 
-      mapOf("fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      return this.get<User>("/users/${path_user_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7570,8 +8056,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<UserAttribute>("/user_attributes/${user_attribute_id}", 
-      mapOf("fields" to fields))
+      val path_user_attribute_id = encodeParam(user_attribute_id)
+      return this.get<UserAttribute>("/user_attributes/${path_user_attribute_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7614,8 +8101,12 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} include_unset If true, returns an empty record for each requested attribute that has no user, group, or default value.
      */
     include_unset: Boolean? = null) : SDKResponse {
-    return this.get<Array<UserAttributeWithValue>>("/users/${user_id}/attribute_values", 
-      mapOf("fields" to fields, "user_attribute_ids" to user_attribute_ids, "all_values" to all_values, "include_unset" to include_unset))
+      val path_user_id = encodeParam(user_id)
+      return this.get<Array<UserAttributeWithValue>>("/users/${path_user_id}/attribute_values", 
+        mapOf("fields" to fields,
+           "user_attribute_ids" to user_attribute_ids,
+           "all_values" to all_values,
+           "include_unset" to include_unset))
   }
 
   /**
@@ -7636,8 +8127,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsApi3>("/users/${user_id}/credentials_api3/${credentials_api3_id}", 
-      mapOf("fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      val path_credentials_api3_id = encodeParam(credentials_api3_id)
+      return this.get<CredentialsApi3>("/users/${path_user_id}/credentials_api3/${path_credentials_api3_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7654,8 +8147,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsEmail>("/users/${user_id}/credentials_email", 
-      mapOf("fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      return this.get<CredentialsEmail>("/users/${path_user_id}/credentials_email", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7676,8 +8170,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsEmbed>("/users/${user_id}/credentials_embed/${credentials_embed_id}", 
-      mapOf("fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      val path_credentials_embed_id = encodeParam(credentials_embed_id)
+      return this.get<CredentialsEmbed>("/users/${path_user_id}/credentials_embed/${path_credentials_embed_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7694,8 +8190,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsGoogle>("/users/${user_id}/credentials_google", 
-      mapOf("fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      return this.get<CredentialsGoogle>("/users/${path_user_id}/credentials_google", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7712,8 +8209,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsLDAP>("/users/${user_id}/credentials_ldap", 
-      mapOf("fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      return this.get<CredentialsLDAP>("/users/${path_user_id}/credentials_ldap", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7730,8 +8228,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsLookerOpenid>("/users/${user_id}/credentials_looker_openid", 
-      mapOf("fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      return this.get<CredentialsLookerOpenid>("/users/${path_user_id}/credentials_looker_openid", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7748,8 +8247,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsOIDC>("/users/${user_id}/credentials_oidc", 
-      mapOf("fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      return this.get<CredentialsOIDC>("/users/${path_user_id}/credentials_oidc", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7766,8 +8266,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsSaml>("/users/${user_id}/credentials_saml", 
-      mapOf("fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      return this.get<CredentialsSaml>("/users/${path_user_id}/credentials_saml", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7784,8 +8285,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<CredentialsTotp>("/users/${user_id}/credentials_totp", 
-      mapOf("fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      return this.get<CredentialsTotp>("/users/${path_user_id}/credentials_totp", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7833,8 +8335,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<User>("/users/credential/${credential_type}/${credential_id}", 
-      mapOf("fields" to fields))
+      val path_credential_type = encodeParam(credential_type)
+      val path_credential_id = encodeParam(credential_id)
+      return this.get<User>("/users/credential/${path_credential_type}/${path_credential_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7855,8 +8359,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {Boolean} direct_association_only Get only roles associated directly with the user: exclude those only associated through groups.
      */
     direct_association_only: Boolean? = null) : SDKResponse {
-    return this.get<Array<Role>>("/users/${user_id}/roles", 
-      mapOf("fields" to fields, "direct_association_only" to direct_association_only))
+      val path_user_id = encodeParam(user_id)
+      return this.get<Array<Role>>("/users/${path_user_id}/roles", 
+        mapOf("fields" to fields,
+           "direct_association_only" to direct_association_only))
   }
 
   /**
@@ -7877,8 +8383,10 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<Session>("/users/${user_id}/sessions/${session_id}", 
-      mapOf("fields" to fields))
+      val path_user_id = encodeParam(user_id)
+      val path_session_id = encodeParam(session_id)
+      return this.get<Session>("/users/${path_user_id}/sessions/${path_session_id}", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7903,8 +8411,9 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields
      */
     fields: String? = null) : SDKResponse {
-    return this.post<ProjectValidation>("/projects/${project_id}/validate", 
-      mapOf("fields" to fields))
+      val path_project_id = encodeParam(project_id)
+      return this.post<ProjectValidation>("/projects/${path_project_id}/validate", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7923,7 +8432,7 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {WriteTheme} body
      */
     body: WriteTheme) : SDKResponse {
-    return this.post<ValidationError>("/themes/validate", mapOf(), body)
+      return this.post<ValidationError>("/themes/validate", mapOf(), body)
   }
 
   /**
@@ -7936,8 +8445,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<ApiVersion>("/versions", 
-      mapOf("fields" to fields))
+      return this.get<ApiVersion>("/versions", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7951,8 +8460,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} fields Requested fields.
      */
     fields: String? = null) : SDKResponse {
-    return this.get<WhitelabelConfiguration>("/whitelabel_configuration", 
-      mapOf("fields" to fields))
+      return this.get<WhitelabelConfiguration>("/whitelabel_configuration", 
+        mapOf("fields" to fields))
   }
 
   /**
@@ -7993,7 +8502,8 @@ class Looker31SDK(authSession: UserSession) : APIMethods(authSession) {
      * @param {String} workspace_id Id of the workspace
      */
     workspace_id: String) : SDKResponse {
-    return this.get<Workspace>("/workspaces/${workspace_id}", mapOf())
+      val path_workspace_id = encodeParam(workspace_id)
+      return this.get<Workspace>("/workspaces/${path_workspace_id}", mapOf())
   }
 
 }
