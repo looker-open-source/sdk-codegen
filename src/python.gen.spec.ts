@@ -263,7 +263,7 @@ def run_url_encoded_query(
 view_name = self.encode_path_param(view_name)
 result_format = self.encode_path_param(result_format)
 `
-      const actual = gen.encodePathParams('', method.pathParams)
+      const actual = gen.encodePathParams('', method)
       expect(actual).toEqual(expected)
     })
 
@@ -271,13 +271,13 @@ result_format = self.encode_path_param(result_format)
       const method = apiTestModel.methods['run_look']
       // should NOT escape look_id (int)
       const expected = 'result_format = self.encode_path_param(result_format)\n'
-      const actual = gen.encodePathParams('', method.pathParams)
+      const actual = gen.encodePathParams('', method)
       expect(actual).toEqual(expected)
     })
 
     it('asserts type of optional body params', () => {
       const method = apiTestModel.methods["import_lookml_dashboard"]
-      const expected = 
+      const expected =
 `if body:
     assert isinstance(body, models.WriteDashboard)
 `
