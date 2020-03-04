@@ -22,8 +22,16 @@
  * THE SOFTWARE.
  */
 
-import { NodeSettingsIniFile, NodeSession, LookerSDK, IDashboard, IDashboardElement } from '@looker/sdk'
+import {
+  NodeSettingsIniFile,
+  NodeSession,
+  Looker40SDK as LookerSDK,
+  IDashboardElement,
+  IRequestRunQuery
+} from '@looker/sdk'
 import * as fs from 'fs'
+import { getDashboard, getDashboardTile, waitForRender } from './utils'
+import { Readable } from 'stream'
 
 /**
  *
@@ -51,126 +59,155 @@ const sdk = new LookerSDK(session)
 
 /**
  * Read command-line parameters. Still have a bug for png argument
- * @returns {{dashboardTitle: string; tileTitle: string; renderFormat: string}}
+ * @returns {{dashboardTitle: string, tileTitle: string, renderFormat: string}}
  */
 const getParams = () => {
   const offset = 1
-  const result = {
-    dashboardTitle: process.argv.length >= offset + 1? process.argv[offset + 1] : '',
+  return {
+    dashboardTitle:
+      process.argv.length > offset + 1 ? process.argv[offset + 1] : '',
     tileTitle: process.argv.length > offset + 2 ? process.argv[offset + 2] : '',
-    renderFormat: process.argv.length >= offset + 3 ? process.argv[offset + 3] : 'png'
+    outputFormat:
+      process.argv.length > offset + 3 ? process.argv[offset + 3] : 'png'
   }
-  return result
 }
 
 /**
- * Find a dashboard by title
- * @param {string} title of dashboard
- * @returns {Promise<IDashboard>} the matched dashboard
+ * Is this format renderable?
+ * @param {string} format to render
+ * @returns {boolean} true if render_task can be used for this format
  */
-const getDashboard = async (title: string) => {
-  const [dash] = await sdk.ok(sdk.search_dashboards({title}))
-  if (!dash) {
-    console.warn(`No dashboard titled ${title} was found`)
-  }
-  return dash
+const isRenderable = (format: string) => {
+  format = format.toLowerCase()
+  return format == 'png' || format == 'jpg'
 }
 
 /**
- * Get a tile by title from a dashboard
- * @param {IDashboard} dash Dashboard to search
- * @param {string} title Title title to find
- * @returns {IDashboardElement | undefined} Returns the found tile or undefined
+ * Renders a dashboard tile's query as PNG or JPG
+ * @param {LookerSDK} sdk object to use
+ * @param {IDashboardElement} tile to render (using query_id)
+ * @param {string} format either png or jpg
+ * @param {number} width defaults to 640
+ * @param {number} height defaults to 480
+ * @returns {Promise<string>} name of downloaded file (undefined on failure)
+ *
+ * **Note:** run_query can also be used for PNG and JPG output, but this function will show an elapsed time ticker via
+ * the `waitForRender()` callback as the render is progressing
  */
-const getDashboardTile = (dash: IDashboard, title: string) => {
-  title = title.toLowerCase()
-  if (!dash.dashboard_elements) return undefined
-  const [tile]= dash.dashboard_elements.filter(t => String(t.title).toLowerCase() === title)
-  if (!tile) {
-    console.warn(`No tile titled ${title} found on ${dash.title}`)
-  }
-  return tile
-}
+const renderTile = async (
+  sdk: LookerSDK,
+  tile: IDashboardElement,
+  format: string,
+  width: number = 640,
+  height: number = 480
+) => {
+  let fileName = undefined
+  const task = await sdk.ok(
+    sdk.create_query_render_task(tile.query_id!, format, width, height)
+  )
 
-/**
- * Wait specified milliseconds
- * @param {number} ms time in milliseconds
- * @returns {Promise<unknown>} promise timeout
- */
-const sleep = async (ms: number) => {
-  return new Promise(resolve  =>{
-    setTimeout(resolve, ms)
+  if (!task || !task.id) {
+    throw `Could not create a render task for ${tile.title}`
+  }
+
+  const result = await waitForRender(sdk, task.id!)
+  fileName = `${tile.title}.${format}`
+  fs.writeFile(fileName, result, 'binary', err => {
+    if (err) {
+      fileName = undefined // no file was created
+      throw err
+    }
   })
+  return fileName
 }
 
 /**
- * Download a dashboard tile when it's finished rendering
+ * Use the streaming SDK to download a tile's query
+ * @param {LookerSDK} sdk to use
+ * @param {IDashboardElement} tile to download
+ * @param {string} format to download
+ * @returns {Promise<string>} name of downloaded file (undefined on failure)
+ */
+const downloadTileAs = async (
+  sdk: LookerSDK,
+  tile: IDashboardElement,
+  format: string
+) => {
+  let fileName = undefined
+  fileName = `${tile.title}.${format}`
+
+  const writer = fs.createWriteStream(fileName)
+  const request: IRequestRunQuery = {
+    result_format: format,
+    query_id: tile.query_id!
+    // apply_formatting: true,
+    // apply_vis: true
+  }
+  await sdk.stream.run_query(async (readable: Readable) => {
+    return new Promise<any>((resolve, reject) => {
+      readable
+        .pipe(writer)
+        .on('error', () => {
+          fileName = undefined
+          throw reject
+        })
+        .on('finish', resolve)
+    })
+  }, request)
+
+  return fileName
+}
+
+/**
+ * Download a dashboard tile in any of its supported formats
  * @param {LookerSDK} sdk initialized Looker SDK
  * @param {IDashboardElement} tile Dashboard tile to render
  * @param {string} format format of rendering
  * @returns {Promise<undefined | string>} Name of file downloaded
  */
-const downloadTile = async (sdk: LookerSDK, tile: IDashboardElement, format: string) => {
+const downloadTile = async (
+  sdk: LookerSDK,
+  tile: IDashboardElement,
+  format: string
+) => {
   let fileName = undefined
   if (!tile.query_id) {
     console.error(`Tile ${tile.title} does not have a query`)
     return
   }
   try {
-    const task = await sdk.ok(sdk.create_query_render_task(tile.query_id, format, 640, 480))
-
-    if (!task || !task.id) {
-      console.error(`Could not create a render task for ${tile.title}`)
-      return
+    if (isRenderable(format)) {
+      fileName = await renderTile(sdk, tile, format)
+    } else {
+      // just try downloading the query results
+      fileName = await downloadTileAs(sdk, tile, format)
     }
-
-    // poll the render task until it completes
-    let elapsed = 0.0
-    const delay = 500 // wait .5 seconds
-    while (true) {
-      const poll = await sdk.ok(sdk.render_task(task.id!))
-      if (poll.status === 'failure') {
-        console.log({poll})
-        console.error(`Render failed for ${tile.title}`)
-        return
-      }
-      if (poll.status === 'success') {
-        break
-      }
-      await sleep(delay)
-      console.log(`${elapsed += (delay/1000)} seconds elapsed`)
-    }
-    const result = await sdk.ok(sdk.render_task_results(task.id!))
-    fileName = `${tile.title}.${format}`
-    fs.writeFile(fileName, result, 'binary',(err) => {
-        if (err) {
-          fileName = undefined
-          console.error(err)}
-      }
-    )
-
   } catch (err) {
     console.error(`'${format}' is probably not a valid format`)
     console.error(err)
   }
   return fileName
 }
-
-(async () => {
-  const { dashboardTitle, tileTitle, renderFormat } = getParams()
+;(async () => {
+  const { dashboardTitle, tileTitle, outputFormat } = getParams()
   if (!dashboardTitle || !tileTitle) {
-    console.warn('Please provide: <dashboardTitle> <titleTitle> [<renderFormat>]')
-    console.warn('  renderFormat defaults to "png"')
+    console.warn('Please provide: <dashboardTitle> <titeTitle> [<ouputFormat>]')
+    console.warn(
+      '  outputFormat defaults to "png". Many other formats are also supported. Refer to the run_query documentation for options.'
+    )
     return
   }
-  console.log(`Rendering dashboard "${dashboardTitle}" tile "${tileTitle}" as ${renderFormat} ...`)
+  const action = isRenderable(outputFormat) ? 'Rendering' : 'Downloading'
+  console.log(
+    `${action} dashboard "${dashboardTitle}" tile "${tileTitle}" as ${outputFormat} ...`
+  )
 
-  const dashboard = await getDashboard(dashboardTitle)
+  const dashboard = await getDashboard(sdk, dashboardTitle)
   if (dashboard) {
     const tile = getDashboardTile(dashboard, tileTitle)
     if (tile) {
-      const fileName = await downloadTile(sdk, tile, renderFormat)
-      console.log(`open ${fileName} to see the download`)
+      const fileName = await downloadTile(sdk, tile, outputFormat)
+      console.log(`open "${fileName}" to see the download`)
     }
   }
 
@@ -178,5 +215,4 @@ const downloadTile = async (sdk: LookerSDK, tile: IDashboardElement, format: str
   if (!sdk.authSession.isAuthenticated()) {
     console.log('Logout successful')
   }
-
 })()

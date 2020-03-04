@@ -22,7 +22,12 @@
  * THE SOFTWARE.
  */
 
-import { NodeSettingsIniFile, NodeSession, LookerSDK, IAuthSession } from '@looker/sdk'
+import {
+  NodeSettingsIniFile,
+  NodeSession,
+  Looker40SDK as LookerSDK,
+  IAuthSession
+} from '@looker/sdk'
 
 /**
  *
@@ -61,33 +66,33 @@ const matchDomain = '%@looker.com'
  * @returns {Promise<undefined | IUser>} Returns the first matched user, or undefined if no match
  */
 const anyoneButMe = async (userId: number, emailPattern: string) => {
-  const all = await sdk.ok(sdk.search_users({email: emailPattern, page: 0, per_page: 2}))
+  const all = await sdk.ok(
+    sdk.search_users({ email: emailPattern, page: 1, per_page: 2 })
+  )
   if (!all || all.length === 0) {
     console.warn(`No matches for ${emailPattern}`)
     return undefined
   }
   // find a user who is not the specified user
-  const [ other ] = all
-    .filter(u => u.id !== userId && !u.is_disabled)
-    .slice(0, 1)
+  const [other] = all.filter(u => u.id !== userId && !u.is_disabled).slice(0, 1)
   return other
 }
-
-(async () => {
-  const userFields ="id, first_name, last_name, display_name, email, personal_space_id, home_space_id, group_ids, role_ids"
+;(async () => {
+  const userFields =
+    'id, first_name, last_name, display_name, email, personal_space_id, home_space_id, group_ids, role_ids'
   // retrieve your user account to verify correct credentials
   const me = await sdk.ok(sdk.me(userFields))
   if (!me) {
     console.warn('API authentication failed')
     return
   }
-  console.log({me})
+  console.log({ me })
   const sudoUser = await anyoneButMe(me.id!, matchDomain)
   if (sudoUser) {
     const auth = sdk.authSession as IAuthSession
     await auth.login(sudoUser.id)
     const sudo = await sdk.ok(sdk.me(userFields))
-    console.log({sudo})
+    console.log({ sudo })
     await sdk.authSession.logout() // logout of sudo
   }
 
@@ -95,5 +100,4 @@ const anyoneButMe = async (userId: number, emailPattern: string) => {
   if (!sdk.authSession.isAuthenticated()) {
     console.log('Logout successful')
   }
-
 })()
