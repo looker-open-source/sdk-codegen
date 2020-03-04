@@ -21,12 +21,7 @@ Very brief descriptions of the examples and the link to the main example/project
 |  &nbsp;&nbsp;Example&nbsp;Topic&nbsp;&nbsp; | Discussion |
 | ------------- | ---------- |
 | [multiple APIs](dual.ts) | A simple example that shows how to use multiple versions of the API in the same file. The goal is to make iterative migration from an older API to a newer API in existing SDK code easier. |
-| [SDK utilities](utils.ts) | This file has some SDK utility methods tasks like: |
-| | * finding a dashboard by name |
-| | * listing dashboards and ids |
-| | * finding a tile on a dashboard by name |
-| | * listing queryable tiles for a given dashboard |
-| | * a general-purpose `waitForRender` routine with progress ticks |
+| [SDK utilities](utils.ts) | This file has some SDK utility methods tasks like:<ul><li>finding a dashboard by name</li> <li>listing dashboards and ids</li> <li>finding a tile on a dashboard</li> <li>listing queryable tiles for a dashboard</li><li>a general-purpose `waitForRender` routine with progress ticks</li></ul> |
 
 ### User management
 
