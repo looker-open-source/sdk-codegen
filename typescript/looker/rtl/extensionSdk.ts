@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import { DefaultSettings } from './apiSettings'
+import { DefaultSettings, IApiSettings } from './apiSettings'
 import { Looker31SDK } from '../sdk/3.1/methods'
 import { ExtensionSession } from './extensionSession'
 import { ExtensionTransport } from './extensionTransport'
@@ -30,6 +30,8 @@ import {
   Authenticator,
   ITransportSettings,
 } from './transport'
+import { APIMethods } from "./apiMethods";
+import { IAuthSession } from "./authSession";
 
 export interface IHostConnection {
   request(
@@ -42,15 +44,28 @@ export interface IHostConnection {
   ): Promise<any>
 }
 
-// TODO update this to init31() and init40() explicit calls
 export class LookerExtensionSDK {
   /**
    * Creates a [[LookerSDK]] object.
+   *
+   * Examples:
+   * LookerExtensionSDK.createClient(host) => constructs a Looker31SDK
+   *
+   * LookerExtensionSDK.createClient(host, Looker40SDK) => constructs a Looker40SDK
    */
-  static createClient (hostConnection: IHostConnection) {
-    const settings = DefaultSettings()
+  static createClient<T extends APIMethods>(hostConnection: IHostConnection,
+                      type?: new (authSession: IAuthSession) => T,
+                      settings?: IApiSettings): T {
+    settings = settings || DefaultSettings()
     const transport = new ExtensionTransport(settings, hostConnection)
     const session = new ExtensionSession(settings, transport)
-    return new Looker31SDK(session)
+    if (type) {
+      return new type(session)
+    }
+    else
+    {
+      // work around TS2322
+      return ((new Looker31SDK(session)) as any) as T
+    }
   }
 }
