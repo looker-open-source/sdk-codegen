@@ -1,7 +1,5 @@
-from functools import reduce
-from typing import cast, MutableSequence, Sequence
 import csv
-from looker_sdk import client, models
+import looker_sdk
 
 """
 The purpose of this script is to parse a CSV file containing a Role name in the first column
@@ -21,8 +19,8 @@ Role 2 will be associated to Group C and Group D, and Role 3 will be associated 
 Group F. If individual users were associated to these three roles, they will be removed.
 """
 
-sdk = client.setup("looker.ini")
-filename = 'roles-groups.csv'
+sdk = looker_sdk.init31()
+filename = "roles-groups.csv"
 cached_roles = {}
 
 
@@ -45,22 +43,29 @@ def load_role(role):
 
 
 def main():
-    f = open(filename, 'r', encoding='utf-8-sig')
-    csv_reader = csv.reader(f, delimiter=',')
+    f = open(filename, "r", encoding="utf-8-sig")
+    csv_reader = csv.reader(f, delimiter=",")
 
     for line in csv_reader:
-        print(".", end='')
+        print(".", end="")
         role = load_role(line[0])
         group = load_group(line[1])
         if role and group:
             cached_roles[line[0]].group_ids.append(group.id)
 
     for role in cached_roles:
-        sdk.set_role_groups(role_id=cached_roles[role].id, body=cached_roles[role].group_ids)
+        sdk.set_role_groups(
+            role_id=cached_roles[role].id, body=cached_roles[role].group_ids
+        )
         sdk.set_role_users(role_id=cached_roles[role].id, body=[])
         print()
-        print("Updated '" + role + "' role to remove individual users and associated these group_ids to it instead:")
+        print(
+            "Updated '"
+            + role
+            + "' role to remove individual users and associated these group_ids to it instead:"
+        )
         print(cached_roles[role].group_ids)
 
 
-main()
+if __name__ == "__main__":
+    main()
