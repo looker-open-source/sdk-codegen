@@ -41,6 +41,18 @@ export class APIMethods {
     this.apiPath = authSession.settings.base_url === '' ? '' : `${authSession.settings.base_url}/api/${this.apiVersion}`
   }
 
+  /** A helper method for constructing with a type as a param
+   *
+   * Example:
+   *   APIMethods.create(Looker40SDK, authSession)
+   *
+   * @param type
+   * @param authSession
+   */
+  static create<T extends APIMethods>(type: (new (authSession: IAuthSession) => T), authSession: IAuthSession): T {
+    return new type(authSession)
+  }
+
   /** A helper method for simplifying error handling of SDK responses.
    *
    * Pass in a promise returned by any SDK method, and it will return a promise
