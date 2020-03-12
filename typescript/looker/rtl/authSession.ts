@@ -22,8 +22,9 @@
  * THE SOFTWARE.
  */
 
-import { IRequestProps, ITransport } from './transport'
+import { IRequestProps, ITransport, sdkError, SDKResponse } from './transport'
 import { IApiSettings } from './apiSettings'
+import { utf8 } from "./constants";
 
 /**
  * Basic authorization session interface for most API authentication scenarios
@@ -156,4 +157,16 @@ export abstract class AuthSession implements IAuthSession {
     this.sudoId = ''
   }
 
+  protected async ok<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
+    const result = await promise
+    if (result.ok) {
+      return result.value
+    } else {
+      if (result instanceof Buffer) {
+        throw sdkError({message: result.toString(utf8)})
+      } else {
+        throw sdkError(result as any)
+      }
+    }
+  }
 }

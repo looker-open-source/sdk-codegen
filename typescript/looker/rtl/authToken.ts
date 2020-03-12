@@ -30,6 +30,8 @@ export class AuthToken implements IAccessToken {
   // tslint:disable-next-line: variable-name
   token_type: string = ''
   // tslint:disable-next-line: variable-name
+  refresh_token?: string
+  // tslint:disable-next-line: variable-name
   expires_in: number = 0
   // tslint:disable-next-line: variable-name
   expiresAt = new Date()
@@ -52,6 +54,7 @@ export class AuthToken implements IAccessToken {
     this.access_token = token.access_token || ''
     this.token_type = token.token_type || ''
     this.expires_in = token.expires_in || 0
+    this.refresh_token = token.refresh_token
     let exp = new Date()
     if (this.access_token && this.expires_in) {
       exp.setSeconds(exp.getSeconds() + this.expires_in)

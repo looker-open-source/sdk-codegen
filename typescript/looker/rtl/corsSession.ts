@@ -39,6 +39,9 @@ import { AuthToken } from './authToken'
  * can be a brokered "get token" operation from a proxy server, or some other method of getting
  * the token.
  *
+ * Or, you can call activeToken.setToken to assign an auth token after construction. This disables
+ * auto token management.
+ *
  */
 export abstract class CorsSession extends AuthSession {
   activeToken = new AuthToken()
