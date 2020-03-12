@@ -36,63 +36,84 @@ import {
 import { AuthToken } from './authToken'
 import { IAccessToken, IApiSettings, IError } from "..";
 
+interface IAuthCodeGrantTypeParams {
+  grant_type: 'authorization_code',
+  code: string,
+  code_verifier: string,
+  client_id: string,
+  redirect_uri: string,
+}
+
+interface IRefreshTokenGrantTypeParams {
+  grant_type: 'refresh_token',
+  refresh_token: string,
+  client_id: string,
+  redirect_uri: string,
+}
+
 export class OAuthSession extends AuthSession {
   activeToken = new AuthToken();
-  private authCode?: string;
-  private code_verifier?: string;
 
   constructor(settings: IApiSettings, transport?: ITransport) {
     super(settings, transport || new BrowserTransport(settings))
   }
 
-  setAuthCode(authCode: string, code_verifier: string) {
-    this.authCode = authCode
-    this.code_verifier = code_verifier
-    // invalidate current token, if any
-    this.activeToken = new AuthToken()
-  }
-
+  /*
+    Apply current auth token credentials to an HTTP request
+  */
   async authenticate(props: IRequestProps): Promise<IRequestProps> {
     const token = await this.getToken()
-    if (token?.access_token) {
+    if (token.access_token) {
       props.headers.Authorization = `Bearer ${token.access_token}`
     }
     return props
   }
 
+  private async requestToken(body: IAuthCodeGrantTypeParams | IRefreshTokenGrantTypeParams) {
+
+    const token = await this.ok(this.transport.request<IAccessToken, IError>(
+    'POST',
+    `/api/token`,
+    undefined,
+    body,
+    ))
+
+    return this.activeToken.setToken(token)
+  }
+
+  /*
+    Convert an authCode received from server into an active auth token
+    The app is responsible for obtaining the authCode via interactive user login
+    via /auth front-end endpoint and URL redirect. When the authCode is received
+    by url redirect to an app route, pass the authCode into this function to
+    get an access_token and refresh_token.
+   */
+  async redeemAuthCode(authCode: string, code_verifier: string) {
+    return this.requestToken({
+      grant_type: 'authorization_code',
+      code: authCode,
+      code_verifier: code_verifier,
+      client_id: this.settings.client_id,
+      redirect_uri: this.settings.redirect_uri,
+    })
+  }
+
   async getToken() {
     if (!this.isAuthenticated()) {
-      let body: any = {}
-      if (this.authCode) {
-        body.merge({
-          grant_type: 'authorization_code',
-          code: this.authCode,
-          code_verifier: this.code_verifier,
-          client_id: this.settings.client_id,
-          redirect_uri: this.settings.redirect_uri,
-        })
-      }
-      else if (this.activeToken.refresh_token) {
-        body.merge({
+      if (this.activeToken.refresh_token) {
+        await this.requestToken({
           grant_type: 'refresh_token',
           refresh_token: this.activeToken.refresh_token,
           client_id: this.settings.client_id,
           redirect_uri: this.settings.redirect_uri,
         })
       }
-      const token = await this.ok(this.transport.request<IAccessToken, IError>(
-      'POST',
-      `/api/token`,
-      undefined,
-       body,
-      ))
-      this.activeToken.setToken((token))
     }
     return this.activeToken
   }
 
   isAuthenticated(): boolean {
-    return !this.authCode && this.activeToken.isActive();
+    return this.activeToken.isActive();
   }
 
   async logout() {
@@ -107,7 +128,7 @@ export class OAuthSession extends AuthSession {
         return init
       }))
 
-      // logout destroys the access_token and the refresh_token
+      // logout destroys the access_token AND the refresh_token
       this.activeToken = new AuthToken()
       return true
     }

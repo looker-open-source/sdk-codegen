@@ -54,7 +54,11 @@ export class AuthToken implements IAccessToken {
     this.access_token = token.access_token || ''
     this.token_type = token.token_type || ''
     this.expires_in = token.expires_in || 0
-    this.refresh_token = token.refresh_token
+    // nil refresh_token in new token means keep using the old refresh_token
+    // capture non-nil new refresh_token
+    if (token.refresh_token) {
+      this.refresh_token = token.refresh_token
+    }
     let exp = new Date()
     if (this.access_token && this.expires_in) {
       exp.setSeconds(exp.getSeconds() + this.expires_in)
