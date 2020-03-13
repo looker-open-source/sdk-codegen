@@ -76,13 +76,13 @@ export const swapXLookerNullable = (contents: string) => {
  * @param {string} openApiFile name of the Open API file to process
  * @returns {Promise<string>} name of the file written
  */
-export const swapNullableInFile = async (openApiFile: string) => {
+export const swapNullableInFile = (openApiFile: string) => {
   if (!isFileSync(openApiFile)) {
     return quit(`${openApiFile} was not found`)
   }
   log(`replacing "x-looker-nullable" with "nullable" in ${openApiFile} ...`)
   const contents = swapXLookerNullable(readFileSync(openApiFile))
-  await fs.writeFileSync(openApiFile, contents)
+  fs.writeFileSync(openApiFile, contents)
   return openApiFile
 }
 
@@ -92,7 +92,7 @@ export const swapNullableInFile = async (openApiFile: string) => {
  * @param {string} openApiFile
  * @returns {Promise<string>}
  */
-const convertSpec = async (fileName: string, openApiFile: string) => {
+const convertSpec = (fileName: string, openApiFile: string) => {
   if (isFileSync(openApiFile)) {
     log(`${openApiFile} already exists.`)
     return openApiFile
@@ -107,7 +107,7 @@ const convertSpec = async (fileName: string, openApiFile: string) => {
     if (!isFileSync(openApiFile)) {
       return fail('convertSpec', `creating ${openApiFile} failed`)
     }
-    return await swapNullableInFile(openApiFile)
+    return swapNullableInFile(openApiFile)
   } catch (e) {
     return quit(e)
   }
@@ -124,7 +124,7 @@ export const logConvert = async (name: string, props: ISDKConfigProps) => {
   if (isFileSync(oaFile)) return oaFile
 
   const specFile = await logFetch(name, props)
-  const openApiFile = await convertSpec(specFile, oaFile)
+  const openApiFile = convertSpec(specFile, oaFile)
   if (!openApiFile) {
     return fail('logConvert', 'No file name returned for openAPI upgrade')
   }

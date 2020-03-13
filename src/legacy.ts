@@ -75,6 +75,7 @@ const runConfig = async (name: string, props: ISDKConfigProps) => {
 
   return results
 }
+
 ;(async () => {
   try {
     const config = SDKConfig()
