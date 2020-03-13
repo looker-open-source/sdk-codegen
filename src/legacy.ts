@@ -29,6 +29,10 @@ import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { log, quit, run } from './utils'
 import { logConvert } from './convert'
 
+const defaultApiVersion = (props: ISDKConfigProps) => {
+  return props.api_version || '4.0'
+}
+
 // Warning: deprecated. This is using the legacy code generator
 // perform the generation for specific API version, configuration, and language
 const generate = async (
