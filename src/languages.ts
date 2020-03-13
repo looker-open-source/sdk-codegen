@@ -34,80 +34,91 @@ export interface IGeneratorSpec {
   language: string // name of Open API Generator language to produce
   path?: string
   factory?: (api: ApiModel, versions?: IVersionInfo) => ICodeGen
-  options: string // generator options
+  options?: string // generator options
   legacy?: string // legacy language tag
 }
 
 // To disable generation of any language specification, you can just comment it out
-export const Languages: Array<IGeneratorSpec> =
-  [
-    {
-      language: 'csharp',
-      legacy: 'csharp',
-      factory: undefined,
-      options: '-DapiPackage=Looker -DpackageName=looker'
-    },
-    {
-      language: 'kotlin',
-      legacy: 'kotlin',
-      factory: (api: ApiModel, versions?: IVersionInfo) => new KotlinGen(api, versions),
-      options: '-DapiPackage=com.looker.sdk -DpackageName=com.looker.sdk'
-    },
-    { language: 'swift',
-      legacy: 'swift4',
-      factory: (api: ApiModel, versions?: IVersionInfo) => new SwiftGen(api, versions),
-      options: '-DapiPackage=Looker -DpackageName=looker'
-    },
-    // {
-    //   language: 'php',
-    //   path: 'php',
-    //   options: '-DapiPackage=Looker -DpackageName=looker'
-    // },
-    {
-      language: 'python',
-      factory: (api: ApiModel, versions?: IVersionInfo) => new PythonGen(api, versions),
-      options: '-DapiPackage=Looker -DpackageName=looker'
-    },
-    {
-      language: 'typescript',
-      legacy: 'typescript-node', // OpenAPI generate uses this for the language
-      factory: (api: ApiModel, versions?: IVersionInfo) => new TypescriptGen(api, versions),
-      options: '-DapiPackage=Looker -DpackageName=looker'
-    },
-    // {
-    //   language: 'r',
-    //   options: '-DapiPackage=Looker -DpackageName=looker'
-    // },
-    // {
-    //   language: 'ruby',
-    //   options: '-DapiPackage=Looker -DpackageName=looker'
-    // },
-    // {
-    //   language: 'rust',
-    //   options: '-DapiPackage=Looker -DpackageName=looker'
-    // },
-    // {
-    //   language: 'typescript-node',
-    //   path: 'ts_node',
-    //   options: '-DapiPackage=Looker -DpackageName=looker'
-    // },
-    // {
-    //   language: 'typescript-fetch',
-    //   path: 'ts_fetch',
-    //   options: '-DapiPackage=looker -DpackageName=looker'
-    // },
-  ]
+export const Languages: Array<IGeneratorSpec> = [
+  {
+    language: 'csharp',
+    legacy: 'csharp',
+    factory: undefined,
+    options: '-papiPackage=Looker -ppackageName=looker'
+  },
+  {
+    language: 'kotlin',
+    factory: (api: ApiModel, versions?: IVersionInfo) =>
+      new KotlinGen(api, versions)
+  },
+  {
+    language: 'swift',
+    factory: (api: ApiModel, versions?: IVersionInfo) =>
+      new SwiftGen(api, versions)
+  },
+  // {
+  //   language: 'php',
+  //   legacy: 'php',
+  //   options: '-papiPackage=Looker -ppackageName=looker'
+  // },
+  {
+    language: 'python',
+    factory: (api: ApiModel, versions?: IVersionInfo) =>
+      new PythonGen(api, versions)
+  },
+  {
+    language: 'typescript',
+    factory: (api: ApiModel, versions?: IVersionInfo) =>
+      new TypescriptGen(api, versions)
+  }
+  // {
+  //   language: 'r',
+  //   legacy: 'r'
+  //   options: '-papiPackage=Looker -ppackageName=looker'
+  // },
+  // {
+  //   language: 'ruby',
+  //   options: '-papiPackage=Looker -ppackageName=looker'
+  // },
+  // {
+  //   language: 'rust',
+  //   options: '-papiPackage=Looker -ppackageName=looker'
+  // },
+  // {
+  //   language: 'typescript-node',
+  //   path: 'ts_node',
+  //   options: '-papiPackage=Looker -ppackageName=looker'
+  // },
+  // {
+  //   language: 'typescript-fetch',
+  //   path: 'ts_fetch',
+  //   options: '-papiPackage=looker -ppackageName=looker'
+  // },
+]
 
-export const getFormatter = (format: string, api: ApiModel, versions?: IVersionInfo): ICodeGen | undefined => {
+export const getFormatter = (
+  format: string,
+  api: ApiModel,
+  versions?: IVersionInfo
+): ICodeGen | undefined => {
   const generators = Languages.filter(x => x.factory !== undefined)
-  const language = generators
-    .find((item) => item.language.toLowerCase() === format.toLowerCase())
+  const language = generators.find(
+    item => item.language.toLowerCase() === format.toLowerCase()
+  )
   if (!language) {
-    const langs = generators.map((item) => item.language)
-    quit(`"${format}" is not a recognized language. Supported languages are: all, ${langs.join(', ')}`)
+    const langs = generators.map(item => item.language)
+    quit(
+      `"${format}" is not a recognized language. Supported languages are: all, ${langs.join(
+        ', '
+      )}`
+    )
   }
   if (language && language.factory) {
     return language.factory(api, versions)
   }
   return undefined
+}
+
+export const legacyLanguages = (): Array<IGeneratorSpec> => {
+  return Languages.filter(x => !!x.legacy)
 }

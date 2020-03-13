@@ -73,6 +73,8 @@ export function TestConfig(rootPath: string = '') {
     testData,
     testIni,
     configContents,
+    config,
+    section,
     testConfig,
     testSection,
   }

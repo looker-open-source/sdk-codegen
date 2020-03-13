@@ -27,6 +27,7 @@
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { openApiFileName, logFetch } from './fetchSpec'
 import { fail, isFileSync, log, quit, readFileSync, run } from './utils'
+import * as fs from 'fs'
 
 const { Spectral } = require('@stoplight/spectral')
 const { getLocationForJsonPath, parseWithPointers } = require('@stoplight/json')
@@ -41,24 +42,56 @@ const lintCheck = async (fileName: string) => {
     const linter = new Spectral()
     if (!linter) return fail('Lint', 'no response')
     const spec = parseWithPointers(readFileSync(fileName))
-    linter.run({
+    linter
+      .run({
         parsed: spec,
-        getLocationForJsonPath,
+        getLocationForJsonPath
       })
       .then(console.log)
-    return ""
+    return ''
     // if (
     //   linter.toString().indexOf('Specification is valid, with 0 lint errors') >=
     //   0
     // ) {
     //   return
     // }
-    return fail('Lint', linter.toString())
   } catch (e) {
     return quit(e)
   }
 }
 
+/**
+ * Replaces x-looker-nullable with nullable for parameters and properties in a string
+ * @param {string} contents
+ * @returns {Promise<string>} name of the file written
+ */
+export const swapXLookerNullable = (contents: string) => {
+  const swapRegex = /x-looker-nullable/gi
+  const nullable = 'nullable'
+  return contents.replace(swapRegex, nullable)
+}
+
+/**
+ * Replaces x-looker-nullable with nullable for parameters and properties in a file
+ * @param {string} openApiFile name of the Open API file to process
+ * @returns {Promise<string>} name of the file written
+ */
+export const swapNullableInFile = async (openApiFile: string) => {
+  if (!isFileSync(openApiFile)) {
+    return quit(`${openApiFile} was not found`)
+  }
+  log(`replacing "x-looker-nullable" with "nullable" in ${openApiFile} ...`)
+  const contents = swapXLookerNullable(readFileSync(openApiFile))
+  await fs.writeFileSync(openApiFile, contents)
+  return openApiFile
+}
+
+/**
+ * Convert a Swagger specification to OpenAPI
+ * @param {string} fileName
+ * @param {string} openApiFile
+ * @returns {Promise<string>}
+ */
 const convertSpec = async (fileName: string, openApiFile: string) => {
   if (isFileSync(openApiFile)) {
     log(`${openApiFile} already exists.`)
@@ -74,13 +107,18 @@ const convertSpec = async (fileName: string, openApiFile: string) => {
     if (!isFileSync(openApiFile)) {
       return fail('convertSpec', `creating ${openApiFile} failed`)
     }
-    return openApiFile
+    return await swapNullableInFile(openApiFile)
   } catch (e) {
     return quit(e)
   }
 }
 
-// convert the swagger specification to OpenApi
+/**
+ * Fetch (if needed) and convert a Swagger API specification to OpenAPI
+ * @param {string} name base name of the target file
+ * @param {ISDKConfigProps} props SDK configuration properties to use
+ * @returns {Promise<string>} name of converted OpenAPI file
+ */
 export const logConvert = async (name: string, props: ISDKConfigProps) => {
   const oaFile = openApiFileName(name, props)
   if (isFileSync(oaFile)) return oaFile
