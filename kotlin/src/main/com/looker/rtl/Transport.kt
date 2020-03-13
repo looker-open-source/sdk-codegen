@@ -27,7 +27,7 @@ package com.looker.rtl
 import io.ktor.client.HttpClient
 import io.ktor.client.call.call
 import io.ktor.client.call.receive
-import io.ktor.client.engine.apache.Apache
+import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.defaultSerializer
@@ -35,22 +35,16 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.response.HttpResponse
 import io.ktor.http.takeFrom
-import io.ktor.util.InternalAPI
-import io.ktor.util.toLocalDateTime
-import io.ktor.util.toZonedDateTime
 import kotlinx.coroutines.runBlocking
-import org.apache.http.conn.ssl.NoopHostnameVerifier
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy
-import org.apache.http.ssl.SSLContextBuilder
 import java.net.URLDecoder
 import java.net.URLEncoder
-import java.text.SimpleDateFormat
-import java.time.OffsetDateTime
+import java.security.KeyStore
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME
 import java.util.*
+import java.util.concurrent.TimeUnit
+import javax.net.ssl.*
 
 sealed class SDKResponse {
     /** A successful SDK call. */
@@ -172,27 +166,59 @@ fun addQueryParams(path: String, params: Values = mapOf()): String {
 
 fun customClient(options: TransportOptions): HttpClient {
     // Timeout is passed in as seconds
-    val timeout = options.timeout * 1000
-
-    return HttpClient(Apache) {
+    val timeout = (options.timeout * 1000).toLong()
+    // From https://ktor.io/clients/http-client/engines.html#artifact-7
+    return HttpClient(OkHttp) {
         install(JsonFeature) {
             serializer = JacksonSerializer()
         }
         engine {
-            customizeClient {
+            config {
+                connectTimeout(timeout, TimeUnit.MILLISECONDS)
+                callTimeout(timeout, TimeUnit.MILLISECONDS)
+                followRedirects(true)
+                // https://square.github.io/okhttp/3.x/okhttp/okhttp3/Interceptor.html
+//                addInterceptor(interceptor)
+//                addNetworkInterceptor(interceptor)
+
+//                /**
+//                 * Set okhttp client instance to use instead of creating one.
+//                 */
+//                preconfigured = okHttpClientInstance
                 if (!options.verifySSL) {
-                    setSSLContext(
-                            SSLContextBuilder
-                                    .create()
-                                    .loadTrustMaterial(TrustSelfSignedStrategy())
-                                    .build()
+                    // TODO this should be optimized
+                    val trustManagerFactory: TrustManagerFactory = TrustManagerFactory.getInstance(
+                            TrustManagerFactory.getDefaultAlgorithm())
+                    trustManagerFactory.init(null as KeyStore?)
+                    val trustManagers: Array<TrustManager> = trustManagerFactory.trustManagers
+                    check(!(trustManagers.size != 1 || trustManagers[0] !is X509TrustManager)) {
+                        ("Unexpected default trust managers:"
+                                + trustManagers.contentToString())
+                    }
+                    val trustManager: X509TrustManager = trustManagers[0] as X509TrustManager
+
+                    val sslContext: SSLContext = SSLContext.getInstance("TLS")
+                    sslContext.init(null, arrayOf<TrustManager>(trustManager), null)
+                    val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
+                    sslSocketFactory(
+                            sslSocketFactory, trustManager
                     )
-                    setSSLHostnameVerifier(NoopHostnameVerifier())
                 }
-                connectTimeout = timeout
-                connectionRequestTimeout = timeout
-                socketTimeout = timeout
             }
+//            customizeClient {
+//                if (!options.verifySSL) {
+//                    setSSLContext(
+//                            SSLContextBuilder
+//                                    .create()
+//                                    .loadTrustMaterial(TrustSelfSignedStrategy())
+//                                    .build()
+//                    )
+//                    setSSLHostnameVerifier(NoopHostnameVerifier())
+//                }
+//                connectTimeout = timeout
+//                connectionRequestTimeout = timeout
+//                socketTimeout = timeout
+//            }
         }
     }
 }

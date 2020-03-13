@@ -28,6 +28,7 @@ dependencies {
     compile "org.ini4j:ini4j:0.5.4"
 
     implementation "io.ktor:ktor-client:$ktor_version"
+    implementation "io.ktor:ktor-client-okhttp:$ktor_version"
     implementation "io.ktor:ktor-client-apache:$ktor_version"
     implementation "io.ktor:ktor-client-json:$ktor_version"
     implementation "io.ktor:ktor-client-jackson:$ktor_version"
