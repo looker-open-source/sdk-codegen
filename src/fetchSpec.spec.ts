@@ -22,21 +22,13 @@
  * THE SOFTWARE.
  */
 
-import * as fs from 'fs'
-import * as yaml from 'js-yaml'
-import { SDKConfig } from './sdkConfig'
 import { authGetUrl, getVersionInfo, login, specFileUrl } from './fetchSpec'
-import { readFileSync } from './utils'
+import { TestConfig } from '../typescript/looker/rtl/nodeSettings.spec'
 
-const dataFile = 'test/data.yml'
-// slightly hackish data path determination for tests
-const root = fs.existsSync(dataFile) ? '' : '../../'
-const testData = yaml.safeLoad(readFileSync(`${root}${dataFile}`))
-const localIni = `${root}${testData['iniFile']}`
-const config = SDKConfig(localIni)
-const props = config['Looker']
+const testConfig = TestConfig()
+const props = testConfig.section
 // api_version is no longer part of the INI, now set by sdkGen iterator
-props.api_version = '3.1'
+props.api_version = '4.0'
 
 describe('fetch operations', () => {
   it('gets version info', async () => {

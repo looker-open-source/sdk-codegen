@@ -21,14 +21,13 @@ A Looker SDK has several parts:
 
 - **API bindings** using the legacy [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) can also be produced. This process converts the API specification to language-specific code. Most of these template-based generators are written by different language enthusiasts, so the pattern and quality of the generated code varies widely, even though most generated code tends to work acceptably.
 
-
 ## Multi-API support with Looker 7.2 and later
 
 Looker 7.2 introduces an **Experimental** version of API 4.0. Therefore, the SDKs now support multiple API versions in the same SDK package.
- 
+
 The main change to the SDKs is that `api_version` is no longer used from any configuration value. Instead, for all SDKs but Swift, API-specific SDKs are now created and put in the same SDK package, and share the same run-time code.
 
-API 3.0 is not included. At the time of this writing, API 3.1 and API 4.0 are included in most SDK packages. For an SDK that supports multiple API versions, there will be a `methods.*` and `models.*` generated for each API version. 
+API 3.0 is not included. At the time of this writing, API 3.1 and API 4.0 are included in most SDK packages. For an SDK that supports multiple API versions, there will be a `methods.*` and `models.*` generated for each API version.
 
 The class names representing these API versions are distinct, and factories for creating initialized SDK objects are also distinctly named.
 
@@ -36,19 +35,24 @@ These API-specific files still use all the same Run-Time Library (RTL) code in t
 
 Please review the following table for a breakdown of the options to initialize the desired SDK object.
 
-| SDK | API 3.1 | API 4.0 | Notes                                                                                                                                                           |
-| ---- | ------ | --------| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Python  | `looker_sdk.init31()` | `looker_sdk.init40()` | Both API 3.1 and 4.0 are supported, and can be initialized with the functions shown                                                   |
-| Typescript | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()` | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | Both API 3.1 and 4.0 are supported and can be initialized with the functions shown | 
-| Kotlin  | Do not use | `LookerSDK()` | API 4.0 was specifically created to correct the endpoint payloads for strongly-typed languages like Kotlin and Swift. Because Kotlin really requires API 4.0, API 4.0 is the default namespace for it |
-| Swift | Not applicable | `Looker40SDK()` | Swift only has SDK definitions for API 4.0 |                                                                                                     |
+| SDK        | API 3.1                                                                   | API 4.0                                                                  | Notes                                                                                                                                                                                                 |
+| ---------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Python     | `looker_sdk.init31()`                                                     | `looker_sdk.init40()`                                                    | Both API 3.1 and 4.0 are supported, and can be initialized with the functions shown                                                                                                                   |
+| Typescript | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()` | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | Both API 3.1 and 4.0 are supported and can be initialized with the functions shown                                                                                                                    |
+| Kotlin     | Do not use                                                                | `LookerSDK()`                                                            | API 4.0 was specifically created to correct the endpoint payloads for strongly-typed languages like Kotlin and Swift. Because Kotlin really requires API 4.0, API 4.0 is the default namespace for it |
+| Swift      | Not applicable                                                            | `Looker40SDK()`                                                          | Swift only has SDK definitions for API 4.0                                                                                                                                                            |  |
 
 By supporting both API versions in the same SDK package, we hope the migration path to the latest API is simplified. Both SDK versions can be used at the same time, in the same source file, which should allow for iterative work to move to the new API version.
- 
+
 For example:
 
 ```typescript
-import { Looker40SDK, Looker31SDK, NodeSession, NodeSettingsIniFile } from '@looker/sdk'
+import {
+  Looker40SDK,
+  Looker31SDK,
+  NodeSession,
+  NodeSettingsIniFile
+} from '@looker/sdk'
 
 const settings = new NodeSettingsIniFile()
 const session = new NodeSession(settings)
@@ -63,7 +67,7 @@ const me31 = await sdk.ok(sdk31.me()) // or sdk31.ok(sdk31.me())
 
 TL;DR: don't URL encode your inputs because the SDKs will automatically handle it.
 
-All SDKs URL encode (also known as [percent encoding](https://en.wikipedia.org/wiki/Percent-encoding)) input values for passing to the API endpoints automatically. Furthermore, except for Swift, which has problematic URL decoding support, the other SDKs will avoid double-encoding inputs that may already be encoded. 
+All SDKs URL encode (also known as [percent encoding](https://en.wikipedia.org/wiki/Percent-encoding)) input values for passing to the API endpoints automatically. Furthermore, except for Swift, which has problematic URL decoding support, the other SDKs will avoid double-encoding inputs that may already be encoded.
 
 ## Using existing, pre-generated SDKs
 
@@ -169,11 +173,13 @@ This command will start a local web server that allows you to browse and search 
 
 To generate a language currently not supported by Looker's SDK code generator with the OpenAPI generator:
 
-- configure the desired language in [`languages.ts`](src/languages.ts)
+- configure the desired language in [`languages.ts`](src/languages.ts). Currently, only C# is defined for the legacy language generator.
 
-- use `yarn legacy` to call the OpenAPI generator
+- the legacy generator defaults to using the API 4.0 specification, which is more accurate for strongly typed languages. To use API 3.1, put `api_version=3.1` in the `Looker` section of your `looker.ini`
 
-#### Additional scripts
+- use `yarn legacy` to call the OpenAPI generator. This will use the OpenAPI generator to output files to the `./api/*` path
+
+### Additional scripts
 
 Use
 
@@ -262,7 +268,3 @@ The following table describes the environment variables. By default, the SDK "na
 | LOOKERSDK_TIMEOUT       | Request timeout in seconds. Defaults to `120` for most platforms.                                                                                                     |
 | LOOKERSDK_CLIENT_ID     | API3 credentials `client_id`. This and `client_secret` must be provided in some fashion to the Node SDK, or no calls to the API will be authorized. No default value. |
 | LOOKERSDK_CLIENT_SECRET | API3 credentials `client_secret`. No default value.                                                                                                                   |
-
-## SDK Examples
-
-Looker hosts an open source repository for SDK examples at <https://github.com/looker-open-source/sdk-examples>. We welcome members of the community to submit additional examples.

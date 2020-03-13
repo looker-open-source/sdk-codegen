@@ -24,31 +24,51 @@
  * THE SOFTWARE.
  */
 
-import { Languages, IGeneratorSpec as LanguageSpec } from './languages'
+import { IGeneratorSpec as LanguageSpec, legacyLanguages } from './languages'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { log, quit, run } from './utils'
 import { logConvert } from './convert'
 
+const defaultApiVersion = (props: ISDKConfigProps) => {
+  return props.api_version || '4.0'
+}
+
 // Warning: deprecated. This is using the legacy code generator
 // perform the generation for specific API version, configuration, and language
-const generate = async (fileName: string, spec: LanguageSpec, props: ISDKConfigProps) => {
+const generate = async (
+  fileName: string,
+  spec: LanguageSpec,
+  props: ISDKConfigProps
+) => {
   const path = spec.path ? spec.path : spec.language
   const language = spec.legacy ? spec.legacy : spec.language
-  const apiPath = `./api/${props.api_version}/${path}`
-  return run('openapi-generator',
-    // ['generate', '-i', fileName, '-g', language, '-o', apiPath, '--enable-post-process-file', spec.options])
-    ['generate', spec.options, '-i', fileName, '-g', language, '-o', apiPath, '--enable-post-process-file'])
+  const apiVersion = defaultApiVersion(props)
+  const apiPath = `./api/${apiVersion}/${path}`
+  const options = spec.options || ''
+  return run('openapi-generator', [
+    'generate',
+    '-i',
+    fileName,
+    '-g',
+    language,
+    '-o',
+    apiPath,
+    '--enable-post-process-file',
+    options
+  ])
 }
 
 // generate all languages for the specified configuration
 const runConfig = async (name: string, props: ISDKConfigProps) => {
   log(`processing ${name} configuration ...`)
-
+  const apiVersion = defaultApiVersion(props)
+  props.api_version = apiVersion
   const openApiFile = await logConvert(name, props)
+  const languages = legacyLanguages()
 
   let results: any[] = []
-  for (const language of Languages) {
-    const tag = `${name} API ${language.language} version ${props.api_version}`
+  for (const language of languages) {
+    const tag = `${name} API ${language.language} version ${apiVersion}`
     log(`generating ${tag} ...`)
     results.push(await generate(openApiFile, language, props))
   }
@@ -56,9 +76,14 @@ const runConfig = async (name: string, props: ISDKConfigProps) => {
   return results
 }
 
-try {
-  const config = SDKConfig()
-  Object.entries(config).forEach(async ([name, props]) => runConfig(name, props))
-} catch (e) {
-  quit(e)
-}
+;(async () => {
+  try {
+    const config = SDKConfig()
+    // Look for the Looker config section and only run that one
+    const name = 'Looker'
+    const props = config[name]
+    await runConfig(name, props)
+  } catch (e) {
+    quit(e)
+  }
+})()
