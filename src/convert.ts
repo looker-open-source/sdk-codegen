@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-import { ISDKConfigProps, SDKConfig } from './sdkConfig'
+import { ISDKConfigProps } from './sdkConfig'
 import { openApiFileName, logFetch } from './fetchSpec'
 import { fail, isFileSync, log, quit, readFileSync, run } from './utils'
 import * as fs from 'fs'
@@ -45,7 +45,7 @@ const lintCheck = async (fileName: string) => {
     linter
       .run({
         parsed: spec,
-        getLocationForJsonPath
+        getLocationForJsonPath,
       })
       .then(console.log)
     return ''
