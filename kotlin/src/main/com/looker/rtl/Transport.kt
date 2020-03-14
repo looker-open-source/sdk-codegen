@@ -46,6 +46,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.*
 
+
 sealed class SDKResponse {
     /** A successful SDK call. */
     data class SDKSuccessResponse<T>(
@@ -154,7 +155,6 @@ fun encodeValues(params: Values = mapOf()): String {
             .filter { (_, v) -> v !== null }
             .map { (k, v) -> "$k=${encodeParam(v)}" }
             .joinToString("&")
-
 }
 
 fun addQueryParams(path: String, params: Values = mapOf()): String {
@@ -176,6 +176,7 @@ fun customClient(options: TransportOptions): HttpClient {
             config {
                 connectTimeout(timeout, TimeUnit.MILLISECONDS)
                 callTimeout(timeout, TimeUnit.MILLISECONDS)
+                readTimeout(timeout, TimeUnit.MILLISECONDS)
                 followRedirects(true)
                 // https://square.github.io/okhttp/3.x/okhttp/okhttp3/Interceptor.html
 //                addInterceptor(interceptor)
@@ -185,6 +186,36 @@ fun customClient(options: TransportOptions): HttpClient {
 //                 * Set okhttp client instance to use instead of creating one.
 //                 */
 //                preconfigured = okHttpClientInstance
+//                if (!options.verifySSL) {
+//                    // NOTE! This is completely insecure and should ONLY be used with local server instance
+//                    // testing for development purposes
+//                    val trustAllCerts = arrayOf<X509TrustManager>(object : X509TrustManager {
+//                        override fun getAcceptedIssuers(): Array<X509Certificate?>? {
+//                            return arrayOfNulls<X509Certificate>(0)
+//                        }
+//
+//                        @Throws(CertificateException::class)
+//                        override fun checkServerTrusted(chain: Array<X509Certificate?>?,
+//                                                        authType: String?) {
+//                        }
+//
+//                        @Throws(CertificateException::class)
+//                        override fun checkClientTrusted(chain: Array<X509Certificate?>?,
+//                                                        authType: String?) {
+//                        }
+//                    })
+//                    val sslContext = SSLContext.getInstance("SSL")
+//                    sslContext.init(null, trustAllCerts, SecureRandom())
+//                    val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
+//                    sslSocketFactory(
+//                            sslSocketFactory, trustAllCerts[0]
+//                    )
+//
+//                    val hostnameVerifier = HostnameVerifier { hostname, session ->
+//                        true
+//                    }
+//                    hostnameVerifier(hostnameVerifier)
+//                }
                 if (!options.verifySSL) {
                     // TODO this should be optimized
                     val trustManagerFactory: TrustManagerFactory = TrustManagerFactory.getInstance(
