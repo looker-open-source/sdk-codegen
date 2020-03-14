@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import { NodeTransport } from './nodeTransport'
+import { NodeCryptoHash, NodeTransport} from './nodeTransport'
 import { ITransportSettings } from './transport'
 import { defaultApiVersion } from './constants'
 
@@ -48,4 +48,21 @@ describe('NodeTransport', () => {
     }
   })
 
+})
+
+describe('NodeCryptoHash', () => {
+  it('secureRandom', () => {
+    const hasher = new NodeCryptoHash()
+    const rand1 = hasher.secureRandom(5)
+    expect(rand1.length).toEqual(10)
+    const rand2 = hasher.secureRandom(32)
+    expect(rand2.length).toEqual(64)
+  })
+
+  it('sha256hash', async () => {
+    const hasher = new NodeCryptoHash()
+    const message = 'The quick brown fox jumped over the lazy dog.'
+    const hash = await hasher.sha256Hash(message)
+    expect(hash).toEqual('68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483')
+  })
 })

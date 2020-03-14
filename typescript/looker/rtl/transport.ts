@@ -282,7 +282,7 @@ export type Authenticator = (props: any) => any
 /** Interface for API transport values */
 export interface ITransportSettings {
   [key:string] : any
-  /** base URL of host address */
+  /** base URL of API REST web service */
   base_url: string
   /** standard headers to provide in all transport requests */
   headers?: Headers

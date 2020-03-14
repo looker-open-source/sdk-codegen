@@ -22,19 +22,15 @@
  * THE SOFTWARE.
  */
 
-import { AuthSession, IAuthSession } from './authSession'
-import { BrowserTransport } from './browserTransport'
+import { AuthSession } from './authSession'
 import {
-  ITransport,
   IRequestProps,
-  LookerAppId,
-  agentPrefix,
-  SDKResponse,
   sdkError,
-  ITransportSettings
 } from './transport'
 import { AuthToken } from './authToken'
-import { IAccessToken, IApiSettings, IError } from "..";
+import { IAccessToken, IApiSettings, IError} from "..";
+import {ICryptoHash} from "./cryptoHash";
+import {IPlatformServices} from "./platformServices";
 
 interface IAuthCodeGrantTypeParams {
   grant_type: 'authorization_code',
@@ -53,9 +49,21 @@ interface IRefreshTokenGrantTypeParams {
 
 export class OAuthSession extends AuthSession {
   activeToken = new AuthToken();
+  code_verifier?: string;
+  crypto: ICryptoHash;
 
-  constructor(settings: IApiSettings, transport?: ITransport) {
-    super(settings, transport || new BrowserTransport(settings))
+  constructor(services: IPlatformServices) {
+    super(services.settings, services.transport)
+
+    this.crypto = services.crypto
+
+    const keys: string[] = ["client_id", "redirect_uri", "base_url", "looker_url"]
+    keys.forEach((key) => {
+      const value = this.settings[key]
+      if (!value) {
+        throw sdkError({message: `Missing required configuration setting: '${key}'`})
+      }
+    })
   }
 
   /*
@@ -70,15 +78,39 @@ export class OAuthSession extends AuthSession {
   }
 
   private async requestToken(body: IAuthCodeGrantTypeParams | IRefreshTokenGrantTypeParams) {
-
+    const url = new URL(this.settings.base_url)
+    // replace the entire path of the base_url because this
+    // auth endpoint is independent of API version
+    url.pathname = '/api/token'
     const token = await this.ok(this.transport.request<IAccessToken, IError>(
     'POST',
-    `/api/token`,
+    url.toString(),
     undefined,
     body,
     ))
 
     return this.activeToken.setToken(token)
+  }
+
+  /*
+   Generate an OAuth2 authCode request URL
+   */
+  async createAuthCodeRequestUrl(scope: string, state: string): Promise<string> {
+    this.code_verifier = this.crypto.secureRandom(32)
+    const code_challenge = await this.crypto.sha256Hash(this.code_verifier)
+    const params: Record<string,string> = {
+      response_type: 'code',
+      client_id: this.settings.client_id,
+      redirect_uri: this.settings.redirect_uri,
+      scope: scope,
+      state: state,
+      code_challenge_method: 'S256',
+      code_challenge: code_challenge,
+    }
+    const url = new URL(this.settings.looker_url)
+    url.pathname = '/auth'
+    url.search = new URLSearchParams(params).toString()
+    return url.toString()
   }
 
   /*
@@ -88,11 +120,11 @@ export class OAuthSession extends AuthSession {
     by url redirect to an app route, pass the authCode into this function to
     get an access_token and refresh_token.
    */
-  async redeemAuthCode(authCode: string, code_verifier: string) {
+  async redeemAuthCode(authCode: string, code_verifier?: string) {
     return this.requestToken({
       grant_type: 'authorization_code',
       code: authCode,
-      code_verifier: code_verifier,
+      code_verifier: code_verifier || this.code_verifier || '',
       client_id: this.settings.client_id,
       redirect_uri: this.settings.redirect_uri,
     })

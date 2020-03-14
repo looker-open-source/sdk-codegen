@@ -38,6 +38,21 @@ import rq, { Response, Request } from 'request'
 import rp from 'request-promise-native'
 import { PassThrough, Readable } from 'readable-stream'
 import { BaseTransport } from './baseTransport'
+import {ICryptoHash} from "./cryptoHash";
+import nodeCrypto from 'crypto';
+
+export class NodeCryptoHash implements ICryptoHash {
+
+  secureRandom(byte_count: number): string {
+    return nodeCrypto.randomBytes(byte_count).toString('hex')
+  }
+
+  async sha256Hash(message: string): Promise<string> {
+    const hash = nodeCrypto.createHash('sha256')
+    hash.update(message)
+    return Promise.resolve(hash.digest('hex'))
+  }
+}
 
 export type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
 

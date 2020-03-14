@@ -28,11 +28,30 @@ import {
   ITransportSettings,
   HttpMethod, Authenticator, trace,
   IRequestProps,
-  IRequestHeaders, LookerAppId, agentPrefix,
+  IRequestHeaders, LookerAppId, agentPrefix, ITransport,
 } from './transport'
 import { PassThrough, Readable } from 'readable-stream'
 import { BaseTransport } from './baseTransport'
 import { lookerVersion } from './constants'
+import {ICryptoHash} from "./cryptoHash";
+
+export class BrowserCryptoHash implements ICryptoHash {
+  arrayToHex(array: Uint8Array): string {
+    return Array.from(array).map(b => b.toString(16).padStart(2,'0')).join('')
+  }
+
+  secureRandom(byte_count: number): string {
+    const bytes = new Uint8Array(byte_count)
+    window.crypto.getRandomValues(bytes)
+    return this.arrayToHex(bytes)
+  }
+
+  async sha256Hash(message: string): Promise<string> {
+    const msgUint8 = new TextEncoder().encode(message)
+    const hashBuffer = await window.crypto.subtle.digest('SHA-256', msgUint8)
+    return this.arrayToHex(new Uint8Array(hashBuffer))
+  }
+}
 
 export class BrowserTransport extends BaseTransport {
 
