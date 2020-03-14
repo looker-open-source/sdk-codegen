@@ -27,7 +27,7 @@ package com.looker.rtl
 import io.ktor.client.HttpClient
 import io.ktor.client.call.call
 import io.ktor.client.call.receive
-import io.ktor.client.engine.apache.Apache
+import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.defaultSerializer
@@ -35,22 +35,22 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.response.HttpResponse
 import io.ktor.http.takeFrom
-import io.ktor.util.InternalAPI
-import io.ktor.util.toLocalDateTime
-import io.ktor.util.toZonedDateTime
 import kotlinx.coroutines.runBlocking
-import org.apache.http.conn.ssl.NoopHostnameVerifier
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy
-import org.apache.http.ssl.SSLContextBuilder
 import java.net.URLDecoder
 import java.net.URLEncoder
-import java.text.SimpleDateFormat
-import java.time.OffsetDateTime
+import java.security.SecureRandom
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME
 import java.util.*
+import java.util.concurrent.TimeUnit
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.X509TrustManager
+
 
 sealed class SDKResponse {
     /** A successful SDK call. */
@@ -160,7 +160,6 @@ fun encodeValues(params: Values = mapOf()): String {
             .filter { (_, v) -> v !== null }
             .map { (k, v) -> "$k=${encodeParam(v)}" }
             .joinToString("&")
-
 }
 
 fun addQueryParams(path: String, params: Values = mapOf()): String {
@@ -172,26 +171,59 @@ fun addQueryParams(path: String, params: Values = mapOf()): String {
 
 fun customClient(options: TransportOptions): HttpClient {
     // Timeout is passed in as seconds
-    val timeout = options.timeout * 1000
-
-    return HttpClient(Apache) {
+    val timeout = (options.timeout * 1000).toLong()
+    // We are using https://square.github.io/okhttp/4.x/okhttp/okhttp3/ as our cross-platform HttpClient
+    // it provides better performance and is compatible with Android
+    // This construction loosely adapted from https://ktor.io/clients/http-client/engines.html#artifact-7
+    return HttpClient(OkHttp) {
         install(JsonFeature) {
             serializer = JacksonSerializer()
         }
         engine {
-            customizeClient {
+            config {
+                connectTimeout(timeout, TimeUnit.MILLISECONDS)
+                callTimeout(timeout, TimeUnit.MILLISECONDS)
+                readTimeout(timeout, TimeUnit.MILLISECONDS)
+                followRedirects(true)
+                // https://square.github.io/okhttp/3.x/okhttp/okhttp3/Interceptor.html
+//                addInterceptor(interceptor)
+//                addNetworkInterceptor(interceptor)
+
+//                /**
+//                 * Set okhttp client instance to use instead of creating one.
+//                 */
+//                preconfigured = okHttpClientInstance
                 if (!options.verifySSL) {
-                    setSSLContext(
-                            SSLContextBuilder
-                                    .create()
-                                    .loadTrustMaterial(TrustSelfSignedStrategy())
-                                    .build()
+                    // NOTE! This is completely insecure and should ONLY be used with local server instance
+                    // testing for development purposes
+                    val tm: X509TrustManager = object : X509TrustManager {
+                        override fun getAcceptedIssuers(): Array<X509Certificate?>? {
+                            return arrayOfNulls(0)
+                        }
+
+                        @Throws(CertificateException::class)
+                        override fun checkClientTrusted(
+                                certs: Array<X509Certificate?>?, authType: String?) {
+                        }
+
+                        @Throws(CertificateException::class)
+                        override fun checkServerTrusted(
+                                certs: Array<X509Certificate?>?, authType: String?) {
+                        }
+                    }
+                    val trustAllCerts = arrayOf(tm)
+                    val sslContext = SSLContext.getInstance("SSL")
+                    sslContext.init(null, trustAllCerts, SecureRandom())
+                    val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
+                    sslSocketFactory(
+                            sslSocketFactory, tm
                     )
-                    setSSLHostnameVerifier(NoopHostnameVerifier())
+
+                    val hostnameVerifier = HostnameVerifier { hostname, session ->
+                        true
+                    }
+                    hostnameVerifier(hostnameVerifier)
                 }
-                connectTimeout = timeout
-                connectionRequestTimeout = timeout
-                socketTimeout = timeout
             }
         }
     }
