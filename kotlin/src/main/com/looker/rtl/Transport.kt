@@ -38,13 +38,18 @@ import io.ktor.http.takeFrom
 import kotlinx.coroutines.runBlocking
 import java.net.URLDecoder
 import java.net.URLEncoder
-import java.security.KeyStore
+import java.security.SecureRandom
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.*
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.X509TrustManager
 
 
 sealed class SDKResponse {
@@ -167,7 +172,9 @@ fun addQueryParams(path: String, params: Values = mapOf()): String {
 fun customClient(options: TransportOptions): HttpClient {
     // Timeout is passed in as seconds
     val timeout = (options.timeout * 1000).toLong()
-    // From https://ktor.io/clients/http-client/engines.html#artifact-7
+    // We are using https://square.github.io/okhttp/4.x/okhttp/okhttp3/ as our cross-platform HttpClient
+    // it provides better performance and is compatible with Android
+    // This construction loosely adapted from https://ktor.io/clients/http-client/engines.html#artifact-7
     return HttpClient(OkHttp) {
         install(JsonFeature) {
             serializer = JacksonSerializer()
@@ -186,70 +193,38 @@ fun customClient(options: TransportOptions): HttpClient {
 //                 * Set okhttp client instance to use instead of creating one.
 //                 */
 //                preconfigured = okHttpClientInstance
-//                if (!options.verifySSL) {
-//                    // NOTE! This is completely insecure and should ONLY be used with local server instance
-//                    // testing for development purposes
-//                    val trustAllCerts = arrayOf<X509TrustManager>(object : X509TrustManager {
-//                        override fun getAcceptedIssuers(): Array<X509Certificate?>? {
-//                            return arrayOfNulls<X509Certificate>(0)
-//                        }
-//
-//                        @Throws(CertificateException::class)
-//                        override fun checkServerTrusted(chain: Array<X509Certificate?>?,
-//                                                        authType: String?) {
-//                        }
-//
-//                        @Throws(CertificateException::class)
-//                        override fun checkClientTrusted(chain: Array<X509Certificate?>?,
-//                                                        authType: String?) {
-//                        }
-//                    })
-//                    val sslContext = SSLContext.getInstance("SSL")
-//                    sslContext.init(null, trustAllCerts, SecureRandom())
-//                    val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
-//                    sslSocketFactory(
-//                            sslSocketFactory, trustAllCerts[0]
-//                    )
-//
-//                    val hostnameVerifier = HostnameVerifier { hostname, session ->
-//                        true
-//                    }
-//                    hostnameVerifier(hostnameVerifier)
-//                }
                 if (!options.verifySSL) {
-                    // TODO this should be optimized
-                    val trustManagerFactory: TrustManagerFactory = TrustManagerFactory.getInstance(
-                            TrustManagerFactory.getDefaultAlgorithm())
-                    trustManagerFactory.init(null as KeyStore?)
-                    val trustManagers: Array<TrustManager> = trustManagerFactory.trustManagers
-                    check(!(trustManagers.size != 1 || trustManagers[0] !is X509TrustManager)) {
-                        ("Unexpected default trust managers:"
-                                + trustManagers.contentToString())
-                    }
-                    val trustManager: X509TrustManager = trustManagers[0] as X509TrustManager
+                    // NOTE! This is completely insecure and should ONLY be used with local server instance
+                    // testing for development purposes
+                    val tm: X509TrustManager = object : X509TrustManager {
+                        override fun getAcceptedIssuers(): Array<X509Certificate?>? {
+                            return arrayOfNulls(0)
+                        }
 
-                    val sslContext: SSLContext = SSLContext.getInstance("TLS")
-                    sslContext.init(null, arrayOf<TrustManager>(trustManager), null)
+                        @Throws(CertificateException::class)
+                        override fun checkClientTrusted(
+                                certs: Array<X509Certificate?>?, authType: String?) {
+                        }
+
+                        @Throws(CertificateException::class)
+                        override fun checkServerTrusted(
+                                certs: Array<X509Certificate?>?, authType: String?) {
+                        }
+                    }
+                    val trustAllCerts = arrayOf(tm)
+                    val sslContext = SSLContext.getInstance("SSL")
+                    sslContext.init(null, trustAllCerts, SecureRandom())
                     val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
                     sslSocketFactory(
-                            sslSocketFactory, trustManager
+                            sslSocketFactory, tm
                     )
+
+                    val hostnameVerifier = HostnameVerifier { hostname, session ->
+                        true
+                    }
+                    hostnameVerifier(hostnameVerifier)
                 }
             }
-//            customizeClient {
-//                if (!options.verifySSL) {
-//                    setSSLContext(
-//                            SSLContextBuilder
-//                                    .create()
-//                                    .loadTrustMaterial(TrustSelfSignedStrategy())
-//                                    .build()
-//                    )
-//                    setSSLHostnameVerifier(NoopHostnameVerifier())
-//                }
-//                connectTimeout = timeout
-//                connectionRequestTimeout = timeout
-//                socketTimeout = timeout
-//            }
         }
     }
 }
