@@ -1,3 +1,3 @@
 # C# Examples for the Looker API
 
-You can find C# language examples in this folder.
+There are currently no C# examples for the Looker API. Feel free to submit some!
