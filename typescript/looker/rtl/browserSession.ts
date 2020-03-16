@@ -27,7 +27,7 @@ import { IRequestProps, ITransport } from './transport'
 import { BrowserTransport } from './browserTransport'
 import { AuthSession } from './authSession'
 
-/*
+/**
 * This BrowserSession is only for use within the Looker UI or script that
 * executes in the Looker UI. Not for use by third party web apps. Looker UI web
 * service endpoints require that requests must contain a CSRF token to block third
