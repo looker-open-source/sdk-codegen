@@ -27,14 +27,14 @@ import { IRequestProps, ITransport } from './transport'
 import { BrowserTransport } from './browserTransport'
 import { AuthSession } from './authSession'
 
-/* This BrowserSession is only for use within the Looker UI or script
-that executes in the Looker UI. Not for use by third party web apps.
-Looker UI web service endpoints require that requests must contain a CSRF
-token to block third party request forgeries.
-The actual login state is conveyed via encrypted browser cookies exclusive
-to the looker domain, which the browser implicitly includes on all web requests to
-looker UI web service.
- */
+/*
+* This BrowserSession is only for use within the Looker UI or script that
+* executes in the Looker UI. Not for use by third party web apps. Looker UI web
+* service endpoints require that requests must contain a CSRF token to block third
+* party request forgeries. The actual login state is conveyed via encrypted browser
+* cookies exclusive to the looker domain, which the browser implicitly includes on
+* all web requests to looker UI web service.
+*/
 export class BrowserSession extends AuthSession {
   _activeToken = ''
   constructor(public settings: IApiSettings, transport?: ITransport) {

@@ -50,7 +50,6 @@ describe('BrowserServices', () => {
     })
     // nonsensical combination, but it doesn't matter for testing BrowserService ctor
     expect(svcs.transport).toBeInstanceOf(NodeTransport)
-    let BrowserCrypto;
     expect(svcs.crypto).toBeInstanceOf(BrowserCryptoHash)
   })
 

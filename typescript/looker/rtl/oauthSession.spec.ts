@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
+ * Copyright (c) 2020 Looker Data Sciences, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,21 +23,19 @@
  */
 
 import { OAuthSession } from "./oauthSession";
-import {ApiSettings, DefaultSettings, IApiSettings} from "./apiSettings";
+import {DefaultSettings, IApiSettings} from "./apiSettings";
 import {BrowserCryptoHash, BrowserTransport} from "./browserTransport";
 import {NodeCryptoHash, NodeTransport} from "./nodeTransport";
 import {BrowserServices} from "./browserServices";
 import {MockCrypto} from "./mocks";
-import Url from "url";
-import {ITransport} from "./transport";
 
 describe('oauthSession', () => {
   const settings = {
     ...DefaultSettings(),
     client_id: '123456',
     redirect_uri: 'https://myapp.com/redirect',
-    base_url: 'https://looker.com:19999/api/3.1/',
-    looker_url: 'https://looker.com:9999',
+    base_url: 'https://myinstance.looker.com:19999',
+    looker_url: 'https://myinstance.looker.com:9999',
   } as IApiSettings
 
   it('fails if missing settings', () => {
@@ -63,9 +61,9 @@ describe('oauthSession', () => {
     const crypto = new MockCrypto()
     const services = new BrowserServices(
     {
-      settings: settings,
-      transport: transport,
-      crypto: crypto,
+      settings,
+      transport,
+      crypto,
     }
     )
     const session = new OAuthSession(services)
@@ -87,9 +85,9 @@ describe('oauthSession', () => {
     const transport = new NodeTransport(settings)
     const crypto = new MockCrypto()
     const session = new OAuthSession({
-      settings: settings,
-      transport: transport,
-      crypto: crypto,
+      settings,
+      transport,
+      crypto,
     })
     expect(session.transport).toEqual(transport)
     expect(session.crypto).toEqual(crypto)
@@ -97,7 +95,7 @@ describe('oauthSession', () => {
 
   it('createAuthCodeRequestUrl with live crypto', async () => {
     const services = new BrowserServices({
-      settings: settings,
+      settings,
       crypto: new NodeCryptoHash(),
     })
     const session = new OAuthSession(services)
@@ -125,7 +123,7 @@ describe('oauthSession', () => {
 
   it('createAuthCodeRequestUrl with mock constant code_verifier', async () => {
     const services = new BrowserServices({
-      settings: settings,
+      settings,
       crypto: new MockCrypto(),
     })
     const session = new OAuthSession(services)
@@ -155,8 +153,8 @@ describe('oauthSession', () => {
     const transport = new BrowserTransport(settings)
     transport.request = mockRequest as any
     const services = new BrowserServices({
-      settings: settings,
-      transport: transport,
+      settings,
+      transport,
       crypto: new MockCrypto(),
     })
     const session = new OAuthSession(services)
