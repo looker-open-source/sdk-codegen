@@ -159,22 +159,6 @@ export class NodeSession extends AuthSession {
     return result
   }
 
-  // TODO should this be moved to `transport.ts` as a generic method?
-  private async ok<TSuccess, TError>(
-    promise: Promise<SDKResponse<TSuccess, TError>>
-  ) {
-    const result = await promise
-    if (result.ok) {
-      return result.value
-    } else {
-      if (result instanceof Buffer) {
-        throw sdkError({message: result.toString(utf8)})
-      } else {
-        throw sdkError(result as any)
-      }
-    }
-  }
-
   private async sudoLogout() {
     let result = false
     if (this.isSudo()) {

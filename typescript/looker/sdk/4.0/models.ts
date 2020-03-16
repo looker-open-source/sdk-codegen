@@ -22,6 +22,8 @@ export interface IAccessToken {
    * Number of seconds before the token expires (read-only)
    */
   expires_in?: number
+
+  refresh_token?: string
 }
 
 export interface IApiSession {
