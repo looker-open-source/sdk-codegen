@@ -102,7 +102,7 @@ class AuthSession: IAuthSession {
         return result
     }
     
-    private func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
+    func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
         switch response {
         case .success(let response):
             return response

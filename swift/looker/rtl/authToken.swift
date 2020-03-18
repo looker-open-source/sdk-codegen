@@ -70,8 +70,8 @@ struct AuthToken: AccessTokenProtocol {
         self.expires_in = token.expires_in!
         self.expiresAt = Self.expiryDate(Int(self.expires_in))
 
-        if (!token.refresh_token.isEmpty) {
-          self.refresh_token = token.refresh_token
+        if let refresh = token.refresh_token {
+            self.refresh_token = refresh
         }
         return self
     }

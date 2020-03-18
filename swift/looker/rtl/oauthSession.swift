@@ -25,7 +25,10 @@
 import Foundation
 import CryptoKit
 
-extension Data {
+@available(OSX 10.15, *)
+
+// from https://stackoverflow.com/a/57255549/74137
+extension Digest {
     var bytes: [UInt8] { Array(makeIterator()) }
     var data: Data { Data(bytes) }
     var hexStr: String {
@@ -33,15 +36,34 @@ extension Data {
     }
 }
 
-@available(OSX 10.15, *)
-class OAuthSession: IAuthSession {
-    var code_verifier: Data
+// from https://stackoverflow.com/a/40089462/74137
+extension Data {
+    struct HexEncodingOptions: OptionSet {
+        let rawValue: Int
+        static let upperCase = HexEncodingOptions(rawValue: 1 << 0)
+    }
 
-    init(_ settings: IApiSettings, _ transport: ITransport? = nil) {
+    func hexStr(_ options: HexEncodingOptions = []) -> String {
+        let hexDigits = Array((options.contains(.upperCase) ? "0123456789ABCDEF" : "0123456789abcdef").utf16)
+        var chars: [unichar] = []
+        chars.reserveCapacity(2 * count)
+        for byte in self {
+            chars.append(hexDigits[Int(byte / 16)])
+            chars.append(hexDigits[Int(byte % 16)])
+        }
+        return String(utf16CodeUnits: chars, count: chars.count)
+    }
+}
+
+@available(OSX 10.15, *)
+class OAuthSession: AuthSession {
+    var code_verifier: Data = Data.init()
+
+    override init(_ settings: IApiSettings, _ transport: ITransport? = nil) {
         super.init(settings, transport)
     }
 
-    func requestToken(body: Any) -> AuthToken {
+    func requestToken(_ body: Values) -> AuthToken {
         let response : SDKResponse<AccessToken, SDKError> = self.transport.request(
             HttpMethod.POST,
             "/api/token",
@@ -51,18 +73,20 @@ class OAuthSession: IAuthSession {
             nil
         )
         let token = try? self.ok(response)
-        _ = self._authToken.setToken(token!)
+        return self._authToken.setToken(token!)
     }
 
-    func getToken() -> AuthToken {
+    override func getToken() -> AuthToken {
         if (!self.isAuthenticated()) {
             if (!self.activeToken.refresh_token.isEmpty) {
-                self.requestToken({
-                    grant_type: "refresh_token",
-                    refresh_token: self.activeToken.refresh_token,
-                    client_id: self.settings.client_id,
-                    redirect_uri: self.settings.redirect_uri,
-                })
+                let config = self.settings.readConfig(nil)
+                // fetch the token
+                let _ = self.requestToken([
+                    "grant_type": "refresh_token",
+                    "refresh_token": self.activeToken.refresh_token,
+                    "client_id": config["client_id"],
+                    "redirect_uri": config["redirect_uri"]
+                ])
             }
         }
         return self.activeToken
@@ -71,35 +95,36 @@ class OAuthSession: IAuthSession {
     /*
      Generate an OAuth2 authCode request URL
      */
-    createAuthCodeRequestUrl(scope: string, state: string) -> String {
-        self.code_verifier = self.secureRandom(32)
+    func createAuthCodeRequestUrl(scope: String, state: String) throws -> String {
+        self.code_verifier = try! self.secureRandom(32)
         let code_challenge = self.sha256Hash(self.code_verifier)
-        let url = URLComponents()
-        url.init?(self.settings.looker_url)
-        url.path = "/auth"
-        url.queryItems = [
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "client_id", value: self.settings.client_id),
-            URLQueryItem(name: "redirect_uri", value: self.settings.redirect_uri),
-            URLQueryItem(name: "scope", value: scope),
-            URLQueryItem(name: "state", value: state),
-            URLQueryItem(name: "code_challenge_method", value: "S256"),
-            URLQueryItem(name: "code_challenge", value: code_challenge)
-        ]
-        return url.url?.absoluteString
+        let config = self.settings.readConfig(nil)
+        let looker_url = config["looker_url"]!
+        let url = addQueryParams("\(looker_url)/auth",
+            [
+                "response_type": "code",
+             "client_id": config["client_id"],
+            "redirect_uri": config["redirect_uri"],
+            "scope": scope,
+            "state": state,
+            "code_challenge_method": "S256",
+            "code_challenge": code_challenge
+        ])
+        return url
     }
 
-    redeemAuthCode(authCode: String, code_verifier: String? = nil) -> AuthToken {
-        return this.requestToken({
-            grant_type: "authorization_code",
-            code: authCode,
-            code_verifier: code_verifier || self.code_verifier.hexStr || "",
-            client_id: self.settings.client_id,
-            redirect_uri: self.settings.redirect_uri,
-        })
+    func redeemAuthCode(authCode: String, code_verifier: String? = nil) -> AuthToken {
+        let config = self.settings.readConfig(nil)
+        return self.requestToken([
+            "grant_type": "authorization_code",
+            "code": authCode,
+            "code_verifier": ((code_verifier != nil) ? "" : self.code_verifier.hexStr),
+            "client_id": config["client_id"],
+            "redirect_uri": config["redirect_uri"]
+        ])
     }
 
-    private secureRandom(byte_count: Int) -> Data {
+    private func secureRandom(_ byte_count: Int) throws -> Data {
         var keyData = Data(count: byte_count)
         let result = keyData.withUnsafeMutableBytes {
             SecRandomCopyBytes(kSecRandomDefault, byte_count, $0.baseAddress!)
@@ -111,8 +136,8 @@ class OAuthSession: IAuthSession {
         }
     }
 
-    private sha256Hash(data: Data) -> String {
-        return SHA256.hash(data: data).data.hexStr
+    private func sha256Hash(_ data: Data) -> String {
+        return SHA256.hash(data: data).hexStr
     }
 
 }
