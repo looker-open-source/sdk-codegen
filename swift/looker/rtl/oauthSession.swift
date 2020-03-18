@@ -32,7 +32,7 @@ extension Digest {
     var bytes: [UInt8] { Array(makeIterator()) }
     var data: Data { Data(bytes) }
     var hexStr: String {
-        bytes.map { String(format: "%02X", $0) }.joined()
+        bytes.map { String(format: "%02x", $0) }.joined()
     }
 }
 
@@ -136,9 +136,13 @@ class OAuthSession: AuthSession {
         }
     }
 
-    private func sha256Hash(_ data: Data) -> String {
+    public func sha256Hash(_ data: Data) -> String {
         return SHA256.hash(data: data).hexStr
     }
 
+    public func sha256Hash(_ value: String) -> String {
+        let data = value.data(using: .utf8)!
+        return sha256Hash(data)
+    }
 }
 
