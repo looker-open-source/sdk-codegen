@@ -238,7 +238,7 @@ Looker improves on the security of the generated code for SDKs by **never** stor
 
 Each Looker SDK has existing `readConfig()` examples that read from `.ini` files or environment variables. These are intended to support a quick start when developing with a Looker SDK. If a production environment prohibits secure use of `.ini` files or environment variables, another method of retrieving API configuration values is required. The API configuration retrieval function `readConfig()` can be overridden to support alternate storage scenarios.
 
-Typically, `client_id` and `client_secret` are the only key values that will need to be dynamically retrieved from the `readConfig()` override method because the configuration values are saved in memory by the initialized SDK client. In the near future, there will be additional authentication flows (such as OAuth) supported by Looker SDKs. The dynamic result that is returned by `readConfig()` can also be useful in those additional scenarios.
+Typically, `client_id` and `client_secret` are the only key values that will need to be dynamically retrieved from the `readConfig()` override method because the other configuration values are saved in memory by the initialized SDK client. In the near future, there will be additional authentication flows (such as OAuth) supported by Looker SDKs. The dynamic result that is returned by `readConfig()` can also be useful in those additional scenarios.
 
 A short [Typescript SDK example](https://github.com/looker-open-source/sdk-examples/blob/6f7b42891923a7430e0bb8341c7b5c567a2e1269/typescript/customConfigReader.ts#L15:L28) that customizes `readConfig()` is available in the SDK Examples repository.
 
