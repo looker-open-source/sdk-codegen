@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@looker/components": "^0.7.2",
+    "@looker/components": "0.7.23",
     "@reach/router": "^1.2.1",
     "@types/jest": "24.0.18",
     "@types/node": "12.7.12",
@@ -17,7 +17,7 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-google-login": "^5.0.7",
-    "react-scripts": "3.2.0",
+    "react-scripts": "3.4.1",
     "styled-components": "^4.4.0",
     "typescript": "3.6.3",
     "yup": "^0.27.0"

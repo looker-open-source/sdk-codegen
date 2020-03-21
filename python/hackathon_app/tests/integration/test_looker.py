@@ -1,6 +1,7 @@
 from typing import List
 
-from looker_sdk import client, models, methods
+import looker_sdk
+from looker_sdk import models, methods
 import pytest  # type: ignore
 
 import looker
@@ -9,7 +10,7 @@ import sheets
 
 @pytest.fixture
 def sdk():
-    sdk = client.setup()
+    sdk = looker_sdk.init31()
     yield sdk
     sdk.logout()
 

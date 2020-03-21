@@ -2,7 +2,8 @@ import functools
 import re
 from typing import Dict, Sequence
 
-from looker_sdk import client, methods, models, error
+import looker_sdk
+from looker_sdk import methods, models, error
 
 
 LOOKER_GROUP_PREFIX = "Looker_Hack: "
@@ -35,6 +36,7 @@ def get_hackathon_attr_id(*, sdk: methods.LookerSDK) -> int:
     user_attrs = sdk.all_user_attributes(fields="name,id")
     for user_attr in user_attrs:
         if user_attr.name == main_hackathon:
+            assert user_attr.id
             HACKATHON_ATTR_ID = user_attr.id
             break
     else:
@@ -46,6 +48,7 @@ def get_hackathon_attr_id(*, sdk: methods.LookerSDK) -> int:
         if not attrib:
             raise RegisterError(f"Could not find '{main_hackathon}' user attribute")
         else:
+            assert attrib.id
             HACKATHON_ATTR_ID = attrib.id
 
     return HACKATHON_ATTR_ID
@@ -71,7 +74,7 @@ def get_hackathon_role(*, sdk: methods.LookerSDK) -> models.Role:
 def register_user(
     *, hackathon: str, first_name: str, last_name: str, email: str
 ) -> str:
-    sdk = client.setup()
+    sdk = looker_sdk.init31()
 
     user = find_or_create_user(
         sdk=sdk, first_name=first_name, last_name=last_name, email=email
@@ -120,7 +123,7 @@ def find_or_create_user(
 
 def enable_users_by_hackathons(hackathons: Sequence[str]) -> Dict[str, str]:
     global LOOKER_GROUP_PREFIX
-    sdk = client.setup()
+    sdk = looker_sdk.init31()
     groups = {g.name: g.id for g in sdk.all_groups(fields="id,name")}
     ret = {}
     for hackathon in hackathons:
@@ -202,7 +205,7 @@ def disable_user(*, sdk: methods.LookerSDK, user_id: int):
 
 
 def me():
-    sdk = client.setup()
+    sdk = looker_sdk.init31()
     return sdk.me()
 
 

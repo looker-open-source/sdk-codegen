@@ -101,9 +101,10 @@ def user_info():
 def verify_google_token():
     try:
         # Specify the CLIENT_ID of the app that accesses the backend:
+        # breakpoint()
         body = flask.request.json
         idinfo = id_token.verify_oauth2_token(
-            body["Zi"]["id_token"],
+            body["tokenId"],
             requests.Request(),
             "280777447286-iigstshu4o2tnkp5fjucrd3nvq03g5hs.apps.googleusercontent.com",
         )
