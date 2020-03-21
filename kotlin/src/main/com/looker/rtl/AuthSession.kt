@@ -27,10 +27,10 @@ package com.looker.rtl
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.http.Parameters
 
-class UserSession(val apiSettings: ApiSettings,
-                  val transport: Transport = Transport(apiSettings)) {
+open class AuthSession(open val apiSettings: ApiSettings,
+                       open val transport: Transport = Transport(apiSettings)) {
 
-    private var authToken: AuthToken = AuthToken()
+    var authToken: AuthToken = AuthToken()
     private var sudoToken: AuthToken = AuthToken()
     var sudoId: String = ""
 
@@ -76,7 +76,7 @@ class UserSession(val apiSettings: ApiSettings,
      * Retrieve the current authentication token. If there is no active token, performs default login to retrieve the
      * token.
      */
-    fun getToken(): AuthToken {
+    open fun getToken(): AuthToken {
         if (!isAuthenticated()) {
             return login()
         }
@@ -109,7 +109,7 @@ class UserSession(val apiSettings: ApiSettings,
         return false
     }
 
-    private fun <T> ok(response: SDKResponse): T {
+    fun <T> ok(response: SDKResponse): T {
         @Suppress("UNCHECKED_CAST")
         when (response) {
             is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())

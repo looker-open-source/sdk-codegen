@@ -25,6 +25,7 @@
 package com.looker.rtl
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.looker.sdk.AccessToken
 import java.time.LocalDateTime
 
 data class AuthToken(
@@ -34,10 +35,13 @@ data class AuthToken(
         val tokenType: String = "",
         @JsonProperty("expires_in")
         var expiresIn: Long = 0,
-        @JsonProperty("expires_at")
-        var expiresAt: LocalDateTime = LocalDateTime.now()) {
+        @JsonProperty("refresh_token")
+        var refreshToken: String? = "") {
 
-    constructor(token: AuthToken) : this(token.accessToken, token.tokenType, token.expiresIn, token.expiresAt)
+    var expiresAt: LocalDateTime = LocalDateTime.now()
+
+//    constructor(token: AuthToken) : this(token.accessToken, token.tokenType, token.expiresIn, token.expiresAt, token.refreshToken)
+    constructor(token: AccessToken) : this(token.access_token!!, token.token_type!!, token.expires_in!!.toLong(), token.refresh_token!!)
 
     init {
         if (expiresIn > 0) {

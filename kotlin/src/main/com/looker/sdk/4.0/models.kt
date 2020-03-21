@@ -4,10 +4,9 @@
 
 package com.looker.sdk
 
-import com.looker.rtl.*
-import java.io.*
+import com.looker.rtl.UriString
+import java.io.Serializable
 import java.util.*
-import java.time.*
 
 data class AccessToken (
   /**
@@ -21,7 +20,11 @@ data class AccessToken (
   /**
    * Number of seconds before the token expires (read-only)
    */
-  var expires_in: Long? = null
+  var expires_in: Long? = null,
+  /**
+   * Refresh token which can be used to obtain a new access token (read-only)
+   */
+  var refresh_token: String? = null
 ) : Serializable
 
 data class ApiSession (
@@ -4861,6 +4864,14 @@ data class Project (
    */
   var git_service_name: String? = null,
   /**
+   * Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
+   */
+  var git_application_server_http_port: Long? = null,
+  /**
+   * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+   */
+  var git_application_server_http_scheme: String? = null,
+  /**
    * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
    */
   var deploy_secret: String? = null,
@@ -5865,6 +5876,10 @@ data class ScheduledPlan (
    * Whether or not to expand table vis to full length
    */
   var long_tables: Boolean? = null,
+  /**
+   * The pixel width at which we render the inline table visualizations
+   */
+  var inline_table_width: Long? = null,
   /**
    * Unique Id (read-only)
    */
@@ -8084,6 +8099,14 @@ data class WriteProject (
    */
   var git_service_name: String? = null,
   /**
+   * Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
+   */
+  var git_application_server_http_port: Long? = null,
+  /**
+   * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+   */
+  var git_application_server_http_scheme: String? = null,
+  /**
    * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
    */
   var deploy_secret: String? = null,
@@ -8437,7 +8460,11 @@ data class WriteScheduledPlan (
   /**
    * Whether or not to expand table vis to full length
    */
-  var long_tables: Boolean? = null
+  var long_tables: Boolean? = null,
+  /**
+   * The pixel width at which we render the inline table visualizations
+   */
+  var inline_table_width: Long? = null
 ) : Serializable
 
 /**

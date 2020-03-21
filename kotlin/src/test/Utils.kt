@@ -53,7 +53,7 @@ open class TestConfig() {
     val testContents = File(testIni).readText()
     val testConfig = apiConfig(testContents)
     val testSection = testConfig["Looker"]
-    val session = UserSession(settings, Transport(testSettings(settings)))
+    val session = AuthSession(settings, Transport(testSettings(settings)))
     val sdk = LookerSDK(session)
 
     fun rootFile(fileName: String): String {
