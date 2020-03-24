@@ -111,10 +111,10 @@ fun hexStr(bytes: ByteArray): String {
 @ExperimentalUnsignedTypes
 class OauthSession : AuthSession {
     // TODO does this need to be re-initialized in createAuthCodeRequestUrl()?
+    private val random = SecureRandom()
     private var codeVerifier = this.secureRandom(32)
     override val apiSettings: ApiSettings
     override val transport: Transport
-    private val random = SecureRandom()
     private val messageDigest = MessageDigest.getInstance("SHA-256") // "HmacSHA256")
 
     constructor(apiSettings: ApiSettings, transport: Transport = Transport(apiSettings)) : super(apiSettings,
@@ -186,9 +186,9 @@ class OauthSession : AuthSession {
     }
 
     fun sha256hash(value: ByteArray) : String {
-        val hmac = hmacSHA256(this.codeVerifier, value)
-        return hexStr(hmac)
-//        return hashString(value, messageDigest)
+//        val hmac = hmacSHA256(this.codeVerifier, value)
+//        return hexStr(hmac)
+        return hashString(value, messageDigest)
     }
 
     fun sha256hash(value: String) : String {
