@@ -27,8 +27,6 @@ package com.looker.rtl
 import com.looker.sdk.AccessToken
 import java.security.MessageDigest
 import java.security.SecureRandom
-import javax.crypto.Mac
-import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
 
 // https://stackoverflow.com/a/52225984/74137
@@ -37,10 +35,21 @@ fun ByteArray.toHexStr() = asUByteArray().joinToString("") { it.toString(16).pad
 
 // Adapted from https://www.samclarke.com/kotlin-hash-strings/
 
-fun String.md5() : String { return hashString(this, "MD5") }
-fun String.sha512() : String { return hashString(this,"SHA-512") }
-fun String.sha256() : String { return hashString(this,"SHA-256") }
-fun String.sha1() : String { return hashString(this,"SHA-1") }
+fun String.md5(): String {
+    return hashString(this, "MD5")
+}
+
+fun String.sha512(): String {
+    return hashString(this, "SHA-512")
+}
+
+fun String.sha256(): String {
+    return hashString(this, "SHA-256")
+}
+
+fun String.sha1(): String {
+    return hashString(this, "SHA-1")
+}
 
 fun hashString(input: ByteArray, digester: MessageDigest): String {
     val HEX_CHARS = "0123456789abcdef"
@@ -60,24 +69,6 @@ fun hashString(input: ByteArray, digester: MessageDigest): String {
 fun hashString(input: ByteArray, type: String): String {
     val digester = MessageDigest.getInstance(type)
     return hashString(input, digester)
-}
-
-// https://github.com/http4k/http4k/blob/master/http4k-aws/src/main/kotlin/org/http4k/aws/AwsHmacSha256.kt
-fun hmacSHA256(key: ByteArray, data: ByteArray): ByteArray = try {
-    val algorithm = "SHA-256" // "HmacSHA256"
-    Mac.getInstance(algorithm).run {
-        init(SecretKeySpec(key, algorithm))
-        doFinal(data)
-    }
-} catch (e: Exception) {
-    throw RuntimeException("Could not run HMAC SHA256", e)
-}
-
-fun hmacSHA256(key: String, data: String): ByteArray = try {
-    val keyBytes = key.toByteArray()
-    hmacSHA256(keyBytes, data.toByteArray(Charsets.UTF_8))
-} catch (e: Exception) {
-    throw RuntimeException("Could not run HMAC SHA256", e)
 }
 
 /**
@@ -110,8 +101,8 @@ fun hexStr(bytes: ByteArray): String {
 
 @ExperimentalUnsignedTypes
 class OauthSession : AuthSession {
-    // TODO does this need to be re-initialized in createAuthCodeRequestUrl()?
     private val random = SecureRandom()
+    // TODO does this need to be re-initialized in createAuthCodeRequestUrl()?
     private var codeVerifier = this.secureRandom(32)
     override val apiSettings: ApiSettings
     override val transport: Transport
@@ -123,7 +114,7 @@ class OauthSession : AuthSession {
         this.transport = transport
     }
 
-    fun requestToken(body: Values) : AuthToken {
+    fun requestToken(body: Values): AuthToken {
         val response = this.transport.request<AccessToken>(
                 HttpMethod.POST,
                 "/api/token",
@@ -134,7 +125,7 @@ class OauthSession : AuthSession {
         return this.authToken
     }
 
-    override fun getToken() : AuthToken {
+    override fun getToken(): AuthToken {
         if (!this.isAuthenticated()) {
             if (this.activeToken().refreshToken?.isNotEmpty()!!) {
                 val config = this.apiSettings.readConfig()
@@ -153,7 +144,7 @@ class OauthSession : AuthSession {
     /**
      * Generate an OAuth2 authCode request URL
      */
-    fun createAuthCodeRequestUrl(scope: String, state: String) : String {
+    fun createAuthCodeRequestUrl(scope: String, state: String): String {
         val codeChallenge = this.sha256hash(this.codeVerifier)
         val config = this.apiSettings.readConfig()
         val lookerUrl = config["looker_url"]
@@ -168,30 +159,30 @@ class OauthSession : AuthSession {
         ))
     }
 
-    fun redeemAuthCode(authCode: String, codeVerifier: String? = null) : AuthToken {
+    fun redeemAuthCode(authCode: String, codeVerifier: String? = null): AuthToken {
         val config = this.apiSettings.readConfig()
         return this.requestToken(mapOf(
                 "grant_type" to "authorization_code",
                 "code" to authCode,
-                "code_verifier" to if (codeVerifier !== null) { hexStr(this.codeVerifier) } else "",
+                "code_verifier" to if (codeVerifier !== null) {
+                    hexStr(this.codeVerifier)
+                } else "",
                 "client_id" to config["client_id"],
                 "redirect_uri" to config["redirect_uri"]
         ))
     }
 
-    fun secureRandom(byteCount: Int) : ByteArray {
+    fun secureRandom(byteCount: Int): ByteArray {
         val bytes = ByteArray(byteCount)
         this.random.nextBytes(bytes)
         return bytes
     }
 
-    fun sha256hash(value: ByteArray) : String {
-//        val hmac = hmacSHA256(this.codeVerifier, value)
-//        return hexStr(hmac)
+    fun sha256hash(value: ByteArray): String {
         return hashString(value, messageDigest)
     }
 
-    fun sha256hash(value: String) : String {
+    fun sha256hash(value: String): String {
         return sha256hash(value.toByteArray())
     }
 }
