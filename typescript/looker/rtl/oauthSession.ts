@@ -113,21 +113,29 @@ export class OAuthSession extends AuthSession {
     return url.toString()
   }
 
-  /*
-    Convert an authCode received from server into an active auth token
-    The app is responsible for obtaining the authCode via interactive user login
-    via /auth front-end endpoint and URL redirect. When the authCode is received
-    by url redirect to an app route, pass the authCode into this function to
-    get an access_token and refresh_token.
-   */
-  async redeemAuthCode(authCode: string, code_verifier?: string) {
-    return this.requestToken({
+  redeemAuthCodeBody(authCode: string, codeVerifier?: string) {
+    const verifier = codeVerifier || this.code_verifier || ""
+    return {
       grant_type: 'authorization_code',
       code: authCode,
-      code_verifier: code_verifier || this.code_verifier || '',
+      code_verifier: verifier,
       client_id: this.settings.client_id,
       redirect_uri: this.settings.redirect_uri,
-    })
+    } as IAuthCodeGrantTypeParams
+  }
+
+  /**
+   * Convert an authCode received from server into an active auth token
+   * The app is responsible for obtaining the authCode via interactive user login
+   * via /auth front-end endpoint and URL redirect. When the authCode is received
+   * by url redirect to an app route, pass the authCode into this function to
+   * get an access_token and refresh_token.
+   * @param {string} authCode
+   * @param {string} codeVerifier
+   * @returns {Promise<AuthToken>}
+   */
+  async redeemAuthCode(authCode: string, codeVerifier?: string) {
+    return this.requestToken(this.redeemAuthCodeBody(authCode, codeVerifier))
   }
 
   async getToken() {

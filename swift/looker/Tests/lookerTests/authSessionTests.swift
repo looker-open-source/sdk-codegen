@@ -48,9 +48,13 @@ class authSessionTests: XCTestCase {
         let settings = config.testsettings
         let xp = BaseTransport(config.settings)
         let session = OAuthSession(settings,xp)
-        let request = session.redeemAuthCodeBody("authCode", "com.looker.ios")
+        let hashCode = session.sha256Hash("com.looker.ios")
+        let request = session.redeemAuthCodeBody("authCode", hashCode)
         XCTAssertEqual("authCode", request["code"])
-        XCTAssertEqual("42e6ca4b717033673e1ce566dce42b5cef245035a898c22fbbd749ad9543abf6", request["code_verifier"])
+        XCTAssertEqual(hashCode, request["code_verifier"])
+        XCTAssertEqual("test_client_id", request["client_id"])
+        XCTAssertEqual("looker://", request["redirect_uri"])
+
     }
 
 }

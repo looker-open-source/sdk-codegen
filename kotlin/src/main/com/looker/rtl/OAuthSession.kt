@@ -103,13 +103,11 @@ fun hexStr(bytes: ByteArray): String {
 class OAuthSession(override val apiSettings: ApiSettings, override val transport: Transport = Transport(apiSettings))
     : AuthSession(apiSettings, transport) {
     private var random = SecureRandom()
-    // TODO does this need to be re-initialized in createAuthCodeRequestUrl()?
-    private var codeVerifier = this.secureRandom(32)
+    private var codeVerifier: String = ""
     private val messageDigest = MessageDigest.getInstance("SHA-256") // "HmacSHA256")
 
     init {
         this.random = SecureRandom()
-        this.codeVerifier = this.secureRandom(32)
     }
 
     fun requestToken(body: Values): AuthToken {
@@ -143,7 +141,8 @@ class OAuthSession(override val apiSettings: ApiSettings, override val transport
      * Generate an OAuth2 authCode request URL
      */
     fun createAuthCodeRequestUrl(scope: String, state: String): String {
-        val codeChallenge = this.sha256hash(this.codeVerifier)
+        val bytes = this.secureRandom(32)
+        this.codeVerifier = this.sha256hash(bytes)
         val config = this.apiSettings.readConfig()
         val lookerUrl = config["looker_url"]
         return addQueryParams("$lookerUrl/auth", mapOf(
@@ -153,17 +152,17 @@ class OAuthSession(override val apiSettings: ApiSettings, override val transport
                 "scope" to scope,
                 "state" to state,
                 "code_challenge_method" to "S256",
-                "code_challenge" to codeChallenge
+                "code_challenge" to this.codeVerifier
         ))
     }
 
     fun redeemAuthCodeBody(authCode: String, codeVerifier: String? = null): Map<String, String> {
-        val verifier = codeVerifier?.toByteArray() ?: this.codeVerifier
+        val verifier = codeVerifier?: this.codeVerifier
         val config = this.apiSettings.readConfig()
         val map = mapOf(
                 "grant_type" to "authorization_code",
                 "code" to authCode,
-                "code_verifier" to hexStr(verifier),
+                "code_verifier" to verifier,
                 "client_id" to (config["client_id"] ?: error("")),
                 "redirect_uri" to (config["redirect_uri"] ?: error(""))
         )

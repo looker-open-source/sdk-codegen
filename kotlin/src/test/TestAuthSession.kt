@@ -88,9 +88,12 @@ class TestAuthSession {
     @test
     fun testRedemptionBody() {
         val session = OAuthSession(config.oAuthTestSettings, Transport(testSettings))
-        val request = session.redeemAuthCodeBody("authCode", "com.looker.android")
-        assertEquals(request["code"], "authCode")
-        assertEquals(request["code_verifier"], "636f6d2e6c6f6f6b65722e616e64726f6964")
+        val hashCode = session.sha256hash("com.looker.android")
+        val request = session.redeemAuthCodeBody("authCode", hashCode)
+        assertEquals("authCode", request["code"])
+        assertEquals(hashCode, request["code_verifier"])
+        assertEquals( "test_client_id", request["client_id"])
+        assertEquals( "looker://", request["redirect_uri"])
     }
 
 }

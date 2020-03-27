@@ -57,7 +57,7 @@ extension Data {
 
 @available(OSX 10.15, *)
 class OAuthSession: AuthSession {
-    var code_verifier: Data = Data.init()
+    var code_verifier: String = ""
 
     override init(_ settings: IApiSettings, _ transport: ITransport? = nil) {
         super.init(settings, transport)
@@ -96,8 +96,7 @@ class OAuthSession: AuthSession {
      Generate an OAuth2 authCode request URL
      */
     func createAuthCodeRequestUrl(scope: String, state: String) throws -> String {
-        self.code_verifier = try! self.secureRandom(32)
-        let code_challenge = self.sha256Hash(self.code_verifier)
+        self.code_verifier = self.sha256Hash(try! self.secureRandom(32))
         let config = self.settings.readConfig(nil)
         let looker_url = config["looker_url"]!
         let url = addQueryParams("\(looker_url)/auth",
@@ -108,23 +107,23 @@ class OAuthSession: AuthSession {
             "scope": scope,
             "state": state,
             "code_challenge_method": "S256",
-            "code_challenge": code_challenge
+            "code_challenge": self.code_verifier
         ])
         return url
     }
 
     func redeemAuthCodeBody(_ authCode: String, _ code_verifier: String? = nil) -> Dictionary<String, String>{
         let config = self.settings.readConfig(nil)
-        let verifier = code_verifier == nil ? self.code_verifier : code_verifier!.data(using: .utf8)!
+        let verifier = (code_verifier == nil ? self.code_verifier : code_verifier) ?? ""
         return [
             "grant_type": "authorization_code",
             "code": authCode,
-            "code_verifier": self.sha256Hash(verifier),
+            "code_verifier": verifier,
             "client_id": config["client_id"]!,
             "redirect_uri": config["redirect_uri"]!
         ]
     }
-    
+
     func redeemAuthCode(_ authCode: String, _ code_verifier: String? = nil) -> AuthToken {
         return self.requestToken(redeemAuthCodeBody(authCode, code_verifier))
     }
