@@ -312,16 +312,24 @@ class Transport(val options: TransportOptions) {
         builder.url.takeFrom(finishedRequest.url)
 
         if (body != null) {
-            if (body is FormDataContent) {
-                // Encoded form, probably automatically does headers["Content-Type"] = "application/x-www-form-urlencoded"
-                builder.body = body
-            } else {
-                // Request body
-                val json = defaultSerializer()
+            when (body) {
+                is FormDataContent -> {
+                    // Encoded form, probably automatically does headers["Content-Type"] = "application/x-www-form-urlencoded"
+                    builder.body = body
+                }
+                is String -> {
+                    // Presume this is a manually user-encoded value
+                    headers["Content-Type"] = "application/x-www-form-urlencoded"
+                    builder.body = body
+                }
+                else -> {
+                    // Request body
+                    val json = defaultSerializer()
 
-                val jsonBody = json.write(body)
-                builder.body = jsonBody  // TODO: I think having to do this is a bug? https://github.com/ktorio/ktor/issues/1265
-                headers["Content-Length"] = jsonBody.contentLength.toString()
+                    val jsonBody = json.write(body)
+                    builder.body = jsonBody  // TODO: I think having to do this is a bug? https://github.com/ktorio/ktor/issues/1265
+                    headers["Content-Length"] = jsonBody.contentLength.toString()
+                }
             }
         }
         return builder
