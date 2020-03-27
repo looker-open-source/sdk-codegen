@@ -67,7 +67,9 @@ class OAuthSession: AuthSession {
             HttpMethod.POST,
             "/api/token",
             nil,
-            body,
+            // This body needs to be www-form-urlencoded for the login method
+            // encoding it to String here makes that happen automatically
+            encodeParams(body),
             nil,
             nil
         )
