@@ -313,7 +313,7 @@ class Transport(val options: TransportOptions) {
 
         if (body != null) {
             if (body is FormDataContent) {
-                // Encoded form
+                // Encoded form, probably automatically does headers["Content-Type"] = "application/x-www-form-urlencoded"
                 builder.body = body
             } else {
                 // Request body

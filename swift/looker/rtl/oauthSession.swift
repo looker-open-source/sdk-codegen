@@ -25,9 +25,8 @@
 import Foundation
 import CryptoKit
 
-@available(OSX 10.15, *)
-
 // from https://stackoverflow.com/a/57255549/74137
+@available(OSX 10.15, *)
 extension Digest {
     var bytes: [UInt8] { Array(makeIterator()) }
     var data: Data { Data(bytes) }
@@ -63,7 +62,7 @@ class OAuthSession: AuthSession {
         super.init(settings, transport)
     }
 
-    func requestToken(_ body: Values) -> AuthToken {
+    func requestToken(_ body: Values) throws -> AuthToken {
         let response : SDKResponse<AccessToken, SDKError> = self.transport.request(
             HttpMethod.POST,
             "/api/token",
@@ -72,16 +71,20 @@ class OAuthSession: AuthSession {
             nil,
             nil
         )
-        let token = try? self.ok(response)
-        return self._authToken.setToken(token!)
+        do {
+            let token = try self.ok(response)
+            return self._authToken.setToken(token)
+        } catch {
+            throw error
+        }
     }
 
-    override func getToken() -> AuthToken {
+    override func getToken() throws -> AuthToken {
         if (!self.isAuthenticated()) {
             if (!self.activeToken.refresh_token.isEmpty) {
                 let config = self.settings.readConfig(nil)
                 // fetch the token
-                let _ = self.requestToken([
+                let _ = try self.requestToken([
                     "grant_type": "refresh_token",
                     "refresh_token": self.activeToken.refresh_token,
                     "client_id": config["client_id"],
@@ -124,8 +127,8 @@ class OAuthSession: AuthSession {
         ]
     }
 
-    func redeemAuthCode(_ authCode: String, _ code_verifier: String? = nil) -> AuthToken {
-        return self.requestToken(redeemAuthCodeBody(authCode, code_verifier))
+    func redeemAuthCode(_ authCode: String, _ code_verifier: String? = nil) throws -> AuthToken {
+        return try self.requestToken(redeemAuthCodeBody(authCode, code_verifier))
     }
 
     private func secureRandom(_ byte_count: Int) throws -> Data {

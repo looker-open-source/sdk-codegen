@@ -139,6 +139,7 @@ class BaseTransport : ITransport  {
         req.addValue(agentTag, forHTTPHeaderField: "x-looker-appid")
         if (body != nil) {
             if (body is String) {
+                req.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
                 req.httpBody = (body as! String).data(using: .utf8)
             } else {
                 /// Only string and encoded JSON (iow`Data`) can be provided for the body

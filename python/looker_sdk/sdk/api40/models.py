@@ -20,11 +20,13 @@ class AccessToken(model.Model):
         access_token: Access Token used for API calls
         token_type: Type of Token
         expires_in: Number of seconds before the token expires
+        refresh_token: Refresh token which can be used to obtain a new access token
     """
 
     access_token: Optional[str] = None
     token_type: Optional[str] = None
     expires_in: Optional[int] = None
+    refresh_token: Optional[str] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -3623,6 +3625,8 @@ class Project(model.Model):
         git_username_user_attribute: User attribute name for username in per-user HTTPS authentication.
         git_password_user_attribute: User attribute name for password in per-user HTTPS authentication.
         git_service_name: Name of the git service provider
+        git_application_server_http_port: Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
+        git_application_server_http_scheme: Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
         deploy_secret: (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
         unset_deploy_secret: (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
         pull_request_mode: The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
@@ -3643,6 +3647,8 @@ class Project(model.Model):
     git_username_user_attribute: Optional[str] = None
     git_password_user_attribute: Optional[str] = None
     git_service_name: Optional[str] = None
+    git_application_server_http_port: Optional[int] = None
+    git_application_server_http_scheme: Optional[str] = None
     deploy_secret: Optional[str] = None
     unset_deploy_secret: Optional[bool] = None
     pull_request_mode: Optional[str] = None
@@ -4292,6 +4298,7 @@ class ScheduledPlan(model.Model):
         embed: Whether this schedule is in an embed context or not
         color_theme: Color scheme of the dashboard if applicable
         long_tables: Whether or not to expand table vis to full length
+        inline_table_width: The pixel width at which we render the inline table visualizations
         id: Unique Id
         created_at: Date and time when ScheduledPlan was created
         updated_at: Date and time when ScheduledPlan was last updated
@@ -4327,6 +4334,7 @@ class ScheduledPlan(model.Model):
     embed: Optional[bool] = None
     color_theme: Optional[str] = None
     long_tables: Optional[bool] = None
+    inline_table_width: Optional[int] = None
     id: Optional[int] = None
     created_at: Optional[datetime.datetime] = None
     updated_at: Optional[datetime.datetime] = None
@@ -4346,7 +4354,7 @@ class ScheduledPlanDestination(model.Model):
         format: The data format to send to the given destination. Supported formats vary by destination, but include: "txt", "csv", "inline_json", "json", "json_detail", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png"
         apply_formatting: Are values formatted? (containing currency symbols, digit separators, etc.
         apply_vis: Whether visualization options are applied to the results.
-        address: Address for recipient. For email e.g. 'user@example.com'. For webhooks e.g. 'https://domain/path'. For Amazon S3 e.g. 's3://bucket-name/path/'. For SFTP e.g. 'sftp://host-name/path/'. 
+        address: Address for recipient. For email e.g. 'user@example.com'. For webhooks e.g. 'https://domain/path'. For Amazon S3 e.g. 's3://bucket-name/path/'. For SFTP e.g. 'sftp://host-name/path/'.
         looker_recipient: Whether the recipient is a Looker user on the current instance (only applicable for email recipients)
         type: Type of the address ('email', 'webhook', 's3', or 'sftp')
         parameters: JSON object containing parameters for external scheduling. For Amazon S3, this requires keys and values for access_key_id and region. For SFTP, this requires a key and value for username.
@@ -6577,6 +6585,8 @@ class WriteProject(model.Model):
         git_username_user_attribute: User attribute name for username in per-user HTTPS authentication.
         git_password_user_attribute: User attribute name for password in per-user HTTPS authentication.
         git_service_name: Name of the git service provider
+        git_application_server_http_port: Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
+        git_application_server_http_scheme: Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
         deploy_secret: (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
         unset_deploy_secret: (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
         pull_request_mode: The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
@@ -6593,6 +6603,8 @@ class WriteProject(model.Model):
     git_username_user_attribute: Optional[str] = None
     git_password_user_attribute: Optional[str] = None
     git_service_name: Optional[str] = None
+    git_application_server_http_port: Optional[int] = None
+    git_application_server_http_scheme: Optional[str] = None
     deploy_secret: Optional[str] = None
     unset_deploy_secret: Optional[bool] = None
     pull_request_mode: Optional[str] = None
@@ -6611,6 +6623,8 @@ class WriteProject(model.Model):
         git_username_user_attribute: Optional[str] = None,
         git_password_user_attribute: Optional[str] = None,
         git_service_name: Optional[str] = None,
+        git_application_server_http_port: Optional[int] = None,
+        git_application_server_http_scheme: Optional[str] = None,
         deploy_secret: Optional[str] = None,
         unset_deploy_secret: Optional[bool] = None,
         pull_request_mode: Optional[str] = None,
@@ -6626,6 +6640,8 @@ class WriteProject(model.Model):
         self.git_username_user_attribute = git_username_user_attribute
         self.git_password_user_attribute = git_password_user_attribute
         self.git_service_name = git_service_name
+        self.git_application_server_http_port = git_application_server_http_port
+        self.git_application_server_http_scheme = git_application_server_http_scheme
         self.deploy_secret = deploy_secret
         self.unset_deploy_secret = unset_deploy_secret
         self.pull_request_mode = pull_request_mode
@@ -6934,6 +6950,7 @@ class WriteScheduledPlan(model.Model):
         embed: Whether this schedule is in an embed context or not
         color_theme: Color scheme of the dashboard if applicable
         long_tables: Whether or not to expand table vis to full length
+        inline_table_width: The pixel width at which we render the inline table visualizations
     """
 
     name: Optional[str] = None
@@ -6961,6 +6978,7 @@ class WriteScheduledPlan(model.Model):
     embed: Optional[bool] = None
     color_theme: Optional[str] = None
     long_tables: Optional[bool] = None
+    inline_table_width: Optional[int] = None
 
     def __init__(
         self,
@@ -6991,7 +7009,8 @@ class WriteScheduledPlan(model.Model):
         pdf_landscape: Optional[bool] = None,
         embed: Optional[bool] = None,
         color_theme: Optional[str] = None,
-        long_tables: Optional[bool] = None
+        long_tables: Optional[bool] = None,
+        inline_table_width: Optional[int] = None
     ):
         self.name = name
         self.user_id = user_id
@@ -7018,6 +7037,7 @@ class WriteScheduledPlan(model.Model):
         self.embed = embed
         self.color_theme = color_theme
         self.long_tables = long_tables
+        self.inline_table_width = inline_table_width
 
 
 @attr.s(auto_attribs=True, kw_only=True, init=False)

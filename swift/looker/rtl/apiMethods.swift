@@ -66,7 +66,13 @@ class APIMethods {
             queryParams,
             body,
             { props -> URLRequest in
-                return self.authSession.authenticate(props)
+                do {
+                    let auth = try self.authSession.authenticate(props)
+                    return auth
+                } catch {
+                    print("Auth Error: \(error)")
+                    return props
+                }
             },
             options
         )

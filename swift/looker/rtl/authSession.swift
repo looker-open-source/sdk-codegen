@@ -26,7 +26,7 @@ import Foundation
 
 protocol IAuthSession: IAuthorizer {
     var sudoId: String { get set }
-    func getToken() -> AuthToken
+    func getToken() throws -> AuthToken
     func isSudo() -> Bool
     func login(_ sudoId : String) -> AuthToken
     func reset() -> Void
@@ -34,7 +34,6 @@ protocol IAuthSession: IAuthorizer {
 
 @available(OSX 10.15, *)
 class AuthSession: IAuthSession {
-  
     private var apiPath = ""
     var _authToken = AuthToken()
     var _sudoToken = AuthToken()
@@ -56,7 +55,7 @@ class AuthSession: IAuthSession {
         self.apiPath = "/api/\(settings.api_version!)"
     }
     
-    func getToken() -> AuthToken {
+    func getToken() throws -> AuthToken {
         if (!self.isAuthenticated()) {
             // this is currently a synchronous call so unblocking
             return self.login()
@@ -85,8 +84,8 @@ class AuthSession: IAuthSession {
         return self.activeToken.isActive()
     }
     
-    func authenticate(_ props: URLRequest) -> URLRequest {
-        let token = self.getToken()
+    func authenticate(_ props: URLRequest) throws -> URLRequest {
+        let token = try self.getToken()
         var updated = props
         if (token.isActive()) {
             updated.addValue("Bearer \(token.access_token)", forHTTPHeaderField: "Authorization")

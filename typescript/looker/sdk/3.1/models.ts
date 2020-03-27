@@ -4892,6 +4892,14 @@ export interface IProject {
    */
   git_service_name?: string
   /**
+   * Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
+   */
+  git_application_server_http_port?: number
+  /**
+   * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+   */
+  git_application_server_http_scheme?: string
+  /**
    * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
    */
   deploy_secret?: string
@@ -5594,11 +5602,11 @@ export interface IRequestCreateDashboardRenderTask {
    */
   fields?: string
   /**
-   * Paper size for pdf
+   * Paper size for pdf. Value can be one of: ["letter","legal","tabloid","a0","a1","a2","a3","a4","a5"]
    */
   pdf_paper_size?: string
   /**
-   * Whether to render pdf in landscape
+   * Whether to render pdf in landscape paper orientation
    */
   pdf_landscape?: boolean
 }
@@ -5632,7 +5640,7 @@ export interface IRequestCreateLookmlDashboardRenderTask {
    */
   fields?: string
   /**
-   * Paper size for pdf
+   * Paper size for pdf. Value can be one of: ["letter","legal","tabloid","a0","a1","a2","a3","a4","a5"]
    */
   pdf_paper_size?: string
   /**
@@ -7396,6 +7404,10 @@ export interface IScheduledPlan {
    * Whether or not to expand table vis to full length
    */
   long_tables?: boolean
+  /**
+   * The pixel width at which we render the inline table visualizations
+   */
+  inline_table_width?: number
   /**
    * Unique Id (read-only)
    */
@@ -9626,6 +9638,14 @@ export interface IWriteProject {
    */
   git_service_name?: string
   /**
+   * Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
+   */
+  git_application_server_http_port?: number
+  /**
+   * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+   */
+  git_application_server_http_scheme?: string
+  /**
    * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
    */
   deploy_secret?: string
@@ -9980,6 +10000,10 @@ export interface IWriteScheduledPlan {
    * Whether or not to expand table vis to full length
    */
   long_tables?: boolean
+  /**
+   * The pixel width at which we render the inline table visualizations
+   */
+  inline_table_width?: number
 }
 
 /**

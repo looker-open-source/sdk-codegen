@@ -182,16 +182,14 @@ export class NodeSession extends AuthSession {
       this.reset()
       // only retain client API3 credentials for the lifetime of the login request
       const section = this.settings.readConfig()
-      // tslint:disable-next-line:variable-name
-      const client_id = getenv(strLookerClientId, section['client_id'])
-      // tslint:disable-next-line:variable-name
-      const client_secret = getenv(strLookerClientSecret, section['client_secret'])
-      if (!client_id || !client_secret) {
+      const clientId = getenv(strLookerClientId, section['client_id'])
+      const clientSecret = getenv(strLookerClientSecret, section['client_secret'])
+      if (!clientId || !clientSecret) {
         throw sdkError({
           message: 'API credentials client_id and/or client_secret are not set'
         })
       }
-      const body = encodeParams({client_id, client_secret})
+      const body = encodeParams({"client_id": clientId, "client_secret": clientSecret})
       // authenticate client
       const token = await this.ok(
         this.transport.request<IAccessToken, IError>(
