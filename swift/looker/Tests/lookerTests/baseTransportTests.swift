@@ -16,6 +16,14 @@ fileprivate let testRootPath: String = rootPath + "/test"
 fileprivate let repoPath : String = rootPath + ""
 fileprivate let localIni : String = ProcessInfo.processInfo.environment["LOOKERSDK_INI"] ?? (repoPath + "looker.ini")
 
+class TestApiConfig: ApiConfig {
+    override func readConfig(_ section: String? = nil) -> IApiSection {
+        var result = super.readConfig(section)
+        result["client_id"] = "test_client_id"
+        result["redirect_uri"] = "looker://"
+        return result
+    }
+}
 
 @available(OSX 10.15, *)
 class TestConfig {
@@ -28,7 +36,7 @@ class TestConfig {
     lazy var testData = try! JSONDecoder().decode([String: AnyCodable].self, from: dataContents)
     lazy var testIni = rootFile((testData["iniFile"]?.value as! String))
     lazy var settings = try! ApiConfig(localIni, "Looker")
-    lazy var testsettings = try! ApiConfig(testIni)
+    lazy var testsettings = try! TestApiConfig(testIni)
     lazy var xp = BaseTransport(settings)
     lazy var auth = AuthSession(settings, xp)
     lazy var sdk = LookerSDK(auth)

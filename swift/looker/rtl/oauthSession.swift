@@ -113,15 +113,20 @@ class OAuthSession: AuthSession {
         return url
     }
 
-    func redeemAuthCode(authCode: String, code_verifier: String? = nil) -> AuthToken {
+    func redeemAuthCodeBody(_ authCode: String, _ code_verifier: String? = nil) -> Dictionary<String, String>{
         let config = self.settings.readConfig(nil)
-        return self.requestToken([
+        let verifier = code_verifier == nil ? self.code_verifier : code_verifier!.data(using: .utf8)!
+        return [
             "grant_type": "authorization_code",
             "code": authCode,
-            "code_verifier": ((code_verifier != nil) ? "" : self.code_verifier.hexStr),
-            "client_id": config["client_id"],
-            "redirect_uri": config["redirect_uri"]
-        ])
+            "code_verifier": self.sha256Hash(verifier),
+            "client_id": config["client_id"]!,
+            "redirect_uri": config["redirect_uri"]!
+        ]
+    }
+    
+    func redeemAuthCode(_ authCode: String, _ code_verifier: String? = nil) -> AuthToken {
+        return self.requestToken(redeemAuthCodeBody(authCode, code_verifier))
     }
 
     private func secureRandom(_ byte_count: Int) throws -> Data {

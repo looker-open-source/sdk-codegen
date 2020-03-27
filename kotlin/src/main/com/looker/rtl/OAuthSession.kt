@@ -100,18 +100,16 @@ fun hexStr(bytes: ByteArray): String {
 }
 
 @ExperimentalUnsignedTypes
-class OauthSession : AuthSession {
-    private val random = SecureRandom()
+class OAuthSession(override val apiSettings: ApiSettings, override val transport: Transport = Transport(apiSettings))
+    : AuthSession(apiSettings, transport) {
+    private var random = SecureRandom()
     // TODO does this need to be re-initialized in createAuthCodeRequestUrl()?
     private var codeVerifier = this.secureRandom(32)
-    override val apiSettings: ApiSettings
-    override val transport: Transport
     private val messageDigest = MessageDigest.getInstance("SHA-256") // "HmacSHA256")
 
-    constructor(apiSettings: ApiSettings, transport: Transport = Transport(apiSettings)) : super(apiSettings,
-            transport) {
-        this.apiSettings = apiSettings
-        this.transport = transport
+    init {
+        this.random = SecureRandom()
+        this.codeVerifier = this.secureRandom(32)
     }
 
     fun requestToken(body: Values): AuthToken {
@@ -159,17 +157,21 @@ class OauthSession : AuthSession {
         ))
     }
 
-    fun redeemAuthCode(authCode: String, codeVerifier: String? = null): AuthToken {
+    fun redeemAuthCodeBody(authCode: String, codeVerifier: String? = null): Map<String, String> {
+        val verifier = codeVerifier?.toByteArray() ?: this.codeVerifier
         val config = this.apiSettings.readConfig()
-        return this.requestToken(mapOf(
+        val map = mapOf(
                 "grant_type" to "authorization_code",
                 "code" to authCode,
-                "code_verifier" to if (codeVerifier !== null) {
-                    hexStr(this.codeVerifier)
-                } else "",
-                "client_id" to config["client_id"],
-                "redirect_uri" to config["redirect_uri"]
-        ))
+                "code_verifier" to hexStr(verifier),
+                "client_id" to (config["client_id"] ?: error("")),
+                "redirect_uri" to (config["redirect_uri"] ?: error(""))
+        )
+        return map
+    }
+
+    fun redeemAuthCode(authCode: String, codeVerifier: String? = null): AuthToken {
+        return this.requestToken(redeemAuthCodeBody(authCode, codeVerifier))
     }
 
     fun secureRandom(byteCount: Int): ByteArray {

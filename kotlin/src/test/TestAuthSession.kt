@@ -24,13 +24,14 @@
 
 import com.looker.rtl.Transport
 import com.looker.rtl.AuthSession
-import com.looker.rtl.OauthSession
+import com.looker.rtl.OAuthSession
 import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import org.junit.Test as test
 
+@ExperimentalUnsignedTypes
 class TestAuthSession {
     val config = TestConfig()
     val settings = config.settings
@@ -74,7 +75,7 @@ class TestAuthSession {
 
     @test
     fun testSha256() {
-        val session = OauthSession(settings, Transport(testSettings))
+        val session = OAuthSession(settings, Transport(testSettings))
         val rosettaCode = "Rosetta code"
         val rosettaHash = "764faf5c61ac315f1497f9dfa542713965b785e5cc2f707d6468d7d1124cdfcf"
         var hash = session.sha256hash(rosettaCode)
@@ -83,4 +84,13 @@ class TestAuthSession {
         hash = session.sha256hash(message)
         assertEquals("68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483", hash, "Quick brown fox should match")
     }
+
+    @test
+    fun testRedemptionBody() {
+        val session = OAuthSession(config.oAuthTestSettings, Transport(testSettings))
+        val request = session.redeemAuthCodeBody("authCode", "com.looker.android")
+        assertEquals(request["code"], "authCode")
+        assertEquals(request["code_verifier"], "636f6d2e6c6f6f6b65722e616e64726f6964")
+    }
+
 }

@@ -36,11 +36,21 @@ class authSessionTests: XCTestCase {
     }
     
     func testSha256() {
-        let settings = config.settings
+        let settings = config.testsettings
         let xp = BaseTransport(settings)
-        let session = OAuthSession(settings,xp)
+        let session = OAuthSession(settings, xp)
         let message = "The quick brown fox jumped over the lazy dog."
         let hash = session.sha256Hash(message)
         XCTAssertEqual("68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483", hash)
     }
+    
+    func testRedemptionBody() {
+        let settings = config.testsettings
+        let xp = BaseTransport(config.settings)
+        let session = OAuthSession(settings,xp)
+        let request = session.redeemAuthCodeBody("authCode", "com.looker.ios")
+        XCTAssertEqual("authCode", request["code"])
+        XCTAssertEqual("42e6ca4b717033673e1ce566dce42b5cef245035a898c22fbbd749ad9543abf6", request["code_verifier"])
+    }
+
 }
