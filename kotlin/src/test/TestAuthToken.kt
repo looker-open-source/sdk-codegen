@@ -34,6 +34,7 @@ class TestAuthToken {
         assertEquals(testToken.accessToken, "")
         assertEquals(testToken.tokenType, "")
         assertEquals(testToken.expiresIn, 0)
+        assertEquals(testToken.refreshToken, null)
         assertEquals(testToken.isActive(), false)
     }
 
@@ -42,12 +43,14 @@ class TestAuthToken {
         val testToken = AuthToken(
                 accessToken = "all-access",
                 tokenType = "backstage",
-                expiresIn = 3600
+                expiresIn = 3600,
+                refreshToken = "refresh"
         )
 
         assertEquals(testToken.accessToken, "all-access")
         assertEquals(testToken.tokenType, "backstage")
         assertEquals(testToken.expiresIn, 3600)
+        assertEquals(testToken.refreshToken, "refresh")
         assertEquals(testToken.isActive(), true)
     }
 

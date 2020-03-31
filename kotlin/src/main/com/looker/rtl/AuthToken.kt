@@ -36,12 +36,12 @@ data class AuthToken(
         @JsonProperty("expires_in")
         var expiresIn: Long = 0L,
         @JsonProperty("refresh_token")
-        var refreshToken: String? = "") {
+        var refreshToken: String? = null) {
 
     var expiresAt: LocalDateTime = LocalDateTime.now()
 
 //    constructor(token: AuthToken) : this(token.accessToken, token.tokenType, token.expiresIn, token.expiresAt, token.refreshToken)
-    constructor(token: AccessToken) : this(token.access_token!!, token.token_type!!, token.expires_in!!.toLong(), token.refresh_token!!)
+    constructor(token: AccessToken) : this(token.access_token!!, token.token_type!!, token.expires_in!!.toLong(), token.refresh_token)
 
     init {
         if (expiresIn > 0) {
