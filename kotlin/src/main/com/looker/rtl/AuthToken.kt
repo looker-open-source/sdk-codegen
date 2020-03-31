@@ -32,9 +32,9 @@ data class AuthToken(
         @JsonProperty("access_token")
         var accessToken: String = "",  // TODO: Consider making this/these vals and using new objects instead of mutating
         @JsonProperty("token_type")
-        val tokenType: String = "",
+        var tokenType: String = "",
         @JsonProperty("expires_in")
-        var expiresIn: Long = 0,
+        var expiresIn: Long = 0L,
         @JsonProperty("refresh_token")
         var refreshToken: String? = "") {
 
@@ -52,6 +52,26 @@ data class AuthToken(
     fun isActive(): Boolean {
         if (accessToken.isEmpty()) return false
         return expiresAt > LocalDateTime.now()
+    }
+
+    fun setToken(token: AccessToken): AuthToken {
+        this.accessToken = token.access_token ?: ""
+        this.tokenType = token.token_type ?: ""
+        this.expiresIn = token.expires_in ?: 0
+
+        if (token.refresh_token != null) {
+            this.refreshToken = token.refresh_token
+        }
+
+        val expirationDate = LocalDateTime.now()
+        if (this.accessToken.isNotEmpty() && this.expiresIn > 0L) {
+            expirationDate.plusSeconds(this.expiresIn)
+        } else {
+            expirationDate.minusSeconds(10)
+        }
+        this.expiresAt = expirationDate
+
+        return this
     }
 
     fun reset() {  // TODO: Should this just return a blank AuthToken object instead?
