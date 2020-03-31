@@ -117,7 +117,7 @@ class OAuthSession(override val apiSettings: ApiSettings, override val transport
                 mapOf(),
                 body)
         val token = this.ok<AccessToken>(response)
-        this.authToken = AuthToken(token)
+        this.authToken.setToken(token)
         return this.authToken
     }
 
@@ -127,7 +127,7 @@ class OAuthSession(override val apiSettings: ApiSettings, override val transport
                 val config = this.apiSettings.readConfig()
                 // fetch the token
                 this.requestToken(mapOf(
-                        "grant_type" to "request_token",
+                        "grant_type" to "refresh_token",
                         "refresh_token" to this.activeToken().refreshToken,
                         "client_id" to config["client_id"],
                         "redirect_uri" to config["redirect_uri"]
