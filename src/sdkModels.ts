@@ -744,12 +744,12 @@ class Type implements IType {
     if (!criteria.has(SearchCriterion.type) && !criteria.has(SearchCriterion.status)) return false
     let result = rx.test(this.searchString(criteria))
     if (!result && Type.isPropSearch(criteria)) {
-      Object.entries(this.properties).forEach(([, p]) => {
+      for (const [, p] of Object.entries(this.properties)) {
         if (p.search(rx, criteria)) {
           result = true
-          // break TODO how do I break out of an entries forEach loop here?
+          break
         }
-      })
+      }
     }
     return result
   }
