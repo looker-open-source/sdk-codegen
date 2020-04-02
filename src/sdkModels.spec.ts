@@ -123,7 +123,11 @@ describe('sdkModels', () => {
   describe('searching', () => {
 
     const modelAndTypeNames = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+    const modelNames = new Set([SearchCriterion.method, SearchCriterion.name])
     const titleOnly  = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.title])
+    const responseCriteria = new Set([SearchCriterion.response])
+    const statusCriteria = new Set([SearchCriterion.status])
+    const activityCriteria = new Set([SearchCriterion.activityType])
 
     describe('model search', () => {
       it('target not found', () => {
@@ -136,7 +140,7 @@ describe('sdkModels', () => {
       it('search anywhere', () => {
         const actual = apiTestModel.search('dashboard', modelAndTypeNames)
         expect(Object.entries(actual.methods).length).toEqual(34)
-        expect(Object.entries(actual.types).length).toEqual(14)
+        expect(Object.entries(actual.types).length).toEqual(15)
       })
 
       it('search for word', () => {
@@ -153,6 +157,64 @@ describe('sdkModels', () => {
         expect(Object.entries(actual.methods).length).toEqual(0)
         expect(Object.entries(actual.types).length).toEqual(1)
       })
+
+      it('just model names', () => {
+        let actual = apiTestModel.search('\\bdashboard\\b', modelNames)
+        expect(Object.entries(actual.methods).length).toEqual(1)
+        expect(Object.entries(actual.types).length).toEqual(0)
+      })
+
+      it('deprecated items', () => {
+        let actual = apiTestModel.search('deprecated', statusCriteria)
+        expect(Object.entries(actual.methods).length).toEqual(6)
+        expect(Object.entries(actual.types).length).toEqual(4)
+      })
+
+      it('beta items', () => {
+        let actual = apiTestModel.search('beta', statusCriteria)
+        expect(Object.entries(actual.methods).length).toEqual(204)
+        expect(Object.entries(actual.types).length).toEqual(99)
+      })
+
+      it('stable items', () => {
+        let actual = apiTestModel.search('stable', statusCriteria)
+        expect(Object.entries(actual.methods).length).toEqual(153)
+        expect(Object.entries(actual.types).length).toEqual(88)
+      })
+
+      it('db queries', () => {
+        let actual = apiTestModel.search('db_query', activityCriteria)
+        expect(Object.entries(actual.methods).length).toEqual(35)
+        expect(Object.entries(actual.types).length).toEqual(0)
+      })
     })
+
+    describe('response search', () => {
+      it('find binary responses', () => {
+        let actual = apiTestModel.search('binary', responseCriteria)
+        expect(Object.entries(actual.methods).length).toEqual(6)
+        expect(Object.entries(actual.types).length).toEqual(0)
+      })
+
+      it('find rate limited responses', () => {
+        let actual = apiTestModel.search('429', responseCriteria)
+        expect(Object.entries(actual.methods).length).toEqual(7)
+        expect(Object.entries(actual.types).length).toEqual(0)
+      })
+    })
+
+  })
+
+  describe('tagging', () => {
+    it('methods are tagged', () => {
+      let actual = apiTestModel.tags
+      expect(Object.entries(actual).length).toEqual(26)
+    })
+
+    it('methods are in the right tag', () => {
+      let actual = apiTestModel.tags['Theme']
+      expect(Object.entries(actual).length).toEqual(11)
+    })
+
   })
 })

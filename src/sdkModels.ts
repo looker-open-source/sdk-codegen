@@ -41,7 +41,7 @@ export interface IModel {
  * @param {string} value to search
  * @returns {string} value plus search delimiter
  */
-const searchIt = (value: string) => value + '\n'
+const searchIt = (value: string) => value ? value + '\n' : ''
 
 export interface ISymbol {
   name: string
@@ -71,7 +71,10 @@ export enum SearchCriterion {
   description,
   argument,
   property,
-  title
+  title,
+  activityType,
+  status,
+  response,
 }
 
 export type SearchCriteria = Set<SearchCriterion>
@@ -83,13 +86,19 @@ export const SearchAll: SearchCriteria = new Set([
   SearchCriterion.description,
   SearchCriterion.argument,
   SearchCriterion.property,
+  SearchCriterion.title,
+  SearchCriterion.activityType,
+  SearchCriterion.status,
+  SearchCriterion.response,
 ])
 
+export interface ISearchResult extends ISymbolList {
+  message: string
+}
 
 export interface ISymbolTable extends ISymbolList {
   resolveType(schema: OAS.SchemaObject): IType
 }
-
 
 export interface IType {
   name: string
@@ -136,6 +145,11 @@ export interface IMethodResponse {
   statusCode: number
   mediaType: string
   type: IType
+  mode: ResponseMode
+
+  search(rx: RegExp, criteria: SearchCriteria): boolean
+
+  searchString(criteria: SearchCriteria): string
 }
 
 class MethodResponse implements IMethodResponse {
@@ -148,6 +162,23 @@ class MethodResponse implements IMethodResponse {
     this.mediaType = mediaType
     this.type = type
   }
+
+  get mode() : ResponseMode {
+    return responseMode(this.mediaType)
+  }
+
+  search(rx: RegExp, criteria: SearchCriteria): boolean {
+    if (!criteria.has(SearchCriterion.response)) return false
+    return rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
+  }
+
+  searchString(criteria: SearchCriteria): string {
+    let result = searchIt(`${this.statusCode}`) + searchIt(`${ResponseMode[this.mode]}`)
+    if (criteria.has(SearchCriterion.name)) result += searchIt(this.mediaType)
+    if (criteria.has(SearchCriterion.type)) result += searchIt(this.mediaType)
+    return result
+  }
+
 }
 
 export interface IProperty extends ISymbol {
@@ -188,12 +219,24 @@ class Symbol implements ISymbol {
   }
 }
 
-class SchemadSymbol extends Symbol {
+interface ISchemadSymbol extends ISymbol {
+  schema: OAS.SchemaObject
+  status: string
+  description: string
+  deprecated: boolean
+  deprecation: string
+}
+
+class SchemadSymbol extends Symbol implements ISchemadSymbol {
   schema: OAS.SchemaObject
 
   constructor(name: string, type: IType, schema: OAS.SchemaObject) {
     super(name, type)
     this.schema = schema
+  }
+
+  get status(): string {
+    return this.schema['x-looker-status'] || ''
   }
 
   get description(): string {
@@ -202,6 +245,10 @@ class SchemadSymbol extends Symbol {
 
   get deprecated(): boolean {
     return this.schema.deprecated || this.schema['x-looker-deprecated'] || false
+  }
+
+  get deprecation(): string {
+    return this.deprecated ? 'deprecated' : ''
   }
 }
 
@@ -237,6 +284,7 @@ class Property extends SchemadSymbol implements IProperty {
   searchString(criteria: SearchCriteria): string {
     let result = super.searchString(criteria)
     if (criteria.has(SearchCriterion.description)) result += searchIt(this.description)
+    if (criteria.has(SearchCriterion.status)) result += searchIt(this.status) + searchIt(this.deprecation)
     return result
   }
 
@@ -301,7 +349,7 @@ export class Parameter implements IParameter {
   }
 }
 
-export interface IMethod extends ISymbol {
+export interface IMethod extends ISchemadSymbol {
   operationId: string // alias of ISymbol.name
   httpMethod: HttpMethod
   endpoint: string
@@ -324,6 +372,7 @@ export interface IMethod extends ISymbol {
   bodyParams: IParameter[]
   pathParams: IParameter[]
   responseModes: Set<ResponseMode>
+  activityType: string
 
   getParams(location?: MethodParameterLocation): IParameter[]
 
@@ -347,6 +396,7 @@ export class Method extends SchemadSymbol implements IMethod {
   responses: IMethodResponse[]
   readonly params: IParameter[]
   readonly responseModes: Set<ResponseMode>
+  readonly activityType: string
 
   constructor(httpMethod: HttpMethod, endpoint: string, schema: OAS.OperationObject, params: IParameter[],
               responses: IMethodResponse[], body?: IParameter) {
@@ -377,6 +427,7 @@ export class Method extends SchemadSymbol implements IMethod {
     if (body) {
       this.params.push(body)
     }
+    this.activityType = schema["x-looker-activity-type"]
   }
 
   /**
@@ -389,7 +440,7 @@ export class Method extends SchemadSymbol implements IMethod {
 
       // TODO should we use one of the mime packages like https://www.npmjs.com/package/mime-types for
       // more thorough/accurate coverage?
-      const mode = responseMode(resp.mediaType)
+      const mode = resp.mode
       if (mode !== ResponseMode.unknown) modes.add(mode)
     }
 
@@ -482,7 +533,7 @@ export class Method extends SchemadSymbol implements IMethod {
   }
 
   get errorResponses() {
-    // TODO use lodash or underscore
+    // TODO use lodash or underscore?
     const result = []
     const map = new Map()
     for (const item of this.responses.filter(r => r.statusCode >= 400)) {
@@ -570,16 +621,43 @@ export class Method extends SchemadSymbol implements IMethod {
       .map(p => p.name)
   }
 
+  isMethodSearch(criteria: SearchCriteria): boolean {
+    return criteria.has(SearchCriterion.method)
+      || criteria.has(SearchCriterion.status)
+      || criteria.has(SearchCriterion.activityType)
+  }
+
   searchString(criteria: SearchCriteria): string {
+    // Are we only searching for contained items of the method or not?
+    if (!this.isMethodSearch(criteria)) return ''
     let result = super.searchString(criteria)
-    if (criteria.has(SearchCriterion.description)) result += searchIt(this.description)
+    if (criteria.has(SearchCriterion.method) && criteria.has(SearchCriterion.description)) {
+      result += searchIt(this.description)
+    }
+    if (criteria.has(SearchCriterion.activityType)) result += searchIt(this.activityType)
+    if (criteria.has(SearchCriterion.status)) {
+      result += searchIt(this.status) + searchIt(this.deprecation)
+    }
     return result
   }
 
   search(rx: RegExp, criteria: SearchCriteria): boolean {
     let result = rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
     if (!result && criteria.has(SearchCriterion.argument)) {
-      // search arguments
+      for (let a of this.params) {
+        if (a.search(rx, criteria)) {
+          result = true
+          break
+        }
+      }
+    }
+    if (!result && criteria.has(SearchCriterion.response)) {
+      for (let r of this.responses) {
+        if (r.search(rx, criteria)) {
+          result = true
+          break
+        }
+      }
     }
     return result
   }
@@ -657,9 +735,23 @@ class Type implements IType {
       .some(([_, prop]) => prop.type.name === selfType)
   }
 
+  private static isPropSearch(criteria: SearchCriteria) : boolean {
+    return criteria.has(SearchCriterion.status)
+      || criteria.has(SearchCriterion.property)
+  }
+
   search(rx: RegExp, criteria: SearchCriteria): boolean {
-    if (!criteria.has(SearchCriterion.type)) return false
-    return rx.test(this.searchString(criteria))
+    if (!criteria.has(SearchCriterion.type) && !criteria.has(SearchCriterion.status)) return false
+    let result = rx.test(this.searchString(criteria))
+    if (!result && Type.isPropSearch(criteria)) {
+      Object.entries(this.properties).forEach(([, p]) => {
+        if (p.search(rx, criteria)) {
+          result = true
+          // break TODO how do I break out of an entries forEach loop here?
+        }
+      })
+    }
+    return result
   }
 
   searchString(criteria: SearchCriteria): string {
@@ -667,6 +759,10 @@ class Type implements IType {
     if (criteria.has(SearchCriterion.name)) result += searchIt(this.name)
     if (criteria.has(SearchCriterion.description)) result += searchIt(this.description)
     if (criteria.has(SearchCriterion.title)) result += searchIt(this.title)
+    if (criteria.has(SearchCriterion.status)) {
+      result += searchIt(this.status)
+      if (this.deprecated) result += searchIt('deprecated')
+    }
     return result
   }
 }
@@ -755,6 +851,7 @@ export interface IApiModel extends IModel {
   description: string
   methods: IMethodList
   types: ITypeList
+  tags: IKeyedCollection<IMethodList>
 
   sortedTypes(): IType[]
 
@@ -772,6 +869,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   readonly methods: IMethodList = {}
   readonly types: ITypeList = {}
   readonly requestTypes: ITypeList = {}
+  readonly tags: IKeyedCollection<IMethodList> = {}
   private refs: ITypeList = {}
 
   constructor(spec: OAS.OpenAPIObject, private readonly swagger: any) {
@@ -809,25 +907,52 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return new ApiModel(spec, swagger)
   }
 
-  search(expression: string, criteria: SearchCriteria = SearchAll): ISymbolList {
-    let rx = new RegExp(expression, "mi") // case insensitive, not global so first match returns
+  private static isModelSearch(criteria: SearchCriteria) : boolean {
+    return criteria.has(SearchCriterion.method)
+      || criteria.has(SearchCriterion.argument)
+      || criteria.has(SearchCriterion.response)
+      || criteria.has(SearchCriterion.status)
+      || criteria.has(SearchCriterion.activityType)
+  }
+
+  private static isTypeSearch(criteria: SearchCriteria) : boolean {
+    return criteria.has(SearchCriterion.type)
+      || criteria.has(SearchCriterion.title)
+      || criteria.has(SearchCriterion.status)
+  }
+
+  search(expression: string, criteria: SearchCriteria = SearchAll): ISearchResult {
     let methods: IMethodList = {}
     let types: ITypeList = {}
-    if (criteria.has(SearchCriterion.method)) {
+    let result = {
+      methods,
+      types,
+      message: 'Search done'
+    }
+
+    let rx: RegExp
+    try {
+      rx = new RegExp(expression, "mi") // multi-line case insensitive, not global so first match returns
+    } catch (e) {
+      result.message = `Error: Invalid search expression ${e}`
+      return result
+    }
+
+    if (ApiModel.isModelSearch(criteria)) {
       Object.entries(this.methods).forEach(([key, method]) => {
         if (method.search(rx, criteria)) {
           methods[key] = method
         }
       })
     }
-    if (criteria.has(SearchCriterion.type)) {
+    if (ApiModel.isTypeSearch(criteria)) {
       Object.entries(this.types).forEach(([key, type]) => {
         if (type.search(rx, criteria)) {
           types[key] = type
         }
       })
     }
-    return { methods, types }
+    return result
   }
 
   // TODO replace this with get from underscore?
@@ -970,6 +1095,19 @@ export class ApiModel implements ISymbolTable, IApiModel {
     }
   }
 
+  private tagMethod(method: IMethod) {
+    for (let tag of method.schema.tags) {
+      let list: IMethodList = this.tags[tag]
+      if (!list) {
+        list = {}
+        list[method.name] = method
+        this.tags[tag] = list
+      } else {
+        list[method.name] = method
+      }
+    }
+  }
+
   private loadMethods(endpoint: string, schema: OAS.PathItemObject): Method[] {
     const methods: Method[] = []
 
@@ -978,7 +1116,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
         const responses = this.methodResponses(opSchema)
         const params = this.methodParameters(opSchema, endpoint, httpMethod)
         const body = this.requestBody(opSchema.requestBody, endpoint, httpMethod)
-        methods.push(new Method(httpMethod, endpoint, opSchema, params, responses, body))
+        const method = new Method(httpMethod, endpoint, opSchema, params, responses, body)
+        methods.push(method)
+        this.tagMethod(method)
       }
     }
 
@@ -1038,97 +1178,6 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return params
   }
 
-  /*
-  some sample request strBody patterns
-  "requestBody": {
-    "$ref": "#/components/requestBodies/Dashboard2"
-  },
-
-  "Dashboard2": {
-    "content": {
-      "application/json": {
-        "schema": {
-          "$ref": "#/components/schemas/Dashboard"
-        }
-      }
-    },
-    "description": "Dashboard"
-  },
-
-  "requestBody": {
-    "content": {
-      "application/json": {
-        "schema": {
-          "type": "array",
-          "items": {
-            "$ref": "#/components/schemas/UserAttributeGroupValue"
-          }
-        }
-      }
-    },
-    "description": "Array of group values.",
-    "required": true
-  },
-
-  "requestBody": {
-    "content": {
-      "application/json": {
-        "schema": {
-          "type": "array",
-          "items": {
-            "type": "integer",
-            "format": "int64"
-          }
-        }
-      }
-    },
-    "description": "array of roles ids for user",
-    "required": true
-  },
-
-  "requestBody": {
-    "$ref": "#/components/requestBodies/Dashboard"
-  },
-
-  "requestBody": {
-    "content": {
-      "application/json": {
-        "schema": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "description": "Data Action Request",
-    "required": true
-  },
-
-  "requestBody": {
-    "content": {
-      "application/json": {
-        "schema": {
-          "$ref": "#/components/schemas/DataActionRequest"
-        }
-      }
-    },
-    "description": "Data Action Request",
-    "required": true
-  },
-  "requestBody": {
-    "content": {
-      "text/plain": {
-        "schema": {
-          "type": "string"
-        }
-      }
-    },
-    "description": "SAML IdP metadata xml",
-    "required": true
-  },
-
-  */
   private requestBody(obj: OAS.RequestBodyObject | OAS.ReferenceObject | undefined, endpoint: string, httpMethod: HttpMethod) {
     if (!obj) return undefined
     const swaggerParams = this.swagger.paths[endpoint][httpMethod.toLowerCase()]['parameters']
