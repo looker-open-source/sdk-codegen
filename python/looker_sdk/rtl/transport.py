@@ -25,12 +25,17 @@
 import abc
 import enum
 import re
+import sys
 from typing import Callable, Dict, MutableMapping, Optional
 
 import attr
-from typing_extensions import Protocol
 
 from looker_sdk.rtl import constants
+
+if sys.version_info >= (3, 8):
+    from typing import Protocol
+else:
+    from typing_extensions import Protocol
 
 
 class HttpMethod(enum.Enum):
