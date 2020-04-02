@@ -36,16 +36,64 @@ export declare type Arg = string
 export interface IModel {
 }
 
+/**
+ * create a "searchable" string that can be concatenated to a larger search string
+ * @param {string} value to search
+ * @returns {string} value plus search delimiter
+ */
+const searchIt = (value: string) => value + '\n'
+
 export interface ISymbol {
   name: string
   type: IType
 
   asHashString(): string
+
+  searchString(criteria: SearchCriteria): string
+
+  search(rx: RegExp, criteria: SearchCriteria): boolean
+
 }
+
+export type IKeyedCollection<T> = Record<string, T>
+export type IMethodList = IKeyedCollection<IMethod>
+export type ITypeList = IKeyedCollection<IType>
+
+export interface ISymbolList {
+  methods: IMethodList
+  types: ITypeList
+}
+
+export enum SearchCriterion {
+  method,
+  type,
+  name,
+  description,
+  argument,
+  property,
+  title
+}
+
+export type SearchCriteria = Set<SearchCriterion>
+
+export const SearchAll: SearchCriteria = new Set([
+  SearchCriterion.method,
+  SearchCriterion.type,
+  SearchCriterion.name,
+  SearchCriterion.description,
+  SearchCriterion.argument,
+  SearchCriterion.property,
+])
+
+
+export interface ISymbolTable extends ISymbolList {
+  resolveType(schema: OAS.SchemaObject): IType
+}
+
 
 export interface IType {
   name: string
-  properties: Record<string, IProperty>
+  properties: IKeyedCollection<IProperty>
   writeable: IProperty[]
   status: string
   elementType?: IType
@@ -59,7 +107,13 @@ export interface IType {
   schema: OAS.SchemaObject
 
   asHashString(): string
+
   isRecursive(): boolean
+
+  searchString(criteria: SearchCriteria): string
+
+  search(rx: RegExp, criteria: SearchCriteria): boolean
+
 }
 
 export declare type MethodParameterLocation = 'path' | 'body' | 'query' | 'header' | 'cookie'
@@ -75,6 +129,7 @@ export interface IParameter extends ISymbol {
   asHashString(): string
 
   doEncode() : boolean
+
 }
 
 export interface IMethodResponse {
@@ -102,13 +157,11 @@ export interface IProperty extends ISymbol {
   readOnly: boolean
   writeOnly: boolean
   deprecated: boolean
-}
 
-export interface ISymbolTable {
-  methods: Record<string, IMethod>
-  types: Record<string, IType>
+  searchString(include: SearchCriteria): string
 
-  resolveType(schema: OAS.SchemaObject): IType
+  search(rx: RegExp, include: SearchCriteria): boolean
+
 }
 
 class Symbol implements ISymbol {
@@ -122,6 +175,16 @@ class Symbol implements ISymbol {
 
   asHashString() {
     return `${this.name}:${this.type.name}`
+  }
+
+  search(rx: RegExp, criteria: SearchCriteria): boolean {
+    return rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
+  }
+
+  searchString(criteria: Set<SearchCriterion>): string {
+    let result = ''
+    if (criteria.has(SearchCriterion.name)) result += searchIt(this.name)
+    return result
   }
 }
 
@@ -170,6 +233,16 @@ class Property extends SchemadSymbol implements IProperty {
     + this.required ? ' req' : ''
     + this.writeOnly ? ' wo' : ''
   }
+
+  searchString(criteria: SearchCriteria): string {
+    let result = super.searchString(criteria)
+    if (criteria.has(SearchCriterion.description)) result += searchIt(this.description)
+    return result
+  }
+
+  search(rx: RegExp, criteria: SearchCriteria): boolean {
+    return rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
+  }
 }
 
 export class Parameter implements IParameter {
@@ -215,6 +288,17 @@ export class Parameter implements IParameter {
   doEncode() {
     return this.type.name === 'string' || this.type.name === 'datetime' || this.type.name === 'date'
   }
+
+  searchString(criteria: Set<SearchCriterion>): string {
+    let result = ''
+    if (criteria.has(SearchCriterion.name)) result += searchIt(this.name)
+    if (criteria.has(SearchCriterion.description)) result += searchIt(this.description)
+    return result
+  }
+
+  search(rx: RegExp, criteria: SearchCriteria): boolean {
+    return rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
+  }
 }
 
 export interface IMethod extends ISymbol {
@@ -252,6 +336,8 @@ export interface IMethod extends ISymbol {
   responseIsString() : boolean
 
   responseIsBoth() : boolean
+
+  search(rx: RegExp, criteria: SearchCriteria): boolean
 }
 
 export class Method extends SchemadSymbol implements IMethod {
@@ -484,12 +570,26 @@ export class Method extends SchemadSymbol implements IMethod {
       .map(p => p.name)
   }
 
+  searchString(criteria: SearchCriteria): string {
+    let result = super.searchString(criteria)
+    if (criteria.has(SearchCriterion.description)) result += searchIt(this.description)
+    return result
+  }
+
+  search(rx: RegExp, criteria: SearchCriteria): boolean {
+    let result = rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
+    if (!result && criteria.has(SearchCriterion.argument)) {
+      // search arguments
+    }
+    return result
+  }
+
 }
 
 class Type implements IType {
   readonly name: string
   readonly schema: OAS.SchemaObject
-  readonly properties: Record<string, IProperty> = {}
+  readonly properties: IKeyedCollection<IProperty> = {}
   refCount = 0
 
   constructor(schema: OAS.SchemaObject, name: string) {
@@ -538,7 +638,7 @@ class Type implements IType {
   asHashString() {
     let result = `${this.name}:`
     Object.entries(this.properties)
-    // put properties in alphabetical order first
+      // put properties in alphabetical order first
       .sort(([a, _], [b, __]) => a.localeCompare(b))
       .forEach(([_, prop]) => {
         result += prop.asHashString() + ':'
@@ -555,6 +655,19 @@ class Type implements IType {
     // test for directly recursive type references
     return Object.entries(this.properties)
       .some(([_, prop]) => prop.type.name === selfType)
+  }
+
+  search(rx: RegExp, criteria: SearchCriteria): boolean {
+    if (!criteria.has(SearchCriterion.type)) return false
+    return rx.test(this.searchString(criteria))
+  }
+
+  searchString(criteria: SearchCriteria): string {
+    let result = ''
+    if (criteria.has(SearchCriterion.name)) result += searchIt(this.name)
+    if (criteria.has(SearchCriterion.description)) result += searchIt(this.description)
+    if (criteria.has(SearchCriterion.title)) result += searchIt(this.title)
+    return result
   }
 }
 
@@ -640,8 +753,8 @@ export class WriteType extends Type {
 export interface IApiModel extends IModel {
   version: string
   description: string
-  methods: Record<string, IMethod>
-  types: Record<string, IType>
+  methods: IMethodList
+  types: ITypeList
 
   sortedTypes(): IType[]
 
@@ -650,14 +763,16 @@ export interface IApiModel extends IModel {
   getRequestType(method: IMethod): IType | undefined
 
   getWriteableType(type: IType): IType | undefined
+
+  search(expression: string, criteria: SearchCriteria): ISymbolList
 }
 
 export class ApiModel implements ISymbolTable, IApiModel {
   readonly schema: OAS.OpenAPIObject | undefined
-  readonly methods: Record<string, IMethod> = {}
-  readonly types: Record<string, IType> = {}
-  readonly requestTypes: Record<string, IType> = {}
-  private refs: Record<string, IType> = {}
+  readonly methods: IMethodList = {}
+  readonly types: ITypeList = {}
+  readonly requestTypes: ITypeList = {}
+  private refs: ITypeList = {}
 
   constructor(spec: OAS.OpenAPIObject, private readonly swagger: any) {
     ['string', 'integer', 'int64', 'boolean', 'object',
@@ -692,6 +807,27 @@ export class ApiModel implements ISymbolTable, IApiModel {
   static fromJson(json: any, swagger: any): ApiModel {
     const spec = new OAS.OpenApiBuilder(json).getSpec()
     return new ApiModel(spec, swagger)
+  }
+
+  search(expression: string, criteria: SearchCriteria = SearchAll): ISymbolList {
+    let rx = new RegExp(expression, "mi") // case insensitive, not global so first match returns
+    let methods: IMethodList = {}
+    let types: ITypeList = {}
+    if (criteria.has(SearchCriterion.method)) {
+      Object.entries(this.methods).forEach(([key, method]) => {
+        if (method.search(rx, criteria)) {
+          methods[key] = method
+        }
+      })
+    }
+    if (criteria.has(SearchCriterion.type)) {
+      Object.entries(this.types).forEach(([key, type]) => {
+        if (type.search(rx, criteria)) {
+          types[key] = type
+        }
+      })
+    }
+    return { methods, types }
   }
 
   // TODO replace this with get from underscore?

@@ -1,4 +1,5 @@
 import * as Models from './sdkModels'
+import { SearchCriterion } from './sdkModels'
 import { TestConfig } from '../typescript/looker/rtl/nodeSettings.spec'
 
 const config = TestConfig()
@@ -119,4 +120,39 @@ describe('sdkModels', () => {
 
   })
 
+  describe('searching', () => {
+
+    const modelAndTypeNames = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+    const titleOnly  = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.title])
+
+    describe('model search', () => {
+      it('target not found', () => {
+        const actual = apiTestModel.search('you will not find me anywhere in there, nuh uh')
+        expect(actual).toBeDefined()
+        expect(Object.entries(actual.methods).length).toEqual(0)
+        expect(Object.entries(actual.types).length).toEqual(0)
+      })
+
+      it('search anywhere', () => {
+        const actual = apiTestModel.search('dashboard', modelAndTypeNames)
+        expect(Object.entries(actual.methods).length).toEqual(34)
+        expect(Object.entries(actual.types).length).toEqual(14)
+      })
+
+      it('search for word', () => {
+        let actual = apiTestModel.search('\\bdashboard\\b', modelAndTypeNames)
+        expect(Object.entries(actual.methods).length).toEqual(7)
+        expect(Object.entries(actual.types).length).toEqual(1)
+        actual = apiTestModel.search('\\bdashboardbase\\b', modelAndTypeNames)
+        expect(Object.entries(actual.methods).length).toEqual(1)
+        expect(Object.entries(actual.types).length).toEqual(1)
+      })
+
+      it('title search', () => {
+        let actual = apiTestModel.search('\\bdashboard\\b', titleOnly)
+        expect(Object.entries(actual.methods).length).toEqual(0)
+        expect(Object.entries(actual.types).length).toEqual(1)
+      })
+    })
+  })
 })
