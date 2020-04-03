@@ -32,6 +32,10 @@ export const strRequest = 'Request'
 export const strWrite = 'Write'
 export declare type Arg = string
 
+// handy refs
+// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schema-object
+// https://swagger.io/docs/specification/data-models/data-types/
+
 /**
  * convert kebab-case or snake_case to camelCase
  * @param value string value to convert to camelCase

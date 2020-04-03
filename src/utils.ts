@@ -54,30 +54,29 @@ const FgYellow = '\x1b[33m'
 // const BgWhite = "\x1b[47m"
 
 // Abstraction of log so it can be skipped when quiet mode is enabled
-export const log = (message?: any) => {
+export const logger = (message?: any) => {
   console.log(message)
   return message
 }
 
 const reset = (message: any) => `${message}${Reset}`
 
-export const warn = (message: any) => log(reset(`${FgYellow}${message}`))
+export const warn = (message: any) => logger(reset(`${FgYellow}${message}`))
 
 export const danger = (message: any) => {
-  return log(reset(`${FgRed}${message}`))
+  return logger(reset(`${FgRed}${message}`))
 }
 
 export const success = (message: any) => {
-  return log(reset(`${FgGreen}${message}`))
+  return logger(reset(`${FgGreen}${message}`))
 }
 
 export const debug = (message: any, value?: any) => {
   if (value !== undefined) console.log(message, '=>', JSON.stringify(value, null, 2))
-  else console.log(message)
-  return ''
+  else return logger(message)
 }
 
-export const dump = (value: any) => console.log(JSON.stringify(value, null, 2))
+export const dump = (value: any) => logger(JSON.stringify(value, null, 2))
 
 export const quit = (err?: Error | string) => {
   if (err) {
@@ -140,40 +139,6 @@ export interface ITypeMapItem {
 export interface ITypeMap {
   [typeformat: string]: ITypeMapItem
 }
-
-// TODO remove when we're sure we don't need these
-// export interface ICodePattern {
-//   commentString: string,
-//   paramIndent: string,
-//   paramSeparator: string,
-//   paramDeclaration: string,
-//   paramEmptyList: string,
-//   paramOpenList: string,
-//   paramCloseList: string,
-//   argEmptyList: string,
-//   argSeparator: string,
-//   argOpenList: string,
-//   argCloseList: string,
-//   noBody: string,
-//   typeMap: ITypeMap[]
-// }
-//
-// // handy refs
-// // https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schema-object
-// // https://swagger.io/docs/specification/data-models/data-types/
-// export const typeMap = (type?: string, format?: string) => {
-//   if (!type) {
-//     console.error({type, format})
-//     return '' // fail('typeMap', 'Schema type was not defined')
-//   }
-//   const typeFormat: keyof ITypeMap = type + (format ? `.${format}` : '')
-//   // @ts-ignore
-//   const result = code.typeMap[typeFormat]
-//   if (!result) {
-//     return {type: type}
-//   }
-//   return result
-// }
 
 /**
  * Abstraction of reading a file so all refs go to one place

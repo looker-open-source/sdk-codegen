@@ -27,7 +27,7 @@
 import * as fs from 'fs'
 import * as Models from './sdkModels'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { danger, log, quit, readFileSync, success } from './utils'
+import { danger, logger, quit, readFileSync, success } from './utils'
 import { fetchLookerVersion, openApiFileName, specFileName } from './fetchSpec'
 import { MethodGenerator, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
@@ -90,7 +90,7 @@ export const specFromFile = (specFile: string, swaggerFile: string): Models.ApiM
             danger(`skipping API ${api} for ${language} because it doesn't support multiple APIs`)
             continue
           }
-          log(`generating ${language} from ${props.base_url} ${api}...`)
+          logger(`generating ${language} from ${props.base_url} ${api}...`)
 
           gen.sdkPathPrep()
           // Generate standard method declarations
