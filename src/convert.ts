@@ -26,7 +26,7 @@
 
 import { ISDKConfigProps } from './sdkConfig'
 import { openApiFileName, logFetch } from './fetchSpec'
-import { fail, isFileSync, logger, quit, readFileSync, run } from './utils'
+import { fail, isFileSync, log, quit, readFileSync, run } from './utils'
 import * as fs from 'fs'
 
 const { Spectral } = require('@stoplight/spectral')
@@ -80,7 +80,7 @@ export const swapNullableInFile = (openApiFile: string) => {
   if (!isFileSync(openApiFile)) {
     return quit(`${openApiFile} was not found`)
   }
-  logger(`replacing "x-looker-nullable" with "nullable" in ${openApiFile} ...`)
+  log(`replacing "x-looker-nullable" with "nullable" in ${openApiFile} ...`)
   const contents = swapXLookerNullable(readFileSync(openApiFile))
   fs.writeFileSync(openApiFile, contents)
   return openApiFile
@@ -94,7 +94,7 @@ export const swapNullableInFile = (openApiFile: string) => {
  */
 const convertSpec = (fileName: string, openApiFile: string) => {
   if (isFileSync(openApiFile)) {
-    logger(`${openApiFile} already exists.`)
+    log(`${openApiFile} already exists.`)
     return openApiFile
   }
   try {

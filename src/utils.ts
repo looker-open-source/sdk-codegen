@@ -54,29 +54,29 @@ const FgYellow = '\x1b[33m'
 // const BgWhite = "\x1b[47m"
 
 // Abstraction of log so it can be skipped when quiet mode is enabled
-export const logger = (message?: any) => {
+export const log = (message?: any) => {
   console.log(message)
   return message
 }
 
 const reset = (message: any) => `${message}${Reset}`
 
-export const warn = (message: any) => logger(reset(`${FgYellow}${message}`))
+export const warn = (message: any) => log(reset(`${FgYellow}${message}`))
 
 export const danger = (message: any) => {
-  return logger(reset(`${FgRed}${message}`))
+  return log(reset(`${FgRed}${message}`))
 }
 
 export const success = (message: any) => {
-  return logger(reset(`${FgGreen}${message}`))
+  return log(reset(`${FgGreen}${message}`))
 }
 
 export const debug = (message: any, value?: any) => {
   if (value !== undefined) console.log(message, '=>', JSON.stringify(value, null, 2))
-  else return logger(message)
+  else return log(message)
 }
 
-export const dump = (value: any) => logger(JSON.stringify(value, null, 2))
+export const dump = (value: any) => log(JSON.stringify(value, null, 2))
 
 export const quit = (err?: Error | string) => {
   if (err) {

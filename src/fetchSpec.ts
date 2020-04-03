@@ -24,7 +24,7 @@
 
 import { ISDKConfigProps } from './sdkConfig'
 import * as fs from 'fs'
-import { fail, quit, logger, isFileSync, warn } from './utils'
+import { fail, quit, log, isFileSync, warn } from './utils'
 import { IVersionInfo } from './codeGen'
 import { NodeTransport } from '../typescript/looker/rtl/nodeTransport'
 import {
@@ -99,7 +99,7 @@ export const login = async (props: ISDKConfigProps) => {
     if (accessToken) {
       return accessToken
     } else {
-      logger(`Server Response: ${JSON.stringify(response)}`)
+      log(`Server Response: ${JSON.stringify(response)}`)
       throw new Error('Access token could not be retrieved.')
     }
   } catch (err) {

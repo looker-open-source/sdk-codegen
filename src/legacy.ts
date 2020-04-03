@@ -26,7 +26,7 @@
 
 import { IGeneratorSpec as LanguageSpec, legacyLanguages } from './languages'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { logger, quit, run } from './utils'
+import { log, quit, run } from './utils'
 import { logConvert } from './convert'
 
 const defaultApiVersion = (props: ISDKConfigProps) => {
@@ -60,7 +60,7 @@ const generate = async (
 
 // generate all languages for the specified configuration
 const runConfig = async (name: string, props: ISDKConfigProps) => {
-  logger(`processing ${name} configuration ...`)
+  log(`processing ${name} configuration ...`)
   const apiVersion = defaultApiVersion(props)
   props.api_version = apiVersion
   const openApiFile = await logConvert(name, props)
@@ -69,7 +69,7 @@ const runConfig = async (name: string, props: ISDKConfigProps) => {
   let results: any[] = []
   for (const language of languages) {
     const tag = `${name} API ${language.language} version ${apiVersion}`
-    logger(`generating ${tag} ...`)
+    log(`generating ${tag} ...`)
     results.push(await generate(openApiFile, language, props))
   }
 

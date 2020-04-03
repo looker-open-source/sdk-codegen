@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { danger, logger, quit, success } from './utils'
+import { danger, log, quit, success } from './utils'
 import { fetchLookerVersion, openApiFileName, specFileName } from './fetchSpec'
 import { MethodGenerator, specFromFile, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
@@ -82,7 +82,7 @@ const apiVersions = (props: any) => {
             danger(`skipping API ${api} for ${language} because it doesn't support multiple APIs`)
             continue
           }
-          logger(`generating ${language} from ${props.base_url} ${api}...`)
+          log(`generating ${language} from ${props.base_url} ${api}...`)
 
           gen.sdkPathPrep()
           // Generate standard method declarations
