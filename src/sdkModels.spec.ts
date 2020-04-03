@@ -1,6 +1,6 @@
 import { SearchCriterion } from './sdkModels'
 import { TestConfig } from '../typescript/looker/rtl/nodeSettings.spec'
-import { specFromFile } from './sdkGen'
+import { specFromFile } from './sdkGenerator'
 
 const config = TestConfig()
 export const apiTestModel = specFromFile(

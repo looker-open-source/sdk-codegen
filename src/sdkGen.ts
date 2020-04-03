@@ -25,11 +25,10 @@
  */
 
 import * as fs from 'fs'
-import * as Models from './sdkModels'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { danger, logger, quit, readFileSync, success } from './utils'
+import { danger, logger, quit, success } from './utils'
 import { fetchLookerVersion, openApiFileName, specFileName } from './fetchSpec'
-import { MethodGenerator, StreamGenerator, TypeGenerator } from './sdkGenerator'
+import { MethodGenerator, specFromFile, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
 import { logConvert } from './convert'
 import { IVersionInfo } from './codeGen'
@@ -38,13 +37,6 @@ const apiVersions = (props: any) => {
   const versions = props.api_versions ?? '3.1,4.0'
   return versions.split(',')
 }
-
-export const specFromFile = (specFile: string, swaggerFile: string): Models.ApiModel => {
-  const specContent = readFileSync(specFile)
-  const swaggerContent = readFileSync(swaggerFile)
-  return Models.ApiModel.fromString(specContent, swaggerContent)
-}
-
 
 // tslint:disable-next-line: no-floating-promises
 ;(async () => {
@@ -77,7 +69,7 @@ export const specFromFile = (specFile: string, swaggerFile: string): Models.ApiM
             lookerVersion,
             apiVersion: api
           }
-          await logConvert(name, p)
+          void await logConvert(name, p)
           const oasFile = openApiFileName(name, p)
           const swaggerFile = specFileName(name, p)
           const apiModel = specFromFile(oasFile, swaggerFile)
