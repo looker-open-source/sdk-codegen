@@ -206,15 +206,3 @@ export const isFileSync = (filePath: string) => {
     }
   }
 }
-
-/**
- * convert kebab-case or snake_case to camelCase
- * @param value string value to convert to camelCase
- */
-export const camelCase = (value: string) => {
-  return value.replace(/([-_][a-z])/ig, ($1) => {
-    return $1.toUpperCase()
-      .replace('-', '')
-      .replace('_', '')
-  })
-}

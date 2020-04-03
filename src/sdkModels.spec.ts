@@ -1,9 +1,9 @@
-import * as Models from './sdkModels'
 import { SearchCriterion } from './sdkModels'
 import { TestConfig } from '../typescript/looker/rtl/nodeSettings.spec'
+import { specFromFile } from './sdkGen'
 
 const config = TestConfig()
-export const apiTestModel = Models.ApiModel.fromFile(
+export const apiTestModel = specFromFile(
   `${config.testPath}openApiRef.json`,
   `${config.testPath}swaggerRef.json`
 )

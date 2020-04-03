@@ -24,7 +24,6 @@
 
 import * as OAS from 'openapi3-ts'
 import md5 from 'blueimp-md5'
-import { camelCase, readFileSync } from './utils'
 import { HttpMethod, ResponseMode, responseMode, StatusCode } from '../typescript/looker/rtl/transport'
 import { IVersionInfo } from './codeGen'
 
@@ -32,6 +31,18 @@ export const strBody = 'body'
 export const strRequest = 'Request'
 export const strWrite = 'Write'
 export declare type Arg = string
+
+/**
+ * convert kebab-case or snake_case to camelCase
+ * @param value string value to convert to camelCase
+ */
+export const camelCase = (value: string) => {
+  return value.replace(/([-_][a-z])/ig, ($1) => {
+    return $1.toUpperCase()
+      .replace('-', '')
+      .replace('_', '')
+  })
+}
 
 export interface IModel {
 }
@@ -888,12 +899,6 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   get description(): string {
     return this.schema?.decription?.trim() || ''
-  }
-
-  static fromFile(specFile: string, swaggerFile: string): ApiModel {
-    const specContent = readFileSync(specFile)
-    const swaggerContent = readFileSync(swaggerFile)
-    return this.fromString(specContent, swaggerContent)
   }
 
   static fromString(specContent: string, swaggerContent: string): ApiModel {

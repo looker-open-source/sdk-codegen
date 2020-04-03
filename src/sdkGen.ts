@@ -27,7 +27,7 @@
 import * as fs from 'fs'
 import * as Models from './sdkModels'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { danger, log, quit, success } from './utils'
+import { danger, log, quit, readFileSync, success } from './utils'
 import { fetchLookerVersion, openApiFileName, specFileName } from './fetchSpec'
 import { MethodGenerator, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
@@ -38,6 +38,13 @@ const apiVersions = (props: any) => {
   const versions = props.api_versions ?? '3.1,4.0'
   return versions.split(',')
 }
+
+export const specFromFile = (specFile: string, swaggerFile: string): Models.ApiModel => {
+  const specContent = readFileSync(specFile)
+  const swaggerContent = readFileSync(swaggerFile)
+  return Models.ApiModel.fromString(specContent, swaggerContent)
+}
+
 
 // tslint:disable-next-line: no-floating-promises
 ;(async () => {
@@ -73,7 +80,7 @@ const apiVersions = (props: any) => {
           await logConvert(name, p)
           const oasFile = openApiFileName(name, p)
           const swaggerFile = specFileName(name, p)
-          const apiModel = Models.ApiModel.fromFile(oasFile, swaggerFile)
+          const apiModel = specFromFile(oasFile, swaggerFile)
           const gen = getFormatter(language, apiModel, versions)
           if (!gen) {
             danger(`${language} does not have a code generator defined`)
