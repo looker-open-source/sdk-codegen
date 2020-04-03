@@ -73,6 +73,7 @@ export interface ISymbol {
 export type IKeyedCollection<T> = Record<string, T>
 export type IMethodList = IKeyedCollection<IMethod>
 export type ITypeList = IKeyedCollection<IType>
+export type ITagList = IKeyedCollection<IMethodList>
 
 export interface ISymbolList {
   methods: IMethodList
@@ -866,7 +867,7 @@ export interface IApiModel extends IModel {
   description: string
   methods: IMethodList
   types: ITypeList
-  tags: IKeyedCollection<IMethodList>
+  tags: ITagList
 
   sortedTypes(): IType[]
 
@@ -884,7 +885,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   readonly methods: IMethodList = {}
   readonly types: ITypeList = {}
   readonly requestTypes: ITypeList = {}
-  readonly tags: IKeyedCollection<IMethodList> = {}
+  readonly tags: ITagList = {}
   private refs: ITypeList = {}
 
   constructor(spec: OAS.OpenAPIObject, private readonly swagger: any) {
