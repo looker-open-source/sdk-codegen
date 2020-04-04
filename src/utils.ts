@@ -73,11 +73,10 @@ export const success = (message: any) => {
 
 export const debug = (message: any, value?: any) => {
   if (value !== undefined) console.log(message, '=>', JSON.stringify(value, null, 2))
-  else console.log(message)
-  return ''
+  else return log(message)
 }
 
-export const dump = (value: any) => console.log(JSON.stringify(value, null, 2))
+export const dump = (value: any) => log(JSON.stringify(value, null, 2))
 
 export const quit = (err?: Error | string) => {
   if (err) {
@@ -141,40 +140,6 @@ export interface ITypeMap {
   [typeformat: string]: ITypeMapItem
 }
 
-// TODO remove when we're sure we don't need these
-// export interface ICodePattern {
-//   commentString: string,
-//   paramIndent: string,
-//   paramSeparator: string,
-//   paramDeclaration: string,
-//   paramEmptyList: string,
-//   paramOpenList: string,
-//   paramCloseList: string,
-//   argEmptyList: string,
-//   argSeparator: string,
-//   argOpenList: string,
-//   argCloseList: string,
-//   noBody: string,
-//   typeMap: ITypeMap[]
-// }
-//
-// // handy refs
-// // https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schema-object
-// // https://swagger.io/docs/specification/data-models/data-types/
-// export const typeMap = (type?: string, format?: string) => {
-//   if (!type) {
-//     console.error({type, format})
-//     return '' // fail('typeMap', 'Schema type was not defined')
-//   }
-//   const typeFormat: keyof ITypeMap = type + (format ? `.${format}` : '')
-//   // @ts-ignore
-//   const result = code.typeMap[typeFormat]
-//   if (!result) {
-//     return {type: type}
-//   }
-//   return result
-// }
-
 /**
  * Abstraction of reading a file so all refs go to one place
  * @param filePath name of file
@@ -205,16 +170,4 @@ export const isFileSync = (filePath: string) => {
       throw e
     }
   }
-}
-
-/**
- * convert kebab-case or snake_case to camelCase
- * @param value string value to convert to camelCase
- */
-export const camelCase = (value: string) => {
-  return value.replace(/([-_][a-z])/ig, ($1) => {
-    return $1.toUpperCase()
-      .replace('-', '')
-      .replace('_', '')
-  })
 }

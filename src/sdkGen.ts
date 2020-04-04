@@ -25,11 +25,10 @@
  */
 
 import * as fs from 'fs'
-import * as Models from './sdkModels'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { danger, log, quit, success } from './utils'
 import { fetchLookerVersion, openApiFileName, specFileName } from './fetchSpec'
-import { MethodGenerator, StreamGenerator, TypeGenerator } from './sdkGenerator'
+import { MethodGenerator, specFromFile, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
 import { logConvert } from './convert'
 import { IVersionInfo } from './codeGen'
@@ -70,10 +69,10 @@ const apiVersions = (props: any) => {
             lookerVersion,
             apiVersion: api
           }
-          await logConvert(name, p)
+          void await logConvert(name, p)
           const oasFile = openApiFileName(name, p)
           const swaggerFile = specFileName(name, p)
-          const apiModel = Models.ApiModel.fromFile(oasFile, swaggerFile)
+          const apiModel = specFromFile(oasFile, swaggerFile)
           const gen = getFormatter(language, apiModel, versions)
           if (!gen) {
             danger(`${language} does not have a code generator defined`)
