@@ -74,6 +74,7 @@ export type IKeyedCollection<T> = Record<string, T>
 export type IMethodList = IKeyedCollection<IMethod>
 export type ITypeList = IKeyedCollection<IType>
 export type ITagList = IKeyedCollection<IMethodList>
+export type IPropertyList = IKeyedCollection<IProperty>
 
 export interface ISymbolList {
   methods: IMethodList
@@ -118,7 +119,7 @@ export interface ISymbolTable extends ISymbolList {
 
 export interface IType {
   name: string
-  properties: IKeyedCollection<IProperty>
+  properties: IPropertyList
   writeable: IProperty[]
   status: string
   elementType?: IType
@@ -683,7 +684,7 @@ export class Method extends SchemadSymbol implements IMethod {
 class Type implements IType {
   readonly name: string
   readonly schema: OAS.SchemaObject
-  readonly properties: IKeyedCollection<IProperty> = {}
+  readonly properties: IPropertyList = {}
   refCount = 0
 
   constructor(schema: OAS.SchemaObject, name: string) {
