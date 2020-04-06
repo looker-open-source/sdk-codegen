@@ -1,4 +1,4 @@
-import { SearchCriterion } from './sdkModels'
+import { IMethod, ITagList, SearchCriterion } from './sdkModels'
 import { TestConfig } from '../typescript/looker/rtl/nodeSettings.spec'
 import { specFromFile } from './sdkGenerator'
 
@@ -120,6 +120,16 @@ describe('sdkModels', () => {
 
   })
 
+  const allMethods = (tags: ITagList) : Array<IMethod> => {
+    let result: Array<IMethod> = []
+    Object.entries(tags).forEach(([key, methods]) => {
+      Object.entries(methods).forEach(([name, method]) => {
+        result.push(method)
+      })
+    })
+    return result
+  }
+
   describe('searching', () => {
 
     const modelAndTypeNames = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
@@ -133,58 +143,62 @@ describe('sdkModels', () => {
       it('target not found', () => {
         const actual = apiTestModel.search('you will not find me anywhere in there, nuh uh')
         expect(actual).toBeDefined()
-        expect(Object.entries(actual.methods).length).toEqual(0)
+        const methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(0)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
 
       it('search anywhere', () => {
         const actual = apiTestModel.search('dashboard', modelAndTypeNames)
-        expect(Object.entries(actual.methods).length).toEqual(34)
+        const methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(34)
         expect(Object.entries(actual.types).length).toEqual(15)
       })
 
       it('search for word', () => {
         let actual = apiTestModel.search('\\bdashboard\\b', modelAndTypeNames)
-        expect(Object.entries(actual.methods).length).toEqual(7)
+        let methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(7)
         expect(Object.entries(actual.types).length).toEqual(1)
         actual = apiTestModel.search('\\bdashboardbase\\b', modelAndTypeNames)
-        expect(Object.entries(actual.methods).length).toEqual(1)
+        methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(1)
         expect(Object.entries(actual.types).length).toEqual(1)
       })
 
       it('title search', () => {
         let actual = apiTestModel.search('\\bdashboard\\b', titleOnly)
-        expect(Object.entries(actual.methods).length).toEqual(0)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(0)
         expect(Object.entries(actual.types).length).toEqual(1)
       })
 
       it('just model names', () => {
         let actual = apiTestModel.search('\\bdashboard\\b', modelNames)
-        expect(Object.entries(actual.methods).length).toEqual(1)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(1)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
 
       it('deprecated items', () => {
         let actual = apiTestModel.search('deprecated', statusCriteria)
-        expect(Object.entries(actual.methods).length).toEqual(6)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(6)
         expect(Object.entries(actual.types).length).toEqual(4)
       })
 
       it('beta items', () => {
         let actual = apiTestModel.search('beta', statusCriteria)
-        expect(Object.entries(actual.methods).length).toEqual(204)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(204)
         expect(Object.entries(actual.types).length).toEqual(99)
       })
 
       it('stable items', () => {
         let actual = apiTestModel.search('stable', statusCriteria)
-        expect(Object.entries(actual.methods).length).toEqual(153)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(153)
         expect(Object.entries(actual.types).length).toEqual(88)
       })
 
       it('db queries', () => {
         let actual = apiTestModel.search('db_query', activityCriteria)
-        expect(Object.entries(actual.methods).length).toEqual(35)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(35)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
     })
@@ -192,13 +206,13 @@ describe('sdkModels', () => {
     describe('response search', () => {
       it('find binary responses', () => {
         let actual = apiTestModel.search('binary', responseCriteria)
-        expect(Object.entries(actual.methods).length).toEqual(6)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(6)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
 
       it('find rate limited responses', () => {
         let actual = apiTestModel.search('429', responseCriteria)
-        expect(Object.entries(actual.methods).length).toEqual(7)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(7)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
     })
