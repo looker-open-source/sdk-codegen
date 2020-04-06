@@ -25,15 +25,19 @@ with the settings as attributes
 """
 import configparser as cp
 import os
+import sys
 from typing import cast, Dict, Optional
 
 import attr
 import cattr
-from typing_extensions import Protocol
 
-from looker_sdk import error
 from looker_sdk.rtl import transport
 from looker_sdk.rtl import constants
+
+if sys.version_info >= (3, 8):
+    from typing import Protocol
+else:
+    from typing_extensions import Protocol
 
 
 def _convert_bool(val: str, _: bool) -> bool:
