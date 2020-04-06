@@ -1,4 +1,4 @@
-import { IMethod, ITagList, SearchCriterion } from './sdkModels'
+import { CriteriaToSet, IMethod, ITagList, SearchCriterion, SearchCriterionName, SetToCriteria } from './sdkModels'
 import { TestConfig } from '../typescript/looker/rtl/nodeSettings.spec'
 import { specFromFile } from './sdkGenerator'
 
@@ -217,6 +217,45 @@ describe('sdkModels', () => {
       })
     })
 
+    describe('criteria transformations', () => {
+      it('criterion name array to criteria', () => {
+        let expected = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        // this declaration pattern assures correct enum names
+        let names: SearchCriterionName[] = ['method', 'type', 'name']
+        let actual = CriteriaToSet(names)
+        expect(actual).toEqual(expected)
+      })
+
+      it('criteria to criterion name array', () => {
+        let criteria = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        let expected: SearchCriterionName[] = ['method', 'type', 'name']
+        let actual = SetToCriteria(criteria)
+        expect(actual).toEqual(expected)
+      })
+
+      it('strings to criteria', () => {
+        let expected = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        let values = ['method', 'type', 'name']
+        let names = values as SearchCriterionName[]
+        let actual = CriteriaToSet(names)
+        expect(actual).toEqual(expected)
+      })
+
+      it('criteria is case insensitive', () => {
+        let expected = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        let values = ['Method', 'Type', 'name']
+        let names = values as SearchCriterionName[]
+        let actual = CriteriaToSet(names)
+        expect(actual).toEqual(expected)
+      })
+
+      it('criteria to strings', () => {
+        let criteria = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        let expected = ['method', 'type', 'name']
+        let actual = SetToCriteria(criteria)
+        expect(actual).toEqual(expected)
+      })
+    })
   })
 
   describe('tagging', () => {

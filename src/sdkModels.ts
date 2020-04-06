@@ -94,6 +94,8 @@ export enum SearchCriterion {
   response,
 }
 
+export type SearchCriterionName = keyof typeof SearchCriterion
+
 export type SearchCriteria = Set<SearchCriterion>
 
 export const SearchAll: SearchCriteria = new Set([
@@ -108,6 +110,18 @@ export const SearchAll: SearchCriteria = new Set([
   SearchCriterion.status,
   SearchCriterion.response,
 ])
+
+export const CriteriaToSet = (criteria: string[]): SearchCriteria => {
+  let result: SearchCriteria = new Set()
+  criteria.forEach(name => result.add(SearchCriterion[name.toLowerCase() as SearchCriterionName]))
+  return result
+}
+
+export const SetToCriteria = (criteria: SearchCriteria): string[] => {
+  let result: string[] = []
+  criteria.forEach(value => result.push(SearchCriterion[value]))
+  return result
+}
 
 export interface ISearchResult {
   tags: ITagList
