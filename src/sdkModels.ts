@@ -94,7 +94,7 @@ export enum SearchCriterion {
   response,
 }
 
-export type SearchCriterionName = keyof typeof SearchCriterion
+export type SearchCriterionTerm = keyof typeof SearchCriterion
 
 export type SearchCriteria = Set<SearchCriterion>
 
@@ -113,7 +113,7 @@ export const SearchAll: SearchCriteria = new Set([
 
 export const CriteriaToSet = (criteria: string[]): SearchCriteria => {
   let result: SearchCriteria = new Set()
-  criteria.forEach(name => result.add(SearchCriterion[name.toLowerCase() as SearchCriterionName]))
+  criteria.forEach(name => result.add(SearchCriterion[name.toLowerCase() as SearchCriterionTerm]))
   return result
 }
 
