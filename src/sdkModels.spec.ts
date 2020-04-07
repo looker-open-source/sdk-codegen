@@ -120,10 +120,10 @@ describe('sdkModels', () => {
 
   })
 
-  const allMethods = (tags: ITagList) : Array<IMethod> => {
+  const allMethods = (tags: ITagList): Array<IMethod> => {
     let result: Array<IMethod> = []
-    Object.entries(tags).forEach(([key, methods]) => {
-      Object.entries(methods).forEach(([name, method]) => {
+    Object.entries(tags).forEach(([, methods]) => {
+      Object.entries(methods).forEach(([, method]) => {
         result.push(method)
       })
     })
@@ -152,7 +152,7 @@ describe('sdkModels', () => {
         const actual = apiTestModel.search('dashboard', modelAndTypeNames)
         const methods = allMethods(actual.tags)
         expect(Object.entries(methods).length).toEqual(34)
-        expect(Object.entries(actual.types).length).toEqual(15)
+        expect(Object.entries(actual.types).length).toEqual(14)
       })
 
       it('search for word', () => {
