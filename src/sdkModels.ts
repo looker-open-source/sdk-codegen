@@ -1265,9 +1265,16 @@ export interface IMappedType {
 
 export interface ICodeGen {
 
-  // root path for generated source code files
-  // e.g. 'python' for Python
+  /**
+   * root path for generated source code files
+   * e.g. 'python' for Python
+   */
   codePath: string
+
+  /**
+   * current version of the Api being generated
+   */
+  apiVersion: string
 
   /**
    * beginning name pattern for all environment variables
@@ -1281,35 +1288,63 @@ export interface ICodeGen {
    */
   packagePath: string
 
-  // folder for the Looker SDK reference
-  // e.g. 'looker_sdk' for Python. All python source would end up under `python/looker_sdk`
+  /**
+   * folder for the Looker SDK reference
+   * e.g. 'looker_sdk' for Python. All python source would end up under `python/looker_sdk`
+   */
   packageName: string
 
-  // name of api request instance variable
-  // e.g. _rtl for Python, transport for TypeScript
+  /**
+   * name of api request instance variable
+   * e.g. _rtl for Python, transport for TypeScript
+   */
   transport: string
 
-  // reference to self. e.g self, this, it, etc.
+  /**
+   * reference to self. e.g self, this, it, etc.
+   */
   itself: string
 
-  // file extension for generated files
+  /**
+   * file extension for generated files
+   */
   fileExtension: string
-  // comment string
-  // e.g. Python=# C#=// TypeScript=//
+
+  /**
+   * comment string
+   * e.g. Python=# C#=// TypeScript=//
+   */
   commentStr: string
-  // string representation of null value
-  // e.g. Python None, C# null, Delphi nil
+
+  /**
+   * string representation of null value
+   * e.g. Python None, C# null, Delphi nil
+   */
   nullStr: string
-  // indentation string. Typically two spaces '  '
+
+  /**
+   * indentation string. Typically two spaces '  '
+   */
   indentStr: string
-  // end type string. For C# and TypeScript, usually '}\n'
+
+  /**
+   * end type string. For C# and TypeScript, usually '}\n'
+   */
   endTypeStr: string
 
-  // argument separator string. Typically ', '
+  /**
+   * argument separator string. Typically ', '
+   */
   argDelimiter: string
-  // parameter delimiter. Typically ",\n"
+
+  /**
+   * parameter delimiter. Typically ",\n"
+   */
   paramDelimiter: string
-  // property delimiter. Typically, ",\n"
+
+  /**
+   * property delimiter. Typically, ",\n"
+   */
   propDelimiter: string
 
   /**
@@ -1324,10 +1359,9 @@ export interface ICodeGen {
   willItStream: boolean
 
   /**
-   * Stamps the version file (typically rtl/constants.xx) with server and api version
-   * @returns {IVersionInfo | undefined}
+   * versions used for generating the SDK
    */
-  versionStamp(): IVersionInfo | undefined
+  versions?: IVersionInfo
 
   /**
    * Returns true if the SDK supports multiple API versions of models
@@ -1387,12 +1421,6 @@ export interface ICodeGen {
    * @returns {string}
    */
   modelsEpilogue(indent: string): string
-
-  /**
-   * Prepare the path where API-specific SDK files should go
-   * @returns {string}
-   */
-  sdkPathPrep() : void
 
   /**
    * Get the name of an SDK file complete with API version
@@ -1508,7 +1536,4 @@ export interface ICodeGen {
 
   typeMap(type: IType): IMappedType
 
-  reformatFile(fileName: string): string
-
-  reformat(): string[]
 }

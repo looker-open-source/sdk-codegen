@@ -26,16 +26,42 @@
 
 import * as fs from 'fs'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { danger, log, quit, success } from './utils'
+import { danger, isDirSync, log, quit, success } from './utils'
 import { fetchLookerVersion, openApiFileName, specFileName } from './fetchSpec'
 import { MethodGenerator, specFromFile, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
 import { logConvert } from './convert'
 import { IVersionInfo } from './codeGen'
+import { ICodeGen } from './sdkModels'
+import { FilesFormatter } from './reformatter'
 
 const apiVersions = (props: any) => {
   const versions = props.api_versions ?? '3.1,4.0'
   return versions.split(',')
+}
+
+/**
+ * Ensures the existence
+ * @param gen the SDK source code path
+ */
+const sdkPathPrep = (gen: ICodeGen) => {
+  const path = `${gen.codePath}${gen.packagePath}/sdk/${gen.apiVersion}`
+  if (!isDirSync(path)) fs.mkdirSync(path, {recursive: true})
+  return path
+}
+
+const formatter = new FilesFormatter()
+
+/**
+ * Writes the output file and registers it with the file reformatter for processing
+ * @param {string} fileName name of source file
+ * @param {string} content contents to (over) write into source file
+ * @returns {string} the name of the file written
+ */
+const writeFile = (fileName: string, content: string): string => {
+  fs.writeFileSync(fileName, content)
+  formatter.addFile(fileName)
+  return fileName
 }
 
 // tslint:disable-next-line: no-floating-promises
@@ -84,31 +110,29 @@ const apiVersions = (props: any) => {
           }
           log(`generating ${language} from ${props.base_url} ${api}...`)
 
-          gen.sdkPathPrep()
+          sdkPathPrep(gen)
           // Generate standard method declarations
           const sdk = new MethodGenerator(apiModel, gen)
           let output = sdk.render(gen.indentStr)
-          fs.writeFileSync(gen.sdkFileName(`methods`), output)
+          writeFile(gen.sdkFileName(`methods`), output)
 
           if (gen.willItStream) {
             // Generate streaming method declarations
             const s = new StreamGenerator(apiModel, gen)
             let output = s.render(gen.indentStr)
-            fs.writeFileSync(gen.sdkFileName(`streams`), output)
+            writeFile(gen.sdkFileName(`streams`), output)
           }
 
           const types = new TypeGenerator(apiModel, gen)
           output = types.render('')
-          fs.writeFileSync(gen.sdkFileName(`models`), output)
-          const reformatted = gen.reformat()
-          if (reformatted.length > 0) {
-            success(`reformatted ${reformatted.join(',')}`)
-          }
-          gen.versionStamp()
+          writeFile(gen.sdkFileName(`models`), output)
+          formatter.versionStamp(gen)
         }
         break
       }
     }
+    // finally, reformat all the files that have been generated
+    formatter.reformat()
   } catch (e) {
     quit(e)
   }

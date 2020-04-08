@@ -38,7 +38,6 @@ import { CodeGen } from './codeGen'
 import * as fs from 'fs'
 import * as prettier from 'prettier'
 import { warn, isFileSync, success, commentBlock, readFileSync } from './utils'
-const utf8Encoding = { encoding: 'utf-8' }
 
 /**
  * TypeScript code generator
@@ -366,27 +365,6 @@ export interface IDictionary<T> {
     return names
   }
 
-  versionStamp() {
-    if (this.versions) {
-      const stampFile = this.fileName('rtl/constants')
-      if (!isFileSync(stampFile)) {
-        warn(`${stampFile} was not found. Skipping version update.`)
-      }
-      let content = readFileSync(stampFile)
-      const lookerPattern = /lookerVersion = ['"].*['"]/i
-      const apiPattern = /\bapiVersion = ['"].*['"]/i
-      const envPattern = /environmentPrefix = ['"].*['"]/i
-      content = content.replace(lookerPattern, `lookerVersion = '${this.versions.lookerVersion}'`)
-      content = content.replace(apiPattern, `apiVersion = '${this.versions.apiVersion}'`)
-      content = content.replace(envPattern, `environmentPrefix = '${this.environmentPrefix}'`)
-      fs.writeFileSync(stampFile, content, utf8Encoding)
-      success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}`)
-    } else {
-      warn('Version information was not retrieved. Skipping SDK version updating.')
-    }
-    return this.versions
-  }
-
   typeMap(type: IType): IMappedType {
     super.typeMap(type)
     const mt = ''
@@ -431,25 +409,4 @@ export interface IDictionary<T> {
     }
   }
 
-  reformatFile(fileName: string) {
-    const formatOptions: prettier.Options = {
-      semi: false,
-      trailingComma: 'all',
-      bracketSpacing: true,
-      parser: 'typescript',
-      singleQuote: true,
-      proseWrap: 'preserve',
-      quoteProps: 'as-needed',
-      endOfLine: 'auto'
-    }
-    const name = super.reformatFile(fileName)
-    if (name) {
-      const source = prettier.format(readFileSync(name), formatOptions)
-      if (source) {
-        fs.writeFileSync(name, source, utf8Encoding)
-        return name
-      }
-    }
-    return ''
-  }
 }

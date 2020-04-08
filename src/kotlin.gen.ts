@@ -364,27 +364,6 @@ import java.time.*
     return names
   }
 
-  versionStamp() {
-    if (this.versions) {
-      const stampFile = this.fileName('rtl/Constants')
-      if (!isFileSync(stampFile)) {
-        warn(`${stampFile} was not found. Skipping version update.`)
-      }
-      let content = readFileSync(stampFile)
-      const lookerPattern = /\bLOOKER_VERSION = ['"].*['"]/i
-      const apiPattern = /\bAPI_VERSION = ['"].*['"]/i
-      const envPattern = /\bENVIRONMENT_PREFIX = ['"].*['"]/i
-      content = content.replace(lookerPattern, `LOOKER_VERSION = "${this.versions.lookerVersion}"`)
-      content = content.replace(apiPattern, `API_VERSION = "${this.versions.apiVersion}"`)
-      content = content.replace(envPattern, `ENVIRONMENT_PREFIX = "${this.environmentPrefix}"`)
-      fs.writeFileSync(stampFile, content, {encoding: utf8})
-      success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}`)
-    } else {
-      warn('Version information was not retrieved. Skipping SDK version updating.')
-    }
-    return this.versions
-  }
-
   typeMap(type: IType): IMappedType {
     super.typeMap(type)
     const mt = this.nullStr
@@ -430,26 +409,4 @@ import java.time.*
     }
   }
 
-  reformatFile(fileName: string) {
-    warn(`No reformatter for ${fileName}, yet`)
-    // const formatOptions: prettier.Options = {
-    //   semi: false,
-    //   trailingComma: 'all',
-    //   bracketSpacing: true,
-    //   parser: 'typescript',
-    //   singleQuote: true,
-    //   proseWrap: 'preserve',
-    //   quoteProps: 'as-needed',
-    //   endOfLine: 'auto'
-    // }
-    // const name = super.reformatFile(fileName)
-    // if (name) {
-    //   const source = prettier.format(readFileSync(name), formatOptions)
-    //   if (source) {
-    //     fs.writeFileSync(name, source, {encoding: utf8})
-    //     return name
-    //   }
-    // }
-    return ''
-  }
 }
