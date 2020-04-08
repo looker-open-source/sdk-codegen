@@ -21,7 +21,6 @@
 # THE SOFTWARE.
 
 from typing import Optional
-import warnings
 
 from looker_sdk.rtl import api_settings
 from looker_sdk.rtl import requests_transport
@@ -47,21 +46,16 @@ def init31(
 ) -> methods31.Looker31SDK:
     """Default dependency configuration
     """
-    settings = api_settings.ApiSettings.configure(config_file, section)
-    if settings.api_version is not None:
-        warnings.warn(message=DeprecationWarning(API_SETTINGS_API_VERSION_DEPRECATED))
-    settings.api_version = "3.1"
-    settings.headers = {"Content-Type": "application/json"}
+    settings = api_settings.ApiSettings(config_file, section)
     if not settings.is_configured():
-        raise InitError(
-            f"Missing required configuration values like base_url and api_version."
-        )
+        raise InitError(f"Missing required configuration values.")
     transport = requests_transport.RequestsTransport.configure(settings)
     return methods31.Looker31SDK(
-        auth_session.AuthSession(settings, transport, serialize.deserialize31),
+        auth_session.AuthSession(settings, transport, serialize.deserialize31, "3.1"),
         serialize.deserialize31,
         serialize.serialize,
         transport,
+        "3.1",
     )
 
 
@@ -70,19 +64,14 @@ def init40(
 ) -> methods40.Looker40SDK:
     """Default dependency configuration
     """
-    settings = api_settings.ApiSettings.configure(config_file, section)
-    if settings.api_version is not None:
-        warnings.warn(message=DeprecationWarning(API_SETTINGS_API_VERSION_DEPRECATED))
-    settings.api_version = "4.0"
-    settings.headers = {"Content-Type": "application/json"}
+    settings = api_settings.ApiSettings(config_file, section)
     if not settings.is_configured():
-        raise InitError(
-            f"Missing required configuration values like base_url and api_version."
-        )
+        raise InitError(f"Missing required configuration values.")
     transport = requests_transport.RequestsTransport.configure(settings)
     return methods40.Looker40SDK(
-        auth_session.AuthSession(settings, transport, serialize.deserialize40),
+        auth_session.AuthSession(settings, transport, serialize.deserialize40, "4.0"),
         serialize.deserialize40,
         serialize.serialize,
         transport,
+        "4.0",
     )

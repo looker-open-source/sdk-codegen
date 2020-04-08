@@ -63,10 +63,10 @@ client_secret=
 
 @pytest.fixture(scope="function")
 def auth_session(config_file):
-    settings = api_settings.ApiSettings.configure(config_file)
+    settings = api_settings.ApiSettings(config_file)
     settings.api_version = "3.1"
     return auth.AuthSession(
-        settings, MockTransport.configure(settings), serialize.deserialize31
+        settings, MockTransport.configure(settings), serialize.deserialize31, "3.1"
     )
 
 
@@ -89,12 +89,12 @@ class MockTransport(transport.Transport):
         if authenticator:
             authenticator()
         if method == transport.HttpMethod.POST:
-            if path == "/login":
+            if path.endswith("login"):
                 token = "AdminAccessToken"
                 expected_header = {"Content-Type": "application/x-www-form-urlencoded"}
                 if headers != expected_header:
                     raise TypeError(f"Must send {expected_header}")
-            elif path == "/login/5":
+            elif path.endswith("login/5"):
                 token = "UserAccessToken"
             access_token = json.dumps(
                 {"access_token": token, "token_type": "Bearer", "expires_in": 3600}
@@ -104,7 +104,7 @@ class MockTransport(transport.Transport):
                 value=bytes(access_token, encoding="utf-8"),
                 response_mode=transport.ResponseMode.STRING,
             )
-        elif (method == transport.HttpMethod.DELETE) and (path == "/logout"):
+        elif method == transport.HttpMethod.DELETE and path.endswith("logout"):
             response = transport.Response(
                 ok=True, value=b"", response_mode=transport.ResponseMode.STRING
             )
@@ -113,52 +113,42 @@ class MockTransport(transport.Transport):
         return response
 
 
-def test_auto_admin_login(auth_session: auth.AuthSession):
-    assert not auth_session.is_admin_authenticated
+def test_auto_login(auth_session: auth.AuthSession):
+    assert not auth_session.is_authenticated
     auth_header = auth_session.authenticate()
     assert auth_header["Authorization"] == "Bearer AdminAccessToken"
-    assert auth_session.is_admin_authenticated
+    assert auth_session.is_authenticated
 
     # even after explicit logout
     auth_session.logout()
-    assert not auth_session.is_admin_authenticated
+    assert not auth_session.is_authenticated
     auth_header = auth_session.authenticate()
     assert isinstance(auth_header, dict)
     assert auth_header["Authorization"] == "Bearer AdminAccessToken"
-    assert auth_session.is_admin_authenticated
+    assert auth_session.is_authenticated
 
 
-def test_user_login_auto_logs_in_admin(auth_session: auth.AuthSession):
-    assert not auth_session.is_admin_authenticated
-    assert not auth_session.is_user_authenticated
+def test_sudo_login_auto_logs_in(auth_session: auth.AuthSession):
+    assert not auth_session.is_authenticated
+    assert not auth_session.is_sudo_authenticated
     auth_session.login_user(5)
-    assert auth_session.is_admin_authenticated
-    assert auth_session.is_user_authenticated
+    assert auth_session.is_authenticated
+    assert auth_session.is_sudo_authenticated
     auth_header = auth_session.authenticate()
     assert auth_header["Authorization"] == "Bearer UserAccessToken"
 
 
-def test_user_logout_leaves_admin_logged_in(auth_session: auth.AuthSession):
+def test_sudo_logout_leaves_logged_in(auth_session: auth.AuthSession):
     auth_session.login_user(5)
     auth_session.logout()
-    assert not auth_session.is_user_authenticated
-    assert auth_session.is_admin_authenticated
+    assert not auth_session.is_sudo_authenticated
+    assert auth_session.is_authenticated
 
 
-def test_login_user_login_user(auth_session: auth.AuthSession):
+def test_login_sudo_login_sudo(auth_session: auth.AuthSession):
     auth_session.login_user(5)
     with pytest.raises(error.SDKError):
         auth_session.login_user(10)
-
-
-def test_is_sudo(auth_session: auth.AuthSession):
-    assert auth_session.is_sudo is None
-    auth_session.authenticate()  # auto-login admin
-    assert auth_session.is_sudo is None
-    auth_session.login_user(5)
-    assert auth_session.is_sudo == 5
-    auth_session.logout()
-    assert auth_session.is_sudo is None
 
 
 @pytest.mark.parametrize(
@@ -178,11 +168,11 @@ def test_it_fails_with_missing_credentials(
     monkeypatch.setenv("LOOKERSDK_CLIENT_ID", test_env_client_id)
     monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", test_env_client_secret)
 
-    settings = api_settings.ApiSettings.configure(config_file, test_section)
+    settings = api_settings.ApiSettings(config_file, test_section)
     settings.api_version = "3.1"
 
     auth_session = auth.AuthSession(
-        settings, MockTransport.configure(settings), serialize.deserialize31
+        settings, MockTransport.configure(settings), serialize.deserialize31, "3.1"
     )
 
     with pytest.raises(error.SDKError) as exc_info:
