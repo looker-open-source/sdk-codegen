@@ -14,8 +14,8 @@ generators like [Typescript](src/typescript.gen.ts) or [Python](src/python.gen.t
 When implementing the syntax and features for the new language SDK, keep in mind the principles described in the 
 [codegen rationale](rationale.md) documentation:
  
-- [consistency](rational.md#consistency),
-- [discoverability](rational.md#discoverability), and
+- [consistency](rationale.md#consistency),
+- [discoverability](rationale.md#discoverability), and
 - [correctness](rationale.md#correctness).
 
 A feature of these SDKs to remember is the support for [multiple API versions in the same SDK](README.md#multi-api-support-with-looker-72-and-later).
