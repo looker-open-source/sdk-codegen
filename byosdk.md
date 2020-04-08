@@ -172,7 +172,7 @@ document we'll pretend it's called `AuthSession`.
 
 Recent (Looker 7.6 and above) API implementations additionally offer an OAuth authentication flow for API calls. Both of these 
 authentication methods should be supported by AuthSession implementations. The Typescript implementation for OAuth is called 
-[`OAuthSession](typescript/looker/rtl/oauthSession.ts)
+[`OAuthSession`](typescript/looker/rtl/oauthSession.ts)
 
 There will be additional authentication methods in future Looker releases, but they should follow very similar patterns
 to the two above methods.
