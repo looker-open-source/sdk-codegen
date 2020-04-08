@@ -94,6 +94,8 @@ export enum SearchCriterion {
   response,
 }
 
+export type SearchCriterionTerm = keyof typeof SearchCriterion
+
 export type SearchCriteria = Set<SearchCriterion>
 
 export const SearchAll: SearchCriteria = new Set([
@@ -109,7 +111,21 @@ export const SearchAll: SearchCriteria = new Set([
   SearchCriterion.response,
 ])
 
-export interface ISearchResult extends ISymbolList {
+export const CriteriaToSet = (criteria: string[]): SearchCriteria => {
+  let result: SearchCriteria = new Set()
+  criteria.forEach(name => result.add(SearchCriterion[name.toLowerCase() as SearchCriterionTerm]))
+  return result
+}
+
+export const SetToCriteria = (criteria: SearchCriteria): string[] => {
+  let result: string[] = []
+  criteria.forEach(value => result.push(SearchCriterion[value]))
+  return result
+}
+
+export interface ISearchResult {
+  tags: ITagList
+  types: ITypeList
   message: string
 }
 
@@ -878,7 +894,7 @@ export interface IApiModel extends IModel {
 
   getWriteableType(type: IType): IType | undefined
 
-  search(expression: string, criteria: SearchCriteria): ISymbolList
+  search(expression: string, criteria: SearchCriteria): ISearchResult
 }
 
 export class ApiModel implements ISymbolTable, IApiModel {
@@ -932,11 +948,29 @@ export class ApiModel implements ISymbolTable, IApiModel {
       || criteria.has(SearchCriterion.status)
   }
 
+  private static addMethodToTags(tags:ITagList, method: IMethod) : ITagList {
+    for (let tag of method.schema.tags) {
+      let list: IMethodList = tags[tag]
+      if (!list) {
+        list = {}
+        list[method.name] = method
+        tags[tag] = list
+      } else {
+        list[method.name] = method
+      }
+    }
+    return tags
+  }
+
+  private tagMethod(method: IMethod) {
+    return ApiModel.addMethodToTags(this.tags, method)
+  }
+
   search(expression: string, criteria: SearchCriteria = SearchAll): ISearchResult {
-    let methods: IMethodList = {}
+    let tags: ITagList = {}
     let types: ITypeList = {}
     let result = {
-      methods,
+      tags,
       types,
       message: 'Search done'
     }
@@ -952,7 +986,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     if (ApiModel.isModelSearch(criteria)) {
       Object.entries(this.methods).forEach(([key, method]) => {
         if (method.search(rx, criteria)) {
-          methods[key] = method
+          ApiModel.addMethodToTags(tags, method)
         }
       })
     }
@@ -1103,19 +1137,6 @@ export class ApiModel implements ISymbolTable, IApiModel {
           this.methods[method.name] = method
         })
       })
-    }
-  }
-
-  private tagMethod(method: IMethod) {
-    for (let tag of method.schema.tags) {
-      let list: IMethodList = this.tags[tag]
-      if (!list) {
-        list = {}
-        list[method.name] = method
-        this.tags[tag] = list
-      } else {
-        list[method.name] = method
-      }
     }
   }
 
