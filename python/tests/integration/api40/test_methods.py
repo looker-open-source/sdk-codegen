@@ -93,7 +93,7 @@ def test_me_field_filters(sdk: mtds.Looker40SDK):
     assert me.last_name != ""
     assert not me.display_name
     assert not me.email
-    assert not me.personal_space_id
+    assert not me.personal_folder_id
 
 
 @pytest.mark.usefixtures("test_users")
