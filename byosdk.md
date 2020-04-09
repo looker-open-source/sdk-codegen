@@ -39,14 +39,14 @@ provider pattern used by the reference SDKs. The existing SDKs provide support f
 for [configuring the code generator](README.md#configuring-lookerini) and as a default configuration file for getting 
 started developing with an existing SDK.
 
-All SDK implement a `readConfig() -> [String: String]` method that can be overridden to customize how configuration 
+All SDKs implement a `readConfig() -> [String: String]` method that can be overridden to customize how configuration 
 values are retrieved. See [securing your SDK credentials](README.md#securing-your-sdk-credentials) for more information 
 on this topic, including links to `readConfig()` examples
 
 Once the `base_url` for the API server is provided to the SDK object and API credentials are available for reading on 
-demand, the request processor and AuthSession implementation can be worked on. 
+demand, the request processor and `AuthSession` implementation can be worked on. 
 
-**Note**: By design, SDK never retain API credentials in runtime memory but only use them when required to authenticate.
+**Note**: By design, SDKs never retain API credentials in runtime memory but only use them when required to authenticate.
  
 ### Request processing
 
@@ -135,13 +135,13 @@ export interface ITransport {
 The `ITransportSettings` interface shows the default properties for all HTTP requests and can also be used to override 
 request settings for an individual HTTP request.
 
-The `ITransport` interfaces describes the two primary HTTP request methods. `request<TSuccess, TError>` is for an 
+The `ITransport` interface describes the two primary HTTP request methods. `request<TSuccess, TError>` is for an 
 atomically completed HTTP request and response, and `stream<T>` is for streaming an HTTP response result from the 
 describe request.
 
 #### Request parameters
 
-In the `request` and `stream` methods describe above:
+In the `request` and `stream` methods described above:
 
 - `method` is the HTTP method for the request. Typically, this will be GET, PUT, POST, PATCH or DELETE.
 - `path` is either a fully specified url like `https://my.server.com/app/path?q=foo` or a relative path like `/users`.
@@ -171,7 +171,7 @@ implementation for the Typescript SDK is called [`NodeSession`](typescript/looke
 document we'll pretend it's called `AuthSession`.
 
 Recent (Looker 7.6 and above) API implementations additionally offer an OAuth authentication flow for API calls. Both of these 
-authentication methods should be supported by AuthSession implementations. The Typescript implementation for OAuth is called 
+authentication methods should be supported by `AuthSession` implementations. The Typescript implementation for OAuth is called 
 [`OAuthSession`](typescript/looker/rtl/oauthSession.ts)
 
 There will be additional authentication methods in future Looker releases, but they should follow very similar patterns
@@ -179,7 +179,7 @@ to the two above methods.
 
 What all `AuthSession` implementations have in common is:
 
-- the use an authorization token (typically added into a request's properties by the `authentication` callback) to 
+- the use of an authorization token (typically added into a request's properties by the `authentication` callback) to 
  authenticate the API user's request
 - the session will track whether the authorization token is expired or not. If it is expired, the session will 
 automatically re-authenticate the API user by reading the necessary credential information from `readConfig()`, "logging"
