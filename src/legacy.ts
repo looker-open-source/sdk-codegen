@@ -26,7 +26,8 @@
 
 import { IGeneratorSpec as LanguageSpec, legacyLanguages } from './languages'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { log, quit, run } from './utils'
+import { log } from './utils'
+import { quit, run } from './nodeUtils'
 import { logConvert } from './convert'
 
 const defaultApiVersion = (props: ISDKConfigProps) => {

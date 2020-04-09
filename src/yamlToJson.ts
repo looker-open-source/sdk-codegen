@@ -26,7 +26,7 @@
 
 import * as yaml from 'js-yaml'
 import * as fs from "fs"
-import { quit } from './utils'
+import { quit } from './nodeUtils'
 
 /**
  * Use this script to convert any valid YAML file to pretty-printed JSON
