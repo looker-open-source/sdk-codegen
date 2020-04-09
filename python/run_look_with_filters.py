@@ -3,9 +3,10 @@ import json
 import sys
 from typing import cast, Dict, List, Union
 
-from looker_sdk import client, models, error
+import looker_sdk
+from looker_sdk import models, error
 
-sdk = client.setup("looker.ini")
+sdk = looker_sdk.init31("../looker.ini")
 
 
 def main() -> None:

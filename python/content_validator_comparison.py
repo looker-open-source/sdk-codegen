@@ -1,11 +1,12 @@
-from looker_sdk import client, models
+import looker_sdk
+from looker_sdk import models
 from looker_sdk.rtl import transport
 import configparser
 import hashlib
 import csv
 
 config_file = "../looker.ini"
-sdk = client.setup(config_file)
+sdk = looker_sdk.init31()
 
 
 def main():

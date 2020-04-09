@@ -1,4 +1,6 @@
+from typing import Dict
 import csv
+
 import looker_sdk
 
 """
@@ -21,7 +23,7 @@ Group F. If individual users were associated to these three roles, they will be 
 
 sdk = looker_sdk.init31()
 filename = "roles-groups.csv"
-cached_roles = {}
+cached_roles: Dict[str, str] = {}
 
 
 def load_group(group):

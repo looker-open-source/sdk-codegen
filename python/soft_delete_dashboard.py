@@ -2,10 +2,11 @@ import sys
 from typing import Sequence
 
 import exceptions
-from looker_sdk import client, error, models
+import looker_sdk
+from looker_sdk import error, models
 
 
-sdk = client.setup("../looker.ini")
+sdk = looker_sdk.init31("../looker.ini")
 
 
 def main():

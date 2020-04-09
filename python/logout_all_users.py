@@ -1,9 +1,10 @@
-from typing import Sequence
+from typing import cast, Sequence
 
-from looker_sdk import client, models
+import looker_sdk
+from looker_sdk import models
 
 
-sdk = client.setup("../looker.ini")
+sdk = looker_sdk.init31("../looker.ini")
 
 
 def main():
@@ -16,7 +17,7 @@ def main():
     count = 0
     for user in users:
         if user.sessions:
-            terminate_sessions(user.id, user.sessions)
+            terminate_sessions(cast(int, user.id), user.sessions)
             count += len(user.sessions)
 
     print(f"Terminated {count} session{'' if count == 1 else 's'}")

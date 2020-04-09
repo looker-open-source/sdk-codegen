@@ -3,9 +3,10 @@ import textwrap
 import time
 
 import exceptions
-from looker_sdk import client, models
+import looker_sdk
+from looker_sdk import models
 
-sdk = client.setup("../looker.ini")
+sdk = looker_sdk.init31("../looker.ini")
 
 
 def main():
