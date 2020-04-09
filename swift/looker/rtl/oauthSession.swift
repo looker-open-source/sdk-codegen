@@ -101,18 +101,18 @@ class OAuthSession: AuthSession {
      Generate an OAuth2 authCode request URL
      */
     func createAuthCodeRequestUrl(scope: String, state: String) throws -> String {
-        self.code_verifier = self.sha256Hash(try! self.secureRandom(32))
+        self.code_verifier = try! self.secureRandom(32)
+        let code_challenge = self.sha256Hash(self.code_verifier)
         let config = self.settings.readConfig(nil)
         let looker_url = config["looker_url"]!
-        let url = addQueryParams("\(looker_url)/auth",
-            [
-                "response_type": "code",
-             "client_id": config["client_id"],
+        let url = addQueryParams("\(looker_url)/auth", [
+            "response_type": "code",
+            "client_id": config["client_id"],
             "redirect_uri": config["redirect_uri"],
             "scope": scope,
             "state": state,
             "code_challenge_method": "S256",
-            "code_challenge": self.code_verifier
+            "code_challenge": code_challenge
         ])
         return url
     }
@@ -154,4 +154,3 @@ class OAuthSession: AuthSession {
         return sha256Hash(data)
     }
 }
-
