@@ -141,8 +141,8 @@ class OAuthSession(override val apiSettings: ApiSettings, override val transport
      * Generate an OAuth2 authCode request URL
      */
     fun createAuthCodeRequestUrl(scope: String, state: String): String {
-        val bytes = this.secureRandom(32)
-        this.codeVerifier = this.sha256hash(bytes)
+        this.codeVerifier = this.secureRandom(32)
+        val codeChallenge = this.sha256hash(this.codeVerifier)
         val config = this.apiSettings.readConfig()
         val lookerUrl = config["looker_url"]
         return addQueryParams("$lookerUrl/auth", mapOf(
@@ -152,7 +152,7 @@ class OAuthSession(override val apiSettings: ApiSettings, override val transport
                 "scope" to scope,
                 "state" to state,
                 "code_challenge_method" to "S256",
-                "code_challenge" to this.codeVerifier
+                "code_challenge" to codeChallenge
         ))
     }
 
