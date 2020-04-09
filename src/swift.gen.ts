@@ -37,9 +37,7 @@ import {
   strBody, DelimArrayType,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
-import * as fs from 'fs'
-import { warn, isDirSync, isFileSync, success, commentBlock, readFileSync } from './utils'
-import { utf8 } from '../typescript/looker/rtl/constants'
+import { commentBlock} from './utils'
 
 export class SwiftGen extends CodeGen {
   codePath = './swift/'

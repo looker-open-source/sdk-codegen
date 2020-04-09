@@ -37,9 +37,7 @@ import {
   strBody, DelimArrayType,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
-import * as fs from 'fs'
-import { warn, isFileSync, success, commentBlock, readFileSync } from './utils'
-import { utf8 } from '../typescript/looker/rtl/constants'
+import { commentBlock} from './utils'
 
 export class KotlinGen extends CodeGen {
   codePath = './kotlin/src/main/com/'

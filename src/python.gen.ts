@@ -36,9 +36,6 @@ import {
   strBody,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
-import * as fs from 'fs'
-import { run, warn, isDirSync, isFileSync, success, readFileSync } from './utils'
-import { utf8 } from '../typescript/looker/rtl/constants'
 
 export class PythonGen extends CodeGen {
   methodInputModelTypes: Set<IType> = new Set()
@@ -159,12 +156,6 @@ from typing import ForwardRef  # type: ignore  # noqa:E402
 ${this.structureHook} = functools.partial(sr.structure_hook, globals(), sr.converter${this.apiRef})
 ${this.hooks.join('\n')}
 `
-
-  sdkPathPrep() {
-    const path = `${this.codePath}${this.packagePath}/sdk/api${this.apiRef}`
-    if (!isDirSync(path)) fs.mkdirSync(path, {recursive: true})
-    fs.writeFileSync(`${path}/__init__.py`, '# Generated file.')
-  }
 
   sdkFileName(baseFileName: string) {
     return this.fileName(`sdk/api${this.apiRef}/${baseFileName}`)

@@ -23,7 +23,8 @@
  */
 
 import * as path from 'path'
-import { danger, isFileSync, readFileSync, run, success, warn } from './utils'
+import { danger, success, warn } from './utils'
+import { isFileSync, readFileSync, run } from './nodeUtils'
 import * as prettier from 'prettier'
 import * as fs from "fs"
 import { ICodeGen } from './sdkModels'

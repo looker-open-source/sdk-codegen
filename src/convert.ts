@@ -26,7 +26,8 @@
 
 import { ISDKConfigProps } from './sdkConfig'
 import { openApiFileName, logFetch } from './fetchSpec'
-import { fail, isFileSync, log, quit, readFileSync, run } from './utils'
+import { log } from './utils'
+import { fail, isFileSync, quit, readFileSync, run } from './nodeUtils'
 import * as fs from 'fs'
 
 const { Spectral } = require('@stoplight/spectral')

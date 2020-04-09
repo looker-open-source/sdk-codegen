@@ -22,10 +22,6 @@
  * THE SOFTWARE.
  */
 
-import * as fs from 'fs'
-import { execSync } from 'child_process'
-import { utf8 } from '../typescript/looker/rtl/constants'
-
 // ANSI colors
 const Reset = '\x1b[0m'
 // const Bright = "\x1b[1m"
@@ -78,96 +74,10 @@ export const debug = (message: any, value?: any) => {
 
 export const dump = (value: any) => log(JSON.stringify(value, null, 2))
 
-export const quit = (err?: Error | string) => {
-  if (err) {
-    if (typeof err === 'string') {
-      const message = err
-      err = new Error('Failure')
-      err.message = message
-    }
-    console.error(`Error: ${err.name}, ${err.message}`)
-    console.error(err.stack)
-    process.exit(1)
-  } else {
-    process.exit(0)
-  }
-  return '' // spoof return type for TypeScript to not complain
-}
-
-export const fail = (name: string, message: string) => {
-  const err = new Error(message)
-  err.name = name
-  return quit(err)
-}
-
-export const run = (command: string, args: string[], errMsg?: string, warning: boolean = false) => {
-  // https://nodejs.org/api/child_process.html#child_process_child_process_execsync_command_options
-  const options = {
-    maxBuffer: 1024 * 2048,
-    timeout: 300 * 1000,
-    windowsHide: true,
-    encoding: 'utf8',
-  }
-  try {
-    // const result = await spawnSync(command, args, options)
-    command += ' ' + args.join(' ')
-    const result = execSync(command, options)
-    return result
-  } catch (e) {
-    if (warning) {
-      warn(errMsg)
-      return ''
-    } else {
-      return quit(errMsg || e)
-    }
-  }
-}
-
 export const commentBlock = (text: string | undefined, indent: string = '', commentStr: string = '// ') => {
   if (!text) return ''
   text = text.trim()
   if (!text) return ''
   const indenter = indent + commentStr
   return indenter + text.split('\n').join('\n' + indenter)
-}
-
-export interface ITypeMapItem {
-  type: string,
-  default: string
-}
-
-export interface ITypeMap {
-  [typeformat: string]: ITypeMapItem
-}
-
-/**
- * Abstraction of reading a file so all refs go to one place
- * @param filePath name of file
- * @param encoding character encoding. defaults to utf-8
- * @returns {string}
- */
-export const readFileSync = (filePath: string, encoding: string = utf8) => fs.readFileSync(filePath, encoding)
-
-export const isDirSync = (filePath: string) => {
-  try {
-    return fs.statSync(filePath).isDirectory()
-  } catch (e) {
-    if (e.code === 'ENOENT') {
-      return false
-    } else {
-      throw e
-    }
-  }
-}
-
-export const isFileSync = (filePath: string) => {
-  try {
-    return fs.statSync(filePath).isFile()
-  } catch (e) {
-    if (e.code === 'ENOENT') {
-      return false
-    } else {
-      throw e
-    }
-  }
 }

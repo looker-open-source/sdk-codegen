@@ -35,9 +35,7 @@ import {
   strBody, DelimArrayType,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
-import * as fs from 'fs'
-import * as prettier from 'prettier'
-import { warn, isFileSync, success, commentBlock, readFileSync } from './utils'
+import { commentBlock} from './utils'
 
 /**
  * TypeScript code generator

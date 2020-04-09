@@ -23,7 +23,7 @@
  */
 
 import * as ini from 'ini'
-import { readFileSync } from './utils'
+import { readFileSync } from './nodeUtils'
 
 export interface ISDKConfigProps {
   api_version: string

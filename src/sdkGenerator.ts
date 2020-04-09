@@ -25,7 +25,8 @@
  */
 
 import * as Models from './sdkModels'
-import { readFileSync, success } from './utils'
+import { success } from './utils'
+import { readFileSync } from './nodeUtils'
 
 export const specFromFile = (specFile: string, swaggerFile: string): Models.ApiModel => {
   const specContent = readFileSync(specFile)

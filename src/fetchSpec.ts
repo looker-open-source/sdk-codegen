@@ -24,7 +24,8 @@
 
 import { ISDKConfigProps } from './sdkConfig'
 import * as fs from 'fs'
-import { fail, quit, log, isFileSync, warn } from './utils'
+import { log, warn } from './utils'
+import { fail, quit, isFileSync } from './nodeUtils'
 import { IVersionInfo } from './codeGen'
 import { NodeTransport } from '../typescript/looker/rtl/nodeTransport'
 import {

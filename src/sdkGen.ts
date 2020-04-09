@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { danger, isDirSync, log, quit, success } from './utils'
+import { danger, log } from './utils'
 import { fetchLookerVersion, openApiFileName, specFileName } from './fetchSpec'
 import { MethodGenerator, specFromFile, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
@@ -34,6 +34,7 @@ import { logConvert } from './convert'
 import { IVersionInfo } from './codeGen'
 import { ICodeGen } from './sdkModels'
 import { FilesFormatter } from './reformatter'
+import { isDirSync, quit } from './nodeUtils'
 
 const apiVersions = (props: any) => {
   const versions = props.api_versions ?? '3.1,4.0'
