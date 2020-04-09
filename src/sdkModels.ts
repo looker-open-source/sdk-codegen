@@ -697,7 +697,7 @@ export class Method extends SchemadSymbol implements IMethod {
 
 }
 
-class Type implements IType {
+export class Type implements IType {
   readonly name: string
   readonly schema: OAS.SchemaObject
   readonly properties: IPropertyList = {}
