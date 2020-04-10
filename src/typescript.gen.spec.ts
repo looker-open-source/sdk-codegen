@@ -23,7 +23,7 @@
  */
 
 import { TypescriptGen } from './typescript.gen'
-import { apiTestModel } from './sdkModels.spec'
+import { apiTestModel } from './testUtils'
 
 const gen = new TypescriptGen(apiTestModel)
 const indent = ''

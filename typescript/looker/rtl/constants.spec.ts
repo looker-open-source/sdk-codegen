@@ -24,7 +24,7 @@
 
 import { boolDefault, isFalse, isTrue, unquote } from './constants'
 import { ResponseMode, responseMode } from './transport'
-import { TestConfig } from './nodeSettings.spec'
+import { TestConfig } from '../../../src/testUtils'
 
 const config = TestConfig()
 const contentTypes = config.testData["content_types"]

@@ -39,7 +39,7 @@ import {
 } from '../rtl/apiSettings'
 import { defaultTimeout } from '../rtl/transport'
 import { LookerNodeSDK } from '../rtl/nodeSdk'
-import { TestConfig } from '../rtl/nodeSettings.spec'
+import { TestConfig } from '../../../src/testUtils'
 
 const config = TestConfig()
 const users: Partial<IUser>[] = config.testData['users']

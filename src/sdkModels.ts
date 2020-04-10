@@ -179,6 +179,7 @@ export interface IMethodResponse {
   mediaType: string
   type: IType
   mode: ResponseMode
+  description: string
 
   search(rx: RegExp, criteria: SearchCriteria): boolean
 
@@ -186,14 +187,12 @@ export interface IMethodResponse {
 }
 
 class MethodResponse implements IMethodResponse {
-  mediaType: string
-  statusCode: number
-  type: IType
 
-  constructor(statusCode: string, mediaType: string, type: IType) {
-    this.statusCode = parseInt(statusCode, 10)
-    this.mediaType = mediaType
-    this.type = type
+  constructor(
+    public statusCode: number,
+    public mediaType: string,
+    public type: IType,
+    public description: string) {
   }
 
   get mode() : ResponseMode {
@@ -1168,14 +1167,16 @@ export class ApiModel implements ISymbolTable, IApiModel {
   private methodResponses(schema: OAS.OperationObject): IMethodResponse[] {
     const responses: IMethodResponse[] = []
     Object.entries(schema.responses).forEach(([statusCode, contentSchema]) => {
+      const desc = contentSchema.description || ''
       if (contentSchema.content) {
+
         Object.entries(contentSchema.content).forEach(([mediaType, response]) => {
-          responses.push(new MethodResponse(statusCode, mediaType,
-            this.resolveType((response as OAS.MediaTypeObject).schema || {})))
+          responses.push(new MethodResponse(parseInt(statusCode, 10), mediaType,
+            this.resolveType((response as OAS.MediaTypeObject).schema || {}), desc))
         })
       } else if (statusCode === '204') {
         // no content - returns void
-        responses.push(new MethodResponse(statusCode, '', this.types['void']))
+        responses.push(new MethodResponse(204, '', this.types['void'],desc || 'No content'))
       }
     })
     return responses
