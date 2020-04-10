@@ -1013,8 +1013,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return item
   }
 
-  // Retrieve an api object via its JSON path
-
+  /**
+   *   Retrieve an api object via its JSON path
+   */
   resolveType(schema: string | OAS.SchemaObject | OAS.ReferenceObject, style?: string): IType {
     if (typeof schema === 'string') {
       if (schema.indexOf('/requestBodies/') < 0) return this.types[schema.substr(schema.lastIndexOf('/') + 1)]

@@ -63,13 +63,32 @@ const lintCheck = async (fileName: string) => {
 
 /**
  * Replaces x-looker-nullable with nullable for parameters and properties in a string
- * @param {string} contents
+ * @param {string} spec
  * @returns {Promise<string>} name of the file written
  */
-export const swapXLookerNullable = (contents: string) => {
+export const swapXLookerNullable = (spec: string) => {
   const swapRegex = /x-looker-nullable/gi
   const nullable = 'nullable'
-  return contents.replace(swapRegex, nullable)
+  return spec.replace(swapRegex, nullable)
+}
+
+// TODO complete this function
+/**
+ * Convert swagger collectionFormat values to OpenAPI styles
+ *
+ * This is post-fix operation for the OpenAPI converter which currently misses this type of conversion
+ *
+ * See https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#style-values for
+ * conversion guidelines
+ *
+ * @param {string} openApiSpec
+ * @param {string} swaggerSpec
+ * @returns {string} modified openApiSpec
+ */
+export const addSpecStyles = (openApiSpec: string, swaggerSpec: string) => {
+  const swagger = JSON.parse(swaggerSpec)
+  const api = JSON.parse(openApiSpec)
+  return openApiSpec
 }
 
 /**
@@ -82,33 +101,34 @@ export const swapNullableInFile = (openApiFile: string) => {
     return quit(`${openApiFile} was not found`)
   }
   log(`replacing "x-looker-nullable" with "nullable" in ${openApiFile} ...`)
-  const contents = swapXLookerNullable(readFileSync(openApiFile))
-  fs.writeFileSync(openApiFile, contents)
+  const spec = swapXLookerNullable(readFileSync(openApiFile))
+  fs.writeFileSync(openApiFile, spec)
   return openApiFile
 }
 
 /**
  * Convert a Swagger specification to OpenAPI
- * @param {string} fileName
- * @param {string} openApiFile
+ * @param {string} swaggerFilename
+ * @param {string} openApiFilename
  * @returns {Promise<string>}
  */
-const convertSpec = (fileName: string, openApiFile: string) => {
-  if (isFileSync(openApiFile)) {
-    log(`${openApiFile} already exists.`)
-    return openApiFile
+const convertSpec = (swaggerFilename: string, openApiFilename: string) => {
+  if (isFileSync(openApiFilename)) {
+    log(`${openApiFilename} already exists.`)
+    return openApiFilename
   }
   try {
     // https://github.com/Mermade/oas-kit/tree/master/packages/swagger2openapi config options:
     // patch to fix up small errors in source definition (not required, just to ensure smooth process)
     // indent 2 spaces
-    // output to openApiFile
-    // run('swagger2openapi', [fileName, '--resolveInternal', '-p', '-i', '"  "', '-o', openApiFile])
-    run('swagger2openapi', [fileName, '-p', '-i', '"  "', '-o', openApiFile])
-    if (!isFileSync(openApiFile)) {
-      return fail('convertSpec', `creating ${openApiFile} failed`)
+    // output to openApiFilename
+    // run('swagger2openapi', [swaggerFilename, '--resolveInternal', '-p', '-i', '"  "', '-o', openApiFilename])
+    run('swagger2openapi', [swaggerFilename, '-p', '-i', '"  "', '-o', openApiFilename])
+    if (!isFileSync(openApiFilename)) {
+      return fail('convertSpec', `creating ${openApiFilename} failed`)
     }
-    return swapNullableInFile(openApiFile)
+    let spec = swapNullableInFile(openApiFilename)
+    return addSpecStyles(spec, readFileSync(swaggerFilename))
   } catch (e) {
     return quit(e)
   }
