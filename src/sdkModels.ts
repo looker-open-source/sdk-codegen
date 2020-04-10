@@ -1185,6 +1185,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   private methodParameters(schema: OAS.OperationObject, endpoint: string, httpMethod: HttpMethod): IParameter[] {
     const params: IParameter[] = []
     if (schema.parameters) {
+      // TODO move this out of sdkModels into a postfix for the OpenAPI converter
       const swaggerParams = this.swagger.paths[endpoint][httpMethod.toLowerCase()]['parameters']
       for (let p of schema.parameters) {
         let type: IType
