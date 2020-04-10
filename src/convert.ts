@@ -86,8 +86,8 @@ export const swapXLookerNullable = (spec: string) => {
  * @returns {string} modified openApiSpec
  */
 export const addSpecStyles = (openApiSpec: string, swaggerSpec: string) => {
-  const swagger = JSON.parse(swaggerSpec)
-  const api = JSON.parse(openApiSpec)
+  // const swagger = JSON.parse(swaggerSpec)
+  // const api = JSON.parse(openApiSpec)
   return openApiSpec
 }
 
