@@ -27,9 +27,9 @@
 import { ISDKConfigProps } from './sdkConfig'
 import { openApiFileName, logFetch } from './fetchSpec'
 import { log, success, warn } from './utils'
-import { fail, isFileSync, quit, readFileSync, run } from './nodeUtils'
+import { fail, isFileSync, quit, readFileSync, run, utf8Encoding } from './nodeUtils'
 import * as fs from 'fs'
-import { writeFileSync } from 'fs'
+import { ParameterStyle } from 'openapi3-ts'
 
 const { Spectral } = require('@stoplight/spectral')
 const { getLocationForJsonPath, parseWithPointers } = require('@stoplight/json')
@@ -73,7 +73,7 @@ export const swapXLookerNullable = (spec: string) => {
   return spec.replace(swapRegex, nullable)
 }
 
-type OpenApiStyle = 'matrix' | 'label' | 'form' | 'simple' | 'spaceDelimited' | 'pipeDelimited' | 'deepObject' | undefined
+type OpenApiStyle = ParameterStyle | undefined
 
 /**
  * Convert OpenAPI 2 collectionFormat to OpenApi 3 style
@@ -87,7 +87,7 @@ type OpenApiStyle = 'matrix' | 'label' | 'form' | 'simple' | 'spaceDelimited' | 
 export const openApiStyle = (collectionFormat: string): OpenApiStyle => {
   if (!collectionFormat) return undefined
   const styles: {[key:string]: OpenApiStyle} = {
-    'csv':'simple',
+    'csv': 'simple',
     'ssv': 'spaceDelimited',
     'pipes': 'pipeDelimited',
   }
@@ -97,46 +97,78 @@ export const openApiStyle = (collectionFormat: string): OpenApiStyle => {
   return undefined
 }
 
-// TODO complete this function
+const findOpenApiParam = (api: any, endpoint: string, httpMethod: string, name: string) => {
+  const result = api.paths[endpoint][httpMethod].parameters.find((p: { name: string }) => p.name === name)
+  if (!result) {
+    warn(`Missing parameter: ${endpoint} ${httpMethod} parameter ${name}`)
+  }
+  return result
+}
+
 /**
- * Convert swagger collectionFormat values to OpenAPI styles
+ * This is a post-fix operation for the OpenAPI converter which currently misses this type of conversion
  *
- * This is post-fix operation for the OpenAPI converter which currently misses this type of conversion
+ * - Converts missing swagger collectionFormat values to OpenAPI styles
+ * - Flags OAS.requestBody as required or optional
  *
  * @param {string} openApiSpec
  * @param {string} swaggerSpec
  * @returns {string} modified openApiSpec
  */
-export const addSpecStyles = (openApiSpec: string, swaggerSpec: string) => {
+export const fixConversion = (openApiSpec: string, swaggerSpec: string) => {
   const swagger = JSON.parse(swaggerSpec)
   const api = JSON.parse(openApiSpec)
   const paths = swagger['paths']
   const fixes: string[] = []
   Object.entries(paths).forEach(([endpoint, op]) => {
-    Object.entries(op as any).forEach(([httpMethod, operation]) => {
-      Object.entries((operation as any).parameters).forEach(([arrayPos, p], index) => {
-        const param = p as any
-        if (param.collectionFormat) {
-          const format = param.collectionFormat
-          const style = openApiStyle(format)
-          if (style === undefined) {
-            warn(`OpenAPI style conversion failed: collectionFormat '${param.collectionFormat}' is unknown`)
-          } else {
-            const newParam = api.paths[endpoint][httpMethod].parameters[arrayPos]
-            if (newParam.style !== style) {
-              newParam.style = style
-              fixes.push(`${endpoint} ${httpMethod} ${param.name}.collectionFormat '${format}' -> '${style}'`)
+    Object.entries(op as any).forEach(([httpMethod, method]) => {
+      const operation = method as any
+      const params = operation.parameters
+      if (params) {
+        Object.entries(params).forEach(([, p], index) => {
+          const param = p as any
+          if (param.name === 'body' && param.in === 'body') {
+            // Set `required` in requestBody
+            if ('required' in param) {
+              //  explicitly setting required value
+              const required = param.required
+              const fix = `${endpoint} ${operation.operationId} setting requestBody.required to ${required}`
+              const body = api.paths[endpoint][httpMethod].requestBody
+              if (!body) {
+                warn(`Failed, not found: ${fix}`)
+              } else {
+                if (body.required !== required) {
+                  body.required = required
+                  fixes.push(fix)
+                }
+              }
             }
           }
-        }
-      })
+
+          if (param.collectionFormat) {
+            // Set style from collectionFormat if it's not set
+            const format = param.collectionFormat
+            const style = openApiStyle(format)
+            if (style === undefined) {
+              warn(`OpenAPI style conversion failed: collectionFormat '${param.collectionFormat}' is unknown`)
+            } else {
+              const fix = `${endpoint} ${operation.operationId} ${param.name} '${format}' -> '${style}'`
+              const newParam = findOpenApiParam(api, endpoint, httpMethod, param.name)
+              if (newParam && newParam.style !== style) {
+                newParam.style = style
+                fixes.push(fix)
+              }
+            }
+          }
+        })
+      }
     })
   })
 
   if (fixes.length > 0) {
     // create the variable to avoid Typescript string template limitation
     const fixed = fixes.join('\n')
-    log(`Converted ${fixes.length} collectionFormat parameters:\n${fixed}`)
+    log(`Fixed ${fixes.length} OpenAPI conversion issues:\n${fixed}`)
 
     // Return the modified API as a string
     return JSON.stringify(api, null, 2)
@@ -154,7 +186,8 @@ export const swapNullableInFile = (openApiFile: string) => {
     return quit(`${openApiFile} was not found`)
   }
   log(`replacing "x-looker-nullable" with "nullable" in ${openApiFile} ...`)
-  return swapXLookerNullable(readFileSync(openApiFile))
+  const spec = readFileSync(openApiFile)
+  return swapXLookerNullable(spec)
 }
 
 /**
@@ -163,7 +196,7 @@ export const swapNullableInFile = (openApiFile: string) => {
  * @param {string} openApiFilename
  * @returns {Promise<string>}
  */
-const convertSpec = (swaggerFilename: string, openApiFilename: string) => {
+export const convertSpec = (swaggerFilename: string, openApiFilename: string) => {
   if (isFileSync(openApiFilename)) {
     log(`${openApiFilename} already exists.`)
     return openApiFilename
@@ -179,9 +212,10 @@ const convertSpec = (swaggerFilename: string, openApiFilename: string) => {
       return fail('convertSpec', `creating ${openApiFilename} failed`)
     }
     let spec = swapNullableInFile(openApiFilename)
-    spec = addSpecStyles(spec, readFileSync(swaggerFilename))
-    writeFileSync(openApiFilename, spec)
-    return spec
+    spec = fixConversion(spec, readFileSync(swaggerFilename))
+    fs.writeFileSync(openApiFilename, spec, utf8Encoding)
+    success(`Fixed up ${openApiFilename}`)
+    return openApiFilename
   } catch (e) {
     return quit(e)
   }

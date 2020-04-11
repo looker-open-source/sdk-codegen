@@ -70,8 +70,5 @@ export function TestConfig(rootPath: string = '') {
 }
 
 const config = TestConfig()
-export const apiTestModel = specFromFile(
-  `${config.testPath}openApiRef.json`,
-  `${config.testPath}swaggerRef.json`
-)
+export const apiTestModel = specFromFile(`${config.testPath}openApiRef.json`)
 

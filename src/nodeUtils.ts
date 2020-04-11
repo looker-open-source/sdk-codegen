@@ -25,7 +25,9 @@
 import * as fs from 'fs'
 import { execSync } from 'child_process'
 import { warn } from './utils'
-const utf8 = 'utf-8'
+
+export const utf8Encoding = { encoding: 'utf-8' }
+export const utf8 = 'utf-8'
 
 /**
  * Abstraction of reading a file so all refs go to one place

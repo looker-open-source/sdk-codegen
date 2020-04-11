@@ -98,8 +98,8 @@ const writeFile = (fileName: string, content: string): string => {
           }
           void await logConvert(name, p)
           const oasFile = openApiFileName(name, p)
-          const swaggerFile = specFileName(name, p)
-          const apiModel = specFromFile(oasFile, swaggerFile)
+          // const swaggerFile = specFileName(name, p)
+          const apiModel = specFromFile(oasFile)
           const gen = getFormatter(language, apiModel, versions)
           if (!gen) {
             danger(`${language} does not have a code generator defined`)

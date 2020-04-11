@@ -136,6 +136,7 @@ export interface ISymbolTable extends ISymbolList {
 export interface IType {
   name: string
   properties: IPropertyList
+  methods: IMethodList
   writeable: IProperty[]
   status: string
   elementType?: IType
@@ -147,6 +148,23 @@ export interface IType {
   readOnly: boolean
   refCount: number // if it works for Delphi, it works for TypeScript
   schema: OAS.SchemaObject
+
+  /**
+   * If this is a custom type from the API specification, it will be a reference to itself
+   * If it's a list type, it will be customType of the item type
+   * Otherwise, it will be null (e.g. IntrinsicType)
+   */
+  customType: IType | null
+
+  /**
+   * Types referenced by this type
+   */
+  types: ITypeList
+
+  /**
+   * Custom types reference by this type
+   */
+  customTypes: ITypeList
 
   asHashString(): string
 
@@ -406,6 +424,16 @@ export interface IMethod extends ISchemadSymbol {
   responseModes: Set<ResponseMode>
   activityType: string
 
+  /**
+   * all types referenced in this method, including intrinsic types
+   */
+  types: ITypeList
+
+  /**
+   * all non-instrinsic types referenced in this method
+   */
+  customTypes: ITypeList
+
   getParams(location?: MethodParameterLocation): IParameter[]
 
   optional(location?: MethodParameterLocation): IParameter[]
@@ -419,6 +447,10 @@ export interface IMethod extends ISchemadSymbol {
   responseIsBoth() : boolean
 
   search(rx: RegExp, criteria: SearchCriteria): boolean
+
+  addParam(param: IParameter): IMethod
+
+  addType(type: IType): IMethod
 }
 
 export class Method extends SchemadSymbol implements IMethod {
@@ -429,6 +461,8 @@ export class Method extends SchemadSymbol implements IMethod {
   readonly params: IParameter[]
   readonly responseModes: Set<ResponseMode>
   readonly activityType: string
+  readonly customTypes: ITypeList
+  readonly types: ITypeList
 
   constructor(httpMethod: HttpMethod, endpoint: string, schema: OAS.OperationObject, params: IParameter[],
               responses: IMethodResponse[], body?: IParameter) {
@@ -450,16 +484,47 @@ export class Method extends SchemadSymbol implements IMethod {
     }
 
     super(schema.operationId, primaryResponse.type, schema)
+    this.customTypes = {}
+    this.types = {}
     this.httpMethod = httpMethod
     this.endpoint = endpoint
     this.responses = responses
     this.primaryResponse = primaryResponse
     this.responseModes = this.getResponseModes()
-    this.params = params
+    this.params = []
+    params.forEach(p => this.addParam(p))
+    responses.forEach(r => this.addType(r.type))
     if (body) {
-      this.params.push(body)
+      this.addParam(body)
     }
     this.activityType = schema["x-looker-activity-type"]
+  }
+
+  /**
+   * Adds the parameter and registers its type for the method
+   * @param {IParameter} param
+   */
+  addParam(param: IParameter) {
+    this.params.push(param)
+    this.addType(param.type)
+    return this
+  }
+
+  /**
+   * Adds the type to the method type xrefs and adds the method to the types xref
+   * @param {IType} type
+   */
+  addType(type: IType) {
+    this.types[type.name] = type
+    // Add the method xref to the type
+    type.methods[this.name] = this
+
+    const custom = type.customType
+    if (custom) {
+      this.customTypes[custom.name] = custom
+      custom.methods[this.name] = this
+    }
+    return this
   }
 
   /**
@@ -700,11 +765,16 @@ export class Type implements IType {
   readonly name: string
   readonly schema: OAS.SchemaObject
   readonly properties: IPropertyList = {}
+  readonly methods: IMethodList = {}
+  readonly types: ITypeList = {}
+  readonly customTypes: ITypeList = {}
+  customType: IType | null
   refCount = 0
 
   constructor(schema: OAS.SchemaObject, name: string) {
     this.schema = schema
     this.name = name
+    this.customType = this
   }
 
   get writeable(): IProperty[] {
@@ -736,12 +806,16 @@ export class Type implements IType {
   }
 
   get readOnly(): boolean {
-    return Object.entries(this.properties).every(([_, prop]) => prop.readOnly && prop.readOnly === true)
+    return Object.entries(this.properties).every(([_, prop]) => prop.readOnly)
   }
 
   load(symbols: ISymbolTable): void {
     Object.entries(this.schema.properties || {}).forEach(([propName, propSchema]) => {
-      this.properties[propName] = new Property(propName, symbols.resolveType(propSchema), propSchema, this.schema.required)
+      const propType = symbols.resolveType(propSchema)
+      const customType = propType.customType
+      this.types[propType.name] = propType
+      if (customType) this.customTypes[customType.name] = customType
+      this.properties[propName] = new Property(propName, propType, propSchema, this.schema.required)
     })
   }
 
@@ -803,22 +877,26 @@ export class ArrayType extends Type {
 
   constructor(public elementType: IType, schema: OAS.SchemaObject) {
     super(schema, `${elementType.name}[]`)
+    this.customType = elementType.customType
   }
 
   get readOnly() {
     return this.elementType.readOnly
   }
+
 }
 
 export class DelimArrayType extends Type {
   constructor(public elementType: IType, schema: OAS.SchemaObject) {
     super(schema, `DelimArray<${elementType.name}>`)
     this.elementType = elementType
+    this.customType = elementType.customType
   }
 
   get readOnly() {
     return this.elementType.readOnly
   }
+
 }
 
 export class HashType extends Type {
@@ -827,16 +905,19 @@ export class HashType extends Type {
   constructor(elementType: IType, schema: OAS.SchemaObject) {
     super(schema, `Hash[${elementType.name}`)
     this.elementType = elementType
+    this.customType = elementType.customType
   }
 
   get readOnly() {
     return this.elementType.readOnly
   }
+
 }
 
 export class IntrinsicType extends Type {
   constructor(name: string) {
     super({}, name)
+    this.customType = null
   }
 
   get readOnly(): boolean {
@@ -904,7 +985,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
   readonly tags: ITagList = {}
   private refs: ITypeList = {}
 
-  constructor(spec: OAS.OpenAPIObject, private readonly swagger: any) {
+
+  constructor(spec: OAS.OpenAPIObject) {
     ['string', 'integer', 'int64', 'boolean', 'object',
       'uri', 'float', 'double', 'void', 'datetime', 'email',
       'uuid', 'uri', 'hostname', 'ipv4', 'ipv6',
@@ -922,15 +1004,14 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return this.schema?.decription?.trim() || ''
   }
 
-  static fromString(specContent: string, swaggerContent: string): ApiModel {
+  static fromString(specContent: string): ApiModel {
     const json = JSON.parse(specContent)
-    const swagger = JSON.parse(swaggerContent)
-    return this.fromJson(json, swagger)
+    return this.fromJson(json)
   }
 
-  static fromJson(json: any, swagger: any): ApiModel {
+  static fromJson(json: any): ApiModel {
     const spec = new OAS.OpenApiBuilder(json).getSpec()
-    return new ApiModel(spec, swagger)
+    return new ApiModel(spec)
   }
 
   private static isModelSearch(criteria: SearchCriteria) : boolean {
@@ -1035,7 +1116,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
         return this.types[schema.format]
       }
       if (schema.type === 'array' && schema.items) {
-        if (style === 'csv') {
+        if (style === 'simple') {
+          // FKA 'csv'
           return new DelimArrayType(this.resolveType(schema.items), schema)
         }
         return new ArrayType(this.resolveType(schema.items), schema)
@@ -1147,7 +1229,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       if (opSchema) {
         const responses = this.methodResponses(opSchema)
         const params = this.methodParameters(opSchema, endpoint, httpMethod)
-        const body = this.requestBody(opSchema.requestBody, endpoint, httpMethod)
+        const body = this.requestBody(opSchema.requestBody)
         const method = new Method(httpMethod, endpoint, opSchema, params, responses, body)
         methods.push(method)
         this.tagMethod(method)
@@ -1186,8 +1268,6 @@ export class ApiModel implements ISymbolTable, IApiModel {
   private methodParameters(schema: OAS.OperationObject, endpoint: string, httpMethod: HttpMethod): IParameter[] {
     const params: IParameter[] = []
     if (schema.parameters) {
-      // TODO move this out of sdkModels into a postfix for the OpenAPI converter
-      const swaggerParams = this.swagger.paths[endpoint][httpMethod.toLowerCase()]['parameters']
       for (let p of schema.parameters) {
         let type: IType
         let param: OAS.ParameterObject
@@ -1200,11 +1280,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
             in: 'query',
           }
         } else {
+          type = this.resolveType(p.schema || {}, p.style)
           param = p
-          const sp = swaggerParams.find((s: any) => s.name === param.name)
-          const style = sp ? sp.collectionFormat : undefined
-          const schema = p.schema
-          type = this.resolveType(schema || {}, style)
         }
         const mp = new Parameter(param, type)
         params.push(mp)
@@ -1213,33 +1290,35 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return params
   }
 
-  private requestBody(obj: OAS.RequestBodyObject | OAS.ReferenceObject | undefined, endpoint: string, httpMethod: HttpMethod) {
+  private requestBody(obj: OAS.RequestBodyObject | OAS.ReferenceObject | undefined) {
     if (!obj) return undefined
-    const swaggerParams = this.swagger.paths[endpoint][httpMethod.toLowerCase()]['parameters']
-    const bp = swaggerParams.find((i:any) => i.name === 'body')
-    if (!bp) bp.required = false
 
-    // TODO create a schema factory function and use that where SchemaObject is directly created?
+    let required = true
+    if (!OAS.isReferenceObject(obj)) {
+      const req = obj as OAS.RequestBodyObject
+      if ('required' in req) {
+        required = req.required!
+      }
+    }
+
     const typeSchema: OAS.SchemaObject = {
       nullable: false,
-      required: bp.required ? [strBody] : [],
+      required: required ? [strBody] : [],
       readOnly: false,
       writeOnly: false,
       deprecated: false,
       description: ''
     }
-    // TODO create a BodyType descendant of Type?
+
+    // default the type to a plain body
     let type: IType = new Type(typeSchema, strBody)
-    let result = new Parameter({
-      name: strBody,
-      location: strBody,
-      required: bp.required,
-      description: '', // TODO capture description
-    } as Partial<IParameter>, type)
 
     if (OAS.isReferenceObject(obj)) {
+      // get the type directly from the ref object
       type = this.resolveType(obj.$ref)
+
     } else if (obj.content) {
+      // determine type from content
       const content = obj.content
       // TODO need to understand headers or links
       Object.keys(content).forEach(key => {
@@ -1251,10 +1330,17 @@ export class ApiModel implements ISymbolTable, IApiModel {
           type = this.resolveType(schema)
         }
       })
+
     } else {
       // TODO must be dynamic, create type
     }
-    result.type = type
+
+    let result = new Parameter({
+      name: strBody,
+      location: strBody,
+      required: required,
+      description: '', // TODO capture description
+    } as Partial<IParameter>, type)
 
     return result
   }

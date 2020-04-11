@@ -24,7 +24,7 @@
 
 import * as path from 'path'
 import { danger, success, warn } from './utils'
-import { isFileSync, readFileSync, run } from './nodeUtils'
+import { isFileSync, readFileSync, run, utf8Encoding } from './nodeUtils'
 import * as prettier from 'prettier'
 import * as fs from "fs"
 import { ICodeGen } from './sdkModels'
@@ -34,9 +34,7 @@ export interface IReformat {
   versionStamp(gen: ICodeGen): string
 }
 
-const utf8Encoding = { encoding: 'utf-8' }
 const fileSep = '\n  '
-
 
 class PythonFormatter implements IReformat {
   instructions = 'To reformat Python files, please install pipenv: https://docs.pipenv.org/en/latest/install/#installing-pipenv'
