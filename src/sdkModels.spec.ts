@@ -28,10 +28,10 @@ import {
   CriteriaToSet,
   IMethod,
   IntrinsicType,
-  ITagList, IType,
+  ITagList, IType, keyValues, methodRefs,
   SearchCriterion,
   SearchCriterionTerm,
-  SetToCriteria,
+  SetToCriteria, typeRefs,
 } from './sdkModels'
 
 import { apiTestModel } from './testUtils'
@@ -179,7 +179,7 @@ describe('sdkModels', () => {
     describe('custom types', () => {
       it('intrinsic types have undefined custom types', () => {
         const actual = new IntrinsicType('integer')
-        expect(actual.customType).toBeNull()
+        expect(actual.customType).toEqual('')
         expect(actual.name).toEqual('integer')
       })
 
@@ -187,27 +187,43 @@ describe('sdkModels', () => {
         const intType = new IntrinsicType('integer')
         const schema = { type: 'mock' } as OAS.SchemaObject
         let actual: IType = new ArrayType(intType, schema)
-        expect(actual.customType).toBeNull()
+        expect(actual.customType).toEqual('')
         expect(actual.name).toEqual('integer[]')
         actual = apiTestModel.types['DashboardBase']
-        expect(actual.customType).toBe(actual)
+        expect(actual.customType).toBe('DashboardBase')
       })
     })
 
     it('type references custom types and methods referencing', () => {
       // LookModel SpaceBase FolderBase DashboardElement DashboardFilter DashboardLayout DashboardSettings
       const actual = apiTestModel.types['Dashboard']
-      const customTypes = Object.entries(actual.customTypes).map(([name,]) => name).sort().join(" ")
-      const methods = Object.entries(actual.methods).map(([name,]) => name).sort().join(" ")
-      expect(customTypes).toEqual(
+      const customTypes = keyValues(actual.customTypes)
+      const types = typeRefs(apiTestModel, actual.customTypes)
+      const methodKeys = keyValues(actual.methodRefs)
+      const methods = methodRefs(apiTestModel, actual.methodRefs)
+      expect(types.length).toEqual(customTypes.length)
+      expect(customTypes.join(" ")).toEqual(
         'DashboardAppearance DashboardElement DashboardFilter DashboardLayout FolderBase LookModel')
-      expect(methods).toEqual(
+      expect(methods.length).toEqual(methodKeys.length)
+      expect(methodKeys.join(" ")).toEqual(
         'create_dashboard dashboard folder_dashboards import_lookml_dashboard search_dashboards sync_lookml_dashboard update_dashboard')
+    })
+
+    it('missing method references are silently skipped', () => {
+      const keys = new Set(['login', 'logout', 'Bogosity'])
+      const actual = methodRefs(apiTestModel, keys)
+      expect(actual.length).toEqual(2)
+    })
+
+    it('missing type references are silently skipped', () => {
+      const keys = new Set(['Dashboard', 'User', 'Bogosity'])
+      const actual = typeRefs(apiTestModel, keys)
+      expect(actual.length).toEqual(2)
     })
 
     it('method references custom types from parameters and responses', () => {
       const actual = apiTestModel.methods['run_inline_query']
-      const customTypes = Object.entries(actual.customTypes).map(([name,]) => name).sort().join(" ")
+      const customTypes = keyValues(actual.customTypes).join(" ")
       expect(customTypes).toEqual('Error Query ValidationError')
     })
 
@@ -346,5 +362,32 @@ describe('sdkModels', () => {
       expect(Object.entries(actual).length).toEqual(11)
     })
 
+  })
+
+  describe('json stringify works', () => {
+    it('handles login', () => {
+      const item = apiTestModel.methods['login']
+      expect(item).toBeDefined()
+      const actual = JSON.stringify(item, null, 2)
+      expect(actual).toBeDefined()
+      expect(actual).toContain('"name": "login"')
+    })
+
+    it('handles Dashboard', () => {
+      const item = apiTestModel.types['Dashboard']
+      expect(item).toBeDefined()
+      const actual = JSON.stringify(item, null, 2)
+      expect(actual).toBeDefined()
+      expect(actual).toContain('"name": "Dashboard"')
+      expect(actual).toContain('"customType": "Dashboard"')
+    })
+
+    it('handles dashboard_dashboard_elements', () => {
+      const item = apiTestModel.methods['dashboard_dashboard_elements']
+      expect(item).toBeDefined()
+      const actual = JSON.stringify(item, null, 2)
+      expect(actual).toBeDefined()
+      expect(actual).toContain('"name": "dashboard_dashboard_elements"')
+    })
   })
 })

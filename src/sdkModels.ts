@@ -48,6 +48,7 @@ export const camelCase = (value: string) => {
   })
 }
 
+
 export interface IModel {
 }
 
@@ -75,6 +76,50 @@ export type IMethodList = IKeyedCollection<IMethod>
 export type ITypeList = IKeyedCollection<IType>
 export type ITagList = IKeyedCollection<IMethodList>
 export type IPropertyList = IKeyedCollection<IProperty>
+export type IKeyList = Set<string>
+
+/**
+ * Returns sorted string array for IKeylist type
+ * @param {IKeyList} keys Set of values
+ * @returns {string[]} sorted string array of keys
+ */
+export const keyValues = (keys: IKeyList): string[] => {
+  return Array.from(keys.values()).sort()
+}
+
+/**
+ * Resolve a list of method keys into an IMethod[] in alphabetical order by name
+ * @param {IApiModel} api model to use
+ * @param {IKeyList} refs references to models
+ * @returns {IMethod[]} Populated method list. Anything not matched is skipped
+ */
+export const methodRefs = (api: IApiModel, refs: IKeyList): IMethod[] => {
+  const keys = keyValues(refs)
+  const result: IMethod[] = []
+  keys.forEach(k => {
+    if (k in api.methods) {
+      result.push(api.methods[k])
+    }
+  })
+  return result
+}
+
+/**
+ * Resolve a list of method keys into an IType[] in alphabetical order by name
+ * @param {IApiModel} api model to use
+ * @param {IKeyList} refs references to models
+ * @returns {IMethod[]} Populated method list. Anything not matched is skipped
+ */
+export const typeRefs = (api: IApiModel, refs: IKeyList): IType[] => {
+  const keys = keyValues(refs)
+  const result: IType[] = []
+  keys.forEach(k => {
+    if (k in api.types) {
+      result.push(api.types[k])
+    }
+  })
+  return result
+}
 
 export interface ISymbolList {
   methods: IMethodList
@@ -136,7 +181,6 @@ export interface ISymbolTable extends ISymbolList {
 export interface IType {
   name: string
   properties: IPropertyList
-  methods: IMethodList
   writeable: IProperty[]
   status: string
   elementType?: IType
@@ -154,17 +198,22 @@ export interface IType {
    * If it's a list type, it will be customType of the item type
    * Otherwise, it will be null (e.g. IntrinsicType)
    */
-  customType: IType | null
+  customType: string
 
   /**
-   * Types referenced by this type
+   * names of methods referencing this type
    */
-  types: ITypeList
+  methodRefs: IKeyList
 
   /**
-   * Custom types reference by this type
+   * Names of types referenced by this type
    */
-  customTypes: ITypeList
+  types: IKeyList
+
+  /**
+   * Names of custom types reference by this type
+   */
+  customTypes: IKeyList
 
   asHashString(): string
 
@@ -425,14 +474,14 @@ export interface IMethod extends ISchemadSymbol {
   activityType: string
 
   /**
-   * all types referenced in this method, including intrinsic types
+   * all type names referenced in this method, including intrinsic types
    */
-  types: ITypeList
+  types: IKeyList
 
   /**
-   * all non-instrinsic types referenced in this method
+   * all non-instrinsic type names referenced in this method
    */
-  customTypes: ITypeList
+  customTypes: IKeyList
 
   getParams(location?: MethodParameterLocation): IParameter[]
 
@@ -448,9 +497,9 @@ export interface IMethod extends ISchemadSymbol {
 
   search(rx: RegExp, criteria: SearchCriteria): boolean
 
-  addParam(param: IParameter): IMethod
+  addParam(api: IApiModel, param: IParameter): IMethod
 
-  addType(type: IType): IMethod
+  addType(api: IApiModel, type: IType): IMethod
 }
 
 export class Method extends SchemadSymbol implements IMethod {
@@ -461,10 +510,10 @@ export class Method extends SchemadSymbol implements IMethod {
   readonly params: IParameter[]
   readonly responseModes: Set<ResponseMode>
   readonly activityType: string
-  readonly customTypes: ITypeList
-  readonly types: ITypeList
+  readonly customTypes: IKeyList
+  readonly types: IKeyList
 
-  constructor(httpMethod: HttpMethod, endpoint: string, schema: OAS.OperationObject, params: IParameter[],
+  constructor(api: IApiModel, httpMethod: HttpMethod, endpoint: string, schema: OAS.OperationObject, params: IParameter[],
               responses: IMethodResponse[], body?: IParameter) {
     if (!schema.operationId) {
       throw new Error('Missing operationId')
@@ -484,18 +533,18 @@ export class Method extends SchemadSymbol implements IMethod {
     }
 
     super(schema.operationId, primaryResponse.type, schema)
-    this.customTypes = {}
-    this.types = {}
+    this.customTypes = new Set<string>()
+    this.types = new Set<string>()
     this.httpMethod = httpMethod
     this.endpoint = endpoint
     this.responses = responses
     this.primaryResponse = primaryResponse
     this.responseModes = this.getResponseModes()
     this.params = []
-    params.forEach(p => this.addParam(p))
-    responses.forEach(r => this.addType(r.type))
+    params.forEach(p => this.addParam(api, p))
+    responses.forEach(r => this.addType(api, r.type))
     if (body) {
-      this.addParam(body)
+      this.addParam(api, body)
     }
     this.activityType = schema["x-looker-activity-type"]
   }
@@ -504,9 +553,9 @@ export class Method extends SchemadSymbol implements IMethod {
    * Adds the parameter and registers its type for the method
    * @param {IParameter} param
    */
-  addParam(param: IParameter) {
+  addParam(api: IApiModel, param: IParameter) {
     this.params.push(param)
-    this.addType(param.type)
+    this.addType(api, param.type)
     return this
   }
 
@@ -514,15 +563,16 @@ export class Method extends SchemadSymbol implements IMethod {
    * Adds the type to the method type xrefs and adds the method to the types xref
    * @param {IType} type
    */
-  addType(type: IType) {
-    this.types[type.name] = type
+  addType(api: IApiModel, type: IType) {
+    this.types.add(type.name)
     // Add the method xref to the type
-    type.methods[this.name] = this
+    type.methodRefs.add(this.name)
 
     const custom = type.customType
     if (custom) {
-      this.customTypes[custom.name] = custom
-      custom.methods[this.name] = this
+      this.customTypes.add(custom)
+      const customType = api.types[custom]
+      customType.methodRefs.add(this.name)
     }
     return this
   }
@@ -765,16 +815,16 @@ export class Type implements IType {
   readonly name: string
   readonly schema: OAS.SchemaObject
   readonly properties: IPropertyList = {}
-  readonly methods: IMethodList = {}
-  readonly types: ITypeList = {}
-  readonly customTypes: ITypeList = {}
-  customType: IType | null
+  readonly methodRefs: IKeyList = new Set<string>()
+  readonly types: IKeyList = new Set<string>()
+  readonly customTypes: IKeyList = new Set<string>()
+  customType: string
   refCount = 0
 
   constructor(schema: OAS.SchemaObject, name: string) {
     this.schema = schema
     this.name = name
-    this.customType = this
+    this.customType = name
   }
 
   get writeable(): IProperty[] {
@@ -812,9 +862,9 @@ export class Type implements IType {
   load(symbols: ISymbolTable): void {
     Object.entries(this.schema.properties || {}).forEach(([propName, propSchema]) => {
       const propType = symbols.resolveType(propSchema)
+      this.types.add(propType.name)
       const customType = propType.customType
-      this.types[propType.name] = propType
-      if (customType) this.customTypes[customType.name] = customType
+      if (customType) this.customTypes.add(customType)
       this.properties[propName] = new Property(propName, propType, propSchema, this.schema.required)
     })
   }
@@ -917,7 +967,7 @@ export class HashType extends Type {
 export class IntrinsicType extends Type {
   constructor(name: string) {
     super({}, name)
-    this.customType = null
+    this.customType = ''
   }
 
   get readOnly(): boolean {
@@ -1228,9 +1278,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
     const addIfPresent = (httpMethod: HttpMethod, opSchema: OAS.OperationObject | undefined) => {
       if (opSchema) {
         const responses = this.methodResponses(opSchema)
-        const params = this.methodParameters(opSchema, endpoint, httpMethod)
+        const params = this.methodParameters(opSchema)
         const body = this.requestBody(opSchema.requestBody)
-        const method = new Method(httpMethod, endpoint, opSchema, params, responses, body)
+        const method = new Method(this, httpMethod, endpoint, opSchema, params, responses, body)
         methods.push(method)
         this.tagMethod(method)
       }
@@ -1265,7 +1315,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return responses
   }
 
-  private methodParameters(schema: OAS.OperationObject, endpoint: string, httpMethod: HttpMethod): IParameter[] {
+  private methodParameters(schema: OAS.OperationObject): IParameter[] {
     const params: IParameter[] = []
     if (schema.parameters) {
       for (let p of schema.parameters) {
