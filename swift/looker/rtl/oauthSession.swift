@@ -101,7 +101,7 @@ class OAuthSession: AuthSession {
      Generate an OAuth2 authCode request URL
      */
     func createAuthCodeRequestUrl(scope: String, state: String) throws -> String {
-        self.code_verifier = try! self.secureRandom(32)
+        self.code_verifier = try! self.secureRandom(32).hexStr()
         let code_challenge = self.sha256Hash(self.code_verifier)
         let config = self.settings.readConfig(nil)
         let looker_url = config["looker_url"]!
