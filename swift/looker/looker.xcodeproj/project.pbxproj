@@ -28,6 +28,7 @@
 		951D365C23F60018007EBBC0 /* AnyDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D365B23F60018007EBBC0 /* AnyDecodable.swift */; };
 		951D365E23F60045007EBBC0 /* AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D365D23F60045007EBBC0 /* AnyEncodable.swift */; };
 		9545D06A235A77F8003AA551 /* baseTransportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9545D069235A77F8003AA551 /* baseTransportTests.swift */; };
+		956088462421A20E00C57969 /* oauthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956088452421A20E00C57969 /* oauthSession.swift */; };
 		9578B256234D01CE0048FD2A /* looker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "looker::looker::Product" /* looker.framework */; };
 		9578B25E234D064F0048FD2A /* authTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9578B25D234D064F0048FD2A /* authTokenTests.swift */; };
 		9578B260234D07260048FD2A /* authToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9578B25F234D07260048FD2A /* authToken.swift */; };
@@ -86,6 +87,7 @@
 		951D365B23F60018007EBBC0 /* AnyDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyDecodable.swift; sourceTree = "<group>"; };
 		951D365D23F60045007EBBC0 /* AnyEncodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyEncodable.swift; sourceTree = "<group>"; };
 		9545D069235A77F8003AA551 /* baseTransportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = baseTransportTests.swift; sourceTree = "<group>"; };
+		956088452421A20E00C57969 /* oauthSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = oauthSession.swift; sourceTree = "<group>"; };
 		9578B251234D01CE0048FD2A /* authTokenTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = authTokenTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9578B25D234D064F0048FD2A /* authTokenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = authTokenTests.swift; sourceTree = "<group>"; };
 		9578B25F234D07260048FD2A /* authToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = authToken.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 		OBJ_11 /* rtl */ = {
 			isa = PBXGroup;
 			children = (
+				956088452421A20E00C57969 /* oauthSession.swift */,
 				95E86571234DA4D8008FF9B4 /* apiConfig.swift */,
 				95A775D22360E0BB00E388B8 /* apiMethods.swift */,
 				95ACE1DE234D5ECA00235E02 /* apiSettings.swift */,
@@ -380,6 +383,7 @@
 				95FA444D234EB2AA0053027C /* partial.swift in Sources */,
 				95F04F7B23FCA5CB006DF219 /* streams.swift in Sources */,
 				951D365C23F60018007EBBC0 /* AnyDecodable.swift in Sources */,
+				956088462421A20E00C57969 /* oauthSession.swift in Sources */,
 				9578B262234D3A840048FD2A /* constants.swift in Sources */,
 				95974CD42363A2A30061F13F /* methods.swift in Sources */,
 				9503C28D2355254400C10EEE /* baseTransport.swift in Sources */,

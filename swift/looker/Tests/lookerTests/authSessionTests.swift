@@ -35,4 +35,26 @@ class authSessionTests: XCTestCase {
         XCTAssertFalse(auth.isAuthenticated(), "should not be authenticated")
     }
     
+    func testSha256() {
+        let settings = config.testsettings
+        let xp = BaseTransport(settings)
+        let session = OAuthSession(settings, xp)
+        let message = "The quick brown fox jumped over the lazy dog."
+        let hash = session.sha256Hash(message)
+        XCTAssertEqual("68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483", hash)
+    }
+    
+    func testRedemptionBody() {
+        let settings = config.testsettings
+        let xp = BaseTransport(config.settings)
+        let session = OAuthSession(settings,xp)
+        let hashCode = session.sha256Hash("com.looker.ios")
+        let request = session.redeemAuthCodeBody("authCode", hashCode)
+        XCTAssertEqual("authCode", request["code"])
+        XCTAssertEqual(hashCode, request["code_verifier"])
+        XCTAssertEqual("test_client_id", request["client_id"])
+        XCTAssertEqual("looker://", request["redirect_uri"])
+
+    }
+
 }

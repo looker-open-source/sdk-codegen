@@ -38,7 +38,7 @@
         "url": "https://github.com/looker-open-source/sdk-codegen/issues"
     },
     "engines": {
-        "node": ">=10"
+        "node": ">=12"
     },
     "homepage": "https://github.com/looker-open-source/sdk-codegen#readme",
     "dependencies": {

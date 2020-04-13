@@ -47,7 +47,7 @@ if [[ $tests == *swift* ]]
 then
   echo "Smoking Swift SDK ..."
   cd swift/looker
-  xcodebuild test -project looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.3' | xcpretty --test --color
+  xcodebuild test -project looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.4' | xcpretty --test --color
   cd ../..
 fi
 

@@ -205,7 +205,7 @@ protocol IAuthorizer {
     /** is the current session authenticated? */
     func isAuthenticated() -> Bool
 
-    func authenticate(_ props: URLRequest) -> URLRequest
+    func authenticate(_ props: URLRequest) throws -> URLRequest
 
     func logout() -> Bool
 }

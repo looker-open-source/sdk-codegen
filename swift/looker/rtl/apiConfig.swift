@@ -79,7 +79,7 @@ func parseConfig(_ filename : String) -> Config {
     return config
 }
 
-struct ApiConfig: IApiSettings {
+class ApiConfig: IApiSettings {
     func readConfig(_ section: String? = nil) -> IApiSection {
         if (self.fileName == "") {
             // No config file to read
@@ -153,7 +153,7 @@ struct ApiConfig: IApiSettings {
         self.encoding = values?["encoding"] ?? defaults.encoding
     }
     
-    mutating func assign(_ values: IApiSettings) {
+    func assign(_ values: IApiSettings) {
         let defaults = DefaultSettings()
         self.base_url = unquote(values.base_url) ?? defaults.base_url
         self.api_version = unquote(values.api_version) ?? defaults.api_version
