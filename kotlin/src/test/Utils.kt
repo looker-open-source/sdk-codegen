@@ -34,6 +34,16 @@ typealias jsonDict = Map<String, Any>
 
 val jsonDictType = object : TypeToken<jsonDict>() {}.type
 
+class TestSettingsIniFile(filename: String = "./looker.ini", section: String = "")
+    : ApiSettingsIniFile(filename, section) {
+    override fun readConfig(): Map<String, String> {
+        var map = super.readConfig().toMutableMap()
+        map["client_id"] = "test_client_id"
+        map["redirect_uri"] = "looker://"
+        return map
+    }
+}
+
 open class TestConfig() {
     val rootPath: String = File("./").absoluteFile.parentFile.parentFile.absolutePath
     val testPath = "${rootPath}/test"
@@ -48,12 +58,13 @@ open class TestConfig() {
     val config = apiConfig(configContents)
     val section = config["Looker"]
     var settings = ApiSettingsIniFile(localIni, "Looker")
+    var oAuthTestSettings = TestSettingsIniFile(localIni, "Looker")
     val baseUrl = section?.get("base_url")
     val timeout = section?.get("timeout")?.toInt(10)
     val testContents = File(testIni).readText()
     val testConfig = apiConfig(testContents)
     val testSection = testConfig["Looker"]
-    val session = UserSession(settings, Transport(testSettings(settings)))
+    val session = AuthSession(settings, Transport(testSettings(settings)))
     val sdk = LookerSDK(session)
 
     fun rootFile(fileName: String): String {

@@ -23,6 +23,7 @@
  */
 
 import com.looker.rtl.AuthToken
+import com.looker.sdk.AccessToken
 import kotlin.test.assertEquals
 import org.junit.Test as test
 
@@ -33,6 +34,7 @@ class TestAuthToken {
         assertEquals(testToken.accessToken, "")
         assertEquals(testToken.tokenType, "")
         assertEquals(testToken.expiresIn, 0)
+        assertEquals(testToken.refreshToken, null)
         assertEquals(testToken.isActive(), false)
     }
 
@@ -41,12 +43,38 @@ class TestAuthToken {
         val testToken = AuthToken(
                 accessToken = "all-access",
                 tokenType = "backstage",
-                expiresIn = 3600
+                expiresIn = 3600,
+                refreshToken = "refresh"
         )
 
         assertEquals(testToken.accessToken, "all-access")
         assertEquals(testToken.tokenType, "backstage")
         assertEquals(testToken.expiresIn, 3600)
+        assertEquals(testToken.refreshToken, "refresh")
         assertEquals(testToken.isActive(), true)
+    }
+
+    @test
+    fun setTokenWithFullAccessToken() {
+        val testToken = AuthToken("accessToken", "type", 3600, "refreshToken")
+        val updatedAccessToken = AccessToken("newAccess", "newType", 7200, "newRefresh")
+        testToken.setToken(updatedAccessToken)
+
+        assertEquals("newAccess", testToken.accessToken, "Access token should update")
+        assertEquals("newType", testToken.tokenType, "Token type should update")
+        assertEquals(7200, testToken.expiresIn, "Expires in should update")
+        assertEquals("newRefresh", testToken.refreshToken, "Refresh token should update")
+    }
+
+    @test
+    fun setTokenWithNoRefreshToken() {
+        val testToken = AuthToken("oldAccessToken", "oldType", 3600, "oldRefreshToken")
+        val updatedAccessToken = AccessToken("newAccessToken", "newType", 7200)
+        testToken.setToken(updatedAccessToken)
+
+        assertEquals("newAccessToken", testToken.accessToken, "Access token should update")
+        assertEquals("newType", testToken.tokenType, "Token type should update")
+        assertEquals(7200, testToken.expiresIn, "Expires in should update")
+        assertEquals("oldRefreshToken", testToken.refreshToken, "Refresh token should remain the same")
     }
 }

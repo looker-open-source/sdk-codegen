@@ -41,8 +41,8 @@ fun apiConfig(contents: String): ApiSections {
     return ret
 }
 
-class ApiSettingsIniFile(var filename: String = "./looker.ini",
-                         section: String = "") : ApiSettings(File(filename).readText(), section) {
+open class ApiSettingsIniFile(var filename: String = "./looker.ini",
+                              section: String = "") : ApiSettings(File(filename).readText(), section) {
     override fun readConfig(): Map<String, String> {
         val file = File(filename)
         if (!file.exists()) return mapOf()

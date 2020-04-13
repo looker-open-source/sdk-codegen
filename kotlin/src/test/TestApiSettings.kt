@@ -1,6 +1,6 @@
 import com.looker.rtl.ApiSettings
 import com.looker.rtl.DEFAULT_TIMEOUT
-import com.looker.rtl.UserSession
+import com.looker.rtl.AuthSession
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -64,7 +64,7 @@ class TestApiSettings {
     @Test
     fun testSessionOverride() {
         val settings = MockSettings(bareMinimum)
-        val session = UserSession(settings)
+        val session = AuthSession(settings)
         val config = session.apiSettings.readConfig()
         assertEquals(settings.baseUrl, "https://my.looker.com:19999", "Base URL is read")
         assertEquals(settings.verifySSL, true)

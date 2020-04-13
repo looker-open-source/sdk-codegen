@@ -23,13 +23,16 @@
  */
 
 import com.looker.rtl.Transport
-import com.looker.rtl.UserSession
+import com.looker.rtl.AuthSession
+import com.looker.rtl.OAuthSession
 import java.io.File
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import org.junit.Test as test
 
-class TestUserSession {
+@ExperimentalUnsignedTypes
+class TestAuthSession {
     val config = TestConfig()
     val settings = config.settings
     val testSettings = config.testSettings(settings)
@@ -42,31 +45,55 @@ class TestUserSession {
 
     @test
     fun testIsAuthenticated() {
-        val session = UserSession(settings, Transport(testSettings))
+        val session = AuthSession(settings, Transport(testSettings))
         assertFalse(session.isAuthenticated())
     }
 
     @test
     fun testLoginWithValidCreds() {
-        val session = UserSession(settings, Transport(testSettings))
+        val session = AuthSession(settings, Transport(testSettings))
         session.login()
         assertTrue(session.isAuthenticated())
     }
 
     @test
     fun testUnauthenticatedLogout() {
-        val session = UserSession(settings, Transport(testSettings))
+        val session = AuthSession(settings, Transport(testSettings))
         assertFalse(session.isAuthenticated())
         assertFalse(session.logout())
     }
 
     @test
     fun testLogsInAndOutWithGoodCreds() {
-        val session = UserSession(settings, Transport(testSettings))
+        val session = AuthSession(settings, Transport(testSettings))
         assertFalse(session.isAuthenticated())
         session.login()
         assertTrue(session.isAuthenticated())
         assertTrue(session.logout())
         assertFalse(session.isAuthenticated())
     }
+
+    @test
+    fun testSha256() {
+        val session = OAuthSession(settings, Transport(testSettings))
+        val rosettaCode = "Rosetta code"
+        val rosettaHash = "764faf5c61ac315f1497f9dfa542713965b785e5cc2f707d6468d7d1124cdfcf"
+        var hash = session.sha256hash(rosettaCode)
+        assertEquals(rosettaHash, hash, "Rosetta code should match")
+        val message = "The quick brown fox jumped over the lazy dog."
+        hash = session.sha256hash(message)
+        assertEquals("68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483", hash, "Quick brown fox should match")
+    }
+
+    @test
+    fun testRedemptionBody() {
+        val session = OAuthSession(config.oAuthTestSettings, Transport(testSettings))
+        val hashCode = session.sha256hash("com.looker.android")
+        val request = session.redeemAuthCodeBody("authCode", hashCode)
+        assertEquals("authCode", request["code"])
+        assertEquals(hashCode, request["code_verifier"])
+        assertEquals( "test_client_id", request["client_id"])
+        assertEquals( "looker://", request["redirect_uri"])
+    }
+
 }

@@ -84,14 +84,9 @@ export class KotlinGen extends CodeGen {
 package com.looker.sdk${this.apiNamespace()}
 
 import com.looker.rtl.*
-import com.looker.rtl.UserSession
 import java.util.*
-import java.time.*
-import com.looker.sdk${this.apiNamespace()}.*
-// TODO can this single import override be avoided in any way?
-import com.looker.sdk${this.apiNamespace()}.Locale
 
-class ${this.sdkClassName()}(authSession: UserSession) : APIMethods(authSession) {
+class ${this.sdkClassName()}(authSession: AuthSession) : APIMethods(authSession) {
 
   val stream by lazy { ${this.sdkClassName()}Stream(this.authSession) }
 `
@@ -104,14 +99,9 @@ class ${this.sdkClassName()}(authSession: UserSession) : APIMethods(authSession)
 package com.looker.sdk${this.apiNamespace()}
 
 import com.looker.rtl.*
-import com.looker.rtl.UserSession
 import java.util.*
-import java.time.*
-import com.looker.sdk${this.apiNamespace()}.*
-// TODO can this single import override be avoided in any way?
-import com.looker.sdk${this.apiNamespace()}.Locale
 
-class ${this.sdkClassName()}Stream(authSession: UserSession) : APIMethods(authSession) {
+class ${this.sdkClassName()}Stream(authSession: AuthSession) : APIMethods(authSession) {
 
 `
   }
@@ -128,10 +118,9 @@ class ${this.sdkClassName()}Stream(authSession: UserSession) : APIMethods(authSe
 
 package com.looker.sdk${this.apiNamespace()}
 
-import com.looker.rtl.*
-import java.io.*
+import com.looker.rtl.UriString
+import java.io.Serializable
 import java.util.*
-import java.time.*
 `
   }
 

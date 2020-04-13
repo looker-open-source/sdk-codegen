@@ -29,7 +29,7 @@
         "url": "https://github.com/looker-open-source/sdk-codegen/issues"
     },
     "engines": {
-        "node": ">=10",
+        "node": ">=12",
         "npm": ">=5.5.1"
     },
     "homepage": "https://github.com/looker-open-source/sdk-codegen/",

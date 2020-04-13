@@ -1,6 +1,5 @@
 import com.looker.rtl.SDKResponse
 import com.looker.sdk.*
-import kotlinx.coroutines.*
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
@@ -109,27 +108,27 @@ class TestMethods {
         return dashboard
     }
 
-    private fun prepHomePage(): Homepage {
-        val items = sdk.ok<Array<Homepage>>(sdk.all_homepages())
+    private fun prepBoard(): Board {
+        val items = sdk.ok<Array<Board>>(sdk.all_boards())
         if (items.count() > 0) {
             return items.first()
         }
         val look = prepLook()
-        val homepage = sdk.ok<Homepage>(sdk.create_homepage(WriteHomepage(
-                description = "SDK home page description",
-                title = "SDK Home Page"
+        val board = sdk.ok<Board>(sdk.create_board(WriteBoard(
+                description = "SDK board description",
+                title = "SDK Board"
         )))
 
-        val section = sdk.ok<HomepageSection>(sdk.create_homepage_section(WriteHomepageSection(
-                homepage_id = homepage.id!!.toLong(),
+        val section = sdk.ok<BoardSection>(sdk.create_board_section(WriteBoardSection(
+                board_id = board.id!!.toLong(),
                 description = "SDK section"
         )))
-        val item = sdk.ok<HomepageItem>(sdk.create_homepage_item(WriteHomepageItem(
-                homepage_section_id = section.id,
+        val item = sdk.ok<BoardItem>(sdk.create_board_item(WriteBoardItem(
+                board_section_id = section.id,
                 look_id = look.id
         )))
-        print("Prepared Homepage ${homepage.id} Section ${section.id} Item ${item.id} with Look ${look.id}")
-        return homepage
+        print("Prepared Board ${board.id} Section ${section.id} Item ${item.id} with Look ${look.id}")
+        return board
     }
 
     val scheduleName = "SDK plans and schemes"
@@ -203,6 +202,8 @@ class TestMethods {
 //        }
 //    }
 
+    // TODO resurrect this when the bug is fixed
+/*
     @ExperimentalUnsignedTypes
     @test
     fun testImageDownload() {
@@ -222,7 +223,7 @@ class TestMethods {
             assertEquals("image/jpeg", mimeType(jpg), "image/jpeg should be returned, not image/png. Definitely an API bug, not SDK")
         }
     }
-
+*/
     /*
     functional tests
      */
@@ -316,37 +317,37 @@ class TestMethods {
     }
 
     @test
-    fun testAllHomepageItems() {
-        prepHomePage()
-        listGetter<HomepageItem, Long, HomepageItem>(
-                { sdk.all_homepage_items() },
+    fun testAllBoardItems() {
+        prepBoard()
+        listGetter<BoardItem, Long, BoardItem>(
+                { sdk.all_board_items() },
                 { item -> item.id!!.toLong() },
-                { id, fields -> sdk.homepage_item(id, fields) })
+                { id, fields -> sdk.board_item(id, fields) })
     }
 
     @test
-    fun testSearchHomepages() {
-        val searched = sdk.ok<Array<Homepage>>(sdk.search_homepages(title="%"))
+    fun testSearchBoards() {
+        val searched = sdk.ok<Array<Board>>(sdk.search_boards(title="%"))
         assertNotNull(searched)
-        assertNotEquals(0, searched.count(), "There should be homepages")
+        assertNotEquals(0, searched.count(), "There should be boards")
     }
 
     @test
-    fun testAllHomepages() {
-        prepHomePage()
-        listGetter<Homepage, Long, Homepage>(
-                { sdk.all_homepages() },
+    fun testAllBoards() {
+        prepBoard()
+        listGetter<Board, Long, Board>(
+                { sdk.all_boards() },
                 { item -> item.id!!.toLong() },
-                { id, fields -> sdk.homepage(id, fields) })
+                { id, fields -> sdk.board(id, fields) })
     }
 
     @test
-    fun testAllHomepageSections() {
-        prepHomePage()
-        listGetter<HomepageSection, Long, HomepageSection>(
-                { sdk.all_homepage_sections() },
+    fun testAllBoardSections() {
+        prepBoard()
+        listGetter<BoardSection, Long, BoardSection>(
+                { sdk.all_board_sections() },
                 { item -> item.id!!.toLong() },
-                { id, fields -> sdk.homepage_section(id, fields) })
+                { id, fields -> sdk.board_section(id, fields) })
     }
 
     @test
@@ -381,7 +382,7 @@ class TestMethods {
 
     @test
     fun testAllLookMLModels() {
-        testAll<LookmlModel, String, LegacyFeature>(
+        testAll<LookmlModel, String, LookmlModel>(
                 { sdk.all_lookml_models() },
                 { item -> item.name!! },
                 { id, fields -> sdk.lookml_model(id, fields) })
@@ -462,14 +463,6 @@ class TestMethods {
                 { item -> item.id!! },
                 { id, fields -> sdk.scheduled_plan(id, fields) })
         clearScheduledPlan()
-    }
-
-    @test
-    fun testAllSpaces() {
-        testAll<SpaceBase, String, Space>(
-                { sdk.all_spaces() },
-                { item -> item.id!! },
-                { id, fields -> sdk.space(id, fields) })
     }
 
     @test
