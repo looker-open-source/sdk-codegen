@@ -16,6 +16,7 @@
     },
     "scripts": {
         "clean": "rm -rf api/ && rm *.?.?.json && rm *.?.?.oas.json",
+        "convert": "ts-node src/specConvert.ts",
         "legacy": "ts-node src/legacy.ts",
         "sdk": "ts-node src/sdkGen.ts",
         "lint": "tslint -p tsconfig.json --format stylish",

@@ -48,7 +48,6 @@ export const camelCase = (value: string) => {
   })
 }
 
-
 export interface IModel {
 }
 
@@ -67,6 +66,12 @@ export interface ISymbol {
 
   searchString(criteria: SearchCriteria): string
 
+  /**
+   * Search this item for a regular expression pattern
+   * @param {RegExp} rx regular expression to match
+   * @param {SearchCriteria} criteria items to examine for the search
+   * @returns {boolean} true if the pattern is found in the specified criteria
+   */
   search(rx: RegExp, criteria: SearchCriteria): boolean
 
 }
@@ -179,24 +184,72 @@ export interface ISymbolTable extends ISymbolList {
 }
 
 export interface IType {
+  /**
+   * Name of the type
+   */
   name: string
+
+  /**
+   * key/value collection of properties for this type
+   */
   properties: IPropertyList
+
+  /**
+   * List of writeable properties for this type
+   */
   writeable: IProperty[]
+
+  /**
+   * Status like 'beta', 'experimental', 'stable'
+   */
   status: string
+
+  /**
+   * If this type is a collection, this is the "item" type
+   */
   elementType?: IType
 
+  /**
+   * True if this type is deprecated
+   */
   deprecated: boolean
+
+  /**
+   * Description of the type
+   */
   description: string
+
+  /**
+   * Title for the type. Dunno why OAS has this
+   */
   title: string
+
+  /**
+   * Default value for the type. Optional types may have default values defined
+   */
   default?: string
+
+  /**
+   * Is this a read-only type?
+   */
   readOnly: boolean
-  refCount: number // if it works for Delphi, it works for TypeScript
+
+  /**
+   * Number of times this type is referenced, per language, when generating methods
+   * Other than for reporting purposes, this is used to generate import statements
+   * Idea adopted from Delphi
+   */
+  refCount: number
+
+  /**
+   * OAS schema for the type
+   */
   schema: OAS.SchemaObject
 
   /**
-   * If this is a custom type from the API specification, it will be a reference to itself
+   * If this is a custom type from the API specification, it will be eponymous
    * If it's a list type, it will be customType of the item type
-   * Otherwise, it will be null (e.g. IntrinsicType)
+   * Otherwise, it will be '' (e.g. IntrinsicType)
    */
   customType: string
 
@@ -221,6 +274,12 @@ export interface IType {
 
   searchString(criteria: SearchCriteria): string
 
+  /**
+   * Search this item for a regular expression pattern
+   * @param {RegExp} rx regular expression to match
+   * @param {SearchCriteria} criteria items to examine for the search
+   * @returns {boolean} true if the pattern is found in the specified criteria
+   */
   search(rx: RegExp, criteria: SearchCriteria): boolean
 
 }
@@ -248,6 +307,12 @@ export interface IMethodResponse {
   mode: ResponseMode
   description: string
 
+  /**
+   * Search this item for a regular expression pattern
+   * @param {RegExp} rx regular expression to match
+   * @param {SearchCriteria} criteria items to examine for the search
+   * @returns {boolean} true if the pattern is found in the specified criteria
+   */
   search(rx: RegExp, criteria: SearchCriteria): boolean
 
   searchString(criteria: SearchCriteria): string
@@ -266,6 +331,12 @@ class MethodResponse implements IMethodResponse {
     return responseMode(this.mediaType)
   }
 
+  /**
+   * Search this item for a regular expression pattern
+   * @param {RegExp} rx regular expression to match
+   * @param {SearchCriteria} criteria items to examine for the search
+   * @returns {boolean} true if the pattern is found in the specified criteria
+   */
   search(rx: RegExp, criteria: SearchCriteria): boolean {
     if (!criteria.has(SearchCriterion.response)) return false
     return rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
@@ -290,6 +361,12 @@ export interface IProperty extends ISymbol {
 
   searchString(include: SearchCriteria): string
 
+  /**
+   * Search this item for a regular expression pattern
+   * @param {RegExp} rx regular expression to match
+   * @param {SearchCriteria} criteria items to examine for the search
+   * @returns {boolean} true if the pattern is found in the specified criteria
+   */
   search(rx: RegExp, include: SearchCriteria): boolean
 
 }
@@ -307,6 +384,12 @@ class Symbol implements ISymbol {
     return `${this.name}:${this.type.name}`
   }
 
+  /**
+   * Search this item for a regular expression pattern
+   * @param {RegExp} rx regular expression to match
+   * @param {SearchCriteria} criteria items to examine for the search
+   * @returns {boolean} true if the pattern is found in the specified criteria
+   */
   search(rx: RegExp, criteria: SearchCriteria): boolean {
     return rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
   }
@@ -319,10 +402,29 @@ class Symbol implements ISymbol {
 }
 
 interface ISchemadSymbol extends ISymbol {
+  /**
+   * Original OpenAPI schema reference for this item
+   */
   schema: OAS.SchemaObject
+
+  /**
+   * Status indicator of this item. Typically 'stable', 'beta', 'experimental', or ''
+   */
   status: string
+
+  /**
+   * Description of this item
+   */
   description: string
+
+  /**
+   * True if this item has been deprecated
+   */
   deprecated: boolean
+
+  /**
+   * If deprecated, 'deprecated'. Otherwise ''
+   */
   deprecation: string
 }
 
@@ -387,6 +489,12 @@ class Property extends SchemadSymbol implements IProperty {
     return result
   }
 
+  /**
+   * Search this item for a regular expression pattern
+   * @param {RegExp} rx regular expression to match
+   * @param {SearchCriteria} criteria items to examine for the search
+   * @returns {boolean} true if the pattern is found in the specified criteria
+   */
   search(rx: RegExp, criteria: SearchCriteria): boolean {
     return rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
   }
@@ -443,34 +551,139 @@ export class Parameter implements IParameter {
     return result
   }
 
+  /**
+   * Search this item for a regular expression pattern
+   * @param {RegExp} rx regular expression to match
+   * @param {SearchCriteria} criteria items to examine for the search
+   * @returns {boolean} true if the pattern is found in the specified criteria
+   */
   search(rx: RegExp, criteria: SearchCriteria): boolean {
     return rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
   }
 }
 
+/**
+ * Properties and methods of an SDK method
+ *
+ * Everything required to generate a method declaration, and documentation for it,
+ * is contained in this interface. Search functionality is also included.
+ *
+ */
 export interface IMethod extends ISchemadSymbol {
-  operationId: string // alias of ISymbol.name
+  /**
+   * alias of ISymbol.name
+   */
+  operationId: string
+
+  /**
+   * HTTP method used for this REST request
+   */
   httpMethod: HttpMethod
+
+  /**
+   * Relative URL of the endpoint
+   */
   endpoint: string
-  resultType: IType   // alias of ISymbol.type
+
+  /**
+   * alias of ISymbol.type
+   */
+  resultType: IType
+
+  /**
+   * Prefers 200 response with application/json as the response type
+   */
   primaryResponse: IMethodResponse
+
+  /**
+   * List of all responses that can be returned by this REST call
+   */
   responses: IMethodResponse[]
+
+  /**
+   * Description (from the spec) of this method
+   */
   description: string
+
+  /**
+   * All parameters defined for this method, in natural order from spec processing
+   */
   params: IParameter[]
+
+  /**
+   * Summary from the method's schema object
+   */
   summary: string
+
+  /**
+   * Names of path arguments. Not in required/optional priority
+   */
   pathArgs: string[]
+
+  /**
+   * Primary body argument name ('' if it doesn't exist)
+   */
   bodyArg: string
+
+  /**
+   * Names of query arguments. Not in required/optional priority
+   */
   queryArgs: string[]
+
+  /**
+   * Names of header arguments. Not currently used by Codegen
+   */
   headerArgs: string[]
+
+  /**
+   * Names of cookie arguments. Not currently used by Codegen
+   */
   cookieArgs: string[]
+
+  /**
+   * Responses that have HTTP error codes (4xx)
+   */
   errorResponses: IMethodResponse[]
-  // All parameters in the correct, sorted order for the method call
-  allParams: IParameter[]
-  // All optional parameters
+
+  /**
+   * All required parameters, ordered by location precedence
+   */
+  requiredParams: IParameter[]
+
+  /**
+   * All optional parameters, ordered by location precedence
+   */
   optionalParams: IParameter[]
+
+  /**
+   * All parameters in the correct, sorted order for the method code generator
+   * Parameters are required, by location precedence, then optional, by location precedence
+   */
+  allParams: IParameter[]
+
+  /**
+   * All body parameters in natural order
+   */
   bodyParams: IParameter[]
+
+  /**
+   * All path parameters in natural order
+   */
   pathParams: IParameter[]
+
+  /**
+   * All query parameters in natural order
+   */
+  queryParams: IParameter[]
+
+  /**
+   * The types of responses returned by this method (binary and/or string)
+   */
   responseModes: Set<ResponseMode>
+
+  /**
+   * Value of `x-looker-activity-type` from schema specification
+   */
   activityType: string
 
   /**
@@ -483,23 +696,79 @@ export interface IMethod extends ISchemadSymbol {
    */
   customTypes: IKeyList
 
+  /**
+   * Get a list of parameters for location, or just all parameters
+   * @param {MethodParameterLocation} location is optional. defaults to all parameters
+   * @returns {IParameter[]} all parameters in natural order matching the location constraing
+   */
   getParams(location?: MethodParameterLocation): IParameter[]
 
+  /**
+   * return the list of optional parameters, optionally for a specific location
+   * @param {MethodParameterLocation} location
+   * @returns {IParameter[]}
+   */
   optional(location?: MethodParameterLocation): IParameter[]
 
+  /**
+   * return the list of required parameters, optionally for a specific location
+   */
+  required(location?: MethodParameterLocation): IParameter[]
+
+  /**
+   * Does this method have optional parameters?
+   * @returns {boolean} true if optional parameters exist for this method
+   */
   hasOptionalParams(): boolean
 
+  /**
+   * Does this method return binary responses?
+   * @returns {boolean} true if binary responses are possible
+   */
   responseIsBinary() : boolean
 
+  /**
+   * Does this method return string responses?
+   * @returns {boolean} true if string responses are possible
+   */
   responseIsString() : boolean
 
+  /**
+   * Does this method return both binary and string responses
+   * @returns {boolean} true if both binary and string responses are possible
+   */
   responseIsBoth() : boolean
 
+  /**
+   * Search this item for a regular expression pattern
+   * @param {RegExp} rx regular expression to match
+   * @param {SearchCriteria} criteria items to examine for the search
+   * @returns {boolean} true if the pattern is found in the specified criteria
+   */
   search(rx: RegExp, criteria: SearchCriteria): boolean
 
+  /**
+   * Add a parameter to the method, tracking all cross-reference information
+   * @param {IApiModel} api specification containing this method
+   * @param {IParameter} param to add to the spec
+   * @returns {IMethod} the defined method with parameter and references added
+   */
   addParam(api: IApiModel, param: IParameter): IMethod
 
+  /**
+   * Add a type to the method, tracking all cross-reference information
+   * @param {IApiModel} api specification containing this method
+   * @param {IType} type to add to the spec
+   * @returns {IMethod} the defined method with parameter and references added
+   */
   addType(api: IApiModel, type: IType): IMethod
+
+  /**
+   * Sorts parameters by location precedence, then alphanumeric
+   * @param {IParameter[]} list
+   * @returns {IParameter[]}
+   */
+  sort(list?: IParameter[]): IParameter[]
 }
 
 export class Method extends SchemadSymbol implements IMethod {
@@ -711,21 +980,23 @@ export class Method extends SchemadSymbol implements IMethod {
     return this.responseIsBinary() && this.responseIsString()
   }
 
-  // order parameters in location priority
-  private locationSorter(p1: IParameter, p2: IParameter) {
+  /**
+   * order parameters in location precedence
+   */
+  private locationSorter(a: IParameter, b: IParameter) {
     const remain = 0
     const before = -1
     // const after = 1
     // note: "strBody" is an injected location for simplifying method declarations
     // parameters should be sorted in the following location order:
     const locations = ['path', strBody, 'query', 'header', 'cookie']
-    if (p1.location === p2.location) return remain // no need to re-order
+    if (a.location === b.location) return remain // no need to re-order
 
     for (let location of locations) {
-      if (p1.location === location) {
+      if (a.location === location) {
         return remain // first parameter should stay first
       }
-      if (p2.location === location) {
+      if (b.location === location) {
         return before // second parameter should move up
       }
     }
@@ -735,10 +1006,12 @@ export class Method extends SchemadSymbol implements IMethod {
   sort(list?: IParameter[]) {
     if (!list) list = this.params
     return list
-      .sort((p1, p2) => this.locationSorter(p1, p2))
+      .sort((a, b) => this.locationSorter(a, b))
   }
 
-  // return the list of required, writeable parameters, optionally for a specific location
+  /**
+   * return the list of required parameters, optionally for a specific location
+   */
   required(location?: MethodParameterLocation) {
     let list = this.params
       .filter((i) => i.required)
@@ -748,7 +1021,7 @@ export class Method extends SchemadSymbol implements IMethod {
     return list
   }
 
-  // return the list of optional, writeable parameters, optionally for a specific location
+  // return the list of optional parameters, optionally for a specific location
   optional(location?: MethodParameterLocation) {
     let list = this.params
       .filter((i) => !i.required)
@@ -788,6 +1061,12 @@ export class Method extends SchemadSymbol implements IMethod {
     return result
   }
 
+  /**
+   * Search this item for a regular expression pattern
+   * @param {RegExp} rx regular expression to match
+   * @param {SearchCriteria} criteria items to examine for the search
+   * @returns {boolean} true if the pattern is found in the specified criteria
+   */
   search(rx: RegExp, criteria: SearchCriteria): boolean {
     let result = rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
     if (!result && criteria.has(SearchCriterion.argument)) {
@@ -896,6 +1175,12 @@ export class Type implements IType {
       || criteria.has(SearchCriterion.property)
   }
 
+  /**
+   * Search this item for a regular expression pattern
+   * @param {RegExp} rx regular expression to match
+   * @param {SearchCriteria} criteria items to examine for the search
+   * @returns {boolean} true if the pattern is found in the specified criteria
+   */
   search(rx: RegExp, criteria: SearchCriteria): boolean {
     if (!criteria.has(SearchCriterion.type) && !criteria.has(SearchCriterion.status)) return false
     let result = rx.test(this.searchString(criteria))
@@ -1024,6 +1309,12 @@ export interface IApiModel extends IModel {
 
   getWriteableType(type: IType): IType | undefined
 
+  /**
+   * Search this item for a regular expression pattern
+   * @param {RegExp} rx regular expression to match
+   * @param {SearchCriteria} criteria items to examine for the search
+   * @returns {boolean} true if the pattern is found in the specified criteria
+   */
   search(expression: string, criteria: SearchCriteria): ISearchResult
 }
 
@@ -1096,6 +1387,12 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return ApiModel.addMethodToTags(this.tags, method)
   }
 
+  /**
+   * Search this item for a regular expression pattern
+   * @param {RegExp} rx regular expression to match
+   * @param {SearchCriteria} criteria items to examine for the search
+   * @returns {boolean} true if the pattern is found in the specified criteria
+   */
   search(expression: string, criteria: SearchCriteria = SearchAll): ISearchResult {
     let tags: ITagList = {}
     let types: ITypeList = {}

@@ -27,7 +27,7 @@
 import * as fs from 'fs'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { danger, log } from './utils'
-import { fetchLookerVersion, openApiFileName, specFileName } from './fetchSpec'
+import { fetchLookerVersion, openApiFileName } from './fetchSpec'
 import { MethodGenerator, specFromFile, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
 import { logConvert } from './convert'
@@ -65,7 +65,6 @@ const writeFile = (fileName: string, content: string): string => {
   return fileName
 }
 
-// tslint:disable-next-line: no-floating-promises
 ;(async () => {
   let args = process.argv.slice(2)
   let languages = Languages.filter(l => l.factory !== undefined).map(
@@ -84,52 +83,50 @@ const writeFile = (fileName: string, content: string): string => {
   try {
     const config = SDKConfig()
     for (let language of languages) {
-      for (let [name, props] of Object.entries(config)) {
-        const lookerVersion = await fetchLookerVersion(props)
-        // Iterate through all specified API versions
-        const apis = apiVersions(props)
-        const lastApi = apis[apis.length-1]
-        for (const api of apis) {
-          let p = JSON.parse(JSON.stringify(props)) as ISDKConfigProps
-          p.api_version = api
-          const versions: IVersionInfo = {
-            lookerVersion,
-            apiVersion: api
-          }
-          void await logConvert(name, p)
-          const oasFile = openApiFileName(name, p)
-          // const swaggerFile = specFileName(name, p)
-          const apiModel = specFromFile(oasFile)
-          const gen = getFormatter(language, apiModel, versions)
-          if (!gen) {
-            danger(`${language} does not have a code generator defined`)
-            continue
-          }
-          if (api !== lastApi && !gen.supportsMultiApi()) {
-            danger(`skipping API ${api} for ${language} because it doesn't support multiple APIs`)
-            continue
-          }
-          log(`generating ${language} from ${props.base_url} ${api}...`)
-
-          sdkPathPrep(gen)
-          // Generate standard method declarations
-          const sdk = new MethodGenerator(apiModel, gen)
-          let output = sdk.render(gen.indentStr)
-          writeFile(gen.sdkFileName(`methods`), output)
-
-          if (gen.willItStream) {
-            // Generate streaming method declarations
-            const s = new StreamGenerator(apiModel, gen)
-            let output = s.render(gen.indentStr)
-            writeFile(gen.sdkFileName(`streams`), output)
-          }
-
-          const types = new TypeGenerator(apiModel, gen)
-          output = types.render('')
-          writeFile(gen.sdkFileName(`models`), output)
-          formatter.versionStamp(gen)
+      let [name, props] = Object.entries(config)[0]
+      const lookerVersion = await fetchLookerVersion(props)
+      // Iterate through all specified API versions
+      const apis = apiVersions(props)
+      const lastApi = apis[apis.length-1]
+      for (const api of apis) {
+        let p = JSON.parse(JSON.stringify(props)) as ISDKConfigProps
+        p.api_version = api
+        const versions: IVersionInfo = {
+          lookerVersion,
+          apiVersion: api
         }
-        break
+        void await logConvert(name, p)
+        const oasFile = openApiFileName(name, p)
+        // const swaggerFile = specFileName(name, p)
+        const apiModel = specFromFile(oasFile)
+        const gen = getFormatter(language, apiModel, versions)
+        if (!gen) {
+          danger(`${language} does not have a code generator defined`)
+          continue
+        }
+        if (api !== lastApi && !gen.supportsMultiApi()) {
+          danger(`skipping API ${api} for ${language} because it doesn't support multiple APIs`)
+          continue
+        }
+        log(`generating ${language} from ${props.base_url} ${api}...`)
+
+        sdkPathPrep(gen)
+        // Generate standard method declarations
+        const sdk = new MethodGenerator(apiModel, gen)
+        let output = sdk.render(gen.indentStr)
+        writeFile(gen.sdkFileName(`methods`), output)
+
+        if (gen.willItStream) {
+          // Generate streaming method declarations
+          const s = new StreamGenerator(apiModel, gen)
+          let output = s.render(gen.indentStr)
+          writeFile(gen.sdkFileName(`streams`), output)
+        }
+
+        const types = new TypeGenerator(apiModel, gen)
+        output = types.render('')
+        writeFile(gen.sdkFileName(`models`), output)
+        formatter.versionStamp(gen)
       }
     }
     // finally, reformat all the files that have been generated

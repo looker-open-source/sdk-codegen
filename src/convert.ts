@@ -132,13 +132,13 @@ export const fixConversion = (openApiSpec: string, swaggerSpec: string) => {
             if ('required' in param) {
               //  explicitly setting required value
               const required = param.required
-              const fix = `${endpoint} ${operation.operationId} setting requestBody.required to ${required}`
-              const body = api.paths[endpoint][httpMethod].requestBody
-              if (!body) {
-                warn(`Failed, not found: ${fix}`)
+              const fix = `${endpoint}::${operation.operationId} setting requestBody.required to ${required}`
+              const requestBody = api.paths[endpoint][httpMethod].requestBody
+              if (!requestBody) {
+                warn(`Failed to find "requestBody" in OAS for swagger "body param" fix: ${fix}`)
               } else {
-                if (body.required !== required) {
-                  body.required = required
+                if (requestBody.required !== required) {
+                  requestBody.required = required
                   fixes.push(fix)
                 }
               }
@@ -150,9 +150,9 @@ export const fixConversion = (openApiSpec: string, swaggerSpec: string) => {
             const format = param.collectionFormat
             const style = openApiStyle(format)
             if (style === undefined) {
-              warn(`OpenAPI style conversion failed: collectionFormat '${param.collectionFormat}' is unknown`)
+              warn(`OAS style conversion failed: collectionFormat '${param.collectionFormat}' is unknown`)
             } else {
-              const fix = `${endpoint} ${operation.operationId} ${param.name} '${format}' -> '${style}'`
+              const fix = `${endpoint}::${operation.operationId} ${param.name} '${format}' -> '${style}'`
               const newParam = findOpenApiParam(api, endpoint, httpMethod, param.name)
               if (newParam && newParam.style !== style) {
                 newParam.style = style
