@@ -1,6 +1,6 @@
 {
     "name": "sdk-codegen",
-    "version": "0.2-beta-3",
+    "version": "0.2.0-beta-3",
     "description": "A utility for generating SDKs for various languages from an OpenApi specification",
     "main": "index.js",
     "devDependencies": {

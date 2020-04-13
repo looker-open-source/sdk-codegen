@@ -30,7 +30,7 @@ Basic Usage
 sample project setup
 ====================
 
-Install python 3.7. We highly recommend using
+Install python 3.8. We highly recommend using
 `pyenv <https://github.com/pyenv/pyenv#installation>`_ to install
 different versions of python. Mac users should use
 `homebrew <https://brew.sh/>`_ to install pyenv:
@@ -40,17 +40,17 @@ different versions of python. Mac users should use
     brew install pyenv
 
 Follow the **remaining steps 3 - 5** of
-https://github.com/pyenv/pyenv#basic-github-checkout otherwise your python3.7
+https://github.com/pyenv/pyenv#basic-github-checkout otherwise your python3.8
 installation may break.
 
-Now you're ready to install python 3.7:
+Now you're ready to install python 3.8:
 
 .. code-block:: bash
 
-    pyenv install 3.7.4
+    pyenv install 3.8.2
 
-Next we'll use `pipenv <https://docs.pipenv.org/en/latest/#install-pipenv-today>`_
-as an awesome enhancement to pip to manage project dependencies.
+We'll use `pipenv <https://docs.pipenv.org/en/latest/#install-pipenv-today>`_
+(fantastic virtualenv manager) to manage project dependencies.
 
 .. code-block:: bash
 
@@ -62,18 +62,18 @@ Create a project directory
 
     mkdir looker-sdk-example
 
-Install python3.7 and use it for this directory
+Set python3.8 as the base interpreter for this directory
 
 .. code-block:: bash
 
     cd looker-sdk-example/
-    pyenv local 3.7.4
+    pyenv local 3.8.2
 
 Install looker_sdk using pipenv
 
 .. code-block:: bash
 
-    pipenv install --python 3.7 looker_sdk
+    pipenv --python 3.8.2 install --pre looker_sdk
 
 
 Configuring the SDK

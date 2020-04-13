@@ -99,14 +99,14 @@ class BaseTransport : ITransport  {
 
         var result: RequestResponse? = nil
         let task = self.session.dataTask(with: req!) { data, response, error in
-            let res = response as! HTTPURLResponse
+            let res = response as? HTTPURLResponse
             var sdkError: SDKError?
-            if let err = error {
-                sdkError = SDKError(err.localizedDescription, code: res.statusCode)
+            if let err = error, let r = res {
+                sdkError = SDKError(err.localizedDescription, code: r.statusCode)
             }
-            if (!BaseTransport.ok(res)) {
+            if let r = res, !BaseTransport.ok(r) {
                 let dataString = String(data: data!, encoding: .utf8)
-                sdkError = SDKError(dataString ?? "Error with \(method) \(path)", code: res.statusCode)
+                sdkError = SDKError(dataString ?? "Error with \(method) \(path)", code: r.statusCode)
             }
             result = RequestResponse(data, response, sdkError)
             semi.signal() // Notify request has completed

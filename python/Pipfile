@@ -25,10 +25,10 @@ pillow = "*"
 requests = "*"
 attrs = "*"
 cattrs = "*"
-typing-extensions = "*"
 
 [requires]
-python_version = "3.7"
+python_full_version = "3.8.2"
 
 [pipenv]
+# for `black`
 allow_prereleases = true

@@ -1,8 +1,9 @@
-import * as Models from './sdkModels'
+import { CriteriaToSet, IMethod, ITagList, SearchCriterion, SearchCriterionTerm, SetToCriteria } from './sdkModels'
 import { TestConfig } from '../typescript/looker/rtl/nodeSettings.spec'
+import { specFromFile } from './sdkGenerator'
 
 const config = TestConfig()
-export const apiTestModel = Models.ApiModel.fromFile(
+export const apiTestModel = specFromFile(
   `${config.testPath}openApiRef.json`,
   `${config.testPath}swaggerRef.json`
 )
@@ -119,4 +120,154 @@ describe('sdkModels', () => {
 
   })
 
+  const allMethods = (tags: ITagList): Array<IMethod> => {
+    let result: Array<IMethod> = []
+    Object.entries(tags).forEach(([, methods]) => {
+      Object.entries(methods).forEach(([, method]) => {
+        result.push(method)
+      })
+    })
+    return result
+  }
+
+  describe('searching', () => {
+
+    const modelAndTypeNames = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+    const modelNames = new Set([SearchCriterion.method, SearchCriterion.name])
+    const titleOnly  = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.title])
+    const responseCriteria = new Set([SearchCriterion.response])
+    const statusCriteria = new Set([SearchCriterion.status])
+    const activityCriteria = new Set([SearchCriterion.activityType])
+
+    describe('model search', () => {
+      it('target not found', () => {
+        const actual = apiTestModel.search('you will not find me anywhere in there, nuh uh')
+        expect(actual).toBeDefined()
+        const methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(0)
+        expect(Object.entries(actual.types).length).toEqual(0)
+      })
+
+      it('search anywhere', () => {
+        const actual = apiTestModel.search('dashboard', modelAndTypeNames)
+        const methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(34)
+        expect(Object.entries(actual.types).length).toEqual(14)
+      })
+
+      it('search for word', () => {
+        let actual = apiTestModel.search('\\bdashboard\\b', modelAndTypeNames)
+        let methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(7)
+        expect(Object.entries(actual.types).length).toEqual(1)
+        actual = apiTestModel.search('\\bdashboardbase\\b', modelAndTypeNames)
+        methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(1)
+        expect(Object.entries(actual.types).length).toEqual(1)
+      })
+
+      it('title search', () => {
+        let actual = apiTestModel.search('\\bdashboard\\b', titleOnly)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(0)
+        expect(Object.entries(actual.types).length).toEqual(1)
+      })
+
+      it('just model names', () => {
+        let actual = apiTestModel.search('\\bdashboard\\b', modelNames)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(1)
+        expect(Object.entries(actual.types).length).toEqual(0)
+      })
+
+      it('deprecated items', () => {
+        let actual = apiTestModel.search('deprecated', statusCriteria)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(6)
+        expect(Object.entries(actual.types).length).toEqual(4)
+      })
+
+      it('beta items', () => {
+        let actual = apiTestModel.search('beta', statusCriteria)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(204)
+        expect(Object.entries(actual.types).length).toEqual(99)
+      })
+
+      it('stable items', () => {
+        let actual = apiTestModel.search('stable', statusCriteria)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(153)
+        expect(Object.entries(actual.types).length).toEqual(88)
+      })
+
+      it('db queries', () => {
+        let actual = apiTestModel.search('db_query', activityCriteria)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(35)
+        expect(Object.entries(actual.types).length).toEqual(0)
+      })
+    })
+
+    describe('response search', () => {
+      it('find binary responses', () => {
+        let actual = apiTestModel.search('binary', responseCriteria)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(6)
+        expect(Object.entries(actual.types).length).toEqual(0)
+      })
+
+      it('find rate limited responses', () => {
+        let actual = apiTestModel.search('429', responseCriteria)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(7)
+        expect(Object.entries(actual.types).length).toEqual(0)
+      })
+    })
+
+    describe('criteria transformations', () => {
+      it('criterion name array to criteria', () => {
+        let expected = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        // this declaration pattern assures correct enum names
+        let names: SearchCriterionTerm[] = ['method', 'type', 'name']
+        let actual = CriteriaToSet(names)
+        expect(actual).toEqual(expected)
+      })
+
+      it('criteria to criterion name array', () => {
+        let criteria = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        let expected: SearchCriterionTerm[] = ['method', 'type', 'name']
+        let actual = SetToCriteria(criteria)
+        expect(actual).toEqual(expected)
+      })
+
+      it('strings to criteria', () => {
+        let expected = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        let values = ['method', 'type', 'name']
+        let names = values as SearchCriterionTerm[]
+        let actual = CriteriaToSet(names)
+        expect(actual).toEqual(expected)
+      })
+
+      it('criteria is case insensitive', () => {
+        let expected = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        let values = ['Method', 'Type', 'name']
+        let names = values as SearchCriterionTerm[]
+        let actual = CriteriaToSet(names)
+        expect(actual).toEqual(expected)
+      })
+
+      it('criteria to strings', () => {
+        let criteria = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        let expected = ['method', 'type', 'name']
+        let actual = SetToCriteria(criteria)
+        expect(actual).toEqual(expected)
+      })
+    })
+  })
+
+  describe('tagging', () => {
+    it('methods are tagged', () => {
+      let actual = apiTestModel.tags
+      expect(Object.entries(actual).length).toEqual(26)
+    })
+
+    it('methods are in the right tag', () => {
+      let actual = apiTestModel.tags['Theme']
+      expect(Object.entries(actual).length).toEqual(11)
+    })
+
+  })
 })

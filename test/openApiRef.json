@@ -25175,6 +25175,7 @@
         ]
       },
       "DashboardBase": {
+        "title": "Simplified dashboard object",
         "properties": {
           "can": {
             "type": "object",

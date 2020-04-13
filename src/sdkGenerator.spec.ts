@@ -1,5 +1,3 @@
-import { MethodGenerator } from './sdkGenerator'
-import { PythonGen } from './python.gen'
 import { apiTestModel } from './sdkModels.spec'
 
 describe('sdk generator test', () => {

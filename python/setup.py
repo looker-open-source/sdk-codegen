@@ -5,8 +5,13 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "looker_sdk"
-VERSION = "0.1.3b8"
-REQUIRES = ["requests >= 2.22", "attrs", "cattrs >= 1.0.0", "typing-extensions"]
+VERSION = "0.1.3b10"
+REQUIRES = [
+    "requests >= 2.22",
+    "attrs",
+    "cattrs >= 1.0.0",
+    "typing-extensions ; python_version<'3.8'",
+]
 
 
 setup(
@@ -21,7 +26,7 @@ setup(
     name=NAME,
     package_data={"looker_sdk": ["py.typed", "looker_sdk/looker-sample.ini"]},
     packages=find_packages(),
-    python_requires=">=3.7.0, <3.8",
+    python_requires=">=3.7.0, <3.9",
     url="https://pypi.python.org/pypi/looker_sdk",
     version=VERSION,
 )
