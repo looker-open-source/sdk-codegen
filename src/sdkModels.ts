@@ -1311,7 +1311,7 @@ export interface IApiModel extends IModel {
 
   /**
    * Search this item for a regular expression pattern
-   * @param {RegExp} rx regular expression to match
+   * @param {string} expression text or regex  to match
    * @param {SearchCriteria} criteria items to examine for the search
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
