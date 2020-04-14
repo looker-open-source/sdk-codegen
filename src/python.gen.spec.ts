@@ -23,7 +23,7 @@
  */
 
 import { PythonGen } from './python.gen'
-import { apiTestModel } from './sdkModels.spec'
+import { apiTestModel } from './testUtils'
 
 const gen = new PythonGen(apiTestModel)
 const indent = ''

@@ -25,12 +25,12 @@
  */
 
 import * as Models from './sdkModels'
-import { readFileSync, success } from './utils'
+import { success } from './utils'
+import { readFileSync } from './nodeUtils'
 
-export const specFromFile = (specFile: string, swaggerFile: string): Models.ApiModel => {
+export const specFromFile = (specFile: string): Models.ApiModel => {
   const specContent = readFileSync(specFile)
-  const swaggerContent = readFileSync(swaggerFile)
-  return Models.ApiModel.fromString(specContent, swaggerContent)
+  return Models.ApiModel.fromString(specContent)
 }
 
 export interface IGeneratorCtor<T extends Models.IModel> {

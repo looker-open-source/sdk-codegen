@@ -37,9 +37,7 @@ import {
   strBody, DelimArrayType,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
-import * as fs from 'fs'
-import { warn, isDirSync, isFileSync, success, commentBlock, readFileSync } from './utils'
-import { utf8 } from '../typescript/looker/rtl/constants'
+import { commentBlock} from './utils'
 
 export class SwiftGen extends CodeGen {
   codePath = './swift/'
@@ -407,27 +405,6 @@ ${indent}return result`
     return names
   }
 
-  versionStamp() {
-    if (this.versions) {
-      const stampFile = this.fileName('rtl/constants')
-      if (!isFileSync(stampFile)) {
-        warn(`${stampFile} was not found. Skipping version update.`)
-      }
-      let content = readFileSync(stampFile)
-      const lookerPattern = /lookerVersion = ['"].*['"]/i
-      const apiPattern = /apiVersion = ['"].*['"]/i
-      const envPattern = /environmentPrefix = ['"].*['"]/i
-      content = content.replace(lookerPattern, `lookerVersion = "${this.versions.lookerVersion}"`)
-      content = content.replace(apiPattern, `apiVersion = "${this.versions.apiVersion}"`)
-      content = content.replace(envPattern, `environmentPrefix = "${this.environmentPrefix}"`)
-      fs.writeFileSync(stampFile, content, {encoding: utf8})
-      success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}`)
-    } else {
-      warn('Version information was not retrieved. Skipping SDK version updating.')
-    }
-    return this.versions
-  }
-
   typeMap(type: IType): IMappedType {
     super.typeMap(type)
     // const ns = `api${this.apiRef}.`
@@ -476,27 +453,4 @@ ${indent}return result`
     }
   }
 
-
-  reformatFile(fileName: string) {
-    warn(`No code formatter is defined for ${fileName}`)
-    // const formatOptions: prettier.Options = {
-    //   semi: false,
-    //   trailingComma: 'all',
-    //   bracketSpacing: true,
-    //   parser: 'typescript',
-    //   singleQuote: true,
-    //   proseWrap: 'preserve',
-    //   quoteProps: 'as-needed',
-    //   endOfLine: 'auto'
-    // }
-    // const name = super.reformatFile(fileName)
-    // if (name) {
-    //   const source = prettier.format(readFileSync(name), formatOptions)
-    //   if (source) {
-    //     fs.writeFileSync(name, source, {encoding: utf8})
-    //     return name
-    //   }
-    // }
-    return ''
-  }
 }

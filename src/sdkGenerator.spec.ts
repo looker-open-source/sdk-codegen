@@ -1,4 +1,4 @@
-import { apiTestModel } from './sdkModels.spec'
+import { apiTestModel } from './testUtils'
 
 describe('sdk generator test', () => {
   it('resolves OAS schemas into types', () => {

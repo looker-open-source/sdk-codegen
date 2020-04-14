@@ -1,10 +1,10 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "4.0.7.1",
-    "x-looker-release-version": "7.1.0",
-    "title": "error",
-    "description": "Error.  version: 4.0",
+    "version": "4.0.7.6",
+    "x-looker-release-version": "7.6.0",
+    "title": "Looker API 4.0 (Experimental) Reference",
+    "description": "\nWelcome to the future! This is an early preview of our next-generation Looker API 4.0.\nAPI 4.0 runs alongside APIs 3.1 and 3.0. We've tagged 4.0 as \"experimental\" to reflect\nthat we have more work planned for API 4.0 which may include breaking changes.\nPlease pardon our dust while we remodel a few rooms!\n\n### In This Release\n\nWe're spinning up this new API 4.0 version so that we can make adjustments to our API\nfunctions, parameters, and response types to fix bugs and inconsistencies. These changes\nfall outside the bounds of non-breaking additive changes we can make to our stable API 3.1.\n\nOne benefit of these type adjustments in API 4.0 is dramatically better support for strongly\ntyped languages like TypeScript, Kotlin, Java, and more. Looker is also creating client SDKs\nto call the Looker API from these and other languages. These client SDKs will be available\nas pre-built packages for download from public repositories such as npmjs.org, RubyGems.org,\nPyPi.org. If you use an IDE for software development, you will soon be able to install a\nLooker SDK for your programming language with the click of a button!\n\nWhile API 3.1 is still the defacto Looker API (\"current\", \"stable\", \"default\", etc), the bulk\nof our development activity will gradually shift to API 4.0.\n\n",
     "contact": {
       "name": "Looker Team",
       "email": "support@looker.com",
@@ -34,6 +34,10 @@
     {
       "name": "Auth",
       "description": "Manage User Authentication Configuration"
+    },
+    {
+      "name": "Board",
+      "description": "Manage Boards"
     },
     {
       "name": "ColorCollection",
@@ -72,10 +76,6 @@
       "description": "Manage Groups"
     },
     {
-      "name": "Homepage",
-      "description": "Manage Homepage"
-    },
-    {
       "name": "Integration",
       "description": "Manage Integrations"
     },
@@ -110,10 +110,6 @@
     {
       "name": "Session",
       "description": "Session Information"
-    },
-    {
-      "name": "Space",
-      "description": "Manage Spaces"
     },
     {
       "name": "Theme",
@@ -275,6 +271,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -582,6 +584,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -729,6 +737,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -946,6 +960,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -1010,7 +1030,7 @@
         ],
         "operationId": "login_user",
         "summary": "Login user",
-        "description": "### Create an access token for a given user.\n\nThis can only be called by an authenticated admin user. It allows that admin to generate a new\nauthentication token for the user with the given user id. That token can then be used for subsequent\nAPI calls - which are then performed *as* that target user.\n\nThe target user does *not* need to have a pre-existing API client_id/client_secret pair. And, no such\ncredentials are created by this call.\n\nThis allows for building systems where api user authentication for an arbitrary number of users is done\noutside of Looker and funneled through a single 'service account' with admin permissions. Note that a\nnew access token is generated on each call. If target users are going to be making numerous API\ncalls in a short period then it is wise to cache this authentication token rather than call this before\neach of those API calls.\n\nSee 'login' for more detail on the access token and how to use it.\n",
+        "description": "### Create an access token that runs as a given user.\n\nThis can only be called by an authenticated admin user. It allows that admin to generate a new\nauthentication token for the user with the given user id. That token can then be used for subsequent\nAPI calls - which are then performed *as* that target user.\n\nThe target user does *not* need to have a pre-existing API client_id/client_secret pair. And, no such\ncredentials are created by this call.\n\nThis allows for building systems where api user authentication for an arbitrary number of users is done\noutside of Looker and funneled through a single 'service account' with admin permissions. Note that a\nnew access token is generated on each call. If target users are going to be making numerous API\ncalls in a short period then it is wise to cache this authentication token rather than call this before\neach of those API calls.\n\nSee 'login' for more detail on the access token and how to use it.\n",
         "parameters": [
           {
             "name": "user_id",
@@ -1019,6 +1039,13 @@
             "required": true,
             "type": "integer",
             "format": "int64"
+          },
+          {
+            "name": "associative",
+            "in": "query",
+            "description": "When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -1077,17 +1104,17 @@
         "x-looker-activity-type": "none"
       }
     },
-    "/backup_configuration": {
+    "/cloud_storage": {
       "get": {
         "tags": [
           "Config"
         ],
-        "operationId": "backup_configuration",
-        "summary": "Get Backup Configuration",
-        "description": "### Get the current Looker internal database backup configuration.\n",
+        "operationId": "cloud_storage_configuration",
+        "summary": "Get Cloud Storage",
+        "description": "Get the current Cloud Storage Configuration.\n",
         "responses": {
           "200": {
-            "description": "Current Backup Configuration",
+            "description": "Current Cloud Storage Configuration",
             "schema": {
               "$ref": "#/definitions/BackupConfiguration"
             }
@@ -1105,21 +1132,21 @@
             }
           }
         },
-        "x-looker-status": "stable",
+        "x-looker-status": "beta",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
         "tags": [
           "Config"
         ],
-        "operationId": "update_backup_configuration",
-        "summary": "Update Backup Configuration",
-        "description": "### Update the Looker internal database backup configuration.\n",
+        "operationId": "update_cloud_storage_configuration",
+        "summary": "Update Cloud Storage",
+        "description": "Update the current Cloud Storage Configuration.\n",
         "parameters": [
           {
             "name": "body",
             "in": "body",
-            "description": "Options for Backup Configuration",
+            "description": "Options for Cloud Storage Configuration",
             "required": true,
             "schema": {
               "$ref": "#/definitions/BackupConfiguration"
@@ -1152,7 +1179,7 @@
             }
           }
         },
-        "x-looker-status": "stable",
+        "x-looker-status": "beta",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1382,6 +1409,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -1497,6 +1530,12 @@
               "$ref": "#/definitions/ColorCollection"
             }
           },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
           "403": {
             "description": "Permission Denied",
             "schema": {
@@ -1575,14 +1614,6 @@
             "name": "id",
             "in": "query",
             "description": "Match content favorite id(s)",
-            "required": false,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "user_id",
-            "in": "query",
-            "description": "Match user id(s)",
             "required": false,
             "type": "integer",
             "format": "int64"
@@ -1770,6 +1801,12 @@
             "schema": {
               "$ref": "#/definitions/Error"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -1824,6 +1861,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -1933,6 +1976,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -2155,6 +2204,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -2195,6 +2250,12 @@
             "schema": {
               "$ref": "#/definitions/Error"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -2208,7 +2269,7 @@
         ],
         "operationId": "content_validation",
         "summary": "Validate Content",
-        "description": "### Validate All Content\nRequires Content Validation Labs Feature be enabled\n\nPerforms validation of all looks and dashboards\nReturns a list of errors found as well as metadata about the content validation run.\n",
+        "description": "### Validate All Content\n\nPerforms validation of all looks and dashboards\nReturns a list of errors found as well as metadata about the content validation run.\n",
         "parameters": [
           {
             "name": "fields",
@@ -2242,6 +2303,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -2262,16 +2329,14 @@
             "in": "query",
             "description": "Match view count",
             "required": false,
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           {
             "name": "group_id",
             "in": "query",
             "description": "Match Group Id",
             "required": false,
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           {
             "name": "look_id",
@@ -2292,8 +2357,7 @@
             "in": "query",
             "description": "Match content metadata id",
             "required": false,
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           {
             "name": "start_of_week_date",
@@ -2314,8 +2378,7 @@
             "in": "query",
             "description": "Match user id",
             "required": false,
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           {
             "name": "fields",
@@ -2462,6 +2525,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -2480,7 +2549,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "Body of the email to be sent.",
+            "description": "Subject, header, and Body of the email to be sent.",
             "required": true,
             "schema": {
               "$ref": "#/definitions/WelcomeEmailTest"
@@ -2510,6 +2579,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -2608,6 +2683,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -2628,8 +2709,7 @@
             "in": "query",
             "description": "Match dashboard id.",
             "required": false,
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           {
             "name": "slug",
@@ -2657,11 +2737,10 @@
             "in": "query",
             "description": "Filter on a content favorite id.",
             "required": false,
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           {
-            "name": "space_id",
+            "name": "folder_id",
             "in": "query",
             "description": "Filter on a particular space.",
             "required": false,
@@ -2693,8 +2772,7 @@
             "in": "query",
             "description": "Filter on a content favorite id.",
             "required": false,
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           {
             "name": "curate",
@@ -2702,6 +2780,13 @@
             "description": "Exclude items that exist only in personal spaces other than the users",
             "required": false,
             "type": "boolean"
+          },
+          {
+            "name": "last_viewed_at",
+            "in": "query",
+            "description": "Select dashboards based on when they were last viewed",
+            "required": false,
+            "type": "string"
           },
           {
             "name": "fields",
@@ -2745,7 +2830,7 @@
           {
             "name": "sorts",
             "in": "query",
-            "description": "One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at]",
+            "description": "One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]",
             "required": false,
             "type": "string"
           },
@@ -2920,6 +3005,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -3284,6 +3375,12 @@
             "schema": {
               "$ref": "#/definitions/Error"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -3344,6 +3441,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -3458,6 +3561,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -3545,6 +3654,12 @@
             "schema": {
               "$ref": "#/definitions/Error"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -3605,6 +3720,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -3719,6 +3840,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -3827,6 +3954,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -4027,6 +4160,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -4139,6 +4278,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -4470,6 +4615,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -4572,6 +4723,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -4608,6 +4765,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -4839,6 +5002,123 @@
         "x-looker-activity-type": "non_query"
       }
     },
+    "/digest_emails_enabled": {
+      "get": {
+        "tags": [
+          "Config"
+        ],
+        "operationId": "digest_emails_enabled",
+        "summary": "Get Digest_emails",
+        "description": "### Retrieve the value for whether or not digest emails is enabled\n",
+        "responses": {
+          "200": {
+            "description": "Digest_emails",
+            "schema": {
+              "$ref": "#/definitions/DigestEmails"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      },
+      "patch": {
+        "tags": [
+          "Config"
+        ],
+        "operationId": "update_digest_emails_enabled",
+        "summary": "Update Digest_emails",
+        "description": "### Update the setting for enabling/disabling digest emails\n",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Digest_emails",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DigestEmails"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Digest_emails",
+            "schema": {
+              "$ref": "#/definitions/DigestEmails"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/digest_email_send": {
+      "post": {
+        "tags": [
+          "Config"
+        ],
+        "operationId": "create_digest_email_send",
+        "summary": "Deliver digest email contents",
+        "description": "### Trigger the generation of digest email records and send them to Looker's internal system. This does not send\nany actual emails, it generates records containing content which may be of interest for users who have become inactive.\nEmails will be sent at a later time from Looker's internal system if the Digest Emails feature is enabled in settings.",
+        "responses": {
+          "200": {
+            "description": "Status of generating and sending the data",
+            "schema": {
+              "$ref": "#/definitions/DigestEmailSend"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "none"
+      }
+    },
     "/embed/sso_url": {
       "post": {
         "tags": [
@@ -4854,7 +5134,7 @@
             "description": "SSO parameters",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/EmbedSsoUrlParams"
+              "$ref": "#/definitions/EmbedSsoParams"
             }
           }
         ],
@@ -4862,7 +5142,56 @@
           "200": {
             "description": "Signed SSO URL",
             "schema": {
-              "$ref": "#/definitions/EmbedSsoUrl"
+              "$ref": "#/definitions/EmbedUrlResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/embed/token_url/me": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "create_embed_url_as_me",
+        "summary": "Create Embed Url",
+        "description": "### Create an Embed URL\n\nCreates an embed URL that runs as the Looker user making this API call. (\"Embed as me\")\nThis embed URL can then be used to instantiate a Looker embed session in a\n\"Powered by Looker\" (PBL) web application.\n\nAn embed URL can only be used once, and must be used within 5 minutes of being created. After it\nhas been used to request a page from the Looker server, the URL is invalid. Future requests using\nthe same URL will fail. This is to prevent 'replay attacks'.\n\nThe `target_url` property must be a complete URL of a Looker UI page - scheme, hostname, path and query params.\nTo load a dashboard with id 56 and with a filter of `Date=1 years`, the looker URL would look like `https://myname.looker.com/dashboards/56?Date=1%20years`.\nThe best way to obtain this target_url is to navigate to the desired Looker page in your web browser,\ncopy the URL shown in the browser address bar and paste it into the `target_url` property as a quoted string value in this API request.\n\n#### Security Note\nProtect this embed URL as you would an access token or password credentials - do not write\nit to disk, do not pass it to a third party, and only pass it through a secure HTTPS\nencrypted transport.\n",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Embed parameters",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EmbedParams"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Embed URL",
+            "schema": {
+              "$ref": "#/definitions/EmbedUrlResponse"
             }
           },
           "400": {
@@ -5027,6 +5356,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -5080,6 +5415,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -5172,6 +5513,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -5328,6 +5675,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -5549,6 +5902,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -6055,14 +6414,14 @@
         "x-looker-activity-type": "non_query"
       }
     },
-    "/homepages": {
+    "/boards": {
       "get": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "all_homepages",
-        "summary": "Get All Homepages",
-        "description": "### Get information about all homepages.\n",
+        "operationId": "all_boards",
+        "summary": "Get All Boards",
+        "description": "### Get information about all boards.\n",
         "parameters": [
           {
             "name": "fields",
@@ -6074,11 +6433,11 @@
         ],
         "responses": {
           "200": {
-            "description": "Homepage",
+            "description": "Board",
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Homepage"
+                "$ref": "#/definitions/Board"
               }
             }
           },
@@ -6100,19 +6459,19 @@
       },
       "post": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "create_homepage",
-        "summary": "Create Homepage",
-        "description": "### Create a new homepage.\n",
+        "operationId": "create_board",
+        "summary": "Create Board",
+        "description": "### Create a new board.\n",
         "parameters": [
           {
             "name": "body",
             "in": "body",
-            "description": "Homepage",
+            "description": "Board",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Homepage"
+              "$ref": "#/definitions/Board"
             }
           },
           {
@@ -6125,9 +6484,9 @@
         ],
         "responses": {
           "200": {
-            "description": "Homepage",
+            "description": "Board",
             "schema": {
-              "$ref": "#/definitions/Homepage"
+              "$ref": "#/definitions/Board"
             }
           },
           "400": {
@@ -6153,46 +6512,52 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
         "x-looker-activity-type": "non_query"
       }
     },
-    "/homepages/search": {
+    "/boards/search": {
       "get": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "search_homepages",
-        "summary": "Search Homepages",
-        "description": "### Search Homepages\n\nIf multiple search params are given and `filter_or` is FALSE or not specified,\nsearch params are combined in a logical AND operation.\nOnly rows that match *all* search param criteria will be returned.\n\nIf `filter_or` is TRUE, multiple search params are combined in a logical OR operation.\nResults will include rows that match **any** of the search criteria.\n\nString search params use case-insensitive matching.\nString search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.\nexample=\"dan%\" will match \"danger\" and \"Danzig\" but not \"David\"\nexample=\"D_m%\" will match \"Damage\" and \"dump\"\n\nInteger search params can accept a single value or a comma separated list of values. The multiple\nvalues will be combined under a logical OR operation - results will match at least one of\nthe given values.\n\nMost search params can accept \"IS NULL\" and \"NOT NULL\" as special expressions to match\nor exclude (respectively) rows where the column is null.\n\nBoolean search params accept only \"true\" and \"false\" as values.\n\n",
+        "operationId": "search_boards",
+        "summary": "Search Boards",
+        "description": "### Search Boards\n\nIf multiple search params are given and `filter_or` is FALSE or not specified,\nsearch params are combined in a logical AND operation.\nOnly rows that match *all* search param criteria will be returned.\n\nIf `filter_or` is TRUE, multiple search params are combined in a logical OR operation.\nResults will include rows that match **any** of the search criteria.\n\nString search params use case-insensitive matching.\nString search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.\nexample=\"dan%\" will match \"danger\" and \"Danzig\" but not \"David\"\nexample=\"D_m%\" will match \"Damage\" and \"dump\"\n\nInteger search params can accept a single value or a comma separated list of values. The multiple\nvalues will be combined under a logical OR operation - results will match at least one of\nthe given values.\n\nMost search params can accept \"IS NULL\" and \"NOT NULL\" as special expressions to match\nor exclude (respectively) rows where the column is null.\n\nBoolean search params accept only \"true\" and \"false\" as values.\n\n",
         "parameters": [
           {
             "name": "title",
             "in": "query",
-            "description": "Matches homepage title.",
+            "description": "Matches board title.",
             "required": false,
             "type": "string"
           },
           {
             "name": "created_at",
             "in": "query",
-            "description": "Matches the timestamp for when the homepage was created.",
+            "description": "Matches the timestamp for when the board was created.",
             "required": false,
             "type": "string"
           },
           {
             "name": "first_name",
             "in": "query",
-            "description": "The first name of the user who created this homepage.",
+            "description": "The first name of the user who created this board.",
             "required": false,
             "type": "string"
           },
           {
             "name": "last_name",
             "in": "query",
-            "description": "The last name of the user who created this homepage.",
+            "description": "The last name of the user who created this board.",
             "required": false,
             "type": "string"
           },
@@ -6206,14 +6571,14 @@
           {
             "name": "favorited",
             "in": "query",
-            "description": "Return favorited homepages when true.",
+            "description": "Return favorited boards when true.",
             "required": false,
             "type": "boolean"
           },
           {
             "name": "creator_id",
             "in": "query",
-            "description": "Filter on homepages created by a particular user.",
+            "description": "Filter on boards created by a particular user.",
             "required": false,
             "type": "string"
           },
@@ -6266,11 +6631,11 @@
         ],
         "responses": {
           "200": {
-            "description": "homepages",
+            "description": "boards",
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Homepage"
+                "$ref": "#/definitions/Board"
               }
             }
           },
@@ -6291,19 +6656,19 @@
         "x-looker-activity-type": "non_query"
       }
     },
-    "/homepages/{homepage_id}": {
+    "/boards/{board_id}": {
       "get": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "homepage",
-        "summary": "Get Homepage",
-        "description": "### Get information about a homepage.\n",
+        "operationId": "board",
+        "summary": "Get Board",
+        "description": "### Get information about a board.\n",
         "parameters": [
           {
-            "name": "homepage_id",
+            "name": "board_id",
             "in": "path",
-            "description": "Id of homepage",
+            "description": "Id of board",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -6318,9 +6683,9 @@
         ],
         "responses": {
           "200": {
-            "description": "Homepage",
+            "description": "Board",
             "schema": {
-              "$ref": "#/definitions/Homepage"
+              "$ref": "#/definitions/Board"
             }
           },
           "400": {
@@ -6341,16 +6706,16 @@
       },
       "patch": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "update_homepage",
-        "summary": "Update Homepage",
-        "description": "### Update a homepage definition.\n",
+        "operationId": "update_board",
+        "summary": "Update Board",
+        "description": "### Update a board definition.\n",
         "parameters": [
           {
-            "name": "homepage_id",
+            "name": "board_id",
             "in": "path",
-            "description": "Id of homepage",
+            "description": "Id of board",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -6358,10 +6723,10 @@
           {
             "name": "body",
             "in": "body",
-            "description": "Homepage",
+            "description": "Board",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Homepage"
+              "$ref": "#/definitions/Board"
             }
           },
           {
@@ -6374,9 +6739,9 @@
         ],
         "responses": {
           "200": {
-            "description": "Homepage",
+            "description": "Board",
             "schema": {
-              "$ref": "#/definitions/Homepage"
+              "$ref": "#/definitions/Board"
             }
           },
           "400": {
@@ -6396,6 +6761,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -6403,16 +6774,16 @@
       },
       "delete": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "delete_homepage",
-        "summary": "Delete Homepage",
-        "description": "### Delete a homepage.\n",
+        "operationId": "delete_board",
+        "summary": "Delete Board",
+        "description": "### Delete a board.\n",
         "parameters": [
           {
-            "name": "homepage_id",
+            "name": "board_id",
             "in": "path",
-            "description": "Id of homepage",
+            "description": "Id of board",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -6436,20 +6807,26 @@
             "schema": {
               "$ref": "#/definitions/Error"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
         "x-looker-activity-type": "non_query"
       }
     },
-    "/homepage_items": {
+    "/board_items": {
       "get": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "all_homepage_items",
-        "summary": "Get All Homepage Items",
-        "description": "### Get information about all homepage items.\n",
+        "operationId": "all_board_items",
+        "summary": "Get All Board Items",
+        "description": "### Get information about all board items.\n",
         "parameters": [
           {
             "name": "fields",
@@ -6466,20 +6843,20 @@
             "type": "string"
           },
           {
-            "name": "homepage_section_id",
+            "name": "board_section_id",
             "in": "query",
-            "description": "Filter to a specific homepage section",
+            "description": "Filter to a specific board section",
             "required": false,
             "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "Homepage Item",
+            "description": "Board Item",
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/HomepageItem"
+                "$ref": "#/definitions/BoardItem"
               }
             }
           },
@@ -6501,19 +6878,19 @@
       },
       "post": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "create_homepage_item",
-        "summary": "Create Homepage Item",
-        "description": "### Create a new homepage item.\n",
+        "operationId": "create_board_item",
+        "summary": "Create Board Item",
+        "description": "### Create a new board item.\n",
         "parameters": [
           {
             "name": "body",
             "in": "body",
-            "description": "Homepage Item",
+            "description": "Board Item",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/HomepageItem"
+              "$ref": "#/definitions/BoardItem"
             }
           },
           {
@@ -6526,9 +6903,9 @@
         ],
         "responses": {
           "200": {
-            "description": "Homepage Item",
+            "description": "Board Item",
             "schema": {
-              "$ref": "#/definitions/HomepageItem"
+              "$ref": "#/definitions/BoardItem"
             }
           },
           "400": {
@@ -6554,25 +6931,31 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
         "x-looker-activity-type": "non_query"
       }
     },
-    "/homepage_items/{homepage_item_id}": {
+    "/board_items/{board_item_id}": {
       "get": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "homepage_item",
-        "summary": "Get Homepage Item",
-        "description": "### Get information about a homepage item.\n",
+        "operationId": "board_item",
+        "summary": "Get Board Item",
+        "description": "### Get information about a board item.\n",
         "parameters": [
           {
-            "name": "homepage_item_id",
+            "name": "board_item_id",
             "in": "path",
-            "description": "Id of homepage item",
+            "description": "Id of board item",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -6587,9 +6970,9 @@
         ],
         "responses": {
           "200": {
-            "description": "Homepage Item",
+            "description": "Board Item",
             "schema": {
-              "$ref": "#/definitions/HomepageItem"
+              "$ref": "#/definitions/BoardItem"
             }
           },
           "400": {
@@ -6610,16 +6993,16 @@
       },
       "patch": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "update_homepage_item",
-        "summary": "Update Homepage Item",
-        "description": "### Update a homepage item definition.\n",
+        "operationId": "update_board_item",
+        "summary": "Update Board Item",
+        "description": "### Update a board item definition.\n",
         "parameters": [
           {
-            "name": "homepage_item_id",
+            "name": "board_item_id",
             "in": "path",
-            "description": "Id of homepage item",
+            "description": "Id of board item",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -6627,10 +7010,10 @@
           {
             "name": "body",
             "in": "body",
-            "description": "Homepage Item",
+            "description": "Board Item",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/HomepageItem"
+              "$ref": "#/definitions/BoardItem"
             }
           },
           {
@@ -6643,9 +7026,9 @@
         ],
         "responses": {
           "200": {
-            "description": "Homepage Item",
+            "description": "Board Item",
             "schema": {
-              "$ref": "#/definitions/HomepageItem"
+              "$ref": "#/definitions/BoardItem"
             }
           },
           "400": {
@@ -6665,6 +7048,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -6672,16 +7061,16 @@
       },
       "delete": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "delete_homepage_item",
-        "summary": "Delete Homepage Item",
-        "description": "### Delete a homepage item.\n",
+        "operationId": "delete_board_item",
+        "summary": "Delete Board Item",
+        "description": "### Delete a board item.\n",
         "parameters": [
           {
-            "name": "homepage_item_id",
+            "name": "board_item_id",
             "in": "path",
-            "description": "Id of homepage_item",
+            "description": "Id of board_item",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -6705,20 +7094,26 @@
             "schema": {
               "$ref": "#/definitions/Error"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
         "x-looker-activity-type": "non_query"
       }
     },
-    "/homepage_sections": {
+    "/board_sections": {
       "get": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "all_homepage_sections",
-        "summary": "Get All Homepage sections",
-        "description": "### Get information about all homepage sections.\n",
+        "operationId": "all_board_sections",
+        "summary": "Get All Board sections",
+        "description": "### Get information about all board sections.\n",
         "parameters": [
           {
             "name": "fields",
@@ -6737,11 +7132,11 @@
         ],
         "responses": {
           "200": {
-            "description": "Homepage section",
+            "description": "Board section",
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/HomepageSection"
+                "$ref": "#/definitions/BoardSection"
               }
             }
           },
@@ -6763,19 +7158,19 @@
       },
       "post": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "create_homepage_section",
-        "summary": "Create Homepage section",
-        "description": "### Create a new homepage section.\n",
+        "operationId": "create_board_section",
+        "summary": "Create Board section",
+        "description": "### Create a new board section.\n",
         "parameters": [
           {
             "name": "body",
             "in": "body",
-            "description": "Homepage section",
+            "description": "Board section",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/HomepageSection"
+              "$ref": "#/definitions/BoardSection"
             }
           },
           {
@@ -6788,9 +7183,9 @@
         ],
         "responses": {
           "200": {
-            "description": "Homepage section",
+            "description": "Board section",
             "schema": {
-              "$ref": "#/definitions/HomepageSection"
+              "$ref": "#/definitions/BoardSection"
             }
           },
           "400": {
@@ -6816,25 +7211,31 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
         "x-looker-activity-type": "non_query"
       }
     },
-    "/homepage_sections/{homepage_section_id}": {
+    "/board_sections/{board_section_id}": {
       "get": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "homepage_section",
-        "summary": "Get Homepage section",
-        "description": "### Get information about a homepage section.\n",
+        "operationId": "board_section",
+        "summary": "Get Board section",
+        "description": "### Get information about a board section.\n",
         "parameters": [
           {
-            "name": "homepage_section_id",
+            "name": "board_section_id",
             "in": "path",
-            "description": "Id of homepage section",
+            "description": "Id of board section",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -6849,9 +7250,9 @@
         ],
         "responses": {
           "200": {
-            "description": "Homepage section",
+            "description": "Board section",
             "schema": {
-              "$ref": "#/definitions/HomepageSection"
+              "$ref": "#/definitions/BoardSection"
             }
           },
           "400": {
@@ -6872,16 +7273,16 @@
       },
       "patch": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "update_homepage_section",
-        "summary": "Update Homepage section",
-        "description": "### Update a homepage section definition.\n",
+        "operationId": "update_board_section",
+        "summary": "Update Board section",
+        "description": "### Update a board section definition.\n",
         "parameters": [
           {
-            "name": "homepage_section_id",
+            "name": "board_section_id",
             "in": "path",
-            "description": "Id of homepage section",
+            "description": "Id of board section",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -6889,10 +7290,10 @@
           {
             "name": "body",
             "in": "body",
-            "description": "Homepage section",
+            "description": "Board section",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/HomepageSection"
+              "$ref": "#/definitions/BoardSection"
             }
           },
           {
@@ -6905,9 +7306,9 @@
         ],
         "responses": {
           "200": {
-            "description": "Homepage section",
+            "description": "Board section",
             "schema": {
-              "$ref": "#/definitions/HomepageSection"
+              "$ref": "#/definitions/BoardSection"
             }
           },
           "400": {
@@ -6927,6 +7328,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -6934,16 +7341,16 @@
       },
       "delete": {
         "tags": [
-          "Homepage"
+          "Board"
         ],
-        "operationId": "delete_homepage_section",
-        "summary": "Delete Homepage section",
-        "description": "### Delete a homepage section.\n",
+        "operationId": "delete_board_section",
+        "summary": "Delete Board section",
+        "description": "### Delete a board section.\n",
         "parameters": [
           {
-            "name": "homepage_section_id",
+            "name": "board_section_id",
             "in": "path",
-            "description": "Id of homepage_section",
+            "description": "Id of board section",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -6964,6 +7371,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -7234,6 +7647,12 @@
             "schema": {
               "$ref": "#/definitions/Error"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -7351,7 +7770,7 @@
           {
             "name": "integration_id",
             "in": "path",
-            "description": "Id of Integration",
+            "description": "Id of integration",
             "required": true,
             "type": "string"
           },
@@ -7397,7 +7816,7 @@
           {
             "name": "integration_id",
             "in": "path",
-            "description": "Id of Integration",
+            "description": "Id of integration",
             "required": true,
             "type": "string"
           },
@@ -7442,6 +7861,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -7460,7 +7885,7 @@
           {
             "name": "integration_id",
             "in": "path",
-            "description": "Id of Integration",
+            "description": "Id of integration",
             "required": true,
             "type": "string"
           }
@@ -7507,7 +7932,7 @@
           {
             "name": "integration_id",
             "in": "path",
-            "description": "Id of Integration",
+            "description": "Id of integration",
             "required": true,
             "type": "string"
           }
@@ -7615,6 +8040,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -7695,6 +8126,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -8095,6 +8532,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -8234,6 +8677,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -8249,6 +8698,13 @@
         "summary": "Search Looks",
         "description": "### Search Looks\n\nReturns an **array of Look objects** that match the specified search criteria.\n\nIf multiple search params are given and `filter_or` is FALSE or not specified,\nsearch params are combined in a logical AND operation.\nOnly rows that match *all* search param criteria will be returned.\n\nIf `filter_or` is TRUE, multiple search params are combined in a logical OR operation.\nResults will include rows that match **any** of the search criteria.\n\nString search params use case-insensitive matching.\nString search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.\nexample=\"dan%\" will match \"danger\" and \"Danzig\" but not \"David\"\nexample=\"D_m%\" will match \"Damage\" and \"dump\"\n\nInteger search params can accept a single value or a comma separated list of values. The multiple\nvalues will be combined under a logical OR operation - results will match at least one of\nthe given values.\n\nMost search params can accept \"IS NULL\" and \"NOT NULL\" as special expressions to match\nor exclude (respectively) rows where the column is null.\n\nBoolean search params accept only \"true\" and \"false\" as values.\n\n\nGet a **single look** by id with [look(id)](#!/Look/look)\n",
         "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Match look id.",
+            "required": false,
+            "type": "string"
+          },
           {
             "name": "title",
             "in": "query",
@@ -8268,13 +8724,12 @@
             "in": "query",
             "description": "Select looks with a particular content favorite id",
             "required": false,
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           {
-            "name": "space_id",
+            "name": "folder_id",
             "in": "query",
-            "description": "Select looks in a particular space.",
+            "description": "Select looks in a particular folder.",
             "required": false,
             "type": "string"
           },
@@ -8313,6 +8768,13 @@
             "description": "Exclude items that exist only in personal spaces other than the users",
             "required": false,
             "type": "boolean"
+          },
+          {
+            "name": "last_viewed_at",
+            "in": "query",
+            "description": "Select looks based on when they were last viewed",
+            "required": false,
+            "type": "string"
           },
           {
             "name": "fields",
@@ -8356,7 +8818,7 @@
           {
             "name": "sorts",
             "in": "query",
-            "description": "One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :query_id]",
+            "description": "One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :query_id]",
             "required": false,
             "type": "string"
           },
@@ -8500,6 +8962,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -8537,6 +9005,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8688,6 +9162,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -8784,6 +9264,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -8887,6 +9373,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -8923,6 +9415,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9090,6 +9588,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -9716,6 +10220,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -9753,6 +10263,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -10676,6 +11192,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -10985,6 +11507,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -11107,6 +11635,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -11190,6 +11724,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -11275,6 +11815,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -11293,114 +11839,7 @@
           {
             "name": "dashboard_id",
             "in": "path",
-            "description": "Id of dashboard to render",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "result_format",
-            "in": "path",
-            "description": "Output type: pdf, png, or jpg",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Dashboard render task parameters",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/CreateDashboardRenderTask"
-            }
-          },
-          {
-            "name": "width",
-            "in": "query",
-            "description": "Output width in pixels",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "height",
-            "in": "query",
-            "description": "Output height in pixels",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "fields",
-            "in": "query",
-            "description": "Requested fields.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "pdf_paper_size",
-            "in": "query",
-            "description": "Paper size for pdf",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "pdf_landscape",
-            "in": "query",
-            "description": "Whether to render pdf in landscape",
-            "required": false,
-            "type": "boolean"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Render Task",
-            "schema": {
-              "$ref": "#/definitions/RenderTask"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "409": {
-            "description": "Resource Already Exists",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "schema": {
-              "$ref": "#/definitions/ValidationError"
-            }
-          }
-        },
-        "x-looker-status": "beta",
-        "x-looker-activity-type": "db_query"
-      }
-    },
-    "/render_tasks/lookml_dashboards/{dashboard_id}/{result_format}": {
-      "post": {
-        "tags": [
-          "RenderTask"
-        ],
-        "operationId": "create_lookml_dashboard_render_task",
-        "summary": "Create Lookml Dashboard Render Task",
-        "description": "### Create a new task to render a lookml dashboard to a document or image.\n\nReturns a render task object.\nTo check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).\nOnce the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).\n\n",
-        "parameters": [
-          {
-            "name": "dashboard_id",
-            "in": "path",
-            "description": "Id of lookml dashboard to render",
+            "description": "Id of dashboard to render. The ID can be a LookML dashboard also.",
             "required": true,
             "type": "string"
           },
@@ -11446,14 +11885,21 @@
           {
             "name": "pdf_paper_size",
             "in": "query",
-            "description": "Paper size for pdf",
+            "description": "Paper size for pdf. Value can be one of: [\"letter\",\"legal\",\"tabloid\",\"a0\",\"a1\",\"a2\",\"a3\",\"a4\",\"a5\"]",
             "required": false,
             "type": "string"
           },
           {
             "name": "pdf_landscape",
             "in": "query",
-            "description": "Whether to render pdf in landscape",
+            "description": "Whether to render pdf in landscape paper orientation",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "long_tables",
+            "in": "query",
+            "description": "Whether or not to expand table vis to full length",
             "required": false,
             "type": "boolean"
           }
@@ -11487,6 +11933,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -11642,6 +12094,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -11685,6 +12143,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12199,6 +12663,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -12791,6 +13261,12 @@
             "schema": {
               "$ref": "#/definitions/Error"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -12845,6 +13321,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -12947,6 +13429,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -13403,6 +13891,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -13482,700 +13976,9 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
-          }
-        },
-        "x-looker-status": "beta",
-        "x-looker-activity-type": "non_query"
-      }
-    },
-    "/spaces/search": {
-      "get": {
-        "tags": [
-          "Space"
-        ],
-        "operationId": "search_spaces",
-        "summary": "Search Spaces",
-        "description": "### Search Spaces\n\n  Returns an **array of space objects** that match the given search criteria.\n\n  If multiple search params are given and `filter_or` is FALSE or not specified,\nsearch params are combined in a logical AND operation.\nOnly rows that match *all* search param criteria will be returned.\n\nIf `filter_or` is TRUE, multiple search params are combined in a logical OR operation.\nResults will include rows that match **any** of the search criteria.\n\nString search params use case-insensitive matching.\nString search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.\nexample=\"dan%\" will match \"danger\" and \"Danzig\" but not \"David\"\nexample=\"D_m%\" will match \"Damage\" and \"dump\"\n\nInteger search params can accept a single value or a comma separated list of values. The multiple\nvalues will be combined under a logical OR operation - results will match at least one of\nthe given values.\n\nMost search params can accept \"IS NULL\" and \"NOT NULL\" as special expressions to match\nor exclude (respectively) rows where the column is null.\n\nBoolean search params accept only \"true\" and \"false\" as values.\n\n\n  The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.\n\n  Get a **single space** by id with [Space](#!/Space/space)\n",
-        "parameters": [
-          {
-            "name": "fields",
-            "in": "query",
-            "description": "Requested fields.",
-            "required": false,
-            "type": "string"
           },
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Requested page.",
-            "required": false,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "per_page",
-            "in": "query",
-            "description": "Results per page.",
-            "required": false,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Number of results to return. (used with offset and takes priority over page and per_page)",
-            "required": false,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "description": "Number of results to skip before returning any. (used with limit and takes priority over page and per_page)",
-            "required": false,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "sorts",
-            "in": "query",
-            "description": "Fields to sort by.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Match Space title.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "in": "query",
-            "description": "Match Space id",
-            "required": false,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "parent_id",
-            "in": "query",
-            "description": "Filter on a children of a particular space.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "creator_id",
-            "in": "query",
-            "description": "Filter on spaces created by a particular user.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "filter_or",
-            "in": "query",
-            "description": "Combine given search criteria in a boolean OR expression",
-            "required": false,
-            "type": "boolean"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "spaces",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Space"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        },
-        "x-looker-status": "beta",
-        "x-looker-activity-type": "non_query"
-      }
-    },
-    "/spaces/{space_id}": {
-      "get": {
-        "tags": [
-          "Space"
-        ],
-        "operationId": "space",
-        "summary": "Get Space",
-        "description": "### Get information about the space with a specific id.",
-        "parameters": [
-          {
-            "name": "space_id",
-            "in": "path",
-            "description": "Id of space",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "fields",
-            "in": "query",
-            "description": "Requested fields.",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Space",
-            "schema": {
-              "$ref": "#/definitions/Space"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        },
-        "x-looker-status": "beta",
-        "x-looker-activity-type": "non_query"
-      },
-      "delete": {
-        "tags": [
-          "Space"
-        ],
-        "operationId": "delete_space",
-        "summary": "Delete Space",
-        "description": "### Delete the space with a specific id including any children spaces.\n**DANGER** this will delete all looks and dashboards in the space.\n",
-        "parameters": [
-          {
-            "name": "space_id",
-            "in": "path",
-            "description": "Id of space",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Successfully deleted.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        },
-        "x-looker-status": "beta",
-        "x-looker-activity-type": "non_query"
-      },
-      "patch": {
-        "tags": [
-          "Space"
-        ],
-        "operationId": "update_space",
-        "summary": "Update Space",
-        "description": "### Update the space with a specific id.",
-        "parameters": [
-          {
-            "name": "space_id",
-            "in": "path",
-            "description": "Id of space",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Space parameters",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UpdateSpace"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Space",
-            "schema": {
-              "$ref": "#/definitions/Space"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "schema": {
-              "$ref": "#/definitions/ValidationError"
-            }
-          }
-        },
-        "x-looker-status": "beta",
-        "x-looker-activity-type": "non_query"
-      }
-    },
-    "/spaces": {
-      "get": {
-        "tags": [
-          "Space"
-        ],
-        "operationId": "all_spaces",
-        "summary": "Get All Spaces",
-        "description": "### Get information about all spaces.",
-        "parameters": [
-          {
-            "name": "fields",
-            "in": "query",
-            "description": "Requested fields.",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Space",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/SpaceBase"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        },
-        "x-looker-status": "beta",
-        "x-looker-activity-type": "non_query"
-      },
-      "post": {
-        "tags": [
-          "Space"
-        ],
-        "operationId": "create_space",
-        "summary": "Create Space",
-        "description": "### Create a space with specified information.\n\nCaller must have permission to edit the parent space and to create spaces, otherwise the request\nreturns 404 Not Found.\n",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Create a new space",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/CreateSpace"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Space",
-            "schema": {
-              "$ref": "#/definitions/Space"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "409": {
-            "description": "Resource Already Exists",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "schema": {
-              "$ref": "#/definitions/ValidationError"
-            }
-          }
-        },
-        "x-looker-status": "beta",
-        "x-looker-activity-type": "non_query"
-      }
-    },
-    "/spaces/{space_id}/children": {
-      "get": {
-        "tags": [
-          "Space"
-        ],
-        "operationId": "space_children",
-        "summary": "Get Space Children",
-        "description": "### Get the children of a space.",
-        "parameters": [
-          {
-            "name": "space_id",
-            "in": "path",
-            "description": "Id of space",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "fields",
-            "in": "query",
-            "description": "Requested fields.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Requested page.",
-            "required": false,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "per_page",
-            "in": "query",
-            "description": "Results per page.",
-            "required": false,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "sorts",
-            "in": "query",
-            "description": "Fields to sort by.",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Spaces",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Space"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        },
-        "x-looker-status": "beta",
-        "x-looker-activity-type": "non_query"
-      }
-    },
-    "/spaces/{space_id}/children/search": {
-      "get": {
-        "tags": [
-          "Space"
-        ],
-        "operationId": "space_children_search",
-        "summary": "Search Space Children",
-        "description": "### Search the children of a space",
-        "parameters": [
-          {
-            "name": "space_id",
-            "in": "path",
-            "description": "Id of space",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "fields",
-            "in": "query",
-            "description": "Requested fields.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "sorts",
-            "in": "query",
-            "description": "Fields to sort by.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Match Space name.",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Spaces",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Space"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        },
-        "x-looker-status": "beta",
-        "x-looker-activity-type": "non_query"
-      }
-    },
-    "/spaces/{space_id}/parent": {
-      "get": {
-        "tags": [
-          "Space"
-        ],
-        "operationId": "space_parent",
-        "summary": "Get Space Parent",
-        "description": "### Get the parent of a space",
-        "parameters": [
-          {
-            "name": "space_id",
-            "in": "path",
-            "description": "Id of space",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "fields",
-            "in": "query",
-            "description": "Requested fields.",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Space",
-            "schema": {
-              "$ref": "#/definitions/Space"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        },
-        "x-looker-status": "beta",
-        "x-looker-activity-type": "non_query"
-      }
-    },
-    "/spaces/{space_id}/ancestors": {
-      "get": {
-        "tags": [
-          "Space"
-        ],
-        "operationId": "space_ancestors",
-        "summary": "Get Space Ancestors",
-        "description": "### Get the ancestors of a space",
-        "parameters": [
-          {
-            "name": "space_id",
-            "in": "path",
-            "description": "Id of space",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "fields",
-            "in": "query",
-            "description": "Requested fields.",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Spaces",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Space"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        },
-        "x-looker-status": "beta",
-        "x-looker-activity-type": "non_query"
-      }
-    },
-    "/spaces/{space_id}/looks": {
-      "get": {
-        "tags": [
-          "Space"
-        ],
-        "operationId": "space_looks",
-        "summary": "Get Space Looks",
-        "description": "### Get the looks in a space",
-        "parameters": [
-          {
-            "name": "space_id",
-            "in": "path",
-            "description": "Id of space",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "fields",
-            "in": "query",
-            "description": "Requested fields.",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Looks",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/LookWithQuery"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        },
-        "x-looker-status": "beta",
-        "x-looker-activity-type": "non_query"
-      }
-    },
-    "/spaces/{space_id}/dashboards": {
-      "get": {
-        "tags": [
-          "Space"
-        ],
-        "operationId": "space_dashboards",
-        "summary": "Get Space Dashboards",
-        "description": "### Get the dashboards in a space",
-        "parameters": [
-          {
-            "name": "space_id",
-            "in": "path",
-            "description": "Id of space",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "fields",
-            "in": "query",
-            "description": "Requested fields.",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Dashboard",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Dashboard"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "404": {
-            "description": "Not Found",
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -14385,6 +14188,12 @@
             "schema": {
               "$ref": "#/definitions/Error"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -14438,6 +14247,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -14535,6 +14350,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -15027,6 +14848,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -15123,6 +14950,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -15316,6 +15149,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -15485,6 +15324,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -15589,6 +15434,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "beta",
@@ -15625,6 +15476,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -15774,6 +15631,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -15885,6 +15748,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -15922,6 +15791,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -16043,6 +15918,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -16228,6 +16109,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -16455,8 +16342,7 @@
             "in": "query",
             "description": "Match User Id.",
             "required": false,
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           {
             "name": "first_name",
@@ -16505,16 +16391,14 @@
             "in": "query",
             "description": "Search for users who have access to this content_metadata item",
             "required": false,
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           },
           {
             "name": "group_id",
             "in": "query",
             "description": "Search for users who are direct members of this group",
             "required": false,
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           }
         ],
         "responses": {
@@ -16984,6 +16868,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -17046,6 +16936,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -17083,6 +16979,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -17203,6 +17105,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -17240,6 +17148,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -17332,6 +17246,12 @@
             "schema": {
               "$ref": "#/definitions/Error"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -17418,6 +17338,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -17510,6 +17436,12 @@
             "schema": {
               "$ref": "#/definitions/Error"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -17596,6 +17528,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -17701,6 +17639,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -17824,6 +17768,12 @@
             "schema": {
               "$ref": "#/definitions/ValidationError"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -17926,6 +17876,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -18070,6 +18026,12 @@
             "schema": {
               "$ref": "#/definitions/Error"
             }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "x-looker-status": "stable",
@@ -18172,6 +18134,12 @@
           },
           "404": {
             "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -18593,6 +18561,58 @@
         "x-looker-activity-type": "non_query"
       }
     },
+    "/vector_thumbnail/{type}/{resource_id}": {
+      "get": {
+        "tags": [
+          "Content"
+        ],
+        "operationId": "vector_thumbnail",
+        "summary": "Get Vector Thumbnail",
+        "description": "### Get a vector image representing the contents of a dashboard or look.\n\nThe returned thumbnail is an abstract representation of the contents of a dashbord or look and does not\nreflect the actual data displayed in the respective visualizations.\n",
+        "produces": [
+          "image/svg+xml"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "Either dashboard or look",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resource_id",
+            "in": "path",
+            "description": "ID of the dashboard or look to render",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "reload",
+            "in": "query",
+            "description": "Whether or not to refresh the rendered image with the latest content",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vector thumbnail",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "db_query"
+      }
+    },
     "/versions": {
       "get": {
         "tags": [
@@ -18715,6 +18735,12 @@
             "description": "Validation Error",
             "schema": {
               "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
@@ -18896,12 +18922,6 @@
           "description": "Refresh Interval in milliseconds",
           "x-looker-nullable": true
         },
-        "space": {
-          "$ref": "#/definitions/SpaceBase",
-          "readOnly": true,
-          "description": "Space",
-          "x-looker-nullable": true
-        },
         "folder": {
           "$ref": "#/definitions/FolderBase",
           "readOnly": true,
@@ -18923,276 +18943,6 @@
         }
       },
       "x-looker-status": "beta"
-    },
-    "SpaceBase": {
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Unique Name",
-          "x-looker-nullable": false
-        },
-        "parent_id": {
-          "type": "string",
-          "description": "Id of Parent. If the parent id is null, this is a root-level entry",
-          "x-looker-nullable": true
-        },
-        "id": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Unique Id",
-          "x-looker-nullable": false
-        },
-        "content_metadata_id": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "Id of content metadata",
-          "x-looker-nullable": true
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time",
-          "readOnly": true,
-          "description": "Time the space was created",
-          "x-looker-nullable": true
-        },
-        "creator_id": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "User Id of Creator",
-          "x-looker-nullable": true
-        },
-        "child_count": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "Children Count",
-          "x-looker-nullable": true
-        },
-        "external_id": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Embedder's Id if this space was autogenerated as an embedding shared space via 'external_group_id' in an SSO embed login",
-          "x-looker-nullable": true
-        },
-        "is_embed": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Space is an embed space",
-          "x-looker-nullable": false
-        },
-        "is_embed_shared_root": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Space is the root embed shared space",
-          "x-looker-nullable": false
-        },
-        "is_embed_users_root": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Space is the root embed users space",
-          "x-looker-nullable": false
-        },
-        "is_personal": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Space is a user's personal space",
-          "x-looker-nullable": false
-        },
-        "is_personal_descendant": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Space is descendant of a user's personal space",
-          "x-looker-nullable": false
-        },
-        "is_shared_root": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Space is the root shared space",
-          "x-looker-nullable": false
-        },
-        "is_users_root": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Space is the root user space",
-          "x-looker-nullable": false
-        },
-        "can": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "boolean"
-          },
-          "readOnly": true,
-          "description": "Operations the current user is able to perform on this object",
-          "x-looker-nullable": false
-        }
-      },
-      "x-looker-status": "beta",
-      "required": [
-        "name"
-      ]
-    },
-    "CreateSpace": {
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Unique Name",
-          "x-looker-nullable": false
-        },
-        "parent_id": {
-          "type": "string",
-          "description": "Id of Parent. If the parent id is null, this is a root-level entry",
-          "x-looker-nullable": false
-        }
-      },
-      "x-looker-status": "beta",
-      "required": [
-        "name",
-        "parent_id"
-      ]
-    },
-    "UpdateSpace": {
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Unique Name",
-          "x-looker-nullable": false
-        },
-        "parent_id": {
-          "type": "string",
-          "description": "Id of Parent. If the parent id is null, this is a root-level entry",
-          "x-looker-nullable": false
-        }
-      },
-      "x-looker-status": "beta"
-    },
-    "Space": {
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Unique Name",
-          "x-looker-nullable": false
-        },
-        "parent_id": {
-          "type": "string",
-          "description": "Id of Parent. If the parent id is null, this is a root-level entry",
-          "x-looker-nullable": true
-        },
-        "id": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Unique Id",
-          "x-looker-nullable": false
-        },
-        "content_metadata_id": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "Id of content metadata",
-          "x-looker-nullable": true
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time",
-          "readOnly": true,
-          "description": "Time the space was created",
-          "x-looker-nullable": true
-        },
-        "creator_id": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "User Id of Creator",
-          "x-looker-nullable": true
-        },
-        "child_count": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "Children Count",
-          "x-looker-nullable": true
-        },
-        "external_id": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Embedder's Id if this space was autogenerated as an embedding shared space via 'external_group_id' in an SSO embed login",
-          "x-looker-nullable": true
-        },
-        "is_embed": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Space is an embed space",
-          "x-looker-nullable": false
-        },
-        "is_embed_shared_root": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Space is the root embed shared space",
-          "x-looker-nullable": false
-        },
-        "is_embed_users_root": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Space is the root embed users space",
-          "x-looker-nullable": false
-        },
-        "is_personal": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Space is a user's personal space",
-          "x-looker-nullable": false
-        },
-        "is_personal_descendant": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Space is descendant of a user's personal space",
-          "x-looker-nullable": false
-        },
-        "is_shared_root": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Space is the root shared space",
-          "x-looker-nullable": false
-        },
-        "is_users_root": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Space is the root user space",
-          "x-looker-nullable": false
-        },
-        "can": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "boolean"
-          },
-          "readOnly": true,
-          "description": "Operations the current user is able to perform on this object",
-          "x-looker-nullable": false
-        },
-        "dashboards": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/DashboardBase"
-          },
-          "readOnly": true,
-          "description": "Dashboards",
-          "x-looker-nullable": true
-        },
-        "looks": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/LookWithDashboards"
-          },
-          "readOnly": true,
-          "description": "Looks",
-          "x-looker-nullable": true
-        }
-      },
-      "x-looker-status": "beta",
-      "required": [
-        "name"
-      ]
     },
     "ValidationError": {
       "properties": {
@@ -19264,19 +19014,25 @@
           "type": "string",
           "readOnly": true,
           "description": "Access Token used for API calls",
-          "x-looker-nullable": true
+          "x-looker-nullable": false
         },
         "token_type": {
           "type": "string",
           "readOnly": true,
           "description": "Type of Token",
-          "x-looker-nullable": true
+          "x-looker-nullable": false
         },
         "expires_in": {
           "type": "integer",
           "format": "int64",
           "readOnly": true,
           "description": "Number of seconds before the token expires",
+          "x-looker-nullable": false
+        },
+        "refresh_token": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Refresh token which can be used to obtain a new access token",
           "x-looker-nullable": true
         }
       },
@@ -19355,6 +19111,278 @@
         }
       },
       "x-looker-status": "stable"
+    },
+    "BoardItem": {
+      "properties": {
+        "can": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "readOnly": true,
+          "description": "Operations the current user is able to perform on this object",
+          "x-looker-nullable": false
+        },
+        "content_created_by": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Name of user who created the content this item is based on",
+          "x-looker-nullable": true
+        },
+        "content_favorite_id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Content favorite id associated with the item this content is based on",
+          "x-looker-nullable": true
+        },
+        "content_metadata_id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Content metadata id associated with the item this content is based on",
+          "x-looker-nullable": true
+        },
+        "content_updated_at": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Last time the content that this item is based on was updated",
+          "x-looker-nullable": true
+        },
+        "dashboard_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Dashboard to base this item on",
+          "x-looker-nullable": true
+        },
+        "description": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The actual description for display",
+          "x-looker-nullable": true
+        },
+        "favorite_count": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Number of times content has been favorited, if present",
+          "x-looker-nullable": true
+        },
+        "board_section_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Associated Board Section",
+          "x-looker-nullable": true
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Unique Id",
+          "x-looker-nullable": false
+        },
+        "location": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The container folder name of the content",
+          "x-looker-nullable": true
+        },
+        "look_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Look to base this item on",
+          "x-looker-nullable": true
+        },
+        "lookml_dashboard_id": {
+          "type": "string",
+          "description": "LookML Dashboard to base this item on",
+          "x-looker-nullable": true
+        },
+        "order": {
+          "type": "integer",
+          "format": "int64",
+          "description": "An arbitrary integer representing the sort order within the section",
+          "x-looker-nullable": true
+        },
+        "title": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The actual title for display",
+          "x-looker-nullable": true
+        },
+        "view_count": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Number of times content has been viewed, if present",
+          "x-looker-nullable": true
+        }
+      },
+      "x-looker-status": "beta"
+    },
+    "Board": {
+      "properties": {
+        "can": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "readOnly": true,
+          "description": "Operations the current user is able to perform on this object",
+          "x-looker-nullable": false
+        },
+        "content_metadata_id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Id of associated content_metadata record",
+          "x-looker-nullable": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "Date of board creation",
+          "x-looker-nullable": true
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date of board deletion",
+          "x-looker-nullable": true
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the board",
+          "x-looker-nullable": true
+        },
+        "board_sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BoardSection"
+          },
+          "readOnly": true,
+          "description": "Sections of the board",
+          "x-looker-nullable": true
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Unique Id",
+          "x-looker-nullable": false
+        },
+        "section_order": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "description": "ids of the board sections in the order they should be displayed",
+          "x-looker-nullable": true
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the board",
+          "x-looker-nullable": true
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "Date of last board update",
+          "x-looker-nullable": true
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "User id of board creator",
+          "x-looker-nullable": true
+        },
+        "primary_homepage": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "Whether the board is the primary homepage or not",
+          "x-looker-nullable": false
+        }
+      },
+      "x-looker-status": "beta"
+    },
+    "BoardSection": {
+      "properties": {
+        "can": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "readOnly": true,
+          "description": "Operations the current user is able to perform on this object",
+          "x-looker-nullable": false
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "Time at which this section was created.",
+          "x-looker-nullable": true
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Time at which this section was deleted.",
+          "x-looker-nullable": true
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the content found in this section.",
+          "x-looker-nullable": true
+        },
+        "board_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Id reference to parent board",
+          "x-looker-nullable": true
+        },
+        "board_items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BoardItem"
+          },
+          "readOnly": true,
+          "description": "Items in the board section",
+          "x-looker-nullable": true
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Unique Id",
+          "x-looker-nullable": false
+        },
+        "item_order": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "description": "ids of the board items in the order they should be displayed",
+          "x-looker-nullable": true
+        },
+        "title": {
+          "type": "string",
+          "description": "Name of row",
+          "x-looker-nullable": true
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "Time at which this section was last updated.",
+          "x-looker-nullable": true
+        }
+      },
+      "x-looker-status": "beta"
     },
     "ColorStop": {
       "properties": {
@@ -19608,18 +19636,6 @@
           "description": "Id of Parent Content",
           "x-looker-nullable": true
         },
-        "space_id": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Id of associated space when content_type is \"space\"",
-          "x-looker-nullable": true
-        },
-        "folder_id": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Id of associated folder when content_type is \"space\"",
-          "x-looker-nullable": true
-        },
         "dashboard_id": {
           "type": "string",
           "readOnly": true,
@@ -19636,7 +19652,7 @@
         "content_type": {
           "type": "string",
           "readOnly": true,
-          "description": "Content Type (\"dashboard\", \"look\", or \"space\")",
+          "description": "Content Type (\"dashboard\", \"look\", or \"folder\")",
           "x-looker-nullable": true
         },
         "inherits": {
@@ -19655,6 +19671,12 @@
           "type": "string",
           "readOnly": true,
           "description": "Content Slug",
+          "x-looker-nullable": true
+        },
+        "folder_id": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Id of associated folder when content_type is \"space\"",
           "x-looker-nullable": true
         }
       },
@@ -19742,25 +19764,6 @@
       },
       "x-looker-status": "beta"
     },
-    "ContentValidationSpace": {
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Unique Name",
-          "x-looker-nullable": false
-        },
-        "id": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Unique Id",
-          "x-looker-nullable": false
-        }
-      },
-      "x-looker-status": "beta",
-      "required": [
-        "name"
-      ]
-    },
     "ContentValidationFolder": {
       "properties": {
         "name": {
@@ -19794,12 +19797,6 @@
           "description": "Look Title",
           "x-looker-nullable": true
         },
-        "space": {
-          "$ref": "#/definitions/ContentValidationSpace",
-          "readOnly": true,
-          "description": "Space of this Look",
-          "x-looker-nullable": true
-        },
         "folder": {
           "$ref": "#/definitions/ContentValidationFolder",
           "readOnly": true,
@@ -19821,12 +19818,6 @@
           "readOnly": true,
           "description": "Unique Id",
           "x-looker-nullable": false
-        },
-        "space": {
-          "$ref": "#/definitions/ContentValidationSpace",
-          "readOnly": true,
-          "description": "Space",
-          "x-looker-nullable": true
         },
         "folder": {
           "$ref": "#/definitions/ContentValidationFolder",
@@ -20642,6 +20633,58 @@
           "type": "string",
           "description": "The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.",
           "x-looker-nullable": true
+        },
+        "subject": {
+          "type": "string",
+          "description": "The text to appear in the email subject line.",
+          "x-looker-nullable": true
+        },
+        "header": {
+          "type": "string",
+          "description": "The text to appear in the header line of the email body.",
+          "x-looker-nullable": true
+        }
+      },
+      "x-looker-status": "beta"
+    },
+    "DashboardAppearance": {
+      "properties": {
+        "page_side_margins": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Page margin (side) width",
+          "x-looker-nullable": true
+        },
+        "page_background_color": {
+          "type": "string",
+          "description": "Background color for the dashboard",
+          "x-looker-nullable": true
+        },
+        "tile_title_alignment": {
+          "type": "string",
+          "description": "Title alignment on dashboard tiles",
+          "x-looker-nullable": true
+        },
+        "tile_space_between": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Space between tiles",
+          "x-looker-nullable": true
+        },
+        "tile_background_color": {
+          "type": "string",
+          "description": "Background color for tiles",
+          "x-looker-nullable": true
+        },
+        "tile_shadow": {
+          "type": "boolean",
+          "description": "Tile shadow on/off",
+          "x-looker-nullable": true
+        },
+        "key_color": {
+          "type": "string",
+          "description": "Key color",
+          "x-looker-nullable": true
         }
       },
       "x-looker-status": "beta"
@@ -20761,7 +20804,6 @@
         "result_maker_id": {
           "type": "integer",
           "format": "int64",
-          "readOnly": true,
           "description": "ID of the ResultMakerLookup entry.",
           "x-looker-nullable": true
         },
@@ -20795,6 +20837,18 @@
           "format": "int64",
           "readOnly": true,
           "description": "Count of Alerts associated to a dashboard element",
+          "x-looker-nullable": true
+        },
+        "title_text_as_html": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Text tile title text as Html",
+          "x-looker-nullable": true
+        },
+        "subtitle_text_as_html": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Text tile subtitle text as Html",
           "x-looker-nullable": true
         }
       },
@@ -21237,12 +21291,6 @@
           "description": "Refresh Interval in milliseconds",
           "x-looker-nullable": true
         },
-        "space": {
-          "$ref": "#/definitions/SpaceBase",
-          "readOnly": true,
-          "description": "Space",
-          "x-looker-nullable": true
-        },
         "folder": {
           "$ref": "#/definitions/FolderBase",
           "readOnly": true,
@@ -21272,6 +21320,11 @@
           "readOnly": true,
           "description": "Time that the Dashboard was created.",
           "x-looker-nullable": true
+        },
+        "crossfilter_enabled": {
+          "type": "boolean",
+          "description": "Enables crossfiltering in dashboards - only available in dashboards-next (beta)",
+          "x-looker-nullable": false
         },
         "dashboard_elements": {
           "type": "array",
@@ -21372,11 +21425,6 @@
           "description": "Content Metadata Slug",
           "x-looker-nullable": true
         },
-        "space_id": {
-          "type": "string",
-          "description": "Id of Space",
-          "x-looker-nullable": true
-        },
         "folder_id": {
           "type": "string",
           "description": "Id of folder",
@@ -21409,56 +21457,14 @@
           "description": "Number of times viewed in the Looker web UI",
           "x-looker-nullable": true
         },
-        "settings": {
-          "$ref": "#/definitions/DashboardSettings",
+        "appearance": {
+          "$ref": "#/definitions/DashboardAppearance",
           "description": "Dashboard visual settings only applicable to dashboards-next (beta)",
           "x-looker-nullable": true
         },
         "preferred_viewer": {
           "type": "string",
           "description": "The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)",
-          "x-looker-nullable": true
-        }
-      },
-      "x-looker-status": "beta"
-    },
-    "DashboardSettings": {
-      "properties": {
-        "page_side_margins": {
-          "type": "integer",
-          "format": "int64",
-          "description": "Page margin (side) width",
-          "x-looker-nullable": true
-        },
-        "page_background_color": {
-          "type": "string",
-          "description": "Background color for the dashboard",
-          "x-looker-nullable": true
-        },
-        "tile_title_alignment": {
-          "type": "string",
-          "description": "Title alignment on dashboard tiles",
-          "x-looker-nullable": true
-        },
-        "tile_space_between": {
-          "type": "integer",
-          "format": "int64",
-          "description": "Space between tiles",
-          "x-looker-nullable": true
-        },
-        "tile_background_color": {
-          "type": "string",
-          "description": "Background color for tiles",
-          "x-looker-nullable": true
-        },
-        "tile_shadow": {
-          "type": "boolean",
-          "description": "Tile shadow on/off",
-          "x-looker-nullable": false
-        },
-        "key_color": {
-          "type": "string",
-          "description": "Key color",
           "x-looker-nullable": true
         }
       },
@@ -22055,6 +22061,36 @@
       },
       "x-looker-status": "stable"
     },
+    "DelegateOauthTest": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Delegate Oauth Connection Name",
+          "x-looker-nullable": false
+        },
+        "installation_target_id": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The ID of the installation target. For Slack, this would be workspace id.",
+          "x-looker-nullable": false
+        },
+        "installation_id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Installation ID",
+          "x-looker-nullable": false
+        },
+        "success": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "Whether or not the test was successful",
+          "x-looker-nullable": false
+        }
+      },
+      "x-looker-status": "beta"
+    },
     "DialectInfo": {
       "properties": {
         "can": {
@@ -22262,19 +22298,27 @@
       },
       "x-looker-status": "stable"
     },
-    "EmbedSsoUrl": {
+    "DigestEmailSend": {
       "properties": {
-        "url": {
-          "type": "string",
-          "format": "uri",
-          "readOnly": true,
-          "description": "The signed embed URL. Any modification to this string will invalidate the signature and make the URL unusable.",
-          "x-looker-nullable": true
+        "configuration_delivered": {
+          "type": "boolean",
+          "description": "True if content was successfully generated and delivered",
+          "x-looker-nullable": false
         }
       },
       "x-looker-status": "beta"
     },
-    "EmbedSsoUrlParams": {
+    "DigestEmails": {
+      "properties": {
+        "is_enabled": {
+          "type": "boolean",
+          "description": "Whether or not digest emails are enabled",
+          "x-looker-nullable": false
+        }
+      },
+      "x-looker-status": "beta"
+    },
+    "EmbedParams": {
       "properties": {
         "target_url": {
           "type": "string",
@@ -22288,15 +22332,40 @@
           "description": "Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).",
           "x-looker-nullable": true
         },
-        "external_user_id": {
+        "force_logout_login": {
+          "type": "boolean",
+          "description": "When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.",
+          "x-looker-nullable": false
+        }
+      },
+      "x-looker-status": "beta",
+      "required": [
+        "target_url"
+      ]
+    },
+    "EmbedSsoParams": {
+      "properties": {
+        "target_url": {
           "type": "string",
-          "description": "A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.",
+          "format": "uri",
+          "description": "The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.",
+          "x-looker-nullable": false
+        },
+        "session_length": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).",
           "x-looker-nullable": true
         },
         "force_logout_login": {
           "type": "boolean",
           "description": "When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.",
           "x-looker-nullable": false
+        },
+        "external_user_id": {
+          "type": "string",
+          "description": "A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.",
+          "x-looker-nullable": true
         },
         "first_name": {
           "type": "string",
@@ -22364,6 +22433,17 @@
       "required": [
         "target_url"
       ]
+    },
+    "EmbedUrlResponse": {
+      "properties": {
+        "url": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The embed URL. Any modification to this string will make the URL unusable.",
+          "x-looker-nullable": false
+        }
+      },
+      "x-looker-status": "beta"
     },
     "FolderBase": {
       "properties": {
@@ -22919,356 +22999,6 @@
       },
       "x-looker-status": "stable"
     },
-    "HomepageItem": {
-      "properties": {
-        "can": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "boolean"
-          },
-          "readOnly": true,
-          "description": "Operations the current user is able to perform on this object",
-          "x-looker-nullable": false
-        },
-        "content_created_by": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Name of user who created the content this item is based on",
-          "x-looker-nullable": true
-        },
-        "content_favorite_id": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "Content favorite id associated with the item this content is based on",
-          "x-looker-nullable": true
-        },
-        "content_metadata_id": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "Content metadata id associated with the item this content is based on",
-          "x-looker-nullable": true
-        },
-        "content_updated_at": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Last time the content that this item is based on was updated",
-          "x-looker-nullable": true
-        },
-        "custom_description": {
-          "type": "string",
-          "description": "Custom description entered by the user, if present",
-          "x-looker-nullable": true
-        },
-        "custom_image_data_base64": {
-          "type": "string",
-          "x-looker-write-only": true,
-          "description": "(Write-Only) base64 encoded image data",
-          "x-looker-nullable": true
-        },
-        "custom_image_url": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Custom image_url entered by the user, if present",
-          "x-looker-nullable": true
-        },
-        "custom_title": {
-          "type": "string",
-          "description": "Custom title entered by the user, if present",
-          "x-looker-nullable": true
-        },
-        "custom_url": {
-          "type": "string",
-          "description": "Custom url entered by the user, if present",
-          "x-looker-nullable": true
-        },
-        "dashboard_id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "Dashboard to base this item on",
-          "x-looker-nullable": true
-        },
-        "description": {
-          "type": "string",
-          "readOnly": true,
-          "description": "The actual description for display",
-          "x-looker-nullable": true
-        },
-        "favorite_count": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "Number of times content has been favorited, if present",
-          "x-looker-nullable": true
-        },
-        "homepage_section_id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "Associated Homepage Section",
-          "x-looker-nullable": true
-        },
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "Unique Id",
-          "x-looker-nullable": false
-        },
-        "image_url": {
-          "type": "string",
-          "readOnly": true,
-          "description": "The actual image_url for display",
-          "x-looker-nullable": true
-        },
-        "location": {
-          "type": "string",
-          "readOnly": true,
-          "description": "The container folder name of the content",
-          "x-looker-nullable": true
-        },
-        "look_id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "Look to base this item on",
-          "x-looker-nullable": true
-        },
-        "lookml_dashboard_id": {
-          "type": "string",
-          "description": "LookML Dashboard to base this item on",
-          "x-looker-nullable": true
-        },
-        "order": {
-          "type": "integer",
-          "format": "int64",
-          "description": "An arbitrary integer representing the sort order within the section",
-          "x-looker-nullable": true
-        },
-        "section_fetch_time": {
-          "type": "number",
-          "format": "float",
-          "readOnly": true,
-          "description": "Number of seconds it took to fetch the section this item is in",
-          "x-looker-nullable": true
-        },
-        "title": {
-          "type": "string",
-          "readOnly": true,
-          "description": "The actual title for display",
-          "x-looker-nullable": true
-        },
-        "url": {
-          "type": "string",
-          "readOnly": true,
-          "description": "The actual url for display",
-          "x-looker-nullable": true
-        },
-        "use_custom_description": {
-          "type": "boolean",
-          "description": "Whether the custom description should be used instead of the content description, if the item is associated with content",
-          "x-looker-nullable": false
-        },
-        "use_custom_image": {
-          "type": "boolean",
-          "description": "Whether the custom image should be used instead of the content image, if the item is associated with content",
-          "x-looker-nullable": false
-        },
-        "use_custom_title": {
-          "type": "boolean",
-          "description": "Whether the custom title should be used instead of the content title, if the item is associated with content",
-          "x-looker-nullable": false
-        },
-        "use_custom_url": {
-          "type": "boolean",
-          "description": "Whether the custom url should be used instead of the content url, if the item is associated with content",
-          "x-looker-nullable": false
-        },
-        "view_count": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "Number of times content has been viewed, if present",
-          "x-looker-nullable": true
-        }
-      },
-      "x-looker-status": "beta"
-    },
-    "Homepage": {
-      "properties": {
-        "can": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "boolean"
-          },
-          "readOnly": true,
-          "description": "Operations the current user is able to perform on this object",
-          "x-looker-nullable": false
-        },
-        "content_metadata_id": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "Id of associated content_metadata record",
-          "x-looker-nullable": true
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time",
-          "readOnly": true,
-          "description": "Date of homepage creatopm",
-          "x-looker-nullable": true
-        },
-        "deleted_at": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Date of homepage deletion",
-          "x-looker-nullable": true
-        },
-        "description": {
-          "type": "string",
-          "description": "Description of homepage",
-          "x-looker-nullable": true
-        },
-        "homepage_sections": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/HomepageSection"
-          },
-          "readOnly": true,
-          "description": "Sections of the homepage",
-          "x-looker-nullable": true
-        },
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "Unique Id",
-          "x-looker-nullable": false
-        },
-        "section_order": {
-          "type": "array",
-          "items": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "description": "ids of the homepage sections in the order they should be displayed",
-          "x-looker-nullable": true
-        },
-        "title": {
-          "type": "string",
-          "description": "Title of homepage",
-          "x-looker-nullable": true
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time",
-          "readOnly": true,
-          "description": "Date of last homepage update",
-          "x-looker-nullable": true
-        },
-        "user_id": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "User id of homepage creator",
-          "x-looker-nullable": true
-        },
-        "primary_homepage": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Whether the homepage is the primary homepage or not",
-          "x-looker-nullable": false
-        }
-      },
-      "x-looker-status": "beta"
-    },
-    "HomepageSection": {
-      "properties": {
-        "can": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "boolean"
-          },
-          "readOnly": true,
-          "description": "Operations the current user is able to perform on this object",
-          "x-looker-nullable": false
-        },
-        "created_at": {
-          "type": "string",
-          "format": "date-time",
-          "readOnly": true,
-          "description": "Time at which this section was created.",
-          "x-looker-nullable": true
-        },
-        "deleted_at": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Time at which this section was deleted.",
-          "x-looker-nullable": true
-        },
-        "detail_url": {
-          "type": "string",
-          "readOnly": true,
-          "description": "A URL pointing to a page showing further information about the content in the section.",
-          "x-looker-nullable": true
-        },
-        "homepage_id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "Id reference to parent homepage",
-          "x-looker-nullable": true
-        },
-        "homepage_items": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/HomepageItem"
-          },
-          "readOnly": true,
-          "description": "Items in the homepage section",
-          "x-looker-nullable": true
-        },
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "Unique Id",
-          "x-looker-nullable": false
-        },
-        "is_header": {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Is this a header section (has no items)",
-          "x-looker-nullable": false
-        },
-        "item_order": {
-          "type": "array",
-          "items": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "description": "ids of the homepage items in the order they should be displayed",
-          "x-looker-nullable": true
-        },
-        "title": {
-          "type": "string",
-          "description": "Name of row",
-          "x-looker-nullable": true
-        },
-        "updated_at": {
-          "type": "string",
-          "format": "date-time",
-          "readOnly": true,
-          "description": "Time at which this section was last updated.",
-          "x-looker-nullable": true
-        },
-        "description": {
-          "type": "string",
-          "description": "Description of the content found in this section.",
-          "x-looker-nullable": true
-        }
-      },
-      "x-looker-status": "beta"
-    },
     "ImportedProject": {
       "properties": {
         "name": {
@@ -23528,7 +23258,8 @@
         "installed_delegate_oauth_targets": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "integer",
+            "format": "int64"
           },
           "description": "Whether the integration is available to users.",
           "x-looker-nullable": false
@@ -23639,6 +23370,15 @@
           "type": "string",
           "readOnly": true,
           "description": "A message representing the results of the test.",
+          "x-looker-nullable": true
+        },
+        "delegate_oauth_result": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DelegateOauthTest"
+          },
+          "readOnly": true,
+          "description": "An array of connection test result for delegate oauth actions.",
           "x-looker-nullable": true
         }
       },
@@ -23926,6 +23666,21 @@
           "description": "(Optional) Name of user record objectclass used for finding user during login id",
           "x-looker-nullable": true
         },
+        "allow_normal_group_membership": {
+          "type": "boolean",
+          "description": "Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.",
+          "x-looker-nullable": false
+        },
+        "allow_roles_from_normal_groups": {
+          "type": "boolean",
+          "description": "LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.",
+          "x-looker-nullable": false
+        },
+        "allow_direct_roles": {
+          "type": "boolean",
+          "description": "Allows roles to be directly assigned to LDAP auth'd users.",
+          "x-looker-nullable": false
+        },
         "url": {
           "type": "string",
           "format": "uri",
@@ -24006,6 +23761,26 @@
     },
     "LDAPGroupRead": {
       "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Unique Id",
+          "x-looker-nullable": false
+        },
+        "looker_group_id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Unique Id of group in Looker",
+          "x-looker-nullable": true
+        },
+        "looker_group_name": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Name of group in Looker",
+          "x-looker-nullable": true
+        },
         "name": {
           "type": "string",
           "readOnly": true,
@@ -24033,6 +23808,24 @@
     },
     "LDAPGroupWrite": {
       "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Unique Id",
+          "x-looker-nullable": true
+        },
+        "looker_group_id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Unique Id of group in Looker",
+          "x-looker-nullable": true
+        },
+        "looker_group_name": {
+          "type": "string",
+          "description": "Name of group in Looker",
+          "x-looker-nullable": true
+        },
         "name": {
           "type": "string",
           "description": "Name of group in LDAP",
@@ -24520,21 +24313,10 @@
           "description": "Short Url",
           "x-looker-nullable": true
         },
-        "space": {
-          "$ref": "#/definitions/SpaceBase",
-          "readOnly": true,
-          "description": "Space of this Look",
-          "x-looker-nullable": true
-        },
         "folder": {
           "$ref": "#/definitions/FolderBase",
           "readOnly": true,
           "description": "Folder of this Look",
-          "x-looker-nullable": true
-        },
-        "space_id": {
-          "type": "string",
-          "description": "Space Id",
           "x-looker-nullable": true
         },
         "folder_id": {
@@ -24725,21 +24507,10 @@
           "description": "Short Url",
           "x-looker-nullable": true
         },
-        "space": {
-          "$ref": "#/definitions/SpaceBase",
-          "readOnly": true,
-          "description": "Space of this Look",
-          "x-looker-nullable": true
-        },
         "folder": {
           "$ref": "#/definitions/FolderBase",
           "readOnly": true,
           "description": "Folder of this Look",
-          "x-looker-nullable": true
-        },
-        "space_id": {
-          "type": "string",
-          "description": "Space Id",
           "x-looker-nullable": true
         },
         "folder_id": {
@@ -24942,21 +24713,10 @@
           "description": "Short Url",
           "x-looker-nullable": true
         },
-        "space": {
-          "$ref": "#/definitions/SpaceBase",
-          "readOnly": true,
-          "description": "Space of this Look",
-          "x-looker-nullable": true
-        },
         "folder": {
           "$ref": "#/definitions/FolderBase",
           "readOnly": true,
           "description": "Folder of this Look",
-          "x-looker-nullable": true
-        },
-        "space_id": {
-          "type": "string",
-          "description": "Space Id",
           "x-looker-nullable": true
         },
         "folder_id": {
@@ -25825,6 +25585,13 @@
           ],
           "description": "The name of the starting day of the week. Valid values are: \"monday\", \"tuesday\", \"wednesday\", \"thursday\", \"friday\", \"saturday\", \"sunday\".",
           "x-looker-nullable": false
+        },
+        "times_used": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "The number of times this field has been used in queries",
+          "x-looker-nullable": false
         }
       },
       "x-looker-status": "stable"
@@ -26629,6 +26396,21 @@
           "description": "OpenID Provider User Information Url",
           "x-looker-nullable": true
         },
+        "allow_normal_group_membership": {
+          "type": "boolean",
+          "description": "Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.",
+          "x-looker-nullable": false
+        },
+        "allow_roles_from_normal_groups": {
+          "type": "boolean",
+          "description": "OIDC auth'd users will inherit roles from non-reflected Looker groups.",
+          "x-looker-nullable": false
+        },
+        "allow_direct_roles": {
+          "type": "boolean",
+          "description": "Allows roles to be directly assigned to OIDC auth'd users.",
+          "x-looker-nullable": false
+        },
         "url": {
           "type": "string",
           "format": "uri",
@@ -26641,6 +26423,26 @@
     },
     "OIDCGroupRead": {
       "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Unique Id",
+          "x-looker-nullable": false
+        },
+        "looker_group_id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Unique Id of group in Looker",
+          "x-looker-nullable": true
+        },
+        "looker_group_name": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Name of group in Looker",
+          "x-looker-nullable": true
+        },
         "name": {
           "type": "string",
           "readOnly": true,
@@ -26661,6 +26463,24 @@
     },
     "OIDCGroupWrite": {
       "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Unique Id",
+          "x-looker-nullable": true
+        },
+        "looker_group_id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Unique Id of group in Looker",
+          "x-looker-nullable": true
+        },
+        "looker_group_name": {
+          "type": "string",
+          "description": "Name of group in Looker",
+          "x-looker-nullable": true
+        },
         "name": {
           "type": "string",
           "description": "Name of group in OIDC",
@@ -26966,6 +26786,21 @@
           "description": "Name of the git service provider",
           "x-looker-nullable": true
         },
+        "git_application_server_http_port": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)",
+          "x-looker-nullable": true
+        },
+        "git_application_server_http_scheme": {
+          "type": "string",
+          "x-looker-values": [
+            "http",
+            "https"
+          ],
+          "description": "Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: \"http\", \"https\".",
+          "x-looker-nullable": true
+        },
         "deploy_secret": {
           "type": "string",
           "x-looker-write-only": true,
@@ -26997,6 +26832,11 @@
         "folders_enabled": {
           "type": "boolean",
           "description": "If true, folders are enabled for this project",
+          "x-looker-nullable": false
+        },
+        "git_release_mgmt_enabled": {
+          "type": "boolean",
+          "description": "If true, advanced git release management is enabled for this project",
           "x-looker-nullable": false
         },
         "allow_warnings": {
@@ -27338,12 +27178,6 @@
             "type": "string"
           },
           "description": "Fields on which to run subtotals",
-          "x-looker-nullable": true
-        },
-        "runtime": {
-          "type": "number",
-          "format": "double",
-          "description": "Runtime",
           "x-looker-nullable": true
         },
         "vis_config": {
@@ -27894,6 +27728,12 @@
           "description": "ID of query if this is a query.",
           "x-looker-nullable": true
         },
+        "sql_query_id": {
+          "type": "string",
+          "readOnly": true,
+          "description": "ID of SQL Query if this is a SQL Runner Query",
+          "x-looker-nullable": true
+        },
         "query": {
           "$ref": "#/definitions/Query",
           "readOnly": true,
@@ -28301,6 +28141,21 @@
           "description": "Bypass the login page when user authentication is required. Redirect to IdP immediately instead.",
           "x-looker-nullable": false
         },
+        "allow_normal_group_membership": {
+          "type": "boolean",
+          "description": "Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.",
+          "x-looker-nullable": false
+        },
+        "allow_roles_from_normal_groups": {
+          "type": "boolean",
+          "description": "SAML auth'd users will inherit roles from non-reflected Looker groups.",
+          "x-looker-nullable": false
+        },
+        "allow_direct_roles": {
+          "type": "boolean",
+          "description": "Allows roles to be directly assigned to SAML auth'd users.",
+          "x-looker-nullable": false
+        },
         "url": {
           "type": "string",
           "format": "uri",
@@ -28313,6 +28168,26 @@
     },
     "SamlGroupRead": {
       "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Unique Id",
+          "x-looker-nullable": false
+        },
+        "looker_group_id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Unique Id of group in Looker",
+          "x-looker-nullable": true
+        },
+        "looker_group_name": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Name of group in Looker",
+          "x-looker-nullable": true
+        },
         "name": {
           "type": "string",
           "readOnly": true,
@@ -28340,6 +28215,24 @@
     },
     "SamlGroupWrite": {
       "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Unique Id",
+          "x-looker-nullable": true
+        },
+        "looker_group_id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "Unique Id of group in Looker",
+          "x-looker-nullable": true
+        },
+        "looker_group_name": {
+          "type": "string",
+          "description": "Name of group in Looker",
+          "x-looker-nullable": true
+        },
         "name": {
           "type": "string",
           "description": "Name of group in Saml",
@@ -28658,6 +28551,12 @@
           "type": "boolean",
           "description": "Whether or not to expand table vis to full length",
           "x-looker-nullable": false
+        },
+        "inline_table_width": {
+          "type": "integer",
+          "format": "int64",
+          "description": "The pixel width at which we render the inline table visualizations",
+          "x-looker-nullable": true
         }
       },
       "x-looker-status": "beta"
@@ -28795,6 +28694,12 @@
           "type": "boolean",
           "description": "Whether or not to expand table vis to full length",
           "x-looker-nullable": false
+        },
+        "inline_table_width": {
+          "type": "integer",
+          "format": "int64",
+          "description": "The pixel width at which we render the inline table visualizations",
+          "x-looker-nullable": true
         },
         "id": {
           "type": "integer",
@@ -29143,6 +29048,12 @@
           },
           "description": "Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A \"type\" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.",
           "x-looker-nullable": true
+        },
+        "result_maker_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "ID of the ResultMakerLookup entry.",
+          "x-looker-nullable": true
         }
       },
       "x-looker-status": "stable"
@@ -29222,6 +29133,16 @@
         "warn_button_color": {
           "type": "string",
           "description": "Warning button color",
+          "x-looker-nullable": false
+        },
+        "tile_title_alignment": {
+          "type": "string",
+          "description": "The text alignment of tile titles (New Dashboards)",
+          "x-looker-nullable": false
+        },
+        "tile_shadow": {
+          "type": "boolean",
+          "description": "Toggles the tile shadow (New Dashboards)",
           "x-looker-nullable": false
         }
       },
@@ -29686,11 +29607,6 @@
           "description": "Array of ids of the groups for this user",
           "x-looker-nullable": true
         },
-        "home_space_id": {
-          "type": "string",
-          "description": "ID string for user's home space",
-          "x-looker-nullable": true
-        },
         "home_folder_id": {
           "type": "string",
           "description": "ID string for user's home folder",
@@ -29730,13 +29646,6 @@
         "models_dir_validated": {
           "type": "boolean",
           "description": "User's dev workspace has been checked for presence of applicable production projects",
-          "x-looker-nullable": true
-        },
-        "personal_space_id": {
-          "type": "integer",
-          "format": "int64",
-          "readOnly": true,
-          "description": "ID of user's personal space",
           "x-looker-nullable": true
         },
         "personal_folder_id": {
@@ -29789,6 +29698,24 @@
           "type": "boolean",
           "readOnly": true,
           "description": "User's roles are managed by an external directory like SAML or LDAP and can not be changed directly.",
+          "x-looker-nullable": false
+        },
+        "allow_direct_roles": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "User can be directly assigned a role.",
+          "x-looker-nullable": false
+        },
+        "allow_normal_group_membership": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "User can be a direct member of a normal Looker group.",
+          "x-looker-nullable": false
+        },
+        "allow_roles_from_normal_groups": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "User can inherit roles from a normal Looker group.",
           "x-looker-nullable": false
         },
         "url": {
@@ -29912,18 +29839,19 @@
     },
     "WelcomeEmailTest": {
       "properties": {
-        "can": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "boolean"
-          },
-          "readOnly": true,
-          "description": "Operations the current user is able to perform on this object",
-          "x-looker-nullable": false
-        },
         "content": {
           "type": "string",
-          "description": "The content that will be sent as part of a custom welcome email",
+          "description": "The content that would be sent in the body of a custom welcome email",
+          "x-looker-nullable": true
+        },
+        "subject": {
+          "type": "string",
+          "description": "The subject that would be sent for the custom welcome email",
+          "x-looker-nullable": true
+        },
+        "header": {
+          "type": "string",
+          "description": "The header that would be sent in the body of a custom welcome email",
           "x-looker-nullable": true
         }
       },
@@ -29997,6 +29925,11 @@
         "allow_looker_links": {
           "type": "boolean",
           "description": "Boolean to toggle links to Looker in emails",
+          "x-looker-nullable": false
+        },
+        "custom_welcome_email_advanced": {
+          "type": "boolean",
+          "description": "Allow subject line and email heading customization in customized emails”",
           "x-looker-nullable": false
         }
       },

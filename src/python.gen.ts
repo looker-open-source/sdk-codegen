@@ -36,9 +36,6 @@ import {
   strBody,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
-import * as fs from 'fs'
-import { run, warn, isDirSync, isFileSync, success, readFileSync } from './utils'
-import { utf8 } from '../typescript/looker/rtl/constants'
 
 export class PythonGen extends CodeGen {
   methodInputModelTypes: Set<IType> = new Set()
@@ -159,12 +156,6 @@ from typing import ForwardRef  # type: ignore  # noqa:E402
 ${this.structureHook} = functools.partial(sr.structure_hook, globals(), sr.converter${this.apiRef})
 ${this.hooks.join('\n')}
 `
-
-  sdkPathPrep() {
-    const path = `${this.codePath}${this.packagePath}/sdk/api${this.apiRef}`
-    if (!isDirSync(path)) fs.mkdirSync(path, {recursive: true})
-    fs.writeFileSync(`${path}/__init__.py`, '# Generated file.')
-  }
 
   sdkFileName(baseFileName: string) {
     return this.fileName(`sdk/api${this.apiRef}/${baseFileName}`)
@@ -469,27 +460,6 @@ ${this.hooks.join('\n')}
     return text ? `${indent}"""${text}"""\n` : ''
   }
 
-  versionStamp() {
-    if (this.versions) {
-      const stampFile = this.fileName('rtl/constants')
-      if (!isFileSync(stampFile)) {
-        warn(`${stampFile} was not found. Skipping version update.`)
-      }
-      let content = readFileSync(stampFile)
-      const lookerPattern = /looker_version = ['"].*['"]/i
-      const apiPattern = /api_version = ['"].*['"]/i
-      const envPattern = /environment_prefix = ['"].*['"]/i
-      content = content.replace(lookerPattern, `looker_version = "${this.versions.lookerVersion}"`)
-      content = content.replace(apiPattern, `api_version = "${this.versions.apiVersion}"`)
-      content = content.replace(envPattern, `environment_prefix = "${this.environmentPrefix}"`)
-      fs.writeFileSync(stampFile, content, {encoding: utf8})
-      success(`updated ${stampFile} to ${this.versions.apiVersion}.${this.versions.lookerVersion}` )
-    } else {
-      warn('Version information was not retrieved. Skipping SDK version updating.')
-    }
-    return this.versions
-  }
-
   _typeMap(type: IType, format: 'models' | 'methods'): IMappedType {
     super.typeMap(type)
     if (type.elementType) {
@@ -524,20 +494,6 @@ ${this.hooks.join('\n')}
 
   typeMapModels(type: IType) {
     return this._typeMap(type, 'models')
-  }
-
-  // @ts-ignore
-  reformatFile(fileName: string) {
-    const name = super.reformatFile(fileName)
-    if (name) {
-      const pipEnvExists = run('command', ['-v', 'pipenv'],
-        `To reformat ${fileName}, please install pipenv: https://docs.pipenv.org/en/latest/install/#installing-pipenv`, true)
-      if (pipEnvExists.includes('pipenv')) {
-        // pipenv check completed without error
-        run('pipenv', ['run', 'black', fileName])
-      }
-    }
-    return ''
   }
 
 }

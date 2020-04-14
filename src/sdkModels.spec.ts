@@ -1,12 +1,40 @@
-import { CriteriaToSet, IMethod, ITagList, SearchCriterion, SearchCriterionTerm, SetToCriteria } from './sdkModels'
-import { TestConfig } from '../typescript/looker/rtl/nodeSettings.spec'
-import { specFromFile } from './sdkGenerator'
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2019 Looker Data Sciences, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
-const config = TestConfig()
-export const apiTestModel = specFromFile(
-  `${config.testPath}openApiRef.json`,
-  `${config.testPath}swaggerRef.json`
-)
+import * as OAS from 'openapi3-ts'
+import {
+  ArrayType,
+  CriteriaToSet,
+  IMethod,
+  IntrinsicType,
+  ITagList, IType, keyValues, methodRefs,
+  SearchCriterion,
+  SearchCriterionTerm,
+  SetToCriteria, typeRefs,
+} from './sdkModels'
+
+import { apiTestModel } from './testUtils'
 
 describe('sdkModels', () => {
 
@@ -14,6 +42,7 @@ describe('sdkModels', () => {
 
     it('search_looks', () => {
       const method = apiTestModel.methods['search_looks']
+      expect(method).toBeDefined()
       const actual = apiTestModel.getRequestType(method)
       expect(actual).toBeDefined()
       if (actual) {
@@ -22,7 +51,8 @@ describe('sdkModels', () => {
     })
 
     it('search_spaces', () => {
-      const method = apiTestModel.methods['search_spaces']
+      const method = apiTestModel.methods['search_folders']
+      expect(method).toBeDefined()
       const actual = apiTestModel.getRequestType(method)
       expect(actual).toBeDefined()
       if (actual) {
@@ -32,8 +62,8 @@ describe('sdkModels', () => {
 
     // TODO create a mock spec that has a recursive type, since this no longer does
     // it ('detects recursive types', () => {
-    //   let type = apiTestModel.types['LookmlModelExploreField']
-    //   let actual = type.isRecursive()
+    //   const type = apiTestModel.types['LookmlModelExploreField']
+    //   const actual = type.isRecursive()
     //   expect(actual).toEqual(true)
     //   type = apiTestModel.types['CredentialsApi3']
     //   actual = type.isRecursive()
@@ -45,6 +75,7 @@ describe('sdkModels', () => {
 
     it('binary only', () => {
       const method = apiTestModel.methods['render_task_results']
+      expect(method).toBeDefined()
       expect(method.responseIsBinary()).toEqual(true)
       expect(method.responseIsString()).toEqual(false)
       expect(method.responseIsBoth()).toEqual(false)
@@ -52,6 +83,7 @@ describe('sdkModels', () => {
 
     it('string only', () => {
       const method = apiTestModel.methods['add_group_user']
+      expect(method).toBeDefined()
       expect(method.responseIsBinary()).toEqual(false)
       expect(method.responseIsString()).toEqual(true)
       expect(method.responseIsBoth()).toEqual(false)
@@ -59,17 +91,27 @@ describe('sdkModels', () => {
 
     it('both modes', () => {
       const method = apiTestModel.methods['run_look']
+      expect(method).toBeDefined()
       expect(method.responseIsBinary()).toEqual(true)
       expect(method.responseIsString()).toEqual(true)
       expect(method.responseIsBoth()).toEqual(true)
     })
 
+    it('each response is described', () => {
+      const method = apiTestModel.methods['run_look']
+      expect(method).toBeDefined()
+      expect(method.responses.length).toBeGreaterThan(0)
+      method.responses.forEach((r => {
+        expect(r.description).not.toEqual("")
+      }))
+    })
   })
 
   describe('required properties', () => {
 
     it('CreateQueryTask', () => {
       const type = apiTestModel.types['CreateQueryTask']
+      expect(type).toBeDefined()
       const actual = apiTestModel.getWriteableType(type)
       expect(actual).toBeDefined()
       expect(type.properties['query_id'].required).toEqual(true)
@@ -90,6 +132,7 @@ describe('sdkModels', () => {
 
     it('CredentialsApi3', () => {
       const type = apiTestModel.types['CredentialsApi3']
+      expect(type).toBeDefined()
       const writeable = type.writeable
       expect(type.readOnly).toEqual(true)
       expect(writeable.length).toEqual(0)
@@ -98,13 +141,15 @@ describe('sdkModels', () => {
     describe('DashboardElement', () => {
       it('writeable', () => {
         const type = apiTestModel.types['DashboardElement']
+        expect(type).toBeDefined()
         const writeable = type.writeable
         expect(type.readOnly).toEqual(false)
-        expect(writeable.length).toEqual(17)
+        expect(writeable.length).toEqual(18)
       })
 
       it('writeableType', () => {
         const type = apiTestModel.types['DashboardElement']
+        expect(type).toBeDefined()
         const actual = apiTestModel.getWriteableType(type)
         expect(actual).toBeDefined()
         if (actual) {
@@ -121,7 +166,7 @@ describe('sdkModels', () => {
   })
 
   const allMethods = (tags: ITagList): Array<IMethod> => {
-    let result: Array<IMethod> = []
+    const result: Array<IMethod> = []
     Object.entries(tags).forEach(([, methods]) => {
       Object.entries(methods).forEach(([, method]) => {
         result.push(method)
@@ -130,11 +175,64 @@ describe('sdkModels', () => {
     return result
   }
 
+  describe('method and type xrefs', () => {
+    describe('custom types', () => {
+      it('intrinsic types have undefined custom types', () => {
+        const actual = new IntrinsicType('integer')
+        expect(actual.customType).toEqual('')
+        expect(actual.name).toEqual('integer')
+      })
+
+      it('array type uses element type as custom type', () => {
+        const intType = new IntrinsicType('integer')
+        const schema = { type: 'mock' } as OAS.SchemaObject
+        let actual: IType = new ArrayType(intType, schema)
+        expect(actual.customType).toEqual('')
+        expect(actual.name).toEqual('integer[]')
+        actual = apiTestModel.types['DashboardBase']
+        expect(actual.customType).toBe('DashboardBase')
+      })
+    })
+
+    it('type references custom types and methods referencing', () => {
+      // LookModel SpaceBase FolderBase DashboardElement DashboardFilter DashboardLayout DashboardSettings
+      const actual = apiTestModel.types['Dashboard']
+      const customTypes = keyValues(actual.customTypes)
+      const types = typeRefs(apiTestModel, actual.customTypes)
+      const methodKeys = keyValues(actual.methodRefs)
+      const methods = methodRefs(apiTestModel, actual.methodRefs)
+      expect(types.length).toEqual(customTypes.length)
+      expect(customTypes.join(" ")).toEqual(
+        'DashboardAppearance DashboardElement DashboardFilter DashboardLayout FolderBase LookModel')
+      expect(methods.length).toEqual(methodKeys.length)
+      expect(methodKeys.join(" ")).toEqual(
+        'create_dashboard dashboard folder_dashboards import_lookml_dashboard search_dashboards sync_lookml_dashboard update_dashboard')
+    })
+
+    it('missing method references are silently skipped', () => {
+      const keys = new Set(['login', 'logout', 'Bogosity'])
+      const actual = methodRefs(apiTestModel, keys)
+      expect(actual.length).toEqual(2)
+    })
+
+    it('missing type references are silently skipped', () => {
+      const keys = new Set(['Dashboard', 'User', 'Bogosity'])
+      const actual = typeRefs(apiTestModel, keys)
+      expect(actual.length).toEqual(2)
+    })
+
+    it('method references custom types from parameters and responses', () => {
+      const actual = apiTestModel.methods['run_inline_query']
+      const customTypes = keyValues(actual.customTypes).join(" ")
+      expect(customTypes).toEqual('Error Query ValidationError')
+    })
+
+  })
+
   describe('searching', () => {
 
     const modelAndTypeNames = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
     const modelNames = new Set([SearchCriterion.method, SearchCriterion.name])
-    const titleOnly  = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.title])
     const responseCriteria = new Set([SearchCriterion.response])
     const statusCriteria = new Set([SearchCriterion.status])
     const activityCriteria = new Set([SearchCriterion.activityType])
@@ -151,14 +249,14 @@ describe('sdkModels', () => {
       it('search anywhere', () => {
         const actual = apiTestModel.search('dashboard', modelAndTypeNames)
         const methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(34)
-        expect(Object.entries(actual.types).length).toEqual(14)
+        expect(Object.entries(methods).length).toEqual(32)
+        expect(Object.entries(actual.types).length).toEqual(15)
       })
 
       it('search for word', () => {
         let actual = apiTestModel.search('\\bdashboard\\b', modelAndTypeNames)
         let methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(7)
+        expect(Object.entries(methods).length).toEqual(6)
         expect(Object.entries(actual.types).length).toEqual(1)
         actual = apiTestModel.search('\\bdashboardbase\\b', modelAndTypeNames)
         methods = allMethods(actual.tags)
@@ -166,38 +264,32 @@ describe('sdkModels', () => {
         expect(Object.entries(actual.types).length).toEqual(1)
       })
 
-      it('title search', () => {
-        let actual = apiTestModel.search('\\bdashboard\\b', titleOnly)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(0)
-        expect(Object.entries(actual.types).length).toEqual(1)
-      })
-
       it('just model names', () => {
-        let actual = apiTestModel.search('\\bdashboard\\b', modelNames)
+        const actual = apiTestModel.search('\\bdashboard\\b', modelNames)
         expect(Object.entries(allMethods(actual.tags)).length).toEqual(1)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
 
       it('deprecated items', () => {
-        let actual = apiTestModel.search('deprecated', statusCriteria)
+        const actual = apiTestModel.search('deprecated', statusCriteria)
         expect(Object.entries(allMethods(actual.tags)).length).toEqual(6)
         expect(Object.entries(actual.types).length).toEqual(4)
       })
 
       it('beta items', () => {
-        let actual = apiTestModel.search('beta', statusCriteria)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(204)
-        expect(Object.entries(actual.types).length).toEqual(99)
+        const actual = apiTestModel.search('beta', statusCriteria)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(198)
+        expect(Object.entries(actual.types).length).toEqual(98)
       })
 
       it('stable items', () => {
-        let actual = apiTestModel.search('stable', statusCriteria)
+        const actual = apiTestModel.search('stable', statusCriteria)
         expect(Object.entries(allMethods(actual.tags)).length).toEqual(153)
         expect(Object.entries(actual.types).length).toEqual(88)
       })
 
       it('db queries', () => {
-        let actual = apiTestModel.search('db_query', activityCriteria)
+        const actual = apiTestModel.search('db_query', activityCriteria)
         expect(Object.entries(allMethods(actual.tags)).length).toEqual(35)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
@@ -205,54 +297,55 @@ describe('sdkModels', () => {
 
     describe('response search', () => {
       it('find binary responses', () => {
-        let actual = apiTestModel.search('binary', responseCriteria)
+        const actual = apiTestModel.search('binary', responseCriteria)
         expect(Object.entries(allMethods(actual.tags)).length).toEqual(6)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
 
       it('find rate limited responses', () => {
-        let actual = apiTestModel.search('429', responseCriteria)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(7)
+        const actual = apiTestModel.search('429', responseCriteria)
+        const methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(107)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
     })
 
     describe('criteria transformations', () => {
       it('criterion name array to criteria', () => {
-        let expected = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        const expected = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
         // this declaration pattern assures correct enum names
-        let names: SearchCriterionTerm[] = ['method', 'type', 'name']
-        let actual = CriteriaToSet(names)
+        const names: SearchCriterionTerm[] = ['method', 'type', 'name']
+        const actual = CriteriaToSet(names)
         expect(actual).toEqual(expected)
       })
 
       it('criteria to criterion name array', () => {
-        let criteria = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
-        let expected: SearchCriterionTerm[] = ['method', 'type', 'name']
-        let actual = SetToCriteria(criteria)
+        const criteria = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        const expected: SearchCriterionTerm[] = ['method', 'type', 'name']
+        const actual = SetToCriteria(criteria)
         expect(actual).toEqual(expected)
       })
 
       it('strings to criteria', () => {
-        let expected = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
-        let values = ['method', 'type', 'name']
-        let names = values as SearchCriterionTerm[]
-        let actual = CriteriaToSet(names)
+        const expected = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        const values = ['method', 'type', 'name']
+        const names = values as SearchCriterionTerm[]
+        const actual = CriteriaToSet(names)
         expect(actual).toEqual(expected)
       })
 
       it('criteria is case insensitive', () => {
-        let expected = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
-        let values = ['Method', 'Type', 'name']
-        let names = values as SearchCriterionTerm[]
-        let actual = CriteriaToSet(names)
+        const expected = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        const values = ['Method', 'Type', 'name']
+        const names = values as SearchCriterionTerm[]
+        const actual = CriteriaToSet(names)
         expect(actual).toEqual(expected)
       })
 
       it('criteria to strings', () => {
-        let criteria = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
-        let expected = ['method', 'type', 'name']
-        let actual = SetToCriteria(criteria)
+        const criteria = new Set([SearchCriterion.method, SearchCriterion.type, SearchCriterion.name])
+        const expected = ['method', 'type', 'name']
+        const actual = SetToCriteria(criteria)
         expect(actual).toEqual(expected)
       })
     })
@@ -260,14 +353,41 @@ describe('sdkModels', () => {
 
   describe('tagging', () => {
     it('methods are tagged', () => {
-      let actual = apiTestModel.tags
-      expect(Object.entries(actual).length).toEqual(26)
+      const actual = apiTestModel.tags
+      expect(Object.entries(actual).length).toEqual(25)
     })
 
     it('methods are in the right tag', () => {
-      let actual = apiTestModel.tags['Theme']
+      const actual = apiTestModel.tags['Theme']
       expect(Object.entries(actual).length).toEqual(11)
     })
 
+  })
+
+  describe('json stringify works', () => {
+    it('handles login', () => {
+      const item = apiTestModel.methods['login']
+      expect(item).toBeDefined()
+      const actual = JSON.stringify(item, null, 2)
+      expect(actual).toBeDefined()
+      expect(actual).toContain('"name": "login"')
+    })
+
+    it('handles Dashboard', () => {
+      const item = apiTestModel.types['Dashboard']
+      expect(item).toBeDefined()
+      const actual = JSON.stringify(item, null, 2)
+      expect(actual).toBeDefined()
+      expect(actual).toContain('"name": "Dashboard"')
+      expect(actual).toContain('"customType": "Dashboard"')
+    })
+
+    it('handles dashboard_dashboard_elements', () => {
+      const item = apiTestModel.methods['dashboard_dashboard_elements']
+      expect(item).toBeDefined()
+      const actual = JSON.stringify(item, null, 2)
+      expect(actual).toBeDefined()
+      expect(actual).toContain('"name": "dashboard_dashboard_elements"')
+    })
   })
 })

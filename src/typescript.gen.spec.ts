@@ -23,7 +23,7 @@
  */
 
 import { TypescriptGen } from './typescript.gen'
-import { apiTestModel } from './sdkModels.spec'
+import { apiTestModel } from './testUtils'
 
 const gen = new TypescriptGen(apiTestModel)
 const indent = ''
@@ -247,9 +247,9 @@ async all_datagroups(
         const dashboard_id = type.properties['dashboard_id']
         const actual_dashboard_id = gen.declareProperty(indent, dashboard_id)
         expect(actual_dashboard_id).toEqual(`/**
- * Id of dashboard to render
+ * Id of dashboard to render. The ID can be a LookML dashboard also.
  */
-dashboard_id: number`)
+dashboard_id: string`)
         const body = type.properties['body']
         const actual_body = gen.declareProperty(indent, body)
         expect(actual_body).toEqual(`/**

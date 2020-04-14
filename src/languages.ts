@@ -25,7 +25,7 @@
 import { PythonGen } from './python.gen'
 import { ICodeGen, ApiModel } from './sdkModels'
 import { TypescriptGen } from './typescript.gen'
-import { quit } from './utils'
+import { quit } from './nodeUtils'
 import { IVersionInfo } from './codeGen'
 import { SwiftGen } from './swift.gen'
 import { KotlinGen } from './kotlin.gen'

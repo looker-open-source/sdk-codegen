@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  */
 
-import * as fs from 'fs'
 import {
   Arg,
   ICodeGen,
@@ -34,7 +33,7 @@ import {
   ApiModel,
   IntrinsicType
 } from './sdkModels'
-import { commentBlock, isDirSync, isFileSync, warn } from './utils'
+import { commentBlock, warn } from './utils'
 
 export interface IVersionInfo {
   lookerVersion: string
@@ -150,8 +149,6 @@ export abstract class CodeGen implements ICodeGen {
 
   abstract construct(indent: string, type: IType): string
 
-  abstract versionStamp(): IVersionInfo | undefined
-
   // abstract createRequester(indent: string, method: IMethod): string
 
   bumper(indent: string) {
@@ -160,11 +157,6 @@ export abstract class CodeGen implements ICodeGen {
 
   describeProperty(property: IProperty) {
     return `${property.description}${property.readOnly?' (read-only)':''}`
-  }
-
-  sdkPathPrep() {
-    const path = `${this.codePath}${this.packagePath}/sdk/${this.apiVersion}`
-    if (!isDirSync(path)) fs.mkdirSync(path, {recursive: true})
   }
 
   sdkFileName(baseFileName: string) {
@@ -317,24 +309,4 @@ export abstract class CodeGen implements ICodeGen {
     return {name: type.name || '', default: this.nullStr || ''}
   }
 
-  reformatFile(fileName: string) {
-    if (isFileSync(fileName)) return fileName
-    warn(`${fileName} was not found`)
-    return ''
-  }
-
-  // Reformat source files after generation
-  reformat() {
-    const result: string[] = []
-    let files = [ this.sdkFileName('methods'), this.sdkFileName('models')]
-    if (this.willItStream) files.push(this.sdkFileName('streams'))
-    for (const name of files) {
-      // const sourceFile = this.fileName(name)
-      const output = this.reformatFile(name)
-      if (output) {
-        result.push(output)
-      }
-    }
-    return result
-  }
 }

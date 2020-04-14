@@ -23,7 +23,7 @@
  */
 
 import { authGetUrl, getVersionInfo, login, specFileUrl } from './fetchSpec'
-import { TestConfig } from '../typescript/looker/rtl/nodeSettings.spec'
+import { TestConfig } from './testUtils'
 
 const testConfig = TestConfig()
 const props = testConfig.section

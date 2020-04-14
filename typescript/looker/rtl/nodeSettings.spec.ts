@@ -27,8 +27,6 @@ import {
   NodeSettings,
   NodeSettingsIniFile,
 } from './nodeSettings'
-import * as fs from 'fs'
-import * as yaml from 'js-yaml'
 import { defaultTimeout } from './transport'
 import { boolDefault, utf8 } from './constants'
 import {
@@ -38,47 +36,7 @@ import {
   strLookerClientSecret,
   strLookerTimeout, strLookerVerifySsl,
 } from './apiSettings'
-
-/**
- * Reads configuration information, returning various test values
- * @param {string} rootPath
- * @returns {{testConfig: {[p: string]: any}; localIni: string; baseUrl: any; testData: any; apiVersion: any; testIni: string; configContents: string; rootPath: string; testSection: any; timeout: number}}
- * @constructor
- */
-export function TestConfig(rootPath: string = '') {
-  const testFile = 'test/data.yml'
-  if (!rootPath) {
-    rootPath = fs.existsSync(testFile) ? '' : '../../'
-  }
-  const localIni = process.env['LOOKERSDK_INI'] || `${rootPath}looker.ini`
-  const testPath = `${rootPath}test/`
-  const dataFile = `${testPath}data.yml`
-  const testData = yaml.safeLoad(fs.readFileSync(dataFile, utf8))
-  const testIni = `${rootPath}${testData['iniFile']}`
-  const configContents = fs.readFileSync(localIni, utf8)
-  const config = ApiConfig(configContents)
-  const section = config['Looker']
-  const baseUrl = section['base_url']
-  const timeout = parseInt(section['timeout'], 10)
-  const testContents = fs.readFileSync(testIni, utf8)
-  const testConfig = ApiConfig(testContents)
-  const testSection = testConfig['Looker']
-  return {
-    rootPath,
-    testPath,
-    dataFile,
-    localIni,
-    baseUrl,
-    timeout,
-    testData,
-    testIni,
-    configContents,
-    config,
-    section,
-    testConfig,
-    testSection,
-  }
-}
+import { TestConfig } from '../../../src/testUtils'
 
 const config = TestConfig()
 
