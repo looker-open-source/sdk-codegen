@@ -129,8 +129,8 @@ class AuthSession:
                 self._login_sudo()
 
     def _login(self) -> None:
-        client_id = self.settings.client_id
-        client_secret = self.settings.client_secret
+        client_id = self.settings.read_config().get("client_id")
+        client_secret = self.settings.read_config().get("client_secret")
         if not (client_id and client_secret):
             raise error.SDKError("Required auth credentials not found.")
 
@@ -187,43 +187,29 @@ class AuthSession:
         if self._sudo_id:
             self._sudo_id = None
             if self.is_sudo_authenticated:
-                self._logout_sudo()
+                self._logout(sudo=True)
                 if full:
                     self._logout()
 
         elif self.is_authenticated:
             self._logout()
 
-    def _logout_sudo(self) -> None:
+    def _logout(self, sudo: bool = False) -> None:
+
+        if sudo:
+            token = self.sudo_token.access_token
+            self.sudo_token = auth_token.AuthToken()
+        else:
+            token = self.token.access_token
+            self.token = auth_token.AuthToken()
+
         self._ok(
             self.transport.request(
                 transport.HttpMethod.DELETE,
                 f"{self.settings.base_url}/api/logout",
-                authenticator=lambda: {
-                    "Authorization": f"Bearer {self.sudo_token.access_token}"
-                },
+                authenticator=lambda: {"Authorization": f"Bearer {token}"},
             )
         )
-        self._reset_sudo_token()
-
-    def _logout(self) -> None:
-        self._ok(
-            self.transport.request(
-                transport.HttpMethod.DELETE,
-                f"{self.settings.base_url}/api/logout",
-                authenticator=lambda: {
-                    "Authorization": f"Bearer {self.token.access_token}"
-                },
-            )
-        )
-
-        self._reset_token()
-
-    def _reset_token(self) -> None:
-        self.token = auth_token.AuthToken()
-
-    def _reset_sudo_token(self) -> None:
-        self.sudo_token = auth_token.AuthToken()
 
     def _ok(self, response: transport.Response) -> str:
         if not response.ok:

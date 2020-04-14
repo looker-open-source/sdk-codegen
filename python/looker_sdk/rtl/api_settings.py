@@ -39,21 +39,12 @@ else:
 
 
 class PApiSettings(transport.PTransportSettings, Protocol):
-    looker_url: Optional[str]
-    redirect_uri: Optional[str]
-
-    @property
-    def client_id(self) -> Optional[str]:
-        ...
-
-    @property
-    def client_secret(self) -> Optional[str]:
+    def read_config(self) -> Dict[str, str]:
         ...
 
 
 class ApiSettings(PApiSettings):
     deprecated_settings: Set[str] = {"api_version", "embed_secret", "user_id"}
-    secure_settings: Set[str] = {"client_id", "client_secret"}
 
     def __init__(self, filename: str = "looker.ini", section: Optional[str] = None):
         """Configure using a config file and/or environment variables.
@@ -68,7 +59,7 @@ class ApiSettings(PApiSettings):
         """
         self.filename = filename
         self.section = section
-        data = self._read_config()
+        data = self.read_config()
         verify_ssl = data.get("verify_ssl")
         if verify_ssl is None:
             self.verify_ssl = True
@@ -78,18 +69,8 @@ class ApiSettings(PApiSettings):
         self.timeout = int(data.get("timeout", 120))
         self.headers = {"Content-Type": "application/json"}
         self.agent_tag = f"{transport.AGENT_PREFIX} {constants.sdk_version}"
-        self.looker_url = data.get("looker_url")
-        self.redirect_uri = data.get("redirect_uri")
 
-    @property
-    def client_id(self) -> Optional[str]:
-        return self._read_config().get("client_id")
-
-    @property
-    def client_secret(self) -> Optional[str]:
-        return self._read_config().get("client_secret")
-
-    def _read_config(self) -> Dict[str, str]:
+    def read_config(self) -> Dict[str, str]:
         cfg_parser = cp.ConfigParser()
         try:
             config_file = open(self.filename)
