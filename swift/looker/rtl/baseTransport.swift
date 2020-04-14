@@ -99,14 +99,27 @@ class BaseTransport : ITransport  {
 
         var result: RequestResponse? = nil
         let task = self.session.dataTask(with: req!) { data, response, error in
-            let res = response as? HTTPURLResponse
             var sdkError: SDKError?
-            if let err = error, let r = res {
-                sdkError = SDKError(err.localizedDescription, code: r.statusCode)
-            }
-            if let r = res, !BaseTransport.ok(r) {
-                let dataString = String(data: data!, encoding: .utf8)
-                sdkError = SDKError(dataString ?? "Error with \(method) \(path)", code: r.statusCode)
+            if let err = error {
+                let msg = "\(method) \(path) error: \(err.localizedDescription)"
+                if let r = response as? HTTPURLResponse {
+                    sdkError = SDKError(msg, code: r.statusCode)
+                } else {
+                    if let d = data {
+                        sdkError = SDKError(msg, reason: String(data: d, encoding: .utf8))
+                    } else {
+                        sdkError = SDKError(msg, reason: "Unknown failure")
+                    }
+                }
+            } else {
+                if let r = response as? HTTPURLResponse {
+                    if !BaseTransport.ok(r) {
+                        let dataString = String(data: data!, encoding: .utf8)
+                        sdkError = SDKError(dataString ?? "\(method) \(path) error:", code: r.statusCode)
+                    }
+                } else {
+                    sdkError = SDKError("\(method) \(path): Response is not HTTP")
+                }
             }
             result = RequestResponse(data, response, sdkError)
             semi.signal() // Notify request has completed
