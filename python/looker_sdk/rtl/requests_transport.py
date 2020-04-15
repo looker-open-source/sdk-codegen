@@ -69,7 +69,7 @@ class RequestsTransport(transport.Transport):
         timeout = self.settings.timeout
         if transport_options:
             timeout = transport_options.timeout
-        logging.info("%s(%s)", method.name, path)
+        self.logger.info("%s(%s)", method.name, path)
         try:
             resp = self.session.request(
                 method.name,
