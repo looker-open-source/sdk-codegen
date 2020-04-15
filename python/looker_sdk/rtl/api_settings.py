@@ -26,10 +26,8 @@ with the settings as attributes
 import configparser as cp
 import os
 import sys
-from typing import cast, Dict, Optional
-
-import attr
-import cattr
+from typing import Dict, Optional, Set
+import warnings
 
 from looker_sdk.rtl import transport
 from looker_sdk.rtl import constants
@@ -40,34 +38,15 @@ else:
     from typing_extensions import Protocol
 
 
-def _convert_bool(val: str, _: bool) -> bool:
-    converted: bool
-    if val.lower() in ("yes", "y", "true", "t", "1"):
-        converted = True
-    elif val.lower() in ("", "no", "n", "false", "f", "0"):
-        converted = False
-    else:
-        raise TypeError
-    return converted
-
-
 class PApiSettings(transport.PTransportSettings, Protocol):
-    def get_client_id(self) -> Optional[str]:
-        ...
-
-    def get_client_secret(self) -> Optional[str]:
+    def read_config(self) -> Dict[str, str]:
         ...
 
 
-@attr.s(auto_attribs=True, kw_only=True)
-class ApiSettings(transport.TransportSettings):
-    filename: str
-    section: Optional[str] = None
+class ApiSettings(PApiSettings):
+    deprecated_settings: Set[str] = {"api_version", "embed_secret", "user_id"}
 
-    @classmethod
-    def configure(
-        cls, filename: str = "looker.ini", section: Optional[str] = None
-    ) -> PApiSettings:
+    def __init__(self, filename: str = "looker.ini", section: Optional[str] = None):
         """Configure using a config file and/or environment variables.
 
         Environment variables will override config file settings. Neither
@@ -75,70 +54,90 @@ class ApiSettings(transport.TransportSettings):
         instantiate ApiSettings.
 
         ENV variables map like this:
-            <package-prefix>_API_VERSION -> api_version
             <package-prefix>_BASE_URL -> base_url
             <package-prefix>_VERIFY_SSL -> verify_ssl
         """
-        api_settings = cls(filename=filename, section=section)
-        config_data = api_settings.read_config()
-        converter = cattr.Converter()
-        converter.register_structure_hook(bool, _convert_bool)
-        settings = converter.structure(config_data, ApiSettings)
-        return settings
+        self.filename = filename
+        self.section = section
+        data = self.read_config()
+        verify_ssl = data.get("verify_ssl")
+        if verify_ssl is None:
+            self.verify_ssl = True
+        else:
+            self.verify_ssl = self._bool(verify_ssl)
+        self.base_url = data.get("base_url", "")
+        self.timeout = int(data.get("timeout", 120))
+        self.headers = {"Content-Type": "application/json"}
+        self.agent_tag = f"{transport.AGENT_PREFIX} {constants.sdk_version}"
 
-    def read_config(self) -> Dict[str, Optional[str]]:
+    def read_config(self) -> Dict[str, str]:
         cfg_parser = cp.ConfigParser()
         try:
-            cfg_parser.read_file(open(self.filename))
+            config_file = open(self.filename)
         except FileNotFoundError:
-            config_data: Dict[str, Optional[str]] = {}
+            data: Dict[str, str] = {}
         else:
+            cfg_parser.read_file(config_file)
             # If section is not specified, use first section in file
             section = self.section or cfg_parser.sections()[0]
-            config_data = self._clean_input(dict(cfg_parser[section]))
+            data = dict(cfg_parser[section])
 
-        env_api_version = cast(
-            str, os.getenv(f"{constants.environment_prefix}_API_VERSION")
-        )
-        if env_api_version:
-            config_data["api_version"] = env_api_version
+        data.update(self._override_from_env())
+        return self._clean_input(data)
 
-        env_base_url = cast(str, os.getenv(f"{constants.environment_prefix}_BASE_URL"))
-        if env_base_url:
-            config_data["base_url"] = env_base_url
+    @staticmethod
+    def _bool(val: str) -> bool:
+        if val.lower() in ("yes", "y", "true", "t", "1"):
+            converted = True
+        elif val.lower() in ("", "no", "n", "false", "f", "0"):
+            converted = False
+        else:
+            raise TypeError
+        return converted
 
-        env_verify_ssl = cast(
-            str, os.getenv(f"{constants.environment_prefix}_VERIFY_SSL")
-        )
-        if env_verify_ssl:
-            config_data["verify_ssl"] = env_verify_ssl
+    @staticmethod
+    def _override_from_env() -> Dict[str, str]:
+        overrides = {}
+        env_prefix = constants.environment_prefix
+        base_url = os.getenv(f"{env_prefix}_BASE_URL")
+        if base_url:
+            overrides["base_url"] = base_url
 
-        config_data["filename"] = self.filename
-        config_data["section"] = self.section
-        config_data = self._clean_input(config_data)
+        verify_ssl = os.getenv(f"{env_prefix}_VERIFY_SSL")
+        if verify_ssl:
+            overrides["verify_ssl"] = verify_ssl
 
-        return config_data
+        timeout = os.getenv(f"{env_prefix}_TIMEOUT")
+        if timeout:
+            overrides["timeout"] = timeout
 
-    def _clean_input(
-        self, config_data: Dict[str, Optional[str]]
-    ) -> Dict[str, Optional[str]]:
-        for setting, value in list(config_data.items()):
+        client_id = os.getenv(f"{env_prefix}_CLIENT_ID")
+        if client_id:
+            overrides["client_id"] = client_id
+
+        client_secret = os.getenv(f"{env_prefix}_CLIENT_SECRET")
+        if client_secret:
+            overrides["client_secret"] = client_secret
+
+        return overrides
+
+    def _clean_input(self, data: Dict[str, str]) -> Dict[str, str]:
+        """Remove surrounding quotes and discard empty strings.
+        """
+        cleaned = {}
+        for setting, value in data.items():
+            if setting in self.deprecated_settings:
+                warnings.warn(
+                    message=DeprecationWarning(
+                        f"'{setting}' config setting is deprecated"
+                    )
+                )
             # Remove empty setting values
-            if not isinstance(value, str):
-                continue
             if value in ['""', "''", ""]:
-                config_data.pop(setting)
+                continue
             # Strip quotes from setting values
             elif value.startswith(('"', "'")) or value.endswith(('"', "'")):
-                config_data[setting] = value.strip("\"'")
-        return config_data
-
-    def get_client_id(self) -> Optional[str]:
-        return os.getenv(
-            f"{constants.environment_prefix}_CLIENT_ID"
-        ) or self.read_config().get("client_id")
-
-    def get_client_secret(self) -> Optional[str]:
-        return os.getenv(
-            f"{constants.environment_prefix}_CLIENT_SECRET"
-        ) or self.read_config().get("client_secret")
+                cleaned[setting] = value.strip("\"'")
+            else:
+                cleaned[setting] = value
+        return cleaned

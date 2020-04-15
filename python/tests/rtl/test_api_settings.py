@@ -22,7 +22,6 @@
 
 import pytest  # type: ignore
 
-from looker_sdk import error
 from looker_sdk.rtl import api_settings
 
 
@@ -33,7 +32,6 @@ def config_file(tmpdir_factory):
     filename.write(
         """
 [Looker]
-# API version
 # Base URL for API. Do not include /api/* in the url
 base_url=https://host1.looker.com:19999
 # API 3 client id
@@ -70,11 +68,12 @@ def test_settings_defaults_to_looker_section(config_file):
     """ApiSettings should retrieve settings from default (Looker) section
     if section is not specified during instantiation.
     """
-    settings = api_settings.ApiSettings.configure(config_file)
+    settings = api_settings.ApiSettings(config_file)
     assert settings.base_url == "https://host1.looker.com:19999"
     # API credentials are not set as attributes in ApiSettings
-    assert not hasattr(settings, "client_id")
-    assert not hasattr(settings, "client_secret")
+    data = vars(settings)
+    assert "client_id" not in data
+    assert "client_secret" not in data
 
 
 @pytest.mark.parametrize(
@@ -87,28 +86,30 @@ def test_settings_defaults_to_looker_section(config_file):
 )
 def test_it_retrieves_section_by_name(config_file, test_section, expected_url):
     """ApiSettings should return settings of specified section."""
-    settings = api_settings.ApiSettings.configure(config_file, test_section)
+    settings = api_settings.ApiSettings(config_file, test_section)
     assert settings.base_url == expected_url
     assert settings.verify_ssl
-    assert not hasattr(settings, "client_id")
-    assert not hasattr(settings, "client_secret")
+    data = vars(settings)
+    assert "client_id" not in data
+    assert "client_secret" not in data
 
 
 def test_it_assigns_defaults_to_empty_settings(config_file):
     """ApiSettings assigns defaults to optional settings that are empty in the
     config file.
     """
-    settings = api_settings.ApiSettings.configure(config_file, "BARE_MINIMUM")
+    settings = api_settings.ApiSettings(config_file, "BARE_MINIMUM")
     assert settings.base_url == "https://host3.looker.com:19999/"
     assert settings.verify_ssl
-    assert not hasattr(settings, "client_id")
-    assert not hasattr(settings, "client_secret")
+    data = vars(settings)
+    assert "client_id" not in data
+    assert "client_secret" not in data
 
 
 def test_it_fails_with_a_bad_section_name(config_file):
     """ApiSettings should raise an error if section is not found."""
     with pytest.raises(KeyError) as exc_info:
-        api_settings.ApiSettings.configure(config_file, "NotAGoodLookForYou")
+        api_settings.ApiSettings(config_file, "NotAGoodLookForYou")
     assert exc_info.match("NotAGoodLookForYou")
 
 
@@ -124,17 +125,17 @@ def test_settings_from_env_variables_override_config_file(
 ):
     """ApiSettings should read settings defined as env variables."""
     monkeypatch.setenv("LOOKERSDK_BASE_URL", "https://host1.looker.com:19999")
-    monkeypatch.setenv("LOOKERSDK_API_VERSION", "3.0")
     monkeypatch.setenv("LOOKERSDK_VERIFY_SSL", "0")
     monkeypatch.setenv("LOOKERSDK_CLIENT_ID", "id123")
     monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", "secret123")
 
-    settings = api_settings.ApiSettings.configure(config_file, section=test_section)
+    settings = api_settings.ApiSettings(config_file, section=test_section)
     assert settings.base_url == "https://host1.looker.com:19999"
     assert not settings.verify_ssl
     # API credentials are still not set as attributes when read from env variables
-    assert not hasattr(settings, "client_id")
-    assert not hasattr(settings, "client_secret")
+    data = vars(settings)
+    assert "client_id" not in data
+    assert "client_secret" not in data
 
 
 @pytest.mark.parametrize(
@@ -157,7 +158,7 @@ def test_env_verify_ssl_maps_properly(monkeypatch, config_file, test_value, expe
     accordingly.
     """
     monkeypatch.setenv("LOOKERSDK_VERIFY_SSL", test_value)
-    settings = api_settings.ApiSettings.configure(config_file, section="BARE_MINIMUM")
+    settings = api_settings.ApiSettings(config_file, section="BARE_MINIMUM")
     assert settings.verify_ssl == expected
 
 
@@ -169,10 +170,11 @@ def test_configure_with_no_file(monkeypatch):
     monkeypatch.setenv("LOOKERSDK_CLIENT_ID", "id123")
     monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", "secret123")
 
-    settings = api_settings.ApiSettings.configure("no-such-file")
+    settings = api_settings.ApiSettings("no-such-file")
     assert settings.base_url == "https://host1.looker.com:19999"
-    assert not hasattr(settings, "client_id")
-    assert not hasattr(settings, "client_secret")
+    data = vars(settings)
+    assert "client_id" not in data
+    assert "client_secret" not in data
 
 
 @pytest.mark.parametrize(
@@ -184,10 +186,7 @@ def test_configure_with_no_file(monkeypatch):
 )
 def test_it_fails_if_required_settings_are_not_found(config_file, test_section):
     """ApiSettings should throw an error if required settings are not found."""
-    assert (
-        api_settings.ApiSettings.configure(config_file, test_section).is_configured()
-        is False
-    )
+    assert api_settings.ApiSettings(config_file, test_section).is_configured() is False
 
 
 def test_it_fails_when_env_variables_are_defined_but_empty(config_file, monkeypatch):
@@ -196,14 +195,12 @@ def test_it_fails_when_env_variables_are_defined_but_empty(config_file, monkeypa
     """
     monkeypatch.setenv("LOOKERSDK_BASE_URL", "")
 
-    assert (
-        api_settings.ApiSettings.configure(config_file, "BARE").is_configured() is False
-    )
+    assert api_settings.ApiSettings(config_file, "BARE").is_configured() is False
 
 
 def test_it_unquotes_quoted_config_file_vars(config_file):
     """ApiSettings should strip quotes from config file variables."""
-    settings = api_settings.ApiSettings.configure(config_file, "QUOTED_CONFIG_VARS")
+    settings = api_settings.ApiSettings(config_file, "QUOTED_CONFIG_VARS")
     assert settings.base_url == "https://host4.looker.com:19999"
     assert settings.verify_ssl is False
 
@@ -211,10 +208,11 @@ def test_it_unquotes_quoted_config_file_vars(config_file):
 def test_it_unquotes_quoted_env_var_values(monkeypatch):
     """ApiSettings should strip quotes from env variable values."""
     monkeypatch.setenv("LOOKERSDK_BASE_URL", "'https://host1.looker.com:19999'")
-    monkeypatch.setenv("LOOKERSDK_API_VERSION", '"3.1"')
+    monkeypatch.setenv("LOOKERSDK_TIMEOUT", "100")
     monkeypatch.setenv("LOOKERSDK_VERIFY_SSL", '"false"')
 
-    settings = api_settings.ApiSettings.configure("no-such-file")
+    settings = api_settings.ApiSettings("no-such-file")
 
     assert settings.base_url == "https://host1.looker.com:19999"
     assert settings.verify_ssl is False
+    assert settings.timeout is 100

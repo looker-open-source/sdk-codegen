@@ -64,20 +64,18 @@ class TransportSettings:
     """
 
     base_url: str = ""
-    api_version: str = "3.1"
     verify_ssl: bool = True
     timeout: int = 120
     headers: Optional[MutableMapping[str, str]] = None
+    agent_tag: str = "foobar"
 
     def is_configured(self) -> bool:
-        return bool(self.base_url and self.api_version)
+        return bool(self.base_url)
 
 
 @pytest.fixture
 def settings():
-    return TransportSettings(
-        base_url="/some/path", api_version="3.1", headers=None, verify_ssl=True
-    )
+    return TransportSettings(base_url="/some/path", headers=None, verify_ssl=True)
 
 
 def test_configure(settings):
@@ -86,9 +84,7 @@ def test_configure(settings):
 
     test = requests_transport.RequestsTransport.configure(settings)
     assert isinstance(test, requests_transport.RequestsTransport)
-    assert (
-        test.session.headers.get("x-looker-appid") == f"PY-SDK {constants.sdk_version}"
-    )
+    assert test.session.headers.get("x-looker-appid") == f"foobar"
 
 
 parametrize = [
@@ -174,28 +170,3 @@ def test_request_error(settings):
     assert isinstance(resp, transport.Response)
     assert resp.value == b"(54, 'Connection reset by peer')"
     assert resp.ok is False
-
-
-@pytest.mark.parametrize(
-    "test_url, expected_url",
-    [
-        pytest.param(
-            "https://host1.looker.com:19999",
-            "https://host1.looker.com:19999/api/3.1",
-            id="Without trailing forward slash",
-        ),
-        pytest.param(
-            "https://host1.looker.com:19999/",
-            "https://host1.looker.com:19999/api/3.1",
-            id="With trailing forward slash",
-        ),
-    ],
-)
-def test_api_versioned_url_is_built_properly(
-    settings: transport.PTransportSettings, test_url: str, expected_url: str
-):
-    """RequestsTransport.api_path should append the api version to the base url."""
-    session = cast(requests.Session, Session(None, True))
-    settings.base_url = test_url
-    rtp = requests_transport.RequestsTransport(settings, session)
-    assert rtp.api_path == expected_url

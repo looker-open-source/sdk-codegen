@@ -61,11 +61,20 @@ class APIMethods:
         deserialize: serialize.TDeserialize,
         serialize: serialize.TSerialize,
         transport: transport.Transport,
+        api_version: str,
     ):
         self.auth = auth
+        self.api_path = urllib.parse.urljoin(
+            auth.settings.base_url, f"/api/{api_version}/"
+        )
         self.deserialize = deserialize
         self.serialize = serialize
         self.transport = transport
+
+    def _path(self, path: str) -> str:
+        if path[0] == "/":
+            path = path[1:]
+        return urllib.parse.urljoin(self.api_path, path)
 
     def __enter__(self) -> "APIMethods":
         return self
@@ -87,7 +96,9 @@ class APIMethods:
             if structure is Union[str, bytes] or structure is str:  # type: ignore
                 ret = value
             else:
-                ret = self.deserialize(data=value, structure=structure)
+                # ignore type: mypy bug doesn't recognized kwarg
+                # `structure` to partial func
+                ret = self.deserialize(data=value, structure=structure)  # type: ignore
         return ret
 
     def _convert_query_params(
@@ -132,7 +143,7 @@ class APIMethods:
         params = self._convert_query_params(query_params) if query_params else None
         response = self.transport.request(
             transport.HttpMethod.GET,
-            path,
+            self._path(path),
             query_params=params,
             body=None,
             authenticator=self.auth.authenticate,
@@ -164,7 +175,7 @@ class APIMethods:
         serialized = self._get_serialized(body)
         response = self.transport.request(
             transport.HttpMethod.POST,
-            path,
+            self._path(path),
             query_params=params,
             body=serialized,
             authenticator=self.auth.authenticate,
@@ -186,7 +197,7 @@ class APIMethods:
         serialized = self._get_serialized(body)
         response = self.transport.request(
             transport.HttpMethod.PATCH,
-            path,
+            self._path(path),
             query_params=params,
             body=serialized,
             authenticator=self.auth.authenticate,
@@ -208,7 +219,7 @@ class APIMethods:
         serialized = self._get_serialized(body)
         response = self.transport.request(
             transport.HttpMethod.PUT,
-            path,
+            self._path(path),
             query_params=params,
             body=serialized,
             authenticator=self.auth.authenticate,
@@ -227,7 +238,7 @@ class APIMethods:
         """
         response = self.transport.request(
             transport.HttpMethod.DELETE,
-            path,
+            self._path(path),
             body=None,
             authenticator=self.auth.authenticate,
             transport_options=transport_options,
