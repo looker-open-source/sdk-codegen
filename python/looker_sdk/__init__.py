@@ -48,7 +48,7 @@ def init31(
     """
     settings = api_settings.ApiSettings(config_file, section)
     if not settings.is_configured():
-        raise InitError(f"Missing required configuration values.")
+        raise InitError("Missing required configuration values.")
     transport = requests_transport.RequestsTransport.configure(settings)
     return methods31.Looker31SDK(
         auth_session.AuthSession(settings, transport, serialize.deserialize31, "3.1"),
@@ -66,7 +66,7 @@ def init40(
     """
     settings = api_settings.ApiSettings(config_file, section)
     if not settings.is_configured():
-        raise InitError(f"Missing required configuration values.")
+        raise InitError("Missing required configuration values.")
     transport = requests_transport.RequestsTransport.configure(settings)
     return methods40.Looker40SDK(
         auth_session.AuthSession(settings, transport, serialize.deserialize40, "4.0"),

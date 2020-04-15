@@ -122,7 +122,7 @@ class ApiSettings(PApiSettings):
         return overrides
 
     def _clean_input(self, data: Dict[str, str]) -> Dict[str, str]:
-        """Remove surrounding quotes and discard empty strigns.
+        """Remove surrounding quotes and discard empty strings.
         """
         cleaned = {}
         for setting, value in data.items():

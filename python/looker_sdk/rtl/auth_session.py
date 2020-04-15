@@ -175,7 +175,7 @@ class AuthSession:
         self.sudo_token = auth_token.AuthToken(access_token)
 
     def logout(self, full: bool = False) -> None:
-        """Logout cuurent session or all.
+        """Logout of API.
 
         If the session is authenticated as sudo_id, logout() "undoes"
         the sudo and deactivates that sudo_id's current token. By default
