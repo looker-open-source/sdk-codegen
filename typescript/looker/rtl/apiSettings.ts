@@ -23,7 +23,7 @@
  */
 
 import { agentPrefix, defaultTimeout, ITransportSettings } from './transport'
-import { lookerVersion, boolDefault, environmentPrefix, isTrue, unquote, defaultApiVersion } from './constants'
+import { lookerVersion, boolDefault, environmentPrefix, isTrue, unquote } from './constants'
 import { IApiSection } from './nodeSettings'
 
 export interface IValueSettings {

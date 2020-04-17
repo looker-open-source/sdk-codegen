@@ -24,7 +24,7 @@
 
 import { IRequestProps, ITransport, sdkError, SDKResponse } from './transport'
 import { IApiSettings } from './apiSettings'
-import { utf8 } from "./constants";
+import { utf8 } from "./constants"
 
 /**
  * Basic authorization session interface for most API authentication scenarios

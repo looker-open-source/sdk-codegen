@@ -33,7 +33,7 @@ import {
   ApiModel,
   IntrinsicType
 } from './sdkModels'
-import { commentBlock, warn } from './utils'
+import { commentBlock } from './utils'
 
 export interface IVersionInfo {
   lookerVersion: string
@@ -149,8 +149,6 @@ export abstract class CodeGen implements ICodeGen {
 
   abstract construct(indent: string, type: IType): string
 
-  // abstract createRequester(indent: string, method: IMethod): string
-
   bumper(indent: string) {
     return indent + this.indentStr
   }
@@ -221,7 +219,6 @@ export abstract class CodeGen implements ICodeGen {
   }
 
   httpPath(path: string, prefix?: string) {
-    prefix = prefix || ''
     return path
   }
 
