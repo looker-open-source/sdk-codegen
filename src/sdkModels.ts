@@ -1411,7 +1411,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     }
 
     if (ApiModel.isModelSearch(criteria)) {
-      Object.entries(this.methods).forEach(([key, method]) => {
+      Object.entries(this.methods).forEach(([, method]) => {
         if (method.search(rx, criteria)) {
           ApiModel.addMethodToTags(tags, method)
         }

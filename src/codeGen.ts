@@ -218,6 +218,7 @@ export abstract class CodeGen implements ICodeGen {
     return `${args}${current ? this.argDelimiter : ''}${current}`
   }
 
+  // @ts-ignore
   httpPath(path: string, prefix?: string) {
     return path
   }
