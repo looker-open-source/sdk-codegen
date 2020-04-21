@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-import * as Models from './sdkModels'
+import * as Models from '../gen/sdkModels'
 import { success } from './utils'
 import { readFileSync } from './nodeUtils'
 

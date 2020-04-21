@@ -25,7 +25,7 @@
 // Discussion of MIME types at https://en.wikipedia.org/wiki/Media_type#Mime.types
 
 import { encodeParam, ResponseMode, responseMode } from './transport'
-import { TestConfig } from '../../../src/testUtils'
+import { TestConfig } from '../../../src/script/testUtils'
 
 const config = TestConfig()
 const binaryTypes = config.testData["content_types"]["binary"] as [string]

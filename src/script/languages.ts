@@ -22,13 +22,13 @@
  * THE SOFTWARE.
  */
 
-import { PythonGen } from './python.gen'
-import { ICodeGen, ApiModel } from './sdkModels'
-import { TypescriptGen } from './typescript.gen'
+import { PythonGen } from '../gen/python.gen'
+import { ICodeGen, ApiModel } from '../gen/sdkModels'
+import { TypescriptGen } from '../gen/typescript.gen'
 import { quit } from './nodeUtils'
-import { IVersionInfo } from './codeGen'
-import { SwiftGen } from './swift.gen'
-import { KotlinGen } from './kotlin.gen'
+import { IVersionInfo } from '../gen/codeGen'
+import { SwiftGen } from '../gen/swift.gen'
+import { KotlinGen } from '../gen/kotlin.gen'
 
 export interface IGeneratorSpec {
   language: string // name of Open API Generator language to produce
@@ -43,6 +43,12 @@ export const Languages: Array<IGeneratorSpec> = [
   {
     language: 'csharp',
     legacy: 'csharp',
+    factory: undefined,
+    options: '-papiPackage=Looker -ppackageName=looker'
+  },
+  {
+    language: 'go',
+    legacy: 'go',
     factory: undefined,
     options: '-papiPackage=Looker -ppackageName=looker'
   },

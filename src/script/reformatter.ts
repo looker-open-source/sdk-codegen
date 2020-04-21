@@ -27,7 +27,7 @@ import { danger, success, warn } from './utils'
 import { isFileSync, readFileSync, run, utf8Encoding } from './nodeUtils'
 import * as prettier from 'prettier'
 import * as fs from "fs"
-import { ICodeGen } from './sdkModels'
+import { ICodeGen } from '../gen/sdkModels'
 
 export interface IReformat {
   reformat(files: string[]): string

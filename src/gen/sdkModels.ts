@@ -24,7 +24,7 @@
 
 import * as OAS from 'openapi3-ts'
 import md5 from 'blueimp-md5'
-import { HttpMethod, ResponseMode, responseMode, StatusCode } from '../typescript/looker/rtl/transport'
+import { HttpMethod, ResponseMode, responseMode, StatusCode } from '../../typescript/looker/rtl/transport'
 import { IVersionInfo } from './codeGen'
 
 export const strBody = 'body'

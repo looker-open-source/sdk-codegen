@@ -26,13 +26,13 @@ import { ISDKConfigProps } from './sdkConfig'
 import * as fs from 'fs'
 import { log, warn } from './utils'
 import { fail, quit, isFileSync } from './nodeUtils'
-import { IVersionInfo } from './codeGen'
-import { NodeTransport } from '../typescript/looker/rtl/nodeTransport'
+import { IVersionInfo } from '../gen/codeGen'
+import { NodeTransport } from '../../typescript/looker/rtl/nodeTransport'
 import {
   defaultTimeout,
   ITransportSettings,
   sdkOk
-} from '../typescript/looker/rtl/transport'
+} from '../../typescript/looker/rtl/transport'
 
 let transport: NodeTransport
 

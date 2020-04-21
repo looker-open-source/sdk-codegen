@@ -34,7 +34,7 @@ import {
   SetToCriteria, typeRefs,
 } from './sdkModels'
 
-import { apiTestModel } from './testUtils'
+import { apiTestModel } from '../script/testUtils'
 
 describe('sdkModels', () => {
 

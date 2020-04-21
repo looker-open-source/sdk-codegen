@@ -1,11 +1,15 @@
 {
-    "name": "sdk-codegen",
+    "private": true,
+    "workspaces": ["src/gen", "src/scripts"],
+    "name": "sdk-codegen-all",
     "version": "0.2.0-beta-3",
     "description": "A utility for generating SDKs for various languages from an OpenApi specification",
     "main": "index.js",
     "devDependencies": {
+        "@looker/eslint-config": "^1.0.16",
         "@openapitools/openapi-generator-cli": "^1.0.2-4.2.0",
         "@types/node-fetch": "^2.3.3",
+        "eslint": "^6.8.0",
         "file-type": "^12.3.0",
         "tslint": "^5.15.0",
         "tslint-config-prettier": "^1.18.0",
@@ -16,17 +20,17 @@
     },
     "scripts": {
         "clean": "rm -rf api/ && rm *.?.?.json && rm *.?.?.oas.json",
-        "convert": "ts-node src/specConvert.ts",
-        "legacy": "ts-node src/legacy.ts",
-        "sdk": "ts-node src/sdkGen.ts",
+        "convert": "ts-node src/script/specConvert.ts",
+        "legacy": "ts-node src/script/legacy.ts",
+        "sdk": "ts-node src/script/sdkGen.ts",
         "lint": "tslint -p tsconfig.json --format stylish",
         "test": "yarn jest --reporters=default --reporters=jest-junit",
-        "test:iphone": "xcodebuild test -project swift/looker/looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.3' | xcpretty --test --color",
+        "test:iphone": "xcodebuild test -project swift/looker/looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.4.1' | xcpretty --test --color",
         "view": "npx redoc-cli serve",
         "prettier:base": "prettier --parser typescript --single-quote",
         "prettier:check": "npm run prettier:base -- --list-different \"**/*.{ts,tsx}\"",
         "prettier:write": "npm run prettier:base -- --write \"**/*.{ts,tsx}\"",
-        "jsonify": "ts-node src/yamlToJson.ts"
+        "jsonify": "ts-node src/script/yamlToJson.ts"
     },
     "repository": {
         "type": "git",
@@ -72,5 +76,8 @@
         "ts-jest": "^24.1.0",
         "ts-node": "^8.1.0",
         "typescript": "^3.6.0"
+    },
+    "stylelint": {
+        "extends": "@looker/eslint-config/stylelint"
     }
 }

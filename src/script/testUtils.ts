@@ -25,8 +25,8 @@
 import { specFromFile } from './sdkGenerator'
 import * as fs from "fs"
 import * as yaml from 'js-yaml'
-import { utf8 } from '../typescript/looker/rtl/constants'
-import { ApiConfig } from '../typescript/looker/rtl/nodeSettings'
+import { utf8 } from '../../typescript/looker/rtl/constants'
+import { ApiConfig } from '../../typescript/looker/rtl/nodeSettings'
 
 /**
  * Reads configuration information, returning various test values
