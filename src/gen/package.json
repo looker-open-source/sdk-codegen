@@ -26,7 +26,7 @@
     "codegen"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "yarn tsc",
     "prebuild": "rm -rf lib dist",
     "test": "yarn jest",
     "docs": "typedoc --mode file --out docs"
