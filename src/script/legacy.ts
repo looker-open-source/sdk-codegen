@@ -30,8 +30,14 @@ import { log } from './utils'
 import { quit, run } from './nodeUtils'
 import { logConvert } from './convert'
 
+/**
+ * Returns the last version in the .ini api_versions comma-delimited list
+ * @param {ISDKConfigProps} props
+ * @returns {string}
+ */
 const defaultApiVersion = (props: ISDKConfigProps) => {
-  return props.api_version || '4.0'
+  const versions = (props.api_versions || '4.0').split(',')
+  return versions[versions.length - 1]
 }
 
 // Warning: deprecated. This is using the legacy code generator
