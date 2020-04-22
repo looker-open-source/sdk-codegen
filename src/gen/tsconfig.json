@@ -5,6 +5,6 @@
     "lib": ["es2015", "es6", "dom", "es2015.promise"],
     "outDir": "dist"
   },
-  "files": ["index.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "files": ["index.ts"]
 }
