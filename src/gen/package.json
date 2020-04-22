@@ -1,21 +1,21 @@
 {
   "name": "@looker/sdk-codegen",
   "version": "0.1.1-alpha.0+fefcdd0",
-  "dependencies": {
-    "blueimp-md5": "^2.13.0",
-    "openapi3-ts": "^1.3.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
   "description": "Looker SDK Codegen core",
   "main": "dist/index.js",
-  "author": "Looker",
-  "license": "MIT",
   "typings": "dist/index.d.ts",
   "files": [
     "dist/**/*"
   ],
+  "author": "Looker",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/looker-open-source/sdk-codegen.git"
+  },
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
@@ -30,6 +30,10 @@
     "prebuild": "rm -rf lib dist",
     "test": "yarn jest",
     "docs": "typedoc --mode file --out docs"
+  },
+  "dependencies": {
+    "blueimp-md5": "^2.13.0",
+    "openapi3-ts": "^1.3.0"
   },
   "devDependencies": {
     "lerna": "^3.20.2"

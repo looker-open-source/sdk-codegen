@@ -19,7 +19,7 @@
     "scripts": {
         "build": "yarn clean && tsc",
         "deploy": "yarn build && npm publish",
-        "clean": "rm -rf lib dist",
+        "prebuild": "rm -rf lib dist",
         "test": "yarn jest",
         "docs": "typedoc --mode file --out docs",
         "lint": "tslint --project tsconfig.json --format stylish 'src/**/*.ts'",
