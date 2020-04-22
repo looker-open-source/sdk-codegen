@@ -1,9 +1,12 @@
 {
   "name": "@looker/sdk-codegen",
-  "version": "0.1.1-alpha.0",
+  "version": "0.1.1-alpha.0+fefcdd0",
   "dependencies": {
     "blueimp-md5": "^2.13.0",
     "openapi3-ts": "^1.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "description": "Looker SDK Codegen core",
   "main": "dist/index.js",
@@ -30,5 +33,6 @@
   },
   "devDependencies": {
     "lerna": "^3.20.2"
-  }
+  },
+  "gitHead": "fefcdd0e7b36be79677c03e51dcc8ce2c3dbc058"
 }
