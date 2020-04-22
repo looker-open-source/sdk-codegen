@@ -1338,7 +1338,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   }
 
   get version(): string {
-    return this.schema?.version || ''
+    return this.schema?.info.version || ''
   }
 
   get description(): string {
