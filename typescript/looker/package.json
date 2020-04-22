@@ -17,7 +17,7 @@
     "author": "Looker",
     "license": "MIT",
     "scripts": {
-        "build": "yarn clean && tsc",
+        "build": "yarn tsc",
         "deploy": "yarn build && npm publish",
         "prebuild": "rm -rf lib dist",
         "test": "yarn jest",
