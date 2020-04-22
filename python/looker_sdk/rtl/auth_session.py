@@ -22,13 +22,17 @@
 
 """AuthSession to provide automatic authentication
 """
+import hashlib
+import secrets
 from typing import cast, Dict, Optional, Type, Union
 import urllib.parse
 
+import attr
 
 from looker_sdk import error
 from looker_sdk.rtl import api_settings
 from looker_sdk.rtl import auth_token
+from looker_sdk.rtl import model
 from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
 from looker_sdk.sdk.api31 import models as models31
@@ -215,3 +219,110 @@ class AuthSession:
         if not response.ok:
             raise error.SDKError(response.value)
         return response.value.decode(encoding="utf-8")
+
+
+class CryptoHash:
+    def secure_random(self, byte_count: int) -> str:
+        return secrets.token_hex()
+
+    def sha256_hash(self, message: str) -> str:
+        value = hashlib.sha256()
+        value.update(bytes(message, "utf8"))
+        return value.hexdigest()
+
+
+class OAuthSession(AuthSession):
+    def __init__(
+        self,
+        *,
+        settings: api_settings.PApiSettings,
+        transport: transport.Transport,
+        deserialize: serialize.TDeserialize,
+        serialize: serialize.TSerialize,
+        crypto: CryptoHash,
+        version: str,
+    ):
+        super().__init__(settings, transport, deserialize, version)
+        self.crypto = crypto
+        self.serialize = serialize
+        config_data = self.settings.read_config()
+        for required in ["client_id", "redirect_uri", "looker_url"]:
+            if required not in config_data:
+                raise error.SDKError(f"Missing required configuration value {required}")
+
+        # would have prefered using setattr(self, required, ...) in loop above
+        # but mypy can't follow it
+        self.client_id = config_data["client_id"]
+        self.redirect_uri = config_data["redirect_uri"]
+        self.looker_url = config_data["looker_url"]
+        self.code_verifier = ""
+
+    def create_auth_code_request_url(self, scope: str, state: str) -> str:
+        self.code_verifier = self.crypto.secure_random(32)
+        code_challenge = self.crypto.sha256_hash(self.code_verifier)
+        params: Dict[str, str] = {
+            "response_type": "code",
+            "client_id": self.client_id,
+            "redirect_uri": self.redirect_uri,
+            "scope": scope,
+            "state": state,
+            "code_challenge_method": "S256",
+            "code_challenge": code_challenge,
+        }
+        path = urllib.parse.urljoin(self.looker_url, "auth")
+        query = urllib.parse.urlencode(params)
+        return f"{path}?{query}"
+
+    @attr.s(auto_attribs=True, kw_only=True)
+    class GrantTypeParams(model.Model):
+        client_id: str
+        redirect_uri: str
+
+    @attr.s(auto_attribs=True, kw_only=True)
+    class AuthCodeGrantTypeParams(GrantTypeParams):
+        code: str
+        code_verifier: str
+        grant_type: str = "authorization_code"
+
+    @attr.s(auto_attribs=True, kw_only=True)
+    class RefreshTokenGrantTypeParams(GrantTypeParams):
+        refresh_token: str
+        grant_type: str = "refresh_token"
+
+    def _request_token(
+        self, grant_type: Union[AuthCodeGrantTypeParams, RefreshTokenGrantTypeParams]
+    ) -> Union[models31.AccessToken, models40.AccessToken]:
+        response = self.transport.request(
+            transport.HttpMethod.POST,
+            urllib.parse.urljoin(self.settings.base_url, "/api/token"),
+            body=self.serialize(grant_type),
+        )
+        if not response.ok:
+            raise error.SDKError(response.value.decode(encoding=response.encoding))
+
+        # ignore type: mypy bug doesn't recognized kwarg `structure` to partial func
+        return self.deserialize(
+            data=response.value, structure=self.token_model
+        )  # type: ignore
+
+    def redeem_auth_code(
+        self, auth_code: str, code_verifier: Optional[str] = None
+    ) -> None:
+        params = self.AuthCodeGrantTypeParams(
+            client_id=self.client_id,
+            redirect_uri=self.redirect_uri,
+            code=auth_code,
+            code_verifier=code_verifier or self.code_verifier,
+        )
+
+        access_token = self._request_token(params)
+        self.token = auth_token.AuthToken(access_token)
+
+    def _login(self) -> None:
+        params = self.RefreshTokenGrantTypeParams(
+            client_id=self.client_id,
+            redirect_uri=self.redirect_uri,
+            refresh_token=self.token.refresh_token,
+        )
+        access_token = self._request_token(params)
+        self.token = auth_token.AuthToken(access_token)

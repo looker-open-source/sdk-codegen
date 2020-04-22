@@ -44,6 +44,7 @@ class AuthToken:
         self, token: Optional[Union[models31.AccessToken, models40.AccessToken]] = None
     ):
         self.access_token: str = ""
+        self.refresh_token: str = ""
         self.token_type: str = ""
         self.expires_in: int = 0
         self.expires_at = datetime.datetime.now()
@@ -54,6 +55,8 @@ class AuthToken:
     def set_token(self, token: Union[models31.AccessToken, models40.AccessToken]):
         """Assign the token and set its expiration."""
         self.access_token = token.access_token or ""
+        if isinstance(token, models40.AccessToken):
+            self.refresh_token = token.refresh_token or ""
         self.token_type = token.token_type or ""
         self.expires_in = token.expires_in or 0
 
