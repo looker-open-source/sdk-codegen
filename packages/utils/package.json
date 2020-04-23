@@ -34,7 +34,6 @@
     "docs": "typedoc --mode file --out docs"
   },
   "dependencies": {
-    "@looker/sdk-codegen-scripts": "0.2.0-beta.32",
     "blueimp-md5": "^2.13.0",
     "openapi3-ts": "^1.3.0"
   },
