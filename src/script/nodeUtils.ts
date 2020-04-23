@@ -24,7 +24,7 @@
 
 import * as fs from 'fs'
 import { execSync } from 'child_process'
-import { warn } from './utils'
+import { warn } from '../gen/src/utils'
 
 export const utf8Encoding = { encoding: 'utf-8' }
 export const utf8 = 'utf-8'

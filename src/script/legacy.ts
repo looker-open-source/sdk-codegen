@@ -26,7 +26,7 @@
 
 import { IGeneratorSpec as LanguageSpec, legacyLanguages } from './languages'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { log } from './utils'
+import { log } from '../gen/src/utils'
 import { quit, run } from './nodeUtils'
 import { logConvert } from './convert'
 

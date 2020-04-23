@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { danger, log } from './utils'
+import { danger, log } from '../gen/src/utils'
 import { fetchLookerVersion, openApiFileName } from './fetchSpec'
 import { MethodGenerator, specFromFile, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'

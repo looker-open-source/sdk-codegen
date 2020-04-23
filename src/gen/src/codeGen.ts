@@ -33,7 +33,7 @@ import {
   ApiModel,
   IntrinsicType
 } from './sdkModels'
-import { commentBlock } from '../script/utils'
+import { commentBlock } from './utils'
 
 export interface IVersionInfo {
   lookerVersion: string

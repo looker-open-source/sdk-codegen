@@ -32,7 +32,7 @@ import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { convertSpec, logConvert } from './convert'
 import { quit } from './nodeUtils'
 import * as path from 'path'
-import { log } from './utils'
+import { log } from '../gen/src/utils'
 
 const apiVersions = (props: any) => {
   const versions = props.api_versions ?? '3.1,4.0'

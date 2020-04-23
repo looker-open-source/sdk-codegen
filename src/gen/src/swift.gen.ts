@@ -37,7 +37,7 @@ import {
   strBody, DelimArrayType,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
-import { commentBlock} from '../script/utils'
+import { commentBlock} from './utils'
 
 export class SwiftGen extends CodeGen {
   codePath = './swift/'

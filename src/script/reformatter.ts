@@ -23,7 +23,7 @@
  */
 
 import * as path from 'path'
-import { danger, success, warn } from './utils'
+import { danger, success, warn } from '../gen/src/utils'
 import { isFileSync, readFileSync, run, utf8Encoding } from './nodeUtils'
 import * as prettier from 'prettier'
 import * as fs from "fs"

@@ -13,7 +13,6 @@ package-lock.json
 **/dist/*
 **/.DS_Store
 **/.build
-**/Packages
 **/xcuserdata/
 kotlin/.gradle/*
 **/.gradle/*

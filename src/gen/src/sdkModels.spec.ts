@@ -26,7 +26,7 @@ import * as OAS from 'openapi3-ts'
 import {
   ArrayType,
   CriteriaToSet,
-  IMethod,
+  IMethod, IMethodResponse,
   IntrinsicType,
   ITagList, IType, keyValues, methodRefs,
   SearchCriterion,
@@ -34,7 +34,7 @@ import {
   SetToCriteria, typeRefs,
 } from './sdkModels'
 
-import { apiTestModel } from '../script/testUtils'
+import { apiTestModel } from '../../script/testUtils'
 
 describe('sdkModels', () => {
 
@@ -101,7 +101,7 @@ describe('sdkModels', () => {
       const method = apiTestModel.methods['run_look']
       expect(method).toBeDefined()
       expect(method.responses.length).toBeGreaterThan(0)
-      method.responses.forEach((r => {
+      method.responses.forEach(((r: IMethodResponse) => {
         expect(r.description).not.toEqual("")
       }))
     })

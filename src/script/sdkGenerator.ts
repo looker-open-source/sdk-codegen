@@ -25,7 +25,7 @@
  */
 
 import * as Models from '../gen/sdkModels'
-import { success } from './utils'
+import { success } from '../gen/src/utils'
 import { readFileSync } from './nodeUtils'
 
 export const specFromFile = (specFile: string): Models.ApiModel => {

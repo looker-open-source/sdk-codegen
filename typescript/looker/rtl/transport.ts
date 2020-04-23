@@ -28,6 +28,7 @@
 // TODO create generic Agent that is not transport-specific
 import { Agent } from 'https'
 import { Headers } from 'request'
+// @ts-ignore  complaints about rootDir violations for some build options
 import { matchCharsetUtf8, matchModeBinary, matchModeString } from './constants'
 import { Readable } from "readable-stream"
 
