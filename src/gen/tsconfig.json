@@ -2,9 +2,10 @@
   "extends": "../../tsconfig.common",
   "compilerOptions": {
     "target": "ES5",
+    "rootDir": "./src",
+    "declarationDir": "./dist/types",
     "lib": ["es2015", "es6", "dom", "es2015.promise"],
-    "outDir": "dist"
+    "outDir": "./dist"
   },
-  "exclude": ["node_modules"],
-  "files": ["index.ts"]
+  "include": ["./src"]
 }
