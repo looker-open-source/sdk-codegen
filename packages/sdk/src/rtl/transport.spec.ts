@@ -25,7 +25,7 @@
 // Discussion of MIME types at https://en.wikipedia.org/wiki/Media_type#Mime.types
 
 import { encodeParam, ResponseMode, responseMode } from './transport'
-import { TestConfig } from '../../../src/script/testUtils'
+import { TestConfig } from '@looker/sdk-codegen-scripts'
 
 const config = TestConfig()
 const binaryTypes = config.testData["content_types"]["binary"] as [string]

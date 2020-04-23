@@ -36,7 +36,7 @@ import {
   strLookerClientSecret,
   strLookerTimeout, strLookerVerifySsl,
 } from './apiSettings'
-import { TestConfig } from '../../../src/script/testUtils'
+import { TestConfig } from '@looker/sdk-codegen-scripts'
 
 const config = TestConfig()
 

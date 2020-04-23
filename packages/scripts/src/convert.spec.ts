@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  */
 
-
 import { fixConversion, openApiStyle, swapXLookerNullable } from './convert'
 import { TestConfig } from './testUtils'
 import { readFileSync } from './nodeUtils'

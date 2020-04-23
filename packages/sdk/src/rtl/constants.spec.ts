@@ -24,7 +24,7 @@
 
 import { boolDefault, isFalse, isTrue, unquote } from './constants'
 import { ResponseMode, responseMode } from './transport'
-import { TestConfig } from '../../../src/script/testUtils'
+import { TestConfig } from '@looker/sdk-codegen-scripts'
 
 const config = TestConfig()
 const contentTypes = config.testData['content_types']
