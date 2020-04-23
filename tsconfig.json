@@ -1,6 +1,13 @@
 {
-  "extends": "./tsconfig.common",
   "compilerOptions": {
+    "declaration": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "strict": true,
+    "esModuleInterop": true,
     "target": "es6",
     "lib": ["es6", "es2017.object", "dom"],
     "allowSyntheticDefaultImports": true,
@@ -9,7 +16,13 @@
     "paths": {
       "rtl/*": ["packages/sdk/src/rtl/*"],
       "@looker/*": ["packages/*/src"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "tslint-language-service",
+        "alwaysShowRuleFailuresAsWarnings": true
+      }
+    ]
   },
   "include": ["packages"],
   "inputs": [],
