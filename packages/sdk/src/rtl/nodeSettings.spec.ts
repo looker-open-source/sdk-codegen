@@ -28,7 +28,7 @@ import {
   NodeSettingsIniFile,
 } from './nodeSettings'
 import { defaultTimeout } from './transport'
-import { boolDefault, utf8 } from './constants'
+import { boolDefault } from './constants'
 import {
   IApiSettings,
   strLookerBaseUrl,

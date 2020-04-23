@@ -24,7 +24,6 @@
 
 import { IRequestProps, ITransport, sdkError, SDKResponse } from './transport'
 import { IApiSettings } from './apiSettings'
-import { utf8 } from "./constants"
 
 /**
  * Basic authorization session interface for most API authentication scenarios
@@ -163,7 +162,7 @@ export abstract class AuthSession implements IAuthSession {
       return result.value
     } else {
       if (result instanceof Buffer) {
-        throw sdkError({message: result.toString(utf8)})
+        throw sdkError({message: result.toString('utf8')})
       } else {
         throw sdkError(result as any)
       }

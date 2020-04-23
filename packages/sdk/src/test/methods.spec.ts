@@ -29,7 +29,7 @@ import * as fs from 'fs'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from '../rtl/nodeSettings'
 import { DelimArray } from '../rtl/delimArray'
 import { Readable } from 'readable-stream'
-import { boolDefault, utf8 } from '../rtl/constants'
+import { boolDefault } from '../rtl/constants'
 import {
   strLookerBaseUrl,
   strLookerClientId,
@@ -40,6 +40,7 @@ import {
 import { defaultTimeout } from '../rtl/transport'
 import { LookerNodeSDK } from '../rtl/nodeSdk'
 import { TestConfig } from '../../../src/script/testUtils'
+import { utf8Encoding } from '../../../scripts/src/nodeUtils'
 
 const config = TestConfig()
 const users: Partial<IUser>[] = config.testData['users']
@@ -625,7 +626,7 @@ describe('LookerNodeSDK', () => {
                 })
               }, request)
               expect(fs.existsSync(csvFile)).toEqual(true)
-              const contents = fs.readFileSync(csvFile, utf8)
+              const contents = fs.readFileSync(csvFile, utf8Encoding)
               fs.unlinkSync(csvFile)
               expect(fs.existsSync(csvFile)).toEqual(false)
               expect(contents).toEqual(csv)
@@ -830,7 +831,7 @@ describe('LookerNodeSDK', () => {
 
   describe('Node environment', () => {
     beforeAll(() => {
-      const section = ApiConfig(fs.readFileSync(config.localIni, utf8))['Looker']
+      const section = ApiConfig(fs.readFileSync(config.localIni, utf8Encoding))['Looker']
       // tslint:disable-next-line:variable-name
       const verify_ssl = boolDefault(section['verify_ssl'], false).toString()
       // populate environment variables

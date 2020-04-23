@@ -38,7 +38,7 @@ import {
   strLookerClientSecret
 } from './apiSettings'
 import { AuthSession } from './authSession'
-import { defaultApiVersion, utf8 } from './constants'
+import { defaultApiVersion } from './constants'
 import { getenv } from './nodeSettings'
 
 const strPost: HttpMethod = 'POST'

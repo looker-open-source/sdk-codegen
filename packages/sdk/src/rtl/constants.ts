@@ -29,8 +29,6 @@ export const sdkVersion = `${apiVersion}.${lookerVersion}`
 export const environmentPrefix = 'LOOKERSDK'
 export const matchCharset = ';.*charset='
 
-export const utf8 = 'utf-8'
-
 /**
  * Does this content type say it's utf-8?
  * @type {string} Regular expression for matching charset=utf-8 in Content-Type

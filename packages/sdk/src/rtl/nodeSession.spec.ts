@@ -34,13 +34,13 @@ import {
   strLookerVerifySsl,
 } from './apiSettings'
 import { defaultTimeout } from './transport'
-import { boolDefault, utf8 } from './constants'
+import { boolDefault } from './constants'
 
 // TODO create destructurable function for test path resolution
 const dataFile = 'test/data.yml'
 // slightly hackish data path determination for tests
 const root = fs.existsSync(dataFile) ? '' : '../../'
-const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, utf8))
+const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, 'utf8'))
 const localIni = `${root}${testData['iniFile']}`
 
 describe('NodeSession', () => {
@@ -79,7 +79,7 @@ describe('NodeSession', () => {
 
   describe('environmental configuration', () => {
     it('no INI file', async () => {
-      const section = ApiConfig(fs.readFileSync(localIni, utf8))['Looker']
+      const section = ApiConfig(fs.readFileSync(localIni, 'utf8'))['Looker']
       // tslint:disable-next-line:variable-name
       const verify_ssl = boolDefault(section['verify_ssl'], false).toString()
       // populate environment variables

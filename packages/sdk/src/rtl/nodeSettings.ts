@@ -27,10 +27,10 @@ import * as ini from 'ini'
 import {
   ApiConfigMap,
   ApiSettings, DefaultSettings,
-  IApiSettings, strLookerClientId,
+  IApiSettings,
   ValueSettings,
 } from './apiSettings'
-import { unquote, utf8 } from './constants'
+import { unquote } from './constants'
 import { sdkError } from './transport'
 
 export interface IApiSection {
@@ -110,7 +110,7 @@ const readIniConfig = (fileName: string, section?: string) => {
   let config = readEnvConfig()
   if (fileName && fs.existsSync(fileName)) {
     // override any config file settings with environment values if the environment value is set
-    config  = {...ApiConfigSection(fs.readFileSync(fileName, utf8), section), ...config}
+    config  = {...ApiConfigSection(fs.readFileSync(fileName, 'utf8'), section), ...config}
   }
   // Unquote any quoted configuration values
   Object.keys(config).forEach(key => {

@@ -41,8 +41,14 @@ import { commentBlock} from '@looker/sdk-codegen-utils'
  * TypeScript code generator
  */
 export class TypescriptGen extends CodeGen {
-  codePath = './typescript/'
-  packagePath = 'looker'
+  /**
+   * special case for Typescript output path due to mono repository
+   */
+  codePath = './packages/'
+  /**
+   * special case for Typescript output path due to mono repository
+   */
+  packagePath = 'sdk/src'
   itself = 'this'
   fileExtension = '.ts'
   commentStr = '// '

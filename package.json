@@ -22,11 +22,11 @@
     "set-value": "^2.0.1"
   },
   "scripts": {
-    "convert": "ts-node src/script/specConvert.ts",
-    "legacy": "ts-node src/script/legacy.ts",
-    "sdk": "ts-node src/script/sdkGen.ts",
+    "convert": "ts-node packages/scripts/src/specConvert.ts",
+    "legacy": "ts-node packages/scripts/src/legacy.ts",
+    "sdk": "ts-node packages/scripts/src/sdkGen.ts",
+    "jsonify": "ts-node packages/scripts/src/yamlToJson.ts",
     "view": "npx redoc-cli serve",
-    "jsonify": "ts-node src/script/yamlToJson.ts",
     "clean": "rm -rf api/ && rm *.?.?.json && rm *.?.?.oas.json && yarn clean-dist",
     "clean-dist": "lerna run clean",
     "deploy:codegen": "lerna run deploy --scope sdk-codegen -c",

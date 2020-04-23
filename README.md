@@ -91,7 +91,11 @@ There are three steps for generating an SDK with this project:
 
   - **Note**: previous versions of the `looker.ini` file had an `api_version` entry. This is no longer required. The code generator project will read an `api_versions` value if that is found, but the SDKs ignore this value. If `api_versions` is not found in the `ini` file, it defaults to "3.1,4.0" for the generator to produce the definitions for the supported API versions.
 
-- install the code generator dependencies by running `yarn`.
+- install the code generator project dependencies by running:
+ 
+```sh
+yarn install
+```.
 
 - run the SDK generator with `yarn sdk`
 
