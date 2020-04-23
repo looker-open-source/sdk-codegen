@@ -22,11 +22,12 @@
  * THE SOFTWARE.
  */
 
-import { specFromFile } from './sdkGenerator'
 import * as fs from "fs"
 import * as yaml from 'js-yaml'
-import { utf8 } from '../../typescript/looker/rtl/constants'
-import { ApiConfig } from '../../typescript/looker/rtl/nodeSettings'
+import { ApiConfig } from '@looker/sdk'
+import { specFromFile } from './sdkGenerator'
+
+const utf8 = 'utf-8'
 
 /**
  * Reads configuration information, returning various test values
