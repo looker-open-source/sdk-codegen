@@ -26,13 +26,12 @@
 
 import * as fs from 'fs'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { danger, log } from '../gen/src/utils'
+import { danger, log } from '@looker/sdk-codegen-utils'
 import { fetchLookerVersion, openApiFileName } from './fetchSpec'
 import { MethodGenerator, specFromFile, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { getFormatter, Languages } from './languages'
 import { logConvert } from './convert'
-import { IVersionInfo } from '../gen/codeGen'
-import { ICodeGen } from '../gen/sdkModels'
+import { IVersionInfo, ICodeGen } from '@looker/sdk-codegen'
 import { FilesFormatter } from './reformatter'
 import { isDirSync, quit } from './nodeUtils'
 

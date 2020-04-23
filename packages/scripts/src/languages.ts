@@ -22,13 +22,10 @@
  * THE SOFTWARE.
  */
 
-import { PythonGen } from '../gen/python.gen'
-import { ICodeGen, ApiModel } from '../gen/sdkModels'
-import { TypescriptGen } from '../gen/typescript.gen'
+import { PythonGen,
+ICodeGen, ApiModel, IVersionInfo, SwiftGen, KotlinGen,
+TypescriptGen } from '@looker/sdk-codegen'
 import { quit } from './nodeUtils'
-import { IVersionInfo } from '../gen/codeGen'
-import { SwiftGen } from '../gen/swift.gen'
-import { KotlinGen } from '../gen/kotlin.gen'
 
 export interface IGeneratorSpec {
   language: string // name of Open API Generator language to produce

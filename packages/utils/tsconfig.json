@@ -6,6 +6,6 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "exclude": ["**/*.spec.*"],
+  "exclude": ["*.spec.*"],
   "include": ["./src"]
 }

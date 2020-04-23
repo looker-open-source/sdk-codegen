@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen",
-  "version": "0.2.0-beta.32",
+  "version": "0.1.0-alpha.20",
   "description": "Looker SDK Codegen core",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -27,7 +27,7 @@
     "codegen"
   ],
   "scripts": {
-    "build": "yarn tsc",
+    "build": "tsc",
     "prebuild": "rm -rf dist",
     "test": "yarn jest",
     "docs": "typedoc --mode file --out docs"

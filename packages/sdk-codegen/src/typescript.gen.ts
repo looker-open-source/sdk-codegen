@@ -35,7 +35,7 @@ import {
   strBody, DelimArrayType,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
-import { commentBlock} from './utils'
+import { commentBlock} from '@looker/sdk-codegen-utils'
 
 /**
  * TypeScript code generator

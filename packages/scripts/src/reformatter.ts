@@ -23,11 +23,11 @@
  */
 
 import * as path from 'path'
-import { danger, success, warn } from '../gen/src/utils'
+import { danger, success, warn } from '@looker/sdk-codegen-utils'
 import { isFileSync, readFileSync, run, utf8Encoding } from './nodeUtils'
 import * as prettier from 'prettier'
 import * as fs from "fs"
-import { ICodeGen } from '../gen/sdkModels'
+import { ICodeGen } from '@looker/sdk-codegen'
 
 export interface IReformat {
   reformat(files: string[]): string

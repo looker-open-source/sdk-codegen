@@ -26,7 +26,7 @@
 
 import { ISDKConfigProps } from './sdkConfig'
 import { openApiFileName, logFetch } from './fetchSpec'
-import { log, success, warn } from '../gen/src/utils'
+import { log, success, warn } from '@looker/sdk-codegen-utils'
 import { fail, isFileSync, quit, readFileSync, run, utf8Encoding } from './nodeUtils'
 import * as fs from 'fs'
 import { ParameterStyle } from 'openapi3-ts'
