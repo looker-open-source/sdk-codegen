@@ -19,7 +19,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "prebuild": "rm -rf lib dist",
+    "prebuild": "rm -rf dist",
+    "clean": "rm -rf dist",
     "deploy": "yarn build && npm publish",
     "docs": "typedoc --mode file --out docs",
     "test": "yarn jest",
@@ -35,7 +36,6 @@
   },
   "homepage": "https://github.com/looker-open-source/sdk-codegen/",
   "devDependencies": {
-    "@looker/sdk-codegen-utils": "^0.1.0-alpha.1",
     "@types/ini": "^1.3.30",
     "@types/node": "^12.12.6",
     "@types/request": "^2.48.3",

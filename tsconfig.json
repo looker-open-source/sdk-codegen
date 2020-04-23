@@ -15,7 +15,7 @@
     "baseUrl": ".",
     "paths": {
       "rtl/*": ["packages/sdk/src/rtl/*"],
-      "@looker/*": ["packages/*/src"]
+      "@looker/*": ["./*/src"]
     },
     "plugins": [
       {

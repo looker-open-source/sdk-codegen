@@ -29,15 +29,16 @@
   "scripts": {
     "build": "tsc",
     "prebuild": "rm -rf dist",
+    "clean": "rm -rf dist",
     "test": "yarn jest",
     "docs": "typedoc --mode file --out docs"
   },
   "dependencies": {
+    "@looker/sdk-codegen-utils": "^0.1.0-alpha.1",
     "blueimp-md5": "^2.13.0",
     "openapi3-ts": "^1.3.0"
   },
   "devDependencies": {
-    "@looker/sdk-codegen-utils": "^0.1.0-alpha.1"
   },
   "gitHead": "fefcdd0e7b36be79677c03e51dcc8ce2c3dbc058"
 }
