@@ -34,7 +34,7 @@ import {
   SetToCriteria, typeRefs,
 } from './sdkModels'
 
-import { apiTestModel } from '../../script/testUtils'
+import { apiTestModel } from "@looker/sdk-codegen-scripts"
 
 describe('sdkModels', () => {
 

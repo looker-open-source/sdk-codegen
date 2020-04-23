@@ -1,8 +1,0 @@
-{
-  "extends": "./tsconfig.common",
-  "compilerOptions": {
-    "target": "ES5",
-    "lib": ["es2015", "es6", "dom", "es2015.promise"]
-  },
-  "exclude": ["**/*.story.*", "**/*.test.*", "dist"]
-}

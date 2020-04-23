@@ -23,7 +23,7 @@
  */
 
 import { TypescriptGen } from './typescript.gen'
-import { apiTestModel } from '../../script/testUtils'
+import { apiTestModel } from '@looker/sdk-codegen-scripts'
 
 const gen = new TypescriptGen(apiTestModel)
 const indent = ''
@@ -31,7 +31,7 @@ const indent = ''
 describe('typescript generator', () => {
   it('comment header', () => {
     const text = 'line 1\nline 2'
-    const actual = gen.commentHeader(indent,text)
+    const actual = gen.commentHeader(indent, text)
     const expected = `/**
  * line 1
  * line 2
@@ -201,8 +201,7 @@ async all_datagroups(
   describe('method body', () => {
     it('encodes string path params', () => {
       const method = apiTestModel.methods['run_url_encoded_query']
-      const expected =
-`  model_name = encodeParam(model_name)
+      const expected = `  model_name = encodeParam(model_name)
   view_name = encodeParam(view_name)
   result_format = encodeParam(result_format)
 `
@@ -213,19 +212,22 @@ async all_datagroups(
     it('encodes only string or date path params', () => {
       const method = apiTestModel.methods['run_look']
       // should NOT escape request.look_id (int)
-      const expected = '  request.result_format = encodeParam(request.result_format)\n'
+      const expected =
+        '  request.result_format = encodeParam(request.result_format)\n'
       const actual = gen.encodePathParams('', method)
       expect(actual).toEqual(expected)
     })
     it('assert response is model add_group_group', () => {
       const method = apiTestModel.methods['add_group_group']
-      const expected = 'return this.post<IGroup, IError>(`/groups/${group_id}/groups`, null, body, options)'
+      const expected =
+        'return this.post<IGroup, IError>(`/groups/${group_id}/groups`, null, body, options)'
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
     it('assert response is None delete_group_from_group', () => {
       const method = apiTestModel.methods['delete_group_from_group']
-      const expected = 'return this.delete<void, IError>(`/groups/${group_id}/groups/${deleting_group_id}`, null, null, options)'
+      const expected =
+        'return this.delete<void, IError>(`/groups/${group_id}/groups/${deleting_group_id}`, null, null, options)'
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
@@ -256,25 +258,25 @@ dashboard_id: string`)
  * body parameter for dynamically created request type
  */
 body: ICreateDashboardRenderTask`)
-//         const actual = gen.declareType(indent, type!)
-//         expect(actual).toEqual(`// Dynamically generated request type for create_dashboard_render_task
-// export interface IRequestcreate_dashboard_render_task{
-//   // Id of dashboard to render
-//   dashboard_id: number
-//   // Output type: pdf, png, or jpg
-//   result_format: string
-//   body: Partial<ICreateDashboardRenderTask>
-//   // Output width in pixels
-//   width: number
-//   // Output height in pixels
-//   height: number
-//   // Requested fields.
-//   fields?: string
-//   // Paper size for pdf
-//   pdf_paper_size?: string
-//   // Whether to render pdf in landscape
-//   pdf_landscape?: boolean
-// }`)
+        //         const actual = gen.declareType(indent, type!)
+        //         expect(actual).toEqual(`// Dynamically generated request type for create_dashboard_render_task
+        // export interface IRequestcreate_dashboard_render_task{
+        //   // Id of dashboard to render
+        //   dashboard_id: number
+        //   // Output type: pdf, png, or jpg
+        //   result_format: string
+        //   body: Partial<ICreateDashboardRenderTask>
+        //   // Output width in pixels
+        //   width: number
+        //   // Output height in pixels
+        //   height: number
+        //   // Requested fields.
+        //   fields?: string
+        //   // Paper size for pdf
+        //   pdf_paper_size?: string
+        //   // Whether to render pdf in landscape
+        //   pdf_landscape?: boolean
+        // }`)
       }
     })
     it('with arrays and hashes', () => {

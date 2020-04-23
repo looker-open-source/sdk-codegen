@@ -13,6 +13,10 @@
         "name": "tslint-language-service",
         "alwaysShowRuleFailuresAsWarnings": true
       }
-    ]
+    ],
+    "paths": {
+      "rtl/*": ["packages/sdk/src/rtl/*"],
+      "@looker/*": ["packages/*/src"]
+    }
   }
 }

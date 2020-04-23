@@ -6,13 +6,14 @@
   "name": "sdk-codegen-all",
   "version": "0.2.0-beta-3",
   "description": "A utility for generating SDKs for various languages from an OpenApi specification",
-  "main": "index.js",
   "devDependencies": {
     "@looker/eslint-config": "^1.0.16",
+    "@looker/prettier-config": "^1.0.15",
     "@openapitools/openapi-generator-cli": "^1.0.2-4.2.0",
     "@types/node-fetch": "^2.3.3",
     "eslint": "^6.8.0",
     "file-type": "^12.3.0",
+    "lerna": "^3.20.2",
     "tslint": "^5.15.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-config-standard": "8.0.1"
@@ -79,7 +80,5 @@
     "ts-node": "^8.1.0",
     "typescript": "^3.6.0"
   },
-  "stylelint": {
-    "extends": "@looker/eslint-config/stylelint"
-  }
+  "prettier": "@looker/prettier-config"
 }

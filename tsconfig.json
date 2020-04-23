@@ -7,8 +7,11 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "rtl/*": ["typescript/looker/rtl/*"]
+      "rtl/*": ["packages/sdk/src/rtl/*"],
+      "@looker/*": ["packages/*/src"]
     }
   },
-  "include": ["*.ts", "src/*.ts"]
+  "include": ["packages"],
+  "inputs": [],
+  "exclude": ["dist"]
 }

@@ -1,7 +1,0 @@
-{
-  "private": true,
-  "name": "@looker/sdk-codegen-scripts",
-  "version": "0.5.0",
-  "dependencies": {
-  }
-}
