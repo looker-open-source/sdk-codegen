@@ -1,7 +1,7 @@
 {
   "name": "@looker/sdk-codegen-utils",
   "version": "0.1.0-alpha.1",
-  "private": true,
+  "private": false,
   "description": "Looker SDK Codegen utils",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
