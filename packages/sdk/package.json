@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@looker/sdk",
-  "version": "0.2.0-beta.32",
+  "version": "0.2.0-beta.33",
   "description": "Looker SDK",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
