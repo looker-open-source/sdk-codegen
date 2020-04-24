@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@looker/sdk",
   "version": "0.2.0-beta.32",
   "description": "Looker SDK",
