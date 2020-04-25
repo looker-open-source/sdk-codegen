@@ -27,15 +27,19 @@ import functools
 import json
 import keyword
 
-# ignoring "Module 'typing' has no attribute 'ForwardRef'"
 from typing import (  # type: ignore
     Callable,
-    ForwardRef,
     MutableMapping,
     Sequence,
     Type,
     Union,
 )
+
+# ignoring "Module 'typing' has no attribute 'ForwardRef'"
+try:
+    from typing import ForwardRef
+except ImportError:
+    from typing import _ForwardRef as ForwardRef # Add Python 3.6 Support
 
 import cattr
 
