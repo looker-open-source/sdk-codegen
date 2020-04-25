@@ -7146,7 +7146,10 @@ class WriteWhitelabelConfiguration(model.Model):
 # these calls will be removed.
 
 import functools  # noqa:E402
-from typing import ForwardRef  # type: ignore  # noqa:E402
+try:
+    from typing import ForwardRef
+except ImportError:
+    from typing import _ForwardRef as ForwardRef # Add Python 3.6 Support
 
 structure_hook = functools.partial(sr.structure_hook, globals(), sr.converter40)
 sr.converter40.register_structure_hook(
