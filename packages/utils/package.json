@@ -29,7 +29,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prebuild": "rm -rf dist",
+    "prebuild": "yarn clean",
     "clean": "rm -rf dist"
   },
   "dependencies": {},

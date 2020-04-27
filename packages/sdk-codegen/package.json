@@ -28,7 +28,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prebuild": "rm -rf dist",
+    "prebuild": "yarn clean",
     "clean": "rm -rf dist",
     "test": "yarn jest",
     "docs": "typedoc --mode file --out docs"

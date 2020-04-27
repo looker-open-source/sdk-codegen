@@ -20,7 +20,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "prebuild": "rm -rf dist",
+    "prebuild": "yarn clean",
     "clean": "rm -rf dist",
     "deploy": "yarn build && npm publish",
     "docs": "typedoc --mode file --out docs",
