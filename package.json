@@ -27,7 +27,7 @@
     "sdk": "ts-node packages/scripts/src/sdkGen.ts",
     "jsonify": "ts-node packages/scripts/src/yamlToJson.ts",
     "view": "npx redoc-cli serve",
-    "clean": "rm -rf api/ && rm *.?.?.json && rm *.?.?.oas.json && yarn clean-dist",
+    "clean": "yarn clean-dist && rm -rf api/ && rm *.?.?.json && rm *.?.?.oas.json",
     "clean-dist": "lerna run clean",
     "deploy:codegen": "lerna run deploy --scope sdk-codegen -c",
     "deploy:sdk": "lerna run deploy --scope sdk",

@@ -216,7 +216,7 @@ ${this.hooks.join('\n')}
     let params: string[] = []
     const args = method.allParams
     if (args && args.length > 0) {
-      method.allParams.forEach(p => params.push(this.declareParameter(bump, p)))
+      method.allParams.forEach(p => params.push(this.declareParameter(bump, method, p)))
     }
     let head = method.description?.trim()
     head = (head ? `${head}\n\n` : '') + `${method.httpMethod} ${method.endpoint} -> ${returnType}`
@@ -237,10 +237,10 @@ ${this.hooks.join('\n')}
     }
   }
 
-  declareParameter(indent: string, param: IParameter) {
+  declareParameter(indent: string, method: IMethod, param: IParameter) {
     let type: IType
     if (param.location === strBody) {
-      type = this.writeableType(param.type) || param.type
+      type = this.writeableType(param.type, method) || param.type
       this.addMethodInputModelType(type)
     } else {
       type = param.type
@@ -371,14 +371,15 @@ ${this.hooks.join('\n')}
     return encodings
   }
 
-  bodyParamsTypeAssertions(indent: string, bodyParams: IParameter[]): string {
+  bodyParamsTypeAssertions(indent: string, method: IMethod): string {
+    const bodyParams = method.bodyParams
     const bump = indent + this.indentStr
     let assertions: string = ''
     if (bodyParams.length > 0) {
       for (const param of bodyParams) {
         if (param.location === strBody) {
           let conditionStr = param.required ? '' : `${indent}if ${param.name}:\n${bump}`
-          let type = this.writeableType(param.type) || param.type
+          let type = this.writeableType(param.type, method) || param.type
           let bodyType = this.typeMapMethods(type).name
           if (bodyType.startsWith('Sequence')) {
             bodyType = 'Sequence'
@@ -409,7 +410,7 @@ ${this.hooks.join('\n')}
     return this.methodSignature(indent, method)
       + this.summary(bump, method.summary)
       + this.encodePathParams(bump, method)
-      + this.bodyParamsTypeAssertions(bump, method.bodyParams)
+      + this.bodyParamsTypeAssertions(bump, method)
       + this.httpCall(bump, method)
   }
 

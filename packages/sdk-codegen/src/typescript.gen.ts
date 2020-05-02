@@ -159,9 +159,9 @@ export interface IDictionary<T> {
     return `@param {${mapped.name}} ${param.name} ${param.description}`
   }
 
-  declareParameter(indent: string, param: IParameter) {
+  declareParameter(indent: string, method: IMethod, param: IParameter) {
     let type = (param.location === strBody)
-      ? this.writeableType(param.type) || param.type
+      ? this.writeableType(param.type, method) || param.type
       : param.type
     const mapped = this.typeMap(type)
     let pOpt = ''
@@ -203,7 +203,7 @@ export interface IDictionary<T> {
     } else {
       let params: string[] = []
       const args = method.allParams // get the params in signature order
-      if (args && args.length > 0) args.forEach(p => params.push(this.declareParameter(bump, p)))
+      if (args && args.length > 0) args.forEach(p => params.push(this.declareParameter(bump, method, p)))
       fragment = params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
     }
     if (method.responseIsBoth()) {

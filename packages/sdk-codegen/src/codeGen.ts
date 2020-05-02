@@ -115,7 +115,7 @@ export abstract class CodeGen implements ICodeGen {
    */
   abstract modelsEpilogue(indent: string): string
 
-  abstract declareParameter(indent: string, param: IParameter): string
+  abstract declareParameter(indent: string, method: IMethod, param: IParameter): string
 
   abstract declareProperty(indent: string, property: IProperty): string
 
@@ -173,9 +173,10 @@ export abstract class CodeGen implements ICodeGen {
     return text ? `${this.comment(indent, text)}\n` : ''
   }
 
-  declareParameters(indent: string, params: IParameter[] | undefined) {
+  declareParameters(indent: string, method: IMethod) {
+    const params = method.allParams
     let items: string[] = []
-    if (params) params.forEach(p => items.push(this.declareParameter(indent, p)))
+    if (params) params.forEach(p => items.push(this.declareParameter(indent, method, p)))
     return items.join(this.paramDelimiter)
   }
 
@@ -278,17 +279,19 @@ export abstract class CodeGen implements ICodeGen {
     const request = this.api.getRequestType(method)
     if (!request) return ''
     request.refCount++
+    method.addType(this.api, request)
     return request.name
   }
 
   // Looks up or dynamically creates the writeable type for this method based
   // on rules for creating writable types at the IApiModel implementation level
   // If no writeable type is required, no writeable type is created or referenced
-  writeableType(type: IType): IType | undefined {
+  writeableType(type: IType, method: IMethod): IType | undefined {
     if (!type) return undefined
     const writer = this.api.getWriteableType(type)
     if (!writer) return undefined
     writer.refCount++
+    method.addType(this.api, writer)
     return writer
   }
 

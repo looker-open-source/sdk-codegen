@@ -1816,10 +1816,12 @@ export interface ICodeGen {
   //
   /**
    * Returns the WriteType if the passed type has any readOnly properties or types
+   *
+   * If the writeable type exists, a reference to it is added to the method
    * @param {IType} type
    * @returns {IType | undefined}
    */
-  writeableType(type: IType): IType | undefined
+  writeableType(type: IType, method: IMethod): IType | undefined
 
   //
   /**
@@ -1913,16 +1915,23 @@ export interface ICodeGen {
   //    '''This is the method summary'''
   summary(indent: string, text: string): string
 
-  // produces the declaration block for a parameter
-  // e.g.
-  //   # ID of the query to run
-  //   query_id: str
-  //
-  // and
-  //
-  //   # size description of parameter
-  //   row_limit: int = None
-  declareParameter(indent: string, param: IParameter): string
+  /**
+   *
+   * produces the declaration block for a parameter
+   * e.g.
+   *   # ID of the query to run
+   *   query_id: str
+   *
+   * and
+   *
+   *   # size description of parameter
+   *   row_limit: int = None
+   * @param {string} indent spaces to indent
+   * @param {IMethod} method method containing the parameter
+   * @param {IParameter} param parameter to declare
+   * @returns {string} the parameter declaration
+   */
+  declareParameter(indent: string, method: IMethod, param: IParameter): string
 
   // generates the method signature including parameter list and return type.
   methodSignature(indent: string, method: IMethod): string
@@ -1941,16 +1950,27 @@ export interface ICodeGen {
   // generates the streaming method signature including parameter list and return type.
   streamerSignature(indent: string, method: IMethod): string
 
-  // generates the entire streaming method
+  /**
+   * Generates the entire streaming method
+   * @param {string} indent code indentation
+   * @param {IMethod} method method to declare
+   * @returns {string} source code declaration
+   */
   declareStreamer(indent: string, method: IMethod): string
 
-  // generates the list of parameters for a method signature
-  // e.g.
-  //   # ID of the query to run
-  //   query_id: str,
-  //   # size description of parameter
-  //   row_limit: int = None
-  declareParameters(indent: string, params: IParameter[] | undefined): string
+  /**
+   *
+   * generates the list of parameters for a method signature
+   * e.g.
+   * # ID of the query to run
+   * query_id: str,
+   * # size description of parameter
+   * row_limit: int = None
+   * @param {string} indent
+   * @param {IMethod} method
+   * @returns {string}
+   */
+  declareParameters(indent: string, method: IMethod): string
 
   // generates the syntax for a constructor argument
   declareConstructorArg(indent: string, property: IProperty): string
