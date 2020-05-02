@@ -1263,7 +1263,6 @@ export class IntrinsicType extends Type {
 export class RequestType extends Type {
   constructor(api: IApiModel, name: string, params: IParameter[], description: string = '') {
     super({description}, name)
-    // params.forEach(p => this.properties[p.name] = p.asProperty())
     params.forEach(p => {
       let writeProp = p.asProperty()
       const typeWriter = api.getWriteableType(p.type)
@@ -1276,7 +1275,9 @@ export class RequestType extends Type {
 export class WriteType extends Type {
   constructor(api: IApiModel, type: IType) {
     const name = `${strWrite}${type.name}`
-    const description = `Dynamically generated writeable type for ${type.name}`
+    const roProps = WriteType.readonlyProps(type.properties)
+    const description = `Dynamically generated writeable type for ${type.name} removes properties:\n`
+      + roProps.map(p => p.name).join(', ')
     super({description}, name)
     type.writeable
       .filter(p => (!p.readOnly) && (!p.type.readOnly))
@@ -1292,6 +1293,15 @@ export class WriteType extends Type {
         this.properties[p.name] = writeProp
       })
   }
+
+  private static readonlyProps = (properties: IPropertyList) : IProperty[] => {
+    let result: IProperty[] = []
+    Object.entries(properties)
+      .filter(([_, prop]) => (prop.readOnly || prop.type.readOnly))
+      .forEach(([_, prop]) => result.push(prop))
+    return result
+  }
+
 }
 
 export interface IApiModel extends IModel {
