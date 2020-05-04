@@ -185,6 +185,10 @@ data class ContentMeta (
    */
   var look_id: Long? = null,
   /**
+   * Id of associated folder when content_type is "space" (read-only)
+   */
+  var folder_id: String? = null,
+  /**
    * Content Type ("dashboard", "look", or "space") (read-only)
    */
   var content_type: String? = null,
@@ -6944,7 +6948,8 @@ data class Workspace (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ApiSession
+ * Dynamically generated writeable type for ApiSession removes properties:
+ * can, sudo_user_id
  */
 data class WriteApiSession (
   /**
@@ -6954,7 +6959,8 @@ data class WriteApiSession (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for BackupConfiguration
+ * Dynamically generated writeable type for BackupConfiguration removes properties:
+ * can, url
  */
 data class WriteBackupConfiguration (
   /**
@@ -6980,7 +6986,8 @@ data class WriteBackupConfiguration (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ColorCollection
+ * Dynamically generated writeable type for ColorCollection removes properties:
+ * id
  */
 data class WriteColorCollection (
   /**
@@ -7002,7 +7009,8 @@ data class WriteColorCollection (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ContentFavorite
+ * Dynamically generated writeable type for ContentFavorite removes properties:
+ * id, look_id, dashboard_id, look
  */
 data class WriteContentFavorite (
   /**
@@ -7017,7 +7025,8 @@ data class WriteContentFavorite (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ContentMeta
+ * Dynamically generated writeable type for ContentMeta removes properties:
+ * can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug, space_id
  */
 data class WriteContentMeta (
   /**
@@ -7027,7 +7036,8 @@ data class WriteContentMeta (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for CreateDashboardFilter
+ * Dynamically generated writeable type for CreateDashboardFilter removes properties:
+ * id, field
  */
 data class WriteCreateDashboardFilter (
   /**
@@ -7085,7 +7095,8 @@ data class WriteCreateDashboardFilter (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for CreateQueryTask
+ * Dynamically generated writeable type for CreateQueryTask removes properties:
+ * can
  */
 data class WriteCreateQueryTask (
   /**
@@ -7115,7 +7126,8 @@ data class WriteCreateQueryTask (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for CredentialsEmail
+ * Dynamically generated writeable type for CredentialsEmail removes properties:
+ * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
  */
 data class WriteCredentialsEmail (
   /**
@@ -7129,7 +7141,8 @@ data class WriteCredentialsEmail (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for CustomWelcomeEmail
+ * Dynamically generated writeable type for CustomWelcomeEmail removes properties:
+ * can
  */
 data class WriteCustomWelcomeEmail (
   /**
@@ -7151,7 +7164,8 @@ data class WriteCustomWelcomeEmail (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Dashboard
+ * Dynamically generated writeable type for Dashboard removes properties:
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
  */
 data class WriteDashboard (
   /**
@@ -7240,7 +7254,8 @@ data class WriteDashboard (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for DashboardBase
+ * Dynamically generated writeable type for DashboardBase removes properties:
+ * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id
  */
 data class WriteDashboardBase (
   var folder: WriteFolderBase? = null,
@@ -7248,7 +7263,8 @@ data class WriteDashboardBase (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for DashboardElement
+ * Dynamically generated writeable type for DashboardElement removes properties:
+ * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
  */
 data class WriteDashboardElement (
   /**
@@ -7317,7 +7333,8 @@ data class WriteDashboardElement (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for DashboardFilter
+ * Dynamically generated writeable type for DashboardFilter removes properties:
+ * can, id, dashboard_id, field
  */
 data class WriteDashboardFilter (
   /**
@@ -7371,7 +7388,8 @@ data class WriteDashboardFilter (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for DashboardLayout
+ * Dynamically generated writeable type for DashboardLayout removes properties:
+ * can, id, deleted, dashboard_title, dashboard_layout_components
  */
 data class WriteDashboardLayout (
   /**
@@ -7397,7 +7415,8 @@ data class WriteDashboardLayout (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for DashboardLayoutComponent
+ * Dynamically generated writeable type for DashboardLayoutComponent removes properties:
+ * can, id, deleted, element_title, element_title_hidden, vis_type
  */
 data class WriteDashboardLayoutComponent (
   /**
@@ -7427,7 +7446,8 @@ data class WriteDashboardLayoutComponent (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Datagroup
+ * Dynamically generated writeable type for Datagroup removes properties:
+ * can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
  */
 data class WriteDatagroup (
   /**
@@ -7441,7 +7461,8 @@ data class WriteDatagroup (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for DBConnection
+ * Dynamically generated writeable type for DBConnection removes properties:
+ * can, dialect, snippets, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
  */
 data class WriteDBConnection (
   /**
@@ -7544,7 +7565,8 @@ data class WriteDBConnection (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for DBConnectionOverride
+ * Dynamically generated writeable type for DBConnectionOverride removes properties:
+ * has_password
  */
 data class WriteDBConnectionOverride (
   /**
@@ -7594,7 +7616,8 @@ data class WriteDBConnectionOverride (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for FolderBase
+ * Dynamically generated writeable type for FolderBase removes properties:
+ * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
  */
 data class WriteFolderBase (
   /**
@@ -7608,7 +7631,8 @@ data class WriteFolderBase (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for GitBranch
+ * Dynamically generated writeable type for GitBranch removes properties:
+ * can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
  */
 data class WriteGitBranch (
   /**
@@ -7622,7 +7646,8 @@ data class WriteGitBranch (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Group
+ * Dynamically generated writeable type for Group removes properties:
+ * can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
  */
 data class WriteGroup (
   /**
@@ -7636,7 +7661,8 @@ data class WriteGroup (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Homepage
+ * Dynamically generated writeable type for Homepage removes properties:
+ * can, content_metadata_id, created_at, homepage_sections, id, updated_at, user_id, primary_homepage
  */
 data class WriteHomepage (
   /**
@@ -7658,7 +7684,8 @@ data class WriteHomepage (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for HomepageItem
+ * Dynamically generated writeable type for HomepageItem removes properties:
+ * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, section_fetch_time, title, url, view_count
  */
 data class WriteHomepageItem (
   /**
@@ -7716,7 +7743,8 @@ data class WriteHomepageItem (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for HomepageSection
+ * Dynamically generated writeable type for HomepageSection removes properties:
+ * can, created_at, detail_url, homepage_items, id, is_header, updated_at
  */
 data class WriteHomepageSection (
   /**
@@ -7742,7 +7770,8 @@ data class WriteHomepageSection (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Integration
+ * Dynamically generated writeable type for Integration removes properties:
+ * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
  */
 data class WriteIntegration (
   /**
@@ -7760,7 +7789,8 @@ data class WriteIntegration (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for IntegrationHub
+ * Dynamically generated writeable type for IntegrationHub removes properties:
+ * can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
  */
 data class WriteIntegrationHub (
   /**
@@ -7774,7 +7804,8 @@ data class WriteIntegrationHub (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for InternalHelpResources
+ * Dynamically generated writeable type for InternalHelpResources removes properties:
+ * can
  */
 data class WriteInternalHelpResources (
   /**
@@ -7784,7 +7815,8 @@ data class WriteInternalHelpResources (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for InternalHelpResourcesContent
+ * Dynamically generated writeable type for InternalHelpResourcesContent removes properties:
+ * can
  */
 data class WriteInternalHelpResourcesContent (
   /**
@@ -7798,7 +7830,8 @@ data class WriteInternalHelpResourcesContent (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for LDAPConfig
+ * Dynamically generated writeable type for LDAPConfig removes properties:
+ * can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
  */
 data class WriteLDAPConfig (
   /**
@@ -7940,7 +7973,8 @@ data class WriteLDAPConfig (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for LegacyFeature
+ * Dynamically generated writeable type for LegacyFeature removes properties:
+ * can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
  */
 data class WriteLegacyFeature (
   /**
@@ -7950,7 +7984,8 @@ data class WriteLegacyFeature (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for LookmlModel
+ * Dynamically generated writeable type for LookmlModel removes properties:
+ * can, explores, has_content, label
  */
 data class WriteLookmlModel (
   /**
@@ -7972,7 +8007,8 @@ data class WriteLookmlModel (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for LookWithQuery
+ * Dynamically generated writeable type for LookWithQuery removes properties:
+ * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
  */
 data class WriteLookWithQuery (
   /**
@@ -8017,7 +8053,8 @@ data class WriteLookWithQuery (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for MergeQuery
+ * Dynamically generated writeable type for MergeQuery removes properties:
+ * can, id, result_maker_id
  */
 data class WriteMergeQuery (
   /**
@@ -8051,7 +8088,8 @@ data class WriteMergeQuery (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ModelSet
+ * Dynamically generated writeable type for ModelSet removes properties:
+ * can, all_access, built_in, id, url
  */
 data class WriteModelSet (
   var models: Array<String>? = null,
@@ -8062,7 +8100,8 @@ data class WriteModelSet (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for OIDCConfig
+ * Dynamically generated writeable type for OIDCConfig removes properties:
+ * can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
  */
 data class WriteOIDCConfig (
   /**
@@ -8164,7 +8203,8 @@ data class WriteOIDCConfig (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for PasswordConfig
+ * Dynamically generated writeable type for PasswordConfig removes properties:
+ * can
  */
 data class WritePasswordConfig (
   /**
@@ -8186,7 +8226,8 @@ data class WritePasswordConfig (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for PermissionSet
+ * Dynamically generated writeable type for PermissionSet removes properties:
+ * can, all_access, built_in, id, url
  */
 data class WritePermissionSet (
   /**
@@ -8197,7 +8238,8 @@ data class WritePermissionSet (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Project
+ * Dynamically generated writeable type for Project removes properties:
+ * can, id, uses_git, is_example
  */
 data class WriteProject (
   /**
@@ -8267,7 +8309,8 @@ data class WriteProject (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Query
+ * Dynamically generated writeable type for Query removes properties:
+ * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
  */
 data class WriteQuery (
   /**
@@ -8353,7 +8396,8 @@ data class WriteQuery (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for RepositoryCredential
+ * Dynamically generated writeable type for RepositoryCredential removes properties:
+ * can, id, root_project_id, remote_url, is_configured
  */
 data class WriteRepositoryCredential (
   /**
@@ -8371,14 +8415,16 @@ data class WriteRepositoryCredential (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields
+ * Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes properties:
+ * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
  */
 data class WriteResultMakerWithIdVisConfigAndDynamicFields (
   var query: WriteQuery? = null
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Role
+ * Dynamically generated writeable type for Role removes properties:
+ * can, id, url, users_url
  */
 data class WriteRole (
   /**
@@ -8398,7 +8444,8 @@ data class WriteRole (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for SamlConfig
+ * Dynamically generated writeable type for SamlConfig removes properties:
+ * can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
  */
 data class WriteSamlConfig (
   /**
@@ -8500,7 +8547,8 @@ data class WriteSamlConfig (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ScheduledPlan
+ * Dynamically generated writeable type for ScheduledPlan removes properties:
+ * id, created_at, updated_at, title, user, next_run_at, last_run_at, can
  */
 data class WriteScheduledPlan (
   /**
@@ -8610,7 +8658,8 @@ data class WriteScheduledPlan (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for SessionConfig
+ * Dynamically generated writeable type for SessionConfig removes properties:
+ * can
  */
 data class WriteSessionConfig (
   /**
@@ -8636,7 +8685,8 @@ data class WriteSessionConfig (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for SpaceBase
+ * Dynamically generated writeable type for SpaceBase removes properties:
+ * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
  */
 data class WriteSpaceBase (
   /**
@@ -8650,7 +8700,8 @@ data class WriteSpaceBase (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Theme
+ * Dynamically generated writeable type for Theme removes properties:
+ * can, id
  */
 data class WriteTheme (
   /**
@@ -8669,7 +8720,8 @@ data class WriteTheme (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for User
+ * Dynamically generated writeable type for User removes properties:
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_space_id, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
  */
 data class WriteUser (
   var credentials_email: WriteCredentialsEmail? = null,
@@ -8708,7 +8760,8 @@ data class WriteUser (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for UserAttribute
+ * Dynamically generated writeable type for UserAttribute removes properties:
+ * can, id, is_system, is_permanent
  */
 data class WriteUserAttribute (
   /**
@@ -8746,7 +8799,8 @@ data class WriteUserAttribute (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for UserAttributeWithValue
+ * Dynamically generated writeable type for UserAttributeWithValue removes properties:
+ * can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
  */
 data class WriteUserAttributeWithValue (
   /**
@@ -8756,7 +8810,8 @@ data class WriteUserAttributeWithValue (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for WhitelabelConfiguration
+ * Dynamically generated writeable type for WhitelabelConfiguration removes properties:
+ * can, id, logo_url, favicon_url
  */
 data class WriteWhitelabelConfiguration (
   /**

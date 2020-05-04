@@ -350,6 +350,10 @@ struct ContentMeta: SDKModel {
      */
     var look_id: Int64?
     /**
+     * Id of associated folder when content_type is "space" (read-only)
+     */
+    var folder_id: String?
+    /**
      * Content Type ("dashboard", "look", or "folder") (read-only)
      */
     var content_type: String?
@@ -365,10 +369,6 @@ struct ContentMeta: SDKModel {
      * Content Slug (read-only)
      */
     var slug: String?
-    /**
-     * Id of associated folder when content_type is "space" (read-only)
-     */
-    var folder_id: String?
 }
 
 struct ContentMetaGroupUser: SDKModel {
@@ -6651,7 +6651,8 @@ struct Workspace: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ApiSession
+ * Dynamically generated writeable type for ApiSession removes properties:
+ * can, sudo_user_id
  */
 struct WriteApiSession: SDKModel {
     /**
@@ -6661,7 +6662,8 @@ struct WriteApiSession: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for BackupConfiguration
+ * Dynamically generated writeable type for BackupConfiguration removes properties:
+ * can, url
  */
 struct WriteBackupConfiguration: SDKModel {
     /**
@@ -6687,7 +6689,8 @@ struct WriteBackupConfiguration: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Board
+ * Dynamically generated writeable type for Board removes properties:
+ * can, content_metadata_id, created_at, board_sections, id, updated_at, user_id, primary_homepage
  */
 struct WriteBoard: SDKModel {
     /**
@@ -6709,7 +6712,8 @@ struct WriteBoard: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for BoardItem
+ * Dynamically generated writeable type for BoardItem removes properties:
+ * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, location, title, view_count
  */
 struct WriteBoardItem: SDKModel {
     /**
@@ -6735,7 +6739,8 @@ struct WriteBoardItem: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for BoardSection
+ * Dynamically generated writeable type for BoardSection removes properties:
+ * can, created_at, board_items, id, updated_at
  */
 struct WriteBoardSection: SDKModel {
     /**
@@ -6761,7 +6766,8 @@ struct WriteBoardSection: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ColorCollection
+ * Dynamically generated writeable type for ColorCollection removes properties:
+ * id
  */
 struct WriteColorCollection: SDKModel {
     /**
@@ -6783,7 +6789,8 @@ struct WriteColorCollection: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ContentFavorite
+ * Dynamically generated writeable type for ContentFavorite removes properties:
+ * id, look_id, dashboard_id, look, board_id
  */
 struct WriteContentFavorite: SDKModel {
     /**
@@ -6798,7 +6805,8 @@ struct WriteContentFavorite: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ContentMeta
+ * Dynamically generated writeable type for ContentMeta removes properties:
+ * can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug
  */
 struct WriteContentMeta: SDKModel {
     /**
@@ -6808,7 +6816,8 @@ struct WriteContentMeta: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for CreateDashboardFilter
+ * Dynamically generated writeable type for CreateDashboardFilter removes properties:
+ * id, field
  */
 struct WriteCreateDashboardFilter: SDKModel {
     /**
@@ -6866,7 +6875,8 @@ struct WriteCreateDashboardFilter: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for CreateQueryTask
+ * Dynamically generated writeable type for CreateQueryTask removes properties:
+ * can
  */
 struct WriteCreateQueryTask: SDKModel {
     /**
@@ -6896,7 +6906,8 @@ struct WriteCreateQueryTask: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for CredentialsEmail
+ * Dynamically generated writeable type for CredentialsEmail removes properties:
+ * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
  */
 struct WriteCredentialsEmail: SDKModel {
     /**
@@ -6910,7 +6921,8 @@ struct WriteCredentialsEmail: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for CustomWelcomeEmail
+ * Dynamically generated writeable type for CustomWelcomeEmail removes properties:
+ * can
  */
 struct WriteCustomWelcomeEmail: SDKModel {
     /**
@@ -6932,7 +6944,8 @@ struct WriteCustomWelcomeEmail: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Dashboard
+ * Dynamically generated writeable type for Dashboard removes properties:
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
  */
 struct WriteDashboard: SDKModel {
     /**
@@ -7016,14 +7029,16 @@ struct WriteDashboard: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for DashboardBase
+ * Dynamically generated writeable type for DashboardBase removes properties:
+ * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id
  */
 struct WriteDashboardBase: SDKModel {
     var folder: WriteFolderBase?
 }
 
 /**
- * Dynamically generated writeable type for DashboardElement
+ * Dynamically generated writeable type for DashboardElement removes properties:
+ * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
  */
 struct WriteDashboardElement: SDKModel {
     /**
@@ -7092,7 +7107,8 @@ struct WriteDashboardElement: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for DashboardFilter
+ * Dynamically generated writeable type for DashboardFilter removes properties:
+ * can, id, dashboard_id, field
  */
 struct WriteDashboardFilter: SDKModel {
     /**
@@ -7146,7 +7162,8 @@ struct WriteDashboardFilter: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for DashboardLayout
+ * Dynamically generated writeable type for DashboardLayout removes properties:
+ * can, id, deleted, dashboard_title, dashboard_layout_components
  */
 struct WriteDashboardLayout: SDKModel {
     /**
@@ -7172,7 +7189,8 @@ struct WriteDashboardLayout: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for DashboardLayoutComponent
+ * Dynamically generated writeable type for DashboardLayoutComponent removes properties:
+ * can, id, deleted, element_title, element_title_hidden, vis_type
  */
 struct WriteDashboardLayoutComponent: SDKModel {
     /**
@@ -7202,7 +7220,8 @@ struct WriteDashboardLayoutComponent: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Datagroup
+ * Dynamically generated writeable type for Datagroup removes properties:
+ * can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
  */
 struct WriteDatagroup: SDKModel {
     /**
@@ -7216,7 +7235,8 @@ struct WriteDatagroup: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for DBConnection
+ * Dynamically generated writeable type for DBConnection removes properties:
+ * can, dialect, snippets, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
  */
 struct WriteDBConnection: SDKModel {
     /**
@@ -7319,7 +7339,8 @@ struct WriteDBConnection: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for DBConnectionOverride
+ * Dynamically generated writeable type for DBConnectionOverride removes properties:
+ * has_password
  */
 struct WriteDBConnectionOverride: SDKModel {
     /**
@@ -7369,7 +7390,8 @@ struct WriteDBConnectionOverride: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for FolderBase
+ * Dynamically generated writeable type for FolderBase removes properties:
+ * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
  */
 struct WriteFolderBase: SDKModel {
     /**
@@ -7383,7 +7405,8 @@ struct WriteFolderBase: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for GitBranch
+ * Dynamically generated writeable type for GitBranch removes properties:
+ * can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
  */
 struct WriteGitBranch: SDKModel {
     /**
@@ -7397,7 +7420,8 @@ struct WriteGitBranch: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Group
+ * Dynamically generated writeable type for Group removes properties:
+ * can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
  */
 struct WriteGroup: SDKModel {
     /**
@@ -7411,7 +7435,8 @@ struct WriteGroup: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Integration
+ * Dynamically generated writeable type for Integration removes properties:
+ * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
  */
 struct WriteIntegration: SDKModel {
     /**
@@ -7429,7 +7454,8 @@ struct WriteIntegration: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for IntegrationHub
+ * Dynamically generated writeable type for IntegrationHub removes properties:
+ * can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
  */
 struct WriteIntegrationHub: SDKModel {
     /**
@@ -7443,7 +7469,8 @@ struct WriteIntegrationHub: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for InternalHelpResources
+ * Dynamically generated writeable type for InternalHelpResources removes properties:
+ * can
  */
 struct WriteInternalHelpResources: SDKModel {
     /**
@@ -7453,7 +7480,8 @@ struct WriteInternalHelpResources: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for InternalHelpResourcesContent
+ * Dynamically generated writeable type for InternalHelpResourcesContent removes properties:
+ * can
  */
 struct WriteInternalHelpResourcesContent: SDKModel {
     /**
@@ -7467,7 +7495,8 @@ struct WriteInternalHelpResourcesContent: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for LDAPConfig
+ * Dynamically generated writeable type for LDAPConfig removes properties:
+ * can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
  */
 struct WriteLDAPConfig: SDKModel {
     /**
@@ -7609,7 +7638,8 @@ struct WriteLDAPConfig: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for LegacyFeature
+ * Dynamically generated writeable type for LegacyFeature removes properties:
+ * can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
  */
 struct WriteLegacyFeature: SDKModel {
     /**
@@ -7619,7 +7649,8 @@ struct WriteLegacyFeature: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for LookmlModel
+ * Dynamically generated writeable type for LookmlModel removes properties:
+ * can, explores, has_content, label
  */
 struct WriteLookmlModel: SDKModel {
     /**
@@ -7641,7 +7672,8 @@ struct WriteLookmlModel: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for LookWithQuery
+ * Dynamically generated writeable type for LookWithQuery removes properties:
+ * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
  */
 struct WriteLookWithQuery: SDKModel {
     /**
@@ -7681,7 +7713,8 @@ struct WriteLookWithQuery: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for MergeQuery
+ * Dynamically generated writeable type for MergeQuery removes properties:
+ * can, id, result_maker_id
  */
 struct WriteMergeQuery: SDKModel {
     /**
@@ -7715,7 +7748,8 @@ struct WriteMergeQuery: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ModelSet
+ * Dynamically generated writeable type for ModelSet removes properties:
+ * can, all_access, built_in, id, url
  */
 struct WriteModelSet: SDKModel {
     var models: [String]?
@@ -7726,7 +7760,8 @@ struct WriteModelSet: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for OIDCConfig
+ * Dynamically generated writeable type for OIDCConfig removes properties:
+ * can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
  */
 struct WriteOIDCConfig: SDKModel {
     /**
@@ -7828,7 +7863,8 @@ struct WriteOIDCConfig: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for PasswordConfig
+ * Dynamically generated writeable type for PasswordConfig removes properties:
+ * can
  */
 struct WritePasswordConfig: SDKModel {
     /**
@@ -7850,7 +7886,8 @@ struct WritePasswordConfig: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for PermissionSet
+ * Dynamically generated writeable type for PermissionSet removes properties:
+ * can, all_access, built_in, id, url
  */
 struct WritePermissionSet: SDKModel {
     /**
@@ -7861,7 +7898,8 @@ struct WritePermissionSet: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Project
+ * Dynamically generated writeable type for Project removes properties:
+ * can, id, uses_git, is_example
  */
 struct WriteProject: SDKModel {
     /**
@@ -7931,7 +7969,8 @@ struct WriteProject: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Query
+ * Dynamically generated writeable type for Query removes properties:
+ * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
  */
 struct WriteQuery: SDKModel {
     /**
@@ -8013,7 +8052,8 @@ struct WriteQuery: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for RepositoryCredential
+ * Dynamically generated writeable type for RepositoryCredential removes properties:
+ * can, id, root_project_id, remote_url, is_configured
  */
 struct WriteRepositoryCredential: SDKModel {
     /**
@@ -8031,14 +8071,16 @@ struct WriteRepositoryCredential: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields
+ * Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes properties:
+ * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
  */
 struct WriteResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
     var query: WriteQuery?
 }
 
 /**
- * Dynamically generated writeable type for Role
+ * Dynamically generated writeable type for Role removes properties:
+ * can, id, url, users_url
  */
 struct WriteRole: SDKModel {
     /**
@@ -8058,7 +8100,8 @@ struct WriteRole: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for SamlConfig
+ * Dynamically generated writeable type for SamlConfig removes properties:
+ * can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
  */
 struct WriteSamlConfig: SDKModel {
     /**
@@ -8160,7 +8203,8 @@ struct WriteSamlConfig: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ScheduledPlan
+ * Dynamically generated writeable type for ScheduledPlan removes properties:
+ * id, created_at, updated_at, title, user, next_run_at, last_run_at, can
  */
 struct WriteScheduledPlan: SDKModel {
     /**
@@ -8270,7 +8314,8 @@ struct WriteScheduledPlan: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for SessionConfig
+ * Dynamically generated writeable type for SessionConfig removes properties:
+ * can
  */
 struct WriteSessionConfig: SDKModel {
     /**
@@ -8296,7 +8341,8 @@ struct WriteSessionConfig: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Theme
+ * Dynamically generated writeable type for Theme removes properties:
+ * can, id
  */
 struct WriteTheme: SDKModel {
     /**
@@ -8315,7 +8361,8 @@ struct WriteTheme: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for User
+ * Dynamically generated writeable type for User removes properties:
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
  */
 struct WriteUser: SDKModel {
     var credentials_email: WriteCredentialsEmail?
@@ -8350,7 +8397,8 @@ struct WriteUser: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for UserAttribute
+ * Dynamically generated writeable type for UserAttribute removes properties:
+ * can, id, is_system, is_permanent
  */
 struct WriteUserAttribute: SDKModel {
     /**
@@ -8388,7 +8436,8 @@ struct WriteUserAttribute: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for UserAttributeWithValue
+ * Dynamically generated writeable type for UserAttributeWithValue removes properties:
+ * can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
  */
 struct WriteUserAttributeWithValue: SDKModel {
     /**
@@ -8398,7 +8447,8 @@ struct WriteUserAttributeWithValue: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for WhitelabelConfiguration
+ * Dynamically generated writeable type for WhitelabelConfiguration removes properties:
+ * can, id, logo_url, favicon_url
  */
 struct WriteWhitelabelConfiguration: SDKModel {
     /**
