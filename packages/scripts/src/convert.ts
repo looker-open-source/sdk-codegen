@@ -31,6 +31,7 @@ import { fail, isFileSync, quit, readFileSync, run, utf8Encoding } from './nodeU
 import * as fs from 'fs'
 import { ParameterStyle } from 'openapi3-ts'
 
+/*
 const { Spectral } = require('@stoplight/spectral')
 const { getLocationForJsonPath, parseWithPointers } = require('@stoplight/json')
 
@@ -60,6 +61,19 @@ const lintCheck = async (fileName: string) => {
   } catch (e) {
     return quit(e)
   }
+}
+
+*/
+
+/**
+ * Checks OpenAPI file for lint errors
+ *
+ * NOTE: Currently disabled
+ * @param {string} fileName
+ * @returns {Promise<void>}
+ */
+const lintCheck = async (fileName: string) => {
+  return ''
 }
 
 /**
@@ -97,6 +111,14 @@ export const openApiStyle = (collectionFormat: string): OpenApiStyle => {
   return undefined
 }
 
+/**
+ * Utility function to find the named parameter for an OpenAPI endpoint
+ * @param api JSON structure of OpenAPI spec
+ * @param {string} endpoint url pattern for endpoint
+ * @param {string} httpMethod HTTP method to locate
+ * @param {string} name name of parameter to find
+ * @returns {any} the matched parameter, or undefined
+ */
 const findOpenApiParam = (api: any, endpoint: string, httpMethod: string, name: string) => {
   const result = api.paths[endpoint][httpMethod].parameters.find((p: { name: string }) => p.name === name)
   if (!result) {

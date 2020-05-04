@@ -40,8 +40,16 @@ const defaultApiVersion = (props: ISDKConfigProps) => {
   return versions[versions.length - 1]
 }
 
-// Warning: deprecated. This is using the legacy code generator
-// perform the generation for specific API version, configuration, and language
+/**
+ * Generate API bindings with the OpenAPI legacy code generator
+ * DEPRECATED: This is using the legacy code generator perform the generation for specific API version, configuration,
+ * and language
+ *
+ * @param {string} fileName specification file name
+ * @param {IGeneratorSpec} spec for language generator options
+ * @param {ISDKConfigProps} props SDK configuration properties
+ * @returns {Promise<Buffer | string>}
+ */
 const generate = async (
   fileName: string,
   spec: LanguageSpec,
@@ -65,7 +73,12 @@ const generate = async (
   ])
 }
 
-// generate all languages for the specified configuration
+/**
+ * generate all languages for the specified configuration
+ * @param {string} name configuration name
+ * @param {ISDKConfigProps} props SDK configuration properties
+ * @returns {Promise<any[]>} generation promises
+ */
 const runConfig = async (name: string, props: ISDKConfigProps) => {
   log(`processing ${name} configuration ...`)
   const apiVersion = defaultApiVersion(props)

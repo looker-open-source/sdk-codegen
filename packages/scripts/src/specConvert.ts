@@ -25,7 +25,7 @@
  */
 
 /**
- * Converts a swagger specification file to an OpenAPI specification file and fixes up
+ * Converts a swagger (OpenAPI 2.x) specification file to an OpenAPI 3.x specification file and fixes up
  * all missing references
  */
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
@@ -69,6 +69,7 @@ const fetchAndConvert = async () => {
       convertSpec(swagger, oas)
 
     } else {
+      log('using looker.ini as the source for fetching and converting specifications ...')
       await fetchAndConvert()
     }
   } catch (e) {
