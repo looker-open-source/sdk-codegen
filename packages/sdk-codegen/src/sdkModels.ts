@@ -1279,6 +1279,11 @@ export class WriteType extends Type {
     const description = `Dynamically generated writeable type for ${type.name} removes properties:\n`
       + roProps.map(p => p.name).join(', ')
     super({description}, name)
+    // Cross-reference the two types
+    this.types.add(type.name)
+    this.customTypes.add(type.name)
+    type.types.add(this.name)
+    type.customTypes.add(this.name)
     type.writeable
       .filter(p => (!p.readOnly) && (!p.type.readOnly))
       .forEach(p => {
