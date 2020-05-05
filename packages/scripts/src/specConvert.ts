@@ -29,10 +29,11 @@
  * all missing references
  */
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { convertSpec, logConvert } from './convert'
+import { convertSpec } from './convert'
 import { quit } from './nodeUtils'
 import * as path from 'path'
 import { log } from '@looker/sdk-codegen-utils'
+import { logConvert } from './fetchSpec'
 
 const apiVersions = (props: any) => {
   const versions = props.api_versions ?? '3.1,4.0'

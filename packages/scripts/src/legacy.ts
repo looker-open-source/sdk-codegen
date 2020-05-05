@@ -28,7 +28,7 @@ import { IGeneratorSpec as LanguageSpec, legacyLanguages } from './languages'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { log } from '@looker/sdk-codegen-utils'
 import { quit, run } from './nodeUtils'
-import { logConvert } from './convert'
+import { logConvert } from './fetchSpec'
 
 /**
  * Returns the last version in the .ini api_versions comma-delimited list

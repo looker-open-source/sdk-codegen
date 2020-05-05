@@ -28,6 +28,52 @@ import { log, warn } from '@looker/sdk-codegen-utils'
 import { fail, quit, isFileSync } from './nodeUtils'
 import { IVersionInfo } from '@looker/sdk-codegen'
 import { NodeTransport, defaultTimeout, ITransportSettings, sdkOk } from '@looker/sdk'
+import { convertSpec } from './convert'
+
+/*
+const { Spectral } = require('@stoplight/spectral')
+const { getLocationForJsonPath, parseWithPointers } = require('@stoplight/json')
+
+const lintyFresh = true
+
+const lintCheck = async (fileName: string) => {
+  if (!lintyFresh) return ''
+  // return `${fileName} lint checking was skipped`
+  try {
+    // const linter = run('speccy', ['lint', fileName])
+    const linter = new Spectral()
+    if (!linter) return fail('Lint', 'no response')
+    const spec = parseWithPointers(readFileSync(fileName))
+    linter
+      .run({
+        parsed: spec,
+        getLocationForJsonPath,
+      })
+      .then(console.log)
+    return ''
+    // if (
+    //   linter.toString().indexOf('Specification is valid, with 0 lint errors') >=
+    //   0
+    // ) {
+    //   return
+    // }
+  } catch (e) {
+    return quit(e)
+  }
+}
+
+*/
+
+/**
+ * Checks OpenAPI file for lint errors
+ *
+ * NOTE: Currently disabled
+ * @param {string} fileName
+ * @returns {Promise<void>}
+ */
+export const lintCheck = async (fileName: string) => {
+  return ''
+}
 
 let transport: NodeTransport
 
@@ -205,4 +251,25 @@ export const fetchLookerVersion = async (props: ISDKConfigProps) => {
   const versions: any = await authGetUrl(props, `${props.base_url}/versions`)
   const [lookerVersion] = versions.looker_release_version.match(/^\d+\.\d+/gi)
   return lookerVersion
+}
+
+
+/**
+ * Fetch (if needed) and convert a Swagger API specification to OpenAPI
+ * @param {string} name base name of the target file
+ * @param {ISDKConfigProps} props SDK configuration properties to use
+ * @returns {Promise<string>} name of converted OpenAPI file
+ */
+export const logConvert = async (name: string, props: ISDKConfigProps) => {
+  const oaFile = openApiFileName(name, props)
+  if (isFileSync(oaFile)) return oaFile
+
+  const specFile = await logFetch(name, props)
+  const openApiFile = convertSpec(specFile, oaFile)
+  if (!openApiFile) {
+    return fail('logConvert', 'No file name returned for openAPI upgrade')
+  }
+
+  await lintCheck(openApiFile)
+  return openApiFile
 }
