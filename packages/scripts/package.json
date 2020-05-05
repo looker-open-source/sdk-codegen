@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@looker/sdk-codegen-utils": "^0.1.0-alpha.1",
-    "@looker/sdk-codegen": "^0.1.1-alpha.652",
+    "@looker/sdk-codegen": "^0.1.1-alpha.664",
     "@looker/sdk": "^0.2.0-alpha.664"
   },
   "devDependencies": {
