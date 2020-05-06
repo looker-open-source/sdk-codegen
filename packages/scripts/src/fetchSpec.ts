@@ -77,6 +77,12 @@ export const lintCheck = async (fileName: string) => {
 
 let transport: NodeTransport
 
+/**
+ * Customize request transport properties for SDK codegen
+ * @param {ISDKConfigProps} props SDK configuration properties
+ * @returns {NodeTransport} codegen-specific overrides
+ * @constructor
+ */
 const Transport = (props: ISDKConfigProps) => {
   if (transport) return transport
   const options: ITransportSettings = {
@@ -104,6 +110,11 @@ export const specFileName = (name: string, props: ISDKConfigProps) =>
 export const openApiFileName = (name: string, props: ISDKConfigProps) =>
   `./${name}.${props.api_version}.oas.json`
 
+/**
+ * Is there an authentication error?
+ * @param {string | object} content response to check
+ * @returns {boolean} True if there's an authentication error
+ */
 const badAuth = (content: string | object) => {
   let text = typeof content === 'object' ? JSON.stringify(content) : content
   return text.indexOf('Requires authentication') > 0
