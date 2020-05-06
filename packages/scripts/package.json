@@ -30,12 +30,12 @@
   "dependencies": {
     "@looker/sdk-codegen-utils": "^0.1.0-alpha.1",
     "@looker/sdk-codegen": "^0.1.1-alpha.664",
-    "@looker/sdk": "^0.3.0-alpha.1"
+    "@looker/sdk": "^0.3.0-alpha.1",
+    "swagger2openapi": "^5.3.1"
   },
   "devDependencies": {
     "@stoplight/json": "^3.7.1",
     "@stoplight/spectral": "^5.3.0",
-    "swagger2openapi": "^5.3.1",
     "ini": "^1.3.5",
     "js-yaml": "^3.13.1",
     "openapi3-ts": "^1.3.0",
