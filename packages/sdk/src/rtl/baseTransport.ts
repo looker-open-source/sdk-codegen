@@ -25,7 +25,7 @@
 import {
   addQueryParams,
   Authenticator,
-  HttpMethod,
+  HttpMethod, IRawResponse,
   ITransport,
   ITransportSettings,
   SDKResponse,
@@ -38,6 +38,25 @@ export abstract class BaseTransport implements ITransport {
   constructor(protected readonly options: ITransportSettings) {
     this.options = options
   }
+
+  /**
+   * HTTP request function for atomic, fully downloaded raw HTTP responses
+   * @param method of HTTP request
+   * @param path request path, either relative or fully specified
+   * @param queryParams name/value pairs to pass as part of the URL
+   * @param body data for the body of the request
+   * @param authenticator authenticator callback, typically from `IAuthSession` implementation
+   * @param options overrides of default transport settings
+   * @returns typed response of `TSuccess`, or `TError` result
+   */
+  abstract async rawRequest(
+    method: HttpMethod,
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  ): Promise<IRawResponse>
 
   /**
    * Request a streaming response

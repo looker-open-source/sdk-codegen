@@ -28,12 +28,12 @@ import {
   ITransportSettings,
   HttpMethod, Authenticator, trace,
   IRequestProps,
-  IRequestHeaders, LookerAppId, agentPrefix, ITransport,
+  IRequestHeaders, LookerAppId, agentPrefix, ITransport, Values, IRawResponse,
 } from './transport'
 import { PassThrough, Readable } from 'readable-stream'
 import { BaseTransport } from './baseTransport'
 import { lookerVersion } from './constants'
-import {ICryptoHash} from "./cryptoHash";
+import {ICryptoHash} from "./cryptoHash"
 
 export class BrowserCryptoHash implements ICryptoHash {
   arrayToHex(array: Uint8Array): string {
@@ -59,18 +59,45 @@ export class BrowserTransport extends BaseTransport {
     super(options)
   }
 
+  async rawRequest(
+    method: HttpMethod,
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  ): Promise<IRawResponse> {
+    options = { ... this.options, ...options}
+    const requestPath = this.makeUrl(path, options, queryParams)
+    const props = await this.initRequest(method, requestPath, body, authenticator, options)
+    const req = fetch(
+      props.url,
+      // @ts-ignore
+      props, // Weird package issues with unresolved imports for RequestInit :(
+    )
+
+    const res = await req
+    const contentType = String(res.headers.get('content-type'))
+    return {
+      statusCode: res.status,
+      statusMessage: res.statusText,
+      contentType,
+      body: await res.body
+    }
+
+  }
+
   async request<TSuccess, TError>(
     method: HttpMethod,
     path: string,
     queryParams?: any,
     body?: any,
     authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>,
-    agentTag: string = `${agentPrefix} ${lookerVersion}`
+    options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
     options = { ... this.options, ...options}
     const requestPath = this.makeUrl(path, options, queryParams)
-    const props = await this.initRequest(agentTag, method, requestPath, body, authenticator, options)
+    const props = await this.initRequest(method, requestPath, body, authenticator, options)
     const req = fetch(
       props.url,
       // @ts-ignore
@@ -99,13 +126,13 @@ export class BrowserTransport extends BaseTransport {
   }
 
   private async initRequest(
-    agentTag: string,
     method: HttpMethod,
     path: string,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>,
   ) {
+    const agentTag = options?.agentTag || `${agentPrefix} ${lookerVersion}`
     options = options ? {...this.options, ...options} : this.options
     let headers: IRequestHeaders = {[LookerAppId]: agentTag }
     if (options && options.headers) {
@@ -148,7 +175,6 @@ export class BrowserTransport extends BaseTransport {
     const requestPath = this.makeUrl(path, options, queryParams)
     const returnPromise = callback(stream)
     let props = await this.initRequest(
-      agentTag,
       method,
       requestPath,
       body,

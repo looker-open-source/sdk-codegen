@@ -31,7 +31,7 @@ import {
   responseMode,
   ResponseMode,
   SDKResponse,
-  StatusCode, trace, Values, IRequestHeaders, LookerAppId, agentPrefix,
+  StatusCode, trace, Values, IRequestHeaders, LookerAppId, agentPrefix, IRawResponse,
 } from './transport'
 
 import rq, { Response, Request } from 'request'
@@ -56,10 +56,69 @@ export class NodeCryptoHash implements ICryptoHash {
 
 export type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
 
+async function parseResponse(res: IRawResponse) {
+  const mode = responseMode(res.contentType)
+  const utf8 = 'utf8'
+  let result = await res.body
+  if (mode === ResponseMode.string) {
+    if (res.contentType.match(/^application\/.*\bjson\b/g)) {
+      try {
+        if (result instanceof Buffer) {
+          result = result.toString(utf8)
+        }
+        if (result instanceof Object) {
+          return result
+        }
+        return JSON.parse(result.toString())
+      } catch (error) {
+        return Promise.reject(error)
+      }
+    }
+    if (result instanceof Buffer) {
+      result = result.toString(utf8)
+    }
+    return result.toString()
+  } else {
+    try {
+      return (result as Buffer).toString('binary')
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  }
+}
+
 export class NodeTransport extends BaseTransport {
 
   constructor(protected readonly options: ITransportSettings) {
     super(options)
+  }
+
+  async rawRequest(
+    method: HttpMethod,
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  ): Promise<IRawResponse> {
+    let init = await this.initRequest(
+      method,
+      path,
+      queryParams,
+      body,
+      authenticator,
+      options,
+    )
+    const req = rp(init).promise()
+    const res = await req
+    const resTyped = res as rq.Response
+    return {
+      statusCode: resTyped.statusCode,
+      statusMessage: resTyped.statusMessage,
+      contentType: String(resTyped.headers['content-type']),
+      body: await resTyped.body
+    }
+
   }
 
   async request<TSuccess, TError>(
@@ -71,23 +130,10 @@ export class NodeTransport extends BaseTransport {
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
 
-    let init = await this.initRequest(
-      method,
-      path,
-      queryParams,
-      body,
-      authenticator,
-      options,
-    )
-    const req = rp(init).promise()
-
     try {
-      const res = await req
-      const resTyped = res as rq.Response
-      const contentType = String(resTyped.headers['content-type'])
-      // @ ts-ignore have to resolve missing properties of response promise
-      const parsed = await parseResponse(contentType, res)
-      if (this.ok(resTyped)) {
+      const res = await this.rawRequest(method, path, queryParams, body, authenticator, options)
+      const parsed = await parseResponse(res)
+      if (this.ok(res)) {
         return {ok: true, value: parsed}
       } else {
         return {ok: false, error: parsed}
@@ -249,7 +295,7 @@ export class NodeTransport extends BaseTransport {
     return init
   }
 
-  private ok(res: rq.Response) {
+  private ok(res: IRawResponse) {
     return (
       res.statusCode >= StatusCode.OK && res.statusCode <= StatusCode.IMUsed
     )
@@ -351,35 +397,4 @@ export class NodeTransport extends BaseTransport {
   //   })
   // }
 
-}
-
-async function parseResponse(contentType: string, res: Response) {
-  const mode = responseMode(contentType)
-  const utf8 = 'utf8'
-  let result = await res.body
-  if (mode === ResponseMode.string) {
-    if (contentType.match(/^application\/.*\bjson\b/g)) {
-      try {
-        if (result instanceof Buffer) {
-          result = result.toString(utf8)
-        }
-        if (result instanceof Object) {
-          return result
-        }
-        return JSON.parse(result.toString())
-      } catch (error) {
-        return Promise.reject(error)
-      }
-    }
-    if (result instanceof Buffer) {
-      result = result.toString(utf8)
-    }
-    return result.toString()
-  } else {
-    try {
-      return (result as Buffer).toString('binary')
-    } catch (error) {
-      return Promise.reject(error)
-    }
-  }
 }

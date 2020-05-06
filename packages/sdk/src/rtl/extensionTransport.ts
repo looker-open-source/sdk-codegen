@@ -23,10 +23,10 @@
  */
 
 import {
-    SDKResponse,
-    ITransport,
-    ITransportSettings,
-    HttpMethod
+  SDKResponse,
+  ITransport,
+  ITransportSettings,
+  HttpMethod, IRawResponse,
 } from './transport'
 import {IHostConnection} from './extensionSdk'
 
@@ -37,6 +37,17 @@ export class ExtensionTransport implements ITransport {
   ) {
     this.options = options
     this.hostConnection = hostConnection
+  }
+
+  async rawRequest(
+    method: HttpMethod,
+    path: string,
+    queryParams?: any,
+    body?: any,
+    authenticator?: any,
+    options?: Partial<ITransportSettings>,
+  ): Promise<IRawResponse> {
+    return Promise.reject('rawRequest not supported')
   }
 
   async request<TSuccess, TError>(

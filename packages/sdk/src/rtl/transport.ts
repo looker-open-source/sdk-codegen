@@ -28,7 +28,6 @@
 // TODO create generic Agent that is not transport-specific
 import { Agent } from 'https'
 import { Headers } from 'request'
-// @ts-ignore  complaints about rootDir violations for some build options
 import { matchCharsetUtf8, matchModeBinary, matchModeString } from './constants'
 import { Readable } from "readable-stream"
 
@@ -168,9 +167,38 @@ export enum StatusCode {
 }
 
 /**
+ * Untyped basic HTTP response type for "raw" HTTP requests
+ */
+export interface IRawResponse {
+  statusCode: number
+  statusMessage: string
+  contentType: string
+  body: any
+}
+
+/**
  * Transport plug-in interface
  */
 export interface ITransport {
+  /**
+   * HTTP request function for atomic, fully downloaded raw HTTP responses
+   * @param method of HTTP request
+   * @param path request path, either relative or fully specified
+   * @param queryParams name/value pairs to pass as part of the URL
+   * @param body data for the body of the request
+   * @param authenticator authenticator callback, typically from `IAuthSession` implementation
+   * @param options overrides of default transport settings
+   * @returns typed response of `TSuccess`, or `TError` result
+   */
+  rawRequest(
+    method: HttpMethod,
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  ): Promise<IRawResponse>
+
   /**
    * HTTP request function for atomic, fully downloaded responses
    * @param method of HTTP request
