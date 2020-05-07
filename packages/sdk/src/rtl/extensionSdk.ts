@@ -27,13 +27,22 @@ import { Looker31SDK } from '../sdk/3.1/methods'
 import { ExtensionSession } from './extensionSession'
 import { ExtensionTransport } from './extensionTransport'
 import {
-  Authenticator,
+  Authenticator, IRawResponse,
   ITransportSettings,
 } from './transport'
 import { APIMethods } from "./apiMethods";
 import { IAuthSession } from "./authSession";
 
 export interface IHostConnection {
+  rawRequest(
+    httpMethod: string,
+    path: string,
+    body?: any,
+    params?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>,
+  ): Promise<IRawResponse>
+
   request(
     httpMethod: string,
     path: string,

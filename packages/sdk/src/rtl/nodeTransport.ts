@@ -295,12 +295,6 @@ export class NodeTransport extends BaseTransport {
     return init
   }
 
-  private ok(res: IRawResponse) {
-    return (
-      res.statusCode >= StatusCode.OK && res.statusCode <= StatusCode.IMUsed
-    )
-  }
-
   // /**
   //  * A streaming helper for the "json" data format. It handles automatically parsing
   //  * the JSON in a streaming fashion. You just need to implement a function that will

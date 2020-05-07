@@ -28,7 +28,7 @@ import {
   HttpMethod, IRawResponse,
   ITransport,
   ITransportSettings,
-  SDKResponse,
+  SDKResponse, StatusCode,
   Values,
 } from './transport'
 import { Readable } from 'readable-stream'
@@ -37,6 +37,12 @@ export abstract class BaseTransport implements ITransport {
 
   constructor(protected readonly options: ITransportSettings) {
     this.options = options
+  }
+
+  protected ok(res: IRawResponse) {
+    return (
+      res.statusCode >= StatusCode.OK && res.statusCode <= StatusCode.IMUsed
+    )
   }
 
   /**

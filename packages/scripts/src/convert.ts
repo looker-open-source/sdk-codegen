@@ -145,8 +145,8 @@ export const fixConversion = (openApiSpec: string, swaggerSpec: string) => {
     const fixed = fixes.join('\n')
     log(`Fixed ${fixes.length} OpenAPI conversion issues:\n${fixed}`)
 
-    // Return the modified API as a string
-    return JSON.stringify(api, null, 2)
+    // Return the modified API as an unformatted string
+    return JSON.stringify(api)
   }
   return openApiSpec
 }
@@ -179,10 +179,9 @@ export const convertSpec = (swaggerFilename: string, openApiFilename: string) =>
   try {
     // https://github.com/Mermade/oas-kit/tree/master/packages/swagger2openapi config options:
     // patch to fix up small errors in source definition (not required, just to ensure smooth process)
-    // indent 2 spaces
+    // indent no spaces
     // output to openApiFilename
-    // run('swagger2openapi', [swaggerFilename, '--resolveInternal', '-p', '-i', '"  "', '-o', openApiFilename])
-    run('swagger2openapi', [swaggerFilename, '-p', '-i', '"  "', '-o', openApiFilename])
+    run('swagger2openapi', [swaggerFilename, '-p', '-i', '""', '-o', openApiFilename])
     if (!isFileSync(openApiFilename)) {
       return fail('convertSpec', `creating ${openApiFilename} failed`)
     }

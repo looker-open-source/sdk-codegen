@@ -47,7 +47,14 @@ export class ExtensionTransport implements ITransport {
     authenticator?: any,
     options?: Partial<ITransportSettings>,
   ): Promise<IRawResponse> {
-    return Promise.reject('rawRequest not supported')
+    return this.hostConnection.rawRequest(
+      method,
+      path,
+      body,
+      queryParams,
+      authenticator,
+      options,
+    )
   }
 
   async request<TSuccess, TError>(

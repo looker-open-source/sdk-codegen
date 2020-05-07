@@ -220,7 +220,7 @@ export const fetchSpecFile = async (name: string, props: ISDKConfigProps) => {
   try {
     let fileUrl = specFileUrl(props)
     const content = await authGetUrl(props, fileUrl)
-    const json = JSON.stringify(content, undefined, 2)
+    const json = JSON.stringify(content)
 
     fs.writeFileSync(fileName, json)
 

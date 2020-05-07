@@ -82,7 +82,7 @@ export class BrowserTransport extends BaseTransport {
       statusCode: res.status,
       statusMessage: res.statusText,
       contentType,
-      body: await res.body
+      body: await res.text()
     }
 
   }
@@ -95,20 +95,10 @@ export class BrowserTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
-    options = { ... this.options, ...options}
-    const requestPath = this.makeUrl(path, options, queryParams)
-    const props = await this.initRequest(method, requestPath, body, authenticator, options)
-    const req = fetch(
-      props.url,
-      // @ts-ignore
-      props, // Weird package issues with unresolved imports for RequestInit :(
-    )
-
     try {
-      const res = await req
-      const contentType = String(res.headers.get('content-type'))
-      const parsed = await parseResponse(contentType, res)
-      if (res.ok) {
+      const res = await this.rawRequest(method, path, queryParams, body, authenticator, options)
+      const parsed = await parseResponse(res)
+      if (this.ok(res)) {
         return {ok: true, value: parsed}
       } else {
         return {ok: false, error: parsed}
@@ -235,18 +225,18 @@ export class BrowserTransport extends BaseTransport {
 
 }
 
-async function parseResponse(contentType: string, res: Response) {
-  if (contentType.match(/application\/json/g)) {
+async function parseResponse(res: IRawResponse) {
+  if (res.contentType.match(/application\/json/g)) {
     try {
-      return await res.json()
+      return JSON.parse(await res.body)
     } catch (error) {
       return Promise.reject(error)
     }
-  } else if (contentType === 'text' || contentType.startsWith('text/')) {
-    return res.text()
+  } else if (res.contentType === 'text' || res.contentType.startsWith('text/')) {
+    return res.body.toString()
   } else {
     try {
-      return await res.blob()
+      return res.body
     } catch (error) {
       return Promise.reject(error)
     }
