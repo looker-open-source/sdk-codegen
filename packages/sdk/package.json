@@ -3,10 +3,10 @@
   "name": "@looker/sdk",
   "version": "0.3.0-alpha.1",
   "description": "Looker SDK",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "files": [
-    "dist"
+    "lib"
   ],
   "directories": {
     "test": "test"
@@ -21,7 +21,7 @@
   "scripts": {
     "build": "tsc",
     "prebuild": "yarn clean",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist lib",
     "deploy": "yarn build && npm publish",
     "docs": "typedoc --mode file --out docs",
     "test": "yarn jest",

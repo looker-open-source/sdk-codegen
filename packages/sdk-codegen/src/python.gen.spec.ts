@@ -1,30 +1,32 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
+import { apiTestModel } from '../../script/testUtils'
 import { PythonGen } from './python.gen'
 // @ts-ignore
-import { apiTestModel } from '../../script/testUtils'
 
 const gen = new PythonGen(apiTestModel)
 const indent = ''
@@ -32,18 +34,20 @@ const indent = ''
 describe('python generator', () => {
   describe('parameter declarations', () => {
     it('required parameter', () => {
-      const param = apiTestModel.methods['run_query'].params[0]
+      const param = apiTestModel.methods.run_query.params[0]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual('# Id of query\nquery_id: int')
     })
     it('optional parameter', () => {
-      const param = apiTestModel.methods['run_query'].params[2]
+      const param = apiTestModel.methods.run_query.params[2]
       const actual = gen.declareParameter(indent, param)
-      expect(actual).toEqual('# Row limit (may override the limit in the saved query).\n' +
-        'limit: Optional[int] = None')
+      expect(actual).toEqual(
+        '# Row limit (may override the limit in the saved query).\n' +
+          'limit: Optional[int] = None'
+      )
     })
     it('required typed parameter', () => {
-      const param = apiTestModel.methods['create_query_render_task'].params[2]
+      const param = apiTestModel.methods.create_query_render_task.params[2]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`# Output width in pixels\nwidth: int`)
     })
@@ -51,7 +55,7 @@ describe('python generator', () => {
 
   describe('args locations', () => {
     it('path and query args', () => {
-      const method = apiTestModel.methods['run_query']
+      const method = apiTestModel.methods.run_query
       expect(method.pathArgs).toEqual(['query_id', 'result_format'])
       expect(method.bodyArg).toEqual('')
       expect(method.queryArgs).toEqual([
@@ -73,7 +77,7 @@ describe('python generator', () => {
     })
     it('body for create_query', () => {
       // TODO get resolution working correctly
-      const method = apiTestModel.methods['create_query']
+      const method = apiTestModel.methods.create_query
       expect(method.pathArgs).toEqual([])
       const body = method.getParams('body')
       expect(body.length).toEqual(1)
@@ -85,7 +89,7 @@ describe('python generator', () => {
     })
     it('body for create_dashboard', () => {
       // TODO get resolution working correctly
-      const method = apiTestModel.methods['create_dashboard']
+      const method = apiTestModel.methods.create_dashboard
       expect(method.pathArgs).toEqual([])
       const body = method.getParams('body')
       expect(body.length).toEqual(1)
@@ -99,7 +103,7 @@ describe('python generator', () => {
 
   describe('httpArgs', () => {
     it('add_group_group', () => {
-      const method = apiTestModel.methods['add_group_group']
+      const method = apiTestModel.methods.add_group_group
       const args = gen.httpArgs('', method).trim()
       const expected = `f"/groups/{group_id}/groups",
             models.Group,
@@ -108,7 +112,7 @@ describe('python generator', () => {
       expect(args).toEqual(expected)
     })
     it('create_query', () => {
-      const method = apiTestModel.methods['create_query']
+      const method = apiTestModel.methods.create_query
       const args = gen.httpArgs('', method).trim()
       const expected = `f"/queries",
             models.Query,
@@ -118,7 +122,7 @@ describe('python generator', () => {
       expect(args).toEqual(expected)
     })
     it('create_dashboard', () => {
-      const method = apiTestModel.methods['create_dashboard']
+      const method = apiTestModel.methods.create_dashboard
       const args = gen.httpArgs('', method).trim()
       const expected = `f"/dashboards",
             models.Dashboard,
@@ -130,9 +134,8 @@ describe('python generator', () => {
 
   describe('method signature', () => {
     it('no params with all_datagroups', () => {
-      const method = apiTestModel.methods['all_datagroups']
-      const expected =
-        `# ### Get information about all datagroups.
+      const method = apiTestModel.methods.all_datagroups
+      const expected = `# ### Get information about all datagroups.
 # 
 # GET /datagroups -> Sequence[models.Datagroup]
 def all_datagroups(
@@ -144,9 +147,8 @@ def all_datagroups(
       expect(actual).toEqual(expected)
     })
     it('binary return type render_task_results', () => {
-      const method = apiTestModel.methods['render_task_results']
-      const expected =
-        `# ### Get the document or image produced by a completed render task.
+      const method = apiTestModel.methods.render_task_results
+      const expected = `# ### Get the document or image produced by a completed render task.
 # 
 # Note that the PDF or image result will be a binary blob in the HTTP response, as indicated by the
 # Content-Type in the response headers. This may require specialized (or at least different) handling than text
@@ -177,9 +179,8 @@ def render_task_results(
     })
 
     it('binary or string return type run_url_encoded_query', () => {
-      const method = apiTestModel.methods['run_url_encoded_query']
-      const expected =
-`# ### Run an URL encoded query.
+      const method = apiTestModel.methods.run_url_encoded_query
+      const expected = `# ### Run an URL encoded query.
 # 
 # This requires the caller to encode the specifiers for the query into the URL query part using
 # Looker-specific syntax as explained below.
@@ -251,16 +252,15 @@ def run_url_encoded_query(
 
   describe('method body', () => {
     it('asserts type of required input body params', () => {
-      const method = apiTestModel.methods['run_inline_query']
+      const method = apiTestModel.methods.run_inline_query
       const expected = `assert isinstance(body, models.WriteQuery)\n`
       const actual = gen.bodyParamsTypeAssertions('', method.bodyParams)
       expect(actual).toEqual(expected)
     })
 
     it('encodes string path params', () => {
-      const method = apiTestModel.methods['run_url_encoded_query']
-      const expected =
-`model_name = self.encode_path_param(model_name)
+      const method = apiTestModel.methods.run_url_encoded_query
+      const expected = `model_name = self.encode_path_param(model_name)
 view_name = self.encode_path_param(view_name)
 result_format = self.encode_path_param(result_format)
 `
@@ -269,7 +269,7 @@ result_format = self.encode_path_param(result_format)
     })
 
     it('encodes only string path params', () => {
-      const method = apiTestModel.methods['run_look']
+      const method = apiTestModel.methods.run_look
       // should NOT escape look_id (int)
       const expected = 'result_format = self.encode_path_param(result_format)\n'
       const actual = gen.encodePathParams('', method)
@@ -277,9 +277,8 @@ result_format = self.encode_path_param(result_format)
     })
 
     it('asserts type of optional body params', () => {
-      const method = apiTestModel.methods["import_lookml_dashboard"]
-      const expected =
-`if body:
+      const method = apiTestModel.methods.import_lookml_dashboard
+      const expected = `if body:
     assert isinstance(body, models.WriteDashboard)
 `
       const actual = gen.bodyParamsTypeAssertions('', method.bodyParams)
@@ -287,28 +286,34 @@ result_format = self.encode_path_param(result_format)
     })
 
     it('body type assertions have generic subscripts stripped away', () => {
-      const sequenceBodyMethod = apiTestModel.methods["set_role_groups"]
+      const sequenceBodyMethod = apiTestModel.methods.set_role_groups
       let expected = `assert isinstance(body, Sequence)\n`
-      let actual = gen.bodyParamsTypeAssertions('', sequenceBodyMethod.bodyParams)
+      let actual = gen.bodyParamsTypeAssertions(
+        '',
+        sequenceBodyMethod.bodyParams
+      )
       expect(actual).toEqual(expected)
 
-      const mutableMappingBodyMethod = apiTestModel.methods["fetch_remote_data_action_form"]
+      const mutableMappingBodyMethod =
+        apiTestModel.methods.fetch_remote_data_action_form
       expected = `assert isinstance(body, MutableMapping)\n`
-      actual = gen.bodyParamsTypeAssertions('', mutableMappingBodyMethod.bodyParams)
+      actual = gen.bodyParamsTypeAssertions(
+        '',
+        mutableMappingBodyMethod.bodyParams
+      )
       expect(actual).toEqual(expected)
     })
 
     it('does not assert type of query/path params', () => {
-      const method = apiTestModel.methods["lookml_model_explore"]
+      const method = apiTestModel.methods.lookml_model_explore
       const expected = ''
       const actual = gen.bodyParamsTypeAssertions('', method.bodyParams)
       expect(actual).toEqual(expected)
     })
 
     it('assert response is model add_group_group', () => {
-      const method = apiTestModel.methods['add_group_group']
-      const expected =
-`response = self.post(
+      const method = apiTestModel.methods.add_group_group
+      const expected = `response = self.post(
             f"/groups/{group_id}/groups",
             models.Group,
             body=body,
@@ -320,9 +325,8 @@ return response`
       expect(actual).toEqual(expected)
     })
     it('assert response is None delete_group_from_group', () => {
-      const method = apiTestModel.methods['delete_group_from_group']
-      const expected =
-`response = self.delete(
+      const method = apiTestModel.methods.delete_group_from_group
+      const expected = `response = self.delete(
             f"/groups/{group_id}/groups/{deleting_group_id}",
             None,
             transport_options=transport_options
@@ -333,9 +337,8 @@ return response`
       expect(actual).toEqual(expected)
     })
     it('assert response is list active_themes', () => {
-      const method = apiTestModel.methods['active_themes']
-      const expected =
-`response = self.get(
+      const method = apiTestModel.methods.active_themes
+      const expected = `response = self.get(
             f"/themes/active",
             Sequence[models.Theme],
             query_params={"name": name, "ts": ts, "fields": fields},
@@ -347,9 +350,8 @@ return response`
       expect(actual).toEqual(expected)
     })
     it('assert response is dict query_task_results', () => {
-      const method = apiTestModel.methods['query_task_results']
-      const expected =
-`response = self.get(
+      const method = apiTestModel.methods.query_task_results
+      const expected = `response = self.get(
             f"/query_tasks/{query_task_id}/results",
             str,
             transport_options=transport_options
@@ -360,9 +362,8 @@ return response`
       expect(actual).toEqual(expected)
     })
     it('assert response is bytes render_task_results', () => {
-      const method = apiTestModel.methods['render_task_results']
-      const expected =
-`response = self.get(
+      const method = apiTestModel.methods.render_task_results
+      const expected = `response = self.get(
             f"/render_tasks/{render_task_id}/results",
             bytes,
             transport_options=transport_options
@@ -373,9 +374,8 @@ return response`
       expect(actual).toEqual(expected)
     })
     it('assert response is bytes or str run_url_encoded_query', () => {
-      const method = apiTestModel.methods['run_url_encoded_query']
-      const expected =
-`response = self.get(
+      const method = apiTestModel.methods.run_url_encoded_query
+      const expected = `response = self.get(
             f"/queries/models/{model_name}/views/{view_name}/run/{result_format}",
             Union[str, bytes],  # type: ignore
             transport_options=transport_options
@@ -389,7 +389,7 @@ return response`
 
   describe('type creation', () => {
     it('with arrays and hashes', () => {
-      const type = apiTestModel.types['Workspace']
+      const type = apiTestModel.types.Workspace
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`
 @attr.s(auto_attribs=True, kw_only=True)
@@ -405,7 +405,7 @@ class Workspace(model.Model):
     projects: Optional[Sequence["Project"]] = None`)
     })
     it('with refs, arrays and nullable', () => {
-      const type = apiTestModel.types['ApiVersion']
+      const type = apiTestModel.types.ApiVersion
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`
 @attr.s(auto_attribs=True, kw_only=True)
@@ -422,11 +422,11 @@ class ApiVersion(model.Model):
     })
     it('input models', () => {
       // run method generation to populate inputTypes
-      const method = apiTestModel.methods['create_merge_query']
+      const method = apiTestModel.methods.create_merge_query
       const param = method.bodyParams[0]
       gen.declareParameter(indent, param)
 
-      const inputType = apiTestModel.types['WriteMergeQuery']
+      const inputType = apiTestModel.types.WriteMergeQuery
       const actual = gen.declareType(indent, inputType)
       expect(actual).toEqual(`
 @attr.s(auto_attribs=True, kw_only=True, init=False)
@@ -467,7 +467,7 @@ class WriteMergeQuery(model.Model):
         self.total = total
         self.vis_config = vis_config`)
 
-      const childInputType = apiTestModel.types['MergeQuerySourceQuery']
+      const childInputType = apiTestModel.types.MergeQuerySourceQuery
       const childActual = gen.declareType(indent, childInputType)
       expect(childActual).toEqual(`
 @attr.s(auto_attribs=True, kw_only=True, init=False)
@@ -490,7 +490,7 @@ class MergeQuerySourceQuery(model.Model):
         self.name = name
         self.query_id = query_id`)
 
-      const grandChildInputType = apiTestModel.types['MergeFields']
+      const grandChildInputType = apiTestModel.types.MergeFields
       const grandChildActual = gen.declareType(indent, grandChildInputType)
       expect(grandChildActual).toEqual(`
 @attr.s(auto_attribs=True, kw_only=True, init=False)

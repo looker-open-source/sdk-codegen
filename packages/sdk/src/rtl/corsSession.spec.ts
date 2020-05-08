@@ -1,37 +1,39 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
+import { IAccessToken } from '../sdk/4.0/models'
 import { CorsSession } from './corsSession'
 import { IApiSettings } from './apiSettings'
 import { IRequestProps, ITransport, LookerAppId } from './transport'
-import { IAccessToken } from '../sdk/4.0/models'
 import { AuthSession } from './authSession'
 
-const mockToken : IAccessToken = {
+const mockToken: IAccessToken = {
   access_token: 'mocked',
+  expires_in: 3600,
   token_type: 'Bearer',
-  expires_in: 3600
 }
 
 /**
@@ -47,8 +49,8 @@ class CorsMock extends CorsSession {
   }
 }
 
-describe("CORS session", () => {
-  it("initialization", async () => {
+describe('CORS session', () => {
+  it('initialization', async () => {
     const mock = new CorsMock({} as IApiSettings)
     await expect(mock.login()).rejects.toEqual(AuthSession.TBD)
     expect(mock.isAuthenticated()).toEqual(false)
@@ -57,13 +59,13 @@ describe("CORS session", () => {
     expect(logout).toEqual(false)
   })
 
-  it("getToken is mocked", async () => {
+  it('getToken is mocked', async () => {
     const mock = new CorsMock({} as IApiSettings)
     const token = await mock.getToken()
     expect(token).toEqual(mockToken)
   })
 
-  it("authenticate causes authentication", async () => {
+  it('authenticate causes authentication', async () => {
     const mock = new CorsMock({} as IApiSettings)
     expect(mock.isAuthenticated()).toEqual(false)
     const props = await mock.authenticate({} as IRequestProps)
@@ -71,5 +73,4 @@ describe("CORS session", () => {
     expect(props.mode).toEqual('cors')
     expect(props.headers.Authorization).toEqual('Bearer mocked')
   })
-
 })

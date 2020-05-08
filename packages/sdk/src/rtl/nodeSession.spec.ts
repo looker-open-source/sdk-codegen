@@ -1,35 +1,38 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
+import * as fs from 'fs'
+import * as yaml from 'js-yaml'
 import { NodeTransport } from './nodeTransport'
 import { NodeSession } from './nodeSession'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings'
-import * as fs from 'fs'
-import * as yaml from 'js-yaml'
 import {
   strLookerBaseUrl,
-  strLookerClientId, strLookerClientSecret,
+  strLookerClientId,
+  strLookerClientSecret,
   strLookerTimeout,
   strLookerVerifySsl,
 } from './apiSettings'
@@ -41,7 +44,7 @@ const dataFile = 'test/data.yml'
 // slightly hackish data path determination for tests
 const root = fs.existsSync(dataFile) ? '' : '../../'
 const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, 'utf8'))
-const localIni = `${root}${testData['iniFile']}`
+const localIni = `${root}${testData.iniFile}`
 
 describe('NodeSession', () => {
   const settings = new NodeSettingsIniFile(localIni, 'Looker')
@@ -79,19 +82,22 @@ describe('NodeSession', () => {
 
   describe('environmental configuration', () => {
     it('no INI file', async () => {
-      const section = ApiConfig(fs.readFileSync(localIni, 'utf8'))['Looker']
+      const section = ApiConfig(fs.readFileSync(localIni, 'utf8')).Looker
       // tslint:disable-next-line:variable-name
-      const verify_ssl = boolDefault(section['verify_ssl'], false).toString()
+      const verify_ssl = boolDefault(section.verify_ssl, false).toString()
       // populate environment variables
-      process.env[strLookerTimeout] = section['timeout'] || defaultTimeout.toString()
-      process.env[strLookerClientId] = section['client_id']
-      process.env[strLookerClientSecret] = section['client_secret']
-      process.env[strLookerBaseUrl] = section['base_url']
+      process.env[strLookerTimeout] =
+        section.timeout || defaultTimeout.toString()
+      process.env[strLookerClientId] = section.client_id
+      process.env[strLookerClientSecret] = section.client_secret
+      process.env[strLookerBaseUrl] = section.base_url
       process.env[strLookerVerifySsl] = verify_ssl.toString()
 
       const settings = new NodeSettings()
-      expect(settings.base_url).toEqual(section['base_url'])
-      expect(settings.timeout.toString()).toEqual(section['timeout'] || defaultTimeout.toString())
+      expect(settings.base_url).toEqual(section.base_url)
+      expect(settings.timeout.toString()).toEqual(
+        section.timeout || defaultTimeout.toString()
+      )
       expect(settings.verify_ssl.toString()).toEqual(verify_ssl)
 
       const session = new NodeSession(settings, transport)

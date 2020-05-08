@@ -1,47 +1,55 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 import { agentPrefix, defaultTimeout, ITransportSettings } from './transport'
-import { lookerVersion, boolDefault, environmentPrefix, isTrue, unquote } from './constants'
+import {
+  lookerVersion,
+  boolDefault,
+  environmentPrefix,
+  isTrue,
+  unquote,
+} from './constants'
 import { IApiSection } from './nodeSettings'
 
 export interface IValueSettings {
-  [name: string]: string;
+  [name: string]: string
 }
 
 export const strLookerBaseUrl = `${environmentPrefix}_BASE_URL`
 export const strLookerVerifySsl = `${environmentPrefix}_VERIFY_SSL`
 export const strLookerTimeout = `${environmentPrefix}_TIMEOUT`
-export const strLookerClientId =`${environmentPrefix}_CLIENT_ID`
+export const strLookerClientId = `${environmentPrefix}_CLIENT_ID`
 export const strLookerClientSecret = `${environmentPrefix}_CLIENT_SECRET`
 
 export const ApiConfigMap: IValueSettings = {
-  'base_url': strLookerBaseUrl,
-  'verify_ssl': strLookerVerifySsl,
-  'timeout': strLookerTimeout,
-  'client_id': strLookerClientId,
-  'client_secret': strLookerClientSecret
+  base_url: strLookerBaseUrl,
+  client_id: strLookerClientId,
+  client_secret: strLookerClientSecret,
+  timeout: strLookerTimeout,
+  verify_ssl: strLookerVerifySsl,
 }
 
 export const strBadConfiguration = `${agentPrefix} configuration error:
@@ -72,10 +80,10 @@ export interface IApiSettings extends ITransportSettings {
  */
 export const DefaultSettings = () =>
   ({
-    base_url: '',
-    verify_ssl: true,
-    timeout: defaultTimeout,
     agentTag: `${agentPrefix} ${lookerVersion}`,
+    base_url: '',
+    timeout: defaultTimeout,
+    verify_ssl: true,
   } as IApiSettings)
 
 /**
@@ -117,15 +125,16 @@ export const ValueSettings = (values: IValueSettings): IApiSettings => {
  */
 export class ApiSettings implements IApiSettings {
   // tslint:disable-next-line: variable-name
-  base_url: string = ''
+  base_url = ''
   // tslint:disable-next-line: variable-name
-  verify_ssl: boolean = true
+  verify_ssl = true
   timeout: number = defaultTimeout
-  agentTag: string = `${agentPrefix} ${lookerVersion}`
+  agentTag = `${agentPrefix} ${lookerVersion}`
 
   constructor(settings: Partial<IApiSettings>) {
     // coerce types to declared types since some paths could have non-conforming settings values
-    this.base_url = 'base_url' in settings ? unquote(settings.base_url) : this.base_url
+    this.base_url =
+      'base_url' in settings ? unquote(settings.base_url) : this.base_url
     this.verify_ssl =
       'verify_ssl' in settings
         ? isTrue(unquote(settings.verify_ssl!.toString()))
@@ -140,7 +149,7 @@ export class ApiSettings implements IApiSettings {
   }
 
   isConfigured() {
-    return !!(this.base_url)
+    return !!this.base_url
   }
 
   /**

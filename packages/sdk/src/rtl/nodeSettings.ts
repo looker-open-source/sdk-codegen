@@ -1,32 +1,35 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 import * as fs from 'fs'
 import * as ini from 'ini'
 import {
   ApiConfigMap,
-  ApiSettings, DefaultSettings,
+  ApiSettings,
+  DefaultSettings,
   IApiSettings,
   ValueSettings,
 } from './apiSettings'
@@ -34,7 +37,7 @@ import { unquote } from './constants'
 import { sdkError } from './transport'
 
 export interface IApiSection {
-  [key: string]: string;
+  [key: string]: string
 }
 
 /**
@@ -43,9 +46,19 @@ export interface IApiSection {
  * @param {string | undefined} defaultValue
  * @returns {string | undefined} The value of the environment variable if it exists, or defaultValue
  */
-export const getenv = (name: string, defaultValue: string | undefined = undefined) => {
+export const getenv = (
+  name: string,
+  defaultValue: string | undefined = undefined
+) => {
   const val = process.env[name]
   return val === undefined ? defaultValue : val
+}
+
+/**
+ * Complete .INI file parse results
+ */
+export interface IApiConfig {
+  [key: string]: any
 }
 
 /**
@@ -53,7 +66,7 @@ export const getenv = (name: string, defaultValue: string | undefined = undefine
  * @param contents formatted as an `.ini` file
  * @constructor
  */
-export const ApiConfig = (contents: string) => ini.parse(contents)
+export const ApiConfig = (contents: string): IApiConfig => ini.parse(contents)
 
 /**
  * Extract named or (default) first section from INI file
@@ -63,7 +76,7 @@ export const ApiConfig = (contents: string) => ini.parse(contents)
  */
 export const ApiConfigSection = (
   contents: string,
-  section?: string,
+  section?: string
 ): IApiSection => {
   const config = ApiConfig(contents)
   if (!section) {
@@ -75,7 +88,9 @@ export const ApiConfigSection = (
     throw new Error(`No section named "${section}" was found`)
   }
   if (settings.api_version) {
-    console.warn("api_version is no longer read from a configuration file by the SDK")
+    console.warn(
+      'api_version is no longer read from a configuration file by the SDK'
+    )
   }
   return settings
 }
@@ -86,8 +101,8 @@ export const ApiConfigSection = (
  * @returns the populated `IApiSection`, which may be empty
  */
 const readEnvConfig = () => {
-  let values : IApiSection = {}
-  Object.keys(ApiConfigMap).forEach(key => {
+  const values: IApiSection = {}
+  Object.keys(ApiConfigMap).forEach((key) => {
     const envKey = ApiConfigMap[key]
     if (process.env[envKey] !== undefined) {
       // Value exists. Map environment variable keys to config variable keys
@@ -110,10 +125,13 @@ const readIniConfig = (fileName: string, section?: string) => {
   let config = readEnvConfig()
   if (fileName && fs.existsSync(fileName)) {
     // override any config file settings with environment values if the environment value is set
-    config  = {...ApiConfigSection(fs.readFileSync(fileName, 'utf8'), section), ...config}
+    config = {
+      ...ApiConfigSection(fs.readFileSync(fileName, 'utf8'), section),
+      ...config,
+    }
   }
   // Unquote any quoted configuration values
-  Object.keys(config).forEach(key => {
+  Object.keys(config).forEach((key) => {
     const val = config[key]
     if (typeof val === 'string') {
       config[key] = unquote(val)
@@ -141,15 +159,15 @@ export class NodeSettings extends ApiSettings {
       } else {
         settings = contents
       }
-      settings = {...readEnvConfig(), ...settings}
+      settings = { ...readEnvConfig(), ...settings }
     } else {
       settings = readEnvConfig() as IApiSettings
     }
-    super({...DefaultSettings(), ...settings})
+    super({ ...DefaultSettings(), ...settings })
   }
 
   // @ts-ignore
-  readConfig(section?: string) : IApiSection {
+  readConfig(section?: string): IApiSection {
     return readEnvConfig()
   }
 }
@@ -172,9 +190,9 @@ export class NodeSettings extends ApiSettings {
 export class NodeSettingsIniFile extends NodeSettings {
   private readonly fileName!: string
 
-  constructor(fileName: string = '', section?: string) {
+  constructor(fileName = '', section?: string) {
     if (fileName && !fs.existsSync(fileName)) {
-      throw sdkError({message: `File ${fileName} was not found`})
+      throw sdkError({ message: `File ${fileName} was not found` })
     }
     // default fileName to looker.ini
     fileName = fileName || './looker.ini'

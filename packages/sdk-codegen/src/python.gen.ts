@@ -1,32 +1,33 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
 
-// Python codeFormatter
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+ */
 
 import {
   Arg,
-  ArrayType, DelimArrayType,
+  ArrayType,
+  DelimArrayType,
   HashType,
   IMappedType,
   IMethod,
@@ -90,27 +91,29 @@ export class PythonGen extends CodeGen {
     'try',
     'while',
     'with',
-    'yield'
+    'yield',
   ]
+
   pythonTypes: Record<string, IMappedType> = {
-    'number': {name: 'float', default: this.nullStr},
-    'double': {name: 'float', default: this.nullStr},
-    'float': {name: 'float', default: this.nullStr},
-    'integer': {name: 'int', default: this.nullStr},
-    'int32': {name: 'int', default: this.nullStr},
-    'int64': {name: 'int', default: this.nullStr},
-    'string': {name: 'str', default: this.nullStr},
-    'password': {name: 'str', default: this.nullStr},
-    'byte': {name: 'bytes', default: this.nullStr},
-    'boolean': {name: 'bool', default: this.nullStr},
-    'void': {name: 'None', default: this.nullStr},
-    'uri': {name: 'str', default: this.nullStr},
-    'datetime': {name: 'datetime.datetime', default: this.nullStr}
+    boolean: { name: 'bool', default: this.nullStr },
+    double: { default: this.nullStr, name: 'float' },
+    byte: { default: this.nullStr, name: 'bytes' },
+    float: { default: this.nullStr, name: 'float' },
+    datetime: { default: this.nullStr, name: 'datetime.datetime' },
+    int32: { default: this.nullStr, name: 'int' },
+    int64: { default: this.nullStr, name: 'int' },
+    integer: { default: this.nullStr, name: 'int' },
+    number: { default: this.nullStr, name: 'float' },
+    password: { default: this.nullStr, name: 'str' },
+    string: { default: this.nullStr, name: 'str' },
+    uri: { default: this.nullStr, name: 'str' },
+    void: { default: this.nullStr, name: 'None' },
   }
+
   // cattrs [un]structure hooks for model [de]serialization
   hooks: string[] = []
-  structureHook: string = 'structure_hook'
-  pythonReservedKeywordClasses: Set<String> = new Set()
+  structureHook = 'structure_hook'
+  pythonReservedKeywordClasses: Set<string> = new Set()
 
   // @ts-ignore
   methodsPrologue = (indent: string) => `
@@ -126,7 +129,8 @@ class ${this.packageName}(api_methods.APIMethods):
 `
 
   // @ts-ignore
-  methodsEpilogue = (indent: string) => this.apiVersion === '3.1' ? `LookerSDK = ${this.packageName}` : ''
+  methodsEpilogue = (indent: string) =>
+    this.apiVersion === '3.1' ? `LookerSDK = ${this.packageName}` : ''
 
   // @ts-ignore
   modelsPrologue = (indent: string) => `
@@ -153,7 +157,9 @@ DelimSequence = model.DelimSequence
 import functools  # noqa:E402
 from typing import ForwardRef  # type: ignore  # noqa:E402
 
-${this.structureHook} = functools.partial(sr.structure_hook, globals(), sr.converter${this.apiRef})
+${
+  this.structureHook
+} = functools.partial(sr.structure_hook, globals(), sr.converter${this.apiRef})
 ${this.hooks.join('\n')}
 `
 
@@ -163,9 +169,9 @@ ${this.hooks.join('\n')}
 
   // @ts-ignore
   argGroup(indent: string, args: Arg[]) {
-    if ((!args) || args.length === 0) return this.nullStr
-    let hash: string[] = []
-    for (let arg of args) {
+    if (!args || args.length === 0) return this.nullStr
+    const hash: string[] = []
+    for (const arg of args) {
       hash.push(`"${arg}": ${arg}`)
     }
     return `{${hash.join(this.dataStructureDelimiter)}}`
@@ -213,19 +219,27 @@ ${this.hooks.join('\n')}
   methodSignature(indent: string, method: IMethod) {
     const returnType = this.methodReturnType(method)
     const bump = this.bumper(indent)
-    let params: string[] = []
+    const params: string[] = []
     const args = method.allParams
     if (args && args.length > 0) {
-      method.allParams.forEach(p => params.push(this.declareParameter(bump, method, p)))
+      method.allParams.forEach((p) =>
+        params.push(this.declareParameter(bump, method, p))
+      )
     }
     let head = method.description?.trim()
-    head = (head ? `${head}\n\n` : '') + `${method.httpMethod} ${method.endpoint} -> ${returnType}`
-    params.push(`${bump}transport_options: Optional[transport.PTransportSettings] = None,`)
-    return this.commentHeader(indent, head)
-      + `${indent}def ${method.name}(\n`
-      + `${bump}self${params.length > 0 ? ',\n' : ''}`
-      + `${params.join(this.paramDelimiter)}\n`
-      + `${indent}) -> ${returnType}:\n`
+    head =
+      (head ? `${head}\n\n` : '') +
+      `${method.httpMethod} ${method.endpoint} -> ${returnType}`
+    params.push(
+      `${bump}transport_options: Optional[transport.PTransportSettings] = None,`
+    )
+    return (
+      this.commentHeader(indent, head) +
+      `${indent}def ${method.name}(\n` +
+      `${bump}self${params.length > 0 ? ',\n' : ''}` +
+      `${params.join(this.paramDelimiter)}\n` +
+      `${indent}) -> ${returnType}:\n`
+    )
   }
 
   private addMethodInputModelType(type: IType) {
@@ -246,10 +260,12 @@ ${this.hooks.join('\n')}
       type = param.type
     }
     const mapped = this.typeMapMethods(type)
-    const paramType = (param.required ? mapped.name : `Optional[${mapped.name}]`)
-    return this.commentHeader(indent, param.description)
-      + `${indent}${param.name}: ${paramType}`
-      + (param.required ? '' : ` = ${mapped.default}`)
+    const paramType = param.required ? mapped.name : `Optional[${mapped.name}]`
+    return (
+      this.commentHeader(indent, param.description) +
+      `${indent}${param.name}: ${paramType}` +
+      (param.required ? '' : ` = ${mapped.default}`)
+    )
   }
 
   initArg(indent: string, property: IProperty) {
@@ -271,15 +287,13 @@ ${this.hooks.join('\n')}
     indent = this.bumper(indent)
     const bump = this.bumper(indent)
     let result = `\n\n${indent}def __init__(self, *${this.argDelimiter}`
-    let args: string[] = []
-    let inits: string[] = []
-    Object.values(type.properties)
-      .forEach((prop) => {
-        args.push(this.declareConstructorArg('', prop))
-        inits.push(this.initArg(bump, prop))
-      })
-    result += `${args.join(this.argDelimiter)}):\n`
-      + inits.join('\n')
+    const args: string[] = []
+    const inits: string[] = []
+    Object.values(type.properties).forEach((prop) => {
+      args.push(this.declareConstructorArg('', prop))
+      inits.push(this.initArg(bump, prop))
+    })
+    result += `${args.join(this.argDelimiter)}):\n` + inits.join('\n')
     return result
   }
 
@@ -296,14 +310,14 @@ ${this.hooks.join('\n')}
 
   // this is a builder function to produce arguments with optional null place holders but no extra required optional arguments
   argFill(current: string, args: string) {
-    if ((!current) && args.trim() === this.nullStr) {
+    if (!current && args.trim() === this.nullStr) {
       // Don't append trailing optional arguments if none have been set yet
       return ''
     }
     let delimiter = this.argDelimiter
     if (!current) {
       delimiter = ''
-    // Caller manually inserted delimiter followed by inline comment
+      // Caller manually inserted delimiter followed by inline comment
     } else if (args.match(/, {2}#/)) {
       delimiter = this.argDelimiter.replace(',', '')
     }
@@ -334,7 +348,9 @@ ${this.hooks.join('\n')}
   httpCall(indent: string, method: IMethod) {
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
-    const methodCall = `${indent}response = ${this.it(method.httpMethod.toLowerCase())}`
+    const methodCall = `${indent}response = ${this.it(
+      method.httpMethod.toLowerCase()
+    )}`
     let assertTypeName = this.methodReturnType(method)
     if (method.type instanceof ArrayType) {
       assertTypeName = 'list'
@@ -350,16 +366,18 @@ ${this.hooks.join('\n')}
       assertion += `isinstance(response, ${assertTypeName})`
     }
     const returnStmt = `${indent}return response`
-    return `${methodCall}(\n`
-      + `${bump.repeat(3)}${args}\n`
-      + `${indent})\n`
-      + `${assertion}\n`
-      + `${returnStmt}`
+    return (
+      `${methodCall}(\n` +
+      `${bump.repeat(3)}${args}\n` +
+      `${indent})\n` +
+      `${assertion}\n` +
+      `${returnStmt}`
+    )
   }
 
   encodePathParams(indent: string, method: IMethod) {
     // const bump = indent + this.indentStr
-    let encodings: string = ''
+    let encodings = ''
     const pathParams = method.pathParams
     if (pathParams.length > 0) {
       for (const param of pathParams) {
@@ -374,12 +392,14 @@ ${this.hooks.join('\n')}
   bodyParamsTypeAssertions(indent: string, method: IMethod): string {
     const bodyParams = method.bodyParams
     const bump = indent + this.indentStr
-    let assertions: string = ''
+    let assertions = ''
     if (bodyParams.length > 0) {
       for (const param of bodyParams) {
         if (param.location === strBody) {
-          let conditionStr = param.required ? '' : `${indent}if ${param.name}:\n${bump}`
-          let type = this.writeableType(param.type, method) || param.type
+          const conditionStr = param.required
+            ? ''
+            : `${indent}if ${param.name}:\n${bump}`
+          const type = this.writeableType(param.type, method) || param.type
           let bodyType = this.typeMapMethods(type).name
           if (bodyType.startsWith('Sequence')) {
             bodyType = 'Sequence'
@@ -388,7 +408,7 @@ ${this.hooks.join('\n')}
           } else if (bodyType.startsWith('models.DelimSequence')) {
             bodyType = 'models.DelimSequence'
           }
-          assertions += (`${conditionStr}${indent}assert isinstance(${param.name}, ${bodyType})\n`)
+          assertions += `${conditionStr}${indent}assert isinstance(${param.name}, ${bodyType})\n`
         }
       }
     }
@@ -407,11 +427,13 @@ ${this.hooks.join('\n')}
       return `${indent}def logout(self) -> None:\n${bump}super().logout()`
     }
 
-    return this.methodSignature(indent, method)
-      + this.summary(bump, method.summary)
-      + this.encodePathParams(bump, method)
-      + this.bodyParamsTypeAssertions(bump, method)
-      + this.httpCall(bump, method)
+    return (
+      this.methodSignature(indent, method) +
+      this.summary(bump, method.summary) +
+      this.encodePathParams(bump, method) +
+      this.bodyParamsTypeAssertions(bump, method) +
+      this.httpCall(bump, method)
+    )
   }
 
   typeSignature(indent: string, type: IType) {
@@ -445,9 +467,9 @@ ${this.hooks.join('\n')}
       this.hooks.push(
         `sr.converter${this.apiRef}.register_structure_hook(\n${bump}${type.name},  # type: ignore\n${bump}${this.structureHook}  # type:ignore\n)`
       )
-
     }
-    return `\n` +
+    return (
+      `\n` +
       `${indent}@attr.s(${attrsArgs})\n` +
       `${indent}class ${type.name}(model.Model):\n` +
       `${bump}"""\n` +
@@ -455,6 +477,7 @@ ${this.hooks.join('\n')}
       `${bump}Attributes:\n` +
       `${attrs.join('\n')}\n` +
       `${bump}"""\n`
+    )
   }
 
   summary(indent: string, text: string | undefined) {
@@ -466,11 +489,17 @@ ${this.hooks.join('\n')}
     if (type.elementType) {
       const map = this._typeMap(type.elementType, format)
       if (type instanceof ArrayType) {
-        return {name: `Sequence[${map.name}]`, default: this.nullStr}
+        return { default: this.nullStr, name: `Sequence[${map.name}]` }
       } else if (type instanceof HashType) {
-        return {name: `MutableMapping[str, ${map.name}]`, default: this.nullStr}
+        return {
+          default: this.nullStr,
+          name: `MutableMapping[str, ${map.name}]`,
+        }
       } else if (type instanceof DelimArrayType) {
-        return {name: `models.DelimSequence[${map.name}]`, default: this.nullStr}
+        return {
+          default: this.nullStr,
+          name: `models.DelimSequence[${map.name}]`,
+        }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
@@ -483,7 +512,9 @@ ${this.hooks.join('\n')}
       } else {
         throw new Error('format must be "models" or "methods"')
       }
-      return this.pythonTypes[type.name] || {name: name, default: this.nullStr}
+      return (
+        this.pythonTypes[type.name] || { default: this.nullStr, name: name }
+      )
     } else {
       throw new Error('Cannot output a nameless type.')
     }
@@ -496,5 +527,4 @@ ${this.hooks.join('\n')}
   typeMapModels(type: IType) {
     return this._typeMap(type, 'models')
   }
-
 }

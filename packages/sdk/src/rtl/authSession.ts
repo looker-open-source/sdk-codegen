@@ -1,25 +1,27 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 import { IRequestProps, ITransport, sdkError, SDKResponse } from './transport'
@@ -28,8 +30,7 @@ import { IApiSettings } from './apiSettings'
 /**
  * Basic authorization session interface for most API authentication scenarios
  */
-export interface IAuthSession  {
-
+export interface IAuthSession {
   settings: IApiSettings
   transport: ITransport
   /**
@@ -94,9 +95,9 @@ export interface IAuthSession  {
  *
  */
 export abstract class AuthSession implements IAuthSession {
-  static TBD = "Method not implemented in AuthSession"
+  static TBD = 'Method not implemented in AuthSession'
   settings: IApiSettings
-  sudoId: string = ''
+  sudoId = ''
   transport: ITransport
 
   constructor(settings: IApiSettings, transport: ITransport) {
@@ -116,7 +117,7 @@ export abstract class AuthSession implements IAuthSession {
   /**
    * Does the session have active authentication information?
    */
-  abstract isAuthenticated() : boolean
+  abstract isAuthenticated(): boolean
 
   /**
    * Override this method to implement a authentication retrieval from the server
@@ -146,7 +147,7 @@ export abstract class AuthSession implements IAuthSession {
    * Is a sudo user active for this session?
    */
   isSudo(): boolean {
-    return (this.sudoId !== '') && (this.isAuthenticated())
+    return this.sudoId !== '' && this.isAuthenticated()
   }
 
   /**
@@ -156,13 +157,15 @@ export abstract class AuthSession implements IAuthSession {
     this.sudoId = ''
   }
 
-  protected async ok<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
+  protected async ok<TSuccess, TError>(
+    promise: Promise<SDKResponse<TSuccess, TError>>
+  ) {
     const result = await promise
     if (result.ok) {
       return result.value
     } else {
       if (result instanceof Buffer) {
-        throw sdkError({message: result.toString('utf8')})
+        throw sdkError({ message: result.toString('utf8') })
       } else {
         throw sdkError(result as any)
       }

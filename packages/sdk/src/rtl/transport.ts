@@ -1,35 +1,32 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
-
-/** A transport is a generic way to make HTTP requests. */
-
-// TODO create generic Headers and Request interfaces that are not transport-specific
-// TODO create generic Agent that is not transport-specific
 import { Agent } from 'https'
 import { Headers } from 'request'
+import { Readable } from 'readable-stream'
 import { matchCharsetUtf8, matchModeBinary, matchModeString } from './constants'
-import { Readable } from "readable-stream"
 
 export const agentPrefix = 'TS-SDK'
 export const LookerAppId = 'x-looker-appid'
@@ -53,33 +50,32 @@ export function trace(message: string, info?: any) {
   }
 }
 
-
 /**
  * ResponseMode for an HTTP request - either binary or "string"
  */
 export enum ResponseMode {
   'binary', // this is a binary response
   'string', // this is a "string" response
-  'unknown' // unrecognized response type
+  'unknown', // unrecognized response type
 }
 
 /**
  * MIME patterns for string content types
  * @type {RegExp}
  */
-export const contentPatternString = new RegExp(matchModeString, "i")
+export const contentPatternString = new RegExp(matchModeString, 'i')
 
 /**
  * MIME patterns for "binary" content types
  * @type {RegExp}
  */
-export const contentPatternBinary = new RegExp(matchModeBinary, "i")
+export const contentPatternBinary = new RegExp(matchModeBinary, 'i')
 
 /**
  * MIME pattern for UTF8 charset attribute
  * @type {RegExp}
  */
-export const charsetUtf8Pattern = new RegExp(matchCharsetUtf8, "i")
+export const charsetUtf8Pattern = new RegExp(matchCharsetUtf8, 'i')
 
 /**
  * Default request timeout
@@ -163,7 +159,7 @@ export enum StatusCode {
   InsufficientStorage,
   LoopDetected,
   NotExtended = 510,
-  NetworkAuthRequired
+  NetworkAuthRequired,
 }
 
 /**
@@ -182,6 +178,9 @@ export interface IRawResponse {
 export interface ITransport {
   /**
    * HTTP request function for atomic, fully downloaded raw HTTP responses
+   *
+   * Note: This method returns the result of the HTTP request without any error handling
+   *
    * @param method of HTTP request
    * @param path request path, either relative or fully specified
    * @param queryParams name/value pairs to pass as part of the URL
@@ -239,7 +238,6 @@ export interface ITransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<T>
-
 }
 
 /** A successful SDK call. */
@@ -272,7 +270,7 @@ export type SDKResponse<TSuccess, TError> =
  * Generic collection
  */
 export interface IRequestHeaders {
-  [key:string]: string
+  [key: string]: string
 }
 
 /**
@@ -280,7 +278,7 @@ export interface IRequestHeaders {
  * TODO: Trim this down to what is required
  */
 export interface IRequestProps {
-  [key:string]: any
+  [key: string]: any
   /** full url for request, including any query params */
   url: string
 
@@ -310,7 +308,7 @@ export type Authenticator = (props: any) => any
 
 /** Interface for API transport values */
 export interface ITransportSettings {
-  [key:string] : any
+  [key: string]: any
   /** base URL of API REST web service */
   base_url: string
   /** standard headers to provide in all transport requests */
@@ -352,7 +350,7 @@ export function isUtf8(contentType: string) {
 /**
  * Used for name/value pair collections like for QueryParams
  */
-export type Values = {[key:string]: any} | null | undefined
+export type Values = { [key: string]: any } | null | undefined
 
 /**
  * Encode parameter if not already encoded
@@ -388,12 +386,12 @@ export function encodeParam(value: any) {
  * @returns {string} query string parameter formatted values. Both `false` and `null` are included. Only `undefined` are omitted.
  */
 export function encodeParams(values?: Values) {
-  if (!values) return ""
+  if (!values) return ''
 
   const keys = Object.keys(values)
   const params = keys
-    .filter(k => values[k] !== undefined) // `null` and `false` will both be passe
-    .map(k => k + '=' + encodeParam(values[k]))
+    .filter((k) => values[k] !== undefined) // `null` and `false` will both be passe
+    .map((k) => k + '=' + encodeParam(values[k]))
     .join('&')
   return params
 }
@@ -403,7 +401,7 @@ export function encodeParams(values?: Values) {
  * @param path the base path of the request
  * @param obj optional collection of query parameters to encode and append to the path
  */
-export function addQueryParams(path: string, obj?: Values ) {
+export function addQueryParams(path: string, obj?: Values) {
   if (!obj) {
     return path
   }
@@ -420,7 +418,11 @@ export function sdkError(result: any) {
   if ('message' in result && typeof result.message === 'string') {
     return new Error(result.message)
   }
-  if ('error' in result && 'message' in result.error && typeof result.error.message === 'string') {
+  if (
+    'error' in result &&
+    'message' in result.error &&
+    typeof result.error.message === 'string'
+  ) {
     return new Error(result.error.message)
   }
   const error = JSON.stringify(result)
@@ -450,7 +452,9 @@ export function sdkError(result: any) {
  * }
  * ```
  */
-export async function sdkOk<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
+export async function sdkOk<TSuccess, TError>(
+  promise: Promise<SDKResponse<TSuccess, TError>>
+) {
   const result = await promise
   if (result.ok) {
     return result.value

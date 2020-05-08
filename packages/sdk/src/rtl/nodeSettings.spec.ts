@@ -1,32 +1,31 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
-import {
-  ApiConfig,
-  NodeSettings,
-  NodeSettingsIniFile,
-} from './nodeSettings'
+import { TestConfig } from '@looker/sdk-codegen-scripts'
+import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings'
 import { defaultTimeout } from './transport'
 import { boolDefault } from './constants'
 import {
@@ -34,9 +33,9 @@ import {
   strLookerBaseUrl,
   strLookerClientId,
   strLookerClientSecret,
-  strLookerTimeout, strLookerVerifySsl,
+  strLookerTimeout,
+  strLookerVerifySsl,
 } from './apiSettings'
-import { TestConfig } from '@looker/sdk-codegen-scripts'
 
 const config = TestConfig()
 
@@ -82,20 +81,23 @@ timeout=30
 
     it('fails with a bad section name', () => {
       expect(() => new NodeSettings(contents, 'NotAGoodLookForYou')).toThrow(
-        /No section named "NotAGoodLookForYou"/,
+        /No section named "NotAGoodLookForYou"/
       )
     })
   })
 
   describe('NodeSettingsEnv', () => {
-    const verifySsl = boolDefault(config.testSection['verify_ssl'], false).toString()
+    const verifySsl = boolDefault(
+      config.testSection.verify_ssl,
+      false
+    ).toString()
 
     beforeAll(() => {
       // populate environment variables
       process.env[strLookerTimeout] = defaultTimeout.toString()
-      process.env[strLookerClientId] = config.testSection['client_id']
-      process.env[strLookerClientSecret] = config.testSection['client_secret']
-      process.env[strLookerBaseUrl] = config.testSection['base_url']
+      process.env[strLookerClientId] = config.testSection.client_id
+      process.env[strLookerClientSecret] = config.testSection.client_secret
+      process.env[strLookerBaseUrl] = config.testSection.base_url
       process.env[strLookerVerifySsl] = verifySsl.toString()
     })
 
@@ -123,20 +125,22 @@ timeout=30
     })
 
     it('partial INI uses environment variables', () => {
-      const settings = new NodeSettings({base_url: config.baseUrl} as IApiSettings)
+      const settings = new NodeSettings({
+        base_url: config.baseUrl,
+      } as IApiSettings)
       expect(settings.base_url).toEqual(config.baseUrl)
       expect(settings.timeout).toEqual(defaultTimeout)
       expect(settings.verify_ssl).toEqual(false)
       const creds = settings.readConfig()
-      expect(creds['client_id']).toBeDefined()
-      expect(creds['client_secret']).toBeDefined()
+      expect(creds.client_id).toBeDefined()
+      expect(creds.client_secret).toBeDefined()
     })
 
     it('environment variables override ini values', () => {
       process.env[strLookerTimeout] = '66'
       process.env[strLookerVerifySsl] = '1'
       const settings = new NodeSettingsIniFile(config.testIni)
-      expect(settings.base_url).toEqual(config.testSection['base_url'])
+      expect(settings.base_url).toEqual(config.testSection.base_url)
       expect(settings.timeout).toEqual(66)
       expect(settings.verify_ssl).toEqual(true)
       // process.env[strLookerTimeout] = config.testSection['timeout'] || defaultTimeout.toString()
@@ -147,16 +151,16 @@ timeout=30
   describe('NodeSettingsIniFile', () => {
     it('settings default to the first section', () => {
       const settings = new NodeSettingsIniFile(config.testIni)
-      expect(settings.base_url).toEqual(config.testSection['base_url'])
-      expect(settings.timeout).toEqual(parseInt(config.testSection['timeout'], 10))
-      expect(settings.verify_ssl).toEqual(config.testSection['verify_ssl'])
+      expect(settings.base_url).toEqual(config.testSection.base_url)
+      expect(settings.timeout).toEqual(parseInt(config.testSection.timeout, 10))
+      expect(settings.verify_ssl).toEqual(config.testSection.verify_ssl)
     })
 
     it('retrieves the first section by name', () => {
       const settings = new NodeSettingsIniFile(config.testIni, 'Looker')
-      expect(settings.base_url).toEqual(config.testSection['base_url'])
-      expect(settings.timeout).toEqual(parseInt(config.testSection['timeout'], 10))
-      expect(settings.verify_ssl).toEqual(config.testSection['verify_ssl'])
+      expect(settings.base_url).toEqual(config.testSection.base_url)
+      expect(settings.timeout).toEqual(parseInt(config.testSection.timeout, 10))
+      expect(settings.verify_ssl).toEqual(config.testSection.verify_ssl)
     })
 
     it('retrieves the second section by name', () => {
@@ -167,13 +171,13 @@ timeout=30
 
     it('fails with a bad section name', () => {
       expect(
-        () => new NodeSettingsIniFile(config.testIni, 'NotAGoodLookForYou'),
+        () => new NodeSettingsIniFile(config.testIni, 'NotAGoodLookForYou')
       ).toThrow(/No section named "NotAGoodLookForYou"/)
     })
 
     it('fails with a bad file name', () => {
       expect(
-        () => new NodeSettingsIniFile('missing.ini', 'NotAGoodLookForYou'),
+        () => new NodeSettingsIniFile('missing.ini', 'NotAGoodLookForYou')
       ).toThrow(/File missing.ini was not found/)
     })
   })

@@ -1,41 +1,43 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 import { IError } from '../sdk/4.0/models'
 import {
   IRequestProps,
   ITransport,
-  SDKResponse,
   sdkError,
-  HttpMethod, encodeParams,
+  HttpMethod,
+  encodeParams,
 } from './transport'
 import { AuthToken } from './authToken'
 import { NodeTransport } from './nodeTransport'
 import {
   IApiSettings,
   strLookerClientId,
-  strLookerClientSecret
+  strLookerClientSecret,
 } from './apiSettings'
 import { AuthSession } from './authSession'
 import { defaultApiVersion } from './constants'
@@ -182,14 +184,17 @@ export class NodeSession extends AuthSession {
       this.reset()
       // only retain client API3 credentials for the lifetime of the login request
       const section = this.settings.readConfig()
-      const clientId = getenv(strLookerClientId, section['client_id'])
-      const clientSecret = getenv(strLookerClientSecret, section['client_secret'])
+      const clientId = getenv(strLookerClientId, section.client_id)
+      const clientSecret = getenv(strLookerClientSecret, section.client_secret)
       if (!clientId || !clientSecret) {
         throw sdkError({
-          message: 'API credentials client_id and/or client_secret are not set'
+          message: 'API credentials client_id and/or client_secret are not set',
         })
       }
-      const body = encodeParams({"client_id": clientId, "client_secret": clientSecret})
+      const body = encodeParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+      })
       // authenticate client
       const token = await this.ok(
         this.transport.request<IAccessToken, IError>(
@@ -204,7 +209,7 @@ export class NodeSession extends AuthSession {
 
     if (this.sudoId) {
       // Use the API user auth to sudo
-      let token = this.activeToken
+      const token = this.activeToken
       const promise = this.transport.request<IAccessToken, IError>(
         strPost,
         encodeURI(`${this.apiPath}/login/${newId}`),

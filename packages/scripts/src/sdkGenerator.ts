@@ -1,27 +1,29 @@
 #!/usr/bin/env node
 
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 import * as Models from '@looker/sdk-codegen'
@@ -34,7 +36,7 @@ export const specFromFile = (specFile: string): Models.ApiModel => {
 }
 
 export interface IGeneratorCtor<T extends Models.IModel> {
-  new(model: T, formatter: Models.ICodeGen): Generator<T>
+  new (model: T, formatter: Models.ICodeGen): Generator<T>
 }
 
 export abstract class Generator<T extends Models.IModel> {
@@ -49,7 +51,12 @@ export abstract class Generator<T extends Models.IModel> {
 
   // convenience function that calls render for each item in the list
   // and collects their output in the buffer
-  each<K extends Models.IModel>(list: Array<K>, ctor: IGeneratorCtor<K>, indent: string = '', delimiter?: string): this {
+  each<K extends Models.IModel>(
+    list: Array<K>,
+    ctor: IGeneratorCtor<K>,
+    indent = '',
+    delimiter?: string
+  ): this {
     const strs = list.map((model) => {
       return new ctor(model, this.codeFormatter).render(indent)
     })
@@ -86,17 +93,15 @@ export abstract class Generator<T extends Models.IModel> {
 
 export class MethodGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
-    let items: string[] = []
+    const items: string[] = []
     // reset refcounts for ALL types so dynamic import statement will work
-    Object.entries(this.model.types).forEach(([_, type]) => type.refCount = 0)
-    Object.values(this.model.sortedMethods())
-      .forEach(method => {
-        items.push(this.codeFormatter.declareMethod(indent, method))
-      })
+    Object.entries(this.model.types).forEach(([_, type]) => (type.refCount = 0))
+    Object.values(this.model.sortedMethods()).forEach((method) => {
+      items.push(this.codeFormatter.declareMethod(indent, method))
+    })
     const tally = `${items.length} API methods`
     success(tally)
-    return this
-      .p(`${this.codeFormatter.comment('', tally)}`)
+    return this.p(`${this.codeFormatter.comment('', tally)}`)
       .p(this.codeFormatter.methodsPrologue(indent))
       .p(items.join('\n\n'))
       .p(this.codeFormatter.methodsEpilogue(indent))
@@ -106,17 +111,15 @@ export class MethodGenerator extends Generator<Models.IApiModel> {
 
 export class StreamGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
-    let items: string[] = []
+    const items: string[] = []
     // reset refcounts for ALL types so dynamic import statement will work
-    Object.entries(this.model.types).forEach(([_, type]) => type.refCount = 0)
-    Object.values(this.model.sortedMethods())
-      .forEach(method => {
-        items.push(this.codeFormatter.declareStreamer(indent, method))
-      })
+    Object.entries(this.model.types).forEach(([_, type]) => (type.refCount = 0))
+    Object.values(this.model.sortedMethods()).forEach((method) => {
+      items.push(this.codeFormatter.declareStreamer(indent, method))
+    })
     const tally = `${items.length} API methods`
     success(tally)
-    return this
-      .p(`${this.codeFormatter.comment('', tally)}`)
+    return this.p(`${this.codeFormatter.comment('', tally)}`)
       .p(this.codeFormatter.streamsPrologue(indent))
       .p(items.join('\n\n'))
       .p(this.codeFormatter.methodsEpilogue(indent))
@@ -124,18 +127,18 @@ export class StreamGenerator extends Generator<Models.IApiModel> {
   }
 }
 
-
 export class TypeGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
-    let items: string[] = []
+    const items: string[] = []
     Object.values(this.model.sortedTypes())
-      .filter(type => !(type instanceof Models.IntrinsicType))
-      .forEach(type => items.push(this.codeFormatter.declareType(indent, type)))
+      .filter((type) => !(type instanceof Models.IntrinsicType))
+      .forEach((type) =>
+        items.push(this.codeFormatter.declareType(indent, type))
+      )
     const counts = this.typeTally(this.model.types)
     const tally = `${counts.total} API models: ${counts.standard} Spec, ${counts.request} Request, ${counts.write} Write`
     success(tally)
-    return this
-      .p(`${this.codeFormatter.comment('', tally)}`)
+    return this.p(`${this.codeFormatter.comment('', tally)}`)
       .p(this.codeFormatter.modelsPrologue(indent))
       .p(items.join('\n\n'))
       .p(this.codeFormatter.modelsEpilogue(indent))
@@ -147,8 +150,8 @@ export class TypeGenerator extends Generator<Models.IApiModel> {
     let write = 0
     let standard = 0
     Object.values(types)
-      .filter(type => !(type instanceof Models.IntrinsicType))
-      .forEach(type => {
+      .filter((type) => !(type instanceof Models.IntrinsicType))
+      .forEach((type) => {
         if (type instanceof Models.RequestType) {
           if (type.refCount > 0) request++
         } else if (type instanceof Models.WriteType) {
@@ -157,6 +160,6 @@ export class TypeGenerator extends Generator<Models.IApiModel> {
           standard++
         }
       })
-    return {standard, write, request, total: standard + write + request}
+    return { request, standard, total: standard + write + request, write }
   }
 }

@@ -2,10 +2,10 @@
   "name": "@looker/sdk-codegen",
   "version": "0.1.1-alpha.652",
   "description": "Looker SDK Codegen core",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "files": [
-    "dist"
+    "lib"
   ],
   "author": "Looker",
   "license": "MIT",
@@ -15,7 +15,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
-    "directory": "packages/codegen"
+    "directory": "packages/sdk-codegen"
   },
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
@@ -29,7 +29,7 @@
   "scripts": {
     "build": "tsc",
     "prebuild": "yarn clean",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist lib",
     "test": "yarn jest",
     "docs": "typedoc --mode file --out docs"
   },

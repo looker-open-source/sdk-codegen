@@ -1,29 +1,30 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
-// Swift code generator
-
+import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
   IMappedType,
@@ -34,10 +35,10 @@ import {
   IntrinsicType,
   ArrayType,
   HashType,
-  strBody, DelimArrayType,
+  strBody,
+  DelimArrayType,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
-import { commentBlock} from '@looker/sdk-codegen-utils'
 
 export class SwiftGen extends CodeGen {
   codePath = './swift/'
@@ -56,14 +57,15 @@ export class SwiftGen extends CodeGen {
   endTypeStr = `\n}`
   needsRequestTypes = false
   willItStream = true
-  keywords = 'associatedtype,class,deinit,enum,extension,fileprivate,func,import,init,inout,internal,let,open,'
-    + 'operator,private,protocol,public,static,struct,subscript,typealias,var,break,case,continue,default,'
-    + 'defer,do,else,fallthrough,for,guard,if,in,repeat,return,switch,where,while,'
-    + 'as,Any,catch,false,is,nil,rethrows,super,self,Self,throw,throws,true,try,'
-    + '_,#available,#colorLiteral,#column,#else,#elseif,#endif,#file,#fileLiteral,#function,#if,#imageLiteral,'
-    + '#line,#selector,and #sourceLocation,associativity,convenience,dynamic,didSet,final,get,infix,indirect,'
-    + 'lazy,left,mutating,none,nonmutating,optional,override,postfix,precedence,prefix,Protocol,required,right,'
-    + 'set,Type,unowned,weak,willSet'.split(',')
+  keywords =
+    'associatedtype,class,deinit,enum,extension,fileprivate,func,import,init,inout,internal,let,open,' +
+    'operator,private,protocol,public,static,struct,subscript,typealias,var,break,case,continue,default,' +
+    'defer,do,else,fallthrough,for,guard,if,in,repeat,return,switch,where,while,' +
+    'as,Any,catch,false,is,nil,rethrows,super,self,Self,throw,throws,true,try,' +
+    '_,#available,#colorLiteral,#column,#else,#elseif,#endif,#file,#fileLiteral,#function,#if,#imageLiteral,' +
+    '#line,#selector,and #sourceLocation,associativity,convenience,dynamic,didSet,final,get,infix,indirect,' +
+    'lazy,left,mutating,none,nonmutating,optional,override,postfix,precedence,prefix,Protocol,required,right,' +
+    'set,Type,unowned,weak,willSet'.split(',')
 
   supportsMultiApi(): boolean {
     return false
@@ -127,7 +129,9 @@ import Foundation
   }
 
   commentHeader(indent: string, text: string | undefined) {
-    return text ? `${indent}/**\n${commentBlock(text, indent, ' * ')}\n${indent} */\n` : ''
+    return text
+      ? `${indent}/**\n${commentBlock(text, indent, ' * ')}\n${indent} */\n`
+      : ''
   }
 
   declareProperty(indent: string, property: IProperty) {
@@ -136,12 +140,22 @@ import Foundation
     if (property.name === strBody) {
       // TODO refactor this hack to track context when the body parameter is created for the request type
       property.type.refCount++
-      return this.commentHeader(indent, property.description || 'body parameter for dynamically created request type')
-        + `${indent}var ${this.reserve(property.name)}: ${property.type.name}${optional}`
+      return (
+        this.commentHeader(
+          indent,
+          property.description ||
+            'body parameter for dynamically created request type'
+        ) +
+        `${indent}var ${this.reserve(property.name)}: ${
+          property.type.name
+        }${optional}`
+      )
     }
     const type = this.typeMap(property.type)
-    return this.commentHeader(indent, this.describeProperty(property))
-      + `${indent}var ${this.reserve(property.name)}: ${type.name}${optional}`
+    return (
+      this.commentHeader(indent, this.describeProperty(property)) +
+      `${indent}var ${this.reserve(property.name)}: ${type.name}${optional}`
+    )
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
@@ -149,9 +163,10 @@ import Foundation
   }
 
   declareParameter(indent: string, method: IMethod, param: IParameter) {
-    let type = (param.location === strBody)
-      ? this.writeableType(param.type, method) || param.type
-      : param.type
+    const type =
+      param.location === strBody
+        ? this.writeableType(param.type, method) || param.type
+        : param.type
     const mapped = this.typeMap(type)
     let pOpt = ''
     let line = ''
@@ -163,9 +178,11 @@ import Foundation
     } else {
       line = '_ '
     }
-    return this.commentHeader(indent, this.paramComment(param, mapped))
-      + `${indent}${line}${this.reserve(param.name)}: ${mapped.name}${pOpt}`
-      + (param.required ? '' : (mapped.default ? ` = ${mapped.default}` : ''))
+    return (
+      this.commentHeader(indent, this.paramComment(param, mapped)) +
+      `${indent}${line}${this.reserve(param.name)}: ${mapped.name}${pOpt}` +
+      (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
+    )
   }
 
   // @ts-ignore
@@ -178,12 +195,15 @@ import Foundation
     return ''
   }
 
-  methodHeaderDeclaration(indent: string, method: IMethod, streamer: boolean = false) {
+  methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
     const type = this.typeMap(method.type)
     const resultType = streamer ? 'Data' : type.name
-    let returnType = type.name === 'Void' ? 'Voidable' : `SDKResponse<${resultType}, SDKError>`
+    const returnType =
+      type.name === 'Void' ? 'Voidable' : `SDKResponse<${resultType}, SDKError>`
     const head = method.description?.trim()
-    let headComment = (head ? `${head}\n\n` : '')  +`${method.httpMethod} ${method.endpoint} -> ${type.name}`
+    let headComment =
+      (head ? `${head}\n\n` : '') +
+      `${method.httpMethod} ${method.endpoint} -> ${type.name}`
     let fragment = ''
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
@@ -192,21 +212,28 @@ import Foundation
       // use the request type that will be generated in models.ts
       fragment = `request: I${requestType}`
     } else {
-      let params: string[] = []
+      const params: string[] = []
       const args = method.allParams // get the params in signature order
-      if (args && args.length > 0) args.forEach(p => params.push(this.declareParameter(bump, method, p)))
-      fragment = params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
+      if (args && args.length > 0)
+        args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
+      fragment =
+        params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
     }
     if (method.responseIsBoth()) {
       headComment += `\n\n**Note**: Binary content may be returned by this method.`
     } else if (method.responseIsBinary()) {
       headComment += `\n\n**Note**: Binary content is returned by this method.\n`
     }
-    const header = this.commentHeader(indent, headComment)
-    + `${indent}func ${method.name}(`
+    const header =
+      this.commentHeader(indent, headComment) + `${indent}func ${method.name}(`
 
-    return header + fragment
-      + `${fragment? ',' : ''}\n${bump}options: ITransportSettings? = nil\n${indent}) -> ${returnType} {\n`
+    return (
+      header +
+      fragment +
+      `${
+        fragment ? ',' : ''
+      }\n${bump}options: ITransportSettings? = nil\n${indent}) -> ${returnType} {\n`
+    )
   }
 
   methodSignature(indent: string, method: IMethod) {
@@ -214,7 +241,7 @@ import Foundation
   }
 
   encodePathParams(indent: string, method: IMethod) {
-    let encodings: string = ''
+    let encodings = ''
     if (method.pathParams.length > 0) {
       for (const param of method.pathParams) {
         // For swift, just encode all path params because of awkward variable renames
@@ -226,10 +253,12 @@ import Foundation
 
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
-    return this.methodSignature(indent, method)
-      + this.encodePathParams(bump, method)
-      + this.httpCall(bump, method)
-      + `\n${indent}}`
+    return (
+      this.methodSignature(indent, method) +
+      this.encodePathParams(bump, method) +
+      this.httpCall(bump, method) +
+      `\n${indent}}`
+    )
   }
 
   streamerSignature(indent: string, method: IMethod) {
@@ -238,10 +267,12 @@ import Foundation
 
   declareStreamer(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
-    return this.streamerSignature(indent, method)
-      + this.encodePathParams(bump, method)
-      + this.streamCall(bump, method)
-      + `\n${indent}}`
+    return (
+      this.streamerSignature(indent, method) +
+      this.encodePathParams(bump, method) +
+      this.streamCall(bump, method) +
+      `\n${indent}}`
+    )
   }
 
   // declareType(indent: string, type: IType): string {
@@ -251,10 +282,14 @@ import Foundation
   typeSignature(indent: string, type: IType) {
     const recursive = type.isRecursive()
     const structOrClass = recursive ? 'class' : 'struct'
-    const needClass = recursive ? "\nRecursive type references must use Class instead of Struct" : ''
+    const needClass = recursive
+      ? '\nRecursive type references must use Class instead of Struct'
+      : ''
     const mapped = this.typeMap(type)
-    return this.commentHeader(indent, type.description + needClass) +
+    return (
+      this.commentHeader(indent, type.description + needClass) +
       `${indent}${structOrClass} ${mapped.name}: SDKModel {\n`
+    )
   }
 
   // @ts-ignore
@@ -278,9 +313,9 @@ import Foundation
 
   // @ts-ignore
   argGroup(indent: string, args: Arg[], prefix?: string) {
-    if ((!args) || args.length === 0) return this.nullStr
-    let hash: string[] = []
-    for (let arg of args) {
+    if (!args || args.length === 0) return this.nullStr
+    const hash: string[] = []
+    for (const arg of args) {
       if (prefix) {
         hash.push(`"${arg}": ${prefix}${arg}`)
       } else {
@@ -291,11 +326,11 @@ import Foundation
   }
 
   queryGroup(indent: string, method: IMethod, prefix?: string) {
-    let params = method.getParams('query')
-    if ((!params) || params.length === 0) return this.nullStr
-    let hash: string[] = []
-    for (let param of params) {
-      let arg = this.asAny(param)
+    const params = method.getParams('query')
+    if (!params || params.length === 0) return this.nullStr
+    const hash: string[] = []
+    for (const param of params) {
+      const arg = this.asAny(param)
       if (prefix) {
         hash.push(`"${param.name}": ${prefix}${arg}`)
       } else {
@@ -305,20 +340,24 @@ import Foundation
     return `\n${indent}[${hash.join(this.argDelimiter)}]`
   }
 
-  asAny(param: IParameter) : Arg {
+  asAny(param: IParameter): Arg {
     let castIt = false
     if (param.type.elementType) {
       castIt = true
     } else {
-      let mapped = this.typeMap(param.type)
+      const mapped = this.typeMap(param.type)
       switch (mapped.name.toLowerCase()) {
         case 'date':
         case 'datetime':
         // case 'url':
         // case 'uri':
         case 'object':
-        case 'bool': castIt = true; break;
-        default: castIt = false; break;
+        case 'bool':
+          castIt = true
+          break
+        default:
+          castIt = false
+          break
       }
     }
     return param.name + (castIt ? ' as Any?' : '')
@@ -334,7 +373,7 @@ import Foundation
 
   // this is a builder function to produce arguments with optional null place holders but no extra required optional arguments
   argFill(current: string, args: string) {
-    if ((!current) && args.trim() === this.nullStr) {
+    if (!current && args.trim() === this.nullStr) {
       // Don't append trailing optional arguments if none have been set yet
       return ''
     }
@@ -357,7 +396,12 @@ import Foundation
     let result = this.argFill('', 'options')
     // let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
     // result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
-    result = this.argFill(result, method.bodyArg ? `try! self.encode(${request}${method.bodyArg})` : this.nullStr)
+    result = this.argFill(
+      result,
+      method.bodyArg
+        ? `try! self.encode(${request}${method.bodyArg})`
+        : this.nullStr
+    )
     result = this.argFill(result, this.queryGroup(indent, method, request))
     return result
   }
@@ -368,7 +412,12 @@ import Foundation
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     const errors = this.errorResponses(indent, method)
-    return `${indent}let result: SDKResponse<${type.name}, ${errors}> = ${this.it(method.httpMethod.toLowerCase())}(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})
+    return `${indent}let result: SDKResponse<${
+      type.name
+    }, ${errors}> = ${this.it(method.httpMethod.toLowerCase())}(${this.httpPath(
+      method.endpoint,
+      request
+    )}${args ? ', ' + args : ''})
 ${indent}return result`
   }
 
@@ -378,7 +427,9 @@ ${indent}return result`
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     const errors = this.errorResponses(indent, method)
-    return `${indent}let result: SDKResponse<Data, ${errors}> = ${this.it(method.httpMethod.toLowerCase())}(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})
+    return `${indent}let result: SDKResponse<Data, ${errors}> = ${this.it(
+      method.httpMethod.toLowerCase()
+    )}(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})
 ${indent}return result`
   }
 
@@ -386,18 +437,18 @@ ${indent}return result`
     return this.commentHeader(indent, text)
   }
 
-  typeNames(countError: boolean = true) {
-    let names: string[] = []
+  typeNames(countError = true) {
+    const names: string[] = []
     if (!this.api) return names
     if (countError) {
-      this.api.types['Error'].refCount++
+      this.api.types.Error.refCount++
     } else {
-      this.api.types['Error'].refCount = 0
+      this.api.types.Error.refCount = 0
     }
     const types = this.api.sortedTypes()
     Object.values(types)
-      .filter(type => (type.refCount > 0) && !(type instanceof IntrinsicType))
-      .forEach(type => names.push(`I${type.name}`))
+      .filter((type) => type.refCount > 0 && !(type instanceof IntrinsicType))
+      .forEach((type) => names.push(`I${type.name}`))
     // TODO import default constants if necessary
     // Object.values(types)
     //   .filter(type => type instanceof RequestType)
@@ -412,45 +463,44 @@ ${indent}return result`
     const ns = 'Lk'
 
     const swiftTypes: Record<string, IMappedType> = {
-      'number': {name: 'Double', default: this.nullStr},
-      'float': {name: 'Float', default: this.nullStr},
-      'double': {name: 'Double', default: this.nullStr},
-      'integer': {name: 'Int', default: this.nullStr},
-      'int32': {name: 'Int32', default: this.nullStr},
-      'int64': {name: 'Int64', default: this.nullStr},
-      'string': {name: 'String', default: this.nullStr},
-      'password': {name: 'Password', default: this.nullStr},
-      'byte': {name: 'binary', default: this.nullStr},
-      'boolean': {name: 'Bool', default: this.nullStr},
-      'uri': {name: 'URI', default: this.nullStr},
-      'url': {name: 'URL', default: this.nullStr},
-      'datetime': {name: 'Date', default: this.nullStr},
-      'date': {name: 'Date', default: this.nullStr},
-      'object': {name: 'Any', default: this.nullStr},
-      'void': {name: 'Voidable', default: ''},
-      'Error': {name: `${ns}Error`, default: ''},
-      'Group': {name: `${ns}Group`, default: ''},
+      boolean: { name: 'Bool', default: this.nullStr },
+      double: { default: this.nullStr, name: 'Double' },
+      byte: { default: this.nullStr, name: 'binary' },
+      float: { default: this.nullStr, name: 'Float' },
+      datetime: { default: this.nullStr, name: 'Date' },
+      int32: { default: this.nullStr, name: 'Int32' },
+      date: { default: this.nullStr, name: 'Date' },
+      int64: { default: this.nullStr, name: 'Int64' },
+      Error: { default: '', name: `${ns}Error` },
+      number: { name: 'Double', default: this.nullStr },
+      Group: { default: '', name: `${ns}Group` },
+      integer: { default: this.nullStr, name: 'Int' },
+      object: { default: this.nullStr, name: 'Any' },
+      password: { default: this.nullStr, name: 'Password' },
+      string: { default: this.nullStr, name: 'String' },
+      uri: { default: this.nullStr, name: 'URI' },
+      url: { default: this.nullStr, name: 'URL' },
+      void: { default: '', name: 'Voidable' },
     }
 
     if (type.elementType) {
       // This is a structure with nested types
       const map = this.typeMap(type.elementType)
       if (type instanceof ArrayType) {
-        return {name: `[${map.name}]`, default: '[]'}
+        return { default: '[]', name: `[${map.name}]` }
       } else if (type instanceof HashType) {
         // return {name: `StringDictionary<${map.name}>`, default: 'nil'}
-        return {name: `StringDictionary<AnyCodable>`, default: 'nil'}
+        return { default: 'nil', name: `StringDictionary<AnyCodable>` }
       } else if (type instanceof DelimArrayType) {
-        return {name: `DelimArray<${map.name}>`, default: 'nil'}
+        return { default: 'nil', name: `DelimArray<${map.name}>` }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
 
     if (type.name) {
-      return swiftTypes[type.name] || {name: `${type.name}`, default: ''} // No null default for complex types
+      return swiftTypes[type.name] || { default: '', name: `${type.name}` } // No null default for complex types
     } else {
       throw new Error('Cannot output a nameless type.')
     }
   }
-
 }

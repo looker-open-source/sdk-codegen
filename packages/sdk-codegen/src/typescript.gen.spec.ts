@@ -1,29 +1,31 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
-import { TypescriptGen } from './typescript.gen'
 import { apiTestModel } from '@looker/sdk-codegen-scripts'
+import { TypescriptGen } from './typescript.gen'
 
 const gen = new TypescriptGen(apiTestModel)
 const indent = ''
@@ -42,7 +44,7 @@ describe('typescript generator', () => {
 
   describe('parameter declarations', () => {
     it('required parameter', () => {
-      const param = apiTestModel.methods['run_query'].params[0]
+      const param = apiTestModel.methods.run_query.params[0]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`/**
  * @param {number} query_id Id of query
@@ -51,7 +53,7 @@ query_id: number`)
     })
 
     it('optional parameter', () => {
-      const param = apiTestModel.methods['run_query'].params[2]
+      const param = apiTestModel.methods.run_query.params[2]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`/**
  * @param {number} limit Row limit (may override the limit in the saved query).
@@ -60,7 +62,7 @@ limit?: number`)
     })
 
     it('required typed parameter', () => {
-      const param = apiTestModel.methods['create_query_render_task'].params[2]
+      const param = apiTestModel.methods.create_query_render_task.params[2]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`/**
  * @param {number} width Output width in pixels
@@ -69,7 +71,7 @@ width: number`)
     })
 
     it('csv formatted parameter', () => {
-      const param = apiTestModel.methods['query_task_multi_results'].params[0]
+      const param = apiTestModel.methods.query_task_multi_results.params[0]
       const actual = gen.declareParameter(indent, param)
       expect(actual).toEqual(`/**
  * @param {DelimArray<string>} query_task_ids List of Query Task IDs
@@ -80,7 +82,7 @@ query_task_ids: DelimArray<string>`)
 
   describe('args locations', () => {
     it('path and query args', () => {
-      const method = apiTestModel.methods['run_query']
+      const method = apiTestModel.methods.run_query
       expect(method.pathArgs).toEqual(['query_id', 'result_format'])
       expect(method.bodyArg).toEqual('')
       expect(method.queryArgs).toEqual([
@@ -102,7 +104,7 @@ query_task_ids: DelimArray<string>`)
     })
 
     it('body for create_query', () => {
-      const method = apiTestModel.methods['create_query']
+      const method = apiTestModel.methods.create_query
       expect(method.pathArgs).toEqual([])
       const body = method.getParams('body')
       expect(body.length).toEqual(1)
@@ -119,7 +121,7 @@ body: Partial<IWriteQuery>`)
     })
 
     it('body for create_dashboard', () => {
-      const method = apiTestModel.methods['create_dashboard']
+      const method = apiTestModel.methods.create_dashboard
       expect(method.pathArgs).toEqual([])
       const body = method.getParams('body')
       expect(body.length).toEqual(1)
@@ -138,17 +140,17 @@ body: Partial<IWriteDashboard>`)
 
   describe('httpArgs', () => {
     it('add_group_group', () => {
-      const method = apiTestModel.methods['add_group_group']
+      const method = apiTestModel.methods.add_group_group
       const args = gen.httpArgs('', method).trim()
       expect(args).toEqual('null, body, options')
     })
     it('create_query', () => {
-      const method = apiTestModel.methods['create_query']
+      const method = apiTestModel.methods.create_query
       const args = gen.httpArgs('', method).trim()
       expect(args).toEqual('{fields}, body, options')
     })
     it('create_dashboard', () => {
-      const method = apiTestModel.methods['create_dashboard']
+      const method = apiTestModel.methods.create_dashboard
       const args = gen.httpArgs('', method).trim()
       expect(args).toEqual('null, body, options')
     })
@@ -157,7 +159,7 @@ body: Partial<IWriteDashboard>`)
   describe('method signature', () => {
     // TODO find a new method with an optional body, or modify these tests to use other non-Looker spec input
     it('optional body and additional param', () => {
-      const method = apiTestModel.methods['create_user_credentials_email']
+      const method = apiTestModel.methods.create_user_credentials_email
       expect(method).toBeDefined()
       const expected = `/**
  * ### Email/password login information for the specified user.
@@ -183,7 +185,7 @@ async create_user_credentials_email(
       expect(actual).toEqual(expected)
     })
     it('no params', () => {
-      const method = apiTestModel.methods['all_datagroups']
+      const method = apiTestModel.methods.all_datagroups
       expect(method).toBeDefined()
       const expected = `/**
  * ### Get information about all datagroups.
@@ -200,7 +202,7 @@ async all_datagroups(
 
   describe('method body', () => {
     it('encodes string path params', () => {
-      const method = apiTestModel.methods['run_url_encoded_query']
+      const method = apiTestModel.methods.run_url_encoded_query
       const expected = `  model_name = encodeParam(model_name)
   view_name = encodeParam(view_name)
   result_format = encodeParam(result_format)
@@ -210,7 +212,7 @@ async all_datagroups(
     })
     // TODO eventually add method that has a date type path param
     it('encodes only string or date path params', () => {
-      const method = apiTestModel.methods['run_look']
+      const method = apiTestModel.methods.run_look
       // should NOT escape request.look_id (int)
       const expected =
         '  request.result_format = encodeParam(request.result_format)\n'
@@ -218,21 +220,21 @@ async all_datagroups(
       expect(actual).toEqual(expected)
     })
     it('assert response is model add_group_group', () => {
-      const method = apiTestModel.methods['add_group_group']
+      const method = apiTestModel.methods.add_group_group
       const expected =
         'return this.post<IGroup, IError>(`/groups/${group_id}/groups`, null, body, options)'
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
     it('assert response is None delete_group_from_group', () => {
-      const method = apiTestModel.methods['delete_group_from_group']
+      const method = apiTestModel.methods.delete_group_from_group
       const expected =
         'return this.delete<void, IError>(`/groups/${group_id}/groups/${deleting_group_id}`, null, null, options)'
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
     it('assert response is list active_themes', () => {
-      const method = apiTestModel.methods['active_themes']
+      const method = apiTestModel.methods.active_themes
       const expected = `return this.get<ITheme[], IError>('/themes/active', 
   {name: request.name, ts: request.ts, fields: request.fields}, null, options)`
       const actual = gen.httpCall(indent, method)
@@ -242,17 +244,17 @@ async all_datagroups(
 
   describe('type creation', () => {
     it('request type with body', () => {
-      const method = apiTestModel.methods['create_dashboard_render_task']
+      const method = apiTestModel.methods.create_dashboard_render_task
       const type = apiTestModel.getRequestType(method)
       expect(type).toBeDefined()
       if (type) {
-        const dashboard_id = type.properties['dashboard_id']
+        const dashboard_id = type.properties.dashboard_id
         const actual_dashboard_id = gen.declareProperty(indent, dashboard_id)
         expect(actual_dashboard_id).toEqual(`/**
  * Id of dashboard to render. The ID can be a LookML dashboard also.
  */
 dashboard_id: string`)
-        const body = type.properties['body']
+        const body = type.properties.body
         const actual_body = gen.declareProperty(indent, body)
         expect(actual_body).toEqual(`/**
  * body parameter for dynamically created request type
@@ -280,7 +282,7 @@ body: ICreateDashboardRenderTask`)
       }
     })
     it('with arrays and hashes', () => {
-      const type = apiTestModel.types['Workspace']
+      const type = apiTestModel.types.Workspace
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface IWorkspace{
   /**
@@ -298,7 +300,7 @@ body: ICreateDashboardRenderTask`)
 }`)
     })
     it('with refs, arrays and nullable', () => {
-      const type = apiTestModel.types['ApiVersion']
+      const type = apiTestModel.types.ApiVersion
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface IApiVersion{
   /**
@@ -313,7 +315,7 @@ body: ICreateDashboardRenderTask`)
 }`)
     })
     it('required properties', () => {
-      const type = apiTestModel.types['CreateQueryTask']
+      const type = apiTestModel.types.CreateQueryTask
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(`export interface ICreateQueryTask{
   /**

@@ -1,67 +1,69 @@
 {
+  "license": "MIT",
+  "name": "sdk-codegen-all",
+  "description": "All workspaces for SDK code generation",
+  "author": "Looker",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
-  "name": "sdk-codegen-all",
-  "version": "0.2.0-beta-3",
-  "description": "A utility for generating SDKs for various languages from an OpenApi specification",
-  "devDependencies": {
-    "@looker/eslint-config": "^1.0.16",
-    "@looker/prettier-config": "^1.0.15",
-    "@openapitools/openapi-generator-cli": "^1.0.2-4.2.0",
-    "@types/node-fetch": "^2.3.3",
-    "swagger2openapi": "^6.0.3",
-    "eslint": "^6.8.0",
-    "file-type": "^12.3.0",
-    "lerna": "^3.20.2",
-    "tslint": "^5.15.0",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-config-standard": "8.0.1"
+  "homepage": "https://github.com/looker-open-source/sdk-codegen#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/looker-open-source/sdk-codegen.git"
   },
-  "resolutions": {
-    "set-value": "^2.0.1"
+  "bugs": {
+    "url": "https://github.com/looker-open-source/sdk-codegen/issues"
+  },
+  "engines": {
+    "node": ">=12",
+    "yarn": ">=1.14.0"
   },
   "scripts": {
     "convert": "ts-node packages/scripts/src/specConvert.ts",
     "legacy": "ts-node packages/scripts/src/legacy.ts",
     "sdk": "ts-node packages/scripts/src/sdkGen.ts",
     "jsonify": "ts-node packages/scripts/src/yamlToJson.ts",
-    "view": "npx redoc-cli serve",
-    "clean": "yarn clean-dist && rm -rf api/ && rm *.?.?.json && rm *.?.?.oas.json",
-    "clean-dist": "lerna run clean",
+    "view": "yarn api-explorer",
+    "wipe": "rm -rf api/ && rm *.?.?.json && rm *.?.?.oas.json",
+
+    "prebuild": "yarn clean",
+    "build": "run-p -c build:*",
+    "build:es": "yarn lerna exec --scope '@looker/*' --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments'",
+    "build:ts": "yarn lerna exec --stream --scope '@looker/*' --sort 'tsc -b tsconfig.build.json'",
+    "clean": "rm -Rf packages/*/dist packages/*/lib packages/*/*.tsbuildinfo",
+    "prepublishOnly": "yarn test",
+    "deploy": "yarn workspace sdk deploy",
     "deploy:codegen": "lerna run deploy --scope sdk-codegen -c",
     "deploy:sdk": "lerna run deploy --scope sdk",
-    "test": "lerna run test",
+    "fix": "yarn lint:es --fix",
+    "lint": "run-p -c lint:*",
+    "lint:css": "stylelint 'packages/**/*.ts{,x}'",
+    "lint:es": "eslint 'packages/**/*.ts{,x}' --cache",
+    "lint:ts": "tsc",
+    "lint-staged": "yarn exec lint-staged",
+    "test": "yarn jest",
     "test:ts": "yarn jest --reporters=default --reporters=jest-junit",
     "test:iphone": "xcodebuild test -project swift/looker/looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.4.1' | xcpretty --test --color",
     "test:jest": "DOT_ENV_FILE=.env.test jest",
-    "ci:test": "yarn lint && yarn test",
-    "build": "lerna run build",
-    "bootstrap": "lerna clean -y && lerna bootstrap",
-    "lint": "run-p -c lint:*",
-    "lint-fix": "run-p -c 'lint:es --fix'",
-    "lint:es": "eslint 'packages/**/*.ts{,x}' 'services/**/*.ts{,x}'",
-    "lint:tsc": "tsc",
-    "prettify": "prettier 'packages/**/*.ts?(x)' 'services/**/*.ts?(x)'",
-    "prettify-fix": "prettier --write 'packages/**/*.ts?(x)' 'services/**/*.ts?(x)'",
-    "prepare": "yarn build"
+    "bootstrap": "lerna clean -y && lerna bootstrap"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/looker-open-source/sdk-codegen.git"
-  },
-  "keywords": [],
-  "author": "Looker",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/looker-open-source/sdk-codegen/issues"
-  },
-  "engines": {
-    "node": ">=12"
-  },
-  "homepage": "https://github.com/looker-open-source/sdk-codegen#readme",
-  "dependencies": {
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
+    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "7.9.4",
+    "@babel/preset-typescript": "^7.9.0",
+    "@babel/runtime": "^7.9.2",
+    "@looker/eslint-config": "^1.0.14",
+    "@looker/prettier-config": "^1.0.15",
+    "@testing-library/jest-dom": "^5.5.0",
+    "@types/node": "^13.13.4",
     "@stoplight/spectral": "^5.0.0",
     "@types/blueimp-md5": "^2.7.0",
     "@types/ini": "^1.3.30",
@@ -69,27 +71,123 @@
     "@types/js-yaml": "^3.12.1",
     "@types/lodash": "^4.14.144",
     "@types/mustache": "^0.8.32",
-    "@types/node": "^11.13.7",
     "@types/prettier": "^1.18.2",
     "@types/readable-stream": "^2.3.5",
     "@types/request": "^2.48.3",
     "@types/request-promise-native": "^1.0.17",
-    "blueimp-md5": "^2.11.0",
-    "ini": "^1.3.5",
-    "jest": "^24.8.0",
+    "babel-core": "^7.0.0-bridge",
+    "babel-plugin-styled-components": "^1.10.7",
+    "core-js": "^3.6.5",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "eslint": "^6.8.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-import-resolver-webpack": "^0.12.1",
+    "eslint-plugin-header": "^3.0.0",
+    "eslint-plugin-mdx": "^1.6.8",
+    "eslint-plugin-sort-keys-fix": "^1.1.1",
+    "jest": "^25.1.0",
+    "jest-canvas-mock": "^2.2.0",
+    "jest-styled-components": "^6.3.4",
+    "lerna": "^3.20.2",
+    "lint-staged": "^10.2.2",
+    "npm-run-all": "^4.1.5",
+    "pre-commit": "1.2.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "styled-components": "^4.4.1",
+    "ts-jest": "^25.4.0",
+    "typescript": "^3.8.3",
+    "ts-node": "^8.1.0",
     "jest-junit": "^10.0.0",
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.15",
     "node-fetch": "^2.6.0",
     "openapi3-ts": "^1.3.0",
     "prettier": "^1.18.2",
-    "readable-stream": "^3.4.0",
-    "redoc-cli": "^0.9.5",
-    "request": "^2.88.0",
-    "request-promise-native": "^1.0.7",
-    "ts-jest": "^24.1.0",
-    "ts-node": "^8.1.0",
-    "typescript": "^3.6.0"
+    "eslint-plugin-prettier": "^3.1.3"
   },
-  "prettier": "@looker/prettier-config"
+  "dependencies": {
+  },
+  "lint-staged": {
+    "**/*.ts?(x)": [
+      "stylelint",
+      "eslint",
+      "git add"
+    ],
+    "**/*.js?(x)": [
+      "git add"
+    ],
+    "**/*.mdx": [
+      "eslint",
+      "git add"
+    ]
+  },
+  "pre-commit": [
+    "lint-staged"
+  ],
+  "eslintConfig": {
+    "extends": [
+      "@looker/eslint-config/no-type-checking"
+    ],
+    "plugins": [
+      "header",
+      "prettier",
+      "sort-keys-fix"
+    ],
+    "rules": {
+      "prettier/prettier": "error",
+      "@typescript-eslint/no-explicit-any": "off",
+      "header/header": [
+        2,
+        "config/license-header.js"
+      ],
+      "import/default": "off",
+      "sort-keys-fix/sort-keys-fix": "warn"
+    },
+    "settings": {
+      "import/resolver": {
+        "typescript": {
+          "directory": "./tsconfig.json"
+        }
+      },
+      "import/external-module-folders": [
+        "node_modules",
+        "packages"
+      ]
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/*.mdx"
+        ],
+        "extends": [
+          "plugin:mdx/recommended"
+        ],
+        "rules": {
+          "mdx/no-unescaped-entities": "off",
+          "sort-keys": "off",
+          "header/header": "off"
+        }
+      },
+      {
+        "files": [
+          "**/*.ts"
+        ],
+        "rules": {
+          "@typescript-eslint/interface-name-prefix": "off",
+          "@typescript-eslint/no-unused-vars" : "warn",
+          "@typescript-eslint/camelcase": "off"
+        }
+      }
+    ]
+  },
+  "prettier": "@looker/prettier-config",
+  "stylelint": {
+    "extends": "@looker/eslint-config/stylelint"
+  },
+  "keywords": [],
+  "resolutions": {
+    "set-value": "^2.0.1"
+  }
 }

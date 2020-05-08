@@ -1,30 +1,17 @@
 {
+  "extends": "./tsconfig.common.json",
   "compilerOptions": {
-    "declaration": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noImplicitReturns": true,
-    "noImplicitAny": true,
-    "noFallthroughCasesInSwitch": true,
-    "strict": true,
-    "esModuleInterop": true,
-    "target": "es6",
-    "lib": ["es6", "es2017.object", "dom"],
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
+    "noEmit": true,
+    "pretty": true,
     "baseUrl": ".",
     "paths": {
-      "rtl/*": ["packages/sdk/src/rtl/*"],
-      "@looker/*": ["./*/src"]
-    },
-    "plugins": [
-      {
-        "name": "tslint-language-service",
-        "alwaysShowRuleFailuresAsWarnings": true
-      }
-    ]
+      "@looker/sdk": ["packages/sdk/src"],
+      "@looker/sdk-codegen-scripts": ["packages/scripts/src"],
+      "@looker/sdk-codegen": ["packages/sdk-codegen/src"],
+      "@looker/sdk-utils": ["packages/utils/src"],
+      "@looker/test-utils": ["packages/test-utils/src"]
+    }
   },
-  "include": ["packages"],
-  "inputs": [],
-  "exclude": ["dist"]
+  "include": ["packages/*/src"],
+  "exclude": ["packages/*/lib", "packages/*/dist"]
 }

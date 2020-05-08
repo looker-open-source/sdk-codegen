@@ -1,44 +1,56 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
+import { Readable } from 'readable-stream'
 import {
   SDKResponse,
   HttpMethod,
-  ITransportSettings, Values, sdkOk, agentPrefix, Authenticator, addQueryParams,
+  ITransportSettings,
+  Values,
+  sdkOk,
+  agentPrefix,
+  Authenticator,
 } from './transport'
-import { Readable } from 'readable-stream'
 import { IAuthSession } from './authSession'
 import { defaultApiVersion, lookerVersion } from './constants'
 
 export class APIMethods {
   private readonly apiPath: string = ''
-  apiVersion : string = defaultApiVersion
-  constructor(public authSession: IAuthSession, apiVersion: string = defaultApiVersion) {
+  apiVersion: string = defaultApiVersion
+  constructor(
+    public authSession: IAuthSession,
+    apiVersion: string = defaultApiVersion
+  ) {
     this.authSession = authSession
     this.apiVersion = apiVersion
     this.authSession.settings.agentTag = `${agentPrefix} ${lookerVersion}.${this.apiVersion}`
-    this.apiPath = authSession.settings.base_url === '' ? '' : `${authSession.settings.base_url}/api/${this.apiVersion}`
+    this.apiPath =
+      authSession.settings.base_url === ''
+        ? ''
+        : `${authSession.settings.base_url}/api/${this.apiVersion}`
   }
 
   /** A helper method for constructing with a type as a param
@@ -49,7 +61,10 @@ export class APIMethods {
    * @param type
    * @param authSession
    */
-  static create<T extends APIMethods>(type: (new (authSession: IAuthSession) => T), authSession: IAuthSession): T {
+  static create<T extends APIMethods>(
+    type: new (authSession: IAuthSession) => T,
+    authSession: IAuthSession
+  ): T {
     return new type(authSession)
   }
 
@@ -90,10 +105,10 @@ export class APIMethods {
   makePath(
     path: string,
     options: Partial<ITransportSettings>,
-    authenticator?: Authenticator,
+    authenticator?: Authenticator
   ) {
     // is this an API-versioned call?
-    let base = (authenticator ? this.apiPath : options.base_url)!
+    const base = (authenticator ? this.apiPath : options.base_url)!
     if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {
       path = `${base}${path}` // path was relative
     }
@@ -115,9 +130,9 @@ export class APIMethods {
     path: string,
     queryParams?: Values,
     body?: any,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
-    options = { ...this.authSession.settings, ...options}
+    options = { ...this.authSession.settings, ...options }
     const authenticator = (init: any) => {
       return this.authSession.authenticate(init)
     }
@@ -128,7 +143,7 @@ export class APIMethods {
       queryParams,
       body,
       authenticator,
-      options,
+      options
     )
   }
 
@@ -149,9 +164,8 @@ export class APIMethods {
     queryParams?: Values,
     body?: any,
     options?: Partial<ITransportSettings>
-  )
-    : Promise<T> {
-    options = { ...this.authSession.settings, ...options}
+  ): Promise<T> {
+    options = { ...this.authSession.settings, ...options }
     const authenticator = (init: any) => {
       return this.authSession.authenticate(init)
     }
@@ -165,9 +179,8 @@ export class APIMethods {
       (init: any) => {
         return this.authSession.authenticate(init)
       },
-      options,
+      options
     )
-
   }
 
   // // dynamically evaluate a template string
@@ -188,14 +201,14 @@ export class APIMethods {
     path: string,
     queryParams?: Values,
     body?: any,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
     return this.authRequest<TSuccess, TError>(
       'GET',
       path,
       queryParams,
       body,
-      options,
+      options
     )
   }
 
@@ -204,14 +217,14 @@ export class APIMethods {
     path: string,
     queryParams?: Values,
     body?: any,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
     return this.authRequest<TSuccess, TError>(
       'HEAD',
       path,
       queryParams,
       body,
-      options,
+      options
     )
   }
 
@@ -220,14 +233,14 @@ export class APIMethods {
     path: string,
     queryParams?: Values,
     body?: any,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
     return this.authRequest<TSuccess, TError>(
       'DELETE',
       path,
       queryParams,
       body,
-      options,
+      options
     )
   }
 
@@ -236,14 +249,14 @@ export class APIMethods {
     path: string,
     queryParams?: Values,
     body?: any,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
     return this.authRequest<TSuccess, TError>(
       'POST',
       path,
       queryParams,
       body,
-      options,
+      options
     )
   }
 
@@ -252,14 +265,14 @@ export class APIMethods {
     path: string,
     queryParams?: Values,
     body?: any,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
     return this.authRequest<TSuccess, TError>(
       'PUT',
       path,
       queryParams,
       body,
-      options,
+      options
     )
   }
 
@@ -268,14 +281,14 @@ export class APIMethods {
     path: string,
     queryParams?: Values,
     body?: any,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
     return this.authRequest<TSuccess, TError>(
       'PATCH',
       path,
       queryParams,
       body,
-      options,
+      options
     )
   }
 }

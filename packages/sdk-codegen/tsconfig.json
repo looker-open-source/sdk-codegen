@@ -1,11 +1,4 @@
 {
-  "extends": "../../tsconfig",
-  "compilerOptions": {
-    "target": "es5",
-    "lib": ["es2015", "es6", "dom", "es2015.promise"],
-    "outDir": "./dist",
-    "rootDir": "./src"
-  },
-  "exclude": ["**/*.spec.*"],
-  "include": ["./src"]
+  "extends": "../../tsconfig.json",
+  "include": ["src/**/*"]
 }

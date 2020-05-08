@@ -1,38 +1,35 @@
 #!/usr/bin/env node
 
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
 
-/**
- * Converts a swagger (OpenAPI 2.x) specification file to an OpenAPI 3.x specification file and fixes up
- * all missing references
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
+import * as path from 'path'
+import { log } from '@looker/sdk-codegen-utils'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { convertSpec } from './convert'
 import { quit } from './nodeUtils'
-import * as path from 'path'
-import { log } from '@looker/sdk-codegen-utils'
 import { logConvert } from './fetchSpec'
 
 const apiVersions = (props: any) => {
@@ -42,19 +39,20 @@ const apiVersions = (props: any) => {
 
 const fetchAndConvert = async () => {
   const config = SDKConfig()
-  let [name, props] = Object.entries(config)[0]
+  const [name, props] = Object.entries(config)[0]
   // Iterate through all specified API versions
   const apis = apiVersions(props)
   for (const api of apis) {
-    let p = JSON.parse(JSON.stringify(props)) as ISDKConfigProps
+    const p = JSON.parse(JSON.stringify(props)) as ISDKConfigProps
     p.api_version = api
-    void await logConvert(name, p)
+    void (await logConvert(name, p))
   }
 }
-
-(async () => {
-
-  if (process.argv.length < 3) log(`yarn ts-node ${process.argv[1]} [Swagger file name] [OpenApi file name]`)
+;(async () => {
+  if (process.argv.length < 3)
+    log(
+      `yarn ts-node ${process.argv[1]} [Swagger file name] [OpenApi file name]`
+    )
   const args = process.argv.slice(2)
   try {
     if (args.length > 0) {
@@ -68,9 +66,10 @@ const fetchAndConvert = async () => {
       }
       log(`Converting ${swagger} to ${oas} ...`)
       convertSpec(swagger, oas)
-
     } else {
-      log('using looker.ini as the source for fetching and converting specifications ...')
+      log(
+        'using looker.ini as the source for fetching and converting specifications ...'
+      )
       await fetchAndConvert()
     }
   } catch (e) {

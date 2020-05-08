@@ -1,36 +1,43 @@
 #!/usr/bin/env node
 
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 import * as fs from 'fs'
-import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { danger, log } from '@looker/sdk-codegen-utils'
-import { fetchLookerVersion, logConvert, openApiFileName } from './fetchSpec'
-import { MethodGenerator, specFromFile, StreamGenerator, TypeGenerator } from './sdkGenerator'
-import { getFormatter, Languages } from './languages'
 import { IVersionInfo, ICodeGen } from '@looker/sdk-codegen'
+import { ISDKConfigProps, SDKConfig } from './sdkConfig'
+import { fetchLookerVersion, logConvert, openApiFileName } from './fetchSpec'
+import {
+  MethodGenerator,
+  specFromFile,
+  StreamGenerator,
+  TypeGenerator,
+} from './sdkGenerator'
+import { getFormatter, Languages } from './languages'
 import { FilesFormatter } from './reformatter'
 import { isDirSync, quit } from './nodeUtils'
 
@@ -45,7 +52,7 @@ const apiVersions = (props: any) => {
  */
 const sdkPathPrep = (gen: ICodeGen) => {
   const path = `${gen.codePath}${gen.packagePath}/sdk/${gen.apiVersion}`
-  if (!isDirSync(path)) fs.mkdirSync(path, {recursive: true})
+  if (!isDirSync(path)) fs.mkdirSync(path, { recursive: true })
   return path
 }
 
@@ -62,38 +69,37 @@ const writeFile = (fileName: string, content: string): string => {
   formatter.addFile(fileName)
   return fileName
 }
-
 ;(async () => {
-  let args = process.argv.slice(2)
-  let languages = Languages.filter(l => l.factory !== undefined).map(
-    l => l.language
+  const args = process.argv.slice(2)
+  let languages = Languages.filter((l) => l.factory !== undefined).map(
+    (l) => l.language
   )
   if (args.length > 0) {
     if (args.toString().toLowerCase() !== 'all') {
       languages = []
-      for (let arg of args) {
+      for (const arg of args) {
         const values = arg.toString().split(',')
-        values.forEach(v => (v.trim() ? languages.push(v.trim()) : null))
+        values.forEach((v) => (v.trim() ? languages.push(v.trim()) : null))
       }
     }
   }
 
   try {
     const config = SDKConfig()
-    for (let language of languages) {
-      let [name, props] = Object.entries(config)[0]
+    for (const language of languages) {
+      const [name, props] = Object.entries(config)[0]
       const lookerVersion = await fetchLookerVersion(props)
       // Iterate through all specified API versions
       const apis = apiVersions(props)
-      const lastApi = apis[apis.length-1]
+      const lastApi = apis[apis.length - 1]
       for (const api of apis) {
-        let p = JSON.parse(JSON.stringify(props)) as ISDKConfigProps
+        const p = JSON.parse(JSON.stringify(props)) as ISDKConfigProps
         p.api_version = api
         const versions: IVersionInfo = {
+          apiVersion: api,
           lookerVersion,
-          apiVersion: api
         }
-        void await logConvert(name, p)
+        void (await logConvert(name, p))
         const oasFile = openApiFileName(name, p)
         // const swaggerFile = specFileName(name, p)
         const apiModel = specFromFile(oasFile)
@@ -103,7 +109,9 @@ const writeFile = (fileName: string, content: string): string => {
           continue
         }
         if (api !== lastApi && !gen.supportsMultiApi()) {
-          danger(`skipping API ${api} for ${language} because it doesn't support multiple APIs`)
+          danger(
+            `skipping API ${api} for ${language} because it doesn't support multiple APIs`
+          )
           continue
         }
         log(`generating ${language} from ${props.base_url} ${api}...`)
@@ -117,7 +125,7 @@ const writeFile = (fileName: string, content: string): string => {
         if (gen.willItStream) {
           // Generate streaming method declarations
           const s = new StreamGenerator(apiModel, gen)
-          let output = s.render(gen.indentStr)
+          const output = s.render(gen.indentStr)
           writeFile(gen.sdkFileName(`streams`), output)
         }
 

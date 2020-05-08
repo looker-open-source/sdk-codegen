@@ -1,27 +1,34 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
+import nodeCrypto from 'crypto'
+import rq, { Request } from 'request'
+
+import rp from 'request-promise-native'
+import { PassThrough, Readable } from 'readable-stream'
 import {
   Authenticator,
   defaultTimeout,
@@ -31,20 +38,18 @@ import {
   responseMode,
   ResponseMode,
   SDKResponse,
-  StatusCode, trace, Values, IRequestHeaders, LookerAppId, agentPrefix, IRawResponse,
+  trace,
+  Values,
+  IRequestHeaders,
+  LookerAppId,
+  IRawResponse,
 } from './transport'
-
-import rq, { Response, Request } from 'request'
-import rp from 'request-promise-native'
-import { PassThrough, Readable } from 'readable-stream'
 import { BaseTransport } from './baseTransport'
-import {ICryptoHash} from "./cryptoHash";
-import nodeCrypto from 'crypto';
+import { ICryptoHash } from './cryptoHash'
 
 export class NodeCryptoHash implements ICryptoHash {
-
-  secureRandom(byte_count: number): string {
-    return nodeCrypto.randomBytes(byte_count).toString('hex')
+  secureRandom(byteCount: number): string {
+    return nodeCrypto.randomBytes(byteCount).toString('hex')
   }
 
   async sha256Hash(message: string): Promise<string> {
@@ -88,7 +93,6 @@ async function parseResponse(res: IRawResponse) {
 }
 
 export class NodeTransport extends BaseTransport {
-
   constructor(protected readonly options: ITransportSettings) {
     super(options)
   }
@@ -101,24 +105,23 @@ export class NodeTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<IRawResponse> {
-    let init = await this.initRequest(
+    const init = await this.initRequest(
       method,
       path,
       queryParams,
       body,
       authenticator,
-      options,
+      options
     )
     const req = rp(init).promise()
     const res = await req
     const resTyped = res as rq.Response
     return {
+      body: await resTyped.body,
+      contentType: String(resTyped.headers['content-type']),
       statusCode: resTyped.statusCode,
       statusMessage: resTyped.statusMessage,
-      contentType: String(resTyped.headers['content-type']),
-      body: await resTyped.body
     }
-
   }
 
   async request<TSuccess, TError>(
@@ -129,24 +132,30 @@ export class NodeTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
-
     try {
-      const res = await this.rawRequest(method, path, queryParams, body, authenticator, options)
+      const res = await this.rawRequest(
+        method,
+        path,
+        queryParams,
+        body,
+        authenticator,
+        options
+      )
       const parsed = await parseResponse(res)
       if (this.ok(res)) {
-        return {ok: true, value: parsed}
+        return { ok: true, value: parsed }
       } else {
-        return {ok: false, error: parsed}
+        return { error: parsed, ok: false }
       }
     } catch (e) {
       const error: ISDKError = {
-        type: 'sdk_error',
         message:
           typeof e.message === 'string'
             ? e.message
             : `The SDK call was not successful. The error was '${e}'.`,
+        type: 'sdk_error',
       }
-      return {ok: false, error}
+      return { error, ok: false }
     }
   }
 
@@ -158,13 +167,20 @@ export class NodeTransport extends BaseTransport {
   protected requestor(props: RequestOptions): Request {
     const method = props.method!.toString().toUpperCase() as HttpMethod
     switch (method) {
-      case 'GET': return rq.get(props)
-      case 'PUT': return rq.put(props)
-      case 'POST': return rq.post(props)
-      case 'PATCH': return rq.patch(props)
-      case 'DELETE': return rq.put(props)
-      case 'HEAD': return rq.head(props)
-      default: return rq.get(props)
+      case 'GET':
+        return rq.get(props)
+      case 'PUT':
+        return rq.put(props)
+      case 'POST':
+        return rq.post(props)
+      case 'PATCH':
+        return rq.patch(props)
+      case 'DELETE':
+        return rq.put(props)
+      case 'HEAD':
+        return rq.head(props)
+      default:
+        return rq.get(props)
     }
   }
 
@@ -176,18 +192,16 @@ export class NodeTransport extends BaseTransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  )
-    : Promise<TSuccess> {
-
+  ): Promise<TSuccess> {
     const stream = new PassThrough()
     const returnPromise = callback(stream)
-    let init = await this.initRequest(
+    const init = await this.initRequest(
       method,
       path,
       queryParams,
       body,
       authenticator,
-      options,
+      options
     )
 
     const streamPromise = new Promise<void>((resolve, reject) => {
@@ -196,41 +210,44 @@ export class NodeTransport extends BaseTransport {
       const req = this.requestor(init)
 
       req
-        .on("error", (err) => {
-          if (hasResolved && (err as any).code === "ECONNRESET") {
-            trace('ignoring ECONNRESET that occurred after streaming finished', init)
+        .on('error', (err) => {
+          if (hasResolved && (err as any).code === 'ECONNRESET') {
+            trace(
+              'ignoring ECONNRESET that occurred after streaming finished',
+              init
+            )
           } else {
             trace('streaming error', err)
             reject(err)
           }
         })
-        .on("finish", () => {
+        .on('finish', () => {
           trace(`[stream] streaming via download url finished`, init)
         })
-        .on("socket", (socket) => {
+        .on('socket', (socket) => {
           trace(`[stream] setting keepalive on socket`, init)
           socket.setKeepAlive(true)
         })
-        .on("abort", () => {
+        .on('abort', () => {
           trace(`[stream] streaming via download url aborted`, init)
         })
-        .on("response", () => {
+        .on('response', () => {
           trace(`[stream] got response from download url`, init)
         })
-        .on("close", () => {
+        .on('close', () => {
           trace(`[stream] request stream closed`, init)
         })
         .pipe(stream)
-        .on("error", (err) => {
+        .on('error', (err) => {
           trace(`[stream] PassThrough stream error`, err)
           reject(err)
         })
-        .on("finish", () => {
+        .on('finish', () => {
           trace(`[stream] PassThrough stream finished`, init)
           resolve()
           hasResolved = true
         })
-        .on("close", () => {
+        .on('close', () => {
           trace(`[stream] PassThrough stream closed`, init)
         })
     })
@@ -266,9 +283,9 @@ export class NodeTransport extends BaseTransport {
     queryParams?: any,
     body?: any,
     authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
-    options = options ? {...this.options, ...options} : this.options
+    options = options ? { ...this.options, ...options } : this.options
     const headers: IRequestHeaders = {
       [LookerAppId]: options.agentTag!,
       ...options.headers,
@@ -276,15 +293,20 @@ export class NodeTransport extends BaseTransport {
 
     const requestPath = this.makeUrl(path, options, queryParams)
     let init: RequestOptions = {
-      url: requestPath,
+      body: body || undefined,
+      encoding: null,
       headers: headers,
-      body: body ? body : undefined,
-      json: body && typeof body !== 'string', // If body is a string, pass as is
-      resolveWithFullResponse: true,
-      rejectUnauthorized: this.verifySsl(options),
-      timeout: this.timeout(options) * 1000,
-      encoding: null, // null = requests are returned as binary so `Content-Type` dictates response format
+      json: body && typeof body !== 'string',
+      // null = requests are returned as binary so `Content-Type` dictates response format
       method,
+
+      rejectUnauthorized: this.verifySsl(options),
+
+      // If body is a string, pass as is
+      resolveWithFullResponse: true,
+
+      timeout: this.timeout(options) * 1000,
+      url: requestPath,
     }
     if ('encoding' in options) init.encoding = options.encoding
 
@@ -390,5 +412,4 @@ export class NodeTransport extends BaseTransport {
   //     })
   //   })
   // }
-
 }

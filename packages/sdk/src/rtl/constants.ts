@@ -1,25 +1,27 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 export const defaultApiVersion = '3.1'
@@ -45,7 +47,8 @@ export const matchModeString = `(^application\\/.*(\\bjson\\b|\\bxml\\b|\\bsql\\
  * Matching rules for all binary or unknown types. Binary matches must be checked *after* string matches
  * @type {string} Regular expression for matching Content-Type headers
  */
-export const matchModeBinary = '^image\\/|^audio\\/|^video\\/|^font\\/|^application\\/|^multipart\\/'
+export const matchModeBinary =
+  '^image\\/|^audio\\/|^video\\/|^font\\/|^application\\/|^multipart\\/'
 
 /**
  * Does this string mean "true"
@@ -67,7 +70,7 @@ export const isFalse = (value: string) => /^(false|f|no|n|0)$/i.test(value)
  * @param {boolean} defaultBool is the value to return if the string doesn't match. defaults to false.
  * @returns {boolean} true or false
  */
-export const boolDefault = (value: string, defaultBool: boolean = false) => {
+export const boolDefault = (value: string, defaultBool = false) => {
   if (isTrue(value)) return true
   if (isFalse(value)) return false
   return defaultBool
@@ -78,7 +81,7 @@ export const boolDefault = (value: string, defaultBool: boolean = false) => {
  * @param {string | null} value to unquote
  * @returns {string | null} unquoted string if it begins and ends with the same character out of `\` " '`
  */
-export const unquote = (value: string | undefined | null) : string => {
+export const unquote = (value: string | undefined | null): string => {
   if (!value) return ''
   if (/^['\"`]/.test(value)) {
     const quote = value.substring(0, 1)

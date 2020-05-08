@@ -1,30 +1,37 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 import * as OAS from 'openapi3-ts'
 import md5 from 'blueimp-md5'
-import { HttpMethod, ResponseMode, responseMode, StatusCode } from '@looker/sdk/dist/browser'
+import {
+  HttpMethod,
+  ResponseMode,
+  responseMode,
+  StatusCode,
+} from '@looker/sdk/lib/browser'
 import { IVersionInfo } from './codeGen'
 
 export const strBody = 'body'
@@ -41,22 +48,22 @@ export declare type Arg = string
  * @param value string value to convert to camelCase
  */
 export const camelCase = (value: string) => {
-  return value.replace(/([-_][a-z])/ig, ($1) => {
-    return $1.toUpperCase()
+  return value.replace(/([-_][a-z])/gi, ($1) => {
+    return $1
+      .toUpperCase()
       .replace('-', '')
       .replace('_', '')
   })
 }
 
-export interface IModel {
-}
+export interface IModel {}
 
 /**
  * create a "searchable" string that can be concatenated to a larger search string
  * @param {string} value to search
  * @returns {string} value plus search delimiter
  */
-const searchIt = (value: string) => value ? value + '\n' : ''
+const searchIt = (value: string) => (value ? value + '\n' : '')
 
 export interface ISymbol {
   name: string
@@ -73,7 +80,6 @@ export interface ISymbol {
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(rx: RegExp, criteria: SearchCriteria): boolean
-
 }
 
 export type IKeyedCollection<T> = Record<string, T>
@@ -101,7 +107,7 @@ export const keyValues = (keys: IKeyList): string[] => {
 export const methodRefs = (api: IApiModel, refs: IKeyList): IMethod[] => {
   const keys = keyValues(refs)
   const result: IMethod[] = []
-  keys.forEach(k => {
+  keys.forEach((k) => {
     if (k in api.methods) {
       result.push(api.methods[k])
     }
@@ -118,7 +124,7 @@ export const methodRefs = (api: IApiModel, refs: IKeyList): IMethod[] => {
 export const typeRefs = (api: IApiModel, refs: IKeyList): IType[] => {
   const keys = keyValues(refs)
   const result: IType[] = []
-  keys.forEach(k => {
+  keys.forEach((k) => {
     if (k in api.types) {
       result.push(api.types[k])
     }
@@ -162,14 +168,16 @@ export const SearchAll: SearchCriteria = new Set([
 ])
 
 export const CriteriaToSet = (criteria: string[]): SearchCriteria => {
-  let result: SearchCriteria = new Set()
-  criteria.forEach(name => result.add(SearchCriterion[name.toLowerCase() as SearchCriterionTerm]))
+  const result: SearchCriteria = new Set()
+  criteria.forEach((name) =>
+    result.add(SearchCriterion[name.toLowerCase() as SearchCriterionTerm])
+  )
   return result
 }
 
 export const SetToCriteria = (criteria: SearchCriteria): string[] => {
-  let result: string[] = []
-  criteria.forEach(value => result.push(SearchCriterion[value]))
+  const result: string[] = []
+  criteria.forEach((value) => result.push(SearchCriterion[value]))
   return result
 }
 
@@ -281,10 +289,14 @@ export interface IType {
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(rx: RegExp, criteria: SearchCriteria): boolean
-
 }
 
-export declare type MethodParameterLocation = 'path' | 'body' | 'query' | 'header' | 'cookie'
+export declare type MethodParameterLocation =
+  | 'path'
+  | 'body'
+  | 'query'
+  | 'header'
+  | 'cookie'
 
 export interface IParameter extends ISymbol {
   type: IType
@@ -296,8 +308,7 @@ export interface IParameter extends ISymbol {
 
   asHashString(): string
 
-  doEncode() : boolean
-
+  doEncode(): boolean
 }
 
 export interface IMethodResponse {
@@ -319,15 +330,14 @@ export interface IMethodResponse {
 }
 
 class MethodResponse implements IMethodResponse {
-
   constructor(
     public statusCode: number,
     public mediaType: string,
     public type: IType,
-    public description: string) {
-  }
+    public description: string
+  ) {}
 
-  get mode() : ResponseMode {
+  get mode(): ResponseMode {
     return responseMode(this.mediaType)
   }
 
@@ -339,16 +349,18 @@ class MethodResponse implements IMethodResponse {
    */
   search(rx: RegExp, criteria: SearchCriteria): boolean {
     if (!criteria.has(SearchCriterion.response)) return false
-    return rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
+    return (
+      rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
+    )
   }
 
   searchString(criteria: SearchCriteria): string {
-    let result = searchIt(`${this.statusCode}`) + searchIt(`${ResponseMode[this.mode]}`)
+    let result =
+      searchIt(`${this.statusCode}`) + searchIt(`${ResponseMode[this.mode]}`)
     if (criteria.has(SearchCriterion.name)) result += searchIt(this.mediaType)
     if (criteria.has(SearchCriterion.type)) result += searchIt(this.mediaType)
     return result
   }
-
 }
 
 export interface IProperty extends ISymbol {
@@ -368,7 +380,6 @@ export interface IProperty extends ISymbol {
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(rx: RegExp, include: SearchCriteria): boolean
-
 }
 
 class Symbol implements ISymbol {
@@ -391,7 +402,9 @@ class Symbol implements ISymbol {
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(rx: RegExp, criteria: SearchCriteria): boolean {
-    return rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
+    return (
+      rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
+    )
   }
 
   searchString(criteria: Set<SearchCriterion>): string {
@@ -454,11 +467,18 @@ class SchemadSymbol extends Symbol implements ISchemadSymbol {
 }
 
 class Property extends SchemadSymbol implements IProperty {
-  required: boolean = false
+  required = false
 
-  constructor(name: string, type: IType, schema: OAS.SchemaObject, required: string[] = []) {
+  constructor(
+    name: string,
+    type: IType,
+    schema: OAS.SchemaObject,
+    required: string[] = []
+  ) {
     super(name, type, schema)
-    this.required = !!(required.includes(name) || schema.required?.includes(name))
+    this.required = !!(
+      required.includes(name) || schema.required?.includes(name)
+    )
   }
 
   get nullable(): boolean {
@@ -475,17 +495,23 @@ class Property extends SchemadSymbol implements IProperty {
   }
 
   asHashString() {
-    return super.asHashString()
-    + this.nullable ? '?' : ''
-    + this.readOnly ? ' ro' : ''
-    + this.required ? ' req' : ''
-    + this.writeOnly ? ' wo' : ''
+    return super.asHashString() + this.nullable
+      ? '?'
+      : '' + this.readOnly
+      ? ' ro'
+      : '' + this.required
+      ? ' req'
+      : '' + this.writeOnly
+      ? ' wo'
+      : ''
   }
 
   searchString(criteria: SearchCriteria): string {
     let result = super.searchString(criteria)
-    if (criteria.has(SearchCriterion.description)) result += searchIt(this.description)
-    if (criteria.has(SearchCriterion.status)) result += searchIt(this.status) + searchIt(this.deprecation)
+    if (criteria.has(SearchCriterion.description))
+      result += searchIt(this.description)
+    if (criteria.has(SearchCriterion.status))
+      result += searchIt(this.status) + searchIt(this.deprecation)
     return result
   }
 
@@ -496,15 +522,17 @@ class Property extends SchemadSymbol implements IProperty {
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(rx: RegExp, criteria: SearchCriteria): boolean {
-    return rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
+    return (
+      rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
+    )
   }
 }
 
 export class Parameter implements IParameter {
-  description: string = ''
+  description = ''
   location: MethodParameterLocation = 'query'
   name: string
-  required: boolean = false
+  required = false
   type: IType
 
   constructor(param: OAS.ParameterObject | Partial<IParameter>, type: IType) {
@@ -522,13 +550,16 @@ export class Parameter implements IParameter {
 
   asSchemaObject() {
     return {
-      nullable: !(this.required), // || this.location === strBody),
-      required: this.required ? [this.name] : undefined,
-      readOnly: false,
-      writeOnly: false,
       deprecated: false,
       description: this.description,
-      type: this.type.name
+
+      nullable: !this.required,
+
+      readOnly: false,
+      // || this.location === strBody),
+      required: this.required ? [this.name] : undefined,
+      type: this.type.name,
+      writeOnly: false,
     } as OAS.SchemaObject
   }
 
@@ -537,17 +568,24 @@ export class Parameter implements IParameter {
   }
 
   asHashString() {
-    return `${this.name}:${this.type.name}${this.required ? '' : '?'}${this.location}`
+    return `${this.name}:${this.type.name}${this.required ? '' : '?'}${
+      this.location
+    }`
   }
 
   doEncode() {
-    return this.type.name === 'string' || this.type.name === 'datetime' || this.type.name === 'date'
+    return (
+      this.type.name === 'string' ||
+      this.type.name === 'datetime' ||
+      this.type.name === 'date'
+    )
   }
 
   searchString(criteria: Set<SearchCriterion>): string {
     let result = ''
     if (criteria.has(SearchCriterion.name)) result += searchIt(this.name)
-    if (criteria.has(SearchCriterion.description)) result += searchIt(this.description)
+    if (criteria.has(SearchCriterion.description))
+      result += searchIt(this.description)
     return result
   }
 
@@ -558,7 +596,9 @@ export class Parameter implements IParameter {
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(rx: RegExp, criteria: SearchCriteria): boolean {
-    return rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
+    return (
+      rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
+    )
   }
 }
 
@@ -725,19 +765,19 @@ export interface IMethod extends ISchemadSymbol {
    * Does this method return binary responses?
    * @returns {boolean} true if binary responses are possible
    */
-  responseIsBinary() : boolean
+  responseIsBinary(): boolean
 
   /**
    * Does this method return string responses?
    * @returns {boolean} true if string responses are possible
    */
-  responseIsString() : boolean
+  responseIsString(): boolean
 
   /**
    * Does this method return both binary and string responses
    * @returns {boolean} true if both binary and string responses are possible
    */
-  responseIsBoth() : boolean
+  responseIsBoth(): boolean
 
   /**
    * Search this item for a regular expression pattern
@@ -782,20 +822,33 @@ export class Method extends SchemadSymbol implements IMethod {
   readonly customTypes: IKeyList
   readonly types: IKeyList
 
-  constructor(api: IApiModel, httpMethod: HttpMethod, endpoint: string, schema: OAS.OperationObject, params: IParameter[],
-              responses: IMethodResponse[], body?: IParameter) {
+  constructor(
+    api: IApiModel,
+    httpMethod: HttpMethod,
+    endpoint: string,
+    schema: OAS.OperationObject,
+    params: IParameter[],
+    responses: IMethodResponse[],
+    body?: IParameter
+  ) {
     if (!schema.operationId) {
       throw new Error('Missing operationId')
     }
 
-    const primaryResponse = responses.find((response) => {
-      // prefer json response over all other 200s
-      return response.statusCode === StatusCode.OK && response.mediaType === 'application/json'
-    }) || responses.find((response) => {
-      return response.statusCode === StatusCode.OK // accept any mediaType for 200 if none are json
-    }) || responses.find((response) => {
-      return response.statusCode === StatusCode.NoContent
-    })
+    const primaryResponse =
+      responses.find((response) => {
+        // prefer json response over all other 200s
+        return (
+          response.statusCode === StatusCode.OK &&
+          response.mediaType === 'application/json'
+        )
+      }) ||
+      responses.find((response) => {
+        return response.statusCode === StatusCode.OK // accept any mediaType for 200 if none are json
+      }) ||
+      responses.find((response) => {
+        return response.statusCode === StatusCode.NoContent
+      })
 
     if (!primaryResponse) {
       throw new Error(`Missing 2xx + application/json response in ${endpoint}`)
@@ -810,12 +863,12 @@ export class Method extends SchemadSymbol implements IMethod {
     this.primaryResponse = primaryResponse
     this.responseModes = this.getResponseModes()
     this.params = []
-    params.forEach(p => this.addParam(api, p))
-    responses.forEach(r => this.addType(api, r.type))
+    params.forEach((p) => this.addParam(api, p))
+    responses.forEach((r) => this.addType(api, r.type))
     if (body) {
       this.addParam(api, body)
     }
-    this.activityType = schema["x-looker-activity-type"]
+    this.activityType = schema['x-looker-activity-type']
   }
 
   /**
@@ -851,9 +904,8 @@ export class Method extends SchemadSymbol implements IMethod {
    * @returns {Set<string>} Either a set of 'string' or 'binary' or both
    */
   private getResponseModes() {
-    let modes = new Set<ResponseMode>()
+    const modes = new Set<ResponseMode>()
     for (const resp of this.responses) {
-
       // TODO should we use one of the mime packages like https://www.npmjs.com/package/mime-types for
       // more thorough/accurate coverage?
       const mode = resp.mode
@@ -861,7 +913,11 @@ export class Method extends SchemadSymbol implements IMethod {
     }
 
     if (modes.size === 0) {
-      throw new Error(`Is ${this.operationId} ${JSON.stringify(this.responses)} binary or string?`)
+      throw new Error(
+        `Is ${this.operationId} ${JSON.stringify(
+          this.responses
+        )} binary or string?`
+      )
     }
 
     return modes
@@ -881,24 +937,22 @@ export class Method extends SchemadSymbol implements IMethod {
 
   // all required parameters ordered by location declaration order
   get requiredParams() {
-    return this.required('path')
-      .concat(
-        this.required(strBody),
-        this.required('query'),
-        this.required('header'),
-        this.required('cookie')
-      )
+    return this.required('path').concat(
+      this.required(strBody),
+      this.required('query'),
+      this.required('header'),
+      this.required('cookie')
+    )
   }
 
   // all required parameters ordered by location declaration order
   get optionalParams() {
-    return this.optional('path')
-      .concat(
-        this.optional(strBody),
-        this.optional('query'),
-        this.optional('header'),
-        this.optional('cookie')
-      )
+    return this.optional('path').concat(
+      this.optional(strBody),
+      this.optional('query'),
+      this.optional('header'),
+      this.optional('cookie')
+    )
   }
 
   // all parameters ordered by required, then optional, location declaration order
@@ -952,7 +1006,7 @@ export class Method extends SchemadSymbol implements IMethod {
     // TODO use lodash or underscore?
     const result = []
     const map = new Map()
-    for (const item of this.responses.filter(r => r.statusCode >= 400)) {
+    for (const item of this.responses.filter((r) => r.statusCode >= 400)) {
       if (!map.has(item.type.name)) {
         map.set(item.type.name, true)
         result.push(item)
@@ -992,7 +1046,7 @@ export class Method extends SchemadSymbol implements IMethod {
     const locations = ['path', strBody, 'query', 'header', 'cookie']
     if (a.location === b.location) return remain // no need to re-order
 
-    for (let location of locations) {
+    for (const location of locations) {
       if (a.location === location) {
         return remain // first parameter should stay first
       }
@@ -1005,16 +1059,14 @@ export class Method extends SchemadSymbol implements IMethod {
 
   sort(list?: IParameter[]) {
     if (!list) list = this.params
-    return list
-      .sort((a, b) => this.locationSorter(a, b))
+    return list.sort((a, b) => this.locationSorter(a, b))
   }
 
   /**
    * return the list of required parameters, optionally for a specific location
    */
   required(location?: MethodParameterLocation) {
-    let list = this.params
-      .filter((i) => i.required)
+    let list = this.params.filter((i) => i.required)
     if (location) {
       list = list.filter((i) => i.location === location)
     }
@@ -1023,8 +1075,7 @@ export class Method extends SchemadSymbol implements IMethod {
 
   // return the list of optional parameters, optionally for a specific location
   optional(location?: MethodParameterLocation) {
-    let list = this.params
-      .filter((i) => !i.required)
+    let list = this.params.filter((i) => !i.required)
     if (location) {
       list = list.filter((i) => i.location === location)
     }
@@ -1036,25 +1087,29 @@ export class Method extends SchemadSymbol implements IMethod {
   }
 
   private argumentNames(location?: MethodParameterLocation): string[] {
-    return this
-      .getParams(location)
-      .map(p => p.name)
+    return this.getParams(location).map((p) => p.name)
   }
 
   isMethodSearch(criteria: SearchCriteria): boolean {
-    return criteria.has(SearchCriterion.method)
-      || criteria.has(SearchCriterion.status)
-      || criteria.has(SearchCriterion.activityType)
+    return (
+      criteria.has(SearchCriterion.method) ||
+      criteria.has(SearchCriterion.status) ||
+      criteria.has(SearchCriterion.activityType)
+    )
   }
 
   searchString(criteria: SearchCriteria): string {
     // Are we only searching for contained items of the method or not?
     if (!this.isMethodSearch(criteria)) return ''
     let result = super.searchString(criteria)
-    if (criteria.has(SearchCriterion.method) && criteria.has(SearchCriterion.description)) {
+    if (
+      criteria.has(SearchCriterion.method) &&
+      criteria.has(SearchCriterion.description)
+    ) {
       result += searchIt(this.description)
     }
-    if (criteria.has(SearchCriterion.activityType)) result += searchIt(this.activityType)
+    if (criteria.has(SearchCriterion.activityType))
+      result += searchIt(this.activityType)
     if (criteria.has(SearchCriterion.status)) {
       result += searchIt(this.status) + searchIt(this.deprecation)
     }
@@ -1068,9 +1123,10 @@ export class Method extends SchemadSymbol implements IMethod {
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(rx: RegExp, criteria: SearchCriteria): boolean {
-    let result = rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
+    let result =
+      rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
     if (!result && criteria.has(SearchCriterion.argument)) {
-      for (let a of this.params) {
+      for (const a of this.params) {
         if (a.search(rx, criteria)) {
           result = true
           break
@@ -1078,7 +1134,7 @@ export class Method extends SchemadSymbol implements IMethod {
       }
     }
     if (!result && criteria.has(SearchCriterion.response)) {
-      for (let r of this.responses) {
+      for (const r of this.responses) {
         if (r.search(rx, criteria)) {
           result = true
           break
@@ -1087,7 +1143,6 @@ export class Method extends SchemadSymbol implements IMethod {
     }
     return result
   }
-
 }
 
 export class Type implements IType {
@@ -1107,7 +1162,7 @@ export class Type implements IType {
   }
 
   get writeable(): IProperty[] {
-    let result: IProperty[] = []
+    const result: IProperty[] = []
     Object.entries(this.properties)
       .filter(([_, prop]) => !(prop.readOnly || prop.type.readOnly))
       .forEach(([_, prop]) => result.push(prop))
@@ -1139,13 +1194,20 @@ export class Type implements IType {
   }
 
   load(symbols: ISymbolTable): void {
-    Object.entries(this.schema.properties || {}).forEach(([propName, propSchema]) => {
-      const propType = symbols.resolveType(propSchema)
-      this.types.add(propType.name)
-      const customType = propType.customType
-      if (customType) this.customTypes.add(customType)
-      this.properties[propName] = new Property(propName, propType, propSchema, this.schema.required)
-    })
+    Object.entries(this.schema.properties || {}).forEach(
+      ([propName, propSchema]) => {
+        const propType = symbols.resolveType(propSchema)
+        this.types.add(propType.name)
+        const customType = propType.customType
+        if (customType) this.customTypes.add(customType)
+        this.properties[propName] = new Property(
+          propName,
+          propType,
+          propSchema,
+          this.schema.required
+        )
+      }
+    )
   }
 
   asHashString() {
@@ -1166,13 +1228,16 @@ export class Type implements IType {
   isRecursive(): boolean {
     const selfType = this.name
     // test for directly recursive type references
-    return Object.entries(this.properties)
-      .some(([_, prop]) => prop.type.name === selfType)
+    return Object.entries(this.properties).some(
+      ([_, prop]) => prop.type.name === selfType
+    )
   }
 
-  private static isPropSearch(criteria: SearchCriteria) : boolean {
-    return criteria.has(SearchCriterion.status)
-      || criteria.has(SearchCriterion.property)
+  private static isPropSearch(criteria: SearchCriteria): boolean {
+    return (
+      criteria.has(SearchCriterion.status) ||
+      criteria.has(SearchCriterion.property)
+    )
   }
 
   /**
@@ -1182,7 +1247,11 @@ export class Type implements IType {
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(rx: RegExp, criteria: SearchCriteria): boolean {
-    if (!criteria.has(SearchCriterion.type) && !criteria.has(SearchCriterion.status)) return false
+    if (
+      !criteria.has(SearchCriterion.type) &&
+      !criteria.has(SearchCriterion.status)
+    )
+      return false
     let result = rx.test(this.searchString(criteria))
     if (!result && Type.isPropSearch(criteria)) {
       for (const [, p] of Object.entries(this.properties)) {
@@ -1198,7 +1267,8 @@ export class Type implements IType {
   searchString(criteria: SearchCriteria): string {
     let result = ''
     if (criteria.has(SearchCriterion.name)) result += searchIt(this.name)
-    if (criteria.has(SearchCriterion.description)) result += searchIt(this.description)
+    if (criteria.has(SearchCriterion.description))
+      result += searchIt(this.description)
     if (criteria.has(SearchCriterion.title)) result += searchIt(this.title)
     if (criteria.has(SearchCriterion.status)) {
       result += searchIt(this.status)
@@ -1209,7 +1279,6 @@ export class Type implements IType {
 }
 
 export class ArrayType extends Type {
-
   constructor(public elementType: IType, schema: OAS.SchemaObject) {
     super(schema, `${elementType.name}[]`)
     this.customType = elementType.customType
@@ -1218,7 +1287,6 @@ export class ArrayType extends Type {
   get readOnly() {
     return this.elementType.readOnly
   }
-
 }
 
 export class DelimArrayType extends Type {
@@ -1231,7 +1299,6 @@ export class DelimArrayType extends Type {
   get readOnly() {
     return this.elementType.readOnly
   }
-
 }
 
 export class HashType extends Type {
@@ -1246,7 +1313,6 @@ export class HashType extends Type {
   get readOnly() {
     return this.elementType.readOnly
   }
-
 }
 
 export class IntrinsicType extends Type {
@@ -1261,10 +1327,15 @@ export class IntrinsicType extends Type {
 }
 
 export class RequestType extends Type {
-  constructor(api: IApiModel, name: string, params: IParameter[], description: string = '') {
-    super({description}, name)
-    params.forEach(p => {
-      let writeProp = p.asProperty()
+  constructor(
+    api: IApiModel,
+    name: string,
+    params: IParameter[],
+    description = ''
+  ) {
+    super({ description }, name)
+    params.forEach((p) => {
+      const writeProp = p.asProperty()
       const typeWriter = api.getWriteableType(p.type)
       if (typeWriter) writeProp.type = typeWriter
       this.properties[p.name] = writeProp
@@ -1276,37 +1347,41 @@ export class WriteType extends Type {
   constructor(api: IApiModel, type: IType) {
     const name = `${strWrite}${type.name}`
     const roProps = WriteType.readonlyProps(type.properties)
-    const description = `Dynamically generated writeable type for ${type.name} removes properties:\n`
-      + roProps.map(p => p.name).join(', ')
-    super({description}, name)
+    const description =
+      `Dynamically generated writeable type for ${type.name} removes properties:\n` +
+      roProps.map((p) => p.name).join(', ')
+    super({ description }, name)
     // Cross-reference the two types
     this.types.add(type.name)
     this.customTypes.add(type.name)
     type.types.add(this.name)
     type.customTypes.add(this.name)
     type.writeable
-      .filter(p => (!p.readOnly) && (!p.type.readOnly))
-      .forEach(p => {
-        let writeProp = new Property(p.name, p.type,
+      .filter((p) => !p.readOnly && !p.type.readOnly)
+      .forEach((p) => {
+        const writeProp = new Property(
+          p.name,
+          p.type,
           {
             description: p.description,
             // nullable/optional if property is nullable or property is complex type
-            nullable: p.nullable || !(p.type instanceof IntrinsicType)
-          }, type.schema.required)
+            nullable: p.nullable || !(p.type instanceof IntrinsicType),
+          },
+          type.schema.required
+        )
         const typeWriter = api.getWriteableType(p.type)
         if (typeWriter) writeProp.type = typeWriter
         this.properties[p.name] = writeProp
       })
   }
 
-  private static readonlyProps = (properties: IPropertyList) : IProperty[] => {
-    let result: IProperty[] = []
+  private static readonlyProps = (properties: IPropertyList): IProperty[] => {
+    const result: IProperty[] = []
     Object.entries(properties)
-      .filter(([_, prop]) => (prop.readOnly || prop.type.readOnly))
+      .filter(([_, prop]) => prop.readOnly || prop.type.readOnly)
       .forEach(([_, prop]) => result.push(prop))
     return result
   }
-
 }
 
 export interface IApiModel extends IModel {
@@ -1341,12 +1416,25 @@ export class ApiModel implements ISymbolTable, IApiModel {
   readonly tags: ITagList = {}
   private refs: ITypeList = {}
 
-
   constructor(spec: OAS.OpenAPIObject) {
-    ['string', 'integer', 'int64', 'boolean', 'object',
-      'uri', 'float', 'double', 'void', 'datetime', 'email',
-      'uuid', 'uri', 'hostname', 'ipv4', 'ipv6',
-    ].forEach((name) => this.types[name] = new IntrinsicType(name))
+    ;[
+      'string',
+      'integer',
+      'int64',
+      'boolean',
+      'object',
+      'uri',
+      'float',
+      'double',
+      'void',
+      'datetime',
+      'email',
+      'uuid',
+      'uri',
+      'hostname',
+      'ipv4',
+      'ipv6',
+    ].forEach((name) => (this.types[name] = new IntrinsicType(name)))
 
     this.schema = spec
     this.load()
@@ -1370,22 +1458,26 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return new ApiModel(spec)
   }
 
-  private static isModelSearch(criteria: SearchCriteria) : boolean {
-    return criteria.has(SearchCriterion.method)
-      || criteria.has(SearchCriterion.argument)
-      || criteria.has(SearchCriterion.response)
-      || criteria.has(SearchCriterion.status)
-      || criteria.has(SearchCriterion.activityType)
+  private static isModelSearch(criteria: SearchCriteria): boolean {
+    return (
+      criteria.has(SearchCriterion.method) ||
+      criteria.has(SearchCriterion.argument) ||
+      criteria.has(SearchCriterion.response) ||
+      criteria.has(SearchCriterion.status) ||
+      criteria.has(SearchCriterion.activityType)
+    )
   }
 
-  private static isTypeSearch(criteria: SearchCriteria) : boolean {
-    return criteria.has(SearchCriterion.type)
-      || criteria.has(SearchCriterion.title)
-      || criteria.has(SearchCriterion.status)
+  private static isTypeSearch(criteria: SearchCriteria): boolean {
+    return (
+      criteria.has(SearchCriterion.type) ||
+      criteria.has(SearchCriterion.title) ||
+      criteria.has(SearchCriterion.status)
+    )
   }
 
-  private static addMethodToTags(tags:ITagList, method: IMethod) : ITagList {
-    for (let tag of method.schema.tags) {
+  private static addMethodToTags(tags: ITagList, method: IMethod): ITagList {
+    for (const tag of method.schema.tags) {
       let list: IMethodList = tags[tag]
       if (!list) {
         list = {}
@@ -1408,18 +1500,21 @@ export class ApiModel implements ISymbolTable, IApiModel {
    * @param {SearchCriteria} criteria items to examine for the search
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
-  search(expression: string, criteria: SearchCriteria = SearchAll): ISearchResult {
-    let tags: ITagList = {}
-    let types: ITypeList = {}
-    let result = {
+  search(
+    expression: string,
+    criteria: SearchCriteria = SearchAll
+  ): ISearchResult {
+    const tags: ITagList = {}
+    const types: ITypeList = {}
+    const result = {
+      message: 'Search done',
       tags,
       types,
-      message: 'Search done'
     }
 
     let rx: RegExp
     try {
-      rx = new RegExp(expression, "mi") // multi-line case insensitive, not global so first match returns
+      rx = new RegExp(expression, 'mi') // multi-line case insensitive, not global so first match returns
     } catch (e) {
       result.message = `Error: Invalid search expression ${e}`
       return result
@@ -1443,12 +1538,12 @@ export class ApiModel implements ISymbolTable, IApiModel {
   }
 
   // TODO replace this with get from underscore?
-  jsonPath(path: string | string[], item: any = this.schema, splitter: string = '/') {
+  jsonPath(path: string | string[], item: any = this.schema, splitter = '/') {
     let keys = path
     if (!(path instanceof Array)) {
       keys = path.split(splitter)
     }
-    for (let key of keys) {
+    for (const key of keys) {
       if (key === '#') continue
       item = item[key]
       if (item == null) return null
@@ -1459,20 +1554,27 @@ export class ApiModel implements ISymbolTable, IApiModel {
   /**
    *   Retrieve an api object via its JSON path
    */
-  resolveType(schema: string | OAS.SchemaObject | OAS.ReferenceObject, style?: string): IType {
+  resolveType(
+    schema: string | OAS.SchemaObject | OAS.ReferenceObject,
+    style?: string
+  ): IType {
     if (typeof schema === 'string') {
-      if (schema.indexOf('/requestBodies/') < 0) return this.types[schema.substr(schema.lastIndexOf('/') + 1)]
+      if (schema.indexOf('/requestBodies/') < 0)
+        return this.types[schema.substr(schema.lastIndexOf('/') + 1)]
       // dereference the request strBody schema reference
       const deref = this.jsonPath(schema)
       if (deref) {
-        const ref = this.jsonPath(['content', 'application/json', 'schema', '$ref'], deref)
+        const ref = this.jsonPath(
+          ['content', 'application/json', 'schema', '$ref'],
+          deref
+        )
         if (ref) return this.resolveType(ref)
       }
     } else if (OAS.isReferenceObject(schema)) {
       return this.refs[schema.$ref]
     } else if (schema.type) {
       if (schema.type === 'integer' && schema.format === 'int64') {
-        return this.types['int64']
+        return this.types.int64
       }
       if (schema.type === 'number' && schema.format) {
         return this.types[schema.format]
@@ -1486,11 +1588,14 @@ export class ApiModel implements ISymbolTable, IApiModel {
       }
       if (schema.type === 'object' && schema.additionalProperties) {
         if (schema.additionalProperties !== true) {
-          return new HashType(this.resolveType(schema.additionalProperties), schema)
+          return new HashType(
+            this.resolveType(schema.additionalProperties),
+            schema
+          )
         }
       }
       if (schema.format === 'date-time') {
-        return this.types['datetime']
+        return this.types.datetime
       }
       if (schema.format && this.types[schema.format]) {
         return this.types[schema.format]
@@ -1505,8 +1610,12 @@ export class ApiModel implements ISymbolTable, IApiModel {
   // add to this.requestTypes collection with hash as key
   makeRequestType(hash: string, method: IMethod) {
     const name = `${strRequest}${camelCase('_' + method.name)}`
-    const request = new RequestType(this, name, method.allParams,
-      `Dynamically generated request type for ${method.name}`)
+    const request = new RequestType(
+      this,
+      name,
+      method.allParams,
+      `Dynamically generated request type for ${method.name}`
+    )
     this.types[name] = request
     this.requestTypes[hash] = request
     return request
@@ -1520,7 +1629,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     if (method.optionalParams.length <= 1) return undefined
     // matches method params hash against current request types
     let paramHash = ''
-    method.allParams.forEach(p => paramHash += p.asHashString())
+    method.allParams.forEach((p) => (paramHash += p.asHashString()))
     const hash = md5(paramHash)
     // if no match, creates the request type and increments its refCount for inclusion
     // in generated imports
@@ -1552,25 +1661,29 @@ export class ApiModel implements ISymbolTable, IApiModel {
   // if any properties of the parameter type are readOnly (including in subtypes)
 
   sortedTypes() {
-    return Object.values(this.types)
-      .sort((a, b) => a.name.localeCompare(b.name))
+    return Object.values(this.types).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    )
   }
 
   sortedMethods() {
-    return Object.values(this.methods)
-      .sort((a, b) => a.name.localeCompare(b.name))
+    return Object.values(this.methods).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    )
   }
 
   private load(): void {
     if (this.schema?.components?.schemas) {
-      Object.entries(this.schema.components.schemas).forEach(([name, schema]) => {
-        const t = new Type(schema, name)
-        // types[n] and corresponding refs[ref] MUST reference the same type instance!
-        this.types[name] = t
-        this.refs[`#/components/schemas/${name}`] = t
-      })
+      Object.entries(this.schema.components.schemas).forEach(
+        ([name, schema]) => {
+          const t = new Type(schema, name)
+          // types[n] and corresponding refs[ref] MUST reference the same type instance!
+          this.types[name] = t
+          this.refs[`#/components/schemas/${name}`] = t
+        }
+      )
       Object.keys(this.schema.components.schemas).forEach((name) => {
-        (this.resolveType(name) as Type).load(this)
+        ;(this.resolveType(name) as Type).load(this)
       })
     }
 
@@ -1587,12 +1700,23 @@ export class ApiModel implements ISymbolTable, IApiModel {
   private loadMethods(endpoint: string, schema: OAS.PathItemObject): Method[] {
     const methods: Method[] = []
 
-    const addIfPresent = (httpMethod: HttpMethod, opSchema: OAS.OperationObject | undefined) => {
+    const addIfPresent = (
+      httpMethod: HttpMethod,
+      opSchema: OAS.OperationObject | undefined
+    ) => {
       if (opSchema) {
         const responses = this.methodResponses(opSchema)
         const params = this.methodParameters(opSchema)
         const body = this.requestBody(opSchema.requestBody)
-        const method = new Method(this, httpMethod, endpoint, opSchema, params, responses, body)
+        const method = new Method(
+          this,
+          httpMethod,
+          endpoint,
+          opSchema,
+          params,
+          responses,
+          body
+        )
         methods.push(method)
         this.tagMethod(method)
       }
@@ -1614,14 +1738,25 @@ export class ApiModel implements ISymbolTable, IApiModel {
     Object.entries(schema.responses).forEach(([statusCode, contentSchema]) => {
       const desc = contentSchema.description || ''
       if (contentSchema.content) {
-
-        Object.entries(contentSchema.content).forEach(([mediaType, response]) => {
-          responses.push(new MethodResponse(parseInt(statusCode, 10), mediaType,
-            this.resolveType((response as OAS.MediaTypeObject).schema || {}), desc))
-        })
+        Object.entries(contentSchema.content).forEach(
+          ([mediaType, response]) => {
+            responses.push(
+              new MethodResponse(
+                parseInt(statusCode, 10),
+                mediaType,
+                this.resolveType(
+                  (response as OAS.MediaTypeObject).schema || {}
+                ),
+                desc
+              )
+            )
+          }
+        )
       } else if (statusCode === '204') {
         // no content - returns void
-        responses.push(new MethodResponse(204, '', this.types['void'],desc || 'No content'))
+        responses.push(
+          new MethodResponse(204, '', this.types.void, desc || 'No content')
+        )
       }
     })
     return responses
@@ -1630,7 +1765,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   private methodParameters(schema: OAS.OperationObject): IParameter[] {
     const params: IParameter[] = []
     if (schema.parameters) {
-      for (let p of schema.parameters) {
+      for (const p of schema.parameters) {
         let type: IType
         let param: OAS.ParameterObject
         if (OAS.isReferenceObject(p)) {
@@ -1638,8 +1773,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
           // TODO is style resolution like below required here?
           type = this.resolveType(p)
           param = {
-            name: type.name,
             in: 'query',
+            name: type.name,
           }
         } else {
           type = this.resolveType(p.schema || {}, p.style)
@@ -1652,7 +1787,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return params
   }
 
-  private requestBody(obj: OAS.RequestBodyObject | OAS.ReferenceObject | undefined) {
+  private requestBody(
+    obj: OAS.RequestBodyObject | OAS.ReferenceObject | undefined
+  ) {
     if (!obj) return undefined
 
     let required = true
@@ -1664,12 +1801,12 @@ export class ApiModel implements ISymbolTable, IApiModel {
     }
 
     const typeSchema: OAS.SchemaObject = {
-      nullable: false,
-      required: required ? [strBody] : [],
-      readOnly: false,
-      writeOnly: false,
       deprecated: false,
-      description: ''
+      description: '',
+      nullable: false,
+      readOnly: false,
+      required: required ? [strBody] : [],
+      writeOnly: false,
     }
 
     // default the type to a plain body
@@ -1678,12 +1815,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
     if (OAS.isReferenceObject(obj)) {
       // get the type directly from the ref object
       type = this.resolveType(obj.$ref)
-
     } else if (obj.content) {
       // determine type from content
       const content = obj.content
       // TODO need to understand headers or links
-      Object.keys(content).forEach(key => {
+      Object.keys(content).forEach((key) => {
         const media = content[key]
         const schema = media.schema!
         if (OAS.isReferenceObject(schema)) {
@@ -1692,21 +1828,22 @@ export class ApiModel implements ISymbolTable, IApiModel {
           type = this.resolveType(schema)
         }
       })
-
     } else {
       // TODO must be dynamic, create type
     }
 
-    let result = new Parameter({
-      name: strBody,
-      location: strBody,
-      required: required,
-      description: '', // TODO capture description
-    } as Partial<IParameter>, type)
+    const result = new Parameter(
+      {
+        description: '',
+        location: strBody,
+        name: strBody,
+        required: required, // TODO capture description
+      } as Partial<IParameter>,
+      type
+    )
 
     return result
   }
-
 }
 
 export interface IMappedType {
@@ -1715,7 +1852,6 @@ export interface IMappedType {
 }
 
 export interface ICodeGen {
-
   /**
    * root path for generated source code files
    * e.g. 'python' for Python
@@ -1818,7 +1954,7 @@ export interface ICodeGen {
    * Returns true if the SDK supports multiple API versions of models
    * @returns {boolean} True if multi-API is supported
    */
-  supportsMultiApi() : boolean
+  supportsMultiApi(): boolean
 
   /**
    * Returns the name of the RequestType if this language AND method require it.
@@ -1880,7 +2016,7 @@ export interface ICodeGen {
    * @param {string} baseFileName e.g. "methods" or "models"
    * @returns {string} fully specified, API-version-specific file name
    */
-  sdkFileName(baseFileName: string) : string
+  sdkFileName(baseFileName: string): string
 
   /**
    * provide the name for a file with the appropriate language code extension
@@ -2006,5 +2142,4 @@ export interface ICodeGen {
   typeNames(countError: boolean): string[]
 
   typeMap(type: IType): IMappedType
-
 }

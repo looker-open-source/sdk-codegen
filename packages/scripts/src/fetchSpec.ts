@@ -1,33 +1,40 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
-import { ISDKConfigProps } from './sdkConfig'
 import * as fs from 'fs'
 import { log, warn } from '@looker/sdk-codegen-utils'
-import { fail, quit, isFileSync } from './nodeUtils'
 import { IVersionInfo } from '@looker/sdk-codegen'
-import { NodeTransport, defaultTimeout, ITransportSettings, sdkOk } from '@looker/sdk'
+import {
+  NodeTransport,
+  defaultTimeout,
+  ITransportSettings,
+  sdkOk,
+} from '@looker/sdk'
+import { fail, quit, isFileSync } from './nodeUtils'
+import { ISDKConfigProps } from './sdkConfig'
 import { convertSpec } from './convert'
 
 /*
@@ -71,6 +78,8 @@ const lintCheck = async (fileName: string) => {
  * @param {string} fileName
  * @returns {Promise<void>}
  */
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 export const lintCheck = async (fileName: string) => {
   return ''
 }
@@ -86,10 +95,10 @@ let transport: NodeTransport
 const Transport = (props: ISDKConfigProps) => {
   if (transport) return transport
   const options: ITransportSettings = {
-    base_url: props.base_url,
-    verify_ssl: props.verify_ssl,
-    timeout: defaultTimeout,
     agentTag: 'SDK Codegen',
+    base_url: props.base_url,
+    timeout: defaultTimeout,
+    verify_ssl: props.verify_ssl,
   }
   transport = new NodeTransport(options)
   return transport
@@ -116,7 +125,7 @@ export const openApiFileName = (name: string, props: ISDKConfigProps) =>
  * @returns {boolean} True if there's an authentication error
  */
 const badAuth = (content: string | object) => {
-  let text = typeof content === 'object' ? JSON.stringify(content) : content
+  const text = typeof content === 'object' ? JSON.stringify(content) : content
   return text.indexOf('Requires authentication') > 0
 }
 
@@ -130,7 +139,7 @@ export const logout = async (props: ISDKConfigProps, token: string) => {
       undefined,
       undefined,
       undefined,
-      { headers: { Authorization: `Bearer ${token}` } },
+      { headers: { Authorization: `Bearer ${token}` } }
     )
   )
 }
@@ -139,13 +148,20 @@ export const login = async (props: ISDKConfigProps) => {
   const xp = Transport(props)
   const creds = {
     client_id: props.client_id,
-    client_secret: props.client_secret
+    client_secret: props.client_secret,
   }
   const url = loginUrl(props)
 
   try {
     const response = await sdkOk<any, Error>(
-      xp.request<any, Error>('POST', url, creds, undefined, undefined, undefined)
+      xp.request<any, Error>(
+        'POST',
+        url,
+        creds,
+        undefined,
+        undefined,
+        undefined
+      )
     )
     const accessToken = await response.access_token
 
@@ -200,7 +216,7 @@ export const authGetUrl = async (props: ISDKConfigProps, url: string) => {
     // Whoops!  Ok, try again with login
     token = await login(props)
     content = await getUrl(props, url, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
     if (token) {
       await logout(props, token)
@@ -218,7 +234,7 @@ export const fetchSpecFile = async (name: string, props: ISDKConfigProps) => {
   if (isFileSync(fileName)) return fileName
 
   try {
-    let fileUrl = specFileUrl(props)
+    const fileUrl = specFileUrl(props)
     const content = await authGetUrl(props, fileUrl)
     const json = JSON.stringify(content)
 
@@ -239,14 +255,20 @@ export const logFetch = async (name: string, props: ISDKConfigProps) => {
   return specFile
 }
 
+export const fetchLookerVersion = async (props: ISDKConfigProps) => {
+  const versions: any = await authGetUrl(props, `${props.base_url}/versions`)
+  const [lookerVersion] = versions.looker_release_version.match(/^\d+\.\d+/gi)
+  return lookerVersion
+}
+
 export const getVersionInfo = async (
   props: ISDKConfigProps
 ): Promise<IVersionInfo | undefined> => {
   try {
     const lookerVersion = await fetchLookerVersion(props)
     return {
+      apiVersion: props.api_version,
       lookerVersion,
-      apiVersion: props.api_version
     }
   } catch (e) {
     warn(
@@ -257,14 +279,6 @@ export const getVersionInfo = async (
   }
   return undefined
 }
-
-export const fetchLookerVersion = async (props: ISDKConfigProps) => {
-  const versions: any = await authGetUrl(props, `${props.base_url}/versions`)
-  const [lookerVersion] = versions.looker_release_version.match(/^\d+\.\d+/gi)
-  return lookerVersion
-}
-
-
 /**
  * Fetch (if needed) and convert a Swagger API specification to OpenAPI
  * @param {string} name base name of the target file
