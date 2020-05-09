@@ -27,7 +27,7 @@
 import { IAccessToken } from '../sdk/4.0/models'
 import { CorsSession } from './corsSession'
 import { IApiSettings } from './apiSettings'
-import { IRequestProps, ITransport, LookerAppId } from './transport'
+import { IRequestProps, ITransport } from './transport'
 import { AuthSession } from './authSession'
 
 const mockToken: IAccessToken = {

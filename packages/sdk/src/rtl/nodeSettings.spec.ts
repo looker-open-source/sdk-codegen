@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from '@looker/sdk-codegen-scripts'
+import { TestConfig } from '@looker/test-utils'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings'
 import { defaultTimeout } from './transport'
 import { boolDefault } from './constants'

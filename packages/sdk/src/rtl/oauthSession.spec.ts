@@ -24,12 +24,12 @@
 
  */
 
+import { MockCrypto } from '@looker/test-utils'
 import { OAuthSession } from './oauthSession'
 import { DefaultSettings, IApiSettings } from './apiSettings'
 import { BrowserCryptoHash, BrowserTransport } from './browserTransport'
 import { NodeCryptoHash, NodeTransport } from './nodeTransport'
 import { BrowserServices } from './browserServices'
-import { MockCrypto } from '../../../test-utils/src/mocks'
 
 describe('oauthSession', () => {
   const settings = {

@@ -26,15 +26,13 @@
 
 import { NodeCryptoHash, NodeTransport } from './nodeTransport'
 import { ITransportSettings } from './transport'
-import { defaultApiVersion } from './constants'
 
 describe('NodeTransport', () => {
   const hostname = 'https://looker.sdk'
-  const apiVersion = defaultApiVersion
   const settings = { base_url: hostname } as ITransportSettings
   const xp = new NodeTransport(settings)
   const fullPath = 'https://github.com/looker-open-source/sdk-codegen'
-  const queryParams = { a: 'b c', d: false, nil: null, skip: undefined }
+  // const queryParams = { a: 'b c', d: false, nil: null, skip: undefined }
 
   it('retrieves fully qualified url', async () => {
     const response = await xp.request<string, Error>('GET', fullPath)

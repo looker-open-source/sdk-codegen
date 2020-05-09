@@ -23,7 +23,10 @@
  SOFTWARE.
 
  */
-import { apiTestModel } from 'test-utils'
+import { TestConfig } from '@looker/test-utils'
+
+const config = TestConfig()
+const apiTestModel = config.apiTestModel
 
 describe('sdk generator test', () => {
   it('resolves OAS schemas into types', () => {

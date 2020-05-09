@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from '@looker/sdk-codegen-scripts'
+import { TestConfig } from '@looker/test-utils'
 import { boolDefault, isFalse, isTrue, unquote } from './constants'
 import { ResponseMode, responseMode } from './transport'
 
@@ -50,6 +50,7 @@ describe('Constants functions', () => {
     expect(isTrue('T')).toEqual(true)
     expect(isTrue('1')).toEqual(true)
     expect(isTrue('')).toEqual(false)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     expect(isTrue(undefined)).toEqual(false)
   })
@@ -67,6 +68,7 @@ describe('Constants functions', () => {
     expect(isFalse('F')).toEqual(true)
     expect(isFalse('0')).toEqual(true)
     expect(isFalse('')).toEqual(false)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     expect(isFalse(undefined)).toEqual(false)
   })
@@ -77,8 +79,10 @@ describe('Constants functions', () => {
     expect(boolDefault('f')).toEqual(false)
     expect(boolDefault('t')).toEqual(true)
     expect(boolDefault('')).toEqual(false)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     expect(boolDefault(undefined, false)).toEqual(false)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     expect(boolDefault(undefined, true)).toEqual(true)
   })
@@ -105,7 +109,7 @@ describe('Constants functions', () => {
   it('binary types match', () => {
     binaryTypes.forEach((t) => {
       const mode = responseMode(t)
-      expect(responseMode(t)).toEqual(ResponseMode.binary)
+      expect(mode).toEqual(ResponseMode.binary)
     })
   })
 })

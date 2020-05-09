@@ -24,31 +24,35 @@
 
  */
 
-import { apiTestModel } from '../../script/testUtils'
+import { TestConfig } from '@looker/test-utils'
 import { PythonGen } from './python.gen'
-// @ts-ignore
 
+const config = TestConfig()
+const apiTestModel = config.apiTestModel
 const gen = new PythonGen(apiTestModel)
 const indent = ''
 
 describe('python generator', () => {
   describe('parameter declarations', () => {
     it('required parameter', () => {
-      const param = apiTestModel.methods.run_query.params[0]
-      const actual = gen.declareParameter(indent, param)
+      const method = apiTestModel.methods.run_query
+      const param = method.params[0]
+      const actual = gen.declareParameter(indent, method, param)
       expect(actual).toEqual('# Id of query\nquery_id: int')
     })
     it('optional parameter', () => {
-      const param = apiTestModel.methods.run_query.params[2]
-      const actual = gen.declareParameter(indent, param)
+      const method = apiTestModel.methods.run_query
+      const param = method.params[2]
+      const actual = gen.declareParameter(indent, method, param)
       expect(actual).toEqual(
         '# Row limit (may override the limit in the saved query).\n' +
           'limit: Optional[int] = None'
       )
     })
     it('required typed parameter', () => {
-      const param = apiTestModel.methods.create_query_render_task.params[2]
-      const actual = gen.declareParameter(indent, param)
+      const method = apiTestModel.methods.create_query_render_task
+      const param = method.params[2]
+      const actual = gen.declareParameter(indent, method, param)
       expect(actual).toEqual(`# Output width in pixels\nwidth: int`)
     })
   })
@@ -254,7 +258,7 @@ def run_url_encoded_query(
     it('asserts type of required input body params', () => {
       const method = apiTestModel.methods.run_inline_query
       const expected = `assert isinstance(body, models.WriteQuery)\n`
-      const actual = gen.bodyParamsTypeAssertions('', method.bodyParams)
+      const actual = gen.bodyParamsTypeAssertions('', method)
       expect(actual).toEqual(expected)
     })
 
@@ -281,33 +285,27 @@ result_format = self.encode_path_param(result_format)
       const expected = `if body:
     assert isinstance(body, models.WriteDashboard)
 `
-      const actual = gen.bodyParamsTypeAssertions('', method.bodyParams)
+      const actual = gen.bodyParamsTypeAssertions('', method)
       expect(actual).toEqual(expected)
     })
 
     it('body type assertions have generic subscripts stripped away', () => {
       const sequenceBodyMethod = apiTestModel.methods.set_role_groups
       let expected = `assert isinstance(body, Sequence)\n`
-      let actual = gen.bodyParamsTypeAssertions(
-        '',
-        sequenceBodyMethod.bodyParams
-      )
+      let actual = gen.bodyParamsTypeAssertions('', sequenceBodyMethod)
       expect(actual).toEqual(expected)
 
       const mutableMappingBodyMethod =
         apiTestModel.methods.fetch_remote_data_action_form
       expected = `assert isinstance(body, MutableMapping)\n`
-      actual = gen.bodyParamsTypeAssertions(
-        '',
-        mutableMappingBodyMethod.bodyParams
-      )
+      actual = gen.bodyParamsTypeAssertions('', mutableMappingBodyMethod)
       expect(actual).toEqual(expected)
     })
 
     it('does not assert type of query/path params', () => {
       const method = apiTestModel.methods.lookml_model_explore
       const expected = ''
-      const actual = gen.bodyParamsTypeAssertions('', method.bodyParams)
+      const actual = gen.bodyParamsTypeAssertions('', method)
       expect(actual).toEqual(expected)
     })
 
@@ -424,7 +422,7 @@ class ApiVersion(model.Model):
       // run method generation to populate inputTypes
       const method = apiTestModel.methods.create_merge_query
       const param = method.bodyParams[0]
-      gen.declareParameter(indent, param)
+      gen.declareParameter(indent, method, param)
 
       const inputType = apiTestModel.types.WriteMergeQuery
       const actual = gen.declareType(indent, inputType)

@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import { Readable } from 'readable-stream'
-import { TestConfig } from '@looker/sdk-codegen-scripts'
+import { TestConfig } from '@looker/test-utils'
 import { NodeSession } from '../rtl/nodeSession'
 import { Looker40SDK as LookerSDK } from '../sdk/4.0/methods'
 import {
@@ -128,23 +128,23 @@ describe('LookerNodeSDK', () => {
 
   const createQueryRequest = (q: any, limit: number) => {
     const result: Partial<IWriteQuery> = {
+      client_id: q.client_id || undefined,
       column_limit: q.column_limit || undefined,
+      dynamic_fields: q.dynamic_fields || undefined,
       fields: q.fields || undefined,
       fill_fields: q.fill_fields || [],
+      filter_config: q.filter_config || undefined,
       filter_expression: q.filter_expression || undefined,
       filters: q.filters || [],
       limit: limit.toString(10),
-      filter_config: q.filter_config || undefined,
       model: q.model,
-      dynamic_fields: q.dynamic_fields || undefined,
       pivots: q.pivots || undefined,
-      client_id: q.client_id || undefined,
-      view: q.view,
       query_timezone: q.query_timezone || undefined,
       row_total: q.row_total || undefined,
       sorts: q.sorts || [],
       subtotals: q.subtotals || undefined,
       total: typeof q.total !== 'undefined' ? q.total : false,
+      view: q.view,
       vis_config: q.vis_config || undefined,
       visible_ui_sections: q.visible_ui_sections || undefined,
     }
@@ -568,7 +568,7 @@ describe('LookerNodeSDK', () => {
           const row = json[0] as any
           if (query.fields) {
             query.fields.forEach((field) => {
-              expect(row.hasOwnProperty(field)).toBeTruthy()
+              expect(field in row).toBeTruthy()
             })
           }
           expect(csv).toBeDefined()
@@ -590,23 +590,23 @@ describe('LookerNodeSDK', () => {
           const limit = q.limit ? parseInt(q.limit, 10) : 10
           const request: IRequestRunInlineQuery = {
             body: {
+              client_id: q.client_id || undefined,
               column_limit: q.column_limit || undefined,
+              dynamic_fields: q.dynamic_fields || undefined,
               fields: q.fields || undefined,
               fill_fields: q.fill_fields || [],
+              filter_config: q.filter_config || undefined,
               filter_expression: q.filter_expression || undefined,
               filters: q.filters,
               limit: limit.toString(10),
-              filter_config: q.filter_config || undefined,
               model: q.model!,
-              dynamic_fields: q.dynamic_fields || undefined,
               pivots: q.pivots || undefined,
-              client_id: q.client_id || undefined,
-              view: q.view!,
               query_timezone: q.query_timezone || undefined,
               row_total: q.row_total || undefined,
               sorts: q.sorts || [],
               subtotals: q.subtotals || undefined,
               total: typeof q.total !== 'undefined' ? q.total : false,
+              view: q.view!,
               vis_config: q.vis_config || undefined,
               visible_ui_sections: q.visible_ui_sections || undefined,
             },
@@ -618,7 +618,7 @@ describe('LookerNodeSDK', () => {
           const row = json[0] as any
           if (q.fields) {
             q.fields.forEach((field: string) => {
-              expect(row.hasOwnProperty(field)).toBeTruthy()
+              expect(field in row).toBeTruthy()
             })
           }
           request.result_format = 'csv'
@@ -631,23 +631,19 @@ describe('LookerNodeSDK', () => {
             streamed = true
             const csvFile = './query.csv'
             const writer = fs.createWriteStream(csvFile)
-            try {
-              await sdk.stream.run_inline_query(async (readable: Readable) => {
-                return new Promise<any>((resolve, reject) => {
-                  readable
-                    .pipe(writer)
-                    .on('error', reject)
-                    .on('finish', resolve)
-                })
-              }, request)
-              expect(fs.existsSync(csvFile)).toEqual(true)
-              const contents = fs.readFileSync(csvFile, 'utf8')
-              fs.unlinkSync(csvFile)
-              expect(fs.existsSync(csvFile)).toEqual(false)
-              expect(contents).toEqual(csv)
-            } catch (e) {
-              throw e
-            }
+            await sdk.stream.run_inline_query(async (readable: Readable) => {
+              return new Promise<any>((resolve, reject) => {
+                readable
+                  .pipe(writer)
+                  .on('error', reject)
+                  .on('finish', resolve)
+              })
+            }, request)
+            expect(fs.existsSync(csvFile)).toEqual(true)
+            const contents = fs.readFileSync(csvFile, 'utf8')
+            fs.unlinkSync(csvFile)
+            expect(fs.existsSync(csvFile)).toEqual(false)
+            expect(contents).toEqual(csv)
             // TODO test binary download
             // request.result_format = 'png'
             // const png = await sdk.ok(sdk.run_inline_query(request))
@@ -738,8 +734,8 @@ describe('LookerNodeSDK', () => {
 
               text_tile_text_color: d.text_tile_text_color || undefined,
               tile_background_color: d.tile_background_color || undefined,
-              title: d.title || undefined,
               tile_text_color: d.tile_text_color || undefined,
+              title: d.title || undefined,
               title_color: d.title_color || undefined,
             })
           )
@@ -887,6 +883,7 @@ describe('LookerNodeSDK', () => {
     })
   })
 
+  /*
   function mimeType(data: string) {
     //        var sig = [UInt8](repeating: 0, count: 20)
     //        data.copyBytes(to: &sig, count: 20)
@@ -921,6 +918,7 @@ describe('LookerNodeSDK', () => {
       view: 'dashboard',
     }
   }
+  */
 
   // TODO resurrect this when the API bug is fixed
   // describe('Binary download', () => {

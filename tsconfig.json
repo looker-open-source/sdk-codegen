@@ -13,5 +13,6 @@
     }
   },
   "include": ["packages/*/src"],
-  "exclude": ["packages/*/lib", "packages/*/dist"]
+  "exclude": ["packages/*/lib", "packages/*/dist"],
+  "allowSyntheticDefaultImports": true
 }

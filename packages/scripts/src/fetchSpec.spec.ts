@@ -26,9 +26,10 @@
 
 import { TestConfig } from '@looker/test-utils'
 import { authGetUrl, getVersionInfo, login, specFileUrl } from './fetchSpec'
+import { ISDKConfigProps } from './sdkConfig'
 
-const testConfig = TestConfig()
-const props = testConfig.section
+const config = TestConfig()
+const props = (config.section as unknown) as ISDKConfigProps
 // api_version is no longer part of the INI, now set by sdkGen iterator
 props.api_version = '4.0'
 

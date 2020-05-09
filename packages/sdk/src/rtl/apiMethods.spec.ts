@@ -26,7 +26,6 @@
 
 import { Authenticator } from './transport'
 import { defaultApiVersion } from './constants'
-import { NodeTransport } from './nodeTransport'
 import { APIMethods } from './apiMethods'
 import { IAuthSession } from './authSession'
 import { DefaultSettings, IApiSettings } from './apiSettings'

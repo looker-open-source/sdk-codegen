@@ -24,8 +24,11 @@
 
  */
 
-import { apiTestModel } from '@looker/sdk-codegen-scripts'
 import { TypescriptGen } from './typescript.gen'
+import { TestConfig } from '@looker/test-utils'
+
+const config = TestConfig()
+const apiTestModel = config.apiTestModel
 
 const gen = new TypescriptGen(apiTestModel)
 const indent = ''
@@ -44,8 +47,9 @@ describe('typescript generator', () => {
 
   describe('parameter declarations', () => {
     it('required parameter', () => {
-      const param = apiTestModel.methods.run_query.params[0]
-      const actual = gen.declareParameter(indent, param)
+      const method = apiTestModel.methods.run_query
+      const param = method.params[0]
+      const actual = gen.declareParameter(indent, method, param)
       expect(actual).toEqual(`/**
  * @param {number} query_id Id of query
  */
@@ -53,8 +57,9 @@ query_id: number`)
     })
 
     it('optional parameter', () => {
-      const param = apiTestModel.methods.run_query.params[2]
-      const actual = gen.declareParameter(indent, param)
+      const method = apiTestModel.methods.run_query
+      const param = method.params[2]
+      const actual = gen.declareParameter(indent, method, param)
       expect(actual).toEqual(`/**
  * @param {number} limit Row limit (may override the limit in the saved query).
  */
@@ -62,8 +67,9 @@ limit?: number`)
     })
 
     it('required typed parameter', () => {
-      const param = apiTestModel.methods.create_query_render_task.params[2]
-      const actual = gen.declareParameter(indent, param)
+      const method = apiTestModel.methods.create_query_render_task
+      const param = method.params[2]
+      const actual = gen.declareParameter(indent, method, param)
       expect(actual).toEqual(`/**
  * @param {number} width Output width in pixels
  */
@@ -71,8 +77,9 @@ width: number`)
     })
 
     it('csv formatted parameter', () => {
-      const param = apiTestModel.methods.query_task_multi_results.params[0]
-      const actual = gen.declareParameter(indent, param)
+      const method = apiTestModel.methods.query_task_multi_results
+      const param = method.params[0]
+      const actual = gen.declareParameter(indent, method, param)
       expect(actual).toEqual(`/**
  * @param {DelimArray<string>} query_task_ids List of Query Task IDs
  */
@@ -109,7 +116,7 @@ query_task_ids: DelimArray<string>`)
       const body = method.getParams('body')
       expect(body.length).toEqual(1)
       expect(body[0].type.name).toEqual('Query')
-      const param = gen.declareParameter(indent, body[0])
+      const param = gen.declareParameter(indent, method, body[0])
       expect(param).toEqual(`/**
  * @param {Partial<IWriteQuery>} body
  */
@@ -126,7 +133,7 @@ body: Partial<IWriteQuery>`)
       const body = method.getParams('body')
       expect(body.length).toEqual(1)
       expect(body[0].type.name).toEqual('Dashboard')
-      const param = gen.declareParameter(indent, body[0])
+      const param = gen.declareParameter(indent, method, body[0])
       expect(param).toEqual(`/**
  * @param {Partial<IWriteDashboard>} body
  */
@@ -222,6 +229,7 @@ async all_datagroups(
     it('assert response is model add_group_group', () => {
       const method = apiTestModel.methods.add_group_group
       const expected =
+        // eslint-disable-next-line no-template-curly-in-string
         'return this.post<IGroup, IError>(`/groups/${group_id}/groups`, null, body, options)'
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
@@ -229,6 +237,7 @@ async all_datagroups(
     it('assert response is None delete_group_from_group', () => {
       const method = apiTestModel.methods.delete_group_from_group
       const expected =
+        // eslint-disable-next-line no-template-curly-in-string
         'return this.delete<void, IError>(`/groups/${group_id}/groups/${deleting_group_id}`, null, null, options)'
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)

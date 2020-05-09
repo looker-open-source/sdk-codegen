@@ -25,7 +25,6 @@
  */
 
 import * as OAS from 'openapi3-ts'
-import { apiTestModel } from '@looker/sdk-codegen-scripts'
 import {
   ArrayType,
   CriteriaToSet,
@@ -41,6 +40,10 @@ import {
   SetToCriteria,
   typeRefs,
 } from './sdkModels'
+import { TestConfig } from '@looker/test-utils'
+
+const config = TestConfig()
+const apiTestModel = config.apiTestModel
 
 describe('sdkModels', () => {
   describe('request type determination', () => {

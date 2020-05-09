@@ -24,12 +24,11 @@
 
  */
 
+import { MockCrypto } from '@looker/test-utils'
 import { BrowserServices } from './browserServices'
 import { DefaultSettings } from './apiSettings'
 import { BrowserCryptoHash, BrowserTransport } from './browserTransport'
 import { NodeTransport } from './nodeTransport'
-import { ICryptoHash } from './cryptoHash'
-import { MockCrypto } from '../../../test-utils/src/mocks'
 
 describe('BrowserServices', () => {
   it('fails if settings are not provided', () => {

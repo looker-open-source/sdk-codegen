@@ -27,16 +27,21 @@
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
 import { IApiConfig, ApiConfig, IApiSection } from '@looker/sdk'
-import { specFromFile } from '@looker/sdk-codegen-scripts'
-import { IApiModel } from '@looker/sdk-codegen'
+import { ApiModel } from '@looker/sdk-codegen'
+import * as Models from '@looker/sdk-codegen'
 
 const utf8 = 'utf-8'
+
+export const specFromFile = (specFile: string): Models.ApiModel => {
+  const specContent = fs.readFileSync(specFile, { encoding: 'utf8' })
+  return Models.ApiModel.fromString(specContent)
+}
 
 /**
  * Properties used for various typescript-based tests
  */
 export interface ITestConfig {
-  apiTestModel: IApiModel
+  apiTestModel: ApiModel
   rootPath: string
   testPath: string
   dataFile: string
