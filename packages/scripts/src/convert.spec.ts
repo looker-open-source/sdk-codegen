@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from '@looker/test-utils'
+import { TestConfig } from '../../test-utils/src/testUtils'
 import { fixConversion, openApiStyle, swapXLookerNullable } from './convert'
 import { readFileSync } from './nodeUtils'
 

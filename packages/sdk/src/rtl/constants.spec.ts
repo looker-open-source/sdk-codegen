@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from '@looker/test-utils'
+import { TestConfig } from '../../../test-utils/src/testUtils'
 import { boolDefault, isFalse, isTrue, unquote } from './constants'
 import { ResponseMode, responseMode } from './transport'
 

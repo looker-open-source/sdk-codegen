@@ -24,7 +24,7 @@
 
  */
 
-import { MockCrypto } from '@looker/test-utils'
+import { MockCrypto } from '../../../test-utils/src/mocks'
 import { OAuthSession } from './oauthSession'
 import { DefaultSettings, IApiSettings } from './apiSettings'
 import { BrowserCryptoHash, BrowserTransport } from './browserTransport'

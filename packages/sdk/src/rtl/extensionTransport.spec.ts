@@ -27,10 +27,17 @@
 import { DefaultSettings } from './apiSettings'
 import { ExtensionTransport } from './extensionTransport'
 import { IHostConnection } from './extensionSdk'
+import { lookerVersion } from './constants'
 
 describe('ExtensionTransport', () => {
   const queryParams = { a: 'b c', d: false, nil: null, skip: undefined }
   const body = { song: 'how much is that doggy' }
+  const defaultOptions = {
+    agentTag: `TS-SDK ${lookerVersion}`,
+    base_url: '',
+    timeout: 120,
+    verify_ssl: true,
+  }
   let transport: ExtensionTransport
   let connection: IHostConnection
   let mockRequest: any
@@ -46,7 +53,11 @@ describe('ExtensionTransport', () => {
 
   beforeEach(() => {
     mockRequest = jest.fn()
-    connection = { request: mockRequest } as IHostConnection
+    connection = {
+      rawRequest: mockRequest,
+      request: mockRequest,
+      stream: streamCallback,
+    } as IHostConnection
     const settings = DefaultSettings()
     transport = new ExtensionTransport(settings, connection)
   })
@@ -60,7 +71,23 @@ describe('ExtensionTransport', () => {
         { song: 'how much is that doggy' },
         { a: 'b c', d: false, nil: null, skip: undefined },
         undefined,
-        undefined
+        defaultOptions
+      )
+    } catch (error) {
+      fail(error)
+    }
+  })
+
+  it('makes a host rawRequest', async () => {
+    try {
+      await transport.rawRequest('POST', '/path', queryParams, body)
+      expect(mockRequest).toHaveBeenCalledWith(
+        'POST',
+        '/path',
+        { song: 'how much is that doggy' },
+        { a: 'b c', d: false, nil: null, skip: undefined },
+        undefined,
+        defaultOptions
       )
     } catch (error) {
       fail(error)
@@ -72,7 +99,7 @@ describe('ExtensionTransport', () => {
       await transport.stream(streamCallback, 'GET', '/path')
       fail('stream should fail')
     } catch (error) {
-      expect(error).toEqual('stream not supported')
+      expect(error).toEqual(Error('Streaming is disabled'))
     }
   })
 })

@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from '@looker/test-utils'
+import { TestConfig } from '../../test-utils/src/testUtils'
 import { authGetUrl, getVersionInfo, login, specFileUrl } from './fetchSpec'
 import { ISDKConfigProps } from './sdkConfig'
 

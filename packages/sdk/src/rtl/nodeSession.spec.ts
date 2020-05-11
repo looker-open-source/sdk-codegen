@@ -25,7 +25,7 @@
  */
 
 import * as fs from 'fs'
-import * as yaml from 'js-yaml'
+import { TestConfig } from '../../../test-utils/src/testUtils'
 import { NodeTransport } from './nodeTransport'
 import { NodeSession } from './nodeSession'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings'
@@ -39,12 +39,8 @@ import {
 import { defaultTimeout } from './transport'
 import { boolDefault } from './constants'
 
-// TODO create destructurable function for test path resolution
-const dataFile = 'test/data.yml'
-// slightly hackish data path determination for tests
-const root = fs.existsSync(dataFile) ? '' : '../../'
-const testData = yaml.safeLoad(fs.readFileSync(`${root}${dataFile}`, 'utf8'))
-const localIni = `${root}${testData.iniFile}`
+const config = TestConfig()
+const localIni = config.localIni
 
 describe('NodeSession', () => {
   const settings = new NodeSettingsIniFile(localIni, 'Looker')

@@ -25,7 +25,7 @@
  */
 
 import { TypescriptGen } from './typescript.gen'
-import { TestConfig } from '@looker/test-utils'
+import { TestConfig } from '../../test-utils/src/testUtils'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
