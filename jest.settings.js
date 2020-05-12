@@ -23,4 +23,15 @@
  SOFTWARE.
 
  */
-module.exports = require('../../jest.settings')
+
+module.exports = {
+  moduleDirectories: ['./node_modules'],
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
+  rootDir: 'src',
+  setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
+  testEnvironment: 'node',
+  transform: {
+    '^.+\\.(ts|tsx)$': 'ts-jest',
+  },
+  verbose: true,
+}

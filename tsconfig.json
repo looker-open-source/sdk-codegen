@@ -1,8 +1,6 @@
 {
   "extends": "./tsconfig.common.json",
   "compilerOptions": {
-    "allowJs": false,
-    "target": "es2017",
     "noEmit": true,
     "pretty": true,
     "baseUrl": ".",
