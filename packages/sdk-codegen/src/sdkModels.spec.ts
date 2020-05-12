@@ -25,9 +25,11 @@
  */
 
 import * as OAS from 'openapi3-ts'
+import { TestConfig } from '../../test-utils/src/testUtils'
 import {
   ArrayType,
   CriteriaToSet,
+  DelimArrayType, HashType,
   IMethod,
   IMethodResponse,
   IntrinsicType,
@@ -40,7 +42,6 @@ import {
   SetToCriteria,
   typeRefs,
 } from './sdkModels'
-import { TestConfig } from '../../test-utils/src/testUtils'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
@@ -179,6 +180,16 @@ describe('sdkModels', () => {
     return result
   }
 
+  const obfuscate = (option: string, element: IType): IType => {
+    switch (option) {
+      case 'd':
+        return new DelimArrayType(element, element.schema)
+      case 'a':
+        return new ArrayType(element, element.schema)
+      default:
+        return element
+    }
+  }
   describe('method and type xrefs', () => {
     describe('custom types', () => {
       it('intrinsic types have undefined custom types', () => {
@@ -187,12 +198,50 @@ describe('sdkModels', () => {
         expect(actual.name).toEqual('integer')
       })
 
+      it('instanceof checks', () => {
+        const element = new IntrinsicType('string')
+        let actual: IType = {} as IType
+        if (element.name === 'string') {
+          actual = new ArrayType(element, element.schema)
+        }
+        expect(actual).toBeDefined()
+        expect(actual instanceof ArrayType).toEqual(true)
+
+        actual = obfuscate('a', element)
+        expect(actual).toBeDefined()
+        expect(actual instanceof ArrayType).toEqual(true)
+
+        actual = obfuscate('d', element)
+        expect(actual).toBeDefined()
+        expect(actual instanceof DelimArrayType).toEqual(true)
+
+        let method = apiTestModel.methods.query_task_multi_results
+        let schema = method.params[0].type.schema
+        actual = apiTestModel.resolveType(schema, 'simple')
+        expect(actual).toBeDefined()
+        expect(actual instanceof DelimArrayType).toEqual(true)
+
+        let response = method.primaryResponse
+        schema = response.type.schema
+        actual = apiTestModel.resolveType(schema, 'simple')
+        expect(actual).toBeDefined()
+        expect(actual instanceof HashType).toEqual(true)
+
+        method = apiTestModel.methods.all_datagroups
+        response = method.primaryResponse
+        schema = response.type.schema
+        actual = apiTestModel.resolveType(schema)
+        expect(actual).toBeDefined()
+        expect(actual instanceof ArrayType).toEqual(true)
+      })
+
       it('array type uses element type as custom type', () => {
         const intType = new IntrinsicType('integer')
         const schema = { type: 'mock' } as OAS.SchemaObject
         let actual: IType = new ArrayType(intType, schema)
         expect(actual.customType).toEqual('')
         expect(actual.name).toEqual('integer[]')
+        expect(actual instanceof ArrayType).toBeTruthy()
         actual = apiTestModel.types.DashboardBase
         expect(actual.customType).toBe('DashboardBase')
       })

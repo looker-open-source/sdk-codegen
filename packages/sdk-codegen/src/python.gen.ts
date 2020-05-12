@@ -95,11 +95,11 @@ export class PythonGen extends CodeGen {
   ]
 
   pythonTypes: Record<string, IMappedType> = {
-    boolean: { name: 'bool', default: this.nullStr },
-    double: { default: this.nullStr, name: 'float' },
+    boolean: { default: this.nullStr, name: 'bool' },
     byte: { default: this.nullStr, name: 'bytes' },
-    float: { default: this.nullStr, name: 'float' },
     datetime: { default: this.nullStr, name: 'datetime.datetime' },
+    double: { default: this.nullStr, name: 'float' },
+    float: { default: this.nullStr, name: 'float' },
     int32: { default: this.nullStr, name: 'int' },
     int64: { default: this.nullStr, name: 'int' },
     integer: { default: this.nullStr, name: 'int' },
@@ -490,18 +490,22 @@ ${this.hooks.join('\n')}
       const map = this._typeMap(type.elementType, format)
       if (type instanceof ArrayType) {
         return { default: this.nullStr, name: `Sequence[${map.name}]` }
-      } else if (type instanceof HashType) {
+      }
+      if (type instanceof HashType) {
         return {
           default: this.nullStr,
           name: `MutableMapping[str, ${map.name}]`,
         }
-      } else if (type instanceof DelimArrayType) {
+      }
+      if (type instanceof DelimArrayType) {
         return {
           default: this.nullStr,
           name: `models.DelimSequence[${map.name}]`,
         }
       }
-      throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
+      throw new Error(
+        `Don't know how to handle: ${JSON.stringify(type)}`
+      )
     }
     if (type.name) {
       let name: string

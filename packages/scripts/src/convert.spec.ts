@@ -386,13 +386,16 @@ describe('spec conversion', () => {
 
   it('fixes missing conversion items', () => {
     const actual = fixConversion(openApiFrag, swaggerFrag)
-    expect(actual).toContain(`"style": "simple"`)
+    expect(actual).toContain(`"style":"simple"`)
   })
 
   it('handles a full conversion', () => {
     const swag = readFileSync(swaggerFile)
     const open = readFileSync(openApiFile)
     const actual = fixConversion(open, swag)
+    // const found = actual.indexOf(`"style": "simple"`)
+    // // Using this check rather than `toContain()` because that is timing out for some reason
+    // expect(found).toBeGreaterThan(0)
     expect(actual).toContain(`"style": "simple"`)
   })
 })

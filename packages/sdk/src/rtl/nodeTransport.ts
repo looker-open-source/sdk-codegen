@@ -114,13 +114,22 @@ export class NodeTransport extends BaseTransport {
       options
     )
     const req = rp(init).promise()
-    const res = await req
-    const resTyped = res as rq.Response
-    return {
-      body: await resTyped.body,
-      contentType: String(resTyped.headers['content-type']),
-      statusCode: resTyped.statusCode,
-      statusMessage: resTyped.statusMessage,
+    try {
+      const res = await req
+      const resTyped = res as rq.Response
+      return {
+        body: await resTyped.body,
+        contentType: String(resTyped.headers['content-type']),
+        statusCode: resTyped.statusCode,
+        statusMessage: resTyped.statusMessage,
+      }
+    } catch (e) {
+      return {
+        body: JSON.stringify(e),
+        contentType: 'application/json',
+        statusCode: e.code,
+        statusMessage: e.message,
+      }
     }
   }
 

@@ -429,9 +429,9 @@ export interface IDictionary<T> {
       boolean: { name: 'boolean', default: mt },
       double: { default: mt, name: 'number' },
       // TODO can we use blob for binary somehow? https://developer.mozilla.org/en-US/docs/Web/API/Blob
-byte: { default: mt, name: 'binary' },
-      
-float: { default: mt, name: 'number' },
+      byte: { default: mt, name: 'binary' },
+
+      float: { default: mt, name: 'number' },
 
       int32: { default: mt, name: 'number' },
 
@@ -440,10 +440,9 @@ float: { default: mt, name: 'number' },
       int64: { default: mt, name: 'number' },
 
       // TODO is there a default expression for datetime?
-date: { default: mt, name: 'Date' },
+      date: { default: mt, name: 'Date' },
 
-      
-number: { default: mt, name: 'number' },
+      number: { default: mt, name: 'number' },
 
       integer: { default: mt, name: 'number' },
 
@@ -464,12 +463,16 @@ number: { default: mt, name: 'number' },
       const map = this.typeMap(type.elementType)
       if (type instanceof ArrayType) {
         return { default: '[]', name: `${map.name}[]` }
-      } else if (type instanceof HashType) {
+      }
+      if (type instanceof HashType) {
         return { default: '{}', name: `IDictionary<${map.name}>` }
-      } else if (type instanceof DelimArrayType) {
+      }
+      if (type instanceof DelimArrayType) {
         return { default: '', name: `DelimArray<${map.name}>` }
       }
-      throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
+      throw new Error(
+        `Don't know how to handle: ${JSON.stringify(type, null, 2)}`
+      )
     }
 
     if (type.name) {

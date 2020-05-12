@@ -34,6 +34,19 @@ describe('NodeTransport', () => {
   const fullPath = 'https://github.com/looker-open-source/sdk-codegen'
   // const queryParams = { a: 'b c', d: false, nil: null, skip: undefined }
 
+  it('raw request retrieves fully qualified url', async () => {
+    const response = await xp.rawRequest('GET', fullPath)
+    expect(response).toBeDefined()
+    expect(response.statusCode).toEqual(200)
+    expect(response.statusMessage).toEqual('OK')
+    expect(response.contentType).toContain('text/html')
+    expect(response.body).toBeDefined()
+    const html = response.body.toString()
+    expect(html).toContain(
+      'One SDK to rule them all, and in the codegen bind them'
+    )
+  })
+
   it('retrieves fully qualified url', async () => {
     const response = await xp.request<string, Error>('GET', fullPath)
     expect(response).toBeDefined()
@@ -45,23 +58,23 @@ describe('NodeTransport', () => {
       )
     }
   })
-})
 
-describe('NodeCryptoHash', () => {
-  it('secureRandom', () => {
-    const hasher = new NodeCryptoHash()
-    const rand1 = hasher.secureRandom(5)
-    expect(rand1.length).toEqual(10)
-    const rand2 = hasher.secureRandom(32)
-    expect(rand2.length).toEqual(64)
-  })
+  describe('NodeCryptoHash', () => {
+    it('secureRandom', () => {
+      const hasher = new NodeCryptoHash()
+      const rand1 = hasher.secureRandom(5)
+      expect(rand1.length).toEqual(10)
+      const rand2 = hasher.secureRandom(32)
+      expect(rand2.length).toEqual(64)
+    })
 
-  it('sha256hash', async () => {
-    const hasher = new NodeCryptoHash()
-    const message = 'The quick brown fox jumped over the lazy dog.'
-    const hash = await hasher.sha256Hash(message)
-    expect(hash).toEqual(
-      '68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483'
-    )
+    it('sha256hash', async () => {
+      const hasher = new NodeCryptoHash()
+      const message = 'The quick brown fox jumped over the lazy dog.'
+      const hash = await hasher.sha256Hash(message)
+      expect(hash).toEqual(
+        '68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483'
+      )
+    })
   })
 })

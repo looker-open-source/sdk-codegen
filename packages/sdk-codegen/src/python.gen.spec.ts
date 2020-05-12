@@ -26,6 +26,7 @@
 
 import { TestConfig } from '../../test-utils/src/testUtils'
 import { PythonGen } from './python.gen'
+import { ArrayType, IType } from './sdkModels'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
