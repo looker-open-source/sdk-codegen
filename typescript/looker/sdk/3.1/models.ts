@@ -186,6 +186,10 @@ export interface IContentMeta {
    */
   look_id?: number
   /**
+   * Id of associated folder when content_type is "space" (read-only)
+   */
+  folder_id?: string
+  /**
    * Content Type ("dashboard", "look", or "space") (read-only)
    */
   content_type?: string

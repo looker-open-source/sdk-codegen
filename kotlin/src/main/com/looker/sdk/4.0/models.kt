@@ -354,6 +354,10 @@ data class ContentMeta (
    */
   var look_id: Long? = null,
   /**
+   * Id of associated folder when content_type is "space" (read-only)
+   */
+  var folder_id: String? = null,
+  /**
    * Content Type ("dashboard", "look", or "folder") (read-only)
    */
   var content_type: String? = null,
@@ -368,11 +372,7 @@ data class ContentMeta (
   /**
    * Content Slug (read-only)
    */
-  var slug: String? = null,
-  /**
-   * Id of associated folder when content_type is "space" (read-only)
-   */
-  var folder_id: String? = null
+  var slug: String? = null
 ) : Serializable
 
 data class ContentMetaGroupUser (

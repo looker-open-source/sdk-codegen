@@ -350,6 +350,10 @@ struct ContentMeta: SDKModel {
      */
     var look_id: Int64?
     /**
+     * Id of associated folder when content_type is "space" (read-only)
+     */
+    var folder_id: String?
+    /**
      * Content Type ("dashboard", "look", or "folder") (read-only)
      */
     var content_type: String?
@@ -365,10 +369,6 @@ struct ContentMeta: SDKModel {
      * Content Slug (read-only)
      */
     var slug: String?
-    /**
-     * Id of associated folder when content_type is "space" (read-only)
-     */
-    var folder_id: String?
 }
 
 struct ContentMetaGroupUser: SDKModel {

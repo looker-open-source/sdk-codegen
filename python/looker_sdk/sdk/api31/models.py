@@ -159,6 +159,7 @@ class ContentMeta(model.Model):
         parent_id: Id of Parent Content
         dashboard_id: Id of associated dashboard when content_type is "dashboard"
         look_id: Id of associated look when content_type is "look"
+        folder_id: Id of associated folder when content_type is "space"
         content_type: Content Type ("dashboard", "look", or "space")
         inherits: Whether content inherits its access levels from parent
         inheriting_id: Id of Inherited Content
@@ -172,6 +173,7 @@ class ContentMeta(model.Model):
     parent_id: Optional[int] = None
     dashboard_id: Optional[str] = None
     look_id: Optional[int] = None
+    folder_id: Optional[str] = None
     content_type: Optional[str] = None
     inherits: Optional[bool] = None
     inheriting_id: Optional[int] = None
