@@ -28,7 +28,7 @@
     "codegen"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --project tsconfig.build.json",
     "prebuild": "yarn clean",
     "clean": "rm -rf dist lib"
   },

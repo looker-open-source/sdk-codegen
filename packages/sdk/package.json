@@ -19,7 +19,7 @@
   "author": "Looker",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --project tsconfig.build.json",
     "prebuild": "yarn clean",
     "clean": "rm -rf dist lib",
     "deploy": "yarn build && npm publish",

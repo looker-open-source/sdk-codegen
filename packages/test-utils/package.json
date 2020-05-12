@@ -30,7 +30,7 @@
     "utilities"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --project tsconfig.build.json",
     "prebuild": "yarn clean",
     "clean": "rm -rf dist lib"
   },
@@ -65,7 +65,6 @@
     "js-yaml": "^3.12.1"
   },
   "devDependencies": {
-    "@looker/test-utils": "^0.1.0-alpha.1",
     "@types/js-yaml": "^3.12.1"
   }
 }
