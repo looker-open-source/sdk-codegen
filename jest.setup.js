@@ -24,8 +24,9 @@
 
  */
 
-import Adapter from 'enzyme-adapter-react-16'
-import { configure } from 'enzyme'
+/* eslint-disable @typescript-eslint/no-var-requires */
+const Adapter = require('enzyme-adapter-react-16')
+const { configure } = require('enzyme')
 
 require('@testing-library/jest-dom/extend-expect')
 require('jest-canvas-mock')
@@ -33,7 +34,7 @@ require('jest-styled-components')
 
 configure({ adapter: new Adapter() })
 
-const observeMock = function (cb, config) {
+const observeMock = function(cb, config) {
   this.observeCallback = cb
   this.observeConfig = config
   this.disconnect = jest.fn()
@@ -44,7 +45,7 @@ const globalAny = global
 globalAny.IntersectionObserver = observeMock
 
 // js-dom doesn't do scrollIntoView
-Element.prototype.scrollIntoView = jest.fn()
+// Element.prototype.scrollIntoView = jest.fn()
 
 beforeAll(() => {
   jest.resetAllMocks()

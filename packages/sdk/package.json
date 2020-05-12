@@ -25,6 +25,7 @@
     "deploy": "yarn build && npm publish",
     "docs": "typedoc --mode file --out docs",
     "test": "yarn jest",
+    "test2": "yarn jest --testPathPattern='/rtl/apiMethods.spec.ts'",
     "lint": "tslint --project tsconfig.json --format stylish 'src/**/*.ts'",
     "lint-fix": "tslint --fix --project tsconfig.json --format stylish 'src/**/*.ts'"
   },
