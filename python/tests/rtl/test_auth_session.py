@@ -22,7 +22,7 @@
 
 import json
 import pytest  # type: ignore
-import urllib
+import urllib.parse
 
 from looker_sdk import error
 from looker_sdk.rtl import auth_session as auth
@@ -48,6 +48,8 @@ client_id=your_API3_client_id
 client_secret=your_API3_client_secret
 # Set to false if testing locally against self-signed certs. Otherwise leave True
 verify_ssl=True
+looker_url=https://webserver.looker.com:9999
+redirect_uri=https://alice.com/auth
 
 [NO_CREDENTIALS]
 base_url=https://host1.looker.com:19999
@@ -64,7 +66,6 @@ client_secret=
 @pytest.fixture(scope="function")
 def auth_session(config_file):
     settings = api_settings.ApiSettings(config_file)
-    settings.api_version = "3.1"
     return auth.AuthSession(
         settings, MockTransport.configure(settings), serialize.deserialize31, "3.1"
     )
@@ -89,21 +90,36 @@ class MockTransport(transport.Transport):
         if authenticator:
             authenticator()
         if method == transport.HttpMethod.POST:
-            if path.endswith("login"):
-                token = "AdminAccessToken"
-                expected_header = {"Content-Type": "application/x-www-form-urlencoded"}
-                if headers != expected_header:
-                    raise TypeError(f"Must send {expected_header}")
-            elif path.endswith("login/5"):
-                token = "UserAccessToken"
-            access_token = json.dumps(
-                {"access_token": token, "token_type": "Bearer", "expires_in": 3600}
-            )
-            response = transport.Response(
-                ok=True,
-                value=bytes(access_token, encoding="utf-8"),
-                response_mode=transport.ResponseMode.STRING,
-            )
+            if path.endswith(("login", "login/5")):
+                if path.endswith("login"):
+                    token = "AdminAccessToken"
+                    expected_header = {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    }
+                    if headers != expected_header:
+                        raise TypeError(f"Must send {expected_header}")
+                else:
+                    token = "UserAccessToken"
+                access_token = json.dumps(
+                    {"access_token": token, "token_type": "Bearer", "expires_in": 3600}
+                )
+                response = transport.Response(
+                    ok=True,
+                    value=bytes(access_token, encoding="utf-8"),
+                    response_mode=transport.ResponseMode.STRING,
+                )
+            elif path.endswith("/api/token"):
+                access_token = {
+                    "access_token": "anOauthToken",
+                    "token_type": "Bearer",
+                    "expires_in": 3600,
+                    "refresh_token": "anOauthRefreshToken",
+                }
+                response = transport.Response(
+                    ok=True,
+                    value=json.dumps(access_token).encode("utf8"),
+                    response_mode=transport.ResponseMode.STRING,
+                )
         elif method == transport.HttpMethod.DELETE and path.endswith("logout"):
             response = transport.Response(
                 ok=True, value=b"", response_mode=transport.ResponseMode.STRING
@@ -201,16 +217,13 @@ def test_env_variables_override_config_file_credentials(
     mocked_request = mocker.patch.object(MockTransport, "request")
     mocked_request.return_value = transport.Response(
         ok=True,
-        value=bytes(
-            json.dumps(
-                {
-                    "access_token": "AdminAccessToken",
-                    "token_type": "Bearer",
-                    "expires_in": 3600,
-                }
-            ),
-            encoding="utf-8",
-        ),
+        value=json.dumps(
+            {
+                "access_token": "AdminAccessToken",
+                "token_type": "Bearer",
+                "expires_in": 3600,
+            }
+        ).encode("utf-8"),
         response_mode=transport.ResponseMode.STRING,
     )
 
@@ -222,3 +235,41 @@ def test_env_variables_override_config_file_credentials(
     mocked_request.assert_called()
     actual_request_body = mocked_request.call_args[1]["body"]
     assert actual_request_body == expected_body
+
+
+@pytest.fixture(scope="function")
+def oauth_session(config_file):
+    settings = api_settings.ApiSettings(config_file)
+    return auth.OAuthSession(
+        settings=settings,
+        transport=MockTransport.configure(settings),
+        deserialize=serialize.deserialize31,
+        serialize=serialize.serialize,
+        crypto=auth.CryptoHash(),
+        version="4.0",
+    )
+
+
+def test_oauth_create_auth_code_request_url(oauth_session):
+    url = oauth_session.create_auth_code_request_url("api", "mystate")
+    url = urllib.parse.urlparse(url)
+    assert url.hostname == "webserver.looker.com"
+    assert url.port == 9999
+    assert url.path == "/auth"
+    query = urllib.parse.parse_qs(url.query)
+    assert query.get("response_type") == ["code"]
+    # Re-using client_id from config. For oauth this is not an API3Credentials
+    # client_id but rather the app client_id
+    assert query.get("client_id") == ["your_API3_client_id"]
+    assert query.get("redirect_uri") == ["https://alice.com/auth"]
+    assert query.get("scope") == ["api"]
+    assert query.get("state") == ["mystate"]
+    assert query.get("code_challenge_method") == ["S256"]
+    assert query.get("code_challenge")
+
+
+def test_oauth_redeem_auth_code(oauth_session):
+    oauth_session.redeem_auth_code("foobar")
+    assert oauth_session.token.access_token == "anOauthToken"
+    assert oauth_session.token.refresh_token == "anOauthRefreshToken"
+    assert oauth_session.token.token_type == "Bearer"
