@@ -32,11 +32,7 @@ import {
   IParameter,
   IProperty,
   IType,
-  IntrinsicType,
-  ArrayType,
-  HashType,
   strBody,
-  DelimArrayType,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
 
@@ -412,7 +408,7 @@ export interface IDictionary<T> {
     }
     const types = this.api.sortedTypes()
     Object.values(types)
-      .filter((type) => type.refCount > 0 && !(type instanceof IntrinsicType))
+      .filter((type) => type.refCount > 0 && !type.intrinsic)
       .forEach((type) => names.push(`I${type.name}`))
     // TODO import default constants if necessary
     // Object.values(types)
@@ -426,25 +422,26 @@ export interface IDictionary<T> {
     const mt = ''
 
     const tsTypes: Record<string, IMappedType> = {
-      boolean: { name: 'boolean', default: mt },
-      double: { default: mt, name: 'number' },
+      boolean: { default: mt, name: 'boolean' },
       // TODO can we use blob for binary somehow? https://developer.mozilla.org/en-US/docs/Web/API/Blob
       byte: { default: mt, name: 'binary' },
+
+      // TODO is there a default expression for datetime?
+      date: { default: mt, name: 'Date' },
+
+      datetime: { default: mt, name: 'Date' },
+
+      double: { default: mt, name: 'number' },
 
       float: { default: mt, name: 'number' },
 
       int32: { default: mt, name: 'number' },
 
-      datetime: { default: mt, name: 'Date' },
-
       int64: { default: mt, name: 'number' },
 
-      // TODO is there a default expression for datetime?
-      date: { default: mt, name: 'Date' },
+      integer: { default: mt, name: 'number' },
 
       number: { default: mt, name: 'number' },
-
-      integer: { default: mt, name: 'number' },
 
       // TODO is there a default expression for date?
       object: { default: mt, name: 'any' },
@@ -461,18 +458,15 @@ export interface IDictionary<T> {
     if (type.elementType) {
       // This is a structure with nested types
       const map = this.typeMap(type.elementType)
-      if (type instanceof ArrayType) {
-        return { default: '[]', name: `${map.name}[]` }
+      switch (type.className) {
+        case 'ArrayType':
+          return { default: '[]', name: `${map.name}[]` }
+        case 'HashType':
+          return { default: '{}', name: `IDictionary<${map.name}>` }
+        case 'DelimArrayType':
+          return { default: '', name: `DelimArray<${map.name}>` }
       }
-      if (type instanceof HashType) {
-        return { default: '{}', name: `IDictionary<${map.name}>` }
-      }
-      if (type instanceof DelimArrayType) {
-        return { default: '', name: `DelimArray<${map.name}>` }
-      }
-      throw new Error(
-        `Don't know how to handle: ${JSON.stringify(type, null, 2)}`
-      )
+      throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
 
     if (type.name) {

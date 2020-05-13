@@ -24,8 +24,8 @@
 
  */
 
-import { TypescriptGen } from './typescript.gen'
 import { TestConfig } from '../../test-utils/src/testUtils'
+import { TypescriptGen } from './typescript.gen'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel

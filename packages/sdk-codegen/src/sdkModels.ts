@@ -276,6 +276,23 @@ export interface IType {
    */
   customTypes: IKeyList
 
+  /**
+   * Hopefully temporary concession to build problems with instance of ArrayType checks etc failing
+   */
+  className: string
+
+  /**
+   * Is this an intrinsic type?
+   */
+  intrinsic: boolean
+
+  /**
+   * Hacky workaround for inexplicable instanceof failures
+   * @param {string} className name of class to check
+   * @returns {boolean} true if class name matches this.className
+   */
+  instanceOf(className: string): boolean
+
   asHashString(): string
 
   isRecursive(): boolean
@@ -1169,6 +1186,14 @@ export class Type implements IType {
     return result
   }
 
+  get className(): string {
+    return this.name
+  }
+
+  get intrinsic(): boolean {
+    return false
+  }
+
   get status(): string {
     return this.schema['x-looker-status'] || ''
   }
@@ -1208,6 +1233,10 @@ export class Type implements IType {
         )
       }
     )
+  }
+
+  instanceOf(className: string): boolean {
+    return this.className === className
   }
 
   asHashString() {
@@ -1284,6 +1313,10 @@ export class ArrayType extends Type {
     this.customType = elementType.customType
   }
 
+  get className(): string {
+    return 'ArrayType'
+  }
+
   get readOnly() {
     return this.elementType.readOnly
   }
@@ -1294,6 +1327,10 @@ export class DelimArrayType extends Type {
     super(schema, `DelimArray<${elementType.name}>`)
     this.elementType = elementType
     this.customType = elementType.customType
+  }
+
+  get className(): string {
+    return 'DelimArrayType'
   }
 
   get readOnly() {
@@ -1310,6 +1347,10 @@ export class HashType extends Type {
     this.customType = elementType.customType
   }
 
+  get className(): string {
+    return 'HashType'
+  }
+
   get readOnly() {
     return this.elementType.readOnly
   }
@@ -1319,6 +1360,14 @@ export class IntrinsicType extends Type {
   constructor(name: string) {
     super({}, name)
     this.customType = ''
+  }
+
+  get className(): string {
+    return 'IntrinsicType'
+  }
+
+  get intrinsic(): boolean {
+    return true
   }
 
   get readOnly(): boolean {
@@ -1365,7 +1414,7 @@ export class WriteType extends Type {
           {
             description: p.description,
             // nullable/optional if property is nullable or property is complex type
-            nullable: p.nullable || !(p.type instanceof IntrinsicType),
+            nullable: p.nullable || !p.type.intrinsic,
           },
           type.schema.required
         )
@@ -2044,7 +2093,12 @@ export interface ICodeGen {
   //   # multi-line comment block
   comment(indent: string, description: string): string
 
-  // generates the method signature including parameter list and return type.
+  /**
+   * generates the method signature including parameter list and return type.
+   * @param {string} indent
+   * @param {IMethod} method
+   * @returns {string}
+   */
   methodSignature(indent: string, method: IMethod): string
 
   // convert endpoint pattern to platform-specific string template
@@ -2083,9 +2137,6 @@ export interface ICodeGen {
    * @returns {string} the parameter declaration
    */
   declareParameter(indent: string, method: IMethod, param: IParameter): string
-
-  // generates the method signature including parameter list and return type.
-  methodSignature(indent: string, method: IMethod): string
 
   /**
    * Handles the encoding call for path parameters within method declarations

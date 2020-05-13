@@ -29,7 +29,7 @@ import { TestConfig } from '../../test-utils/src/testUtils'
 import {
   ArrayType,
   CriteriaToSet,
-  DelimArrayType, HashType,
+  DelimArrayType,
   IMethod,
   IMethodResponse,
   IntrinsicType,
@@ -190,6 +190,7 @@ describe('sdkModels', () => {
         return element
     }
   }
+
   describe('method and type xrefs', () => {
     describe('custom types', () => {
       it('intrinsic types have undefined custom types', () => {
@@ -205,34 +206,40 @@ describe('sdkModels', () => {
           actual = new ArrayType(element, element.schema)
         }
         expect(actual).toBeDefined()
-        expect(actual instanceof ArrayType).toEqual(true)
+        expect(actual.instanceOf('ArrayType')).toEqual(true)
+        expect(actual.intrinsic).toEqual(false)
 
         actual = obfuscate('a', element)
         expect(actual).toBeDefined()
         expect(actual instanceof ArrayType).toEqual(true)
+        expect(actual.instanceOf('ArrayType')).toEqual(true)
 
         actual = obfuscate('d', element)
         expect(actual).toBeDefined()
-        expect(actual instanceof DelimArrayType).toEqual(true)
+        expect(actual.instanceOf('DelimArrayType')).toEqual(true)
 
         let method = apiTestModel.methods.query_task_multi_results
         let schema = method.params[0].type.schema
         actual = apiTestModel.resolveType(schema, 'simple')
         expect(actual).toBeDefined()
-        expect(actual instanceof DelimArrayType).toEqual(true)
+        expect(actual.instanceOf('DelimArrayType')).toEqual(true)
 
         let response = method.primaryResponse
         schema = response.type.schema
         actual = apiTestModel.resolveType(schema, 'simple')
         expect(actual).toBeDefined()
-        expect(actual instanceof HashType).toEqual(true)
+        expect(actual.instanceOf('HashType')).toEqual(true)
 
         method = apiTestModel.methods.all_datagroups
         response = method.primaryResponse
         schema = response.type.schema
         actual = apiTestModel.resolveType(schema)
         expect(actual).toBeDefined()
-        expect(actual instanceof ArrayType).toEqual(true)
+        expect(actual.instanceOf('ArrayType')).toEqual(true)
+
+        // actual = apiTestModel.resolveType(schema)
+        // expect(actual).toBeDefined()
+        // expect(actual instanceof ArrayType).toEqual(true)
       })
 
       it('array type uses element type as custom type', () => {

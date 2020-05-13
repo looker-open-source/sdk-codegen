@@ -32,11 +32,7 @@ import {
   IParameter,
   IProperty,
   IType,
-  IntrinsicType,
-  ArrayType,
-  HashType,
   strBody,
-  DelimArrayType,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
 
@@ -447,7 +443,7 @@ ${indent}return result`
     }
     const types = this.api.sortedTypes()
     Object.values(types)
-      .filter((type) => type.refCount > 0 && !(type instanceof IntrinsicType))
+      .filter((type) => type.refCount > 0 && !type.intrinsic)
       .forEach((type) => names.push(`I${type.name}`))
     // TODO import default constants if necessary
     // Object.values(types)
@@ -463,18 +459,18 @@ ${indent}return result`
     const ns = 'Lk'
 
     const swiftTypes: Record<string, IMappedType> = {
-      boolean: { name: 'Bool', default: this.nullStr },
-      double: { default: this.nullStr, name: 'Double' },
-      byte: { default: this.nullStr, name: 'binary' },
-      float: { default: this.nullStr, name: 'Float' },
-      datetime: { default: this.nullStr, name: 'Date' },
-      int32: { default: this.nullStr, name: 'Int32' },
-      date: { default: this.nullStr, name: 'Date' },
-      int64: { default: this.nullStr, name: 'Int64' },
       Error: { default: '', name: `${ns}Error` },
-      number: { name: 'Double', default: this.nullStr },
       Group: { default: '', name: `${ns}Group` },
+      boolean: { default: this.nullStr, name: 'Bool' },
+      byte: { default: this.nullStr, name: 'binary' },
+      date: { default: this.nullStr, name: 'Date' },
+      datetime: { default: this.nullStr, name: 'Date' },
+      double: { default: this.nullStr, name: 'Double' },
+      float: { default: this.nullStr, name: 'Float' },
+      int32: { default: this.nullStr, name: 'Int32' },
+      int64: { default: this.nullStr, name: 'Int64' },
       integer: { default: this.nullStr, name: 'Int' },
+      number: { default: this.nullStr, name: 'Double' },
       object: { default: this.nullStr, name: 'Any' },
       password: { default: this.nullStr, name: 'Password' },
       string: { default: this.nullStr, name: 'String' },
@@ -486,13 +482,14 @@ ${indent}return result`
     if (type.elementType) {
       // This is a structure with nested types
       const map = this.typeMap(type.elementType)
-      if (type instanceof ArrayType) {
-        return { default: '[]', name: `[${map.name}]` }
-      } else if (type instanceof HashType) {
-        // return {name: `StringDictionary<${map.name}>`, default: 'nil'}
-        return { default: 'nil', name: `StringDictionary<AnyCodable>` }
-      } else if (type instanceof DelimArrayType) {
-        return { default: 'nil', name: `DelimArray<${map.name}>` }
+      switch (type.className) {
+        case 'ArrayType':
+          return { default: '[]', name: `[${map.name}]` }
+        case 'HashType':
+          // return {name: `StringDictionary<${map.name}>`, default: 'nil'}
+          return { default: 'nil', name: `StringDictionary<AnyCodable>` }
+        case 'DelimArrayType':
+          return { default: 'nil', name: `DelimArray<${map.name}>` }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }

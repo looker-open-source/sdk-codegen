@@ -28,6 +28,7 @@
 
 import * as Models from '@looker/sdk-codegen'
 import { success } from '@looker/sdk-codegen-utils'
+import { IntrinsicType } from '@looker/sdk-codegen'
 import { readFileSync } from './nodeUtils'
 
 export const specFromFile = (specFile: string): Models.ApiModel => {
@@ -131,7 +132,7 @@ export class TypeGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
     const items: string[] = []
     Object.values(this.model.sortedTypes())
-      .filter((type) => !(type instanceof Models.IntrinsicType))
+      .filter((type) => !(type instanceof IntrinsicType))
       .forEach((type) =>
         items.push(this.codeFormatter.declareType(indent, type))
       )
@@ -150,7 +151,7 @@ export class TypeGenerator extends Generator<Models.IApiModel> {
     let write = 0
     let standard = 0
     Object.values(types)
-      .filter((type) => !(type instanceof Models.IntrinsicType))
+      .filter((type) => !(type instanceof IntrinsicType))
       .forEach((type) => {
         if (type instanceof Models.RequestType) {
           if (type.refCount > 0) request++

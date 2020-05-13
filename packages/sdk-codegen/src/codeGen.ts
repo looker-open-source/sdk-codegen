@@ -34,7 +34,6 @@ import {
   IProperty,
   IMappedType,
   ApiModel,
-  IntrinsicType,
 } from './sdkModels'
 
 export interface IVersionInfo {
@@ -330,7 +329,7 @@ export abstract class CodeGen implements ICodeGen {
     const items: string[] = []
     if (!this.api) return items
     Object.values(this.api.sortedTypes())
-      .filter((type) => type.refCount > 0 && !(type instanceof IntrinsicType))
+      .filter((type) => type.refCount > 0 && !type.intrinsic)
       .forEach((type) => items.push(type.name))
     return items
   }

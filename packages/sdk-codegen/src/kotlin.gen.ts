@@ -32,11 +32,7 @@ import {
   IParameter,
   IProperty,
   IType,
-  IntrinsicType,
-  ArrayType,
-  HashType,
   strBody,
-  DelimArrayType,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
 
@@ -375,7 +371,7 @@ import java.util.*
     }
     const types = this.api.sortedTypes()
     Object.values(types)
-      .filter((type) => type.refCount > 0 && !(type instanceof IntrinsicType))
+      .filter((type) => type.refCount > 0 && !type.intrinsic)
       .forEach((type) => names.push(`I${type.name}`))
     // TODO import default constants if necessary
     // Object.values(types)
@@ -388,16 +384,16 @@ import java.util.*
     super.typeMap(type)
     const mt = this.nullStr
     const ktTypes: Record<string, IMappedType> = {
-      boolean: { name: 'Boolean', default: mt },
-      double: { default: mt, name: 'Double' },
+      boolean: { default: mt, name: 'Boolean' },
       byte: { default: mt, name: 'binary' },
-      float: { default: mt, name: 'Float' },
-      datetime: { default: mt, name: 'Date' },
-      int32: { default: mt, name: 'Int' },
       date: { default: mt, name: 'Date' },
+      datetime: { default: mt, name: 'Date' },
+      double: { default: mt, name: 'Double' },
+      float: { default: mt, name: 'Float' },
+      int32: { default: mt, name: 'Int' },
       int64: { default: mt, name: 'Long' },
       integer: { default: mt, name: 'Int' },
-      number: { name: 'Double', default: mt },
+      number: { default: mt, name: 'Double' },
       object: { default: mt, name: 'Any' },
       password: { default: mt, name: 'Password' },
       string: { default: mt, name: 'String' },
@@ -409,15 +405,16 @@ import java.util.*
     if (type.elementType) {
       // This is a structure with nested types
       const map = this.typeMap(type.elementType)
-      if (type instanceof ArrayType) {
-        return { default: this.nullStr, name: `Array<${map.name}>` }
-      } else if (type instanceof HashType) {
-        // TODO figure out this bizarre string template error either in IntelliJ or Typescript
-        // return {name: `Map<String,${map.name}>`, default: '{}'}
-        if (map.name === 'String') map.name = 'Any' // TODO fix messy hash values
-        return { default: this.nullStr, name: 'Map<String' + `,${map.name}>` }
-      } else if (type instanceof DelimArrayType) {
-        return { default: this.nullStr, name: `DelimArray<${map.name}>` }
+      switch (type.className) {
+        case 'ArrayType':
+          return { default: this.nullStr, name: `Array<${map.name}>` }
+        case 'HashType':
+          // TODO figure out this bizarre string template error either in IntelliJ or Typescript
+          // return {name: `Map<String,${map.name}>`, default: '{}'}
+          if (map.name === 'String') map.name = 'Any' // TODO fix messy hash values
+          return { default: this.nullStr, name: 'Map<String' + `,${map.name}>` }
+        case 'DelimArrayType':
+          return { default: this.nullStr, name: `DelimArray<${map.name}>` }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }

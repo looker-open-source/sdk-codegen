@@ -1,8 +1,4 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "lib": ["es2017", "es2017.object", "dom"]
-  },
   "extends": "../../tsconfig.json",
   "include": ["src/**/*"]
 }

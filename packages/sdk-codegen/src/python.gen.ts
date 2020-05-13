@@ -26,9 +26,6 @@
 
 import {
   Arg,
-  ArrayType,
-  DelimArrayType,
-  HashType,
   IMappedType,
   IMethod,
   IParameter,
@@ -352,12 +349,17 @@ ${this.hooks.join('\n')}
       method.httpMethod.toLowerCase()
     )}`
     let assertTypeName = this.methodReturnType(method)
-    if (method.type instanceof ArrayType) {
-      assertTypeName = 'list'
-    } else if (method.type instanceof HashType) {
-      assertTypeName = 'dict'
-    } else if (assertTypeName === 'Union[str, bytes]') {
-      assertTypeName = '(str, bytes)'
+    switch (method.type.className) {
+      case 'ArrayType':
+        assertTypeName = 'list'
+        break
+      case 'HashType':
+        assertTypeName = 'dict'
+        break
+      default:
+        if (assertTypeName === 'Union[str, bytes]') {
+          assertTypeName = '(str, bytes)'
+        }
     }
     let assertion = `${indent}assert `
     if (assertTypeName === this.nullStr) {
@@ -488,24 +490,21 @@ ${this.hooks.join('\n')}
     super.typeMap(type)
     if (type.elementType) {
       const map = this._typeMap(type.elementType, format)
-      if (type instanceof ArrayType) {
-        return { default: this.nullStr, name: `Sequence[${map.name}]` }
+      switch (type.className) {
+        case 'ArrayType':
+          return { default: this.nullStr, name: `Sequence[${map.name}]` }
+        case 'HashType':
+          return {
+            default: this.nullStr,
+            name: `MutableMapping[str, ${map.name}]`,
+          }
+        case 'DelimArrayType':
+          return {
+            default: this.nullStr,
+            name: `models.DelimSequence[${map.name}]`,
+          }
       }
-      if (type instanceof HashType) {
-        return {
-          default: this.nullStr,
-          name: `MutableMapping[str, ${map.name}]`,
-        }
-      }
-      if (type instanceof DelimArrayType) {
-        return {
-          default: this.nullStr,
-          name: `models.DelimSequence[${map.name}]`,
-        }
-      }
-      throw new Error(
-        `Don't know how to handle: ${JSON.stringify(type)}`
-      )
+      throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
     if (type.name) {
       let name: string

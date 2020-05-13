@@ -26,7 +26,6 @@
 
 import { TestConfig } from '../../test-utils/src/testUtils'
 import { PythonGen } from './python.gen'
-import { ArrayType, IType } from './sdkModels'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
@@ -431,7 +430,8 @@ class ApiVersion(model.Model):
 @attr.s(auto_attribs=True, kw_only=True, init=False)
 class WriteMergeQuery(model.Model):
     """
-    Dynamically generated writeable type for MergeQuery
+    Dynamically generated writeable type for MergeQuery removes properties:
+can, id, result_maker_id
 
     Attributes:
         column_limit: Column Limit
