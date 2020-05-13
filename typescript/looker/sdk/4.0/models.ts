@@ -355,6 +355,10 @@ export interface IContentMeta {
    */
   look_id?: number
   /**
+   * Id of associated folder when content_type is "space" (read-only)
+   */
+  folder_id?: string
+  /**
    * Content Type ("dashboard", "look", or "folder") (read-only)
    */
   content_type?: string
@@ -370,10 +374,6 @@ export interface IContentMeta {
    * Content Slug (read-only)
    */
   slug?: string
-  /**
-   * Id of associated folder when content_type is "space" (read-only)
-   */
-  folder_id?: string
 }
 
 export interface IContentMetaGroupUser {

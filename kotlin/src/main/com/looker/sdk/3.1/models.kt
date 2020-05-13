@@ -185,6 +185,10 @@ data class ContentMeta (
    */
   var look_id: Long? = null,
   /**
+   * Id of associated folder when content_type is "space" (read-only)
+   */
+  var folder_id: String? = null,
+  /**
    * Content Type ("dashboard", "look", or "space") (read-only)
    */
   var content_type: String? = null,
