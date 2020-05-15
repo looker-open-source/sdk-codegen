@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import configparser
+
 import pytest  # type: ignore
 
 from looker_sdk.rtl import api_settings
@@ -107,10 +109,19 @@ def test_it_assigns_defaults_to_empty_settings(config_file):
 
 
 def test_it_fails_with_a_bad_section_name(config_file):
-    """ApiSettings should raise an error if section is not found."""
-    with pytest.raises(KeyError) as exc_info:
+    """ApiSettings should raise NoSectionError section is not found."""
+    with pytest.raises(configparser.NoSectionError) as exc_info:
         api_settings.ApiSettings(config_file, "NotAGoodLookForYou")
     assert exc_info.match("NotAGoodLookForYou")
+
+
+def test_it_fails_with_a_bad_file_path():
+    """ApiSettings should raise an error non-default ini path doesn't exist."""
+    api_settings.ApiSettings()  # defaulting to _DEFAULT_INI, no error
+    api_settings.ApiSettings("looker.ini")  # specifying _DEFAULT_INI, no error
+    with pytest.raises(FileNotFoundError) as exc_info:
+        api_settings.ApiSettings("/no/such/file.ini")
+    assert exc_info.match("file.ini")
 
 
 @pytest.mark.parametrize(
@@ -170,7 +181,7 @@ def test_configure_with_no_file(monkeypatch):
     monkeypatch.setenv("LOOKERSDK_CLIENT_ID", "id123")
     monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", "secret123")
 
-    settings = api_settings.ApiSettings("no-such-file")
+    settings = api_settings.ApiSettings("")  # explicitly setting config_file to falsey
     assert settings.base_url == "https://host1.looker.com:19999"
     data = vars(settings)
     assert "client_id" not in data
@@ -211,8 +222,8 @@ def test_it_unquotes_quoted_env_var_values(monkeypatch):
     monkeypatch.setenv("LOOKERSDK_TIMEOUT", "100")
     monkeypatch.setenv("LOOKERSDK_VERIFY_SSL", '"false"')
 
-    settings = api_settings.ApiSettings("no-such-file")
+    settings = api_settings.ApiSettings()  # _DEFAULT_INI absence doesn't raise
 
     assert settings.base_url == "https://host1.looker.com:19999"
     assert settings.verify_ssl is False
-    assert settings.timeout is 100
+    assert settings.timeout == 100
