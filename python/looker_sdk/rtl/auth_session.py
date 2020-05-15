@@ -148,7 +148,7 @@ class AuthSession:
         response = self._ok(
             self.transport.request(
                 transport.HttpMethod.POST,
-                f"{self.settings.base_url}/api/login",
+                f"{self.settings.base_url}/api/{self.version}/login",
                 body=serialized,
                 headers={"Content-Type": "application/x-www-form-urlencoded"},
             )
