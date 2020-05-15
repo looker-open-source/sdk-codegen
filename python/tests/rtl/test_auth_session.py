@@ -31,15 +31,16 @@ from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
 
 
-@pytest.fixture(scope="module")
-def config_file(tmpdir_factory):
+@pytest.fixture(scope="function")
+def config_file(tmpdir_factory, monkeypatch):
     """Creates a sample looker.ini file and returns it"""
+    # make sure test is only using these settings
+    for setting in ["BASE_URL", "CLIENT_ID", "CLIENT_SECRET"]:
+        monkeypatch.delenv(f"LOOKERSDK_{setting}", raising=False)
     filename = tmpdir_factory.mktemp("settings").join("looker.ini")
     filename.write(
         """
 [Looker]
-# API version is required
-api_version=3.1
 # Base URL for API. Do not include /api/* in the url
 base_url=https://host1.looker.com:19999
 # API 3 client id
