@@ -27,17 +27,10 @@
 import { DefaultSettings } from './apiSettings'
 import { ExtensionTransport } from './extensionTransport'
 import { IHostConnection } from './extensionSdk'
-import { lookerVersion } from './constants'
 
 describe('ExtensionTransport', () => {
   const queryParams = { a: 'b c', d: false, nil: null, skip: undefined }
   const body = { song: 'how much is that doggy' }
-  const defaultOptions = {
-    agentTag: `TS-SDK ${lookerVersion}`,
-    base_url: '',
-    timeout: 120,
-    verify_ssl: true,
-  }
   let transport: ExtensionTransport
   let connection: IHostConnection
   let mockRequest: any
@@ -71,7 +64,7 @@ describe('ExtensionTransport', () => {
         { song: 'how much is that doggy' },
         { a: 'b c', d: false, nil: null, skip: undefined },
         undefined,
-        defaultOptions
+        undefined
       )
     } catch (error) {
       fail(error)
@@ -87,7 +80,7 @@ describe('ExtensionTransport', () => {
         { song: 'how much is that doggy' },
         { a: 'b c', d: false, nil: null, skip: undefined },
         undefined,
-        defaultOptions
+        undefined
       )
     } catch (error) {
       fail(error)

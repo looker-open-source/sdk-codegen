@@ -50,7 +50,6 @@ export class ExtensionTransport implements ITransport {
     authenticator?: any,
     options?: Partial<ITransportSettings>
   ): Promise<IRawResponse> {
-    options = options ? { ...this.options, ...options } : this.options
     return this.hostConnection.rawRequest(
       method,
       path,
@@ -69,7 +68,6 @@ export class ExtensionTransport implements ITransport {
     authenticator?: any,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
-    options = options ? { ...this.options, ...options } : this.options
     return this.hostConnection.request(
       method,
       path,
