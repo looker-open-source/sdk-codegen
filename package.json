@@ -25,7 +25,7 @@
     "sdk": "ts-node packages/scripts/src/sdkGen.ts",
     "jsonify": "ts-node packages/scripts/src/yamlToJson.ts",
     "view": "yarn api-explorer",
-    "wipe": "rm -rf api/ && rm *.?.?.json && rm *.?.?.oas.json",
+    "wipe": "rm -rf api spec",
     "prebuild": "yarn clean",
     "build": "run-p -c build:*",
     "_build:es": "yarn lerna exec --scope '@looker/*' --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments'",

@@ -167,7 +167,7 @@ export abstract class AuthSession implements IAuthSession {
       if (result instanceof Buffer) {
         throw sdkError({ message: result.toString('utf8') })
       } else {
-        throw sdkError(result as any)
+        throw sdkError(result)
       }
     }
   }

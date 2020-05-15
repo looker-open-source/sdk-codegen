@@ -116,6 +116,7 @@ export class BrowserTransport extends BaseTransport {
     return {
       body: await res.text(),
       contentType,
+      ok: true,
       statusCode: res.status,
       statusMessage: res.statusText,
     }

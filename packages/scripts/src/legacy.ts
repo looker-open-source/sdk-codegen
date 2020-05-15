@@ -30,7 +30,7 @@ import { log } from '@looker/sdk-codegen-utils'
 import { IGeneratorSpec as LanguageSpec, legacyLanguages } from './languages'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { quit, run } from './nodeUtils'
-import { logConvert } from './fetchSpec'
+import { fetchLookerVersions, logConvertSpec } from './fetchSpec'
 
 /**
  * Returns the last version in the .ini api_versions comma-delimited list
@@ -85,7 +85,8 @@ const runConfig = async (name: string, props: ISDKConfigProps) => {
   log(`processing ${name} configuration ...`)
   const apiVersion = defaultApiVersion(props)
   props.api_version = apiVersion
-  const openApiFile = await logConvert(name, props)
+  const lookerVersions = fetchLookerVersions(props)
+  const openApiFile = await logConvertSpec(name, props, lookerVersions)
   const languages = legacyLanguages()
 
   const results: any[] = []

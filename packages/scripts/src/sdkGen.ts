@@ -30,7 +30,11 @@ import * as fs from 'fs'
 import { danger, log } from '@looker/sdk-codegen-utils'
 import { IVersionInfo, ICodeGen } from '@looker/sdk-codegen'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { fetchLookerVersion, logConvert, openApiFileName } from './fetchSpec'
+import {
+  fetchLookerVersion,
+  fetchLookerVersions,
+  logConvertSpec,
+} from './fetchSpec'
 import {
   MethodGenerator,
   specFromFile,
@@ -88,7 +92,8 @@ const writeFile = (fileName: string, content: string): string => {
     const config = SDKConfig()
     for (const language of languages) {
       const [name, props] = Object.entries(config)[0]
-      const lookerVersion = await fetchLookerVersion(props)
+      const lookerVersions = await fetchLookerVersions(props)
+      const lookerVersion = await fetchLookerVersion(props, lookerVersions)
       // Iterate through all specified API versions
       const apis = apiVersions(props)
       const lastApi = apis[apis.length - 1]
@@ -99,9 +104,8 @@ const writeFile = (fileName: string, content: string): string => {
           apiVersion: api,
           lookerVersion,
         }
-        void (await logConvert(name, p))
-        const oasFile = openApiFileName(name, p)
-        // const swaggerFile = specFileName(name, p)
+        const oasFile = await logConvertSpec(name, p, lookerVersions)
+        log(`Using specification ${oasFile} for code generation`)
         const apiModel = specFromFile(oasFile)
         const gen = getFormatter(language, apiModel, versions)
         if (!gen) {

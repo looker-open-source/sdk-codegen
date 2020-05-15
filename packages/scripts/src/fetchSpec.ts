@@ -32,8 +32,9 @@ import {
   defaultTimeout,
   ITransportSettings,
   sdkOk,
+  sdkError,
 } from '@looker/sdk'
-import { fail, quit, isFileSync } from './nodeUtils'
+import { fail, quit, isFileSync, utf8Encoding, isDirSync } from './nodeUtils'
 import { ISDKConfigProps } from './sdkConfig'
 import { convertSpec } from './convert'
 
@@ -92,7 +93,7 @@ let transport: NodeTransport
  * @returns {NodeTransport} codegen-specific overrides
  * @constructor
  */
-const Transport = (props: ISDKConfigProps) => {
+export const specTransport = (props: ISDKConfigProps) => {
   if (transport) return transport
   const options: ITransportSettings = {
     agentTag: 'SDK Codegen',
@@ -110,14 +111,45 @@ const loginUrl = (props: ISDKConfigProps) =>
 const logoutUrl = (props: ISDKConfigProps) =>
   `${props.base_url}/api/${props.api_version}/logout`
 
-export const specFileUrl = (props: ISDKConfigProps) =>
-  `${props.base_url}/api/${props.api_version}/swagger.json`
+export const supportedVersion = (version: string, versions: any) => {
+  const found = Object.entries(versions.supported_versions).find(
+    ([, value]) => (value as any).version === version
+  )
+  if (found) return found[1]
+  return undefined
+}
 
-export const specFileName = (name: string, props: ISDKConfigProps) =>
-  `./${name}.${props.api_version}.json`
+export const swaggerFileUrl = (props: ISDKConfigProps, versions: any) => {
+  const apiVersion = props.api_version
+  if (!versions) {
+    return `${props.base_url}/api/${apiVersion}/swagger.json`
+  }
+  const version: any = supportedVersion(apiVersion, versions)
+  if (!version) {
+    throw sdkError(`${apiVersion} is not a supported version`)
+  }
+  return version.swagger_url
+}
+
+export const openApiFileUrl = (props: ISDKConfigProps, versions: any) => {
+  const apiVersion = props.api_version
+  if (!versions) {
+    return ''
+  }
+  const version: any = supportedVersion(apiVersion, versions)
+  if (!version) {
+    throw sdkError(`${apiVersion} is not a supported version`)
+  }
+  return version.openapi_url
+}
+
+export const specPath = 'spec'
+
+export const swaggerFileName = (name: string, props: ISDKConfigProps) =>
+  `${specPath}/${name}.${props.api_version}.json`
 
 export const openApiFileName = (name: string, props: ISDKConfigProps) =>
-  `./${name}.${props.api_version}.oas.json`
+  `${specPath}/${name}.${props.api_version}.oas.json`
 
 /**
  * Is there an authentication error?
@@ -130,7 +162,7 @@ const badAuth = (content: string | object) => {
 }
 
 export const logout = async (props: ISDKConfigProps, token: string) => {
-  const xp = Transport(props)
+  const xp = specTransport(props)
 
   return sdkOk<string, Error>(
     xp.request<string, Error>(
@@ -145,7 +177,7 @@ export const logout = async (props: ISDKConfigProps, token: string) => {
 }
 
 export const login = async (props: ISDKConfigProps) => {
-  const xp = Transport(props)
+  const xp = specTransport(props)
   const creds = {
     client_id: props.client_id,
     client_secret: props.client_secret,
@@ -192,7 +224,7 @@ export const getUrl = async (
   url: string,
   options?: Partial<ITransportSettings>
 ) => {
-  const xp = Transport(props)
+  const xp = specTransport(props)
   // log(`GETting ${url} ...`)
   return sdkOk<string, Error>(
     xp.request<string, Error>(
@@ -229,16 +261,50 @@ export const authGetUrl = async (props: ISDKConfigProps, url: string) => {
   return content
 }
 
-export const fetchSpecFile = async (name: string, props: ISDKConfigProps) => {
-  const fileName = specFileName(name, props)
+export const fetchLookerVersions = async (props: ISDKConfigProps) => {
+  return await authGetUrl(props, `${props.base_url}/versions`)
+}
+
+export const fetchLookerVersion = async (
+  props: ISDKConfigProps,
+  versions?: any
+) => {
+  if (!versions) {
+    versions = await fetchLookerVersions(props)
+  }
+  const [lookerVersion] = versions.looker_release_version.match(/^\d+\.\d+/gi)
+  return lookerVersion
+}
+
+/**
+ * Creates spec directory if needed, converts content to JSON string, writes file
+ *
+ * NOTE: if specFile is not in the spec path, write errors may occur
+ *
+ * @param {string} specFile name of spec file to write
+ * @param {object | string} content to convert to a JSON string
+ * @returns {string} name of file written
+ */
+export const writeSpecFile = (specFile: string, content: object | string) => {
+  const data = typeof content === 'string' ? content : JSON.stringify(content)
+  if (!isDirSync(specPath)) fs.mkdirSync(specPath, { recursive: true })
+  fs.writeFileSync(specFile, data, utf8Encoding)
+  return specFile
+}
+
+export const fetchSwaggerFile = async (
+  name: string,
+  props: ISDKConfigProps
+) => {
+  const fileName = swaggerFileName(name, props)
   if (isFileSync(fileName)) return fileName
 
   try {
-    const fileUrl = specFileUrl(props)
+    const versions = await fetchLookerVersions(props)
+    const fileUrl = swaggerFileUrl(props, versions)
     const content = await authGetUrl(props, fileUrl)
-    const json = JSON.stringify(content)
 
-    fs.writeFileSync(fileName, json)
+    writeSpecFile(fileName, content)
 
     return fileName
   } catch (err) {
@@ -247,18 +313,12 @@ export const fetchSpecFile = async (name: string, props: ISDKConfigProps) => {
   }
 }
 
-export const logFetch = async (name: string, props: ISDKConfigProps) => {
-  const specFile = await fetchSpecFile(name, props)
+export const logFetchSwagger = async (name: string, props: ISDKConfigProps) => {
+  const specFile = await fetchSwaggerFile(name, props)
   if (!specFile) {
-    return fail('fetchSpecFile', 'No specification file name returned')
+    return fail('fetchSwaggerFile', 'No specification file name returned')
   }
   return specFile
-}
-
-export const fetchLookerVersion = async (props: ISDKConfigProps) => {
-  const versions: any = await authGetUrl(props, `${props.base_url}/versions`)
-  const [lookerVersion] = versions.looker_release_version.match(/^\d+\.\d+/gi)
-  return lookerVersion
 }
 
 export const getVersionInfo = async (
@@ -283,18 +343,33 @@ export const getVersionInfo = async (
  * Fetch (if needed) and convert a Swagger API specification to OpenAPI
  * @param {string} name base name of the target file
  * @param {ISDKConfigProps} props SDK configuration properties to use
+ * @param versions version information structure from Looker
  * @returns {Promise<string>} name of converted OpenAPI file
  */
-export const logConvert = async (name: string, props: ISDKConfigProps) => {
+export const logConvertSpec = async (
+  name: string,
+  props: ISDKConfigProps,
+  versions: any
+) => {
+  // if openApiFile is resolved correctly, this value will be the file name
+  let result = ''
   const oaFile = openApiFileName(name, props)
   if (isFileSync(oaFile)) return oaFile
 
-  const specFile = await logFetch(name, props)
-  const openApiFile = convertSpec(specFile, oaFile)
-  if (!openApiFile) {
-    return fail('logConvert', 'No file name returned for openAPI upgrade')
-  }
+  const apiUrl = await openApiFileUrl(props, versions)
+  if (apiUrl) {
+    const spec = await authGetUrl(props, apiUrl)
+    if (spec) {
+      result = writeSpecFile(oaFile, spec)
+    }
+  } else {
+    const specFile = await logFetchSwagger(name, props)
+    result = convertSpec(specFile, oaFile)
+    if (!result) {
+      return fail('logConvert', 'No file name returned for openAPI upgrade')
+    }
 
-  await lintCheck(openApiFile)
-  return openApiFile
+    await lintCheck(result)
+  }
+  return result
 }

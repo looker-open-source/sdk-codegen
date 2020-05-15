@@ -166,6 +166,7 @@ export enum StatusCode {
  * Untyped basic HTTP response type for "raw" HTTP requests
  */
 export interface IRawResponse {
+  ok: boolean
   statusCode: number
   statusMessage: string
   contentType: string
@@ -411,21 +412,35 @@ export function addQueryParams(path: string, obj?: Values) {
 
 /**
  * SDK error handler
- * @param result any kind of error
+ * @param response any kind of error
  * @returns a new `Error` object with the failure message
  */
-export function sdkError(result: any) {
-  if ('message' in result && typeof result.message === 'string') {
-    return new Error(result.message)
+export function sdkError(response: any) {
+  if ('error' in response) {
+    const error = response.error
+    if (typeof error === 'string') {
+      return new Error(error)
+    }
+    // Try to get most specific error first
+    if ('statusMessage' in error) {
+      return new Error(error.statusMessage)
+    }
+    if ('error' in error && error.error instanceof Buffer) {
+      const result = Buffer.from(error.error).toString('utf-8')
+      return new Error(result)
+    }
+    if (error instanceof Buffer) {
+      const result = Buffer.from(error).toString('utf-8')
+      return new Error(result)
+    }
+    if ('message' in error) {
+      return new Error(response.error.message.toString())
+    }
   }
-  if (
-    'error' in result &&
-    'message' in result.error &&
-    typeof result.error.message === 'string'
-  ) {
-    return new Error(result.error.message)
+  if ('message' in response) {
+    return new Error(response.message)
   }
-  const error = JSON.stringify(result)
+  const error = JSON.stringify(response)
   return new Error(`Unknown error with SDK method ${error}`)
 }
 
@@ -459,6 +474,6 @@ export async function sdkOk<TSuccess, TError>(
   if (result.ok) {
     return result.value
   } else {
-    throw sdkError(result as any)
+    throw sdkError(result)
   }
 }

@@ -24,9 +24,20 @@
 
  */
 
+import * as fs from 'fs'
 import { TestConfig } from '../../test-utils/src/testUtils'
-import { authGetUrl, getVersionInfo, login, specFileUrl } from './fetchSpec'
+import {
+  authGetUrl,
+  fetchLookerVersions,
+  getVersionInfo,
+  login,
+  swaggerFileUrl,
+  supportedVersion,
+  logConvertSpec,
+  openApiFileName,
+} from './fetchSpec'
 import { ISDKConfigProps } from './sdkConfig'
+import { isFileSync } from './nodeUtils'
 
 const config = TestConfig()
 const props = (config.section as unknown) as ISDKConfigProps
@@ -50,12 +61,42 @@ describe('fetch operations', () => {
     expect(token).toBeDefined()
   })
 
+  it('get versions', async () => {
+    expect(props).toBeDefined()
+    const actual = await fetchLookerVersions(props)
+    expect(actual).toBeDefined()
+    const version: any = supportedVersion('4.0', actual)
+    expect(version).toBeDefined()
+    if (version) {
+      expect(version.version).toEqual('4.0')
+      expect(version.swagger_url).toBeDefined()
+      // TODO enable when these values are surfaced in Looker
+      // expect(version.swagger_min_url).toBeDefined()
+      // expect(version.openapi_url).toBeDefined()
+      // expect(version.openapi_min_url).toBeDefined()
+    }
+  })
+
   it('authGetUrl', async () => {
     expect(props).toBeDefined()
-    const fileUrl = specFileUrl(props)
+    const fileUrl = swaggerFileUrl(props, await fetchLookerVersions(props))
     const content = await authGetUrl(props, fileUrl)
     expect(content).toBeDefined()
     expect(content.swagger).toBeDefined()
     expect(content.swagger).toEqual('2.0')
+  })
+
+  it('logConvertSpec', async () => {
+    expect(props).toBeDefined()
+    const name = 'Looker'
+    const fileName = openApiFileName(name, props)
+    const lookerVersions = await fetchLookerVersions(props)
+    // Make sure the file doesn't exist
+    if (isFileSync(fileName)) {
+      fs.unlinkSync(fileName)
+    }
+    const actual = await logConvertSpec(name, props, lookerVersions)
+    expect(actual).toBeDefined()
+    expect(actual.length).toBeGreaterThan(0)
   })
 })

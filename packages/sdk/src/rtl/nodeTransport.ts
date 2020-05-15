@@ -29,6 +29,7 @@ import rq, { Request } from 'request'
 
 import rp from 'request-promise-native'
 import { PassThrough, Readable } from 'readable-stream'
+import { StatusCodeError } from 'request-promise-native/errors'
 import {
   Authenticator,
   defaultTimeout,
@@ -69,7 +70,7 @@ async function parseResponse(res: IRawResponse) {
     if (res.contentType.match(/^application\/.*\bjson\b/g)) {
       try {
         if (result instanceof Buffer) {
-          result = result.toString(utf8)
+          result = (result as Buffer).toString(utf8)
         }
         if (result instanceof Object) {
           return result
@@ -80,7 +81,7 @@ async function parseResponse(res: IRawResponse) {
       }
     }
     if (result instanceof Buffer) {
-      result = result.toString(utf8)
+      result = (result as Buffer).toString(utf8)
     }
     return result.toString()
   } else {
@@ -120,15 +121,40 @@ export class NodeTransport extends BaseTransport {
       return {
         body: await resTyped.body,
         contentType: String(resTyped.headers['content-type']),
+        ok: true,
         statusCode: resTyped.statusCode,
         statusMessage: resTyped.statusMessage,
       }
     } catch (e) {
+      const statusMessage = `${method} ${path}`
+      let statusCode = 404
+      let contentType = 'text'
+      let body = ''
+      if (e instanceof StatusCodeError) {
+        statusCode = e.statusCode
+        const text = e.message
+        // Need to re-parse the error message
+        const matches = /^\d+\s*-\s*({.*})/gim.exec(text)
+        if (matches && matches.length > 1) {
+          const json = matches[1]
+          const obj = JSON.parse(json)
+          body = Buffer.from(obj.data).toString('utf8')
+        } else {
+          body = e.message
+        }
+        body = `${statusMessage} ${body}`
+      } else if (e.error instanceof Buffer) {
+        body = Buffer.from(e.error).toString('utf8')
+      } else {
+        body = JSON.stringify(e)
+        contentType = 'application/json'
+      }
       return {
-        body: JSON.stringify(e),
-        contentType: 'application/json',
-        statusCode: e.code,
-        statusMessage: e.message,
+        body,
+        contentType,
+        ok: false,
+        statusCode,
+        statusMessage,
       }
     }
   }

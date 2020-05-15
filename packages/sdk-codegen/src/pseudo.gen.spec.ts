@@ -24,10 +24,29 @@
 
  */
 
-export * from './codeGen'
-export * from './sdkModels'
-export * from './kotlin.gen'
-export * from './pseudo.gen'
-export * from './python.gen'
-export * from './swift.gen'
-export * from './typescript.gen'
+import { TestConfig } from '../../test-utils/src/testUtils'
+import { PseudoGen } from './pseudo.gen'
+
+const config = TestConfig()
+const apiTestModel = config.apiTestModel
+
+const gen = new PseudoGen(apiTestModel)
+
+describe('pseudocode', () => {
+  describe('method signature', () => {
+    it('optional body and additional param', () => {
+      const method = apiTestModel.methods.create_user_credentials_email
+      expect(method).toBeDefined()
+      const expected = `create_user_credentials_email(user_id, body, fields): CredentialsEmail`
+      const actual = gen.methodSignature('', method)
+      expect(actual).toEqual(expected)
+    })
+    it('no params', () => {
+      const method = apiTestModel.methods.all_datagroups
+      expect(method).toBeDefined()
+      const expected = `all_datagroups(): Datagroup[]`
+      const actual = gen.methodSignature('', method)
+      expect(actual).toEqual(expected)
+    })
+  })
+})

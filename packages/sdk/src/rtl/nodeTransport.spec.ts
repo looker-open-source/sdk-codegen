@@ -32,11 +32,13 @@ describe('NodeTransport', () => {
   const settings = { base_url: hostname } as ITransportSettings
   const xp = new NodeTransport(settings)
   const fullPath = 'https://github.com/looker-open-source/sdk-codegen'
+  const badPath = fullPath + '_bogus'
   // const queryParams = { a: 'b c', d: false, nil: null, skip: undefined }
 
   it('raw request retrieves fully qualified url', async () => {
     const response = await xp.rawRequest('GET', fullPath)
     expect(response).toBeDefined()
+    expect(response.ok).toEqual(true)
     expect(response.statusCode).toEqual(200)
     expect(response.statusMessage).toEqual('OK')
     expect(response.contentType).toContain('text/html')
@@ -45,6 +47,19 @@ describe('NodeTransport', () => {
     expect(html).toContain(
       'One SDK to rule them all, and in the codegen bind them'
     )
+  })
+
+  it('gracefully handles Node-level transport errors', async () => {
+    const response = await xp.rawRequest('GET', badPath)
+    const errorMessage = `GET ${badPath}`
+    expect(response).toBeDefined()
+    expect(response.ok).toEqual(false)
+    expect(response.statusCode).toEqual(404)
+    expect(response.body).toBeDefined()
+    expect(response.body.indexOf(errorMessage)).toEqual(0)
+    expect(response.body.length).toBeGreaterThan(0)
+    expect(response.statusMessage.indexOf('"type":"Buffer":')).toEqual(-1)
+    expect(response.statusMessage.indexOf(errorMessage)).toEqual(0)
   })
 
   it('retrieves fully qualified url', async () => {

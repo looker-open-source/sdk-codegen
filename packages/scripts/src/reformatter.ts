@@ -38,6 +38,15 @@ export interface IReformat {
 
 const fileSep = '\n  '
 
+/**
+ * wrapper function for writing reformatted files with utf-8 encoding synchronously
+ * @param {string} fileName name of file to write
+ * @param {string} content content to write
+ */
+const writeFile = (fileName: string, content: string) => {
+  fs.writeFileSync(fileName, content, utf8Encoding)
+}
+
 class PythonFormatter implements IReformat {
   instructions =
     'To reformat Python files, please install pipenv: https://docs.pipenv.org/en/latest/install/#installing-pipenv'
@@ -81,7 +90,7 @@ class PythonFormatter implements IReformat {
         envPattern,
         `environment_prefix = "${gen.environmentPrefix}"`
       )
-      fs.writeFileSync(stampFile, content, utf8Encoding)
+      writeFile(stampFile, content)
       return success(
         `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
       )
@@ -115,7 +124,7 @@ class TypescriptFormatter implements IReformat {
   reformatFile(fileName: string) {
     const source = prettier.format(readFileSync(fileName), this.formatOptions)
     if (source) {
-      fs.writeFileSync(fileName, source, utf8Encoding)
+      writeFile(fileName, source)
     }
     return fileName
   }
@@ -142,7 +151,7 @@ class TypescriptFormatter implements IReformat {
         envPattern,
         `environmentPrefix = '${gen.environmentPrefix}'`
       )
-      fs.writeFileSync(stampFile, content, utf8Encoding)
+      writeFile(stampFile, content)
       return success(
         `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
       )
@@ -189,7 +198,7 @@ class KotlinFormatter implements IReformat {
         envPattern,
         `ENVIRONMENT_PREFIX = "${gen.environmentPrefix}"`
       )
-      fs.writeFileSync(stampFile, content, utf8Encoding)
+      writeFile(stampFile, content)
       return success(
         `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
       )
@@ -228,7 +237,7 @@ class SwiftFormatter implements IReformat {
         envPattern,
         `environmentPrefix = "${gen.environmentPrefix}"`
       )
-      fs.writeFileSync(stampFile, content, utf8Encoding)
+      writeFile(stampFile, content)
       return success(
         `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
       )

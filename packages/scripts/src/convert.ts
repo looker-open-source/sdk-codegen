@@ -26,17 +26,10 @@
 
  */
 
-import * as fs from 'fs'
 import { log, success, warn } from '@looker/sdk-codegen-utils'
 import { ParameterStyle } from 'openapi3-ts'
-import {
-  fail,
-  isFileSync,
-  quit,
-  readFileSync,
-  run,
-  utf8Encoding,
-} from './nodeUtils'
+import { fail, isFileSync, quit, readFileSync, run } from './nodeUtils'
+import { writeSpecFile } from './fetchSpec'
 
 /**
  * Replaces x-looker-nullable with nullable for parameters and properties in a string
@@ -194,7 +187,7 @@ export const swapNullableInFile = (openApiFile: string) => {
  * Convert a Swagger specification to OpenAPI
  * @param {string} swaggerFilename
  * @param {string} openApiFilename
- * @returns {Promise<string>}
+ * @returns {Promise<string>} name of OpenAPI file
  */
 export const convertSpec = (
   swaggerFilename: string,
@@ -222,7 +215,7 @@ export const convertSpec = (
     }
     let spec = swapNullableInFile(openApiFilename)
     spec = fixConversion(spec, readFileSync(swaggerFilename))
-    fs.writeFileSync(openApiFilename, spec, utf8Encoding)
+    writeSpecFile(openApiFilename, spec)
     success(`Fixed up ${openApiFilename}`)
     return openApiFilename
   } catch (e) {
