@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen-utils",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "private": false,
   "description": "Looker SDK Codegen utils",
   "main": "lib/index.js",
@@ -31,7 +31,5 @@
     "build": "tsc --project tsconfig.build.json",
     "prebuild": "yarn clean",
     "clean": "rm -rf dist lib"
-  },
-  "dependencies": {},
-  "devDependencies": {}
+  }
 }
