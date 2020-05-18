@@ -1,18 +1,30 @@
 {
   "compilerOptions": {
-    "declaration": true,
+    "target": "ES2017",
+//    "lib": ["es2017", "es2017.object", "dom"],
     "module": "commonjs",
-    "moduleResolution": "node",
-    "noImplicitReturns": true,
-    "noImplicitAny": true,
-    "noFallthroughCasesInSwitch": true,
-    "strict": true,
+    "jsx": "react",
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "plugins": [
-      {
-        "name": "tslint-language-service",
-        "alwaysShowRuleFailuresAsWarnings": true
-      }
-    ]
-  }
+    "moduleResolution": "node",
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "strictNullChecks": true,
+    "preserveConstEnums": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "suppressImplicitAnyIndexErrors": true
+  },
+  "exclude": ["lib", "node_modules", "**/*.test.*", "**/*.spec.*"],
+  "include": []
 }

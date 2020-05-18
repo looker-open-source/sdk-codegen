@@ -23,15 +23,15 @@ A Looker SDK has several parts:
 
 ## Multi-API support with Looker 7.2 and later
 
-Looker 7.2 introduces an **Experimental** version of API 4.0. Therefore, the SDKs now support multiple API versions in the same SDK package.
+Looker 7.2 introduced an **Experimental** version of API 4.0. Therefore, the SDKs now support multiple API versions in the same SDK package.
 
 The main change to the SDKs is that `api_version` is no longer used from any configuration value. Instead, for all SDKs but Swift, API-specific SDKs are now created and put in the same SDK package, and share the same run-time code.
 
 API 3.0 is not included. At the time of this writing, API 3.1 and API 4.0 are included in most SDK packages. For an SDK that supports multiple API versions, there will be a `methods.*` and `models.*` generated for each API version.
 
-The class names representing these API versions are distinct, and factories for creating initialized SDK objects are also distinctly named.
+The class names representing these API versions are distinct, with version-named factories for creating initialized SDK objects.
 
-These API-specific files still use all the same Run-Time Library (RTL) code in the SDK package, so code duplication is minimized.
+These API-specific files still use all the same Run-Time Library (RTL) code in the SDK package to minimize code duplication.
 
 Please review the following table for a breakdown of the options to initialize the desired SDK object.
 
@@ -91,7 +91,11 @@ There are three steps for generating an SDK with this project:
 
   - **Note**: previous versions of the `looker.ini` file had an `api_version` entry. This is no longer required. The code generator project will read an `api_versions` value if that is found, but the SDKs ignore this value. If `api_versions` is not found in the `ini` file, it defaults to "3.1,4.0" for the generator to produce the definitions for the supported API versions.
 
-- install the code generator dependencies by running `yarn`.
+- install the code generator project dependencies by running:
+ 
+```sh
+yarn install
+```.
 
 - run the SDK generator with `yarn sdk`
 
@@ -131,7 +135,7 @@ The code generator will:
 
 - validate the OpenAPI 3.x file(s)
 
-- by default, call the code generator for each active language configured in [`languages.ts`](src/languages.ts)
+- by default, call the code generator for each active language configured in [`languages.ts`](src/script/languages.ts)
 
   - If you want to generate for one specific language, use `yarn sdk {language}`. Currently, supported `{language}` values are `kotlin`, `python`, `swift` and `typescript`
 
@@ -172,7 +176,7 @@ This command will start a local web server that allows you to browse and search 
 
 To generate a language currently not supported by Looker's SDK code generator with the OpenAPI generator:
 
-- configure the desired language in [`languages.ts`](src/languages.ts). Currently, only C# is defined for the legacy language generator.
+- configure the desired language in [`languages.ts`](src/script/languages.ts). Currently, only C# is defined for the legacy language generator.
 
 - the legacy generator defaults to using the API 4.0 specification, which is more accurate for strongly typed languages. To use API 3.1, put `api_version=3.1` in the `Looker` section of your `looker.ini`
 
