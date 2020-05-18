@@ -1,3 +1,4 @@
+import com.looker.rtl.DelimArray
 import com.looker.rtl.SDKResponse
 import com.looker.sdk.*
 import kotlin.test.assertEquals
@@ -501,6 +502,17 @@ class TestMethods {
                 { sdk.all_users() },
                 { item -> item.id!! },
                 { id, fields -> sdk.user(id, fields) })
+    }
+
+    @test
+    fun testAllUsersWithIds() {
+        val ids: DelimArray<Long> = arrayOf(47, 48)
+        val users = sdk.ok<Array<User>>(sdk.all_users(ids = ids))
+        assertEquals(2, users.size, "Should retrieve 2 users.")
+        assertEquals("Ross", users[0].first_name)
+        assertEquals("Bailey", users[0].last_name)
+        assertEquals("Rob", users[1].first_name)
+        assertEquals("Miller", users[1].last_name)
     }
 
     @test

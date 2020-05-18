@@ -167,6 +167,15 @@ class methodsTests: XCTestCase {
         XCTAssertEqual("", result, result)
     }
 
+    func testGetAllUsersWithIds() {
+            let ids: [Int64] = [47, 48]
+            let users = try? sdk.ok(sdk.all_users(ids: ids))
+            XCTAssertEqual(users![0].first_name, "Ross")
+            XCTAssertEqual(users![0].last_name, "Bailey")
+            XCTAssertEqual(users![1].first_name, "Rob")
+            XCTAssertEqual(users![1].last_name, "Miller")
+        }
+
     func testGetAllLooks() {
         let result = listGetter(
             lister: { sdk.all_looks() },
