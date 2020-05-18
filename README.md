@@ -23,15 +23,15 @@ A Looker SDK has several parts:
 
 ## Multi-API support with Looker 7.2 and later
 
-Looker 7.2 introduces an **Experimental** version of API 4.0. Therefore, the SDKs now support multiple API versions in the same SDK package.
+Looker 7.2 introduced an **Experimental** version of API 4.0. Therefore, the SDKs now support multiple API versions in the same SDK package.
 
 The main change to the SDKs is that `api_version` is no longer used from any configuration value. Instead, for all SDKs but Swift, API-specific SDKs are now created and put in the same SDK package, and share the same run-time code.
 
 API 3.0 is not included. At the time of this writing, API 3.1 and API 4.0 are included in most SDK packages. For an SDK that supports multiple API versions, there will be a `methods.*` and `models.*` generated for each API version.
 
-The class names representing these API versions are distinct, and factories for creating initialized SDK objects are also distinctly named.
+The class names representing these API versions are distinct, with version-named factories for creating initialized SDK objects.
 
-These API-specific files still use all the same Run-Time Library (RTL) code in the SDK package, so code duplication is minimized.
+These API-specific files still use all the same Run-Time Library (RTL) code in the SDK package to minimize code duplication.
 
 Please review the following table for a breakdown of the options to initialize the desired SDK object.
 

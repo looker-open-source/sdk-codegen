@@ -54,7 +54,7 @@ When the SDK is installed and the server location and API credentials are config
 Verify authentication works and that API calls will succeed with code similar to the following:
 
 ```typescript
-import { LookerNodeSDK } from '@looker/sdk/node'
+import { LookerNodeSDK } from '@looker/sdk/lib/node'
 (async () => {
   // create a Node SDK object for API 3.1
   const sdk = LookerNodeSDK.init31()
@@ -113,7 +113,7 @@ for example, which will generate files to
 Code similar to the following can be used to develop with both the 3.1 and 4.0 SDKs in the same source file:
 
 ```typescript
-import { Looker40SDK, Looker31SDK, NodeSession, NodeSettingsIniFile } from '@looker/sdk/node'
+import { Looker40SDK, Looker31SDK, NodeSession, NodeSettingsIniFile } from '@looker/sdk/lib/node'
 
 const settings = new NodeSettingsIniFile()
 const session = new NodeSession(settings)

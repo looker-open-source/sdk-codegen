@@ -67,11 +67,12 @@ export class TypescriptGen extends CodeGen {
   methodsPrologue(indent: string) {
     // TODO get the rtl path alias to work correctly in all scenarios! !!
     return `
-// ${this.warnEditing()}
 import { APIMethods } from '../../rtl/apiMethods'
 import { IAuthSession } from '../../rtl/authSession'
 import { ITransportSettings, encodeParam } from '../../rtl/transport'
 /**
+ * ${this.warnEditing()}
+ *
  * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
  */
 import { DelimArray } from '../../rtl/delimArray'
@@ -93,12 +94,13 @@ export class ${this.packageName} extends APIMethods {
   // @ts-ignore
   streamsPrologue(indent: string): string {
     return `
-// ${this.warnEditing()}
 import { Readable } from 'readable-stream'
 import { APIMethods } from '../../rtl/apiMethods'
 import { IAuthSession } from '../../rtl/authSession'
 import { ITransportSettings, encodeParam } from '../../rtl/transport'
 /**
+ * ${this.warnEditing()}
+ *
  * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
  */
 import { DelimArray } from '../../rtl/delimArray'
@@ -119,10 +121,12 @@ export class ${this.packageName}Stream extends APIMethods {
   // @ts-ignore
   modelsPrologue(indent: string) {
     return `
-// ${this.warnEditing()}
-
 import { Url } from '../../rtl/constants'
 import { DelimArray } from '../../rtl/delimArray'
+
+/*
+ * ${this.warnEditing()}
+ */
 
 export interface IDictionary<T> {
   [key: string]: T
