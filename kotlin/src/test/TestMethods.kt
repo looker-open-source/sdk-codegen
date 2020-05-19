@@ -506,13 +506,16 @@ class TestMethods {
 
     @test
     fun testAllUsersWithIds() {
-        val ids: DelimArray<Long> = arrayOf(47, 48)
+        val allUsers = sdk.ok<Array<User>>(sdk.all_users())
+        val userIds: Array<Long> = allUsers
+                .map { u -> u.id!! }
+                .take(2)
+                .toTypedArray()
+        val ids: DelimArray<Long> = DelimArray<Long>(userIds)
         val users = sdk.ok<Array<User>>(sdk.all_users(ids = ids))
         assertEquals(2, users.size, "Should retrieve 2 users.")
-        assertEquals("Ross", users[0].first_name)
-        assertEquals("Bailey", users[0].last_name)
-        assertEquals("Rob", users[1].first_name)
-        assertEquals("Miller", users[1].last_name)
+        assertEquals(userIds[0], users[0].id)
+        assertEquals(userIds[1], users[1].id)
     }
 
     @test
