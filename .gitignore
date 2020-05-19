@@ -1,10 +1,49 @@
+# local credentials
+.npmrc
 looker.ini
+
+# dependencies
+node_modules
+
+# typescript incrementals
+*.tsbuildinfo
+
+# testing
+/coverage
+.cache
+.eslintcache
+
+# code-gen
+/packages/icons/src/generated
+public/
+
+# lerna
+/packages/*/lib
+/packages/*/dist
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+/.idea
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/lerna-debug.log
+
 looker.ini.*
 lookerapi*.json
 Looker*.json
-**/node_modules/*
+
+# ide configurations
 **/.idea/*
-.vscode/*
+**/.vscode/*
+
+# code generator unversioned files
 api/*
 python/venv/*
 venv/*
@@ -13,7 +52,6 @@ package-lock.json
 **/dist/*
 **/.DS_Store
 **/.build
-**/Packages
 **/xcuserdata/
 kotlin/.gradle/*
 **/.gradle/*
@@ -21,5 +59,7 @@ kotlin/.*
 kotlin/bin/*
 kotlin/build/*
 kotlin/out/*
+
+# test output
 junit.xml
 results/*

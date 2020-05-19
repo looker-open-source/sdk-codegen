@@ -1,0 +1,70 @@
+{
+  "name": "@looker/test-utils",
+  "version": "0.1.0-alpha.2",
+  "private": true,
+  "description": "Looker SDK test utils",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "author": "Looker",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
+    "directory": "packages/test-utils"
+  },
+  "bugs": {
+    "url": "https://github.com/looker-open-source/sdk-codegen/issues"
+  },
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/",
+  "keywords": [
+    "Looker",
+    "SDK",
+    "codegen",
+    "test",
+    "utilities"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "prebuild": "yarn clean",
+    "clean": "rm -rf dist lib"
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.mdx"
+      ],
+      "extends": [
+        "plugin:mdx/recommended"
+      ],
+      "rules": {
+        "mdx/no-unescaped-entities": "off",
+        "sort-keys": "off",
+        "header/header": "off"
+      }
+    },
+    {
+      "files": [
+        "**/*.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/interface-name-prefix": "off",
+        "@typescript-eslint/no-unused-vars": "warn"
+      }
+    }
+  ],
+  "dependencies": {
+    "@looker/sdk": "^0.3.0-beta.1",
+    "@looker/sdk-codegen": "^0.1.2-alpha.0",
+    "@looker/sdk-codegen-utils": "^0.1.0-alpha.2",
+    "js-yaml": "^3.12.1"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^3.12.1"
+  }
+}

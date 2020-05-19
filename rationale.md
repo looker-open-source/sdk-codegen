@@ -186,7 +186,7 @@ This third-party tool loses some attributes during the conversion, so the SDK co
 
 ## Code generation
 
-The language-specific generators for [Python](src/python.gen.ts) and [Typescript](src/typescript.gen.ts) descend from a common class declared in [codeGen.ts](src/codeGen.ts). The base `CodeGen` class implements the `ICodeGen` interface, which is the contract for all the language-specific options the generator needs to support. Expect to see the internal implementation of this source change throughout the beta process as we refine the generator. The public interface may get some extensions, but is less likely to have significant changes.
+The language-specific generators for [Python](src/gen/python.gen.ts) and [Typescript](src/gen/typescript.gen.ts) descend from a common class declared in [codeGen.ts](src/gen/codeGen.ts). The base `CodeGen` class implements the `ICodeGen` interface, which is the contract for all the language-specific options the generator needs to support. Expect to see the internal implementation of this source change throughout the beta process as we refine the generator. The public interface may get some extensions, but is less likely to have significant changes.
 
 ### Model declarations
 

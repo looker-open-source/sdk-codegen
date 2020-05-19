@@ -1,0 +1,35 @@
+{
+  "name": "@looker/sdk-codegen-utils",
+  "version": "0.1.0-alpha.2",
+  "private": false,
+  "description": "Looker SDK Codegen utils",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "author": "Looker",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
+    "directory": "packages/utils"
+  },
+  "bugs": {
+    "url": "https://github.com/looker-open-source/sdk-codegen/issues"
+  },
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/",
+  "keywords": [
+    "Looker",
+    "SDK",
+    "codegen"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "prebuild": "yarn clean",
+    "clean": "rm -rf dist lib"
+  }
+}
