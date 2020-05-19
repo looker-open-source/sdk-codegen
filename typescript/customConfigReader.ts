@@ -3,7 +3,7 @@ import {
   NodeSettings,
   IApiSettings,
   IApiSection
-} from "@looker/sdk";
+} from "@looker/sdk"
 
 /**
  * @class customConfigReader
@@ -14,7 +14,7 @@ import {
  */
 class customConfigReader extends NodeSettings {
   constructor(settings: IApiSettings) {
-    super(settings);
+    super(settings)
   }
   /**
    * @returns an IApiSection object containing client_id and client_secret
@@ -23,7 +23,7 @@ class customConfigReader extends NodeSettings {
     return {
       client_id: "clientId",
       client_secret: "clientSecret"
-    };
+    }
   }
 }
 
@@ -32,12 +32,12 @@ class customConfigReader extends NodeSettings {
     new customConfigReader({
       base_url: "https://<your-looker-server>:19999"
     } as IApiSettings)
-  );
+  )
 
   const me = await sdk.ok(
     sdk.me(
       "id, first_name, last_name, display_name, email, personal_space_id, home_space_id, group_ids, role_ids"
     )
-  );
-  console.log({ me });
-})();
+  )
+  console.log({ me })
+})()

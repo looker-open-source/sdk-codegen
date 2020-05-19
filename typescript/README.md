@@ -1,6 +1,6 @@
 # Typescript Examples for the Looker API
 
-The examples in this folder are set up for `yarn`. If you don't have `yarn` installed already, you'll need to [install](https://yarnpkg.com/en/docs/install) it.
+The examples in this folder use `yarn`. If you don't have `yarn` installed already, you'll need to [install](https://yarnpkg.com/en/docs/install) it.
 
 ## Using yarn
 

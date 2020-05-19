@@ -111,13 +111,15 @@ const renderTile = async (
   }
 
   const result = await waitForRender(sdk, task.id!)
-  fileName = `${tile.title}.${format}`
-  fs.writeFile(fileName, result, 'binary', err => {
-    if (err) {
-      fileName = undefined // no file was created
-      throw err
-    }
-  })
+  if (result) {
+    fileName = `${tile.title}.${format}`
+    fs.writeFile(fileName, result, 'binary', err => {
+      if (err) {
+        fileName = undefined // no file was created
+        throw err
+      }
+    })
+  }
   return fileName
 }
 

@@ -85,7 +85,7 @@ const downloadDashboard = async (
   let fileName = undefined
   try {
     const req: IRequestCreateDashboardRenderTask = {
-      dashboard_id: Number(dashboard.id!),
+      dashboard_id: dashboard.id!,
       result_format: format,
       body: {},
       width: 1920,
@@ -99,13 +99,15 @@ const downloadDashboard = async (
     }
 
     const result = await waitForRender(sdk, task.id!)
-    fileName = `${dashboard.title}.${format}`
-    fs.writeFile(fileName, result, 'binary', err => {
-      if (err) {
-        fileName = undefined
-        console.error(err)
-      }
-    })
+    if (result) {
+      fileName = `${dashboard.title}.${format}`
+      fs.writeFile(fileName, result, 'binary', err => {
+        if (err) {
+          fileName = undefined
+          console.error(err)
+        }
+      })
+    }
   } catch (err) {
     console.error(`'${format}' is probably not a valid format`)
     console.error(err)
@@ -126,7 +128,7 @@ const downloadDashboard = async (
   const dashboard = await getDashboard(sdk, dashboardTitle)
   if (dashboard) {
     const fileName = await downloadDashboard(sdk, dashboard, outputFormat)
-    console.log(`open ${fileName} to see the download`)
+    console.log(`open "${fileName}" to see the download`)
   }
 
   await sdk.authSession.logout() // logout of API session
