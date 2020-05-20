@@ -168,13 +168,12 @@ class methodsTests: XCTestCase {
     }
 
     func testGetAllUsersWithIds() {
-            let ids: [Int64] = [47, 48]
-            let users = try? sdk.ok(sdk.all_users(ids: ids))
-            XCTAssertEqual(users![0].first_name, "Ross")
-            XCTAssertEqual(users![0].last_name, "Bailey")
-            XCTAssertEqual(users![1].first_name, "Rob")
-            XCTAssertEqual(users![1].last_name, "Miller")
-        }
+        let allUsers = try? sdk.ok(sdk.all_users())
+        let searchIds = allUsers!.prefix(2).map { $0.id! }
+        let users = try? sdk.ok(sdk.all_users(ids: searchIds))
+        XCTAssertEqual(users![0].id, searchIds[0])
+        XCTAssertEqual(users![1].id, searchIds[1])
+    }
 
     func testGetAllLooks() {
         let result = listGetter(
