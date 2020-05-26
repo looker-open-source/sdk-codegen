@@ -283,16 +283,16 @@ class Transport(val options: TransportOptions) {
 //            }
 //        }
 
-        var result: SDKResponse
-        try {
-            result = runBlocking {
+        val result = try {
+            runBlocking {
                 SDKResponse.SDKSuccessResponse(client.call(builder).response.receive<T>())
             }
         } catch (e: Exception) {
-            result = SDKResponse.SDKErrorResponse("$method $path $e")
+            SDKResponse.SDKErrorResponse("$method $path $e")
         } finally {
             client.close()
         }
+
         return result
     }
 
