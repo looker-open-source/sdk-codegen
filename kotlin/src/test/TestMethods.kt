@@ -519,6 +519,16 @@ class TestMethods {
     }
 
     @test
+    fun testErrorHandling() {
+        try {
+            sdk.ok<Array<Look>>(sdk.look(-1))
+            assertTrue(false, "We shouldn't get here")
+        } catch (e: java.lang.Error) {
+            assertTrue(e.toString().contains("GET /looks/-1"))
+        }
+    }
+
+    @test
     fun testAllWorkspaces() {
         testAll<Workspace, String, Workspace>(
                 { sdk.all_workspaces() },

@@ -28,6 +28,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.call
 import io.ktor.client.call.receive
 import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.features.ClientRequestException
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.defaultSerializer
@@ -219,7 +220,7 @@ fun customClient(options: TransportOptions): HttpClient {
                             sslSocketFactory, tm
                     )
 
-                    val hostnameVerifier = HostnameVerifier { hostname, session ->
+                    val hostnameVerifier = HostnameVerifier { _, _ ->
                         true
                     }
                     hostnameVerifier(hostnameVerifier)
@@ -282,10 +283,16 @@ class Transport(val options: TransportOptions) {
 //            }
 //        }
 
-        val result = runBlocking {
-            SDKResponse.SDKSuccessResponse(client.call(builder).response.receive<T>())
+        val result = try {
+            runBlocking {
+                SDKResponse.SDKSuccessResponse(client.call(builder).response.receive<T>())
+            }
+        } catch (e: Exception) {
+            SDKResponse.SDKErrorResponse("$method $path $e")
+        } finally {
+            client.close()
         }
-        client.close()
+
         return result
     }
 
