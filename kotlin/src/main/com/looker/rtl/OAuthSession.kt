@@ -31,6 +31,7 @@ import kotlin.experimental.and
 
 // https://stackoverflow.com/a/52225984/74137
 // TODO performance comparison of these two methods
+@ExperimentalUnsignedTypes
 fun ByteArray.toHexStr() = asUByteArray().joinToString("") { it.toString(16).padStart(2, '0') }
 
 // Adapted from https://www.samclarke.com/kotlin-hash-strings/
