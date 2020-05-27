@@ -25,10 +25,10 @@
  */
 
 import * as fs from 'fs'
-import { execSync } from 'child_process'
+import { execSync, ExecSyncOptionsWithStringEncoding } from 'child_process'
 import { warn } from '@looker/sdk-codegen-utils'
 
-const utf8 = 'utf-8'
+const utf8: BufferEncoding = 'utf-8'
 export const utf8Encoding = { encoding: utf8 }
 
 /**
@@ -37,8 +37,10 @@ export const utf8Encoding = { encoding: utf8 }
  * @param encoding character encoding. defaults to utf-8
  * @returns {string}
  */
-export const readFileSync = (filePath: string, encoding: string = utf8) =>
-  fs.readFileSync(filePath, encoding)
+export const readFileSync = (
+  filePath: string,
+  encoding: BufferEncoding = utf8
+) => fs.readFileSync(filePath, { encoding: encoding })
 
 export const isDirSync = (filePath: string) => {
   try {
@@ -93,7 +95,7 @@ export const run = (
   warning = false
 ) => {
   // https://nodejs.org/api/child_process.html#child_process_child_process_execsync_command_options
-  const options = {
+  const options: ExecSyncOptionsWithStringEncoding = {
     encoding: 'utf8',
     maxBuffer: 1024 * 2048,
     timeout: 300 * 1000,
@@ -102,8 +104,7 @@ export const run = (
   try {
     // const result = await spawnSync(command, args, options)
     command += ' ' + args.join(' ')
-    const result = execSync(command, options)
-    return result
+    return execSync(command, options)
   } catch (e) {
     if (warning) {
       warn(errMsg)
