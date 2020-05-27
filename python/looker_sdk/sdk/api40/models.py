@@ -7315,7 +7315,11 @@ can, id, logo_url, favicon_url
 # these calls will be removed.
 
 import functools  # noqa:E402
-from typing import ForwardRef  # type: ignore  # noqa:E402
+
+try:
+    from typing import ForwardRef  # type: ignore
+except ImportError:
+    from typing import _ForwardRef as ForwardRef  # type: ignore
 
 structure_hook = functools.partial(sr.structure_hook, globals(), sr.converter40)
 sr.converter40.register_structure_hook(

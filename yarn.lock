@@ -2208,10 +2208,15 @@
   dependencies:
     prettier ">=2.0.2"
 
-"@looker/sdk-codegen@^0.1.2-alpha.3":
-  version "0.1.2-alpha.3"
-  resolved "https://registry.yarnpkg.com/@looker/sdk-codegen/-/sdk-codegen-0.1.2-alpha.3.tgz#a066593991a8d5d39a86801b92e5254417b91839"
-  integrity sha512-m3i4W+INKAfrGtSN4cgKA9F6sGRGI89uRegidTYFxJc/ZyXXUz9VOXpDpYJKLtMmZ9HK9TtxNwHs11N3HEvqoQ==
+"@looker/sdk-codegen-utils@^0.1.0-alpha.5":
+  version "0.1.0-alpha.648"
+  resolved "https://registry.yarnpkg.com/@looker/sdk-codegen-utils/-/sdk-codegen-utils-0.1.0-alpha.648.tgz#cfc8f01e205b446a56656c3a8f064ff57d5a50ad"
+  integrity sha512-GFDcQ6RsJDT0adirytOd3BzJ2xUh0Gv6nFWlqfsyna0kyVifILH8G/kg29nvAvmbBgqjTx3zWUGYLUNvPl+8aQ==
+
+"@looker/sdk-codegen@^0.1.2-alpha.5":
+  version "0.1.2-alpha.5"
+  resolved "https://registry.yarnpkg.com/@looker/sdk-codegen/-/sdk-codegen-0.1.2-alpha.5.tgz#dc4749e6b90a7d30387149a94046dd65cb3ff47f"
+  integrity sha512-Wra0vSuL6DP8/uYVGKMUEhkuX3ZmniTmUFVf0iiPuMLVk36z+QV+5T+oCLHUUqWufB0qwpSfVePJhk+gKL5PzA==
   dependencies:
     blueimp-md5 "^2.13.0"
     openapi3-ts "^1.3.0"
