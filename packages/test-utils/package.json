@@ -66,5 +66,8 @@
   },
   "devDependencies": {
     "@types/js-yaml": "^3.12.1"
+  },
+  "resolutions": {
+    "typescript": "3.8.2"
   }
 }
