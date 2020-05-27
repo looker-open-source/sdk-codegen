@@ -25,7 +25,12 @@ import functools
 import json
 
 # ignoring "Module 'typing' has no attribute 'ForwardRef'"
-from typing import ForwardRef, Optional, Sequence  # type: ignore
+from typing import Optional, Sequence
+
+try:
+    from typing import ForwardRef  # type: ignore
+except ImportError:
+    from typing import _ForwardRef as ForwardRef  # type: ignore
 
 import attr
 import cattr

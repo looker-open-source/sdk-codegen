@@ -152,7 +152,10 @@ DelimSequence = model.DelimSequence
 # these calls will be removed.
 
 import functools  # noqa:E402
-from typing import ForwardRef  # type: ignore  # noqa:E402
+try:
+    from typing import ForwardRef  # type: ignore
+except ImportError:
+    from typing import _ForwardRef as ForwardRef  # type: ignore
 
 ${
   this.structureHook
