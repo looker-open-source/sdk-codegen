@@ -31,5 +31,8 @@
     "build": "tsc --project tsconfig.build.json",
     "prebuild": "yarn clean",
     "clean": "rm -rf dist lib"
+  },
+  "resolutions": {
+    "typescript": "3.8.2"
   }
 }
