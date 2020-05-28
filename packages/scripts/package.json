@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen-scripts",
-  "version": "0.3.1-alpha.0+d03bf81",
+  "version": "0.3.3-alpha.0",
   "description": "Looker SDK Codegen scripts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -35,7 +35,7 @@
     "swagger2openapi": "^6.0.3"
   },
   "devDependencies": {
-    "@looker/test-utils": "^0.1.0-alpha.3",
+    "@looker/test-utils": "^0.3.3-alpha.0",
     "@openapitools/openapi-generator-cli": "^1.0.2-4.2.0",
     "@stoplight/json": "^3.7.1",
     "@stoplight/spectral": "^5.3.0",
