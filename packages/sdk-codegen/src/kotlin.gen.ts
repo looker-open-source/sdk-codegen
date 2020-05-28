@@ -115,7 +115,7 @@ class ${this.sdkClassName()}Stream(authSession: AuthSession) : APIMethods(authSe
 
 package com.looker.sdk${this.apiNamespace()}
 
-import com.looker.rtl.UriString
+import com.looker.rtl.*
 import java.io.Serializable
 import java.util.*
 `
