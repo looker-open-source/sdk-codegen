@@ -2226,9 +2226,9 @@
   integrity sha512-GFDcQ6RsJDT0adirytOd3BzJ2xUh0Gv6nFWlqfsyna0kyVifILH8G/kg29nvAvmbBgqjTx3zWUGYLUNvPl+8aQ==
 
 "@looker/sdk-codegen@^0.1.2-alpha.6":
-  version "0.1.2-alpha.6"
-  resolved "https://registry.yarnpkg.com/@looker/sdk-codegen/-/sdk-codegen-0.1.2-alpha.6.tgz#7d430ee91669b4e36ca814ce2a94fbcd24f0997c"
-  integrity sha512-AteMyg5Vf31P4gzV/QyXc8+x95wmHnZCCN0EwYlE+8LTWzJn1IfpnQ6+srE42csP2GeLSkwNmfNK/0iRNDceaA==
+  version "0.1.2-alpha.9"
+  resolved "https://registry.yarnpkg.com/@looker/sdk-codegen/-/sdk-codegen-0.1.2-alpha.9.tgz#1f77328150bf9f388a53f7d016498423842459a9"
+  integrity sha512-gkjz7YiOt20CAj/7lo6mxh9d2oLARqQh/OvIelpEzO9mA39ToLNj4mBHzhgHMpxUbBbGoFsv14CgDapkxLAUOA==
   dependencies:
     blueimp-md5 "^2.13.0"
     openapi3-ts "^1.3.0"
