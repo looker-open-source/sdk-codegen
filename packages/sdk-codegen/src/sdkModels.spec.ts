@@ -36,6 +36,7 @@ import {
   ITagList,
   IType,
   keyValues,
+  Method,
   methodRefs,
   SearchCriterion,
   SearchCriterionTerm,
@@ -167,6 +168,148 @@ describe('sdkModels', () => {
           expect(actual.properties.look_id).toBeDefined()
         }
       })
+    })
+  })
+
+  describe('sorting it out', () => {
+    it('sorts methods', () => {
+      const list = apiTestModel.methods
+      const keys = Object.keys(list)
+      const sortedKeys = Object.keys(list).sort((a, b) => a.localeCompare(b))
+      expect(keys).toEqual(sortedKeys)
+    })
+
+    it('sorts types', () => {
+      const list = apiTestModel.types
+      const keys = Object.keys(list)
+      const sortedKeys = Object.keys(list).sort((a, b) => a.localeCompare(b))
+      expect(keys).toEqual(sortedKeys)
+    })
+
+    it('sorts tags and methods in tags', () => {
+      const list = apiTestModel.tags
+      const keys = Object.keys(list)
+      const sortedKeys = Object.keys(list).sort((a, b) => a.localeCompare(b))
+      expect(keys).toEqual(sortedKeys)
+
+      keys.forEach((key) => {
+        const methods = list[key]
+        const methodKeys = Object.keys(methods)
+        const sortedMethodKeys = Object.keys(methods).sort((a, b) => a.localeCompare(b))
+        expect(methodKeys).toEqual(sortedMethodKeys)
+      })
+    })
+  })
+
+  describe('rate limit', () => {
+    it('x-looker-rate-limited', () => {
+      const yes = ({
+        'x-looker-rate-limited': true,
+      } as unknown) as OAS.OperationObject
+      const no = ({
+        'x-looker-rate-limited': false,
+      } as unknown) as OAS.OperationObject
+      const nada = {} as OAS.OperationObject
+
+      expect(Method.isRateLimited(yes)).toBe(true)
+      expect(Method.isRateLimited(no)).toBe(false)
+      expect(Method.isRateLimited(nada)).toBe(false)
+    })
+
+    it('X-RateLimit-Limit', () => {
+      const yes = ({
+        'X-RateLimit-Limit': 0,
+      } as unknown) as OAS.OperationObject
+      const no = ({
+        'x-ratelimit-limit': 0,
+      } as unknown) as OAS.OperationObject
+      const nada = {} as OAS.OperationObject
+
+      expect(Method.isRateLimited(yes)).toBe(true)
+      expect(Method.isRateLimited(no)).toBe(false)
+      expect(Method.isRateLimited(nada)).toBe(false)
+    })
+
+    it('X-RateLimit-Remaining', () => {
+      const yes = ({
+        'X-RateLimit-Remaining': 0,
+      } as unknown) as OAS.OperationObject
+      const no = ({
+        'x-ratelimit-remaining': 0,
+      } as unknown) as OAS.OperationObject
+      const nada = {} as OAS.OperationObject
+
+      expect(Method.isRateLimited(yes)).toBe(true)
+      expect(Method.isRateLimited(no)).toBe(false)
+      expect(Method.isRateLimited(nada)).toBe(false)
+    })
+
+    it('X-RateLimit-Reset', () => {
+      const yes = ({
+        'X-RateLimit-Reset': 0,
+      } as unknown) as OAS.OperationObject
+      const no = ({
+        'x-ratelimit-reset': 0,
+      } as unknown) as OAS.OperationObject
+      const nada = {} as OAS.OperationObject
+
+      expect(Method.isRateLimited(yes)).toBe(true)
+      expect(Method.isRateLimited(no)).toBe(false)
+      expect(Method.isRateLimited(nada)).toBe(false)
+    })
+
+    it('X-Rate-Limit-Limit', () => {
+      const yes = ({
+        'X-Rate-Limit-Limit': 0,
+      } as unknown) as OAS.OperationObject
+      const no = ({
+        'x-rate-limit-limit': 0,
+      } as unknown) as OAS.OperationObject
+      const nada = {} as OAS.OperationObject
+
+      expect(Method.isRateLimited(yes)).toBe(true)
+      expect(Method.isRateLimited(no)).toBe(false)
+      expect(Method.isRateLimited(nada)).toBe(false)
+    })
+
+    it('X-Rate-Limit-Remaining', () => {
+      const yes = ({
+        'X-Rate-Limit-Remaining': 0,
+      } as unknown) as OAS.OperationObject
+      const no = ({
+        'x-rate-limit-remaining': 0,
+      } as unknown) as OAS.OperationObject
+      const nada = {} as OAS.OperationObject
+
+      expect(Method.isRateLimited(yes)).toBe(true)
+      expect(Method.isRateLimited(no)).toBe(false)
+      expect(Method.isRateLimited(nada)).toBe(false)
+    })
+
+    it('X-Rate-Limit-Reset', () => {
+      const yes = ({
+        'X-Rate-Limit-Reset': 0,
+      } as unknown) as OAS.OperationObject
+      const no = ({
+        'x-rate-limit-reset': 0,
+      } as unknown) as OAS.OperationObject
+      const nada = {} as OAS.OperationObject
+
+      expect(Method.isRateLimited(yes)).toBe(true)
+      expect(Method.isRateLimited(no)).toBe(false)
+      expect(Method.isRateLimited(nada)).toBe(false)
+    })
+
+    it('scheduled_plan_run_once is rate limited', () => {
+      const method = apiTestModel.methods.scheduled_plan_run_once
+      expect(method).toBeDefined()
+      expect(method.rateLimited).toBe(true)
+    })
+
+    it('dashboard is not rate limited', () => {
+      const method = apiTestModel.methods.dashboard
+      expect(method).toBeDefined()
+      expect(method.rateLimited).toBe(false)
     })
   })
 

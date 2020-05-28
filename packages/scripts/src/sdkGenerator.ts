@@ -97,7 +97,7 @@ export class MethodGenerator extends Generator<Models.IApiModel> {
     const items: string[] = []
     // reset refcounts for ALL types so dynamic import statement will work
     Object.entries(this.model.types).forEach(([_, type]) => (type.refCount = 0))
-    Object.values(this.model.sortedMethods()).forEach((method) => {
+    Object.values(this.model.methods).forEach((method) => {
       items.push(this.codeFormatter.declareMethod(indent, method))
     })
     const tally = `${items.length} API methods`
@@ -115,7 +115,7 @@ export class StreamGenerator extends Generator<Models.IApiModel> {
     const items: string[] = []
     // reset refcounts for ALL types so dynamic import statement will work
     Object.entries(this.model.types).forEach(([_, type]) => (type.refCount = 0))
-    Object.values(this.model.sortedMethods()).forEach((method) => {
+    Object.values(this.model.methods).forEach((method) => {
       items.push(this.codeFormatter.declareStreamer(indent, method))
     })
     const tally = `${items.length} API methods`
@@ -131,7 +131,7 @@ export class StreamGenerator extends Generator<Models.IApiModel> {
 export class TypeGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
     const items: string[] = []
-    Object.values(this.model.sortedTypes())
+    Object.values(this.model.types)
       .filter((type) => !(type instanceof IntrinsicType))
       .forEach((type) =>
         items.push(this.codeFormatter.declareType(indent, type))

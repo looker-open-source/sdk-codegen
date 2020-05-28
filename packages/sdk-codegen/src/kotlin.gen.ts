@@ -369,7 +369,7 @@ import java.util.*
     } else {
       this.api.types.Error.refCount = 0
     }
-    const types = this.api.sortedTypes()
+    const types = this.api.types
     Object.values(types)
       .filter((type) => type.refCount > 0 && !type.intrinsic)
       .forEach((type) => names.push(`I${type.name}`))

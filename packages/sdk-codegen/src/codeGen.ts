@@ -328,7 +328,7 @@ export abstract class CodeGen implements ICodeGen {
   typeNames(countError = true) {
     const items: string[] = []
     if (!this.api) return items
-    Object.values(this.api.sortedTypes())
+    Object.values(this.api.types)
       .filter((type) => type.refCount > 0 && !type.intrinsic)
       .forEach((type) => items.push(type.name))
     return items

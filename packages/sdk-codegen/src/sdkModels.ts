@@ -754,6 +754,11 @@ export interface IMethod extends ISchemadSymbol {
   customTypes: IKeyList
 
   /**
+   * true if this method is a rate-limited API endpoint
+   */
+  rateLimited: boolean
+
+  /**
    * Get a list of parameters for location, or just all parameters
    * @param {MethodParameterLocation} location is optional. defaults to all parameters
    * @returns {IParameter[]} all parameters in natural order matching the location constraing
@@ -838,6 +843,7 @@ export class Method extends SchemadSymbol implements IMethod {
   readonly activityType: string
   readonly customTypes: IKeyList
   readonly types: IKeyList
+  readonly rateLimited: boolean
 
   constructor(
     api: IApiModel,
@@ -886,6 +892,35 @@ export class Method extends SchemadSymbol implements IMethod {
       this.addParam(api, body)
     }
     this.activityType = schema['x-looker-activity-type']
+    this.rateLimited = Method.isRateLimited(schema)
+  }
+
+  /**
+   * Check the many, many ways an endpoint can be flagged as rate-limited
+   *
+   * Because we LOVE standards. Yes we do.
+   *
+   * See https://github.com/OAI/OpenAPI-Specification/issues/1539 for more color commentary
+   *
+   * @param {OAS.OperationObject} op to check for rate limiting
+   * @returns {boolean} true if any rate limiting attribute is defined for the op
+   */
+  static isRateLimited(op: OAS.OperationObject): boolean {
+    if (op['x-looker-rate-limited']) return true
+
+    const many = [
+      'X-RateLimit-Limit',
+      'X-RateLimit-Remaining',
+      'X-RateLimit-Reset',
+      'X-Rate-Limit-Limit',
+      'X-Rate-Limit-Remaining',
+      'X-Rate-Limit-Reset',
+    ]
+    for (const flag of many) {
+      if (flag in op) return true
+    }
+
+    return false
   }
 
   /**
@@ -1440,10 +1475,6 @@ export interface IApiModel extends IModel {
   types: ITypeList
   tags: ITagList
 
-  sortedTypes(): IType[]
-
-  sortedMethods(): IMethod[]
-
   getRequestType(method: IMethod): IType | undefined
 
   getWriteableType(type: IType): IType | undefined
@@ -1459,10 +1490,10 @@ export interface IApiModel extends IModel {
 
 export class ApiModel implements ISymbolTable, IApiModel {
   readonly schema: OAS.OpenAPIObject | undefined
-  readonly methods: IMethodList = {}
-  readonly types: ITypeList = {}
-  readonly requestTypes: ITypeList = {}
-  readonly tags: ITagList = {}
+  methods: IMethodList = {}
+  types: ITypeList = {}
+  requestTypes: ITypeList = {}
+  tags: ITagList = {}
   private refs: ITypeList = {}
 
   constructor(spec: OAS.OpenAPIObject) {
@@ -1707,18 +1738,30 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return result
   }
 
-  // if any properties of the parameter type are readOnly (including in subtypes)
-
-  sortedTypes() {
-    return Object.values(this.types).sort((a, b) =>
-      a.name.localeCompare(b.name)
-    )
+  /**
+   * Sort a keyed collection so its keys are in sorted order
+   * @param {IKeyedCollection<T>} list to sort
+   * @returns {IKeyedCollection<T>} newly sorted list
+   */
+  sortList<T>(list: IKeyedCollection<T>): IKeyedCollection<T> {
+    const result = {}
+    const sortedKeys = Object.keys(list).sort((a, b) => a.localeCompare(b))
+    for (const key of sortedKeys) {
+      result[key] = list[key]
+    }
+    return result
   }
 
-  sortedMethods() {
-    return Object.values(this.methods).sort((a, b) =>
-      a.name.localeCompare(b.name)
-    )
+  sortLists() {
+    this.methods = this.sortList(this.methods)
+    this.types = this.sortList(this.types)
+    this.requestTypes = this.sortList(this.requestTypes)
+    this.refs = this.sortList(this.refs)
+    this.tags = this.sortList(this.tags)
+    const keys = Object.keys(this.tags)
+    keys.forEach((key) => {
+      this.tags[key] = this.sortList(this.tags[key])
+    })
   }
 
   private load(): void {
@@ -1744,6 +1787,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
         })
       })
     }
+
+    this.sortLists()
   }
 
   private loadMethods(endpoint: string, schema: OAS.PathItemObject): Method[] {
