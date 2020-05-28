@@ -347,6 +347,8 @@ export interface IMethodResponse {
 }
 
 class MethodResponse implements IMethodResponse {
+  // TODO either use this https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-useless-constructor.md
+  // or turn off 'useless constructor' linting
   constructor(
     public statusCode: number,
     public mediaType: string,
