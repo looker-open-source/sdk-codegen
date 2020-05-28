@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@looker/sdk",
-  "version": "0.3.0-beta.2",
+  "version": "0.3.0-alpha.0+d03bf81",
   "description": "Looker SDK",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -58,5 +58,5 @@
     "Looker",
     "SDK"
   ],
-  "gitHead": "dec6740721093a9ec33573ad5da6541aea7e158c"
+  "gitHead": "d03bf81006d0f6fc2e1a54938e30356df9d86ecd"
 }
