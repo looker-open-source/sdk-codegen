@@ -1,6 +1,6 @@
 {
   "name": "@looker/test-utils",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "private": true,
   "description": "Looker SDK test utils",
   "main": "lib/index.js",
@@ -59,8 +59,8 @@
     }
   ],
   "dependencies": {
-    "@looker/sdk": "^0.3.0-beta.1",
-    "@looker/sdk-codegen": "^0.1.2-alpha.0",
+    "@looker/sdk": "^0.3.0-beta.2",
+    "@looker/sdk-codegen": "^0.1.2-alpha.1",
     "@looker/sdk-codegen-utils": "^0.1.0-alpha.2",
     "js-yaml": "^3.12.1"
   },
