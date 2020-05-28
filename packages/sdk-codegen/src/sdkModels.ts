@@ -272,7 +272,7 @@ export interface IType {
   types: IKeyList
 
   /**
-   * Names of custom types reference by this type
+   * Names of custom types referenced by this type
    */
   customTypes: IKeyList
 
@@ -377,7 +377,6 @@ class MethodResponse implements IMethodResponse {
     let result =
       searchIt(`${this.statusCode}`) + searchIt(`${ResponseMode[this.mode]}`)
     if (criteria.has(SearchCriterion.name)) result += searchIt(this.mediaType)
-    if (criteria.has(SearchCriterion.type)) result += searchIt(this.mediaType)
     return result
   }
 }
@@ -428,7 +427,11 @@ class Symbol implements ISymbol {
 
   searchString(criteria: Set<SearchCriterion>): string {
     let result = ''
-    if (criteria.has(SearchCriterion.name)) result += searchIt(this.name)
+    if (
+      criteria.has(SearchCriterion.name) ||
+      criteria.has(SearchCriterion.method)
+    )
+      result += searchIt(this.name)
     return result
   }
 }
@@ -833,6 +836,11 @@ export interface IMethod extends ISchemadSymbol {
    * @returns {IParameter[]}
    */
   sort(list?: IParameter[]): IParameter[]
+
+  /**
+   * If a method may need a request type for a given language, this function returns true
+   */
+  mayUseRequestType(): boolean
 }
 
 export class Method extends SchemadSymbol implements IMethod {
@@ -925,8 +933,18 @@ export class Method extends SchemadSymbol implements IMethod {
     return false
   }
 
+  mayUseRequestType(): boolean {
+    const [body] = this.bodyParams
+    /**
+     * if the body parameter is specified and is optional, at least 2 optional parameters are required
+     */
+    const offset = body && `required` in body && !body.required ? 1 : 0
+    return this.optionalParams.length - offset > 1
+  }
+
   /**
    * Adds the parameter and registers its type for the method
+   * @param api current API model
    * @param {IParameter} param
    */
   addParam(api: IApiModel, param: IParameter) {
@@ -1091,7 +1109,7 @@ export class Method extends SchemadSymbol implements IMethod {
   /**
    * order parameters in location precedence
    */
-  private locationSorter(a: IParameter, b: IParameter) {
+  private static locationSorter(a: IParameter, b: IParameter) {
     const remain = 0
     const before = -1
     // const after = 1
@@ -1113,7 +1131,7 @@ export class Method extends SchemadSymbol implements IMethod {
 
   sort(list?: IParameter[]) {
     if (!list) list = this.params
-    return list.sort((a, b) => this.locationSorter(a, b))
+    return list.sort((a, b) => Method.locationSorter(a, b))
   }
 
   /**
@@ -1148,7 +1166,9 @@ export class Method extends SchemadSymbol implements IMethod {
     return (
       criteria.has(SearchCriterion.method) ||
       criteria.has(SearchCriterion.status) ||
-      criteria.has(SearchCriterion.activityType)
+      criteria.has(SearchCriterion.activityType) ||
+      criteria.has(SearchCriterion.name) ||
+      criteria.has(SearchCriterion.argument)
     )
   }
 
@@ -1156,16 +1176,23 @@ export class Method extends SchemadSymbol implements IMethod {
     // Are we only searching for contained items of the method or not?
     if (!this.isMethodSearch(criteria)) return ''
     let result = super.searchString(criteria)
-    if (
-      criteria.has(SearchCriterion.method) &&
-      criteria.has(SearchCriterion.description)
-    ) {
-      result += searchIt(this.description)
+    if (criteria.has(SearchCriterion.method)) {
+      if (this.rateLimited) {
+        result += searchIt('rate limited')
+      }
+      if (criteria.has(SearchCriterion.description)) {
+        result += searchIt(this.description)
+      }
     }
     if (criteria.has(SearchCriterion.activityType))
       result += searchIt(this.activityType)
     if (criteria.has(SearchCriterion.status)) {
       result += searchIt(this.status) + searchIt(this.deprecation)
+    }
+    if (criteria.has(SearchCriterion.argument)) {
+      this.params.forEach((p) => {
+        result += p.searchString(criteria)
+      })
     }
     return result
   }
@@ -1339,6 +1366,11 @@ export class Type implements IType {
     if (criteria.has(SearchCriterion.status)) {
       result += searchIt(this.status)
       if (this.deprecated) result += searchIt('deprecated')
+    }
+    if (criteria.has(SearchCriterion.property)) {
+      Object.entries(this.properties).forEach(([_, prop]) => {
+        result += prop.searchString(criteria)
+      })
     }
     return result
   }
@@ -1700,14 +1732,20 @@ export class ApiModel implements ISymbolTable, IApiModel {
     )
     this.types[name] = request
     this.requestTypes[hash] = request
+    method.addType(this, request)
     return request
   }
 
-  // create request type from method parameters
-  // add to this.types collection with name as key
-
-  // only gets the request type if more than one method parameter is optional
-  getRequestType(method: IMethod) {
+  /**
+   * only gets the request type if more than one method parameter is optional
+   *
+   * if needed, create the request type from method parameters
+   * add to this.types collection
+   *
+   * @param {IMethod} method for request type
+   * @returns {IType | undefined} returns type if request type is needed, otherwise it doesn't
+   */
+  private _getRequestType(method: IMethod) {
     if (method.optionalParams.length <= 1) return undefined
     // matches method params hash against current request types
     let paramHash = ''
@@ -1717,6 +1755,19 @@ export class ApiModel implements ISymbolTable, IApiModel {
     // in generated imports
     let result = this.requestTypes[hash]
     if (!result) result = this.makeRequestType(hash, method)
+    return result
+  }
+
+  /**
+   * only gets the request type if more than one method parameter is optional
+   *
+   * updates refCount for the method
+   *
+   * @param {IMethod} method for request type
+   * @returns {IType | undefined} returns type if request type is needed, otherwise it doesn't
+   */
+  getRequestType(method: IMethod) {
+    const result = this._getRequestType(method)
     if (result) result.refCount++
     return result
   }
@@ -1728,7 +1779,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return writer
   }
 
-  // a writeable type will need to be found or created
+  /**
+   * a writeable type will need to be found or created if the passed type has read-only properties
+   * @param {IType} type to check for read-only properties
+   * @returns {IType | undefined} either writeable type or undefined
+   */
   getWriteableType(type: IType) {
     const props = Object.entries(type.properties).map(([_, prop]) => prop)
     const writes = type.writeable
@@ -1737,7 +1792,23 @@ export class ApiModel implements ISymbolTable, IApiModel {
     const hash = md5(type.asHashString())
     let result = this.requestTypes[hash]
     if (!result) result = this.makeWriteableType(hash, type)
+    type.types.add(result.name)
+    type.customTypes.add(result.name)
     return result
+  }
+
+  /**
+   * establishes any dynamically-generated request or writeable types
+   */
+  loadDynamicTypes() {
+    Object.entries(this.methods).forEach(([_, method]) => {
+      if (method.mayUseRequestType()) {
+        this.getRequestType(method)
+      }
+    })
+    Object.entries(this.types).forEach(([_, type]) => {
+      this.getWriteableType(type)
+    })
   }
 
   /**
@@ -1789,7 +1860,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
         })
       })
     }
-
+    this.loadDynamicTypes()
     this.sortLists()
   }
 

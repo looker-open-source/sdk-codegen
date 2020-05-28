@@ -336,7 +336,7 @@ body: ICreateDashboardRenderTask`)
    */
   query_id: number
   /**
-   * Desired async query result format. Valid values are: "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
   result_format: string
   /**
