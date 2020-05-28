@@ -96,7 +96,7 @@ export class MethodGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
     const items: string[] = []
     // reset refcounts for ALL types so dynamic import statement will work
-    Object.entries(this.model.types).forEach(([_, type]) => (type.refCount = 0))
+    Object.values(this.model.types).forEach(type => type.refCount = 0)
     Object.values(this.model.methods).forEach((method) => {
       items.push(this.codeFormatter.declareMethod(indent, method))
     })
