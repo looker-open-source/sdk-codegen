@@ -12,6 +12,7 @@ node_modules
 /coverage
 .cache
 .eslintcache
+python/.tox/
 
 # code-gen
 /packages/icons/src/generated

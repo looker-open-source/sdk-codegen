@@ -41,5 +41,8 @@
     "@looker/sdk": "^0.3.0-beta.1",
     "@looker/sdk-codegen-utils": "^0.1.0-alpha.2"
   },
+  "resolutions": {
+    "typescript": "3.8.2"
+  },
   "gitHead": "7b5dc825c304c5c8b1c155dbd67e63c0bd54ac47"
 }

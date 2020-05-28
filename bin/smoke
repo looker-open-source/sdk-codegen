@@ -32,7 +32,7 @@ if [[ $tests == *python* ]]
 then
   cd python || exit
   echo "Smoking Python SDK ..."
-  pipenv run pytest --junitxml=../results/smokepython.xml tests/
+  pipenv run tox
   cd ..
 fi
 
