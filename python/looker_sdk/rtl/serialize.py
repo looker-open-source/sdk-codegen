@@ -26,6 +26,7 @@ import datetime
 import functools
 import json
 import keyword
+import sys
 
 # ignoring "Module 'typing' has no attribute 'ForwardRef'"
 from typing import (  # type: ignore
@@ -96,7 +97,7 @@ def serialize(api_model: TModelOrSequence) -> bytes:
 
 
 def structure_hook(context, converter, data, type_):
-    """cattr structure hook
+    """cattr structure hook used in generated models.
 
     - Map reserved words in json keys to approriate (safe) names in model.
     - handle ForwardRef types until github.com/Tinche/cattrs/pull/42/ is fixed
@@ -133,18 +134,19 @@ def unstructure_hook(api_model):
     return data
 
 
-# structure_hook_func = functools.partial(structure_hook, globals())  # type: ignore
-# cattr.register_structure_hook(model.Model, structure_hook_func)  # type: ignore
-converter31.register_structure_hook(
-    datetime.datetime,
-    lambda d, _: datetime.datetime.strptime(  # type: ignore
-        d, "%Y-%m-%dT%H:%M:%S.%f%z"
-    ),
-)
-converter40.register_structure_hook(
-    datetime.datetime,
-    lambda d, _: datetime.datetime.strptime(  # type: ignore
-        d, "%Y-%m-%dT%H:%M:%S.%f%z"
-    ),
-)
+if sys.version_info < (3, 7):
+    from dateutil import parser
+
+    def datetime_structure_hook(d: str, t: datetime.datetime) -> datetime.datetime:
+        return parser.isoparse(d)
+
+
+else:
+
+    def datetime_structure_hook(d: str, t: datetime.datetime) -> datetime.datetime:
+        return datetime.datetime.strptime(d, "%Y-%m-%dT%H:%M:%S.%f%z")
+
+
+converter31.register_structure_hook(datetime.datetime, datetime_structure_hook)
+converter40.register_structure_hook(datetime.datetime, datetime_structure_hook)
 cattr.register_unstructure_hook(model.Model, unstructure_hook)  # type: ignore
