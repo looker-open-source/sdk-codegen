@@ -24,24 +24,24 @@
 
  */
 
-// import * as OAS from 'openapi3-ts'
+import * as OAS from 'openapi3-ts'
 import { TestConfig } from '../../test-utils/src/testUtils'
 import {
-  // ArrayType,
-  // CriteriaToSet,
-  // DelimArrayType,
-  // IMethod,
+  ArrayType,
+  CriteriaToSet,
+  DelimArrayType,
+  IMethod,
   IMethodResponse,
-  // IntrinsicType,
-  // TagList,
-  // IType,
-  // keyValues,
-  // Method,
-  // methodRefs,
-  // SearchCriterion,
-  // SearchCriterionTerm,
-  // SetToCriteria,
-  // typeRefs,
+  IntrinsicType,
+  TagList,
+  IType,
+  keyValues,
+  Method,
+  methodRefs,
+  SearchCriterion,
+  SearchCriterionTerm,
+  SetToCriteria,
+  typeRefs,
 } from './sdkModels'
 
 const config = TestConfig()
@@ -171,8 +171,6 @@ describe('sdkModels', () => {
     })
   })
 
-  /*
-  TODO restore this after packages are back in sync
   describe('sorting it out', () => {
     it('sorts methods', () => {
       const list = apiTestModel.methods
@@ -646,7 +644,6 @@ describe('sdkModels', () => {
       })
     })
   })
-/**/
 
   describe('tagging', () => {
     it('methods are tagged', () => {
