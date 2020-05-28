@@ -82,29 +82,29 @@ export interface ISymbol {
   search(rx: RegExp, criteria: SearchCriteria): boolean
 }
 
-export type IKeyedCollection<T> = Record<string, T>
-export type IMethodList = IKeyedCollection<IMethod>
-export type ITypeList = IKeyedCollection<IType>
-export type ITagList = IKeyedCollection<IMethodList>
-export type IPropertyList = IKeyedCollection<IProperty>
-export type IKeyList = Set<string>
+export type KeyedCollection<T> = Record<string, T>
+export type MethodList = KeyedCollection<IMethod>
+export type TypeList = KeyedCollection<IType>
+export type TagList = KeyedCollection<MethodList>
+export type PropertyList = KeyedCollection<IProperty>
+export type KeyList = Set<string>
 
 /**
  * Returns sorted string array for IKeylist type
- * @param {IKeyList} keys Set of values
+ * @param {KeyList} keys Set of values
  * @returns {string[]} sorted string array of keys
  */
-export const keyValues = (keys: IKeyList): string[] => {
+export const keyValues = (keys: KeyList): string[] => {
   return Array.from(keys.values()).sort()
 }
 
 /**
  * Resolve a list of method keys into an IMethod[] in alphabetical order by name
  * @param {IApiModel} api model to use
- * @param {IKeyList} refs references to models
+ * @param {KeyList} refs references to models
  * @returns {IMethod[]} Populated method list. Anything not matched is skipped
  */
-export const methodRefs = (api: IApiModel, refs: IKeyList): IMethod[] => {
+export const methodRefs = (api: IApiModel, refs: KeyList): IMethod[] => {
   const keys = keyValues(refs)
   const result: IMethod[] = []
   keys.forEach((k) => {
@@ -118,10 +118,10 @@ export const methodRefs = (api: IApiModel, refs: IKeyList): IMethod[] => {
 /**
  * Resolve a list of method keys into an IType[] in alphabetical order by name
  * @param {IApiModel} api model to use
- * @param {IKeyList} refs references to models
+ * @param {KeyList} refs references to models
  * @returns {IMethod[]} Populated method list. Anything not matched is skipped
  */
-export const typeRefs = (api: IApiModel, refs: IKeyList): IType[] => {
+export const typeRefs = (api: IApiModel, refs: KeyList): IType[] => {
   const keys = keyValues(refs)
   const result: IType[] = []
   keys.forEach((k) => {
@@ -133,8 +133,8 @@ export const typeRefs = (api: IApiModel, refs: IKeyList): IType[] => {
 }
 
 export interface ISymbolList {
-  methods: IMethodList
-  types: ITypeList
+  methods: MethodList
+  types: TypeList
 }
 
 export enum SearchCriterion {
@@ -182,8 +182,8 @@ export const SetToCriteria = (criteria: SearchCriteria): string[] => {
 }
 
 export interface ISearchResult {
-  tags: ITagList
-  types: ITypeList
+  tags: TagList
+  types: TypeList
   message: string
 }
 
@@ -200,7 +200,7 @@ export interface IType {
   /**
    * key/value collection of properties for this type
    */
-  properties: IPropertyList
+  properties: PropertyList
 
   /**
    * List of writeable properties for this type
@@ -264,17 +264,17 @@ export interface IType {
   /**
    * names of methods referencing this type
    */
-  methodRefs: IKeyList
+  methodRefs: KeyList
 
   /**
    * Names of types referenced by this type
    */
-  types: IKeyList
+  types: KeyList
 
   /**
    * Names of custom types referenced by this type
    */
-  customTypes: IKeyList
+  customTypes: KeyList
 
   /**
    * Hopefully temporary concession to build problems with instance of ArrayType checks etc failing
@@ -751,12 +751,12 @@ export interface IMethod extends ISchemadSymbol {
   /**
    * all type names referenced in this method, including intrinsic types
    */
-  types: IKeyList
+  types: KeyList
 
   /**
    * all non-instrinsic type names referenced in this method
    */
-  customTypes: IKeyList
+  customTypes: KeyList
 
   /**
    * true if this method is a rate-limited API endpoint
@@ -851,8 +851,8 @@ export class Method extends SchemadSymbol implements IMethod {
   readonly params: IParameter[]
   readonly responseModes: Set<ResponseMode>
   readonly activityType: string
-  readonly customTypes: IKeyList
-  readonly types: IKeyList
+  readonly customTypes: KeyList
+  readonly types: KeyList
   readonly rateLimited: boolean
 
   constructor(
@@ -1229,10 +1229,10 @@ export class Method extends SchemadSymbol implements IMethod {
 export class Type implements IType {
   readonly name: string
   readonly schema: OAS.SchemaObject
-  readonly properties: IPropertyList = {}
-  readonly methodRefs: IKeyList = new Set<string>()
-  readonly types: IKeyList = new Set<string>()
-  readonly customTypes: IKeyList = new Set<string>()
+  readonly properties: PropertyList = {}
+  readonly methodRefs: KeyList = new Set<string>()
+  readonly types: KeyList = new Set<string>()
+  readonly customTypes: KeyList = new Set<string>()
   customType: string
   refCount = 0
 
@@ -1493,7 +1493,7 @@ export class WriteType extends Type {
       })
   }
 
-  private static readonlyProps = (properties: IPropertyList): IProperty[] => {
+  private static readonlyProps = (properties: PropertyList): IProperty[] => {
     const result: IProperty[] = []
     Object.entries(properties)
       .filter(([_, prop]) => prop.readOnly || prop.type.readOnly)
@@ -1505,9 +1505,9 @@ export class WriteType extends Type {
 export interface IApiModel extends IModel {
   version: string
   description: string
-  methods: IMethodList
-  types: ITypeList
-  tags: ITagList
+  methods: MethodList
+  types: TypeList
+  tags: TagList
 
   getRequestType(method: IMethod): IType | undefined
 
@@ -1524,11 +1524,11 @@ export interface IApiModel extends IModel {
 
 export class ApiModel implements ISymbolTable, IApiModel {
   readonly schema: OAS.OpenAPIObject | undefined
-  methods: IMethodList = {}
-  types: ITypeList = {}
-  requestTypes: ITypeList = {}
-  tags: ITagList = {}
-  private refs: ITypeList = {}
+  methods: MethodList = {}
+  types: TypeList = {}
+  requestTypes: TypeList = {}
+  tags: TagList = {}
+  private refs: TypeList = {}
 
   constructor(spec: OAS.OpenAPIObject) {
     ;[
@@ -1590,9 +1590,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
     )
   }
 
-  private static addMethodToTags(tags: ITagList, method: IMethod): ITagList {
+  private static addMethodToTags(tags: TagList, method: IMethod): TagList {
     for (const tag of method.schema.tags) {
-      let list: IMethodList = tags[tag]
+      let list: MethodList = tags[tag]
       if (!list) {
         list = {}
         list[method.name] = method
@@ -1618,8 +1618,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
     expression: string,
     criteria: SearchCriteria = SearchAll
   ): ISearchResult {
-    const tags: ITagList = {}
-    const types: ITypeList = {}
+    const tags: TagList = {}
+    const types: TypeList = {}
     const result = {
       message: 'Search done',
       tags,
@@ -1688,7 +1688,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       return this.refs[schema.$ref]
     } else if (schema.type) {
       if (schema.type === 'integer' && schema.format === 'int64') {
-        return this.types.int64
+        return this.types['int64']
       }
       if (schema.type === 'number' && schema.format) {
         return this.types[schema.format]
@@ -1709,7 +1709,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
         }
       }
       if (schema.format === 'date-time') {
-        return this.types.datetime
+        return this.types['datetime']
       }
       if (schema.format && this.types[schema.format]) {
         return this.types[schema.format]
@@ -1813,11 +1813,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   /**
    * Sort a keyed collection so its keys are in sorted order
-   * @param {IKeyedCollection<T>} list to sort
-   * @returns {IKeyedCollection<T>} newly sorted list
+   * @param {KeyedCollection<T>} list to sort
+   * @returns {KeyedCollection<T>} newly sorted list
    */
-  sortList<T>(list: IKeyedCollection<T>): IKeyedCollection<T> {
-    const result = {}
+  sortList<T>(list: KeyedCollection<T>): KeyedCollection<T> {
+    const result: KeyedCollection<T> = {}
     const sortedKeys = Object.keys(list).sort((a, b) => a.localeCompare(b))
     for (const key of sortedKeys) {
       result[key] = list[key]
@@ -1922,7 +1922,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       } else if (statusCode === '204') {
         // no content - returns void
         responses.push(
-          new MethodResponse(204, '', this.types.void, desc || 'No content')
+          new MethodResponse(204, '', this.types['void'], desc || 'No content')
         )
       }
     })

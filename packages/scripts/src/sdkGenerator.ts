@@ -96,10 +96,14 @@ export class MethodGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
     const items: string[] = []
     // reset refcounts for ALL types so dynamic import statement will work
-    Object.values(this.model.types).forEach(type => type.refCount = 0)
-    Object.values(this.model.methods).forEach((method) => {
-      items.push(this.codeFormatter.declareMethod(indent, method))
-    })
+    Object.entries(this.model.types).forEach(([_, type]) => (type.refCount = 0))
+    Object.keys(this.model.methods)
+      .sort((a, b) => a.localeCompare(b))
+      .forEach((key) =>
+        items.push(
+          this.codeFormatter.declareMethod(indent, this.model.methods[key])
+        )
+      )
     const tally = `${items.length} API methods`
     success(tally)
     return this.p(`${this.codeFormatter.comment('', tally)}`)
@@ -115,9 +119,13 @@ export class StreamGenerator extends Generator<Models.IApiModel> {
     const items: string[] = []
     // reset refcounts for ALL types so dynamic import statement will work
     Object.entries(this.model.types).forEach(([_, type]) => (type.refCount = 0))
-    Object.values(this.model.methods).forEach((method) => {
-      items.push(this.codeFormatter.declareStreamer(indent, method))
-    })
+    Object.keys(this.model.methods)
+      .sort((a, b) => a.localeCompare(b))
+      .forEach((key) =>
+        items.push(
+          this.codeFormatter.declareStreamer(indent, this.model.methods[key])
+        )
+      )
     const tally = `${items.length} API methods`
     success(tally)
     return this.p(`${this.codeFormatter.comment('', tally)}`)
@@ -131,11 +139,18 @@ export class StreamGenerator extends Generator<Models.IApiModel> {
 export class TypeGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
     const items: string[] = []
-    Object.values(this.model.types)
-      .filter((type) => !(type instanceof IntrinsicType))
-      .forEach((type) =>
-        items.push(this.codeFormatter.declareType(indent, type))
-      )
+    Object.keys(this.model.types)
+      .sort((a, b) => a.localeCompare(b))
+      .forEach((key) => {
+        const type = this.model.types[key]
+
+        if (!(type instanceof IntrinsicType)) {
+          items.push(
+            this.codeFormatter.declareType(indent, this.model.types[key])
+          )
+        }
+      })
+
     const counts = this.typeTally(this.model.types)
     const tally = `${counts.total} API models: ${counts.standard} Spec, ${counts.request} Request, ${counts.write} Write`
     success(tally)
