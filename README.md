@@ -123,7 +123,7 @@ Invoke the SDK code generator with the command:
 yarn sdk
 ```
 
-To ensure the latest Looker API specification is used for the SDK generation, use:
+To always use the latest Looker API specification for SDK generation, use:
 
 ```sh
 yarn wipe && yarn sdk
