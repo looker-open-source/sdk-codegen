@@ -28,7 +28,7 @@
 
 import * as Models from '@looker/sdk-codegen'
 import { success } from '@looker/sdk-codegen-utils'
-import { IntrinsicType } from '@looker/sdk-codegen'
+import { IntrinsicType, RequestType } from '@looker/sdk-codegen'
 import { readFileSync } from './nodeUtils'
 
 export const specFromFile = (specFile: string): Models.ApiModel => {
@@ -145,9 +145,14 @@ export class TypeGenerator extends Generator<Models.IApiModel> {
         const type = this.model.types[key]
 
         if (!(type instanceof IntrinsicType)) {
-          items.push(
-            this.codeFormatter.declareType(indent, this.model.types[key])
-          )
+          if (
+            this.codeFormatter.needsRequestTypes ||
+            !(type instanceof RequestType)
+          ) {
+            items.push(
+              this.codeFormatter.declareType(indent, this.model.types[key])
+            )
+          }
         }
       })
 
