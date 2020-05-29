@@ -408,7 +408,7 @@ describe('sdkModels', () => {
       const methods = methodRefs(apiTestModel, actual.methodRefs)
       expect(types.length).toEqual(customTypes.length)
       expect(customTypes.join(' ')).toEqual(
-        'DashboardAppearance DashboardElement DashboardFilter DashboardLayout FolderBase LookModel'
+        'DashboardAppearance DashboardElement DashboardFilter DashboardLayout FolderBase LookModel WriteDashboard'
       )
       expect(methods.length).toEqual(methodKeys.length)
       expect(methodKeys.join(' ')).toEqual(
@@ -432,7 +432,7 @@ describe('sdkModels', () => {
       const actual = apiTestModel.methods.run_inline_query
       const customTypes = keyValues(actual.customTypes).join(' ')
       expect(customTypes).toEqual(
-        'Error Query RequestRunInlineQuery ValidationError'
+        'Error Query RequestRunInlineQuery ValidationError WriteQuery'
       )
     })
   })
@@ -489,7 +489,7 @@ describe('sdkModels', () => {
         const actual = apiTestModel.search('dashboard', modelAndTypeNames)
         const methods = allMethods(actual.tags)
         expect(Object.entries(methods).length).toEqual(33)
-        expect(Object.entries(actual.types).length).toEqual(21)
+        expect(Object.entries(actual.types).length).toEqual(27)
       })
 
       it('search for word', () => {
@@ -507,7 +507,7 @@ describe('sdkModels', () => {
         const actual = apiTestModel.search('\\bslug\\b', standardSet)
         const methods = allMethods(actual.tags)
         expect(Object.entries(methods).length).toEqual(33)
-        expect(Object.entries(actual.types).length).toEqual(19)
+        expect(Object.entries(actual.types).length).toEqual(21)
       })
 
       it('find rate limited endpoints', () => {
@@ -526,13 +526,13 @@ describe('sdkModels', () => {
       it('deprecated items', () => {
         const actual = apiTestModel.search('deprecated', statusCriteria)
         expect(Object.entries(allMethods(actual.tags)).length).toEqual(6)
-        expect(Object.entries(actual.types).length).toEqual(4)
+        expect(Object.entries(actual.types).length).toEqual(3)
       })
 
       it('beta items', () => {
         const actual = apiTestModel.search('beta', statusCriteria)
         expect(Object.entries(allMethods(actual.tags)).length).toEqual(201)
-        expect(Object.entries(actual.types).length).toEqual(102)
+        expect(Object.entries(actual.types).length).toEqual(103)
       })
 
       it('stable items', () => {
