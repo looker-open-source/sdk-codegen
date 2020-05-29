@@ -65,6 +65,14 @@ export interface IModel {}
  */
 const searchIt = (value: string) => (value ? value + '\n' : '')
 
+/**
+ * lambda function for local sorting
+ * @param {string} a first string to compare
+ * @param {string} b second string to compare
+ * @returns {any} but should be -1, 0, or 1
+ */
+const localeSort = (a: string, b: string) => a.localeCompare(b)
+
 export interface ISymbol {
   name: string
   type: IType
@@ -957,9 +965,8 @@ export class Method extends SchemadSymbol implements IMethod {
       api.getRequestType(this)
     }
 
-    Object.values(this.types).forEach((name) => {
-      const type = api.types[name]
-      const writer = api.getWriteableType(type)
+    Object.entries(this.params).forEach(([_, param]) => {
+      const writer = api.getWriteableType(param.type)
       if (writer) {
         this.types.add(writer.name)
         this.customTypes.add(writer.name)
@@ -1254,8 +1261,6 @@ export class Method extends SchemadSymbol implements IMethod {
 }
 
 export class Type implements IType {
-  readonly name: string
-  readonly schema: OAS.SchemaObject
   readonly properties: PropertyList = {}
   readonly methodRefs: KeyList = new Set<string>()
   readonly types: KeyList = new Set<string>()
@@ -1263,9 +1268,7 @@ export class Type implements IType {
   customType: string
   refCount = 0
 
-  constructor(schema: OAS.SchemaObject, name: string) {
-    this.schema = schema
-    this.name = name
+  constructor(public schema: OAS.SchemaObject, public name: string) {
     this.customType = name
   }
 
@@ -1840,7 +1843,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
    */
   sortList<T>(list: KeyedCollection<T>): KeyedCollection<T> {
     const result: KeyedCollection<T> = {}
-    const sortedKeys = Object.keys(list).sort((a, b) => a.localeCompare(b))
+    const sortedKeys = Object.keys(list).sort(localeSort)
     for (const key of sortedKeys) {
       result[key] = list[key]
     }
@@ -1853,7 +1856,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     this.requestTypes = this.sortList(this.requestTypes)
     this.refs = this.sortList(this.refs)
     this.tags = this.sortList(this.tags)
-    const keys = Object.keys(this.tags)
+    const keys = Object.keys(this.tags).sort(localeSort)
     keys.forEach((key) => {
       this.tags[key] = this.sortList(this.tags[key])
     })
