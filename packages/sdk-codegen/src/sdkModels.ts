@@ -841,6 +841,16 @@ export interface IMethod extends ISchemadSymbol {
    * If a method may need a request type for a given language, this function returns true
    */
   mayUseRequestType(): boolean
+
+  /**
+   * If any dynamic types will be required for this method, this function will make them
+   *
+   * Dynamic types are Request and Write types
+   *
+   * @param api the spec to use for making types
+   * @returns {KeyList} the list of all types used by the method
+   */
+  makeTypes(api: IApiModel): KeyList
 }
 
 export class Method extends SchemadSymbol implements IMethod {
@@ -940,6 +950,23 @@ export class Method extends SchemadSymbol implements IMethod {
      */
     const offset = body && `required` in body && !body.required ? 1 : 0
     return this.optionalParams.length - offset > 1
+  }
+
+  makeTypes(api: IApiModel): KeyList {
+    if (this.mayUseRequestType()) {
+      api.getRequestType(this)
+    }
+
+    Object.values(this.types).forEach((name) => {
+      const type = api.types[name]
+      const writer = api.getWriteableType(type)
+      if (writer) {
+        this.types.add(writer.name)
+        this.customTypes.add(writer.name)
+      }
+    })
+
+    return this.types
   }
 
   /**
@@ -1802,12 +1829,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
    */
   loadDynamicTypes() {
     Object.entries(this.methods).forEach(([_, method]) => {
-      if (method.mayUseRequestType()) {
-        this.getRequestType(method)
-      }
-    })
-    Object.entries(this.types).forEach(([_, type]) => {
-      this.getWriteableType(type)
+      method.makeTypes(this)
     })
   }
 
