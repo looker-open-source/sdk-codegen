@@ -962,11 +962,11 @@ export class Method extends SchemadSymbol implements IMethod {
 
   makeTypes(api: IApiModel): KeyList {
     if (this.mayUseRequestType()) {
-      api.mayGetRequestType(this)
+      api.getRequestType(this)
     }
 
     Object.entries(this.params).forEach(([_, param]) => {
-      const writer = api.mayGetWriteableType(param.type)
+      const writer = api.getWriteableType(param.type)
       if (writer) {
         this.types.add(writer.name)
         this.customTypes.add(writer.name)
@@ -1484,7 +1484,7 @@ export class RequestType extends Type {
     super({ description }, name)
     params.forEach((p) => {
       const writeProp = p.asProperty()
-      const typeWriter = api.mayGetWriteableType(p.type)
+      const typeWriter = api.getWriteableType(p.type)
       if (typeWriter) writeProp.type = typeWriter
       this.properties[p.name] = writeProp
     })
@@ -1517,7 +1517,7 @@ export class WriteType extends Type {
           },
           type.schema.required
         )
-        const typeWriter = api.mayGetWriteableType(p.type)
+        const typeWriter = api.getWriteableType(p.type)
         if (typeWriter) writeProp.type = typeWriter
         this.properties[p.name] = writeProp
       })
@@ -1539,9 +1539,9 @@ export interface IApiModel extends IModel {
   types: TypeList
   tags: TagList
 
-  mayGetRequestType(method: IMethod): IType | undefined
+  getRequestType(method: IMethod): IType | undefined
 
-  mayGetWriteableType(type: IType): IType | undefined
+  getWriteableType(type: IType): IType | undefined
 
   /**
    * Search this item for a regular expression pattern
@@ -1775,7 +1775,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
    * @param {IMethod} method for request type
    * @returns {IType | undefined} returns type if request type is needed, otherwise it doesn't
    */
-  private getRequestType(method: IMethod) {
+  private _getRequestType(method: IMethod) {
     if (method.optionalParams.length <= 1) return undefined
     // matches method params hash against current request types
     let paramHash = ''
@@ -1796,8 +1796,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
    * @param {IMethod} method for request type
    * @returns {IType | undefined} returns type if request type is needed, otherwise it doesn't
    */
-  mayGetRequestType(method: IMethod) {
-    const result = this.getRequestType(method)
+  getRequestType(method: IMethod) {
+    const result = this._getRequestType(method)
     if (result) result.refCount++
     return result
   }
@@ -1814,7 +1814,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
    * @param {IType} type to check for read-only properties
    * @returns {IType | undefined} either writeable type or undefined
    */
-  mayGetWriteableType(type: IType) {
+  getWriteableType(type: IType) {
     const props = Object.entries(type.properties).map(([_, prop]) => prop)
     const writes = type.writeable
     // do we have any readOnly properties?

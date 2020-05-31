@@ -254,7 +254,7 @@ async all_datagroups(
   describe('type creation', () => {
     it('request type with body', () => {
       const method = apiTestModel.methods.create_dashboard_render_task
-      const type = apiTestModel.mayGetRequestType(method)
+      const type = apiTestModel.getRequestType(method)
       expect(type).toBeDefined()
       if (type) {
         const dashboard_id = type.properties.dashboard_id
