@@ -52,7 +52,7 @@ describe('sdkModels', () => {
     it('search_looks', () => {
       const method = apiTestModel.methods.search_looks
       expect(method).toBeDefined()
-      const actual = apiTestModel.getRequestType(method)
+      const actual = apiTestModel.mayGetRequestType(method)
       expect(actual).toBeDefined()
       if (actual) {
         expect(actual.properties.title).toBeDefined()
@@ -62,7 +62,7 @@ describe('sdkModels', () => {
     it('search_spaces', () => {
       const method = apiTestModel.methods.search_folders
       expect(method).toBeDefined()
-      const actual = apiTestModel.getRequestType(method)
+      const actual = apiTestModel.mayGetRequestType(method)
       expect(actual).toBeDefined()
       if (actual) {
         expect(actual.properties.fields).toBeDefined()
@@ -119,7 +119,7 @@ describe('sdkModels', () => {
     it('CreateQueryTask', () => {
       const type = apiTestModel.types.CreateQueryTask
       expect(type).toBeDefined()
-      const actual = apiTestModel.getWriteableType(type)
+      const actual = apiTestModel.mayGetWriteableType(type)
       expect(actual).toBeDefined()
       expect(type.properties.query_id.required).toEqual(true)
       expect(type.properties.result_format.required).toEqual(true)
@@ -127,7 +127,7 @@ describe('sdkModels', () => {
     })
 
     it('WriteCreateQueryTask', () => {
-      const type = apiTestModel.getWriteableType(
+      const type = apiTestModel.mayGetWriteableType(
         apiTestModel.types.CreateQueryTask
       )
       expect(type).toBeDefined()
@@ -158,7 +158,7 @@ describe('sdkModels', () => {
       it('writeableType', () => {
         const type = apiTestModel.types.DashboardElement
         expect(type).toBeDefined()
-        const actual = apiTestModel.getWriteableType(type)
+        const actual = apiTestModel.mayGetWriteableType(type)
         expect(actual).toBeDefined()
         if (actual) {
           expect(actual.properties.body_text).toBeDefined()
