@@ -20,6 +20,7 @@
     "yarn": ">=1.14.0"
   },
   "scripts": {
+    "autolink": "ts-node bin/autolink.ts",
     "convert": "ts-node packages/scripts/src/specConvert.ts",
     "legacy": "ts-node packages/scripts/src/legacy.ts",
     "sdk": "ts-node packages/scripts/src/sdkGen.ts",
