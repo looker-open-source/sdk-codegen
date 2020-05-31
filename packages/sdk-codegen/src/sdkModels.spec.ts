@@ -33,9 +33,10 @@ import {
   IMethod,
   IMethodResponse,
   IntrinsicType,
-  ITagList,
+  TagList,
   IType,
   keyValues,
+  Method,
   methodRefs,
   SearchCriterion,
   SearchCriterionTerm,
@@ -170,7 +171,151 @@ describe('sdkModels', () => {
     })
   })
 
-  const allMethods = (tags: ITagList): Array<IMethod> => {
+  const localeSort = (a: string, b: string) => a.localeCompare(b)
+
+  describe('sorting it out', () => {
+    it('sorts methods', () => {
+      const list = apiTestModel.methods
+      const keys = Object.keys(list)
+      const sortedKeys = Object.keys(list).sort(localeSort)
+      expect(keys).toEqual(sortedKeys)
+    })
+
+    // it('sorts types', () => {
+    //   const list = apiTestModel.types
+    //   const keys = Object.keys(list)
+    //   const sortedKeys = Object.keys(list).sort(localeSort)
+    //   expect(keys).toEqual(sortedKeys)
+    // })
+
+    it('sorts tags and methods in tags', () => {
+      const list = apiTestModel.tags
+      const keys = Object.keys(list)
+      const sortedKeys = Object.keys(list).sort(localeSort)
+      expect(keys).toEqual(sortedKeys)
+
+      keys.forEach((key) => {
+        const methods = list[key]
+        const methodKeys = Object.keys(methods)
+        const sortedMethodKeys = Object.keys(methods).sort(localeSort)
+        expect(methodKeys).toEqual(sortedMethodKeys)
+      })
+    })
+  })
+
+  describe('rate limit', () => {
+    it('x-looker-rate-limited', () => {
+      const yes = ({
+        'x-looker-rate-limited': true,
+      } as unknown) as OAS.OperationObject
+      const no = ({
+        'x-looker-rate-limited': false,
+      } as unknown) as OAS.OperationObject
+      const nada = {} as OAS.OperationObject
+
+      expect(Method.isRateLimited(yes)).toBe(true)
+      expect(Method.isRateLimited(no)).toBe(false)
+      expect(Method.isRateLimited(nada)).toBe(false)
+    })
+
+    it('X-RateLimit-Limit', () => {
+      const yes = ({
+        'X-RateLimit-Limit': 0,
+      } as unknown) as OAS.OperationObject
+      const no = ({
+        'x-ratelimit-limit': 0,
+      } as unknown) as OAS.OperationObject
+      const nada = {} as OAS.OperationObject
+
+      expect(Method.isRateLimited(yes)).toBe(true)
+      expect(Method.isRateLimited(no)).toBe(false)
+      expect(Method.isRateLimited(nada)).toBe(false)
+    })
+
+    it('X-RateLimit-Remaining', () => {
+      const yes = ({
+        'X-RateLimit-Remaining': 0,
+      } as unknown) as OAS.OperationObject
+      const no = ({
+        'x-ratelimit-remaining': 0,
+      } as unknown) as OAS.OperationObject
+      const nada = {} as OAS.OperationObject
+
+      expect(Method.isRateLimited(yes)).toBe(true)
+      expect(Method.isRateLimited(no)).toBe(false)
+      expect(Method.isRateLimited(nada)).toBe(false)
+    })
+
+    it('X-RateLimit-Reset', () => {
+      const yes = ({
+        'X-RateLimit-Reset': 0,
+      } as unknown) as OAS.OperationObject
+      const no = ({
+        'x-ratelimit-reset': 0,
+      } as unknown) as OAS.OperationObject
+      const nada = {} as OAS.OperationObject
+
+      expect(Method.isRateLimited(yes)).toBe(true)
+      expect(Method.isRateLimited(no)).toBe(false)
+      expect(Method.isRateLimited(nada)).toBe(false)
+    })
+
+    it('X-Rate-Limit-Limit', () => {
+      const yes = ({
+        'X-Rate-Limit-Limit': 0,
+      } as unknown) as OAS.OperationObject
+      const no = ({
+        'x-rate-limit-limit': 0,
+      } as unknown) as OAS.OperationObject
+      const nada = {} as OAS.OperationObject
+
+      expect(Method.isRateLimited(yes)).toBe(true)
+      expect(Method.isRateLimited(no)).toBe(false)
+      expect(Method.isRateLimited(nada)).toBe(false)
+    })
+
+    it('X-Rate-Limit-Remaining', () => {
+      const yes = ({
+        'X-Rate-Limit-Remaining': 0,
+      } as unknown) as OAS.OperationObject
+      const no = ({
+        'x-rate-limit-remaining': 0,
+      } as unknown) as OAS.OperationObject
+      const nada = {} as OAS.OperationObject
+
+      expect(Method.isRateLimited(yes)).toBe(true)
+      expect(Method.isRateLimited(no)).toBe(false)
+      expect(Method.isRateLimited(nada)).toBe(false)
+    })
+
+    it('X-Rate-Limit-Reset', () => {
+      const yes = ({
+        'X-Rate-Limit-Reset': 0,
+      } as unknown) as OAS.OperationObject
+      const no = ({
+        'x-rate-limit-reset': 0,
+      } as unknown) as OAS.OperationObject
+      const nada = {} as OAS.OperationObject
+
+      expect(Method.isRateLimited(yes)).toBe(true)
+      expect(Method.isRateLimited(no)).toBe(false)
+      expect(Method.isRateLimited(nada)).toBe(false)
+    })
+
+    it('scheduled_plan_run_once is rate limited', () => {
+      const method = apiTestModel.methods.scheduled_plan_run_once
+      expect(method).toBeDefined()
+      expect(method.rateLimited).toBe(true)
+    })
+
+    it('dashboard is not rate limited', () => {
+      const method = apiTestModel.methods.dashboard
+      expect(method).toBeDefined()
+      expect(method.rateLimited).toBe(false)
+    })
+  })
+
+  const allMethods = (tags: TagList): Array<IMethod> => {
     const result: Array<IMethod> = []
     Object.entries(tags).forEach(([, methods]) => {
       Object.entries(methods).forEach(([, method]) => {
@@ -263,7 +408,7 @@ describe('sdkModels', () => {
       const methods = methodRefs(apiTestModel, actual.methodRefs)
       expect(types.length).toEqual(customTypes.length)
       expect(customTypes.join(' ')).toEqual(
-        'DashboardAppearance DashboardElement DashboardFilter DashboardLayout FolderBase LookModel'
+        'DashboardAppearance DashboardElement DashboardFilter DashboardLayout FolderBase LookModel WriteDashboard'
       )
       expect(methods.length).toEqual(methodKeys.length)
       expect(methodKeys.join(' ')).toEqual(
@@ -286,7 +431,9 @@ describe('sdkModels', () => {
     it('method references custom types from parameters and responses', () => {
       const actual = apiTestModel.methods.run_inline_query
       const customTypes = keyValues(actual.customTypes).join(' ')
-      expect(customTypes).toEqual('Error Query ValidationError')
+      expect(customTypes).toEqual(
+        'Error Query RequestRunInlineQuery ValidationError WriteQuery'
+      )
     })
   })
 
@@ -296,10 +443,36 @@ describe('sdkModels', () => {
       SearchCriterion.type,
       SearchCriterion.name,
     ])
+    const standardSet = new Set([
+      SearchCriterion.method,
+      SearchCriterion.type,
+      SearchCriterion.name,
+      SearchCriterion.property,
+      SearchCriterion.argument,
+      SearchCriterion.description,
+    ])
     const modelNames = new Set([SearchCriterion.method, SearchCriterion.name])
     const responseCriteria = new Set([SearchCriterion.response])
     const statusCriteria = new Set([SearchCriterion.status])
     const activityCriteria = new Set([SearchCriterion.activityType])
+
+    describe('searchString', () => {
+      it('type.searchString', () => {
+        const query = apiTestModel.types.Query
+        let text = query.searchString(modelAndTypeNames)
+        expect(text).toContain('Query')
+        text = query.searchString(standardSet)
+        expect(text).toContain('slug')
+      })
+
+      it('model.searchString', () => {
+        const query = apiTestModel.methods.query_for_slug
+        let text = query.searchString(modelAndTypeNames)
+        expect(text).toContain('query_for_slug')
+        text = query.searchString(standardSet)
+        expect(text).toContain('slug')
+      })
+    })
 
     describe('model search', () => {
       it('target not found', () => {
@@ -315,8 +488,8 @@ describe('sdkModels', () => {
       it('search anywhere', () => {
         const actual = apiTestModel.search('dashboard', modelAndTypeNames)
         const methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(32)
-        expect(Object.entries(actual.types).length).toEqual(15)
+        expect(Object.entries(methods).length).toEqual(33)
+        expect(Object.entries(actual.types).length).toEqual(27)
       })
 
       it('search for word', () => {
@@ -330,6 +503,20 @@ describe('sdkModels', () => {
         expect(Object.entries(actual.types).length).toEqual(1)
       })
 
+      it('search for slug', () => {
+        const actual = apiTestModel.search('\\bslug\\b', standardSet)
+        const methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(33)
+        expect(Object.entries(actual.types).length).toEqual(21)
+      })
+
+      it('find rate limited endpoints', () => {
+        const actual = apiTestModel.search('rate limited', modelAndTypeNames)
+        const methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(8)
+        expect(Object.entries(actual.types).length).toEqual(0)
+      })
+
       it('just model names', () => {
         const actual = apiTestModel.search('\\bdashboard\\b', modelNames)
         expect(Object.entries(allMethods(actual.tags)).length).toEqual(1)
@@ -339,19 +526,19 @@ describe('sdkModels', () => {
       it('deprecated items', () => {
         const actual = apiTestModel.search('deprecated', statusCriteria)
         expect(Object.entries(allMethods(actual.tags)).length).toEqual(6)
-        expect(Object.entries(actual.types).length).toEqual(4)
+        expect(Object.entries(actual.types).length).toEqual(3)
       })
 
       it('beta items', () => {
         const actual = apiTestModel.search('beta', statusCriteria)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(198)
-        expect(Object.entries(actual.types).length).toEqual(98)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(201)
+        expect(Object.entries(actual.types).length).toEqual(103)
       })
 
       it('stable items', () => {
         const actual = apiTestModel.search('stable', statusCriteria)
         expect(Object.entries(allMethods(actual.tags)).length).toEqual(153)
-        expect(Object.entries(actual.types).length).toEqual(88)
+        expect(Object.entries(actual.types).length).toEqual(89)
       })
 
       it('db queries', () => {
@@ -365,13 +552,6 @@ describe('sdkModels', () => {
       it('find binary responses', () => {
         const actual = apiTestModel.search('binary', responseCriteria)
         expect(Object.entries(allMethods(actual.tags)).length).toEqual(6)
-        expect(Object.entries(actual.types).length).toEqual(0)
-      })
-
-      it('find rate limited responses', () => {
-        const actual = apiTestModel.search('429', responseCriteria)
-        const methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(107)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
     })
@@ -440,7 +620,7 @@ describe('sdkModels', () => {
   describe('tagging', () => {
     it('methods are tagged', () => {
       const actual = apiTestModel.tags
-      expect(Object.entries(actual).length).toEqual(25)
+      expect(Object.entries(actual).length).toEqual(26)
     })
 
     it('methods are in the right tag', () => {

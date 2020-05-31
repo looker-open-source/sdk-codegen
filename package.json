@@ -186,7 +186,6 @@
   },
   "keywords": [],
   "resolutions": {
-    "set-value": "^2.0.1",
-    "typescript": "3.8.2"
+    "set-value": "^2.0.1"
   }
 }

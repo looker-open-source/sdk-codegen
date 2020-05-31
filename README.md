@@ -95,7 +95,7 @@ There are three steps for generating an SDK with this project:
  
 ```sh
 yarn install
-```.
+```
 
 - run the SDK generator with `yarn sdk`
 
@@ -115,13 +115,20 @@ Unlike some other OpenAPI code generators, the Looker SDK code generator **never
 
 If `yarn` is not installed, use [these instructions to install](https://yarnpkg.com/lang/en/docs/install/) it.
 
-After yarn is installed, just run `yarn` from your terminal window/command line, and it will download or update all the packages required to run the code generator. The resources required to run the code generator are listed in [package.json](package.json).
+After installing yarn, just run `yarn` from your terminal window/command line, and it will download or update all the packages required to run the code generator. The resources required to run the code generator are in [package.json](package.json).
 
 Invoke the SDK code generator with the command:
 
 ```sh
 yarn sdk
 ```
+
+To always use the latest Looker API specification for SDK generation, use:
+
+```sh
+yarn wipe && yarn sdk
+```
+
 
 The code generator will:
 

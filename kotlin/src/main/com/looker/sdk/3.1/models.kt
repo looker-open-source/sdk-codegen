@@ -4,7 +4,7 @@
 
 package com.looker.sdk.api31
 
-import com.looker.rtl.UriString
+import com.looker.rtl.*
 import java.io.Serializable
 import java.util.*
 

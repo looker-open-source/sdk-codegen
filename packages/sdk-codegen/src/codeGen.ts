@@ -290,14 +290,7 @@ export abstract class CodeGen implements ICodeGen {
 
   useRequest(method: IMethod) {
     if (!this.needsRequestTypes) return false
-    const [body] = method.bodyParams
-    /**
-     *
-     * @type {number} if the body parameter is specified and is optional, at least 2 optional parameters are required
-     */
-    const offset = body && body.required === false ? 1 : 0
-    const result = method.optionalParams.length - offset > 1
-    return result
+    return method.mayUseRequestType()
   }
 
   // Looks up or dynamically creates the request type for this method based
@@ -328,7 +321,7 @@ export abstract class CodeGen implements ICodeGen {
   typeNames(countError = true) {
     const items: string[] = []
     if (!this.api) return items
-    Object.values(this.api.sortedTypes())
+    Object.values(this.api.types)
       .filter((type) => type.refCount > 0 && !type.intrinsic)
       .forEach((type) => items.push(type.name))
     return items

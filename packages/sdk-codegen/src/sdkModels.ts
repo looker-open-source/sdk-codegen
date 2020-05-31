@@ -65,6 +65,14 @@ export interface IModel {}
  */
 const searchIt = (value: string) => (value ? value + '\n' : '')
 
+/**
+ * lambda function for local sorting
+ * @param {string} a first string to compare
+ * @param {string} b second string to compare
+ * @returns {any} but should be -1, 0, or 1
+ */
+const localeSort = (a: string, b: string) => a.localeCompare(b)
+
 export interface ISymbol {
   name: string
   type: IType
@@ -82,29 +90,29 @@ export interface ISymbol {
   search(rx: RegExp, criteria: SearchCriteria): boolean
 }
 
-export type IKeyedCollection<T> = Record<string, T>
-export type IMethodList = IKeyedCollection<IMethod>
-export type ITypeList = IKeyedCollection<IType>
-export type ITagList = IKeyedCollection<IMethodList>
-export type IPropertyList = IKeyedCollection<IProperty>
-export type IKeyList = Set<string>
+export type KeyedCollection<T> = Record<string, T>
+export type MethodList = KeyedCollection<IMethod>
+export type TypeList = KeyedCollection<IType>
+export type TagList = KeyedCollection<MethodList>
+export type PropertyList = KeyedCollection<IProperty>
+export type KeyList = Set<string>
 
 /**
  * Returns sorted string array for IKeylist type
- * @param {IKeyList} keys Set of values
+ * @param {KeyList} keys Set of values
  * @returns {string[]} sorted string array of keys
  */
-export const keyValues = (keys: IKeyList): string[] => {
+export const keyValues = (keys: KeyList): string[] => {
   return Array.from(keys.values()).sort()
 }
 
 /**
  * Resolve a list of method keys into an IMethod[] in alphabetical order by name
  * @param {IApiModel} api model to use
- * @param {IKeyList} refs references to models
+ * @param {KeyList} refs references to models
  * @returns {IMethod[]} Populated method list. Anything not matched is skipped
  */
-export const methodRefs = (api: IApiModel, refs: IKeyList): IMethod[] => {
+export const methodRefs = (api: IApiModel, refs: KeyList): IMethod[] => {
   const keys = keyValues(refs)
   const result: IMethod[] = []
   keys.forEach((k) => {
@@ -118,10 +126,10 @@ export const methodRefs = (api: IApiModel, refs: IKeyList): IMethod[] => {
 /**
  * Resolve a list of method keys into an IType[] in alphabetical order by name
  * @param {IApiModel} api model to use
- * @param {IKeyList} refs references to models
+ * @param {KeyList} refs references to models
  * @returns {IMethod[]} Populated method list. Anything not matched is skipped
  */
-export const typeRefs = (api: IApiModel, refs: IKeyList): IType[] => {
+export const typeRefs = (api: IApiModel, refs: KeyList): IType[] => {
   const keys = keyValues(refs)
   const result: IType[] = []
   keys.forEach((k) => {
@@ -133,8 +141,8 @@ export const typeRefs = (api: IApiModel, refs: IKeyList): IType[] => {
 }
 
 export interface ISymbolList {
-  methods: IMethodList
-  types: ITypeList
+  methods: MethodList
+  types: TypeList
 }
 
 export enum SearchCriterion {
@@ -182,8 +190,8 @@ export const SetToCriteria = (criteria: SearchCriteria): string[] => {
 }
 
 export interface ISearchResult {
-  tags: ITagList
-  types: ITypeList
+  tags: TagList
+  types: TypeList
   message: string
 }
 
@@ -200,7 +208,7 @@ export interface IType {
   /**
    * key/value collection of properties for this type
    */
-  properties: IPropertyList
+  properties: PropertyList
 
   /**
    * List of writeable properties for this type
@@ -264,17 +272,17 @@ export interface IType {
   /**
    * names of methods referencing this type
    */
-  methodRefs: IKeyList
+  methodRefs: KeyList
 
   /**
    * Names of types referenced by this type
    */
-  types: IKeyList
+  types: KeyList
 
   /**
-   * Names of custom types reference by this type
+   * Names of custom types referenced by this type
    */
-  customTypes: IKeyList
+  customTypes: KeyList
 
   /**
    * Hopefully temporary concession to build problems with instance of ArrayType checks etc failing
@@ -347,6 +355,8 @@ export interface IMethodResponse {
 }
 
 class MethodResponse implements IMethodResponse {
+  // TODO either use this https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-useless-constructor.md
+  // or turn off 'useless constructor' linting
   constructor(
     public statusCode: number,
     public mediaType: string,
@@ -375,7 +385,6 @@ class MethodResponse implements IMethodResponse {
     let result =
       searchIt(`${this.statusCode}`) + searchIt(`${ResponseMode[this.mode]}`)
     if (criteria.has(SearchCriterion.name)) result += searchIt(this.mediaType)
-    if (criteria.has(SearchCriterion.type)) result += searchIt(this.mediaType)
     return result
   }
 }
@@ -426,7 +435,11 @@ class Symbol implements ISymbol {
 
   searchString(criteria: Set<SearchCriterion>): string {
     let result = ''
-    if (criteria.has(SearchCriterion.name)) result += searchIt(this.name)
+    if (
+      criteria.has(SearchCriterion.name) ||
+      criteria.has(SearchCriterion.method)
+    )
+      result += searchIt(this.name)
     return result
   }
 }
@@ -746,12 +759,17 @@ export interface IMethod extends ISchemadSymbol {
   /**
    * all type names referenced in this method, including intrinsic types
    */
-  types: IKeyList
+  types: KeyList
 
   /**
    * all non-instrinsic type names referenced in this method
    */
-  customTypes: IKeyList
+  customTypes: KeyList
+
+  /**
+   * true if this method is a rate-limited API endpoint
+   */
+  rateLimited: boolean
 
   /**
    * Get a list of parameters for location, or just all parameters
@@ -826,6 +844,21 @@ export interface IMethod extends ISchemadSymbol {
    * @returns {IParameter[]}
    */
   sort(list?: IParameter[]): IParameter[]
+
+  /**
+   * If a method may need a request type for a given language, this function returns true
+   */
+  mayUseRequestType(): boolean
+
+  /**
+   * If any dynamic types will be required for this method, this function will make them
+   *
+   * Dynamic types are Request and Write types
+   *
+   * @param api the spec to use for making types
+   * @returns {KeyList} the list of all types used by the method
+   */
+  makeTypes(api: IApiModel): KeyList
 }
 
 export class Method extends SchemadSymbol implements IMethod {
@@ -836,8 +869,9 @@ export class Method extends SchemadSymbol implements IMethod {
   readonly params: IParameter[]
   readonly responseModes: Set<ResponseMode>
   readonly activityType: string
-  readonly customTypes: IKeyList
-  readonly types: IKeyList
+  readonly customTypes: KeyList
+  readonly types: KeyList
+  readonly rateLimited: boolean
 
   constructor(
     api: IApiModel,
@@ -886,10 +920,65 @@ export class Method extends SchemadSymbol implements IMethod {
       this.addParam(api, body)
     }
     this.activityType = schema['x-looker-activity-type']
+    this.rateLimited = Method.isRateLimited(schema)
+  }
+
+  /**
+   * Check the many, many ways an endpoint can be flagged as rate-limited
+   *
+   * Because we LOVE standards. Yes we do.
+   *
+   * See https://github.com/OAI/OpenAPI-Specification/issues/1539 for more color commentary
+   *
+   * @param {OAS.OperationObject} op to check for rate limiting
+   * @returns {boolean} true if any rate limiting attribute is defined for the op
+   */
+  static isRateLimited(op: OAS.OperationObject): boolean {
+    if (op['x-looker-rate-limited']) return true
+
+    const many = [
+      'X-RateLimit-Limit',
+      'X-RateLimit-Remaining',
+      'X-RateLimit-Reset',
+      'X-Rate-Limit-Limit',
+      'X-Rate-Limit-Remaining',
+      'X-Rate-Limit-Reset',
+    ]
+    for (const flag of many) {
+      if (flag in op) return true
+    }
+
+    return false
+  }
+
+  mayUseRequestType(): boolean {
+    const [body] = this.bodyParams
+    /**
+     * if the body parameter is specified and is optional, at least 2 optional parameters are required
+     */
+    const offset = body && `required` in body && !body.required ? 1 : 0
+    return this.optionalParams.length - offset > 1
+  }
+
+  makeTypes(api: IApiModel): KeyList {
+    if (this.mayUseRequestType()) {
+      api.getRequestType(this)
+    }
+
+    Object.entries(this.params).forEach(([_, param]) => {
+      const writer = api.getWriteableType(param.type)
+      if (writer) {
+        this.types.add(writer.name)
+        this.customTypes.add(writer.name)
+      }
+    })
+
+    return this.types
   }
 
   /**
    * Adds the parameter and registers its type for the method
+   * @param api current API model
    * @param {IParameter} param
    */
   addParam(api: IApiModel, param: IParameter) {
@@ -1054,7 +1143,7 @@ export class Method extends SchemadSymbol implements IMethod {
   /**
    * order parameters in location precedence
    */
-  private locationSorter(a: IParameter, b: IParameter) {
+  private static locationSorter(a: IParameter, b: IParameter) {
     const remain = 0
     const before = -1
     // const after = 1
@@ -1076,7 +1165,7 @@ export class Method extends SchemadSymbol implements IMethod {
 
   sort(list?: IParameter[]) {
     if (!list) list = this.params
-    return list.sort((a, b) => this.locationSorter(a, b))
+    return list.sort((a, b) => Method.locationSorter(a, b))
   }
 
   /**
@@ -1111,7 +1200,9 @@ export class Method extends SchemadSymbol implements IMethod {
     return (
       criteria.has(SearchCriterion.method) ||
       criteria.has(SearchCriterion.status) ||
-      criteria.has(SearchCriterion.activityType)
+      criteria.has(SearchCriterion.activityType) ||
+      criteria.has(SearchCriterion.name) ||
+      criteria.has(SearchCriterion.argument)
     )
   }
 
@@ -1119,16 +1210,23 @@ export class Method extends SchemadSymbol implements IMethod {
     // Are we only searching for contained items of the method or not?
     if (!this.isMethodSearch(criteria)) return ''
     let result = super.searchString(criteria)
-    if (
-      criteria.has(SearchCriterion.method) &&
-      criteria.has(SearchCriterion.description)
-    ) {
-      result += searchIt(this.description)
+    if (criteria.has(SearchCriterion.method)) {
+      if (this.rateLimited) {
+        result += searchIt('rate limited')
+      }
+      if (criteria.has(SearchCriterion.description)) {
+        result += searchIt(this.description)
+      }
     }
     if (criteria.has(SearchCriterion.activityType))
       result += searchIt(this.activityType)
     if (criteria.has(SearchCriterion.status)) {
       result += searchIt(this.status) + searchIt(this.deprecation)
+    }
+    if (criteria.has(SearchCriterion.argument)) {
+      this.params.forEach((p) => {
+        result += p.searchString(criteria)
+      })
     }
     return result
   }
@@ -1163,18 +1261,14 @@ export class Method extends SchemadSymbol implements IMethod {
 }
 
 export class Type implements IType {
-  readonly name: string
-  readonly schema: OAS.SchemaObject
-  readonly properties: IPropertyList = {}
-  readonly methodRefs: IKeyList = new Set<string>()
-  readonly types: IKeyList = new Set<string>()
-  readonly customTypes: IKeyList = new Set<string>()
+  readonly properties: PropertyList = {}
+  readonly methodRefs: KeyList = new Set<string>()
+  readonly types: KeyList = new Set<string>()
+  readonly customTypes: KeyList = new Set<string>()
   customType: string
   refCount = 0
 
-  constructor(schema: OAS.SchemaObject, name: string) {
-    this.schema = schema
-    this.name = name
+  constructor(public schema: OAS.SchemaObject, public name: string) {
     this.customType = name
   }
 
@@ -1303,6 +1397,11 @@ export class Type implements IType {
       result += searchIt(this.status)
       if (this.deprecated) result += searchIt('deprecated')
     }
+    if (criteria.has(SearchCriterion.property)) {
+      Object.entries(this.properties).forEach(([_, prop]) => {
+        result += prop.searchString(criteria)
+      })
+    }
     return result
   }
 }
@@ -1424,7 +1523,7 @@ export class WriteType extends Type {
       })
   }
 
-  private static readonlyProps = (properties: IPropertyList): IProperty[] => {
+  private static readonlyProps = (properties: PropertyList): IProperty[] => {
     const result: IProperty[] = []
     Object.entries(properties)
       .filter(([_, prop]) => prop.readOnly || prop.type.readOnly)
@@ -1436,13 +1535,9 @@ export class WriteType extends Type {
 export interface IApiModel extends IModel {
   version: string
   description: string
-  methods: IMethodList
-  types: ITypeList
-  tags: ITagList
-
-  sortedTypes(): IType[]
-
-  sortedMethods(): IMethod[]
+  methods: MethodList
+  types: TypeList
+  tags: TagList
 
   getRequestType(method: IMethod): IType | undefined
 
@@ -1459,11 +1554,11 @@ export interface IApiModel extends IModel {
 
 export class ApiModel implements ISymbolTable, IApiModel {
   readonly schema: OAS.OpenAPIObject | undefined
-  readonly methods: IMethodList = {}
-  readonly types: ITypeList = {}
-  readonly requestTypes: ITypeList = {}
-  readonly tags: ITagList = {}
-  private refs: ITypeList = {}
+  methods: MethodList = {}
+  types: TypeList = {}
+  requestTypes: TypeList = {}
+  tags: TagList = {}
+  private refs: TypeList = {}
 
   constructor(spec: OAS.OpenAPIObject) {
     ;[
@@ -1525,9 +1620,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
     )
   }
 
-  private static addMethodToTags(tags: ITagList, method: IMethod): ITagList {
+  private static addMethodToTags(tags: TagList, method: IMethod): TagList {
     for (const tag of method.schema.tags) {
-      let list: IMethodList = tags[tag]
+      let list: MethodList = tags[tag]
       if (!list) {
         list = {}
         list[method.name] = method
@@ -1553,8 +1648,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
     expression: string,
     criteria: SearchCriteria = SearchAll
   ): ISearchResult {
-    const tags: ITagList = {}
-    const types: ITypeList = {}
+    const tags: TagList = {}
+    const types: TypeList = {}
     const result = {
       message: 'Search done',
       tags,
@@ -1623,7 +1718,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       return this.refs[schema.$ref]
     } else if (schema.type) {
       if (schema.type === 'integer' && schema.format === 'int64') {
-        return this.types.int64
+        return this.types['int64']
       }
       if (schema.type === 'number' && schema.format) {
         return this.types[schema.format]
@@ -1644,7 +1739,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
         }
       }
       if (schema.format === 'date-time') {
-        return this.types.datetime
+        return this.types['datetime']
       }
       if (schema.format && this.types[schema.format]) {
         return this.types[schema.format]
@@ -1667,14 +1762,20 @@ export class ApiModel implements ISymbolTable, IApiModel {
     )
     this.types[name] = request
     this.requestTypes[hash] = request
+    method.addType(this, request)
     return request
   }
 
-  // create request type from method parameters
-  // add to this.types collection with name as key
-
-  // only gets the request type if more than one method parameter is optional
-  getRequestType(method: IMethod) {
+  /**
+   * only gets the request type if more than one method parameter is optional
+   *
+   * if needed, create the request type from method parameters
+   * add to this.types collection
+   *
+   * @param {IMethod} method for request type
+   * @returns {IType | undefined} returns type if request type is needed, otherwise it doesn't
+   */
+  private _getRequestType(method: IMethod) {
     if (method.optionalParams.length <= 1) return undefined
     // matches method params hash against current request types
     let paramHash = ''
@@ -1684,6 +1785,19 @@ export class ApiModel implements ISymbolTable, IApiModel {
     // in generated imports
     let result = this.requestTypes[hash]
     if (!result) result = this.makeRequestType(hash, method)
+    return result
+  }
+
+  /**
+   * only gets the request type if more than one method parameter is optional
+   *
+   * updates refCount for the method
+   *
+   * @param {IMethod} method for request type
+   * @returns {IType | undefined} returns type if request type is needed, otherwise it doesn't
+   */
+  getRequestType(method: IMethod) {
+    const result = this._getRequestType(method)
     if (result) result.refCount++
     return result
   }
@@ -1695,7 +1809,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return writer
   }
 
-  // a writeable type will need to be found or created
+  /**
+   * a writeable type will need to be found or created if the passed type has read-only properties
+   * @param {IType} type to check for read-only properties
+   * @returns {IType | undefined} either writeable type or undefined
+   */
   getWriteableType(type: IType) {
     const props = Object.entries(type.properties).map(([_, prop]) => prop)
     const writes = type.writeable
@@ -1704,21 +1822,44 @@ export class ApiModel implements ISymbolTable, IApiModel {
     const hash = md5(type.asHashString())
     let result = this.requestTypes[hash]
     if (!result) result = this.makeWriteableType(hash, type)
+    type.types.add(result.name)
+    type.customTypes.add(result.name)
     return result
   }
 
-  // if any properties of the parameter type are readOnly (including in subtypes)
-
-  sortedTypes() {
-    return Object.values(this.types).sort((a, b) =>
-      a.name.localeCompare(b.name)
-    )
+  /**
+   * establishes any dynamically-generated request or writeable types
+   */
+  loadDynamicTypes() {
+    Object.entries(this.methods).forEach(([_, method]) => {
+      method.makeTypes(this)
+    })
   }
 
-  sortedMethods() {
-    return Object.values(this.methods).sort((a, b) =>
-      a.name.localeCompare(b.name)
-    )
+  /**
+   * Sort a keyed collection so its keys are in sorted order
+   * @param {KeyedCollection<T>} list to sort
+   * @returns {KeyedCollection<T>} newly sorted list
+   */
+  sortList<T>(list: KeyedCollection<T>): KeyedCollection<T> {
+    const result: KeyedCollection<T> = {}
+    const sortedKeys = Object.keys(list).sort(localeSort)
+    for (const key of sortedKeys) {
+      result[key] = list[key]
+    }
+    return result
+  }
+
+  sortLists() {
+    this.methods = this.sortList(this.methods)
+    this.types = this.sortList(this.types)
+    this.requestTypes = this.sortList(this.requestTypes)
+    this.refs = this.sortList(this.refs)
+    this.tags = this.sortList(this.tags)
+    const keys = Object.keys(this.tags).sort(localeSort)
+    keys.forEach((key) => {
+      this.tags[key] = this.sortList(this.tags[key])
+    })
   }
 
   private load(): void {
@@ -1744,6 +1885,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
         })
       })
     }
+    this.loadDynamicTypes()
+    this.sortLists()
   }
 
   private loadMethods(endpoint: string, schema: OAS.PathItemObject): Method[] {
@@ -1804,7 +1947,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       } else if (statusCode === '204') {
         // no content - returns void
         responses.push(
-          new MethodResponse(204, '', this.types.void, desc || 'No content')
+          new MethodResponse(204, '', this.types['void'], desc || 'No content')
         )
       }
     })

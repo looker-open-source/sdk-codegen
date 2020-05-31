@@ -24,28 +24,29 @@
 
  */
 import { TestConfig } from '../../test-utils/src/testUtils'
+import { IMethodResponse } from '@looker/sdk-codegen'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
 
 describe('sdk generator test', () => {
   it('resolves OAS schemas into types', () => {
-    expect(typeof apiTestModel.types.ValidationError.elementType).toEqual(
+    expect(typeof apiTestModel.types['ValidationError'].elementType).toEqual(
       'undefined'
     )
 
     const test =
-      apiTestModel.types.ValidationError.properties.errors.type.elementType
+      apiTestModel.types['ValidationError'].properties.errors.type.elementType
     expect(test && test.name).toEqual('ValidationErrorDetail')
   })
 
   it('loads a method with a ref type response', () => {
-    const method = apiTestModel.methods.user
+    const method = apiTestModel.methods['user']
     expect(method.primaryResponse.statusCode).toEqual(200)
     expect(method.primaryResponse.type.name).toEqual('User')
     expect(method.type.name).toEqual('User')
     expect(method.endpoint).toEqual('/users/{user_id}')
-    const response = method.responses.find((a) => a.statusCode === 400)
+    const response = method.responses.find((a: IMethodResponse) => a.statusCode === 400)
     expect(response).toBeDefined()
     if (response) {
       expect(response.type.name).toEqual('Error')
@@ -53,8 +54,18 @@ describe('sdk generator test', () => {
   })
 
   it('loads 204 methods with void response type', () => {
-    const method = apiTestModel.methods.delete_group_user
+    const method = apiTestModel.methods['delete_group_user']
     expect(method.primaryResponse.statusCode).toEqual(204)
     expect(method.primaryResponse.type.name).toEqual('void')
+  })
+
+  it('has collections by key order', () => {
+    let keys = Object.keys(apiTestModel.methods)
+    let sorted = keys.sort((a, b) => a.localeCompare(b))
+    expect(keys).toEqual(sorted)
+
+    keys = Object.keys(apiTestModel.types)
+    sorted = keys.sort((a, b) => a.localeCompare(b))
+    expect(keys).toEqual(sorted)
   })
 })
