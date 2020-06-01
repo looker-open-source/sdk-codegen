@@ -81,7 +81,7 @@ done
 # sdk has no local dependencies
 
 # TODO: Luke, this may conflict with a components package name so we'll probably need to rename it
-refs=( @looker/sdk @looker/sdk-codegen @looker/sdk-codegen-utils @looker/test-utils )
+refs=( @looker/sdk @looker/sdk-codegen @looker/sdk-codegen-utils @looker/sdk-test-utils )
 for r in "${refs[@]}"
 do
   echo "Referencing $r in scripts"

@@ -966,7 +966,7 @@ export class Method extends SchemadSymbol implements IMethod {
     }
 
     Object.entries(this.params).forEach(([_, param]) => {
-      const writer = api.getWriteableType(param.type)
+      const writer = api.mayGetWriteableType(param.type)
       if (writer) {
         this.types.add(writer.name)
         this.customTypes.add(writer.name)
@@ -1484,7 +1484,7 @@ export class RequestType extends Type {
     super({ description }, name)
     params.forEach((p) => {
       const writeProp = p.asProperty()
-      const typeWriter = api.getWriteableType(p.type)
+      const typeWriter = api.mayGetWriteableType(p.type)
       if (typeWriter) writeProp.type = typeWriter
       this.properties[p.name] = writeProp
     })
@@ -1517,7 +1517,7 @@ export class WriteType extends Type {
           },
           type.schema.required
         )
-        const typeWriter = api.getWriteableType(p.type)
+        const typeWriter = api.mayGetWriteableType(p.type)
         if (typeWriter) writeProp.type = typeWriter
         this.properties[p.name] = writeProp
       })
@@ -1541,7 +1541,7 @@ export interface IApiModel extends IModel {
 
   getRequestType(method: IMethod): IType | undefined
 
-  getWriteableType(type: IType): IType | undefined
+  mayGetWriteableType(type: IType): IType | undefined
 
   /**
    * Search this item for a regular expression pattern
@@ -1814,7 +1814,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
    * @param {IType} type to check for read-only properties
    * @returns {IType | undefined} either writeable type or undefined
    */
-  getWriteableType(type: IType) {
+  mayGetWriteableType(type: IType) {
     const props = Object.entries(type.properties).map(([_, prop]) => prop)
     const writes = type.writeable
     // do we have any readOnly properties?

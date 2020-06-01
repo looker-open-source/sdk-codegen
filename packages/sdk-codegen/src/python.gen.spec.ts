@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from '../../test-utils/src/testUtils'
+import { TestConfig } from '@looker/sdk-test-utils'
 import { PythonGen } from './python.gen'
 
 const config = TestConfig()
@@ -47,8 +47,7 @@ from looker_sdk.rtl import serialize as sr
 
 EXPLICIT_NULL = model.EXPLICIT_NULL  # type: ignore
 DelimSequence = model.DelimSequence
-`
-      )
+`)
     })
     it('has an epilogue', () => {
       expect(gen.modelsEpilogue('')).toEqual(`
@@ -65,10 +64,8 @@ except ImportError:
 
 structure_hook = functools.partial(sr.structure_hook, globals(), sr.converter)
 
-`
-      )
+`)
     })
-
   })
 
   describe('parameter declarations', () => {

@@ -310,7 +310,7 @@ export abstract class CodeGen implements ICodeGen {
   // If no writeable type is required, no writeable type is created or referenced
   writeableType(type: IType, method: IMethod): IType | undefined {
     if (!type) return undefined
-    const writer = this.api.getWriteableType(type)
+    const writer = this.api.mayGetWriteableType(type)
     if (!writer) return undefined
     writer.refCount++
     method.addType(this.api, writer)

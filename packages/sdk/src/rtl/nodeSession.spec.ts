@@ -25,7 +25,7 @@
  */
 
 import * as fs from 'fs'
-import { TestConfig } from '../../../test-utils/src/testUtils'
+import { TestConfig } from '@looker/sdk-test-utils'
 import { NodeTransport } from './nodeTransport'
 import { NodeSession } from './nodeSession'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings'
@@ -79,7 +79,6 @@ describe('NodeSession', () => {
   describe('environmental configuration', () => {
     it('no INI file', async () => {
       const section = ApiConfig(fs.readFileSync(localIni, 'utf8')).Looker
-      // tslint:disable-next-line:variable-name
       const verify_ssl = boolDefault(section.verify_ssl, false).toString()
       // populate environment variables
       process.env[strLookerTimeout] =

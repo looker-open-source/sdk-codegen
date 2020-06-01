@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import { Readable } from 'readable-stream'
-import { TestConfig } from '../../../test-utils/src/testUtils'
+import { TestConfig } from '@looker/sdk-test-utils'
 import { NodeSession } from '../rtl/nodeSession'
 import { Looker40SDK as LookerSDK } from '../sdk/4.0/methods'
 import {
@@ -852,7 +852,6 @@ describe('LookerNodeSDK', () => {
   describe('Node environment', () => {
     beforeAll(() => {
       const section = ApiConfig(fs.readFileSync(config.localIni, 'utf8')).Looker
-      // tslint:disable-next-line:variable-name
       const verify_ssl = boolDefault(section.verify_ssl, false).toString()
       // populate environment variables
       process.env[strLookerTimeout] =

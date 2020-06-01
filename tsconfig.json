@@ -9,10 +9,8 @@
       "@looker/sdk-codegen-scripts": ["packages/scripts/src"],
       "@looker/sdk-codegen": ["packages/sdk-codegen/src"],
       "@looker/sdk-utils": ["packages/utils/src"],
-      "@looker/test-utils": ["packages/test-utils/src"]
+      "@looker/sdk-test-utils": ["packages/test-utils/src"]
     }
   },
-  "include": ["packages/*/src"],
-  "exclude": ["packages/*/lib", "packages/*/dist"],
-  "allowSyntheticDefaultImports": true
+  "include": ["packages/*/src"]
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@looker/test-utils",
+  "name": "@looker/sdk-test-utils",
   "version": "0.3.3-alpha.0",
   "private": true,
   "description": "Looker SDK test utils",
@@ -29,11 +29,6 @@
     "test",
     "utilities"
   ],
-  "scripts": {
-    "build": "tsc --project tsconfig.build.json",
-    "prebuild": "yarn clean",
-    "clean": "rm -rf dist lib"
-  },
   "overrides": [
     {
       "files": [

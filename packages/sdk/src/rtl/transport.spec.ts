@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from '../../../test-utils/src/testUtils'
+import { TestConfig } from '@looker/sdk-test-utils'
 import { encodeParam, ResponseMode, responseMode } from './transport'
 
 const config = TestConfig()

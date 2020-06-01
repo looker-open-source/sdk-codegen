@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { TestConfig } from '../../test-utils/src/testUtils'
+import { TestConfig } from '@looker/sdk-test-utils'
 import { IMethodResponse } from '@looker/sdk-codegen'
 
 const config = TestConfig()
@@ -46,7 +46,9 @@ describe('sdk generator test', () => {
     expect(method.primaryResponse.type.name).toEqual('User')
     expect(method.type.name).toEqual('User')
     expect(method.endpoint).toEqual('/users/{user_id}')
-    const response = method.responses.find((a: IMethodResponse) => a.statusCode === 400)
+    const response = method.responses.find(
+      (a: IMethodResponse) => a.statusCode === 400
+    )
     expect(response).toBeDefined()
     if (response) {
       expect(response.type.name).toEqual('Error')
