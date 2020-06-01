@@ -142,7 +142,21 @@ const loadDependencies = (
   return packages
 }
 
-type LinkOption = 'show' | 'link' | 'unlink'
+const buildTree = (packages: Packages): string[] => {
+  const result: string[] = []
+  Object.entries(packages).forEach(([, pkg]) => {
+    result.push(pkg.name)
+    pkg.references.forEach((ref) => {
+      result.push(`  ->${ref}`)
+    })
+    pkg.dependencies.forEach((dep) => {
+      result.push(`  <-${dep}`)
+    })
+  })
+  return result
+}
+
+type LinkOption = 'show' | 'link' | 'unlink' | 'tree'
 
 const processLinks = (packages: Packages, op: LinkOption): string[] => {
   const commands: string[] = []
@@ -180,6 +194,10 @@ const op: LinkOption = (args.length > 1
 switch (op) {
   case 'show':
     console.log(JSON.stringify(dependencies, null, 2))
+    break
+
+  case 'tree':
+    console.log(buildTree(dependencies).join('\n'))
     break
 
   case 'link':
