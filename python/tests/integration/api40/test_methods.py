@@ -93,7 +93,7 @@ def test_me_field_filters(sdk: mtds.Looker40SDK):
     assert me.last_name != ""
     assert not me.display_name
     assert not me.email
-    assert not me.personal_space_id
+    assert not me.personal_folder_id
 
 
 @pytest.mark.usefixtures("test_users")
@@ -267,7 +267,7 @@ def test_crud_look(sdk: mtds.Looker40SDK, looks):
                 is_run_on_load=l.get("is_run_on_load"),
                 public=l.get("public"),
                 query_id=query.id,
-                space_id=l.get("space_id") or str(sdk.me().personal_space_id),
+                folder_id=l.get("folder_id") or str(sdk.me().personal_folder_id),
             )
         )
 
@@ -279,7 +279,7 @@ def test_crud_look(sdk: mtds.Looker40SDK, looks):
         # TODO this is broken for local dev but works for CI...
         # assert look.public == l.get("public")
         assert look.query_id == query.id
-        assert look.space_id == l.get("space_id") or sdk.me().home_space_id
+        assert look.folder_id == l.get("folder_id") or sdk.me().home_folder_id
         assert look.user_id == l.get("user_id") or sdk.me().id
 
         # Update
@@ -368,7 +368,6 @@ def create_query_request(q, limit: Optional[str] = None) -> ml.WriteQuery:
         total=q.get("total"),
         row_total=q.get("row_total"),
         subtotals=q.get("subtotal"),
-        runtime=q.get("runtime"),
         vis_config=q.get("vis_config"),
         filter_config=q.get("filter_config"),
         visible_ui_sections=q.get("visible_ui_sections"),
@@ -403,7 +402,7 @@ def test_crud_dashboard(sdk: mtds.Looker40SDK, queries_system_activity, dashboar
                 show_filters_bar=d.get("show_filters_bar"),
                 show_title=d.get("show_title"),
                 slug=d.get("slug"),
-                space_id=d.get("space_id") or sdk.me().home_space_id,
+                folder_id=d.get("folder_id") or sdk.me().home_folder_id,
                 text_tile_text_color=d.get("text_tile_text_color"),
                 tile_background_color=d.get("tile_background_color"),
                 tile_text_color=d.get("tile_text_color"),

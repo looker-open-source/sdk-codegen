@@ -28,6 +28,7 @@ protocol AccessTokenProtocol {
     var access_token: String { get set }
     var token_type: String { get set }
     var expires_in: Int64 { get set }
+    var refresh_token: String { get set }
 }
 //
 //struct AccessToken: AccessTokenProtocol, Codable {
@@ -36,10 +37,11 @@ protocol AccessTokenProtocol {
 //  var expires_in: Int
 //}
 
-struct AuthToken: AccessTokenProtocol {
+struct AuthToken: AccessTokenProtocol, Codable {
     var access_token: String = ""
     var token_type: String = ""
     var expires_in: Int64 = 0
+    var refresh_token: String = ""
     
     private var expiresAt: Date?
     
@@ -67,6 +69,10 @@ struct AuthToken: AccessTokenProtocol {
         self.token_type = token.token_type!
         self.expires_in = token.expires_in!
         self.expiresAt = Self.expiryDate(Int(self.expires_in))
+
+        if let refresh = token.refresh_token {
+            self.refresh_token = refresh
+        }
         return self
     }
     

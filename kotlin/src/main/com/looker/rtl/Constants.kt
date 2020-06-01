@@ -32,7 +32,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 const val ENVIRONMENT_PREFIX = "LOOKERSDK"
-const val LOOKER_VERSION = "7.4"
+const val LOOKER_VERSION = "7.8"
 const val API_VERSION = "4.0"
 const val SDK_VERSION = "${API_VERSION}.${LOOKER_VERSION}"
 const val AGENT_TAG = "KT-SDK ${SDK_VERSION}"
@@ -51,8 +51,11 @@ const val DEFAULT_API_VERSION = "4.0" // Kotlin requires API 4.0
 
 typealias Values = Map<String, Any?>
 
-// TODO ensure DelimArray<t> returns 1,2,3 for the string representation rather than [1,2,3] or some other syntax
-typealias DelimArray<T> = Array<T>
+class DelimArray<T>(val values: Array<T>, private val delimiter: String = ",") {
+    override fun toString(): String {
+        return values.joinToString(delimiter)
+    }
+}
 
 typealias UriString = String
 

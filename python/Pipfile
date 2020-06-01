@@ -20,11 +20,13 @@ pytest-pudb = "*"
 pytest-mock = "*"
 twine = "*"
 pillow = "*"
+tox = "*"
 
 [packages]
 requests = "*"
 attrs = "*"
 cattrs = "*"
+python-dateutil = "*"
 
 [requires]
 python_full_version = "3.8.2"

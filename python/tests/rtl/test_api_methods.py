@@ -38,12 +38,11 @@ from looker_sdk.sdk.api31 import models
 
 @pytest.fixture(scope="module")
 def api() -> api_methods.APIMethods:
-    settings = api_settings.ApiSettings.configure("../looker.ini")
-    settings.api_version = "3.1"
+    settings = api_settings.ApiSettings("../looker.ini")
     transport = requests_transport.RequestsTransport.configure(settings)
-    auth = auth_session.AuthSession(settings, transport, serialize.deserialize31)
+    auth = auth_session.AuthSession(settings, transport, serialize.deserialize31, "3.1")
     return api_methods.APIMethods(
-        auth, serialize.deserialize31, serialize.serialize, transport
+        auth, serialize.deserialize31, serialize.serialize, transport, "3.1"
     )
 
 
@@ -197,3 +196,18 @@ def test_return_raises_an_SDKError_for_bad_responses(api):
             str,
         )
     assert "some error message" in str(exc.value)
+
+
+@pytest.mark.parametrize(
+    "method_path, expected_url",
+    [
+        ("/user", "https://self-signed.looker.com:19999/api/3.1/user"),
+        ("user", "https://self-signed.looker.com:19999/api/3.1/user"),
+        ("/user/1", "https://self-signed.looker.com:19999/api/3.1/user/1"),
+        ("user/1", "https://self-signed.looker.com:19999/api/3.1/user/1"),
+    ],
+)
+def test_api_versioned_url_is_built_properly(
+    api: api_methods.APIMethods, method_path: str, expected_url: str
+):
+    assert api._path(method_path) == expected_url

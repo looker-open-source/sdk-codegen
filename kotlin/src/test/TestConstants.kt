@@ -22,10 +22,7 @@
  * THE SOFTWARE.
  */
 
-import com.looker.rtl.ResponseMode
-import com.looker.rtl.asBoolean
-import com.looker.rtl.responseMode
-import com.looker.rtl.unQuote
+import com.looker.rtl.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
@@ -89,5 +86,16 @@ class TestConstants {
             val mode = responseMode(t)
             assertEquals(ResponseMode.Binary, mode, t)
         }
+    }
+
+    @test
+    fun testDelimArray() {
+        val ids: Array<Long> = arrayOf(1,2,3,4)
+        var actual = DelimArray(ids)
+        assertEquals(actual.toString(), "1,2,3,4")
+        actual = DelimArray(ids, ", ")
+        assertEquals(actual.toString(), "1, 2, 3, 4")
+        actual = DelimArray(ids, "|")
+        assertEquals(actual.toString(), "1|2|3|4")
     }
 }

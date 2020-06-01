@@ -22,31 +22,24 @@
 
 """AuthSession to provide automatic authentication
 """
+import hashlib
+import secrets
 from typing import cast, Dict, Optional, Type, Union
 import urllib.parse
+
+import attr
 
 from looker_sdk import error
 from looker_sdk.rtl import api_settings
 from looker_sdk.rtl import auth_token
-from looker_sdk.rtl import constants
+from looker_sdk.rtl import model
 from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
 from looker_sdk.sdk.api31 import models as models31
 from looker_sdk.sdk.api40 import models as models40
 
 
-# I'd expect the following line to be sufficient to tell mypy that `access_token`
-# is a Union[models31.AccessToken, models40.AccessToken] but it isn't.
-#
-# `isinstance(access_token, token_model)`
-#
-# hence the explicit tuple instead
 token_model_isinstances = models31.AccessToken, models40.AccessToken
-token_model: Union[Type[models31.AccessToken], Type[models40.AccessToken]]
-if constants.api_version == "3.1":
-    token_model = models31.AccessToken
-elif constants.api_version == "4.0":
-    token_model = models40.AccessToken
 
 
 class AuthSession:
@@ -58,17 +51,24 @@ class AuthSession:
         settings: api_settings.PApiSettings,
         transport: transport.Transport,
         deserialize: serialize.TDeserialize,
+        version: str,
     ):
         if not settings.is_configured():
             raise error.SDKError(
                 "Missing required configuration values like base_url and api_version."
             )
         self.settings = settings
-        self.user_token: auth_token.AuthToken = auth_token.AuthToken()
-        self.admin_token: auth_token.AuthToken = auth_token.AuthToken()
+        self.sudo_token: auth_token.AuthToken = auth_token.AuthToken()
+        self.token: auth_token.AuthToken = auth_token.AuthToken()
         self._sudo_id: Optional[int] = None
         self.transport = transport
         self.deserialize = deserialize
+        self.version = version
+        self.token_model: Union[Type[models31.AccessToken], Type[models40.AccessToken]]
+        if self.version == "3.1":
+            self.token_model = models31.AccessToken
+        elif self.version == "4.0":
+            self.token_model = models40.AccessToken
 
     def _is_authenticated(self, token: auth_token.AuthToken) -> bool:
         """Determines if current token is active."""
@@ -77,28 +77,24 @@ class AuthSession:
         return token.is_active
 
     @property
-    def is_user_authenticated(self) -> bool:
-        return self._is_authenticated(self.user_token)
+    def is_sudo_authenticated(self) -> bool:
+        return self._is_authenticated(self.sudo_token)
 
     @property
-    def is_admin_authenticated(self) -> bool:
-        return self._is_authenticated(self.admin_token)
+    def is_authenticated(self) -> bool:
+        return self._is_authenticated(self.token)
 
-    @property
-    def is_sudo(self) -> Optional[int]:
-        return self._sudo_id
+    def _get_sudo_token(self) -> auth_token.AuthToken:
+        """Returns an active sudo token."""
+        if not self.is_sudo_authenticated:
+            self._login_sudo()
+        return self.sudo_token
 
-    def _get_user_token(self) -> auth_token.AuthToken:
-        """Returns an active user token."""
-        if not self.is_user_authenticated:
-            self._login_user()
-        return self.user_token
-
-    def _get_admin_token(self) -> auth_token.AuthToken:
-        """Returns an active admin token."""
-        if not self.is_admin_authenticated:
-            self._login_admin()
-        return self.admin_token
+    def _get_token(self) -> auth_token.AuthToken:
+        """Returns an active token."""
+        if not self.is_authenticated:
+            self._login()
+        return self.token
 
     def authenticate(self) -> Dict[str, str]:
         """Return the Authorization header to authenticate each API call.
@@ -106,9 +102,9 @@ class AuthSession:
         Expired token renewal happens automatically.
         """
         if self._sudo_id:
-            token = self._get_user_token()
+            token = self._get_sudo_token()
         else:
-            token = self._get_admin_token()
+            token = self._get_token()
 
         return {"Authorization": f"Bearer {token.access_token}"}
 
@@ -122,7 +118,7 @@ class AuthSession:
         if self._sudo_id is None:
             self._sudo_id = sudo_id
             try:
-                self._login_user()
+                self._login_sudo()
             except error.SDKError:
                 self._sudo_id = None
                 raise
@@ -133,12 +129,12 @@ class AuthSession:
                     f"Another user ({self._sudo_id}) "
                     "is already logged in. Log them out first."
                 )
-            elif not self.is_user_authenticated:
-                self._login_user()
+            elif not self.is_sudo_authenticated:
+                self._login_sudo()
 
-    def _login_admin(self) -> None:
-        client_id = self.settings.get_client_id()
-        client_secret = self.settings.get_client_secret()
+    def _login(self) -> None:
+        client_id = self.settings.read_config().get("client_id")
+        client_secret = self.settings.read_config().get("client_secret")
         if not (client_id and client_secret):
             raise error.SDKError("Required auth credentials not found.")
 
@@ -152,82 +148,181 @@ class AuthSession:
         response = self._ok(
             self.transport.request(
                 transport.HttpMethod.POST,
-                "/login",
+                f"{self.settings.base_url}/api/{self.version}/login",
                 body=serialized,
                 headers={"Content-Type": "application/x-www-form-urlencoded"},
             )
         )
 
-        access_token = self.deserialize(data=response, structure=token_model)
+        # ignore type: mypy bug doesn't recognized kwarg `structure` to partial func
+        access_token = self.deserialize(
+            data=response, structure=self.token_model
+        )  # type: ignore
         assert isinstance(access_token, token_model_isinstances)
-        self.admin_token = auth_token.AuthToken(access_token)
+        self.token = auth_token.AuthToken(access_token)
 
-    def _login_user(self) -> None:
+    def _login_sudo(self) -> None:
         response = self._ok(
             self.transport.request(
                 transport.HttpMethod.POST,
-                f"/login/{self._sudo_id}",
+                f"{self.settings.base_url}/api/{self.version}/login/{self._sudo_id}",
                 authenticator=lambda: {
-                    "Authorization": f"Bearer {self._get_admin_token().access_token}"
+                    "Authorization": f"Bearer {self._get_token().access_token}"
                 },
             )
         )
-        access_token = self.deserialize(data=response, structure=token_model)
+        # ignore type: mypy bug doesn't recognized kwarg `structure` to partial func
+        access_token = self.deserialize(
+            data=response, structure=self.token_model
+        )  # type: ignore
         assert isinstance(access_token, token_model_isinstances)
-        self.user_token = auth_token.AuthToken(access_token)
+        self.sudo_token = auth_token.AuthToken(access_token)
 
     def logout(self, full: bool = False) -> None:
-        """Logout cuurent session or all.
+        """Logout of API.
 
-        If the session is authenticated as sudo_id, logoout() "undoes"
+        If the session is authenticated as sudo_id, logout() "undoes"
         the sudo and deactivates that sudo_id's current token. By default
-        the current admin/api3credential session is active at which point
-        you can continue to make API calls as the admin/api3credential user
+        the current api3credential session is active at which point
+        you can continue to make API calls as the api3credential user
         or logout(). If you want to logout completely in one step pass
         full=True
         """
         if self._sudo_id:
             self._sudo_id = None
-            if self.is_user_authenticated:
-                self._logout_user()
+            if self.is_sudo_authenticated:
+                self._logout(sudo=True)
                 if full:
-                    self._logout_admin()
+                    self._logout()
 
-        elif self.is_admin_authenticated:
-            self._logout_admin()
+        elif self.is_authenticated:
+            self._logout()
 
-    def _logout_user(self) -> None:
+    def _logout(self, sudo: bool = False) -> None:
+
+        if sudo:
+            token = self.sudo_token.access_token
+            self.sudo_token = auth_token.AuthToken()
+        else:
+            token = self.token.access_token
+            self.token = auth_token.AuthToken()
+
         self._ok(
             self.transport.request(
                 transport.HttpMethod.DELETE,
-                "/logout",
-                authenticator=lambda: {
-                    "Authorization": f"Bearer {self.user_token.access_token}"
-                },
+                f"{self.settings.base_url}/api/logout",
+                authenticator=lambda: {"Authorization": f"Bearer {token}"},
             )
         )
-        self._reset_user_token()
-
-    def _logout_admin(self) -> None:
-        self._ok(
-            self.transport.request(
-                transport.HttpMethod.DELETE,
-                "/logout",
-                authenticator=lambda: {
-                    "Authorization": f"Bearer {self.admin_token.access_token}"
-                },
-            )
-        )
-
-        self._reset_admin_token()
-
-    def _reset_admin_token(self) -> None:
-        self.admin_token = auth_token.AuthToken()
-
-    def _reset_user_token(self) -> None:
-        self.user_token = auth_token.AuthToken()
 
     def _ok(self, response: transport.Response) -> str:
         if not response.ok:
             raise error.SDKError(response.value)
         return response.value.decode(encoding="utf-8")
+
+
+class CryptoHash:
+    def secure_random(self, byte_count: int) -> str:
+        return secrets.token_hex()
+
+    def sha256_hash(self, message: str) -> str:
+        value = hashlib.sha256()
+        value.update(bytes(message, "utf8"))
+        return value.hexdigest()
+
+
+class OAuthSession(AuthSession):
+    def __init__(
+        self,
+        *,
+        settings: api_settings.PApiSettings,
+        transport: transport.Transport,
+        deserialize: serialize.TDeserialize,
+        serialize: serialize.TSerialize,
+        crypto: CryptoHash,
+        version: str,
+    ):
+        super().__init__(settings, transport, deserialize, version)
+        self.crypto = crypto
+        self.serialize = serialize
+        config_data = self.settings.read_config()
+        for required in ["client_id", "redirect_uri", "looker_url"]:
+            if required not in config_data:
+                raise error.SDKError(f"Missing required configuration value {required}")
+
+        # would have prefered using setattr(self, required, ...) in loop above
+        # but mypy can't follow it
+        self.client_id = config_data["client_id"]
+        self.redirect_uri = config_data["redirect_uri"]
+        self.looker_url = config_data["looker_url"]
+        self.code_verifier = ""
+
+    def create_auth_code_request_url(self, scope: str, state: str) -> str:
+        self.code_verifier = self.crypto.secure_random(32)
+        code_challenge = self.crypto.sha256_hash(self.code_verifier)
+        params: Dict[str, str] = {
+            "response_type": "code",
+            "client_id": self.client_id,
+            "redirect_uri": self.redirect_uri,
+            "scope": scope,
+            "state": state,
+            "code_challenge_method": "S256",
+            "code_challenge": code_challenge,
+        }
+        path = urllib.parse.urljoin(self.looker_url, "auth")
+        query = urllib.parse.urlencode(params)
+        return f"{path}?{query}"
+
+    @attr.s(auto_attribs=True, kw_only=True)
+    class GrantTypeParams(model.Model):
+        client_id: str
+        redirect_uri: str
+
+    @attr.s(auto_attribs=True, kw_only=True)
+    class AuthCodeGrantTypeParams(GrantTypeParams):
+        code: str
+        code_verifier: str
+        grant_type: str = "authorization_code"
+
+    @attr.s(auto_attribs=True, kw_only=True)
+    class RefreshTokenGrantTypeParams(GrantTypeParams):
+        refresh_token: str
+        grant_type: str = "refresh_token"
+
+    def _request_token(
+        self, grant_type: Union[AuthCodeGrantTypeParams, RefreshTokenGrantTypeParams]
+    ) -> Union[models31.AccessToken, models40.AccessToken]:
+        response = self.transport.request(
+            transport.HttpMethod.POST,
+            urllib.parse.urljoin(self.settings.base_url, "/api/token"),
+            body=self.serialize(grant_type),
+        )
+        if not response.ok:
+            raise error.SDKError(response.value.decode(encoding=response.encoding))
+
+        # ignore type: mypy bug doesn't recognized kwarg `structure` to partial func
+        return self.deserialize(
+            data=response.value, structure=self.token_model
+        )  # type: ignore
+
+    def redeem_auth_code(
+        self, auth_code: str, code_verifier: Optional[str] = None
+    ) -> None:
+        params = self.AuthCodeGrantTypeParams(
+            client_id=self.client_id,
+            redirect_uri=self.redirect_uri,
+            code=auth_code,
+            code_verifier=code_verifier or self.code_verifier,
+        )
+
+        access_token = self._request_token(params)
+        self.token = auth_token.AuthToken(access_token)
+
+    def _login(self) -> None:
+        params = self.RefreshTokenGrantTypeParams(
+            client_id=self.client_id,
+            redirect_uri=self.redirect_uri,
+            refresh_token=self.token.refresh_token,
+        )
+        access_token = self._request_token(params)
+        self.token = auth_token.AuthToken(access_token)

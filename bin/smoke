@@ -18,6 +18,7 @@ else
 fi
 
 yarn jsonify test/data.yml
+rm -rf results/
 
 echo "Smoking SDKs: ${tests} ..."
 
@@ -29,25 +30,26 @@ fi
 
 if [[ $tests == *python* ]]
 then
+  cd python || exit
   echo "Smoking Python SDK ..."
-  cd python
-  pipenv run pytest --junitxml=../results/smokepython.xml tests/
+  pipenv run tox
   cd ..
 fi
 
 if [[ $tests == *kotlin* ]]
 then
+  cd kotlin || exit
   echo "Smoking Kotlin SDK ..."
-  cd kotlin
   gradle test
   cd ..
 fi
 
 if [[ $tests == *swift* ]]
 then
-  echo "Smoking Swift SDK ..."
-  cd swift/looker
-  xcodebuild test -project looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.3' | xcpretty --test --color
+  cd swift/looker || exit
+  echo "Smoking Swift SDK (this could be broken right now, no need to report it) ..."
+  xcodebuild test -project looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.4.1'
+#  xcodebuild test -project looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8,OS=13.4.1' | xcpretty --test --color
   cd ../..
 fi
 

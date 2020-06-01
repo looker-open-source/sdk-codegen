@@ -29,7 +29,7 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 @Suppress("UNCHECKED_CAST")
-open class APIMethods(val authSession: UserSession) {
+open class APIMethods(val authSession: AuthSession) {
 
     val authRequest = authSession::authenticate
 

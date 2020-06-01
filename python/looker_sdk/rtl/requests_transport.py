@@ -28,7 +28,6 @@ from typing import cast, Callable, Dict, MutableMapping, Optional
 
 import requests
 
-from looker_sdk.rtl import constants
 from looker_sdk.rtl import transport
 
 
@@ -40,14 +39,12 @@ class RequestsTransport(transport.Transport):
         self, settings: transport.PTransportSettings, session: requests.Session
     ):
         self.settings = settings
-        headers: Dict[str, str] = {"x-looker-appid": f"PY-SDK {constants.sdk_version}"}
+        headers: Dict[str, str] = {transport.LOOKER_API_ID: settings.agent_tag}
         if settings.headers:
             headers.update(settings.headers)
         session.headers.update(headers)
         session.verify = settings.verify_ssl
         self.session = session
-        base_url = settings.base_url.strip("/")
-        self.api_path: str = f"{base_url}/api/{settings.api_version}"
         self.logger = logging.getLogger(__name__)
 
     @classmethod
@@ -65,7 +62,6 @@ class RequestsTransport(transport.Transport):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> transport.Response:
 
-        url = f"{self.api_path}{path}"
         if headers is None:
             headers = {}
         if authenticator:
@@ -73,11 +69,11 @@ class RequestsTransport(transport.Transport):
         timeout = self.settings.timeout
         if transport_options:
             timeout = transport_options.timeout
-        logging.info("%s(%s)", method.name, url)
+        self.logger.info("%s(%s)", method.name, path)
         try:
             resp = self.session.request(
                 method.name,
-                url,
+                path,
                 auth=NullAuth(),
                 params=query_params,
                 data=body,

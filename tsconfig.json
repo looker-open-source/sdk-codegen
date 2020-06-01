@@ -1,14 +1,18 @@
 {
-  "extends": "./tsconfig.common",
+  "extends": "./tsconfig.common.json",
   "compilerOptions": {
-    "target": "es6",
-    "lib": ["es6", "es2017.object", "dom"],
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
+    "noEmit": true,
+    "pretty": true,
     "baseUrl": ".",
     "paths": {
-      "rtl/*": ["typescript/looker/rtl/*"]
+      "@looker/sdk": ["packages/sdk/src"],
+      "@looker/sdk-codegen-scripts": ["packages/scripts/src"],
+      "@looker/sdk-codegen": ["packages/sdk-codegen/src"],
+      "@looker/sdk-utils": ["packages/utils/src"],
+      "@looker/test-utils": ["packages/test-utils/src"]
     }
   },
-  "include": ["*.ts", "src/*.ts"]
+  "include": ["packages/*/src"],
+  "exclude": ["packages/*/lib", "packages/*/dist"],
+  "allowSyntheticDefaultImports": true
 }

@@ -38,6 +38,10 @@ else:
     from typing_extensions import Protocol
 
 
+AGENT_PREFIX = "PY SDK"
+LOOKER_API_ID = "x-looker-appid"
+
+
 class HttpMethod(enum.Enum):
     """Supported HTTP verbs.
     """
@@ -53,28 +57,13 @@ class HttpMethod(enum.Enum):
 
 class PTransportSettings(Protocol):
     base_url: str
-    api_version: str
     verify_ssl: bool
     timeout: int
+    agent_tag: str
     headers: Optional[MutableMapping[str, str]]
 
     def is_configured(self) -> bool:
-        ...
-
-
-@attr.s(auto_attribs=True, kw_only=True)
-class TransportSettings:
-    """Basic transport settings.
-    """
-
-    base_url: str = ""
-    api_version: str = ""
-    verify_ssl: bool = True
-    timeout: int = 120
-    headers: Optional[MutableMapping[str, str]] = None
-
-    def is_configured(self) -> bool:
-        return bool(self.base_url and self.api_version)
+        return bool(self.base_url)
 
 
 TAuthenticator = Optional[Callable[[], Dict[str, str]]]
