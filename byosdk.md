@@ -8,15 +8,15 @@ The high-level steps for building a new language SDK include:
 
 1. Create the language/platform [run-time library](#run-time-library) (RTL)
 
-1. Create the [code generator](#code-generator) by descending from [codeGen.ts](src/codeGen.ts) or one of the existing
-   generators like [Typescript](src/typescript.gen.ts) or [Python](src/python.gen.ts)
+1. Create the [code generator](#code-generator) by descending from [codeGen.ts](packages/sdk-codegen/src/codeGen.ts) or one of the existing
+   generators like [Typescript](packages/sdk-codegen/src/typescript.gen.ts) or [Python](packages/sdk-codegen/src/python.gen.ts)
 
-1. Create unit and functional tests
+1. Create [unit](#unit-tests) and [functional](#functional-or-integration-tests) tests
 
-1. Create package manager deployment scripts (where applicable)
+1. Create package manager [deployment scripts](#deployment-scripts) (where applicable)
 
 When implementing the syntax and features for the new language SDK, keep in mind the principles described in the
-[codegen rationale](rationale.md) documentation:
+[Codegen rationale](rationale.md) documentation:
 
 - [consistency](rationale.md#consistency),
 - [discoverability](rationale.md#discoverability), and
@@ -382,13 +382,13 @@ See the Typescript SDK [`models.ts`](packages/sdk/src/sdk/4.0/models.ts) for typ
 
 ### Streams
 
-Streaming declarations are basically the same as [Methods](Methods), but with a parameter for a streaming callback. 
+Streaming declarations are basically the same as [Methods](#methods), but with a parameter for a streaming callback. 
 
 See the Typescript SDK [`streams.ts`](packages/sdk/src/sdk/4.0/streams.ts) for streaming method examples. 
 
 ### API version tracking
 
-The `constants` file for an SDK has the Looker API version and Looker release version as variables. The update mechanism
+The `constants` file (e.g. [`constants.ts`](packages/sdk/src/rtl/constants.ts)) for an SDK has the Looker API version and Looker release version as variables. The update mechanism
 for these variables is in [`reformatter.ts`](packages/scripts/src/reformatter.ts).
 
 #### Code reformatting
