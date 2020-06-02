@@ -301,3 +301,12 @@ The following table describes the environment variables. By default, the SDK "na
 | LOOKERSDK_TIMEOUT       | Request timeout in seconds. Defaults to `120` for most platforms.                                                                                                     |
 | LOOKERSDK_CLIENT_ID     | API3 credentials `client_id`. This and `client_secret` must be provided in some fashion to the Node SDK, or no calls to the API will be authorized. No default value. |
 | LOOKERSDK_CLIENT_SECRET | API3 credentials `client_secret`. No default value.                                                                                                                   |
+
+### Configuration variable precedence
+
+Configuration variables should be processed as follows:
+
+- if the default configuration `.ini` file exists, apply the values
+- if an environment variable exists, apply the value
+- if a configuration value is explicitly in code, apply that value
+- if a command-line switch is supported, apply that value 
