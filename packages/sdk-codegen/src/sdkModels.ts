@@ -640,89 +640,52 @@ export class Parameter implements IParameter {
  *
  */
 export interface IMethod extends ISchemadSymbol {
-  /**
-   * alias of ISymbol.name
-   */
+  /** alias of ISymbol.name */
   operationId: string
 
-  /**
-   * HTTP method used for this REST request
-   */
+  /** HTTP method used for this REST request */
   httpMethod: HttpMethod
 
-  /**
-   * Relative URL of the endpoint
-   */
+  /** Relative URL of the endpoint */
   endpoint: string
 
-  /**
-   * alias of ISymbol.type
-   */
-  resultType: IType
-
-  /**
-   * Prefers 200 response with application/json as the response type
-   */
+  /** Prefers 200 response with application/json as the response type */
   primaryResponse: IMethodResponse
 
-  /**
-   * List of all responses that can be returned by this REST call
-   */
+  /** List of all responses that can be returned by this REST call */
   responses: IMethodResponse[]
 
-  /**
-   * Description (from the spec) of this method
-   */
+  /** Description (from the spec) of this method */
   description: string
 
-  /**
-   * All parameters defined for this method, in natural order from spec processing
-   */
+  /** All parameters defined for this method, in natural order from spec processing */
   params: IParameter[]
 
-  /**
-   * Summary from the method's schema object
-   */
+  /** Summary from the method's schema object */
   summary: string
 
-  /**
-   * Names of path arguments. Not in required/optional priority
-   */
+  /** Names of path arguments. Not in required/optional priority */
   pathArgs: string[]
 
-  /**
-   * Primary body argument name ('' if it doesn't exist)
-   */
+  /** Primary body argument name ('' if it doesn't exist) */
   bodyArg: string
 
-  /**
-   * Names of query arguments. Not in required/optional priority
-   */
+  /** Names of query arguments. Not in required/optional priority */
   queryArgs: string[]
 
-  /**
-   * Names of header arguments. Not currently used by Codegen
-   */
+  /** Names of header arguments. Not currently used by Codegen */
   headerArgs: string[]
 
-  /**
-   * Names of cookie arguments. Not currently used by Codegen
-   */
+  /** Names of cookie arguments. Not currently used by Codegen */
   cookieArgs: string[]
 
-  /**
-   * Responses that have HTTP error codes (4xx)
-   */
+  /** Responses that have HTTP error codes (4xx) */
   errorResponses: IMethodResponse[]
 
-  /**
-   * All required parameters, ordered by location precedence
-   */
+  /** All required parameters, ordered by location precedence */
   requiredParams: IParameter[]
 
-  /**
-   * All optional parameters, ordered by location precedence
-   */
+  /** All optional parameters, ordered by location precedence */
   optionalParams: IParameter[]
 
   /**
@@ -731,44 +694,28 @@ export interface IMethod extends ISchemadSymbol {
    */
   allParams: IParameter[]
 
-  /**
-   * All body parameters in natural order
-   */
+  /** All body parameters in natural order */
   bodyParams: IParameter[]
 
-  /**
-   * All path parameters in natural order
-   */
+  /** All path parameters in natural order */
   pathParams: IParameter[]
 
-  /**
-   * All query parameters in natural order
-   */
+  /** All query parameters in natural order */
   queryParams: IParameter[]
 
-  /**
-   * The types of responses returned by this method (binary and/or string)
-   */
+  /** The types of responses returned by this method (binary and/or string) */
   responseModes: Set<ResponseMode>
 
-  /**
-   * Value of `x-looker-activity-type` from schema specification
-   */
+  /** Value of `x-looker-activity-type` from schema specification */
   activityType: string
 
-  /**
-   * all type names referenced in this method, including intrinsic types
-   */
+  /** all type names referenced in this method, including intrinsic types */
   types: KeyList
 
-  /**
-   * all non-instrinsic type names referenced in this method
-   */
+  /** all non-instrinsic type names referenced in this method */
   customTypes: KeyList
 
-  /**
-   * true if this method is a rate-limited API endpoint
-   */
+  /** true if this method is a rate-limited API endpoint */
   rateLimited: boolean
 
   /**
@@ -861,6 +808,9 @@ export interface IMethod extends ISchemadSymbol {
   makeTypes(api: IApiModel): KeyList
 }
 
+/**
+ * Concrete implementation of IMethod interface
+ */
 export class Method extends SchemadSymbol implements IMethod {
   readonly httpMethod: HttpMethod
   readonly endpoint: string
@@ -1027,10 +977,6 @@ export class Method extends SchemadSymbol implements IMethod {
     }
 
     return modes
-  }
-
-  get resultType(): IType {
-    return this.type
   }
 
   get operationId(): string {
@@ -2050,9 +1996,7 @@ export interface ICodeGen {
    */
   codePath: string
 
-  /**
-   * current version of the Api being generated
-   */
+  /** current version of the Api being generated */
   apiVersion: string
 
   /**
@@ -2079,14 +2023,10 @@ export interface ICodeGen {
    */
   transport: string
 
-  /**
-   * reference to self. e.g self, this, it, etc.
-   */
+  /** reference to self. e.g self, this, it, etc. */
   itself: string
 
-  /**
-   * file extension for generated files
-   */
+  /** file extension for generated files */
   fileExtension: string
 
   /**
@@ -2101,29 +2041,19 @@ export interface ICodeGen {
    */
   nullStr: string
 
-  /**
-   * indentation string. Typically two spaces '  '
-   */
+  /** indentation string. Typically two spaces '  ' */
   indentStr: string
 
-  /**
-   * end type string. For C# and TypeScript, usually '}\n'
-   */
+  /** end type string. For C# and TypeScript, usually '}\n' */
   endTypeStr: string
 
-  /**
-   * argument separator string. Typically ', '
-   */
+  /** argument separator string. Typically ', ' */
   argDelimiter: string
 
-  /**
-   * parameter delimiter. Typically ",\n"
-   */
+  /** parameter delimiter. Typically ",\n" */
   paramDelimiter: string
 
-  /**
-   * property delimiter. Typically, ",\n"
-   */
+  /** property delimiter. Typically, ",\n" */
   propDelimiter: string
 
   /**
@@ -2132,14 +2062,10 @@ export interface ICodeGen {
    */
   needsRequestTypes: boolean
 
-  /**
-   * Does this language support specific streaming methods?
-   */
+  /** Does this language have streaming methods? */
   willItStream: boolean
 
-  /**
-   * versions used for generating the SDK
-   */
+  /** versions info used for generating the SDK */
   versions?: IVersionInfo
 
   /**
@@ -2156,50 +2082,48 @@ export interface ICodeGen {
    */
   requestTypeName(method: IMethod): string
 
-  //
   /**
    * Returns the WriteType if the passed type has any readOnly properties or types
    *
    * If the writeable type exists, a reference to it is added to the method
    * @param {IType} type
+   * @param method to track writeable type conversion
    * @returns {IType | undefined}
    */
   writeableType(type: IType, method: IMethod): IType | undefined
 
-  //
   /**
    * standard code to insert at the top of the generated "methods" file(s)
-   * @param {string} indent
+   * @param {string} indent code indentation
    * @returns {string}
    */
   methodsPrologue(indent: string): string
 
-  //
   /**
    * standard code to append to the bottom of the generated "methods" file(s)
-   * @param {string} indent
-   * @returns {string}
+   * @param {string} indent code indentation
+   * @returns {string} generated code
    */
   methodsEpilogue(indent: string): string
 
   /**
    * standard code to insert at the top of the generated "streams" file(s)
-   * @param {string} indent
-   * @returns {string}
+   * @param {string} indent code indentation
+   * @returns {string} generated code
    */
   streamsPrologue(indent: string): string
 
   /**
    * standard code to insert at the top of the generated "models" file(s)
-   * @param {string} indent indentation string
-   * @returns {string}
+   * @param {string} indent code indentation
+   * @returns {string} generated code
    */
   modelsPrologue(indent: string): string
 
   /**
    * standard code to append to the bottom of the generated "models" file(s)
-   * @param {string} indent indentation string
-   * @returns {string}
+   * @param {string} indent code indentation
+   * @returns {string} generated code
    */
   modelsEpilogue(indent: string): string
 
@@ -2217,50 +2141,97 @@ export interface ICodeGen {
    */
   fileName(base: string): string
 
-  // generate an optional comment header if the comment is not empty
+  /**
+   * generate an optional comment header if the comment is not empty
+   * @param {string} indent code indentation
+   * @param {string | undefined} text
+   * @returns {string} comment (or not)
+   */
   commentHeader(indent: string, text: string | undefined): string
 
-  // group argument names together
-  // e.g.
-  //   [ row_size, page_offset ]
+  /**
+   * group argument names together
+   * e.g.
+   *  [ row_size, page_offset ]
+   * @param {string} indent code indentation
+   * @param {Arg[]} args list of argument names
+   * @param {string} prefix "namespace" for argument names
+   * @returns {string} source code
+   */
   argGroup(indent: string, args: Arg[], prefix?: string): string
 
-  // list arguments by name
-  // e.g.
-  //   row_size, page_offset
+  /**
+   * list arguments by name
+   * e.g.
+   *  row_size, page_offset
+   * @param {string} indent code indentation
+   * @param {Arg[]} args list of argument names
+   * @param {string} prefix "namespace" for argument names
+   * @returns {string} source code
+   */
   argList(indent: string, args: Arg[], prefix?: string): string
 
-  // generate a comment block
-  // e.g.
-  //   # this is a
-  //   # multi-line comment block
+  /**
+   * generate a comment block
+   * e.g.
+   *  # this is a
+   *  # multi-line comment block
+   * @param {string} indent code indentation
+   * @param {string} description as comment
+   * @returns {string} comment block
+   */
   comment(indent: string, description: string): string
 
   /**
    * generates the method signature including parameter list and return type.
-   * @param {string} indent
-   * @param {IMethod} method
-   * @returns {string}
+   * @param {string} indent code indentation
+   * @param {IMethod} method to declare
+   * @returns {string} source code
    */
   methodSignature(indent: string, method: IMethod): string
 
-  // convert endpoint pattern to platform-specific string template
+  /**
+   * convert endpoint pattern to platform-specific string template
+   * @param {string} path endpoint path template
+   * @param {string} prefix namespace prefix
+   * @returns {string} string template
+   */
   httpPath(path: string, prefix?: string): string
 
-  // generate a call to the http API abstraction
-  // includes http method, path, body, query, headers, cookie arguments
+  /**
+   * generate a call to the http API abstraction
+   * includes http method, path, body, query, headers, cookie arguments
+   * @param {string} indent code indentation
+   * @param {IMethod} method to call
+   * @returns {string} source code
+   */
   httpCall(indent: string, method: IMethod): string
 
-  // generate a call to the stream API abstraction
-  // includes http method, path, body, query, headers, cookie arguments
+  /**
+   * generate a call to the stream API abstraction
+   * includes http method, path, body, query, headers, cookie arguments
+   * @param {string} indent code indentation
+   * @param {IMethod} method to call
+   * @returns {string} source code
+   */
   streamCall(indent: string, method: IMethod): string
 
-  // generates the type declaration signature for the start of the type definition
+  /**
+   * generates the type declaration signature for the start of the type definition
+   * @param {string} indent code indentation
+   * @param {IType} type to declare
+   * @returns {string} source code
+   */
   typeSignature(indent: string, type: IType): string
 
-  // generates summary text
-  // e.g, for Python:
-  //    '''This is the method summary'''
+  /**
+   * generates summary text
+   * e.g, for Python:
+   *  '''This is the method summary'''
+   * @param {string} indent code indentation
+   * @param {string} text comment
+   * @returns {string} source code
+   */
   summary(indent: string, text: string): string
 
   /**
@@ -2274,7 +2245,7 @@ export interface ICodeGen {
    *
    *   # size description of parameter
    *   row_limit: int = None
-   * @param {string} indent spaces to indent
+   * @param {string} indent code indentation
    * @param {IMethod} method method containing the parameter
    * @param {IParameter} param parameter to declare
    * @returns {string} the parameter declaration
@@ -2283,57 +2254,99 @@ export interface ICodeGen {
 
   /**
    * Handles the encoding call for path parameters within method declarations
-   * @param {string} indent how much indent
+   * @param {string} indent code indentation
    * @param {IMethod} method structure of method to declare
-   * @returns {string} indentation strings
+   * @returns {string} the resolved API endpoint path
    */
   encodePathParams(indent: string, method: IMethod): string
 
-  // generates the entire method
+  /**
+   * generates the entire method
+   * @param {string} indent code indentation
+   * @param {IMethod} method structure of method to declare
+   * @returns {string} the resolved API endpoint path
+   */
   declareMethod(indent: string, method: IMethod): string
 
-  // generates the streaming method signature including parameter list and return type.
+  /**
+   * generates the streaming method signature including parameter list and return type.
+   * @param {string} indent code indentation
+   * @param {IMethod} method
+   * @returns {string}
+   */
   streamerSignature(indent: string, method: IMethod): string
 
   /**
    * Generates the entire streaming method
    * @param {string} indent code indentation
    * @param {IMethod} method method to declare
-   * @returns {string} source code declaration
+   * @returns {string} source code
    */
   declareStreamer(indent: string, method: IMethod): string
 
   /**
-   *
    * generates the list of parameters for a method signature
    * e.g.
    * # ID of the query to run
    * query_id: str,
    * # size description of parameter
    * row_limit: int = None
-   * @param {string} indent
-   * @param {IMethod} method
-   * @returns {string}
+   * @param {string} indent code indentation
+   * @param {IMethod} method containing parameters to declare
+   * @returns {string} source code
    */
   declareParameters(indent: string, method: IMethod): string
 
-  // generates the syntax for a constructor argument
+  /**
+   * generates the syntax for a constructor argument
+   * @param {string} indent code indentation
+   * @param {IProperty} property of constructor
+   * @returns {string} source code
+   */
   declareConstructorArg(indent: string, property: IProperty): string
 
-  // produces the code for the type constructor
+  /**
+   * produces the code for the type constructor
+   * @param {string} indent code indentation
+   * @param {IType} type to generate
+   * @returns {string} source code
+   */
   construct(indent: string, type: IType): string
 
-  // generates entire type declaration
+  /**
+   * generates entire type declaration
+   * @param {string} indent code indentation
+   * @param {IType} type to generate
+   * @returns {string} source code
+   */
   declareType(indent: string, type: IType): string
 
-  // generates a textual description for the property's comment header
+  /**
+   * generates a textual description for the property's comment header
+   * @param {IProperty} property to describe
+   * @returns {string} source code
+   */
   describeProperty(property: IProperty): string
 
-  // generates type property
+  /**
+   * generates type property
+   * @param {string} indent
+   * @param {IProperty} property to declare
+   * @returns {string} source code
+   */
   declareProperty(indent: string, property: IProperty): string
 
-  // if countError is false, no import reference to Error or IError should be included
+  /**
+   * if countError is false, no import reference to Error or IError should be included
+   * @param {boolean} countError
+   * @returns {string[]}
+   */
   typeNames(countError: boolean): string[]
 
+  /**
+   * Language-specific type conversion
+   * @param {IType} type to potentially convert
+   * @returns {IMappedType} converted type
+   */
   typeMap(type: IType): IMappedType
 }

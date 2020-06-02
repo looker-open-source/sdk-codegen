@@ -166,10 +166,15 @@ export enum StatusCode {
  * Untyped basic HTTP response type for "raw" HTTP requests
  */
 export interface IRawResponse {
+  /** ok is `true` if the response is successful, `false` otherwise */
   ok: boolean
+  /** HTTP response code */
   statusCode: number
+  /** HTTP response status message text */
   statusMessage: string
+  /** MIME type of the response from the HTTP response header */
   contentType: string
+  /** The body of the HTTP response, without any additional processing */
   body: any
 }
 
