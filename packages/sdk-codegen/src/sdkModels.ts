@@ -39,6 +39,9 @@ export const strRequest = 'Request'
 export const strWrite = 'Write'
 export declare type Arg = string
 
+const lookerValuesTag = 'x-looker-values'
+const enumTag = 'enum'
+
 // handy refs
 // https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schema-object
 // https://swagger.io/docs/specification/data-models/data-types/
@@ -314,6 +317,14 @@ export interface IType {
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(rx: RegExp, criteria: SearchCriteria): boolean
+}
+
+/**
+ * Types that have an `x-looker-values` enumeration or Enum specification
+ * according to https://swagger.io/docs/specification/data-models/enums/
+ */
+export interface IEnumType extends IType {
+  values: any[]
 }
 
 export declare type MethodParameterLocation =
@@ -1367,6 +1378,39 @@ export class ArrayType extends Type {
   }
 }
 
+export class EnumType extends Type implements IEnumType {
+  readonly values: any[]
+  constructor(public elementType: IType, schema: OAS.SchemaObject) {
+    super(schema, `${elementType.name}[]`)
+    this.customType = elementType.customType
+    if (lookerValuesTag in schema) {
+      this.values = schema[lookerValuesTag]
+    } else if (enumTag in schema) {
+      this.values = schema[enumTag] as any[]
+    } else {
+      throw new Error(`${schema.name} is an enum but has no values`)
+    }
+  }
+
+  searchString(criteria: SearchCriteria): string {
+    let result = super.searchString(criteria)
+    if (criteria.has(SearchCriterion.property)) {
+      for (const val in this.values) {
+        result += searchIt(val.toString())
+      }
+    }
+    return result
+  }
+
+  get className(): string {
+    return 'EnumType'
+  }
+
+  get readOnly() {
+    return this.elementType.readOnly
+  }
+}
+
 export class DelimArrayType extends Type {
   constructor(public elementType: IType, schema: OAS.SchemaObject) {
     super(schema, `DelimArray<${elementType.name}>`)
@@ -1673,6 +1717,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
         if (style === 'simple') {
           // FKA 'csv'
           return new DelimArrayType(this.resolveType(schema.items), schema)
+        }
+        if (lookerValuesTag in schema || enumTag in schema) {
+          return new EnumType(this.resolveType(schema.items), schema)
         }
         return new ArrayType(this.resolveType(schema.items), schema)
       }

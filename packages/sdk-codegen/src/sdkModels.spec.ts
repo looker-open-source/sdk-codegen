@@ -42,6 +42,8 @@ import {
   SearchCriterionTerm,
   SetToCriteria,
   typeRefs,
+  // EnumType,
+  // IEnumType,
 } from './sdkModels'
 
 const config = TestConfig()
@@ -139,7 +141,7 @@ describe('sdkModels', () => {
 
   describe('writeable logic', () => {
     it('CredentialsApi3', () => {
-      const type = apiTestModel.types.CredentialsApi3
+      const type = apiTestModel.types['CredentialsApi3']
       expect(type).toBeDefined()
       const writeable = type.writeable
       expect(type.readOnly).toEqual(true)
@@ -148,7 +150,7 @@ describe('sdkModels', () => {
 
     describe('DashboardElement', () => {
       it('writeable', () => {
-        const type = apiTestModel.types.DashboardElement
+        const type = apiTestModel.types['DashboardElement']
         expect(type).toBeDefined()
         const writeable = type.writeable
         expect(type.readOnly).toEqual(false)
@@ -156,7 +158,7 @@ describe('sdkModels', () => {
       })
 
       it('writeableType', () => {
-        const type = apiTestModel.types.DashboardElement
+        const type = apiTestModel.types['DashboardElement']
         expect(type).toBeDefined()
         const actual = apiTestModel.getWriteableType(type)
         expect(actual).toBeDefined()
@@ -171,37 +173,62 @@ describe('sdkModels', () => {
     })
   })
 
-  const localeSort = (a: string, b: string) => a.localeCompare(b)
-
-  describe('sorting it out', () => {
-    it('sorts methods', () => {
-      const list = apiTestModel.methods
-      const keys = Object.keys(list)
-      const sortedKeys = Object.keys(list).sort(localeSort)
-      expect(keys).toEqual(sortedKeys)
-    })
-
-    // it('sorts types', () => {
-    //   const list = apiTestModel.types
-    //   const keys = Object.keys(list)
-    //   const sortedKeys = Object.keys(list).sort(localeSort)
-    //   expect(keys).toEqual(sortedKeys)
-    // })
-
-    it('sorts tags and methods in tags', () => {
-      const list = apiTestModel.tags
-      const keys = Object.keys(list)
-      const sortedKeys = Object.keys(list).sort(localeSort)
-      expect(keys).toEqual(sortedKeys)
-
-      keys.forEach((key) => {
-        const methods = list[key]
-        const methodKeys = Object.keys(methods)
-        const sortedMethodKeys = Object.keys(methods).sort(localeSort)
-        expect(methodKeys).toEqual(sortedMethodKeys)
-      })
-    })
-  })
+  // describe('enum types', () => {
+  //   const checkEnum = (type: IType, values: any[]) => {
+  //     const num = type as IEnumType
+  //     expect(num).toBeDefined()
+  //     expect(num).toBeInstanceOf(EnumType)
+  //     expect(num.values).toEqual(values)
+  //   }
+  //
+  //   it('Integration enum properties', () => {
+  //     const type = apiTestModel.types['Integration']
+  //     expect(type).toBeDefined()
+  //     checkEnum(type.properties['supported_formats'].type, [
+  //       'txt',
+  //       'csv',
+  //       'inline_json',
+  //       'json',
+  //       'json_label',
+  //       'json_detail',
+  //       'json_detail_lite_stream',
+  //       'xlsx',
+  //       'html',
+  //       'wysiwyg_pdf',
+  //       'assembled_pdf',
+  //       'wysiwyg_png',
+  //       'csv_zip',
+  //     ])
+  //     checkEnum(type.properties['supported_action_types'].type, [
+  //       'call',
+  //       'query',
+  //       'dashboard',
+  //     ])
+  //     checkEnum(type.properties['supported_formattings'].type, [
+  //       'apply',
+  //       'noapply',
+  //     ])
+  //     checkEnum(type.properties['supported_download_settings'].type, [
+  //       'push',
+  //       'url',
+  //     ])
+  //   })
+  //
+  //   it('Project enum properties', () => {
+  //     const type = apiTestModel.types['Project']
+  //     expect(type).toBeDefined()
+  //     checkEnum(type.properties['git_application_server_http_scheme'].type, [
+  //       'http',
+  //       'https',
+  //     ])
+  //     checkEnum(type.properties['pull_request_mode'].type, [
+  //       'off',
+  //       'links',
+  //       'recommended',
+  //       'required',
+  //     ])
+  //   })
+  // })
 
   describe('rate limit', () => {
     it('x-looker-rate-limited', () => {
