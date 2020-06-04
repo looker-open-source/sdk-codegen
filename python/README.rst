@@ -2,9 +2,10 @@
 Looker SDK
 ===========
 
-The Looker SDK for Python provides a convenient way to communicate with the
-Looker API available on your Looker server. The library requires python3.7+
-and is annotated using the typing module.
+The Looker SDK for Python provides a convenient and strongly typed way to
+communicate with the Looker API available on your Looker server. The
+library supports python versions 3.6, 3.7, and 3.8.
+
 
 **DISCLAIMER**: This is a *beta* version of the Looker SDK, using a completely
 new code generator developed by Looker. Implementations are still subject to
@@ -30,7 +31,7 @@ Basic Usage
 sample project setup
 ====================
 
-Install python 3.8. We highly recommend using
+Install python: we'll use 3.8 for this tutorial. We highly recommend using
 `pyenv <https://github.com/pyenv/pyenv#installation>`_ to install
 different versions of python. Mac users should use
 `homebrew <https://brew.sh/>`_ to install pyenv:
