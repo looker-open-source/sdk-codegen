@@ -1381,7 +1381,7 @@ export class ArrayType extends Type {
 export class EnumType extends Type implements IEnumType {
   readonly values: any[]
   constructor(public elementType: IType, schema: OAS.SchemaObject) {
-    super(schema, `${elementType.name}[]`)
+    super(schema, schema.name)
     this.customType = elementType.customType
     if (lookerValuesTag in schema) {
       this.values = schema[lookerValuesTag]
