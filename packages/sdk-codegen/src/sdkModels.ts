@@ -1524,6 +1524,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       'hostname',
       'ipv4',
       'ipv6',
+      'any',
     ].forEach((name) => (this.types[name] = new IntrinsicType(name)))
 
     this.schema = spec

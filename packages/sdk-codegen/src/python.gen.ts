@@ -105,6 +105,7 @@ export class PythonGen extends CodeGen {
     string: { default: this.nullStr, name: 'str' },
     uri: { default: this.nullStr, name: 'str' },
     void: { default: this.nullStr, name: 'None' },
+    any: { default: this.nullStr, name: 'Any' },
   }
 
   // cattrs [un]structure hooks for model [de]serialization
@@ -490,7 +491,7 @@ ${this.hooks.join('\n')}
   }
 
   _typeMap(type: IType, format: 'models' | 'methods'): IMappedType {
-    super.typeMap(type)
+    this.typeMap(type)
     if (type.elementType) {
       const map = this._typeMap(type.elementType, format)
       switch (type.className) {
