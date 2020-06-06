@@ -413,7 +413,7 @@ import java.util.*
         case 'HashType':
           // TODO figure out this bizarre string template error either in IntelliJ or Typescript
           // return {name: `Map<String,${map.name}>`, default: '{}'}
-          // if (map.name === 'String') map.name = 'Any' // TODO fix messy hash values
+          if (map.name === 'String') map.name = 'Any' // TODO fix bad API spec values
           return { default: this.nullStr, name: 'Map<String' + `,${map.name}>` }
         case 'DelimArrayType':
           return { default: this.nullStr, name: `DelimArray<${map.name}>` }
