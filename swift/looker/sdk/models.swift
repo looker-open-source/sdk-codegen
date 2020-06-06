@@ -1965,6 +1965,10 @@ struct DBConnection: SDKModel {
      * Maximum number of threads to use to build PDTs in parallel
      */
     var pdt_concurrency: Int64?
+    /**
+     * When disable_context_comment is true comment will not be added to SQL
+     */
+    var disable_context_comment: Bool?
 }
 
 struct DBConnectionBase: SDKModel {
@@ -3730,7 +3734,7 @@ struct LookmlModelExploreError: SDKModel {
     /**
      * Details (read-only)
      */
-    var details: String?
+    var details: AnyCodable?
     /**
      * Error source location (read-only)
      */
@@ -3950,7 +3954,7 @@ struct LookmlModelExploreFieldEnumeration: SDKModel {
     /**
      * Value (read-only)
      */
-    var value: String?
+    var value: AnyCodable?
 }
 
 struct LookmlModelExploreFieldMapLayer: SDKModel {
@@ -7463,6 +7467,10 @@ struct WriteDBConnection: SDKModel {
      * Maximum number of threads to use to build PDTs in parallel
      */
     var pdt_concurrency: Int64?
+    /**
+     * When disable_context_comment is true comment will not be added to SQL
+     */
+    var disable_context_comment: Bool?
 }
 
 /**

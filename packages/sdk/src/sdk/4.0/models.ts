@@ -737,7 +737,7 @@ export interface ICreateDashboardFilter {
   /**
    * Field information (read-only)
    */
-  field?: IDictionary<string>
+  field?: IDictionary<any>
   /**
    * Display order of this filter relative to other filters
    */
@@ -757,7 +757,7 @@ export interface ICreateDashboardFilter {
   /**
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
-  ui_config?: IDictionary<string>
+  ui_config?: IDictionary<any>
 }
 
 export interface ICreateDashboardRenderTask {
@@ -1562,7 +1562,7 @@ export interface IDashboardFilter {
   /**
    * Field information (read-only)
    */
-  field?: IDictionary<string>
+  field?: IDictionary<any>
   /**
    * Display order of this filter relative to other filters
    */
@@ -1582,7 +1582,7 @@ export interface IDashboardFilter {
   /**
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
-  ui_config?: IDictionary<string>
+  ui_config?: IDictionary<any>
 }
 
 export interface IDashboardLayout {
@@ -1972,6 +1972,10 @@ export interface IDBConnection {
    * Maximum number of threads to use to build PDTs in parallel
    */
   pdt_concurrency?: number
+  /**
+   * When disable_context_comment is true comment will not be added to SQL
+   */
+  disable_context_comment?: boolean
 }
 
 export interface IDBConnectionBase {
@@ -2309,7 +2313,7 @@ export interface IEmbedSsoParams {
   /**
    * A dictionary of name-value pairs associating a Looker user attribute name with a value.
    */
-  user_attributes?: IDictionary<string>
+  user_attributes?: IDictionary<any>
   /**
    * Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
    */
@@ -3737,7 +3741,7 @@ export interface ILookmlModelExploreError {
   /**
    * Details (read-only)
    */
-  details?: string
+  details?: any
   /**
    * Error source location (read-only)
    */
@@ -3957,7 +3961,7 @@ export interface ILookmlModelExploreFieldEnumeration {
   /**
    * Value (read-only)
    */
-  value?: string
+  value?: any
 }
 
 export interface ILookmlModelExploreFieldMapLayer {
@@ -5181,11 +5185,11 @@ export interface IQuery {
   /**
    * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
    */
-  vis_config?: IDictionary<string>
+  vis_config?: IDictionary<any>
   /**
    * The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
    */
-  filter_config?: IDictionary<string>
+  filter_config?: IDictionary<any>
   /**
    * Visible UI Sections
    */
@@ -7602,7 +7606,7 @@ export interface ISqlQuery {
   /**
    * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
    */
-  vis_config?: IDictionary<string>
+  vis_config?: IDictionary<any>
   /**
    * ID of the ResultMakerLookup entry.
    */
@@ -7629,7 +7633,7 @@ export interface ISqlQueryCreate {
   /**
    * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
    */
-  vis_config?: IDictionary<string>
+  vis_config?: IDictionary<any>
 }
 
 export interface ITheme {
@@ -8431,7 +8435,7 @@ export interface IWriteCreateDashboardFilter {
   /**
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
-  ui_config?: IDictionary<string>
+  ui_config?: IDictionary<any>
 }
 
 /**
@@ -8718,7 +8722,7 @@ export interface IWriteDashboardFilter {
   /**
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
-  ui_config?: IDictionary<string>
+  ui_config?: IDictionary<any>
 }
 
 /**
@@ -8900,6 +8904,10 @@ export interface IWriteDBConnection {
    * Maximum number of threads to use to build PDTs in parallel
    */
   pdt_concurrency?: number
+  /**
+   * When disable_context_comment is true comment will not be added to SQL
+   */
+  disable_context_comment?: boolean
 }
 
 /**
@@ -9607,11 +9615,11 @@ export interface IWriteQuery {
   /**
    * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
    */
-  vis_config?: IDictionary<string>
+  vis_config?: IDictionary<any>
   /**
    * The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
    */
-  filter_config?: IDictionary<string>
+  filter_config?: IDictionary<any>
   /**
    * Visible UI Sections
    */

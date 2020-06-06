@@ -36,7 +36,7 @@ class ApiSession(model.Model):
         sudo_user_id: The id of the actual user in the case when this session represents one user sudo'ing as another
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     workspace_id: Optional[str] = None
     sudo_user_id: Optional[int] = None
 
@@ -84,7 +84,7 @@ class BackupConfiguration(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     type: Optional[str] = None
     custom_s3_bucket: Optional[str] = None
     custom_s3_bucket_region: Optional[str] = None
@@ -167,7 +167,7 @@ class ContentMeta(model.Model):
         space_id: Id of associated space when content_type is "space"
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[int] = None
     name: Optional[str] = None
     parent_id: Optional[int] = None
@@ -193,7 +193,7 @@ class ContentMetaGroupUser(model.Model):
         user_id: ID of associated user
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[str] = None
     content_metadata_id: Optional[str] = None
     permission_type: Optional[str] = None
@@ -203,7 +203,7 @@ class ContentMetaGroupUser(model.Model):
     def __init__(
         self,
         *,
-        can: Optional[MutableMapping[str, bool]] = None,
+        can: Optional[MutableMapping[str, Any]] = None,
         id: Optional[str] = None,
         content_metadata_id: Optional[str] = None,
         permission_type: Optional[str] = None,
@@ -431,7 +431,7 @@ class ContentView(model.Model):
         start_of_week_date: Week start date for the view and favorite count during that given week
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[int] = None
     look_id: Optional[int] = None
     dashboard_id: Optional[int] = None
@@ -503,12 +503,12 @@ class CreateDashboardFilter(model.Model):
     model: Optional[str] = None
     explore: Optional[str] = None
     dimension: Optional[str] = None
-    field: Optional[MutableMapping[str, str]] = None
+    field: Optional[MutableMapping[str, Any]] = None
     row: Optional[int] = None
     listens_to_filters: Optional[Sequence[str]] = None
     allow_multiple_values: Optional[bool] = None
     required: Optional[bool] = None
-    ui_config: Optional[MutableMapping[str, str]] = None
+    ui_config: Optional[MutableMapping[str, Any]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True, init=False)
@@ -561,7 +561,7 @@ class CreateQueryTask(model.Model):
         dashboard_id: Id of dashboard associated with query.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     query_id: int
     result_format: str
     source: Optional[str] = None
@@ -599,7 +599,7 @@ class CredentialsApi3(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[int] = None
     client_id: Optional[str] = None
     created_at: Optional[str] = None
@@ -610,7 +610,7 @@ class CredentialsApi3(model.Model):
     def __init__(
         self,
         *,
-        can: Optional[MutableMapping[str, bool]] = None,
+        can: Optional[MutableMapping[str, Any]] = None,
         id: Optional[int] = None,
         client_id: Optional[str] = None,
         created_at: Optional[str] = None,
@@ -643,7 +643,7 @@ class CredentialsEmail(model.Model):
         user_url: Link to get this user
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     created_at: Optional[str] = None
     email: Optional[str] = None
     forced_password_reset_at_next_login: Optional[bool] = None
@@ -670,7 +670,7 @@ class CredentialsEmbed(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     created_at: Optional[str] = None
     external_group_id: Optional[str] = None
     external_user_id: Optional[str] = None
@@ -696,7 +696,7 @@ class CredentialsGoogle(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     created_at: Optional[str] = None
     domain: Optional[str] = None
     email: Optional[str] = None
@@ -722,7 +722,7 @@ class CredentialsLDAP(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     created_at: Optional[str] = None
     email: Optional[str] = None
     is_disabled: Optional[bool] = None
@@ -748,7 +748,7 @@ class CredentialsLookerOpenid(model.Model):
         user_url: Link to get this user
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     created_at: Optional[str] = None
     email: Optional[str] = None
     is_disabled: Optional[bool] = None
@@ -773,7 +773,7 @@ class CredentialsOIDC(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     created_at: Optional[str] = None
     email: Optional[str] = None
     is_disabled: Optional[bool] = None
@@ -797,7 +797,7 @@ class CredentialsSaml(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     created_at: Optional[str] = None
     email: Optional[str] = None
     is_disabled: Optional[bool] = None
@@ -819,7 +819,7 @@ class CredentialsTotp(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     created_at: Optional[str] = None
     is_disabled: Optional[bool] = None
     type: Optional[str] = None
@@ -829,7 +829,7 @@ class CredentialsTotp(model.Model):
     def __init__(
         self,
         *,
-        can: Optional[MutableMapping[str, bool]] = None,
+        can: Optional[MutableMapping[str, Any]] = None,
         created_at: Optional[str] = None,
         is_disabled: Optional[bool] = None,
         type: Optional[str] = None,
@@ -855,7 +855,7 @@ class CustomWelcomeEmail(model.Model):
         header: The text to appear in the header line of the email body.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     enabled: Optional[bool] = None
     content: Optional[str] = None
     subject: Optional[str] = None
@@ -910,7 +910,7 @@ class Dashboard(model.Model):
         preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     content_favorite_id: Optional[int] = None
     content_metadata_id: Optional[int] = None
     description: Optional[str] = None
@@ -1009,7 +1009,7 @@ class DashboardBase(model.Model):
         space:
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     content_favorite_id: Optional[int] = None
     content_metadata_id: Optional[int] = None
     description: Optional[str] = None
@@ -1060,7 +1060,7 @@ class DashboardElement(model.Model):
         subtitle_text_as_html: Text tile subtitle text as Html
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     body_text: Optional[str] = None
     body_text_as_html: Optional[str] = None
     dashboard_id: Optional[str] = None
@@ -1112,7 +1112,7 @@ class DashboardFilter(model.Model):
         ui_config: The visual configuration for this filter. Used to set up how the UI for this filter should appear.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[str] = None
     dashboard_id: Optional[str] = None
     name: Optional[str] = None
@@ -1122,12 +1122,12 @@ class DashboardFilter(model.Model):
     model: Optional[str] = None
     explore: Optional[str] = None
     dimension: Optional[str] = None
-    field: Optional[MutableMapping[str, str]] = None
+    field: Optional[MutableMapping[str, Any]] = None
     row: Optional[int] = None
     listens_to_filters: Optional[Sequence[str]] = None
     allow_multiple_values: Optional[bool] = None
     required: Optional[bool] = None
-    ui_config: Optional[MutableMapping[str, str]] = None
+    ui_config: Optional[MutableMapping[str, Any]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -1146,7 +1146,7 @@ class DashboardLayout(model.Model):
         dashboard_layout_components: Components
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[str] = None
     dashboard_id: Optional[str] = None
     type: Optional[str] = None
@@ -1176,7 +1176,7 @@ class DashboardLayoutComponent(model.Model):
         vis_type: Visualization type, extracted from a query's vis_config
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[str] = None
     dashboard_layout_id: Optional[str] = None
     dashboard_element_id: Optional[str] = None
@@ -1260,14 +1260,14 @@ class DataActionRequest(model.Model):
         form_values: User input for any form values the data action might use.
     """
 
-    action: Optional[MutableMapping[str, str]] = None
-    form_values: Optional[MutableMapping[str, str]] = None
+    action: Optional[MutableMapping[str, Any]] = None
+    form_values: Optional[MutableMapping[str, Any]] = None
 
     def __init__(
         self,
         *,
-        action: Optional[MutableMapping[str, str]] = None,
-        form_values: Optional[MutableMapping[str, str]] = None
+        action: Optional[MutableMapping[str, Any]] = None,
+        form_values: Optional[MutableMapping[str, Any]] = None
     ):
         self.action = action
         self.form_values = form_values
@@ -1319,7 +1319,7 @@ class Datagroup(model.Model):
         triggered_at: UNIX timestamp at which this entry became triggered. Cannot be in the future.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     created_at: Optional[int] = None
     id: Optional[str] = None
     model_name: Optional[str] = None
@@ -1372,7 +1372,7 @@ class DBConnection(model.Model):
         managed: Is this connection created and managed by Looker
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     name: Optional[str] = None
     dialect: Optional["Dialect"] = None
     snippets: Optional[Sequence["Snippet"]] = None
@@ -1419,7 +1419,7 @@ class DBConnectionBase(model.Model):
         snippets: SQL Runner snippets for this connection
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     name: Optional[str] = None
     dialect: Optional["Dialect"] = None
     snippets: Optional[Sequence["Snippet"]] = None
@@ -1468,7 +1468,7 @@ class DBConnectionTestResult(model.Model):
         status: Result code of test
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     connection_string: Optional[str] = None
     message: Optional[str] = None
     name: Optional[str] = None
@@ -1539,7 +1539,7 @@ class DialectInfo(model.Model):
         supported_options:
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     default_max_connections: Optional[str] = None
     default_port: Optional[str] = None
     installed: Optional[bool] = None
@@ -1576,7 +1576,7 @@ class DialectInfoOptions(model.Model):
     timezone: Optional[bool] = None
     tmp_table: Optional[bool] = None
     username_required: Optional[bool] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True, init=False)
@@ -1661,7 +1661,7 @@ class EmbedSsoParams(model.Model):
     models: Optional[Sequence[str]] = None
     group_ids: Optional[Sequence[int]] = None
     external_group_id: Optional[int] = None
-    user_attributes: Optional[MutableMapping[str, str]] = None
+    user_attributes: Optional[MutableMapping[str, Any]] = None
     secret_id: Optional[int] = None
 
     def __init__(
@@ -1678,7 +1678,7 @@ class EmbedSsoParams(model.Model):
         models: Optional[Sequence[str]] = None,
         group_ids: Optional[Sequence[int]] = None,
         external_group_id: Optional[int] = None,
-        user_attributes: Optional[MutableMapping[str, str]] = None,
+        user_attributes: Optional[MutableMapping[str, Any]] = None,
         secret_id: Optional[int] = None
     ):
         self.target_url = target_url
@@ -1757,7 +1757,7 @@ class Folder(model.Model):
     is_personal_descendant: Optional[bool] = None
     is_shared_root: Optional[bool] = None
     is_users_root: Optional[bool] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     dashboards: Optional[Sequence["DashboardBase"]] = None
     looks: Optional[Sequence["LookWithDashboards"]] = None
 
@@ -1799,7 +1799,7 @@ class FolderBase(model.Model):
     is_personal_descendant: Optional[bool] = None
     is_shared_root: Optional[bool] = None
     is_users_root: Optional[bool] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -1825,7 +1825,7 @@ class GitBranch(model.Model):
         remote_ref: The resolved ref of this branch remote.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     name: Optional[str] = None
     remote: Optional[str] = None
     remote_name: Optional[str] = None
@@ -1853,7 +1853,7 @@ class GitConnectionTest(model.Model):
         id: A short string, uniquely naming this test
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     description: Optional[str] = None
     id: Optional[str] = None
 
@@ -1868,7 +1868,7 @@ class GitConnectionTestResult(model.Model):
         status: Either 'pass' or 'fail'
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[str] = None
     message: Optional[str] = None
     status: Optional[str] = None
@@ -1889,7 +1889,7 @@ class GitStatus(model.Model):
     conflict: Optional[bool] = None
     revertable: Optional[bool] = None
     text: Optional[str] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -1907,7 +1907,7 @@ class Group(model.Model):
         user_count: Number of users included in this group
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     can_add_to_content_metadata: Optional[bool] = None
     contains_current_user: Optional[bool] = None
     external_group_id: Optional[str] = None
@@ -1959,7 +1959,7 @@ class GroupSearch(model.Model):
         user_count: Number of users included in this group
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     can_add_to_content_metadata: Optional[bool] = None
     contains_current_user: Optional[bool] = None
     external_group_id: Optional[str] = None
@@ -1988,7 +1988,7 @@ class Homepage(model.Model):
         primary_homepage: Whether the homepage is the primary homepage or not
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     content_metadata_id: Optional[int] = None
     created_at: Optional[datetime.datetime] = None
     deleted_at: Optional[datetime.datetime] = None
@@ -2036,7 +2036,7 @@ class HomepageItem(model.Model):
         view_count: Number of times content has been viewed, if present
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     content_created_by: Optional[str] = None
     content_favorite_id: Optional[int] = None
     content_metadata_id: Optional[int] = None
@@ -2084,7 +2084,7 @@ class HomepageSection(model.Model):
         description: Description of the content found in this section.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     created_at: Optional[datetime.datetime] = None
     deleted_at: Optional[datetime.datetime] = None
     detail_url: Optional[str] = None
@@ -2113,7 +2113,7 @@ class ImportedProject(model.Model):
     url: Optional[str] = None
     ref: Optional[str] = None
     is_remote: Optional[bool] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -2139,7 +2139,7 @@ class Integration(model.Model):
         installed_delegate_oauth_targets: Whether the integration is available to users.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[str] = None
     integration_hub_id: Optional[int] = None
     label: Optional[str] = None
@@ -2175,7 +2175,7 @@ class IntegrationHub(model.Model):
         legal_agreement_text: The legal agreement text for this integration hub.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[int] = None
     url: Optional[str] = None
     label: Optional[str] = None
@@ -2277,7 +2277,7 @@ class InternalHelpResources(model.Model):
         enabled: If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     enabled: Optional[bool] = None
 
 
@@ -2290,7 +2290,7 @@ class InternalHelpResourcesContent(model.Model):
         markdown_content: Content to be displayed in the internal help resources page/modal
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     organization_name: Optional[str] = None
     markdown_content: Optional[str] = None
 
@@ -2344,7 +2344,7 @@ class LDAPConfig(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     alternate_email_login_allowed: Optional[bool] = None
     auth_password: Optional[str] = None
     auth_requires_role: Optional[bool] = None
@@ -2400,7 +2400,7 @@ class LDAPConfigTestIssue(model.Model):
 
     severity: Optional[str] = None
     message: Optional[str] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -2500,7 +2500,7 @@ class LDAPUser(model.Model):
     """
 
     all_emails: Optional[Sequence[str]] = None
-    attributes: Optional[MutableMapping[str, str]] = None
+    attributes: Optional[MutableMapping[str, Any]] = None
     email: Optional[str] = None
     first_name: Optional[str] = None
     groups: Optional[Sequence[str]] = None
@@ -2508,7 +2508,7 @@ class LDAPUser(model.Model):
     ldap_dn: Optional[str] = None
     ldap_id: Optional[str] = None
     roles: Optional[Sequence[str]] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     url: Optional[str] = None
 
 
@@ -2576,7 +2576,7 @@ class LegacyFeature(model.Model):
         has_disabled_on_upgrade: Whether this legacy feature may have been automatically disabled when upgrading to the current version.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[str] = None
     name: Optional[str] = None
     description: Optional[str] = None
@@ -2616,7 +2616,7 @@ class LocalizationSettings(model.Model):
 
     default_locale: Optional[str] = None
     localization_level: Optional[str] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -2658,7 +2658,7 @@ class Look(model.Model):
         space:
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     content_metadata_id: Optional[int] = None
     id: Optional[int] = None
     title: Optional[str] = None
@@ -2703,7 +2703,7 @@ class LookBasic(model.Model):
         title: Look Title
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     content_metadata_id: Optional[int] = None
     id: Optional[int] = None
     title: Optional[str] = None
@@ -2723,7 +2723,7 @@ class LookmlModel(model.Model):
         unlimited_db_connections: Is this model allowed to use all current and future connections
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     allowed_db_connection_names: Optional[Sequence[str]] = None
     explores: Optional[Sequence["LookmlModelNavExplore"]] = None
     has_content: Optional[bool] = None
@@ -2872,7 +2872,7 @@ class LookmlModelExploreError(model.Model):
     """
 
     message: Optional[str] = None
-    details: Optional[str] = None
+    details: Optional[Any] = None
     error_pos: Optional[str] = None
     field_error: Optional[bool] = None
 
@@ -2994,7 +2994,7 @@ class LookmlModelExploreFieldEnumeration(model.Model):
     """
 
     label: Optional[str] = None
-    value: Optional[str] = None
+    value: Optional[Any] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -3140,7 +3140,7 @@ class LookmlModelNavExplore(model.Model):
     label: Optional[str] = None
     hidden: Optional[bool] = None
     group_label: Optional[str] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -3156,7 +3156,7 @@ class LookmlTest(model.Model):
         line: Line number of this test in LookML.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     model_name: Optional[str] = None
     name: Optional[str] = None
     explore_name: Optional[str] = None
@@ -3179,7 +3179,7 @@ class LookmlTestResult(model.Model):
         success: True if this test passsed without errors.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     model_name: Optional[str] = None
     test_name: Optional[str] = None
     assertions_count: Optional[int] = None
@@ -3241,7 +3241,7 @@ class LookWithDashboards(model.Model):
         dashboards: Dashboards
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     content_metadata_id: Optional[int] = None
     id: Optional[int] = None
     title: Optional[str] = None
@@ -3318,7 +3318,7 @@ class LookWithQuery(model.Model):
         url: Url
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     content_metadata_id: Optional[int] = None
     id: Optional[int] = None
     title: Optional[str] = None
@@ -3365,7 +3365,7 @@ class Manifest(model.Model):
         localization_settings:
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     name: Optional[str] = None
     imports: Optional[Sequence["ImportedProject"]] = None
     localization_settings: Optional["LocalizationSettings"] = None
@@ -3408,7 +3408,7 @@ class MergeQuery(model.Model):
         vis_config: Visualization Config
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     column_limit: Optional[str] = None
     dynamic_fields: Optional[str] = None
     id: Optional[str] = None
@@ -3417,7 +3417,7 @@ class MergeQuery(model.Model):
     sorts: Optional[Sequence[str]] = None
     source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None
     total: Optional[bool] = None
-    vis_config: Optional[MutableMapping[str, str]] = None
+    vis_config: Optional[MutableMapping[str, Any]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True, init=False)
@@ -3458,7 +3458,7 @@ class ModelSet(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     all_access: Optional[bool] = None
     built_in: Optional[bool] = None
     id: Optional[int] = None
@@ -3518,7 +3518,7 @@ class OIDCConfig(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     alternate_email_login_allowed: Optional[bool] = None
     audience: Optional[str] = None
     auth_requires_role: Optional[bool] = None
@@ -3588,7 +3588,7 @@ class OIDCGroupWrite(model.Model):
     looker_group_name: Optional[str] = None
     name: Optional[str] = None
     role_ids: Optional[Sequence[int]] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
 
     def __init__(
         self,
@@ -3598,7 +3598,7 @@ class OIDCGroupWrite(model.Model):
         looker_group_name: Optional[str] = None,
         name: Optional[str] = None,
         role_ids: Optional[Sequence[int]] = None,
-        can: Optional[MutableMapping[str, bool]] = None
+        can: Optional[MutableMapping[str, Any]] = None
     ):
         self.id = id
         self.looker_group_id = looker_group_id
@@ -3635,7 +3635,7 @@ class OIDCUserAttributeWrite(model.Model):
     name: Optional[str] = None
     required: Optional[bool] = None
     user_attribute_ids: Optional[Sequence[int]] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
 
     def __init__(
         self,
@@ -3643,7 +3643,7 @@ class OIDCUserAttributeWrite(model.Model):
         name: Optional[str] = None,
         required: Optional[bool] = None,
         user_attribute_ids: Optional[Sequence[int]] = None,
-        can: Optional[MutableMapping[str, bool]] = None
+        can: Optional[MutableMapping[str, Any]] = None
     ):
         self.name = name
         self.required = required
@@ -3662,7 +3662,7 @@ class PasswordConfig(model.Model):
         require_special: Require at least one special character
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     min_length: Optional[int] = None
     require_numeric: Optional[bool] = None
     require_upperlower: Optional[bool] = None
@@ -3679,7 +3679,7 @@ class Permission(model.Model):
         description: Description
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     permission: Optional[str] = None
     parent: Optional[str] = None
     description: Optional[str] = None
@@ -3698,7 +3698,7 @@ class PermissionSet(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     all_access: Optional[bool] = None
     built_in: Optional[bool] = None
     id: Optional[int] = None
@@ -3733,7 +3733,7 @@ class Project(model.Model):
         is_example: If true the project is an example project and cannot be modified
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[str] = None
     name: Optional[str] = None
     uses_git: Optional[bool] = None
@@ -3783,7 +3783,7 @@ class ProjectError(model.Model):
     model_id: Optional[str] = None
     explore: Optional[str] = None
     help_url: Optional[str] = None
-    params: Optional[MutableMapping[str, str]] = None
+    params: Optional[MutableMapping[str, Any]] = None
     sanitized_message: Optional[str] = None
 
 
@@ -3802,7 +3802,7 @@ class ProjectFile(model.Model):
         git_status:
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[str] = None
     path: Optional[str] = None
     title: Optional[str] = None
@@ -3861,7 +3861,7 @@ class ProjectWorkspace(model.Model):
         lookml_type: The lookml syntax used by all files in this project
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     project_id: Optional[str] = None
     workspace_id: Optional[str] = None
     git_status: Optional[str] = None
@@ -3904,14 +3904,14 @@ class Query(model.Model):
         runtime: (DEPRECATED) Runtime (Deprecated)
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[int] = None
     model: str
     view: str
     fields: Optional[Sequence[str]] = None
     pivots: Optional[Sequence[str]] = None
     fill_fields: Optional[Sequence[str]] = None
-    filters: Optional[MutableMapping[str, str]] = None
+    filters: Optional[MutableMapping[str, Any]] = None
     filter_expression: Optional[str] = None
     sorts: Optional[Sequence[str]] = None
     limit: Optional[str] = None
@@ -3919,8 +3919,8 @@ class Query(model.Model):
     total: Optional[bool] = None
     row_total: Optional[str] = None
     subtotals: Optional[Sequence[str]] = None
-    vis_config: Optional[MutableMapping[str, str]] = None
-    filter_config: Optional[MutableMapping[str, str]] = None
+    vis_config: Optional[MutableMapping[str, Any]] = None
+    filter_config: Optional[MutableMapping[str, Any]] = None
     visible_ui_sections: Optional[str] = None
     slug: Optional[str] = None
     dynamic_fields: Optional[str] = None
@@ -3958,7 +3958,7 @@ class QueryTask(model.Model):
         result_format: The data format of the query results.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[str] = None
     query_id: Optional[int] = None
     query: Optional["Query"] = None
@@ -4004,7 +4004,7 @@ class RenderTask(model.Model):
         width: Output width in pixels
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     created_at: Optional[str] = None
     dashboard_filters: Optional[str] = None
     dashboard_id: Optional[int] = None
@@ -4039,7 +4039,7 @@ class RepositoryCredential(model.Model):
         is_configured: Whether the credentials have been configured for the Git Repository.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[str] = None
     root_project_id: Optional[str] = None
     remote_url: Optional[str] = None
@@ -4102,7 +4102,7 @@ class ResultMakerWithIdVisConfigAndDynamicFields(model.Model):
     query_id: Optional[int] = None
     sql_query_id: Optional[str] = None
     query: Optional["Query"] = None
-    vis_config: Optional[MutableMapping[str, str]] = None
+    vis_config: Optional[MutableMapping[str, Any]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -4120,7 +4120,7 @@ class Role(model.Model):
         users_url: Link to get list of users with this role
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[int] = None
     name: Optional[str] = None
     permission_set: Optional["PermissionSet"] = None
@@ -4158,7 +4158,7 @@ class RunningQueries(model.Model):
         sql: SQL text of the query as run
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[int] = None
     user: Optional["UserPublic"] = None
     query: Optional["Query"] = None
@@ -4220,7 +4220,7 @@ class SamlConfig(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     enabled: Optional[bool] = None
     idp_cert: Optional[str] = None
     idp_url: Optional[str] = None
@@ -4322,7 +4322,7 @@ class SamlMetadataParseResult(model.Model):
         idp_cert: Identify Provider Certificate
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     idp_issuer: Optional[str] = None
     idp_url: Optional[str] = None
     idp_cert: Optional[str] = None
@@ -4446,7 +4446,7 @@ class ScheduledPlan(model.Model):
     user: Optional["UserPublic"] = None
     next_run_at: Optional[datetime.datetime] = None
     last_run_at: Optional[datetime.datetime] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True, init=False)
@@ -4527,7 +4527,7 @@ class Session(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[int] = None
     ip_address: Optional[str] = None
     browser: Optional[str] = None
@@ -4556,7 +4556,7 @@ class SessionConfig(model.Model):
         track_session_location: Track location of session when user logs in.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     allow_persistent_sessions: Optional[bool] = None
     session_minutes: Optional[int] = None
     unlimited_sessions_per_user: Optional[bool] = None
@@ -4577,7 +4577,7 @@ class Snippet(model.Model):
     name: Optional[str] = None
     label: Optional[str] = None
     sql: Optional[str] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -4619,7 +4619,7 @@ class Space(model.Model):
     is_personal_descendant: Optional[bool] = None
     is_shared_root: Optional[bool] = None
     is_users_root: Optional[bool] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     dashboards: Optional[Sequence["DashboardBase"]] = None
     looks: Optional[Sequence["LookWithDashboards"]] = None
 
@@ -4661,7 +4661,7 @@ class SpaceBase(model.Model):
     is_personal_descendant: Optional[bool] = None
     is_shared_root: Optional[bool] = None
     is_users_root: Optional[bool] = None
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -4684,7 +4684,7 @@ class SqlQuery(model.Model):
         result_maker_id: ID of the ResultMakerLookup entry.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     slug: Optional[str] = None
     last_runtime: Optional[float] = None
     run_count: Optional[int] = None
@@ -4696,7 +4696,7 @@ class SqlQuery(model.Model):
     creator: Optional["UserPublic"] = None
     explore_url: Optional[str] = None
     plaintext: Optional[bool] = None
-    vis_config: Optional[MutableMapping[str, str]] = None
+    vis_config: Optional[MutableMapping[str, Any]] = None
     result_maker_id: Optional[int] = None
 
 
@@ -4715,7 +4715,7 @@ class SqlQueryCreate(model.Model):
     connection_id: Optional[str] = None
     model_name: Optional[str] = None
     sql: Optional[str] = None
-    vis_config: Optional[MutableMapping[str, str]] = None
+    vis_config: Optional[MutableMapping[str, Any]] = None
 
     def __init__(
         self,
@@ -4724,7 +4724,7 @@ class SqlQueryCreate(model.Model):
         connection_id: Optional[str] = None,
         model_name: Optional[str] = None,
         sql: Optional[str] = None,
-        vis_config: Optional[MutableMapping[str, str]] = None
+        vis_config: Optional[MutableMapping[str, Any]] = None
     ):
         self.connection_name = connection_name
         self.connection_id = connection_id
@@ -4745,7 +4745,7 @@ class Theme(model.Model):
         settings:
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     begin_at: Optional[datetime.datetime] = None
     end_at: Optional[datetime.datetime] = None
     id: Optional[int] = None
@@ -4884,7 +4884,7 @@ class User(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     avatar_url: Optional[str] = None
     avatar_url_without_sizing: Optional[str] = None
     credentials_api3: Optional[Sequence["CredentialsApi3"]] = None
@@ -4914,7 +4914,7 @@ class User(model.Model):
     presumed_looker_employee: Optional[bool] = None
     role_ids: Optional[Sequence[int]] = None
     sessions: Optional[Sequence["Session"]] = None
-    ui_state: Optional[MutableMapping[str, str]] = None
+    ui_state: Optional[MutableMapping[str, Any]] = None
     verified_looker_employee: Optional[bool] = None
     roles_externally_managed: Optional[bool] = None
     allow_direct_roles: Optional[bool] = None
@@ -4941,7 +4941,7 @@ class UserAttribute(model.Model):
         hidden_value_domain_whitelist: Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[int] = None
     name: Optional[str] = None
     label: Optional[str] = None
@@ -4968,7 +4968,7 @@ class UserAttributeGroupValue(model.Model):
         value: Value of user attribute for group
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[int] = None
     group_id: Optional[int] = None
     user_attribute_id: Optional[int] = None
@@ -4979,7 +4979,7 @@ class UserAttributeGroupValue(model.Model):
     def __init__(
         self,
         *,
-        can: Optional[MutableMapping[str, bool]] = None,
+        can: Optional[MutableMapping[str, Any]] = None,
         id: Optional[int] = None,
         group_id: Optional[int] = None,
         user_attribute_id: Optional[int] = None,
@@ -5013,7 +5013,7 @@ class UserAttributeWithValue(model.Model):
         hidden_value_domain_whitelist: If this user attribute is hidden, whitelist of destinations to which it may be sent.
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     name: Optional[str] = None
     label: Optional[str] = None
     rank: Optional[int] = None
@@ -5052,7 +5052,7 @@ class UserLoginLockout(model.Model):
         lockout_at: Time when lockout was triggered
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     key: Optional[str] = None
     auth_type: Optional[str] = None
     ip: Optional[str] = None
@@ -5077,7 +5077,7 @@ class UserPublic(model.Model):
         url: Link to get this item
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[int] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
@@ -5163,7 +5163,7 @@ class WhitelabelConfiguration(model.Model):
         alerts_links: Remove Looker links from Alerts
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[int] = None
     logo_file: Optional[str] = None
     logo_url: Optional[str] = None
@@ -5190,7 +5190,7 @@ class Workspace(model.Model):
         projects: The local state of each project in the workspace
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[str] = None
     projects: Optional[Sequence["Project"]] = None
 
@@ -5357,7 +5357,7 @@ id, field
     listens_to_filters: Optional[Sequence[str]] = None
     allow_multiple_values: Optional[bool] = None
     required: Optional[bool] = None
-    ui_config: Optional[MutableMapping[str, str]] = None
+    ui_config: Optional[MutableMapping[str, Any]] = None
 
     def __init__(
         self,
@@ -5374,7 +5374,7 @@ id, field
         listens_to_filters: Optional[Sequence[str]] = None,
         allow_multiple_values: Optional[bool] = None,
         required: Optional[bool] = None,
-        ui_config: Optional[MutableMapping[str, str]] = None
+        ui_config: Optional[MutableMapping[str, Any]] = None
     ):
         self.dashboard_id = dashboard_id
         self.name = name
@@ -5732,7 +5732,7 @@ can, id, dashboard_id, field
     listens_to_filters: Optional[Sequence[str]] = None
     allow_multiple_values: Optional[bool] = None
     required: Optional[bool] = None
-    ui_config: Optional[MutableMapping[str, str]] = None
+    ui_config: Optional[MutableMapping[str, Any]] = None
 
     def __init__(
         self,
@@ -5748,7 +5748,7 @@ can, id, dashboard_id, field
         listens_to_filters: Optional[Sequence[str]] = None,
         allow_multiple_values: Optional[bool] = None,
         required: Optional[bool] = None,
-        ui_config: Optional[MutableMapping[str, str]] = None
+        ui_config: Optional[MutableMapping[str, Any]] = None
     ):
         self.name = name
         self.title = title
@@ -6579,7 +6579,7 @@ can, id, result_maker_id
     sorts: Optional[Sequence[str]] = None
     source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None
     total: Optional[bool] = None
-    vis_config: Optional[MutableMapping[str, str]] = None
+    vis_config: Optional[MutableMapping[str, Any]] = None
 
     def __init__(
         self,
@@ -6590,7 +6590,7 @@ can, id, result_maker_id
         sorts: Optional[Sequence[str]] = None,
         source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None,
         total: Optional[bool] = None,
-        vis_config: Optional[MutableMapping[str, str]] = None
+        vis_config: Optional[MutableMapping[str, Any]] = None
     ):
         self.column_limit = column_limit
         self.dynamic_fields = dynamic_fields
@@ -6901,7 +6901,7 @@ can, id, slug, share_url, expanded_share_url, url, has_table_calculations
     fields: Optional[Sequence[str]] = None
     pivots: Optional[Sequence[str]] = None
     fill_fields: Optional[Sequence[str]] = None
-    filters: Optional[MutableMapping[str, str]] = None
+    filters: Optional[MutableMapping[str, Any]] = None
     filter_expression: Optional[str] = None
     sorts: Optional[Sequence[str]] = None
     limit: Optional[str] = None
@@ -6909,8 +6909,8 @@ can, id, slug, share_url, expanded_share_url, url, has_table_calculations
     total: Optional[bool] = None
     row_total: Optional[str] = None
     subtotals: Optional[Sequence[str]] = None
-    vis_config: Optional[MutableMapping[str, str]] = None
-    filter_config: Optional[MutableMapping[str, str]] = None
+    vis_config: Optional[MutableMapping[str, Any]] = None
+    filter_config: Optional[MutableMapping[str, Any]] = None
     visible_ui_sections: Optional[str] = None
     dynamic_fields: Optional[str] = None
     client_id: Optional[str] = None
@@ -6925,7 +6925,7 @@ can, id, slug, share_url, expanded_share_url, url, has_table_calculations
         fields: Optional[Sequence[str]] = None,
         pivots: Optional[Sequence[str]] = None,
         fill_fields: Optional[Sequence[str]] = None,
-        filters: Optional[MutableMapping[str, str]] = None,
+        filters: Optional[MutableMapping[str, Any]] = None,
         filter_expression: Optional[str] = None,
         sorts: Optional[Sequence[str]] = None,
         limit: Optional[str] = None,
@@ -6933,8 +6933,8 @@ can, id, slug, share_url, expanded_share_url, url, has_table_calculations
         total: Optional[bool] = None,
         row_total: Optional[str] = None,
         subtotals: Optional[Sequence[str]] = None,
-        vis_config: Optional[MutableMapping[str, str]] = None,
-        filter_config: Optional[MutableMapping[str, str]] = None,
+        vis_config: Optional[MutableMapping[str, Any]] = None,
+        filter_config: Optional[MutableMapping[str, Any]] = None,
         visible_ui_sections: Optional[str] = None,
         dynamic_fields: Optional[str] = None,
         client_id: Optional[str] = None,
@@ -7383,7 +7383,7 @@ can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed,
     last_name: Optional[str] = None
     locale: Optional[str] = None
     models_dir_validated: Optional[bool] = None
-    ui_state: Optional[MutableMapping[str, str]] = None
+    ui_state: Optional[MutableMapping[str, Any]] = None
 
     def __init__(
         self,
@@ -7396,7 +7396,7 @@ can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed,
         last_name: Optional[str] = None,
         locale: Optional[str] = None,
         models_dir_validated: Optional[bool] = None,
-        ui_state: Optional[MutableMapping[str, str]] = None
+        ui_state: Optional[MutableMapping[str, Any]] = None
     ):
         self.credentials_email = credentials_email
         self.first_name = first_name
