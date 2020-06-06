@@ -436,7 +436,7 @@ class Workspace(model.Model):
         id: The unique id of this user workspace. Predefined workspace ids include "production" and "dev"
         projects: The local state of each project in the workspace
     """
-    can: Optional[MutableMapping[str, bool]] = None
+    can: Optional[MutableMapping[str, Any]] = None
     id: Optional[str] = None
     projects: Optional[Sequence["Project"]] = None`)
     })
@@ -486,7 +486,7 @@ can, id, result_maker_id
     sorts: Optional[Sequence[str]] = None
     source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None
     total: Optional[bool] = None
-    vis_config: Optional[MutableMapping[str, str]] = None
+    vis_config: Optional[MutableMapping[str, Any]] = None
 
     def __init__(self, *,
             column_limit: Optional[str] = None,
@@ -495,7 +495,7 @@ can, id, result_maker_id
             sorts: Optional[Sequence[str]] = None,
             source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None,
             total: Optional[bool] = None,
-            vis_config: Optional[MutableMapping[str, str]] = None):
+            vis_config: Optional[MutableMapping[str, Any]] = None):
         self.column_limit = column_limit
         self.dynamic_fields = dynamic_fields
         self.pivots = pivots
