@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen",
-  "version": "0.1.2-alpha.9+4022abe",
+  "version": "0.1.2-alpha.12+3f70a20",
   "description": "Looker SDK Codegen core",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -41,5 +41,5 @@
     "@looker/sdk": "^0.3.0-alpha.1",
     "@looker/sdk-codegen-utils": "^0.1.0-alpha.2"
   },
-  "gitHead": "4022abe470b9b207e54e5f4a95cbd59cff206f05"
+  "gitHead": "3f70a2051ab682df14e6b733c894e537e074bd01"
 }
