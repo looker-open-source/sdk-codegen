@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen-scripts",
-  "version": "0.3.3-alpha.0",
+  "version": "0.3.1-alpha.9+4022abe",
   "description": "Looker SDK Codegen scripts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@looker/sdk": "^0.3.0-alpha.1+e58e096",
-    "@looker/sdk-codegen": "^0.1.2-alpha.6",
+    "@looker/sdk-codegen": "^0.1.2-alpha.9+4022abe",
     "@looker/sdk-codegen-utils": "^0.1.0-alpha.5",
     "cross-env": "^7.0.2",
     "swagger2openapi": "^6.0.3"
@@ -47,5 +47,5 @@
     "prettier": "^2.0.5",
     "swagger2openapi": "^6.0.3"
   },
-  "gitHead": "d03bf81006d0f6fc2e1a54938e30356df9d86ecd"
+  "gitHead": "4022abe470b9b207e54e5f4a95cbd59cff206f05"
 }
