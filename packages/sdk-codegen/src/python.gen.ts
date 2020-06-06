@@ -500,7 +500,8 @@ ${this.hooks.join('\n')}
         case 'HashType':
           return {
             default: this.nullStr,
-            name: `MutableMapping[str, ${map.name}]`,
+            // TODO fix the invalid Looker API spec formats like MergeQuery's vis_config
+            name: `MutableMapping[str, Any]`, // `MutableMapping[str, ${map.name}]`,
           }
         case 'DelimArrayType':
           return {

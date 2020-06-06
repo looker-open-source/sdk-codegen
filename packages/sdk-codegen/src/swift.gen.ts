@@ -488,8 +488,8 @@ ${indent}return result`
         case 'ArrayType':
           return { default: '[]', name: `[${map.name}]` }
         case 'HashType':
-          // return { default: 'nil', name: `StringDictionary<AnyCodable>` }
-          return { default: 'nil', name: `StringDictionary<${map.name}>` }
+          // return { default: 'nil', name: `StringDictionary<${map.name}>` }
+          return { default: 'nil', name: `StringDictionary<AnyCodable>` }
         case 'DelimArrayType':
           return { default: 'nil', name: `DelimArray<${map.name}>` }
       }
