@@ -15,7 +15,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
-    "directory": "packages/script"
+    "directory": "packages/sdk-codegen-scripts"
   },
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"

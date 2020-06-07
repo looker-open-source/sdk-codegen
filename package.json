@@ -102,7 +102,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "styled-components": "^4.4.1",
-    "ts-jest": "^25.4.0",
     "ts-node": "^8.1.0",
     "typescript": "^3.8.3",
     "webpack": "^4.43.0"

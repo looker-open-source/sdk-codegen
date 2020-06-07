@@ -27,6 +27,6 @@
     "skipLibCheck": true,
     "suppressImplicitAnyIndexErrors": true
   },
-  "exclude": ["lib", "node_modules", "**/*.test.*", "**/*.spec.*"],
+  "exclude": ["lib", "node_modules"],
   "include": []
 }
