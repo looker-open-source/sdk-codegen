@@ -487,9 +487,12 @@ ${indent}return result`
       switch (type.className) {
         case 'ArrayType':
           return { default: '[]', name: `[${map.name}]` }
-        case 'HashType':
-          if (type.elementType.name === 'string') map.name = 'AnyCodable' // TODO fix bad API spec values, usually vis_config
-          return { default: 'nil', name: `StringDictionary<${map.name}>` }
+        case 'HashType': {
+          const mapName =
+            type.elementType.name === 'string' ? 'AnyCodable' : map.name // TODO fix bad API spec, like MergeQuery vis_config
+
+          return { default: 'nil', name: `StringDictionary<${mapName}>` }
+        }
         case 'DelimArrayType':
           return { default: 'nil', name: `DelimArray<${map.name}>` }
       }

@@ -410,11 +410,12 @@ import java.util.*
       switch (type.className) {
         case 'ArrayType':
           return { default: this.nullStr, name: `Array<${map.name}>` }
-        case 'HashType':
-          if (type.elementType.name === 'string') map.name = 'Any' // TODO fix bad API spec values, usually vis_config
+        case 'HashType': {
+          const mapName = type.elementType.name === 'string' ? 'Any' : map.name // TODO fix bad API spec, like MergeQuery vis_config
           // TODO figure out this bizarre string template error either in IntelliJ or Typescript
           // return {name: `Map<String,${map.name}>`, default: '{}'}
-          return { default: this.nullStr, name: 'Map<String' + `,${map.name}>` }
+          return { default: this.nullStr, name: 'Map<String' + `,${mapName}>` }
+        }
         case 'DelimArrayType':
           return { default: this.nullStr, name: `DelimArray<${map.name}>` }
       }

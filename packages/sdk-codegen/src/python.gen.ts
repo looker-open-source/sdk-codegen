@@ -91,7 +91,8 @@ export class PythonGen extends CodeGen {
     'yield',
   ]
 
-  pythonTypes: Record<string, IMappedType> = {
+  readonly pythonTypes: Record<string, IMappedType> = {
+    any: { default: this.nullStr, name: 'Any' },
     boolean: { default: this.nullStr, name: 'bool' },
     byte: { default: this.nullStr, name: 'bytes' },
     datetime: { default: this.nullStr, name: 'datetime.datetime' },
@@ -105,7 +106,6 @@ export class PythonGen extends CodeGen {
     string: { default: this.nullStr, name: 'str' },
     uri: { default: this.nullStr, name: 'str' },
     void: { default: this.nullStr, name: 'None' },
-    any: { default: this.nullStr, name: 'Any' },
   }
 
   // cattrs [un]structure hooks for model [de]serialization
@@ -498,12 +498,13 @@ ${this.hooks.join('\n')}
       switch (type.className) {
         case 'ArrayType':
           return { default: this.nullStr, name: `Sequence[${map.name}]` }
-        case 'HashType':
-          if (type.elementType.name === 'string') map.name = 'Any' // TODO fix bad API spec, like MergeQuery vis_config
+        case 'HashType': {
+          const mapName = type.elementType.name === 'string' ? 'Any' : map.name // TODO fix bad API spec, like MergeQuery vis_config
           return {
             default: this.nullStr,
-            name: `MutableMapping[str, ${map.name}]`,
+            name: `MutableMapping[str, ${mapName}]`,
           }
+        }
         case 'DelimArrayType':
           return {
             default: this.nullStr,
@@ -515,15 +516,14 @@ ${this.hooks.join('\n')}
     if (type.name) {
       let name: string
       if (format === 'models') {
-        name = `"${type.name}"`
+        name = type.customType ? `"${type.name}"` : type.name
       } else if (format === 'methods') {
         name = `models.${type.name}`
       } else {
         throw new Error('format must be "models" or "methods"')
       }
-      return (
-        this.pythonTypes[type.name] || { default: this.nullStr, name: name }
-      )
+      const result = this.pythonTypes[type.name]
+      return result || { default: this.nullStr, name: name }
     } else {
       throw new Error('Cannot output a nameless type.')
     }

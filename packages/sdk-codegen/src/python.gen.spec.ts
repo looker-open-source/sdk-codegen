@@ -388,10 +388,10 @@ return response`
       const method = apiTestModel.methods.query_task_results
       const expected = `response = self.get(
             f"/query_tasks/{query_task_id}/results",
-            Any,
+            str,
             transport_options=transport_options
 )
-assert isinstance(response, Any)
+assert isinstance(response, str)
 return response`
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
@@ -412,18 +412,18 @@ return response`
       const method = apiTestModel.methods.run_url_encoded_query
       const expected = `response = self.get(
             f"/queries/models/{model_name}/views/{view_name}/run/{result_format}",
-            Union[Any, bytes],  # type: ignore
+            Union[str, bytes],  # type: ignore
             transport_options=transport_options
 )
-assert isinstance(response, Union[Any, bytes])
+assert isinstance(response, (str, bytes))
 return response`
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
   })
 
-  // TODO reinstate these tests after publishing canary build
-  describe.skip('type creation', () => {
+  // TODO reinstate these tests after package dependencies are updated correctly
+  describe('type creation', () => {
     it('with arrays and hashes', () => {
       const type = apiTestModel.types.Workspace
       const actual = gen.declareType(indent, type)
