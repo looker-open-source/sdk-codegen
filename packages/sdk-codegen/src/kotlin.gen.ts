@@ -411,9 +411,9 @@ import java.util.*
         case 'ArrayType':
           return { default: this.nullStr, name: `Array<${map.name}>` }
         case 'HashType':
+          if (type.elementType.name === 'string') map.name = 'Any' // TODO fix bad API spec values, usually vis_config
           // TODO figure out this bizarre string template error either in IntelliJ or Typescript
           // return {name: `Map<String,${map.name}>`, default: '{}'}
-          if (map.name === 'String') map.name = 'Any' // TODO fix bad API spec values, usually vis_config
           return { default: this.nullStr, name: 'Map<String' + `,${map.name}>` }
         case 'DelimArrayType':
           return { default: this.nullStr, name: `DelimArray<${map.name}>` }

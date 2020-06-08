@@ -488,8 +488,8 @@ ${indent}return result`
         case 'ArrayType':
           return { default: '[]', name: `[${map.name}]` }
         case 'HashType':
-          // return { default: 'nil', name: `StringDictionary<${map.name}>` }
-          return { default: 'nil', name: `StringDictionary<AnyCodable>` }
+          if (type.elementType.name === 'string') map.name = 'AnyCodable' // TODO fix bad API spec values, usually vis_config
+          return { default: 'nil', name: `StringDictionary<${map.name}>` }
         case 'DelimArrayType':
           return { default: 'nil', name: `DelimArray<${map.name}>` }
       }

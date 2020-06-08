@@ -134,7 +134,7 @@ class ${this.packageName}(api_methods.APIMethods):
   modelsPrologue = (indent: string) => `
 # ${this.warnEditing()}
 import datetime
-from typing import MutableMapping, Optional, Sequence
+from typing import Any, MutableMapping, Optional, Sequence
 
 import attr
 
@@ -153,6 +153,7 @@ DelimSequence = model.DelimSequence
 # these calls will be removed.
 
 import functools  # noqa:E402
+from typing import Any
 try:
     from typing import ForwardRef  # type: ignore
 except ImportError:
@@ -498,10 +499,10 @@ ${this.hooks.join('\n')}
         case 'ArrayType':
           return { default: this.nullStr, name: `Sequence[${map.name}]` }
         case 'HashType':
+          if (type.elementType.name === 'string') map.name = 'Any' // TODO fix bad API spec, like MergeQuery vis_config
           return {
             default: this.nullStr,
-            // TODO fix the invalid Looker API spec formats like MergeQuery's vis_config
-            name: `MutableMapping[str, Any]`, // `MutableMapping[str, ${map.name}]`,
+            name: `MutableMapping[str, ${map.name}]`,
           }
         case 'DelimArrayType':
           return {
