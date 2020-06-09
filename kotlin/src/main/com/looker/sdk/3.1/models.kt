@@ -3803,7 +3803,7 @@ data class LookmlModelExploreError (
   /**
    * Details (read-only)
    */
-  var details: String? = null,
+  var details: Any? = null,
   /**
    * Error source location (read-only)
    */
@@ -4019,7 +4019,7 @@ data class LookmlModelExploreFieldEnumeration (
   /**
    * Value (read-only)
    */
-  var value: String? = null
+  var value: Any? = null
 ) : Serializable
 
 data class LookmlModelExploreFieldMapLayer (

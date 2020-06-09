@@ -478,6 +478,7 @@ ${indent}return result`
       uri: { default: this.nullStr, name: 'URI' },
       url: { default: this.nullStr, name: 'URL' },
       void: { default: '', name: 'Voidable' },
+      any: { default: this.nullStr, name: 'AnyCodable' },
     }
 
     if (type.elementType) {
@@ -486,9 +487,12 @@ ${indent}return result`
       switch (type.className) {
         case 'ArrayType':
           return { default: '[]', name: `[${map.name}]` }
-        case 'HashType':
-          // return {name: `StringDictionary<${map.name}>`, default: 'nil'}
-          return { default: 'nil', name: `StringDictionary<AnyCodable>` }
+        case 'HashType': {
+          const mapName =
+            type.elementType.name === 'string' ? 'AnyCodable' : map.name // TODO fix bad API spec, like MergeQuery vis_config
+
+          return { default: 'nil', name: `StringDictionary<${mapName}>` }
+        }
         case 'DelimArrayType':
           return { default: 'nil', name: `DelimArray<${map.name}>` }
       }

@@ -1387,7 +1387,7 @@ export class HashType extends Type {
   elementType: IType
 
   constructor(elementType: IType, schema: OAS.SchemaObject) {
-    super(schema, `Hash[${elementType.name}`)
+    super(schema, `Hash[${elementType.name}]`)
     this.elementType = elementType
     this.customType = elementType.customType
   }
@@ -1524,6 +1524,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       'hostname',
       'ipv4',
       'ipv6',
+      'any',
     ].forEach((name) => (this.types[name] = new IntrinsicType(name)))
 
     this.schema = spec

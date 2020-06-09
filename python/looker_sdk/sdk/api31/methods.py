@@ -3682,7 +3682,7 @@ class Looker31SDK(api_methods.APIMethods):
     # POST /data_actions/form -> models.DataActionForm
     def fetch_remote_data_action_form(
         self,
-        body: MutableMapping[str, str],
+        body: MutableMapping[str, Any],
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DataActionForm:
         """Fetch Remote Data Action Form"""
@@ -4727,17 +4727,17 @@ class Looker31SDK(api_methods.APIMethods):
     # Query Tasks whose results have expired will have a status of 'expired'.
     # If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
     #
-    # GET /query_tasks/multi_results -> MutableMapping[str, str]
+    # GET /query_tasks/multi_results -> MutableMapping[str, Any]
     def query_task_multi_results(
         self,
         # List of Query Task IDs
         query_task_ids: models.DelimSequence[str],
         transport_options: Optional[transport.PTransportSettings] = None,
-    ) -> MutableMapping[str, str]:
+    ) -> MutableMapping[str, Any]:
         """Get Multiple Async Query Results"""
         response = self.get(
             f"/query_tasks/multi_results",
-            MutableMapping[str, str],
+            MutableMapping[str, Any],
             query_params={"query_task_ids": query_task_ids},
             transport_options=transport_options,
         )

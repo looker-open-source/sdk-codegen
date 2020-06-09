@@ -1968,7 +1968,11 @@ data class DBConnection (
   /**
    * Maximum number of threads to use to build PDTs in parallel
    */
-  var pdt_concurrency: Long? = null
+  var pdt_concurrency: Long? = null,
+  /**
+   * When disable_context_comment is true comment will not be added to SQL
+   */
+  var disable_context_comment: Boolean? = null
 ) : Serializable
 
 data class DBConnectionBase (
@@ -3734,7 +3738,7 @@ data class LookmlModelExploreError (
   /**
    * Details (read-only)
    */
-  var details: String? = null,
+  var details: Any? = null,
   /**
    * Error source location (read-only)
    */
@@ -3954,7 +3958,7 @@ data class LookmlModelExploreFieldEnumeration (
   /**
    * Value (read-only)
    */
-  var value: String? = null
+  var value: Any? = null
 ) : Serializable
 
 data class LookmlModelExploreFieldMapLayer (
@@ -7466,7 +7470,11 @@ data class WriteDBConnection (
   /**
    * Maximum number of threads to use to build PDTs in parallel
    */
-  var pdt_concurrency: Long? = null
+  var pdt_concurrency: Long? = null,
+  /**
+   * When disable_context_comment is true comment will not be added to SQL
+   */
+  var disable_context_comment: Boolean? = null
 ) : Serializable
 
 /**

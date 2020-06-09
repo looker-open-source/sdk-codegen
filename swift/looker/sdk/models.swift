@@ -27,7 +27,7 @@ struct ApiSession: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * The id of active workspace for this session
      */
@@ -73,7 +73,7 @@ struct BackupConfiguration: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Type of backup: looker-s3 or custom-s3
      */
@@ -104,7 +104,7 @@ struct Board: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Id of associated content_metadata record (read-only)
      */
@@ -155,7 +155,7 @@ struct BoardItem: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Name of user who created the content this item is based on (read-only)
      */
@@ -226,7 +226,7 @@ struct BoardSection: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Time at which this section was created. (read-only)
      */
@@ -332,7 +332,7 @@ struct ContentMeta: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -379,7 +379,7 @@ struct ContentMetaGroupUser: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -628,7 +628,7 @@ struct ContentView: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -779,7 +779,7 @@ struct CreateQueryTask: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Id of query to run
      */
@@ -810,7 +810,7 @@ struct CredentialsApi3: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -841,7 +841,7 @@ struct CredentialsEmail: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -884,7 +884,7 @@ struct CredentialsEmbed: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -923,7 +923,7 @@ struct CredentialsGoogle: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -962,7 +962,7 @@ struct CredentialsLDAP: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -1001,7 +1001,7 @@ struct CredentialsLookerOpenid: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -1040,7 +1040,7 @@ struct CredentialsOIDC: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -1075,7 +1075,7 @@ struct CredentialsSaml: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -1110,7 +1110,7 @@ struct CredentialsTotp: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
@@ -1137,7 +1137,7 @@ struct CustomWelcomeEmail: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * If true, custom email content will replace the default body of welcome emails
      */
@@ -1160,7 +1160,7 @@ struct Dashboard: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Content Favorite Id (read-only)
      */
@@ -1356,7 +1356,7 @@ struct DashboardBase: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Content Favorite Id (read-only)
      */
@@ -1409,7 +1409,7 @@ struct DashboardElement: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Text tile body text
      */
@@ -1515,7 +1515,7 @@ struct DashboardFilter: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -1582,7 +1582,7 @@ struct DashboardLayout: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -1625,7 +1625,7 @@ struct DashboardLayoutComponent: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -1787,7 +1787,7 @@ struct Datagroup: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * UNIX timestamp at which this entry was created. (read-only)
      */
@@ -1830,7 +1830,7 @@ struct DBConnection: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Name of the connection. Also used as the unique identifier
      */
@@ -1965,13 +1965,17 @@ struct DBConnection: SDKModel {
      * Maximum number of threads to use to build PDTs in parallel
      */
     var pdt_concurrency: Int64?
+    /**
+     * When disable_context_comment is true comment will not be added to SQL
+     */
+    var disable_context_comment: Bool?
 }
 
 struct DBConnectionBase: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Name of the connection. Also used as the unique identifier (read-only)
      */
@@ -2038,7 +2042,7 @@ struct DBConnectionTestResult: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * JDBC connection string. (only populated in the 'connect' test) (read-only)
      */
@@ -2135,7 +2139,7 @@ struct DialectInfo: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Default number max connections (read-only)
      */
@@ -2391,7 +2395,7 @@ struct Folder: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Dashboards (read-only)
      */
@@ -2466,14 +2470,14 @@ struct FolderBase: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
 }
 
 struct GitBranch: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * The short name on the local. Updating `name` results in `git checkout <new_name>`
      */
@@ -2544,7 +2548,7 @@ struct GitConnectionTest: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Human readable string describing the test (read-only)
      */
@@ -2559,7 +2563,7 @@ struct GitConnectionTestResult: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * A short string, uniquely naming this test (read-only)
      */
@@ -2597,7 +2601,7 @@ struct LkGroup: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Group can be used in content access controls
      */
@@ -2650,7 +2654,7 @@ struct GroupSearch: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Group can be used in content access controls
      */
@@ -2712,7 +2716,7 @@ struct Integration: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * ID of the integration. (read-only)
      */
@@ -2783,7 +2787,7 @@ struct IntegrationHub: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * ID of the hub. (read-only)
      */
@@ -2903,7 +2907,7 @@ struct InternalHelpResources: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
      */
@@ -2914,7 +2918,7 @@ struct InternalHelpResourcesContent: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Text to display in the help menu item which will display the internal help resources
      */
@@ -2929,7 +2933,7 @@ struct LDAPConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
@@ -3278,7 +3282,7 @@ struct LegacyFeature: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -3359,7 +3363,7 @@ struct Look: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Id of content metadata (read-only)
      */
@@ -3476,7 +3480,7 @@ struct LookBasic: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Id of content metadata (read-only)
      */
@@ -3499,7 +3503,7 @@ struct LookmlModel: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Array of names of connections this model is allowed to use
      */
@@ -3730,7 +3734,7 @@ struct LookmlModelExploreError: SDKModel {
     /**
      * Details (read-only)
      */
-    var details: String?
+    var details: AnyCodable?
     /**
      * Error source location (read-only)
      */
@@ -3950,7 +3954,7 @@ struct LookmlModelExploreFieldEnumeration: SDKModel {
     /**
      * Value (read-only)
      */
-    var value: String?
+    var value: AnyCodable?
 }
 
 struct LookmlModelExploreFieldMapLayer: SDKModel {
@@ -4141,7 +4145,7 @@ struct LookmlTest: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Name of model containing this test. (read-only)
      */
@@ -4172,7 +4176,7 @@ struct LookmlTestResult: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Name of model containing this test. (read-only)
      */
@@ -4218,7 +4222,7 @@ struct LookWithDashboards: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Id of content metadata (read-only)
      */
@@ -4339,7 +4343,7 @@ struct LookWithQuery: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Id of content metadata (read-only)
      */
@@ -4461,7 +4465,7 @@ struct Manifest: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Manifest project name (read-only)
      */
@@ -4488,7 +4492,7 @@ struct MergeQuery: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Column Limit
      */
@@ -4546,7 +4550,7 @@ struct ModelSet: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * (read-only)
      */
@@ -4585,7 +4589,7 @@ struct OIDCConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
@@ -4796,7 +4800,7 @@ struct PasswordConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Minimum number of characters required for a new password.  Must be between 7 and 100
      */
@@ -4819,7 +4823,7 @@ struct Permission: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Permission symbol (read-only)
      */
@@ -4838,7 +4842,7 @@ struct PermissionSet: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * (read-only)
      */
@@ -4866,7 +4870,7 @@ struct Project: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Project Id (read-only)
      */
@@ -5004,7 +5008,7 @@ struct ProjectFile: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * An opaque token uniquely identifying a file within a project. Avoid parsing or decomposing the text of this token. This token is stable within a Looker release but may change between Looker releases (read-only)
      */
@@ -5082,7 +5086,7 @@ struct ProjectWorkspace: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * The id of the project (read-only)
      */
@@ -5114,7 +5118,7 @@ struct Query: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -5221,7 +5225,7 @@ struct QueryTask: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -5297,7 +5301,7 @@ struct RenderTask: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Date/Time render task was created (read-only)
      */
@@ -5376,7 +5380,7 @@ struct RepositoryCredential: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -5481,7 +5485,7 @@ struct Role: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -5514,7 +5518,7 @@ struct RunningQueries: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -5589,7 +5593,7 @@ struct SamlConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Enable/Disable Saml authentication for the server
      */
@@ -5778,7 +5782,7 @@ struct SamlMetadataParseResult: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Identify Provider Issuer (read-only)
      */
@@ -5964,7 +5968,7 @@ struct ScheduledPlan: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
 }
 
 struct ScheduledPlanDestination: SDKModel {
@@ -6018,7 +6022,7 @@ struct Session: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -6081,7 +6085,7 @@ struct SessionConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Allow users to have persistent sessions when they login
      */
@@ -6123,7 +6127,7 @@ struct SqlQuery: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * The identifier of the SQL query (read-only)
      */
@@ -6199,7 +6203,7 @@ struct Theme: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Timestamp for when this theme becomes active. Null=always
      */
@@ -6320,7 +6324,7 @@ struct User: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * URL for the avatar image (may be generic) (read-only)
      */
@@ -6442,7 +6446,7 @@ struct UserAttribute: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -6493,7 +6497,7 @@ struct UserAttributeGroupValue: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id of this group-attribute relation (read-only)
      */
@@ -6524,7 +6528,7 @@ struct UserAttributeWithValue: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Name of user attribute (read-only)
      */
@@ -6571,7 +6575,7 @@ struct UserLoginLockout: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Hash of user's client id (read-only)
      */
@@ -6614,7 +6618,7 @@ struct UserPublic: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -6694,7 +6698,7 @@ struct WhitelabelConfiguration: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
@@ -6761,7 +6765,7 @@ struct Workspace: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<AnyCodable>?
+    var can: StringDictionary<Bool>?
     /**
      * The unique id of this user workspace. Predefined workspace ids include "production" and "dev" (read-only)
      */
@@ -7463,6 +7467,10 @@ struct WriteDBConnection: SDKModel {
      * Maximum number of threads to use to build PDTs in parallel
      */
     var pdt_concurrency: Int64?
+    /**
+     * When disable_context_comment is true comment will not be added to SQL
+     */
+    var disable_context_comment: Bool?
 }
 
 /**

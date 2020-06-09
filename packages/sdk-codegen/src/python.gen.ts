@@ -91,7 +91,8 @@ export class PythonGen extends CodeGen {
     'yield',
   ]
 
-  pythonTypes: Record<string, IMappedType> = {
+  readonly pythonTypes: Record<string, IMappedType> = {
+    any: { default: this.nullStr, name: 'Any' },
     boolean: { default: this.nullStr, name: 'bool' },
     byte: { default: this.nullStr, name: 'bytes' },
     datetime: { default: this.nullStr, name: 'datetime.datetime' },
@@ -133,7 +134,7 @@ class ${this.packageName}(api_methods.APIMethods):
   modelsPrologue = (indent: string) => `
 # ${this.warnEditing()}
 import datetime
-from typing import MutableMapping, Optional, Sequence
+from typing import Any, MutableMapping, Optional, Sequence
 
 import attr
 
@@ -152,6 +153,7 @@ DelimSequence = model.DelimSequence
 # these calls will be removed.
 
 import functools  # noqa:E402
+from typing import Any
 try:
     from typing import ForwardRef  # type: ignore
 except ImportError:
@@ -490,17 +492,19 @@ ${this.hooks.join('\n')}
   }
 
   _typeMap(type: IType, format: 'models' | 'methods'): IMappedType {
-    super.typeMap(type)
+    this.typeMap(type)
     if (type.elementType) {
       const map = this._typeMap(type.elementType, format)
       switch (type.className) {
         case 'ArrayType':
           return { default: this.nullStr, name: `Sequence[${map.name}]` }
-        case 'HashType':
+        case 'HashType': {
+          const mapName = type.elementType.name === 'string' ? 'Any' : map.name // TODO fix bad API spec, like MergeQuery vis_config
           return {
             default: this.nullStr,
-            name: `MutableMapping[str, ${map.name}]`,
+            name: `MutableMapping[str, ${mapName}]`,
           }
+        }
         case 'DelimArrayType':
           return {
             default: this.nullStr,
@@ -512,15 +516,14 @@ ${this.hooks.join('\n')}
     if (type.name) {
       let name: string
       if (format === 'models') {
-        name = `"${type.name}"`
+        name = type.customType ? `"${type.name}"` : type.name
       } else if (format === 'methods') {
         name = `models.${type.name}`
       } else {
         throw new Error('format must be "models" or "methods"')
       }
-      return (
-        this.pythonTypes[type.name] || { default: this.nullStr, name: name }
-      )
+      const result = this.pythonTypes[type.name]
+      return result || { default: this.nullStr, name: name }
     } else {
       throw new Error('Cannot output a nameless type.')
     }
