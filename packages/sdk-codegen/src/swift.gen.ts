@@ -67,8 +67,7 @@ export class SwiftGen extends CodeGen {
     return false
   }
 
-  // @ts-ignore
-  methodsPrologue(indent: string) {
+  methodsPrologue(_indent: string) {
     return `
 /// ${this.warnEditing()}
 
@@ -81,8 +80,7 @@ ${this.indentStr}lazy var stream = ${this.packageName}Stream(authSession)
 `
   }
 
-  // @ts-ignore
-  streamsPrologue(indent: string): string {
+  streamsPrologue(_indent: string): string {
     return `
 /// ${this.warnEditing()}
 
@@ -93,13 +91,11 @@ class ${this.packageName}Stream: APIMethods {
 `
   }
 
-  // @ts-ignore
-  methodsEpilogue(indent: string) {
+  methodsEpilogue(_indent: string) {
     return '\n}'
   }
 
-  // @ts-ignore
-  modelsPrologue(indent: string) {
+  modelsPrologue(_indent: string) {
     return `
 /// ${this.warnEditing()}
 
@@ -107,8 +103,7 @@ import Foundation
 `
   }
 
-  // @ts-ignore
-  modelsEpilogue(indent: string) {
+  modelsEpilogue(_indent: string) {
     return '\n'
   }
 
@@ -179,16 +174,6 @@ import Foundation
       `${indent}${line}${this.reserve(param.name)}: ${mapped.name}${pOpt}` +
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
-  }
-
-  // @ts-ignore
-  initArg(indent: string, property: IProperty) {
-    return ''
-  }
-
-  // @ts-ignore
-  construct(indent: string, type: IType) {
-    return ''
   }
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
@@ -288,12 +273,11 @@ import Foundation
     )
   }
 
-  // @ts-ignore
-  errorResponses(indent: string, method: IMethod) {
+  errorResponses(_indent: string, _method: IMethod) {
     // const results: string[] = method.errorResponses
     //   .map(r => `${r.type.name}`)
     // return results.join(' | ')
-    // TODO figure out how to express OR'd error type responses
+    // TODO figure out how to express Union error type responses
     return 'SDKError'
   }
 
@@ -307,7 +291,6 @@ import Foundation
     return `"${path}"`
   }
 
-  // @ts-ignore
   argGroup(indent: string, args: Arg[], prefix?: string) {
     if (!args || args.length === 0) return this.nullStr
     const hash: string[] = []
@@ -344,9 +327,7 @@ import Foundation
       const mapped = this.typeMap(param.type)
       switch (mapped.name.toLowerCase()) {
         case 'date':
-        case 'datetime':
-        // case 'url':
-        // case 'uri':
+        case 'datetime': // case 'url': case 'uri':
         case 'object':
         case 'bool':
           castIt = true
@@ -359,7 +340,6 @@ import Foundation
     return param.name + (castIt ? ' as Any?' : '')
   }
 
-  // @ts-ignore
   argList(indent: string, args: Arg[], prefix?: string) {
     prefix = prefix || ''
     return args && args.length !== 0
@@ -367,7 +347,12 @@ import Foundation
       : this.nullStr
   }
 
-  // this is a builder function to produce arguments with optional null place holders but no extra required optional arguments
+  /**
+   * this is a builder function to produce arguments with optional null place holders but no extra required optional arguments
+   * @param {string} current accumulator
+   * @param {string} args names of parameters
+   * @returns {string} accumulated argument list
+   */
   argFill(current: string, args: string) {
     if (!current && args.trim() === this.nullStr) {
       // Don't append trailing optional arguments if none have been set yet
@@ -376,14 +361,19 @@ import Foundation
     return `${args}${current ? this.argDelimiter : ''}${current}`
   }
 
-  // build the http argument list from back to front, so trailing undefined arguments
-  // can be omitted. Path arguments are resolved as part of the path parameter to general
-  // purpose API method call
-  // e.g.
-  //   {queryArgs...}, bodyArg, {headerArgs...}, {cookieArgs...}
-  //   {queryArgs...}, null, null, {cookieArgs...}
-  //   null, bodyArg
-  //   {queryArgs...}
+  /**
+   * build the http argument list from back to front, so trailing undefined arguments
+   * can be omitted. Path arguments are resolved as part of the path parameter to general
+   * purpose API method call
+   * e.g.
+   *   {queryArgs...}, bodyArg, {headerArgs...}, {cookieArgs...}
+   *   {queryArgs...}, null, null, {cookieArgs...}
+   *   null, bodyArg
+   *   {queryArgs...}
+   * @param {string} indent
+   * @param {IMethod} method
+   * @returns {string}
+   */
   httpArgs(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
     // add options at the end of the request calls. this will cause all other arguments to be
@@ -438,9 +428,9 @@ ${indent}return result`
     const names: string[] = []
     if (!this.api) return names
     if (countError) {
-      this.api.types['Error'].refCount++
+      this.api.types.Error.refCount++
     } else {
-      this.api.types['Error'].refCount = 0
+      this.api.types.Error.refCount = 0
     }
     const types = this.api.types
     Object.values(types)
@@ -462,6 +452,8 @@ ${indent}return result`
     const swiftTypes: Record<string, IMappedType> = {
       Error: { default: '', name: `${ns}Error` },
       Group: { default: '', name: `${ns}Group` },
+      Locale: { default: '', name: `${ns}Group` },
+      any: { default: this.nullStr, name: 'AnyCodable' },
       boolean: { default: this.nullStr, name: 'Bool' },
       byte: { default: this.nullStr, name: 'binary' },
       date: { default: this.nullStr, name: 'Date' },
@@ -478,7 +470,6 @@ ${indent}return result`
       uri: { default: this.nullStr, name: 'URI' },
       url: { default: this.nullStr, name: 'URL' },
       void: { default: '', name: 'Voidable' },
-      any: { default: this.nullStr, name: 'AnyCodable' },
     }
 
     if (type.elementType) {

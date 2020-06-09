@@ -79,9 +79,7 @@ const lintCheck = async (fileName: string) => {
  * @param {string} fileName
  * @returns {Promise<void>}
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-export const lintCheck = async (fileName: string) => {
+export const lintCheck = async (_fileName: string) => {
   return ''
 }
 

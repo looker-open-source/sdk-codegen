@@ -138,7 +138,7 @@
         "config/license-header.js"
       ],
       "import/default": "off",
-      "sort-keys-fix/sort-keys-fix": "warn"
+      "sort-keys-fix/sort-keys-fix": "off"
     },
     "settings": {
       "import/resolver": {
@@ -159,7 +159,8 @@
         "rules": {
           "@typescript-eslint/interface-name-prefix": "off",
           "@typescript-eslint/no-unused-vars": "warn",
-          "@typescript-eslint/camelcase": "off"
+          "@typescript-eslint/camelcase": "off",
+          "sort-keys-fix/sort-keys-fix": "off"
         }
       }
     ]

@@ -113,8 +113,7 @@ export class PythonGen extends CodeGen {
   structureHook = 'structure_hook'
   pythonReservedKeywordClasses: Set<string> = new Set()
 
-  // @ts-ignore
-  methodsPrologue = (indent: string) => `
+  methodsPrologue = (_indent: string) => `
 # ${this.warnEditing()}
 import datetime
 from typing import Any, MutableMapping, Optional, Sequence, Union
@@ -126,12 +125,10 @@ from ${this.packagePath}.rtl import transport
 class ${this.packageName}(api_methods.APIMethods):
 `
 
-  // @ts-ignore
-  methodsEpilogue = (indent: string) =>
+  methodsEpilogue = (_indent: string) =>
     this.apiVersion === '3.1' ? `LookerSDK = ${this.packageName}` : ''
 
-  // @ts-ignore
-  modelsPrologue = (indent: string) => `
+  modelsPrologue = (_indent: string) => `
 # ${this.warnEditing()}
 import datetime
 from typing import Any, MutableMapping, Optional, Sequence
@@ -145,8 +142,7 @@ EXPLICIT_NULL = model.EXPLICIT_NULL  # type: ignore
 DelimSequence = model.DelimSequence
 `
 
-  // @ts-ignore
-  modelsEpilogue = (indent: string) => `
+  modelsEpilogue = (_indent: string) => `
 
 # The following cattrs structure hook registrations are a workaround
 # for https://github.com/Tinche/cattrs/pull/42 Once this issue is resolved
@@ -169,8 +165,7 @@ ${this.hooks.join('\n')}
     return this.fileName(`sdk/api${this.apiRef}/${baseFileName}`)
   }
 
-  // @ts-ignore
-  argGroup(indent: string, args: Arg[]) {
+  argGroup(_indent: string, args: Arg[]) {
     if (!args || args.length === 0) return this.nullStr
     const hash: string[] = []
     for (const arg of args) {
@@ -179,12 +174,6 @@ ${this.hooks.join('\n')}
     return `{${hash.join(this.dataStructureDelimiter)}}`
   }
 
-  // @ts-ignore
-  createRequester(indent: string, method: IMethod) {
-    return ''
-  }
-
-  // @ts-ignore
   argList(indent: string, args: Arg[]) {
     return args && args.length !== 0
       ? `\n${indent}${args.join(this.argDelimiter)}`

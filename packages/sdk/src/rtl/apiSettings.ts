@@ -155,8 +155,7 @@ export class ApiSettings implements IApiSettings {
    * @param section key/name of configuration section to read
    * @returns an empty `IAPISection`
    */
-  // @ts-ignore
-  readConfig(section?: string): IApiSection {
+  readConfig(_section?: string): IApiSection {
     return {}
   }
 }

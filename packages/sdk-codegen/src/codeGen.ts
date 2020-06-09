@@ -99,8 +99,7 @@ export abstract class CodeGen implements ICodeGen {
    */
   abstract methodsEpilogue(indent: string): string
 
-  // @ts-ignore
-  streamsPrologue(indent: string) {
+  streamsPrologue(_indent: string) {
     return ''
   }
 
@@ -143,22 +142,24 @@ export abstract class CodeGen implements ICodeGen {
     )
   }
 
-  // @ts-ignore
-  streamerSignature(indent: string, method: IMethod) {
+  streamerSignature(_indent: string, _method: IMethod) {
     return ''
   }
 
   // Only implement this method for languages that have explicit streaming methods declared
-  // @ts-ignore
-  declareStreamer(indent: string, method: IMethod) {
+  declareStreamer(_indent: string, _method: IMethod) {
     return ''
   }
 
   abstract summary(indent: string, text: string | undefined): string
 
-  abstract initArg(indent: string, property: IProperty): string
+  initArg(_indent: string, _property: IProperty): string {
+    return ''
+  }
 
-  abstract construct(indent: string, type: IType): string
+  construct(_indent: string, _type: IType): string {
+    return ''
+  }
 
   bumper(indent: string) {
     return indent + this.indentStr
@@ -242,8 +243,7 @@ export abstract class CodeGen implements ICodeGen {
     return `${args}${current ? this.argDelimiter : ''}${current}`
   }
 
-  // @ts-ignore
-  httpPath(path: string, prefix?: string) {
+  httpPath(path: string, _prefix?: string) {
     return path
   }
 
@@ -266,8 +266,7 @@ export abstract class CodeGen implements ICodeGen {
     return result
   }
 
-  // @ts-ignore
-  errorResponses(indent: string, method: IMethod) {
+  errorResponses(_indent: string, method: IMethod) {
     const results: string[] = method.errorResponses.map((r) => `${r.type.name}`)
     return results.join(', ')
   }
@@ -283,8 +282,7 @@ export abstract class CodeGen implements ICodeGen {
     })`
   }
 
-  // @ts-ignore
-  streamCall(indent: string, method: IMethod) {
+  streamCall(_indent: string, _method: IMethod) {
     return ''
   }
 
@@ -317,8 +315,7 @@ export abstract class CodeGen implements ICodeGen {
     return writer
   }
 
-  // @ts-ignore
-  typeNames(countError = true) {
+  typeNames(_countError = true) {
     const items: string[] = []
     if (!this.api) return items
     Object.values(this.api.types)
