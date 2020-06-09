@@ -25,7 +25,7 @@
  */
 
 import * as fs from 'fs'
-import { TestConfig } from '@looker/sdk-test-utils'
+import { TestConfig } from './testUtils'
 import {
   authGetUrl,
   fetchLookerVersions,

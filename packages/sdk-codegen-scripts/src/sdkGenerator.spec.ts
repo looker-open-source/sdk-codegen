@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { TestConfig } from '@looker/sdk-test-utils'
+import { TestConfig } from './testUtils'
 import { IMethodResponse } from '@looker/sdk-codegen'
 
 const config = TestConfig()

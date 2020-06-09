@@ -24,7 +24,7 @@
 
  */
 
-import { MockCrypto } from '@looker/sdk-test-utils'
+import { MockCrypto } from 'packages/sdk-codegen-scripts/src/testUtils'
 import { BrowserServices } from './browserServices'
 import { DefaultSettings } from './apiSettings'
 import { BrowserCryptoHash, BrowserTransport } from './browserTransport'

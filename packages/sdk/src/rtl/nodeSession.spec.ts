@@ -25,7 +25,7 @@
  */
 
 import * as fs from 'fs'
-import { TestConfig } from '@looker/sdk-test-utils'
+import { TestConfig } from 'packages/sdk-codegen-scripts/src/testUtils'
 import { NodeTransport } from './nodeTransport'
 import { NodeSession } from './nodeSession'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings'

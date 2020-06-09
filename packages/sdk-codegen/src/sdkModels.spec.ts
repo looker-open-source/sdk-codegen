@@ -25,7 +25,7 @@
  */
 
 import * as OAS from 'openapi3-ts'
-import { TestConfig } from '@looker/sdk-test-utils'
+import { TestConfig } from 'packages/sdk-codegen-scripts/src/testUtils'
 import {
   ArrayType,
   CriteriaToSet,

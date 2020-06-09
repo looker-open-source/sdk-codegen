@@ -24,29 +24,18 @@
 
  */
 
-import { TestConfig } from 'packages/sdk-codegen-scripts/src/testUtils'
-import { PseudoGen } from './pseudo.gen'
+import { ICryptoHash } from '../'
 
-const config = TestConfig()
-const apiTestModel = config.apiTestModel
+export class MockCrypto implements ICryptoHash {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  secureRandom(byteCount: number): string {
+    return 'feedface'
+  }
 
-const gen = new PseudoGen(apiTestModel)
-
-describe('pseudocode', () => {
-  describe('method signature', () => {
-    it('optional body and additional param', () => {
-      const method = apiTestModel.methods.create_user_credentials_email
-      expect(method).toBeDefined()
-      const expected = `create_user_credentials_email(user_id, body, fields): CredentialsEmail`
-      const actual = gen.methodSignature('', method)
-      expect(actual).toEqual(expected)
-    })
-    it('no params', () => {
-      const method = apiTestModel.methods.all_datagroups
-      expect(method).toBeDefined()
-      const expected = `all_datagroups(): Datagroup[]`
-      const actual = gen.methodSignature('', method)
-      expect(actual).toEqual(expected)
-    })
-  })
-})
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  sha256Hash(message: string): Promise<string> {
+    return Promise.resolve('baadf00d')
+  }
+}
