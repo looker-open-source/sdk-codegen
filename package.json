@@ -20,10 +20,10 @@
     "yarn": ">=1.14.0"
   },
   "scripts": {
-    "convert": "ts-node packages/scripts/src/specConvert.ts",
-    "legacy": "ts-node packages/scripts/src/legacy.ts",
-    "sdk": "ts-node packages/scripts/src/sdkGen.ts",
-    "jsonify": "ts-node packages/scripts/src/yamlToJson.ts",
+    "convert": "ts-node -O '{ \"module\": \"commonjs\" }' packages/sdk-codegen-scripts/src/specConvert.ts",
+    "legacy": "ts-node -O '{ \"module\": \"commonjs\" }' packages/sdk-codegen-scripts/src/legacy.ts",
+    "sdk": "ts-node -O '{ \"module\": \"commonjs\" }' packages/sdk-codegen-scripts/src/sdkGen.ts",
+    "jsonify": "ts-node -O '{ \"module\": \"commonjs\" }' packages/sdk-codegen-scripts/src/yamlToJson.ts",
     "view": "yarn api-explorer",
     "wipe": "rm -rf api spec",
     "prebuild": "yarn clean",

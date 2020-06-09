@@ -430,34 +430,21 @@ export interface IDictionary<T> {
       boolean: { default: mt, name: 'boolean' },
       // TODO can we use blob for binary somehow? https://developer.mozilla.org/en-US/docs/Web/API/Blob
       byte: { default: mt, name: 'binary' },
-
-      // TODO is there a default expression for datetime?
       date: { default: mt, name: 'Date' },
-
       datetime: { default: mt, name: 'Date' },
-
       double: { default: mt, name: 'number' },
-
       float: { default: mt, name: 'number' },
-
       int32: { default: mt, name: 'number' },
-
       int64: { default: mt, name: 'number' },
-
       integer: { default: mt, name: 'number' },
-
       number: { default: mt, name: 'number' },
-
-      // TODO is there a default expression for date?
       object: { default: mt, name: 'any' },
-
       password: { default: mt, name: 'Password' },
-
       string: { default: mt, name: 'string' },
-
       uri: { default: mt, name: 'Url' },
       url: { default: mt, name: 'Url' },
       void: { default: mt, name: 'void' },
+      any: { default: mt, name: 'any' },
     }
 
     if (type.elementType) {
