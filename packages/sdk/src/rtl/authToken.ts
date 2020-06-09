@@ -27,15 +27,10 @@
 import { IAccessToken } from '../sdk/4.0/models'
 
 export class AuthToken implements IAccessToken {
-  // tslint:disable-next-line: variable-name
   access_token = ''
-  // tslint:disable-next-line: variable-name
   token_type = ''
-  // tslint:disable-next-line: variable-name
   refresh_token?: string
-  // tslint:disable-next-line: variable-name
   expires_in = 0
-  // tslint:disable-next-line: variable-name
   expiresAt = new Date()
 
   constructor(token?: IAccessToken) {

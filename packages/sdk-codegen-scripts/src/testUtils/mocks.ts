@@ -23,4 +23,15 @@
  SOFTWARE.
 
  */
-module.exports = require('../../jest.settings')
+
+import { ICryptoHash } from '@looker/sdk'
+
+export class MockCrypto implements ICryptoHash {
+  secureRandom(_byteCount: number): string {
+    return 'feedface'
+  }
+
+  sha256Hash(_message: string): Promise<string> {
+    return Promise.resolve('baadf00d')
+  }
+}

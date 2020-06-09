@@ -129,8 +129,7 @@ export abstract class AuthSession implements IAuthSession {
    *
    * @param sudoId ID of sudo user. A missing sudoId means the API credentials are used to login
    */
-  // @ts-ignore sudoId is not used in this default implementation
-  login(sudoId?: string | number): Promise<any> {
+  login(_sudoId?: string | number): Promise<any> {
     return Promise.reject(AuthSession.TBD)
   }
 

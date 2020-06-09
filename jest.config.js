@@ -26,20 +26,14 @@
 process.env.TZ = 'UTC'
 
 module.exports = {
-  // roots: ['<rootDir>'],
-  // testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
   automock: false,
   moduleDirectories: ['./node_modules', './packages'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
   moduleNameMapper: {
-    '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
+    '@looker/(.+)$': '<rootDir>/packages/$1/src',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
       '<rootDir>/config/jest/fileMock.js',
-    // '^@/(.*)$': '<rootDir>/$1'
   },
   setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
   testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
-  transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
-  },
 }

@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from '../../../test-utils/src/testUtils'
+import { TestConfig } from '../testUtils'
 import { boolDefault, isFalse, isTrue, unquote } from './constants'
 import { ResponseMode, responseMode } from './transport'
 

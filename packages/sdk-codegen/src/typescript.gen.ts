@@ -63,8 +63,7 @@ export class TypescriptGen extends CodeGen {
   needsRequestTypes = true
   willItStream = true
 
-  // @ts-ignore
-  methodsPrologue(indent: string) {
+  methodsPrologue(_indent: string) {
     // TODO get the rtl path alias to work correctly in all scenarios! !!
     return `
 import { APIMethods } from '../../rtl/apiMethods'
@@ -91,8 +90,7 @@ export class ${this.packageName} extends APIMethods {
 `
   }
 
-  // @ts-ignore
-  streamsPrologue(indent: string): string {
+  streamsPrologue(_indent: string): string {
     return `
 import { Readable } from 'readable-stream'
 import { APIMethods } from '../../rtl/apiMethods'
@@ -113,13 +111,11 @@ export class ${this.packageName}Stream extends APIMethods {
 `
   }
 
-  // @ts-ignore
-  methodsEpilogue(indent: string) {
+  methodsEpilogue(_indent: string) {
     return '\n}'
   }
 
-  // @ts-ignore
-  modelsPrologue(indent: string) {
+  modelsPrologue(_indent: string) {
     return `
 import { Url } from '../../rtl/constants'
 import { DelimArray } from '../../rtl/delimArray'
@@ -135,8 +131,7 @@ export interface IDictionary<T> {
 `
   }
 
-  // @ts-ignore
-  modelsEpilogue(indent: string) {
+  modelsEpilogue(_indent: string) {
     return ''
   }
 
@@ -189,16 +184,6 @@ export interface IDictionary<T> {
       `${indent}${param.name}${pOpt}: ${mapped.name}` +
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
-  }
-
-  // @ts-ignore
-  initArg(indent: string, property: IProperty) {
-    return ''
-  }
-
-  // @ts-ignore
-  construct(indent: string, type: IType) {
-    return ''
   }
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
@@ -298,8 +283,7 @@ export interface IDictionary<T> {
     )
   }
 
-  // @ts-ignore
-  errorResponses(indent: string, method: IMethod) {
+  errorResponses(_indent: string, method: IMethod) {
     const results: string[] = method.errorResponses.map(
       (r) => `I${r.type.name}`
     )
@@ -313,7 +297,6 @@ export interface IDictionary<T> {
     return `'${path}'`
   }
 
-  // @ts-ignore
   argGroup(indent: string, args: Arg[], prefix?: string) {
     if (!args || args.length === 0) return this.nullStr
     const hash: string[] = []
@@ -327,7 +310,6 @@ export interface IDictionary<T> {
     return `\n${indent}{${hash.join(this.argDelimiter)}}`
   }
 
-  // @ts-ignore
   argList(indent: string, args: Arg[], prefix?: string) {
     prefix = prefix || ''
     return args && args.length !== 0
@@ -407,9 +389,9 @@ export interface IDictionary<T> {
     const names: string[] = []
     if (!this.api) return names
     if (countError) {
-      this.api.types['Error'].refCount++
+      this.api.types.Error.refCount++
     } else {
-      this.api.types['Error'].refCount = 0
+      this.api.types.Error.refCount = 0
     }
     const types = this.api.types
     Object.values(types)
@@ -427,34 +409,21 @@ export interface IDictionary<T> {
     const mt = ''
 
     const tsTypes: Record<string, IMappedType> = {
+      any: { default: mt, name: 'any' },
       boolean: { default: mt, name: 'boolean' },
       // TODO can we use blob for binary somehow? https://developer.mozilla.org/en-US/docs/Web/API/Blob
       byte: { default: mt, name: 'binary' },
-
-      // TODO is there a default expression for datetime?
       date: { default: mt, name: 'Date' },
-
       datetime: { default: mt, name: 'Date' },
-
       double: { default: mt, name: 'number' },
-
       float: { default: mt, name: 'number' },
-
       int32: { default: mt, name: 'number' },
-
       int64: { default: mt, name: 'number' },
-
       integer: { default: mt, name: 'number' },
-
       number: { default: mt, name: 'number' },
-
-      // TODO is there a default expression for date?
       object: { default: mt, name: 'any' },
-
       password: { default: mt, name: 'Password' },
-
       string: { default: mt, name: 'string' },
-
       uri: { default: mt, name: 'Url' },
       url: { default: mt, name: 'Url' },
       void: { default: mt, name: 'void' },

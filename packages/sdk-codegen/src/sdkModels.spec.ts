@@ -25,7 +25,7 @@
  */
 
 import * as OAS from 'openapi3-ts'
-import { TestConfig } from '../../test-utils/src/testUtils'
+import { TestConfig } from './testUtils'
 import {
   ArrayType,
   CriteriaToSet,
@@ -121,7 +121,7 @@ describe('sdkModels', () => {
     it('CreateQueryTask', () => {
       const type = apiTestModel.types.CreateQueryTask
       expect(type).toBeDefined()
-      const actual = apiTestModel.getWriteableType(type)
+      const actual = apiTestModel.mayGetWriteableType(type)
       expect(actual).toBeDefined()
       expect(type.properties.query_id.required).toEqual(true)
       expect(type.properties.result_format.required).toEqual(true)
@@ -129,7 +129,7 @@ describe('sdkModels', () => {
     })
 
     it('WriteCreateQueryTask', () => {
-      const type = apiTestModel.getWriteableType(
+      const type = apiTestModel.mayGetWriteableType(
         apiTestModel.types.CreateQueryTask
       )
       expect(type).toBeDefined()
@@ -160,7 +160,7 @@ describe('sdkModels', () => {
       it('writeableType', () => {
         const type = apiTestModel.types['DashboardElement']
         expect(type).toBeDefined()
-        const actual = apiTestModel.getWriteableType(type)
+        const actual = apiTestModel.mayGetWriteableType(type)
         expect(actual).toBeDefined()
         if (actual) {
           expect(actual.properties.body_text).toBeDefined()

@@ -74,8 +74,7 @@ export class KotlinGen extends CodeGen {
     return `.api${this.apiRef}`
   }
 
-  // @ts-ignore
-  methodsPrologue(indent: string) {
+  methodsPrologue(_indent: string) {
     return `
 // ${this.warnEditing()}
 package com.looker.sdk${this.apiNamespace()}
@@ -89,8 +88,7 @@ class ${this.sdkClassName()}(authSession: AuthSession) : APIMethods(authSession)
 `
   }
 
-  // @ts-ignore
-  streamsPrologue(indent: string): string {
+  streamsPrologue(_indent: string): string {
     return `
 // ${this.warnEditing()}
 package com.looker.sdk${this.apiNamespace()}
@@ -103,13 +101,11 @@ class ${this.sdkClassName()}Stream(authSession: AuthSession) : APIMethods(authSe
 `
   }
 
-  // @ts-ignore
-  methodsEpilogue(indent: string) {
+  methodsEpilogue(_indent: string) {
     return '\n}'
   }
 
-  // @ts-ignore
-  modelsPrologue(indent: string) {
+  modelsPrologue(_indent: string) {
     return `
 // ${this.warnEditing()}
 
@@ -121,8 +117,7 @@ import java.util.*
 `
   }
 
-  // @ts-ignore
-  modelsEpilogue(indent: string) {
+  modelsEpilogue(_indent: string) {
     return ''
   }
 
@@ -160,16 +155,6 @@ import java.util.*
       `${indent}${param.name}: ${mapped.name}${pOpt}` +
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
-  }
-
-  // @ts-ignore
-  initArg(indent: string, property: IProperty) {
-    return ''
-  }
-
-  // @ts-ignore
-  construct(indent: string, type: IType) {
-    return ''
   }
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
@@ -256,8 +241,7 @@ import java.util.*
     )
   }
 
-  // @ts-ignore
-  errorResponses(indent: string, method: IMethod) {
+  errorResponses(_indent: string, _method: IMethod) {
     return ''
     // const results: string[] = method.errorResponses
     //   .map(r => `I${r.type.name}`)
@@ -271,7 +255,6 @@ import java.util.*
     return `"${path}"`
   }
 
-  // @ts-ignore
   argGroup(indent: string, args: Arg[], prefix?: string) {
     if (!args || args.length === 0) return 'mapOf()'
     const hash: string[] = []
@@ -288,7 +271,6 @@ import java.util.*
     return `\n${bump}mapOf(${hash.join(argWrapper)})`
   }
 
-  // @ts-ignore
   argList(indent: string, args: Arg[], prefix?: string) {
     prefix = prefix || ''
     return args && args.length !== 0
@@ -366,9 +348,9 @@ import java.util.*
     const names: string[] = []
     if (!this.api) return names
     if (countError) {
-      this.api.types['Error'].refCount++
+      this.api.types.Error.refCount++
     } else {
-      this.api.types['Error'].refCount = 0
+      this.api.types.Error.refCount = 0
     }
     const types = this.api.types
     Object.values(types)
@@ -385,6 +367,7 @@ import java.util.*
     super.typeMap(type)
     const mt = this.nullStr
     const ktTypes: Record<string, IMappedType> = {
+      any: { default: mt, name: 'Any' },
       boolean: { default: mt, name: 'Boolean' },
       byte: { default: mt, name: 'binary' },
       date: { default: mt, name: 'Date' },
@@ -409,11 +392,12 @@ import java.util.*
       switch (type.className) {
         case 'ArrayType':
           return { default: this.nullStr, name: `Array<${map.name}>` }
-        case 'HashType':
+        case 'HashType': {
+          const mapName = type.elementType.name === 'string' ? 'Any' : map.name // TODO fix bad API spec, like MergeQuery vis_config
           // TODO figure out this bizarre string template error either in IntelliJ or Typescript
           // return {name: `Map<String,${map.name}>`, default: '{}'}
-          if (map.name === 'String') map.name = 'Any' // TODO fix messy hash values
-          return { default: this.nullStr, name: 'Map<String' + `,${map.name}>` }
+          return { default: this.nullStr, name: 'Map<String' + `,${mapName}>` }
+        }
         case 'DelimArrayType':
           return { default: this.nullStr, name: `DelimArray<${map.name}>` }
       }

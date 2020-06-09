@@ -104,7 +104,7 @@ const runConfig = async (name: string, props: ISDKConfigProps) => {
     // Look for the Looker config section and only run that one
     const name = 'Looker'
     const props = config[name]
-    void (await runConfig(name, props))
+    await runConfig(name, props)
   } catch (e) {
     quit(e)
   }
