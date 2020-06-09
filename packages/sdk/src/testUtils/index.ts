@@ -23,4 +23,5 @@
  SOFTWARE.
 
  */
-module.exports = require('../../jest.settings')
+
+export * from './testUtils'

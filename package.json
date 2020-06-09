@@ -20,24 +20,23 @@
     "yarn": ">=1.14.0"
   },
   "scripts": {
-    "convert": "ts-node packages/scripts/src/specConvert.ts",
-    "legacy": "ts-node packages/scripts/src/legacy.ts",
-    "sdk": "ts-node packages/scripts/src/sdkGen.ts",
-    "jsonify": "ts-node packages/scripts/src/yamlToJson.ts",
+    "convert": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/src/specConvert.ts",
+    "legacy": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/src/legacy.ts",
+    "sdk": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/src/sdkGen.ts",
+    "jsonify": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/src/yamlToJson.ts",
     "view": "yarn api-explorer",
     "wipe": "rm -rf api spec",
     "prebuild": "yarn clean",
     "build": "run-p -c build:*",
-    "_build:es": "yarn lerna exec --scope '@looker/*' --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments'",
-    "build:ts": "yarn lerna exec --stream --scope '@looker/*' --sort 'tsc -b tsconfig.build.json'",
-    "clean": "rm -Rf packages/*/dist packages/*/lib packages/*/*.tsbuildinfo",
+    "build:es": "yarn lerna exec --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments'",
+    "build:ts": "yarn lerna exec --stream --sort 'tsc -b tsconfig.build.json'",
+    "clean": "rm -Rf packages/*/lib",
     "prepublishOnly": "yarn test",
     "deploy": "yarn workspace sdk deploy",
     "deploy:codegen": "lerna run deploy --scope sdk-codegen -c",
     "deploy:sdk": "lerna run deploy --scope sdk",
     "fix": "yarn lint:es --fix",
     "lint": "run-p -c lint:*",
-    "lint:css": "stylelint 'packages/**/*.ts{,x}'",
     "lint:es": "eslint 'packages/**/*.ts{,x}' --cache",
     "lint:ts": "tsc",
     "lint-staged": "yarn exec lint-staged",
@@ -54,11 +53,11 @@
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
     "@babel/plugin-proposal-optional-chaining": "^7.9.0",
-    "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "7.9.4",
     "@babel/preset-typescript": "^7.9.0",
     "@babel/runtime": "^7.9.2",
+    "@babel/runtime-corejs3": "^7.10.2",
     "@looker/eslint-config": "^1.0.14",
     "@looker/prettier-config": "^1.0.15",
     "@stoplight/spectral": "^5.0.0",
@@ -83,6 +82,7 @@
     "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-import-resolver-webpack": "^0.12.1",
     "eslint-plugin-header": "^3.0.0",
+    "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-mdx": "^1.6.8",
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-sort-keys-fix": "^1.1.1",
@@ -102,23 +102,20 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "styled-components": "^4.4.1",
-    "ts-jest": "^25.4.0",
     "ts-node": "^8.1.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "webpack": "^4.43.0"
   },
   "dependencies": {},
   "lint-staged": {
     "**/*.ts?(x)": [
-      "stylelint",
-      "eslint",
-      "git add"
+      "eslint"
     ],
     "**/*.js?(x)": [
-      "git add"
+      "eslint"
     ],
     "**/*.mdx": [
-      "eslint",
-      "git add"
+      "eslint"
     ]
   },
   "pre-commit": [
@@ -141,7 +138,7 @@
         "config/license-header.js"
       ],
       "import/default": "off",
-      "sort-keys-fix/sort-keys-fix": "warn"
+      "sort-keys-fix/sort-keys-fix": "off"
     },
     "settings": {
       "import/resolver": {
@@ -157,33 +154,18 @@
     "overrides": [
       {
         "files": [
-          "**/*.mdx"
-        ],
-        "extends": [
-          "plugin:mdx/recommended"
-        ],
-        "rules": {
-          "mdx/no-unescaped-entities": "off",
-          "sort-keys": "off",
-          "header/header": "off"
-        }
-      },
-      {
-        "files": [
           "**/*.ts"
         ],
         "rules": {
           "@typescript-eslint/interface-name-prefix": "off",
           "@typescript-eslint/no-unused-vars": "warn",
-          "@typescript-eslint/camelcase": "off"
+          "@typescript-eslint/camelcase": "off",
+          "sort-keys-fix/sort-keys-fix": "off"
         }
       }
     ]
   },
   "prettier": "@looker/prettier-config",
-  "stylelint": {
-    "extends": "@looker/eslint-config/stylelint"
-  },
   "keywords": [],
   "resolutions": {
     "set-value": "^2.0.1"

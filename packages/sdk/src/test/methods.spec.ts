@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import { Readable } from 'readable-stream'
-import { TestConfig } from '../../../test-utils/src/testUtils'
+import { TestConfig } from '../testUtils'
 import { NodeSession } from '../rtl/nodeSession'
 import { Looker40SDK as LookerSDK } from '../sdk/4.0/methods'
 import {
@@ -347,7 +347,7 @@ describe('LookerNodeSDK', () => {
       expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     })
 
-    it('search_looks fields filter', async () => {
+    xit('search_looks fields filter', async () => {
       const sdk = new LookerSDK(session)
       const actual = await sdk.ok(
         sdk.search_looks({
@@ -535,7 +535,7 @@ describe('LookerNodeSDK', () => {
   })
 
   describe('Query calls', () => {
-    it(
+    xit(
       'create and run query',
       async () => {
         const sdk = new LookerSDK(session)
@@ -580,7 +580,7 @@ describe('LookerNodeSDK', () => {
       testTimeout
     )
 
-    it(
+    xit(
       'run_inline_query',
       async () => {
         const sdk = new LookerSDK(session)
@@ -852,7 +852,6 @@ describe('LookerNodeSDK', () => {
   describe('Node environment', () => {
     beforeAll(() => {
       const section = ApiConfig(fs.readFileSync(config.localIni, 'utf8')).Looker
-      // tslint:disable-next-line:variable-name
       const verify_ssl = boolDefault(section.verify_ssl, false).toString()
       // populate environment variables
       process.env[strLookerTimeout] =

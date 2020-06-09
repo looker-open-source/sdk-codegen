@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from '../../test-utils/src/testUtils'
+import { TestConfig } from './testUtils'
 import { PseudoGen } from './pseudo.gen'
 
 const config = TestConfig()

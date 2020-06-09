@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from '../../test-utils/src/testUtils'
+import { TestConfig } from './testUtils'
 import { TypescriptGen } from './typescript.gen'
 
 const config = TestConfig()

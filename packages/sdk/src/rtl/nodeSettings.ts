@@ -166,8 +166,7 @@ export class NodeSettings extends ApiSettings {
     super({ ...DefaultSettings(), ...settings })
   }
 
-  // @ts-ignore
-  readConfig(section?: string): IApiSection {
+  readConfig(_section?: string): IApiSection {
     return readEnvConfig()
   }
 }

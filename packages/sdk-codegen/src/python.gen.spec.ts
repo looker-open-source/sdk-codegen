@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from '../../test-utils/src/testUtils'
+import { TestConfig } from './testUtils'
 import { PythonGen } from './python.gen'
 import { IMappedType, IType } from './sdkModels'
 

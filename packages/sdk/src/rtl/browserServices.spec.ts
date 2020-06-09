@@ -24,7 +24,7 @@
 
  */
 
-import { MockCrypto } from '../../../test-utils/src/'
+import { MockCrypto } from './oauthSession.spec'
 import { BrowserServices } from './browserServices'
 import { DefaultSettings } from './apiSettings'
 import { BrowserCryptoHash, BrowserTransport } from './browserTransport'

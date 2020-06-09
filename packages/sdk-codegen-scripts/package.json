@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen-scripts",
-  "version": "0.3.1-alpha.13+eb1186b",
+  "version": "0.3.1-alpha.18+551e4fe",
   "description": "Looker SDK Codegen scripts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -15,27 +15,21 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
-    "directory": "packages/script"
+    "directory": "packages/sdk-codegen-scripts"
   },
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
   "homepage": "https://github.com/looker-open-source/sdk-codegen/",
   "private": false,
-  "scripts": {
-    "build": "tsc --project tsconfig.build.json",
-    "prebuild": "yarn clean",
-    "clean": "rm -rf dist lib"
-  },
   "dependencies": {
-    "@looker/sdk": "^0.3.0-alpha.1+e58e096",
-    "@looker/sdk-codegen": "^0.1.2-alpha.13+eb1186b",
-    "@looker/sdk-codegen-utils": "^0.1.0-alpha.5",
+    "@looker/sdk": "^0.3.3-alpha.0",
+    "@looker/sdk-codegen": "^0.1.2-alpha.18+551e4fe",
+    "@looker/sdk-codegen-utils": "^0.1.0-alpha.2",
     "cross-env": "^7.0.2",
     "swagger2openapi": "^6.0.3"
   },
   "devDependencies": {
-    "@looker/test-utils": "^0.3.3-alpha.0",
     "@openapitools/openapi-generator-cli": "^1.0.2-4.2.0",
     "@stoplight/json": "^3.7.1",
     "@stoplight/spectral": "^5.3.0",
@@ -47,5 +41,5 @@
     "prettier": "^2.0.5",
     "swagger2openapi": "^6.0.3"
   },
-  "gitHead": "eb1186bb5d3e9666a8746037bbd4082f687089a9"
+  "gitHead": "551e4fe9bdbabe91116fbb0094d4f2bfd2dae029"
 }

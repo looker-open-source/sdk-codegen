@@ -25,7 +25,7 @@
  */
 
 import * as fs from 'fs'
-import { TestConfig } from '../../test-utils/src/testUtils'
+import { TestConfig } from './testUtils'
 import {
   authGetUrl,
   fetchLookerVersions,

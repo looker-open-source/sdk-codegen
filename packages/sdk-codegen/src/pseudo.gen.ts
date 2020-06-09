@@ -51,63 +51,51 @@ export class PseudoGen extends CodeGen {
     }`
   }
 
-  // @ts-ignore
-  construct(indent: string, type: IType): string {
+  construct(_indent: string, _type: IType): string {
     return ''
   }
 
-  // @ts-ignore
-  declareMethod(indent: string, method: IMethod): string {
+  declareMethod(_indent: string, _method: IMethod): string {
     return ''
   }
 
-  // @ts-ignore
-  declareParameter(indent: string, method: IMethod, param: IParameter): string {
+  declareParameter(
+    _indent: string,
+    _method: IMethod,
+    _param: IParameter
+  ): string {
     return ''
   }
 
-  // @ts-ignore
-  declareProperty(indent: string, property: IProperty): string {
+  declareProperty(_indent: string, _property: IProperty): string {
     return ''
   }
 
-  // @ts-ignore
-  encodePathParams(indent: string, method: IMethod): string {
+  encodePathParams(_indent: string, _method: IMethod): string {
     return ''
   }
 
-  // @ts-ignore
-  initArg(indent: string, property: IProperty): string {
+  methodsEpilogue(_indent: string): string {
     return ''
   }
 
-  // @ts-ignore
-  methodsEpilogue(indent: string): string {
+  methodsPrologue(_indent: string): string {
     return ''
   }
 
-  // @ts-ignore
-  methodsPrologue(indent: string): string {
+  modelsEpilogue(_indent: string): string {
     return ''
   }
 
-  // @ts-ignore
-  modelsEpilogue(indent: string): string {
+  modelsPrologue(_indent: string): string {
     return ''
   }
 
-  // @ts-ignore
-  modelsPrologue(indent: string): string {
+  summary(_indent: string, _text: string | undefined): string {
     return ''
   }
 
-  // @ts-ignore
-  summary(indent: string, text: string | undefined): string {
-    return ''
-  }
-
-  // @ts-ignore
-  typeSignature(indent: string, type: IType): string {
+  typeSignature(_indent: string, _type: IType): string {
     return ''
   }
 }

@@ -124,9 +124,7 @@ export const ValueSettings = (values: IValueSettings): IApiSettings => {
  * .ini Configuration initializer
  */
 export class ApiSettings implements IApiSettings {
-  // tslint:disable-next-line: variable-name
   base_url = ''
-  // tslint:disable-next-line: variable-name
   verify_ssl = true
   timeout: number = defaultTimeout
   agentTag = `${agentPrefix} ${lookerVersion}`
@@ -157,8 +155,7 @@ export class ApiSettings implements IApiSettings {
    * @param section key/name of configuration section to read
    * @returns an empty `IAPISection`
    */
-  // @ts-ignore
-  readConfig(section?: string): IApiSection {
+  readConfig(_section?: string): IApiSection {
     return {}
   }
 }
