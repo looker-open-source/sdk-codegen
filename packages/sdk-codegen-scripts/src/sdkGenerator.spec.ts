@@ -23,25 +23,25 @@
  SOFTWARE.
 
  */
-import { TestConfig } from './testUtils'
 import { IMethodResponse } from '@looker/sdk-codegen'
+import { TestConfig } from './testUtils'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
 
 describe('sdk generator test', () => {
   it('resolves OAS schemas into types', () => {
-    expect(typeof apiTestModel.types['ValidationError'].elementType).toEqual(
+    expect(typeof apiTestModel.types.ValidationError.elementType).toEqual(
       'undefined'
     )
 
     const test =
-      apiTestModel.types['ValidationError'].properties.errors.type.elementType
+      apiTestModel.types.ValidationError.properties.errors.type.elementType
     expect(test && test.name).toEqual('ValidationErrorDetail')
   })
 
   it('loads a method with a ref type response', () => {
-    const method = apiTestModel.methods['user']
+    const method = apiTestModel.methods.user
     expect(method.primaryResponse.statusCode).toEqual(200)
     expect(method.primaryResponse.type.name).toEqual('User')
     expect(method.type.name).toEqual('User')
@@ -56,7 +56,7 @@ describe('sdk generator test', () => {
   })
 
   it('loads 204 methods with void response type', () => {
-    const method = apiTestModel.methods['delete_group_user']
+    const method = apiTestModel.methods.delete_group_user
     expect(method.primaryResponse.statusCode).toEqual(204)
     expect(method.primaryResponse.type.name).toEqual('void')
   })

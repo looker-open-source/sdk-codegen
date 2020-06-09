@@ -1660,7 +1660,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       return this.refs[schema.$ref]
     } else if (schema.type) {
       if (schema.type === 'integer' && schema.format === 'int64') {
-        return this.types['int64']
+        return this.types.int64
       }
       if (schema.type === 'number' && schema.format) {
         return this.types[schema.format]
@@ -1681,7 +1681,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
         }
       }
       if (schema.format === 'date-time') {
-        return this.types['datetime']
+        return this.types.datetime
       }
       if (schema.format && this.types[schema.format]) {
         return this.types[schema.format]
@@ -1889,7 +1889,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       } else if (statusCode === '204') {
         // no content - returns void
         responses.push(
-          new MethodResponse(204, '', this.types['void'], desc || 'No content')
+          new MethodResponse(204, '', this.types.void, desc || 'No content')
         )
       }
     })
