@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-looker_version = "7.8"
+looker_version = "7.10"
 api_version = "4.0"
 sdk_version = f"{api_version}.{looker_version}"
 environment_prefix = "LOOKERSDK"
