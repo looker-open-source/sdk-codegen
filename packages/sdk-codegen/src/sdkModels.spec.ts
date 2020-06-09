@@ -25,7 +25,7 @@
  */
 
 import * as OAS from 'openapi3-ts'
-import { TestConfig } from 'packages/sdk-codegen-scripts/src/testUtils'
+import { TestConfig } from './testUtils'
 import {
   ArrayType,
   CriteriaToSet,

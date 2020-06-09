@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from 'packages/sdk-codegen-scripts/src/testUtils'
+import { TestConfig } from '../testUtils'
 import { boolDefault, isFalse, isTrue, unquote } from './constants'
 import { ResponseMode, responseMode } from './transport'
 

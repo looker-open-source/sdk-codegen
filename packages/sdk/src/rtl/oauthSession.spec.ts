@@ -24,12 +24,26 @@
 
  */
 
-import { MockCrypto } from 'packages/sdk-codegen-scripts/src/testUtils'
+import { ICryptoHash } from './cryptoHash'
 import { OAuthSession } from './oauthSession'
 import { DefaultSettings, IApiSettings } from './apiSettings'
 import { BrowserCryptoHash, BrowserTransport } from './browserTransport'
 import { NodeCryptoHash, NodeTransport } from './nodeTransport'
 import { BrowserServices } from './browserServices'
+
+export class MockCrypto implements ICryptoHash {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  secureRandom(byteCount: number): string {
+    return 'feedface'
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  sha256Hash(message: string): Promise<string> {
+    return Promise.resolve('baadf00d')
+  }
+}
 
 describe('oauthSession', () => {
   const settings = {

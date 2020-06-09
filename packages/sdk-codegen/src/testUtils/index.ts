@@ -24,18 +24,4 @@
 
  */
 
-import { ICryptoHash } from '../'
-
-export class MockCrypto implements ICryptoHash {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  // @ts-ignore
-  secureRandom(byteCount: number): string {
-    return 'feedface'
-  }
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  // @ts-ignore
-  sha256Hash(message: string): Promise<string> {
-    return Promise.resolve('baadf00d')
-  }
-}
+export * from './testUtils'

@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from 'packages/sdk-codegen-scripts/src/testUtils'
+import { TestConfig } from './testUtils'
 import { PseudoGen } from './pseudo.gen'
 
 const config = TestConfig()

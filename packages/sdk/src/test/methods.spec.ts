@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import { Readable } from 'readable-stream'
-import { TestConfig } from 'packages/sdk-codegen-scripts/src/testUtils'
+import { TestConfig } from '../testUtils'
 import { NodeSession } from '../rtl/nodeSession'
 import { Looker40SDK as LookerSDK } from '../sdk/4.0/methods'
 import {

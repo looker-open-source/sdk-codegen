@@ -25,7 +25,8 @@
  */
 
 import * as fs from 'fs'
-import { ApiConfig } from '../'
+import { ApiConfig } from '@looker/sdk'
+import { ApiModel } from '../sdkModels'
 
 interface IKeyAny {
   [key: string]: any
@@ -33,10 +34,16 @@ interface IKeyAny {
 
 const utf8 = 'utf-8'
 
+export const specFromFile = (specFile: string): ApiModel => {
+  const specContent = fs.readFileSync(specFile, { encoding: utf8 })
+  return ApiModel.fromString(specContent)
+}
+
 /**
  * Properties used for various typescript-based tests
  */
 export interface ITestConfig {
+  apiTestModel: ApiModel
   rootPath: string
   testPath: string
   dataFile: string
@@ -76,7 +83,9 @@ export function TestConfig(rootPath = ''): ITestConfig {
   const testContents = fs.readFileSync(testIni, utf8)
   const testConfig = ApiConfig(testContents)
   const testSection = testConfig.Looker
+  const apiTestModel = specFromFile(`${testPath}openApiRef.json`)
   return {
+    apiTestModel,
     baseUrl,
     config,
     configContents,
