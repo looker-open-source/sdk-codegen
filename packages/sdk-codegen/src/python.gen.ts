@@ -117,7 +117,7 @@ export class PythonGen extends CodeGen {
   methodsPrologue = (indent: string) => `
 # ${this.warnEditing()}
 import datetime
-from typing import MutableMapping, Optional, Sequence, Union
+from typing import Any, MutableMapping, Optional, Sequence, Union
 
 from . import models
 from ${this.packagePath}.rtl import api_methods
