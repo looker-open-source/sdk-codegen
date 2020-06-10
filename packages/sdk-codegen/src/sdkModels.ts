@@ -94,6 +94,7 @@ export type TypeList = KeyedCollection<IType>
 export type TagList = KeyedCollection<MethodList>
 export type PropertyList = KeyedCollection<IProperty>
 export type KeyList = Set<string>
+export type EnumValueType = string | number
 
 /**
  * Returns sorted string array for IKeylist type
@@ -102,6 +103,20 @@ export type KeyList = Set<string>
  */
 export const keyValues = (keys: KeyList): string[] => {
   return Array.from(keys.values()).sort()
+}
+
+/**
+ * Optionally quote a string if quotes are required
+ * @param value to convert to string and optionally quote
+ * @param {string} quoteChar defaults to "'"
+ * @returns {string} the quoted or unquoted value
+ */
+export const mayQuote = (value: any, quoteChar = `'`): string => {
+  const str = value.toString()
+  if (!str) return ''
+  const simpleName = /^\w[\w]*$/gim
+  if (simpleName.test(str)) return str
+  return `${quoteChar}${str}${quoteChar}`
 }
 
 /**
@@ -319,7 +334,7 @@ export interface IType {
  * according to https://swagger.io/docs/specification/data-models/enums/
  */
 export interface IEnumType extends IType {
-  values: any[]
+  values: EnumValueType[]
 }
 
 export declare type MethodParameterLocation =
@@ -594,7 +609,7 @@ export class Parameter implements IParameter {
       readOnly: false,
       // || this.location === strBody),
       required: this.required ? [this.name] : undefined,
-      type: this.type.name,
+      type: this.type.name || this.name,
       writeOnly: false,
     } as OAS.SchemaObject
   }
@@ -1268,6 +1283,10 @@ export class Type implements IType {
     Object.entries(this.schema.properties || {}).forEach(
       ([propName, propSchema]) => {
         const propType = symbols.resolveType(propSchema)
+        if (!propType.name) {
+          // Must be a string enum type??
+          propType.name = propName
+        }
         this.types.add(propType.name)
         const customType = propType.customType
         if (customType) this.customTypes.add(customType)
@@ -1374,14 +1393,14 @@ export class ArrayType extends Type {
 }
 
 export class EnumType extends Type implements IEnumType {
-  readonly values: any[]
+  readonly values: EnumValueType[]
   constructor(public elementType: IType, schema: OAS.SchemaObject) {
     super(schema, schema.name)
     this.customType = elementType.customType
     if (lookerValuesTag in schema) {
       this.values = schema[lookerValuesTag]
     } else if (enumTag in schema) {
-      this.values = schema[enumTag] as any[]
+      this.values = schema[enumTag] as EnumValueType[]
     } else {
       throw new Error(`${schema.name} is an enum but has no values`)
     }
@@ -1681,6 +1700,10 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return item
   }
 
+  private schemaHasEnums(schema: OAS.SchemaObject) {
+    return lookerValuesTag in schema || enumTag in schema
+  }
+
   /**
    *   Retrieve an api object via its JSON path
    */
@@ -1714,10 +1737,13 @@ export class ApiModel implements ISymbolTable, IApiModel {
           // FKA 'csv'
           return new DelimArrayType(this.resolveType(schema.items), schema)
         }
-        if (lookerValuesTag in schema || enumTag in schema) {
+        if (this.schemaHasEnums(schema)) {
           return new EnumType(this.resolveType(schema.items), schema)
         }
         return new ArrayType(this.resolveType(schema.items), schema)
+      }
+      if (this.schemaHasEnums(schema)) {
+        return new EnumType(this.resolveType(schema.type), schema)
       }
       if (schema.type === 'object' && schema.additionalProperties) {
         if (schema.additionalProperties !== true) {
@@ -2096,8 +2122,11 @@ export interface ICodeGen {
   /** parameter delimiter. Typically ",\n" */
   paramDelimiter: string
 
-  /** property delimiter. Typically, ",\n" */
+  /** property delimiter. Typically, "\n" or ",\n" */
   propDelimiter: string
+
+  /** enum value delimiter. Typically, ",\n" */
+  enumDelimiter: string
 
   /**
    * Does this language require request types to be generated because it doesn't
@@ -2372,12 +2401,20 @@ export interface ICodeGen {
   describeProperty(property: IProperty): string
 
   /**
-   * generates type property
-   * @param {string} indent
+   * generates type property declaration
+   * @param {string} indent code indentation
    * @param {IProperty} property to declare
    * @returns {string} source code
    */
   declareProperty(indent: string, property: IProperty): string
+
+  /**
+   * generates an enum value declaration
+   * @param {string} indent code indentation
+   * @param {EnumValueType} value to declare
+   * @returns {string} source code
+   */
+  declareEnumValue(indent: string, value: EnumValueType): string
 
   /**
    * if countError is false, no import reference to Error or IError should be included

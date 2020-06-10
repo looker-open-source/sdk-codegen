@@ -43,13 +43,27 @@ import {
   SetToCriteria,
   typeRefs,
   EnumType,
-  IEnumType,
+  IEnumType, mayQuote,
 } from './sdkModels'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
 
 describe('sdkModels', () => {
+  describe('mayQuote', () => {
+    it('quotes foo-bar', () => {
+      expect(mayQuote('foo-bar')).toEqual(`'foo-bar'`)
+    })
+    it('does not quote foo_bar', () => {
+      expect(mayQuote('foo_bar')).toEqual(`foo_bar`)
+    })
+    it('quotes " foo_bar"', () => {
+      expect(mayQuote(' foo_bar')).toEqual(`' foo_bar'`)
+    })
+    it('does not quote _foo_bar_', () => {
+      expect(mayQuote('_foo_bar_')).toEqual(`_foo_bar_`)
+    })
+  })
   describe('request type determination', () => {
     it('search_looks', () => {
       const method = apiTestModel.methods.search_looks
@@ -141,7 +155,7 @@ describe('sdkModels', () => {
 
   describe('writeable logic', () => {
     it('CredentialsApi3', () => {
-      const type = apiTestModel.types['CredentialsApi3']
+      const type = apiTestModel.types.CredentialsApi3
       expect(type).toBeDefined()
       const writeable = type.writeable
       expect(type.readOnly).toEqual(true)
@@ -150,7 +164,7 @@ describe('sdkModels', () => {
 
     describe('DashboardElement', () => {
       it('writeable', () => {
-        const type = apiTestModel.types['DashboardElement']
+        const type = apiTestModel.types.DashboardElement
         expect(type).toBeDefined()
         const writeable = type.writeable
         expect(type.readOnly).toEqual(false)
@@ -158,7 +172,7 @@ describe('sdkModels', () => {
       })
 
       it('writeableType', () => {
-        const type = apiTestModel.types['DashboardElement']
+        const type = apiTestModel.types.DashboardElement
         expect(type).toBeDefined()
         const actual = apiTestModel.mayGetWriteableType(type)
         expect(actual).toBeDefined()
@@ -174,17 +188,19 @@ describe('sdkModels', () => {
   })
 
   describe('enum types', () => {
-    const checkEnum = (type: IType, values: any[]) => {
-      const num = type as IEnumType
+    const checkEnum = (type: IType, propName: string, values: any[]) => {
+      const num = type.properties[propName].type as IEnumType
       expect(num).toBeDefined()
+      if (!(num instanceof EnumType))
+        console.error(`${type.name}.${propName} should be EnumType`)
       expect(num).toBeInstanceOf(EnumType)
       expect(num.values).toEqual(values)
     }
 
-    it('Integration enum properties', () => {
-      const type = apiTestModel.types['Integration']
+    it('enum from array type', () => {
+      const type = apiTestModel.types.Integration
       expect(type).toBeDefined()
-      checkEnum(type.properties['supported_formats'].type, [
+      checkEnum(type, 'supported_formats', [
         'txt',
         'csv',
         'inline_json',
@@ -199,29 +215,16 @@ describe('sdkModels', () => {
         'wysiwyg_png',
         'csv_zip',
       ])
-      checkEnum(type.properties['supported_action_types'].type, [
-        'call',
-        'query',
-        'dashboard',
-      ])
-      checkEnum(type.properties['supported_formattings'].type, [
-        'apply',
-        'noapply',
-      ])
-      checkEnum(type.properties['supported_download_settings'].type, [
-        'push',
-        'url',
-      ])
+      checkEnum(type, 'supported_action_types', ['cell', 'query', 'dashboard'])
+      checkEnum(type, 'supported_formattings', ['formatted', 'unformatted'])
+      checkEnum(type, 'supported_download_settings', ['push', 'url'])
     })
 
-    it('Project enum properties', () => {
-      const type = apiTestModel.types['Project']
+    it('enum from string type', () => {
+      const type = apiTestModel.types.Project
       expect(type).toBeDefined()
-      checkEnum(type.properties['git_application_server_http_scheme'].type, [
-        'http',
-        'https',
-      ])
-      checkEnum(type.properties['pull_request_mode'].type, [
+      checkEnum(type, 'git_application_server_http_scheme', ['http', 'https'])
+      checkEnum(type, 'pull_request_mode', [
         'off',
         'links',
         'recommended',

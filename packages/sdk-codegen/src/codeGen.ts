@@ -34,6 +34,9 @@ import {
   IProperty,
   IMappedType,
   ApiModel,
+  EnumType,
+  EnumValueType,
+  mayQuote,
 } from './sdkModels'
 
 export interface IVersionInfo {
@@ -52,7 +55,8 @@ export abstract class CodeGen implements ICodeGen {
   fileExtension = '.code'
   argDelimiter = ', '
   paramDelimiter = ',\n'
-  propDelimiter = ',\n'
+  propDelimiter = '\n'
+  enumDelimiter = ',\n'
 
   indentStr = '  '
   commentStr = '// '
@@ -122,6 +126,10 @@ export abstract class CodeGen implements ICodeGen {
     method: IMethod,
     param: IParameter
   ): string
+
+  declareEnumValue(indent: string, value: EnumValueType) {
+    return `${indent}${mayQuote(value)}`
+  }
 
   abstract declareProperty(indent: string, property: IProperty): string
 
@@ -208,13 +216,22 @@ export abstract class CodeGen implements ICodeGen {
   declareType(indent: string, type: IType) {
     const bump = this.bumper(indent)
     const props: string[] = []
-    // TODO skip read-only properties when we correctly tag read-only attributes
-    Object.values(type.properties).forEach((prop) =>
-      props.push(this.declareProperty(bump, prop))
-    )
+    let propertyValues = ''
+    if (type instanceof EnumType) {
+      const num = type as EnumType
+      num.values.forEach((value) =>
+        props.push(this.declareEnumValue(bump, value))
+      )
+      propertyValues = props.join(this.enumDelimiter)
+    } else {
+      Object.values(type.properties).forEach((prop) =>
+        props.push(this.declareProperty(bump, prop))
+      )
+      propertyValues = props.join(this.propDelimiter)
+    }
     return (
       this.typeSignature(indent, type) +
-      props.join(this.propDelimiter) +
+      propertyValues +
       this.construct(indent, type) +
       `${this.endTypeStr ? indent : ''}${this.endTypeStr}`
     )

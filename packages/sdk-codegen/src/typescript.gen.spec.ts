@@ -269,31 +269,12 @@ dashboard_id: string`)
  * body parameter for dynamically created request type
  */
 body: ICreateDashboardRenderTask`)
-        //         const actual = gen.declareType(indent, type!)
-        //         expect(actual).toEqual(`// Dynamically generated request type for create_dashboard_render_task
-        // export interface IRequestcreate_dashboard_render_task{
-        //   // Id of dashboard to render
-        //   dashboard_id: number
-        //   // Output type: pdf, png, or jpg
-        //   result_format: string
-        //   body: Partial<ICreateDashboardRenderTask>
-        //   // Output width in pixels
-        //   width: number
-        //   // Output height in pixels
-        //   height: number
-        //   // Requested fields.
-        //   fields?: string
-        //   // Paper size for pdf
-        //   pdf_paper_size?: string
-        //   // Whether to render pdf in landscape
-        //   pdf_landscape?: boolean
-        // }`)
       }
     })
     it('with arrays and hashes', () => {
       const type = apiTestModel.types.Workspace
       const actual = gen.declareType(indent, type)
-      expect(actual).toEqual(`export interface IWorkspace{
+      expect(actual).toEqual(`export interface IWorkspace {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
@@ -311,7 +292,7 @@ body: ICreateDashboardRenderTask`)
     it('with refs, arrays and nullable', () => {
       const type = apiTestModel.types.ApiVersion
       const actual = gen.declareType(indent, type)
-      expect(actual).toEqual(`export interface IApiVersion{
+      expect(actual).toEqual(`export interface IApiVersion {
   /**
    * Current Looker release version number (read-only)
    */
@@ -326,7 +307,7 @@ body: ICreateDashboardRenderTask`)
     it('required properties', () => {
       const type = apiTestModel.types.CreateQueryTask
       const actual = gen.declareType(indent, type)
-      expect(actual).toEqual(`export interface ICreateQueryTask{
+      expect(actual).toEqual(`export interface ICreateQueryTask {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
@@ -338,7 +319,7 @@ body: ICreateDashboardRenderTask`)
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: string
+  result_format: result_format
   /**
    * Source of query task
    */
@@ -355,6 +336,26 @@ body: ICreateDashboardRenderTask`)
    * Id of dashboard associated with query.
    */
   dashboard_id?: string
+}`)
+    })
+    it('enum declaration', () => {
+      const type =
+        apiTestModel.types.CreateQueryTask.properties.result_format.type
+      const actual = gen.declareType('', type)
+      expect(actual).toEqual(`/**
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ */
+export enum result_format {
+  inline_json,
+  json,
+  json_detail,
+  json_fe,
+  csv,
+  html,
+  md,
+  txt,
+  xlsx,
+  gsxml
 }`)
     })
   })

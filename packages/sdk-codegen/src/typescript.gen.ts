@@ -27,6 +27,7 @@
 import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
+  EnumType,
   IMappedType,
   IMethod,
   IParameter,
@@ -152,7 +153,8 @@ export interface IDictionary<T> {
           indent,
           property.description ||
             'body parameter for dynamically created request type'
-        ) + `${indent}${property.name}${optional}: I${property.type.name}`
+        ) +
+        `${indent}${property.name}${optional}: ${this.typeName(property.type)}`
       )
     }
     const type = this.typeMap(property.type)
@@ -276,16 +278,27 @@ export interface IDictionary<T> {
     )
   }
 
+  private typeName(type: IType) {
+    if (type.customType) {
+      if (type instanceof EnumType) {
+        return type.name
+      }
+      return `I${type.name}`
+    }
+    return type.name
+  }
+
   typeSignature(indent: string, type: IType) {
+    const meta = type instanceof EnumType ? 'enum' : 'interface'
     return (
       this.commentHeader(indent, type.description) +
-      `${indent}export interface I${type.name}{\n`
+      `${indent}export ${meta} ${this.typeName(type)} {\n`
     )
   }
 
   errorResponses(_indent: string, method: IMethod) {
     const results: string[] = method.errorResponses.map(
-      (r) => `I${r.type.name}`
+      (r) => `${this.typeName(r.type)}`
     )
     return results.join(' | ')
   }
@@ -396,11 +409,7 @@ export interface IDictionary<T> {
     const types = this.api.types
     Object.values(types)
       .filter((type) => type.refCount > 0 && !type.intrinsic)
-      .forEach((type) => names.push(`I${type.name}`))
-    // TODO import default constants if necessary
-    // Object.values(types)
-    //   .filter(type => type instanceof RequestType)
-    //   .forEach(type => names.push(`${strDefault}${type.name.substring(strRequest.length)}`))
+      .forEach((type) => names.push(this.typeName(type)))
     return names
   }
 
@@ -444,7 +453,7 @@ export interface IDictionary<T> {
     }
 
     if (type.name) {
-      return tsTypes[type.name] || { default: '', name: `I${type.name}` } // No null default for complex types
+      return tsTypes[type.name] || { default: '', name: this.typeName(type) } // No null default for complex types
     } else {
       throw new Error('Cannot output a nameless type.')
     }
