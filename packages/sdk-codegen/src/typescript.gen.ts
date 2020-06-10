@@ -82,12 +82,12 @@ import { IDictionary, ${this.typeNames().join(', ')} } from './models'
 export class ${this.packageName} extends APIMethods {
 
   public stream: ${this.packageName}Stream
-  
+
   constructor(authSession: IAuthSession) {
     super(authSession, '${this.apiVersion}')
-    this.stream = new ${this.packageName}Stream(authSession)  
+    this.stream = new ${this.packageName}Stream(authSession)
   }
-  
+
 `
   }
 
@@ -448,6 +448,8 @@ export interface IDictionary<T> {
           return { default: '{}', name: `IDictionary<${map.name}>` }
         case 'DelimArrayType':
           return { default: '', name: `DelimArray<${map.name}>` }
+        case 'EnumType':
+          return { default: '', name: this.typeName(type) }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
