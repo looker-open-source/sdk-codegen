@@ -83,7 +83,7 @@ export const boolDefault = (value: string, defaultBool = false) => {
  */
 export const unquote = (value: string | undefined | null): string => {
   if (!value) return ''
-  if (/^['\"`]/.test(value)) {
+  if (/^['"`]/.test(value)) {
     const quote = value.substring(0, 1)
     // Strip surrounding quotes?
     if (value.endsWith(quote)) return value.substring(1, value.length - 1)

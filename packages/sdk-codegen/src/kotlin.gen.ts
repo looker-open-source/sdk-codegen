@@ -400,6 +400,8 @@ import java.util.*
         }
         case 'DelimArrayType':
           return { default: this.nullStr, name: `DelimArray<${map.name}>` }
+        case 'EnumType':
+          return { default: '', name: type.name }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }

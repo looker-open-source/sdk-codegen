@@ -1,4 +1,30 @@
-// 277 API models: 184 Spec, 42 Request, 51 Write
+/**
+ * MIT License
+ *
+ * Copyright (c) 2019 Looker Data Sciences, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/**
+ * 294 API models: 184 Spec, 42 Request, 51 Write, 17 Enum
+ */
 
 import { Url } from '../../rtl/constants'
 import { DelimArray } from '../../rtl/delimArray'
@@ -229,7 +255,7 @@ export interface IContentMetaGroupUser {
   /**
    * Type of permission: "view" or "edit" Valid values are: "view", "edit". (read-only)
    */
-  permission_type?: string
+  permission_type?: EnumPermissionType
   /**
    * ID of associated group (read-only)
    */
@@ -638,7 +664,7 @@ export interface ICreateQueryTask {
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: string
+  result_format: EnumResultFormat
   /**
    * Source of query task
    */
@@ -2169,6 +2195,187 @@ export interface IEmbedUrlResponse {
   url?: string
 }
 
+/**
+ * The appropriate horizontal text alignment the values of this field shoud be displayed in. Valid values are: "left", "right".
+ */
+export enum EnumAlign {
+  left = 'left',
+  right = 'right',
+}
+
+/**
+ * Field category Valid values are: "parameter", "filter", "measure", "dimension".
+ */
+export enum EnumCategory {
+  parameter = 'parameter',
+  filter = 'filter',
+  measure = 'measure',
+  dimension = 'dimension',
+}
+
+/**
+ * Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none".
+ */
+export enum EnumDependencyStatus {
+  lock_optional = 'lock_optional',
+  lock_required = 'lock_required',
+  lock_error = 'lock_error',
+  install_none = 'install_none',
+}
+
+/**
+ * The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range".
+ */
+export enum EnumFillStyle {
+  enumeration = 'enumeration',
+  range = 'range',
+}
+
+/**
+ * Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region".
+ */
+export enum EnumFormat {
+  topojson = 'topojson',
+  vector_tile_region = 'vector_tile_region',
+}
+
+/**
+ * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+ */
+export enum EnumGitApplicationServerHttpScheme {
+  http = 'http',
+  https = 'https',
+}
+
+/**
+ * The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "year".
+ */
+export enum EnumName {
+  day = 'day',
+  hour = 'hour',
+  minute = 'minute',
+  second = 'second',
+  millisecond = 'millisecond',
+  microsecond = 'microsecond',
+  week = 'week',
+  month = 'month',
+  year = 'year',
+}
+
+/**
+ * Type of permission: "view" or "edit" Valid values are: "view", "edit".
+ */
+export enum EnumPermissionType {
+  view = 'view',
+  edit = 'edit',
+}
+
+/**
+ * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+ */
+export enum EnumPullRequestMode {
+  off = 'off',
+  links = 'links',
+  recommended = 'recommended',
+  required = 'required',
+}
+
+/**
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ */
+export enum EnumResultFormat {
+  inline_json = 'inline_json',
+  json = 'json',
+  json_detail = 'json_detail',
+  json_fe = 'json_fe',
+  csv = 'csv',
+  html = 'html',
+  md = 'md',
+  txt = 'txt',
+  xlsx = 'xlsx',
+  gsxml = 'gsxml',
+}
+
+/**
+ * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard".
+ */
+export enum EnumSupportedActionTypes {
+  cell = 'cell',
+  query = 'query',
+  dashboard = 'dashboard',
+}
+
+/**
+ * A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url".
+ */
+export enum EnumSupportedDownloadSettings {
+  push = 'push',
+  url = 'url',
+}
+
+/**
+ * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip".
+ */
+export enum EnumSupportedFormats {
+  txt = 'txt',
+  csv = 'csv',
+  inline_json = 'inline_json',
+  json = 'json',
+  json_label = 'json_label',
+  json_detail = 'json_detail',
+  json_detail_lite_stream = 'json_detail_lite_stream',
+  xlsx = 'xlsx',
+  html = 'html',
+  wysiwyg_pdf = 'wysiwyg_pdf',
+  assembled_pdf = 'assembled_pdf',
+  wysiwyg_png = 'wysiwyg_png',
+  csv_zip = 'csv_zip',
+}
+
+/**
+ * A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted".
+ */
+export enum EnumSupportedFormattings {
+  formatted = 'formatted',
+  unformatted = 'unformatted',
+}
+
+/**
+ * A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply".
+ */
+export enum EnumSupportedVisualizationFormattings {
+  apply = 'apply',
+  noapply = 'noapply',
+}
+
+/**
+ * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode".
+ */
+export enum EnumUserAttributeFilterTypes {
+  advanced_filter_string = 'advanced_filter_string',
+  advanced_filter_number = 'advanced_filter_number',
+  advanced_filter_datetime = 'advanced_filter_datetime',
+  string = 'string',
+  number = 'number',
+  datetime = 'datetime',
+  relative_url = 'relative_url',
+  yesno = 'yesno',
+  zipcode = 'zipcode',
+}
+
+/**
+ * The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday".
+ */
+export enum EnumWeekStartDay {
+  monday = 'monday',
+  tuesday = 'tuesday',
+  wednesday = 'wednesday',
+  thursday = 'thursday',
+  friday = 'friday',
+  saturday = 'saturday',
+  sunday = 'sunday',
+}
+
 export interface IError {
   /**
    * Error details (read-only)
@@ -2814,23 +3021,23 @@ export interface IIntegration {
   /**
    * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
    */
-  supported_formats?: string[]
+  supported_formats?: EnumSupportedFormats
   /**
    * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)
    */
-  supported_action_types?: string[]
+  supported_action_types?: EnumSupportedActionTypes
   /**
    * A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (read-only)
    */
-  supported_formattings?: string[]
+  supported_formattings?: EnumSupportedFormattings
   /**
    * A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (read-only)
    */
-  supported_visualization_formattings?: string[]
+  supported_visualization_formattings?: EnumSupportedVisualizationFormattings
   /**
    * A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (read-only)
    */
-  supported_download_settings?: string[]
+  supported_download_settings?: EnumSupportedDownloadSettings
   /**
    * URL to an icon for the integration. (read-only)
    */
@@ -3821,7 +4028,7 @@ export interface ILookmlModelExploreField {
   /**
    * The appropriate horizontal text alignment the values of this field shoud be displayed in. Valid values are: "left", "right". (read-only)
    */
-  align?: string
+  align?: EnumAlign
   /**
    * Whether it's possible to filter on this field. (read-only)
    */
@@ -3829,7 +4036,7 @@ export interface ILookmlModelExploreField {
   /**
    * Field category Valid values are: "parameter", "filter", "measure", "dimension". (read-only)
    */
-  category?: string
+  category?: EnumCategory
   /**
    * The default value that this field uses when filtering. Null if there is no default value. (read-only)
    */
@@ -3857,7 +4064,7 @@ export interface ILookmlModelExploreField {
   /**
    * The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (read-only)
    */
-  fill_style?: string
+  fill_style?: EnumFillStyle
   /**
    * An offset (in months) from the calendar start month to the fiscal start month defined in the LookML model this field belongs to. (read-only)
    */
@@ -3991,7 +4198,7 @@ export interface ILookmlModelExploreField {
   /**
    * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
    */
-  user_attribute_filter_types?: string[]
+  user_attribute_filter_types?: EnumUserAttributeFilterTypes
   /**
    * If specified, the LookML value format string for formatting values of this field. (read-only)
    */
@@ -4011,7 +4218,7 @@ export interface ILookmlModelExploreField {
   /**
    * The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (read-only)
    */
-  week_start_day?: string
+  week_start_day?: EnumWeekStartDay
 }
 
 export interface ILookmlModelExploreFieldEnumeration {
@@ -4053,7 +4260,7 @@ export interface ILookmlModelExploreFieldMapLayer {
   /**
    * Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (read-only)
    */
-  format?: string
+  format?: EnumFormat
   /**
    * Specifies the URL to a JSON file that defines the geographic extents of each region available in the map layer. This data is used to automatically center the map on the available data for visualization purposes. The JSON file must be a JSON object where the keys are the mapping value of the feature (as specified by property_key) and the values are arrays of four numbers representing the west longitude, south latitude, east longitude, and north latitude extents of the region. The object must include a key for every possible value of property_key. (read-only)
    */
@@ -4102,7 +4309,7 @@ export interface ILookmlModelExploreFieldTimeInterval {
   /**
    * The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "year". (read-only)
    */
-  name?: string
+  name?: EnumName
   /**
    * The number of intervals this field represents a grouping of. (read-only)
    */
@@ -5006,7 +5213,7 @@ export interface IProject {
   /**
    * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
    */
-  git_application_server_http_scheme?: string
+  git_application_server_http_scheme?: EnumGitApplicationServerHttpScheme
   /**
    * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
    */
@@ -5018,7 +5225,7 @@ export interface IProject {
   /**
    * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
    */
-  pull_request_mode?: string
+  pull_request_mode?: EnumPullRequestMode
   /**
    * Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
    */
@@ -5194,7 +5401,7 @@ export interface IProjectWorkspace {
   /**
    * Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (read-only)
    */
-  dependency_status?: string
+  dependency_status?: EnumDependencyStatus
   git_branch?: IGitBranch
   /**
    * The lookml syntax used by all files in this project (read-only)
@@ -8707,7 +8914,7 @@ export interface IWriteCreateQueryTask {
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: string
+  result_format: EnumResultFormat
   /**
    * Source of query task
    */
@@ -9878,7 +10085,7 @@ export interface IWriteProject {
   /**
    * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
    */
-  git_application_server_http_scheme?: string
+  git_application_server_http_scheme?: EnumGitApplicationServerHttpScheme
   /**
    * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
    */
@@ -9890,7 +10097,7 @@ export interface IWriteProject {
   /**
    * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
    */
-  pull_request_mode?: string
+  pull_request_mode?: EnumPullRequestMode
   /**
    * Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
    */

@@ -57,6 +57,7 @@ export abstract class CodeGen implements ICodeGen {
   paramDelimiter = ',\n'
   propDelimiter = '\n'
   enumDelimiter = ',\n'
+  codeQuote = `'`
 
   indentStr = '  '
   commentStr = '// '
@@ -128,7 +129,8 @@ export abstract class CodeGen implements ICodeGen {
   ): string
 
   declareEnumValue(indent: string, value: EnumValueType) {
-    return `${indent}${mayQuote(value)}`
+    const quote = typeof value === 'string' ? this.codeQuote : ''
+    return `${indent}${mayQuote(value)} = ${quote}${value}${quote}`
   }
 
   abstract declareProperty(indent: string, property: IProperty): string

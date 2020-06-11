@@ -1,4 +1,30 @@
-// 343 API methods
+/**
+ * MIT License
+ *
+ * Copyright (c) 2019 Looker Data Sciences, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/**
+ * 343 API methods
+ */
 
 import { APIMethods } from '../../rtl/apiMethods'
 import { IAuthSession } from '../../rtl/authSession'
@@ -226,13 +252,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} integration_hub_id Id of integration_hub
      */
     integration_hub_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IIntegrationHub, IError | IValidationError>(
       `/integration_hubs/${integration_hub_id}/accept_legal_agreement`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -260,14 +286,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     client_guid = encodeParam(client_guid)
     return this.post<string, IError | IValidationError>(
       `/oauth_client_apps/${client_guid}/users/${user_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -286,13 +312,13 @@ export class Looker40SDK extends APIMethods {
    */
   async active_themes(
     request: IRequestActiveThemes,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ITheme[], IError>(
       '/themes/active',
       { name: request.name, ts: request.ts, fields: request.fields },
       null,
-      options,
+      options
     )
   }
 
@@ -310,13 +336,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IGroupIdForGroupInclusion>} body
      */
     body: Partial<IGroupIdForGroupInclusion>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IGroup, IError>(
       `/groups/${group_id}/groups`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -334,13 +360,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IGroupIdForGroupUserInclusion>} body
      */
     body: Partial<IGroupIdForGroupUserInclusion>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IUser, IError>(
       `/groups/${group_id}/users`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -351,7 +377,7 @@ export class Looker40SDK extends APIMethods {
    */
   async all_board_items(
     request: IRequestAllBoardItems,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IBoardItem[], IError>(
       '/board_items',
@@ -361,7 +387,7 @@ export class Looker40SDK extends APIMethods {
         board_section_id: request.board_section_id,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -372,13 +398,13 @@ export class Looker40SDK extends APIMethods {
    */
   async all_board_sections(
     request: IRequestAllBoardSections,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IBoardSection[], IError>(
       '/board_sections',
       { fields: request.fields, sorts: request.sorts },
       null,
-      options,
+      options
     )
   }
 
@@ -392,7 +418,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IBoard[], IError>('/boards', { fields }, null, options)
   }
@@ -414,13 +440,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IColorCollection[], IError>(
       '/color_collections',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -434,13 +460,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IDBConnection[], IError>(
       '/connections',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -458,13 +484,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IContentMetaGroupUser[], IError>(
       '/content_metadata_access',
       { content_metadata_id, fields },
       null,
-      options,
+      options
     )
   }
 
@@ -482,13 +508,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IContentMeta[], IError>(
       '/content_metadata',
       { parent_id, fields },
       null,
-      options,
+      options
     )
   }
 
@@ -508,13 +534,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IDashboardBase[], IError>(
       '/dashboards',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -537,13 +563,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IDialectInfo[], IError>(
       '/dialect_info',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -557,7 +583,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IFolder[], IError>('/folders', { fields }, null, options)
   }
@@ -574,14 +600,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} project_id Project Id
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.get<IGitBranch[], IError>(
       `/projects/${project_id}/git_branches`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -608,14 +634,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
      */
     remote_url?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.get<IGitConnectionTest[], IError>(
       `/projects/${project_id}/git_connection_tests`,
       { remote_url },
       null,
-      options,
+      options
     )
   }
 
@@ -633,13 +659,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IGroup[], IError>(
       `/groups/${group_id}/groups`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -650,7 +676,7 @@ export class Looker40SDK extends APIMethods {
    */
   async all_group_users(
     request: IRequestAllGroupUsers,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IUser[], IError>(
       `/groups/${request.group_id}/users`,
@@ -661,7 +687,7 @@ export class Looker40SDK extends APIMethods {
         sorts: request.sorts,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -672,7 +698,7 @@ export class Looker40SDK extends APIMethods {
    */
   async all_groups(
     request: IRequestAllGroups,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IGroup[], IError>(
       '/groups',
@@ -686,7 +712,7 @@ export class Looker40SDK extends APIMethods {
         can_add_to_content_metadata: request.can_add_to_content_metadata,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -700,13 +726,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IIntegrationHub[], IError>(
       '/integration_hubs',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -717,7 +743,7 @@ export class Looker40SDK extends APIMethods {
    */
   async all_integrations(
     request: IRequestAllIntegrations,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IIntegration[], IError>(
       '/integrations',
@@ -726,7 +752,7 @@ export class Looker40SDK extends APIMethods {
         integration_hub_id: request.integration_hub_id,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -740,7 +766,7 @@ export class Looker40SDK extends APIMethods {
       '/legacy_features',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -763,13 +789,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ILookmlModel[], IError>(
       '/lookml_models',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -791,14 +817,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} file_id File Id
      */
     file_id?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.get<ILookmlTest[], IError>(
       `/projects/${project_id}/lookml_tests`,
       { file_id },
       null,
-      options,
+      options
     )
   }
 
@@ -818,7 +844,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ILook[], IError>('/looks', { fields }, null, options)
   }
@@ -833,13 +859,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IModelSet[], IError>(
       '/model_sets',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -859,13 +885,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IOauthClientApp[], IError>(
       '/oauth_client_apps',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -879,13 +905,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IPermissionSet[], IError>(
       '/permission_sets',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -914,14 +940,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.get<IProjectFile[], IError>(
       `/projects/${project_id}/files`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -937,7 +963,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IProject[], IError>('/projects', { fields }, null, options)
   }
@@ -949,13 +975,13 @@ export class Looker40SDK extends APIMethods {
    */
   async all_roles(
     request: IRequestAllRoles,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IRole[], IError>(
       '/roles',
       { fields: request.fields, ids: request.ids },
       null,
-      options,
+      options
     )
   }
 
@@ -969,7 +995,7 @@ export class Looker40SDK extends APIMethods {
       '/running_queries',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -990,7 +1016,7 @@ export class Looker40SDK extends APIMethods {
    */
   async all_scheduled_plans(
     request: IRequestAllScheduledPlans,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IScheduledPlan[], IError | IValidationError>(
       '/scheduled_plans',
@@ -1000,7 +1026,7 @@ export class Looker40SDK extends APIMethods {
         all_users: request.all_users,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -1020,7 +1046,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ITheme[], IError>('/themes', { fields }, null, options)
   }
@@ -1054,13 +1080,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IUserAttributeGroupValue[], IError>(
       `/user_attributes/${user_attribute_id}/group_values`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1071,13 +1097,13 @@ export class Looker40SDK extends APIMethods {
    */
   async all_user_attributes(
     request: IRequestAllBoardSections,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IUserAttribute[], IError>(
       '/user_attributes',
       { fields: request.fields, sorts: request.sorts },
       null,
-      options,
+      options
     )
   }
 
@@ -1095,13 +1121,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ICredentialsApi3[], IError>(
       `/users/${user_id}/credentials_api3`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1119,13 +1145,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ICredentialsEmbed[], IError>(
       `/users/${user_id}/credentials_embed`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1139,13 +1165,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Include only these fields in the response
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IUserLoginLockout[], IError>(
       '/user_login_lockouts',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1163,13 +1189,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ISession[], IError>(
       `/users/${user_id}/sessions`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1180,7 +1206,7 @@ export class Looker40SDK extends APIMethods {
    */
   async all_users(
     request: IRequestAllUsers,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IUser[], IError>(
       '/users',
@@ -1192,7 +1218,7 @@ export class Looker40SDK extends APIMethods {
         ids: request.ids,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -1221,13 +1247,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IBoard, IError>(
       `/boards/${board_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1245,13 +1271,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IBoardItem, IError>(
       `/board_items/${board_item_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1269,13 +1295,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IBoardSection, IError>(
       `/board_sections/${board_section_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1289,7 +1315,7 @@ export class Looker40SDK extends APIMethods {
       '/cloud_storage',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -1316,14 +1342,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     collection_id = encodeParam(collection_id)
     return this.get<IColorCollection, IError>(
       `/color_collections/${collection_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1342,13 +1368,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IColorCollection[], IError>(
       '/color_collections/custom',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1367,13 +1393,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IColorCollection[], IError>(
       '/color_collections/standard',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1391,14 +1417,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     connection_name = encodeParam(connection_name)
     return this.get<IDBConnection, IError>(
       `/connections/${connection_name}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1416,13 +1442,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IContentFavorite, IError>(
       `/content_favorite/${content_favorite_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1440,13 +1466,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IContentMeta, IError>(
       `/content_metadata/${content_metadata_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1463,13 +1489,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IContentValidation, IError | IValidationError>(
       '/content_validation',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1487,13 +1513,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IBoard, IError | IValidationError>(
       '/boards',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -1511,13 +1537,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IBoardItem, IError | IValidationError>(
       '/board_items',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -1535,13 +1561,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IBoardSection, IError | IValidationError>(
       '/board_sections',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -1563,13 +1589,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteColorCollection>} body
      */
     body: Partial<IWriteColorCollection>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IColorCollection, IError | IValidationError>(
       '/color_collections',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -1585,13 +1611,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteCommand>} body
      */
     body: Partial<IWriteCommand>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<ICommand, IError | IValidationError>(
       '/commands',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -1605,13 +1631,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteDBConnection>} body
      */
     body: Partial<IWriteDBConnection>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IDBConnection, IError | IValidationError>(
       '/connections',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -1625,13 +1651,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteContentFavorite>} body
      */
     body: Partial<IWriteContentFavorite>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IContentFavorite, IError | IValidationError>(
       '/content_favorite',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -1649,13 +1675,13 @@ export class Looker40SDK extends APIMethods {
      * @param {boolean} send_boards_notification_email Optionally sends notification email when granting access to a board.
      */
     send_boards_notification_email?: boolean,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IContentMetaGroupUser, IError | IValidationError>(
       '/content_metadata_access',
       { send_boards_notification_email },
       body,
-      options,
+      options
     )
   }
 
@@ -1682,13 +1708,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteDashboard>} body
      */
     body: Partial<IWriteDashboard>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IDashboard, IError | IValidationError>(
       '/dashboards',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -1706,13 +1732,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IDashboardElement, IError | IValidationError>(
       '/dashboard_elements',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -1730,13 +1756,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IDashboardFilter, IError | IValidationError>(
       '/dashboard_filters',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -1754,13 +1780,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IDashboardLayout, IError | IValidationError>(
       '/dashboard_layouts',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -1775,7 +1801,7 @@ export class Looker40SDK extends APIMethods {
    */
   async create_dashboard_render_task(
     request: IRequestCreateDashboardRenderTask,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.dashboard_id = encodeParam(request.dashboard_id)
     request.result_format = encodeParam(request.result_format)
@@ -1790,7 +1816,7 @@ export class Looker40SDK extends APIMethods {
         long_tables: request.long_tables,
       },
       request.body,
-      options,
+      options
     )
   }
 
@@ -1806,7 +1832,7 @@ export class Looker40SDK extends APIMethods {
       '/digest_email_send',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -1838,13 +1864,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IEmbedParams>} body
      */
     body: Partial<IEmbedParams>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IEmbedUrlResponse, IError | IValidationError>(
       '/embed/token_url/me',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -1861,13 +1887,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<ICreateFolder>} body
      */
     body: Partial<ICreateFolder>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IFolder, IError | IValidationError>(
       '/folders',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -1892,14 +1918,14 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteGitBranch>} body
      */
     body: Partial<IWriteGitBranch>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.post<IGitBranch, IError | IValidationError>(
       `/projects/${project_id}/git_branch`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -1921,14 +1947,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} project_id Project Id
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.post<string, IError | IValidationError>(
       `/projects/${project_id}/git/deploy_key`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -1946,13 +1972,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IGroup, IError | IValidationError>(
       '/groups',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -1972,13 +1998,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IIntegrationHub, IError | IValidationError>(
       '/integration_hubs',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2002,13 +2028,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<ILookWithQuery, IError | IValidationError>(
       '/looks',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2042,14 +2068,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     result_format = encodeParam(result_format)
     return this.post<IRenderTask, IError | IValidationError>(
       `/render_tasks/looks/${look_id}/${result_format}`,
       { width, height, fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2063,13 +2089,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteLookmlModel>} body
      */
     body: Partial<IWriteLookmlModel>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<ILookmlModel, IError | IValidationError>(
       '/lookml_models',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2103,13 +2129,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IMergeQuery, IError | IValidationError>(
       '/merge_queries',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2123,13 +2149,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteModelSet>} body
      */
     body: Partial<IWriteModelSet>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IModelSet, IError | IValidationError>(
       '/model_sets',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2143,13 +2169,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteOIDCConfig>} body
      */
     body: Partial<IWriteOIDCConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IOIDCConfig, IError | IValidationError>(
       '/oidc_test_configs',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2163,13 +2189,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWritePermissionSet>} body
      */
     body: Partial<IWritePermissionSet>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IPermissionSet, IError | IValidationError>(
       '/permission_sets',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2189,13 +2215,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteProject>} body
      */
     body: Partial<IWriteProject>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IProject, IError | IValidationError>(
       '/projects',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2220,13 +2246,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IQuery, IError | IValidationError>(
       '/queries',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2260,14 +2286,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     result_format = encodeParam(result_format)
     return this.post<IRenderTask, IError | IValidationError>(
       `/render_tasks/queries/${query_id}/${result_format}`,
       { width, height, fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2283,7 +2309,7 @@ export class Looker40SDK extends APIMethods {
    */
   async create_query_task(
     request: IRequestCreateQueryTask,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IQueryTask, IError | IValidationError>(
       '/query_tasks',
@@ -2303,7 +2329,7 @@ export class Looker40SDK extends APIMethods {
         fields: request.fields,
       },
       request.body,
-      options,
+      options
     )
   }
 
@@ -2317,13 +2343,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteRole>} body
      */
     body: Partial<IWriteRole>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IRole, IError | IValidationError>(
       '/roles',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2337,13 +2363,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteSamlConfig>} body
      */
     body: Partial<IWriteSamlConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<ISamlConfig, IError | IValidationError>(
       '/saml_test_configs',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2414,13 +2440,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteScheduledPlan>} body
      */
     body: Partial<IWriteScheduledPlan>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IScheduledPlan, IError | IValidationError>(
       '/scheduled_plans',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2436,13 +2462,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<ISqlQueryCreate>} body
      */
     body: Partial<ISqlQueryCreate>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<ISqlQuery, IError | IValidationError>(
       '/sql_queries',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2489,13 +2515,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IEmbedSsoParams>} body
      */
     body: Partial<IEmbedSsoParams>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IEmbedUrlResponse, IError | IValidationError>(
       '/embed/sso_url',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2523,13 +2549,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteTheme>} body
      */
     body: Partial<IWriteTheme>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<ITheme, IError | IValidationError>(
       '/themes',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2547,13 +2573,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IUser, IError | IValidationError>(
       '/users',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2580,13 +2606,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IUserAttribute, IError | IValidationError>(
       '/user_attributes',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2608,13 +2634,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<ICredentialsApi3, IError | IValidationError>(
       `/users/${user_id}/credentials_api3`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2636,13 +2662,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<ICredentialsEmail, IError | IValidationError>(
       `/users/${user_id}/credentials_email`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2661,13 +2687,13 @@ export class Looker40SDK extends APIMethods {
    */
   async create_user_credentials_email_password_reset(
     request: IRequestCreateUserCredentialsEmailPasswordReset,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<ICredentialsEmail, IError>(
       `/users/${request.user_id}/credentials_email/password_reset`,
       { expires: request.expires, fields: request.fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2689,13 +2715,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<ICredentialsTotp, IError | IValidationError>(
       `/users/${user_id}/credentials_totp`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2709,7 +2735,7 @@ export class Looker40SDK extends APIMethods {
       '/custom_welcome_email',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -2733,14 +2759,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.get<IDashboard, IError>(
       `/dashboards/${dashboard_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2756,14 +2782,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} dashboard_id Id of dashboard
      */
     dashboard_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.get<IDashboardAggregateTableLookml, IError>(
       `/dashboards/aggregate_table_lookml/${dashboard_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -2781,14 +2807,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.get<IDashboardElement[], IError>(
       `/dashboards/${dashboard_id}/dashboard_elements`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2806,14 +2832,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.get<IDashboardFilter[], IError>(
       `/dashboards/${dashboard_id}/dashboard_filters`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2831,14 +2857,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.get<IDashboardLayout[], IError>(
       `/dashboards/${dashboard_id}/dashboard_layouts`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2856,14 +2882,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_element_id = encodeParam(dashboard_element_id)
     return this.get<IDashboardElement, IError>(
       `/dashboard_elements/${dashboard_element_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2881,14 +2907,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_filter_id = encodeParam(dashboard_filter_id)
     return this.get<IDashboardFilter, IError>(
       `/dashboard_filters/${dashboard_filter_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2906,14 +2932,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_layout_id = encodeParam(dashboard_layout_id)
     return this.get<IDashboardLayout, IError>(
       `/dashboard_layouts/${dashboard_layout_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2931,14 +2957,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_layout_component_id = encodeParam(dashboard_layout_component_id)
     return this.get<IDashboardLayoutComponent, IError>(
       `/dashboard_layout_components/${dashboard_layout_component_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2956,14 +2982,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_layout_id = encodeParam(dashboard_layout_id)
     return this.get<IDashboardLayoutComponent[], IError>(
       `/dashboard_layouts/${dashboard_layout_id}/dashboard_layout_components`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2979,14 +3005,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} dashboard_id Id of dashboard
      */
     dashboard_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.get<IDashboardLookml, IError>(
       `/dashboards/lookml/${dashboard_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3000,13 +3026,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} datagroup_id ID of datagroup.
      */
     datagroup_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IDatagroup, IError>(
       `/datagroups/${datagroup_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3037,14 +3063,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     client_guid = encodeParam(client_guid)
     return this.delete<string, IError>(
       `/oauth_client_apps/${client_guid}/users/${user_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -3062,7 +3088,7 @@ export class Looker40SDK extends APIMethods {
       '/color_collections/default',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3082,7 +3108,7 @@ export class Looker40SDK extends APIMethods {
      * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
      */
     ts?: Date,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ITheme, IError>('/themes/default', { ts }, null, options)
   }
@@ -3097,13 +3123,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} board_id Id of board
      */
     board_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/boards/${board_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3117,13 +3143,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} board_item_id Id of board_item
      */
     board_item_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/board_items/${board_item_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3137,13 +3163,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} board_section_id Id of board section
      */
     board_section_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/board_sections/${board_section_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3164,14 +3190,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} collection_id Id of Color Collection
      */
     collection_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     collection_id = encodeParam(collection_id)
     return this.delete<string, IError>(
       `/color_collections/${collection_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3185,13 +3211,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} command_id ID of a command
      */
     command_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<void, IError>(
       `/commands/${command_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3205,14 +3231,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} connection_name Name of connection
      */
     connection_name: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     connection_name = encodeParam(connection_name)
     return this.delete<string, IError>(
       `/connections/${connection_name}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3230,7 +3256,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} override_context Context of connection override
      */
     override_context: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     connection_name = encodeParam(connection_name)
     override_context = encodeParam(override_context)
@@ -3238,7 +3264,7 @@ export class Looker40SDK extends APIMethods {
       `/connections/${connection_name}/connection_override/${override_context}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3252,13 +3278,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} content_favorite_id Id of favorite content
      */
     content_favorite_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/content_favorite/${content_favorite_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3272,13 +3298,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} content_metadata_access_id Id of content metadata access
      */
     content_metadata_access_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/content_metadata_access/${content_metadata_access_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3298,14 +3324,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} dashboard_id Id of dashboard
      */
     dashboard_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.delete<string, IError>(
       `/dashboards/${dashboard_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3319,14 +3345,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} dashboard_element_id Id of dashboard element
      */
     dashboard_element_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_element_id = encodeParam(dashboard_element_id)
     return this.delete<string, IError>(
       `/dashboard_elements/${dashboard_element_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3340,14 +3366,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} dashboard_filter_id Id of dashboard filter
      */
     dashboard_filter_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_filter_id = encodeParam(dashboard_filter_id)
     return this.delete<string, IError>(
       `/dashboard_filters/${dashboard_filter_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3361,14 +3387,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} dashboard_layout_id Id of dashboard layout
      */
     dashboard_layout_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_layout_id = encodeParam(dashboard_layout_id)
     return this.delete<string, IError | IValidationError>(
       `/dashboard_layouts/${dashboard_layout_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3383,14 +3409,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} folder_id Id of folder
      */
     folder_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     folder_id = encodeParam(folder_id)
     return this.delete<string, IError>(
       `/folders/${folder_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3410,7 +3436,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} branch_name Branch Name
      */
     branch_name: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     branch_name = encodeParam(branch_name)
@@ -3418,7 +3444,7 @@ export class Looker40SDK extends APIMethods {
       `/projects/${project_id}/git_branch/${branch_name}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3432,13 +3458,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} group_id Id of group
      */
     group_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/groups/${group_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3456,13 +3482,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} deleting_group_id Id of group to delete
      */
     deleting_group_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<void, IError>(
       `/groups/${group_id}/groups/${deleting_group_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3480,13 +3506,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} user_id Id of user to remove from group
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<void, IError>(
       `/groups/${group_id}/users/${user_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3500,13 +3526,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} integration_hub_id Id of integration_hub
      */
     integration_hub_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/integration_hubs/${integration_hub_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3526,7 +3552,7 @@ export class Looker40SDK extends APIMethods {
      * @param {number} look_id Id of look
      */
     look_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(`/looks/${look_id}`, null, null, options)
   }
@@ -3541,14 +3567,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} lookml_model_name Name of lookml model.
      */
     lookml_model_name: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     lookml_model_name = encodeParam(lookml_model_name)
     return this.delete<string, IError>(
       `/lookml_models/${lookml_model_name}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3562,13 +3588,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} model_set_id id of model set
      */
     model_set_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/model_sets/${model_set_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3587,14 +3613,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} client_guid The unique id of this application
      */
     client_guid: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     client_guid = encodeParam(client_guid)
     return this.delete<string, IError>(
       `/oauth_client_apps/${client_guid}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3608,14 +3634,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} test_slug Slug of test config
      */
     test_slug: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     test_slug = encodeParam(test_slug)
     return this.delete<string, IError>(
       `/oidc_test_configs/${test_slug}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3629,13 +3655,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} permission_set_id Id of permission set
      */
     permission_set_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/permission_sets/${permission_set_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3658,7 +3684,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} credential_id Credential Id
      */
     credential_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     root_project_id = encodeParam(root_project_id)
     credential_id = encodeParam(credential_id)
@@ -3666,7 +3692,7 @@ export class Looker40SDK extends APIMethods {
       `/projects/${root_project_id}/credential/${credential_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3680,7 +3706,7 @@ export class Looker40SDK extends APIMethods {
      * @param {number} role_id id of role
      */
     role_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(`/roles/${role_id}`, null, null, options)
   }
@@ -3695,14 +3721,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} test_slug Slug of test config
      */
     test_slug: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     test_slug = encodeParam(test_slug)
     return this.delete<string, IError>(
       `/saml_test_configs/${test_slug}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3720,13 +3746,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} scheduled_plan_id Scheduled Plan Id
      */
     scheduled_plan_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/scheduled_plans/${scheduled_plan_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3748,14 +3774,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} theme_id Id of theme
      */
     theme_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     theme_id = encodeParam(theme_id)
     return this.delete<string, IError>(
       `/themes/${theme_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3771,7 +3797,7 @@ export class Looker40SDK extends APIMethods {
      * @param {number} user_id Id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(`/users/${user_id}`, null, null, options)
   }
@@ -3786,13 +3812,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} user_attribute_id Id of user_attribute
      */
     user_attribute_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/user_attributes/${user_attribute_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3810,13 +3836,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} user_attribute_id Id of user attribute
      */
     user_attribute_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<void, IError>(
       `/groups/${group_id}/attribute_values/${user_attribute_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3839,13 +3865,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} user_attribute_id Id of user attribute
      */
     user_attribute_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<void, IError>(
       `/users/${user_id}/attribute_values/${user_attribute_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3863,13 +3889,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} credentials_api3_id id of API 3 Credential
      */
     credentials_api3_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/users/${user_id}/credentials_api3/${credentials_api3_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3883,13 +3909,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} user_id id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/users/${user_id}/credentials_email`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3907,13 +3933,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} credentials_embed_id id of Embedding Credential
      */
     credentials_embed_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/users/${user_id}/credentials_embed/${credentials_embed_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3927,13 +3953,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} user_id id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/users/${user_id}/credentials_google`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3947,13 +3973,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} user_id id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/users/${user_id}/credentials_ldap`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3967,13 +3993,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} user_id id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/users/${user_id}/credentials_looker_openid`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3987,13 +4013,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} user_id id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/users/${user_id}/credentials_oidc`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4007,13 +4033,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} user_id id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/users/${user_id}/credentials_saml`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4027,13 +4053,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} user_id id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/users/${user_id}/credentials_totp`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4047,14 +4073,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} key The key associated with the locked user
      */
     key: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     key = encodeParam(key)
     return this.delete<string, IError>(
       `/user_login_lockout/${key}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4072,13 +4098,13 @@ export class Looker40SDK extends APIMethods {
      * @param {number} session_id id of Web Login Session
      */
     session_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.delete<string, IError>(
       `/users/${user_id}/sessions/${session_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4103,14 +4129,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} project_id Id of project
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.post<string, IError | IValidationError>(
       `/projects/${project_id}/deploy_to_production`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4124,7 +4150,7 @@ export class Looker40SDK extends APIMethods {
       '/digest_emails_enabled',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4140,13 +4166,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<string>} body
      */
     body: Partial<string>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<ISamlMetadataParseResult, IError>(
       '/fetch_and_parse_saml_idp_metadata',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -4160,14 +4186,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} integration_id Id of integration
      */
     integration_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     integration_id = encodeParam(integration_id)
     return this.post<IDataActionForm, IError | IValidationError>(
       `/integrations/${integration_id}/form`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4181,13 +4207,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IDictionary<string>>} body
      */
     body: Partial<IDictionary<string>>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IDataActionForm, IError | IValidationError>(
       '/data_actions/form',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -4207,7 +4233,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} branch_name Branch Name
      */
     branch_name: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     branch_name = encodeParam(branch_name)
@@ -4215,7 +4241,7 @@ export class Looker40SDK extends APIMethods {
       `/projects/${project_id}/git_branch/${branch_name}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4233,14 +4259,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     folder_id = encodeParam(folder_id)
     return this.get<IFolder, IError>(
       `/folders/${folder_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4258,14 +4284,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     folder_id = encodeParam(folder_id)
     return this.get<IFolder[], IError>(
       `/folders/${folder_id}/ancestors`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4276,7 +4302,7 @@ export class Looker40SDK extends APIMethods {
    */
   async folder_children(
     request: IRequestFolderChildren,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.folder_id = encodeParam(request.folder_id)
     return this.get<IFolder[], IError>(
@@ -4288,7 +4314,7 @@ export class Looker40SDK extends APIMethods {
         sorts: request.sorts,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -4299,14 +4325,14 @@ export class Looker40SDK extends APIMethods {
    */
   async folder_children_search(
     request: IRequestFolderChildrenSearch,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.folder_id = encodeParam(request.folder_id)
     return this.get<IFolder[], IError>(
       `/folders/${request.folder_id}/children/search`,
       { fields: request.fields, sorts: request.sorts, name: request.name },
       null,
-      options,
+      options
     )
   }
 
@@ -4324,14 +4350,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     folder_id = encodeParam(folder_id)
     return this.get<IDashboard[], IError>(
       `/folders/${folder_id}/dashboards`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4349,14 +4375,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     folder_id = encodeParam(folder_id)
     return this.get<ILookWithQuery[], IError>(
       `/folders/${folder_id}/looks`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4374,14 +4400,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     folder_id = encodeParam(folder_id)
     return this.get<IFolder, IError>(
       `/folders/${folder_id}/parent`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4391,13 +4417,13 @@ export class Looker40SDK extends APIMethods {
    * PUT /password_config/force_password_reset_at_next_login_for_all_users -> string
    */
   async force_password_reset_at_next_login_for_all_users(
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.put<string, IError | IValidationError>(
       '/password_config/force_password_reset_at_next_login_for_all_users',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4408,7 +4434,7 @@ export class Looker40SDK extends APIMethods {
    */
   async get_all_commands(
     request: IRequestGetAllCommands,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ICommand[], IError>(
       '/commands',
@@ -4418,7 +4444,7 @@ export class Looker40SDK extends APIMethods {
         limit: request.limit,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -4434,14 +4460,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} root_project_id Root Project Id
      */
     root_project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     root_project_id = encodeParam(root_project_id)
     return this.get<IRepositoryCredential[], IError>(
       `/projects/${root_project_id}/credentials`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4457,14 +4483,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} project_id Project Id
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.get<IGitBranch, IError>(
       `/projects/${project_id}/git_branch`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4480,14 +4506,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} project_id Project Id
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.get<string, IError>(
       `/projects/${project_id}/git/deploy_key`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4505,13 +4531,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IGroup, IError>(
       `/groups/${group_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4548,7 +4574,7 @@ export class Looker40SDK extends APIMethods {
      * @param {boolean} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
      */
     raw_locale?: boolean,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     lookml_dashboard_id = encodeParam(lookml_dashboard_id)
     space_id = encodeParam(space_id)
@@ -4556,7 +4582,7 @@ export class Looker40SDK extends APIMethods {
       `/dashboards/${lookml_dashboard_id}/import/${space_id}`,
       { raw_locale },
       body,
-      options,
+      options
     )
   }
 
@@ -4574,14 +4600,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     integration_id = encodeParam(integration_id)
     return this.get<IIntegration, IError>(
       `/integrations/${integration_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4599,13 +4625,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IIntegrationHub, IError>(
       `/integration_hubs/${integration_hub_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4619,7 +4645,7 @@ export class Looker40SDK extends APIMethods {
       '/internal_help_resources_enabled',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4633,7 +4659,7 @@ export class Looker40SDK extends APIMethods {
       '/internal_help_resources_content',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4650,14 +4676,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} client_guid The unique id of the application
      */
     client_guid: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     client_guid = encodeParam(client_guid)
     return this.delete<string, IError>(
       `/oauth_client_apps/${client_guid}/tokens`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4671,14 +4697,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} query_task_id Query task id.
      */
     query_task_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     query_task_id = encodeParam(query_task_id)
     return this.delete<string, IError | IValidationError>(
       `/running_queries/${query_task_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4716,14 +4742,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} legacy_feature_id id of legacy feature
      */
     legacy_feature_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     legacy_feature_id = encodeParam(legacy_feature_id)
     return this.get<ILegacyFeature, IError>(
       `/legacy_features/${legacy_feature_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4747,14 +4773,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.post<string, IError | IValidationError>(
       `/projects/${project_id}/manifest/lock_all`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4795,7 +4821,7 @@ export class Looker40SDK extends APIMethods {
       '/login',
       { client_id: request.client_id, client_secret: request.client_secret },
       null,
-      options,
+      options
     )
   }
 
@@ -4828,13 +4854,13 @@ export class Looker40SDK extends APIMethods {
      * @param {boolean} associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
      */
     associative?: boolean,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IAccessToken, IError>(
       `/login/${user_id}`,
       { associative },
       null,
-      options,
+      options
     )
   }
 
@@ -4863,13 +4889,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ILookWithQuery, IError>(
       `/looks/${look_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4887,14 +4913,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     lookml_model_name = encodeParam(lookml_model_name)
     return this.get<ILookmlModel, IError>(
       `/lookml_models/${lookml_model_name}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4916,7 +4942,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     lookml_model_name = encodeParam(lookml_model_name)
     explore_name = encodeParam(explore_name)
@@ -4924,7 +4950,7 @@ export class Looker40SDK extends APIMethods {
       `/lookml_models/${lookml_model_name}/explores/${explore_name}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4940,14 +4966,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} project_id Project Id
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.get<IManifest, IError>(
       `/projects/${project_id}/manifest`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4961,7 +4987,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IUser, IError>('/user', { fields }, null, options)
   }
@@ -4982,14 +5008,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     merge_query_id = encodeParam(merge_query_id)
     return this.get<IMergeQuery, IError>(
       `/merge_queries/${merge_query_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5007,13 +5033,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IModelSet, IError>(
       `/model_sets/${model_set_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5033,14 +5059,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     client_guid = encodeParam(client_guid)
     return this.get<IOauthClientApp, IError>(
       `/oauth_client_apps/${client_guid}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5074,14 +5100,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} test_slug Slug of test config
      */
     test_slug: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     test_slug = encodeParam(test_slug)
     return this.get<IOIDCConfig, IError>(
       `/oidc_test_configs/${test_slug}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5095,13 +5121,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<string>} body
      */
     body: Partial<string>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<ISamlMetadataParseResult, IError>(
       '/parse_saml_idp_metadata',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -5115,7 +5141,7 @@ export class Looker40SDK extends APIMethods {
       '/password_config',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5129,13 +5155,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IDataActionRequest>} body
      */
     body: Partial<IDataActionRequest>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IDataActionResponse, IError>(
       '/data_actions',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -5153,13 +5179,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IPermissionSet, IError>(
       `/permission_sets/${permission_set_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5179,14 +5205,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.get<IProject, IError>(
       `/projects/${project_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5210,14 +5236,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.get<IProjectFile, IError>(
       `/projects/${project_id}/files/file`,
       { file_id, fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5246,14 +5272,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.get<IProjectValidationCache, IError>(
       `/projects/${project_id}/validate`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5273,14 +5299,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.get<IProjectWorkspace, IError>(
       `/projects/${project_id}/current_workspace`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5314,13 +5340,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IQuery, IError>(
       `/queries/${query_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5354,14 +5380,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     slug = encodeParam(slug)
     return this.get<IQuery, IError>(
       `/queries/slug/${slug}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5385,14 +5411,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     query_task_id = encodeParam(query_task_id)
     return this.get<IQueryTask, IError>(
       `/query_tasks/${query_task_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5412,13 +5438,13 @@ export class Looker40SDK extends APIMethods {
      * @param {DelimArray<string>} query_task_ids List of Query Task IDs
      */
     query_task_ids: DelimArray<string>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IDictionary<string>, IError>(
       '/query_tasks/multi_results',
       { query_task_ids },
       null,
-      options,
+      options
     )
   }
 
@@ -5454,14 +5480,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} query_task_id ID of the Query Task
      */
     query_task_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     query_task_id = encodeParam(query_task_id)
     return this.get<string, IError>(
       `/query_tasks/${query_task_id}/results`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5488,14 +5514,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     client_guid = encodeParam(client_guid)
     return this.post<IOauthClientApp, IError | IValidationError>(
       `/oauth_client_apps/${client_guid}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -5517,14 +5543,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     render_task_id = encodeParam(render_task_id)
     return this.get<IRenderTask, IError>(
       `/render_tasks/${render_task_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5556,14 +5582,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} render_task_id Id of render task
      */
     render_task_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     render_task_id = encodeParam(render_task_id)
     return this.get<string, IError>(
       `/render_tasks/${render_task_id}/results`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5579,14 +5605,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} project_id Id of project
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.post<string, IError | IValidationError>(
       `/projects/${project_id}/reset_to_production`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5602,14 +5628,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} project_id Id of project
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.post<string, IError | IValidationError>(
       `/projects/${project_id}/reset_to_remote`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5623,7 +5649,7 @@ export class Looker40SDK extends APIMethods {
      * @param {number} role_id id of role
      */
     role_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IRole, IError>(`/roles/${role_id}`, null, null, options)
   }
@@ -5642,13 +5668,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IGroup[], IError>(
       `/roles/${role_id}/groups`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5659,7 +5685,7 @@ export class Looker40SDK extends APIMethods {
    */
   async role_users(
     request: IRequestRoleUsers,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IUser[], IError>(
       `/roles/${request.role_id}/users`,
@@ -5668,7 +5694,7 @@ export class Looker40SDK extends APIMethods {
         direct_association_only: request.direct_association_only,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -5696,7 +5722,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
      */
     remote_url?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     test_id = encodeParam(test_id)
@@ -5704,7 +5730,7 @@ export class Looker40SDK extends APIMethods {
       `/projects/${project_id}/git_connection_tests/${test_id}`,
       { remote_url },
       null,
-      options,
+      options
     )
   }
 
@@ -5766,7 +5792,7 @@ export class Looker40SDK extends APIMethods {
    */
   async run_inline_query(
     request: IRequestRunInlineQuery,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.result_format = encodeParam(request.result_format)
     return this.post<string, IError | IValidationError>(
@@ -5786,7 +5812,7 @@ export class Looker40SDK extends APIMethods {
         server_table_calcs: request.server_table_calcs,
       },
       request.body,
-      options,
+      options
     )
   }
 
@@ -5816,7 +5842,7 @@ export class Looker40SDK extends APIMethods {
    */
   async run_look(
     request: IRequestRunLook,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.result_format = encodeParam(request.result_format)
     return this.get<string, IError | IValidationError>(
@@ -5836,7 +5862,7 @@ export class Looker40SDK extends APIMethods {
         server_table_calcs: request.server_table_calcs,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -5849,14 +5875,14 @@ export class Looker40SDK extends APIMethods {
    */
   async run_lookml_test(
     request: IRequestRunLookmlTest,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.project_id = encodeParam(request.project_id)
     return this.get<ILookmlTestResult[], IError | IValidationError>(
       `/projects/${request.project_id}/lookml_tests/run`,
       { file_id: request.file_id, test: request.test, model: request.model },
       null,
-      options,
+      options
     )
   }
 
@@ -5889,7 +5915,7 @@ export class Looker40SDK extends APIMethods {
    */
   async run_query(
     request: IRequestRunQuery,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.result_format = encodeParam(request.result_format)
     return this.get<string, IError | IValidationError>(
@@ -5909,7 +5935,7 @@ export class Looker40SDK extends APIMethods {
         server_table_calcs: request.server_table_calcs,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -5933,7 +5959,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
      */
     download?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     slug = encodeParam(slug)
     result_format = encodeParam(result_format)
@@ -5941,7 +5967,7 @@ export class Looker40SDK extends APIMethods {
       `/sql_queries/${slug}/run/${result_format}`,
       { download },
       null,
-      options,
+      options
     )
   }
 
@@ -6016,7 +6042,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} result_format Format of result
      */
     result_format: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     model_name = encodeParam(model_name)
     view_name = encodeParam(view_name)
@@ -6025,7 +6051,7 @@ export class Looker40SDK extends APIMethods {
       `/queries/models/${model_name}/views/${view_name}/run/${result_format}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -6059,14 +6085,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} test_slug Slug of test config
      */
     test_slug: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     test_slug = encodeParam(test_slug)
     return this.get<ISamlConfig, IError>(
       `/saml_test_configs/${test_slug}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -6086,13 +6112,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IScheduledPlan, IError>(
       `/scheduled_plans/${scheduled_plan_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -6142,13 +6168,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteScheduledPlan>} body
      */
     body: Partial<IWriteScheduledPlan>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IScheduledPlan, IError | IValidationError>(
       '/scheduled_plans/run_once',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -6212,13 +6238,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteScheduledPlan>} body
      */
     body?: Partial<IWriteScheduledPlan>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IScheduledPlan, IError | IValidationError>(
       `/scheduled_plans/${scheduled_plan_id}/run_once`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -6239,7 +6265,7 @@ export class Looker40SDK extends APIMethods {
    */
   async scheduled_plans_for_dashboard(
     request: IRequestScheduledPlansForDashboard,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IScheduledPlan[], IError>(
       `/scheduled_plans/dashboard/${request.dashboard_id}`,
@@ -6249,7 +6275,7 @@ export class Looker40SDK extends APIMethods {
         fields: request.fields,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6270,7 +6296,7 @@ export class Looker40SDK extends APIMethods {
    */
   async scheduled_plans_for_look(
     request: IRequestScheduledPlansForLook,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IScheduledPlan[], IError>(
       `/scheduled_plans/look/${request.look_id}`,
@@ -6280,7 +6306,7 @@ export class Looker40SDK extends APIMethods {
         all_users: request.all_users,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6301,7 +6327,7 @@ export class Looker40SDK extends APIMethods {
    */
   async scheduled_plans_for_lookml_dashboard(
     request: IRequestScheduledPlansForLookmlDashboard,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IScheduledPlan[], IError>(
       `/scheduled_plans/lookml_dashboard/${request.lookml_dashboard_id}`,
@@ -6311,7 +6337,7 @@ export class Looker40SDK extends APIMethods {
         all_users: request.all_users,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6331,13 +6357,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IScheduledPlan[], IError>(
       `/scheduled_plans/space/${space_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -6369,7 +6395,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_boards(
     request: IRequestSearchBoards,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IBoard[], IError>(
       '/boards/search',
@@ -6389,7 +6415,7 @@ export class Looker40SDK extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6421,7 +6447,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_content_favorites(
     request: IRequestSearchContentFavorites,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IContentFavorite[], IError>(
       '/content_favorite/search',
@@ -6439,7 +6465,7 @@ export class Looker40SDK extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6471,7 +6497,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_content_views(
     request: IRequestSearchContentViews,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IContentView[], IError>(
       '/content_view/search',
@@ -6491,7 +6517,7 @@ export class Looker40SDK extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6525,7 +6551,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_dashboard_elements(
     request: IRequestSearchDashboardElements,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IDashboardElement[], IError>(
       '/dashboard_elements/search',
@@ -6539,7 +6565,7 @@ export class Looker40SDK extends APIMethods {
         sorts: request.sorts,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6578,7 +6604,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_dashboards(
     request: IRequestSearchDashboards,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IDashboard[], IError>(
       '/dashboards/search',
@@ -6604,7 +6630,7 @@ export class Looker40SDK extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6615,7 +6641,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_folders(
     request: IRequestSearchFolders,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IFolder[], IError>(
       '/folders/search',
@@ -6633,7 +6659,7 @@ export class Looker40SDK extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6667,7 +6693,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_groups(
     request: IRequestSearchGroups,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IGroupSearch[], IError>(
       '/groups/search',
@@ -6684,7 +6710,7 @@ export class Looker40SDK extends APIMethods {
         externally_orphaned: request.externally_orphaned,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6721,7 +6747,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_looks(
     request: IRequestSearchLooks,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ILook[], IError>(
       '/looks/search',
@@ -6746,7 +6772,7 @@ export class Looker40SDK extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6778,7 +6804,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_model_sets(
     request: IRequestSearchModelSets,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IModelSet[], IError>(
       '/model_sets/search',
@@ -6794,7 +6820,7 @@ export class Looker40SDK extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6826,7 +6852,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_permission_sets(
     request: IRequestSearchModelSets,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IPermissionSet[], IError>(
       '/permission_sets/search',
@@ -6842,7 +6868,7 @@ export class Looker40SDK extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6876,7 +6902,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_roles(
     request: IRequestSearchRoles,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IRole[], IError>(
       '/roles/search',
@@ -6891,7 +6917,7 @@ export class Looker40SDK extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6939,7 +6965,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_themes(
     request: IRequestSearchThemes,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ITheme[], IError>(
       '/themes/search',
@@ -6955,7 +6981,7 @@ export class Looker40SDK extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6966,7 +6992,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_user_login_lockouts(
     request: IRequestSearchUserLoginLockouts,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IUserLoginLockout[], IError>(
       '/user_login_lockouts/search',
@@ -6982,7 +7008,7 @@ export class Looker40SDK extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7022,7 +7048,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_users(
     request: IRequestSearchUsers,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IUser[], IError>(
       '/users/search',
@@ -7042,7 +7068,7 @@ export class Looker40SDK extends APIMethods {
         group_id: request.group_id,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7058,7 +7084,7 @@ export class Looker40SDK extends APIMethods {
    */
   async search_users_names(
     request: IRequestSearchUsersNames,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.pattern = encodeParam(request.pattern)
     return this.get<IUser[], IError>(
@@ -7076,7 +7102,7 @@ export class Looker40SDK extends APIMethods {
         is_disabled: request.is_disabled,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7101,7 +7127,7 @@ export class Looker40SDK extends APIMethods {
       '/session_config',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -7118,13 +7144,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} collection_id ID of color collection to set as default
      */
     collection_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.put<IColorCollection, IError | IValidationError>(
       '/color_collections/default',
       { collection_id },
       null,
-      options,
+      options
     )
   }
 
@@ -7148,13 +7174,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} name Name of theme to set as default
      */
     name: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.put<ITheme, IError | IValidationError>(
       '/themes/default',
       { name },
       null,
-      options,
+      options
     )
   }
 
@@ -7172,13 +7198,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<number[]>} body
      */
     body: Partial<number[]>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.put<IGroup[], IError | IValidationError>(
       `/roles/${role_id}/groups`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7196,13 +7222,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<number[]>} body
      */
     body: Partial<number[]>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.put<IUser[], IError | IValidationError>(
       `/roles/${role_id}/users`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7239,13 +7265,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IUserAttributeGroupValue[]>} body
      */
     body: Partial<IUserAttributeGroupValue[]>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IUserAttributeGroupValue[], IError | IValidationError>(
       `/user_attributes/${user_attribute_id}/group_values`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7269,13 +7295,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteUserAttributeWithValue>} body
      */
     body: Partial<IWriteUserAttributeWithValue>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IUserAttributeWithValue, IError | IValidationError>(
       `/users/${user_id}/attribute_values/${user_attribute_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7297,13 +7323,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.put<IRole[], IError>(
       `/users/${user_id}/roles`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -7317,14 +7343,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} slug slug of query
      */
     slug: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     slug = encodeParam(slug)
     return this.get<ISqlQuery, IError>(
       `/sql_queries/${slug}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -7354,14 +7380,14 @@ export class Looker40SDK extends APIMethods {
      * @param {boolean} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
      */
     raw_locale?: boolean,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     lookml_dashboard_id = encodeParam(lookml_dashboard_id)
     return this.patch<number[], IError | IValidationError>(
       `/dashboards/${lookml_dashboard_id}/sync`,
       { raw_locale },
       body,
-      options,
+      options
     )
   }
 
@@ -7386,14 +7412,14 @@ export class Looker40SDK extends APIMethods {
      * @param {DelimArray<string>} tests Array of names of tests to run
      */
     tests?: DelimArray<string>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     connection_name = encodeParam(connection_name)
     return this.put<IDBConnectionTestResult[], IError>(
       `/connections/${connection_name}/test`,
       { tests },
       null,
-      options,
+      options
     )
   }
 
@@ -7418,13 +7444,13 @@ export class Looker40SDK extends APIMethods {
      * @param {DelimArray<string>} tests Array of names of tests to run
      */
     tests?: DelimArray<string>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.put<IDBConnectionTestResult[], IError>(
       '/connections/test',
       { tests },
       body,
-      options,
+      options
     )
   }
 
@@ -7438,14 +7464,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} integration_id Id of integration
      */
     integration_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     integration_id = encodeParam(integration_id)
     return this.post<IIntegrationTestResult, IError | IValidationError>(
       `/integrations/${integration_id}/test`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -7478,13 +7504,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteLDAPConfig>} body
      */
     body: Partial<IWriteLDAPConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.put<ILDAPConfigTestResult, IError | IValidationError>(
       '/ldap_config/test_auth',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7515,13 +7541,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteLDAPConfig>} body
      */
     body: Partial<IWriteLDAPConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.put<ILDAPConfigTestResult, IError | IValidationError>(
       '/ldap_config/test_connection',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7543,13 +7569,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteLDAPConfig>} body
      */
     body: Partial<IWriteLDAPConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.put<ILDAPConfigTestResult, IError | IValidationError>(
       '/ldap_config/test_user_auth',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7571,13 +7597,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteLDAPConfig>} body
      */
     body: Partial<IWriteLDAPConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.put<ILDAPConfigTestResult, IError | IValidationError>(
       '/ldap_config/test_user_info',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7599,13 +7625,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ITheme, IError>(
       `/themes/${theme_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -7628,13 +7654,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
      */
     ts?: Date,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ITheme, IError>(
       '/themes/theme_or_default',
       { name, ts },
       null,
-      options,
+      options
     )
   }
 
@@ -7656,13 +7682,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IBoard, IError | IValidationError>(
       `/boards/${board_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -7684,13 +7710,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IBoardItem, IError | IValidationError>(
       `/board_items/${board_item_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -7712,13 +7738,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IBoardSection, IError | IValidationError>(
       `/board_sections/${board_section_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -7732,13 +7758,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteBackupConfiguration>} body
      */
     body: Partial<IWriteBackupConfiguration>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IBackupConfiguration, IError | IValidationError>(
       '/cloud_storage',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7757,14 +7783,14 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteColorCollection>} body
      */
     body: Partial<IWriteColorCollection>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     collection_id = encodeParam(collection_id)
     return this.patch<IColorCollection, IError | IValidationError>(
       `/color_collections/${collection_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7782,14 +7808,14 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteDBConnection>} body
      */
     body: Partial<IWriteDBConnection>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     connection_name = encodeParam(connection_name)
     return this.patch<IDBConnection, IError | IValidationError>(
       `/connections/${connection_name}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7807,13 +7833,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteContentMeta>} body
      */
     body: Partial<IWriteContentMeta>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IContentMeta, IError | IValidationError>(
       `/content_metadata/${content_metadata_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7831,14 +7857,14 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IContentMetaGroupUser>} body
      */
     body: Partial<IContentMetaGroupUser>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     content_metadata_access_id = encodeParam(content_metadata_access_id)
     return this.put<IContentMetaGroupUser, IError | IValidationError>(
       `/content_metadata_access/${content_metadata_access_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7856,13 +7882,13 @@ export class Looker40SDK extends APIMethods {
      * @param {boolean} send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
      */
     send_test_welcome_email?: boolean,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<ICustomWelcomeEmail, IError | IValidationError>(
       '/custom_welcome_email',
       { send_test_welcome_email },
       body,
-      options,
+      options
     )
   }
 
@@ -7876,13 +7902,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWelcomeEmailTest>} body
      */
     body: Partial<IWelcomeEmailTest>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.put<IWelcomeEmailTest, IError | IValidationError>(
       '/custom_welcome_email_test',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7909,14 +7935,14 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteDashboard>} body
      */
     body: Partial<IWriteDashboard>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.patch<IDashboard, IError | IValidationError>(
       `/dashboards/${dashboard_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7938,14 +7964,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_element_id = encodeParam(dashboard_element_id)
     return this.patch<IDashboardElement, IError | IValidationError>(
       `/dashboard_elements/${dashboard_element_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -7967,14 +7993,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_filter_id = encodeParam(dashboard_filter_id)
     return this.patch<IDashboardFilter, IError | IValidationError>(
       `/dashboard_filters/${dashboard_filter_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -7996,14 +8022,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_layout_id = encodeParam(dashboard_layout_id)
     return this.patch<IDashboardLayout, IError | IValidationError>(
       `/dashboard_layouts/${dashboard_layout_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8025,14 +8051,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_layout_component_id = encodeParam(dashboard_layout_component_id)
     return this.patch<IDashboardLayoutComponent, IError | IValidationError>(
       `/dashboard_layout_components/${dashboard_layout_component_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8050,13 +8076,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteDatagroup>} body
      */
     body: Partial<IWriteDatagroup>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IDatagroup, IError | IValidationError>(
       `/datagroups/${datagroup_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8070,13 +8096,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IDigestEmails>} body
      */
     body: Partial<IDigestEmails>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IDigestEmails, IError | IValidationError>(
       '/digest_emails_enabled',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8094,14 +8120,14 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IUpdateFolder>} body
      */
     body: Partial<IUpdateFolder>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     folder_id = encodeParam(folder_id)
     return this.patch<IFolder, IError | IValidationError>(
       `/folders/${folder_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8127,14 +8153,14 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteGitBranch>} body
      */
     body: Partial<IWriteGitBranch>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.put<IGitBranch, IError | IValidationError>(
       `/projects/${project_id}/git_branch`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8156,13 +8182,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IGroup, IError | IValidationError>(
       `/groups/${group_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8184,14 +8210,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     integration_id = encodeParam(integration_id)
     return this.patch<IIntegration, IError | IValidationError>(
       `/integrations/${integration_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8215,13 +8241,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IIntegrationHub, IError | IValidationError>(
       `/integration_hubs/${integration_hub_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8235,13 +8261,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteInternalHelpResources>} body
      */
     body: Partial<IWriteInternalHelpResources>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IInternalHelpResources, IError | IValidationError>(
       '/internal_help_resources',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8255,13 +8281,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteInternalHelpResourcesContent>} body
      */
     body: Partial<IWriteInternalHelpResourcesContent>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IInternalHelpResourcesContent, IError | IValidationError>(
       '/internal_help_resources_content',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8285,13 +8311,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteLDAPConfig>} body
      */
     body: Partial<IWriteLDAPConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<ILDAPConfig, IError | IValidationError>(
       '/ldap_config',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8309,14 +8335,14 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteLegacyFeature>} body
      */
     body: Partial<IWriteLegacyFeature>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     legacy_feature_id = encodeParam(legacy_feature_id)
     return this.patch<ILegacyFeature, IError | IValidationError>(
       `/legacy_features/${legacy_feature_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8357,13 +8383,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<ILookWithQuery, IError | IValidationError>(
       `/looks/${look_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8381,14 +8407,14 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteLookmlModel>} body
      */
     body: Partial<IWriteLookmlModel>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     lookml_model_name = encodeParam(lookml_model_name)
     return this.patch<ILookmlModel, IError | IValidationError>(
       `/lookml_models/${lookml_model_name}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8406,13 +8432,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteModelSet>} body
      */
     body: Partial<IWriteModelSet>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IModelSet, IError | IValidationError>(
       `/model_sets/${model_set_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8436,14 +8462,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     client_guid = encodeParam(client_guid)
     return this.patch<IOauthClientApp, IError | IValidationError>(
       `/oauth_client_apps/${client_guid}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8465,13 +8491,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteOIDCConfig>} body
      */
     body: Partial<IWriteOIDCConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IOIDCConfig, IError | IValidationError>(
       '/oidc_config',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8485,13 +8511,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWritePasswordConfig>} body
      */
     body: Partial<IWritePasswordConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IPasswordConfig, IError | IValidationError>(
       '/password_config',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8509,13 +8535,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWritePermissionSet>} body
      */
     body: Partial<IWritePermissionSet>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IPermissionSet, IError | IValidationError>(
       `/permission_sets/${permission_set_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8558,14 +8584,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.patch<IProject, IError | IValidationError>(
       `/projects/${project_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8592,7 +8618,7 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteRepositoryCredential>} body
      */
     body: Partial<IWriteRepositoryCredential>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     root_project_id = encodeParam(root_project_id)
     credential_id = encodeParam(credential_id)
@@ -8600,7 +8626,7 @@ export class Looker40SDK extends APIMethods {
       `/projects/${root_project_id}/credential/${credential_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8618,13 +8644,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteRole>} body
      */
     body: Partial<IWriteRole>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IRole, IError | IValidationError>(
       `/roles/${role_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8646,13 +8672,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteSamlConfig>} body
      */
     body: Partial<IWriteSamlConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<ISamlConfig, IError | IValidationError>(
       '/saml_config',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8711,13 +8737,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteScheduledPlan>} body
      */
     body: Partial<IWriteScheduledPlan>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IScheduledPlan, IError | IValidationError>(
       `/scheduled_plans/${scheduled_plan_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8750,13 +8776,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteApiSession>} body
      */
     body: Partial<IWriteApiSession>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IApiSession, IError | IValidationError>(
       '/session',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8770,13 +8796,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteSessionConfig>} body
      */
     body: Partial<IWriteSessionConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<ISessionConfig, IError | IValidationError>(
       '/session_config',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8796,13 +8822,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteTheme>} body
      */
     body: Partial<IWriteTheme>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<ITheme, IError | IValidationError>(
       `/themes/${theme_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8824,13 +8850,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IUser, IError | IValidationError>(
       `/users/${user_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8852,13 +8878,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IUserAttribute, IError | IValidationError>(
       `/user_attributes/${user_attribute_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8882,13 +8908,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IUserAttributeGroupValue>} body
      */
     body: Partial<IUserAttributeGroupValue>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<IUserAttributeGroupValue, IError | IValidationError>(
       `/groups/${group_id}/attribute_values/${user_attribute_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8910,13 +8936,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.patch<ICredentialsEmail, IError | IValidationError>(
       `/users/${user_id}/credentials_email`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8930,13 +8956,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteWhitelabelConfiguration>} body
      */
     body: Partial<IWriteWhitelabelConfiguration>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.put<IWhitelabelConfiguration, IError | IValidationError>(
       '/whitelabel_configuration',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8958,13 +8984,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IUser, IError>(
       `/users/${user_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -8982,13 +9008,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IUserAttribute, IError>(
       `/user_attributes/${user_attribute_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -9014,7 +9040,7 @@ export class Looker40SDK extends APIMethods {
    */
   async user_attribute_user_values(
     request: IRequestUserAttributeUserValues,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IUserAttributeWithValue[], IError>(
       `/users/${request.user_id}/attribute_values`,
@@ -9025,7 +9051,7 @@ export class Looker40SDK extends APIMethods {
         include_unset: request.include_unset,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -9047,13 +9073,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ICredentialsApi3, IError>(
       `/users/${user_id}/credentials_api3/${credentials_api3_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -9071,13 +9097,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ICredentialsEmail, IError>(
       `/users/${user_id}/credentials_email`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -9099,13 +9125,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ICredentialsEmbed, IError>(
       `/users/${user_id}/credentials_embed/${credentials_embed_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -9123,13 +9149,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ICredentialsGoogle, IError>(
       `/users/${user_id}/credentials_google`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -9147,13 +9173,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ICredentialsLDAP, IError>(
       `/users/${user_id}/credentials_ldap`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -9171,13 +9197,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ICredentialsLookerOpenid, IError>(
       `/users/${user_id}/credentials_looker_openid`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -9195,13 +9221,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ICredentialsOIDC, IError>(
       `/users/${user_id}/credentials_oidc`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -9219,13 +9245,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ICredentialsSaml, IError>(
       `/users/${user_id}/credentials_saml`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -9243,13 +9269,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ICredentialsTotp, IError>(
       `/users/${user_id}/credentials_totp`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -9298,7 +9324,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     credential_type = encodeParam(credential_type)
     credential_id = encodeParam(credential_id)
@@ -9306,7 +9332,7 @@ export class Looker40SDK extends APIMethods {
       `/users/credential/${credential_type}/${credential_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -9317,7 +9343,7 @@ export class Looker40SDK extends APIMethods {
    */
   async user_roles(
     request: IRequestUserRoles,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IRole[], IError>(
       `/users/${request.user_id}/roles`,
@@ -9326,7 +9352,7 @@ export class Looker40SDK extends APIMethods {
         direct_association_only: request.direct_association_only,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -9348,13 +9374,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<ISession, IError>(
       `/users/${user_id}/sessions/${session_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -9380,14 +9406,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.post<IProjectValidation, IError | IValidationError>(
       `/projects/${project_id}/validate`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -9407,13 +9433,13 @@ export class Looker40SDK extends APIMethods {
      * @param {Partial<IWriteTheme>} body
      */
     body: Partial<IWriteTheme>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.post<IValidationError, IError | IValidationError>(
       '/themes/validate',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9438,7 +9464,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} reload Whether or not to refresh the rendered image with the latest content
      */
     reload?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     type = encodeParam(type)
     resource_id = encodeParam(resource_id)
@@ -9446,7 +9472,7 @@ export class Looker40SDK extends APIMethods {
       `/vector_thumbnail/${type}/${resource_id}`,
       { reload },
       null,
-      options,
+      options
     )
   }
 
@@ -9460,7 +9486,7 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IApiVersion, IError>('/versions', { fields }, null, options)
   }
@@ -9476,13 +9502,13 @@ export class Looker40SDK extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.get<IWhitelabelConfiguration, IError>(
       '/whitelabel_configuration',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -9524,14 +9550,14 @@ export class Looker40SDK extends APIMethods {
      * @param {string} workspace_id Id of the workspace
      */
     workspace_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     workspace_id = encodeParam(workspace_id)
     return this.get<IWorkspace, IError>(
       `/workspaces/${workspace_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 }

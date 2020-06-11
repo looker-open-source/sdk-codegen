@@ -43,7 +43,9 @@ import {
   SetToCriteria,
   typeRefs,
   EnumType,
-  IEnumType, mayQuote,
+  IEnumType,
+  mayQuote,
+  enumName,
 } from './sdkModels'
 
 const config = TestConfig()
@@ -64,6 +66,19 @@ describe('sdkModels', () => {
       expect(mayQuote('_foo_bar_')).toEqual(`_foo_bar_`)
     })
   })
+
+  describe('enumName', () => {
+    it('foo-bar is FooBarEnum', () => {
+      expect(enumName('foo-bar')).toEqual('FooBarEnum')
+    })
+    it('foo_bar is FooBarEnum', () => {
+      expect(enumName('foo_bar')).toEqual('FooBarEnum')
+    })
+    it('foobar is FoobarEnum', () => {
+      expect(enumName('foobar')).toEqual(`FoobarEnum`)
+    })
+  })
+
   describe('request type determination', () => {
     it('search_looks', () => {
       const method = apiTestModel.methods.search_looks
@@ -147,9 +162,9 @@ describe('sdkModels', () => {
         apiTestModel.types.CreateQueryTask
       )
       expect(type).toBeDefined()
-      expect(type!.properties.query_id.required).toEqual(true)
-      expect(type!.properties.result_format.required).toEqual(true)
-      expect(type!.properties.source.required).toEqual(false)
+      expect(type?.properties.query_id.required).toEqual(true)
+      expect(type?.properties.result_format.required).toEqual(true)
+      expect(type?.properties.source.required).toEqual(false)
     })
   })
 
@@ -194,8 +209,17 @@ describe('sdkModels', () => {
       if (!(num instanceof EnumType))
         console.error(`${type.name}.${propName} should be EnumType`)
       expect(num).toBeInstanceOf(EnumType)
+      expect(num.name).toEqual(enumName(propName))
       expect(num.values).toEqual(values)
     }
+
+    it('registers enum types', () => {
+      const types = apiTestModel.types
+      expect(types.SupportedActionTypesEnum).toBeDefined()
+      expect(types.SupportedFormattingsEnum).toBeDefined()
+      expect(types.SupportedDownloadSettingsEnum).toBeDefined()
+      expect(types.PullRequestModeEnum).toBeDefined()
+    })
 
     it('enum from array type', () => {
       const type = apiTestModel.types.Integration

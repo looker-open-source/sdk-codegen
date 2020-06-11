@@ -46,12 +46,14 @@ const enumTag = 'enum'
  * @param value string value to convert to camelCase
  */
 export const camelCase = (value: string) => {
-  return value.replace(/([-_][a-z])/gi, ($1) => {
+  let result = value.replace(/([-_][a-z])/gi, ($1) => {
     return $1
       .toUpperCase()
       .replace('-', '')
       .replace('_', '')
   })
+  result = result[0].toLocaleUpperCase() + result.substring(1)
+  return result
 }
 
 export interface IModel {}
@@ -117,6 +119,20 @@ export const mayQuote = (value: any, quoteChar = `'`): string => {
   const simpleName = /^\w[\w]*$/gim
   if (simpleName.test(str)) return str
   return `${quoteChar}${str}${quoteChar}`
+}
+
+/**
+ * Converts a name to its enum equivalent
+ *
+ * foo-bar = FooBarEnum
+ * foo_bar = FooBarEnum
+ * foobar = FoobarEnum
+ *
+ * @param {string} name to enumify
+ * @returns {string} Enum version of name
+ */
+export const enumName = (name: string): string => {
+  return camelCase(`Enum_${name}`)
 }
 
 /**
@@ -423,7 +439,7 @@ export interface IProperty extends ISymbol {
   /**
    * Search this item for a regular expression pattern
    * @param {RegExp} rx regular expression to match
-   * @param {SearchCriteria} criteria items to examine for the search
+   * @param {SearchCriteria} include items to examine for the search
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(rx: RegExp, include: SearchCriteria): boolean
@@ -901,8 +917,8 @@ export class Method extends SchemadSymbol implements IMethod {
    *
    * See https://github.com/OAI/OpenAPI-Specification/issues/1539 for more color commentary
    *
-   * @param {OAS.OperationObject} op to check for rate limiting
-   * @returns {boolean} true if any rate limiting attribute is defined for the op
+   * @param op to check for rate limiting
+   * @returns true if any rate limiting attribute is defined for the op
    */
   static isRateLimited(op: OAS.OperationObject): boolean {
     if (op['x-looker-rate-limited']) return true
@@ -936,7 +952,7 @@ export class Method extends SchemadSymbol implements IMethod {
       api.getRequestType(this)
     }
 
-    Object.entries(this.params).forEach(([_, param]) => {
+    Object.entries(this.params).forEach(([, param]) => {
       const writer = api.mayGetWriteableType(param.type)
       if (writer) {
         this.types.add(writer.name)
@@ -960,7 +976,8 @@ export class Method extends SchemadSymbol implements IMethod {
 
   /**
    * Adds the type to the method type xrefs and adds the method to the types xref
-   * @param {IType} type
+   * @param api ApiModel for tracking type
+   * @param type Type to add
    */
   addType(api: IApiModel, type: IType) {
     this.types.add(type.name)
@@ -1242,8 +1259,8 @@ export class Type implements IType {
   get writeable(): IProperty[] {
     const result: IProperty[] = []
     Object.entries(this.properties)
-      .filter(([_, prop]) => !(prop.readOnly || prop.type.readOnly))
-      .forEach(([_, prop]) => result.push(prop))
+      .filter(([, prop]) => !(prop.readOnly || prop.type.readOnly))
+      .forEach(([, prop]) => result.push(prop))
     return result
   }
 
@@ -1276,16 +1293,17 @@ export class Type implements IType {
   }
 
   get readOnly(): boolean {
-    return Object.entries(this.properties).every(([_, prop]) => prop.readOnly)
+    return Object.entries(this.properties).every(([, prop]) => prop.readOnly)
   }
 
-  load(symbols: ISymbolTable): void {
+  load(api: ApiModel): void {
     Object.entries(this.schema.properties || {}).forEach(
       ([propName, propSchema]) => {
-        const propType = symbols.resolveType(propSchema)
-        if (!propType.name) {
-          // Must be a string enum type??
-          propType.name = propName
+        const propType = api.resolveType(propSchema)
+        if (propType.className === 'EnumType' && !propType.name) {
+          propType.name = enumName(propName)
+          // Add enum to the symbol table
+          api.types[propType.name] = propType
         }
         this.types.add(propType.name)
         const customType = propType.customType
@@ -1308,8 +1326,8 @@ export class Type implements IType {
     let result = `${this.name}:`
     Object.entries(this.properties)
       // put properties in alphabetical order first
-      .sort(([a, _], [b, __]) => a.localeCompare(b))
-      .forEach(([_, prop]) => {
+      .sort(([a], [b]) => a.localeCompare(b))
+      .forEach(([, prop]) => {
         result += prop.asHashString() + ':'
       })
     return result
@@ -1323,7 +1341,7 @@ export class Type implements IType {
     const selfType = this.name
     // test for directly recursive type references
     return Object.entries(this.properties).some(
-      ([_, prop]) => prop.type.name === selfType
+      ([, prop]) => prop.type.name === selfType
     )
   }
 
@@ -1369,7 +1387,7 @@ export class Type implements IType {
       if (this.deprecated) result += searchIt('deprecated')
     }
     if (criteria.has(SearchCriterion.property)) {
-      Object.entries(this.properties).forEach(([_, prop]) => {
+      Object.entries(this.properties).forEach(([, prop]) => {
         result += prop.searchString(criteria)
       })
     }
@@ -1394,6 +1412,7 @@ export class ArrayType extends Type {
 
 export class EnumType extends Type implements IEnumType {
   readonly values: EnumValueType[]
+
   constructor(public elementType: IType, schema: OAS.SchemaObject) {
     super(schema, schema.name)
     this.customType = elementType.customType
@@ -1422,6 +1441,12 @@ export class EnumType extends Type implements IEnumType {
 
   get readOnly() {
     return this.elementType.readOnly
+  }
+
+  asHashString() {
+    let result = super.asHashString()
+    this.values.forEach((value) => (result += ':' + value.toString()))
+    return result
   }
 }
 
@@ -1530,8 +1555,8 @@ export class WriteType extends Type {
   private static readonlyProps = (properties: PropertyList): IProperty[] => {
     const result: IProperty[] = []
     Object.entries(properties)
-      .filter(([_, prop]) => prop.readOnly || prop.type.readOnly)
-      .forEach(([_, prop]) => result.push(prop))
+      .filter(([, prop]) => prop.readOnly || prop.type.readOnly)
+      .forEach(([, prop]) => result.push(prop))
     return result
   }
 }
@@ -1645,8 +1670,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   /**
    * Search this item for a regular expression pattern
-   * @param {RegExp} rx regular expression to match
-   * @param {SearchCriteria} criteria items to examine for the search
+   * @param expression regular expression to match
+   * @param criteria items to examine for the search
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(
@@ -1830,7 +1855,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
    * @returns {IType | undefined} either writeable type or undefined
    */
   mayGetWriteableType(type: IType) {
-    const props = Object.entries(type.properties).map(([_, prop]) => prop)
+    const props = Object.entries(type.properties).map(([, prop]) => prop)
     const writes = type.writeable
     // do we have any readOnly properties?
     if (writes.length === 0 || writes.length === props.length) return undefined
@@ -1846,7 +1871,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
    * establishes any dynamically-generated request or writeable types
    */
   loadDynamicTypes() {
-    Object.entries(this.methods).forEach(([_, method]) => {
+    Object.entries(this.methods).forEach(([, method]) => {
       method.makeTypes(this)
     })
   }
@@ -2127,6 +2152,9 @@ export interface ICodeGen {
 
   /** enum value delimiter. Typically, ",\n" */
   enumDelimiter: string
+
+  /** quote character/string to use for quoted strings. Typically, '"' or "'" */
+  codeQuote: string
 
   /**
    * Does this language require request types to be generated because it doesn't

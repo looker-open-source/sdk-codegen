@@ -486,6 +486,8 @@ ${indent}return result`
         }
         case 'DelimArrayType':
           return { default: 'nil', name: `DelimArray<${map.name}>` }
+        case 'EnumType':
+          return { default: 'nil', name: type.name }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }

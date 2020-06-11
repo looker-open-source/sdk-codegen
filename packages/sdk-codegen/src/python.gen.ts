@@ -499,6 +499,8 @@ ${this.hooks.join('\n')}
             default: this.nullStr,
             name: `models.DelimSequence[${map.name}]`,
           }
+        case 'EnumType':
+          return { default: '', name: `models.${type.name}` }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
