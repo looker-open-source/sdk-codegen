@@ -94,6 +94,8 @@ export abstract class Generator<T extends Models.IModel> {
   }
 }
 
+const noComment = ' '
+
 export class MethodGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
     const items: string[] = []
@@ -108,7 +110,7 @@ export class MethodGenerator extends Generator<Models.IApiModel> {
       )
     const tally = `${items.length} API methods`
     success(tally)
-    return this.p(this.codeFormatter.commentHeader('', licenseText))
+    return this.p(this.codeFormatter.commentHeader('', licenseText, noComment))
       .p(this.codeFormatter.commentHeader('', tally))
       .p(this.codeFormatter.methodsPrologue(indent))
       .p(items.join('\n\n'))
@@ -131,7 +133,7 @@ export class StreamGenerator extends Generator<Models.IApiModel> {
       )
     const tally = `${items.length} API methods`
     success(tally)
-    return this.p(this.codeFormatter.commentHeader('', licenseText))
+    return this.p(this.codeFormatter.commentHeader('', licenseText, noComment))
       .p(this.codeFormatter.commentHeader('', tally))
       .p(this.codeFormatter.streamsPrologue(indent))
       .p(items.join('\n\n'))
@@ -162,7 +164,7 @@ export class TypeGenerator extends Generator<Models.IApiModel> {
     const counts = this.typeTally(this.model.types)
     const tally = `${counts.total} API models: ${counts.standard} Spec, ${counts.request} Request, ${counts.write} Write, ${counts.enums} Enum`
     success(tally)
-    return this.p(this.codeFormatter.commentHeader('', licenseText))
+    return this.p(this.codeFormatter.commentHeader('', licenseText, noComment))
       .p(this.codeFormatter.commentHeader('', tally))
       .p(this.codeFormatter.modelsPrologue(indent))
       .p(items.join('\n\n'))

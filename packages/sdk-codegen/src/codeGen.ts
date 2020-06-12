@@ -191,7 +191,11 @@ export abstract class CodeGen implements ICodeGen {
     return commentBlock(description, indent, this.commentStr)
   }
 
-  commentHeader(indent: string, text: string | undefined) {
+  commentHeader(
+    indent: string,
+    text: string | undefined,
+    _commentStr?: string
+  ) {
     return text ? `${this.comment(indent, text)}\n` : ''
   }
 

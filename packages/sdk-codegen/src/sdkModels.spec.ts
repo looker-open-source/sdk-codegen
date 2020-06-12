@@ -68,14 +68,14 @@ describe('sdkModels', () => {
   })
 
   describe('enumName', () => {
-    it('foo-bar is FooBarEnum', () => {
-      expect(enumName('foo-bar')).toEqual('FooBarEnum')
+    it('foo-bar is FooBar', () => {
+      expect(enumName('foo-bar')).toEqual('FooBar')
     })
-    it('foo_bar is FooBarEnum', () => {
-      expect(enumName('foo_bar')).toEqual('FooBarEnum')
+    it('foo_bar is FooBar', () => {
+      expect(enumName('foo_bar')).toEqual('FooBar')
     })
-    it('foobar is FoobarEnum', () => {
-      expect(enumName('foobar')).toEqual(`FoobarEnum`)
+    it('foobar is Foobar', () => {
+      expect(enumName('foobar')).toEqual(`Foobar`)
     })
   })
 
@@ -215,10 +215,9 @@ describe('sdkModels', () => {
 
     it('registers enum types', () => {
       const types = apiTestModel.types
-      expect(types.SupportedActionTypesEnum).toBeDefined()
-      expect(types.SupportedFormattingsEnum).toBeDefined()
-      expect(types.SupportedDownloadSettingsEnum).toBeDefined()
-      expect(types.PullRequestModeEnum).toBeDefined()
+      expect(types[enumName('supported_action_types')]).toBeDefined()
+      expect(types[enumName('supported_formattings')]).toBeDefined()
+      expect(types[enumName('pull_request_mode')]).toBeDefined()
     })
 
     it('enum from array type', () => {

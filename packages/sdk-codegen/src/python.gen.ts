@@ -26,6 +26,7 @@
 
 import {
   Arg,
+  EnumType,
   IMappedType,
   IMethod,
   IParameter,
@@ -49,6 +50,7 @@ export class PythonGen extends CodeGen {
   paramDelimiter = ',\n'
   propDelimiter = '\n'
   dataStructureDelimiter = ', '
+  enumDelimiter = '\n'
 
   endTypeStr = ''
 
@@ -132,6 +134,7 @@ class ${this.packageName}(api_methods.APIMethods):
 # ${this.warnEditing()}
 import datetime
 from typing import Any, MutableMapping, Optional, Sequence
+from enum import Enum
 
 import attr
 
@@ -436,44 +439,52 @@ ${this.hooks.join('\n')}
     const bump = this.bumper(indent)
     const b2 = this.bumper(bump)
     const attrs: string[] = []
-    let usesReservedPythonKeyword = false
-    for (const prop of Object.values(type.properties)) {
-      let propName = prop.name
-      if (this.pythonKeywords.includes(propName)) {
-        propName = propName + '_'
-        usesReservedPythonKeyword = true
-      }
-      let attr = `${b2}${propName}:`
-      if (prop.description) {
-        attr += ` ${prop.description}`
-      }
-      attrs.push(attr)
-    }
-
+    const isEnum = type instanceof EnumType
+    const baseClass = isEnum ? 'Enum' : 'model.Model'
     let attrsArgs = 'auto_attribs=True, kw_only=True'
-    if (this.methodInputModelTypes.has(type)) {
-      attrsArgs += ', init=False'
+    let usesReservedPythonKeyword = false
+
+    if (!isEnum) {
+      for (const prop of Object.values(type.properties)) {
+        let propName = prop.name
+        if (this.pythonKeywords.includes(propName)) {
+          propName = propName + '_'
+          usesReservedPythonKeyword = true
+        }
+        let attr = `${b2}${propName}:`
+        if (prop.description) {
+          attr += ` ${prop.description}`
+        }
+        attrs.push(attr)
+      }
+
+      if (this.methodInputModelTypes.has(type)) {
+        attrsArgs += ', init=False'
+      }
+
+      const forwardRef = `ForwardRef("${type.name}")`
+      this.hooks.push(
+        `sr.converter${this.apiRef}.register_structure_hook(\n${bump}${forwardRef},  # type: ignore\n${bump}${this.structureHook}  # type:ignore\n)`
+      )
+      if (usesReservedPythonKeyword) {
+        this.hooks.push(
+          `sr.converter${this.apiRef}.register_structure_hook(\n${bump}${type.name},  # type: ignore\n${bump}${this.structureHook}  # type:ignore\n)`
+        )
+      }
     }
 
-    const forwardRef = `ForwardRef("${type.name}")`
-    this.hooks.push(
-      `sr.converter${this.apiRef}.register_structure_hook(\n${bump}${forwardRef},  # type: ignore\n${bump}${this.structureHook}  # type:ignore\n)`
-    )
-    if (usesReservedPythonKeyword) {
-      this.hooks.push(
-        `sr.converter${this.apiRef}.register_structure_hook(\n${bump}${type.name},  # type: ignore\n${bump}${this.structureHook}  # type:ignore\n)`
-      )
-    }
-    return (
+    let result =
       `\n` +
       `${indent}@attr.s(${attrsArgs})\n` +
-      `${indent}class ${type.name}(model.Model):\n` +
+      `${indent}class ${type.name}(${baseClass}):\n` +
       `${bump}"""\n` +
-      (type.description ? `${bump}${type.description}\n\n` : '') +
-      `${bump}Attributes:\n` +
-      `${attrs.join('\n')}\n` +
-      `${bump}"""\n`
-    )
+      (type.description ? `${bump}${type.description}\n` : '')
+
+    if (attrs.length > 0) {
+      result += `\n${bump}Attributes:\n` + `${attrs.join('\n')}\n`
+    }
+
+    return result + `${bump}"""\n`
   }
 
   summary(indent: string, text: string | undefined) {

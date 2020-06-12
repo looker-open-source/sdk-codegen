@@ -29,17 +29,25 @@ import md5 from 'blueimp-md5'
 import { HttpMethod, ResponseMode, responseMode, StatusCode } from '@looker/sdk'
 import { IVersionInfo } from './codeGen'
 
+/**
+ * Handy specification references
+ * https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schema-object
+ * https://swagger.io/docs/specification/data-models/data-types/
+ */
+
 export const strBody = 'body'
 export const strRequest = 'Request'
 export const strWrite = 'Write'
 export declare type Arg = string
 
+/**
+ * Tags for types that have an `x-looker-values` or `enum` specification
+ * according to https://swagger.io/docs/specification/data-models/enums/
+ *
+ * Ordinarily, if the OpenAPI specification is created by SDK Codegen, `x-looker-values` will already be converted to `enum`
+ */
 const lookerValuesTag = 'x-looker-values'
 const enumTag = 'enum'
-
-// handy refs
-// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schema-object
-// https://swagger.io/docs/specification/data-models/data-types/
 
 /**
  * convert kebab-case or snake_case to camelCase
@@ -124,15 +132,15 @@ export const mayQuote = (value: any, quoteChar = `'`): string => {
 /**
  * Converts a name to its enum equivalent
  *
- * foo-bar = FooBarEnum
- * foo_bar = FooBarEnum
- * foobar = FoobarEnum
+ * foo-bar = FooBar
+ * foo_bar = FooBar
+ * foobar = Foobar
  *
  * @param {string} name to enumify
  * @returns {string} Enum version of name
  */
 export const enumName = (name: string): string => {
-  return camelCase(`Enum_${name}`)
+  return camelCase(name)
 }
 
 /**
@@ -345,10 +353,6 @@ export interface IType {
   search(rx: RegExp, criteria: SearchCriteria): boolean
 }
 
-/**
- * Types that have an `x-looker-values` enumeration or Enum specification
- * according to https://swagger.io/docs/specification/data-models/enums/
- */
 export interface IEnumType extends IType {
   values: EnumValueType[]
 }
@@ -1445,7 +1449,7 @@ export class EnumType extends Type implements IEnumType {
 
   asHashString() {
     let result = super.asHashString()
-    this.values.forEach((value) => (result += ':' + value.toString()))
+    this.values.forEach((value) => (result += value.toString() + ':'))
     return result
   }
 }
@@ -1817,7 +1821,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
    */
   private _getRequestType(method: IMethod) {
     if (method.optionalParams.length <= 1) return undefined
-    // matches method params hash against current request types
+    // matches method params ONLY value hash against current request types
     let paramHash = ''
     method.allParams.forEach((p) => (paramHash += p.asHashString()))
     const hash = md5(paramHash)
@@ -2243,11 +2247,16 @@ export interface ICodeGen {
 
   /**
    * generate an optional comment header if the comment is not empty
-   * @param {string} indent code indentation
-   * @param {string | undefined} text
-   * @returns {string} comment (or not)
+   * @param indent code indentation
+   * @param text of comment, can be multi-line
+   * @param commentStr comment character for multi-line comments
+   * @returns comment (or not)
    */
-  commentHeader(indent: string, text: string | undefined): string
+  commentHeader(
+    indent: string,
+    text: string | undefined,
+    commentStr?: string
+  ): string
 
   /**
    * group argument names together

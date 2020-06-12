@@ -136,10 +136,20 @@ export interface IDictionary<T> {
     return ''
   }
 
-  commentHeader(indent: string, text: string | undefined) {
-    return text
-      ? `${indent}/**\n${commentBlock(text, indent, ' * ')}\n${indent} */\n`
-      : ''
+  commentHeader(indent: string, text: string | undefined, commentStr = ' * ') {
+    if (!text) return ''
+    if (commentStr === ' ') {
+      return `${indent}/**\n\n${commentBlock(
+        text,
+        indent,
+        commentStr
+      )}\n\n${indent} */\n`
+    }
+    return `${indent}/**\n${commentBlock(
+      text,
+      indent,
+      commentStr
+    )}\n${indent} */\n`
   }
 
   declareProperty(indent: string, property: IProperty) {

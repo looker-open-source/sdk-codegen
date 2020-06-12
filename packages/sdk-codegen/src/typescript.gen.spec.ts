@@ -26,6 +26,7 @@
 
 import { TestConfig } from './testUtils'
 import { TypescriptGen } from './typescript.gen'
+import { enumName } from './sdkModels'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
@@ -36,13 +37,22 @@ const indent = ''
 describe('typescript generator', () => {
   it('comment header', () => {
     const text = 'line 1\nline 2'
-    const actual = gen.commentHeader(indent, text)
-    const expected = `/**
+    let actual = gen.commentHeader(indent, text)
+    let expected = `/**
  * line 1
  * line 2
  */
 `
     expect(actual).toEqual(expected)
+
+    actual = gen.commentHeader(indent, text, ' ')
+    expected = `/**
+    
+ line 1
+ line 2
+
+ */
+`
   })
 
   describe('parameter declarations', () => {
@@ -307,6 +317,7 @@ body: ICreateDashboardRenderTask`)
     it('required properties', () => {
       const type = apiTestModel.types.CreateQueryTask
       const actual = gen.declareType(indent, type)
+      const name = enumName('result_format')
       expect(actual).toEqual(`export interface ICreateQueryTask {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -319,7 +330,7 @@ body: ICreateDashboardRenderTask`)
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: result_format
+  result_format: ${name}
   /**
    * Source of query task
    */
@@ -342,20 +353,21 @@ body: ICreateDashboardRenderTask`)
       const type =
         apiTestModel.types.CreateQueryTask.properties.result_format.type
       const actual = gen.declareType('', type)
+      const name = enumName('result_format')
       expect(actual).toEqual(`/**
  * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
  */
-export enum result_format {
-  inline_json,
-  json,
-  json_detail,
-  json_fe,
-  csv,
-  html,
-  md,
-  txt,
-  xlsx,
-  gsxml
+export enum ${name} {
+  inline_json = 'inline_json',
+  json = 'json',
+  json_detail = 'json_detail',
+  json_fe = 'json_fe',
+  csv = 'csv',
+  html = 'html',
+  md = 'md',
+  txt = 'txt',
+  xlsx = 'xlsx',
+  gsxml = 'gsxml'
 }`)
     })
   })
