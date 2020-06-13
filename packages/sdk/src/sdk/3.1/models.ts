@@ -57,7 +57,7 @@ export interface IAccessToken {
 /**
  * The appropriate horizontal text alignment the values of this field shoud be displayed in. Valid values are: "left", "right".
  */
-export enum AlignType {
+export enum Align {
   left = 'left',
   right = 'right',
 }
@@ -142,7 +142,7 @@ export interface IBackupConfiguration {
 /**
  * Field category Valid values are: "parameter", "filter", "measure", "dimension".
  */
-export enum CategoryType {
+export enum Category {
   parameter = 'parameter',
   filter = 'filter',
   measure = 'measure',
@@ -275,7 +275,7 @@ export interface IContentMetaGroupUser {
   /**
    * Type of permission: "view" or "edit" Valid values are: "view", "edit". (read-only)
    */
-  permission_type?: PermissionTypeType
+  permission_type?: PermissionType
   /**
    * ID of associated group (read-only)
    */
@@ -684,7 +684,7 @@ export interface ICreateQueryTask {
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: ResultFormatType
+  result_format: ResultFormat
   /**
    * Source of query task
    */
@@ -1989,7 +1989,7 @@ export interface IDelegateOauthTest {
 /**
  * Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none".
  */
-export enum DependencyStatusType {
+export enum DependencyStatus {
   lock_optional = 'lock_optional',
   lock_required = 'lock_required',
   lock_error = 'lock_error',
@@ -2239,7 +2239,7 @@ export interface IError {
 /**
  * The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range".
  */
-export enum FillStyleType {
+export enum FillStyle {
   enumeration = 'enumeration',
   range = 'range',
 }
@@ -2389,7 +2389,7 @@ export interface IFolderBase {
 /**
  * Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region".
  */
-export enum FormatType {
+export enum Format {
   topojson = 'topojson',
   vector_tile_region = 'vector_tile_region',
 }
@@ -2397,7 +2397,7 @@ export enum FormatType {
 /**
  * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
  */
-export enum GitApplicationServerHttpSchemeType {
+export enum GitApplicationServerHttpScheme {
   http = 'http',
   https = 'https',
 }
@@ -2894,23 +2894,23 @@ export interface IIntegration {
   /**
    * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
    */
-  supported_formats?: SupportedFormatsType
+  supported_formats?: SupportedFormats
   /**
    * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)
    */
-  supported_action_types?: SupportedActionTypesType
+  supported_action_types?: SupportedActionTypes
   /**
    * A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (read-only)
    */
-  supported_formattings?: SupportedFormattingsType
+  supported_formattings?: SupportedFormattings
   /**
    * A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (read-only)
    */
-  supported_visualization_formattings?: SupportedVisualizationFormattingsType
+  supported_visualization_formattings?: SupportedVisualizationFormattings
   /**
    * A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (read-only)
    */
-  supported_download_settings?: SupportedDownloadSettingsType
+  supported_download_settings?: SupportedDownloadSettings
   /**
    * URL to an icon for the integration. (read-only)
    */
@@ -3901,7 +3901,7 @@ export interface ILookmlModelExploreField {
   /**
    * The appropriate horizontal text alignment the values of this field shoud be displayed in. Valid values are: "left", "right". (read-only)
    */
-  align?: AlignType
+  align?: Align
   /**
    * Whether it's possible to filter on this field. (read-only)
    */
@@ -3909,7 +3909,7 @@ export interface ILookmlModelExploreField {
   /**
    * Field category Valid values are: "parameter", "filter", "measure", "dimension". (read-only)
    */
-  category?: CategoryType
+  category?: Category
   /**
    * The default value that this field uses when filtering. Null if there is no default value. (read-only)
    */
@@ -3937,7 +3937,7 @@ export interface ILookmlModelExploreField {
   /**
    * The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (read-only)
    */
-  fill_style?: FillStyleType
+  fill_style?: FillStyle
   /**
    * An offset (in months) from the calendar start month to the fiscal start month defined in the LookML model this field belongs to. (read-only)
    */
@@ -4071,7 +4071,7 @@ export interface ILookmlModelExploreField {
   /**
    * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
    */
-  user_attribute_filter_types?: UserAttributeFilterTypesType
+  user_attribute_filter_types?: UserAttributeFilterTypes
   /**
    * If specified, the LookML value format string for formatting values of this field. (read-only)
    */
@@ -4091,7 +4091,7 @@ export interface ILookmlModelExploreField {
   /**
    * The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (read-only)
    */
-  week_start_day?: WeekStartDayType
+  week_start_day?: WeekStartDay
 }
 
 export interface ILookmlModelExploreFieldEnumeration {
@@ -4133,7 +4133,7 @@ export interface ILookmlModelExploreFieldMapLayer {
   /**
    * Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (read-only)
    */
-  format?: FormatType
+  format?: Format
   /**
    * Specifies the URL to a JSON file that defines the geographic extents of each region available in the map layer. This data is used to automatically center the map on the available data for visualization purposes. The JSON file must be a JSON object where the keys are the mapping value of the feature (as specified by property_key) and the values are arrays of four numbers representing the west longitude, south latitude, east longitude, and north latitude extents of the region. The object must include a key for every possible value of property_key. (read-only)
    */
@@ -4182,7 +4182,7 @@ export interface ILookmlModelExploreFieldTimeInterval {
   /**
    * The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "year". (read-only)
    */
-  name?: NameType
+  name?: Name
   /**
    * The number of intervals this field represents a grouping of. (read-only)
    */
@@ -4752,7 +4752,7 @@ export interface IModelsNotValidated {
 /**
  * The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "year".
  */
-export enum NameType {
+export enum Name {
   day = 'day',
   hour = 'hour',
   minute = 'minute',
@@ -5056,7 +5056,7 @@ export interface IPermissionSet {
 /**
  * Type of permission: "view" or "edit" Valid values are: "view", "edit".
  */
-export enum PermissionTypeType {
+export enum PermissionType {
   view = 'view',
   edit = 'edit',
 }
@@ -5109,7 +5109,7 @@ export interface IProject {
   /**
    * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
    */
-  git_application_server_http_scheme?: GitApplicationServerHttpSchemeType
+  git_application_server_http_scheme?: GitApplicationServerHttpScheme
   /**
    * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
    */
@@ -5121,7 +5121,7 @@ export interface IProject {
   /**
    * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
    */
-  pull_request_mode?: PullRequestModeType
+  pull_request_mode?: PullRequestMode
   /**
    * Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
    */
@@ -5297,7 +5297,7 @@ export interface IProjectWorkspace {
   /**
    * Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (read-only)
    */
-  dependency_status?: DependencyStatusType
+  dependency_status?: DependencyStatus
   git_branch?: IGitBranch
   /**
    * The lookml syntax used by all files in this project (read-only)
@@ -5308,7 +5308,7 @@ export interface IProjectWorkspace {
 /**
  * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
  */
-export enum PullRequestModeType {
+export enum PullRequestMode {
   off = 'off',
   links = 'links',
   recommended = 'recommended',
@@ -7123,7 +7123,7 @@ export interface IRequestUserRoles {
 /**
  * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
  */
-export enum ResultFormatType {
+export enum ResultFormat {
   inline_json = 'inline_json',
   json = 'json',
   json_detail = 'json_detail',
@@ -8073,7 +8073,7 @@ export interface ISqlQueryCreate {
 /**
  * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard".
  */
-export enum SupportedActionTypesType {
+export enum SupportedActionTypes {
   cell = 'cell',
   query = 'query',
   dashboard = 'dashboard',
@@ -8082,7 +8082,7 @@ export enum SupportedActionTypesType {
 /**
  * A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url".
  */
-export enum SupportedDownloadSettingsType {
+export enum SupportedDownloadSettings {
   push = 'push',
   url = 'url',
 }
@@ -8090,7 +8090,7 @@ export enum SupportedDownloadSettingsType {
 /**
  * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip".
  */
-export enum SupportedFormatsType {
+export enum SupportedFormats {
   txt = 'txt',
   csv = 'csv',
   inline_json = 'inline_json',
@@ -8109,7 +8109,7 @@ export enum SupportedFormatsType {
 /**
  * A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted".
  */
-export enum SupportedFormattingsType {
+export enum SupportedFormattings {
   formatted = 'formatted',
   unformatted = 'unformatted',
 }
@@ -8117,7 +8117,7 @@ export enum SupportedFormattingsType {
 /**
  * A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply".
  */
-export enum SupportedVisualizationFormattingsType {
+export enum SupportedVisualizationFormattings {
   apply = 'apply',
   noapply = 'noapply',
 }
@@ -8438,7 +8438,7 @@ export interface IUserAttribute {
 /**
  * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode".
  */
-export enum UserAttributeFilterTypesType {
+export enum UserAttributeFilterTypes {
   advanced_filter_string = 'advanced_filter_string',
   advanced_filter_number = 'advanced_filter_number',
   advanced_filter_datetime = 'advanced_filter_datetime',
@@ -8646,7 +8646,7 @@ export interface IValidationErrorDetail {
 /**
  * The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday".
  */
-export enum WeekStartDayType {
+export enum WeekStartDay {
   monday = 'monday',
   tuesday = 'tuesday',
   wednesday = 'wednesday',
@@ -8916,7 +8916,7 @@ export interface IWriteCreateQueryTask {
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: ResultFormatType
+  result_format: ResultFormat
   /**
    * Source of query task
    */
@@ -10087,7 +10087,7 @@ export interface IWriteProject {
   /**
    * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
    */
-  git_application_server_http_scheme?: GitApplicationServerHttpSchemeType
+  git_application_server_http_scheme?: GitApplicationServerHttpScheme
   /**
    * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
    */
@@ -10099,7 +10099,7 @@ export interface IWriteProject {
   /**
    * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
    */
-  pull_request_mode?: PullRequestModeType
+  pull_request_mode?: PullRequestMode
   /**
    * Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
    */

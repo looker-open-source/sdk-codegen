@@ -46,6 +46,8 @@ import {
   IEnumType,
   mayQuote,
   enumName,
+  Type,
+  ApiModel,
 } from './sdkModels'
 
 const config = TestConfig()
@@ -218,6 +220,92 @@ describe('sdkModels', () => {
       expect(types[enumName('supported_action_types')]).toBeDefined()
       expect(types[enumName('supported_formattings')]).toBeDefined()
       expect(types[enumName('pull_request_mode')]).toBeDefined()
+    })
+
+    describe('enum naming', () => {
+      const rf1: OAS.SchemaObject = {
+        name: 'result_format',
+        type: 'string',
+        'x-looker-values': [
+          'inline_json',
+          'json',
+          'json_detail',
+          'json_fe',
+          'csv',
+          'html',
+          'md',
+          'txt',
+          'xlsx',
+          'gsxml',
+        ],
+        description: 'RF1',
+        nullable: true,
+      }
+
+      const rf2: OAS.SchemaObject = {
+        name: 'result_format',
+        type: 'string',
+        'x-looker-values': ['pdf', 'png', 'jpeg'],
+        description: 'RF2',
+        nullable: true,
+      }
+
+      const rf3: OAS.SchemaObject = {
+        type: 'string',
+        'x-looker-values': ['csv', 'html', 'txt'],
+        description: 'RF3',
+        nullable: true,
+      }
+
+      const rf4: OAS.SchemaObject = {
+        name: 'result_format',
+        type: 'string',
+        'x-looker-values': ['csv', 'html', 'txt', 'xlsx'],
+        description: 'RF4',
+        nullable: true,
+      }
+
+      const rf5: OAS.SchemaObject = {
+        name: 'result_format',
+        type: 'string',
+        'enum': [
+          'inline_json',
+          'json',
+          'json_detail',
+          'json_fe',
+          'csv',
+          'html',
+          'md',
+          'txt',
+          'xlsx',
+          'gsxml',
+        ],
+        description: 'RF5',
+        nullable: true,
+      }
+
+      it('enum types are renamed and not overwritten', () => {
+        const api = new ApiModel({} as OAS.OpenAPIObject)
+        const actual1 = api.resolveType(rf1)
+        const name1 = enumName(rf1.name)
+        expect(actual1.name).toEqual(name1)
+
+        // Returns first enum for same values
+        const actual5 = api.resolveType(rf5, undefined, 'Foo')
+        expect(actual5.name).toEqual(name1)
+        expect(actual5.description).toEqual(actual1.description)
+
+        const actual2 = api.resolveType(rf2)
+        const name2 = `${enumName(rf2.name)}1`
+        expect(actual2.name).toEqual(name2)
+
+        const actual3 = api.resolveType(rf3, undefined, 'result_format')
+        expect(actual3.name).toEqual('ResultFormat2')
+
+        const actual4 = api.resolveType(rf4, undefined, undefined, 'Meth')
+        const name4 = `Meth${enumName(rf4.name)}`
+        expect(actual4.name).toEqual(name4)
+      })
     })
 
     it('enum from array type', () => {

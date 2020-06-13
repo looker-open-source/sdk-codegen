@@ -27,11 +27,14 @@
 import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
+  EnumType,
+  EnumValueType,
   IMappedType,
   IMethod,
   IParameter,
   IProperty,
   IType,
+  mayQuote,
   strBody,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
@@ -48,6 +51,8 @@ export class KotlinGen extends CodeGen {
   argDelimiter = ', '
   paramDelimiter = ',\n'
   propDelimiter = ',\n'
+  codeQuote = '"'
+  enumDelimiter = ',\n'
 
   indentStr = '  '
   endTypeStr = '\n) : Serializable'
@@ -244,10 +249,43 @@ import java.util.*
     )
   }
 
+  declareEnumValue(indent: string, value: EnumValueType) {
+    return `${indent}${mayQuote(value)}`
+  }
+
   typeSignature(indent: string, type: IType) {
+    const isEnum = type instanceof EnumType
+    const kind = isEnum ? 'enum' : 'data'
+    const opener = isEnum ? ': Serializable {' : '('
     return (
       this.commentHeader(indent, type.description) +
-      `${indent}data class ${type.name} (\n`
+      `${indent}${kind} class ${type.name} ${opener}\n`
+    )
+  }
+
+  declareType(indent: string, type: IType) {
+    const bump = this.bumper(indent)
+    const props: string[] = []
+    let ender = this.endTypeStr
+    let propertyValues = ''
+    if (type instanceof EnumType) {
+      ender = `\n}`
+      const num = type as EnumType
+      num.values.forEach((value) =>
+        props.push(this.declareEnumValue(bump, value))
+      )
+      propertyValues = props.join(this.enumDelimiter)
+    } else {
+      Object.values(type.properties).forEach((prop) =>
+        props.push(this.declareProperty(bump, prop))
+      )
+      propertyValues = props.join(this.propDelimiter)
+    }
+    return (
+      this.typeSignature(indent, type) +
+      propertyValues +
+      this.construct(indent, type) +
+      `${this.endTypeStr ? indent : ''}${ender}`
     )
   }
 

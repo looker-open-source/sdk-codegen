@@ -51,6 +51,7 @@ export class PythonGen extends CodeGen {
   propDelimiter = '\n'
   dataStructureDelimiter = ', '
   enumDelimiter = '\n'
+  codeQuote = '"'
 
   endTypeStr = ''
 
@@ -134,7 +135,7 @@ class ${this.packageName}(api_methods.APIMethods):
 # ${this.warnEditing()}
 import datetime
 from typing import Any, MutableMapping, Optional, Sequence
-from enum import Enum
+import enum
 
 import attr
 
@@ -440,7 +441,7 @@ ${this.hooks.join('\n')}
     const b2 = this.bumper(bump)
     const attrs: string[] = []
     const isEnum = type instanceof EnumType
-    const baseClass = isEnum ? 'Enum' : 'model.Model'
+    const baseClass = isEnum ? 'enum.Enum' : 'model.Model'
     let attrsArgs = 'auto_attribs=True, kw_only=True'
     let usesReservedPythonKeyword = false
 
@@ -475,13 +476,13 @@ ${this.hooks.join('\n')}
 
     let result =
       `\n` +
-      `${indent}@attr.s(${attrsArgs})\n` +
+      (isEnum ? '' : `${indent}@attr.s(${attrsArgs})\n`) +
       `${indent}class ${type.name}(${baseClass}):\n` +
       `${bump}"""\n` +
-      (type.description ? `${bump}${type.description}\n` : '')
+      (type.description ? `${bump}${type.description}\n\n` : '')
 
     if (attrs.length > 0) {
-      result += `\n${bump}Attributes:\n` + `${attrs.join('\n')}\n`
+      result += `${bump}Attributes:\n` + `${attrs.join('\n')}\n`
     }
 
     return result + `${bump}"""\n`

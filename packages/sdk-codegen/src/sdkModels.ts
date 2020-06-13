@@ -1303,11 +1303,9 @@ export class Type implements IType {
   load(api: ApiModel): void {
     Object.entries(this.schema.properties || {}).forEach(
       ([propName, propSchema]) => {
-        const propType = api.resolveType(propSchema)
-        if (propType.className === 'EnumType' && !propType.name) {
-          propType.name = enumName(propName)
-          // Add enum to the symbol table
-          api.types[propType.name] = propType
+        const propType = api.resolveType(propSchema, undefined, propName)
+        if (propType.className === 'EnumType') {
+          api.registerEnum(propType, propName)
         }
         this.types.add(propType.name)
         const customType = propType.customType
@@ -1425,7 +1423,9 @@ export class EnumType extends Type implements IEnumType {
     } else if (enumTag in schema) {
       this.values = schema[enumTag] as EnumValueType[]
     } else {
-      throw new Error(`${schema.name} is an enum but has no values`)
+      throw new Error(
+        `${schema.name} is an enum but has no defined enum values`
+      )
     }
   }
 
@@ -1448,9 +1448,7 @@ export class EnumType extends Type implements IEnumType {
   }
 
   asHashString() {
-    let result = super.asHashString()
-    this.values.forEach((value) => (result += value.toString() + ':'))
-    return result
+    return this.values.join()
   }
 }
 
@@ -1586,12 +1584,13 @@ export interface IApiModel extends IModel {
 }
 
 export class ApiModel implements ISymbolTable, IApiModel {
+  private requestTypes: TypeList = {}
+  private enumTypes: TypeList = {}
+  private refs: TypeList = {}
   readonly schema: OAS.OpenAPIObject | undefined
   methods: MethodList = {}
   types: TypeList = {}
-  requestTypes: TypeList = {}
   tags: TagList = {}
-  private refs: TypeList = {}
 
   constructor(spec: OAS.OpenAPIObject) {
     ;[
@@ -1738,7 +1737,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
    */
   resolveType(
     schema: string | OAS.SchemaObject | OAS.ReferenceObject,
-    style?: string
+    style?: string,
+    typeName?: string,
+    methodName?: string
   ): IType {
     if (typeof schema === 'string') {
       if (schema.indexOf('/requestBodies/') < 0)
@@ -1750,7 +1751,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
           ['content', 'application/json', 'schema', '$ref'],
           deref
         )
-        if (ref) return this.resolveType(ref)
+        if (ref) return this.resolveType(ref, style, typeName, methodName)
       }
     } else if (OAS.isReferenceObject(schema)) {
       return this.refs[schema.$ref]
@@ -1767,12 +1768,22 @@ export class ApiModel implements ISymbolTable, IApiModel {
           return new DelimArrayType(this.resolveType(schema.items), schema)
         }
         if (this.schemaHasEnums(schema)) {
-          return new EnumType(this.resolveType(schema.items), schema)
+          const result = new EnumType(this.resolveType(schema.items), schema)
+          if (result) {
+            // If defined, it may get reassigned
+            return this.registerEnum(result, typeName, methodName)
+          }
+          return result
         }
         return new ArrayType(this.resolveType(schema.items), schema)
       }
       if (this.schemaHasEnums(schema)) {
-        return new EnumType(this.resolveType(schema.type), schema)
+        const result = new EnumType(this.resolveType(schema.type), schema)
+        if (result) {
+          // If defined, it may get reassigned
+          return this.registerEnum(result, typeName, methodName)
+        }
+        return result
       }
       if (schema.type === 'object' && schema.additionalProperties) {
         if (schema.additionalProperties !== true) {
@@ -1808,6 +1819,36 @@ export class ApiModel implements ISymbolTable, IApiModel {
     this.requestTypes[hash] = request
     method.addType(this, request)
     return request
+  }
+
+  registerEnum(type: IType, typeName?: string, methodName?: string) {
+    if (!(type instanceof EnumType)) return type
+    const num = type as EnumType
+    const hash = md5(num.asHashString())
+
+    if (hash in this.enumTypes) {
+      /**
+       * whatever type this was, it's now the same as the existing enum type
+       */
+      return this.enumTypes[hash]
+    }
+
+    type.name = enumName(type.name || typeName || 'Enum')
+    if (type.name in this.types) {
+      // Enum values don't match existing enum of this name. Pick a new name
+      const baseName = methodName
+        ? enumName(`${methodName}_${type.name}`)
+        : type.name
+      let newName = baseName
+      let i = 0
+      while (newName in this.types) {
+        newName = `${baseName}${++i}`
+      }
+      type.name = newName
+    }
+    this.enumTypes[hash] = type
+    this.types[type.name] = type
+    return type
   }
 
   /**
@@ -1897,8 +1938,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
   sortLists() {
     this.methods = this.sortList(this.methods)
     this.types = this.sortList(this.types)
-    this.requestTypes = this.sortList(this.requestTypes)
-    this.refs = this.sortList(this.refs)
+    // this.requestTypes = this.sortList(this.requestTypes)
+    // this.refs = this.sortList(this.refs)
     this.tags = this.sortList(this.tags)
     const keys = Object.keys(this.tags).sort(localeSort)
     keys.forEach((key) => {
