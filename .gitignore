@@ -64,3 +64,7 @@ kotlin/out/*
 # test output
 junit.xml
 results/*
+
+# csharp
+csharp/*.cache
+obj/
