@@ -1,10 +1,11 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Looker.RTL
 {
@@ -13,7 +14,6 @@ namespace Looker.RTL
      *     https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-3.1
      * 
      */
-    
     /** Interface for API transport values */
     public interface ITransportSettings
     {
@@ -64,13 +64,13 @@ namespace Looker.RTL
         public TSuccess Value { get; set; }
         public TError Error { get; set; }
     }
-    
+
     /**
      * Http request authenticator callback used by AuthSession and any other automatically authenticating
      * request processor
      */
     public delegate HttpRequestMessage Authenticator(HttpRequestMessage init);
-        
+
     /**
      * Concrete implementation of IRawResponse interface
      *
@@ -105,13 +105,26 @@ namespace Looker.RTL
             Authenticator authenticator = null,
             ITransportSettings options = null
         ) where TSuccess : class where TError : class;
-
     }
-    
-    public class Transport: ITransport, ITransportSettings
+
+    /// <summary>
+    /// HTPP request processor
+    /// </summary>
+    public class Transport : ITransport, ITransportSettings
     {
         private readonly HttpClient _client;
         private readonly ITransportSettings _settings;
+
+        static Transport()
+        {
+            // Long docs on DateTime support at https://docs.microsoft.com/en-us/dotnet/standard/datetime/system-text-json-support
+            // JsonSerializerSettings settings = new JsonSerializerSettings
+            // {
+            //     DateFormatHandling = DateFormatHandling.IsoDateFormat,
+            //     DateTimeZoneHandling = DateTimeZoneHandling.Utc
+            // };            
+        }
+
         public Transport(ITransportSettings settings, HttpClient client = null)
         {
             _client = client ?? new HttpClient();
@@ -126,9 +139,85 @@ namespace Looker.RTL
             if (path.StartsWith("http:", StringComparison.InvariantCultureIgnoreCase)
                 || path.StartsWith("https:", StringComparison.InvariantCultureIgnoreCase))
                 return path;
-            // TODO implement queryParams conversion
-            return $"{BaseUrl}{path}";
+            // TODO I don't think authenticator is needed here any more?
+            return AddQueryParams($"{BaseUrl}{path}", queryParams);
         }
+
+        /**
+         * Encode parameter if not already encoded
+         * @param value value of parameter
+         * @returns URI encoded value
+         */
+        public static string EncodeParam(object value)
+        {
+            string encoded;
+            switch (value)
+            {
+                case null:
+                    return "";
+                case DateTime time:
+                {
+                    var d = time;
+                    encoded = d.ToString("O");
+                    break;
+                }
+                case bool toggle:
+                {
+                    encoded = Convert.ToString(toggle).ToLowerInvariant();
+                    break;
+                }
+                default:
+                    encoded = Convert.ToString(value);
+                    break;
+            }
+
+            var decoded = WebUtility.UrlDecode(encoded);
+            if (encoded == decoded)
+            {
+                encoded = WebUtility.UrlEncode(encoded);
+            }
+
+            return encoded;
+        }
+
+        /**
+         * Converts `Values` to query string parameter format
+         * @param values Name/value collection to encode
+         * @returns {string} query string parameter formatted values. Both `false` and `null` are included. Only `undefined` are omitted.
+         */
+        public static string EncodeParams(Values values = null)
+        {
+            if (values == null) return "";
+
+            var args = values
+                .Where(pair =>
+                    pair.Value != null || (pair.Value is string && !string.IsNullOrEmpty(pair.Value.ToString())))
+                .Select(x => $"{x.Key}=encodeParam(x.Value)");
+
+            return string.Join("&", args);
+        }
+
+        /**
+         * constructs the path argument including any optional query parameters
+         * @param path the base path of the request
+         * @param obj optional collection of query parameters to encode and append to the path
+         */
+        public static string AddQueryParams(string path, Values obj = null)
+        {
+            if (obj == null)
+            {
+                return path;
+            }
+
+            var sb = new StringBuilder(path);
+            var qp = EncodeParams(obj);
+            if (string.IsNullOrEmpty(qp)) return sb.ToString();
+            sb.Append("?");
+            sb.Append(qp);
+
+            return sb.ToString();
+        }
+
         public async Task<IRawResponse> RawRequest(
             HttpMethod method,
             string path,
@@ -146,7 +235,7 @@ namespace Looker.RTL
                 if (body is string)
                 {
                     request.Content = new StringContent(
-                        body.ToString(), 
+                        body.ToString(),
                         Encoding.UTF8,
                         "application/x-www-form-urlencoded");
                 }
@@ -155,10 +244,11 @@ namespace Looker.RTL
                     request.Content =
                         new StringContent(
                             JsonSerializer.Serialize(body),
-                            Encoding.UTF8, 
+                            Encoding.UTF8,
                             "application/json");
                 }
             }
+
             if (authenticator != null) request = authenticator(request);
             var response = await _client.SendAsync(request);
             var result = new RawResponse();
@@ -179,6 +269,7 @@ namespace Looker.RTL
                     {
                         result.Body = await sr.ReadToEndAsync();
                     }
+
                     break;
                 case ResponseMode.Unknown:
                     result.Body = Constants.StreamToByteArray(stream);
@@ -186,16 +277,17 @@ namespace Looker.RTL
                 default:
                     throw new ArgumentOutOfRangeException($"Unrecognized Content Type {result.ContentType}");
             }
+
             return result;
         }
 
-        public SdkResponse<TSuccess, TError> ParseResponse<TSuccess, TError>(IRawResponse response) where TSuccess : class where TError : class
+        public SdkResponse<TSuccess, TError> ParseResponse<TSuccess, TError>(IRawResponse response)
+            where TSuccess : class where TError : class
         {
-            object result;
             switch (Constants.ResponseMode(response.ContentType))
             {
                 case ResponseMode.Binary:
-                    return new SdkResponse<TSuccess, TError>() { Value = response.Body as TSuccess };
+                    return new SdkResponse<TSuccess, TError>() {Value = response.Body as TSuccess};
                 case ResponseMode.String:
                     if (response.ContentType.StartsWith("application/json"))
                     {
@@ -217,6 +309,7 @@ namespace Looker.RTL
                     throw new ArgumentOutOfRangeException($"Unrecognized Content Type {response.ContentType}");
             }
         }
+
         public async Task<SdkResponse<TSuccess, TError>> Request<TSuccess, TError>(
             HttpMethod method,
             string path,
@@ -226,7 +319,7 @@ namespace Looker.RTL
             ITransportSettings options = null
         ) where TSuccess : class where TError : class
         {
-            var raw =  await RawRequest(method, path, queryParams, body, authenticator, options);
+            var raw = await RawRequest(method, path, queryParams, body, authenticator, options);
             return ParseResponse<TSuccess, TError>(raw);
         }
 
