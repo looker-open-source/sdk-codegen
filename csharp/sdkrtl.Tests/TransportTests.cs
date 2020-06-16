@@ -53,9 +53,6 @@ namespace sdkrtl.Tests
             Assert.Equal(json.Keys, new string[] {"looker_release_version", "current_version", "supported_versions"});
         }
 
-        /**
-         * This test requires the local Looker server is running and versions can be retrieved
-         */
         [Fact]
         public async Task GetTypedUrlTest()
         {
