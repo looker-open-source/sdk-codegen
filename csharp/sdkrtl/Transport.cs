@@ -131,9 +131,13 @@ namespace Looker.RTL
             _settings = settings;
         }
 
-        /**
-         * Makes adjustments to path based on whether the path is relative or not
-         */
+        /// <summary>
+        ///  Makes adjustments to path based on whether the path is relative or not
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="queryParams"></param>
+        /// <param name="authenticator"></param>
+        /// <returns></returns>
         public string MakeUrl(string path, Values queryParams = null, Authenticator authenticator = null)
         {
             if (path.StartsWith("http:", StringComparison.InvariantCultureIgnoreCase)
@@ -287,21 +291,21 @@ namespace Looker.RTL
             switch (Constants.ResponseMode(response.ContentType))
             {
                 case ResponseMode.Binary:
-                    return new SdkResponse<TSuccess, TError>() {Value = response.Body as TSuccess};
+                    return new SdkResponse<TSuccess, TError> {Value = response.Body as TSuccess};
                 case ResponseMode.String:
                     if (response.ContentType.StartsWith("application/json"))
                     {
-                        return new SdkResponse<TSuccess, TError>()
+                        return new SdkResponse<TSuccess, TError>
                         {
                             Value = JsonSerializer.Deserialize<TSuccess>(response.Body.ToString())
                         };
                     }
                     else
                     {
-                        return new SdkResponse<TSuccess, TError>() {Value = response.Body.ToString() as TSuccess};
+                        return new SdkResponse<TSuccess, TError> {Value = response.Body.ToString() as TSuccess};
                     }
                 case ResponseMode.Unknown:
-                    return new SdkResponse<TSuccess, TError>()
+                    return new SdkResponse<TSuccess, TError>
                     {
                         Error = JsonSerializer.Deserialize<TError>(response.Body.ToString())
                     };
