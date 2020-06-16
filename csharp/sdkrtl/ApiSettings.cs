@@ -8,26 +8,33 @@ using IniParser;
 
 namespace Looker.RTL
 {
-    public interface IApiSection : IDictionary<string, object> { }
+    // TODO file configuration provider
+    // https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.configuration.fileconfigurationprovider?view=dotnet-plat-ext-3.1
+    // instead of IniParser
 
     public interface IApiSettings : ITransportSettings
     {
-        IApiSection ReadConfig(string section);
+        /**
+         * return configuration values as a name/value collection from the configuration store
+         */
+        IValues ReadConfig(string section);
 
+        /**
+         * returns True if the API settings are configured correctly
+         */
         bool IsConfigured();
     }
-
-    public class ApiSection : Dictionary<string, object>, IApiSection { }
     
     public class ApiSettings : IApiSettings
     {
-        public string base_url { get; set; }
-        public bool verify_ssl { get; set; } = true;
-        public int timeout { get; set; } = 120;
-        public string agentTag { get; set; }
-        private string fileName { get; }
+        public string BaseUrl { get; set; }
+        public bool VerifySsl { get; set; } = true;
+        public int Timeout { get; set; } = 120;
+        public string AgentTag { get; set; }
+        private string FileName { get; }
+        private string SectionName { get; }
         
-        public ApiSettings(string fileName = "")
+        public ApiSettings(string fileName = "", string sectionName = null)
         {
             if (!string.IsNullOrEmpty(fileName))
             {
@@ -36,47 +43,47 @@ namespace Looker.RTL
                     throw new ArgumentException($"File {fileName} does not exist.");
                 }
             }
-            this.fileName = fileName ?? "looker.ini";
-            if (File.Exists(this.fileName))
+            FileName = fileName ?? "looker.ini";
+            SectionName = sectionName ?? "Looker";
+            if (File.Exists(FileName))
             {
-                this.Load(this.ReadConfig(this.fileName));
+                Load(ReadConfig(sectionName));
             }
         }
 
-        public IApiSection ReadConfig(string sectionName = "Looker")
+        public IValues ReadConfig(string sectionName = null)
         {
             var parser = new FileIniDataParser();
-            var data = parser.ReadFile(this.fileName);
+            var data = parser.ReadFile(FileName);
+            sectionName ??= SectionName;
             var section = data[sectionName];
-            IApiSection result = new ApiSection();
+            IValues result = new Values();
             foreach (var pair in section)
             {
                 result[pair.KeyName] = pair.Value;
             }
-            // TODO: figure out how to do toDictionary
+            // TODO: figure out how to make section.toDictionary() work
             return result;
         }
 
-        public IApiSettings Load(IApiSection values)
+        public IApiSettings Load(IValues values)
         {
             foreach (var pair in values)
             {
                 switch (pair.Key)
                 {
                     case "base_url":
-                        this.base_url = Convert.ToString(pair.Value);
+                        BaseUrl = Convert.ToString(pair.Value);
                         break;
                     case "verify_ssl":
-                        this.verify_ssl = Convert.ToBoolean(pair.Value);
+                        VerifySsl = Convert.ToBoolean(pair.Value);
                         break;
                     case "timeout":
-                        this.timeout = Convert.ToInt32(pair.Value);
+                        Timeout = Convert.ToInt32(pair.Value);
                         break;
                     case "agentTag":
-                        this.agentTag = Convert.ToString(pair.Value);
+                        AgentTag = Convert.ToString(pair.Value);
                         break;
-                    default:
-                        throw new ArgumentException($"Unrecognized key: {pair.Key}");
                 }
             }
             return this;
@@ -84,7 +91,7 @@ namespace Looker.RTL
 
         public bool IsConfigured()
         {
-            return this.base_url == String.Empty;
+            return !string.IsNullOrEmpty(BaseUrl);
         }
     }
 }

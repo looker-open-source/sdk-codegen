@@ -68,3 +68,5 @@ results/*
 # csharp
 csharp/*.cache
 obj/
+**/bin/Debug
+*.user

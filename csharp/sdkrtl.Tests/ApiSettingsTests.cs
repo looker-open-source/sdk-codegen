@@ -1,23 +1,28 @@
-using System.Reflection.Metadata;
 using Xunit;
 using IniParser;
 using Looker.RTL;
 
 namespace sdkrtl.Tests
 {
-    static class TestConstants
-    {
-        public const string localIni = "../../../../looker.ini";
-        public const int timeout = 120;
-    }
-    
     public class ApiSettingsTests
     {
+        private readonly TestConfig _config = new TestConfig();
+
+        [Fact]
+        public void TestConfigTest()
+        {
+            var actual = new TestConfig();
+            Assert.NotNull(actual);
+            Assert.NotNull(actual.Settings);
+            Assert.NotNull(actual.IniFileName);
+            Assert.NotNull(actual.Settings.BaseUrl);
+        }
+        
         [Fact]
         public void ReadConfigTest()
         {
             var parser = new FileIniDataParser();
-            var data = parser.ReadFile(TestConstants.localIni);
+            var data = parser.ReadFile(_config.IniFileName);
             Assert.Equal("false", data["Looker"]["verify_ssl"]);
         }
 
@@ -26,8 +31,8 @@ namespace sdkrtl.Tests
         {
             var settings = new ApiSettings();
             Assert.False(settings.IsConfigured());
-            Assert.True(settings.verify_ssl);
-            Assert.Equal(TestConstants.timeout, settings.timeout);
+            Assert.Equal(Constants.VerifySsl, settings.VerifySsl);
+            Assert.Equal(Constants.Timeout, settings.Timeout);
         }
     }
 }
