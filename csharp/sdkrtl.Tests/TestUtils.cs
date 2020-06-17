@@ -17,6 +17,9 @@ namespace sdkrtl.Tests
         /// </summary>
         string TestFileName { get; set; }
         
+        string HtmlTestUrl { get; set; }
+        
+        string HtmlTestContent { get; set; }
         /// <summary>
         /// Test data parsed from <c>/test/data.yml.json</c>
         /// </summary>
@@ -36,11 +39,16 @@ namespace sdkrtl.Tests
     {
         public string IniFileName { get; set; }
         public string TestFileName { get; set; }
+        public string HtmlTestUrl { get; set; }
+        public string HtmlTestContent { get; set; }
         public dynamic TestData { get; set; }
         public IApiSettings Settings { get; set; }
 
         public TestConfig(string iniFile = null, string sectionName = null)
         {
+            HtmlTestUrl = "https://github.com/looker-open-source/sdk-codegen";
+            HtmlTestContent = "One SDK to rule them all";
+
             var rootPath = Path.GetFullPath("../../../../");
             IniFileName = iniFile ?? Environment.GetEnvironmentVariable("LOOKERSDK_INI") ??
                 Path.Combine(rootPath, "looker.ini");

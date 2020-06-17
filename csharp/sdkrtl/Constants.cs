@@ -64,6 +64,7 @@ namespace Looker.RTL
         public const string LookerVersion = "7.12";
 
         public const string Bearer = "Bearer";
+        public const string LookerAppiId = "x-looker-appid";
     }
 
     /// <summary>

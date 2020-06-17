@@ -91,7 +91,7 @@ namespace Looker.RTL
             ITransportSettings settings = null
         ) where TSuccess : class where TError : class
         {
-            settings = settings.Merge(AuthSession.Settings);
+            settings = settings.Spread(AuthSession.Settings);
             path = MakePath(path, settings, _authenticator);
             return await AuthSession.Transport.Request<TSuccess, TError>(
                 method,

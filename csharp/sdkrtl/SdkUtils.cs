@@ -13,19 +13,19 @@ namespace Looker.RTL
     public static class Extensions
     {
         /// <summary>
-        /// Merge assigned properties from <c>source</c> into <c>dest</c> 
+        /// Assigned properties from <c>source</c> into <c>dest</c> where they're null in <c>dest</c> 
         /// </summary>
         /// <remarks>
         /// Sorta similar to ECMAScript spread operator.
         /// </remarks>
         /// <example>
-        /// settings = settings.Merge(AuthSession.Settings);
+        /// settings = settings.Spread(AuthSession.Settings);
         /// </example>
         /// <param name="dest">Destination object</param>
         /// <param name="source">Source object</param>
         /// <typeparam name="T">Type of object (homogeneous)</typeparam>
         /// <returns><c>dest</c> with merged values</returns>
-        public static T Merge<T>(this T dest, T source)
+        public static T Spread<T>(this T dest, T source)
         {
             if (dest == null) return source;
             var t = typeof(T);
@@ -33,6 +33,9 @@ namespace Looker.RTL
 
             foreach (var prop in properties)
             {
+                // Skip any assigned properties
+                if (prop.GetValue(dest, null) != null) continue;
+                
                 var value = prop.GetValue(source, null);
                 if (value != null)
                     prop.SetValue(dest, value, null);

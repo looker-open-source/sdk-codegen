@@ -49,6 +49,7 @@ namespace Looker.RTL
         /// <exception cref="ArgumentException"></exception>
         public ApiSettings(string fileName = "", string sectionName = null)
         {
+            AgentTag = $"{Constants.AgentPrefix} {Constants.LookerVersion}";
             if (fileName.IsFull())
             {
                 if (!File.Exists(fileName))
@@ -96,12 +97,10 @@ namespace Looker.RTL
                     case "timeout":
                         Timeout = Convert.ToInt32(pair.Value);
                         break;
-                    case "agentTag":
-                        AgentTag = Convert.ToString(pair.Value);
-                        break;
                 }
             }
 
+            
             return this;
         }
 

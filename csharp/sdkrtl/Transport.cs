@@ -221,6 +221,7 @@ namespace Looker.RTL
             var url = MakeUrl(path, queryParams, authenticator);
             var request = new HttpRequestMessage(method,
                 url);
+            request.Headers.Add(Constants.LookerAppiId, _settings.AgentTag);
             if (body != null)
             {
                 if (body is string)

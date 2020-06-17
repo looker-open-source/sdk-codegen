@@ -20,8 +20,6 @@ namespace sdkrtl.Tests
     public class TransportTests
     {
         private readonly ITestOutputHelper _testOutputHelper;
-        private const string HtmlUrl = "https://github.com/looker-open-source/sdk-codegen";
-        private const string HtmlContent = "One SDK to rule them all";
 
         private TestConfig _config;
         private dynamic _contentTypes;
@@ -39,14 +37,14 @@ namespace sdkrtl.Tests
             var xp = new Transport(_config.Settings);
             var actual = await xp.RawRequest(
                 HttpMethod.Get,
-                HtmlUrl
+                _config.HtmlTestUrl
             );
             Assert.True(actual.Ok);
             Assert.Equal(HttpStatusCode.OK, actual.StatusCode);
             Assert.Contains("text/html", actual.ContentType);
             var content = actual.Body.ToString();
             Assert.NotNull(content);
-            Assert.Contains(HtmlContent, content);
+            Assert.Contains(_config.HtmlTestContent, content);
         }
 
         [Fact]

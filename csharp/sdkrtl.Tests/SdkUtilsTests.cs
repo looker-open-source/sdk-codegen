@@ -72,6 +72,17 @@ namespace sdkrtl.Tests
             Assert.Equal("2.3", actual);
 
         }
-        
+
+        [Fact]
+        public void SpreadTest()
+        {
+            var settings = new ApiSettings { BaseUrl = "url", AgentTag = "A", Timeout = 120 };
+            var options = new ApiSettings { Timeout = 5, VerifySsl = false };
+            options.Spread(settings);
+            Assert.Equal("url", options.BaseUrl);
+            Assert.Equal(5, options.Timeout);
+            Assert.Equal("A", options.AgentTag);
+            Assert.False(options.VerifySsl);
+        }
     }
 }
