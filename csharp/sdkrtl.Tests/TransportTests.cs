@@ -6,75 +6,33 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Looker.RTL;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace sdkrtl.Tests
 {
+
+    /// <summary>
+    /// These tests require the Looker server configured in the root looker.ini file to be running
+    /// </summary>
+    /// TODO test MakeUrl()
+    /// TODO remove reliance on Looker server for these basic tests. Find some other reliable URLs for tests
+    /// TODO test binary (image) responses
     public class TransportTests
     {
-        /**
-         * These tests require the local Looker server is running and versions can be retrieved
-         */
+        private readonly ITestOutputHelper _testOutputHelper;
         private const string HtmlUrl = "https://github.com/looker-open-source/sdk-codegen";
-
         private const string HtmlContent = "One SDK to rule them all";
 
         private TestConfig _config;
         private dynamic _contentTypes;
         
-        public TransportTests()
+        public TransportTests(ITestOutputHelper testOutputHelper)
         {
+            _testOutputHelper = testOutputHelper;
             _config = new TestConfig();
             _contentTypes = _config.TestData["content_types"];
         }
 
-        [Fact]
-        public void BinaryModeTest()
-        {
-            var contents = _contentTypes["binary"];
-            Assert.NotNull(contents);
-            foreach (var content in contents)
-            {
-                var s = Convert.ToString(content);
-                var actual = Constants.ResponseMode(s);
-                if (actual != ResponseMode.Binary)
-                {
-                    Console.WriteLine($"{s} is not binary");
-                }
-                Assert.Equal(ResponseMode.Binary, actual);
-            }
-        }
-        
-        [Fact]
-        public void StringModeTest()
-        {
-            var contents = _contentTypes["string"];
-            Assert.NotNull(contents);
-            foreach (var content in contents)
-            {
-                var s = Convert.ToString(content);
-                var actual = Constants.ResponseMode(s);
-                if (actual != ResponseMode.String)
-                {
-                    Console.WriteLine($"{s} is not test/string");
-                }
-                Assert.Equal(ResponseMode.String, actual);
-            }
-        }
-
-        [Fact]
-        public void EncodeParamTest()
-        {
-            // TODO figure out the always painful DateTime conversions
-            // var date = DateTime.Parse("2020-01-01T14:48:00.00Z");
-            // Assert.Equal("2020-01-01T14%3A48%3A00.000Z", Transport.EncodeParam(date));
-            Assert.Equal("foo%2Fbar", Transport.EncodeParam("foo%2Fbar"));
-            Assert.Equal("foo%2Fbar", Transport.EncodeParam("foo/bar"));
-            var actual = Transport.EncodeParam(true);
-            Assert.Equal("true", actual);
-            actual = Transport.EncodeParam(2.3);
-            Assert.Equal("2.3", actual);
-
-        }
         [Fact]
         public async Task GetHtmlUrlTest()
         {

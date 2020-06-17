@@ -11,10 +11,10 @@ namespace Looker.RTL
     // TODO: figure out nullable ints
     public interface IAccessToken
     {
-        string access_token { get; set; }
-        string token_type { get; set; }
+        string? access_token { get; set; }
+        string? token_type { get; set; }
         int expires_in { get; set; }
-        string refresh_token { get; set; }
+        string? refresh_token { get; set; }
     }
 
     /// <summary>
@@ -22,10 +22,10 @@ namespace Looker.RTL
     /// </summary>
     public struct AccessToken : IAccessToken
     {
-        public string access_token { get; set; }
-        public string token_type { get; set; }
+        public string? access_token { get; set; }
+        public string? token_type { get; set; }
         public int expires_in { get; set; }
-        public string refresh_token { get; set; }
+        public string? refresh_token { get; set; }
     }
 
     /// <summary>
@@ -33,12 +33,12 @@ namespace Looker.RTL
     /// </summary>
     public class AuthToken: IAccessToken
     {
-        public string access_token { get; set; }
-        public string token_type { get; set; }
+        public string? access_token { get; set; }
+        public string? token_type { get; set; }
 
         public int expires_in { get; set; }
 
-        public string refresh_token { get; set; }
+        public string? refresh_token { get; set; }
         // Give a 10 second expiration window to account for latency
         public DateTime ExpiresAt { get; set; } = DateTime.Now.AddSeconds(-10);
 
@@ -55,18 +55,18 @@ namespace Looker.RTL
         /// <param name="token"></param>
         public void SetToken(IAccessToken token)
         {
-            if (!string.IsNullOrEmpty(token.token_type))
+            if (token.token_type.IsFull())
             {
                 token_type = token.token_type;
             }
 
-            if (!string.IsNullOrEmpty(token.refresh_token))
+            if (token.refresh_token.IsFull())
             {
                 refresh_token = token.refresh_token;
             }
 
             expires_in = token.expires_in;
-            if (string.IsNullOrEmpty(token.access_token)) return;
+            if (token.access_token.IsNullOrEmpty()) return;
             access_token = token.access_token;
             ExpiresAt = ExpiresAt.AddSeconds(expires_in);
         }
@@ -77,11 +77,19 @@ namespace Looker.RTL
         /// <returns></returns>
         public bool IsActive()
         {
-            if (string.IsNullOrEmpty(access_token))
+            if (access_token.IsNullOrEmpty())
             {
                 return false;
             }
             return ExpiresAt > DateTime.Now;
+        }
+
+        public AuthToken Reset()
+        {
+            access_token = null;
+            expires_in = 0;
+            ExpiresAt = DateTime.Now.AddSeconds(-10);
+            return this;
         }
     }
 }

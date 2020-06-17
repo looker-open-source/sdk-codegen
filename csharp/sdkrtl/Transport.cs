@@ -9,45 +9,51 @@ using System.Text.Json;
 
 namespace Looker.RTL
 {
-    /**
-     * Notes:
-     *     https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-3.1
-     * 
-     */
-    /** Interface for API transport values */
+    // Ref: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-3.1
+
+    /// <summary>
+    /// Interface for API transport values
+    /// </summary>
     public interface ITransportSettings
     {
-        /** base URL of API REST web service */
+        /// base URL of API REST web service
         string BaseUrl { get; set; }
 
-        /** whether to verify ssl certs or not. Defaults to true */
+        /// whether to verify ssl certs or not. Defaults to true
         bool VerifySsl { get; set; }
 
-        /** request timeout in seconds. Default to 30 */
+        /// request timeout in seconds. Default to 30
         int Timeout { get; set; }
 
-        /** agent tag to use for the SDK requests  */
+        /// agent tag to use for the SDK requests 
         string AgentTag { get; set; }
     }
 
-    /**
-     * HTTP response without any error handling. Based on Looker SDK response interface
-     */
+    /// <summary>
+    /// HTTP response without any error handling. Based on Looker SDK response interface
+    /// </summary>
     public interface IRawResponse
     {
-        /** ok is `true` if the response is successful, `false` otherwise */
+        /// <summary>
+        /// ok is <c>true</c> if the response is successful, <c>false</c> otherwise
+        /// </summary>
         bool Ok { get; }
 
-        /** HTTP response code */
         HttpStatusCode StatusCode { get; set; }
 
-        /** HTTP response status message text */
+        /// <summary>
+        /// HTTP response status message text
+        /// </summary>
         string StatusMessage { get; set; }
 
-        /** MIME type of the response from the HTTP response header */
+        /// <summary>
+        /// MIME type of the response from the HTTP response header as a semicolon-delimited string
+        /// </summary>
         string ContentType { get; set; }
 
-        /** The body of the HTTP response, without any additional processing */
+        /// <summary>
+        /// The body of the HTTP response, with minimal conversion
+        /// </summary>
         object Body { get; set; }
     }
 
@@ -65,17 +71,18 @@ namespace Looker.RTL
         public TError Error { get; set; }
     }
 
-    /**
-     * Http request authenticator callback used by AuthSession and any other automatically authenticating
-     * request processor
-     */
-    public delegate HttpRequestMessage Authenticator(HttpRequestMessage init);
+    /// <summary>
+    /// Http request authenticator callback used by AuthSession and any other automatically authenticating request processor
+    /// </summary>
+    /// <param name="request">request to update with auth properties</param>
+    public delegate Task<HttpRequestMessage> Authenticator(HttpRequestMessage request);
 
-    /**
-     * Concrete implementation of IRawResponse interface
-     *
-     * The `Ok` property is read-only, based on checking `StatusCode`.
-     */
+    /// <summary>
+    /// Concrete implementation of IRawResponse interface
+    /// </summary>
+    /// <remarks>
+    /// The <c>Ok</c> property is read-only, determining its value by checking <c>StatusCode</c>.
+    /// </remarks> 
     public struct RawResponse : IRawResponse
     {
         public bool Ok => (StatusCode >= HttpStatusCode.OK && StatusCode < HttpStatusCode.Ambiguous);
@@ -86,8 +93,26 @@ namespace Looker.RTL
         public object Body { get; set; }
     }
 
+    /// <summary>
+    /// The HTTP request/response processing interface
+    /// </summary>
     public interface ITransport
     {
+        /// <summary>
+        /// Process a request without type conversion or error handling
+        /// </summary>
+        /// <param name="method">the <c>HttpMethod</c> to use</param>
+        /// <param name="path">the url path (either absolute or relative)</param>
+        /// <param name="queryParams">optional query parameters</param>
+        /// <param name="body">optional body value.
+        /// If the body is a <c>string</c> type, the post will be marked as <c>x-www-urlformencoded</c>.
+        /// Otherwise, it will be converted to JSON.
+        /// </param>
+        /// <param name="authenticator">Optional authenticator callback for the request.</param>
+        /// <param name="options">Transport option overrides, such as a different timeout.
+        /// TODO not implemented yet
+        /// </param>
+        /// <returns>the raw response to the HTTP request. The <c>Ok</c> property will be <c>False</c> if the request failed.</returns>
         Task<IRawResponse> RawRequest(
             HttpMethod method,
             string path,
@@ -97,6 +122,23 @@ namespace Looker.RTL
             ITransportSettings options = null
         );
 
+        /// <summary>
+        /// Process an HTTP request and convert it to the indicated type
+        /// </summary>
+        /// <param name="method">the <c>HttpMethod</c> to use</param>
+        /// <param name="path">the url path (either absolute or relative)</param>
+        /// <param name="queryParams">optional query parameters</param>
+        /// <param name="body">optional body value.
+        /// If the body is a <c>string</c> type, the post will be marked as <c>x-www-urlformencoded</c>.
+        /// Otherwise, it will be converted to JSON.
+        /// </param>
+        /// <param name="authenticator">Optional authenticator callback for the request.</param>
+        /// <param name="options">Transport option overrides, such as a different timeout.
+        /// TODO not implemented yet
+        /// </param>
+        /// <typeparam name="TSuccess">Type of response if the request succeeds</typeparam>
+        /// <typeparam name="TError">Type of response if the request fails</typeparam>
+        /// <returns>A <c>TSuccess</c> response if successful, a <c>TError</c> response if not.</returns>
         Task<SdkResponse<TSuccess, TError>> Request<TSuccess, TError>(
             HttpMethod method,
             string path,
@@ -144,82 +186,7 @@ namespace Looker.RTL
                 || path.StartsWith("https:", StringComparison.InvariantCultureIgnoreCase))
                 return path;
             // TODO I don't think authenticator is needed here any more?
-            return AddQueryParams($"{BaseUrl}{path}", queryParams);
-        }
-
-        /**
-         * Encode parameter if not already encoded
-         * @param value value of parameter
-         * @returns URI encoded value
-         */
-        public static string EncodeParam(object value)
-        {
-            string encoded;
-            switch (value)
-            {
-                case null:
-                    return "";
-                case DateTime time:
-                {
-                    var d = time;
-                    encoded = d.ToString("O");
-                    break;
-                }
-                case bool toggle:
-                {
-                    encoded = Convert.ToString(toggle).ToLowerInvariant();
-                    break;
-                }
-                default:
-                    encoded = Convert.ToString(value);
-                    break;
-            }
-
-            var decoded = WebUtility.UrlDecode(encoded);
-            if (encoded == decoded)
-            {
-                encoded = WebUtility.UrlEncode(encoded);
-            }
-
-            return encoded;
-        }
-
-        /**
-         * Converts `Values` to query string parameter format
-         * @param values Name/value collection to encode
-         * @returns {string} query string parameter formatted values. Both `false` and `null` are included. Only `undefined` are omitted.
-         */
-        public static string EncodeParams(Values values = null)
-        {
-            if (values == null) return "";
-
-            var args = values
-                .Where(pair =>
-                    pair.Value != null || (pair.Value is string && !string.IsNullOrEmpty(pair.Value.ToString())))
-                .Select(x => $"{x.Key}=encodeParam(x.Value)");
-
-            return string.Join("&", args);
-        }
-
-        /**
-         * constructs the path argument including any optional query parameters
-         * @param path the base path of the request
-         * @param obj optional collection of query parameters to encode and append to the path
-         */
-        public static string AddQueryParams(string path, Values obj = null)
-        {
-            if (obj == null)
-            {
-                return path;
-            }
-
-            var sb = new StringBuilder(path);
-            var qp = EncodeParams(obj);
-            if (string.IsNullOrEmpty(qp)) return sb.ToString();
-            sb.Append("?");
-            sb.Append(qp);
-
-            return sb.ToString();
+            return SdkUtils.AddQueryParams($"{BaseUrl}{path}", queryParams);
         }
 
         public async Task<IRawResponse> RawRequest(
@@ -253,7 +220,7 @@ namespace Looker.RTL
                 }
             }
 
-            if (authenticator != null) request = authenticator(request);
+            if (authenticator != null) request = await authenticator(request);
             var response = await _client.SendAsync(request);
             var result = new RawResponse();
             response.Content.Headers.TryGetValues("Content-Type", out var values);
@@ -263,10 +230,10 @@ namespace Looker.RTL
             await using var stream = await response.Content.ReadAsStreamAsync();
             result.ContentType = string.Join("; ", values);
             // Simple content conversion here to make body easily readable in consumers
-            switch (Constants.ResponseMode(result.ContentType))
+            switch (SdkUtils.ResponseMode(result.ContentType))
             {
                 case ResponseMode.Binary:
-                    result.Body = Constants.StreamToByteArray(stream);
+                    result.Body = SdkUtils.StreamToByteArray(stream);
                     break;
                 case ResponseMode.String:
                     using (var sr = new StreamReader(stream))
@@ -276,7 +243,7 @@ namespace Looker.RTL
 
                     break;
                 case ResponseMode.Unknown:
-                    result.Body = Constants.StreamToByteArray(stream);
+                    result.Body = SdkUtils.StreamToByteArray(stream);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"Unrecognized Content Type {result.ContentType}");
@@ -285,10 +252,10 @@ namespace Looker.RTL
             return result;
         }
 
-        public SdkResponse<TSuccess, TError> ParseResponse<TSuccess, TError>(IRawResponse response)
+        public static SdkResponse<TSuccess, TError> ParseResponse<TSuccess, TError>(IRawResponse response)
             where TSuccess : class where TError : class
         {
-            switch (Constants.ResponseMode(response.ContentType))
+            switch (SdkUtils.ResponseMode(response.ContentType))
             {
                 case ResponseMode.Binary:
                     return new SdkResponse<TSuccess, TError> {Value = response.Body as TSuccess};
@@ -350,5 +317,6 @@ namespace Looker.RTL
             get => _settings.AgentTag;
             set => _settings.AgentTag = value;
         }
+
     }
 }

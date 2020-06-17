@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading;
 using IniParser;
 
 namespace Looker.RTL
@@ -14,17 +10,23 @@ namespace Looker.RTL
 
     public interface IApiSettings : ITransportSettings
     {
-        /**
-         * return configuration values as a name/value collection from the configuration store
-         */
-        IValues ReadConfig(string section);
+        /// <summary>
+        /// return configuration values as a name/value collection from the configuration store
+        /// </summary>
+        /// <param name="section">Configuration section name to read</param>
+        /// <returns><c>IValues</c> collection</returns>
+        IValues ReadConfig(string section = null);
 
-        /**
-         * returns True if the API settings are configured correctly
-         */
+        /// <summary>
+        /// Are all required API Settings configured?
+        /// </summary>
+        /// <returns>returns True if the API settings are configured correctly</returns>
         bool IsConfigured();
     }
-    
+
+    /// <summary>
+    /// Base ApiSettings class that reads configuration values from looker.ini by default
+    /// </summary>
     public class ApiSettings : IApiSettings
     {
         public string BaseUrl { get; set; }
@@ -33,16 +35,28 @@ namespace Looker.RTL
         public string AgentTag { get; set; }
         private string FileName { get; }
         private string SectionName { get; }
-        
+
+        public ApiSettings()
+        {
+        }
+
+        /// <summary>
+        /// Read ApiSettings from an ini file 
+        /// </summary>
+        /// <param name="fileName">Name of file to read. Defaults to <c>looker.ini</c> in the current path.
+        /// If specified and the file does not exist, an error is thrown.</param>
+        /// <param name="sectionName">Name of section to read from <c>.ini</c> file. Defaults to "Looker"</param>
+        /// <exception cref="ArgumentException"></exception>
         public ApiSettings(string fileName = "", string sectionName = null)
         {
-            if (!string.IsNullOrEmpty(fileName))
+            if (fileName.IsFull())
             {
                 if (!File.Exists(fileName))
                 {
                     throw new ArgumentException($"File {fileName} does not exist.");
                 }
             }
+
             FileName = fileName ?? "looker.ini";
             SectionName = sectionName ?? "Looker";
             if (File.Exists(FileName))
@@ -62,6 +76,7 @@ namespace Looker.RTL
             {
                 result[pair.KeyName] = pair.Value;
             }
+
             // TODO: figure out how to make section.toDictionary() work
             return result;
         }
@@ -86,12 +101,13 @@ namespace Looker.RTL
                         break;
                 }
             }
+
             return this;
         }
 
         public bool IsConfigured()
         {
-            return !string.IsNullOrEmpty(BaseUrl);
+            return BaseUrl.IsFull();
         }
     }
 }

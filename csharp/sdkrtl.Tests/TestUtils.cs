@@ -1,19 +1,37 @@
 using System;
 using System.IO;
 using Looker.RTL;
-// Need this serializer for dynamic support
 using Newtonsoft.Json;
 
 namespace sdkrtl.Tests
 {
     public interface ITestConfig
     {
+        /// <summary>
+        /// Name of the root looker.ini file
+        /// </summary>
         string IniFileName { get; set; }
+        
+        /// <summary>
+        /// Name of the test data file
+        /// </summary>
         string TestFileName { get; set; }
+        
+        /// <summary>
+        /// Test data parsed from <c>/test/data.yml.json</c>
+        /// </summary>
         dynamic TestData { get; set; }
+        
+        /// <summary>
+        /// API settings read from <c>IniFileName</c>
+        /// </summary>
         IApiSettings Settings { get; set; }
     }
 
+    /// <summary>
+    /// This class needs the NewtonSoft JSON processor for <c>dynamic</c> deserialization support
+    /// The "standard" .NET core JSON processor doesn't yet support <c>dynamic</c> correctly.
+    /// </summary>
     public class TestConfig : ITestConfig
     {
         public string IniFileName { get; set; }

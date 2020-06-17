@@ -1,9 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
 namespace Looker.RTL
 {
+    /// <summary>
+    /// Response mode enums
+    ///
+    /// TODO: add Json for application/json MIME types?
+    /// </summary>
     public enum ResponseMode
     {
         Binary,
@@ -11,92 +17,65 @@ namespace Looker.RTL
         Unknown
     }
 
+    /// <summary>
+    /// SDK Exception class for recognizing SDK-specific errors and eventual customization
+    /// </summary>
+    public class SdkError : Exception
+    {
+        public SdkError() : base() {}
+        
+        public SdkError(string message): base(message) {}
+    }
+    
     public struct Constants
     {
-        /**
-         * Default HTTP request timeout in seconds
-         */
+        /// <summary>
+        /// Default HTTP request timeout in seconds
+        /// </summary>
         public const int Timeout = 120;
 
-        /**
-         * Default SSL verification
-         */
+        /// <summary>
+        /// Default SSL verification
+        /// </summary>
         public const bool VerifySsl = true;
 
-        /**
-     * Does this content type say it's utf-8?
-     * @type {string} Regular expression for matching charset=utf-8 in Content-Type
-     */
-        const string MatchCharsetUtf8 = ";.*charset=.*\\butf-8\\b`";
+        private const string MatchCharsetUtf8 = ";.*charset=.*\\butf-8\\b`";
 
+        /// <summary>
+        /// Is this content type utf-8?
+        /// </summary>
         public static Regex IsCharsetUtf8 = new Regex(MatchCharsetUtf8,
             RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        /**
-     * Matching rules for string/text types. String matches must be checked *before* binary matches
-     * @type {string} Regular expression for matching Content-Type headers
-     */
-        const string MatchModeString =
+        private const string MatchModeString =
             "(^application\\/.*(\\bjson\\b|\\bxml\\b|\\bsql\\b|\\bgraphql\\b|\\bjavascript\\b|\\bx-www-form-urlencoded\\b)|^text\\/|.*\\+xml\\b|;.*charset=)";
 
-        static readonly Regex ContentPatternString = new Regex(MatchModeString,
+        internal static readonly Regex ContentPatternString = new Regex(MatchModeString,
             RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        /**
-     * Matching rules for all binary or unknown types. Binary matches must be checked *after* string matches
-     * @type {string} Regular expression for matching Content-Type headers
-     */
-        const string MatchModeBinary =
+        private const string MatchModeBinary =
             "^image\\/|^audio\\/|^video\\/|^font\\/|^application\\/|^multipart\\/";
 
-        static readonly Regex ContentPatternBinary = new Regex(MatchModeBinary,
+        internal static readonly Regex ContentPatternBinary = new Regex(MatchModeBinary,
             RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public static ResponseMode ResponseMode(string contentType)
-        {
-            if (ContentPatternString.IsMatch(contentType))
-            {
-                return RTL.ResponseMode.String;
-            }
+        public const string DefaultApiVersion = "4.0";
+        public const string AgentPrefix = "CS-SDK";
+        public const string LookerVersion = "7.12";
 
-            if (ContentPatternBinary.IsMatch(contentType))
-            {
-                return RTL.ResponseMode.Binary;
-            }
-
-            return RTL.ResponseMode.Unknown;
-        }
-        
-        public static byte[] ReadAll(Stream inStream)
-        {
-            using var outStream = new MemoryStream();
-            inStream.CopyTo(outStream);
-            return outStream.ToArray();
-        }
-        
-        public static byte[] StreamToByteArray(Stream stream)
-        {
-            if (stream is MemoryStream)
-            {
-                return ((MemoryStream)stream).ToArray();                
-            }
-            else
-            {
-                return ReadAll(stream);
-            }
-        }        
+        public const string Bearer = "Bearer";
     }
 
-    /**
-     * Interface describing standard name/value pairs for the SDK
-     */
+    /// <summary>
+    /// Interface describing standard name/value pairs for the SDK
+    /// </summary>
     public interface IValues : IDictionary<string, object>
     {
     }
 
-    /**
-     * Concrete implementation of IValues for easy population of values
-     */
+    /// <summary>
+    /// Concrete implementation of IValues for easy population of values
+    /// </summary>
     public class Values : Dictionary<string, object>, IValues
     {
     }
