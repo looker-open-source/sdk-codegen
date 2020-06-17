@@ -20,7 +20,7 @@ namespace Looker.RTL
     /// <summary>
     /// Concrete implementation of IAccessToken
     /// </summary>
-    public struct AccessToken : IAccessToken
+    public class AccessToken : IAccessToken
     {
         public string? access_token { get; set; }
         public string? token_type { get; set; }

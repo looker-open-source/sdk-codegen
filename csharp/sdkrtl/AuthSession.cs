@@ -144,7 +144,7 @@ namespace Looker.RTL
                 }
 
                 var body = $"client_id={SdkUtils.EncodeParam(clientId)}&client_secret={SdkUtils.EncodeParam(secret)}";
-                var apiToken = await Ok(Transport.Request<IAccessToken, SdkError>(
+                var apiToken = await Ok(Transport.Request<AccessToken, Exception>(
                     HttpMethod.Post,
                     $"{_apiPath}/login",
                     null,
@@ -169,7 +169,7 @@ namespace Looker.RTL
             }
 
             var sudoPath = $"{_apiPath}/login/{SdkUtils.EncodeParam(sudoId)}";
-            var sudoToken = await Ok(Transport.Request<IAccessToken, SdkError>(
+            var sudoToken = await Ok(Transport.Request<AccessToken, Exception>(
                 HttpMethod.Post,
                 sudoPath,
                 null,

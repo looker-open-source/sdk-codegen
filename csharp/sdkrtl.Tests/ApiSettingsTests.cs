@@ -4,6 +4,10 @@ using Looker.RTL;
 
 namespace sdkrtl.Tests
 {
+    /// <summary>
+    /// Configuration reading tests
+    /// </summary>
+    /// TODO create environment variable override tests https://stackoverflow.com/a/43951218/74137
     public class ApiSettingsTests
     {
         private readonly TestConfig _config = new TestConfig();

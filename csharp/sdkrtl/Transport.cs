@@ -189,6 +189,26 @@ namespace Looker.RTL
             return SdkUtils.AddQueryParams($"{BaseUrl}{path}", queryParams);
         }
 
+        private static RawResponse InitRawResponse(HttpResponseMessage response)
+        {
+            var raw = new RawResponse();
+            if (response != null)
+            {
+                raw.StatusCode = response.StatusCode;
+                raw.StatusMessage = response.ReasonPhrase;
+                response.Content.Headers.TryGetValues("Content-Type", out var values);
+                raw.ContentType = string.Join("; ", values ?? new [] {"text/plain"});
+            }
+            else
+            {
+                raw.StatusCode = HttpStatusCode.BadRequest;
+                raw.ContentType = "text/plain";
+                raw.Body = new SdkError("Response is null. That's all I know.");
+            }
+            return raw;
+        }
+
+
         public async Task<IRawResponse> RawRequest(
             HttpMethod method,
             string path,
@@ -221,32 +241,38 @@ namespace Looker.RTL
             }
 
             if (authenticator != null) request = await authenticator(request);
-            var response = await _client.SendAsync(request);
-            var result = new RawResponse();
-            response.Content.Headers.TryGetValues("Content-Type", out var values);
-            result.StatusCode = response.StatusCode;
-            result.StatusMessage = response.ReasonPhrase;
-            // if (response.IsSuccessStatusCode)
-            await using var stream = await response.Content.ReadAsStreamAsync();
-            result.ContentType = string.Join("; ", values);
-            // Simple content conversion here to make body easily readable in consumers
-            switch (SdkUtils.ResponseMode(result.ContentType))
+            RawResponse result = new RawResponse();
+            HttpResponseMessage response = null;
+            try
             {
-                case ResponseMode.Binary:
-                    result.Body = SdkUtils.StreamToByteArray(stream);
-                    break;
-                case ResponseMode.String:
-                    using (var sr = new StreamReader(stream))
-                    {
-                        result.Body = await sr.ReadToEndAsync();
-                    }
+                response = await _client.SendAsync(request);
+                result = InitRawResponse(response);
+                // if (response.IsSuccessStatusCode)
+                await using var stream = await response.Content.ReadAsStreamAsync();
+                // Simple content conversion here to make body easily readable in consumers
+                switch (SdkUtils.ResponseMode(result.ContentType))
+                {
+                    case ResponseMode.Binary:
+                        result.Body = SdkUtils.StreamToByteArray(stream);
+                        break;
+                    case ResponseMode.String:
+                        using (var sr = new StreamReader(stream))
+                        {
+                            result.Body = await sr.ReadToEndAsync();
+                        }
 
-                    break;
-                case ResponseMode.Unknown:
-                    result.Body = SdkUtils.StreamToByteArray(stream);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException($"Unrecognized Content Type {result.ContentType}");
+                        break;
+                    case ResponseMode.Unknown:
+                        result.Body = SdkUtils.StreamToByteArray(stream);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException($"Unrecognized Content Type {result.ContentType}");
+                }
+            }
+            catch (Exception e)
+            {
+                result = InitRawResponse(response);
+                result.Body = e;
             }
 
             return result;
@@ -255,6 +281,11 @@ namespace Looker.RTL
         public static SdkResponse<TSuccess, TError> ParseResponse<TSuccess, TError>(IRawResponse response)
             where TSuccess : class where TError : class
         {
+            if (response.Body is Exception)
+            {
+                return new SdkResponse<TSuccess, TError> { Error = response.Body as TError};
+            }
+            
             switch (SdkUtils.ResponseMode(response.ContentType))
             {
                 case ResponseMode.Binary:
@@ -317,6 +348,5 @@ namespace Looker.RTL
             get => _settings.AgentTag;
             set => _settings.AgentTag = value;
         }
-
     }
 }

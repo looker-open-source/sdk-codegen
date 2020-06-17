@@ -146,6 +146,8 @@ namespace Looker.RTL
 
         public static ResponseMode ResponseMode(string contentType)
         {
+            if (contentType.IsNullOrEmpty()) return RTL.ResponseMode.Unknown;
+            
             if (Constants.ContentPatternString.IsMatch(contentType))
             {
                 return RTL.ResponseMode.String;

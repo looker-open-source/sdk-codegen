@@ -1,3 +1,4 @@
+using System;
 using Looker.RTL;
 using Xunit;
 using Xunit.Abstractions;
@@ -7,11 +8,13 @@ namespace sdkrtl.Tests
 {
     public class AuthSessionTests
     {
+        private readonly ITestOutputHelper _testOutputHelper;
         private TestConfig _config;
         private ITransport _transport;
         
         public AuthSessionTests(ITestOutputHelper testOutputHelper)
         {
+            _testOutputHelper = testOutputHelper;
             _config = new TestConfig();
             _transport = new Transport(_config.Settings);
         }
@@ -44,16 +47,23 @@ namespace sdkrtl.Tests
         {
             var session = Auth();
             Assert.False(session.IsAuthenticated());
-            var result = await session.Login();
-            Assert.NotNull(result);
-            var token = result as AuthToken;
-            Assert.NotNull(token);
-            Assert.NotNull(token.access_token);
-            Assert.Equal(3600, token.expires_in);
-            Assert.True(session.IsAuthenticated());
-            var actual = await session.Logout();
-            Assert.True(actual);
-            Assert.False(session.IsAuthenticated());
+            try
+            {
+                var result = await session.Login();
+                Assert.NotNull(result);
+                var token = result as AuthToken;
+                Assert.NotNull(token);
+                Assert.NotNull(token.access_token);
+                Assert.Equal(3600, token.expires_in);
+                Assert.True(session.IsAuthenticated());
+                var actual = await session.Logout();
+                Assert.True(actual);
+                Assert.False(session.IsAuthenticated());
+            }
+            catch (Exception e)
+            {
+                _testOutputHelper.WriteLine(e.ToString());
+            }
         }
     }
 }
