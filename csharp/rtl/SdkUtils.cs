@@ -8,6 +8,16 @@ using System.Threading.Tasks;
 
 namespace Looker.RTL
 {
+    /// <summary>
+    /// Base type for all generated SDK models
+    /// </summary>
+    /// <remarks>
+    /// This is where general-purpose type functionality will appear
+    /// </remarks>
+    public class SdkModel
+    {
+        
+    }
     public class StringDictionary<T> : Dictionary<string, T>
     {
     };

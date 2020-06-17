@@ -12,7 +12,7 @@ namespace Looker.SDK.API31
 {
 
 
-public class AccessToken
+public class AccessToken : SdkModel 
 {
   // Access Token used for API calls (read-only)
   public string? access_token { get; set; }
@@ -22,7 +22,7 @@ public class AccessToken
   public long? expires_in { get; set; }
 }
 
-public class ApiSession
+public class ApiSession : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -32,7 +32,7 @@ public class ApiSession
   public long? sudo_user_id { get; set; }
 }
 
-public class ApiVersion
+public class ApiVersion : SdkModel 
 {
   // Current Looker release version number (read-only)
   public string? looker_release_version { get; set; }
@@ -41,7 +41,7 @@ public class ApiVersion
   public ApiVersionElement[]? supported_versions { get; set; }
 }
 
-public class ApiVersionElement
+public class ApiVersionElement : SdkModel 
 {
   // Version number as it appears in '/api/xxx/' urls (read-only)
   public string? version { get; set; }
@@ -53,7 +53,7 @@ public class ApiVersionElement
   public Url? swagger_url { get; set; }
 }
 
-public class BackupConfiguration
+public class BackupConfiguration : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -71,7 +71,7 @@ public class BackupConfiguration
   public Url? url { get; set; }
 }
 
-public class ColorCollection
+public class ColorCollection : SdkModel 
 {
   // Unique Id (read-only)
   public string? id { get; set; }
@@ -85,7 +85,7 @@ public class ColorCollection
   public ContinuousPalette[]? divergingPalettes { get; set; }
 }
 
-public class ColorStop
+public class ColorStop : SdkModel 
 {
   // CSS color string
   public string? color { get; set; }
@@ -93,7 +93,7 @@ public class ColorStop
   public long? offset { get; set; }
 }
 
-public class ContentFavorite
+public class ContentFavorite : SdkModel 
 {
   // Unique Id (read-only)
   public long? id { get; set; }
@@ -109,7 +109,7 @@ public class ContentFavorite
   public DashboardBase? dashboard { get; set; }
 }
 
-public class ContentMeta
+public class ContentMeta : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -137,7 +137,7 @@ public class ContentMeta
   public string? space_id { get; set; }
 }
 
-public class ContentMetaGroupUser
+public class ContentMetaGroupUser : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -153,7 +153,7 @@ public class ContentMetaGroupUser
   public long? user_id { get; set; }
 }
 
-public class ContentValidation
+public class ContentValidation : SdkModel 
 {
   // A list of content errors (read-only)
   public ContentValidatorError[]? content_with_errors { get; set; }
@@ -171,7 +171,7 @@ public class ContentValidation
   public long? total_explores_validated { get; set; }
 }
 
-public class ContentValidationDashboard
+public class ContentValidationDashboard : SdkModel 
 {
   // Description
   public string? description { get; set; }
@@ -183,7 +183,7 @@ public class ContentValidationDashboard
   public ContentValidationSpace? space { get; set; }
 }
 
-public class ContentValidationDashboardElement
+public class ContentValidationDashboardElement : SdkModel 
 {
   // Text tile body text
   public string? body_text { get; set; }
@@ -215,7 +215,7 @@ public class ContentValidationDashboardElement
   public string? type { get; set; }
 }
 
-public class ContentValidationDashboardFilter
+public class ContentValidationDashboardFilter : SdkModel 
 {
   // Unique Id (read-only)
   public string? id { get; set; }
@@ -237,7 +237,7 @@ public class ContentValidationDashboardFilter
   public string? dimension { get; set; }
 }
 
-public class ContentValidationError
+public class ContentValidationError : SdkModel 
 {
   // Error message (read-only)
   public string? message { get; set; }
@@ -251,7 +251,7 @@ public class ContentValidationError
   public bool? removable { get; set; }
 }
 
-public class ContentValidationFolder
+public class ContentValidationFolder : SdkModel 
 {
   // Unique Name
   public string name { get; set; } = "";
@@ -259,7 +259,7 @@ public class ContentValidationFolder
   public string? id { get; set; }
 }
 
-public class ContentValidationLook
+public class ContentValidationLook : SdkModel 
 {
   // Unique Id (read-only)
   public long? id { get; set; }
@@ -269,7 +269,7 @@ public class ContentValidationLook
   public ContentValidationSpace? space { get; set; }
 }
 
-public class ContentValidationScheduledPlan
+public class ContentValidationScheduledPlan : SdkModel 
 {
   // Name of this scheduled plan
   public string? name { get; set; }
@@ -279,7 +279,7 @@ public class ContentValidationScheduledPlan
   public long? id { get; set; }
 }
 
-public class ContentValidationSpace
+public class ContentValidationSpace : SdkModel 
 {
   // Unique Name
   public string name { get; set; } = "";
@@ -287,7 +287,7 @@ public class ContentValidationSpace
   public string? id { get; set; }
 }
 
-public class ContentValidatorError
+public class ContentValidatorError : SdkModel 
 {
   public ContentValidationLook? look { get; set; }
   public ContentValidationDashboard? dashboard { get; set; }
@@ -300,7 +300,7 @@ public class ContentValidatorError
   public string? id { get; set; }
 }
 
-public class ContentView
+public class ContentView : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -326,7 +326,7 @@ public class ContentView
   public string? start_of_week_date { get; set; }
 }
 
-public class ContinuousPalette
+public class ContinuousPalette : SdkModel 
 {
   // Unique identity string (read-only)
   public string? id { get; set; }
@@ -338,7 +338,7 @@ public class ContinuousPalette
   public ColorStop[]? stops { get; set; }
 }
 
-public class CreateDashboardFilter
+public class CreateDashboardFilter : SdkModel 
 {
   // Unique Id (read-only)
   public string? id { get; set; }
@@ -372,7 +372,7 @@ public class CreateDashboardFilter
   public StringDictionary<object>? ui_config { get; set; }
 }
 
-public class CreateDashboardRenderTask
+public class CreateDashboardRenderTask : SdkModel 
 {
   // Filter values to apply to the dashboard queries, in URL query format
   public string? dashboard_filters { get; set; }
@@ -380,7 +380,7 @@ public class CreateDashboardRenderTask
   public string? dashboard_style { get; set; }
 }
 
-public class CreateFolder
+public class CreateFolder : SdkModel 
 {
   // Unique Name
   public string name { get; set; } = "";
@@ -388,7 +388,7 @@ public class CreateFolder
   public string parent_id { get; set; } = "";
 }
 
-public class CreateQueryTask
+public class CreateQueryTask : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -406,7 +406,7 @@ public class CreateQueryTask
   public string? dashboard_id { get; set; }
 }
 
-public class CreateSpace
+public class CreateSpace : SdkModel 
 {
   // Unique Name
   public string name { get; set; } = "";
@@ -414,7 +414,7 @@ public class CreateSpace
   public string parent_id { get; set; } = "";
 }
 
-public class CredentialsApi3
+public class CredentialsApi3 : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -432,7 +432,7 @@ public class CredentialsApi3
   public Url? url { get; set; }
 }
 
-public class CredentialsEmail
+public class CredentialsEmail : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -456,7 +456,7 @@ public class CredentialsEmail
   public Url? user_url { get; set; }
 }
 
-public class CredentialsEmbed
+public class CredentialsEmbed : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -478,7 +478,7 @@ public class CredentialsEmbed
   public Url? url { get; set; }
 }
 
-public class CredentialsGoogle
+public class CredentialsGoogle : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -500,7 +500,7 @@ public class CredentialsGoogle
   public Url? url { get; set; }
 }
 
-public class CredentialsLDAP
+public class CredentialsLDAP : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -522,7 +522,7 @@ public class CredentialsLDAP
   public Url? url { get; set; }
 }
 
-public class CredentialsLookerOpenid
+public class CredentialsLookerOpenid : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -544,7 +544,7 @@ public class CredentialsLookerOpenid
   public Url? user_url { get; set; }
 }
 
-public class CredentialsOIDC
+public class CredentialsOIDC : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -564,7 +564,7 @@ public class CredentialsOIDC
   public Url? url { get; set; }
 }
 
-public class CredentialsSaml
+public class CredentialsSaml : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -584,7 +584,7 @@ public class CredentialsSaml
   public Url? url { get; set; }
 }
 
-public class CredentialsTotp
+public class CredentialsTotp : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -600,7 +600,7 @@ public class CredentialsTotp
   public Url? url { get; set; }
 }
 
-public class CustomWelcomeEmail
+public class CustomWelcomeEmail : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -614,7 +614,7 @@ public class CustomWelcomeEmail
   public string? header { get; set; }
 }
 
-public class Dashboard
+public class Dashboard : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -698,7 +698,7 @@ public class Dashboard
   public string? preferred_viewer { get; set; }
 }
 
-public class DashboardAggregateTableLookml
+public class DashboardAggregateTableLookml : SdkModel 
 {
   // Dashboard Id (read-only)
   public string? dashboard_id { get; set; }
@@ -706,7 +706,7 @@ public class DashboardAggregateTableLookml
   public string? aggregate_table_lookml { get; set; }
 }
 
-public class DashboardAppearance
+public class DashboardAppearance : SdkModel 
 {
   // Page margin (side) width
   public long? page_side_margins { get; set; }
@@ -724,7 +724,7 @@ public class DashboardAppearance
   public string? key_color { get; set; }
 }
 
-public class DashboardBase
+public class DashboardBase : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -755,7 +755,7 @@ public class DashboardBase
   public SpaceBase? space { get; set; }
 }
 
-public class DashboardElement
+public class DashboardElement : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -812,7 +812,7 @@ public class DashboardElement
   public string? subtitle_text_as_html { get; set; }
 }
 
-public class DashboardFilter
+public class DashboardFilter : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -848,7 +848,7 @@ public class DashboardFilter
   public StringDictionary<object>? ui_config { get; set; }
 }
 
-public class DashboardLayout
+public class DashboardLayout : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -872,7 +872,7 @@ public class DashboardLayout
   public DashboardLayoutComponent[]? dashboard_layout_components { get; set; }
 }
 
-public class DashboardLayoutComponent
+public class DashboardLayoutComponent : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -900,7 +900,7 @@ public class DashboardLayoutComponent
   public string? vis_type { get; set; }
 }
 
-public class DashboardLookml
+public class DashboardLookml : SdkModel 
 {
   // Id of Dashboard (read-only)
   public string? dashboard_id { get; set; }
@@ -908,14 +908,14 @@ public class DashboardLookml
   public string? lookml { get; set; }
 }
 
-public class DataActionForm
+public class DataActionForm : SdkModel 
 {
   public DataActionUserState? state { get; set; }
   // Array of form fields. (read-only)
   public DataActionFormField[]? fields { get; set; }
 }
 
-public class DataActionFormField
+public class DataActionFormField : SdkModel 
 {
   // Name (read-only)
   public string? name { get; set; }
@@ -937,7 +937,7 @@ public class DataActionFormField
   public DataActionFormSelectOption[]? options { get; set; }
 }
 
-public class DataActionFormSelectOption
+public class DataActionFormSelectOption : SdkModel 
 {
   // Name (read-only)
   public string? name { get; set; }
@@ -945,7 +945,7 @@ public class DataActionFormSelectOption
   public string? label { get; set; }
 }
 
-public class DataActionRequest
+public class DataActionRequest : SdkModel 
 {
   // The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.
   public StringDictionary<string>? action { get; set; }
@@ -953,7 +953,7 @@ public class DataActionRequest
   public StringDictionary<string>? form_values { get; set; }
 }
 
-public class DataActionResponse
+public class DataActionResponse : SdkModel 
 {
   // ID of the webhook event that sent this data action. In some error conditions, this may be null. (read-only)
   public string? webhook_id { get; set; }
@@ -966,7 +966,7 @@ public class DataActionResponse
   public string? message { get; set; }
 }
 
-public class DataActionUserState
+public class DataActionUserState : SdkModel 
 {
   // User state data (read-only)
   public string? data { get; set; }
@@ -974,7 +974,7 @@ public class DataActionUserState
   public long? refresh_time { get; set; }
 }
 
-public class Datagroup
+public class Datagroup : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -998,7 +998,7 @@ public class Datagroup
   public long? triggered_at { get; set; }
 }
 
-public class DBConnection
+public class DBConnection : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1070,7 +1070,7 @@ public class DBConnection
   public bool? managed { get; set; }
 }
 
-public class DBConnectionBase
+public class DBConnectionBase : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1081,7 +1081,7 @@ public class DBConnectionBase
   public Snippet[]? snippets { get; set; }
 }
 
-public class DBConnectionOverride
+public class DBConnectionOverride : SdkModel 
 {
   // Context in which to override (`pdt` is the only allowed value)
   public string? context { get; set; }
@@ -1109,7 +1109,7 @@ public class DBConnectionOverride
   public string? after_connect_statements { get; set; }
 }
 
-public class DBConnectionTestResult
+public class DBConnectionTestResult : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1123,7 +1123,7 @@ public class DBConnectionTestResult
   public string? status { get; set; }
 }
 
-public class DelegateOauthTest
+public class DelegateOauthTest : SdkModel 
 {
   // Delegate Oauth Connection Name (read-only)
   public string? name { get; set; }
@@ -1135,7 +1135,7 @@ public class DelegateOauthTest
   public bool? success { get; set; }
 }
 
-public class Dialect
+public class Dialect : SdkModel 
 {
   // The name of the dialect (read-only)
   public string? name { get; set; }
@@ -1165,7 +1165,7 @@ public class Dialect
   public bool? has_ssl_support { get; set; }
 }
 
-public class DialectInfo
+public class DialectInfo : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1184,7 +1184,7 @@ public class DialectInfo
   public DialectInfoOptions? supported_options { get; set; }
 }
 
-public class DialectInfoOptions
+public class DialectInfoOptions : SdkModel 
 {
   // Has additional params support (read-only)
   public bool? additional_params { get; set; }
@@ -1210,19 +1210,19 @@ public class DialectInfoOptions
   public StringDictionary<bool>? can { get; set; }
 }
 
-public class DigestEmails
+public class DigestEmails : SdkModel 
 {
   // Whether or not digest emails are enabled
   public bool? is_enabled { get; set; }
 }
 
-public class DigestEmailSend
+public class DigestEmailSend : SdkModel 
 {
   // True if content was successfully generated and delivered
   public bool? configuration_delivered { get; set; }
 }
 
-public class DiscretePalette
+public class DiscretePalette : SdkModel 
 {
   // Unique identity string (read-only)
   public string? id { get; set; }
@@ -1234,7 +1234,7 @@ public class DiscretePalette
   public string[]? colors { get; set; }
 }
 
-public class EmbedSsoParams
+public class EmbedSsoParams : SdkModel 
 {
   // The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
   public Url target_url { get; set; } = "";
@@ -1264,13 +1264,13 @@ public class EmbedSsoParams
   public long? secret_id { get; set; }
 }
 
-public class EmbedUrlResponse
+public class EmbedUrlResponse : SdkModel 
 {
   // The embed URL. Any modification to this string will make the URL unusable. (read-only)
   public string? url { get; set; }
 }
 
-public class Error
+public class Error : SdkModel 
 {
   // Error details (read-only)
   public string message { get; set; } = "";
@@ -1278,7 +1278,7 @@ public class Error
   public Url documentation_url { get; set; } = "";
 }
 
-public class Folder
+public class Folder : SdkModel 
 {
   // Unique Name
   public string name { get; set; } = "";
@@ -1318,7 +1318,7 @@ public class Folder
   public LookWithDashboards[]? looks { get; set; }
 }
 
-public class FolderBase
+public class FolderBase : SdkModel 
 {
   // Unique Name
   public string name { get; set; } = "";
@@ -1354,7 +1354,7 @@ public class FolderBase
   public StringDictionary<bool>? can { get; set; }
 }
 
-public class GitBranch
+public class GitBranch : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1392,7 +1392,7 @@ public class GitBranch
   public string? remote_ref { get; set; }
 }
 
-public class GitConnectionTest
+public class GitConnectionTest : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1402,7 +1402,7 @@ public class GitConnectionTest
   public string? id { get; set; }
 }
 
-public class GitConnectionTestResult
+public class GitConnectionTestResult : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1414,7 +1414,7 @@ public class GitConnectionTestResult
   public string? status { get; set; }
 }
 
-public class GitStatus
+public class GitStatus : SdkModel 
 {
   // Git action: add, delete, etc (read-only)
   public string? action { get; set; }
@@ -1428,7 +1428,7 @@ public class GitStatus
   public StringDictionary<bool>? can { get; set; }
 }
 
-public class Group
+public class Group : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1450,19 +1450,19 @@ public class Group
   public long? user_count { get; set; }
 }
 
-public class GroupIdForGroupInclusion
+public class GroupIdForGroupInclusion : SdkModel 
 {
   // Id of group (read-only)
   public long? group_id { get; set; }
 }
 
-public class GroupIdForGroupUserInclusion
+public class GroupIdForGroupUserInclusion : SdkModel 
 {
   // Id of user (read-only)
   public long? user_id { get; set; }
 }
 
-public class GroupSearch
+public class GroupSearch : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1484,7 +1484,7 @@ public class GroupSearch
   public long? user_count { get; set; }
 }
 
-public class Homepage
+public class Homepage : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1512,7 +1512,7 @@ public class Homepage
   public bool? primary_homepage { get; set; }
 }
 
-public class HomepageItem
+public class HomepageItem : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1572,7 +1572,7 @@ public class HomepageItem
   public long? view_count { get; set; }
 }
 
-public class HomepageSection
+public class HomepageSection : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1600,7 +1600,7 @@ public class HomepageSection
   public string? description { get; set; }
 }
 
-public class ImportedProject
+public class ImportedProject : SdkModel 
 {
   // Dependency name (read-only)
   public string? name { get; set; }
@@ -1614,7 +1614,7 @@ public class ImportedProject
   public StringDictionary<bool>? can { get; set; }
 }
 
-public class Integration
+public class Integration : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1652,7 +1652,7 @@ public class Integration
   public long[]? installed_delegate_oauth_targets { get; set; }
 }
 
-public class IntegrationHub
+public class IntegrationHub : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1678,7 +1678,7 @@ public class IntegrationHub
   public string? legal_agreement_text { get; set; }
 }
 
-public class IntegrationParam
+public class IntegrationParam : SdkModel 
 {
   // Name of the parameter.
   public string? name { get; set; }
@@ -1702,7 +1702,7 @@ public class IntegrationParam
   public string? delegate_oauth_url { get; set; }
 }
 
-public class IntegrationRequiredField
+public class IntegrationRequiredField : SdkModel 
 {
   // Matches a field that has this tag. (read-only)
   public string? tag { get; set; }
@@ -1712,7 +1712,7 @@ public class IntegrationRequiredField
   public string[]? all_tags { get; set; }
 }
 
-public class IntegrationTestResult
+public class IntegrationTestResult : SdkModel 
 {
   // Whether or not the test was successful (read-only)
   public bool? success { get; set; }
@@ -1722,7 +1722,7 @@ public class IntegrationTestResult
   public DelegateOauthTest[]? delegate_oauth_result { get; set; }
 }
 
-public class InternalHelpResources
+public class InternalHelpResources : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1730,7 +1730,7 @@ public class InternalHelpResources
   public bool? enabled { get; set; }
 }
 
-public class InternalHelpResourcesContent
+public class InternalHelpResourcesContent : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1740,7 +1740,7 @@ public class InternalHelpResourcesContent
   public string? markdown_content { get; set; }
 }
 
-public class LDAPConfig
+public class LDAPConfig : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1830,7 +1830,7 @@ public class LDAPConfig
   public Url? url { get; set; }
 }
 
-public class LDAPConfigTestIssue
+public class LDAPConfigTestIssue : SdkModel 
 {
   // Severity of the issue. Error or Warning (read-only)
   public string? severity { get; set; }
@@ -1840,7 +1840,7 @@ public class LDAPConfigTestIssue
   public StringDictionary<bool>? can { get; set; }
 }
 
-public class LDAPConfigTestResult
+public class LDAPConfigTestResult : SdkModel 
 {
   // Additional details for error cases (read-only)
   public string? details { get; set; }
@@ -1857,7 +1857,7 @@ public class LDAPConfigTestResult
   public Url? url { get; set; }
 }
 
-public class LDAPGroupRead
+public class LDAPGroupRead : SdkModel 
 {
   // Unique Id (read-only)
   public long? id { get; set; }
@@ -1873,7 +1873,7 @@ public class LDAPGroupRead
   public Url? url { get; set; }
 }
 
-public class LDAPGroupWrite
+public class LDAPGroupWrite : SdkModel 
 {
   // Unique Id
   public long? id { get; set; }
@@ -1889,7 +1889,7 @@ public class LDAPGroupWrite
   public Url? url { get; set; }
 }
 
-public class LDAPUser
+public class LDAPUser : SdkModel 
 {
   // Array of user's email addresses and aliases for use in migration (read-only)
   public string[]? all_emails { get; set; }
@@ -1915,7 +1915,7 @@ public class LDAPUser
   public Url? url { get; set; }
 }
 
-public class LDAPUserAttributeRead
+public class LDAPUserAttributeRead : SdkModel 
 {
   // Name of User Attribute in LDAP (read-only)
   public string? name { get; set; }
@@ -1927,7 +1927,7 @@ public class LDAPUserAttributeRead
   public Url? url { get; set; }
 }
 
-public class LDAPUserAttributeWrite
+public class LDAPUserAttributeWrite : SdkModel 
 {
   // Name of User Attribute in LDAP
   public string? name { get; set; }
@@ -1939,7 +1939,7 @@ public class LDAPUserAttributeWrite
   public Url? url { get; set; }
 }
 
-public class LegacyFeature
+public class LegacyFeature : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -1969,7 +1969,7 @@ public class LegacyFeature
   public bool? has_disabled_on_upgrade { get; set; }
 }
 
-public class Locale
+public class Locale : SdkModel 
 {
   // Code for Locale (read-only)
   public string? code { get; set; }
@@ -1979,7 +1979,7 @@ public class Locale
   public string? english_name { get; set; }
 }
 
-public class LocalizationSettings
+public class LocalizationSettings : SdkModel 
 {
   // Default locale for localization (read-only)
   public string? default_locale { get; set; }
@@ -1989,7 +1989,7 @@ public class LocalizationSettings
   public StringDictionary<bool>? can { get; set; }
 }
 
-public class Look
+public class Look : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2055,7 +2055,7 @@ public class Look
   public SpaceBase? space { get; set; }
 }
 
-public class LookBasic
+public class LookBasic : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2067,7 +2067,7 @@ public class LookBasic
   public string? title { get; set; }
 }
 
-public class LookmlModel
+public class LookmlModel : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2087,7 +2087,7 @@ public class LookmlModel
   public bool? unlimited_db_connections { get; set; }
 }
 
-public class LookmlModelExplore
+public class LookmlModelExplore : SdkModel 
 {
   // Fully qualified explore name (model name plus explore name) (read-only)
   public string? id { get; set; }
@@ -2158,7 +2158,7 @@ public class LookmlModelExplore
   public LookmlModelExploreSupportedMeasureType[]? supported_measure_types { get; set; }
 }
 
-public class LookmlModelExploreAccessFilter
+public class LookmlModelExploreAccessFilter : SdkModel 
 {
   // Field to be filtered (read-only)
   public string? field { get; set; }
@@ -2166,7 +2166,7 @@ public class LookmlModelExploreAccessFilter
   public string? user_attribute { get; set; }
 }
 
-public class LookmlModelExploreAlias
+public class LookmlModelExploreAlias : SdkModel 
 {
   // Name (read-only)
   public string? name { get; set; }
@@ -2174,7 +2174,7 @@ public class LookmlModelExploreAlias
   public string? value { get; set; }
 }
 
-public class LookmlModelExploreAlwaysFilter
+public class LookmlModelExploreAlwaysFilter : SdkModel 
 {
   // Name (read-only)
   public string? name { get; set; }
@@ -2182,7 +2182,7 @@ public class LookmlModelExploreAlwaysFilter
   public string? value { get; set; }
 }
 
-public class LookmlModelExploreConditionallyFilter
+public class LookmlModelExploreConditionallyFilter : SdkModel 
 {
   // Name (read-only)
   public string? name { get; set; }
@@ -2190,7 +2190,7 @@ public class LookmlModelExploreConditionallyFilter
   public string? value { get; set; }
 }
 
-public class LookmlModelExploreError
+public class LookmlModelExploreError : SdkModel 
 {
   // Error Message (read-only)
   public string? message { get; set; }
@@ -2202,7 +2202,7 @@ public class LookmlModelExploreError
   public bool? field_error { get; set; }
 }
 
-public class LookmlModelExploreField
+public class LookmlModelExploreField : SdkModel 
 {
   // The appropriate horizontal text alignment the values of this field shoud be displayed in. Valid values are: "left", "right". (read-only)
   public string? align { get; set; }
@@ -2304,7 +2304,7 @@ public class LookmlModelExploreField
   public string? week_start_day { get; set; }
 }
 
-public class LookmlModelExploreFieldEnumeration
+public class LookmlModelExploreFieldEnumeration : SdkModel 
 {
   // Label (read-only)
   public string? label { get; set; }
@@ -2312,7 +2312,7 @@ public class LookmlModelExploreFieldEnumeration
   public object? value { get; set; }
 }
 
-public class LookmlModelExploreFieldMapLayer
+public class LookmlModelExploreFieldMapLayer : SdkModel 
 {
   // URL to the map layer resource. (read-only)
   public string? url { get; set; }
@@ -2336,7 +2336,7 @@ public class LookmlModelExploreFieldMapLayer
   public long? min_zoom_level { get; set; }
 }
 
-public class LookmlModelExploreFieldset
+public class LookmlModelExploreFieldset : SdkModel 
 {
   // Array of dimensions (read-only)
   public LookmlModelExploreField[]? dimensions { get; set; }
@@ -2348,7 +2348,7 @@ public class LookmlModelExploreFieldset
   public LookmlModelExploreField[]? parameters { get; set; }
 }
 
-public class LookmlModelExploreFieldSqlCase
+public class LookmlModelExploreFieldSqlCase : SdkModel 
 {
   // SQL Case label value (read-only)
   public string? value { get; set; }
@@ -2356,7 +2356,7 @@ public class LookmlModelExploreFieldSqlCase
   public string? condition { get; set; }
 }
 
-public class LookmlModelExploreFieldTimeInterval
+public class LookmlModelExploreFieldTimeInterval : SdkModel 
 {
   // The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "year". (read-only)
   public string? name { get; set; }
@@ -2364,7 +2364,7 @@ public class LookmlModelExploreFieldTimeInterval
   public long? count { get; set; }
 }
 
-public class LookmlModelExploreJoins
+public class LookmlModelExploreJoins : SdkModel 
 {
   // Name of this join (and name of the view to join) (read-only)
   public string? name { get; set; }
@@ -2394,7 +2394,7 @@ public class LookmlModelExploreJoins
   public string? view_label { get; set; }
 }
 
-public class LookmlModelExploreSet
+public class LookmlModelExploreSet : SdkModel 
 {
   // Name (read-only)
   public string? name { get; set; }
@@ -2402,7 +2402,7 @@ public class LookmlModelExploreSet
   public string[]? value { get; set; }
 }
 
-public class LookmlModelExploreSupportedMeasureType
+public class LookmlModelExploreSupportedMeasureType : SdkModel 
 {
   // (read-only)
   public string? dimension_type { get; set; }
@@ -2410,7 +2410,7 @@ public class LookmlModelExploreSupportedMeasureType
   public string[]? measure_types { get; set; }
 }
 
-public class LookmlModelNavExplore
+public class LookmlModelNavExplore : SdkModel 
 {
   // Name of the explore (read-only)
   public string? name { get; set; }
@@ -2426,7 +2426,7 @@ public class LookmlModelNavExplore
   public StringDictionary<bool>? can { get; set; }
 }
 
-public class LookmlTest
+public class LookmlTest : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2444,7 +2444,7 @@ public class LookmlTest
   public long? line { get; set; }
 }
 
-public class LookmlTestResult
+public class LookmlTestResult : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2464,7 +2464,7 @@ public class LookmlTestResult
   public bool? success { get; set; }
 }
 
-public class LookModel
+public class LookModel : SdkModel 
 {
   // Model Id (read-only)
   public string? id { get; set; }
@@ -2472,7 +2472,7 @@ public class LookModel
   public string? label { get; set; }
 }
 
-public class LookWithDashboards
+public class LookWithDashboards : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2540,7 +2540,7 @@ public class LookWithDashboards
   public DashboardBase[]? dashboards { get; set; }
 }
 
-public class LookWithQuery
+public class LookWithQuery : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2609,7 +2609,7 @@ public class LookWithQuery
   public string? url { get; set; }
 }
 
-public class Manifest
+public class Manifest : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2620,7 +2620,7 @@ public class Manifest
   public LocalizationSettings? localization_settings { get; set; }
 }
 
-public class MergeFields
+public class MergeFields : SdkModel 
 {
   // Field name to map onto in the merged results
   public string? field_name { get; set; }
@@ -2628,7 +2628,7 @@ public class MergeFields
   public string? source_field_name { get; set; }
 }
 
-public class MergeQuery
+public class MergeQuery : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2652,7 +2652,7 @@ public class MergeQuery
   public StringDictionary<string>? vis_config { get; set; }
 }
 
-public class MergeQuerySourceQuery
+public class MergeQuerySourceQuery : SdkModel 
 {
   // An array defining which fields of the source query are mapped onto fields of the merge query
   public MergeFields[]? merge_fields { get; set; }
@@ -2662,7 +2662,7 @@ public class MergeQuerySourceQuery
   public long? query_id { get; set; }
 }
 
-public class ModelSet
+public class ModelSet : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2679,7 +2679,7 @@ public class ModelSet
   public Url? url { get; set; }
 }
 
-public class ModelsNotValidated
+public class ModelsNotValidated : SdkModel 
 {
   // Model name (read-only)
   public string? name { get; set; }
@@ -2687,7 +2687,7 @@ public class ModelsNotValidated
   public string? project_file_id { get; set; }
 }
 
-public class OIDCConfig
+public class OIDCConfig : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2757,7 +2757,7 @@ public class OIDCConfig
   public Url? url { get; set; }
 }
 
-public class OIDCGroupRead
+public class OIDCGroupRead : SdkModel 
 {
   // Unique Id (read-only)
   public long? id { get; set; }
@@ -2771,7 +2771,7 @@ public class OIDCGroupRead
   public Role[]? roles { get; set; }
 }
 
-public class OIDCGroupWrite
+public class OIDCGroupWrite : SdkModel 
 {
   // Unique Id
   public long? id { get; set; }
@@ -2787,7 +2787,7 @@ public class OIDCGroupWrite
   public StringDictionary<bool>? can { get; set; }
 }
 
-public class OIDCUserAttributeRead
+public class OIDCUserAttributeRead : SdkModel 
 {
   // Name of User Attribute in OIDC (read-only)
   public string? name { get; set; }
@@ -2797,7 +2797,7 @@ public class OIDCUserAttributeRead
   public UserAttribute[]? user_attributes { get; set; }
 }
 
-public class OIDCUserAttributeWrite
+public class OIDCUserAttributeWrite : SdkModel 
 {
   // Name of User Attribute in OIDC
   public string? name { get; set; }
@@ -2809,7 +2809,7 @@ public class OIDCUserAttributeWrite
   public StringDictionary<bool>? can { get; set; }
 }
 
-public class PasswordConfig
+public class PasswordConfig : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2823,7 +2823,7 @@ public class PasswordConfig
   public bool? require_special { get; set; }
 }
 
-public class Permission
+public class Permission : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2835,7 +2835,7 @@ public class Permission
   public string? description { get; set; }
 }
 
-public class PermissionSet
+public class PermissionSet : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2852,7 +2852,7 @@ public class PermissionSet
   public Url? url { get; set; }
 }
 
-public class Project
+public class Project : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2896,7 +2896,7 @@ public class Project
   public bool? is_example { get; set; }
 }
 
-public class ProjectError
+public class ProjectError : SdkModel 
 {
   // A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)
   public string? code { get; set; }
@@ -2924,7 +2924,7 @@ public class ProjectError
   public string? sanitized_message { get; set; }
 }
 
-public class ProjectFile
+public class ProjectFile : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2945,7 +2945,7 @@ public class ProjectFile
   public GitStatus? git_status { get; set; }
 }
 
-public class ProjectValidation
+public class ProjectValidation : SdkModel 
 {
   // A list of project errors (read-only)
   public ProjectError[]? errors { get; set; }
@@ -2957,7 +2957,7 @@ public class ProjectValidation
   public float? computation_time { get; set; }
 }
 
-public class ProjectValidationCache
+public class ProjectValidationCache : SdkModel 
 {
   // A list of project errors (read-only)
   public ProjectError[]? errors { get; set; }
@@ -2971,7 +2971,7 @@ public class ProjectValidationCache
   public bool? stale { get; set; }
 }
 
-public class ProjectWorkspace
+public class ProjectWorkspace : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -2990,7 +2990,7 @@ public class ProjectWorkspace
   public string? lookml_type { get; set; }
 }
 
-public class Query
+public class Query : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3048,7 +3048,7 @@ public class Query
   public double? runtime { get; set; }
 }
 
-public class QueryTask
+public class QueryTask : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3089,7 +3089,7 @@ public class QueryTask
   public string? result_format { get; set; }
 }
 
-public class RenderTask
+public class RenderTask : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3131,7 +3131,7 @@ public class RenderTask
   public long? width { get; set; }
 }
 
-public class RepositoryCredential
+public class RepositoryCredential : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3151,7 +3151,7 @@ public class RepositoryCredential
   public bool? is_configured { get; set; }
 }
 
-public class ResultMakerFilterables
+public class ResultMakerFilterables : SdkModel 
 {
   // The model this filterable comes from (used for field suggestions). (read-only)
   public string? model { get; set; }
@@ -3163,7 +3163,7 @@ public class ResultMakerFilterables
   public ResultMakerFilterablesListen[]? listen { get; set; }
 }
 
-public class ResultMakerFilterablesListen
+public class ResultMakerFilterablesListen : SdkModel 
 {
   // The name of a dashboard filter to listen to.
   public string? dashboard_filter_name { get; set; }
@@ -3171,7 +3171,7 @@ public class ResultMakerFilterablesListen
   public string? field { get; set; }
 }
 
-public class ResultMakerWithIdVisConfigAndDynamicFields
+public class ResultMakerWithIdVisConfigAndDynamicFields : SdkModel 
 {
   // Unique Id. (read-only)
   public long? id { get; set; }
@@ -3194,7 +3194,7 @@ public class ResultMakerWithIdVisConfigAndDynamicFields
   public StringDictionary<string>? vis_config { get; set; }
 }
 
-public class Role
+public class Role : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3214,7 +3214,7 @@ public class Role
   public Url? users_url { get; set; }
 }
 
-public class RunningQueries
+public class RunningQueries : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3256,7 +3256,7 @@ public class RunningQueries
   public string? sql { get; set; }
 }
 
-public class SamlConfig
+public class SamlConfig : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3326,7 +3326,7 @@ public class SamlConfig
   public Url? url { get; set; }
 }
 
-public class SamlGroupRead
+public class SamlGroupRead : SdkModel 
 {
   // Unique Id (read-only)
   public long? id { get; set; }
@@ -3342,7 +3342,7 @@ public class SamlGroupRead
   public Url? url { get; set; }
 }
 
-public class SamlGroupWrite
+public class SamlGroupWrite : SdkModel 
 {
   // Unique Id
   public long? id { get; set; }
@@ -3358,7 +3358,7 @@ public class SamlGroupWrite
   public Url? url { get; set; }
 }
 
-public class SamlMetadataParseResult
+public class SamlMetadataParseResult : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3370,7 +3370,7 @@ public class SamlMetadataParseResult
   public string? idp_cert { get; set; }
 }
 
-public class SamlUserAttributeRead
+public class SamlUserAttributeRead : SdkModel 
 {
   // Name of User Attribute in Saml (read-only)
   public string? name { get; set; }
@@ -3382,7 +3382,7 @@ public class SamlUserAttributeRead
   public Url? url { get; set; }
 }
 
-public class SamlUserAttributeWrite
+public class SamlUserAttributeWrite : SdkModel 
 {
   // Name of User Attribute in Saml
   public string? name { get; set; }
@@ -3394,7 +3394,7 @@ public class SamlUserAttributeWrite
   public Url? url { get; set; }
 }
 
-public class ScheduledPlan
+public class ScheduledPlan : SdkModel 
 {
   // Name of this scheduled plan
   public string? name { get; set; }
@@ -3465,7 +3465,7 @@ public class ScheduledPlan
   public StringDictionary<bool>? can { get; set; }
 }
 
-public class ScheduledPlanDestination
+public class ScheduledPlanDestination : SdkModel 
 {
   // Unique Id (read-only)
   public long? id { get; set; }
@@ -3491,7 +3491,7 @@ public class ScheduledPlanDestination
   public string? message { get; set; }
 }
 
-public class Session
+public class Session : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3525,7 +3525,7 @@ public class Session
   public Url? url { get; set; }
 }
 
-public class SessionConfig
+public class SessionConfig : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3541,7 +3541,7 @@ public class SessionConfig
   public bool? track_session_location { get; set; }
 }
 
-public class Snippet
+public class Snippet : SdkModel 
 {
   // Name of the snippet (read-only)
   public string? name { get; set; }
@@ -3553,7 +3553,7 @@ public class Snippet
   public StringDictionary<bool>? can { get; set; }
 }
 
-public class Space
+public class Space : SdkModel 
 {
   // Unique Name
   public string name { get; set; } = "";
@@ -3593,7 +3593,7 @@ public class Space
   public LookWithDashboards[]? looks { get; set; }
 }
 
-public class SpaceBase
+public class SpaceBase : SdkModel 
 {
   // Unique Name
   public string name { get; set; } = "";
@@ -3629,7 +3629,7 @@ public class SpaceBase
   public StringDictionary<bool>? can { get; set; }
 }
 
-public class SqlQuery
+public class SqlQuery : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3659,7 +3659,7 @@ public class SqlQuery
   public long? result_maker_id { get; set; }
 }
 
-public class SqlQueryCreate
+public class SqlQueryCreate : SdkModel 
 {
   // Name of the db connection on which to run this query
   public string? connection_name { get; set; }
@@ -3673,7 +3673,7 @@ public class SqlQueryCreate
   public StringDictionary<object>? vis_config { get; set; }
 }
 
-public class Theme
+public class Theme : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3688,7 +3688,7 @@ public class Theme
   public ThemeSettings? settings { get; set; }
 }
 
-public class ThemeSettings
+public class ThemeSettings : SdkModel 
 {
   // Default background color
   public string? background_color { get; set; }
@@ -3726,7 +3726,7 @@ public class ThemeSettings
   public bool? tile_shadow { get; set; }
 }
 
-public class Timezone
+public class Timezone : SdkModel 
 {
   // Timezone (read-only)
   public string? value { get; set; }
@@ -3736,7 +3736,7 @@ public class Timezone
   public string? group { get; set; }
 }
 
-public class UpdateFolder
+public class UpdateFolder : SdkModel 
 {
   // Unique Name
   public string? name { get; set; }
@@ -3744,7 +3744,7 @@ public class UpdateFolder
   public string? parent_id { get; set; }
 }
 
-public class UpdateSpace
+public class UpdateSpace : SdkModel 
 {
   // Unique Name
   public string? name { get; set; }
@@ -3752,7 +3752,7 @@ public class UpdateSpace
   public string? parent_id { get; set; }
 }
 
-public class User
+public class User : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3823,7 +3823,7 @@ public class User
   public Url? url { get; set; }
 }
 
-public class UserAttribute
+public class UserAttribute : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3851,7 +3851,7 @@ public class UserAttribute
   public string? hidden_value_domain_whitelist { get; set; }
 }
 
-public class UserAttributeGroupValue
+public class UserAttributeGroupValue : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3869,7 +3869,7 @@ public class UserAttributeGroupValue
   public string? value { get; set; }
 }
 
-public class UserAttributeWithValue
+public class UserAttributeWithValue : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3895,13 +3895,13 @@ public class UserAttributeWithValue
   public string? hidden_value_domain_whitelist { get; set; }
 }
 
-public class UserIdOnly
+public class UserIdOnly : SdkModel 
 {
   // Unique Id (read-only)
   public long? id { get; set; }
 }
 
-public class UserLoginLockout
+public class UserLoginLockout : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3925,7 +3925,7 @@ public class UserLoginLockout
   public DateTime? lockout_at { get; set; }
 }
 
-public class UserPublic
+public class UserPublic : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -3943,7 +3943,7 @@ public class UserPublic
   public Url? url { get; set; }
 }
 
-public class ValidationError
+public class ValidationError : SdkModel 
 {
   // Error details (read-only)
   public string message { get; set; } = "";
@@ -3953,7 +3953,7 @@ public class ValidationError
   public Url documentation_url { get; set; } = "";
 }
 
-public class ValidationErrorDetail
+public class ValidationErrorDetail : SdkModel 
 {
   // Field with error (read-only)
   public string? field { get; set; }
@@ -3965,7 +3965,7 @@ public class ValidationErrorDetail
   public Url documentation_url { get; set; } = "";
 }
 
-public class WelcomeEmailTest
+public class WelcomeEmailTest : SdkModel 
 {
   // The content that would be sent in the body of a custom welcome email
   public string? content { get; set; }
@@ -3975,7 +3975,7 @@ public class WelcomeEmailTest
   public string? header { get; set; }
 }
 
-public class WhitelabelConfiguration
+public class WhitelabelConfiguration : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -4013,7 +4013,7 @@ public class WhitelabelConfiguration
   public bool? folders_mentions { get; set; }
 }
 
-public class Workspace
+public class Workspace : SdkModel 
 {
   // Operations the current user is able to perform on this object (read-only)
   public StringDictionary<bool>? can { get; set; }
@@ -4025,7 +4025,7 @@ public class Workspace
 
 // Dynamically generated writeable type for ApiSession removes properties:
 // can, sudo_user_id
-public class WriteApiSession
+public class WriteApiSession : SdkModel 
 {
   // The id of active workspace for this session
   public string? workspace_id { get; set; }
@@ -4033,7 +4033,7 @@ public class WriteApiSession
 
 // Dynamically generated writeable type for BackupConfiguration removes properties:
 // can, url
-public class WriteBackupConfiguration
+public class WriteBackupConfiguration : SdkModel 
 {
   // Type of backup: looker-s3 or custom-s3
   public string? type { get; set; }
@@ -4049,7 +4049,7 @@ public class WriteBackupConfiguration
 
 // Dynamically generated writeable type for ColorCollection removes properties:
 // id
-public class WriteColorCollection
+public class WriteColorCollection : SdkModel 
 {
   // Label of color collection
   public string? label { get; set; }
@@ -4063,7 +4063,7 @@ public class WriteColorCollection
 
 // Dynamically generated writeable type for ContentFavorite removes properties:
 // id, look_id, dashboard_id, look
-public class WriteContentFavorite
+public class WriteContentFavorite : SdkModel 
 {
   // User Id which owns this ContentFavorite
   public long? user_id { get; set; }
@@ -4074,7 +4074,7 @@ public class WriteContentFavorite
 
 // Dynamically generated writeable type for ContentMeta removes properties:
 // can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug, space_id
-public class WriteContentMeta
+public class WriteContentMeta : SdkModel 
 {
   // Whether content inherits its access levels from parent
   public bool? inherits { get; set; }
@@ -4082,7 +4082,7 @@ public class WriteContentMeta
 
 // Dynamically generated writeable type for CreateDashboardFilter removes properties:
 // id, field
-public class WriteCreateDashboardFilter
+public class WriteCreateDashboardFilter : SdkModel 
 {
   // Id of Dashboard
   public string dashboard_id { get; set; } = "";
@@ -4114,7 +4114,7 @@ public class WriteCreateDashboardFilter
 
 // Dynamically generated writeable type for CreateQueryTask removes properties:
 // can
-public class WriteCreateQueryTask
+public class WriteCreateQueryTask : SdkModel 
 {
   // Id of query to run
   public long query_id { get; set; }
@@ -4132,7 +4132,7 @@ public class WriteCreateQueryTask
 
 // Dynamically generated writeable type for CredentialsEmail removes properties:
 // can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
-public class WriteCredentialsEmail
+public class WriteCredentialsEmail : SdkModel 
 {
   // EMail address used for user login
   public string? email { get; set; }
@@ -4142,7 +4142,7 @@ public class WriteCredentialsEmail
 
 // Dynamically generated writeable type for CustomWelcomeEmail removes properties:
 // can
-public class WriteCustomWelcomeEmail
+public class WriteCustomWelcomeEmail : SdkModel 
 {
   // If true, custom email content will replace the default body of welcome emails
   public bool? enabled { get; set; }
@@ -4156,7 +4156,7 @@ public class WriteCustomWelcomeEmail
 
 // Dynamically generated writeable type for Dashboard removes properties:
 // can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
-public class WriteDashboard
+public class WriteDashboard : SdkModel 
 {
   // Description
   public string? description { get; set; }
@@ -4205,7 +4205,7 @@ public class WriteDashboard
 
 // Dynamically generated writeable type for DashboardBase removes properties:
 // can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id
-public class WriteDashboardBase
+public class WriteDashboardBase : SdkModel 
 {
   public WriteFolderBase? folder { get; set; }
   public WriteSpaceBase? space { get; set; }
@@ -4213,7 +4213,7 @@ public class WriteDashboardBase
 
 // Dynamically generated writeable type for DashboardElement removes properties:
 // can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
-public class WriteDashboardElement
+public class WriteDashboardElement : SdkModel 
 {
   // Text tile body text
   public string? body_text { get; set; }
@@ -4252,7 +4252,7 @@ public class WriteDashboardElement
 
 // Dynamically generated writeable type for DashboardFilter removes properties:
 // can, id, dashboard_id, field
-public class WriteDashboardFilter
+public class WriteDashboardFilter : SdkModel 
 {
   // Name of filter
   public string? name { get; set; }
@@ -4282,7 +4282,7 @@ public class WriteDashboardFilter
 
 // Dynamically generated writeable type for DashboardLayout removes properties:
 // can, id, deleted, dashboard_title, dashboard_layout_components
-public class WriteDashboardLayout
+public class WriteDashboardLayout : SdkModel 
 {
   // Id of Dashboard
   public string? dashboard_id { get; set; }
@@ -4298,7 +4298,7 @@ public class WriteDashboardLayout
 
 // Dynamically generated writeable type for DashboardLayoutComponent removes properties:
 // can, id, deleted, element_title, element_title_hidden, vis_type
-public class WriteDashboardLayoutComponent
+public class WriteDashboardLayoutComponent : SdkModel 
 {
   // Id of Dashboard Layout
   public string? dashboard_layout_id { get; set; }
@@ -4316,7 +4316,7 @@ public class WriteDashboardLayoutComponent
 
 // Dynamically generated writeable type for Datagroup removes properties:
 // can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
-public class WriteDatagroup
+public class WriteDatagroup : SdkModel 
 {
   // UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
   public long? stale_before { get; set; }
@@ -4326,7 +4326,7 @@ public class WriteDatagroup
 
 // Dynamically generated writeable type for DBConnection removes properties:
 // can, dialect, snippets, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
-public class WriteDBConnection
+public class WriteDBConnection : SdkModel 
 {
   // Name of the connection. Also used as the unique identifier
   public string? name { get; set; }
@@ -4381,7 +4381,7 @@ public class WriteDBConnection
 
 // Dynamically generated writeable type for DBConnectionOverride removes properties:
 // has_password
-public class WriteDBConnectionOverride
+public class WriteDBConnectionOverride : SdkModel 
 {
   // Context in which to override (`pdt` is the only allowed value)
   public string? context { get; set; }
@@ -4409,7 +4409,7 @@ public class WriteDBConnectionOverride
 
 // Dynamically generated writeable type for FolderBase removes properties:
 // id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-public class WriteFolderBase
+public class WriteFolderBase : SdkModel 
 {
   // Unique Name
   public string name { get; set; } = "";
@@ -4419,7 +4419,7 @@ public class WriteFolderBase
 
 // Dynamically generated writeable type for GitBranch removes properties:
 // can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
-public class WriteGitBranch
+public class WriteGitBranch : SdkModel 
 {
   // The short name on the local. Updating `name` results in `git checkout <new_name>`
   public string? name { get; set; }
@@ -4429,7 +4429,7 @@ public class WriteGitBranch
 
 // Dynamically generated writeable type for Group removes properties:
 // can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
-public class WriteGroup
+public class WriteGroup : SdkModel 
 {
   // Group can be used in content access controls
   public bool? can_add_to_content_metadata { get; set; }
@@ -4439,7 +4439,7 @@ public class WriteGroup
 
 // Dynamically generated writeable type for Homepage removes properties:
 // can, content_metadata_id, created_at, homepage_sections, id, updated_at, user_id, primary_homepage
-public class WriteHomepage
+public class WriteHomepage : SdkModel 
 {
   // Date of homepage deletion
   public DateTime? deleted_at { get; set; }
@@ -4453,7 +4453,7 @@ public class WriteHomepage
 
 // Dynamically generated writeable type for HomepageItem removes properties:
 // can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, section_fetch_time, title, url, view_count
-public class WriteHomepageItem
+public class WriteHomepageItem : SdkModel 
 {
   // Custom description entered by the user, if present
   public string? custom_description { get; set; }
@@ -4485,7 +4485,7 @@ public class WriteHomepageItem
 
 // Dynamically generated writeable type for HomepageSection removes properties:
 // can, created_at, detail_url, homepage_items, id, is_header, updated_at
-public class WriteHomepageSection
+public class WriteHomepageSection : SdkModel 
 {
   // Time at which this section was deleted.
   public DateTime? deleted_at { get; set; }
@@ -4501,7 +4501,7 @@ public class WriteHomepageSection
 
 // Dynamically generated writeable type for Integration removes properties:
 // can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
-public class WriteIntegration
+public class WriteIntegration : SdkModel 
 {
   // Whether the integration is available to users.
   public bool? enabled { get; set; }
@@ -4513,7 +4513,7 @@ public class WriteIntegration
 
 // Dynamically generated writeable type for IntegrationHub removes properties:
 // can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
-public class WriteIntegrationHub
+public class WriteIntegrationHub : SdkModel 
 {
   // URL of the hub.
   public string? url { get; set; }
@@ -4523,7 +4523,7 @@ public class WriteIntegrationHub
 
 // Dynamically generated writeable type for InternalHelpResources removes properties:
 // can
-public class WriteInternalHelpResources
+public class WriteInternalHelpResources : SdkModel 
 {
   // If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
   public bool? enabled { get; set; }
@@ -4531,7 +4531,7 @@ public class WriteInternalHelpResources
 
 // Dynamically generated writeable type for InternalHelpResourcesContent removes properties:
 // can
-public class WriteInternalHelpResourcesContent
+public class WriteInternalHelpResourcesContent : SdkModel 
 {
   // Text to display in the help menu item which will display the internal help resources
   public string? organization_name { get; set; }
@@ -4541,7 +4541,7 @@ public class WriteInternalHelpResourcesContent
 
 // Dynamically generated writeable type for LDAPConfig removes properties:
 // can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
-public class WriteLDAPConfig
+public class WriteLDAPConfig : SdkModel 
 {
   // Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
   public bool? alternate_email_login_allowed { get; set; }
@@ -4615,7 +4615,7 @@ public class WriteLDAPConfig
 
 // Dynamically generated writeable type for LegacyFeature removes properties:
 // can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
-public class WriteLegacyFeature
+public class WriteLegacyFeature : SdkModel 
 {
   // Whether this feature has been enabled by a user
   public bool? enabled_locally { get; set; }
@@ -4623,7 +4623,7 @@ public class WriteLegacyFeature
 
 // Dynamically generated writeable type for LookmlModel removes properties:
 // can, explores, has_content, label
-public class WriteLookmlModel
+public class WriteLookmlModel : SdkModel 
 {
   // Array of names of connections this model is allowed to use
   public string[]? allowed_db_connection_names { get; set; }
@@ -4637,7 +4637,7 @@ public class WriteLookmlModel
 
 // Dynamically generated writeable type for LookWithQuery removes properties:
 // can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
-public class WriteLookWithQuery
+public class WriteLookWithQuery : SdkModel 
 {
   // Look Title
   public string? title { get; set; }
@@ -4664,7 +4664,7 @@ public class WriteLookWithQuery
 
 // Dynamically generated writeable type for MergeQuery removes properties:
 // can, id, result_maker_id
-public class WriteMergeQuery
+public class WriteMergeQuery : SdkModel 
 {
   // Column Limit
   public string? column_limit { get; set; }
@@ -4684,7 +4684,7 @@ public class WriteMergeQuery
 
 // Dynamically generated writeable type for ModelSet removes properties:
 // can, all_access, built_in, id, url
-public class WriteModelSet
+public class WriteModelSet : SdkModel 
 {
   public string[]? models { get; set; }
   // Name of ModelSet
@@ -4693,7 +4693,7 @@ public class WriteModelSet
 
 // Dynamically generated writeable type for OIDCConfig removes properties:
 // can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
-public class WriteOIDCConfig
+public class WriteOIDCConfig : SdkModel 
 {
   // Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
   public bool? alternate_email_login_allowed { get; set; }
@@ -4747,7 +4747,7 @@ public class WriteOIDCConfig
 
 // Dynamically generated writeable type for PasswordConfig removes properties:
 // can
-public class WritePasswordConfig
+public class WritePasswordConfig : SdkModel 
 {
   // Minimum number of characters required for a new password.  Must be between 7 and 100
   public long? min_length { get; set; }
@@ -4761,7 +4761,7 @@ public class WritePasswordConfig
 
 // Dynamically generated writeable type for PermissionSet removes properties:
 // can, all_access, built_in, id, url
-public class WritePermissionSet
+public class WritePermissionSet : SdkModel 
 {
   // Name of PermissionSet
   public string? name { get; set; }
@@ -4770,7 +4770,7 @@ public class WritePermissionSet
 
 // Dynamically generated writeable type for Project removes properties:
 // can, id, uses_git, is_example
-public class WriteProject
+public class WriteProject : SdkModel 
 {
   // Project display name
   public string? name { get; set; }
@@ -4808,7 +4808,7 @@ public class WriteProject
 
 // Dynamically generated writeable type for Query removes properties:
 // can, id, slug, share_url, expanded_share_url, url, has_table_calculations
-public class WriteQuery
+public class WriteQuery : SdkModel 
 {
   // Model
   public string model { get; set; } = "";
@@ -4854,7 +4854,7 @@ public class WriteQuery
 
 // Dynamically generated writeable type for RepositoryCredential removes properties:
 // can, id, root_project_id, remote_url, is_configured
-public class WriteRepositoryCredential
+public class WriteRepositoryCredential : SdkModel 
 {
   // Git username for HTTPS authentication.
   public string? git_username { get; set; }
@@ -4866,14 +4866,14 @@ public class WriteRepositoryCredential
 
 // Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes properties:
 // id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
-public class WriteResultMakerWithIdVisConfigAndDynamicFields
+public class WriteResultMakerWithIdVisConfigAndDynamicFields : SdkModel 
 {
   public WriteQuery? query { get; set; }
 }
 
 // Dynamically generated writeable type for Role removes properties:
 // can, id, url, users_url
-public class WriteRole
+public class WriteRole : SdkModel 
 {
   // Name of Role
   public string? name { get; set; }
@@ -4887,7 +4887,7 @@ public class WriteRole
 
 // Dynamically generated writeable type for SamlConfig removes properties:
 // can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
-public class WriteSamlConfig
+public class WriteSamlConfig : SdkModel 
 {
   // Enable/Disable Saml authentication for the server
   public bool? enabled { get; set; }
@@ -4941,7 +4941,7 @@ public class WriteSamlConfig
 
 // Dynamically generated writeable type for ScheduledPlan removes properties:
 // id, created_at, updated_at, title, user, next_run_at, last_run_at, can
-public class WriteScheduledPlan
+public class WriteScheduledPlan : SdkModel 
 {
   // Name of this scheduled plan
   public string? name { get; set; }
@@ -4999,7 +4999,7 @@ public class WriteScheduledPlan
 
 // Dynamically generated writeable type for SessionConfig removes properties:
 // can
-public class WriteSessionConfig
+public class WriteSessionConfig : SdkModel 
 {
   // Allow users to have persistent sessions when they login
   public bool? allow_persistent_sessions { get; set; }
@@ -5015,7 +5015,7 @@ public class WriteSessionConfig
 
 // Dynamically generated writeable type for SpaceBase removes properties:
 // id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-public class WriteSpaceBase
+public class WriteSpaceBase : SdkModel 
 {
   // Unique Name
   public string name { get; set; } = "";
@@ -5025,7 +5025,7 @@ public class WriteSpaceBase
 
 // Dynamically generated writeable type for Theme removes properties:
 // can, id
-public class WriteTheme
+public class WriteTheme : SdkModel 
 {
   // Timestamp for when this theme becomes active. Null=always
   public DateTime? begin_at { get; set; }
@@ -5038,7 +5038,7 @@ public class WriteTheme
 
 // Dynamically generated writeable type for User removes properties:
 // can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_space_id, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
-public class WriteUser
+public class WriteUser : SdkModel 
 {
   public WriteCredentialsEmail? credentials_email { get; set; }
   // First name
@@ -5061,7 +5061,7 @@ public class WriteUser
 
 // Dynamically generated writeable type for UserAttribute removes properties:
 // can, id, is_system, is_permanent
-public class WriteUserAttribute
+public class WriteUserAttribute : SdkModel 
 {
   // Name of user attribute
   public string? name { get; set; }
@@ -5083,7 +5083,7 @@ public class WriteUserAttribute
 
 // Dynamically generated writeable type for UserAttributeWithValue removes properties:
 // can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
-public class WriteUserAttributeWithValue
+public class WriteUserAttributeWithValue : SdkModel 
 {
   // Value of attribute for user
   public string? value { get; set; }
@@ -5091,7 +5091,7 @@ public class WriteUserAttributeWithValue
 
 // Dynamically generated writeable type for WhitelabelConfiguration removes properties:
 // can, id, logo_url, favicon_url
-public class WriteWhitelabelConfiguration
+public class WriteWhitelabelConfiguration : SdkModel 
 {
   // Customer logo image. Expected base64 encoded data (write-only)
   public string? logo_file { get; set; }

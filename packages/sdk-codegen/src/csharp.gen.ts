@@ -206,6 +206,8 @@ namespace Looker.SDK.API${this.apiRef}
 
   declareProperty(indent: string, property: IProperty): string {
     const type = this.typeMap(property.type)
+    // TODO notation for readonly support
+    // let getset = property.readOnly ? '{ get; }' : '{ get; set; }'
     let getset = '{ get; set; }'
     // Presumption is, if type.default has a value, it should be used for required properties in class
     if (property.required && type.default) {
@@ -254,7 +256,7 @@ namespace Looker.SDK.API${this.apiRef}
     const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
     const header =
       this.commentHeader(indent, headComment) +
-      `${indent}async Task<SdkResponse<TSuccess, TError>> ${method.name}<TSuccess, TError>(` +
+      `${indent}public async Task<SdkResponse<TSuccess, TError>> ${method.name}<TSuccess, TError>(` +
       (streamer ? `\n${bump}${callback}` : '')
 
     return (
@@ -262,7 +264,7 @@ namespace Looker.SDK.API${this.apiRef}
       fragment +
       `${
         fragment ? ',' : ''
-      }\n${bump}ITransportSettings? options) where TSuccess : class where TError : class\n{${indent}\n`
+      }\n${bump}ITransportSettings? options) where TSuccess : class where TError : Exception\n{${indent}\n`
     )
   }
 
@@ -344,7 +346,7 @@ namespace Looker.SDK.API${this.apiRef}
   typeSignature(indent: string, type: IType) {
     return (
       this.commentHeader(indent, type.description) +
-      `${indent}public class ${type.name}\n{\n`
+      `${indent}public class ${type.name} : SdkModel \n{\n`
     )
   }
 

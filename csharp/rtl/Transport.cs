@@ -5,7 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Text.Json;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Looker.RTL
 {
@@ -296,7 +297,7 @@ namespace Looker.RTL
                     {
                         return new SdkResponse<TSuccess, TError>
                         {
-                            Value = JsonSerializer.Deserialize<TSuccess>(response.Body.ToString())
+                            Value = JsonConvert.DeserializeObject<TSuccess>(response.Body.ToString())
                         };
                     }
                     else
@@ -306,7 +307,7 @@ namespace Looker.RTL
                 case ResponseMode.Unknown:
                     return new SdkResponse<TSuccess, TError>
                     {
-                        Error = JsonSerializer.Deserialize<TError>(response.Body.ToString())
+                        Error = JsonConvert.DeserializeObject<TError>(response.Body.ToString())
                     };
                 default:
                     throw new ArgumentOutOfRangeException($"Unrecognized Content Type {response.ContentType}");

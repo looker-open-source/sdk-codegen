@@ -18,10 +18,10 @@ namespace Looker.SDK.API40
   // Accepts the legal agreement for a given integration hub. This only works for integration hubs that have legal_agreement_required set to true and legal_agreement_signed set to false.
   // 
   // POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> IntegrationHub
-  async Task<SdkResponse<TSuccess, TError>> accept_integration_hub_legal_agreement<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> accept_integration_hub_legal_agreement<TSuccess, TError>(
     // <param name=long>Id of integration_hub</param>
     long integration_hub_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/integration_hubs/{integration_hub_id}/accept_legal_agreement");
   }
@@ -35,14 +35,14 @@ namespace Looker.SDK.API40
   // Activating a user for an app that the user is already activated with returns a success response.
   // 
   // POST /oauth_client_apps/{client_guid}/users/{user_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> activate_app_user<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> activate_app_user<TSuccess, TError>(
     // <param name=string>The unique id of this application</param>
     string client_guid,
     // <param name=long>The id of the user to enable use of this app</param>
     long user_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       client_guid = SdkUtils.EncodeParam(client_guid);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/oauth_client_apps/{client_guid}/users/{user_id}", new Values {
@@ -60,14 +60,14 @@ namespace Looker.SDK.API40
   // **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   // 
   // GET /themes/active -> Theme[]
-  async Task<SdkResponse<TSuccess, TError>> active_themes<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> active_themes<TSuccess, TError>(
     // <param name=string>Name of theme</param>
     string? name,
     // <param name=DateTime>Timestamp representing the target datetime for the active period. Defaults to 'now'</param>
     DateTime? ts,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/themes/active", new Values {
       { "name", name },
@@ -78,12 +78,12 @@ namespace Looker.SDK.API40
   // ### Adds a new group to a group.
   // 
   // POST /groups/{group_id}/groups -> Group
-  async Task<SdkResponse<TSuccess, TError>> add_group_group<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> add_group_group<TSuccess, TError>(
     // <param name=long>Id of group</param>
     long group_id,
     // <param name=GroupIdForGroupInclusion></param>
     GroupIdForGroupInclusion body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/groups/{group_id}/groups", null,
 body);
@@ -92,12 +92,12 @@ body);
   // ### Adds a new user to a group.
   // 
   // POST /groups/{group_id}/users -> User
-  async Task<SdkResponse<TSuccess, TError>> add_group_user<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> add_group_user<TSuccess, TError>(
     // <param name=long>Id of group</param>
     long group_id,
     // <param name=GroupIdForGroupUserInclusion></param>
     GroupIdForGroupUserInclusion body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/groups/{group_id}/users", null,
 body);
@@ -106,14 +106,14 @@ body);
   // ### Get information about all board items.
   // 
   // GET /board_items -> BoardItem[]
-  async Task<SdkResponse<TSuccess, TError>> all_board_items<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_board_items<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
     // <param name=string>Fields to sort by.</param>
     string? sorts,
     // <param name=string>Filter to a specific board section</param>
     string? board_section_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/board_items", new Values {
       { "fields", fields },
@@ -124,12 +124,12 @@ body);
   // ### Get information about all board sections.
   // 
   // GET /board_sections -> BoardSection[]
-  async Task<SdkResponse<TSuccess, TError>> all_board_sections<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_board_sections<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
     // <param name=string>Fields to sort by.</param>
     string? sorts,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/board_sections", new Values {
       { "fields", fields },
@@ -139,10 +139,10 @@ body);
   // ### Get information about all boards.
   // 
   // GET /boards -> Board[]
-  async Task<SdkResponse<TSuccess, TError>> all_boards<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_boards<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/boards", new Values {
       { "fields", fields }});
@@ -158,10 +158,10 @@ body);
   // **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   // 
   // GET /color_collections -> ColorCollection[]
-  async Task<SdkResponse<TSuccess, TError>> all_color_collections<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_color_collections<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/color_collections", new Values {
       { "fields", fields }});
@@ -170,10 +170,10 @@ body);
   // ### Get information about all connections.
   // 
   // GET /connections -> DBConnection[]
-  async Task<SdkResponse<TSuccess, TError>> all_connections<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_connections<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/connections", new Values {
       { "fields", fields }});
@@ -182,12 +182,12 @@ body);
   // ### All content metadata access records for a content metadata item.
   // 
   // GET /content_metadata_access -> ContentMetaGroupUser[]
-  async Task<SdkResponse<TSuccess, TError>> all_content_metadata_accesses<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_content_metadata_accesses<TSuccess, TError>(
     // <param name=long>Id of content metadata</param>
     long content_metadata_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/content_metadata_access", new Values {
       { "content_metadata_id", content_metadata_id },
@@ -197,12 +197,12 @@ body);
   // ### Get information about all content metadata in a space.
   // 
   // GET /content_metadata -> ContentMeta[]
-  async Task<SdkResponse<TSuccess, TError>> all_content_metadatas<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_content_metadatas<TSuccess, TError>(
     // <param name=long>Parent space of content.</param>
     long parent_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/content_metadata", new Values {
       { "parent_id", parent_id },
@@ -218,10 +218,10 @@ body);
   // Find **deleted dashboards** with [search_dashboards()](#!/Dashboard/search_dashboards)
   // 
   // GET /dashboards -> DashboardBase[]
-  async Task<SdkResponse<TSuccess, TError>> all_dashboards<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_dashboards<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
-    string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    string? fields = null,
+    ITransportSettings? options = null) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/dashboards", new Values {
       { "fields", fields }});
@@ -230,8 +230,8 @@ body);
   // ### Get information about all datagroups.
   // 
   // GET /datagroups -> Datagroup[]
-  async Task<SdkResponse<TSuccess, TError>> all_datagroups<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> all_datagroups<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/datagroups");
   }
@@ -239,10 +239,10 @@ body);
   // ### Get information about all dialects.
   // 
   // GET /dialect_info -> DialectInfo[]
-  async Task<SdkResponse<TSuccess, TError>> all_dialect_infos<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_dialect_infos<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/dialect_info", new Values {
       { "fields", fields }});
@@ -251,10 +251,10 @@ body);
   // ### Get information about all folders.
   // 
   // GET /folders -> Folder[]
-  async Task<SdkResponse<TSuccess, TError>> all_folders<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_folders<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/folders", new Values {
       { "fields", fields }});
@@ -265,10 +265,10 @@ body);
   // Returns a list of git branches in the project repository
   // 
   // GET /projects/{project_id}/git_branches -> GitBranch[]
-  async Task<SdkResponse<TSuccess, TError>> all_git_branches<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_git_branches<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/git_branches");
@@ -286,12 +286,12 @@ body);
   // For example, a late-stage test for write access is meaningless if connecting to the git server (an early test) is failing.
   // 
   // GET /projects/{project_id}/git_connection_tests -> GitConnectionTest[]
-  async Task<SdkResponse<TSuccess, TError>> all_git_connection_tests<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_git_connection_tests<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=string>(Optional: leave blank for root project) The remote url for remote dependency to test.</param>
     string? remote_url,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/git_connection_tests", new Values {
@@ -301,12 +301,12 @@ body);
   // ### Get information about all the groups in a group
   // 
   // GET /groups/{group_id}/groups -> Group[]
-  async Task<SdkResponse<TSuccess, TError>> all_group_groups<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_group_groups<TSuccess, TError>(
     // <param name=long>Id of group</param>
     long group_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/groups/{group_id}/groups", new Values {
       { "fields", fields }});
@@ -315,7 +315,7 @@ body);
   // ### Get information about all the users directly included in a group.
   // 
   // GET /groups/{group_id}/users -> User[]
-  async Task<SdkResponse<TSuccess, TError>> all_group_users<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_group_users<TSuccess, TError>(
     // <param name=long>Id of group</param>
     long group_id,
     // <param name=string>Requested fields.</param>
@@ -326,7 +326,7 @@ body);
     long? per_page,
     // <param name=string>Fields to sort by.</param>
     string? sorts,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/groups/{group_id}/users", new Values {
       { "fields", fields },
@@ -338,7 +338,7 @@ body);
   // ### Get information about all groups.
   // 
   // GET /groups -> Group[]
-  async Task<SdkResponse<TSuccess, TError>> all_groups<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_groups<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
     // <param name=long>Requested page.</param>
@@ -353,7 +353,7 @@ body);
     long? content_metadata_id,
     // <param name=bool>Select only groups that either can/cannot be given access to content.</param>
     bool? can_add_to_content_metadata,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/groups", new Values {
       { "fields", fields },
@@ -368,10 +368,10 @@ body);
   // ### Get information about all Integration Hubs.
   // 
   // GET /integration_hubs -> IntegrationHub[]
-  async Task<SdkResponse<TSuccess, TError>> all_integration_hubs<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_integration_hubs<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/integration_hubs", new Values {
       { "fields", fields }});
@@ -380,12 +380,12 @@ body);
   // ### Get information about all Integrations.
   // 
   // GET /integrations -> Integration[]
-  async Task<SdkResponse<TSuccess, TError>> all_integrations<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_integrations<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
     // <param name=string>Filter to a specific provider</param>
     string? integration_hub_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/integrations", new Values {
       { "fields", fields },
@@ -395,8 +395,8 @@ body);
   // ### Get all legacy features.
   // 
   // GET /legacy_features -> LegacyFeature[]
-  async Task<SdkResponse<TSuccess, TError>> all_legacy_features<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> all_legacy_features<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/legacy_features");
   }
@@ -404,8 +404,8 @@ body);
   // ### Get a list of locales that Looker supports.
   // 
   // GET /locales -> Locale[]
-  async Task<SdkResponse<TSuccess, TError>> all_locales<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> all_locales<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/locales");
   }
@@ -413,10 +413,10 @@ body);
   // ### Get information about all lookml models.
   // 
   // GET /lookml_models -> LookmlModel[]
-  async Task<SdkResponse<TSuccess, TError>> all_lookml_models<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_lookml_models<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/lookml_models", new Values {
       { "fields", fields }});
@@ -429,12 +429,12 @@ body);
   // Call [Run LookML Test](#!/Project/run_lookml_test) to execute tests.
   // 
   // GET /projects/{project_id}/lookml_tests -> LookmlTest[]
-  async Task<SdkResponse<TSuccess, TError>> all_lookml_tests<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_lookml_tests<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=string>File Id</param>
     string? file_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/lookml_tests", new Values {
@@ -450,10 +450,10 @@ body);
   // Find **soft-deleted looks** with [search_looks()](#!/Look/search_looks)
   // 
   // GET /looks -> Look[]
-  async Task<SdkResponse<TSuccess, TError>> all_looks<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_looks<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/looks", new Values {
       { "fields", fields }});
@@ -462,10 +462,10 @@ body);
   // ### Get information about all model sets.
   // 
   // GET /model_sets -> ModelSet[]
-  async Task<SdkResponse<TSuccess, TError>> all_model_sets<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_model_sets<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/model_sets", new Values {
       { "fields", fields }});
@@ -480,10 +480,10 @@ body);
   // has permission to see.
   // 
   // GET /oauth_client_apps -> OauthClientApp[]
-  async Task<SdkResponse<TSuccess, TError>> all_oauth_client_apps<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_oauth_client_apps<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/oauth_client_apps", new Values {
       { "fields", fields }});
@@ -492,10 +492,10 @@ body);
   // ### Get information about all permission sets.
   // 
   // GET /permission_sets -> PermissionSet[]
-  async Task<SdkResponse<TSuccess, TError>> all_permission_sets<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_permission_sets<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/permission_sets", new Values {
       { "fields", fields }});
@@ -504,8 +504,8 @@ body);
   // ### Get all supported permissions.
   // 
   // GET /permissions -> Permission[]
-  async Task<SdkResponse<TSuccess, TError>> all_permissions<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> all_permissions<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/permissions");
   }
@@ -515,12 +515,12 @@ body);
   // Returns a list of the files in the project
   // 
   // GET /projects/{project_id}/files -> ProjectFile[]
-  async Task<SdkResponse<TSuccess, TError>> all_project_files<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_project_files<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=string>Requested fields</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/files", new Values {
@@ -532,10 +532,10 @@ body);
   // Returns all projects visible to the current user
   // 
   // GET /projects -> Project[]
-  async Task<SdkResponse<TSuccess, TError>> all_projects<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_projects<TSuccess, TError>(
     // <param name=string>Requested fields</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/projects", new Values {
       { "fields", fields }});
@@ -544,12 +544,12 @@ body);
   // ### Get information about all roles.
   // 
   // GET /roles -> Role[]
-  async Task<SdkResponse<TSuccess, TError>> all_roles<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_roles<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
     // <param name=DelimArray<long>>Optional list of ids to get specific roles.</param>
     DelimArray<long>? ids,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/roles", new Values {
       { "fields", fields },
@@ -559,8 +559,8 @@ body);
   // Get information about all running queries.
   // 
   // GET /running_queries -> RunningQueries[]
-  async Task<SdkResponse<TSuccess, TError>> all_running_queries<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> all_running_queries<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/running_queries");
   }
@@ -578,14 +578,14 @@ body);
   // The caller must have `see_schedules` permission to see other users' scheduled plans.
   // 
   // GET /scheduled_plans -> ScheduledPlan[]
-  async Task<SdkResponse<TSuccess, TError>> all_scheduled_plans<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_scheduled_plans<TSuccess, TError>(
     // <param name=long>Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.</param>
     long? user_id,
     // <param name=string>Comma delimited list of field names. If provided, only the fields specified will be included in the response</param>
     string? fields,
     // <param name=bool>Return scheduled plans belonging to all users (caller needs see_schedules permission)</param>
     bool? all_users,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/scheduled_plans", new Values {
       { "user_id", user_id },
@@ -602,10 +602,10 @@ body);
   // **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   // 
   // GET /themes -> Theme[]
-  async Task<SdkResponse<TSuccess, TError>> all_themes<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_themes<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/themes", new Values {
       { "fields", fields }});
@@ -614,8 +614,8 @@ body);
   // ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
   // 
   // GET /timezones -> Timezone[]
-  async Task<SdkResponse<TSuccess, TError>> all_timezones<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> all_timezones<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/timezones");
   }
@@ -629,12 +629,12 @@ body);
   // Results will only include groups that the caller's user account has permission to see.
   // 
   // GET /user_attributes/{user_attribute_id}/group_values -> UserAttributeGroupValue[]
-  async Task<SdkResponse<TSuccess, TError>> all_user_attribute_group_values<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_user_attribute_group_values<TSuccess, TError>(
     // <param name=long>Id of user attribute</param>
     long user_attribute_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/user_attributes/{user_attribute_id}/group_values", new Values {
       { "fields", fields }});
@@ -643,12 +643,12 @@ body);
   // ### Get information about all user attributes.
   // 
   // GET /user_attributes -> UserAttribute[]
-  async Task<SdkResponse<TSuccess, TError>> all_user_attributes<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_user_attributes<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
     // <param name=string>Fields to order the results by. Sortable fields include: name, label</param>
     string? sorts,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/user_attributes", new Values {
       { "fields", fields },
@@ -658,12 +658,12 @@ body);
   // ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
   // 
   // GET /users/{user_id}/credentials_api3 -> CredentialsApi3[]
-  async Task<SdkResponse<TSuccess, TError>> all_user_credentials_api3s<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_user_credentials_api3s<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_api3", new Values {
       { "fields", fields }});
@@ -672,12 +672,12 @@ body);
   // ### Embed login information for the specified user.
   // 
   // GET /users/{user_id}/credentials_embed -> CredentialsEmbed[]
-  async Task<SdkResponse<TSuccess, TError>> all_user_credentials_embeds<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_user_credentials_embeds<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_embed", new Values {
       { "fields", fields }});
@@ -686,10 +686,10 @@ body);
   // ### Get currently locked-out users.
   // 
   // GET /user_login_lockouts -> UserLoginLockout[]
-  async Task<SdkResponse<TSuccess, TError>> all_user_login_lockouts<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_user_login_lockouts<TSuccess, TError>(
     // <param name=string>Include only these fields in the response</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/user_login_lockouts", new Values {
       { "fields", fields }});
@@ -698,12 +698,12 @@ body);
   // ### Web login session for the specified user.
   // 
   // GET /users/{user_id}/sessions -> Session[]
-  async Task<SdkResponse<TSuccess, TError>> all_user_sessions<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_user_sessions<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/sessions", new Values {
       { "fields", fields }});
@@ -712,7 +712,7 @@ body);
   // ### Get information about all users.
   // 
   // GET /users -> User[]
-  async Task<SdkResponse<TSuccess, TError>> all_users<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> all_users<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
     // <param name=long>Requested page.</param>
@@ -723,7 +723,7 @@ body);
     string? sorts,
     // <param name=DelimArray<long>>Optional list of ids to get specific users.</param>
     DelimArray<long>? ids,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/users", new Values {
       { "fields", fields },
@@ -738,8 +738,8 @@ body);
   // Returns all workspaces available to the calling user.
   // 
   // GET /workspaces -> Workspace[]
-  async Task<SdkResponse<TSuccess, TError>> all_workspaces<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> all_workspaces<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/workspaces");
   }
@@ -747,12 +747,12 @@ body);
   // ### Get information about a board.
   // 
   // GET /boards/{board_id} -> Board
-  async Task<SdkResponse<TSuccess, TError>> board<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> board<TSuccess, TError>(
     // <param name=long>Id of board</param>
     long board_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/boards/{board_id}", new Values {
       { "fields", fields }});
@@ -761,12 +761,12 @@ body);
   // ### Get information about a board item.
   // 
   // GET /board_items/{board_item_id} -> BoardItem
-  async Task<SdkResponse<TSuccess, TError>> board_item<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> board_item<TSuccess, TError>(
     // <param name=long>Id of board item</param>
     long board_item_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/board_items/{board_item_id}", new Values {
       { "fields", fields }});
@@ -775,12 +775,12 @@ body);
   // ### Get information about a board section.
   // 
   // GET /board_sections/{board_section_id} -> BoardSection
-  async Task<SdkResponse<TSuccess, TError>> board_section<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> board_section<TSuccess, TError>(
     // <param name=long>Id of board section</param>
     long board_section_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/board_sections/{board_section_id}", new Values {
       { "fields", fields }});
@@ -789,8 +789,8 @@ body);
   // Get the current Cloud Storage Configuration.
   // 
   // GET /cloud_storage -> BackupConfiguration
-  async Task<SdkResponse<TSuccess, TError>> cloud_storage_configuration<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> cloud_storage_configuration<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/cloud_storage");
   }
@@ -807,12 +807,12 @@ body);
   // **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   // 
   // GET /color_collections/{collection_id} -> ColorCollection
-  async Task<SdkResponse<TSuccess, TError>> color_collection<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> color_collection<TSuccess, TError>(
     // <param name=string>Id of Color Collection</param>
     string collection_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       collection_id = SdkUtils.EncodeParam(collection_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/color_collections/{collection_id}", new Values {
@@ -827,10 +827,10 @@ body);
   // **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   // 
   // GET /color_collections/custom -> ColorCollection[]
-  async Task<SdkResponse<TSuccess, TError>> color_collections_custom<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> color_collections_custom<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/color_collections/custom", new Values {
       { "fields", fields }});
@@ -844,10 +844,10 @@ body);
   // **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   // 
   // GET /color_collections/standard -> ColorCollection[]
-  async Task<SdkResponse<TSuccess, TError>> color_collections_standard<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> color_collections_standard<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/color_collections/standard", new Values {
       { "fields", fields }});
@@ -856,12 +856,12 @@ body);
   // ### Get information about a connection.
   // 
   // GET /connections/{connection_name} -> DBConnection
-  async Task<SdkResponse<TSuccess, TError>> connection<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> connection<TSuccess, TError>(
     // <param name=string>Name of connection</param>
     string connection_name,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       connection_name = SdkUtils.EncodeParam(connection_name);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/connections/{connection_name}", new Values {
@@ -871,12 +871,12 @@ body);
   // ### Get favorite content by its id
   // 
   // GET /content_favorite/{content_favorite_id} -> ContentFavorite
-  async Task<SdkResponse<TSuccess, TError>> content_favorite<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> content_favorite<TSuccess, TError>(
     // <param name=long>Id of favorite content</param>
     long content_favorite_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/content_favorite/{content_favorite_id}", new Values {
       { "fields", fields }});
@@ -885,12 +885,12 @@ body);
   // ### Get information about an individual content metadata record.
   // 
   // GET /content_metadata/{content_metadata_id} -> ContentMeta
-  async Task<SdkResponse<TSuccess, TError>> content_metadata<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> content_metadata<TSuccess, TError>(
     // <param name=long>Id of content metadata</param>
     long content_metadata_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/content_metadata/{content_metadata_id}", new Values {
       { "fields", fields }});
@@ -902,10 +902,10 @@ body);
   // Returns a list of errors found as well as metadata about the content validation run.
   // 
   // GET /content_validation -> ContentValidation
-  async Task<SdkResponse<TSuccess, TError>> content_validation<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> content_validation<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/content_validation", new Values {
       { "fields", fields }});
@@ -914,12 +914,12 @@ body);
   // ### Create a new board.
   // 
   // POST /boards -> Board
-  async Task<SdkResponse<TSuccess, TError>> create_board<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_board<TSuccess, TError>(
     // <param name=WriteBoard></param>
     WriteBoard body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/boards", new Values {
       { "fields", fields }},
@@ -929,12 +929,12 @@ body);
   // ### Create a new board item.
   // 
   // POST /board_items -> BoardItem
-  async Task<SdkResponse<TSuccess, TError>> create_board_item<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_board_item<TSuccess, TError>(
     // <param name=WriteBoardItem></param>
     WriteBoardItem body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/board_items", new Values {
       { "fields", fields }},
@@ -944,12 +944,12 @@ body);
   // ### Create a new board section.
   // 
   // POST /board_sections -> BoardSection
-  async Task<SdkResponse<TSuccess, TError>> create_board_section<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_board_section<TSuccess, TError>(
     // <param name=WriteBoardSection></param>
     WriteBoardSection body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/board_sections", new Values {
       { "fields", fields }},
@@ -967,10 +967,10 @@ body);
   // **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   // 
   // POST /color_collections -> ColorCollection
-  async Task<SdkResponse<TSuccess, TError>> create_color_collection<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_color_collection<TSuccess, TError>(
     // <param name=WriteColorCollection></param>
     WriteColorCollection body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/color_collections", null,
 body);
@@ -981,10 +981,10 @@ body);
   // #
   // 
   // POST /commands -> Command
-  async Task<SdkResponse<TSuccess, TError>> create_command<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_command<TSuccess, TError>(
     // <param name=WriteCommand></param>
     WriteCommand body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/commands", null,
 body);
@@ -993,10 +993,10 @@ body);
   // ### Create a connection using the specified configuration.
   // 
   // POST /connections -> DBConnection
-  async Task<SdkResponse<TSuccess, TError>> create_connection<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_connection<TSuccess, TError>(
     // <param name=WriteDBConnection></param>
     WriteDBConnection body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/connections", null,
 body);
@@ -1005,10 +1005,10 @@ body);
   // ### Create favorite content
   // 
   // POST /content_favorite -> ContentFavorite
-  async Task<SdkResponse<TSuccess, TError>> create_content_favorite<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_content_favorite<TSuccess, TError>(
     // <param name=WriteContentFavorite></param>
     WriteContentFavorite body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/content_favorite", null,
 body);
@@ -1017,12 +1017,12 @@ body);
   // ### Create content metadata access.
   // 
   // POST /content_metadata_access -> ContentMetaGroupUser
-  async Task<SdkResponse<TSuccess, TError>> create_content_metadata_access<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_content_metadata_access<TSuccess, TError>(
     // <param name=ContentMetaGroupUser></param>
     ContentMetaGroupUser body,
     // <param name=bool>Optionally sends notification email when granting access to a board.</param>
     bool? send_boards_notification_email,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/content_metadata_access", new Values {
       { "send_boards_notification_email", send_boards_notification_email }},
@@ -1045,10 +1045,10 @@ body);
   // You can **permanently delete** an existing dashboard with [delete_dashboard()](#!/Dashboard/delete_dashboard)
   // 
   // POST /dashboards -> Dashboard
-  async Task<SdkResponse<TSuccess, TError>> create_dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_dashboard<TSuccess, TError>(
     // <param name=WriteDashboard></param>
     WriteDashboard body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/dashboards", null,
 body);
@@ -1057,12 +1057,12 @@ body);
   // ### Create a dashboard element on the dashboard with a specific id.
   // 
   // POST /dashboard_elements -> DashboardElement
-  async Task<SdkResponse<TSuccess, TError>> create_dashboard_element<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_dashboard_element<TSuccess, TError>(
     // <param name=WriteDashboardElement></param>
     WriteDashboardElement body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/dashboard_elements", new Values {
       { "fields", fields }},
@@ -1072,12 +1072,12 @@ body);
   // ### Create a dashboard filter on the dashboard with a specific id.
   // 
   // POST /dashboard_filters -> DashboardFilter
-  async Task<SdkResponse<TSuccess, TError>> create_dashboard_filter<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_dashboard_filter<TSuccess, TError>(
     // <param name=WriteCreateDashboardFilter></param>
     WriteCreateDashboardFilter body,
     // <param name=string>Requested fields</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/dashboard_filters", new Values {
       { "fields", fields }},
@@ -1087,12 +1087,12 @@ body);
   // ### Create a dashboard layout on the dashboard with a specific id.
   // 
   // POST /dashboard_layouts -> DashboardLayout
-  async Task<SdkResponse<TSuccess, TError>> create_dashboard_layout<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_dashboard_layout<TSuccess, TError>(
     // <param name=WriteDashboardLayout></param>
     WriteDashboardLayout body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/dashboard_layouts", new Values {
       { "fields", fields }},
@@ -1106,7 +1106,7 @@ body);
   // Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
   // 
   // POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> RenderTask
-  async Task<SdkResponse<TSuccess, TError>> create_dashboard_render_task<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_dashboard_render_task<TSuccess, TError>(
     // <param name=string>Id of dashboard to render. The ID can be a LookML dashboard also.</param>
     string dashboard_id,
     // <param name=string>Output type: pdf, png, or jpg</param>
@@ -1125,7 +1125,7 @@ body);
     bool? pdf_landscape,
     // <param name=bool>Whether or not to expand table vis to full length</param>
     bool? long_tables,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
       result_format = SdkUtils.EncodeParam(result_format);
@@ -1144,8 +1144,8 @@ body);
   // Emails will be sent at a later time from Looker's internal system if the Digest Emails feature is enabled in settings.
   // 
   // POST /digest_email_send -> DigestEmailSend
-  async Task<SdkResponse<TSuccess, TError>> create_digest_email_send<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> create_digest_email_send<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/digest_email_send");
   }
@@ -1171,10 +1171,10 @@ body);
   // encrypted transport.
   // 
   // POST /embed/token_url/me -> EmbedUrlResponse
-  async Task<SdkResponse<TSuccess, TError>> create_embed_url_as_me<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_embed_url_as_me<TSuccess, TError>(
     // <param name=EmbedParams></param>
     EmbedParams body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/embed/token_url/me", null,
 body);
@@ -1186,10 +1186,10 @@ body);
   // returns 404 Not Found.
   // 
   // POST /folders -> Folder
-  async Task<SdkResponse<TSuccess, TError>> create_folder<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_folder<TSuccess, TError>(
     // <param name=CreateFolder></param>
     CreateFolder body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/folders", null,
 body);
@@ -1205,12 +1205,12 @@ body);
   //   If no ref is specified, HEAD of the current branch will be used as the start point for the new branch.
   // 
   // POST /projects/{project_id}/git_branch -> GitBranch
-  async Task<SdkResponse<TSuccess, TError>> create_git_branch<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_git_branch<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=WriteGitBranch></param>
     WriteGitBranch body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/projects/{project_id}/git_branch", null,
@@ -1228,10 +1228,10 @@ body);
   // validate and accept git requests from the Looker server.
   // 
   // POST /projects/{project_id}/git/deploy_key -> string
-  async Task<SdkResponse<TSuccess, TError>> create_git_deploy_key<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_git_deploy_key<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/projects/{project_id}/git/deploy_key");
@@ -1240,12 +1240,12 @@ body);
   // ### Creates a new group (admin only).
   // 
   // POST /groups -> Group
-  async Task<SdkResponse<TSuccess, TError>> create_group<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_group<TSuccess, TError>(
     // <param name=WriteGroup></param>
     WriteGroup body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/groups", new Values {
       { "fields", fields }},
@@ -1257,12 +1257,12 @@ body);
   // This API is rate limited to prevent it from being used for SSRF attacks
   // 
   // POST /integration_hubs -> IntegrationHub
-  async Task<SdkResponse<TSuccess, TError>> create_integration_hub<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_integration_hub<TSuccess, TError>(
     // <param name=WriteIntegrationHub></param>
     WriteIntegrationHub body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/integration_hubs", new Values {
       { "fields", fields }},
@@ -1278,12 +1278,12 @@ body);
   // in the call to `create_look()`.
   // 
   // POST /looks -> LookWithQuery
-  async Task<SdkResponse<TSuccess, TError>> create_look<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_look<TSuccess, TError>(
     // <param name=WriteLookWithQuery></param>
     WriteLookWithQuery body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/looks", new Values {
       { "fields", fields }},
@@ -1297,7 +1297,7 @@ body);
   // Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
   // 
   // POST /render_tasks/looks/{look_id}/{result_format} -> RenderTask
-  async Task<SdkResponse<TSuccess, TError>> create_look_render_task<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_look_render_task<TSuccess, TError>(
     // <param name=long>Id of look to render</param>
     long look_id,
     // <param name=string>Output type: png, or jpg</param>
@@ -1308,7 +1308,7 @@ body);
     long height,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       result_format = SdkUtils.EncodeParam(result_format);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/render_tasks/looks/{look_id}/{result_format}", new Values {
@@ -1320,10 +1320,10 @@ body);
   // ### Create a lookml model using the specified configuration.
   // 
   // POST /lookml_models -> LookmlModel
-  async Task<SdkResponse<TSuccess, TError>> create_lookml_model<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_lookml_model<TSuccess, TError>(
     // <param name=WriteLookmlModel></param>
     WriteLookmlModel body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/lookml_models", null,
 body);
@@ -1348,12 +1348,12 @@ body);
   // change to the contents of a merge query will produce a new object with a new id.
   // 
   // POST /merge_queries -> MergeQuery
-  async Task<SdkResponse<TSuccess, TError>> create_merge_query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_merge_query<TSuccess, TError>(
     // <param name=WriteMergeQuery></param>
     WriteMergeQuery? body,
     // <param name=string>Requested fields</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/merge_queries", new Values {
       { "fields", fields }},
@@ -1363,10 +1363,10 @@ body);
   // ### Create a model set with the specified information. Model sets are used by Roles.
   // 
   // POST /model_sets -> ModelSet
-  async Task<SdkResponse<TSuccess, TError>> create_model_set<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_model_set<TSuccess, TError>(
     // <param name=WriteModelSet></param>
     WriteModelSet body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/model_sets", null,
 body);
@@ -1375,10 +1375,10 @@ body);
   // ### Create a OIDC test configuration.
   // 
   // POST /oidc_test_configs -> OIDCConfig
-  async Task<SdkResponse<TSuccess, TError>> create_oidc_test_config<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_oidc_test_config<TSuccess, TError>(
     // <param name=WriteOIDCConfig></param>
     WriteOIDCConfig body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/oidc_test_configs", null,
 body);
@@ -1387,10 +1387,10 @@ body);
   // ### Create a permission set with the specified information. Permission sets are used by Roles.
   // 
   // POST /permission_sets -> PermissionSet
-  async Task<SdkResponse<TSuccess, TError>> create_permission_set<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_permission_set<TSuccess, TError>(
     // <param name=WritePermissionSet></param>
     WritePermissionSet body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/permission_sets", null,
 body);
@@ -1405,10 +1405,10 @@ body);
   // `git_remote_url` is not allowed. To configure Git for the newly created project, follow the instructions in `update_project`.
   // 
   // POST /projects -> Project
-  async Task<SdkResponse<TSuccess, TError>> create_project<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_project<TSuccess, TError>(
     // <param name=WriteProject></param>
     WriteProject body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/projects", null,
 body);
@@ -1424,12 +1424,12 @@ body);
   // The query parameters are passed as json in the body of the request.
   // 
   // POST /queries -> Query
-  async Task<SdkResponse<TSuccess, TError>> create_query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_query<TSuccess, TError>(
     // <param name=WriteQuery></param>
     WriteQuery body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/queries", new Values {
       { "fields", fields }},
@@ -1443,7 +1443,7 @@ body);
   // Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
   // 
   // POST /render_tasks/queries/{query_id}/{result_format} -> RenderTask
-  async Task<SdkResponse<TSuccess, TError>> create_query_render_task<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_query_render_task<TSuccess, TError>(
     // <param name=long>Id of the query to render</param>
     long query_id,
     // <param name=string>Output type: png or jpg</param>
@@ -1454,7 +1454,7 @@ body);
     long height,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       result_format = SdkUtils.EncodeParam(result_format);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/render_tasks/queries/{query_id}/{result_format}", new Values {
@@ -1471,7 +1471,7 @@ body);
   // After the query task status reaches "Complete", use [query_task_results(query_task_id)](#!/Query/query_task_results) to fetch the results of the query.
   // 
   // POST /query_tasks -> QueryTask
-  async Task<SdkResponse<TSuccess, TError>> create_query_task<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_query_task<TSuccess, TError>(
     // <param name=WriteCreateQueryTask></param>
     WriteCreateQueryTask body,
     // <param name=long>Row limit (may override the limit in the saved query).</param>
@@ -1500,7 +1500,7 @@ body);
     bool? server_table_calcs,
     // <param name=string>Requested fields</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/query_tasks", new Values {
       { "limit", limit },
@@ -1522,10 +1522,10 @@ body);
   // ### Create a role with the specified information.
   // 
   // POST /roles -> Role
-  async Task<SdkResponse<TSuccess, TError>> create_role<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_role<TSuccess, TError>(
     // <param name=WriteRole></param>
     WriteRole body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/roles", null,
 body);
@@ -1534,10 +1534,10 @@ body);
   // ### Create a SAML test configuration.
   // 
   // POST /saml_test_configs -> SamlConfig
-  async Task<SdkResponse<TSuccess, TError>> create_saml_test_config<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_saml_test_config<TSuccess, TError>(
     // <param name=WriteSamlConfig></param>
     WriteSamlConfig body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/saml_test_configs", null,
 body);
@@ -1603,10 +1603,10 @@ body);
   // Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
   // 
   // POST /scheduled_plans -> ScheduledPlan
-  async Task<SdkResponse<TSuccess, TError>> create_scheduled_plan<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_scheduled_plan<TSuccess, TError>(
     // <param name=WriteScheduledPlan></param>
     WriteScheduledPlan body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/scheduled_plans", null,
 body);
@@ -1617,10 +1617,10 @@ body);
   // Either the `connection_name` or `model_name` parameter MUST be provided.
   // 
   // POST /sql_queries -> SqlQuery
-  async Task<SdkResponse<TSuccess, TError>> create_sql_query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_sql_query<TSuccess, TError>(
     // <param name=SqlQueryCreate></param>
     SqlQueryCreate body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/sql_queries", null,
 body);
@@ -1662,10 +1662,10 @@ body);
   // encrypted transport.
   // 
   // POST /embed/sso_url -> EmbedUrlResponse
-  async Task<SdkResponse<TSuccess, TError>> create_sso_embed_url<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_sso_embed_url<TSuccess, TError>(
     // <param name=EmbedSsoParams></param>
     EmbedSsoParams body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/embed/sso_url", null,
 body);
@@ -1688,10 +1688,10 @@ body);
   // **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   // 
   // POST /themes -> Theme
-  async Task<SdkResponse<TSuccess, TError>> create_theme<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_theme<TSuccess, TError>(
     // <param name=WriteTheme></param>
     WriteTheme body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/themes", null,
 body);
@@ -1700,12 +1700,12 @@ body);
   // ### Create a user with the specified information.
   // 
   // POST /users -> User
-  async Task<SdkResponse<TSuccess, TError>> create_user<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_user<TSuccess, TError>(
     // <param name=WriteUser></param>
     WriteUser? body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/users", new Values {
       { "fields", fields }},
@@ -1724,12 +1724,12 @@ body);
   // user attribute will fail with a 422 error.
   // 
   // POST /user_attributes -> UserAttribute
-  async Task<SdkResponse<TSuccess, TError>> create_user_attribute<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_user_attribute<TSuccess, TError>(
     // <param name=WriteUserAttribute></param>
     WriteUserAttribute body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/user_attributes", new Values {
       { "fields", fields }},
@@ -1739,14 +1739,14 @@ body);
   // ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
   // 
   // POST /users/{user_id}/credentials_api3 -> CredentialsApi3
-  async Task<SdkResponse<TSuccess, TError>> create_user_credentials_api3<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_user_credentials_api3<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=CredentialsApi3></param>
     CredentialsApi3? body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/users/{user_id}/credentials_api3", new Values {
       { "fields", fields }},
@@ -1756,14 +1756,14 @@ body);
   // ### Email/password login information for the specified user.
   // 
   // POST /users/{user_id}/credentials_email -> CredentialsEmail
-  async Task<SdkResponse<TSuccess, TError>> create_user_credentials_email<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_user_credentials_email<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=WriteCredentialsEmail></param>
     WriteCredentialsEmail body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/users/{user_id}/credentials_email", new Values {
       { "fields", fields }},
@@ -1781,14 +1781,14 @@ body);
   // This method can be called with an empty body.
   // 
   // POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
-  async Task<SdkResponse<TSuccess, TError>> create_user_credentials_email_password_reset<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_user_credentials_email_password_reset<TSuccess, TError>(
     // <param name=long>Id of user</param>
     long user_id,
     // <param name=bool>Expiring token.</param>
     bool? expires,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/users/{user_id}/credentials_email/password_reset", new Values {
       { "expires", expires },
@@ -1798,14 +1798,14 @@ body);
   // ### Two-factor login information for the specified user.
   // 
   // POST /users/{user_id}/credentials_totp -> CredentialsTotp
-  async Task<SdkResponse<TSuccess, TError>> create_user_credentials_totp<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> create_user_credentials_totp<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=CredentialsTotp></param>
     CredentialsTotp? body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/users/{user_id}/credentials_totp", new Values {
       { "fields", fields }},
@@ -1815,8 +1815,8 @@ body);
   // ### Get the current status and content of custom welcome emails
   // 
   // GET /custom_welcome_email -> CustomWelcomeEmail
-  async Task<SdkResponse<TSuccess, TError>> custom_welcome_email<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> custom_welcome_email<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/custom_welcome_email");
   }
@@ -1830,12 +1830,12 @@ body);
   // You can **Search** for dashboards with [search_dashboards()](#!/Dashboard/search_dashboards)
   // 
   // GET /dashboards/{dashboard_id} -> Dashboard
-  async Task<SdkResponse<TSuccess, TError>> dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> dashboard<TSuccess, TError>(
     // <param name=string>Id of dashboard</param>
     string dashboard_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboards/{dashboard_id}", new Values {
@@ -1847,10 +1847,10 @@ body);
   // Returns a JSON object that contains the dashboard id and Aggregate Table lookml
   // 
   // GET /dashboards/aggregate_table_lookml/{dashboard_id} -> DashboardAggregateTableLookml
-  async Task<SdkResponse<TSuccess, TError>> dashboard_aggregate_table_lookml<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> dashboard_aggregate_table_lookml<TSuccess, TError>(
     // <param name=string>Id of dashboard</param>
     string dashboard_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboards/aggregate_table_lookml/{dashboard_id}");
@@ -1859,12 +1859,12 @@ body);
   // ### Get information about all the dashboard elements on a dashboard with a specific id.
   // 
   // GET /dashboards/{dashboard_id}/dashboard_elements -> DashboardElement[]
-  async Task<SdkResponse<TSuccess, TError>> dashboard_dashboard_elements<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> dashboard_dashboard_elements<TSuccess, TError>(
     // <param name=string>Id of dashboard</param>
     string dashboard_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboards/{dashboard_id}/dashboard_elements", new Values {
@@ -1874,12 +1874,12 @@ body);
   // ### Get information about all the dashboard filters on a dashboard with a specific id.
   // 
   // GET /dashboards/{dashboard_id}/dashboard_filters -> DashboardFilter[]
-  async Task<SdkResponse<TSuccess, TError>> dashboard_dashboard_filters<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> dashboard_dashboard_filters<TSuccess, TError>(
     // <param name=string>Id of dashboard</param>
     string dashboard_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboards/{dashboard_id}/dashboard_filters", new Values {
@@ -1889,12 +1889,12 @@ body);
   // ### Get information about all the dashboard elements on a dashboard with a specific id.
   // 
   // GET /dashboards/{dashboard_id}/dashboard_layouts -> DashboardLayout[]
-  async Task<SdkResponse<TSuccess, TError>> dashboard_dashboard_layouts<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> dashboard_dashboard_layouts<TSuccess, TError>(
     // <param name=string>Id of dashboard</param>
     string dashboard_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboards/{dashboard_id}/dashboard_layouts", new Values {
@@ -1904,12 +1904,12 @@ body);
   // ### Get information about the dashboard element with a specific id.
   // 
   // GET /dashboard_elements/{dashboard_element_id} -> DashboardElement
-  async Task<SdkResponse<TSuccess, TError>> dashboard_element<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> dashboard_element<TSuccess, TError>(
     // <param name=string>Id of dashboard element</param>
     string dashboard_element_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_element_id = SdkUtils.EncodeParam(dashboard_element_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboard_elements/{dashboard_element_id}", new Values {
@@ -1919,12 +1919,12 @@ body);
   // ### Get information about the dashboard filters with a specific id.
   // 
   // GET /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
-  async Task<SdkResponse<TSuccess, TError>> dashboard_filter<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> dashboard_filter<TSuccess, TError>(
     // <param name=string>Id of dashboard filters</param>
     string dashboard_filter_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_filter_id = SdkUtils.EncodeParam(dashboard_filter_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboard_filters/{dashboard_filter_id}", new Values {
@@ -1934,12 +1934,12 @@ body);
   // ### Get information about the dashboard layouts with a specific id.
   // 
   // GET /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
-  async Task<SdkResponse<TSuccess, TError>> dashboard_layout<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> dashboard_layout<TSuccess, TError>(
     // <param name=string>Id of dashboard layouts</param>
     string dashboard_layout_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_layout_id = SdkUtils.EncodeParam(dashboard_layout_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboard_layouts/{dashboard_layout_id}", new Values {
@@ -1949,12 +1949,12 @@ body);
   // ### Get information about the dashboard elements with a specific id.
   // 
   // GET /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
-  async Task<SdkResponse<TSuccess, TError>> dashboard_layout_component<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> dashboard_layout_component<TSuccess, TError>(
     // <param name=string>Id of dashboard layout component</param>
     string dashboard_layout_component_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_layout_component_id = SdkUtils.EncodeParam(dashboard_layout_component_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboard_layout_components/{dashboard_layout_component_id}", new Values {
@@ -1964,12 +1964,12 @@ body);
   // ### Get information about all the dashboard layout components for a dashboard layout with a specific id.
   // 
   // GET /dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components -> DashboardLayoutComponent[]
-  async Task<SdkResponse<TSuccess, TError>> dashboard_layout_dashboard_layout_components<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> dashboard_layout_dashboard_layout_components<TSuccess, TError>(
     // <param name=string>Id of dashboard layout component</param>
     string dashboard_layout_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_layout_id = SdkUtils.EncodeParam(dashboard_layout_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components", new Values {
@@ -1981,10 +1981,10 @@ body);
   // Returns a JSON object that contains the dashboard id and the full lookml
   // 
   // GET /dashboards/lookml/{dashboard_id} -> DashboardLookml
-  async Task<SdkResponse<TSuccess, TError>> dashboard_lookml<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> dashboard_lookml<TSuccess, TError>(
     // <param name=string>Id of dashboard</param>
     string dashboard_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboards/lookml/{dashboard_id}");
@@ -1993,10 +1993,10 @@ body);
   // ### Get information about a datagroup.
   // 
   // GET /datagroups/{datagroup_id} -> Datagroup
-  async Task<SdkResponse<TSuccess, TError>> datagroup<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> datagroup<TSuccess, TError>(
     // <param name=long>ID of datagroup.</param>
     long datagroup_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/datagroups/{datagroup_id}");
   }
@@ -2013,14 +2013,14 @@ body);
   // resource (app or user) does not exist or has already been deactivated.
   // 
   // DELETE /oauth_client_apps/{client_guid}/users/{user_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> deactivate_app_user<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> deactivate_app_user<TSuccess, TError>(
     // <param name=string>The unique id of this application</param>
     string client_guid,
     // <param name=long>The id of the user to enable use of this app</param>
     long user_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       client_guid = SdkUtils.EncodeParam(client_guid);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/oauth_client_apps/{client_guid}/users/{user_id}", new Values {
@@ -2034,8 +2034,8 @@ body);
   // Set the default color collection with [ColorCollection](#!/ColorCollection/set_default_color_collection)
   // 
   // GET /color_collections/default -> ColorCollection
-  async Task<SdkResponse<TSuccess, TError>> default_color_collection<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> default_color_collection<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/color_collections/default");
   }
@@ -2049,10 +2049,10 @@ body);
   // The optional `ts` parameter can specify a different timestamp than "now." If specified, it returns the default theme at the time indicated.
   // 
   // GET /themes/default -> Theme
-  async Task<SdkResponse<TSuccess, TError>> default_theme<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> default_theme<TSuccess, TError>(
     // <param name=DateTime>Timestamp representing the target datetime for the active period. Defaults to 'now'</param>
     DateTime? ts,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/themes/default", new Values {
       { "ts", ts }});
@@ -2061,10 +2061,10 @@ body);
   // ### Delete a board.
   // 
   // DELETE /boards/{board_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_board<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_board<TSuccess, TError>(
     // <param name=long>Id of board</param>
     long board_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/boards/{board_id}");
   }
@@ -2072,10 +2072,10 @@ body);
   // ### Delete a board item.
   // 
   // DELETE /board_items/{board_item_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_board_item<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_board_item<TSuccess, TError>(
     // <param name=long>Id of board_item</param>
     long board_item_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/board_items/{board_item_id}");
   }
@@ -2083,10 +2083,10 @@ body);
   // ### Delete a board section.
   // 
   // DELETE /board_sections/{board_section_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_board_section<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_board_section<TSuccess, TError>(
     // <param name=long>Id of board section</param>
     long board_section_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/board_sections/{board_section_id}");
   }
@@ -2101,10 +2101,10 @@ body);
   // **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   // 
   // DELETE /color_collections/{collection_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_color_collection<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_color_collection<TSuccess, TError>(
     // <param name=string>Id of Color Collection</param>
     string collection_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       collection_id = SdkUtils.EncodeParam(collection_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/color_collections/{collection_id}");
@@ -2113,10 +2113,10 @@ body);
   // ### Delete an existing custom command.
   // 
   // DELETE /commands/{command_id} -> void
-  async Task<SdkResponse<TSuccess, TError>> delete_command<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_command<TSuccess, TError>(
     // <param name=long>ID of a command</param>
     long command_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/commands/{command_id}");
   }
@@ -2124,10 +2124,10 @@ body);
   // ### Delete a connection.
   // 
   // DELETE /connections/{connection_name} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_connection<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_connection<TSuccess, TError>(
     // <param name=string>Name of connection</param>
     string connection_name,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       connection_name = SdkUtils.EncodeParam(connection_name);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/connections/{connection_name}");
@@ -2136,12 +2136,12 @@ body);
   // ### Delete a connection override.
   // 
   // DELETE /connections/{connection_name}/connection_override/{override_context} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_connection_override<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_connection_override<TSuccess, TError>(
     // <param name=string>Name of connection</param>
     string connection_name,
     // <param name=string>Context of connection override</param>
     string override_context,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       connection_name = SdkUtils.EncodeParam(connection_name);
       override_context = SdkUtils.EncodeParam(override_context);
@@ -2151,10 +2151,10 @@ body);
   // ### Delete favorite content
   // 
   // DELETE /content_favorite/{content_favorite_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_content_favorite<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_content_favorite<TSuccess, TError>(
     // <param name=long>Id of favorite content</param>
     long content_favorite_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/content_favorite/{content_favorite_id}");
   }
@@ -2162,10 +2162,10 @@ body);
   // ### Remove content metadata access.
   // 
   // DELETE /content_metadata_access/{content_metadata_access_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_content_metadata_access<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_content_metadata_access<TSuccess, TError>(
     // <param name=long>Id of content metadata access</param>
     long content_metadata_access_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/content_metadata_access/{content_metadata_access_id}");
   }
@@ -2179,10 +2179,10 @@ body);
   // Note: When a dashboard is deleted in the UI, it is soft deleted. Use this API call to permanently remove it, if desired.
   // 
   // DELETE /dashboards/{dashboard_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_dashboard<TSuccess, TError>(
     // <param name=string>Id of dashboard</param>
     string dashboard_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/dashboards/{dashboard_id}");
@@ -2191,10 +2191,10 @@ body);
   // ### Delete a dashboard element with a specific id.
   // 
   // DELETE /dashboard_elements/{dashboard_element_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_dashboard_element<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_dashboard_element<TSuccess, TError>(
     // <param name=string>Id of dashboard element</param>
     string dashboard_element_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_element_id = SdkUtils.EncodeParam(dashboard_element_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/dashboard_elements/{dashboard_element_id}");
@@ -2203,10 +2203,10 @@ body);
   // ### Delete a dashboard filter with a specific id.
   // 
   // DELETE /dashboard_filters/{dashboard_filter_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_dashboard_filter<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_dashboard_filter<TSuccess, TError>(
     // <param name=string>Id of dashboard filter</param>
     string dashboard_filter_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_filter_id = SdkUtils.EncodeParam(dashboard_filter_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/dashboard_filters/{dashboard_filter_id}");
@@ -2215,10 +2215,10 @@ body);
   // ### Delete a dashboard layout with a specific id.
   // 
   // DELETE /dashboard_layouts/{dashboard_layout_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_dashboard_layout<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_dashboard_layout<TSuccess, TError>(
     // <param name=string>Id of dashboard layout</param>
     string dashboard_layout_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_layout_id = SdkUtils.EncodeParam(dashboard_layout_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/dashboard_layouts/{dashboard_layout_id}");
@@ -2228,10 +2228,10 @@ body);
   // **DANGER** this will delete all looks and dashboards in the folder.
   // 
   // DELETE /folders/{folder_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_folder<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_folder<TSuccess, TError>(
     // <param name=string>Id of folder</param>
     string folder_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/folders/{folder_id}");
@@ -2242,12 +2242,12 @@ body);
   // Delete git branch specified in branch_name path param from local and remote of specified project repository
   // 
   // DELETE /projects/{project_id}/git_branch/{branch_name} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_git_branch<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_git_branch<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=string>Branch Name</param>
     string branch_name,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
       branch_name = SdkUtils.EncodeParam(branch_name);
@@ -2257,10 +2257,10 @@ body);
   // ### Deletes a group (admin only).
   // 
   // DELETE /groups/{group_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_group<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_group<TSuccess, TError>(
     // <param name=long>Id of group</param>
     long group_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/groups/{group_id}");
   }
@@ -2268,12 +2268,12 @@ body);
   // ### Removes a group from a group.
   // 
   // DELETE /groups/{group_id}/groups/{deleting_group_id} -> void
-  async Task<SdkResponse<TSuccess, TError>> delete_group_from_group<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_group_from_group<TSuccess, TError>(
     // <param name=long>Id of group</param>
     long group_id,
     // <param name=long>Id of group to delete</param>
     long deleting_group_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/groups/{group_id}/groups/{deleting_group_id}");
   }
@@ -2281,12 +2281,12 @@ body);
   // ### Removes a user from a group.
   // 
   // DELETE /groups/{group_id}/users/{user_id} -> void
-  async Task<SdkResponse<TSuccess, TError>> delete_group_user<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_group_user<TSuccess, TError>(
     // <param name=long>Id of group</param>
     long group_id,
     // <param name=long>Id of user to remove from group</param>
     long user_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/groups/{group_id}/users/{user_id}");
   }
@@ -2294,10 +2294,10 @@ body);
   // ### Delete a Integration Hub.
   // 
   // DELETE /integration_hubs/{integration_hub_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_integration_hub<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_integration_hub<TSuccess, TError>(
     // <param name=long>Id of integration_hub</param>
     long integration_hub_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/integration_hubs/{integration_hub_id}");
   }
@@ -2311,10 +2311,10 @@ body);
   // For information about soft-delete (which can be undone) see [update_look()](#!/Look/update_look).
   // 
   // DELETE /looks/{look_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_look<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_look<TSuccess, TError>(
     // <param name=long>Id of look</param>
     long look_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/looks/{look_id}");
   }
@@ -2322,10 +2322,10 @@ body);
   // ### Delete a lookml model.
   // 
   // DELETE /lookml_models/{lookml_model_name} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_lookml_model<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_lookml_model<TSuccess, TError>(
     // <param name=string>Name of lookml model.</param>
     string lookml_model_name,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       lookml_model_name = SdkUtils.EncodeParam(lookml_model_name);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/lookml_models/{lookml_model_name}");
@@ -2334,10 +2334,10 @@ body);
   // ### Delete the model set with a specific id.
   // 
   // DELETE /model_sets/{model_set_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_model_set<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_model_set<TSuccess, TError>(
     // <param name=long>id of model set</param>
     long model_set_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/model_sets/{model_set_id}");
   }
@@ -2350,10 +2350,10 @@ body);
   // ### Note: this deletion cannot be undone.
   // 
   // DELETE /oauth_client_apps/{client_guid} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_oauth_client_app<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_oauth_client_app<TSuccess, TError>(
     // <param name=string>The unique id of this application</param>
     string client_guid,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       client_guid = SdkUtils.EncodeParam(client_guid);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/oauth_client_apps/{client_guid}");
@@ -2362,10 +2362,10 @@ body);
   // ### Delete a OIDC test configuration.
   // 
   // DELETE /oidc_test_configs/{test_slug} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_oidc_test_config<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_oidc_test_config<TSuccess, TError>(
     // <param name=string>Slug of test config</param>
     string test_slug,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       test_slug = SdkUtils.EncodeParam(test_slug);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/oidc_test_configs/{test_slug}");
@@ -2374,10 +2374,10 @@ body);
   // ### Delete the permission set with a specific id.
   // 
   // DELETE /permission_sets/{permission_set_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_permission_set<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_permission_set<TSuccess, TError>(
     // <param name=long>Id of permission set</param>
     long permission_set_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/permission_sets/{permission_set_id}");
   }
@@ -2390,12 +2390,12 @@ body);
   // `credential_id` is required.
   // 
   // DELETE /projects/{root_project_id}/credential/{credential_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_repository_credential<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_repository_credential<TSuccess, TError>(
     // <param name=string>Root Project Id</param>
     string root_project_id,
     // <param name=string>Credential Id</param>
     string credential_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       root_project_id = SdkUtils.EncodeParam(root_project_id);
       credential_id = SdkUtils.EncodeParam(credential_id);
@@ -2405,10 +2405,10 @@ body);
   // ### Delete the role with a specific id.
   // 
   // DELETE /roles/{role_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_role<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_role<TSuccess, TError>(
     // <param name=long>id of role</param>
     long role_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/roles/{role_id}");
   }
@@ -2416,10 +2416,10 @@ body);
   // ### Delete a SAML test configuration.
   // 
   // DELETE /saml_test_configs/{test_slug} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_saml_test_config<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_saml_test_config<TSuccess, TError>(
     // <param name=string>Slug of test config</param>
     string test_slug,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       test_slug = SdkUtils.EncodeParam(test_slug);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/saml_test_configs/{test_slug}");
@@ -2432,10 +2432,10 @@ body);
   // This delete cannot be undone.
   // 
   // DELETE /scheduled_plans/{scheduled_plan_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_scheduled_plan<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_scheduled_plan<TSuccess, TError>(
     // <param name=long>Scheduled Plan Id</param>
     long scheduled_plan_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/scheduled_plans/{scheduled_plan_id}");
   }
@@ -2451,10 +2451,10 @@ body);
   // **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   // 
   // DELETE /themes/{theme_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_theme<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_theme<TSuccess, TError>(
     // <param name=string>Id of theme</param>
     string theme_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       theme_id = SdkUtils.EncodeParam(theme_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/themes/{theme_id}");
@@ -2465,10 +2465,10 @@ body);
   // **DANGER** this will delete the user and all looks and other information owned by the user.
   // 
   // DELETE /users/{user_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_user<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user<TSuccess, TError>(
     // <param name=long>Id of user</param>
     long user_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}");
   }
@@ -2476,10 +2476,10 @@ body);
   // ### Delete a user attribute (admin only).
   // 
   // DELETE /user_attributes/{user_attribute_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_user_attribute<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user_attribute<TSuccess, TError>(
     // <param name=long>Id of user_attribute</param>
     long user_attribute_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/user_attributes/{user_attribute_id}");
   }
@@ -2487,12 +2487,12 @@ body);
   // ### Remove a user attribute value from a group.
   // 
   // DELETE /groups/{group_id}/attribute_values/{user_attribute_id} -> void
-  async Task<SdkResponse<TSuccess, TError>> delete_user_attribute_group_value<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user_attribute_group_value<TSuccess, TError>(
     // <param name=long>Id of group</param>
     long group_id,
     // <param name=long>Id of user attribute</param>
     long user_attribute_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/groups/{group_id}/attribute_values/{user_attribute_id}");
   }
@@ -2505,12 +2505,12 @@ body);
   // information about how user attribute values are resolved.
   // 
   // DELETE /users/{user_id}/attribute_values/{user_attribute_id} -> void
-  async Task<SdkResponse<TSuccess, TError>> delete_user_attribute_user_value<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user_attribute_user_value<TSuccess, TError>(
     // <param name=long>Id of user</param>
     long user_id,
     // <param name=long>Id of user attribute</param>
     long user_attribute_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/attribute_values/{user_attribute_id}");
   }
@@ -2518,12 +2518,12 @@ body);
   // ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
   // 
   // DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_api3<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_api3<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=long>id of API 3 Credential</param>
     long credentials_api3_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_api3/{credentials_api3_id}");
   }
@@ -2531,10 +2531,10 @@ body);
   // ### Email/password login information for the specified user.
   // 
   // DELETE /users/{user_id}/credentials_email -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_email<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_email<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_email");
   }
@@ -2542,12 +2542,12 @@ body);
   // ### Embed login information for the specified user.
   // 
   // DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_embed<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_embed<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=long>id of Embedding Credential</param>
     long credentials_embed_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_embed/{credentials_embed_id}");
   }
@@ -2555,10 +2555,10 @@ body);
   // ### Google authentication login information for the specified user.
   // 
   // DELETE /users/{user_id}/credentials_google -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_google<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_google<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_google");
   }
@@ -2566,10 +2566,10 @@ body);
   // ### LDAP login information for the specified user.
   // 
   // DELETE /users/{user_id}/credentials_ldap -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_ldap<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_ldap<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_ldap");
   }
@@ -2577,10 +2577,10 @@ body);
   // ### Looker Openid login information for the specified user. Used by Looker Analysts.
   // 
   // DELETE /users/{user_id}/credentials_looker_openid -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_looker_openid<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_looker_openid<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_looker_openid");
   }
@@ -2588,10 +2588,10 @@ body);
   // ### OpenID Connect (OIDC) authentication login information for the specified user.
   // 
   // DELETE /users/{user_id}/credentials_oidc -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_oidc<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_oidc<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_oidc");
   }
@@ -2599,10 +2599,10 @@ body);
   // ### Saml authentication login information for the specified user.
   // 
   // DELETE /users/{user_id}/credentials_saml -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_saml<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_saml<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_saml");
   }
@@ -2610,10 +2610,10 @@ body);
   // ### Two-factor login information for the specified user.
   // 
   // DELETE /users/{user_id}/credentials_totp -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_totp<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_totp<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_totp");
   }
@@ -2621,10 +2621,10 @@ body);
   // ### Removes login lockout for the associated user.
   // 
   // DELETE /user_login_lockout/{key} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_user_login_lockout<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user_login_lockout<TSuccess, TError>(
     // <param name=string>The key associated with the locked user</param>
     string key,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       key = SdkUtils.EncodeParam(key);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/user_login_lockout/{key}");
@@ -2633,12 +2633,12 @@ body);
   // ### Web login session for the specified user.
   // 
   // DELETE /users/{user_id}/sessions/{session_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> delete_user_session<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> delete_user_session<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=long>id of Web Login Session</param>
     long session_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/sessions/{session_id}");
   }
@@ -2657,10 +2657,10 @@ body);
   // 3. Pull the production branch into the production project.
   // 
   // POST /projects/{project_id}/deploy_to_production -> string
-  async Task<SdkResponse<TSuccess, TError>> deploy_to_production<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> deploy_to_production<TSuccess, TError>(
     // <param name=string>Id of project</param>
     string project_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/projects/{project_id}/deploy_to_production");
@@ -2669,8 +2669,8 @@ body);
   // ### Retrieve the value for whether or not digest emails is enabled
   // 
   // GET /digest_emails_enabled -> DigestEmails
-  async Task<SdkResponse<TSuccess, TError>> digest_emails_enabled<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> digest_emails_enabled<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/digest_emails_enabled");
   }
@@ -2680,10 +2680,10 @@ body);
   // can fetch it without requiring any special authentication.
   // 
   // POST /fetch_and_parse_saml_idp_metadata -> SamlMetadataParseResult
-  async Task<SdkResponse<TSuccess, TError>> fetch_and_parse_saml_idp_metadata<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> fetch_and_parse_saml_idp_metadata<TSuccess, TError>(
     // <param name=string></param>
     string body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/fetch_and_parse_saml_idp_metadata", null,
 body);
@@ -2692,10 +2692,10 @@ body);
   // Returns the Integration form for presentation to the user.
   // 
   // POST /integrations/{integration_id}/form -> DataActionForm
-  async Task<SdkResponse<TSuccess, TError>> fetch_integration_form<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> fetch_integration_form<TSuccess, TError>(
     // <param name=string>Id of integration</param>
     string integration_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       integration_id = SdkUtils.EncodeParam(integration_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/integrations/{integration_id}/form");
@@ -2704,10 +2704,10 @@ body);
   // For some data actions, the remote server may supply a form requesting further user input. This endpoint takes a data action, asks the remote server to generate a form for it, and returns that form to you for presentation to the user.
   // 
   // POST /data_actions/form -> DataActionForm
-  async Task<SdkResponse<TSuccess, TError>> fetch_remote_data_action_form<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> fetch_remote_data_action_form<TSuccess, TError>(
     // <param name=StringDictionary<string>></param>
     StringDictionary<string> body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/data_actions/form", null,
 body);
@@ -2718,12 +2718,12 @@ body);
   // Returns the git branch specified in branch_name path param if it exists in the given project repository
   // 
   // GET /projects/{project_id}/git_branch/{branch_name} -> GitBranch
-  async Task<SdkResponse<TSuccess, TError>> find_git_branch<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> find_git_branch<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=string>Branch Name</param>
     string branch_name,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
       branch_name = SdkUtils.EncodeParam(branch_name);
@@ -2733,12 +2733,12 @@ body);
   // ### Get information about the folder with a specific id.
   // 
   // GET /folders/{folder_id} -> Folder
-  async Task<SdkResponse<TSuccess, TError>> folder<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> folder<TSuccess, TError>(
     // <param name=string>Id of folder</param>
     string folder_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/folders/{folder_id}", new Values {
@@ -2748,12 +2748,12 @@ body);
   // ### Get the ancestors of a folder
   // 
   // GET /folders/{folder_id}/ancestors -> Folder[]
-  async Task<SdkResponse<TSuccess, TError>> folder_ancestors<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> folder_ancestors<TSuccess, TError>(
     // <param name=string>Id of folder</param>
     string folder_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/folders/{folder_id}/ancestors", new Values {
@@ -2763,7 +2763,7 @@ body);
   // ### Get the children of a folder.
   // 
   // GET /folders/{folder_id}/children -> Folder[]
-  async Task<SdkResponse<TSuccess, TError>> folder_children<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> folder_children<TSuccess, TError>(
     // <param name=string>Id of folder</param>
     string folder_id,
     // <param name=string>Requested fields.</param>
@@ -2774,7 +2774,7 @@ body);
     long? per_page,
     // <param name=string>Fields to sort by.</param>
     string? sorts,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/folders/{folder_id}/children", new Values {
@@ -2787,7 +2787,7 @@ body);
   // ### Search the children of a folder
   // 
   // GET /folders/{folder_id}/children/search -> Folder[]
-  async Task<SdkResponse<TSuccess, TError>> folder_children_search<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> folder_children_search<TSuccess, TError>(
     // <param name=string>Id of folder</param>
     string folder_id,
     // <param name=string>Requested fields.</param>
@@ -2796,7 +2796,7 @@ body);
     string? sorts,
     // <param name=string>Match folder name.</param>
     string? name,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/folders/{folder_id}/children/search", new Values {
@@ -2808,12 +2808,12 @@ body);
   // ### Get the dashboards in a folder
   // 
   // GET /folders/{folder_id}/dashboards -> Dashboard[]
-  async Task<SdkResponse<TSuccess, TError>> folder_dashboards<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> folder_dashboards<TSuccess, TError>(
     // <param name=string>Id of folder</param>
     string folder_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/folders/{folder_id}/dashboards", new Values {
@@ -2823,12 +2823,12 @@ body);
   // ### Get the looks in a folder
   // 
   // GET /folders/{folder_id}/looks -> LookWithQuery[]
-  async Task<SdkResponse<TSuccess, TError>> folder_looks<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> folder_looks<TSuccess, TError>(
     // <param name=string>Id of folder</param>
     string folder_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/folders/{folder_id}/looks", new Values {
@@ -2838,12 +2838,12 @@ body);
   // ### Get the parent of a folder
   // 
   // GET /folders/{folder_id}/parent -> Folder
-  async Task<SdkResponse<TSuccess, TError>> folder_parent<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> folder_parent<TSuccess, TError>(
     // <param name=string>Id of folder</param>
     string folder_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/folders/{folder_id}/parent", new Values {
@@ -2853,8 +2853,8 @@ body);
   // ### Force all credentials_email users to reset their login passwords upon their next login.
   // 
   // PUT /password_config/force_password_reset_at_next_login_for_all_users -> string
-  async Task<SdkResponse<TSuccess, TError>> force_password_reset_at_next_login_for_all_users<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> force_password_reset_at_next_login_for_all_users<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, "/password_config/force_password_reset_at_next_login_for_all_users");
   }
@@ -2862,14 +2862,14 @@ body);
   // ### Get All Commands.
   // 
   // GET /commands -> Command[]
-  async Task<SdkResponse<TSuccess, TError>> get_all_commands<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> get_all_commands<TSuccess, TError>(
     // <param name=string>Id of the associated content. This must be accompanied with content_type.</param>
     string? content_id,
     // <param name=string>Type of the associated content. This must be accompanied with content_id.</param>
     string? content_type,
     // <param name=long>Number of results to return.</param>
     long? limit,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/commands", new Values {
       { "content_id", content_id },
@@ -2882,10 +2882,10 @@ body);
   // `root_project_id` is required.
   // 
   // GET /projects/{root_project_id}/credentials -> RepositoryCredential[]
-  async Task<SdkResponse<TSuccess, TError>> get_all_repository_credentials<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> get_all_repository_credentials<TSuccess, TError>(
     // <param name=string>Root Project Id</param>
     string root_project_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       root_project_id = SdkUtils.EncodeParam(root_project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{root_project_id}/credentials");
@@ -2896,10 +2896,10 @@ body);
   // Returns the git branch currently checked out in the given project repository
   // 
   // GET /projects/{project_id}/git_branch -> GitBranch
-  async Task<SdkResponse<TSuccess, TError>> git_branch<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> git_branch<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/git_branch");
@@ -2910,10 +2910,10 @@ body);
   // Returns the ssh public key previously created for a project's git repository.
   // 
   // GET /projects/{project_id}/git/deploy_key -> string
-  async Task<SdkResponse<TSuccess, TError>> git_deploy_key<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> git_deploy_key<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/git/deploy_key");
@@ -2922,12 +2922,12 @@ body);
   // ### Get information about a group.
   // 
   // GET /groups/{group_id} -> Group
-  async Task<SdkResponse<TSuccess, TError>> group<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> group<TSuccess, TError>(
     // <param name=long>Id of group</param>
     long group_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/groups/{group_id}", new Values {
       { "fields", fields }});
@@ -2947,7 +2947,7 @@ body);
   // **Unlink** a linked UDD by setting lookml_link_id to null with [update_dashboard()](#!/Dashboard/update_dashboard)
   // 
   // POST /dashboards/{lookml_dashboard_id}/import/{space_id} -> Dashboard
-  async Task<SdkResponse<TSuccess, TError>> import_lookml_dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> import_lookml_dashboard<TSuccess, TError>(
     // <param name=string>Id of LookML dashboard</param>
     string lookml_dashboard_id,
     // <param name=string>Id of space to import the dashboard to</param>
@@ -2956,7 +2956,7 @@ body);
     WriteDashboard? body,
     // <param name=bool>If true, and this dashboard is localized, export it with the raw keys, not localized.</param>
     bool? raw_locale,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       lookml_dashboard_id = SdkUtils.EncodeParam(lookml_dashboard_id);
       space_id = SdkUtils.EncodeParam(space_id);
@@ -2968,12 +2968,12 @@ body);
   // ### Get information about a Integration.
   // 
   // GET /integrations/{integration_id} -> Integration
-  async Task<SdkResponse<TSuccess, TError>> integration<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> integration<TSuccess, TError>(
     // <param name=string>Id of integration</param>
     string integration_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       integration_id = SdkUtils.EncodeParam(integration_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/integrations/{integration_id}", new Values {
@@ -2983,12 +2983,12 @@ body);
   // ### Get information about a Integration Hub.
   // 
   // GET /integration_hubs/{integration_hub_id} -> IntegrationHub
-  async Task<SdkResponse<TSuccess, TError>> integration_hub<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> integration_hub<TSuccess, TError>(
     // <param name=long>Id of Integration Hub</param>
     long integration_hub_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/integration_hubs/{integration_hub_id}", new Values {
       { "fields", fields }});
@@ -2997,8 +2997,8 @@ body);
   // ### Get and set the options for internal help resources
   // 
   // GET /internal_help_resources_enabled -> InternalHelpResources
-  async Task<SdkResponse<TSuccess, TError>> internal_help_resources<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> internal_help_resources<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/internal_help_resources_enabled");
   }
@@ -3006,8 +3006,8 @@ body);
   // ### Set the menu item name and content for internal help resources
   // 
   // GET /internal_help_resources_content -> InternalHelpResourcesContent
-  async Task<SdkResponse<TSuccess, TError>> internal_help_resources_content<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> internal_help_resources_content<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/internal_help_resources_content");
   }
@@ -3018,10 +3018,10 @@ body);
   // this app for ALL USERS of this app.
   // 
   // DELETE /oauth_client_apps/{client_guid}/tokens -> string
-  async Task<SdkResponse<TSuccess, TError>> invalidate_tokens<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> invalidate_tokens<TSuccess, TError>(
     // <param name=string>The unique id of the application</param>
     string client_guid,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       client_guid = SdkUtils.EncodeParam(client_guid);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/oauth_client_apps/{client_guid}/tokens");
@@ -3030,10 +3030,10 @@ body);
   // Kill a query with a specific query_task_id.
   // 
   // DELETE /running_queries/{query_task_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> kill_query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> kill_query<TSuccess, TError>(
     // <param name=string>Query task id.</param>
     string query_task_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       query_task_id = SdkUtils.EncodeParam(query_task_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/running_queries/{query_task_id}");
@@ -3057,8 +3057,8 @@ body);
   // See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
   // 
   // GET /ldap_config -> LDAPConfig
-  async Task<SdkResponse<TSuccess, TError>> ldap_config<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> ldap_config<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/ldap_config");
   }
@@ -3066,10 +3066,10 @@ body);
   // ### Get information about the legacy feature with a specific id.
   // 
   // GET /legacy_features/{legacy_feature_id} -> LegacyFeature
-  async Task<SdkResponse<TSuccess, TError>> legacy_feature<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> legacy_feature<TSuccess, TError>(
     // <param name=string>id of legacy feature</param>
     string legacy_feature_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       legacy_feature_id = SdkUtils.EncodeParam(legacy_feature_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/legacy_features/{legacy_feature_id}");
@@ -3084,12 +3084,12 @@ body);
   //       2. The project will then write out a lockfile including each remote_dependency with its resolved ref.
   // 
   // POST /projects/{project_id}/manifest/lock_all -> string
-  async Task<SdkResponse<TSuccess, TError>> lock_all<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> lock_all<TSuccess, TError>(
     // <param name=string>Id of project</param>
     string project_id,
     // <param name=string>Requested fields</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/projects/{project_id}/manifest/lock_all", new Values {
@@ -3126,12 +3126,12 @@ body);
   // For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API3](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
   // 
   // POST /login -> AccessToken
-  async Task<SdkResponse<TSuccess, TError>> login<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> login<TSuccess, TError>(
     // <param name=string>client_id part of API3 Key.</param>
     string? client_id,
     // <param name=string>client_secret part of API3 Key.</param>
     string? client_secret,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/login", new Values {
       { "client_id", client_id },
@@ -3156,12 +3156,12 @@ body);
   // See 'login' for more detail on the access token and how to use it.
   // 
   // POST /login/{user_id} -> AccessToken
-  async Task<SdkResponse<TSuccess, TError>> login_user<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> login_user<TSuccess, TError>(
     // <param name=long>Id of user.</param>
     long user_id,
     // <param name=bool>When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.</param>
     bool? associative,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/login/{user_id}", new Values {
       { "associative", associative }});
@@ -3170,8 +3170,8 @@ body);
   // ### Logout of the API and invalidate the current access token.
   // 
   // DELETE /logout -> string
-  async Task<SdkResponse<TSuccess, TError>> logout<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> logout<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Delete, "/logout");
   }
@@ -3181,12 +3181,12 @@ body);
   // Returns detailed information about a Look and its associated Query.
   // 
   // GET /looks/{look_id} -> LookWithQuery
-  async Task<SdkResponse<TSuccess, TError>> look<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> look<TSuccess, TError>(
     // <param name=long>Id of look</param>
     long look_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/looks/{look_id}", new Values {
       { "fields", fields }});
@@ -3195,12 +3195,12 @@ body);
   // ### Get information about a lookml model.
   // 
   // GET /lookml_models/{lookml_model_name} -> LookmlModel
-  async Task<SdkResponse<TSuccess, TError>> lookml_model<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> lookml_model<TSuccess, TError>(
     // <param name=string>Name of lookml model.</param>
     string lookml_model_name,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       lookml_model_name = SdkUtils.EncodeParam(lookml_model_name);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/lookml_models/{lookml_model_name}", new Values {
@@ -3210,14 +3210,14 @@ body);
   // ### Get information about a lookml model explore.
   // 
   // GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> LookmlModelExplore
-  async Task<SdkResponse<TSuccess, TError>> lookml_model_explore<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> lookml_model_explore<TSuccess, TError>(
     // <param name=string>Name of lookml model.</param>
     string lookml_model_name,
     // <param name=string>Name of explore.</param>
     string explore_name,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       lookml_model_name = SdkUtils.EncodeParam(lookml_model_name);
       explore_name = SdkUtils.EncodeParam(explore_name);
@@ -3230,10 +3230,10 @@ body);
   // Returns the project with the given project id
   // 
   // GET /projects/{project_id}/manifest -> Manifest
-  async Task<SdkResponse<TSuccess, TError>> manifest<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> manifest<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/manifest");
@@ -3242,10 +3242,10 @@ body);
   // ### Get information about the current user; i.e. the user account currently calling the API.
   // 
   // GET /user -> User
-  async Task<SdkResponse<TSuccess, TError>> me<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> me<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
-    string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    string? fields = null,
+    ITransportSettings? options = null) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/user", new Values {
       { "fields", fields }});
@@ -3256,12 +3256,12 @@ body);
   // Returns a merge query object given its id.
   // 
   // GET /merge_queries/{merge_query_id} -> MergeQuery
-  async Task<SdkResponse<TSuccess, TError>> merge_query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> merge_query<TSuccess, TError>(
     // <param name=string>Merge Query Id</param>
     string merge_query_id,
     // <param name=string>Requested fields</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       merge_query_id = SdkUtils.EncodeParam(merge_query_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/merge_queries/{merge_query_id}", new Values {
@@ -3271,12 +3271,12 @@ body);
   // ### Get information about the model set with a specific id.
   // 
   // GET /model_sets/{model_set_id} -> ModelSet
-  async Task<SdkResponse<TSuccess, TError>> model_set<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> model_set<TSuccess, TError>(
     // <param name=long>Id of model set</param>
     long model_set_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/model_sets/{model_set_id}", new Values {
       { "fields", fields }});
@@ -3287,12 +3287,12 @@ body);
   // Returns the registered app client with matching client_guid.
   // 
   // GET /oauth_client_apps/{client_guid} -> OauthClientApp
-  async Task<SdkResponse<TSuccess, TError>> oauth_client_app<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> oauth_client_app<TSuccess, TError>(
     // <param name=string>The unique id of this application</param>
     string client_guid,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       client_guid = SdkUtils.EncodeParam(client_guid);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/oauth_client_apps/{client_guid}", new Values {
@@ -3313,8 +3313,8 @@ body);
   // OIDC is enabled or disabled for Looker using the **enabled** field.
   // 
   // GET /oidc_config -> OIDCConfig
-  async Task<SdkResponse<TSuccess, TError>> oidc_config<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> oidc_config<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/oidc_config");
   }
@@ -3322,10 +3322,10 @@ body);
   // ### Get a OIDC test configuration by test_slug.
   // 
   // GET /oidc_test_configs/{test_slug} -> OIDCConfig
-  async Task<SdkResponse<TSuccess, TError>> oidc_test_config<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> oidc_test_config<TSuccess, TError>(
     // <param name=string>Slug of test config</param>
     string test_slug,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       test_slug = SdkUtils.EncodeParam(test_slug);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/oidc_test_configs/{test_slug}");
@@ -3334,10 +3334,10 @@ body);
   // ### Parse the given xml as a SAML IdP metadata document and return the result.
   // 
   // POST /parse_saml_idp_metadata -> SamlMetadataParseResult
-  async Task<SdkResponse<TSuccess, TError>> parse_saml_idp_metadata<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> parse_saml_idp_metadata<TSuccess, TError>(
     // <param name=string></param>
     string body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/parse_saml_idp_metadata", null,
 body);
@@ -3346,8 +3346,8 @@ body);
   // ### Get password config.
   // 
   // GET /password_config -> PasswordConfig
-  async Task<SdkResponse<TSuccess, TError>> password_config<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> password_config<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/password_config");
   }
@@ -3355,10 +3355,10 @@ body);
   // Perform a data action. The data action object can be obtained from query results, and used to perform an arbitrary action.
   // 
   // POST /data_actions -> DataActionResponse
-  async Task<SdkResponse<TSuccess, TError>> perform_data_action<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> perform_data_action<TSuccess, TError>(
     // <param name=DataActionRequest></param>
     DataActionRequest body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/data_actions", null,
 body);
@@ -3367,12 +3367,12 @@ body);
   // ### Get information about the permission set with a specific id.
   // 
   // GET /permission_sets/{permission_set_id} -> PermissionSet
-  async Task<SdkResponse<TSuccess, TError>> permission_set<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> permission_set<TSuccess, TError>(
     // <param name=long>Id of permission set</param>
     long permission_set_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/permission_sets/{permission_set_id}", new Values {
       { "fields", fields }});
@@ -3383,12 +3383,12 @@ body);
   // Returns the project with the given project id
   // 
   // GET /projects/{project_id} -> Project
-  async Task<SdkResponse<TSuccess, TError>> project<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> project<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=string>Requested fields</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}", new Values {
@@ -3400,14 +3400,14 @@ body);
   // Returns information about a file in the project
   // 
   // GET /projects/{project_id}/files/file -> ProjectFile
-  async Task<SdkResponse<TSuccess, TError>> project_file<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> project_file<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=string>File Id</param>
     string file_id,
     // <param name=string>Requested fields</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/files/file", new Values {
@@ -3429,12 +3429,12 @@ body);
   // reflect the current state of the project.
   // 
   // GET /projects/{project_id}/validate -> ProjectValidationCache
-  async Task<SdkResponse<TSuccess, TError>> project_validation_results<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> project_validation_results<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=string>Requested fields</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/validate", new Values {
@@ -3446,12 +3446,12 @@ body);
   // Returns information about the state of the project files in the currently selected workspace
   // 
   // GET /projects/{project_id}/current_workspace -> ProjectWorkspace
-  async Task<SdkResponse<TSuccess, TError>> project_workspace<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> project_workspace<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=string>Requested fields</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/current_workspace", new Values {
@@ -3477,12 +3477,12 @@ body);
   // creating new queries and can usually just be ignored.
   // 
   // GET /queries/{query_id} -> Query
-  async Task<SdkResponse<TSuccess, TError>> query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> query<TSuccess, TError>(
     // <param name=long>Id of query</param>
     long query_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/queries/{query_id}", new Values {
       { "fields", fields }});
@@ -3507,12 +3507,12 @@ body);
   // 'aogBgL6o3cKK1jN3RoZl5s' is the slug.
   // 
   // GET /queries/slug/{slug} -> Query
-  async Task<SdkResponse<TSuccess, TError>> query_for_slug<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> query_for_slug<TSuccess, TError>(
     // <param name=string>Slug of query</param>
     string slug,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       slug = SdkUtils.EncodeParam(slug);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/queries/slug/{slug}", new Values {
@@ -3528,12 +3528,12 @@ body);
   // Use [create_query_task()](#!/Query/create_query_task) to create an async query task.
   // 
   // GET /query_tasks/{query_task_id} -> QueryTask
-  async Task<SdkResponse<TSuccess, TError>> query_task<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> query_task<TSuccess, TError>(
     // <param name=string>ID of the Query Task</param>
     string query_task_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       query_task_id = SdkUtils.EncodeParam(query_task_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/query_tasks/{query_task_id}", new Values {
@@ -3549,10 +3549,10 @@ body);
   // If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
   // 
   // GET /query_tasks/multi_results -> StringDictionary<string>
-  async Task<SdkResponse<TSuccess, TError>> query_task_multi_results<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> query_task_multi_results<TSuccess, TError>(
     // <param name=DelimArray<string>>List of Query Task IDs</param>
     DelimArray<string> query_task_ids,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/query_tasks/multi_results", new Values {
       { "query_task_ids", query_task_ids }});
@@ -3583,10 +3583,10 @@ body);
   // These data formats can only carry row data, and error info is not row data.
   // 
   // GET /query_tasks/{query_task_id}/results -> string
-  async Task<SdkResponse<TSuccess, TError>> query_task_results<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> query_task_results<TSuccess, TError>(
     // <param name=string>ID of the Query Task</param>
     string query_task_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       query_task_id = SdkUtils.EncodeParam(query_task_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/query_tasks/{query_task_id}/results");
@@ -3600,14 +3600,14 @@ body);
   // the app details registered with the Looker instance, the request is assumed to be a forgery and is rejected.
   // 
   // POST /oauth_client_apps/{client_guid} -> OauthClientApp
-  async Task<SdkResponse<TSuccess, TError>> register_oauth_client_app<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> register_oauth_client_app<TSuccess, TError>(
     // <param name=string>The unique id of this application</param>
     string client_guid,
     // <param name=WriteOauthClientApp></param>
     WriteOauthClientApp body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       client_guid = SdkUtils.EncodeParam(client_guid);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/oauth_client_apps/{client_guid}", new Values {
@@ -3622,12 +3622,12 @@ body);
   // Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
   // 
   // GET /render_tasks/{render_task_id} -> RenderTask
-  async Task<SdkResponse<TSuccess, TError>> render_task<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> render_task<TSuccess, TError>(
     // <param name=string>Id of render task</param>
     string render_task_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       render_task_id = SdkUtils.EncodeParam(render_task_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/render_tasks/{render_task_id}", new Values {
@@ -3655,10 +3655,10 @@ body);
   // GET /render_tasks/{render_task_id}/results -> string
   // 
   // **Note**: Binary content is returned by this method.
-  async Task<SdkResponse<TSuccess, TError>> render_task_results<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> render_task_results<TSuccess, TError>(
     // <param name=string>Id of render task</param>
     string render_task_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       render_task_id = SdkUtils.EncodeParam(render_task_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/render_tasks/{render_task_id}/results");
@@ -3669,10 +3669,10 @@ body);
   // **DANGER** this will delete any changes that have not been pushed to a remote repository.
   // 
   // POST /projects/{project_id}/reset_to_production -> string
-  async Task<SdkResponse<TSuccess, TError>> reset_project_to_production<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> reset_project_to_production<TSuccess, TError>(
     // <param name=string>Id of project</param>
     string project_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/projects/{project_id}/reset_to_production");
@@ -3683,10 +3683,10 @@ body);
   // **DANGER** this will delete any changes that have not been pushed to a remote repository.
   // 
   // POST /projects/{project_id}/reset_to_remote -> string
-  async Task<SdkResponse<TSuccess, TError>> reset_project_to_remote<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> reset_project_to_remote<TSuccess, TError>(
     // <param name=string>Id of project</param>
     string project_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/projects/{project_id}/reset_to_remote");
@@ -3695,10 +3695,10 @@ body);
   // ### Get information about the role with a specific id.
   // 
   // GET /roles/{role_id} -> Role
-  async Task<SdkResponse<TSuccess, TError>> role<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> role<TSuccess, TError>(
     // <param name=long>id of role</param>
     long role_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/roles/{role_id}");
   }
@@ -3706,12 +3706,12 @@ body);
   // ### Get information about all the groups with the role that has a specific id.
   // 
   // GET /roles/{role_id}/groups -> Group[]
-  async Task<SdkResponse<TSuccess, TError>> role_groups<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> role_groups<TSuccess, TError>(
     // <param name=long>id of role</param>
     long role_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/roles/{role_id}/groups", new Values {
       { "fields", fields }});
@@ -3720,14 +3720,14 @@ body);
   // ### Get information about all the users with the role that has a specific id.
   // 
   // GET /roles/{role_id}/users -> User[]
-  async Task<SdkResponse<TSuccess, TError>> role_users<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> role_users<TSuccess, TError>(
     // <param name=long>id of user</param>
     long role_id,
     // <param name=string>Requested fields.</param>
     string? fields,
     // <param name=bool>Get only users associated directly with the role: exclude those only associated through groups.</param>
     bool? direct_association_only,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/roles/{role_id}/users", new Values {
       { "fields", fields },
@@ -3743,14 +3743,14 @@ body);
   // Tests should be run in the order they are returned by [Get All Git Connection Tests](#!/Project/all_git_connection_tests).
   // 
   // GET /projects/{project_id}/git_connection_tests/{test_id} -> GitConnectionTestResult
-  async Task<SdkResponse<TSuccess, TError>> run_git_connection_test<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> run_git_connection_test<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=string>Test Id</param>
     string test_id,
     // <param name=string>(Optional: leave blank for root project) The remote url for remote dependency to test.</param>
     string? remote_url,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
       test_id = SdkUtils.EncodeParam(test_id);
@@ -3812,7 +3812,7 @@ body);
   // POST /queries/run/{result_format} -> string
   // 
   // **Note**: Binary content may be returned by this method.
-  async Task<SdkResponse<TSuccess, TError>> run_inline_query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> run_inline_query<TSuccess, TError>(
     // <param name=string>Format of result</param>
     string result_format,
     // <param name=WriteQuery></param>
@@ -3841,7 +3841,7 @@ body);
     bool? rebuild_pdts,
     // <param name=bool>Perform table calculations on query results</param>
     bool? server_table_calcs,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       result_format = SdkUtils.EncodeParam(result_format);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/queries/run/{result_format}", new Values {
@@ -3882,7 +3882,7 @@ body);
   // GET /looks/{look_id}/run/{result_format} -> string
   // 
   // **Note**: Binary content may be returned by this method.
-  async Task<SdkResponse<TSuccess, TError>> run_look<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> run_look<TSuccess, TError>(
     // <param name=long>Id of look</param>
     long look_id,
     // <param name=string>Format of result</param>
@@ -3911,7 +3911,7 @@ body);
     bool? rebuild_pdts,
     // <param name=bool>Perform table calculations on query results</param>
     bool? server_table_calcs,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       result_format = SdkUtils.EncodeParam(result_format);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/looks/{look_id}/run/{result_format}", new Values {
@@ -3934,7 +3934,7 @@ body);
   // Runs all tests in the project, optionally filtered by file, test, and/or model.
   // 
   // GET /projects/{project_id}/lookml_tests/run -> LookmlTestResult[]
-  async Task<SdkResponse<TSuccess, TError>> run_lookml_test<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> run_lookml_test<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=string>File Name</param>
@@ -3943,7 +3943,7 @@ body);
     string? test,
     // <param name=string>Model Name</param>
     string? model,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/lookml_tests/run", new Values {
@@ -3977,7 +3977,7 @@ body);
   // GET /queries/{query_id}/run/{result_format} -> string
   // 
   // **Note**: Binary content may be returned by this method.
-  async Task<SdkResponse<TSuccess, TError>> run_query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> run_query<TSuccess, TError>(
     // <param name=long>Id of query</param>
     long query_id,
     // <param name=string>Format of result</param>
@@ -4006,7 +4006,7 @@ body);
     bool? rebuild_pdts,
     // <param name=bool>Perform table calculations on query results</param>
     bool? server_table_calcs,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       result_format = SdkUtils.EncodeParam(result_format);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/queries/{query_id}/run/{result_format}", new Values {
@@ -4029,14 +4029,14 @@ body);
   // POST /sql_queries/{slug}/run/{result_format} -> string
   // 
   // **Note**: Binary content may be returned by this method.
-  async Task<SdkResponse<TSuccess, TError>> run_sql_query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> run_sql_query<TSuccess, TError>(
     // <param name=string>slug of query</param>
     string slug,
     // <param name=string>Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]</param>
     string result_format,
     // <param name=string>Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.</param>
     string? download,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       slug = SdkUtils.EncodeParam(slug);
       result_format = SdkUtils.EncodeParam(result_format);
@@ -4100,14 +4100,14 @@ body);
   // GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> string
   // 
   // **Note**: Binary content may be returned by this method.
-  async Task<SdkResponse<TSuccess, TError>> run_url_encoded_query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> run_url_encoded_query<TSuccess, TError>(
     // <param name=string>Model name</param>
     string model_name,
     // <param name=string>View name</param>
     string view_name,
     // <param name=string>Format of result</param>
     string result_format,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       model_name = SdkUtils.EncodeParam(model_name);
       view_name = SdkUtils.EncodeParam(view_name);
@@ -4129,8 +4129,8 @@ body);
   // SAML is enabled or disabled for Looker using the **enabled** field.
   // 
   // GET /saml_config -> SamlConfig
-  async Task<SdkResponse<TSuccess, TError>> saml_config<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> saml_config<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/saml_config");
   }
@@ -4138,10 +4138,10 @@ body);
   // ### Get a SAML test configuration by test_slug.
   // 
   // GET /saml_test_configs/{test_slug} -> SamlConfig
-  async Task<SdkResponse<TSuccess, TError>> saml_test_config<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> saml_test_config<TSuccess, TError>(
     // <param name=string>Slug of test config</param>
     string test_slug,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       test_slug = SdkUtils.EncodeParam(test_slug);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/saml_test_configs/{test_slug}");
@@ -4152,12 +4152,12 @@ body);
   // Admins can fetch information about other users' Scheduled Plans.
   // 
   // GET /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
-  async Task<SdkResponse<TSuccess, TError>> scheduled_plan<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> scheduled_plan<TSuccess, TError>(
     // <param name=long>Scheduled Plan Id</param>
     long scheduled_plan_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/scheduled_plans/{scheduled_plan_id}", new Values {
       { "fields", fields }});
@@ -4202,10 +4202,10 @@ body);
   // Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
   // 
   // POST /scheduled_plans/run_once -> ScheduledPlan
-  async Task<SdkResponse<TSuccess, TError>> scheduled_plan_run_once<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> scheduled_plan_run_once<TSuccess, TError>(
     // <param name=WriteScheduledPlan></param>
     WriteScheduledPlan body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/scheduled_plans/run_once", null,
 body);
@@ -4260,12 +4260,12 @@ body);
   // This API is rate limited to prevent it from being used for relay spam or DoS attacks
   // 
   // POST /scheduled_plans/{scheduled_plan_id}/run_once -> ScheduledPlan
-  async Task<SdkResponse<TSuccess, TError>> scheduled_plan_run_once_by_id<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> scheduled_plan_run_once_by_id<TSuccess, TError>(
     // <param name=long>Id of schedule plan to copy and run</param>
     long scheduled_plan_id,
     // <param name=WriteScheduledPlan></param>
     WriteScheduledPlan? body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/scheduled_plans/{scheduled_plan_id}/run_once", null,
 body);
@@ -4284,7 +4284,7 @@ body);
   // The caller must have `see_schedules` permission to see other users' scheduled plans.
   // 
   // GET /scheduled_plans/dashboard/{dashboard_id} -> ScheduledPlan[]
-  async Task<SdkResponse<TSuccess, TError>> scheduled_plans_for_dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> scheduled_plans_for_dashboard<TSuccess, TError>(
     // <param name=long>Dashboard Id</param>
     long dashboard_id,
     // <param name=long>User Id (default is requesting user if not specified)</param>
@@ -4293,7 +4293,7 @@ body);
     bool? all_users,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/scheduled_plans/dashboard/{dashboard_id}", new Values {
       { "user_id", user_id },
@@ -4314,7 +4314,7 @@ body);
   // The caller must have `see_schedules` permission to see other users' scheduled plans.
   // 
   // GET /scheduled_plans/look/{look_id} -> ScheduledPlan[]
-  async Task<SdkResponse<TSuccess, TError>> scheduled_plans_for_look<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> scheduled_plans_for_look<TSuccess, TError>(
     // <param name=long>Look Id</param>
     long look_id,
     // <param name=long>User Id (default is requesting user if not specified)</param>
@@ -4323,7 +4323,7 @@ body);
     string? fields,
     // <param name=bool>Return scheduled plans belonging to all users for the look</param>
     bool? all_users,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/scheduled_plans/look/{look_id}", new Values {
       { "user_id", user_id },
@@ -4344,7 +4344,7 @@ body);
   // The caller must have `see_schedules` permission to see other users' scheduled plans.
   // 
   // GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id} -> ScheduledPlan[]
-  async Task<SdkResponse<TSuccess, TError>> scheduled_plans_for_lookml_dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> scheduled_plans_for_lookml_dashboard<TSuccess, TError>(
     // <param name=long>LookML Dashboard Id</param>
     long lookml_dashboard_id,
     // <param name=long>User Id (default is requesting user if not specified)</param>
@@ -4353,7 +4353,7 @@ body);
     string? fields,
     // <param name=bool>Return scheduled plans belonging to all users for the dashboard</param>
     bool? all_users,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/scheduled_plans/lookml_dashboard/{lookml_dashboard_id}", new Values {
       { "user_id", user_id },
@@ -4366,12 +4366,12 @@ body);
   // Returns scheduled plans owned by the caller for a given space id.
   // 
   // GET /scheduled_plans/space/{space_id} -> ScheduledPlan[]
-  async Task<SdkResponse<TSuccess, TError>> scheduled_plans_for_space<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> scheduled_plans_for_space<TSuccess, TError>(
     // <param name=long>Space Id</param>
     long space_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/scheduled_plans/space/{space_id}", new Values {
       { "fields", fields }});
@@ -4401,7 +4401,7 @@ body);
   // Boolean search params accept only "true" and "false" as values.
   // 
   // GET /boards/search -> Board[]
-  async Task<SdkResponse<TSuccess, TError>> search_boards<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_boards<TSuccess, TError>(
     // <param name=string>Matches board title.</param>
     string? title,
     // <param name=string>Matches the timestamp for when the board was created.</param>
@@ -4428,7 +4428,7 @@ body);
     long? limit,
     // <param name=bool>Combine given search criteria in a boolean OR expression</param>
     bool? filter_or,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/boards/search", new Values {
       { "title", title },
@@ -4470,7 +4470,7 @@ body);
   // Boolean search params accept only "true" and "false" as values.
   // 
   // GET /content_favorite/search -> ContentFavorite[]
-  async Task<SdkResponse<TSuccess, TError>> search_content_favorites<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_content_favorites<TSuccess, TError>(
     // <param name=long>Match content favorite id(s)</param>
     long? id,
     // <param name=string>Match user id(s).To create a list of multiple ids, use commas as separators</param>
@@ -4493,7 +4493,7 @@ body);
     string? fields,
     // <param name=bool>Combine given search criteria in a boolean OR expression</param>
     bool? filter_or,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/content_favorite/search", new Values {
       { "id", id },
@@ -4533,7 +4533,7 @@ body);
   // Boolean search params accept only "true" and "false" as values.
   // 
   // GET /content_view/search -> ContentView[]
-  async Task<SdkResponse<TSuccess, TError>> search_content_views<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_content_views<TSuccess, TError>(
     // <param name=string>Match view count</param>
     string? view_count,
     // <param name=string>Match Group Id</param>
@@ -4560,7 +4560,7 @@ body);
     string? sorts,
     // <param name=bool>Combine given search criteria in a boolean OR expression</param>
     bool? filter_or,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/content_view/search", new Values {
       { "view_count", view_count },
@@ -4604,7 +4604,7 @@ body);
   // Boolean search params accept only "true" and "false" as values.
   // 
   // GET /dashboard_elements/search -> DashboardElement[]
-  async Task<SdkResponse<TSuccess, TError>> search_dashboard_elements<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_dashboard_elements<TSuccess, TError>(
     // <param name=long>Select elements that refer to a given dashboard id</param>
     long? dashboard_id,
     // <param name=long>Select elements that refer to a given look id</param>
@@ -4619,7 +4619,7 @@ body);
     bool? filter_or,
     // <param name=string>Fields to sort by. Sortable fields: [:look_id, :dashboard_id, :deleted, :title]</param>
     string? sorts,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/dashboard_elements/search", new Values {
       { "dashboard_id", dashboard_id },
@@ -4662,7 +4662,7 @@ body);
   // Get a **single dashboard** by id with [dashboard()](#!/Dashboard/dashboard)
   // 
   // GET /dashboards/search -> Dashboard[]
-  async Task<SdkResponse<TSuccess, TError>> search_dashboards<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_dashboards<TSuccess, TError>(
     // <param name=string>Match dashboard id.</param>
     string? id,
     // <param name=string>Match dashboard slug.</param>
@@ -4701,7 +4701,7 @@ body);
     string? sorts,
     // <param name=bool>Combine given search criteria in a boolean OR expression</param>
     bool? filter_or,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/dashboards/search", new Values {
       { "id", id },
@@ -4728,7 +4728,7 @@ body);
   // Search for folders by creator id, parent id, name, etc
   // 
   // GET /folders/search -> Folder[]
-  async Task<SdkResponse<TSuccess, TError>> search_folders<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_folders<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
     // <param name=long>Requested page.</param>
@@ -4751,7 +4751,7 @@ body);
     string? creator_id,
     // <param name=bool>Combine given search criteria in a boolean OR expression</param>
     bool? filter_or,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/folders/search", new Values {
       { "fields", fields },
@@ -4793,7 +4793,7 @@ body);
   // Boolean search params accept only "true" and "false" as values.
   // 
   // GET /groups/search -> GroupSearch[]
-  async Task<SdkResponse<TSuccess, TError>> search_groups<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_groups<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
     // <param name=long>Number of results to return (used with `offset`).</param>
@@ -4814,7 +4814,7 @@ body);
     bool? externally_managed,
     // <param name=bool>Match group externally_orphaned.</param>
     bool? externally_orphaned,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/groups/search", new Values {
       { "fields", fields },
@@ -4858,7 +4858,7 @@ body);
   // Get a **single look** by id with [look(id)](#!/Look/look)
   // 
   // GET /looks/search -> Look[]
-  async Task<SdkResponse<TSuccess, TError>> search_looks<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_looks<TSuccess, TError>(
     // <param name=string>Match look id.</param>
     string? id,
     // <param name=string>Match Look title.</param>
@@ -4895,7 +4895,7 @@ body);
     string? sorts,
     // <param name=bool>Combine given search criteria in a boolean OR expression</param>
     bool? filter_or,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/looks/search", new Values {
       { "id", id },
@@ -4942,7 +4942,7 @@ body);
   // Boolean search params accept only "true" and "false" as values.
   // 
   // GET /model_sets/search -> ModelSet[]
-  async Task<SdkResponse<TSuccess, TError>> search_model_sets<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_model_sets<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
     // <param name=long>Number of results to return (used with `offset`).</param>
@@ -4961,7 +4961,7 @@ body);
     bool? built_in,
     // <param name=bool>Combine given search criteria in a boolean OR expression.</param>
     bool? filter_or,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/model_sets/search", new Values {
       { "fields", fields },
@@ -4999,7 +4999,7 @@ body);
   // Boolean search params accept only "true" and "false" as values.
   // 
   // GET /permission_sets/search -> PermissionSet[]
-  async Task<SdkResponse<TSuccess, TError>> search_permission_sets<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_permission_sets<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
     // <param name=long>Number of results to return (used with `offset`).</param>
@@ -5018,7 +5018,7 @@ body);
     bool? built_in,
     // <param name=bool>Combine given search criteria in a boolean OR expression.</param>
     bool? filter_or,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/permission_sets/search", new Values {
       { "fields", fields },
@@ -5058,7 +5058,7 @@ body);
   // Boolean search params accept only "true" and "false" as values.
   // 
   // GET /roles/search -> Role[]
-  async Task<SdkResponse<TSuccess, TError>> search_roles<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_roles<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
     // <param name=long>Number of results to return (used with `offset`).</param>
@@ -5075,7 +5075,7 @@ body);
     bool? built_in,
     // <param name=bool>Combine given search criteria in a boolean OR expression.</param>
     bool? filter_or,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/roles/search", new Values {
       { "fields", fields },
@@ -5128,7 +5128,7 @@ body);
   // **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   // 
   // GET /themes/search -> Theme[]
-  async Task<SdkResponse<TSuccess, TError>> search_themes<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_themes<TSuccess, TError>(
     // <param name=long>Match theme id.</param>
     long? id,
     // <param name=string>Match theme name.</param>
@@ -5147,7 +5147,7 @@ body);
     string? fields,
     // <param name=bool>Combine given search criteria in a boolean OR expression</param>
     bool? filter_or,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/themes/search", new Values {
       { "id", id },
@@ -5164,7 +5164,7 @@ body);
   // ### Search currently locked-out users.
   // 
   // GET /user_login_lockouts/search -> UserLoginLockout[]
-  async Task<SdkResponse<TSuccess, TError>> search_user_login_lockouts<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_user_login_lockouts<TSuccess, TError>(
     // <param name=string>Include only these fields in the response</param>
     string? fields,
     // <param name=long>Return only page N of paginated results</param>
@@ -5183,7 +5183,7 @@ body);
     string? remote_id,
     // <param name=bool>Combine given search criteria in a boolean OR expression</param>
     bool? filter_or,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/user_login_lockouts/search", new Values {
       { "fields", fields },
@@ -5229,7 +5229,7 @@ body);
   // names of other users who are members of the same group as the user.
   // 
   // GET /users/search -> User[]
-  async Task<SdkResponse<TSuccess, TError>> search_users<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_users<TSuccess, TError>(
     // <param name=string>Include only these fields in the response</param>
     string? fields,
     // <param name=long>Return only page N of paginated results</param>
@@ -5256,7 +5256,7 @@ body);
     string? content_metadata_id,
     // <param name=string>Search for users who are direct members of this group</param>
     string? group_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/users/search", new Values {
       { "fields", fields },
@@ -5282,7 +5282,7 @@ body);
   // Any additional search params will be combined into a logical AND expression.
   // 
   // GET /users/search/names/{pattern} -> User[]
-  async Task<SdkResponse<TSuccess, TError>> search_users_names<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> search_users_names<TSuccess, TError>(
     // <param name=string>Pattern to match</param>
     string pattern,
     // <param name=string>Include only these fields in the response</param>
@@ -5305,7 +5305,7 @@ body);
     string? email,
     // <param name=bool>Include or exclude disabled accounts in the results</param>
     bool? is_disabled,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       pattern = SdkUtils.EncodeParam(pattern);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/search/names/{pattern}", new Values {
@@ -5326,8 +5326,8 @@ body);
   // Returns information about the current API session, such as which workspace is selected for the session.
   // 
   // GET /session -> ApiSession
-  async Task<SdkResponse<TSuccess, TError>> session<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> session<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/session");
   }
@@ -5335,8 +5335,8 @@ body);
   // ### Get session config.
   // 
   // GET /session_config -> SessionConfig
-  async Task<SdkResponse<TSuccess, TError>> session_config<TSuccess, TError>(
-    ITransportSettings? options) where TSuccess : class where TError : class
+  public async Task<SdkResponse<TSuccess, TError>> session_config<TSuccess, TError>(
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/session_config");
   }
@@ -5347,10 +5347,10 @@ body);
   // **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   // 
   // PUT /color_collections/default -> ColorCollection
-  async Task<SdkResponse<TSuccess, TError>> set_default_color_collection<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> set_default_color_collection<TSuccess, TError>(
     // <param name=string>ID of color collection to set as default</param>
     string collection_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, "/color_collections/default", new Values {
       { "collection_id", collection_id }});
@@ -5369,10 +5369,10 @@ body);
   // **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   // 
   // PUT /themes/default -> Theme
-  async Task<SdkResponse<TSuccess, TError>> set_default_theme<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> set_default_theme<TSuccess, TError>(
     // <param name=string>Name of theme to set as default</param>
     string name,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, "/themes/default", new Values {
       { "name", name }});
@@ -5381,12 +5381,12 @@ body);
   // ### Set all groups for a role, removing all existing group associations from that role.
   // 
   // PUT /roles/{role_id}/groups -> Group[]
-  async Task<SdkResponse<TSuccess, TError>> set_role_groups<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> set_role_groups<TSuccess, TError>(
     // <param name=long>Id of Role</param>
     long role_id,
     // <param name=long[]></param>
     long[] body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, $"/roles/{role_id}/groups", null,
 body);
@@ -5395,12 +5395,12 @@ body);
   // ### Set all the users of the role with a specific id.
   // 
   // PUT /roles/{role_id}/users -> User[]
-  async Task<SdkResponse<TSuccess, TError>> set_role_users<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> set_role_users<TSuccess, TError>(
     // <param name=long>id of role</param>
     long role_id,
     // <param name=long[]></param>
     long[] body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, $"/roles/{role_id}/users", null,
 body);
@@ -5428,12 +5428,12 @@ body);
   // To set a user attribute value for all members of a group, see [Set User Attribute Group Value](#!/Group/update_user_attribute_group_value).
   // 
   // POST /user_attributes/{user_attribute_id}/group_values -> UserAttributeGroupValue[]
-  async Task<SdkResponse<TSuccess, TError>> set_user_attribute_group_values<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> set_user_attribute_group_values<TSuccess, TError>(
     // <param name=long>Id of user attribute</param>
     long user_attribute_id,
     // <param name=UserAttributeGroupValue[]></param>
     UserAttributeGroupValue[] body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/user_attributes/{user_attribute_id}/group_values", null,
 body);
@@ -5444,14 +5444,14 @@ body);
   // Per-user user attribute values take precedence over group or default values.
   // 
   // PATCH /users/{user_id}/attribute_values/{user_attribute_id} -> UserAttributeWithValue
-  async Task<SdkResponse<TSuccess, TError>> set_user_attribute_user_value<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> set_user_attribute_user_value<TSuccess, TError>(
     // <param name=long>Id of user</param>
     long user_id,
     // <param name=long>Id of user attribute</param>
     long user_attribute_id,
     // <param name=WriteUserAttributeWithValue></param>
     WriteUserAttributeWithValue body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/users/{user_id}/attribute_values/{user_attribute_id}", null,
 body);
@@ -5460,14 +5460,14 @@ body);
   // ### Set roles of the user with a specific id.
   // 
   // PUT /users/{user_id}/roles -> Role[]
-  async Task<SdkResponse<TSuccess, TError>> set_user_roles<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> set_user_roles<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=long[]></param>
     long[] body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, $"/users/{user_id}/roles", new Values {
       { "fields", fields }},
@@ -5477,10 +5477,10 @@ body);
   // Get a SQL Runner query.
   // 
   // GET /sql_queries/{slug} -> SqlQuery
-  async Task<SdkResponse<TSuccess, TError>> sql_query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> sql_query<TSuccess, TError>(
     // <param name=string>slug of query</param>
     string slug,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       slug = SdkUtils.EncodeParam(slug);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/sql_queries/{slug}");
@@ -5497,14 +5497,14 @@ body);
   // To **link** or **unlink** a UDD set the `lookml_link_id` property with [update_dashboard()](#!/Dashboard/update_dashboard)
   // 
   // PATCH /dashboards/{lookml_dashboard_id}/sync -> long[]
-  async Task<SdkResponse<TSuccess, TError>> sync_lookml_dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> sync_lookml_dashboard<TSuccess, TError>(
     // <param name=string>Id of LookML dashboard, in the form 'model::dashboardname'</param>
     string lookml_dashboard_id,
     // <param name=WriteDashboard></param>
     WriteDashboard body,
     // <param name=bool>If true, and this dashboard is localized, export it with the raw keys, not localized.</param>
     bool? raw_locale,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       lookml_dashboard_id = SdkUtils.EncodeParam(lookml_dashboard_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/dashboards/{lookml_dashboard_id}/sync", new Values {
@@ -5522,12 +5522,12 @@ body);
   // Unsupported tests in the request will be ignored.
   // 
   // PUT /connections/{connection_name}/test -> DBConnectionTestResult[]
-  async Task<SdkResponse<TSuccess, TError>> test_connection<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> test_connection<TSuccess, TError>(
     // <param name=string>Name of connection</param>
     string connection_name,
     // <param name=DelimArray<string>>Array of names of tests to run</param>
     DelimArray<string>? tests,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       connection_name = SdkUtils.EncodeParam(connection_name);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, $"/connections/{connection_name}/test", new Values {
@@ -5544,12 +5544,12 @@ body);
   // Unsupported tests in the request will be ignored.
   // 
   // PUT /connections/test -> DBConnectionTestResult[]
-  async Task<SdkResponse<TSuccess, TError>> test_connection_config<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> test_connection_config<TSuccess, TError>(
     // <param name=WriteDBConnection></param>
     WriteDBConnection body,
     // <param name=DelimArray<string>>Array of names of tests to run</param>
     DelimArray<string>? tests,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, "/connections/test", new Values {
       { "tests", tests }},
@@ -5559,10 +5559,10 @@ body);
   // Tests the integration to make sure all the settings are working.
   // 
   // POST /integrations/{integration_id}/test -> IntegrationTestResult
-  async Task<SdkResponse<TSuccess, TError>> test_integration<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> test_integration<TSuccess, TError>(
     // <param name=string>Id of integration</param>
     string integration_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       integration_id = SdkUtils.EncodeParam(integration_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/integrations/{integration_id}/test");
@@ -5590,10 +5590,10 @@ body);
   // The active LDAP settings are not modified.
   // 
   // PUT /ldap_config/test_auth -> LDAPConfigTestResult
-  async Task<SdkResponse<TSuccess, TError>> test_ldap_config_auth<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> test_ldap_config_auth<TSuccess, TError>(
     // <param name=WriteLDAPConfig></param>
     WriteLDAPConfig body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, "/ldap_config/test_auth", null,
 body);
@@ -5619,10 +5619,10 @@ body);
   // The active LDAP settings are not modified.
   // 
   // PUT /ldap_config/test_connection -> LDAPConfigTestResult
-  async Task<SdkResponse<TSuccess, TError>> test_ldap_config_connection<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> test_ldap_config_connection<TSuccess, TError>(
     // <param name=WriteLDAPConfig></param>
     WriteLDAPConfig body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, "/ldap_config/test_connection", null,
 body);
@@ -5639,10 +5639,10 @@ body);
   // The active LDAP settings are not modified.
   // 
   // PUT /ldap_config/test_user_auth -> LDAPConfigTestResult
-  async Task<SdkResponse<TSuccess, TError>> test_ldap_config_user_auth<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> test_ldap_config_user_auth<TSuccess, TError>(
     // <param name=WriteLDAPConfig></param>
     WriteLDAPConfig body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, "/ldap_config/test_user_auth", null,
 body);
@@ -5659,10 +5659,10 @@ body);
   // The active LDAP settings are not modified.
   // 
   // PUT /ldap_config/test_user_info -> LDAPConfigTestResult
-  async Task<SdkResponse<TSuccess, TError>> test_ldap_config_user_info<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> test_ldap_config_user_info<TSuccess, TError>(
     // <param name=WriteLDAPConfig></param>
     WriteLDAPConfig body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, "/ldap_config/test_user_info", null,
 body);
@@ -5675,12 +5675,12 @@ body);
   // **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   // 
   // GET /themes/{theme_id} -> Theme
-  async Task<SdkResponse<TSuccess, TError>> theme<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> theme<TSuccess, TError>(
     // <param name=long>Id of theme</param>
     long theme_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/themes/{theme_id}", new Values {
       { "fields", fields }});
@@ -5694,12 +5694,12 @@ body);
   // **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   // 
   // GET /themes/theme_or_default -> Theme
-  async Task<SdkResponse<TSuccess, TError>> theme_or_default<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> theme_or_default<TSuccess, TError>(
     // <param name=string>Name of theme</param>
     string name,
     // <param name=DateTime>Timestamp representing the target datetime for the active period. Defaults to 'now'</param>
     DateTime? ts,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/themes/theme_or_default", new Values {
       { "name", name },
@@ -5709,14 +5709,14 @@ body);
   // ### Update a board definition.
   // 
   // PATCH /boards/{board_id} -> Board
-  async Task<SdkResponse<TSuccess, TError>> update_board<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_board<TSuccess, TError>(
     // <param name=long>Id of board</param>
     long board_id,
     // <param name=WriteBoard></param>
     WriteBoard body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/boards/{board_id}", new Values {
       { "fields", fields }},
@@ -5726,14 +5726,14 @@ body);
   // ### Update a board item definition.
   // 
   // PATCH /board_items/{board_item_id} -> BoardItem
-  async Task<SdkResponse<TSuccess, TError>> update_board_item<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_board_item<TSuccess, TError>(
     // <param name=long>Id of board item</param>
     long board_item_id,
     // <param name=WriteBoardItem></param>
     WriteBoardItem body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/board_items/{board_item_id}", new Values {
       { "fields", fields }},
@@ -5743,14 +5743,14 @@ body);
   // ### Update a board section definition.
   // 
   // PATCH /board_sections/{board_section_id} -> BoardSection
-  async Task<SdkResponse<TSuccess, TError>> update_board_section<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_board_section<TSuccess, TError>(
     // <param name=long>Id of board section</param>
     long board_section_id,
     // <param name=WriteBoardSection></param>
     WriteBoardSection body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/board_sections/{board_section_id}", new Values {
       { "fields", fields }},
@@ -5760,10 +5760,10 @@ body);
   // Update the current Cloud Storage Configuration.
   // 
   // PATCH /cloud_storage -> BackupConfiguration
-  async Task<SdkResponse<TSuccess, TError>> update_cloud_storage_configuration<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_cloud_storage_configuration<TSuccess, TError>(
     // <param name=WriteBackupConfiguration></param>
     WriteBackupConfiguration body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/cloud_storage", null,
 body);
@@ -5773,12 +5773,12 @@ body);
   // **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   // 
   // PATCH /color_collections/{collection_id} -> ColorCollection
-  async Task<SdkResponse<TSuccess, TError>> update_color_collection<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_color_collection<TSuccess, TError>(
     // <param name=string>Id of Custom Color Collection</param>
     string collection_id,
     // <param name=WriteColorCollection></param>
     WriteColorCollection body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       collection_id = SdkUtils.EncodeParam(collection_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/color_collections/{collection_id}", null,
@@ -5788,12 +5788,12 @@ body);
   // ### Update a connection using the specified configuration.
   // 
   // PATCH /connections/{connection_name} -> DBConnection
-  async Task<SdkResponse<TSuccess, TError>> update_connection<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_connection<TSuccess, TError>(
     // <param name=string>Name of connection</param>
     string connection_name,
     // <param name=WriteDBConnection></param>
     WriteDBConnection body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       connection_name = SdkUtils.EncodeParam(connection_name);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/connections/{connection_name}", null,
@@ -5803,12 +5803,12 @@ body);
   // ### Move a piece of content.
   // 
   // PATCH /content_metadata/{content_metadata_id} -> ContentMeta
-  async Task<SdkResponse<TSuccess, TError>> update_content_metadata<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_content_metadata<TSuccess, TError>(
     // <param name=long>Id of content metadata</param>
     long content_metadata_id,
     // <param name=WriteContentMeta></param>
     WriteContentMeta body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/content_metadata/{content_metadata_id}", null,
 body);
@@ -5817,12 +5817,12 @@ body);
   // ### Update type of access for content metadata.
   // 
   // PUT /content_metadata_access/{content_metadata_access_id} -> ContentMetaGroupUser
-  async Task<SdkResponse<TSuccess, TError>> update_content_metadata_access<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_content_metadata_access<TSuccess, TError>(
     // <param name=string>Id of content metadata access</param>
     string content_metadata_access_id,
     // <param name=ContentMetaGroupUser></param>
     ContentMetaGroupUser body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       content_metadata_access_id = SdkUtils.EncodeParam(content_metadata_access_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, $"/content_metadata_access/{content_metadata_access_id}", null,
@@ -5832,12 +5832,12 @@ body);
   // Update custom welcome email setting and values. Optionally send a test email with the new content to the currently logged in user.
   // 
   // PATCH /custom_welcome_email -> CustomWelcomeEmail
-  async Task<SdkResponse<TSuccess, TError>> update_custom_welcome_email<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_custom_welcome_email<TSuccess, TError>(
     // <param name=WriteCustomWelcomeEmail></param>
     WriteCustomWelcomeEmail body,
     // <param name=bool>If true a test email with the content from the request will be sent to the current user after saving</param>
     bool? send_test_welcome_email,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/custom_welcome_email", new Values {
       { "send_test_welcome_email", send_test_welcome_email }},
@@ -5847,10 +5847,10 @@ body);
   // Requests to this endpoint will send a welcome email with the custom content provided in the body to the currently logged in user.
   // 
   // PUT /custom_welcome_email_test -> WelcomeEmailTest
-  async Task<SdkResponse<TSuccess, TError>> update_custom_welcome_email_test<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_custom_welcome_email_test<TSuccess, TError>(
     // <param name=WelcomeEmailTest></param>
     WelcomeEmailTest body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, "/custom_welcome_email_test", null,
 body);
@@ -5868,12 +5868,12 @@ body);
   // response body for information about exactly which fields are missing or contain invalid data.
   // 
   // PATCH /dashboards/{dashboard_id} -> Dashboard
-  async Task<SdkResponse<TSuccess, TError>> update_dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_dashboard<TSuccess, TError>(
     // <param name=string>Id of dashboard</param>
     string dashboard_id,
     // <param name=WriteDashboard></param>
     WriteDashboard body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/dashboards/{dashboard_id}", null,
@@ -5883,14 +5883,14 @@ body);
   // ### Update the dashboard element with a specific id.
   // 
   // PATCH /dashboard_elements/{dashboard_element_id} -> DashboardElement
-  async Task<SdkResponse<TSuccess, TError>> update_dashboard_element<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_dashboard_element<TSuccess, TError>(
     // <param name=string>Id of dashboard element</param>
     string dashboard_element_id,
     // <param name=WriteDashboardElement></param>
     WriteDashboardElement body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_element_id = SdkUtils.EncodeParam(dashboard_element_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/dashboard_elements/{dashboard_element_id}", new Values {
@@ -5901,14 +5901,14 @@ body);
   // ### Update the dashboard filter with a specific id.
   // 
   // PATCH /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
-  async Task<SdkResponse<TSuccess, TError>> update_dashboard_filter<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_dashboard_filter<TSuccess, TError>(
     // <param name=string>Id of dashboard filter</param>
     string dashboard_filter_id,
     // <param name=WriteDashboardFilter></param>
     WriteDashboardFilter body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_filter_id = SdkUtils.EncodeParam(dashboard_filter_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/dashboard_filters/{dashboard_filter_id}", new Values {
@@ -5919,14 +5919,14 @@ body);
   // ### Update the dashboard layout with a specific id.
   // 
   // PATCH /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
-  async Task<SdkResponse<TSuccess, TError>> update_dashboard_layout<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_dashboard_layout<TSuccess, TError>(
     // <param name=string>Id of dashboard layout</param>
     string dashboard_layout_id,
     // <param name=WriteDashboardLayout></param>
     WriteDashboardLayout body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_layout_id = SdkUtils.EncodeParam(dashboard_layout_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/dashboard_layouts/{dashboard_layout_id}", new Values {
@@ -5937,14 +5937,14 @@ body);
   // ### Update the dashboard element with a specific id.
   // 
   // PATCH /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
-  async Task<SdkResponse<TSuccess, TError>> update_dashboard_layout_component<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_dashboard_layout_component<TSuccess, TError>(
     // <param name=string>Id of dashboard layout component</param>
     string dashboard_layout_component_id,
     // <param name=WriteDashboardLayoutComponent></param>
     WriteDashboardLayoutComponent body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       dashboard_layout_component_id = SdkUtils.EncodeParam(dashboard_layout_component_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/dashboard_layout_components/{dashboard_layout_component_id}", new Values {
@@ -5955,12 +5955,12 @@ body);
   // ### Update a datagroup using the specified params.
   // 
   // PATCH /datagroups/{datagroup_id} -> Datagroup
-  async Task<SdkResponse<TSuccess, TError>> update_datagroup<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_datagroup<TSuccess, TError>(
     // <param name=long>ID of datagroup.</param>
     long datagroup_id,
     // <param name=WriteDatagroup></param>
     WriteDatagroup body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/datagroups/{datagroup_id}", null,
 body);
@@ -5969,10 +5969,10 @@ body);
   // ### Update the setting for enabling/disabling digest emails
   // 
   // PATCH /digest_emails_enabled -> DigestEmails
-  async Task<SdkResponse<TSuccess, TError>> update_digest_emails_enabled<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_digest_emails_enabled<TSuccess, TError>(
     // <param name=DigestEmails></param>
     DigestEmails body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/digest_emails_enabled", null,
 body);
@@ -5981,12 +5981,12 @@ body);
   // ### Update the folder with a specific id.
   // 
   // PATCH /folders/{folder_id} -> Folder
-  async Task<SdkResponse<TSuccess, TError>> update_folder<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_folder<TSuccess, TError>(
     // <param name=string>Id of folder</param>
     string folder_id,
     // <param name=UpdateFolder></param>
     UpdateFolder body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/folders/{folder_id}", null,
@@ -6004,12 +6004,12 @@ body);
   //   **DANGER** hard reset will be force pushed to the remote. Unsaved changes and commits may be permanently lost.
   // 
   // PUT /projects/{project_id}/git_branch -> GitBranch
-  async Task<SdkResponse<TSuccess, TError>> update_git_branch<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_git_branch<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=WriteGitBranch></param>
     WriteGitBranch body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, $"/projects/{project_id}/git_branch", null,
@@ -6019,14 +6019,14 @@ body);
   // ### Updates the a group (admin only).
   // 
   // PATCH /groups/{group_id} -> Group
-  async Task<SdkResponse<TSuccess, TError>> update_group<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_group<TSuccess, TError>(
     // <param name=long>Id of group</param>
     long group_id,
     // <param name=WriteGroup></param>
     WriteGroup body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/groups/{group_id}", new Values {
       { "fields", fields }},
@@ -6036,14 +6036,14 @@ body);
   // ### Update parameters on a Integration.
   // 
   // PATCH /integrations/{integration_id} -> Integration
-  async Task<SdkResponse<TSuccess, TError>> update_integration<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_integration<TSuccess, TError>(
     // <param name=string>Id of integration</param>
     string integration_id,
     // <param name=WriteIntegration></param>
     WriteIntegration body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       integration_id = SdkUtils.EncodeParam(integration_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/integrations/{integration_id}", new Values {
@@ -6056,14 +6056,14 @@ body);
   // This API is rate limited to prevent it from being used for SSRF attacks
   // 
   // PATCH /integration_hubs/{integration_hub_id} -> IntegrationHub
-  async Task<SdkResponse<TSuccess, TError>> update_integration_hub<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_integration_hub<TSuccess, TError>(
     // <param name=long>Id of Integration Hub</param>
     long integration_hub_id,
     // <param name=WriteIntegrationHub></param>
     WriteIntegrationHub body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/integration_hubs/{integration_hub_id}", new Values {
       { "fields", fields }},
@@ -6073,10 +6073,10 @@ body);
   // Update internal help resources settings
   // 
   // PATCH /internal_help_resources -> InternalHelpResources
-  async Task<SdkResponse<TSuccess, TError>> update_internal_help_resources<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_internal_help_resources<TSuccess, TError>(
     // <param name=WriteInternalHelpResources></param>
     WriteInternalHelpResources body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/internal_help_resources", null,
 body);
@@ -6085,10 +6085,10 @@ body);
   // Update internal help resources content
   // 
   // PATCH /internal_help_resources_content -> InternalHelpResourcesContent
-  async Task<SdkResponse<TSuccess, TError>> update_internal_help_resources_content<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_internal_help_resources_content<TSuccess, TError>(
     // <param name=WriteInternalHelpResourcesContent></param>
     WriteInternalHelpResourcesContent body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/internal_help_resources_content", null,
 body);
@@ -6107,10 +6107,10 @@ body);
   // See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
   // 
   // PATCH /ldap_config -> LDAPConfig
-  async Task<SdkResponse<TSuccess, TError>> update_ldap_config<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_ldap_config<TSuccess, TError>(
     // <param name=WriteLDAPConfig></param>
     WriteLDAPConfig body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/ldap_config", null,
 body);
@@ -6119,12 +6119,12 @@ body);
   // ### Update information about the legacy feature with a specific id.
   // 
   // PATCH /legacy_features/{legacy_feature_id} -> LegacyFeature
-  async Task<SdkResponse<TSuccess, TError>> update_legacy_feature<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_legacy_feature<TSuccess, TError>(
     // <param name=string>id of legacy feature</param>
     string legacy_feature_id,
     // <param name=WriteLegacyFeature></param>
     WriteLegacyFeature body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       legacy_feature_id = SdkUtils.EncodeParam(legacy_feature_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/legacy_features/{legacy_feature_id}", null,
@@ -6153,14 +6153,14 @@ body);
   // database and destroyed. There is no "undo" for `delete_look()`.
   // 
   // PATCH /looks/{look_id} -> LookWithQuery
-  async Task<SdkResponse<TSuccess, TError>> update_look<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_look<TSuccess, TError>(
     // <param name=long>Id of look</param>
     long look_id,
     // <param name=WriteLookWithQuery></param>
     WriteLookWithQuery body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/looks/{look_id}", new Values {
       { "fields", fields }},
@@ -6170,12 +6170,12 @@ body);
   // ### Update a lookml model using the specified configuration.
   // 
   // PATCH /lookml_models/{lookml_model_name} -> LookmlModel
-  async Task<SdkResponse<TSuccess, TError>> update_lookml_model<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_lookml_model<TSuccess, TError>(
     // <param name=string>Name of lookml model.</param>
     string lookml_model_name,
     // <param name=WriteLookmlModel></param>
     WriteLookmlModel body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       lookml_model_name = SdkUtils.EncodeParam(lookml_model_name);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/lookml_models/{lookml_model_name}", null,
@@ -6185,12 +6185,12 @@ body);
   // ### Update information about the model set with a specific id.
   // 
   // PATCH /model_sets/{model_set_id} -> ModelSet
-  async Task<SdkResponse<TSuccess, TError>> update_model_set<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_model_set<TSuccess, TError>(
     // <param name=long>id of model set</param>
     long model_set_id,
     // <param name=WriteModelSet></param>
     WriteModelSet body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/model_sets/{model_set_id}", null,
 body);
@@ -6201,14 +6201,14 @@ body);
   // Modifies the details a previously registered OAuth2 login client app.
   // 
   // PATCH /oauth_client_apps/{client_guid} -> OauthClientApp
-  async Task<SdkResponse<TSuccess, TError>> update_oauth_client_app<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_oauth_client_app<TSuccess, TError>(
     // <param name=string>The unique id of this application</param>
     string client_guid,
     // <param name=WriteOauthClientApp></param>
     WriteOauthClientApp body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       client_guid = SdkUtils.EncodeParam(client_guid);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/oauth_client_apps/{client_guid}", new Values {
@@ -6227,10 +6227,10 @@ body);
   // It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
   // 
   // PATCH /oidc_config -> OIDCConfig
-  async Task<SdkResponse<TSuccess, TError>> update_oidc_config<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_oidc_config<TSuccess, TError>(
     // <param name=WriteOIDCConfig></param>
     WriteOIDCConfig body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/oidc_config", null,
 body);
@@ -6239,10 +6239,10 @@ body);
   // ### Update password config.
   // 
   // PATCH /password_config -> PasswordConfig
-  async Task<SdkResponse<TSuccess, TError>> update_password_config<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_password_config<TSuccess, TError>(
     // <param name=WritePasswordConfig></param>
     WritePasswordConfig body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/password_config", null,
 body);
@@ -6251,12 +6251,12 @@ body);
   // ### Update information about the permission set with a specific id.
   // 
   // PATCH /permission_sets/{permission_set_id} -> PermissionSet
-  async Task<SdkResponse<TSuccess, TError>> update_permission_set<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_permission_set<TSuccess, TError>(
     // <param name=long>id of permission set</param>
     long permission_set_id,
     // <param name=WritePermissionSet></param>
     WritePermissionSet body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/permission_sets/{permission_set_id}", null,
 body);
@@ -6286,14 +6286,14 @@ body);
   // 1. Call `update_project` setting `git_remote_url` to null and `git_service_name` to "bare".
   // 
   // PATCH /projects/{project_id} -> Project
-  async Task<SdkResponse<TSuccess, TError>> update_project<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_project<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=WriteProject></param>
     WriteProject body,
     // <param name=string>Requested fields</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/projects/{project_id}", new Values {
@@ -6309,14 +6309,14 @@ body);
   // `credential_id` is required.
   // 
   // PUT /projects/{root_project_id}/credential/{credential_id} -> RepositoryCredential
-  async Task<SdkResponse<TSuccess, TError>> update_repository_credential<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_repository_credential<TSuccess, TError>(
     // <param name=string>Root Project Id</param>
     string root_project_id,
     // <param name=string>Credential Id</param>
     string credential_id,
     // <param name=WriteRepositoryCredential></param>
     WriteRepositoryCredential body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       root_project_id = SdkUtils.EncodeParam(root_project_id);
       credential_id = SdkUtils.EncodeParam(credential_id);
@@ -6327,12 +6327,12 @@ body);
   // ### Update information about the role with a specific id.
   // 
   // PATCH /roles/{role_id} -> Role
-  async Task<SdkResponse<TSuccess, TError>> update_role<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_role<TSuccess, TError>(
     // <param name=long>id of role</param>
     long role_id,
     // <param name=WriteRole></param>
     WriteRole body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/roles/{role_id}", null,
 body);
@@ -6349,10 +6349,10 @@ body);
   // It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
   // 
   // PATCH /saml_config -> SamlConfig
-  async Task<SdkResponse<TSuccess, TError>> update_saml_config<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_saml_config<TSuccess, TError>(
     // <param name=WriteSamlConfig></param>
     WriteSamlConfig body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/saml_config", null,
 body);
@@ -6402,12 +6402,12 @@ body);
   // Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
   // 
   // PATCH /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
-  async Task<SdkResponse<TSuccess, TError>> update_scheduled_plan<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_scheduled_plan<TSuccess, TError>(
     // <param name=long>Scheduled Plan Id</param>
     long scheduled_plan_id,
     // <param name=WriteScheduledPlan></param>
     WriteScheduledPlan body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/scheduled_plans/{scheduled_plan_id}", null,
 body);
@@ -6435,10 +6435,10 @@ body);
   // API sessions, be sure to select the dev workspace after each login.
   // 
   // PATCH /session -> ApiSession
-  async Task<SdkResponse<TSuccess, TError>> update_session<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_session<TSuccess, TError>(
     // <param name=WriteApiSession></param>
     WriteApiSession body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/session", null,
 body);
@@ -6447,10 +6447,10 @@ body);
   // ### Update session config.
   // 
   // PATCH /session_config -> SessionConfig
-  async Task<SdkResponse<TSuccess, TError>> update_session_config<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_session_config<TSuccess, TError>(
     // <param name=WriteSessionConfig></param>
     WriteSessionConfig body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/session_config", null,
 body);
@@ -6461,12 +6461,12 @@ body);
   // **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   // 
   // PATCH /themes/{theme_id} -> Theme
-  async Task<SdkResponse<TSuccess, TError>> update_theme<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_theme<TSuccess, TError>(
     // <param name=long>Id of theme</param>
     long theme_id,
     // <param name=WriteTheme></param>
     WriteTheme body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/themes/{theme_id}", null,
 body);
@@ -6475,14 +6475,14 @@ body);
   // ### Update information about the user with a specific id.
   // 
   // PATCH /users/{user_id} -> User
-  async Task<SdkResponse<TSuccess, TError>> update_user<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_user<TSuccess, TError>(
     // <param name=long>Id of user</param>
     long user_id,
     // <param name=WriteUser></param>
     WriteUser body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/users/{user_id}", new Values {
       { "fields", fields }},
@@ -6492,14 +6492,14 @@ body);
   // ### Update a user attribute definition.
   // 
   // PATCH /user_attributes/{user_attribute_id} -> UserAttribute
-  async Task<SdkResponse<TSuccess, TError>> update_user_attribute<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_user_attribute<TSuccess, TError>(
     // <param name=long>Id of user attribute</param>
     long user_attribute_id,
     // <param name=WriteUserAttribute></param>
     WriteUserAttribute body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/user_attributes/{user_attribute_id}", new Values {
       { "fields", fields }},
@@ -6511,14 +6511,14 @@ body);
   // For information about how user attribute values are calculated, see [Set User Attribute Group Values](#!/UserAttribute/set_user_attribute_group_values).
   // 
   // PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> UserAttributeGroupValue
-  async Task<SdkResponse<TSuccess, TError>> update_user_attribute_group_value<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_user_attribute_group_value<TSuccess, TError>(
     // <param name=long>Id of group</param>
     long group_id,
     // <param name=long>Id of user attribute</param>
     long user_attribute_id,
     // <param name=UserAttributeGroupValue></param>
     UserAttributeGroupValue body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/groups/{group_id}/attribute_values/{user_attribute_id}", null,
 body);
@@ -6527,14 +6527,14 @@ body);
   // ### Email/password login information for the specified user.
   // 
   // PATCH /users/{user_id}/credentials_email -> CredentialsEmail
-  async Task<SdkResponse<TSuccess, TError>> update_user_credentials_email<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_user_credentials_email<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=WriteCredentialsEmail></param>
     WriteCredentialsEmail body,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/users/{user_id}/credentials_email", new Values {
       { "fields", fields }},
@@ -6544,10 +6544,10 @@ body);
   // ### Update the whitelabel configuration
   // 
   // PUT /whitelabel_configuration -> WhitelabelConfiguration
-  async Task<SdkResponse<TSuccess, TError>> update_whitelabel_configuration<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> update_whitelabel_configuration<TSuccess, TError>(
     // <param name=WriteWhitelabelConfiguration></param>
     WriteWhitelabelConfiguration body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Put, "/whitelabel_configuration", null,
 body);
@@ -6560,12 +6560,12 @@ body);
   // The user name and avatar url, but no sensitive information.
   // 
   // GET /users/{user_id} -> User
-  async Task<SdkResponse<TSuccess, TError>> user<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user<TSuccess, TError>(
     // <param name=long>Id of user</param>
     long user_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}", new Values {
       { "fields", fields }});
@@ -6574,12 +6574,12 @@ body);
   // ### Get information about a user attribute.
   // 
   // GET /user_attributes/{user_attribute_id} -> UserAttribute
-  async Task<SdkResponse<TSuccess, TError>> user_attribute<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user_attribute<TSuccess, TError>(
     // <param name=long>Id of user attribute</param>
     long user_attribute_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/user_attributes/{user_attribute_id}", new Values {
       { "fields", fields }});
@@ -6603,7 +6603,7 @@ body);
   // The value of all hidden user attributes will be blank.
   // 
   // GET /users/{user_id}/attribute_values -> UserAttributeWithValue[]
-  async Task<SdkResponse<TSuccess, TError>> user_attribute_user_values<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user_attribute_user_values<TSuccess, TError>(
     // <param name=long>Id of user</param>
     long user_id,
     // <param name=string>Requested fields.</param>
@@ -6614,7 +6614,7 @@ body);
     bool? all_values,
     // <param name=bool>If true, returns an empty record for each requested attribute that has no user, group, or default value.</param>
     bool? include_unset,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/attribute_values", new Values {
       { "fields", fields },
@@ -6626,14 +6626,14 @@ body);
   // ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
   // 
   // GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
-  async Task<SdkResponse<TSuccess, TError>> user_credentials_api3<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user_credentials_api3<TSuccess, TError>(
     // <param name=long>Id of user</param>
     long user_id,
     // <param name=long>Id of API 3 Credential</param>
     long credentials_api3_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_api3/{credentials_api3_id}", new Values {
       { "fields", fields }});
@@ -6642,12 +6642,12 @@ body);
   // ### Email/password login information for the specified user.
   // 
   // GET /users/{user_id}/credentials_email -> CredentialsEmail
-  async Task<SdkResponse<TSuccess, TError>> user_credentials_email<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user_credentials_email<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_email", new Values {
       { "fields", fields }});
@@ -6656,14 +6656,14 @@ body);
   // ### Embed login information for the specified user.
   // 
   // GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
-  async Task<SdkResponse<TSuccess, TError>> user_credentials_embed<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user_credentials_embed<TSuccess, TError>(
     // <param name=long>Id of user</param>
     long user_id,
     // <param name=long>Id of Embedding Credential</param>
     long credentials_embed_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_embed/{credentials_embed_id}", new Values {
       { "fields", fields }});
@@ -6672,12 +6672,12 @@ body);
   // ### Google authentication login information for the specified user.
   // 
   // GET /users/{user_id}/credentials_google -> CredentialsGoogle
-  async Task<SdkResponse<TSuccess, TError>> user_credentials_google<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user_credentials_google<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_google", new Values {
       { "fields", fields }});
@@ -6686,12 +6686,12 @@ body);
   // ### LDAP login information for the specified user.
   // 
   // GET /users/{user_id}/credentials_ldap -> CredentialsLDAP
-  async Task<SdkResponse<TSuccess, TError>> user_credentials_ldap<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user_credentials_ldap<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_ldap", new Values {
       { "fields", fields }});
@@ -6700,12 +6700,12 @@ body);
   // ### Looker Openid login information for the specified user. Used by Looker Analysts.
   // 
   // GET /users/{user_id}/credentials_looker_openid -> CredentialsLookerOpenid
-  async Task<SdkResponse<TSuccess, TError>> user_credentials_looker_openid<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user_credentials_looker_openid<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_looker_openid", new Values {
       { "fields", fields }});
@@ -6714,12 +6714,12 @@ body);
   // ### OpenID Connect (OIDC) authentication login information for the specified user.
   // 
   // GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
-  async Task<SdkResponse<TSuccess, TError>> user_credentials_oidc<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user_credentials_oidc<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_oidc", new Values {
       { "fields", fields }});
@@ -6728,12 +6728,12 @@ body);
   // ### Saml authentication login information for the specified user.
   // 
   // GET /users/{user_id}/credentials_saml -> CredentialsSaml
-  async Task<SdkResponse<TSuccess, TError>> user_credentials_saml<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user_credentials_saml<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_saml", new Values {
       { "fields", fields }});
@@ -6742,12 +6742,12 @@ body);
   // ### Two-factor login information for the specified user.
   // 
   // GET /users/{user_id}/credentials_totp -> CredentialsTotp
-  async Task<SdkResponse<TSuccess, TError>> user_credentials_totp<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user_credentials_totp<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_totp", new Values {
       { "fields", fields }});
@@ -6783,14 +6783,14 @@ body);
   // NOTE: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
   // 
   // GET /users/credential/{credential_type}/{credential_id} -> User
-  async Task<SdkResponse<TSuccess, TError>> user_for_credential<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user_for_credential<TSuccess, TError>(
     // <param name=string>Type name of credential</param>
     string credential_type,
     // <param name=string>Id of credential</param>
     string credential_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       credential_type = SdkUtils.EncodeParam(credential_type);
       credential_id = SdkUtils.EncodeParam(credential_id);
@@ -6801,14 +6801,14 @@ body);
   // ### Get information about roles of a given user
   // 
   // GET /users/{user_id}/roles -> Role[]
-  async Task<SdkResponse<TSuccess, TError>> user_roles<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user_roles<TSuccess, TError>(
     // <param name=long>id of user</param>
     long user_id,
     // <param name=string>Requested fields.</param>
     string? fields,
     // <param name=bool>Get only roles associated directly with the user: exclude those only associated through groups.</param>
     bool? direct_association_only,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/roles", new Values {
       { "fields", fields },
@@ -6818,14 +6818,14 @@ body);
   // ### Web login session for the specified user.
   // 
   // GET /users/{user_id}/sessions/{session_id} -> Session
-  async Task<SdkResponse<TSuccess, TError>> user_session<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> user_session<TSuccess, TError>(
     // <param name=long>Id of user</param>
     long user_id,
     // <param name=long>Id of Web Login Session</param>
     long session_id,
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/sessions/{session_id}", new Values {
       { "fields", fields }});
@@ -6842,12 +6842,12 @@ body);
   // the most recent project validation (without recomputing), use `project_validation_results(project_id)`
   // 
   // POST /projects/{project_id}/validate -> ProjectValidation
-  async Task<SdkResponse<TSuccess, TError>> validate_project<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> validate_project<TSuccess, TError>(
     // <param name=string>Project Id</param>
     string project_id,
     // <param name=string>Requested fields</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       project_id = SdkUtils.EncodeParam(project_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/projects/{project_id}/validate", new Values {
@@ -6863,10 +6863,10 @@ body);
   // **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   // 
   // POST /themes/validate -> ValidationError
-  async Task<SdkResponse<TSuccess, TError>> validate_theme<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> validate_theme<TSuccess, TError>(
     // <param name=WriteTheme></param>
     WriteTheme body,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Post, "/themes/validate", null,
 body);
@@ -6878,14 +6878,14 @@ body);
   // reflect the actual data displayed in the respective visualizations.
   // 
   // GET /vector_thumbnail/{type}/{resource_id} -> string
-  async Task<SdkResponse<TSuccess, TError>> vector_thumbnail<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> vector_thumbnail<TSuccess, TError>(
     // <param name=string>Either dashboard or look</param>
     string type,
     // <param name=string>ID of the dashboard or look to render</param>
     string resource_id,
     // <param name=string>Whether or not to refresh the rendered image with the latest content</param>
     string? reload,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       type = SdkUtils.EncodeParam(type);
       resource_id = SdkUtils.EncodeParam(resource_id);
@@ -6896,10 +6896,10 @@ body);
   // ### Get information about all API versions supported by this Looker instance.
   // 
   // GET /versions -> ApiVersion
-  async Task<SdkResponse<TSuccess, TError>> versions<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> versions<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/versions", new Values {
       { "fields", fields }});
@@ -6909,10 +6909,10 @@ body);
   // ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
   // 
   // GET /whitelabel_configuration -> WhitelabelConfiguration
-  async Task<SdkResponse<TSuccess, TError>> whitelabel_configuration<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> whitelabel_configuration<TSuccess, TError>(
     // <param name=string>Requested fields.</param>
     string? fields,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, "/whitelabel_configuration", new Values {
       { "fields", fields }});
@@ -6949,10 +6949,10 @@ body);
   // later and use update_session(workspace_id: "dev") to select the dev workspace for the new API session.
   // 
   // GET /workspaces/{workspace_id} -> Workspace
-  async Task<SdkResponse<TSuccess, TError>> workspace<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, TError>> workspace<TSuccess, TError>(
     // <param name=string>Id of the workspace </param>
     string workspace_id,
-    ITransportSettings? options) where TSuccess : class where TError : class
+    ITransportSettings? options) where TSuccess : class where TError : Exception
 {  
       workspace_id = SdkUtils.EncodeParam(workspace_id);
     return await this.AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/workspaces/{workspace_id}");
