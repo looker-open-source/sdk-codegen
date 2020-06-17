@@ -16,7 +16,7 @@ namespace sdkrtl.Tests
         private TestConfig _config;
         private ITransport _transport;
         private IAuthSession _auth;
-        private Looker40SDK _sdk;
+        private Looker40SDK sdk;
         
         public SdkMethodsTests(ITestOutputHelper testOutputHelper)
         {
@@ -24,21 +24,13 @@ namespace sdkrtl.Tests
             _config = new TestConfig();
             _transport = new Transport(_config.Settings);
             _auth = new AuthSession(_config.Settings, _transport);
-            _sdk = new Looker40SDK(_auth);
-        }
-        
-        [Fact]
-        public async void MeTest()
-        {
-            var actual = await _sdk.Ok(_sdk.me<User, Exception>());
-            Assert.NotNull(actual);
-            Assert.NotNull(actual.first_name);
+            sdk = new Looker40SDK(_auth);
         }
 
         [Fact]
         public async void AllDashboardsTest()
         {
-            var actual = await _sdk.Ok(_sdk.all_dashboards<Dashboard[], Exception>());
+            var actual = await sdk.Ok(sdk.all_dashboards<Dashboard[], Exception>());
             Assert.NotNull(actual);
             Assert.True(actual.Length > 0);
             var dashes = actual
@@ -46,6 +38,14 @@ namespace sdkrtl.Tests
                 .Select(x => x)
                 .ToList();
             Assert.True(dashes.Count > 0);
+        }
+        
+        [Fact]
+        public async void MeTest()
+        {
+            var actual = await sdk.Ok(sdk.me<User, Exception>());
+            Assert.NotNull(actual);
+            Assert.NotNull(actual.first_name);
         }
     }
 }
