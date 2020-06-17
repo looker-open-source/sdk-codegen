@@ -7,6 +7,6 @@ LookSharp was developed using the principles in [Build Your Own SDK](../byosdk.m
 LookSharp! consists of:
 
 - C# Runtime library with strong typing
-- SDK Codegen generates the methods (SDK calls) and models (types)
-- Supports both API 3.1 and API 4.0
-- Includes some unit and functional test!
+- SDK Codegen generates the SDK bindings from the Looker API spec
+- Both API 3.1 and API 4.0 methods (SDK calls) and models (SDK types)
+- Includes some unit and functional tests!
