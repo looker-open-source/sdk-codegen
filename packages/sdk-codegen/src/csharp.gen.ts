@@ -31,22 +31,105 @@ import {
   IParameter,
   IType,
   IProperty,
-  strBody, titleCase, Arg,
+  strBody,
+  titleCase,
+  Arg,
 } from './sdkModels'
+
+// https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/
+const reservedWords = new Set<string>([
+  'abstract',
+  'as',
+  'base',
+  'bool',
+  'break',
+  'byte',
+  'case',
+  'catch',
+  'char',
+  'checked',
+  'class',
+  'const',
+  'continue',
+  'decimal',
+  'default',
+  'delegate',
+  'do ',
+  'double',
+  'else',
+  'enum',
+  'event',
+  'explicit',
+  'extern',
+  'false',
+  'finally',
+  'fixed',
+  'float',
+  'for',
+  'foreach',
+  'goto',
+  'if',
+  'implicit',
+  'in',
+  'int',
+  'interface',
+  'internal',
+  'is',
+  'lock',
+  'long',
+  'namespace',
+  'new',
+  'null',
+  'object',
+  'operator',
+  'out',
+  'override',
+  'params',
+  'private',
+  'protected',
+  'public',
+  'readonly',
+  'ref',
+  'return',
+  'sbyte',
+  'sealed',
+  'short',
+  'sizeof',
+  'stackalloc',
+  'static',
+  'string',
+  'struct',
+  'switch',
+  'this',
+  'throw',
+  'true',
+  'try',
+  'typeof',
+  'uint',
+  'ulong',
+  'unchecked',
+  'unsafe',
+  'ushort',
+  'using',
+  'virtual',
+  'void',
+  'volatile',
+  'while',
+])
 
 /**
  * C# code generator
  */
 export class CSharpGen extends CodeGen {
-  codePath = './csharp/'
-  packagePath = 'sdk'
+  codePath = './csharp'
+  packagePath = ''
   itself = 'this'
   fileExtension = '.cs'
-  commentStr = '/// '
+  commentStr = '// '
   nullStr = 'null'
   transport = 'Transport'
 
-  argDelimiter = ', '
+  argDelimiter = ',\n'
   paramDelimiter = ',\n'
   propDelimiter = '\n'
 
@@ -56,35 +139,55 @@ export class CSharpGen extends CodeGen {
   willItStream = false
 
   modelsPrologue(_indent: string) {
-    return `${this.commentHeader('', this.warnEditing())}
+    return `#nullable enable
+using System;
 using Looker.RTL;
+using Url = System.String;
+using Password = System.String;
+// ReSharper disable InconsistentNaming
+
+${this.commentHeader('', this.warnEditing())}
+namespace Looker.SDK.API${this.apiRef} 
+{
+
 `
   }
 
   modelsEpilogue(_indent: string) {
-    return ''
+    return '\n}'
   }
 
   methodsPrologue(_indent: string) {
-    return `
-${this.commentHeader('', this.warnEditing())}
-using Looker.RTL;
+    return `#nullable enable
+using System;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Looker.RTL;
+// ReSharper disable InconsistentNaming
 
-namespace Looker.SDK
+${this.commentHeader('', this.warnEditing())}
+namespace Looker.SDK.API${this.apiRef}
 {
+
   public class ${this.packageName}: ApiMethods
   {
-    public ${this.packageName}(IAuthSession authSession): base(authSession, ${
+    public ${this.packageName}(IAuthSession authSession): base(authSession, "${
       this.apiVersion
-    }) { }
+    }") { }
 `
   }
 
-  methodsEpilogue(_indent: string) {
-    return `}
-  }
+  methodsEpilogue(indent: string) {
+    return `${indent}}
+}
 `
+  }
+
+  reserve(name: string) {
+    if (reservedWords.has(name)) {
+      return '@' + name
+    }
+    return name
   }
 
   declareParameter(indent: string, method: IMethod, param: IParameter) {
@@ -93,24 +196,30 @@ namespace Looker.SDK
         ? this.writeableType(param.type, method) || param.type
         : param.type
     const mapped = this.typeMap(type)
-    let pOpt = ''
-    // if (param.location === strBody) {
-    //   mapped.name = `Partial<${mapped.name}>`
-    // }
-    // if (!param.required) {
-    // pOpt = mapped.default ? '' : '?'
-    // }
+    const arg = this.reserve(param.name)
+    const pOpt = param.required ? '' : '?'
     return (
       this.commentHeader(indent, this.paramComment(param, mapped)) +
-      `${indent}${param.name}${pOpt}: ${mapped.name}` +
-      (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
+      `${indent}${mapped.name}${pOpt} ${arg}`
     )
   }
 
-  declareProperty(_indent: string, _property: IProperty): string {
-    throw new Error('Method not implemented.')
+  declareProperty(indent: string, property: IProperty): string {
+    const type = this.typeMap(property.type)
+    let getset = '{ get; set; }'
+    // Presumption is, if type.default has a value, it should be used for required properties in class
+    if (property.required && type.default) {
+      getset += ` = ${type.default};`
+    }
+    const arg = this.reserve(property.name)
+    const pOpt = property.required ? '' : '?'
+    return (
+      this.commentHeader(indent, this.describeProperty(property)) +
+      `${indent}public ${type.name}${pOpt} ${arg} ${getset}`
+    )
   }
 
+  // TODO document parameters in methodHeader()
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
     const type = this.typeMap(method.type)
     const head = method.description?.trim()
@@ -153,7 +262,7 @@ namespace Looker.SDK
       fragment +
       `${
         fragment ? ',' : ''
-      }\n${bump}ITransportSettings options = null)\n{${indent}\n`
+      }\n${bump}ITransportSettings? options) where TSuccess : class where TError : class\n{${indent}\n`
     )
   }
 
@@ -164,7 +273,7 @@ namespace Looker.SDK
   httpPath(path: string, prefix?: string) {
     prefix = prefix || ''
     if (path.indexOf('{') >= 0) {
-      return `\$"${path.replace(/{/gi, '{' + prefix)}"`
+      return `$"${path.replace(/{/gi, '{' + prefix)}"`
     }
     return `'${path}'`
   }
@@ -185,20 +294,24 @@ namespace Looker.SDK
 
   argGroup(_indent: string, args: Arg[], prefix?: string) {
     prefix = prefix || ''
-    const values = args.map(arg => `{ "${arg}" = ${arg} }`)
+    const values = args.map((arg) => `{ "${arg}", ${arg} }`)
+    const bump = this.bumper(this.indentStr) + this.indentStr
     return args && args.length !== 0
-        ? `new Values = {${values.join(this.argDelimiter + prefix)}}`
-        : this.nullStr
+      ? `new Values {\n${bump}${values.join(
+          this.argDelimiter + bump + prefix
+        )}}`
+      : this.nullStr
   }
 
   httpCall(indent: string, method: IMethod) {
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
+    const dollah = method.pathArgs.length ? '$' : ''
     // const errors = `(${this.errorResponses(indent, method)})`
     const fragment = `AuthRequest<TSuccess, TError>(HttpMethod.${titleCase(
       method.httpMethod
-    )}, $"${method.endpoint}"${args ? ', ' + args : ''})`
-    return `${indent}return ${this.it(fragment)};`
+    )}, ${dollah}"${method.endpoint}"${args ? ', ' + args : ''})`
+    return `${indent}return await ${this.it(fragment)};`
   }
 
   encodePathParams(indent: string, method: IMethod): string {
@@ -207,7 +320,7 @@ namespace Looker.SDK
     if (method.pathParams.length > 0) {
       for (const param of method.pathParams) {
         if (param.doEncode()) {
-          encodings += `${bump}${param.name} = EncodeParam(${param.name});\n`
+          encodings += `${bump}${param.name} = SdkUtils.EncodeParam(${param.name});\n`
         }
       }
     }
@@ -226,34 +339,37 @@ namespace Looker.SDK
     return `${this.commentStr}<returns>${param.description}</returns>`
   }
 
+  // TODO document properties in `typeHeader()` instead of inline
+  // TODO create class constructor for all required parameters
   typeSignature(indent: string, type: IType) {
     return (
       this.commentHeader(indent, type.description) +
-      `${indent}public interface I${type.name}\n{\n`
+      `${indent}public class ${type.name}\n{\n`
     )
   }
 
   typeMap(type: IType): IMappedType {
     super.typeMap(type)
-    const mt = this.nullStr
+    const mt = ''
+    const quotes = '""'
 
     const csTypes: Record<string, IMappedType> = {
-      any: { default: mt, name: '' },
+      any: { default: this.nullStr, name: 'object' },
       boolean: { default: mt, name: 'bool' },
       byte: { default: mt, name: 'byte' },
-      date: { default: mt, name: 'DateTime' },
-      datetime: { default: mt, name: 'DateTime' },
+      date: { default: this.nullStr, name: 'DateTime' },
+      datetime: { default: this.nullStr, name: 'DateTime' },
       double: { default: mt, name: 'double' },
       float: { default: mt, name: 'float' },
       int32: { default: mt, name: 'int' },
       int64: { default: mt, name: 'long' },
       integer: { default: mt, name: 'int' },
-      number: { default: mt, name: 'int' },
-      object: { default: mt, name: 'object' },
-      password: { default: mt, name: 'Password' },
-      string: { default: mt, name: 'string' },
-      uri: { default: mt, name: 'Url' },
-      url: { default: mt, name: 'Url' },
+      number: { default: mt, name: 'double' },
+      object: { default: this.nullStr, name: 'object' },
+      password: { default: quotes, name: 'Password' },
+      string: { default: quotes, name: 'string' },
+      uri: { default: quotes, name: 'Url' },
+      url: { default: quotes, name: 'Url' },
       void: { default: mt, name: 'void' },
     }
 
@@ -262,17 +378,22 @@ namespace Looker.SDK
       const map = this.typeMap(type.elementType)
       switch (type.className) {
         case 'ArrayType':
-          return { default: '[]', name: `${map.name}[]` }
+          return { default: this.nullStr, name: `${map.name}[]` }
         case 'HashType':
-          return { default: '{}', name: `StringDictionary<${map.name}>` }
+          return {
+            default: this.nullStr,
+            name: `StringDictionary<${map.name}>`,
+          }
         case 'DelimArrayType':
-          return { default: '', name: `DelimArray<${map.name}>` }
+          return { default: this.nullStr, name: `DelimArray<${map.name}>` }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
 
     if (type.name) {
-      return csTypes[type.name] || { default: '', name: `I${type.name}` } // No null default for complex types
+      return (
+        csTypes[type.name] || { default: this.nullStr, name: `${type.name}` }
+      )
     } else {
       throw new Error('Cannot output a nameless type.')
     }

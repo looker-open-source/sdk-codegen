@@ -8,9 +8,26 @@ using System.Threading.Tasks;
 
 namespace Looker.RTL
 {
-    using Password = String; 
-    using Url = String;
-    using StringDictionary = Dictionary<string, object>;
+    public class StringDictionary<T> : Dictionary<string, T>
+    {
+    };
+
+    public class DelimArray<T> : List<T>
+    {
+        public string Delimiter { get; set; } = ",";
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            foreach(var item in this)
+            {
+                sb.Append(SdkUtils.EncodeParam(item));
+            }
+
+            sb.Remove(sb.Length - 1, 1);
+            return sb.ToString();
+        }
+    }
+    
     /// <summary>
     /// Sweet extension methods for syntactic sugar
     /// </summary>
