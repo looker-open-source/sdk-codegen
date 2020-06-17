@@ -32,6 +32,7 @@ import {
   SwiftGen,
   KotlinGen,
   TypescriptGen,
+  CSharpGen,
 } from '@looker/sdk-codegen'
 import { quit } from './nodeUtils'
 
@@ -46,7 +47,7 @@ export interface IGeneratorSpec {
 // To disable generation of any language specification, you can just comment it out
 export const Languages: Array<IGeneratorSpec> = [
   {
-    factory: undefined,
+    factory: (api: ApiModel, versions?: IVersionInfo) => new CSharpGen(api, versions),
     language: 'csharp',
     legacy: 'csharp',
     options: '-papiPackage=Looker -ppackageName=looker',

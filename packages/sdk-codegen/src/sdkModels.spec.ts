@@ -42,6 +42,7 @@ import {
   SearchCriterionTerm,
   SetToCriteria,
   typeRefs,
+  titleCase,
 } from './sdkModels'
 
 const config = TestConfig()
@@ -653,6 +654,13 @@ describe('sdkModels', () => {
       const actual = JSON.stringify(item, null, 2)
       expect(actual).toBeDefined()
       expect(actual).toContain('"name": "dashboard_dashboard_elements"')
+    })
+  })
+
+  describe('titleCase', () => {
+    it('titlecases', () => {
+      const actual = titleCase('POST')
+      expect(actual).toEqual('Post')
     })
   })
 })

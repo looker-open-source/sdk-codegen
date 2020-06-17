@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -7,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Looker.RTL
 {
+    using Password = String; 
+    using Url = String;
+    using StringDictionary = Dictionary<string, object>;
     /// <summary>
     /// Sweet extension methods for syntactic sugar
     /// </summary>
