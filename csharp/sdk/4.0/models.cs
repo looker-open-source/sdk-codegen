@@ -14,374 +14,374 @@ namespace Looker.SDK.API40
 
 public class AccessToken : SdkModel 
 {
-  /// Access Token used for API calls (read-only)
+  /// <summary>Access Token used for API calls (read-only)</summary>
   public string? access_token { get; set; } = null;
-  /// Type of Token (read-only)
+  /// <summary>Type of Token (read-only)</summary>
   public string? token_type { get; set; } = null;
-  /// Number of seconds before the token expires (read-only)
+  /// <summary>Number of seconds before the token expires (read-only)</summary>
   public long? expires_in { get; set; } = null;
-  /// Refresh token which can be used to obtain a new access token (read-only)
+  /// <summary>Refresh token which can be used to obtain a new access token (read-only)</summary>
   public string? refresh_token { get; set; } = null;
 }
 
 public class ApiSession : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// The id of active workspace for this session
+  /// <summary>The id of active workspace for this session</summary>
   public string? workspace_id { get; set; } = null;
-  /// The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)
+  /// <summary>The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)</summary>
   public long? sudo_user_id { get; set; } = null;
 }
 
 public class ApiVersion : SdkModel 
 {
-  /// Current Looker release version number (read-only)
+  /// <summary>Current Looker release version number (read-only)</summary>
   public string? looker_release_version { get; set; } = null;
   public ApiVersionElement? current_version { get; set; }
-  /// Array of versions supported by this Looker instance (read-only)
+  /// <summary>Array of versions supported by this Looker instance (read-only)</summary>
   public ApiVersionElement[]? supported_versions { get; set; } = null;
 }
 
 public class ApiVersionElement : SdkModel 
 {
-  /// Version number as it appears in '/api/xxx/' urls (read-only)
+  /// <summary>Version number as it appears in '/api/xxx/' urls (read-only)</summary>
   public string? version { get; set; } = null;
-  /// Full version number including minor version (read-only)
+  /// <summary>Full version number including minor version (read-only)</summary>
   public string? full_version { get; set; } = null;
-  /// Status of this version (read-only)
+  /// <summary>Status of this version (read-only)</summary>
   public string? status { get; set; } = null;
-  /// Url for swagger.json for this version (read-only)
+  /// <summary>Url for swagger.json for this version (read-only)</summary>
   public Url? swagger_url { get; set; } = null;
 }
 
 public class BackupConfiguration : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Type of backup: looker-s3 or custom-s3
+  /// <summary>Type of backup: looker-s3 or custom-s3</summary>
   public string? type { get; set; } = null;
-  /// Name of bucket for custom-s3 backups
+  /// <summary>Name of bucket for custom-s3 backups</summary>
   public string? custom_s3_bucket { get; set; } = null;
-  /// Name of region where the bucket is located
+  /// <summary>Name of region where the bucket is located</summary>
   public string? custom_s3_bucket_region { get; set; } = null;
-  /// (Write-Only) AWS S3 key used for custom-s3 backups
+  /// <summary>(Write-Only) AWS S3 key used for custom-s3 backups</summary>
   public string? custom_s3_key { get; set; } = null;
-  /// (Write-Only) AWS S3 secret used for custom-s3 backups
+  /// <summary>(Write-Only) AWS S3 secret used for custom-s3 backups</summary>
   public string? custom_s3_secret { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class Board : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Id of associated content_metadata record (read-only)
+  /// <summary>Id of associated content_metadata record (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
-  /// Date of board creation (read-only)
+  /// <summary>Date of board creation (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
-  /// Date of board deletion
+  /// <summary>Date of board deletion</summary>
   public DateTime? deleted_at { get; set; } = null;
-  /// Description of the board
+  /// <summary>Description of the board</summary>
   public string? description { get; set; } = null;
-  /// Sections of the board (read-only)
+  /// <summary>Sections of the board (read-only)</summary>
   public BoardSection[]? board_sections { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// ids of the board sections in the order they should be displayed
+  /// <summary>ids of the board sections in the order they should be displayed</summary>
   public long[]? section_order { get; set; } = null;
-  /// Title of the board
+  /// <summary>Title of the board</summary>
   public string? title { get; set; } = null;
-  /// Date of last board update (read-only)
+  /// <summary>Date of last board update (read-only)</summary>
   public DateTime? updated_at { get; set; } = null;
-  /// User id of board creator (read-only)
+  /// <summary>User id of board creator (read-only)</summary>
   public long? user_id { get; set; } = null;
-  /// Whether the board is the primary homepage or not (read-only)
+  /// <summary>Whether the board is the primary homepage or not (read-only)</summary>
   public bool? primary_homepage { get; set; } = null;
 }
 
 public class BoardItem : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Name of user who created the content this item is based on (read-only)
+  /// <summary>Name of user who created the content this item is based on (read-only)</summary>
   public string? content_created_by { get; set; } = null;
-  /// Content favorite id associated with the item this content is based on (read-only)
+  /// <summary>Content favorite id associated with the item this content is based on (read-only)</summary>
   public long? content_favorite_id { get; set; } = null;
-  /// Content metadata id associated with the item this content is based on (read-only)
+  /// <summary>Content metadata id associated with the item this content is based on (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
-  /// Last time the content that this item is based on was updated (read-only)
+  /// <summary>Last time the content that this item is based on was updated (read-only)</summary>
   public string? content_updated_at { get; set; } = null;
-  /// Dashboard to base this item on
+  /// <summary>Dashboard to base this item on</summary>
   public long? dashboard_id { get; set; } = null;
-  /// The actual description for display (read-only)
+  /// <summary>The actual description for display (read-only)</summary>
   public string? description { get; set; } = null;
-  /// Number of times content has been favorited, if present (read-only)
+  /// <summary>Number of times content has been favorited, if present (read-only)</summary>
   public long? favorite_count { get; set; } = null;
-  /// Associated Board Section
+  /// <summary>Associated Board Section</summary>
   public long? board_section_id { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// The container folder name of the content (read-only)
+  /// <summary>The container folder name of the content (read-only)</summary>
   public string? location { get; set; } = null;
-  /// Look to base this item on
+  /// <summary>Look to base this item on</summary>
   public long? look_id { get; set; } = null;
-  /// LookML Dashboard to base this item on
+  /// <summary>LookML Dashboard to base this item on</summary>
   public string? lookml_dashboard_id { get; set; } = null;
-  /// An arbitrary integer representing the sort order within the section
+  /// <summary>An arbitrary integer representing the sort order within the section</summary>
   public long? order { get; set; } = null;
-  /// The actual title for display (read-only)
+  /// <summary>The actual title for display (read-only)</summary>
   public string? title { get; set; } = null;
-  /// Relative url for the associated content (read-only)
+  /// <summary>Relative url for the associated content (read-only)</summary>
   public string? url { get; set; } = null;
-  /// Number of times content has been viewed, if present (read-only)
+  /// <summary>Number of times content has been viewed, if present (read-only)</summary>
   public long? view_count { get; set; } = null;
 }
 
 public class BoardSection : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Time at which this section was created. (read-only)
+  /// <summary>Time at which this section was created. (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
-  /// Time at which this section was deleted.
+  /// <summary>Time at which this section was deleted.</summary>
   public DateTime? deleted_at { get; set; } = null;
-  /// Description of the content found in this section.
+  /// <summary>Description of the content found in this section.</summary>
   public string? description { get; set; } = null;
-  /// Id reference to parent board
+  /// <summary>Id reference to parent board</summary>
   public long? board_id { get; set; } = null;
-  /// Items in the board section (read-only)
+  /// <summary>Items in the board section (read-only)</summary>
   public BoardItem[]? board_items { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// ids of the board items in the order they should be displayed
+  /// <summary>ids of the board items in the order they should be displayed</summary>
   public long[]? item_order { get; set; } = null;
-  /// Name of row
+  /// <summary>Name of row</summary>
   public string? title { get; set; } = null;
-  /// Time at which this section was last updated. (read-only)
+  /// <summary>Time at which this section was last updated. (read-only)</summary>
   public DateTime? updated_at { get; set; } = null;
 }
 
 public class ColorCollection : SdkModel 
 {
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Label of color collection
+  /// <summary>Label of color collection</summary>
   public string? label { get; set; } = null;
-  /// Array of categorical palette definitions
+  /// <summary>Array of categorical palette definitions</summary>
   public DiscretePalette[]? categoricalPalettes { get; set; } = null;
-  /// Array of discrete palette definitions
+  /// <summary>Array of discrete palette definitions</summary>
   public ContinuousPalette[]? sequentialPalettes { get; set; } = null;
-  /// Array of diverging palette definitions
+  /// <summary>Array of diverging palette definitions</summary>
   public ContinuousPalette[]? divergingPalettes { get; set; } = null;
 }
 
 public class ColorStop : SdkModel 
 {
-  /// CSS color string
+  /// <summary>CSS color string</summary>
   public string? color { get; set; } = null;
-  /// Offset in continuous palette (0 to 100)
+  /// <summary>Offset in continuous palette (0 to 100)</summary>
   public long? offset { get; set; } = null;
 }
 
 public class Command : SdkModel 
 {
-  /// Id of the command record (read-only)
+  /// <summary>Id of the command record (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Id of the command author (read-only)
+  /// <summary>Id of the command author (read-only)</summary>
   public long? author_id { get; set; } = null;
-  /// Name of the command
+  /// <summary>Name of the command</summary>
   public string? name { get; set; } = null;
-  /// Description of the command
+  /// <summary>Description of the command</summary>
   public string? description { get; set; } = null;
-  /// Id of the content associated with the command
+  /// <summary>Id of the content associated with the command</summary>
   public string? linked_content_id { get; set; } = null;
-  /// Name of the command Valid values are: "dashboard", "lookml_dashboard".
+  /// <summary>Name of the command Valid values are: "dashboard", "lookml_dashboard".</summary>
   public string? linked_content_type { get; set; } = null;
 }
 
 public class ContentFavorite : SdkModel 
 {
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// User Id which owns this ContentFavorite
+  /// <summary>User Id which owns this ContentFavorite</summary>
   public long? user_id { get; set; } = null;
-  /// Content Metadata Id associated with this ContentFavorite
+  /// <summary>Content Metadata Id associated with this ContentFavorite</summary>
   public long? content_metadata_id { get; set; } = null;
-  /// Id of a look (read-only)
+  /// <summary>Id of a look (read-only)</summary>
   public long? look_id { get; set; } = null;
-  /// Id of a dashboard (read-only)
+  /// <summary>Id of a dashboard (read-only)</summary>
   public long? dashboard_id { get; set; } = null;
   public LookBasic? look { get; set; }
   public DashboardBase? dashboard { get; set; }
-  /// Id of a board (read-only)
+  /// <summary>Id of a board (read-only)</summary>
   public long? board_id { get; set; } = null;
 }
 
 public class ContentMeta : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Name or title of underlying content (read-only)
+  /// <summary>Name or title of underlying content (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Id of Parent Content (read-only)
+  /// <summary>Id of Parent Content (read-only)</summary>
   public long? parent_id { get; set; } = null;
-  /// Id of associated dashboard when content_type is "dashboard" (read-only)
+  /// <summary>Id of associated dashboard when content_type is "dashboard" (read-only)</summary>
   public string? dashboard_id { get; set; } = null;
-  /// Id of associated look when content_type is "look" (read-only)
+  /// <summary>Id of associated look when content_type is "look" (read-only)</summary>
   public long? look_id { get; set; } = null;
-  /// Id of associated folder when content_type is "space" (read-only)
+  /// <summary>Id of associated folder when content_type is "space" (read-only)</summary>
   public string? folder_id { get; set; } = null;
-  /// Content Type ("dashboard", "look", or "folder") (read-only)
+  /// <summary>Content Type ("dashboard", "look", or "folder") (read-only)</summary>
   public string? content_type { get; set; } = null;
-  /// Whether content inherits its access levels from parent
+  /// <summary>Whether content inherits its access levels from parent</summary>
   public bool? inherits { get; set; } = null;
-  /// Id of Inherited Content (read-only)
+  /// <summary>Id of Inherited Content (read-only)</summary>
   public long? inheriting_id { get; set; } = null;
-  /// Content Slug (read-only)
+  /// <summary>Content Slug (read-only)</summary>
   public string? slug { get; set; } = null;
 }
 
 public class ContentMetaGroupUser : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Id of associated Content Metadata (read-only)
+  /// <summary>Id of associated Content Metadata (read-only)</summary>
   public string? content_metadata_id { get; set; } = null;
-  /// Type of permission: "view" or "edit" Valid values are: "view", "edit". (read-only)
+  /// <summary>Type of permission: "view" or "edit" Valid values are: "view", "edit". (read-only)</summary>
   public string? permission_type { get; set; } = null;
-  /// ID of associated group (read-only)
+  /// <summary>ID of associated group (read-only)</summary>
   public long? group_id { get; set; } = null;
-  /// ID of associated user (read-only)
+  /// <summary>ID of associated user (read-only)</summary>
   public long? user_id { get; set; } = null;
 }
 
 public class ContentValidation : SdkModel 
 {
-  /// A list of content errors (read-only)
+  /// <summary>A list of content errors (read-only)</summary>
   public ContentValidatorError[]? content_with_errors { get; set; } = null;
-  /// Duration of content validation in seconds (read-only)
+  /// <summary>Duration of content validation in seconds (read-only)</summary>
   public float? computation_time { get; set; } = null;
-  /// The number of looks validated (read-only)
+  /// <summary>The number of looks validated (read-only)</summary>
   public long? total_looks_validated { get; set; } = null;
-  /// The number of dashboard elements validated (read-only)
+  /// <summary>The number of dashboard elements validated (read-only)</summary>
   public long? total_dashboard_elements_validated { get; set; } = null;
-  /// The number of dashboard filters validated (read-only)
+  /// <summary>The number of dashboard filters validated (read-only)</summary>
   public long? total_dashboard_filters_validated { get; set; } = null;
-  /// The number of scheduled plans validated (read-only)
+  /// <summary>The number of scheduled plans validated (read-only)</summary>
   public long? total_scheduled_plans_validated { get; set; } = null;
-  /// The number of explores used across all content validated (read-only)
+  /// <summary>The number of explores used across all content validated (read-only)</summary>
   public long? total_explores_validated { get; set; } = null;
 }
 
 public class ContentValidationDashboard : SdkModel 
 {
-  /// Description
+  /// <summary>Description</summary>
   public string? description { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
   public ContentValidationFolder? folder { get; set; }
-  /// Dashboard Title
+  /// <summary>Dashboard Title</summary>
   public string? title { get; set; } = null;
 }
 
 public class ContentValidationDashboardElement : SdkModel 
 {
-  /// Text tile body text
+  /// <summary>Text tile body text</summary>
   public string? body_text { get; set; } = null;
-  /// Id of Dashboard
+  /// <summary>Id of Dashboard</summary>
   public string? dashboard_id { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Id Of Look
+  /// <summary>Id Of Look</summary>
   public string? look_id { get; set; } = null;
-  /// Note Display
+  /// <summary>Note Display</summary>
   public string? note_display { get; set; } = null;
-  /// Note State
+  /// <summary>Note State</summary>
   public string? note_state { get; set; } = null;
-  /// Note Text
+  /// <summary>Note Text</summary>
   public string? note_text { get; set; } = null;
-  /// Note Text as Html (read-only)
+  /// <summary>Note Text as Html (read-only)</summary>
   public string? note_text_as_html { get; set; } = null;
-  /// Id Of Query
+  /// <summary>Id Of Query</summary>
   public long? query_id { get; set; } = null;
-  /// Text tile subtitle text
+  /// <summary>Text tile subtitle text</summary>
   public string? subtitle_text { get; set; } = null;
-  /// Title of dashboard element
+  /// <summary>Title of dashboard element</summary>
   public string? title { get; set; } = null;
-  /// Whether title is hidden
+  /// <summary>Whether title is hidden</summary>
   public bool? title_hidden { get; set; } = null;
-  /// Text tile title
+  /// <summary>Text tile title</summary>
   public string? title_text { get; set; } = null;
-  /// Type
+  /// <summary>Type</summary>
   public string? type { get; set; } = null;
 }
 
 public class ContentValidationDashboardFilter : SdkModel 
 {
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Id of Dashboard (read-only)
+  /// <summary>Id of Dashboard (read-only)</summary>
   public string? dashboard_id { get; set; } = null;
-  /// Name of filter
+  /// <summary>Name of filter</summary>
   public string? name { get; set; } = null;
-  /// Title of filter
+  /// <summary>Title of filter</summary>
   public string? title { get; set; } = null;
-  /// Type of filter: one of date, number, string, or field
+  /// <summary>Type of filter: one of date, number, string, or field</summary>
   public string? type { get; set; } = null;
-  /// Default value of filter
+  /// <summary>Default value of filter</summary>
   public string? default_value { get; set; } = null;
-  /// Model of filter (required if type = field)
+  /// <summary>Model of filter (required if type = field)</summary>
   public string? model { get; set; } = null;
-  /// Explore of filter (required if type = field)
+  /// <summary>Explore of filter (required if type = field)</summary>
   public string? explore { get; set; } = null;
-  /// Dimension of filter (required if type = field)
+  /// <summary>Dimension of filter (required if type = field)</summary>
   public string? dimension { get; set; } = null;
 }
 
 public class ContentValidationError : SdkModel 
 {
-  /// Error message (read-only)
+  /// <summary>Error message (read-only)</summary>
   public string? message { get; set; } = null;
-  /// Name of the field involved in the error (read-only)
+  /// <summary>Name of the field involved in the error (read-only)</summary>
   public string? field_name { get; set; } = null;
-  /// Name of the model involved in the error (read-only)
+  /// <summary>Name of the model involved in the error (read-only)</summary>
   public string? model_name { get; set; } = null;
-  /// Name of the explore involved in the error (read-only)
+  /// <summary>Name of the explore involved in the error (read-only)</summary>
   public string? explore_name { get; set; } = null;
-  /// Whether this validation error is removable (read-only)
+  /// <summary>Whether this validation error is removable (read-only)</summary>
   public bool? removable { get; set; } = null;
 }
 
 public class ContentValidationFolder : SdkModel 
 {
-  /// Unique Name
+  /// <summary>Unique Name</summary>
   public string name { get; set; } = "";
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
 }
 
 public class ContentValidationLook : SdkModel 
 {
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Look Title
+  /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
   public ContentValidationFolder? folder { get; set; }
 }
 
 public class ContentValidationScheduledPlan : SdkModel 
 {
-  /// Name of this scheduled plan
+  /// <summary>Name of this scheduled plan</summary>
   public string? name { get; set; } = null;
-  /// Id of a look
+  /// <summary>Id of a look</summary>
   public long? look_id { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
 }
 
@@ -392,3280 +392,3280 @@ public class ContentValidatorError : SdkModel
   public ContentValidationDashboardElement? dashboard_element { get; set; }
   public ContentValidationDashboardFilter? dashboard_filter { get; set; }
   public ContentValidationScheduledPlan? scheduled_plan { get; set; }
-  /// A list of errors found for this piece of content (read-only)
+  /// <summary>A list of errors found for this piece of content (read-only)</summary>
   public ContentValidationError[]? errors { get; set; } = null;
-  /// An id unique to this piece of content for this validation run (read-only)
+  /// <summary>An id unique to this piece of content for this validation run (read-only)</summary>
   public string? id { get; set; } = null;
 }
 
 public class ContentView : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Id of viewed Look (read-only)
+  /// <summary>Id of viewed Look (read-only)</summary>
   public long? look_id { get; set; } = null;
-  /// Id of the viewed Dashboard (read-only)
+  /// <summary>Id of the viewed Dashboard (read-only)</summary>
   public long? dashboard_id { get; set; } = null;
-  /// Content metadata id of the Look or Dashboard (read-only)
+  /// <summary>Content metadata id of the Look or Dashboard (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
-  /// Id of user content was viewed by (read-only)
+  /// <summary>Id of user content was viewed by (read-only)</summary>
   public long? user_id { get; set; } = null;
-  /// Id of group content was viewed by (read-only)
+  /// <summary>Id of group content was viewed by (read-only)</summary>
   public long? group_id { get; set; } = null;
-  /// Number of times piece of content was viewed (read-only)
+  /// <summary>Number of times piece of content was viewed (read-only)</summary>
   public long? view_count { get; set; } = null;
-  /// Number of times piece of content was favorited (read-only)
+  /// <summary>Number of times piece of content was favorited (read-only)</summary>
   public long? favorite_count { get; set; } = null;
-  /// Date the piece of content was last viewed (read-only)
+  /// <summary>Date the piece of content was last viewed (read-only)</summary>
   public string? last_viewed_at { get; set; } = null;
-  /// Week start date for the view and favorite count during that given week (read-only)
+  /// <summary>Week start date for the view and favorite count during that given week (read-only)</summary>
   public string? start_of_week_date { get; set; } = null;
 }
 
 public class ContinuousPalette : SdkModel 
 {
-  /// Unique identity string (read-only)
+  /// <summary>Unique identity string (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Label for palette
+  /// <summary>Label for palette</summary>
   public string? label { get; set; } = null;
-  /// Type of palette
+  /// <summary>Type of palette</summary>
   public string? type { get; set; } = null;
-  /// Array of ColorStops in the palette
+  /// <summary>Array of ColorStops in the palette</summary>
   public ColorStop[]? stops { get; set; } = null;
 }
 
 public class CreateDashboardFilter : SdkModel 
 {
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Id of Dashboard
+  /// <summary>Id of Dashboard</summary>
   public string dashboard_id { get; set; } = "";
-  /// Name of filter
+  /// <summary>Name of filter</summary>
   public string name { get; set; } = "";
-  /// Title of filter
+  /// <summary>Title of filter</summary>
   public string title { get; set; } = "";
-  /// Type of filter: one of date, number, string, or field
+  /// <summary>Type of filter: one of date, number, string, or field</summary>
   public string type { get; set; } = "";
-  /// Default value of filter
+  /// <summary>Default value of filter</summary>
   public string? default_value { get; set; } = null;
-  /// Model of filter (required if type = field)
+  /// <summary>Model of filter (required if type = field)</summary>
   public string? model { get; set; } = null;
-  /// Explore of filter (required if type = field)
+  /// <summary>Explore of filter (required if type = field)</summary>
   public string? explore { get; set; } = null;
-  /// Dimension of filter (required if type = field)
+  /// <summary>Dimension of filter (required if type = field)</summary>
   public string? dimension { get; set; } = null;
-  /// Field information (read-only)
+  /// <summary>Field information (read-only)</summary>
   public StringDictionary<object>? field { get; set; } = null;
-  /// Display order of this filter relative to other filters
+  /// <summary>Display order of this filter relative to other filters</summary>
   public long? row { get; set; } = null;
-  /// Array of listeners for faceted filters
+  /// <summary>Array of listeners for faceted filters</summary>
   public string[]? listens_to_filters { get; set; } = null;
-  /// Whether the filter allows multiple filter values
+  /// <summary>Whether the filter allows multiple filter values</summary>
   public bool? allow_multiple_values { get; set; } = null;
-  /// Whether the filter requires a value to run the dashboard
+  /// <summary>Whether the filter requires a value to run the dashboard</summary>
   public bool? required { get; set; } = null;
-  /// The visual configuration for this filter. Used to set up how the UI for this filter should appear.
+  /// <summary>The visual configuration for this filter. Used to set up how the UI for this filter should appear.</summary>
   public StringDictionary<object>? ui_config { get; set; } = null;
 }
 
 public class CreateDashboardRenderTask : SdkModel 
 {
-  /// Filter values to apply to the dashboard queries, in URL query format
+  /// <summary>Filter values to apply to the dashboard queries, in URL query format</summary>
   public string? dashboard_filters { get; set; } = null;
-  /// Dashboard layout style: single_column or tiled
+  /// <summary>Dashboard layout style: single_column or tiled</summary>
   public string? dashboard_style { get; set; } = null;
 }
 
 public class CreateFolder : SdkModel 
 {
-  /// Unique Name
+  /// <summary>Unique Name</summary>
   public string name { get; set; } = "";
-  /// Id of Parent. If the parent id is null, this is a root-level entry
+  /// <summary>Id of Parent. If the parent id is null, this is a root-level entry</summary>
   public string parent_id { get; set; } = "";
 }
 
 public class CreateQueryTask : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Id of query to run
+  /// <summary>Id of query to run</summary>
   public long query_id { get; set; }
-  /// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".</summary>
   public string result_format { get; set; } = "";
-  /// Source of query task
+  /// <summary>Source of query task</summary>
   public string? source { get; set; } = null;
-  /// Create the task but defer execution
+  /// <summary>Create the task but defer execution</summary>
   public bool? deferred { get; set; } = null;
-  /// Id of look associated with query.
+  /// <summary>Id of look associated with query.</summary>
   public long? look_id { get; set; } = null;
-  /// Id of dashboard associated with query.
+  /// <summary>Id of dashboard associated with query.</summary>
   public string? dashboard_id { get; set; } = null;
 }
 
 public class CredentialsApi3 : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// API key client_id (read-only)
+  /// <summary>API key client_id (read-only)</summary>
   public string? client_id { get; set; } = null;
-  /// Timestamp for the creation of this credential (read-only)
+  /// <summary>Timestamp for the creation of this credential (read-only)</summary>
   public string? created_at { get; set; } = null;
-  /// Has this credential been disabled? (read-only)
+  /// <summary>Has this credential been disabled? (read-only)</summary>
   public bool? is_disabled { get; set; } = null;
-  /// Short name for the type of this kind of credential (read-only)
+  /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class CredentialsEmail : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Timestamp for the creation of this credential (read-only)
+  /// <summary>Timestamp for the creation of this credential (read-only)</summary>
   public string? created_at { get; set; } = null;
-  /// EMail address used for user login
+  /// <summary>EMail address used for user login</summary>
   public string? email { get; set; } = null;
-  /// Force the user to change their password upon their next login
+  /// <summary>Force the user to change their password upon their next login</summary>
   public bool? forced_password_reset_at_next_login { get; set; } = null;
-  /// Has this credential been disabled? (read-only)
+  /// <summary>Has this credential been disabled? (read-only)</summary>
   public bool? is_disabled { get; set; } = null;
-  /// Timestamp for most recent login using credential (read-only)
+  /// <summary>Timestamp for most recent login using credential (read-only)</summary>
   public string? logged_in_at { get; set; } = null;
-  /// Url with one-time use secret token that the user can use to reset password (read-only)
+  /// <summary>Url with one-time use secret token that the user can use to reset password (read-only)</summary>
   public string? password_reset_url { get; set; } = null;
-  /// Short name for the type of this kind of credential (read-only)
+  /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
-  /// Link to get this user (read-only)
+  /// <summary>Link to get this user (read-only)</summary>
   public Url? user_url { get; set; } = null;
 }
 
 public class CredentialsEmbed : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Timestamp for the creation of this credential (read-only)
+  /// <summary>Timestamp for the creation of this credential (read-only)</summary>
   public string? created_at { get; set; } = null;
-  /// Embedder's id for a group to which this user was added during the most recent login (read-only)
+  /// <summary>Embedder's id for a group to which this user was added during the most recent login (read-only)</summary>
   public string? external_group_id { get; set; } = null;
-  /// Embedder's unique id for the user (read-only)
+  /// <summary>Embedder's unique id for the user (read-only)</summary>
   public string? external_user_id { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Has this credential been disabled? (read-only)
+  /// <summary>Has this credential been disabled? (read-only)</summary>
   public bool? is_disabled { get; set; } = null;
-  /// Timestamp for most recent login using credential (read-only)
+  /// <summary>Timestamp for most recent login using credential (read-only)</summary>
   public string? logged_in_at { get; set; } = null;
-  /// Short name for the type of this kind of credential (read-only)
+  /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class CredentialsGoogle : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Timestamp for the creation of this credential (read-only)
+  /// <summary>Timestamp for the creation of this credential (read-only)</summary>
   public string? created_at { get; set; } = null;
-  /// Google domain (read-only)
+  /// <summary>Google domain (read-only)</summary>
   public string? domain { get; set; } = null;
-  /// EMail address (read-only)
+  /// <summary>EMail address (read-only)</summary>
   public string? email { get; set; } = null;
-  /// Google's Unique ID for this user (read-only)
+  /// <summary>Google's Unique ID for this user (read-only)</summary>
   public string? google_user_id { get; set; } = null;
-  /// Has this credential been disabled? (read-only)
+  /// <summary>Has this credential been disabled? (read-only)</summary>
   public bool? is_disabled { get; set; } = null;
-  /// Timestamp for most recent login using credential (read-only)
+  /// <summary>Timestamp for most recent login using credential (read-only)</summary>
   public string? logged_in_at { get; set; } = null;
-  /// Short name for the type of this kind of credential (read-only)
+  /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class CredentialsLDAP : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Timestamp for the creation of this credential (read-only)
+  /// <summary>Timestamp for the creation of this credential (read-only)</summary>
   public string? created_at { get; set; } = null;
-  /// EMail address (read-only)
+  /// <summary>EMail address (read-only)</summary>
   public string? email { get; set; } = null;
-  /// Has this credential been disabled? (read-only)
+  /// <summary>Has this credential been disabled? (read-only)</summary>
   public bool? is_disabled { get; set; } = null;
-  /// LDAP Distinguished name for this user (as-of the last login) (read-only)
+  /// <summary>LDAP Distinguished name for this user (as-of the last login) (read-only)</summary>
   public string? ldap_dn { get; set; } = null;
-  /// LDAP Unique ID for this user (read-only)
+  /// <summary>LDAP Unique ID for this user (read-only)</summary>
   public string? ldap_id { get; set; } = null;
-  /// Timestamp for most recent login using credential (read-only)
+  /// <summary>Timestamp for most recent login using credential (read-only)</summary>
   public string? logged_in_at { get; set; } = null;
-  /// Short name for the type of this kind of credential (read-only)
+  /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class CredentialsLookerOpenid : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Timestamp for the creation of this credential (read-only)
+  /// <summary>Timestamp for the creation of this credential (read-only)</summary>
   public string? created_at { get; set; } = null;
-  /// EMail address used for user login (read-only)
+  /// <summary>EMail address used for user login (read-only)</summary>
   public string? email { get; set; } = null;
-  /// Has this credential been disabled? (read-only)
+  /// <summary>Has this credential been disabled? (read-only)</summary>
   public bool? is_disabled { get; set; } = null;
-  /// Timestamp for most recent login using credential (read-only)
+  /// <summary>Timestamp for most recent login using credential (read-only)</summary>
   public string? logged_in_at { get; set; } = null;
-  /// IP address of client for most recent login using credential (read-only)
+  /// <summary>IP address of client for most recent login using credential (read-only)</summary>
   public string? logged_in_ip { get; set; } = null;
-  /// Short name for the type of this kind of credential (read-only)
+  /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
-  /// Link to get this user (read-only)
+  /// <summary>Link to get this user (read-only)</summary>
   public Url? user_url { get; set; } = null;
 }
 
 public class CredentialsOIDC : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Timestamp for the creation of this credential (read-only)
+  /// <summary>Timestamp for the creation of this credential (read-only)</summary>
   public string? created_at { get; set; } = null;
-  /// EMail address (read-only)
+  /// <summary>EMail address (read-only)</summary>
   public string? email { get; set; } = null;
-  /// Has this credential been disabled? (read-only)
+  /// <summary>Has this credential been disabled? (read-only)</summary>
   public bool? is_disabled { get; set; } = null;
-  /// Timestamp for most recent login using credential (read-only)
+  /// <summary>Timestamp for most recent login using credential (read-only)</summary>
   public string? logged_in_at { get; set; } = null;
-  /// OIDC OP's Unique ID for this user (read-only)
+  /// <summary>OIDC OP's Unique ID for this user (read-only)</summary>
   public string? oidc_user_id { get; set; } = null;
-  /// Short name for the type of this kind of credential (read-only)
+  /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class CredentialsSaml : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Timestamp for the creation of this credential (read-only)
+  /// <summary>Timestamp for the creation of this credential (read-only)</summary>
   public string? created_at { get; set; } = null;
-  /// EMail address (read-only)
+  /// <summary>EMail address (read-only)</summary>
   public string? email { get; set; } = null;
-  /// Has this credential been disabled? (read-only)
+  /// <summary>Has this credential been disabled? (read-only)</summary>
   public bool? is_disabled { get; set; } = null;
-  /// Timestamp for most recent login using credential (read-only)
+  /// <summary>Timestamp for most recent login using credential (read-only)</summary>
   public string? logged_in_at { get; set; } = null;
-  /// Saml IdP's Unique ID for this user (read-only)
+  /// <summary>Saml IdP's Unique ID for this user (read-only)</summary>
   public string? saml_user_id { get; set; } = null;
-  /// Short name for the type of this kind of credential (read-only)
+  /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class CredentialsTotp : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Timestamp for the creation of this credential (read-only)
+  /// <summary>Timestamp for the creation of this credential (read-only)</summary>
   public string? created_at { get; set; } = null;
-  /// Has this credential been disabled? (read-only)
+  /// <summary>Has this credential been disabled? (read-only)</summary>
   public bool? is_disabled { get; set; } = null;
-  /// Short name for the type of this kind of credential (read-only)
+  /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
-  /// User has verified (read-only)
+  /// <summary>User has verified (read-only)</summary>
   public bool? verified { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class CustomWelcomeEmail : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// If true, custom email content will replace the default body of welcome emails
+  /// <summary>If true, custom email content will replace the default body of welcome emails</summary>
   public bool? enabled { get; set; } = null;
-  /// The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
+  /// <summary>The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.</summary>
   public string? content { get; set; } = null;
-  /// The text to appear in the email subject line.
+  /// <summary>The text to appear in the email subject line.</summary>
   public string? subject { get; set; } = null;
-  /// The text to appear in the header line of the email body.
+  /// <summary>The text to appear in the header line of the email body.</summary>
   public string? header { get; set; } = null;
 }
 
 public class Dashboard : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Content Favorite Id (read-only)
+  /// <summary>Content Favorite Id (read-only)</summary>
   public long? content_favorite_id { get; set; } = null;
-  /// Id of content metadata (read-only)
+  /// <summary>Id of content metadata (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
-  /// Description
+  /// <summary>Description</summary>
   public string? description { get; set; } = null;
-  /// Is Hidden
+  /// <summary>Is Hidden</summary>
   public bool? hidden { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
   public LookModel? model { get; set; }
-  /// Timezone in which the Dashboard will run by default.
+  /// <summary>Timezone in which the Dashboard will run by default.</summary>
   public string? query_timezone { get; set; } = null;
-  /// Is Read-only (read-only)
+  /// <summary>Is Read-only (read-only)</summary>
   public bool? @readonly { get; set; } = null;
-  /// Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
+  /// <summary>Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.</summary>
   public string? refresh_interval { get; set; } = null;
-  /// Refresh Interval in milliseconds (read-only)
+  /// <summary>Refresh Interval in milliseconds (read-only)</summary>
   public long? refresh_interval_to_i { get; set; } = null;
   public FolderBase? folder { get; set; }
-  /// Dashboard Title
+  /// <summary>Dashboard Title</summary>
   public string? title { get; set; } = null;
-  /// Id of User (read-only)
+  /// <summary>Id of User (read-only)</summary>
   public long? user_id { get; set; } = null;
-  /// Background color
+  /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
-  /// Time that the Dashboard was created. (read-only)
+  /// <summary>Time that the Dashboard was created. (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
-  /// Enables crossfiltering in dashboards - only available in dashboards-next (beta)
+  /// <summary>Enables crossfiltering in dashboards - only available in dashboards-next (beta)</summary>
   public bool? crossfilter_enabled { get; set; } = null;
-  /// Elements (read-only)
+  /// <summary>Elements (read-only)</summary>
   public DashboardElement[]? dashboard_elements { get; set; } = null;
-  /// Filters (read-only)
+  /// <summary>Filters (read-only)</summary>
   public DashboardFilter[]? dashboard_filters { get; set; } = null;
-  /// Layouts (read-only)
+  /// <summary>Layouts (read-only)</summary>
   public DashboardLayout[]? dashboard_layouts { get; set; } = null;
-  /// Whether or not a dashboard is 'soft' deleted.
+  /// <summary>Whether or not a dashboard is 'soft' deleted.</summary>
   public bool? deleted { get; set; } = null;
-  /// Time that the Dashboard was 'soft' deleted. (read-only)
+  /// <summary>Time that the Dashboard was 'soft' deleted. (read-only)</summary>
   public DateTime? deleted_at { get; set; } = null;
-  /// Id of User that 'soft' deleted the dashboard. (read-only)
+  /// <summary>Id of User that 'soft' deleted the dashboard. (read-only)</summary>
   public long? deleter_id { get; set; } = null;
-  /// Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)
+  /// <summary>Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)</summary>
   public Url? edit_uri { get; set; } = null;
-  /// Number of times favorited (read-only)
+  /// <summary>Number of times favorited (read-only)</summary>
   public long? favorite_count { get; set; } = null;
-  /// Time the dashboard was last accessed (read-only)
+  /// <summary>Time the dashboard was last accessed (read-only)</summary>
   public DateTime? last_accessed_at { get; set; } = null;
-  /// Time last viewed in the Looker web UI (read-only)
+  /// <summary>Time last viewed in the Looker web UI (read-only)</summary>
   public DateTime? last_viewed_at { get; set; } = null;
-  /// configuration option that governs how dashboard loading will happen.
+  /// <summary>configuration option that governs how dashboard loading will happen.</summary>
   public string? load_configuration { get; set; } = null;
-  /// Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
+  /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
   public string? lookml_link_id { get; set; } = null;
-  /// Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)</summary>
   public bool? show_filters_bar { get; set; } = null;
-  /// Show title
+  /// <summary>Show title</summary>
   public bool? show_title { get; set; } = null;
-  /// Content Metadata Slug
+  /// <summary>Content Metadata Slug</summary>
   public string? slug { get; set; } = null;
-  /// Id of folder
+  /// <summary>Id of folder</summary>
   public string? folder_id { get; set; } = null;
-  /// Color of text on text tiles
+  /// <summary>Color of text on text tiles</summary>
   public string? text_tile_text_color { get; set; } = null;
-  /// Tile background color
+  /// <summary>Tile background color</summary>
   public string? tile_background_color { get; set; } = null;
-  /// Tile text color
+  /// <summary>Tile text color</summary>
   public string? tile_text_color { get; set; } = null;
-  /// Title color
+  /// <summary>Title color</summary>
   public string? title_color { get; set; } = null;
-  /// Number of times viewed in the Looker web UI (read-only)
+  /// <summary>Number of times viewed in the Looker web UI (read-only)</summary>
   public long? view_count { get; set; } = null;
   public DashboardAppearance? appearance { get; set; }
-  /// The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
+  /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
 }
 
 public class DashboardAggregateTableLookml : SdkModel 
 {
-  /// Dashboard Id (read-only)
+  /// <summary>Dashboard Id (read-only)</summary>
   public string? dashboard_id { get; set; } = null;
-  /// Aggregate Table LookML (read-only)
+  /// <summary>Aggregate Table LookML (read-only)</summary>
   public string? aggregate_table_lookml { get; set; } = null;
 }
 
 public class DashboardAppearance : SdkModel 
 {
-  /// Page margin (side) width
+  /// <summary>Page margin (side) width</summary>
   public long? page_side_margins { get; set; } = null;
-  /// Background color for the dashboard
+  /// <summary>Background color for the dashboard</summary>
   public string? page_background_color { get; set; } = null;
-  /// Title alignment on dashboard tiles
+  /// <summary>Title alignment on dashboard tiles</summary>
   public string? tile_title_alignment { get; set; } = null;
-  /// Space between tiles
+  /// <summary>Space between tiles</summary>
   public long? tile_space_between { get; set; } = null;
-  /// Background color for tiles
+  /// <summary>Background color for tiles</summary>
   public string? tile_background_color { get; set; } = null;
-  /// Tile shadow on/off
+  /// <summary>Tile shadow on/off</summary>
   public bool? tile_shadow { get; set; } = null;
-  /// Key color
+  /// <summary>Key color</summary>
   public string? key_color { get; set; } = null;
 }
 
 public class DashboardBase : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Content Favorite Id (read-only)
+  /// <summary>Content Favorite Id (read-only)</summary>
   public long? content_favorite_id { get; set; } = null;
-  /// Id of content metadata (read-only)
+  /// <summary>Id of content metadata (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
-  /// Description (read-only)
+  /// <summary>Description (read-only)</summary>
   public string? description { get; set; } = null;
-  /// Is Hidden (read-only)
+  /// <summary>Is Hidden (read-only)</summary>
   public bool? hidden { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
   public LookModel? model { get; set; }
-  /// Timezone in which the Dashboard will run by default. (read-only)
+  /// <summary>Timezone in which the Dashboard will run by default. (read-only)</summary>
   public string? query_timezone { get; set; } = null;
-  /// Is Read-only (read-only)
+  /// <summary>Is Read-only (read-only)</summary>
   public bool? @readonly { get; set; } = null;
-  /// Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds. (read-only)
+  /// <summary>Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds. (read-only)</summary>
   public string? refresh_interval { get; set; } = null;
-  /// Refresh Interval in milliseconds (read-only)
+  /// <summary>Refresh Interval in milliseconds (read-only)</summary>
   public long? refresh_interval_to_i { get; set; } = null;
   public FolderBase? folder { get; set; }
-  /// Dashboard Title (read-only)
+  /// <summary>Dashboard Title (read-only)</summary>
   public string? title { get; set; } = null;
-  /// Id of User (read-only)
+  /// <summary>Id of User (read-only)</summary>
   public long? user_id { get; set; } = null;
 }
 
 public class DashboardElement : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Text tile body text
+  /// <summary>Text tile body text</summary>
   public string? body_text { get; set; } = null;
-  /// Text tile body text as Html (read-only)
+  /// <summary>Text tile body text as Html (read-only)</summary>
   public string? body_text_as_html { get; set; } = null;
-  /// Id of Dashboard
+  /// <summary>Id of Dashboard</summary>
   public string? dashboard_id { get; set; } = null;
-  /// Relative path of URI of LookML file to edit the dashboard element (LookML dashboard only). (read-only)
+  /// <summary>Relative path of URI of LookML file to edit the dashboard element (LookML dashboard only). (read-only)</summary>
   public Url? edit_uri { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
   public LookWithQuery? look { get; set; }
-  /// Id Of Look
+  /// <summary>Id Of Look</summary>
   public string? look_id { get; set; } = null;
-  /// LookML link ID (read-only)
+  /// <summary>LookML link ID (read-only)</summary>
   public string? lookml_link_id { get; set; } = null;
-  /// ID of merge result
+  /// <summary>ID of merge result</summary>
   public string? merge_result_id { get; set; } = null;
-  /// Note Display
+  /// <summary>Note Display</summary>
   public string? note_display { get; set; } = null;
-  /// Note State
+  /// <summary>Note State</summary>
   public string? note_state { get; set; } = null;
-  /// Note Text
+  /// <summary>Note Text</summary>
   public string? note_text { get; set; } = null;
-  /// Note Text as Html (read-only)
+  /// <summary>Note Text as Html (read-only)</summary>
   public string? note_text_as_html { get; set; } = null;
   public Query? query { get; set; }
-  /// Id Of Query
+  /// <summary>Id Of Query</summary>
   public long? query_id { get; set; } = null;
-  /// Refresh Interval
+  /// <summary>Refresh Interval</summary>
   public string? refresh_interval { get; set; } = null;
-  /// Refresh Interval as integer (read-only)
+  /// <summary>Refresh Interval as integer (read-only)</summary>
   public long? refresh_interval_to_i { get; set; } = null;
   public ResultMakerWithIdVisConfigAndDynamicFields? result_maker { get; set; }
-  /// ID of the ResultMakerLookup entry.
+  /// <summary>ID of the ResultMakerLookup entry.</summary>
   public long? result_maker_id { get; set; } = null;
-  /// Text tile subtitle text
+  /// <summary>Text tile subtitle text</summary>
   public string? subtitle_text { get; set; } = null;
-  /// Title of dashboard element
+  /// <summary>Title of dashboard element</summary>
   public string? title { get; set; } = null;
-  /// Whether title is hidden
+  /// <summary>Whether title is hidden</summary>
   public bool? title_hidden { get; set; } = null;
-  /// Text tile title
+  /// <summary>Text tile title</summary>
   public string? title_text { get; set; } = null;
-  /// Type
+  /// <summary>Type</summary>
   public string? type { get; set; } = null;
-  /// Count of Alerts associated to a dashboard element (read-only)
+  /// <summary>Count of Alerts associated to a dashboard element (read-only)</summary>
   public long? alert_count { get; set; } = null;
-  /// Text tile title text as Html (read-only)
+  /// <summary>Text tile title text as Html (read-only)</summary>
   public string? title_text_as_html { get; set; } = null;
-  /// Text tile subtitle text as Html (read-only)
+  /// <summary>Text tile subtitle text as Html (read-only)</summary>
   public string? subtitle_text_as_html { get; set; } = null;
 }
 
 public class DashboardFilter : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Id of Dashboard (read-only)
+  /// <summary>Id of Dashboard (read-only)</summary>
   public string? dashboard_id { get; set; } = null;
-  /// Name of filter
+  /// <summary>Name of filter</summary>
   public string? name { get; set; } = null;
-  /// Title of filter
+  /// <summary>Title of filter</summary>
   public string? title { get; set; } = null;
-  /// Type of filter: one of date, number, string, or field
+  /// <summary>Type of filter: one of date, number, string, or field</summary>
   public string? type { get; set; } = null;
-  /// Default value of filter
+  /// <summary>Default value of filter</summary>
   public string? default_value { get; set; } = null;
-  /// Model of filter (required if type = field)
+  /// <summary>Model of filter (required if type = field)</summary>
   public string? model { get; set; } = null;
-  /// Explore of filter (required if type = field)
+  /// <summary>Explore of filter (required if type = field)</summary>
   public string? explore { get; set; } = null;
-  /// Dimension of filter (required if type = field)
+  /// <summary>Dimension of filter (required if type = field)</summary>
   public string? dimension { get; set; } = null;
-  /// Field information (read-only)
+  /// <summary>Field information (read-only)</summary>
   public StringDictionary<object>? field { get; set; } = null;
-  /// Display order of this filter relative to other filters
+  /// <summary>Display order of this filter relative to other filters</summary>
   public long? row { get; set; } = null;
-  /// Array of listeners for faceted filters
+  /// <summary>Array of listeners for faceted filters</summary>
   public string[]? listens_to_filters { get; set; } = null;
-  /// Whether the filter allows multiple filter values
+  /// <summary>Whether the filter allows multiple filter values</summary>
   public bool? allow_multiple_values { get; set; } = null;
-  /// Whether the filter requires a value to run the dashboard
+  /// <summary>Whether the filter requires a value to run the dashboard</summary>
   public bool? required { get; set; } = null;
-  /// The visual configuration for this filter. Used to set up how the UI for this filter should appear.
+  /// <summary>The visual configuration for this filter. Used to set up how the UI for this filter should appear.</summary>
   public StringDictionary<object>? ui_config { get; set; } = null;
 }
 
 public class DashboardLayout : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Id of Dashboard
+  /// <summary>Id of Dashboard</summary>
   public string? dashboard_id { get; set; } = null;
-  /// Type
+  /// <summary>Type</summary>
   public string? type { get; set; } = null;
-  /// Is Active
+  /// <summary>Is Active</summary>
   public bool? active { get; set; } = null;
-  /// Column Width
+  /// <summary>Column Width</summary>
   public long? column_width { get; set; } = null;
-  /// Width
+  /// <summary>Width</summary>
   public long? width { get; set; } = null;
-  /// Whether or not the dashboard layout is deleted. (read-only)
+  /// <summary>Whether or not the dashboard layout is deleted. (read-only)</summary>
   public bool? deleted { get; set; } = null;
-  /// Title extracted from the dashboard this layout represents. (read-only)
+  /// <summary>Title extracted from the dashboard this layout represents. (read-only)</summary>
   public string? dashboard_title { get; set; } = null;
-  /// Components (read-only)
+  /// <summary>Components (read-only)</summary>
   public DashboardLayoutComponent[]? dashboard_layout_components { get; set; } = null;
 }
 
 public class DashboardLayoutComponent : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Id of Dashboard Layout
+  /// <summary>Id of Dashboard Layout</summary>
   public string? dashboard_layout_id { get; set; } = null;
-  /// Id Of Dashboard Element
+  /// <summary>Id Of Dashboard Element</summary>
   public string? dashboard_element_id { get; set; } = null;
-  /// Row
+  /// <summary>Row</summary>
   public long? row { get; set; } = null;
-  /// Column
+  /// <summary>Column</summary>
   public long? column { get; set; } = null;
-  /// Width
+  /// <summary>Width</summary>
   public long? width { get; set; } = null;
-  /// Height
+  /// <summary>Height</summary>
   public long? height { get; set; } = null;
-  /// Whether or not the dashboard layout component is deleted (read-only)
+  /// <summary>Whether or not the dashboard layout component is deleted (read-only)</summary>
   public bool? deleted { get; set; } = null;
-  /// Dashboard element title, extracted from the Dashboard Element. (read-only)
+  /// <summary>Dashboard element title, extracted from the Dashboard Element. (read-only)</summary>
   public string? element_title { get; set; } = null;
-  /// Whether or not the dashboard element title is displayed. (read-only)
+  /// <summary>Whether or not the dashboard element title is displayed. (read-only)</summary>
   public bool? element_title_hidden { get; set; } = null;
-  /// Visualization type, extracted from a query's vis_config (read-only)
+  /// <summary>Visualization type, extracted from a query's vis_config (read-only)</summary>
   public string? vis_type { get; set; } = null;
 }
 
 public class DashboardLookml : SdkModel 
 {
-  /// Id of Dashboard (read-only)
+  /// <summary>Id of Dashboard (read-only)</summary>
   public string? dashboard_id { get; set; } = null;
-  /// lookml of UDD (read-only)
+  /// <summary>lookml of UDD (read-only)</summary>
   public string? lookml { get; set; } = null;
 }
 
 public class DataActionForm : SdkModel 
 {
   public DataActionUserState? state { get; set; }
-  /// Array of form fields. (read-only)
+  /// <summary>Array of form fields. (read-only)</summary>
   public DataActionFormField[]? fields { get; set; } = null;
 }
 
 public class DataActionFormField : SdkModel 
 {
-  /// Name (read-only)
+  /// <summary>Name (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Human-readable label (read-only)
+  /// <summary>Human-readable label (read-only)</summary>
   public string? label { get; set; } = null;
-  /// Description of field (read-only)
+  /// <summary>Description of field (read-only)</summary>
   public string? description { get; set; } = null;
-  /// Type of field. (read-only)
+  /// <summary>Type of field. (read-only)</summary>
   public string? type { get; set; } = null;
-  /// Default value of the field. (read-only)
+  /// <summary>Default value of the field. (read-only)</summary>
   public string? @default { get; set; } = null;
-  /// The URL for an oauth link, if type is 'oauth_link'. (read-only)
+  /// <summary>The URL for an oauth link, if type is 'oauth_link'. (read-only)</summary>
   public string? oauth_url { get; set; } = null;
-  /// Whether or not a field supports interactive forms. (read-only)
+  /// <summary>Whether or not a field supports interactive forms. (read-only)</summary>
   public bool? interactive { get; set; } = null;
-  /// Whether or not the field is required. This is a user-interface hint. A user interface displaying this form should not submit it without a value for this field. The action server must also perform this validation. (read-only)
+  /// <summary>Whether or not the field is required. This is a user-interface hint. A user interface displaying this form should not submit it without a value for this field. The action server must also perform this validation. (read-only)</summary>
   public bool? required { get; set; } = null;
-  /// If the form type is 'select', a list of options to be selected from. (read-only)
+  /// <summary>If the form type is 'select', a list of options to be selected from. (read-only)</summary>
   public DataActionFormSelectOption[]? options { get; set; } = null;
 }
 
 public class DataActionFormSelectOption : SdkModel 
 {
-  /// Name (read-only)
+  /// <summary>Name (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Human-readable label (read-only)
+  /// <summary>Human-readable label (read-only)</summary>
   public string? label { get; set; } = null;
 }
 
 public class DataActionRequest : SdkModel 
 {
-  /// The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.
+  /// <summary>The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.</summary>
   public StringDictionary<string>? action { get; set; } = null;
-  /// User input for any form values the data action might use.
+  /// <summary>User input for any form values the data action might use.</summary>
   public StringDictionary<string>? form_values { get; set; } = null;
 }
 
 public class DataActionResponse : SdkModel 
 {
-  /// ID of the webhook event that sent this data action. In some error conditions, this may be null. (read-only)
+  /// <summary>ID of the webhook event that sent this data action. In some error conditions, this may be null. (read-only)</summary>
   public string? webhook_id { get; set; } = null;
-  /// Whether the data action was successful. (read-only)
+  /// <summary>Whether the data action was successful. (read-only)</summary>
   public bool? success { get; set; } = null;
-  /// When true, indicates that the client should refresh (rerun) the source query because the data may have been changed by the action. (read-only)
+  /// <summary>When true, indicates that the client should refresh (rerun) the source query because the data may have been changed by the action. (read-only)</summary>
   public bool? refresh_query { get; set; } = null;
   public ValidationError? validation_errors { get; set; }
-  /// Optional message returned by the data action server describing the state of the action that took place. This can be used to implement custom failure messages. If a failure is related to a particular form field, the server should send back a validation error instead. The Looker web UI does not currently display any message if the action indicates 'success', but may do so in the future. (read-only)
+  /// <summary>Optional message returned by the data action server describing the state of the action that took place. This can be used to implement custom failure messages. If a failure is related to a particular form field, the server should send back a validation error instead. The Looker web UI does not currently display any message if the action indicates 'success', but may do so in the future. (read-only)</summary>
   public string? message { get; set; } = null;
 }
 
 public class DataActionUserState : SdkModel 
 {
-  /// User state data (read-only)
+  /// <summary>User state data (read-only)</summary>
   public string? data { get; set; } = null;
-  /// Time in seconds until the state needs to be refreshed (read-only)
+  /// <summary>Time in seconds until the state needs to be refreshed (read-only)</summary>
   public long? refresh_time { get; set; } = null;
 }
 
 public class Datagroup : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// UNIX timestamp at which this entry was created. (read-only)
+  /// <summary>UNIX timestamp at which this entry was created. (read-only)</summary>
   public long? created_at { get; set; } = null;
-  /// Unique ID of the datagroup (read-only)
+  /// <summary>Unique ID of the datagroup (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Name of the model containing the datagroup. Unique when combined with name. (read-only)
+  /// <summary>Name of the model containing the datagroup. Unique when combined with name. (read-only)</summary>
   public string? model_name { get; set; } = null;
-  /// Name of the datagroup. Unique when combined with model_name. (read-only)
+  /// <summary>Name of the datagroup. Unique when combined with model_name. (read-only)</summary>
   public string? name { get; set; } = null;
-  /// UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
+  /// <summary>UNIX timestamp before which cache entries are considered stale. Cannot be in the future.</summary>
   public long? stale_before { get; set; } = null;
-  /// UNIX timestamp at which this entry trigger was last checked. (read-only)
+  /// <summary>UNIX timestamp at which this entry trigger was last checked. (read-only)</summary>
   public long? trigger_check_at { get; set; } = null;
-  /// The message returned with the error of the last trigger check. (read-only)
+  /// <summary>The message returned with the error of the last trigger check. (read-only)</summary>
   public string? trigger_error { get; set; } = null;
-  /// The value of the trigger when last checked. (read-only)
+  /// <summary>The value of the trigger when last checked. (read-only)</summary>
   public string? trigger_value { get; set; } = null;
-  /// UNIX timestamp at which this entry became triggered. Cannot be in the future.
+  /// <summary>UNIX timestamp at which this entry became triggered. Cannot be in the future.</summary>
   public long? triggered_at { get; set; } = null;
 }
 
 public class DBConnection : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Name of the connection. Also used as the unique identifier
+  /// <summary>Name of the connection. Also used as the unique identifier</summary>
   public string? name { get; set; } = null;
   public Dialect? dialect { get; set; }
-  /// SQL Runner snippets for this connection (read-only)
+  /// <summary>SQL Runner snippets for this connection (read-only)</summary>
   public Snippet[]? snippets { get; set; } = null;
-  /// Host name/address of server
+  /// <summary>Host name/address of server</summary>
   public string? host { get; set; } = null;
-  /// Port number on server
+  /// <summary>Port number on server</summary>
   public long? port { get; set; } = null;
-  /// Username for server authentication
+  /// <summary>Username for server authentication</summary>
   public string? username { get; set; } = null;
-  /// (Write-Only) Password for server authentication
+  /// <summary>(Write-Only) Password for server authentication</summary>
   public string? password { get; set; } = null;
-  /// Whether the connection uses OAuth for authentication. (read-only)
+  /// <summary>Whether the connection uses OAuth for authentication. (read-only)</summary>
   public bool? uses_oauth { get; set; } = null;
-  /// (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
+  /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).</summary>
   public string? certificate { get; set; } = null;
-  /// (Write-Only) Certificate keyfile type - .json or .p12
+  /// <summary>(Write-Only) Certificate keyfile type - .json or .p12</summary>
   public string? file_type { get; set; } = null;
-  /// Database name
+  /// <summary>Database name</summary>
   public string? database { get; set; } = null;
-  /// Time zone of database
+  /// <summary>Time zone of database</summary>
   public string? db_timezone { get; set; } = null;
-  /// Timezone to use in queries
+  /// <summary>Timezone to use in queries</summary>
   public string? query_timezone { get; set; } = null;
-  /// Scheme name
+  /// <summary>Scheme name</summary>
   public string? schema { get; set; } = null;
-  /// Maximum number of concurrent connection to use
+  /// <summary>Maximum number of concurrent connection to use</summary>
   public long? max_connections { get; set; } = null;
-  /// Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
+  /// <summary>Maximum size of query in GBs (BigQuery only, can be a user_attribute name)</summary>
   public string? max_billing_gigabytes { get; set; } = null;
-  /// Use SSL/TLS when connecting to server
+  /// <summary>Use SSL/TLS when connecting to server</summary>
   public bool? ssl { get; set; } = null;
-  /// Verify the SSL
+  /// <summary>Verify the SSL</summary>
   public bool? verify_ssl { get; set; } = null;
-  /// Name of temporary database (if used)
+  /// <summary>Name of temporary database (if used)</summary>
   public string? tmp_db_name { get; set; } = null;
-  /// Additional params to add to JDBC connection string
+  /// <summary>Additional params to add to JDBC connection string</summary>
   public string? jdbc_additional_params { get; set; } = null;
-  /// Connection Pool Timeout, in seconds
+  /// <summary>Connection Pool Timeout, in seconds</summary>
   public long? pool_timeout { get; set; } = null;
-  /// (Read/Write) SQL Dialect name
+  /// <summary>(Read/Write) SQL Dialect name</summary>
   public string? dialect_name { get; set; } = null;
-  /// Creation date for this connection (read-only)
+  /// <summary>Creation date for this connection (read-only)</summary>
   public string? created_at { get; set; } = null;
-  /// Id of user who last modified this connection configuration (read-only)
+  /// <summary>Id of user who last modified this connection configuration (read-only)</summary>
   public string? user_id { get; set; } = null;
-  /// Is this an example connection? (read-only)
+  /// <summary>Is this an example connection? (read-only)</summary>
   public bool? example { get; set; } = null;
-  /// (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
+  /// <summary>(Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password</summary>
   public bool? user_db_credentials { get; set; } = null;
-  /// Fields whose values map to user attribute names
+  /// <summary>Fields whose values map to user attribute names</summary>
   public string[]? user_attribute_fields { get; set; } = null;
-  /// Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
+  /// <summary>Cron string specifying when maintenance such as PDT trigger checks and drops should be performed</summary>
   public string? maintenance_cron { get; set; } = null;
-  /// Unix timestamp at start of last completed PDT trigger check process (read-only)
+  /// <summary>Unix timestamp at start of last completed PDT trigger check process (read-only)</summary>
   public string? last_regen_at { get; set; } = null;
-  /// Unix timestamp at start of last completed PDT reap process (read-only)
+  /// <summary>Unix timestamp at start of last completed PDT reap process (read-only)</summary>
   public string? last_reap_at { get; set; } = null;
-  /// Precache tables in the SQL Runner
+  /// <summary>Precache tables in the SQL Runner</summary>
   public bool? sql_runner_precache_tables { get; set; } = null;
-  /// SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
+  /// <summary>SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature</summary>
   public string? after_connect_statements { get; set; } = null;
   public DBConnectionOverride? pdt_context_override { get; set; }
-  /// Is this connection created and managed by Looker (read-only)
+  /// <summary>Is this connection created and managed by Looker (read-only)</summary>
   public bool? managed { get; set; } = null;
-  /// Maximum number of threads to use to build PDTs in parallel
+  /// <summary>Maximum number of threads to use to build PDTs in parallel</summary>
   public long? pdt_concurrency { get; set; } = null;
-  /// When disable_context_comment is true comment will not be added to SQL
+  /// <summary>When disable_context_comment is true comment will not be added to SQL</summary>
   public bool? disable_context_comment { get; set; } = null;
 }
 
 public class DBConnectionBase : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Name of the connection. Also used as the unique identifier (read-only)
+  /// <summary>Name of the connection. Also used as the unique identifier (read-only)</summary>
   public string? name { get; set; } = null;
   public Dialect? dialect { get; set; }
-  /// SQL Runner snippets for this connection (read-only)
+  /// <summary>SQL Runner snippets for this connection (read-only)</summary>
   public Snippet[]? snippets { get; set; } = null;
 }
 
 public class DBConnectionOverride : SdkModel 
 {
-  /// Context in which to override (`pdt` is the only allowed value)
+  /// <summary>Context in which to override (`pdt` is the only allowed value)</summary>
   public string? context { get; set; } = null;
-  /// Host name/address of server
+  /// <summary>Host name/address of server</summary>
   public string? host { get; set; } = null;
-  /// Port number on server
+  /// <summary>Port number on server</summary>
   public string? port { get; set; } = null;
-  /// Username for server authentication
+  /// <summary>Username for server authentication</summary>
   public string? username { get; set; } = null;
-  /// (Write-Only) Password for server authentication
+  /// <summary>(Write-Only) Password for server authentication</summary>
   public string? password { get; set; } = null;
-  /// Whether or not the password is overridden in this context (read-only)
+  /// <summary>Whether or not the password is overridden in this context (read-only)</summary>
   public bool? has_password { get; set; } = null;
-  /// (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
+  /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).</summary>
   public string? certificate { get; set; } = null;
-  /// (Write-Only) Certificate keyfile type - .json or .p12
+  /// <summary>(Write-Only) Certificate keyfile type - .json or .p12</summary>
   public string? file_type { get; set; } = null;
-  /// Database name
+  /// <summary>Database name</summary>
   public string? database { get; set; } = null;
-  /// Scheme name
+  /// <summary>Scheme name</summary>
   public string? schema { get; set; } = null;
-  /// Additional params to add to JDBC connection string
+  /// <summary>Additional params to add to JDBC connection string</summary>
   public string? jdbc_additional_params { get; set; } = null;
-  /// SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
+  /// <summary>SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature</summary>
   public string? after_connect_statements { get; set; } = null;
 }
 
 public class DBConnectionTestResult : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// JDBC connection string. (only populated in the 'connect' test) (read-only)
+  /// <summary>JDBC connection string. (only populated in the 'connect' test) (read-only)</summary>
   public string? connection_string { get; set; } = null;
-  /// Result message of test (read-only)
+  /// <summary>Result message of test (read-only)</summary>
   public string? message { get; set; } = null;
-  /// Name of test (read-only)
+  /// <summary>Name of test (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Result code of test (read-only)
+  /// <summary>Result code of test (read-only)</summary>
   public string? status { get; set; } = null;
 }
 
 public class DelegateOauthTest : SdkModel 
 {
-  /// Delegate Oauth Connection Name (read-only)
+  /// <summary>Delegate Oauth Connection Name (read-only)</summary>
   public string? name { get; set; } = null;
-  /// The ID of the installation target. For Slack, this would be workspace id. (read-only)
+  /// <summary>The ID of the installation target. For Slack, this would be workspace id. (read-only)</summary>
   public string? installation_target_id { get; set; } = null;
-  /// Installation ID (read-only)
+  /// <summary>Installation ID (read-only)</summary>
   public long? installation_id { get; set; } = null;
-  /// Whether or not the test was successful (read-only)
+  /// <summary>Whether or not the test was successful (read-only)</summary>
   public bool? success { get; set; } = null;
 }
 
 public class Dialect : SdkModel 
 {
-  /// The name of the dialect (read-only)
+  /// <summary>The name of the dialect (read-only)</summary>
   public string? name { get; set; } = null;
-  /// The human-readable label of the connection (read-only)
+  /// <summary>The human-readable label of the connection (read-only)</summary>
   public string? label { get; set; } = null;
-  /// Whether the dialect supports query cost estimates (read-only)
+  /// <summary>Whether the dialect supports query cost estimates (read-only)</summary>
   public bool? supports_cost_estimate { get; set; } = null;
-  /// PDT index columns (read-only)
+  /// <summary>PDT index columns (read-only)</summary>
   public string? persistent_table_indexes { get; set; } = null;
-  /// PDT sortkey columns (read-only)
+  /// <summary>PDT sortkey columns (read-only)</summary>
   public string? persistent_table_sortkeys { get; set; } = null;
-  /// PDT distkey column (read-only)
+  /// <summary>PDT distkey column (read-only)</summary>
   public string? persistent_table_distkey { get; set; } = null;
-  /// Suports streaming results (read-only)
+  /// <summary>Suports streaming results (read-only)</summary>
   public bool? supports_streaming { get; set; } = null;
-  /// Should SQL Runner snippets automatically be run (read-only)
+  /// <summary>Should SQL Runner snippets automatically be run (read-only)</summary>
   public bool? automatically_run_sql_runner_snippets { get; set; } = null;
-  /// Array of names of the tests that can be run on a connection using this dialect (read-only)
+  /// <summary>Array of names of the tests that can be run on a connection using this dialect (read-only)</summary>
   public string[]? connection_tests { get; set; } = null;
-  /// Is supported with the inducer (i.e. generate from sql) (read-only)
+  /// <summary>Is supported with the inducer (i.e. generate from sql) (read-only)</summary>
   public bool? supports_inducer { get; set; } = null;
-  /// Can multiple databases be accessed from a connection using this dialect (read-only)
+  /// <summary>Can multiple databases be accessed from a connection using this dialect (read-only)</summary>
   public bool? supports_multiple_databases { get; set; } = null;
-  /// Whether the dialect supports allowing Looker to build persistent derived tables (read-only)
+  /// <summary>Whether the dialect supports allowing Looker to build persistent derived tables (read-only)</summary>
   public bool? supports_persistent_derived_tables { get; set; } = null;
-  /// Does the database have client SSL support settable through the JDBC string explicitly? (read-only)
+  /// <summary>Does the database have client SSL support settable through the JDBC string explicitly? (read-only)</summary>
   public bool? has_ssl_support { get; set; } = null;
 }
 
 public class DialectInfo : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Default number max connections (read-only)
+  /// <summary>Default number max connections (read-only)</summary>
   public string? default_max_connections { get; set; } = null;
-  /// Default port number (read-only)
+  /// <summary>Default port number (read-only)</summary>
   public string? default_port { get; set; } = null;
-  /// Is the supporting driver installed (read-only)
+  /// <summary>Is the supporting driver installed (read-only)</summary>
   public bool? installed { get; set; } = null;
-  /// The human-readable label of the connection (read-only)
+  /// <summary>The human-readable label of the connection (read-only)</summary>
   public string? label { get; set; } = null;
-  /// What the dialect calls the equivalent of a normal SQL table (read-only)
+  /// <summary>What the dialect calls the equivalent of a normal SQL table (read-only)</summary>
   public string? label_for_database_equivalent { get; set; } = null;
-  /// The name of the dialect (read-only)
+  /// <summary>The name of the dialect (read-only)</summary>
   public string? name { get; set; } = null;
   public DialectInfoOptions? supported_options { get; set; }
 }
 
 public class DialectInfoOptions : SdkModel 
 {
-  /// Has additional params support (read-only)
+  /// <summary>Has additional params support (read-only)</summary>
   public bool? additional_params { get; set; } = null;
-  /// Has auth support (read-only)
+  /// <summary>Has auth support (read-only)</summary>
   public bool? auth { get; set; } = null;
-  /// Has host support (read-only)
+  /// <summary>Has host support (read-only)</summary>
   public bool? host { get; set; } = null;
-  /// Has support for a service account (read-only)
+  /// <summary>Has support for a service account (read-only)</summary>
   public bool? oauth_credentials { get; set; } = null;
-  /// Has project name support (read-only)
+  /// <summary>Has project name support (read-only)</summary>
   public bool? project_name { get; set; } = null;
-  /// Has schema support (read-only)
+  /// <summary>Has schema support (read-only)</summary>
   public bool? schema { get; set; } = null;
-  /// Has SSL support (read-only)
+  /// <summary>Has SSL support (read-only)</summary>
   public bool? ssl { get; set; } = null;
-  /// Has timezone support (read-only)
+  /// <summary>Has timezone support (read-only)</summary>
   public bool? timezone { get; set; } = null;
-  /// Has tmp table support (read-only)
+  /// <summary>Has tmp table support (read-only)</summary>
   public bool? tmp_table { get; set; } = null;
-  /// Username is required (read-only)
+  /// <summary>Username is required (read-only)</summary>
   public bool? username_required { get; set; } = null;
 }
 
 public class DigestEmails : SdkModel 
 {
-  /// Whether or not digest emails are enabled
+  /// <summary>Whether or not digest emails are enabled</summary>
   public bool? is_enabled { get; set; } = null;
 }
 
 public class DigestEmailSend : SdkModel 
 {
-  /// True if content was successfully generated and delivered
+  /// <summary>True if content was successfully generated and delivered</summary>
   public bool? configuration_delivered { get; set; } = null;
 }
 
 public class DiscretePalette : SdkModel 
 {
-  /// Unique identity string (read-only)
+  /// <summary>Unique identity string (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Label for palette
+  /// <summary>Label for palette</summary>
   public string? label { get; set; } = null;
-  /// Type of palette
+  /// <summary>Type of palette</summary>
   public string? type { get; set; } = null;
-  /// Array of colors in the palette
+  /// <summary>Array of colors in the palette</summary>
   public string[]? colors { get; set; } = null;
 }
 
 public class EmbedParams : SdkModel 
 {
-  /// The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
+  /// <summary>The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.</summary>
   public Url target_url { get; set; } = "";
-  /// Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+  /// <summary>Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
   public long? session_length { get; set; } = null;
-  /// When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
+  /// <summary>When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.</summary>
   public bool? force_logout_login { get; set; } = null;
 }
 
 public class EmbedSsoParams : SdkModel 
 {
-  /// The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
+  /// <summary>The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.</summary>
   public Url target_url { get; set; } = "";
-  /// Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+  /// <summary>Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
   public long? session_length { get; set; } = null;
-  /// When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
+  /// <summary>When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.</summary>
   public bool? force_logout_login { get; set; } = null;
-  /// A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+  /// <summary>A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.</summary>
   public string? external_user_id { get; set; } = null;
-  /// First name of the embed user. Defaults to 'Embed' if not specified
+  /// <summary>First name of the embed user. Defaults to 'Embed' if not specified</summary>
   public string? first_name { get; set; } = null;
-  /// Last name of the embed user. Defaults to 'User' if not specified
+  /// <summary>Last name of the embed user. Defaults to 'User' if not specified</summary>
   public string? last_name { get; set; } = null;
-  /// Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
+  /// <summary>Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.</summary>
   public string? user_timezone { get; set; } = null;
-  /// List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.
+  /// <summary>List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.</summary>
   public string[]? permissions { get; set; } = null;
-  /// List of model names that the embed user may access
+  /// <summary>List of model names that the embed user may access</summary>
   public string[]? models { get; set; } = null;
-  /// List of Looker group ids in which to enroll the embed user
+  /// <summary>List of Looker group ids in which to enroll the embed user</summary>
   public long[]? group_ids { get; set; } = null;
-  /// A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
+  /// <summary>A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.</summary>
   public long? external_group_id { get; set; } = null;
-  /// A dictionary of name-value pairs associating a Looker user attribute name with a value.
+  /// <summary>A dictionary of name-value pairs associating a Looker user attribute name with a value.</summary>
   public StringDictionary<object>? user_attributes { get; set; } = null;
-  /// Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
+  /// <summary>Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.</summary>
   public long? secret_id { get; set; } = null;
 }
 
 public class EmbedUrlResponse : SdkModel 
 {
-  /// The embed URL. Any modification to this string will make the URL unusable. (read-only)
+  /// <summary>The embed URL. Any modification to this string will make the URL unusable. (read-only)</summary>
   public string? url { get; set; } = null;
 }
 
 public class Error : SdkModel 
 {
-  /// Error details (read-only)
+  /// <summary>Error details (read-only)</summary>
   public string message { get; set; } = "";
-  /// Documentation link (read-only)
+  /// <summary>Documentation link (read-only)</summary>
   public Url documentation_url { get; set; } = "";
 }
 
 public class Folder : SdkModel 
 {
-  /// Unique Name
+  /// <summary>Unique Name</summary>
   public string name { get; set; } = "";
-  /// Id of Parent. If the parent id is null, this is a root-level entry
+  /// <summary>Id of Parent. If the parent id is null, this is a root-level entry</summary>
   public string? parent_id { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Id of content metadata (read-only)
+  /// <summary>Id of content metadata (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
-  /// Time the space was created (read-only)
+  /// <summary>Time the space was created (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
-  /// User Id of Creator (read-only)
+  /// <summary>User Id of Creator (read-only)</summary>
   public long? creator_id { get; set; } = null;
-  /// Children Count (read-only)
+  /// <summary>Children Count (read-only)</summary>
   public long? child_count { get; set; } = null;
-  /// Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)
+  /// <summary>Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)</summary>
   public string? external_id { get; set; } = null;
-  /// Folder is an embed folder (read-only)
+  /// <summary>Folder is an embed folder (read-only)</summary>
   public bool? is_embed { get; set; } = null;
-  /// Folder is the root embed shared folder (read-only)
+  /// <summary>Folder is the root embed shared folder (read-only)</summary>
   public bool? is_embed_shared_root { get; set; } = null;
-  /// Folder is the root embed users folder (read-only)
+  /// <summary>Folder is the root embed users folder (read-only)</summary>
   public bool? is_embed_users_root { get; set; } = null;
-  /// Folder is a user's personal folder (read-only)
+  /// <summary>Folder is a user's personal folder (read-only)</summary>
   public bool? is_personal { get; set; } = null;
-  /// Folder is descendant of a user's personal folder (read-only)
+  /// <summary>Folder is descendant of a user's personal folder (read-only)</summary>
   public bool? is_personal_descendant { get; set; } = null;
-  /// Folder is the root shared folder (read-only)
+  /// <summary>Folder is the root shared folder (read-only)</summary>
   public bool? is_shared_root { get; set; } = null;
-  /// Folder is the root user folder (read-only)
+  /// <summary>Folder is the root user folder (read-only)</summary>
   public bool? is_users_root { get; set; } = null;
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Dashboards (read-only)
+  /// <summary>Dashboards (read-only)</summary>
   public DashboardBase[]? dashboards { get; set; } = null;
-  /// Looks (read-only)
+  /// <summary>Looks (read-only)</summary>
   public LookWithDashboards[]? looks { get; set; } = null;
 }
 
 public class FolderBase : SdkModel 
 {
-  /// Unique Name
+  /// <summary>Unique Name</summary>
   public string name { get; set; } = "";
-  /// Id of Parent. If the parent id is null, this is a root-level entry
+  /// <summary>Id of Parent. If the parent id is null, this is a root-level entry</summary>
   public string? parent_id { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Id of content metadata (read-only)
+  /// <summary>Id of content metadata (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
-  /// Time the folder was created (read-only)
+  /// <summary>Time the folder was created (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
-  /// User Id of Creator (read-only)
+  /// <summary>User Id of Creator (read-only)</summary>
   public long? creator_id { get; set; } = null;
-  /// Children Count (read-only)
+  /// <summary>Children Count (read-only)</summary>
   public long? child_count { get; set; } = null;
-  /// Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)
+  /// <summary>Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)</summary>
   public string? external_id { get; set; } = null;
-  /// Folder is an embed folder (read-only)
+  /// <summary>Folder is an embed folder (read-only)</summary>
   public bool? is_embed { get; set; } = null;
-  /// Folder is the root embed shared folder (read-only)
+  /// <summary>Folder is the root embed shared folder (read-only)</summary>
   public bool? is_embed_shared_root { get; set; } = null;
-  /// Folder is the root embed users folder (read-only)
+  /// <summary>Folder is the root embed users folder (read-only)</summary>
   public bool? is_embed_users_root { get; set; } = null;
-  /// Folder is a user's personal folder (read-only)
+  /// <summary>Folder is a user's personal folder (read-only)</summary>
   public bool? is_personal { get; set; } = null;
-  /// Folder is descendant of a user's personal folder (read-only)
+  /// <summary>Folder is descendant of a user's personal folder (read-only)</summary>
   public bool? is_personal_descendant { get; set; } = null;
-  /// Folder is the root shared folder (read-only)
+  /// <summary>Folder is the root shared folder (read-only)</summary>
   public bool? is_shared_root { get; set; } = null;
-  /// Folder is the root user folder (read-only)
+  /// <summary>Folder is the root user folder (read-only)</summary>
   public bool? is_users_root { get; set; } = null;
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
 }
 
 public class GitBranch : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// The short name on the local. Updating `name` results in `git checkout <new_name>`
+  /// <summary>The short name on the local. Updating `name` results in `git checkout <new_name>`</summary>
   public string? name { get; set; } = null;
-  /// The name of the remote (read-only)
+  /// <summary>The name of the remote (read-only)</summary>
   public string? remote { get; set; } = null;
-  /// The short name on the remote (read-only)
+  /// <summary>The short name on the remote (read-only)</summary>
   public string? remote_name { get; set; } = null;
-  /// Name of error (read-only)
+  /// <summary>Name of error (read-only)</summary>
   public string? error { get; set; } = null;
-  /// Message describing an error if present (read-only)
+  /// <summary>Message describing an error if present (read-only)</summary>
   public string? message { get; set; } = null;
-  /// Name of the owner of a personal branch (read-only)
+  /// <summary>Name of the owner of a personal branch (read-only)</summary>
   public string? owner_name { get; set; } = null;
-  /// Whether or not this branch is readonly (read-only)
+  /// <summary>Whether or not this branch is readonly (read-only)</summary>
   public bool? @readonly { get; set; } = null;
-  /// Whether or not this branch is a personal branch - readonly for all developers except the owner (read-only)
+  /// <summary>Whether or not this branch is a personal branch - readonly for all developers except the owner (read-only)</summary>
   public bool? personal { get; set; } = null;
-  /// Whether or not a local ref exists for the branch (read-only)
+  /// <summary>Whether or not a local ref exists for the branch (read-only)</summary>
   public bool? is_local { get; set; } = null;
-  /// Whether or not a remote ref exists for the branch (read-only)
+  /// <summary>Whether or not a remote ref exists for the branch (read-only)</summary>
   public bool? is_remote { get; set; } = null;
-  /// Whether or not this is the production branch (read-only)
+  /// <summary>Whether or not this is the production branch (read-only)</summary>
   public bool? is_production { get; set; } = null;
-  /// Number of commits the local branch is ahead of the remote (read-only)
+  /// <summary>Number of commits the local branch is ahead of the remote (read-only)</summary>
   public long? ahead_count { get; set; } = null;
-  /// Number of commits the local branch is behind the remote (read-only)
+  /// <summary>Number of commits the local branch is behind the remote (read-only)</summary>
   public long? behind_count { get; set; } = null;
-  /// UNIX timestamp at which this branch was last committed. (read-only)
+  /// <summary>UNIX timestamp at which this branch was last committed. (read-only)</summary>
   public long? commit_at { get; set; } = null;
-  /// The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
+  /// <summary>The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.</summary>
   public string? @ref { get; set; } = null;
-  /// The resolved ref of this branch remote. (read-only)
+  /// <summary>The resolved ref of this branch remote. (read-only)</summary>
   public string? remote_ref { get; set; } = null;
 }
 
 public class GitConnectionTest : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Human readable string describing the test (read-only)
+  /// <summary>Human readable string describing the test (read-only)</summary>
   public string? description { get; set; } = null;
-  /// A short string, uniquely naming this test (read-only)
+  /// <summary>A short string, uniquely naming this test (read-only)</summary>
   public string? id { get; set; } = null;
 }
 
 public class GitConnectionTestResult : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// A short string, uniquely naming this test (read-only)
+  /// <summary>A short string, uniquely naming this test (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Additional data from the test (read-only)
+  /// <summary>Additional data from the test (read-only)</summary>
   public string? message { get; set; } = null;
-  /// Either 'pass' or 'fail' (read-only)
+  /// <summary>Either 'pass' or 'fail' (read-only)</summary>
   public string? status { get; set; } = null;
 }
 
 public class GitStatus : SdkModel 
 {
-  /// Git action: add, delete, etc (read-only)
+  /// <summary>Git action: add, delete, etc (read-only)</summary>
   public string? action { get; set; } = null;
-  /// When true, changes to the local file conflict with the remote repository (read-only)
+  /// <summary>When true, changes to the local file conflict with the remote repository (read-only)</summary>
   public bool? conflict { get; set; } = null;
-  /// When true, the file can be reverted to an earlier state (read-only)
+  /// <summary>When true, the file can be reverted to an earlier state (read-only)</summary>
   public bool? revertable { get; set; } = null;
-  /// Git description of the action (read-only)
+  /// <summary>Git description of the action (read-only)</summary>
   public string? text { get; set; } = null;
 }
 
 public class Group : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Group can be used in content access controls
+  /// <summary>Group can be used in content access controls</summary>
   public bool? can_add_to_content_metadata { get; set; } = null;
-  /// Currently logged in user is group member (read-only)
+  /// <summary>Currently logged in user is group member (read-only)</summary>
   public bool? contains_current_user { get; set; } = null;
-  /// External Id group if embed group (read-only)
+  /// <summary>External Id group if embed group (read-only)</summary>
   public string? external_group_id { get; set; } = null;
-  /// Group membership controlled outside of Looker (read-only)
+  /// <summary>Group membership controlled outside of Looker (read-only)</summary>
   public bool? externally_managed { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// New users are added to this group by default (read-only)
+  /// <summary>New users are added to this group by default (read-only)</summary>
   public bool? include_by_default { get; set; } = null;
-  /// Name of group
+  /// <summary>Name of group</summary>
   public string? name { get; set; } = null;
-  /// Number of users included in this group (read-only)
+  /// <summary>Number of users included in this group (read-only)</summary>
   public long? user_count { get; set; } = null;
 }
 
 public class GroupIdForGroupInclusion : SdkModel 
 {
-  /// Id of group (read-only)
+  /// <summary>Id of group (read-only)</summary>
   public long? group_id { get; set; } = null;
 }
 
 public class GroupIdForGroupUserInclusion : SdkModel 
 {
-  /// Id of user (read-only)
+  /// <summary>Id of user (read-only)</summary>
   public long? user_id { get; set; } = null;
 }
 
 public class GroupSearch : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Group can be used in content access controls
+  /// <summary>Group can be used in content access controls</summary>
   public bool? can_add_to_content_metadata { get; set; } = null;
-  /// Currently logged in user is group member (read-only)
+  /// <summary>Currently logged in user is group member (read-only)</summary>
   public bool? contains_current_user { get; set; } = null;
-  /// External Id group if embed group (read-only)
+  /// <summary>External Id group if embed group (read-only)</summary>
   public string? external_group_id { get; set; } = null;
-  /// Group membership controlled outside of Looker (read-only)
+  /// <summary>Group membership controlled outside of Looker (read-only)</summary>
   public bool? externally_managed { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// New users are added to this group by default (read-only)
+  /// <summary>New users are added to this group by default (read-only)</summary>
   public bool? include_by_default { get; set; } = null;
-  /// Name of group
+  /// <summary>Name of group</summary>
   public string? name { get; set; } = null;
-  /// Number of users included in this group (read-only)
+  /// <summary>Number of users included in this group (read-only)</summary>
   public long? user_count { get; set; } = null;
-  /// Roles assigned to group (read-only)
+  /// <summary>Roles assigned to group (read-only)</summary>
   public Role[]? roles { get; set; } = null;
 }
 
 public class ImportedProject : SdkModel 
 {
-  /// Dependency name (read-only)
+  /// <summary>Dependency name (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Url for a remote dependency (read-only)
+  /// <summary>Url for a remote dependency (read-only)</summary>
   public string? url { get; set; } = null;
-  /// Ref for a remote dependency (read-only)
+  /// <summary>Ref for a remote dependency (read-only)</summary>
   public string? @ref { get; set; } = null;
-  /// Flag signifying if a dependency is remote or local (read-only)
+  /// <summary>Flag signifying if a dependency is remote or local (read-only)</summary>
   public bool? is_remote { get; set; } = null;
 }
 
 public class Integration : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// ID of the integration. (read-only)
+  /// <summary>ID of the integration. (read-only)</summary>
   public string? id { get; set; } = null;
-  /// ID of the integration hub. (read-only)
+  /// <summary>ID of the integration hub. (read-only)</summary>
   public long? integration_hub_id { get; set; } = null;
-  /// Label for the integration. (read-only)
+  /// <summary>Label for the integration. (read-only)</summary>
   public string? label { get; set; } = null;
-  /// Description of the integration. (read-only)
+  /// <summary>Description of the integration. (read-only)</summary>
   public string? description { get; set; } = null;
-  /// Whether the integration is available to users.
+  /// <summary>Whether the integration is available to users.</summary>
   public bool? enabled { get; set; } = null;
-  /// Array of params for the integration.
+  /// <summary>Array of params for the integration.</summary>
   public IntegrationParam[]? @params { get; set; } = null;
-  /// A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
+  /// <summary>A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)</summary>
   public string[]? supported_formats { get; set; } = null;
-  /// A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)
+  /// <summary>A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)</summary>
   public string[]? supported_action_types { get; set; } = null;
-  /// A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (read-only)
+  /// <summary>A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (read-only)</summary>
   public string[]? supported_formattings { get; set; } = null;
-  /// A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (read-only)
+  /// <summary>A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (read-only)</summary>
   public string[]? supported_visualization_formattings { get; set; } = null;
-  /// A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (read-only)
+  /// <summary>A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (read-only)</summary>
   public string[]? supported_download_settings { get; set; } = null;
-  /// URL to an icon for the integration. (read-only)
+  /// <summary>URL to an icon for the integration. (read-only)</summary>
   public string? icon_url { get; set; } = null;
-  /// Whether the integration uses oauth. (read-only)
+  /// <summary>Whether the integration uses oauth. (read-only)</summary>
   public bool? uses_oauth { get; set; } = null;
-  /// A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required. (read-only)
+  /// <summary>A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required. (read-only)</summary>
   public IntegrationRequiredField[]? required_fields { get; set; } = null;
-  /// Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)
+  /// <summary>Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)</summary>
   public bool? delegate_oauth { get; set; } = null;
-  /// Whether the integration is available to users.
+  /// <summary>Whether the integration is available to users.</summary>
   public long[]? installed_delegate_oauth_targets { get; set; } = null;
 }
 
 public class IntegrationHub : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// ID of the hub. (read-only)
+  /// <summary>ID of the hub. (read-only)</summary>
   public long? id { get; set; } = null;
-  /// URL of the hub.
+  /// <summary>URL of the hub.</summary>
   public string? url { get; set; } = null;
-  /// Label of the hub. (read-only)
+  /// <summary>Label of the hub. (read-only)</summary>
   public string? label { get; set; } = null;
-  /// Whether this hub is a first-party integration hub operated by Looker. (read-only)
+  /// <summary>Whether this hub is a first-party integration hub operated by Looker. (read-only)</summary>
   public bool? official { get; set; } = null;
-  /// An error message, present if the integration hub metadata could not be fetched. If this is present, the integration hub is unusable. (read-only)
+  /// <summary>An error message, present if the integration hub metadata could not be fetched. If this is present, the integration hub is unusable. (read-only)</summary>
   public string? fetch_error_message { get; set; } = null;
-  /// (Write-Only) An authorization key that will be sent to the integration hub on every request.
+  /// <summary>(Write-Only) An authorization key that will be sent to the integration hub on every request.</summary>
   public string? authorization_token { get; set; } = null;
-  /// Whether the authorization_token is set for the hub. (read-only)
+  /// <summary>Whether the authorization_token is set for the hub. (read-only)</summary>
   public bool? has_authorization_token { get; set; } = null;
-  /// Whether the legal agreement message has been signed by the user. This only matters if legal_agreement_required is true. (read-only)
+  /// <summary>Whether the legal agreement message has been signed by the user. This only matters if legal_agreement_required is true. (read-only)</summary>
   public bool? legal_agreement_signed { get; set; } = null;
-  /// Whether the legal terms for the integration hub are required before use. (read-only)
+  /// <summary>Whether the legal terms for the integration hub are required before use. (read-only)</summary>
   public bool? legal_agreement_required { get; set; } = null;
-  /// The legal agreement text for this integration hub. (read-only)
+  /// <summary>The legal agreement text for this integration hub. (read-only)</summary>
   public string? legal_agreement_text { get; set; } = null;
 }
 
 public class IntegrationParam : SdkModel 
 {
-  /// Name of the parameter.
+  /// <summary>Name of the parameter.</summary>
   public string? name { get; set; } = null;
-  /// Label of the parameter. (read-only)
+  /// <summary>Label of the parameter. (read-only)</summary>
   public string? label { get; set; } = null;
-  /// Short description of the parameter. (read-only)
+  /// <summary>Short description of the parameter. (read-only)</summary>
   public string? description { get; set; } = null;
-  /// Whether the parameter is required to be set to use the destination. If unspecified, this defaults to false. (read-only)
+  /// <summary>Whether the parameter is required to be set to use the destination. If unspecified, this defaults to false. (read-only)</summary>
   public bool? required { get; set; } = null;
-  /// Whether the parameter has a value set. (read-only)
+  /// <summary>Whether the parameter has a value set. (read-only)</summary>
   public bool? has_value { get; set; } = null;
-  /// The current value of the parameter. Always null if the value is sensitive. When writing, null values will be ignored. Set the value to an empty string to clear it.
+  /// <summary>The current value of the parameter. Always null if the value is sensitive. When writing, null values will be ignored. Set the value to an empty string to clear it.</summary>
   public string? value { get; set; } = null;
-  /// When present, the param's value comes from this user attribute instead of the 'value' parameter. Set to null to use the 'value'.
+  /// <summary>When present, the param's value comes from this user attribute instead of the 'value' parameter. Set to null to use the 'value'.</summary>
   public string? user_attribute_name { get; set; } = null;
-  /// Whether the parameter contains sensitive data like API credentials. If unspecified, this defaults to true. (read-only)
+  /// <summary>Whether the parameter contains sensitive data like API credentials. If unspecified, this defaults to true. (read-only)</summary>
   public bool? sensitive { get; set; } = null;
-  /// When true, this parameter must be assigned to a user attribute in the admin panel (instead of a constant value), and that value may be updated by the user as part of the integration flow. (read-only)
+  /// <summary>When true, this parameter must be assigned to a user attribute in the admin panel (instead of a constant value), and that value may be updated by the user as part of the integration flow. (read-only)</summary>
   public bool? per_user { get; set; } = null;
-  /// When present, the param represents the oauth url the user will be taken to. (read-only)
+  /// <summary>When present, the param represents the oauth url the user will be taken to. (read-only)</summary>
   public string? delegate_oauth_url { get; set; } = null;
 }
 
 public class IntegrationRequiredField : SdkModel 
 {
-  /// Matches a field that has this tag. (read-only)
+  /// <summary>Matches a field that has this tag. (read-only)</summary>
   public string? tag { get; set; } = null;
-  /// If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)
+  /// <summary>If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)</summary>
   public string[]? any_tag { get; set; } = null;
-  /// If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)
+  /// <summary>If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)</summary>
   public string[]? all_tags { get; set; } = null;
 }
 
 public class IntegrationTestResult : SdkModel 
 {
-  /// Whether or not the test was successful (read-only)
+  /// <summary>Whether or not the test was successful (read-only)</summary>
   public bool? success { get; set; } = null;
-  /// A message representing the results of the test. (read-only)
+  /// <summary>A message representing the results of the test. (read-only)</summary>
   public string? message { get; set; } = null;
-  /// An array of connection test result for delegate oauth actions. (read-only)
+  /// <summary>An array of connection test result for delegate oauth actions. (read-only)</summary>
   public DelegateOauthTest[]? delegate_oauth_result { get; set; } = null;
 }
 
 public class InternalHelpResources : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
+  /// <summary>If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker</summary>
   public bool? enabled { get; set; } = null;
 }
 
 public class InternalHelpResourcesContent : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Text to display in the help menu item which will display the internal help resources
+  /// <summary>Text to display in the help menu item which will display the internal help resources</summary>
   public string? organization_name { get; set; } = null;
-  /// Content to be displayed in the internal help resources page/modal
+  /// <summary>Content to be displayed in the internal help resources page/modal</summary>
   public string? markdown_content { get; set; } = null;
 }
 
 public class LDAPConfig : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+  /// <summary>Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.</summary>
   public bool? alternate_email_login_allowed { get; set; } = null;
-  /// (Write-Only)  Password for the LDAP account used to access the LDAP server
+  /// <summary>(Write-Only)  Password for the LDAP account used to access the LDAP server</summary>
   public string? auth_password { get; set; } = null;
-  /// Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
+  /// <summary>Users will not be allowed to login at all unless a role for them is found in LDAP if set to true</summary>
   public bool? auth_requires_role { get; set; } = null;
-  /// Distinguished name of LDAP account used to access the LDAP server
+  /// <summary>Distinguished name of LDAP account used to access the LDAP server</summary>
   public string? auth_username { get; set; } = null;
-  /// LDAP server hostname
+  /// <summary>LDAP server hostname</summary>
   public string? connection_host { get; set; } = null;
-  /// LDAP host port
+  /// <summary>LDAP host port</summary>
   public string? connection_port { get; set; } = null;
-  /// Use Transport Layer Security
+  /// <summary>Use Transport Layer Security</summary>
   public bool? connection_tls { get; set; } = null;
-  /// Do not verify peer when using TLS
+  /// <summary>Do not verify peer when using TLS</summary>
   public bool? connection_tls_no_verify { get; set; } = null;
-  /// (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
+  /// <summary>(Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP</summary>
   public long[]? default_new_user_group_ids { get; set; } = null;
-  /// (Read-only) Groups that will be applied to new users the first time they login via LDAP (read-only)
+  /// <summary>(Read-only) Groups that will be applied to new users the first time they login via LDAP (read-only)</summary>
   public Group[]? default_new_user_groups { get; set; } = null;
-  /// (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
+  /// <summary>(Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP</summary>
   public long[]? default_new_user_role_ids { get; set; } = null;
-  /// (Read-only) Roles that will be applied to new users the first time they login via LDAP (read-only)
+  /// <summary>(Read-only) Roles that will be applied to new users the first time they login via LDAP (read-only)</summary>
   public Role[]? default_new_user_roles { get; set; } = null;
-  /// Enable/Disable LDAP authentication for the server
+  /// <summary>Enable/Disable LDAP authentication for the server</summary>
   public bool? enabled { get; set; } = null;
-  /// Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.
+  /// <summary>Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.</summary>
   public bool? force_no_page { get; set; } = null;
-  /// (Read-only) Array of mappings between LDAP Groups and Looker Roles (read-only)
+  /// <summary>(Read-only) Array of mappings between LDAP Groups and Looker Roles (read-only)</summary>
   public LDAPGroupRead[]? groups { get; set; } = null;
-  /// Base dn for finding groups in LDAP searches
+  /// <summary>Base dn for finding groups in LDAP searches</summary>
   public string? groups_base_dn { get; set; } = null;
-  /// Identifier for a strategy for how Looker will search for groups in the LDAP server
+  /// <summary>Identifier for a strategy for how Looker will search for groups in the LDAP server</summary>
   public string? groups_finder_type { get; set; } = null;
-  /// LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
+  /// <summary>LDAP Group attribute that signifies the members of the groups. Most commonly 'member'</summary>
   public string? groups_member_attribute { get; set; } = null;
-  /// Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
+  /// <summary>Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches</summary>
   public string? groups_objectclasses { get; set; } = null;
-  /// LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
+  /// <summary>LDAP Group attribute that signifies the user in a group. Most commonly 'dn'</summary>
   public string? groups_user_attribute { get; set; } = null;
-  /// (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
+  /// <summary>(Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids</summary>
   public LDAPGroupWrite[]? groups_with_role_ids { get; set; } = null;
-  /// (Read-only) Has the password been set for the LDAP account used to access the LDAP server (read-only)
+  /// <summary>(Read-only) Has the password been set for the LDAP account used to access the LDAP server (read-only)</summary>
   public bool? has_auth_password { get; set; } = null;
-  /// Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
+  /// <summary>Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.</summary>
   public bool? merge_new_users_by_email { get; set; } = null;
-  /// When this config was last modified (read-only)
+  /// <summary>When this config was last modified (read-only)</summary>
   public string? modified_at { get; set; } = null;
-  /// User id of user who last modified this config (read-only)
+  /// <summary>User id of user who last modified this config (read-only)</summary>
   public string? modified_by { get; set; } = null;
-  /// Set user roles in Looker based on groups from LDAP
+  /// <summary>Set user roles in Looker based on groups from LDAP</summary>
   public bool? set_roles_from_groups { get; set; } = null;
-  /// (Write-Only)  Test LDAP user password. For ldap tests only.
+  /// <summary>(Write-Only)  Test LDAP user password. For ldap tests only.</summary>
   public string? test_ldap_password { get; set; } = null;
-  /// (Write-Only)  Test LDAP user login id. For ldap tests only.
+  /// <summary>(Write-Only)  Test LDAP user login id. For ldap tests only.</summary>
   public string? test_ldap_user { get; set; } = null;
-  /// Name of user record attributes used to indicate email address field
+  /// <summary>Name of user record attributes used to indicate email address field</summary>
   public string? user_attribute_map_email { get; set; } = null;
-  /// Name of user record attributes used to indicate first name
+  /// <summary>Name of user record attributes used to indicate first name</summary>
   public string? user_attribute_map_first_name { get; set; } = null;
-  /// Name of user record attributes used to indicate last name
+  /// <summary>Name of user record attributes used to indicate last name</summary>
   public string? user_attribute_map_last_name { get; set; } = null;
-  /// Name of user record attributes used to indicate unique record id
+  /// <summary>Name of user record attributes used to indicate unique record id</summary>
   public string? user_attribute_map_ldap_id { get; set; } = null;
-  /// (Read-only) Array of mappings between LDAP User Attributes and Looker User Attributes (read-only)
+  /// <summary>(Read-only) Array of mappings between LDAP User Attributes and Looker User Attributes (read-only)</summary>
   public LDAPUserAttributeRead[]? user_attributes { get; set; } = null;
-  /// (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
+  /// <summary>(Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids</summary>
   public LDAPUserAttributeWrite[]? user_attributes_with_ids { get; set; } = null;
-  /// Distinguished name of LDAP node used as the base for user searches
+  /// <summary>Distinguished name of LDAP node used as the base for user searches</summary>
   public string? user_bind_base_dn { get; set; } = null;
-  /// (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
+  /// <summary>(Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.</summary>
   public string? user_custom_filter { get; set; } = null;
-  /// Name(s) of user record attributes used for matching user login id (comma separated list)
+  /// <summary>Name(s) of user record attributes used for matching user login id (comma separated list)</summary>
   public string? user_id_attribute_names { get; set; } = null;
-  /// (Optional) Name of user record objectclass used for finding user during login id
+  /// <summary>(Optional) Name of user record objectclass used for finding user during login id</summary>
   public string? user_objectclass { get; set; } = null;
-  /// Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+  /// <summary>Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.</summary>
   public bool? allow_normal_group_membership { get; set; } = null;
-  /// LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
+  /// <summary>LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.</summary>
   public bool? allow_roles_from_normal_groups { get; set; } = null;
-  /// Allows roles to be directly assigned to LDAP auth'd users.
+  /// <summary>Allows roles to be directly assigned to LDAP auth'd users.</summary>
   public bool? allow_direct_roles { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class LDAPConfigTestIssue : SdkModel 
 {
-  /// Severity of the issue. Error or Warning (read-only)
+  /// <summary>Severity of the issue. Error or Warning (read-only)</summary>
   public string? severity { get; set; } = null;
-  /// Message describing the issue (read-only)
+  /// <summary>Message describing the issue (read-only)</summary>
   public string? message { get; set; } = null;
 }
 
 public class LDAPConfigTestResult : SdkModel 
 {
-  /// Additional details for error cases (read-only)
+  /// <summary>Additional details for error cases (read-only)</summary>
   public string? details { get; set; } = null;
-  /// Array of issues/considerations about the result (read-only)
+  /// <summary>Array of issues/considerations about the result (read-only)</summary>
   public LDAPConfigTestIssue[]? issues { get; set; } = null;
-  /// Short human readable test about the result (read-only)
+  /// <summary>Short human readable test about the result (read-only)</summary>
   public string? message { get; set; } = null;
-  /// Test status code: always 'success' or 'error' (read-only)
+  /// <summary>Test status code: always 'success' or 'error' (read-only)</summary>
   public string? status { get; set; } = null;
-  /// A more detailed trace of incremental results during auth tests (read-only)
+  /// <summary>A more detailed trace of incremental results during auth tests (read-only)</summary>
   public string? trace { get; set; } = null;
   public LDAPUser? user { get; set; }
-  /// Link to ldap config (read-only)
+  /// <summary>Link to ldap config (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class LDAPGroupRead : SdkModel 
 {
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Unique Id of group in Looker (read-only)
+  /// <summary>Unique Id of group in Looker (read-only)</summary>
   public long? looker_group_id { get; set; } = null;
-  /// Name of group in Looker (read-only)
+  /// <summary>Name of group in Looker (read-only)</summary>
   public string? looker_group_name { get; set; } = null;
-  /// Name of group in LDAP (read-only)
+  /// <summary>Name of group in LDAP (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Looker Roles (read-only)
+  /// <summary>Looker Roles (read-only)</summary>
   public Role[]? roles { get; set; } = null;
-  /// Link to ldap config (read-only)
+  /// <summary>Link to ldap config (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class LDAPGroupWrite : SdkModel 
 {
-  /// Unique Id
+  /// <summary>Unique Id</summary>
   public long? id { get; set; } = null;
-  /// Unique Id of group in Looker (read-only)
+  /// <summary>Unique Id of group in Looker (read-only)</summary>
   public long? looker_group_id { get; set; } = null;
-  /// Name of group in Looker
+  /// <summary>Name of group in Looker</summary>
   public string? looker_group_name { get; set; } = null;
-  /// Name of group in LDAP
+  /// <summary>Name of group in LDAP</summary>
   public string? name { get; set; } = null;
-  /// Looker Role Ids
+  /// <summary>Looker Role Ids</summary>
   public long[]? role_ids { get; set; } = null;
-  /// Link to ldap config (read-only)
+  /// <summary>Link to ldap config (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class LDAPUser : SdkModel 
 {
-  /// Array of user's email addresses and aliases for use in migration (read-only)
+  /// <summary>Array of user's email addresses and aliases for use in migration (read-only)</summary>
   public string[]? all_emails { get; set; } = null;
-  /// Dictionary of user's attributes (name/value) (read-only)
+  /// <summary>Dictionary of user's attributes (name/value) (read-only)</summary>
   public StringDictionary<string>? attributes { get; set; } = null;
-  /// Primary email address (read-only)
+  /// <summary>Primary email address (read-only)</summary>
   public string? email { get; set; } = null;
-  /// First name (read-only)
+  /// <summary>First name (read-only)</summary>
   public string? first_name { get; set; } = null;
-  /// Array of user's groups (group names only) (read-only)
+  /// <summary>Array of user's groups (group names only) (read-only)</summary>
   public string[]? groups { get; set; } = null;
-  /// Last Name (read-only)
+  /// <summary>Last Name (read-only)</summary>
   public string? last_name { get; set; } = null;
-  /// LDAP's distinguished name for the user record (read-only)
+  /// <summary>LDAP's distinguished name for the user record (read-only)</summary>
   public string? ldap_dn { get; set; } = null;
-  /// LDAP's Unique ID for the user (read-only)
+  /// <summary>LDAP's Unique ID for the user (read-only)</summary>
   public string? ldap_id { get; set; } = null;
-  /// Array of user's roles (role names only) (read-only)
+  /// <summary>Array of user's roles (role names only) (read-only)</summary>
   public string[]? roles { get; set; } = null;
-  /// Link to ldap config (read-only)
+  /// <summary>Link to ldap config (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class LDAPUserAttributeRead : SdkModel 
 {
-  /// Name of User Attribute in LDAP (read-only)
+  /// <summary>Name of User Attribute in LDAP (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Required to be in LDAP assertion for login to be allowed to succeed (read-only)
+  /// <summary>Required to be in LDAP assertion for login to be allowed to succeed (read-only)</summary>
   public bool? required { get; set; } = null;
-  /// Looker User Attributes (read-only)
+  /// <summary>Looker User Attributes (read-only)</summary>
   public UserAttribute[]? user_attributes { get; set; } = null;
-  /// Link to ldap config (read-only)
+  /// <summary>Link to ldap config (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class LDAPUserAttributeWrite : SdkModel 
 {
-  /// Name of User Attribute in LDAP
+  /// <summary>Name of User Attribute in LDAP</summary>
   public string? name { get; set; } = null;
-  /// Required to be in LDAP assertion for login to be allowed to succeed
+  /// <summary>Required to be in LDAP assertion for login to be allowed to succeed</summary>
   public bool? required { get; set; } = null;
-  /// Looker User Attribute Ids
+  /// <summary>Looker User Attribute Ids</summary>
   public long[]? user_attribute_ids { get; set; } = null;
-  /// Link to ldap config (read-only)
+  /// <summary>Link to ldap config (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class LegacyFeature : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Name (read-only)
+  /// <summary>Name (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Description (read-only)
+  /// <summary>Description (read-only)</summary>
   public string? description { get; set; } = null;
-  /// Whether this feature has been enabled by a user
+  /// <summary>Whether this feature has been enabled by a user</summary>
   public bool? enabled_locally { get; set; } = null;
-  /// Whether this feature is currently enabled (read-only)
+  /// <summary>Whether this feature is currently enabled (read-only)</summary>
   public bool? enabled { get; set; } = null;
-  /// Looker version where this feature became a legacy feature (read-only)
+  /// <summary>Looker version where this feature became a legacy feature (read-only)</summary>
   public string? disallowed_as_of_version { get; set; } = null;
-  /// Looker version where this feature will be automatically disabled (read-only)
+  /// <summary>Looker version where this feature will be automatically disabled (read-only)</summary>
   public string? disable_on_upgrade_to_version { get; set; } = null;
-  /// Future Looker version where this feature will be removed (read-only)
+  /// <summary>Future Looker version where this feature will be removed (read-only)</summary>
   public string? end_of_life_version { get; set; } = null;
-  /// URL for documentation about this feature (read-only)
+  /// <summary>URL for documentation about this feature (read-only)</summary>
   public string? documentation_url { get; set; } = null;
-  /// Approximate date that this feature will be automatically disabled. (read-only)
+  /// <summary>Approximate date that this feature will be automatically disabled. (read-only)</summary>
   public DateTime? approximate_disable_date { get; set; } = null;
-  /// Approximate date that this feature will be removed. (read-only)
+  /// <summary>Approximate date that this feature will be removed. (read-only)</summary>
   public DateTime? approximate_end_of_life_date { get; set; } = null;
-  /// Whether this legacy feature may have been automatically disabled when upgrading to the current version. (read-only)
+  /// <summary>Whether this legacy feature may have been automatically disabled when upgrading to the current version. (read-only)</summary>
   public bool? has_disabled_on_upgrade { get; set; } = null;
 }
 
 public class Locale : SdkModel 
 {
-  /// Code for Locale (read-only)
+  /// <summary>Code for Locale (read-only)</summary>
   public string? code { get; set; } = null;
-  /// Name of Locale in its own language (read-only)
+  /// <summary>Name of Locale in its own language (read-only)</summary>
   public string? native_name { get; set; } = null;
-  /// Name of Locale in English (read-only)
+  /// <summary>Name of Locale in English (read-only)</summary>
   public string? english_name { get; set; } = null;
 }
 
 public class LocalizationSettings : SdkModel 
 {
-  /// Default locale for localization (read-only)
+  /// <summary>Default locale for localization (read-only)</summary>
   public string? default_locale { get; set; } = null;
-  /// Localization level - strict or permissive (read-only)
+  /// <summary>Localization level - strict or permissive (read-only)</summary>
   public string? localization_level { get; set; } = null;
 }
 
 public class Look : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Id of content metadata (read-only)
+  /// <summary>Id of content metadata (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Look Title
+  /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
-  /// User Id
+  /// <summary>User Id</summary>
   public long? user_id { get; set; } = null;
-  /// Content Favorite Id (read-only)
+  /// <summary>Content Favorite Id (read-only)</summary>
   public long? content_favorite_id { get; set; } = null;
-  /// Time that the Look was created. (read-only)
+  /// <summary>Time that the Look was created. (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
-  /// Whether or not a look is 'soft' deleted.
+  /// <summary>Whether or not a look is 'soft' deleted.</summary>
   public bool? deleted { get; set; } = null;
-  /// Time that the Look was deleted. (read-only)
+  /// <summary>Time that the Look was deleted. (read-only)</summary>
   public DateTime? deleted_at { get; set; } = null;
-  /// Id of User that deleted the look. (read-only)
+  /// <summary>Id of User that deleted the look. (read-only)</summary>
   public long? deleter_id { get; set; } = null;
-  /// Description
+  /// <summary>Description</summary>
   public string? description { get; set; } = null;
-  /// Embed Url (read-only)
+  /// <summary>Embed Url (read-only)</summary>
   public string? embed_url { get; set; } = null;
-  /// Excel File Url (read-only)
+  /// <summary>Excel File Url (read-only)</summary>
   public string? excel_file_url { get; set; } = null;
-  /// Number of times favorited (read-only)
+  /// <summary>Number of times favorited (read-only)</summary>
   public long? favorite_count { get; set; } = null;
-  /// Google Spreadsheet Formula (read-only)
+  /// <summary>Google Spreadsheet Formula (read-only)</summary>
   public string? google_spreadsheet_formula { get; set; } = null;
-  /// Image Embed Url (read-only)
+  /// <summary>Image Embed Url (read-only)</summary>
   public string? image_embed_url { get; set; } = null;
-  /// auto-run query when Look viewed
+  /// <summary>auto-run query when Look viewed</summary>
   public bool? is_run_on_load { get; set; } = null;
-  /// Time that the Look was last accessed by any user (read-only)
+  /// <summary>Time that the Look was last accessed by any user (read-only)</summary>
   public DateTime? last_accessed_at { get; set; } = null;
-  /// Id of User that last updated the look. (read-only)
+  /// <summary>Id of User that last updated the look. (read-only)</summary>
   public long? last_updater_id { get; set; } = null;
-  /// Time last viewed in the Looker web UI (read-only)
+  /// <summary>Time last viewed in the Looker web UI (read-only)</summary>
   public DateTime? last_viewed_at { get; set; } = null;
   public LookModel? model { get; set; }
-  /// Is Public
+  /// <summary>Is Public</summary>
   public bool? @public { get; set; } = null;
-  /// Public Slug (read-only)
+  /// <summary>Public Slug (read-only)</summary>
   public string? public_slug { get; set; } = null;
-  /// Public Url (read-only)
+  /// <summary>Public Url (read-only)</summary>
   public string? public_url { get; set; } = null;
-  /// Query Id
+  /// <summary>Query Id</summary>
   public long? query_id { get; set; } = null;
-  /// Short Url (read-only)
+  /// <summary>Short Url (read-only)</summary>
   public string? short_url { get; set; } = null;
   public FolderBase? folder { get; set; }
-  /// Folder Id
+  /// <summary>Folder Id</summary>
   public string? folder_id { get; set; } = null;
-  /// Time that the Look was updated. (read-only)
+  /// <summary>Time that the Look was updated. (read-only)</summary>
   public DateTime? updated_at { get; set; } = null;
-  /// Number of times viewed in the Looker web UI (read-only)
+  /// <summary>Number of times viewed in the Looker web UI (read-only)</summary>
   public long? view_count { get; set; } = null;
 }
 
 public class LookBasic : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Id of content metadata (read-only)
+  /// <summary>Id of content metadata (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Look Title (read-only)
+  /// <summary>Look Title (read-only)</summary>
   public string? title { get; set; } = null;
-  /// User Id
+  /// <summary>User Id</summary>
   public long? user_id { get; set; } = null;
 }
 
 public class LookmlModel : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Array of names of connections this model is allowed to use
+  /// <summary>Array of names of connections this model is allowed to use</summary>
   public string[]? allowed_db_connection_names { get; set; } = null;
-  /// Array of explores (if has_content) (read-only)
+  /// <summary>Array of explores (if has_content) (read-only)</summary>
   public LookmlModelNavExplore[]? explores { get; set; } = null;
-  /// Does this model declaration have have lookml content? (read-only)
+  /// <summary>Does this model declaration have have lookml content? (read-only)</summary>
   public bool? has_content { get; set; } = null;
-  /// UI-friendly name for this model (read-only)
+  /// <summary>UI-friendly name for this model (read-only)</summary>
   public string? label { get; set; } = null;
-  /// Name of the model. Also used as the unique identifier
+  /// <summary>Name of the model. Also used as the unique identifier</summary>
   public string? name { get; set; } = null;
-  /// Name of project containing the model
+  /// <summary>Name of project containing the model</summary>
   public string? project_name { get; set; } = null;
-  /// Is this model allowed to use all current and future connections
+  /// <summary>Is this model allowed to use all current and future connections</summary>
   public bool? unlimited_db_connections { get; set; } = null;
 }
 
 public class LookmlModelExplore : SdkModel 
 {
-  /// Fully qualified explore name (model name plus explore name) (read-only)
+  /// <summary>Fully qualified explore name (model name plus explore name) (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Explore name (read-only)
+  /// <summary>Explore name (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Description (read-only)
+  /// <summary>Description (read-only)</summary>
   public string? description { get; set; } = null;
-  /// Label (read-only)
+  /// <summary>Label (read-only)</summary>
   public string? label { get; set; } = null;
-  /// Scopes (read-only)
+  /// <summary>Scopes (read-only)</summary>
   public string[]? scopes { get; set; } = null;
-  /// Can Total (read-only)
+  /// <summary>Can Total (read-only)</summary>
   public bool? can_total { get; set; } = null;
-  /// Can Develop LookML (read-only)
+  /// <summary>Can Develop LookML (read-only)</summary>
   public bool? can_develop { get; set; } = null;
-  /// Can See LookML (read-only)
+  /// <summary>Can See LookML (read-only)</summary>
   public bool? can_see_lookml { get; set; } = null;
-  /// A URL linking to the definition of this explore in the LookML IDE. (read-only)
+  /// <summary>A URL linking to the definition of this explore in the LookML IDE. (read-only)</summary>
   public string? lookml_link { get; set; } = null;
-  /// Can Save (read-only)
+  /// <summary>Can Save (read-only)</summary>
   public bool? can_save { get; set; } = null;
-  /// Can Explain (read-only)
+  /// <summary>Can Explain (read-only)</summary>
   public bool? can_explain { get; set; } = null;
-  /// Can pivot in the DB (read-only)
+  /// <summary>Can pivot in the DB (read-only)</summary>
   public bool? can_pivot_in_db { get; set; } = null;
-  /// Can use subtotals (read-only)
+  /// <summary>Can use subtotals (read-only)</summary>
   public bool? can_subtotal { get; set; } = null;
-  /// Has timezone support (read-only)
+  /// <summary>Has timezone support (read-only)</summary>
   public bool? has_timezone_support { get; set; } = null;
-  /// Cost estimates supported (read-only)
+  /// <summary>Cost estimates supported (read-only)</summary>
   public bool? supports_cost_estimate { get; set; } = null;
-  /// Connection name (read-only)
+  /// <summary>Connection name (read-only)</summary>
   public string? connection_name { get; set; } = null;
-  /// How nulls are sorted, possible values are "low", "high", "first" and "last" (read-only)
+  /// <summary>How nulls are sorted, possible values are "low", "high", "first" and "last" (read-only)</summary>
   public string? null_sort_treatment { get; set; } = null;
-  /// List of model source files (read-only)
+  /// <summary>List of model source files (read-only)</summary>
   public string[]? files { get; set; } = null;
-  /// Primary source_file file (read-only)
+  /// <summary>Primary source_file file (read-only)</summary>
   public string? source_file { get; set; } = null;
-  /// Name of project (read-only)
+  /// <summary>Name of project (read-only)</summary>
   public string? project_name { get; set; } = null;
-  /// Name of model (read-only)
+  /// <summary>Name of model (read-only)</summary>
   public string? model_name { get; set; } = null;
-  /// Name of view (read-only)
+  /// <summary>Name of view (read-only)</summary>
   public string? view_name { get; set; } = null;
-  /// Is hidden (read-only)
+  /// <summary>Is hidden (read-only)</summary>
   public bool? hidden { get; set; } = null;
-  /// A sql_table_name expression that defines what sql table the view/explore maps onto. Example: "prod_orders2 AS orders" in a view named orders. (read-only)
+  /// <summary>A sql_table_name expression that defines what sql table the view/explore maps onto. Example: "prod_orders2 AS orders" in a view named orders. (read-only)</summary>
   public string? sql_table_name { get; set; } = null;
-  /// (DEPRECATED) Array of access filter field names (read-only)
+  /// <summary>(DEPRECATED) Array of access filter field names (read-only)</summary>
   public string[]? access_filter_fields { get; set; } = null;
-  /// Access filters (read-only)
+  /// <summary>Access filters (read-only)</summary>
   public LookmlModelExploreAccessFilter[]? access_filters { get; set; } = null;
-  /// Aliases (read-only)
+  /// <summary>Aliases (read-only)</summary>
   public LookmlModelExploreAlias[]? aliases { get; set; } = null;
-  /// Always filter (read-only)
+  /// <summary>Always filter (read-only)</summary>
   public LookmlModelExploreAlwaysFilter[]? always_filter { get; set; } = null;
-  /// Conditionally filter (read-only)
+  /// <summary>Conditionally filter (read-only)</summary>
   public LookmlModelExploreConditionallyFilter[]? conditionally_filter { get; set; } = null;
-  /// Array of index fields (read-only)
+  /// <summary>Array of index fields (read-only)</summary>
   public string[]? index_fields { get; set; } = null;
-  /// Sets (read-only)
+  /// <summary>Sets (read-only)</summary>
   public LookmlModelExploreSet[]? sets { get; set; } = null;
-  /// An array of arbitrary string tags provided in the model for this explore. (read-only)
+  /// <summary>An array of arbitrary string tags provided in the model for this explore. (read-only)</summary>
   public string[]? tags { get; set; } = null;
-  /// Errors (read-only)
+  /// <summary>Errors (read-only)</summary>
   public LookmlModelExploreError[]? errors { get; set; } = null;
   public LookmlModelExploreFieldset? fields { get; set; }
-  /// Views joined into this explore (read-only)
+  /// <summary>Views joined into this explore (read-only)</summary>
   public LookmlModelExploreJoins[]? joins { get; set; } = null;
-  /// Label used to group explores in the navigation menus (read-only)
+  /// <summary>Label used to group explores in the navigation menus (read-only)</summary>
   public string? group_label { get; set; } = null;
-  /// An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type. (read-only)
+  /// <summary>An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type. (read-only)</summary>
   public LookmlModelExploreSupportedMeasureType[]? supported_measure_types { get; set; } = null;
 }
 
 public class LookmlModelExploreAccessFilter : SdkModel 
 {
-  /// Field to be filtered (read-only)
+  /// <summary>Field to be filtered (read-only)</summary>
   public string? field { get; set; } = null;
-  /// User attribute name (read-only)
+  /// <summary>User attribute name (read-only)</summary>
   public string? user_attribute { get; set; } = null;
 }
 
 public class LookmlModelExploreAlias : SdkModel 
 {
-  /// Name (read-only)
+  /// <summary>Name (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Value (read-only)
+  /// <summary>Value (read-only)</summary>
   public string? value { get; set; } = null;
 }
 
 public class LookmlModelExploreAlwaysFilter : SdkModel 
 {
-  /// Name (read-only)
+  /// <summary>Name (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Value (read-only)
+  /// <summary>Value (read-only)</summary>
   public string? value { get; set; } = null;
 }
 
 public class LookmlModelExploreConditionallyFilter : SdkModel 
 {
-  /// Name (read-only)
+  /// <summary>Name (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Value (read-only)
+  /// <summary>Value (read-only)</summary>
   public string? value { get; set; } = null;
 }
 
 public class LookmlModelExploreError : SdkModel 
 {
-  /// Error Message (read-only)
+  /// <summary>Error Message (read-only)</summary>
   public string? message { get; set; } = null;
-  /// Details (read-only)
+  /// <summary>Details (read-only)</summary>
   public object? details { get; set; } = null;
-  /// Error source location (read-only)
+  /// <summary>Error source location (read-only)</summary>
   public string? error_pos { get; set; } = null;
-  /// Is this a field error (read-only)
+  /// <summary>Is this a field error (read-only)</summary>
   public bool? field_error { get; set; } = null;
 }
 
 public class LookmlModelExploreField : SdkModel 
 {
-  /// The appropriate horizontal text alignment the values of this field shoud be displayed in. Valid values are: "left", "right". (read-only)
+  /// <summary>The appropriate horizontal text alignment the values of this field shoud be displayed in. Valid values are: "left", "right". (read-only)</summary>
   public string? align { get; set; } = null;
-  /// Whether it's possible to filter on this field. (read-only)
+  /// <summary>Whether it's possible to filter on this field. (read-only)</summary>
   public bool? can_filter { get; set; } = null;
-  /// Field category Valid values are: "parameter", "filter", "measure", "dimension". (read-only)
+  /// <summary>Field category Valid values are: "parameter", "filter", "measure", "dimension". (read-only)</summary>
   public string? category { get; set; } = null;
-  /// The default value that this field uses when filtering. Null if there is no default value. (read-only)
+  /// <summary>The default value that this field uses when filtering. Null if there is no default value. (read-only)</summary>
   public string? default_filter_value { get; set; } = null;
-  /// Description (read-only)
+  /// <summary>Description (read-only)</summary>
   public string? description { get; set; } = null;
-  /// An array enumerating all the possible values that this field can contain. When null, there is no limit to the set of possible values this field can contain. (read-only)
+  /// <summary>An array enumerating all the possible values that this field can contain. When null, there is no limit to the set of possible values this field can contain. (read-only)</summary>
   public LookmlModelExploreFieldEnumeration[]? enumerations { get; set; } = null;
-  /// An error message indicating a problem with the definition of this field. If there are no errors, this will be null. (read-only)
+  /// <summary>An error message indicating a problem with the definition of this field. If there are no errors, this will be null. (read-only)</summary>
   public string? error { get; set; } = null;
-  /// A label creating a grouping of fields. All fields with this label should be presented together when displayed in a UI. (read-only)
+  /// <summary>A label creating a grouping of fields. All fields with this label should be presented together when displayed in a UI. (read-only)</summary>
   public string? field_group_label { get; set; } = null;
-  /// When presented in a field group via field_group_label, a shorter name of the field to be displayed in that context. (read-only)
+  /// <summary>When presented in a field group via field_group_label, a shorter name of the field to be displayed in that context. (read-only)</summary>
   public string? field_group_variant { get; set; } = null;
-  /// The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (read-only)
+  /// <summary>The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (read-only)</summary>
   public string? fill_style { get; set; } = null;
-  /// An offset (in months) from the calendar start month to the fiscal start month defined in the LookML model this field belongs to. (read-only)
+  /// <summary>An offset (in months) from the calendar start month to the fiscal start month defined in the LookML model this field belongs to. (read-only)</summary>
   public long? fiscal_month_offset { get; set; } = null;
-  /// Whether this field has a set of allowed_values specified in LookML. (read-only)
+  /// <summary>Whether this field has a set of allowed_values specified in LookML. (read-only)</summary>
   public bool? has_allowed_values { get; set; } = null;
-  /// Whether this field should be hidden from the user interface. (read-only)
+  /// <summary>Whether this field should be hidden from the user interface. (read-only)</summary>
   public bool? hidden { get; set; } = null;
-  /// Whether this field is a filter. (read-only)
+  /// <summary>Whether this field is a filter. (read-only)</summary>
   public bool? is_filter { get; set; } = null;
-  /// Whether this field represents a fiscal time value. (read-only)
+  /// <summary>Whether this field represents a fiscal time value. (read-only)</summary>
   public bool? is_fiscal { get; set; } = null;
-  /// Whether this field is of a type that represents a numeric value. (read-only)
+  /// <summary>Whether this field is of a type that represents a numeric value. (read-only)</summary>
   public bool? is_numeric { get; set; } = null;
-  /// Whether this field is of a type that represents a time value. (read-only)
+  /// <summary>Whether this field is of a type that represents a time value. (read-only)</summary>
   public bool? is_timeframe { get; set; } = null;
-  /// Whether this field can be time filtered. (read-only)
+  /// <summary>Whether this field can be time filtered. (read-only)</summary>
   public bool? can_time_filter { get; set; } = null;
   public LookmlModelExploreFieldTimeInterval? time_interval { get; set; }
-  /// Fully-qualified human-readable label of the field. (read-only)
+  /// <summary>Fully-qualified human-readable label of the field. (read-only)</summary>
   public string? label { get; set; } = null;
-  /// The name of the parameter that will provide a parameterized label for this field, if available in the current context. (read-only)
+  /// <summary>The name of the parameter that will provide a parameterized label for this field, if available in the current context. (read-only)</summary>
   public string? label_from_parameter { get; set; } = null;
-  /// The human-readable label of the field, without the view label. (read-only)
+  /// <summary>The human-readable label of the field, without the view label. (read-only)</summary>
   public string? label_short { get; set; } = null;
-  /// A URL linking to the definition of this field in the LookML IDE. (read-only)
+  /// <summary>A URL linking to the definition of this field in the LookML IDE. (read-only)</summary>
   public string? lookml_link { get; set; } = null;
   public LookmlModelExploreFieldMapLayer? map_layer { get; set; }
-  /// Whether this field is a measure. (read-only)
+  /// <summary>Whether this field is a measure. (read-only)</summary>
   public bool? measure { get; set; } = null;
-  /// Fully-qualified name of the field. (read-only)
+  /// <summary>Fully-qualified name of the field. (read-only)</summary>
   public string? name { get; set; } = null;
-  /// If yes, the field will not be localized with the user attribute number_format. Defaults to no (read-only)
+  /// <summary>If yes, the field will not be localized with the user attribute number_format. Defaults to no (read-only)</summary>
   public bool? strict_value_format { get; set; } = null;
-  /// Whether this field is a parameter. (read-only)
+  /// <summary>Whether this field is a parameter. (read-only)</summary>
   public bool? parameter { get; set; } = null;
-  /// Whether this field can be removed from a query. (read-only)
+  /// <summary>Whether this field can be removed from a query. (read-only)</summary>
   public bool? permanent { get; set; } = null;
-  /// Whether or not the field represents a primary key. (read-only)
+  /// <summary>Whether or not the field represents a primary key. (read-only)</summary>
   public bool? primary_key { get; set; } = null;
-  /// The name of the project this field is defined in. (read-only)
+  /// <summary>The name of the project this field is defined in. (read-only)</summary>
   public string? project_name { get; set; } = null;
-  /// When true, it's not possible to re-sort this field's values without re-running the SQL query, due to database logic that affects the sort. (read-only)
+  /// <summary>When true, it's not possible to re-sort this field's values without re-running the SQL query, due to database logic that affects the sort. (read-only)</summary>
   public bool? requires_refresh_on_sort { get; set; } = null;
-  /// The LookML scope this field belongs to. The scope is typically the field's view. (read-only)
+  /// <summary>The LookML scope this field belongs to. The scope is typically the field's view. (read-only)</summary>
   public string? scope { get; set; } = null;
-  /// Whether this field can be sorted. (read-only)
+  /// <summary>Whether this field can be sorted. (read-only)</summary>
   public bool? sortable { get; set; } = null;
-  /// The path portion of source_file_path. (read-only)
+  /// <summary>The path portion of source_file_path. (read-only)</summary>
   public string? source_file { get; set; } = null;
-  /// The fully-qualified path of the project file this field is defined in. (read-only)
+  /// <summary>The fully-qualified path of the project file this field is defined in. (read-only)</summary>
   public string? source_file_path { get; set; } = null;
-  /// SQL expression as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model. (read-only)
+  /// <summary>SQL expression as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model. (read-only)</summary>
   public string? sql { get; set; } = null;
-  /// An array of conditions and values that make up a SQL Case expression, as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model. (read-only)
+  /// <summary>An array of conditions and values that make up a SQL Case expression, as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model. (read-only)</summary>
   public LookmlModelExploreFieldSqlCase[]? sql_case { get; set; } = null;
-  /// The name of the dimension to base suggest queries from. (read-only)
+  /// <summary>The name of the dimension to base suggest queries from. (read-only)</summary>
   public string? suggest_dimension { get; set; } = null;
-  /// The name of the explore to base suggest queries from. (read-only)
+  /// <summary>The name of the explore to base suggest queries from. (read-only)</summary>
   public string? suggest_explore { get; set; } = null;
-  /// Whether or not suggestions are possible for this field. (read-only)
+  /// <summary>Whether or not suggestions are possible for this field. (read-only)</summary>
   public bool? suggestable { get; set; } = null;
-  /// If available, a list of suggestions for this field. For most fields, a suggest query is a more appropriate way to get an up-to-date list of suggestions. Or use enumerations to list all the possible values. (read-only)
+  /// <summary>If available, a list of suggestions for this field. For most fields, a suggest query is a more appropriate way to get an up-to-date list of suggestions. Or use enumerations to list all the possible values. (read-only)</summary>
   public string[]? suggestions { get; set; } = null;
-  /// An array of arbitrary string tags provided in the model for this field. (read-only)
+  /// <summary>An array of arbitrary string tags provided in the model for this field. (read-only)</summary>
   public string[]? tags { get; set; } = null;
-  /// The LookML type of the field. (read-only)
+  /// <summary>The LookML type of the field. (read-only)</summary>
   public string? type { get; set; } = null;
-  /// An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
+  /// <summary>An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)</summary>
   public string[]? user_attribute_filter_types { get; set; } = null;
-  /// If specified, the LookML value format string for formatting values of this field. (read-only)
+  /// <summary>If specified, the LookML value format string for formatting values of this field. (read-only)</summary>
   public string? value_format { get; set; } = null;
-  /// The name of the view this field belongs to. (read-only)
+  /// <summary>The name of the view this field belongs to. (read-only)</summary>
   public string? view { get; set; } = null;
-  /// The human-readable label of the view the field belongs to. (read-only)
+  /// <summary>The human-readable label of the view the field belongs to. (read-only)</summary>
   public string? view_label { get; set; } = null;
-  /// Whether this field was specified in "dynamic_fields" and is not part of the model. (read-only)
+  /// <summary>Whether this field was specified in "dynamic_fields" and is not part of the model. (read-only)</summary>
   public bool? dynamic { get; set; } = null;
-  /// The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (read-only)
+  /// <summary>The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (read-only)</summary>
   public string? week_start_day { get; set; } = null;
-  /// The number of times this field has been used in queries (read-only)
+  /// <summary>The number of times this field has been used in queries (read-only)</summary>
   public long? times_used { get; set; } = null;
 }
 
 public class LookmlModelExploreFieldEnumeration : SdkModel 
 {
-  /// Label (read-only)
+  /// <summary>Label (read-only)</summary>
   public string? label { get; set; } = null;
-  /// Value (read-only)
+  /// <summary>Value (read-only)</summary>
   public object? value { get; set; } = null;
 }
 
 public class LookmlModelExploreFieldMapLayer : SdkModel 
 {
-  /// URL to the map layer resource. (read-only)
+  /// <summary>URL to the map layer resource. (read-only)</summary>
   public string? url { get; set; } = null;
-  /// Name of the map layer, as defined in LookML. (read-only)
+  /// <summary>Name of the map layer, as defined in LookML. (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Specifies the name of the TopoJSON object that the map layer references. If not specified, use the first object.. (read-only)
+  /// <summary>Specifies the name of the TopoJSON object that the map layer references. If not specified, use the first object.. (read-only)</summary>
   public string? feature_key { get; set; } = null;
-  /// Selects which property from the TopoJSON data to plot against. TopoJSON supports arbitrary metadata for each region. When null, the first matching property should be used. (read-only)
+  /// <summary>Selects which property from the TopoJSON data to plot against. TopoJSON supports arbitrary metadata for each region. When null, the first matching property should be used. (read-only)</summary>
   public string? property_key { get; set; } = null;
-  /// Which property from the TopoJSON data to use to label the region. When null, property_key should be used. (read-only)
+  /// <summary>Which property from the TopoJSON data to use to label the region. When null, property_key should be used. (read-only)</summary>
   public string? property_label_key { get; set; } = null;
-  /// The preferred geographic projection of the map layer when displayed in a visualization that supports multiple geographic projections. (read-only)
+  /// <summary>The preferred geographic projection of the map layer when displayed in a visualization that supports multiple geographic projections. (read-only)</summary>
   public string? projection { get; set; } = null;
-  /// Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (read-only)
+  /// <summary>Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (read-only)</summary>
   public string? format { get; set; } = null;
-  /// Specifies the URL to a JSON file that defines the geographic extents of each region available in the map layer. This data is used to automatically center the map on the available data for visualization purposes. The JSON file must be a JSON object where the keys are the mapping value of the feature (as specified by property_key) and the values are arrays of four numbers representing the west longitude, south latitude, east longitude, and north latitude extents of the region. The object must include a key for every possible value of property_key. (read-only)
+  /// <summary>Specifies the URL to a JSON file that defines the geographic extents of each region available in the map layer. This data is used to automatically center the map on the available data for visualization purposes. The JSON file must be a JSON object where the keys are the mapping value of the feature (as specified by property_key) and the values are arrays of four numbers representing the west longitude, south latitude, east longitude, and north latitude extents of the region. The object must include a key for every possible value of property_key. (read-only)</summary>
   public string? extents_json_url { get; set; } = null;
-  /// The minimum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)
+  /// <summary>The minimum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)</summary>
   public long? max_zoom_level { get; set; } = null;
-  /// The maximum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)
+  /// <summary>The maximum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)</summary>
   public long? min_zoom_level { get; set; } = null;
 }
 
 public class LookmlModelExploreFieldset : SdkModel 
 {
-  /// Array of dimensions (read-only)
+  /// <summary>Array of dimensions (read-only)</summary>
   public LookmlModelExploreField[]? dimensions { get; set; } = null;
-  /// Array of measures (read-only)
+  /// <summary>Array of measures (read-only)</summary>
   public LookmlModelExploreField[]? measures { get; set; } = null;
-  /// Array of filters (read-only)
+  /// <summary>Array of filters (read-only)</summary>
   public LookmlModelExploreField[]? filters { get; set; } = null;
-  /// Array of parameters (read-only)
+  /// <summary>Array of parameters (read-only)</summary>
   public LookmlModelExploreField[]? parameters { get; set; } = null;
 }
 
 public class LookmlModelExploreFieldSqlCase : SdkModel 
 {
-  /// SQL Case label value (read-only)
+  /// <summary>SQL Case label value (read-only)</summary>
   public string? value { get; set; } = null;
-  /// SQL Case condition expression (read-only)
+  /// <summary>SQL Case condition expression (read-only)</summary>
   public string? condition { get; set; } = null;
 }
 
 public class LookmlModelExploreFieldTimeInterval : SdkModel 
 {
-  /// The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "year". (read-only)
+  /// <summary>The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "year". (read-only)</summary>
   public string? name { get; set; } = null;
-  /// The number of intervals this field represents a grouping of. (read-only)
+  /// <summary>The number of intervals this field represents a grouping of. (read-only)</summary>
   public long? count { get; set; } = null;
 }
 
 public class LookmlModelExploreJoins : SdkModel 
 {
-  /// Name of this join (and name of the view to join) (read-only)
+  /// <summary>Name of this join (and name of the view to join) (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Fields referenced by the join (read-only)
+  /// <summary>Fields referenced by the join (read-only)</summary>
   public string[]? dependent_fields { get; set; } = null;
-  /// Fields of the joined view to pull into this explore (read-only)
+  /// <summary>Fields of the joined view to pull into this explore (read-only)</summary>
   public string[]? fields { get; set; } = null;
-  /// Name of the dimension in this explore whose value is in the primary key of the joined view (read-only)
+  /// <summary>Name of the dimension in this explore whose value is in the primary key of the joined view (read-only)</summary>
   public string? foreign_key { get; set; } = null;
-  /// Name of view to join (read-only)
+  /// <summary>Name of view to join (read-only)</summary>
   public string? from { get; set; } = null;
-  /// Specifies whether all queries must use an outer join (read-only)
+  /// <summary>Specifies whether all queries must use an outer join (read-only)</summary>
   public bool? outer_only { get; set; } = null;
-  /// many_to_one, one_to_one, one_to_many, many_to_many (read-only)
+  /// <summary>many_to_one, one_to_one, one_to_many, many_to_many (read-only)</summary>
   public string? relationship { get; set; } = null;
-  /// Names of joins that must always be included in SQL queries (read-only)
+  /// <summary>Names of joins that must always be included in SQL queries (read-only)</summary>
   public string[]? required_joins { get; set; } = null;
-  /// SQL expression that produces a foreign key (read-only)
+  /// <summary>SQL expression that produces a foreign key (read-only)</summary>
   public string? sql_foreign_key { get; set; } = null;
-  /// SQL ON expression describing the join condition (read-only)
+  /// <summary>SQL ON expression describing the join condition (read-only)</summary>
   public string? sql_on { get; set; } = null;
-  /// SQL table name to join (read-only)
+  /// <summary>SQL table name to join (read-only)</summary>
   public string? sql_table_name { get; set; } = null;
-  /// The join type: left_outer, full_outer, inner, or cross (read-only)
+  /// <summary>The join type: left_outer, full_outer, inner, or cross (read-only)</summary>
   public string? type { get; set; } = null;
-  /// Label to display in UI selectors (read-only)
+  /// <summary>Label to display in UI selectors (read-only)</summary>
   public string? view_label { get; set; } = null;
 }
 
 public class LookmlModelExploreSet : SdkModel 
 {
-  /// Name (read-only)
+  /// <summary>Name (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Value set (read-only)
+  /// <summary>Value set (read-only)</summary>
   public string[]? value { get; set; } = null;
 }
 
 public class LookmlModelExploreSupportedMeasureType : SdkModel 
 {
-  /// (read-only)
+  /// <summary> (read-only)</summary>
   public string? dimension_type { get; set; } = null;
-  /// (read-only)
+  /// <summary> (read-only)</summary>
   public string[]? measure_types { get; set; } = null;
 }
 
 public class LookmlModelNavExplore : SdkModel 
 {
-  /// Name of the explore (read-only)
+  /// <summary>Name of the explore (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Description for the explore (read-only)
+  /// <summary>Description for the explore (read-only)</summary>
   public string? description { get; set; } = null;
-  /// Label for the explore (read-only)
+  /// <summary>Label for the explore (read-only)</summary>
   public string? label { get; set; } = null;
-  /// Is this explore marked as hidden (read-only)
+  /// <summary>Is this explore marked as hidden (read-only)</summary>
   public bool? hidden { get; set; } = null;
-  /// Label used to group explores in the navigation menus (read-only)
+  /// <summary>Label used to group explores in the navigation menus (read-only)</summary>
   public string? group_label { get; set; } = null;
 }
 
 public class LookmlTest : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Name of model containing this test. (read-only)
+  /// <summary>Name of model containing this test. (read-only)</summary>
   public string? model_name { get; set; } = null;
-  /// Name of this test. (read-only)
+  /// <summary>Name of this test. (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Name of the explore this test runs a query against (read-only)
+  /// <summary>Name of the explore this test runs a query against (read-only)</summary>
   public string? explore_name { get; set; } = null;
-  /// The url parameters that can be used to reproduce this test's query on an explore. (read-only)
+  /// <summary>The url parameters that can be used to reproduce this test's query on an explore. (read-only)</summary>
   public string? query_url_params { get; set; } = null;
-  /// Name of the LookML file containing this test. (read-only)
+  /// <summary>Name of the LookML file containing this test. (read-only)</summary>
   public string? file { get; set; } = null;
-  /// Line number of this test in LookML. (read-only)
+  /// <summary>Line number of this test in LookML. (read-only)</summary>
   public long? line { get; set; } = null;
 }
 
 public class LookmlTestResult : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Name of model containing this test. (read-only)
+  /// <summary>Name of model containing this test. (read-only)</summary>
   public string? model_name { get; set; } = null;
-  /// Name of this test. (read-only)
+  /// <summary>Name of this test. (read-only)</summary>
   public string? test_name { get; set; } = null;
-  /// Number of assertions in this test (read-only)
+  /// <summary>Number of assertions in this test (read-only)</summary>
   public long? assertions_count { get; set; } = null;
-  /// Number of assertions passed in this test (read-only)
+  /// <summary>Number of assertions passed in this test (read-only)</summary>
   public long? assertions_failed { get; set; } = null;
-  /// A list of any errors encountered by the test. (read-only)
+  /// <summary>A list of any errors encountered by the test. (read-only)</summary>
   public ProjectError[]? errors { get; set; } = null;
-  /// A list of any warnings encountered by the test. (read-only)
+  /// <summary>A list of any warnings encountered by the test. (read-only)</summary>
   public ProjectError[]? warnings { get; set; } = null;
-  /// True if this test passsed without errors. (read-only)
+  /// <summary>True if this test passsed without errors. (read-only)</summary>
   public bool? success { get; set; } = null;
 }
 
 public class LookModel : SdkModel 
 {
-  /// Model Id (read-only)
+  /// <summary>Model Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Model Label (read-only)
+  /// <summary>Model Label (read-only)</summary>
   public string? label { get; set; } = null;
 }
 
 public class LookWithDashboards : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Id of content metadata (read-only)
+  /// <summary>Id of content metadata (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Look Title
+  /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
-  /// User Id
+  /// <summary>User Id</summary>
   public long? user_id { get; set; } = null;
-  /// Content Favorite Id (read-only)
+  /// <summary>Content Favorite Id (read-only)</summary>
   public long? content_favorite_id { get; set; } = null;
-  /// Time that the Look was created. (read-only)
+  /// <summary>Time that the Look was created. (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
-  /// Whether or not a look is 'soft' deleted.
+  /// <summary>Whether or not a look is 'soft' deleted.</summary>
   public bool? deleted { get; set; } = null;
-  /// Time that the Look was deleted. (read-only)
+  /// <summary>Time that the Look was deleted. (read-only)</summary>
   public DateTime? deleted_at { get; set; } = null;
-  /// Id of User that deleted the look. (read-only)
+  /// <summary>Id of User that deleted the look. (read-only)</summary>
   public long? deleter_id { get; set; } = null;
-  /// Description
+  /// <summary>Description</summary>
   public string? description { get; set; } = null;
-  /// Embed Url (read-only)
+  /// <summary>Embed Url (read-only)</summary>
   public string? embed_url { get; set; } = null;
-  /// Excel File Url (read-only)
+  /// <summary>Excel File Url (read-only)</summary>
   public string? excel_file_url { get; set; } = null;
-  /// Number of times favorited (read-only)
+  /// <summary>Number of times favorited (read-only)</summary>
   public long? favorite_count { get; set; } = null;
-  /// Google Spreadsheet Formula (read-only)
+  /// <summary>Google Spreadsheet Formula (read-only)</summary>
   public string? google_spreadsheet_formula { get; set; } = null;
-  /// Image Embed Url (read-only)
+  /// <summary>Image Embed Url (read-only)</summary>
   public string? image_embed_url { get; set; } = null;
-  /// auto-run query when Look viewed
+  /// <summary>auto-run query when Look viewed</summary>
   public bool? is_run_on_load { get; set; } = null;
-  /// Time that the Look was last accessed by any user (read-only)
+  /// <summary>Time that the Look was last accessed by any user (read-only)</summary>
   public DateTime? last_accessed_at { get; set; } = null;
-  /// Id of User that last updated the look. (read-only)
+  /// <summary>Id of User that last updated the look. (read-only)</summary>
   public long? last_updater_id { get; set; } = null;
-  /// Time last viewed in the Looker web UI (read-only)
+  /// <summary>Time last viewed in the Looker web UI (read-only)</summary>
   public DateTime? last_viewed_at { get; set; } = null;
   public LookModel? model { get; set; }
-  /// Is Public
+  /// <summary>Is Public</summary>
   public bool? @public { get; set; } = null;
-  /// Public Slug (read-only)
+  /// <summary>Public Slug (read-only)</summary>
   public string? public_slug { get; set; } = null;
-  /// Public Url (read-only)
+  /// <summary>Public Url (read-only)</summary>
   public string? public_url { get; set; } = null;
-  /// Query Id
+  /// <summary>Query Id</summary>
   public long? query_id { get; set; } = null;
-  /// Short Url (read-only)
+  /// <summary>Short Url (read-only)</summary>
   public string? short_url { get; set; } = null;
   public FolderBase? folder { get; set; }
-  /// Folder Id
+  /// <summary>Folder Id</summary>
   public string? folder_id { get; set; } = null;
-  /// Time that the Look was updated. (read-only)
+  /// <summary>Time that the Look was updated. (read-only)</summary>
   public DateTime? updated_at { get; set; } = null;
-  /// Number of times viewed in the Looker web UI (read-only)
+  /// <summary>Number of times viewed in the Looker web UI (read-only)</summary>
   public long? view_count { get; set; } = null;
-  /// Dashboards (read-only)
+  /// <summary>Dashboards (read-only)</summary>
   public DashboardBase[]? dashboards { get; set; } = null;
 }
 
 public class LookWithQuery : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Id of content metadata (read-only)
+  /// <summary>Id of content metadata (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Look Title
+  /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
-  /// User Id
+  /// <summary>User Id</summary>
   public long? user_id { get; set; } = null;
-  /// Content Favorite Id (read-only)
+  /// <summary>Content Favorite Id (read-only)</summary>
   public long? content_favorite_id { get; set; } = null;
-  /// Time that the Look was created. (read-only)
+  /// <summary>Time that the Look was created. (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
-  /// Whether or not a look is 'soft' deleted.
+  /// <summary>Whether or not a look is 'soft' deleted.</summary>
   public bool? deleted { get; set; } = null;
-  /// Time that the Look was deleted. (read-only)
+  /// <summary>Time that the Look was deleted. (read-only)</summary>
   public DateTime? deleted_at { get; set; } = null;
-  /// Id of User that deleted the look. (read-only)
+  /// <summary>Id of User that deleted the look. (read-only)</summary>
   public long? deleter_id { get; set; } = null;
-  /// Description
+  /// <summary>Description</summary>
   public string? description { get; set; } = null;
-  /// Embed Url (read-only)
+  /// <summary>Embed Url (read-only)</summary>
   public string? embed_url { get; set; } = null;
-  /// Excel File Url (read-only)
+  /// <summary>Excel File Url (read-only)</summary>
   public string? excel_file_url { get; set; } = null;
-  /// Number of times favorited (read-only)
+  /// <summary>Number of times favorited (read-only)</summary>
   public long? favorite_count { get; set; } = null;
-  /// Google Spreadsheet Formula (read-only)
+  /// <summary>Google Spreadsheet Formula (read-only)</summary>
   public string? google_spreadsheet_formula { get; set; } = null;
-  /// Image Embed Url (read-only)
+  /// <summary>Image Embed Url (read-only)</summary>
   public string? image_embed_url { get; set; } = null;
-  /// auto-run query when Look viewed
+  /// <summary>auto-run query when Look viewed</summary>
   public bool? is_run_on_load { get; set; } = null;
-  /// Time that the Look was last accessed by any user (read-only)
+  /// <summary>Time that the Look was last accessed by any user (read-only)</summary>
   public DateTime? last_accessed_at { get; set; } = null;
-  /// Id of User that last updated the look. (read-only)
+  /// <summary>Id of User that last updated the look. (read-only)</summary>
   public long? last_updater_id { get; set; } = null;
-  /// Time last viewed in the Looker web UI (read-only)
+  /// <summary>Time last viewed in the Looker web UI (read-only)</summary>
   public DateTime? last_viewed_at { get; set; } = null;
   public LookModel? model { get; set; }
-  /// Is Public
+  /// <summary>Is Public</summary>
   public bool? @public { get; set; } = null;
-  /// Public Slug (read-only)
+  /// <summary>Public Slug (read-only)</summary>
   public string? public_slug { get; set; } = null;
-  /// Public Url (read-only)
+  /// <summary>Public Url (read-only)</summary>
   public string? public_url { get; set; } = null;
-  /// Query Id
+  /// <summary>Query Id</summary>
   public long? query_id { get; set; } = null;
-  /// Short Url (read-only)
+  /// <summary>Short Url (read-only)</summary>
   public string? short_url { get; set; } = null;
   public FolderBase? folder { get; set; }
-  /// Folder Id
+  /// <summary>Folder Id</summary>
   public string? folder_id { get; set; } = null;
-  /// Time that the Look was updated. (read-only)
+  /// <summary>Time that the Look was updated. (read-only)</summary>
   public DateTime? updated_at { get; set; } = null;
-  /// Number of times viewed in the Looker web UI (read-only)
+  /// <summary>Number of times viewed in the Looker web UI (read-only)</summary>
   public long? view_count { get; set; } = null;
   public Query? query { get; set; }
-  /// Url (read-only)
+  /// <summary>Url (read-only)</summary>
   public string? url { get; set; } = null;
 }
 
 public class Manifest : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Manifest project name (read-only)
+  /// <summary>Manifest project name (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Imports for a project (read-only)
+  /// <summary>Imports for a project (read-only)</summary>
   public ImportedProject[]? imports { get; set; } = null;
   public LocalizationSettings? localization_settings { get; set; }
 }
 
 public class MergeFields : SdkModel 
 {
-  /// Field name to map onto in the merged results
+  /// <summary>Field name to map onto in the merged results</summary>
   public string? field_name { get; set; } = null;
-  /// Field name from the source query
+  /// <summary>Field name from the source query</summary>
   public string? source_field_name { get; set; } = null;
 }
 
 public class MergeQuery : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Column Limit
+  /// <summary>Column Limit</summary>
   public string? column_limit { get; set; } = null;
-  /// Dynamic Fields
+  /// <summary>Dynamic Fields</summary>
   public string? dynamic_fields { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Pivots
+  /// <summary>Pivots</summary>
   public string[]? pivots { get; set; } = null;
-  /// Unique to get results (read-only)
+  /// <summary>Unique to get results (read-only)</summary>
   public long? result_maker_id { get; set; } = null;
-  /// Sorts
+  /// <summary>Sorts</summary>
   public string[]? sorts { get; set; } = null;
-  /// Source Queries defining the results to be merged.
+  /// <summary>Source Queries defining the results to be merged.</summary>
   public MergeQuerySourceQuery[]? source_queries { get; set; } = null;
-  /// Total
+  /// <summary>Total</summary>
   public bool? total { get; set; } = null;
-  /// Visualization Config
+  /// <summary>Visualization Config</summary>
   public StringDictionary<string>? vis_config { get; set; } = null;
 }
 
 public class MergeQuerySourceQuery : SdkModel 
 {
-  /// An array defining which fields of the source query are mapped onto fields of the merge query
+  /// <summary>An array defining which fields of the source query are mapped onto fields of the merge query</summary>
   public MergeFields[]? merge_fields { get; set; } = null;
-  /// Display name
+  /// <summary>Display name</summary>
   public string? name { get; set; } = null;
-  /// Id of the query to merge
+  /// <summary>Id of the query to merge</summary>
   public long? query_id { get; set; } = null;
 }
 
 public class ModelSet : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// (read-only)
+  /// <summary> (read-only)</summary>
   public bool? all_access { get; set; } = null;
-  /// (read-only)
+  /// <summary> (read-only)</summary>
   public bool? built_in { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
   public string[]? models { get; set; } = null;
-  /// Name of ModelSet
+  /// <summary>Name of ModelSet</summary>
   public string? name { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class ModelsNotValidated : SdkModel 
 {
-  /// Model name (read-only)
+  /// <summary>Model name (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Project file (read-only)
+  /// <summary>Project file (read-only)</summary>
   public string? project_file_id { get; set; } = null;
 }
 
 public class OauthClientApp : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// The globally unique id of this application (read-only)
+  /// <summary>The globally unique id of this application (read-only)</summary>
   public string? client_guid { get; set; } = null;
-  /// The uri with which this application will receive an auth code by browser redirect.
+  /// <summary>The uri with which this application will receive an auth code by browser redirect.</summary>
   public string? redirect_uri { get; set; } = null;
-  /// The application's display name
+  /// <summary>The application's display name</summary>
   public string? display_name { get; set; } = null;
-  /// A description of the application that will be displayed to users
+  /// <summary>A description of the application that will be displayed to users</summary>
   public string? description { get; set; } = null;
-  /// When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
+  /// <summary>When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.</summary>
   public bool? enabled { get; set; } = null;
-  /// If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
+  /// <summary>If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance</summary>
   public long? group_id { get; set; } = null;
-  /// All auth codes, access tokens, and refresh tokens issued for this application prior to this date-time for ALL USERS will be invalid. (read-only)
+  /// <summary>All auth codes, access tokens, and refresh tokens issued for this application prior to this date-time for ALL USERS will be invalid. (read-only)</summary>
   public DateTime? tokens_invalid_before { get; set; } = null;
-  /// All users who have been activated to use this app (read-only)
+  /// <summary>All users who have been activated to use this app (read-only)</summary>
   public UserPublic[]? activated_users { get; set; } = null;
 }
 
 public class OIDCConfig : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+  /// <summary>Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.</summary>
   public bool? alternate_email_login_allowed { get; set; } = null;
-  /// OpenID Provider Audience
+  /// <summary>OpenID Provider Audience</summary>
   public string? audience { get; set; } = null;
-  /// Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
+  /// <summary>Users will not be allowed to login at all unless a role for them is found in OIDC if set to true</summary>
   public bool? auth_requires_role { get; set; } = null;
-  /// OpenID Provider Authorization Url
+  /// <summary>OpenID Provider Authorization Url</summary>
   public Url? authorization_endpoint { get; set; } = null;
-  /// (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
+  /// <summary>(Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC</summary>
   public long[]? default_new_user_group_ids { get; set; } = null;
-  /// (Read-only) Groups that will be applied to new users the first time they login via OIDC (read-only)
+  /// <summary>(Read-only) Groups that will be applied to new users the first time they login via OIDC (read-only)</summary>
   public Group[]? default_new_user_groups { get; set; } = null;
-  /// (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
+  /// <summary>(Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC</summary>
   public long[]? default_new_user_role_ids { get; set; } = null;
-  /// (Read-only) Roles that will be applied to new users the first time they login via OIDC (read-only)
+  /// <summary>(Read-only) Roles that will be applied to new users the first time they login via OIDC (read-only)</summary>
   public Role[]? default_new_user_roles { get; set; } = null;
-  /// Enable/Disable OIDC authentication for the server
+  /// <summary>Enable/Disable OIDC authentication for the server</summary>
   public bool? enabled { get; set; } = null;
-  /// (Read-only) Array of mappings between OIDC Groups and Looker Roles (read-only)
+  /// <summary>(Read-only) Array of mappings between OIDC Groups and Looker Roles (read-only)</summary>
   public OIDCGroupRead[]? groups { get; set; } = null;
-  /// Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
+  /// <summary>Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'</summary>
   public string? groups_attribute { get; set; } = null;
-  /// (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
+  /// <summary>(Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids</summary>
   public OIDCGroupWrite[]? groups_with_role_ids { get; set; } = null;
-  /// Relying Party Identifier (provided by OpenID Provider)
+  /// <summary>Relying Party Identifier (provided by OpenID Provider)</summary>
   public string? identifier { get; set; } = null;
-  /// OpenID Provider Issuer
+  /// <summary>OpenID Provider Issuer</summary>
   public string? issuer { get; set; } = null;
-  /// When this config was last modified (read-only)
+  /// <summary>When this config was last modified (read-only)</summary>
   public DateTime? modified_at { get; set; } = null;
-  /// User id of user who last modified this config (read-only)
+  /// <summary>User id of user who last modified this config (read-only)</summary>
   public long? modified_by { get; set; } = null;
-  /// Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+  /// <summary>Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'</summary>
   public string? new_user_migration_types { get; set; } = null;
-  /// Array of scopes to request.
+  /// <summary>Array of scopes to request.</summary>
   public string[]? scopes { get; set; } = null;
-  /// (Write-Only) Relying Party Secret (provided by OpenID Provider)
+  /// <summary>(Write-Only) Relying Party Secret (provided by OpenID Provider)</summary>
   public string? secret { get; set; } = null;
-  /// Set user roles in Looker based on groups from OIDC
+  /// <summary>Set user roles in Looker based on groups from OIDC</summary>
   public bool? set_roles_from_groups { get; set; } = null;
-  /// Slug to identify configurations that are created in order to run a OIDC config test (read-only)
+  /// <summary>Slug to identify configurations that are created in order to run a OIDC config test (read-only)</summary>
   public string? test_slug { get; set; } = null;
-  /// OpenID Provider Token Url
+  /// <summary>OpenID Provider Token Url</summary>
   public string? token_endpoint { get; set; } = null;
-  /// Name of user record attributes used to indicate email address field
+  /// <summary>Name of user record attributes used to indicate email address field</summary>
   public string? user_attribute_map_email { get; set; } = null;
-  /// Name of user record attributes used to indicate first name
+  /// <summary>Name of user record attributes used to indicate first name</summary>
   public string? user_attribute_map_first_name { get; set; } = null;
-  /// Name of user record attributes used to indicate last name
+  /// <summary>Name of user record attributes used to indicate last name</summary>
   public string? user_attribute_map_last_name { get; set; } = null;
-  /// (Read-only) Array of mappings between OIDC User Attributes and Looker User Attributes (read-only)
+  /// <summary>(Read-only) Array of mappings between OIDC User Attributes and Looker User Attributes (read-only)</summary>
   public OIDCUserAttributeRead[]? user_attributes { get; set; } = null;
-  /// (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
+  /// <summary>(Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids</summary>
   public OIDCUserAttributeWrite[]? user_attributes_with_ids { get; set; } = null;
-  /// OpenID Provider User Information Url
+  /// <summary>OpenID Provider User Information Url</summary>
   public Url? userinfo_endpoint { get; set; } = null;
-  /// Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+  /// <summary>Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.</summary>
   public bool? allow_normal_group_membership { get; set; } = null;
-  /// OIDC auth'd users will inherit roles from non-reflected Looker groups.
+  /// <summary>OIDC auth'd users will inherit roles from non-reflected Looker groups.</summary>
   public bool? allow_roles_from_normal_groups { get; set; } = null;
-  /// Allows roles to be directly assigned to OIDC auth'd users.
+  /// <summary>Allows roles to be directly assigned to OIDC auth'd users.</summary>
   public bool? allow_direct_roles { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class OIDCGroupRead : SdkModel 
 {
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Unique Id of group in Looker (read-only)
+  /// <summary>Unique Id of group in Looker (read-only)</summary>
   public long? looker_group_id { get; set; } = null;
-  /// Name of group in Looker (read-only)
+  /// <summary>Name of group in Looker (read-only)</summary>
   public string? looker_group_name { get; set; } = null;
-  /// Name of group in OIDC (read-only)
+  /// <summary>Name of group in OIDC (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Looker Roles (read-only)
+  /// <summary>Looker Roles (read-only)</summary>
   public Role[]? roles { get; set; } = null;
 }
 
 public class OIDCGroupWrite : SdkModel 
 {
-  /// Unique Id
+  /// <summary>Unique Id</summary>
   public long? id { get; set; } = null;
-  /// Unique Id of group in Looker (read-only)
+  /// <summary>Unique Id of group in Looker (read-only)</summary>
   public long? looker_group_id { get; set; } = null;
-  /// Name of group in Looker
+  /// <summary>Name of group in Looker</summary>
   public string? looker_group_name { get; set; } = null;
-  /// Name of group in OIDC
+  /// <summary>Name of group in OIDC</summary>
   public string? name { get; set; } = null;
-  /// Looker Role Ids
+  /// <summary>Looker Role Ids</summary>
   public long[]? role_ids { get; set; } = null;
 }
 
 public class OIDCUserAttributeRead : SdkModel 
 {
-  /// Name of User Attribute in OIDC (read-only)
+  /// <summary>Name of User Attribute in OIDC (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Required to be in OIDC assertion for login to be allowed to succeed (read-only)
+  /// <summary>Required to be in OIDC assertion for login to be allowed to succeed (read-only)</summary>
   public bool? required { get; set; } = null;
-  /// Looker User Attributes (read-only)
+  /// <summary>Looker User Attributes (read-only)</summary>
   public UserAttribute[]? user_attributes { get; set; } = null;
 }
 
 public class OIDCUserAttributeWrite : SdkModel 
 {
-  /// Name of User Attribute in OIDC
+  /// <summary>Name of User Attribute in OIDC</summary>
   public string? name { get; set; } = null;
-  /// Required to be in OIDC assertion for login to be allowed to succeed
+  /// <summary>Required to be in OIDC assertion for login to be allowed to succeed</summary>
   public bool? required { get; set; } = null;
-  /// Looker User Attribute Ids
+  /// <summary>Looker User Attribute Ids</summary>
   public long[]? user_attribute_ids { get; set; } = null;
 }
 
 public class PasswordConfig : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Minimum number of characters required for a new password.  Must be between 7 and 100
+  /// <summary>Minimum number of characters required for a new password.  Must be between 7 and 100</summary>
   public long? min_length { get; set; } = null;
-  /// Require at least one numeric character
+  /// <summary>Require at least one numeric character</summary>
   public bool? require_numeric { get; set; } = null;
-  /// Require at least one uppercase and one lowercase letter
+  /// <summary>Require at least one uppercase and one lowercase letter</summary>
   public bool? require_upperlower { get; set; } = null;
-  /// Require at least one special character
+  /// <summary>Require at least one special character</summary>
   public bool? require_special { get; set; } = null;
 }
 
 public class Permission : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Permission symbol (read-only)
+  /// <summary>Permission symbol (read-only)</summary>
   public string? permission { get; set; } = null;
-  /// Dependency parent symbol (read-only)
+  /// <summary>Dependency parent symbol (read-only)</summary>
   public string? parent { get; set; } = null;
-  /// Description (read-only)
+  /// <summary>Description (read-only)</summary>
   public string? description { get; set; } = null;
 }
 
 public class PermissionSet : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// (read-only)
+  /// <summary> (read-only)</summary>
   public bool? all_access { get; set; } = null;
-  /// (read-only)
+  /// <summary> (read-only)</summary>
   public bool? built_in { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Name of PermissionSet
+  /// <summary>Name of PermissionSet</summary>
   public string? name { get; set; } = null;
   public string[]? permissions { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class Project : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Project Id (read-only)
+  /// <summary>Project Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Project display name
+  /// <summary>Project display name</summary>
   public string? name { get; set; } = null;
-  /// If true the project is configured with a git repository (read-only)
+  /// <summary>If true the project is configured with a git repository (read-only)</summary>
   public bool? uses_git { get; set; } = null;
-  /// Git remote repository url
+  /// <summary>Git remote repository url</summary>
   public string? git_remote_url { get; set; } = null;
-  /// Git username for HTTPS authentication. (For production only, if using user attributes.)
+  /// <summary>Git username for HTTPS authentication. (For production only, if using user attributes.)</summary>
   public string? git_username { get; set; } = null;
-  /// (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
+  /// <summary>(Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)</summary>
   public string? git_password { get; set; } = null;
-  /// User attribute name for username in per-user HTTPS authentication.
+  /// <summary>User attribute name for username in per-user HTTPS authentication.</summary>
   public string? git_username_user_attribute { get; set; } = null;
-  /// User attribute name for password in per-user HTTPS authentication.
+  /// <summary>User attribute name for password in per-user HTTPS authentication.</summary>
   public string? git_password_user_attribute { get; set; } = null;
-  /// Name of the git service provider
+  /// <summary>Name of the git service provider</summary>
   public string? git_service_name { get; set; } = null;
-  /// Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
+  /// <summary>Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)</summary>
   public long? git_application_server_http_port { get; set; } = null;
-  /// Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+  /// <summary>Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".</summary>
   public string? git_application_server_http_scheme { get; set; } = null;
-  /// (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
+  /// <summary>(Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.</summary>
   public string? deploy_secret { get; set; } = null;
-  /// (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
+  /// <summary>(Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.</summary>
   public bool? unset_deploy_secret { get; set; } = null;
-  /// The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+  /// <summary>The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".</summary>
   public string? pull_request_mode { get; set; } = null;
-  /// Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
+  /// <summary>Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository</summary>
   public bool? validation_required { get; set; } = null;
-  /// If true, folders are enabled for this project
+  /// <summary>If true, folders are enabled for this project</summary>
   public bool? folders_enabled { get; set; } = null;
-  /// If true, advanced git release management is enabled for this project
+  /// <summary>If true, advanced git release management is enabled for this project</summary>
   public bool? git_release_mgmt_enabled { get; set; } = null;
-  /// Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
+  /// <summary>Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).</summary>
   public bool? allow_warnings { get; set; } = null;
-  /// If true the project is an example project and cannot be modified (read-only)
+  /// <summary>If true the project is an example project and cannot be modified (read-only)</summary>
   public bool? is_example { get; set; } = null;
-  /// Status of dependencies in your manifest & lockfile
+  /// <summary>Status of dependencies in your manifest & lockfile</summary>
   public string? dependency_status { get; set; } = null;
 }
 
 public class ProjectError : SdkModel 
 {
-  /// A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)
+  /// <summary>A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)</summary>
   public string? code { get; set; } = null;
-  /// Severity: fatal, error, warning, info, success (read-only)
+  /// <summary>Severity: fatal, error, warning, info, success (read-only)</summary>
   public string? severity { get; set; } = null;
-  /// Error classification: syntax, deprecation, model_configuration, etc (read-only)
+  /// <summary>Error classification: syntax, deprecation, model_configuration, etc (read-only)</summary>
   public string? kind { get; set; } = null;
-  /// Error message which may contain information such as dashboard or model names that may be considered sensitive in some use cases. Avoid storing or sending this message outside of Looker (read-only)
+  /// <summary>Error message which may contain information such as dashboard or model names that may be considered sensitive in some use cases. Avoid storing or sending this message outside of Looker (read-only)</summary>
   public string? message { get; set; } = null;
-  /// The field associated with this error (read-only)
+  /// <summary>The field associated with this error (read-only)</summary>
   public string? field_name { get; set; } = null;
-  /// Name of the file containing this error (read-only)
+  /// <summary>Name of the file containing this error (read-only)</summary>
   public string? file_path { get; set; } = null;
-  /// Line number in the file of this error (read-only)
+  /// <summary>Line number in the file of this error (read-only)</summary>
   public long? line_number { get; set; } = null;
-  /// The model associated with this error (read-only)
+  /// <summary>The model associated with this error (read-only)</summary>
   public string? model_id { get; set; } = null;
-  /// The explore associated with this error (read-only)
+  /// <summary>The explore associated with this error (read-only)</summary>
   public string? explore { get; set; } = null;
-  /// A link to Looker documentation about this error (read-only)
+  /// <summary>A link to Looker documentation about this error (read-only)</summary>
   public string? help_url { get; set; } = null;
-  /// Error parameters (read-only)
+  /// <summary>Error parameters (read-only)</summary>
   public StringDictionary<string>? @params { get; set; } = null;
-  /// A version of the error message that does not contain potentially sensitive information. Suitable for situations in which messages are stored or sent to consumers outside of Looker, such as external logs. Sanitized messages will display "(?)" where sensitive information would appear in the corresponding non-sanitized message (read-only)
+  /// <summary>A version of the error message that does not contain potentially sensitive information. Suitable for situations in which messages are stored or sent to consumers outside of Looker, such as external logs. Sanitized messages will display "(?)" where sensitive information would appear in the corresponding non-sanitized message (read-only)</summary>
   public string? sanitized_message { get; set; } = null;
 }
 
 public class ProjectFile : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// An opaque token uniquely identifying a file within a project. Avoid parsing or decomposing the text of this token. This token is stable within a Looker release but may change between Looker releases (read-only)
+  /// <summary>An opaque token uniquely identifying a file within a project. Avoid parsing or decomposing the text of this token. This token is stable within a Looker release but may change between Looker releases (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Path, file name, and extension of the file relative to the project root directory (read-only)
+  /// <summary>Path, file name, and extension of the file relative to the project root directory (read-only)</summary>
   public string? path { get; set; } = null;
-  /// Display name (read-only)
+  /// <summary>Display name (read-only)</summary>
   public string? title { get; set; } = null;
-  /// File type: model, view, etc (read-only)
+  /// <summary>File type: model, view, etc (read-only)</summary>
   public string? type { get; set; } = null;
-  /// The extension of the file: .view.lkml, .model.lkml, etc (read-only)
+  /// <summary>The extension of the file: .view.lkml, .model.lkml, etc (read-only)</summary>
   public string? extension { get; set; } = null;
-  /// File mime type (read-only)
+  /// <summary>File mime type (read-only)</summary>
   public string? mime_type { get; set; } = null;
-  /// State of editability for the file. (read-only)
+  /// <summary>State of editability for the file. (read-only)</summary>
   public bool? editable { get; set; } = null;
   public GitStatus? git_status { get; set; }
 }
 
 public class ProjectValidation : SdkModel 
 {
-  /// A list of project errors (read-only)
+  /// <summary>A list of project errors (read-only)</summary>
   public ProjectError[]? errors { get; set; } = null;
-  /// A hash value computed from the project's current state (read-only)
+  /// <summary>A hash value computed from the project's current state (read-only)</summary>
   public string? project_digest { get; set; } = null;
-  /// A list of models which were not fully validated (read-only)
+  /// <summary>A list of models which were not fully validated (read-only)</summary>
   public ModelsNotValidated[]? models_not_validated { get; set; } = null;
-  /// Duration of project validation in seconds (read-only)
+  /// <summary>Duration of project validation in seconds (read-only)</summary>
   public float? computation_time { get; set; } = null;
 }
 
 public class ProjectValidationCache : SdkModel 
 {
-  /// A list of project errors (read-only)
+  /// <summary>A list of project errors (read-only)</summary>
   public ProjectError[]? errors { get; set; } = null;
-  /// A hash value computed from the project's current state (read-only)
+  /// <summary>A hash value computed from the project's current state (read-only)</summary>
   public string? project_digest { get; set; } = null;
-  /// A list of models which were not fully validated (read-only)
+  /// <summary>A list of models which were not fully validated (read-only)</summary>
   public ModelsNotValidated[]? models_not_validated { get; set; } = null;
-  /// Duration of project validation in seconds (read-only)
+  /// <summary>Duration of project validation in seconds (read-only)</summary>
   public float? computation_time { get; set; } = null;
-  /// If true, the cached project validation results are no longer accurate because the project has changed since the cached results were calculated (read-only)
+  /// <summary>If true, the cached project validation results are no longer accurate because the project has changed since the cached results were calculated (read-only)</summary>
   public bool? stale { get; set; } = null;
 }
 
 public class ProjectWorkspace : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// The id of the project (read-only)
+  /// <summary>The id of the project (read-only)</summary>
   public string? project_id { get; set; } = null;
-  /// The id of the local workspace containing the project files (read-only)
+  /// <summary>The id of the local workspace containing the project files (read-only)</summary>
   public string? workspace_id { get; set; } = null;
-  /// The status of the local git directory (read-only)
+  /// <summary>The status of the local git directory (read-only)</summary>
   public string? git_status { get; set; } = null;
-  /// Git head revision name (read-only)
+  /// <summary>Git head revision name (read-only)</summary>
   public string? git_head { get; set; } = null;
-  /// Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (read-only)
+  /// <summary>Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (read-only)</summary>
   public string? dependency_status { get; set; } = null;
   public GitBranch? git_branch { get; set; }
-  /// The lookml syntax used by all files in this project (read-only)
+  /// <summary>The lookml syntax used by all files in this project (read-only)</summary>
   public string? lookml_type { get; set; } = null;
 }
 
 public class Query : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Model
+  /// <summary>Model</summary>
   public string model { get; set; } = "";
-  /// Explore Name
+  /// <summary>Explore Name</summary>
   public string view { get; set; } = "";
-  /// Fields
+  /// <summary>Fields</summary>
   public string[]? fields { get; set; } = null;
-  /// Pivots
+  /// <summary>Pivots</summary>
   public string[]? pivots { get; set; } = null;
-  /// Fill Fields
+  /// <summary>Fill Fields</summary>
   public string[]? fill_fields { get; set; } = null;
-  /// Filters
+  /// <summary>Filters</summary>
   public StringDictionary<string>? filters { get; set; } = null;
-  /// Filter Expression
+  /// <summary>Filter Expression</summary>
   public string? filter_expression { get; set; } = null;
-  /// Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
+  /// <summary>Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.</summary>
   public string[]? sorts { get; set; } = null;
-  /// Limit
+  /// <summary>Limit</summary>
   public string? limit { get; set; } = null;
-  /// Column Limit
+  /// <summary>Column Limit</summary>
   public string? column_limit { get; set; } = null;
-  /// Total
+  /// <summary>Total</summary>
   public bool? total { get; set; } = null;
-  /// Raw Total
+  /// <summary>Raw Total</summary>
   public string? row_total { get; set; } = null;
-  /// Fields on which to run subtotals
+  /// <summary>Fields on which to run subtotals</summary>
   public string[]? subtotals { get; set; } = null;
-  /// Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
+  /// <summary>Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.</summary>
   public StringDictionary<object>? vis_config { get; set; } = null;
-  /// The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
+  /// <summary>The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.</summary>
   public StringDictionary<object>? filter_config { get; set; } = null;
-  /// Visible UI Sections
+  /// <summary>Visible UI Sections</summary>
   public string? visible_ui_sections { get; set; } = null;
-  /// Slug (read-only)
+  /// <summary>Slug (read-only)</summary>
   public string? slug { get; set; } = null;
-  /// Dynamic Fields
+  /// <summary>Dynamic Fields</summary>
   public string? dynamic_fields { get; set; } = null;
-  /// Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
+  /// <summary>Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.</summary>
   public string? client_id { get; set; } = null;
-  /// Share Url (read-only)
+  /// <summary>Share Url (read-only)</summary>
   public string? share_url { get; set; } = null;
-  /// Expanded Share Url (read-only)
+  /// <summary>Expanded Share Url (read-only)</summary>
   public string? expanded_share_url { get; set; } = null;
-  /// Expanded Url (read-only)
+  /// <summary>Expanded Url (read-only)</summary>
   public string? url { get; set; } = null;
-  /// Query Timezone
+  /// <summary>Query Timezone</summary>
   public string? query_timezone { get; set; } = null;
-  /// Has Table Calculations (read-only)
+  /// <summary>Has Table Calculations (read-only)</summary>
   public bool? has_table_calculations { get; set; } = null;
 }
 
 public class QueryTask : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Id of query
+  /// <summary>Id of query</summary>
   public long? query_id { get; set; } = null;
   public Query? query { get; set; }
-  /// whether or not to generate links in the query response.
+  /// <summary>whether or not to generate links in the query response.</summary>
   public bool? generate_links { get; set; } = null;
-  /// Use production models to run query (even is user is in dev mode).
+  /// <summary>Use production models to run query (even is user is in dev mode).</summary>
   public bool? force_production { get; set; } = null;
-  /// Prefix to use for drill links.
+  /// <summary>Prefix to use for drill links.</summary>
   public string? path_prefix { get; set; } = null;
-  /// Whether or not to use the cache
+  /// <summary>Whether or not to use the cache</summary>
   public bool? cache { get; set; } = null;
-  /// Whether or not to run table calculations on the server
+  /// <summary>Whether or not to run table calculations on the server</summary>
   public bool? server_table_calcs { get; set; } = null;
-  /// Retrieve any results from cache even if the results have expired.
+  /// <summary>Retrieve any results from cache even if the results have expired.</summary>
   public bool? cache_only { get; set; } = null;
-  /// cache key used to cache query. (read-only)
+  /// <summary>cache key used to cache query. (read-only)</summary>
   public string? cache_key { get; set; } = null;
-  /// Status of query task.
+  /// <summary>Status of query task.</summary>
   public string? status { get; set; } = null;
-  /// Source of query task.
+  /// <summary>Source of query task.</summary>
   public string? source { get; set; } = null;
-  /// Runtime of prior queries. (read-only)
+  /// <summary>Runtime of prior queries. (read-only)</summary>
   public float? runtime { get; set; } = null;
-  /// Rebuild PDTS used in query.
+  /// <summary>Rebuild PDTS used in query.</summary>
   public bool? rebuild_pdts { get; set; } = null;
-  /// Source of the results of the query. (read-only)
+  /// <summary>Source of the results of the query. (read-only)</summary>
   public string? result_source { get; set; } = null;
-  /// Id of look associated with query.
+  /// <summary>Id of look associated with query.</summary>
   public long? look_id { get; set; } = null;
-  /// Id of dashboard associated with query.
+  /// <summary>Id of dashboard associated with query.</summary>
   public string? dashboard_id { get; set; } = null;
-  /// The data format of the query results. (read-only)
+  /// <summary>The data format of the query results. (read-only)</summary>
   public string? result_format { get; set; } = null;
 }
 
 public class RenderTask : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Date/Time render task was created (read-only)
+  /// <summary>Date/Time render task was created (read-only)</summary>
   public string? created_at { get; set; } = null;
-  /// Filter values to apply to the dashboard queries, in URL query format (read-only)
+  /// <summary>Filter values to apply to the dashboard queries, in URL query format (read-only)</summary>
   public string? dashboard_filters { get; set; } = null;
-  /// Id of dashboard to render (read-only)
+  /// <summary>Id of dashboard to render (read-only)</summary>
   public long? dashboard_id { get; set; } = null;
-  /// Dashboard layout style: single_column or tiled (read-only)
+  /// <summary>Dashboard layout style: single_column or tiled (read-only)</summary>
   public string? dashboard_style { get; set; } = null;
-  /// Date/Time render task was completed (read-only)
+  /// <summary>Date/Time render task was completed (read-only)</summary>
   public string? finalized_at { get; set; } = null;
-  /// Output height in pixels. Flowed layouts may ignore this value. (read-only)
+  /// <summary>Output height in pixels. Flowed layouts may ignore this value. (read-only)</summary>
   public long? height { get; set; } = null;
-  /// Id of this render task (read-only)
+  /// <summary>Id of this render task (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Id of look to render (read-only)
+  /// <summary>Id of look to render (read-only)</summary>
   public long? look_id { get; set; } = null;
-  /// Id of lookml dashboard to render (read-only)
+  /// <summary>Id of lookml dashboard to render (read-only)</summary>
   public string? lookml_dashboard_id { get; set; } = null;
-  /// Id of query to render (read-only)
+  /// <summary>Id of query to render (read-only)</summary>
   public long? query_id { get; set; } = null;
-  /// Number of seconds elapsed running queries (read-only)
+  /// <summary>Number of seconds elapsed running queries (read-only)</summary>
   public double? query_runtime { get; set; } = null;
-  /// Number of seconds elapsed rendering data (read-only)
+  /// <summary>Number of seconds elapsed rendering data (read-only)</summary>
   public double? render_runtime { get; set; } = null;
-  /// Output format: pdf, png, or jpg (read-only)
+  /// <summary>Output format: pdf, png, or jpg (read-only)</summary>
   public string? result_format { get; set; } = null;
-  /// Total seconds elapsed for render task (read-only)
+  /// <summary>Total seconds elapsed for render task (read-only)</summary>
   public double? runtime { get; set; } = null;
-  /// Render task status: enqueued_for_query, querying, enqueued_for_render, rendering, success, failure (read-only)
+  /// <summary>Render task status: enqueued_for_query, querying, enqueued_for_render, rendering, success, failure (read-only)</summary>
   public string? status { get; set; } = null;
-  /// Additional information about the current status (read-only)
+  /// <summary>Additional information about the current status (read-only)</summary>
   public string? status_detail { get; set; } = null;
-  /// The user account permissions in which the render task will execute (read-only)
+  /// <summary>The user account permissions in which the render task will execute (read-only)</summary>
   public long? user_id { get; set; } = null;
-  /// Output width in pixels (read-only)
+  /// <summary>Output width in pixels (read-only)</summary>
   public long? width { get; set; } = null;
 }
 
 public class RepositoryCredential : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
-  /// Root project Id (read-only)
+  /// <summary>Root project Id (read-only)</summary>
   public string? root_project_id { get; set; } = null;
-  /// Git remote repository url (read-only)
+  /// <summary>Git remote repository url (read-only)</summary>
   public string? remote_url { get; set; } = null;
-  /// Git username for HTTPS authentication.
+  /// <summary>Git username for HTTPS authentication.</summary>
   public string? git_username { get; set; } = null;
-  /// (Write-Only) Git password for HTTPS authentication.
+  /// <summary>(Write-Only) Git password for HTTPS authentication.</summary>
   public string? git_password { get; set; } = null;
-  /// Public deploy key for SSH authentication.
+  /// <summary>Public deploy key for SSH authentication.</summary>
   public string? ssh_public_key { get; set; } = null;
-  /// Whether the credentials have been configured for the Git Repository. (read-only)
+  /// <summary>Whether the credentials have been configured for the Git Repository. (read-only)</summary>
   public bool? is_configured { get; set; } = null;
 }
 
 public class ResultMakerFilterables : SdkModel 
 {
-  /// The model this filterable comes from (used for field suggestions). (read-only)
+  /// <summary>The model this filterable comes from (used for field suggestions). (read-only)</summary>
   public string? model { get; set; } = null;
-  /// The view this filterable comes from (used for field suggestions). (read-only)
+  /// <summary>The view this filterable comes from (used for field suggestions). (read-only)</summary>
   public string? view { get; set; } = null;
-  /// The name of the filterable thing (Query or Merged Results). (read-only)
+  /// <summary>The name of the filterable thing (Query or Merged Results). (read-only)</summary>
   public string? name { get; set; } = null;
-  /// array of dashboard_filter_name: and field: objects. (read-only)
+  /// <summary>array of dashboard_filter_name: and field: objects. (read-only)</summary>
   public ResultMakerFilterablesListen[]? listen { get; set; } = null;
 }
 
 public class ResultMakerFilterablesListen : SdkModel 
 {
-  /// The name of a dashboard filter to listen to.
+  /// <summary>The name of a dashboard filter to listen to.</summary>
   public string? dashboard_filter_name { get; set; } = null;
-  /// The name of the field in the filterable to filter with the value of the dashboard filter.
+  /// <summary>The name of the field in the filterable to filter with the value of the dashboard filter.</summary>
   public string? field { get; set; } = null;
 }
 
 public class ResultMakerWithIdVisConfigAndDynamicFields : SdkModel 
 {
-  /// Unique Id. (read-only)
+  /// <summary>Unique Id. (read-only)</summary>
   public long? id { get; set; } = null;
-  /// JSON string of dynamic field information. (read-only)
+  /// <summary>JSON string of dynamic field information. (read-only)</summary>
   public string? dynamic_fields { get; set; } = null;
-  /// array of items that can be filtered and information about them. (read-only)
+  /// <summary>array of items that can be filtered and information about them. (read-only)</summary>
   public ResultMakerFilterables[]? filterables { get; set; } = null;
-  /// Sorts of the constituent Look, Query, or Merge Query (read-only)
+  /// <summary>Sorts of the constituent Look, Query, or Merge Query (read-only)</summary>
   public string[]? sorts { get; set; } = null;
-  /// ID of merge result if this is a merge_result. (read-only)
+  /// <summary>ID of merge result if this is a merge_result. (read-only)</summary>
   public string? merge_result_id { get; set; } = null;
-  /// Total of the constituent Look, Query, or Merge Query (read-only)
+  /// <summary>Total of the constituent Look, Query, or Merge Query (read-only)</summary>
   public bool? total { get; set; } = null;
-  /// ID of query if this is a query. (read-only)
+  /// <summary>ID of query if this is a query. (read-only)</summary>
   public long? query_id { get; set; } = null;
-  /// ID of SQL Query if this is a SQL Runner Query (read-only)
+  /// <summary>ID of SQL Query if this is a SQL Runner Query (read-only)</summary>
   public string? sql_query_id { get; set; } = null;
   public Query? query { get; set; }
-  /// Vis config of the constituent Query, or Merge Query. (read-only)
+  /// <summary>Vis config of the constituent Query, or Merge Query. (read-only)</summary>
   public StringDictionary<string>? vis_config { get; set; } = null;
 }
 
 public class Role : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Name of Role
+  /// <summary>Name of Role</summary>
   public string? name { get; set; } = null;
   public PermissionSet? permission_set { get; set; }
-  /// (Write-Only) Id of permission set
+  /// <summary>(Write-Only) Id of permission set</summary>
   public long? permission_set_id { get; set; } = null;
   public ModelSet? model_set { get; set; }
-  /// (Write-Only) Id of model set
+  /// <summary>(Write-Only) Id of model set</summary>
   public long? model_set_id { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
-  /// Link to get list of users with this role (read-only)
+  /// <summary>Link to get list of users with this role (read-only)</summary>
   public Url? users_url { get; set; } = null;
 }
 
 public class RunningQueries : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
   public UserPublic? user { get; set; }
   public Query? query { get; set; }
   public SqlQuery? sql_query { get; set; }
   public LookBasic? look { get; set; }
-  /// Date/Time Query was initiated (read-only)
+  /// <summary>Date/Time Query was initiated (read-only)</summary>
   public string? created_at { get; set; } = null;
-  /// Date/Time Query was completed (read-only)
+  /// <summary>Date/Time Query was completed (read-only)</summary>
   public string? completed_at { get; set; } = null;
-  /// Query Id (read-only)
+  /// <summary>Query Id (read-only)</summary>
   public string? query_id { get; set; } = null;
-  /// Source (look, dashboard, queryrunner, explore, etc.) (read-only)
+  /// <summary>Source (look, dashboard, queryrunner, explore, etc.) (read-only)</summary>
   public string? source { get; set; } = null;
-  /// Node Id (read-only)
+  /// <summary>Node Id (read-only)</summary>
   public string? node_id { get; set; } = null;
-  /// Slug (read-only)
+  /// <summary>Slug (read-only)</summary>
   public string? slug { get; set; } = null;
-  /// ID of a Query Task (read-only)
+  /// <summary>ID of a Query Task (read-only)</summary>
   public string? query_task_id { get; set; } = null;
-  /// Cache Key (read-only)
+  /// <summary>Cache Key (read-only)</summary>
   public string? cache_key { get; set; } = null;
-  /// Connection (read-only)
+  /// <summary>Connection (read-only)</summary>
   public string? connection_name { get; set; } = null;
-  /// Dialect (read-only)
+  /// <summary>Dialect (read-only)</summary>
   public string? dialect { get; set; } = null;
-  /// Connection ID (read-only)
+  /// <summary>Connection ID (read-only)</summary>
   public string? connection_id { get; set; } = null;
-  /// Additional Information(Error message or verbose status) (read-only)
+  /// <summary>Additional Information(Error message or verbose status) (read-only)</summary>
   public string? message { get; set; } = null;
-  /// Status description (read-only)
+  /// <summary>Status description (read-only)</summary>
   public string? status { get; set; } = null;
-  /// Number of seconds elapsed running the Query (read-only)
+  /// <summary>Number of seconds elapsed running the Query (read-only)</summary>
   public double? runtime { get; set; } = null;
-  /// SQL text of the query as run (read-only)
+  /// <summary>SQL text of the query as run (read-only)</summary>
   public string? sql { get; set; } = null;
 }
 
 public class SamlConfig : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Enable/Disable Saml authentication for the server
+  /// <summary>Enable/Disable Saml authentication for the server</summary>
   public bool? enabled { get; set; } = null;
-  /// Identity Provider Certificate (provided by IdP)
+  /// <summary>Identity Provider Certificate (provided by IdP)</summary>
   public string? idp_cert { get; set; } = null;
-  /// Identity Provider Url (provided by IdP)
+  /// <summary>Identity Provider Url (provided by IdP)</summary>
   public string? idp_url { get; set; } = null;
-  /// Identity Provider Issuer (provided by IdP)
+  /// <summary>Identity Provider Issuer (provided by IdP)</summary>
   public string? idp_issuer { get; set; } = null;
-  /// Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
+  /// <summary>Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.</summary>
   public string? idp_audience { get; set; } = null;
-  /// Count of seconds of clock drift to allow when validating timestamps of assertions.
+  /// <summary>Count of seconds of clock drift to allow when validating timestamps of assertions.</summary>
   public long? allowed_clock_drift { get; set; } = null;
-  /// Name of user record attributes used to indicate email address field
+  /// <summary>Name of user record attributes used to indicate email address field</summary>
   public string? user_attribute_map_email { get; set; } = null;
-  /// Name of user record attributes used to indicate first name
+  /// <summary>Name of user record attributes used to indicate first name</summary>
   public string? user_attribute_map_first_name { get; set; } = null;
-  /// Name of user record attributes used to indicate last name
+  /// <summary>Name of user record attributes used to indicate last name</summary>
   public string? user_attribute_map_last_name { get; set; } = null;
-  /// Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+  /// <summary>Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'</summary>
   public string? new_user_migration_types { get; set; } = null;
-  /// Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+  /// <summary>Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.</summary>
   public bool? alternate_email_login_allowed { get; set; } = null;
-  /// Slug to identify configurations that are created in order to run a Saml config test (read-only)
+  /// <summary>Slug to identify configurations that are created in order to run a Saml config test (read-only)</summary>
   public string? test_slug { get; set; } = null;
-  /// When this config was last modified (read-only)
+  /// <summary>When this config was last modified (read-only)</summary>
   public string? modified_at { get; set; } = null;
-  /// User id of user who last modified this config (read-only)
+  /// <summary>User id of user who last modified this config (read-only)</summary>
   public string? modified_by { get; set; } = null;
-  /// (Read-only) Roles that will be applied to new users the first time they login via Saml (read-only)
+  /// <summary>(Read-only) Roles that will be applied to new users the first time they login via Saml (read-only)</summary>
   public Role[]? default_new_user_roles { get; set; } = null;
-  /// (Read-only) Groups that will be applied to new users the first time they login via Saml (read-only)
+  /// <summary>(Read-only) Groups that will be applied to new users the first time they login via Saml (read-only)</summary>
   public Group[]? default_new_user_groups { get; set; } = null;
-  /// (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
+  /// <summary>(Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml</summary>
   public long[]? default_new_user_role_ids { get; set; } = null;
-  /// (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
+  /// <summary>(Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml</summary>
   public long[]? default_new_user_group_ids { get; set; } = null;
-  /// Set user roles in Looker based on groups from Saml
+  /// <summary>Set user roles in Looker based on groups from Saml</summary>
   public bool? set_roles_from_groups { get; set; } = null;
-  /// Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
+  /// <summary>Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'</summary>
   public string? groups_attribute { get; set; } = null;
-  /// (Read-only) Array of mappings between Saml Groups and Looker Roles (read-only)
+  /// <summary>(Read-only) Array of mappings between Saml Groups and Looker Roles (read-only)</summary>
   public SamlGroupRead[]? groups { get; set; } = null;
-  /// (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
+  /// <summary>(Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids</summary>
   public SamlGroupWrite[]? groups_with_role_ids { get; set; } = null;
-  /// Users will not be allowed to login at all unless a role for them is found in Saml if set to true
+  /// <summary>Users will not be allowed to login at all unless a role for them is found in Saml if set to true</summary>
   public bool? auth_requires_role { get; set; } = null;
-  /// (Read-only) Array of mappings between Saml User Attributes and Looker User Attributes (read-only)
+  /// <summary>(Read-only) Array of mappings between Saml User Attributes and Looker User Attributes (read-only)</summary>
   public SamlUserAttributeRead[]? user_attributes { get; set; } = null;
-  /// (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
+  /// <summary>(Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids</summary>
   public SamlUserAttributeWrite[]? user_attributes_with_ids { get; set; } = null;
-  /// Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
+  /// <summary>Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']</summary>
   public string? groups_finder_type { get; set; } = null;
-  /// Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
+  /// <summary>Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'</summary>
   public string? groups_member_value { get; set; } = null;
-  /// Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
+  /// <summary>Bypass the login page when user authentication is required. Redirect to IdP immediately instead.</summary>
   public bool? bypass_login_page { get; set; } = null;
-  /// Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+  /// <summary>Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.</summary>
   public bool? allow_normal_group_membership { get; set; } = null;
-  /// SAML auth'd users will inherit roles from non-reflected Looker groups.
+  /// <summary>SAML auth'd users will inherit roles from non-reflected Looker groups.</summary>
   public bool? allow_roles_from_normal_groups { get; set; } = null;
-  /// Allows roles to be directly assigned to SAML auth'd users.
+  /// <summary>Allows roles to be directly assigned to SAML auth'd users.</summary>
   public bool? allow_direct_roles { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class SamlGroupRead : SdkModel 
 {
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Unique Id of group in Looker (read-only)
+  /// <summary>Unique Id of group in Looker (read-only)</summary>
   public long? looker_group_id { get; set; } = null;
-  /// Name of group in Looker (read-only)
+  /// <summary>Name of group in Looker (read-only)</summary>
   public string? looker_group_name { get; set; } = null;
-  /// Name of group in Saml (read-only)
+  /// <summary>Name of group in Saml (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Looker Roles (read-only)
+  /// <summary>Looker Roles (read-only)</summary>
   public Role[]? roles { get; set; } = null;
-  /// Link to saml config (read-only)
+  /// <summary>Link to saml config (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class SamlGroupWrite : SdkModel 
 {
-  /// Unique Id
+  /// <summary>Unique Id</summary>
   public long? id { get; set; } = null;
-  /// Unique Id of group in Looker (read-only)
+  /// <summary>Unique Id of group in Looker (read-only)</summary>
   public long? looker_group_id { get; set; } = null;
-  /// Name of group in Looker
+  /// <summary>Name of group in Looker</summary>
   public string? looker_group_name { get; set; } = null;
-  /// Name of group in Saml
+  /// <summary>Name of group in Saml</summary>
   public string? name { get; set; } = null;
-  /// Looker Role Ids
+  /// <summary>Looker Role Ids</summary>
   public long[]? role_ids { get; set; } = null;
-  /// Link to saml config (read-only)
+  /// <summary>Link to saml config (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class SamlMetadataParseResult : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Identify Provider Issuer (read-only)
+  /// <summary>Identify Provider Issuer (read-only)</summary>
   public string? idp_issuer { get; set; } = null;
-  /// Identify Provider Url (read-only)
+  /// <summary>Identify Provider Url (read-only)</summary>
   public string? idp_url { get; set; } = null;
-  /// Identify Provider Certificate (read-only)
+  /// <summary>Identify Provider Certificate (read-only)</summary>
   public string? idp_cert { get; set; } = null;
 }
 
 public class SamlUserAttributeRead : SdkModel 
 {
-  /// Name of User Attribute in Saml (read-only)
+  /// <summary>Name of User Attribute in Saml (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Required to be in Saml assertion for login to be allowed to succeed (read-only)
+  /// <summary>Required to be in Saml assertion for login to be allowed to succeed (read-only)</summary>
   public bool? required { get; set; } = null;
-  /// Looker User Attributes (read-only)
+  /// <summary>Looker User Attributes (read-only)</summary>
   public UserAttribute[]? user_attributes { get; set; } = null;
-  /// Link to saml config (read-only)
+  /// <summary>Link to saml config (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class SamlUserAttributeWrite : SdkModel 
 {
-  /// Name of User Attribute in Saml
+  /// <summary>Name of User Attribute in Saml</summary>
   public string? name { get; set; } = null;
-  /// Required to be in Saml assertion for login to be allowed to succeed
+  /// <summary>Required to be in Saml assertion for login to be allowed to succeed</summary>
   public bool? required { get; set; } = null;
-  /// Looker User Attribute Ids
+  /// <summary>Looker User Attribute Ids</summary>
   public long[]? user_attribute_ids { get; set; } = null;
-  /// Link to saml config (read-only)
+  /// <summary>Link to saml config (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class ScheduledPlan : SdkModel 
 {
-  /// Name of this scheduled plan
+  /// <summary>Name of this scheduled plan</summary>
   public string? name { get; set; } = null;
-  /// User Id which owns this scheduled plan
+  /// <summary>User Id which owns this scheduled plan</summary>
   public long? user_id { get; set; } = null;
-  /// Whether schedule is run as recipient (only applicable for email recipients)
+  /// <summary>Whether schedule is run as recipient (only applicable for email recipients)</summary>
   public bool? run_as_recipient { get; set; } = null;
-  /// Whether the ScheduledPlan is enabled
+  /// <summary>Whether the ScheduledPlan is enabled</summary>
   public bool? enabled { get; set; } = null;
-  /// Id of a look
+  /// <summary>Id of a look</summary>
   public long? look_id { get; set; } = null;
-  /// Id of a dashboard
+  /// <summary>Id of a dashboard</summary>
   public long? dashboard_id { get; set; } = null;
-  /// Id of a LookML dashboard
+  /// <summary>Id of a LookML dashboard</summary>
   public string? lookml_dashboard_id { get; set; } = null;
-  /// Query string to run look or dashboard with
+  /// <summary>Query string to run look or dashboard with</summary>
   public string? filters_string { get; set; } = null;
-  /// (DEPRECATED) Alias for filters_string field
+  /// <summary>(DEPRECATED) Alias for filters_string field</summary>
   public string? dashboard_filters { get; set; } = null;
-  /// Delivery should occur if running the dashboard or look returns results
+  /// <summary>Delivery should occur if running the dashboard or look returns results</summary>
   public bool? require_results { get; set; } = null;
-  /// Delivery should occur if the dashboard look does not return results
+  /// <summary>Delivery should occur if the dashboard look does not return results</summary>
   public bool? require_no_results { get; set; } = null;
-  /// Delivery should occur if data have changed since the last run
+  /// <summary>Delivery should occur if data have changed since the last run</summary>
   public bool? require_change { get; set; } = null;
-  /// Will run an unlimited query and send all results.
+  /// <summary>Will run an unlimited query and send all results.</summary>
   public bool? send_all_results { get; set; } = null;
-  /// Vixie-Style crontab specification when to run
+  /// <summary>Vixie-Style crontab specification when to run</summary>
   public string? crontab { get; set; } = null;
-  /// Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
+  /// <summary>Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)</summary>
   public string? datagroup { get; set; } = null;
-  /// Timezone for interpreting the specified crontab (default is Looker instance timezone)
+  /// <summary>Timezone for interpreting the specified crontab (default is Looker instance timezone)</summary>
   public string? timezone { get; set; } = null;
-  /// Query id
+  /// <summary>Query id</summary>
   public string? query_id { get; set; } = null;
-  /// Scheduled plan destinations
+  /// <summary>Scheduled plan destinations</summary>
   public ScheduledPlanDestination[]? scheduled_plan_destination { get; set; } = null;
-  /// Whether the plan in question should only be run once (usually for testing)
+  /// <summary>Whether the plan in question should only be run once (usually for testing)</summary>
   public bool? run_once { get; set; } = null;
-  /// Whether links back to Looker should be included in this ScheduledPlan
+  /// <summary>Whether links back to Looker should be included in this ScheduledPlan</summary>
   public bool? include_links { get; set; } = null;
-  /// The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
+  /// <summary>The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".</summary>
   public string? pdf_paper_size { get; set; } = null;
-  /// Whether the PDF should be formatted for landscape orientation
+  /// <summary>Whether the PDF should be formatted for landscape orientation</summary>
   public bool? pdf_landscape { get; set; } = null;
-  /// Whether this schedule is in an embed context or not
+  /// <summary>Whether this schedule is in an embed context or not</summary>
   public bool? embed { get; set; } = null;
-  /// Color scheme of the dashboard if applicable
+  /// <summary>Color scheme of the dashboard if applicable</summary>
   public string? color_theme { get; set; } = null;
-  /// Whether or not to expand table vis to full length
+  /// <summary>Whether or not to expand table vis to full length</summary>
   public bool? long_tables { get; set; } = null;
-  /// The pixel width at which we render the inline table visualizations
+  /// <summary>The pixel width at which we render the inline table visualizations</summary>
   public long? inline_table_width { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Date and time when ScheduledPlan was created (read-only)
+  /// <summary>Date and time when ScheduledPlan was created (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
-  /// Date and time when ScheduledPlan was last updated (read-only)
+  /// <summary>Date and time when ScheduledPlan was last updated (read-only)</summary>
   public DateTime? updated_at { get; set; } = null;
-  /// Title (read-only)
+  /// <summary>Title (read-only)</summary>
   public string? title { get; set; } = null;
   public UserPublic? user { get; set; }
-  /// When the ScheduledPlan will next run (null if running once) (read-only)
+  /// <summary>When the ScheduledPlan will next run (null if running once) (read-only)</summary>
   public DateTime? next_run_at { get; set; } = null;
-  /// When the ScheduledPlan was last run (read-only)
+  /// <summary>When the ScheduledPlan was last run (read-only)</summary>
   public DateTime? last_run_at { get; set; } = null;
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
 }
 
 public class ScheduledPlanDestination : SdkModel 
 {
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Id of a scheduled plan you own
+  /// <summary>Id of a scheduled plan you own</summary>
   public long? scheduled_plan_id { get; set; } = null;
-  /// The data format to send to the given destination. Supported formats vary by destination, but include: "txt", "csv", "inline_json", "json", "json_detail", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png"
+  /// <summary>The data format to send to the given destination. Supported formats vary by destination, but include: "txt", "csv", "inline_json", "json", "json_detail", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png"</summary>
   public string? format { get; set; } = null;
-  /// Are values formatted? (containing currency symbols, digit separators, etc.
+  /// <summary>Are values formatted? (containing currency symbols, digit separators, etc.</summary>
   public bool? apply_formatting { get; set; } = null;
-  /// Whether visualization options are applied to the results.
+  /// <summary>Whether visualization options are applied to the results.</summary>
   public bool? apply_vis { get; set; } = null;
-  /// Address for recipient. For email e.g. 'user@example.com'. For webhooks e.g. 'https://domain/path'. For Amazon S3 e.g. 's3://bucket-name/path/'. For SFTP e.g. 'sftp://host-name/path/'.
+  /// <summary>Address for recipient. For email e.g. 'user@example.com'. For webhooks e.g. 'https://domain/path'. For Amazon S3 e.g. 's3://bucket-name/path/'. For SFTP e.g. 'sftp://host-name/path/'. </summary>
   public string? address { get; set; } = null;
-  /// Whether the recipient is a Looker user on the current instance (only applicable for email recipients) (read-only)
+  /// <summary>Whether the recipient is a Looker user on the current instance (only applicable for email recipients) (read-only)</summary>
   public bool? looker_recipient { get; set; } = null;
-  /// Type of the address ('email', 'webhook', 's3', or 'sftp')
+  /// <summary>Type of the address ('email', 'webhook', 's3', or 'sftp')</summary>
   public string? type { get; set; } = null;
-  /// JSON object containing parameters for external scheduling. For Amazon S3, this requires keys and values for access_key_id and region. For SFTP, this requires a key and value for username.
+  /// <summary>JSON object containing parameters for external scheduling. For Amazon S3, this requires keys and values for access_key_id and region. For SFTP, this requires a key and value for username.</summary>
   public string? parameters { get; set; } = null;
-  /// (Write-Only) JSON object containing secret parameters for external scheduling. For Amazon S3, this requires a key and value for secret_access_key. For SFTP, this requires a key and value for password.
+  /// <summary>(Write-Only) JSON object containing secret parameters for external scheduling. For Amazon S3, this requires a key and value for secret_access_key. For SFTP, this requires a key and value for password.</summary>
   public string? secret_parameters { get; set; } = null;
-  /// Optional message to be included in scheduled emails
+  /// <summary>Optional message to be included in scheduled emails</summary>
   public string? message { get; set; } = null;
 }
 
 public class Session : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// IP address of user when this session was initiated (read-only)
+  /// <summary>IP address of user when this session was initiated (read-only)</summary>
   public string? ip_address { get; set; } = null;
-  /// User's browser type (read-only)
+  /// <summary>User's browser type (read-only)</summary>
   public string? browser { get; set; } = null;
-  /// User's Operating System (read-only)
+  /// <summary>User's Operating System (read-only)</summary>
   public string? operating_system { get; set; } = null;
-  /// City component of user location (derived from IP address) (read-only)
+  /// <summary>City component of user location (derived from IP address) (read-only)</summary>
   public string? city { get; set; } = null;
-  /// State component of user location (derived from IP address) (read-only)
+  /// <summary>State component of user location (derived from IP address) (read-only)</summary>
   public string? state { get; set; } = null;
-  /// Country component of user location (derived from IP address) (read-only)
+  /// <summary>Country component of user location (derived from IP address) (read-only)</summary>
   public string? country { get; set; } = null;
-  /// Type of credentials used for logging in this session (read-only)
+  /// <summary>Type of credentials used for logging in this session (read-only)</summary>
   public string? credentials_type { get; set; } = null;
-  /// Time when this session was last extended by the user (read-only)
+  /// <summary>Time when this session was last extended by the user (read-only)</summary>
   public string? extended_at { get; set; } = null;
-  /// Number of times this session was extended (read-only)
+  /// <summary>Number of times this session was extended (read-only)</summary>
   public long? extended_count { get; set; } = null;
-  /// Actual user in the case when this session represents one user sudo'ing as another (read-only)
+  /// <summary>Actual user in the case when this session represents one user sudo'ing as another (read-only)</summary>
   public long? sudo_user_id { get; set; } = null;
-  /// Time when this session was initiated (read-only)
+  /// <summary>Time when this session was initiated (read-only)</summary>
   public string? created_at { get; set; } = null;
-  /// Time when this session will expire (read-only)
+  /// <summary>Time when this session will expire (read-only)</summary>
   public string? expires_at { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class SessionConfig : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Allow users to have persistent sessions when they login
+  /// <summary>Allow users to have persistent sessions when they login</summary>
   public bool? allow_persistent_sessions { get; set; } = null;
-  /// Number of minutes for user sessions.  Must be between 5 and 43200
+  /// <summary>Number of minutes for user sessions.  Must be between 5 and 43200</summary>
   public long? session_minutes { get; set; } = null;
-  /// Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
+  /// <summary>Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).</summary>
   public bool? unlimited_sessions_per_user { get; set; } = null;
-  /// Enforce session logout for sessions that are inactive for 15 minutes.
+  /// <summary>Enforce session logout for sessions that are inactive for 15 minutes.</summary>
   public bool? use_inactivity_based_logout { get; set; } = null;
-  /// Track location of session when user logs in.
+  /// <summary>Track location of session when user logs in.</summary>
   public bool? track_session_location { get; set; } = null;
 }
 
 public class Snippet : SdkModel 
 {
-  /// Name of the snippet (read-only)
+  /// <summary>Name of the snippet (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Label of the snippet (read-only)
+  /// <summary>Label of the snippet (read-only)</summary>
   public string? label { get; set; } = null;
-  /// SQL text of the snippet (read-only)
+  /// <summary>SQL text of the snippet (read-only)</summary>
   public string? sql { get; set; } = null;
 }
 
 public class SqlQuery : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// The identifier of the SQL query (read-only)
+  /// <summary>The identifier of the SQL query (read-only)</summary>
   public string? slug { get; set; } = null;
-  /// Number of seconds this query took to run the most recent time it was run (read-only)
+  /// <summary>Number of seconds this query took to run the most recent time it was run (read-only)</summary>
   public float? last_runtime { get; set; } = null;
-  /// Number of times this query has been run (read-only)
+  /// <summary>Number of times this query has been run (read-only)</summary>
   public long? run_count { get; set; } = null;
-  /// Maximum number of rows this query will display on the SQL Runner page (read-only)
+  /// <summary>Maximum number of rows this query will display on the SQL Runner page (read-only)</summary>
   public long? browser_limit { get; set; } = null;
-  /// SQL query text (read-only)
+  /// <summary>SQL query text (read-only)</summary>
   public string? sql { get; set; } = null;
-  /// The most recent time this query was run (read-only)
+  /// <summary>The most recent time this query was run (read-only)</summary>
   public string? last_run_at { get; set; } = null;
   public DBConnectionBase? connection { get; set; }
-  /// Model name this query uses (read-only)
+  /// <summary>Model name this query uses (read-only)</summary>
   public string? model_name { get; set; } = null;
   public UserPublic? creator { get; set; }
-  /// Explore page URL for this SQL query (read-only)
+  /// <summary>Explore page URL for this SQL query (read-only)</summary>
   public string? explore_url { get; set; } = null;
-  /// Should this query be rendered as plain text (read-only)
+  /// <summary>Should this query be rendered as plain text (read-only)</summary>
   public bool? plaintext { get; set; } = null;
-  /// Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
+  /// <summary>Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.</summary>
   public StringDictionary<object>? vis_config { get; set; } = null;
-  /// ID of the ResultMakerLookup entry.
+  /// <summary>ID of the ResultMakerLookup entry.</summary>
   public long? result_maker_id { get; set; } = null;
 }
 
 public class SqlQueryCreate : SdkModel 
 {
-  /// Name of the db connection on which to run this query
+  /// <summary>Name of the db connection on which to run this query</summary>
   public string? connection_name { get; set; } = null;
-  /// (DEPRECATED) Use `connection_name` instead
+  /// <summary>(DEPRECATED) Use `connection_name` instead</summary>
   public string? connection_id { get; set; } = null;
-  /// Name of LookML Model (this or `connection_id` required)
+  /// <summary>Name of LookML Model (this or `connection_id` required)</summary>
   public string? model_name { get; set; } = null;
-  /// SQL query
+  /// <summary>SQL query</summary>
   public string? sql { get; set; } = null;
-  /// Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
+  /// <summary>Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.</summary>
   public StringDictionary<object>? vis_config { get; set; } = null;
 }
 
 public class Theme : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Timestamp for when this theme becomes active. Null=always
+  /// <summary>Timestamp for when this theme becomes active. Null=always</summary>
   public DateTime? begin_at { get; set; } = null;
-  /// Timestamp for when this theme expires. Null=never
+  /// <summary>Timestamp for when this theme expires. Null=never</summary>
   public DateTime? end_at { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Name of theme. Can only be alphanumeric and underscores.
+  /// <summary>Name of theme. Can only be alphanumeric and underscores.</summary>
   public string? name { get; set; } = null;
   public ThemeSettings? settings { get; set; }
 }
 
 public class ThemeSettings : SdkModel 
 {
-  /// Default background color
+  /// <summary>Default background color</summary>
   public string? background_color { get; set; } = null;
-  /// Base font size for scaling fonts
+  /// <summary>Base font size for scaling fonts</summary>
   public string? base_font_size { get; set; } = null;
-  /// Optional. ID of color collection to use with the theme. Use an empty string for none.
+  /// <summary>Optional. ID of color collection to use with the theme. Use an empty string for none.</summary>
   public string? color_collection_id { get; set; } = null;
-  /// Default font color
+  /// <summary>Default font color</summary>
   public string? font_color { get; set; } = null;
-  /// Primary font family
+  /// <summary>Primary font family</summary>
   public string? font_family { get; set; } = null;
-  /// Source specification for font
+  /// <summary>Source specification for font</summary>
   public string? font_source { get; set; } = null;
-  /// Info button color
+  /// <summary>Info button color</summary>
   public string? info_button_color { get; set; } = null;
-  /// Primary button color
+  /// <summary>Primary button color</summary>
   public string? primary_button_color { get; set; } = null;
-  /// Toggle to show filters. Defaults to true.
+  /// <summary>Toggle to show filters. Defaults to true.</summary>
   public bool? show_filters_bar { get; set; } = null;
-  /// Toggle to show the title. Defaults to true.
+  /// <summary>Toggle to show the title. Defaults to true.</summary>
   public bool? show_title { get; set; } = null;
-  /// Text color for text tiles
+  /// <summary>Text color for text tiles</summary>
   public string? text_tile_text_color { get; set; } = null;
-  /// Background color for tiles
+  /// <summary>Background color for tiles</summary>
   public string? tile_background_color { get; set; } = null;
-  /// Text color for tiles
+  /// <summary>Text color for tiles</summary>
   public string? tile_text_color { get; set; } = null;
-  /// Color for titles
+  /// <summary>Color for titles</summary>
   public string? title_color { get; set; } = null;
-  /// Warning button color
+  /// <summary>Warning button color</summary>
   public string? warn_button_color { get; set; } = null;
-  /// The text alignment of tile titles (New Dashboards)
+  /// <summary>The text alignment of tile titles (New Dashboards)</summary>
   public string? tile_title_alignment { get; set; } = null;
-  /// Toggles the tile shadow (New Dashboards)
+  /// <summary>Toggles the tile shadow (New Dashboards)</summary>
   public bool? tile_shadow { get; set; } = null;
 }
 
 public class Timezone : SdkModel 
 {
-  /// Timezone (read-only)
+  /// <summary>Timezone (read-only)</summary>
   public string? value { get; set; } = null;
-  /// Description of timezone (read-only)
+  /// <summary>Description of timezone (read-only)</summary>
   public string? label { get; set; } = null;
-  /// Timezone group (e.g Common, Other, etc.) (read-only)
+  /// <summary>Timezone group (e.g Common, Other, etc.) (read-only)</summary>
   public string? group { get; set; } = null;
 }
 
 public class UpdateFolder : SdkModel 
 {
-  /// Unique Name
+  /// <summary>Unique Name</summary>
   public string? name { get; set; } = null;
-  /// Id of Parent. If the parent id is null, this is a root-level entry
+  /// <summary>Id of Parent. If the parent id is null, this is a root-level entry</summary>
   public string? parent_id { get; set; } = null;
 }
 
 public class User : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// URL for the avatar image (may be generic) (read-only)
+  /// <summary>URL for the avatar image (may be generic) (read-only)</summary>
   public Url? avatar_url { get; set; } = null;
-  /// URL for the avatar image (may be generic), does not specify size (read-only)
+  /// <summary>URL for the avatar image (may be generic), does not specify size (read-only)</summary>
   public Url? avatar_url_without_sizing { get; set; } = null;
-  /// API 3 credentials (read-only)
+  /// <summary>API 3 credentials (read-only)</summary>
   public CredentialsApi3[]? credentials_api3 { get; set; } = null;
   public CredentialsEmail? credentials_email { get; set; }
-  /// Embed credentials (read-only)
+  /// <summary>Embed credentials (read-only)</summary>
   public CredentialsEmbed[]? credentials_embed { get; set; } = null;
   public CredentialsGoogle? credentials_google { get; set; }
   public CredentialsLDAP? credentials_ldap { get; set; }
@@ -3673,245 +3673,245 @@ public class User : SdkModel
   public CredentialsOIDC? credentials_oidc { get; set; }
   public CredentialsSaml? credentials_saml { get; set; }
   public CredentialsTotp? credentials_totp { get; set; }
-  /// Full name for display (available only if both first_name and last_name are set) (read-only)
+  /// <summary>Full name for display (available only if both first_name and last_name are set) (read-only)</summary>
   public string? display_name { get; set; } = null;
-  /// EMail address (read-only)
+  /// <summary>EMail address (read-only)</summary>
   public string? email { get; set; } = null;
-  /// (Embed only) ID of user's group space based on the external_group_id optionally specified during embed user login (read-only)
+  /// <summary>(Embed only) ID of user's group space based on the external_group_id optionally specified during embed user login (read-only)</summary>
   public long? embed_group_space_id { get; set; } = null;
-  /// First name
+  /// <summary>First name</summary>
   public string? first_name { get; set; } = null;
-  /// Array of ids of the groups for this user (read-only)
+  /// <summary>Array of ids of the groups for this user (read-only)</summary>
   public long[]? group_ids { get; set; } = null;
-  /// ID string for user's home folder
+  /// <summary>ID string for user's home folder</summary>
   public string? home_folder_id { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Account has been disabled
+  /// <summary>Account has been disabled</summary>
   public bool? is_disabled { get; set; } = null;
-  /// Last name
+  /// <summary>Last name</summary>
   public string? last_name { get; set; } = null;
-  /// User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
+  /// <summary>User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.</summary>
   public string? locale { get; set; } = null;
-  /// Array of strings representing the Looker versions that this user has used (this only goes back as far as '3.54.0') (read-only)
+  /// <summary>Array of strings representing the Looker versions that this user has used (this only goes back as far as '3.54.0') (read-only)</summary>
   public string[]? looker_versions { get; set; } = null;
-  /// User's dev workspace has been checked for presence of applicable production projects
+  /// <summary>User's dev workspace has been checked for presence of applicable production projects</summary>
   public bool? models_dir_validated { get; set; } = null;
-  /// ID of user's personal folder (read-only)
+  /// <summary>ID of user's personal folder (read-only)</summary>
   public long? personal_folder_id { get; set; } = null;
-  /// User is identified as an employee of Looker (read-only)
+  /// <summary>User is identified as an employee of Looker (read-only)</summary>
   public bool? presumed_looker_employee { get; set; } = null;
-  /// Array of ids of the roles for this user (read-only)
+  /// <summary>Array of ids of the roles for this user (read-only)</summary>
   public long[]? role_ids { get; set; } = null;
-  /// Active sessions (read-only)
+  /// <summary>Active sessions (read-only)</summary>
   public Session[]? sessions { get; set; } = null;
-  /// Per user dictionary of undocumented state information owned by the Looker UI.
+  /// <summary>Per user dictionary of undocumented state information owned by the Looker UI.</summary>
   public StringDictionary<string>? ui_state { get; set; } = null;
-  /// User is identified as an employee of Looker who has been verified via Looker corporate authentication (read-only)
+  /// <summary>User is identified as an employee of Looker who has been verified via Looker corporate authentication (read-only)</summary>
   public bool? verified_looker_employee { get; set; } = null;
-  /// User's roles are managed by an external directory like SAML or LDAP and can not be changed directly. (read-only)
+  /// <summary>User's roles are managed by an external directory like SAML or LDAP and can not be changed directly. (read-only)</summary>
   public bool? roles_externally_managed { get; set; } = null;
-  /// User can be directly assigned a role. (read-only)
+  /// <summary>User can be directly assigned a role. (read-only)</summary>
   public bool? allow_direct_roles { get; set; } = null;
-  /// User can be a direct member of a normal Looker group. (read-only)
+  /// <summary>User can be a direct member of a normal Looker group. (read-only)</summary>
   public bool? allow_normal_group_membership { get; set; } = null;
-  /// User can inherit roles from a normal Looker group. (read-only)
+  /// <summary>User can inherit roles from a normal Looker group. (read-only)</summary>
   public bool? allow_roles_from_normal_groups { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class UserAttribute : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Name of user attribute
+  /// <summary>Name of user attribute</summary>
   public string? name { get; set; } = null;
-  /// Human-friendly label for user attribute
+  /// <summary>Human-friendly label for user attribute</summary>
   public string? label { get; set; } = null;
-  /// Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
+  /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")</summary>
   public string? type { get; set; } = null;
-  /// Default value for when no value is set on the user
+  /// <summary>Default value for when no value is set on the user</summary>
   public string? default_value { get; set; } = null;
-  /// Attribute is a system default (read-only)
+  /// <summary>Attribute is a system default (read-only)</summary>
   public bool? is_system { get; set; } = null;
-  /// Attribute is permanent and cannot be deleted (read-only)
+  /// <summary>Attribute is permanent and cannot be deleted (read-only)</summary>
   public bool? is_permanent { get; set; } = null;
-  /// If true, users will not be able to view values of this attribute
+  /// <summary>If true, users will not be able to view values of this attribute</summary>
   public bool? value_is_hidden { get; set; } = null;
-  /// Non-admin users can see the values of their attributes and use them in filters
+  /// <summary>Non-admin users can see the values of their attributes and use them in filters</summary>
   public bool? user_can_view { get; set; } = null;
-  /// Users can change the value of this attribute for themselves
+  /// <summary>Users can change the value of this attribute for themselves</summary>
   public bool? user_can_edit { get; set; } = null;
-  /// Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
+  /// <summary>Destinations to which a hidden attribute may be sent. Once set, cannot be edited.</summary>
   public string? hidden_value_domain_whitelist { get; set; } = null;
 }
 
 public class UserAttributeGroupValue : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id of this group-attribute relation (read-only)
+  /// <summary>Unique Id of this group-attribute relation (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Id of group (read-only)
+  /// <summary>Id of group (read-only)</summary>
   public long? group_id { get; set; } = null;
-  /// Id of user attribute (read-only)
+  /// <summary>Id of user attribute (read-only)</summary>
   public long? user_attribute_id { get; set; } = null;
-  /// If true, the "value" field will be null, because the attribute settings block access to this value (read-only)
+  /// <summary>If true, the "value" field will be null, because the attribute settings block access to this value (read-only)</summary>
   public bool? value_is_hidden { get; set; } = null;
-  /// Precedence for resolving value for user (read-only)
+  /// <summary>Precedence for resolving value for user (read-only)</summary>
   public long? rank { get; set; } = null;
-  /// Value of user attribute for group (read-only)
+  /// <summary>Value of user attribute for group (read-only)</summary>
   public string? value { get; set; } = null;
 }
 
 public class UserAttributeWithValue : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Name of user attribute (read-only)
+  /// <summary>Name of user attribute (read-only)</summary>
   public string? name { get; set; } = null;
-  /// Human-friendly label for user attribute (read-only)
+  /// <summary>Human-friendly label for user attribute (read-only)</summary>
   public string? label { get; set; } = null;
-  /// Precedence for setting value on user (lowest wins) (read-only)
+  /// <summary>Precedence for setting value on user (lowest wins) (read-only)</summary>
   public long? rank { get; set; } = null;
-  /// Value of attribute for user
+  /// <summary>Value of attribute for user</summary>
   public string? value { get; set; } = null;
-  /// Id of User (read-only)
+  /// <summary>Id of User (read-only)</summary>
   public long? user_id { get; set; } = null;
-  /// Can the user set this value (read-only)
+  /// <summary>Can the user set this value (read-only)</summary>
   public bool? user_can_edit { get; set; } = null;
-  /// If true, the "value" field will be null, because the attribute settings block access to this value (read-only)
+  /// <summary>If true, the "value" field will be null, because the attribute settings block access to this value (read-only)</summary>
   public bool? value_is_hidden { get; set; } = null;
-  /// Id of User Attribute (read-only)
+  /// <summary>Id of User Attribute (read-only)</summary>
   public long? user_attribute_id { get; set; } = null;
-  /// How user got this value for this attribute (read-only)
+  /// <summary>How user got this value for this attribute (read-only)</summary>
   public string? source { get; set; } = null;
-  /// If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
+  /// <summary>If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)</summary>
   public string? hidden_value_domain_whitelist { get; set; } = null;
 }
 
 public class UserLoginLockout : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Hash of user's client id (read-only)
+  /// <summary>Hash of user's client id (read-only)</summary>
   public string? key { get; set; } = null;
-  /// Authentication method for login failures (read-only)
+  /// <summary>Authentication method for login failures (read-only)</summary>
   public string? auth_type { get; set; } = null;
-  /// IP address of most recent failed attempt (read-only)
+  /// <summary>IP address of most recent failed attempt (read-only)</summary>
   public string? ip { get; set; } = null;
-  /// User ID (read-only)
+  /// <summary>User ID (read-only)</summary>
   public long? user_id { get; set; } = null;
-  /// Remote ID of user if using LDAP (read-only)
+  /// <summary>Remote ID of user if using LDAP (read-only)</summary>
   public string? remote_id { get; set; } = null;
-  /// User's name (read-only)
+  /// <summary>User's name (read-only)</summary>
   public string? full_name { get; set; } = null;
-  /// Email address associated with the user's account (read-only)
+  /// <summary>Email address associated with the user's account (read-only)</summary>
   public string? email { get; set; } = null;
-  /// Number of failures that triggered the lockout (read-only)
+  /// <summary>Number of failures that triggered the lockout (read-only)</summary>
   public long? fail_count { get; set; } = null;
-  /// Time when lockout was triggered (read-only)
+  /// <summary>Time when lockout was triggered (read-only)</summary>
   public DateTime? lockout_at { get; set; } = null;
 }
 
 public class UserPublic : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// First Name (read-only)
+  /// <summary>First Name (read-only)</summary>
   public string? first_name { get; set; } = null;
-  /// Last Name (read-only)
+  /// <summary>Last Name (read-only)</summary>
   public string? last_name { get; set; } = null;
-  /// Full name for display (available only if both first_name and last_name are set) (read-only)
+  /// <summary>Full name for display (available only if both first_name and last_name are set) (read-only)</summary>
   public string? display_name { get; set; } = null;
-  /// URL for the avatar image (may be generic) (read-only)
+  /// <summary>URL for the avatar image (may be generic) (read-only)</summary>
   public Url? avatar_url { get; set; } = null;
-  /// Link to get this item (read-only)
+  /// <summary>Link to get this item (read-only)</summary>
   public Url? url { get; set; } = null;
 }
 
 public class ValidationError : SdkModel 
 {
-  /// Error details (read-only)
+  /// <summary>Error details (read-only)</summary>
   public string message { get; set; } = "";
-  /// Error detail array (read-only)
+  /// <summary>Error detail array (read-only)</summary>
   public ValidationErrorDetail[]? errors { get; set; } = null;
-  /// Documentation link (read-only)
+  /// <summary>Documentation link (read-only)</summary>
   public Url documentation_url { get; set; } = "";
 }
 
 public class ValidationErrorDetail : SdkModel 
 {
-  /// Field with error (read-only)
+  /// <summary>Field with error (read-only)</summary>
   public string? field { get; set; } = null;
-  /// Error code (read-only)
+  /// <summary>Error code (read-only)</summary>
   public string? code { get; set; } = null;
-  /// Error info message (read-only)
+  /// <summary>Error info message (read-only)</summary>
   public string? message { get; set; } = null;
-  /// Documentation link (read-only)
+  /// <summary>Documentation link (read-only)</summary>
   public Url documentation_url { get; set; } = "";
 }
 
 public class WelcomeEmailTest : SdkModel 
 {
-  /// The content that would be sent in the body of a custom welcome email
+  /// <summary>The content that would be sent in the body of a custom welcome email</summary>
   public string? content { get; set; } = null;
-  /// The subject that would be sent for the custom welcome email
+  /// <summary>The subject that would be sent for the custom welcome email</summary>
   public string? subject { get; set; } = null;
-  /// The header that would be sent in the body of a custom welcome email
+  /// <summary>The header that would be sent in the body of a custom welcome email</summary>
   public string? header { get; set; } = null;
 }
 
 public class WhitelabelConfiguration : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// Unique Id (read-only)
+  /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
-  /// Customer logo image. Expected base64 encoded data (write-only)
+  /// <summary>Customer logo image. Expected base64 encoded data (write-only)</summary>
   public string? logo_file { get; set; } = null;
-  /// Logo image url (read-only) (read-only)
+  /// <summary>Logo image url (read-only) (read-only)</summary>
   public string? logo_url { get; set; } = null;
-  /// Custom favicon image. Expected base64 encoded data (write-only)
+  /// <summary>Custom favicon image. Expected base64 encoded data (write-only)</summary>
   public string? favicon_file { get; set; } = null;
-  /// Favicon image url (read-only) (read-only)
+  /// <summary>Favicon image url (read-only) (read-only)</summary>
   public string? favicon_url { get; set; } = null;
-  /// Default page title
+  /// <summary>Default page title</summary>
   public string? default_title { get; set; } = null;
-  /// Boolean to toggle showing help menus
+  /// <summary>Boolean to toggle showing help menus</summary>
   public bool? show_help_menu { get; set; } = null;
-  /// Boolean to toggle showing docs
+  /// <summary>Boolean to toggle showing docs</summary>
   public bool? show_docs { get; set; } = null;
-  /// Boolean to toggle showing email subscription options.
+  /// <summary>Boolean to toggle showing email subscription options.</summary>
   public bool? show_email_sub_options { get; set; } = null;
-  /// Boolean to toggle mentions of Looker in emails
+  /// <summary>Boolean to toggle mentions of Looker in emails</summary>
   public bool? allow_looker_mentions { get; set; } = null;
-  /// Boolean to toggle links to Looker in emails
+  /// <summary>Boolean to toggle links to Looker in emails</summary>
   public bool? allow_looker_links { get; set; } = null;
-  /// Allow subject line and email heading customization in customized emails”
+  /// <summary>Allow subject line and email heading customization in customized emails”</summary>
   public bool? custom_welcome_email_advanced { get; set; } = null;
-  /// Remove the word Looker from appearing in the account setup page
+  /// <summary>Remove the word Looker from appearing in the account setup page</summary>
   public bool? setup_mentions { get; set; } = null;
-  /// Remove Looker logo from Alerts
+  /// <summary>Remove Looker logo from Alerts</summary>
   public bool? alerts_logo { get; set; } = null;
-  /// Remove Looker links from Alerts
+  /// <summary>Remove Looker links from Alerts</summary>
   public bool? alerts_links { get; set; } = null;
-  /// Remove Looker mentions in home folder page when you don’t have any items saved
+  /// <summary>Remove Looker mentions in home folder page when you don’t have any items saved</summary>
   public bool? folders_mentions { get; set; } = null;
 }
 
 public class Workspace : SdkModel 
 {
-  /// Operations the current user is able to perform on this object (read-only)
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
-  /// The unique id of this user workspace. Predefined workspace ids include "production" and "dev" (read-only)
+  /// <summary>The unique id of this user workspace. Predefined workspace ids include "production" and "dev" (read-only)</summary>
   public string? id { get; set; } = null;
-  /// The local state of each project in the workspace (read-only)
+  /// <summary>The local state of each project in the workspace (read-only)</summary>
   public Project[]? projects { get; set; } = null;
 }
 
@@ -3919,7 +3919,7 @@ public class Workspace : SdkModel
 /// can, sudo_user_id
 public class WriteApiSession : SdkModel 
 {
-  /// The id of active workspace for this session
+  /// <summary>The id of active workspace for this session</summary>
   public string? workspace_id { get; set; } = null;
 }
 
@@ -3927,15 +3927,15 @@ public class WriteApiSession : SdkModel
 /// can, url
 public class WriteBackupConfiguration : SdkModel 
 {
-  /// Type of backup: looker-s3 or custom-s3
+  /// <summary>Type of backup: looker-s3 or custom-s3</summary>
   public string? type { get; set; } = null;
-  /// Name of bucket for custom-s3 backups
+  /// <summary>Name of bucket for custom-s3 backups</summary>
   public string? custom_s3_bucket { get; set; } = null;
-  /// Name of region where the bucket is located
+  /// <summary>Name of region where the bucket is located</summary>
   public string? custom_s3_bucket_region { get; set; } = null;
-  /// (Write-Only) AWS S3 key used for custom-s3 backups
+  /// <summary>(Write-Only) AWS S3 key used for custom-s3 backups</summary>
   public string? custom_s3_key { get; set; } = null;
-  /// (Write-Only) AWS S3 secret used for custom-s3 backups
+  /// <summary>(Write-Only) AWS S3 secret used for custom-s3 backups</summary>
   public string? custom_s3_secret { get; set; } = null;
 }
 
@@ -3943,13 +3943,13 @@ public class WriteBackupConfiguration : SdkModel
 /// can, content_metadata_id, created_at, board_sections, id, updated_at, user_id, primary_homepage
 public class WriteBoard : SdkModel 
 {
-  /// Date of board deletion
+  /// <summary>Date of board deletion</summary>
   public DateTime? deleted_at { get; set; } = null;
-  /// Description of the board
+  /// <summary>Description of the board</summary>
   public string? description { get; set; } = null;
-  /// ids of the board sections in the order they should be displayed
+  /// <summary>ids of the board sections in the order they should be displayed</summary>
   public long[]? section_order { get; set; } = null;
-  /// Title of the board
+  /// <summary>Title of the board</summary>
   public string? title { get; set; } = null;
 }
 
@@ -3957,15 +3957,15 @@ public class WriteBoard : SdkModel
 /// can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, location, title, url, view_count
 public class WriteBoardItem : SdkModel 
 {
-  /// Dashboard to base this item on
+  /// <summary>Dashboard to base this item on</summary>
   public long? dashboard_id { get; set; } = null;
-  /// Associated Board Section
+  /// <summary>Associated Board Section</summary>
   public long? board_section_id { get; set; } = null;
-  /// Look to base this item on
+  /// <summary>Look to base this item on</summary>
   public long? look_id { get; set; } = null;
-  /// LookML Dashboard to base this item on
+  /// <summary>LookML Dashboard to base this item on</summary>
   public string? lookml_dashboard_id { get; set; } = null;
-  /// An arbitrary integer representing the sort order within the section
+  /// <summary>An arbitrary integer representing the sort order within the section</summary>
   public long? order { get; set; } = null;
 }
 
@@ -3973,15 +3973,15 @@ public class WriteBoardItem : SdkModel
 /// can, created_at, board_items, id, updated_at
 public class WriteBoardSection : SdkModel 
 {
-  /// Time at which this section was deleted.
+  /// <summary>Time at which this section was deleted.</summary>
   public DateTime? deleted_at { get; set; } = null;
-  /// Description of the content found in this section.
+  /// <summary>Description of the content found in this section.</summary>
   public string? description { get; set; } = null;
-  /// Id reference to parent board
+  /// <summary>Id reference to parent board</summary>
   public long? board_id { get; set; } = null;
-  /// ids of the board items in the order they should be displayed
+  /// <summary>ids of the board items in the order they should be displayed</summary>
   public long[]? item_order { get; set; } = null;
-  /// Name of row
+  /// <summary>Name of row</summary>
   public string? title { get; set; } = null;
 }
 
@@ -3989,13 +3989,13 @@ public class WriteBoardSection : SdkModel
 /// id
 public class WriteColorCollection : SdkModel 
 {
-  /// Label of color collection
+  /// <summary>Label of color collection</summary>
   public string? label { get; set; } = null;
-  /// Array of categorical palette definitions
+  /// <summary>Array of categorical palette definitions</summary>
   public DiscretePalette[]? categoricalPalettes { get; set; } = null;
-  /// Array of discrete palette definitions
+  /// <summary>Array of discrete palette definitions</summary>
   public ContinuousPalette[]? sequentialPalettes { get; set; } = null;
-  /// Array of diverging palette definitions
+  /// <summary>Array of diverging palette definitions</summary>
   public ContinuousPalette[]? divergingPalettes { get; set; } = null;
 }
 
@@ -4003,13 +4003,13 @@ public class WriteColorCollection : SdkModel
 /// id, author_id
 public class WriteCommand : SdkModel 
 {
-  /// Name of the command
+  /// <summary>Name of the command</summary>
   public string? name { get; set; } = null;
-  /// Description of the command
+  /// <summary>Description of the command</summary>
   public string? description { get; set; } = null;
-  /// Id of the content associated with the command
+  /// <summary>Id of the content associated with the command</summary>
   public string? linked_content_id { get; set; } = null;
-  /// Name of the command Valid values are: "dashboard", "lookml_dashboard".
+  /// <summary>Name of the command Valid values are: "dashboard", "lookml_dashboard".</summary>
   public string? linked_content_type { get; set; } = null;
 }
 
@@ -4017,9 +4017,9 @@ public class WriteCommand : SdkModel
 /// id, look_id, dashboard_id, board_id
 public class WriteContentFavorite : SdkModel 
 {
-  /// User Id which owns this ContentFavorite
+  /// <summary>User Id which owns this ContentFavorite</summary>
   public long? user_id { get; set; } = null;
-  /// Content Metadata Id associated with this ContentFavorite
+  /// <summary>Content Metadata Id associated with this ContentFavorite</summary>
   public long? content_metadata_id { get; set; } = null;
   public WriteLookBasic? look { get; set; }
   public WriteDashboardBase? dashboard { get; set; }
@@ -4029,7 +4029,7 @@ public class WriteContentFavorite : SdkModel
 /// can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug
 public class WriteContentMeta : SdkModel 
 {
-  /// Whether content inherits its access levels from parent
+  /// <summary>Whether content inherits its access levels from parent</summary>
   public bool? inherits { get; set; } = null;
 }
 
@@ -4037,31 +4037,31 @@ public class WriteContentMeta : SdkModel
 /// id, field
 public class WriteCreateDashboardFilter : SdkModel 
 {
-  /// Id of Dashboard
+  /// <summary>Id of Dashboard</summary>
   public string dashboard_id { get; set; } = "";
-  /// Name of filter
+  /// <summary>Name of filter</summary>
   public string name { get; set; } = "";
-  /// Title of filter
+  /// <summary>Title of filter</summary>
   public string title { get; set; } = "";
-  /// Type of filter: one of date, number, string, or field
+  /// <summary>Type of filter: one of date, number, string, or field</summary>
   public string type { get; set; } = "";
-  /// Default value of filter
+  /// <summary>Default value of filter</summary>
   public string? default_value { get; set; } = null;
-  /// Model of filter (required if type = field)
+  /// <summary>Model of filter (required if type = field)</summary>
   public string? model { get; set; } = null;
-  /// Explore of filter (required if type = field)
+  /// <summary>Explore of filter (required if type = field)</summary>
   public string? explore { get; set; } = null;
-  /// Dimension of filter (required if type = field)
+  /// <summary>Dimension of filter (required if type = field)</summary>
   public string? dimension { get; set; } = null;
-  /// Display order of this filter relative to other filters
+  /// <summary>Display order of this filter relative to other filters</summary>
   public long? row { get; set; } = null;
-  /// Array of listeners for faceted filters
+  /// <summary>Array of listeners for faceted filters</summary>
   public string[]? listens_to_filters { get; set; } = null;
-  /// Whether the filter allows multiple filter values
+  /// <summary>Whether the filter allows multiple filter values</summary>
   public bool? allow_multiple_values { get; set; } = null;
-  /// Whether the filter requires a value to run the dashboard
+  /// <summary>Whether the filter requires a value to run the dashboard</summary>
   public bool? required { get; set; } = null;
-  /// The visual configuration for this filter. Used to set up how the UI for this filter should appear.
+  /// <summary>The visual configuration for this filter. Used to set up how the UI for this filter should appear.</summary>
   public StringDictionary<object>? ui_config { get; set; } = null;
 }
 
@@ -4069,17 +4069,17 @@ public class WriteCreateDashboardFilter : SdkModel
 /// can
 public class WriteCreateQueryTask : SdkModel 
 {
-  /// Id of query to run
+  /// <summary>Id of query to run</summary>
   public long query_id { get; set; }
-  /// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".</summary>
   public string result_format { get; set; } = "";
-  /// Source of query task
+  /// <summary>Source of query task</summary>
   public string? source { get; set; } = null;
-  /// Create the task but defer execution
+  /// <summary>Create the task but defer execution</summary>
   public bool? deferred { get; set; } = null;
-  /// Id of look associated with query.
+  /// <summary>Id of look associated with query.</summary>
   public long? look_id { get; set; } = null;
-  /// Id of dashboard associated with query.
+  /// <summary>Id of dashboard associated with query.</summary>
   public string? dashboard_id { get; set; } = null;
 }
 
@@ -4087,9 +4087,9 @@ public class WriteCreateQueryTask : SdkModel
 /// can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
 public class WriteCredentialsEmail : SdkModel 
 {
-  /// EMail address used for user login
+  /// <summary>EMail address used for user login</summary>
   public string? email { get; set; } = null;
-  /// Force the user to change their password upon their next login
+  /// <summary>Force the user to change their password upon their next login</summary>
   public bool? forced_password_reset_at_next_login { get; set; } = null;
 }
 
@@ -4097,13 +4097,13 @@ public class WriteCredentialsEmail : SdkModel
 /// can
 public class WriteCustomWelcomeEmail : SdkModel 
 {
-  /// If true, custom email content will replace the default body of welcome emails
+  /// <summary>If true, custom email content will replace the default body of welcome emails</summary>
   public bool? enabled { get; set; } = null;
-  /// The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
+  /// <summary>The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.</summary>
   public string? content { get; set; } = null;
-  /// The text to appear in the email subject line.
+  /// <summary>The text to appear in the email subject line.</summary>
   public string? subject { get; set; } = null;
-  /// The text to appear in the header line of the email body.
+  /// <summary>The text to appear in the header line of the email body.</summary>
   public string? header { get; set; } = null;
 }
 
@@ -4111,45 +4111,45 @@ public class WriteCustomWelcomeEmail : SdkModel
 /// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
 public class WriteDashboard : SdkModel 
 {
-  /// Description
+  /// <summary>Description</summary>
   public string? description { get; set; } = null;
-  /// Is Hidden
+  /// <summary>Is Hidden</summary>
   public bool? hidden { get; set; } = null;
-  /// Timezone in which the Dashboard will run by default.
+  /// <summary>Timezone in which the Dashboard will run by default.</summary>
   public string? query_timezone { get; set; } = null;
-  /// Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
+  /// <summary>Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.</summary>
   public string? refresh_interval { get; set; } = null;
   public WriteFolderBase? folder { get; set; }
-  /// Dashboard Title
+  /// <summary>Dashboard Title</summary>
   public string? title { get; set; } = null;
-  /// Background color
+  /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
-  /// Enables crossfiltering in dashboards - only available in dashboards-next (beta)
+  /// <summary>Enables crossfiltering in dashboards - only available in dashboards-next (beta)</summary>
   public bool? crossfilter_enabled { get; set; } = null;
-  /// Whether or not a dashboard is 'soft' deleted.
+  /// <summary>Whether or not a dashboard is 'soft' deleted.</summary>
   public bool? deleted { get; set; } = null;
-  /// configuration option that governs how dashboard loading will happen.
+  /// <summary>configuration option that governs how dashboard loading will happen.</summary>
   public string? load_configuration { get; set; } = null;
-  /// Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
+  /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
   public string? lookml_link_id { get; set; } = null;
-  /// Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)</summary>
   public bool? show_filters_bar { get; set; } = null;
-  /// Show title
+  /// <summary>Show title</summary>
   public bool? show_title { get; set; } = null;
-  /// Content Metadata Slug
+  /// <summary>Content Metadata Slug</summary>
   public string? slug { get; set; } = null;
-  /// Id of folder
+  /// <summary>Id of folder</summary>
   public string? folder_id { get; set; } = null;
-  /// Color of text on text tiles
+  /// <summary>Color of text on text tiles</summary>
   public string? text_tile_text_color { get; set; } = null;
-  /// Tile background color
+  /// <summary>Tile background color</summary>
   public string? tile_background_color { get; set; } = null;
-  /// Tile text color
+  /// <summary>Tile text color</summary>
   public string? tile_text_color { get; set; } = null;
-  /// Title color
+  /// <summary>Title color</summary>
   public string? title_color { get; set; } = null;
   public DashboardAppearance? appearance { get; set; }
-  /// The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
+  /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
 }
 
@@ -4164,38 +4164,38 @@ public class WriteDashboardBase : SdkModel
 /// can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
 public class WriteDashboardElement : SdkModel 
 {
-  /// Text tile body text
+  /// <summary>Text tile body text</summary>
   public string? body_text { get; set; } = null;
-  /// Id of Dashboard
+  /// <summary>Id of Dashboard</summary>
   public string? dashboard_id { get; set; } = null;
   public WriteLookWithQuery? look { get; set; }
-  /// Id Of Look
+  /// <summary>Id Of Look</summary>
   public string? look_id { get; set; } = null;
-  /// ID of merge result
+  /// <summary>ID of merge result</summary>
   public string? merge_result_id { get; set; } = null;
-  /// Note Display
+  /// <summary>Note Display</summary>
   public string? note_display { get; set; } = null;
-  /// Note State
+  /// <summary>Note State</summary>
   public string? note_state { get; set; } = null;
-  /// Note Text
+  /// <summary>Note Text</summary>
   public string? note_text { get; set; } = null;
   public WriteQuery? query { get; set; }
-  /// Id Of Query
+  /// <summary>Id Of Query</summary>
   public long? query_id { get; set; } = null;
-  /// Refresh Interval
+  /// <summary>Refresh Interval</summary>
   public string? refresh_interval { get; set; } = null;
   public WriteResultMakerWithIdVisConfigAndDynamicFields? result_maker { get; set; }
-  /// ID of the ResultMakerLookup entry.
+  /// <summary>ID of the ResultMakerLookup entry.</summary>
   public long? result_maker_id { get; set; } = null;
-  /// Text tile subtitle text
+  /// <summary>Text tile subtitle text</summary>
   public string? subtitle_text { get; set; } = null;
-  /// Title of dashboard element
+  /// <summary>Title of dashboard element</summary>
   public string? title { get; set; } = null;
-  /// Whether title is hidden
+  /// <summary>Whether title is hidden</summary>
   public bool? title_hidden { get; set; } = null;
-  /// Text tile title
+  /// <summary>Text tile title</summary>
   public string? title_text { get; set; } = null;
-  /// Type
+  /// <summary>Type</summary>
   public string? type { get; set; } = null;
 }
 
@@ -4203,29 +4203,29 @@ public class WriteDashboardElement : SdkModel
 /// can, id, dashboard_id, field
 public class WriteDashboardFilter : SdkModel 
 {
-  /// Name of filter
+  /// <summary>Name of filter</summary>
   public string? name { get; set; } = null;
-  /// Title of filter
+  /// <summary>Title of filter</summary>
   public string? title { get; set; } = null;
-  /// Type of filter: one of date, number, string, or field
+  /// <summary>Type of filter: one of date, number, string, or field</summary>
   public string? type { get; set; } = null;
-  /// Default value of filter
+  /// <summary>Default value of filter</summary>
   public string? default_value { get; set; } = null;
-  /// Model of filter (required if type = field)
+  /// <summary>Model of filter (required if type = field)</summary>
   public string? model { get; set; } = null;
-  /// Explore of filter (required if type = field)
+  /// <summary>Explore of filter (required if type = field)</summary>
   public string? explore { get; set; } = null;
-  /// Dimension of filter (required if type = field)
+  /// <summary>Dimension of filter (required if type = field)</summary>
   public string? dimension { get; set; } = null;
-  /// Display order of this filter relative to other filters
+  /// <summary>Display order of this filter relative to other filters</summary>
   public long? row { get; set; } = null;
-  /// Array of listeners for faceted filters
+  /// <summary>Array of listeners for faceted filters</summary>
   public string[]? listens_to_filters { get; set; } = null;
-  /// Whether the filter allows multiple filter values
+  /// <summary>Whether the filter allows multiple filter values</summary>
   public bool? allow_multiple_values { get; set; } = null;
-  /// Whether the filter requires a value to run the dashboard
+  /// <summary>Whether the filter requires a value to run the dashboard</summary>
   public bool? required { get; set; } = null;
-  /// The visual configuration for this filter. Used to set up how the UI for this filter should appear.
+  /// <summary>The visual configuration for this filter. Used to set up how the UI for this filter should appear.</summary>
   public StringDictionary<object>? ui_config { get; set; } = null;
 }
 
@@ -4233,15 +4233,15 @@ public class WriteDashboardFilter : SdkModel
 /// can, id, deleted, dashboard_title, dashboard_layout_components
 public class WriteDashboardLayout : SdkModel 
 {
-  /// Id of Dashboard
+  /// <summary>Id of Dashboard</summary>
   public string? dashboard_id { get; set; } = null;
-  /// Type
+  /// <summary>Type</summary>
   public string? type { get; set; } = null;
-  /// Is Active
+  /// <summary>Is Active</summary>
   public bool? active { get; set; } = null;
-  /// Column Width
+  /// <summary>Column Width</summary>
   public long? column_width { get; set; } = null;
-  /// Width
+  /// <summary>Width</summary>
   public long? width { get; set; } = null;
 }
 
@@ -4249,17 +4249,17 @@ public class WriteDashboardLayout : SdkModel
 /// can, id, deleted, element_title, element_title_hidden, vis_type
 public class WriteDashboardLayoutComponent : SdkModel 
 {
-  /// Id of Dashboard Layout
+  /// <summary>Id of Dashboard Layout</summary>
   public string? dashboard_layout_id { get; set; } = null;
-  /// Id Of Dashboard Element
+  /// <summary>Id Of Dashboard Element</summary>
   public string? dashboard_element_id { get; set; } = null;
-  /// Row
+  /// <summary>Row</summary>
   public long? row { get; set; } = null;
-  /// Column
+  /// <summary>Column</summary>
   public long? column { get; set; } = null;
-  /// Width
+  /// <summary>Width</summary>
   public long? width { get; set; } = null;
-  /// Height
+  /// <summary>Height</summary>
   public long? height { get; set; } = null;
 }
 
@@ -4267,9 +4267,9 @@ public class WriteDashboardLayoutComponent : SdkModel
 /// can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
 public class WriteDatagroup : SdkModel 
 {
-  /// UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
+  /// <summary>UNIX timestamp before which cache entries are considered stale. Cannot be in the future.</summary>
   public long? stale_before { get; set; } = null;
-  /// UNIX timestamp at which this entry became triggered. Cannot be in the future.
+  /// <summary>UNIX timestamp at which this entry became triggered. Cannot be in the future.</summary>
   public long? triggered_at { get; set; } = null;
 }
 
@@ -4277,58 +4277,58 @@ public class WriteDatagroup : SdkModel
 /// can, dialect, snippets, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
 public class WriteDBConnection : SdkModel 
 {
-  /// Name of the connection. Also used as the unique identifier
+  /// <summary>Name of the connection. Also used as the unique identifier</summary>
   public string? name { get; set; } = null;
-  /// Host name/address of server
+  /// <summary>Host name/address of server</summary>
   public string? host { get; set; } = null;
-  /// Port number on server
+  /// <summary>Port number on server</summary>
   public long? port { get; set; } = null;
-  /// Username for server authentication
+  /// <summary>Username for server authentication</summary>
   public string? username { get; set; } = null;
-  /// (Write-Only) Password for server authentication
+  /// <summary>(Write-Only) Password for server authentication</summary>
   public string? password { get; set; } = null;
-  /// (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
+  /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).</summary>
   public string? certificate { get; set; } = null;
-  /// (Write-Only) Certificate keyfile type - .json or .p12
+  /// <summary>(Write-Only) Certificate keyfile type - .json or .p12</summary>
   public string? file_type { get; set; } = null;
-  /// Database name
+  /// <summary>Database name</summary>
   public string? database { get; set; } = null;
-  /// Time zone of database
+  /// <summary>Time zone of database</summary>
   public string? db_timezone { get; set; } = null;
-  /// Timezone to use in queries
+  /// <summary>Timezone to use in queries</summary>
   public string? query_timezone { get; set; } = null;
-  /// Scheme name
+  /// <summary>Scheme name</summary>
   public string? schema { get; set; } = null;
-  /// Maximum number of concurrent connection to use
+  /// <summary>Maximum number of concurrent connection to use</summary>
   public long? max_connections { get; set; } = null;
-  /// Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
+  /// <summary>Maximum size of query in GBs (BigQuery only, can be a user_attribute name)</summary>
   public string? max_billing_gigabytes { get; set; } = null;
-  /// Use SSL/TLS when connecting to server
+  /// <summary>Use SSL/TLS when connecting to server</summary>
   public bool? ssl { get; set; } = null;
-  /// Verify the SSL
+  /// <summary>Verify the SSL</summary>
   public bool? verify_ssl { get; set; } = null;
-  /// Name of temporary database (if used)
+  /// <summary>Name of temporary database (if used)</summary>
   public string? tmp_db_name { get; set; } = null;
-  /// Additional params to add to JDBC connection string
+  /// <summary>Additional params to add to JDBC connection string</summary>
   public string? jdbc_additional_params { get; set; } = null;
-  /// Connection Pool Timeout, in seconds
+  /// <summary>Connection Pool Timeout, in seconds</summary>
   public long? pool_timeout { get; set; } = null;
-  /// (Read/Write) SQL Dialect name
+  /// <summary>(Read/Write) SQL Dialect name</summary>
   public string? dialect_name { get; set; } = null;
-  /// (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
+  /// <summary>(Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password</summary>
   public bool? user_db_credentials { get; set; } = null;
-  /// Fields whose values map to user attribute names
+  /// <summary>Fields whose values map to user attribute names</summary>
   public string[]? user_attribute_fields { get; set; } = null;
-  /// Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
+  /// <summary>Cron string specifying when maintenance such as PDT trigger checks and drops should be performed</summary>
   public string? maintenance_cron { get; set; } = null;
-  /// Precache tables in the SQL Runner
+  /// <summary>Precache tables in the SQL Runner</summary>
   public bool? sql_runner_precache_tables { get; set; } = null;
-  /// SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
+  /// <summary>SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature</summary>
   public string? after_connect_statements { get; set; } = null;
   public WriteDBConnectionOverride? pdt_context_override { get; set; }
-  /// Maximum number of threads to use to build PDTs in parallel
+  /// <summary>Maximum number of threads to use to build PDTs in parallel</summary>
   public long? pdt_concurrency { get; set; } = null;
-  /// When disable_context_comment is true comment will not be added to SQL
+  /// <summary>When disable_context_comment is true comment will not be added to SQL</summary>
   public bool? disable_context_comment { get; set; } = null;
 }
 
@@ -4336,27 +4336,27 @@ public class WriteDBConnection : SdkModel
 /// has_password
 public class WriteDBConnectionOverride : SdkModel 
 {
-  /// Context in which to override (`pdt` is the only allowed value)
+  /// <summary>Context in which to override (`pdt` is the only allowed value)</summary>
   public string? context { get; set; } = null;
-  /// Host name/address of server
+  /// <summary>Host name/address of server</summary>
   public string? host { get; set; } = null;
-  /// Port number on server
+  /// <summary>Port number on server</summary>
   public string? port { get; set; } = null;
-  /// Username for server authentication
+  /// <summary>Username for server authentication</summary>
   public string? username { get; set; } = null;
-  /// (Write-Only) Password for server authentication
+  /// <summary>(Write-Only) Password for server authentication</summary>
   public string? password { get; set; } = null;
-  /// (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
+  /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).</summary>
   public string? certificate { get; set; } = null;
-  /// (Write-Only) Certificate keyfile type - .json or .p12
+  /// <summary>(Write-Only) Certificate keyfile type - .json or .p12</summary>
   public string? file_type { get; set; } = null;
-  /// Database name
+  /// <summary>Database name</summary>
   public string? database { get; set; } = null;
-  /// Scheme name
+  /// <summary>Scheme name</summary>
   public string? schema { get; set; } = null;
-  /// Additional params to add to JDBC connection string
+  /// <summary>Additional params to add to JDBC connection string</summary>
   public string? jdbc_additional_params { get; set; } = null;
-  /// SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
+  /// <summary>SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature</summary>
   public string? after_connect_statements { get; set; } = null;
 }
 
@@ -4364,9 +4364,9 @@ public class WriteDBConnectionOverride : SdkModel
 /// id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
 public class WriteFolderBase : SdkModel 
 {
-  /// Unique Name
+  /// <summary>Unique Name</summary>
   public string name { get; set; } = "";
-  /// Id of Parent. If the parent id is null, this is a root-level entry
+  /// <summary>Id of Parent. If the parent id is null, this is a root-level entry</summary>
   public string? parent_id { get; set; } = null;
 }
 
@@ -4374,9 +4374,9 @@ public class WriteFolderBase : SdkModel
 /// can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
 public class WriteGitBranch : SdkModel 
 {
-  /// The short name on the local. Updating `name` results in `git checkout <new_name>`
+  /// <summary>The short name on the local. Updating `name` results in `git checkout <new_name>`</summary>
   public string? name { get; set; } = null;
-  /// The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
+  /// <summary>The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.</summary>
   public string? @ref { get; set; } = null;
 }
 
@@ -4384,9 +4384,9 @@ public class WriteGitBranch : SdkModel
 /// can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
 public class WriteGroup : SdkModel 
 {
-  /// Group can be used in content access controls
+  /// <summary>Group can be used in content access controls</summary>
   public bool? can_add_to_content_metadata { get; set; } = null;
-  /// Name of group
+  /// <summary>Name of group</summary>
   public string? name { get; set; } = null;
 }
 
@@ -4394,11 +4394,11 @@ public class WriteGroup : SdkModel
 /// can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
 public class WriteIntegration : SdkModel 
 {
-  /// Whether the integration is available to users.
+  /// <summary>Whether the integration is available to users.</summary>
   public bool? enabled { get; set; } = null;
-  /// Array of params for the integration.
+  /// <summary>Array of params for the integration.</summary>
   public IntegrationParam[]? @params { get; set; } = null;
-  /// Whether the integration is available to users.
+  /// <summary>Whether the integration is available to users.</summary>
   public long[]? installed_delegate_oauth_targets { get; set; } = null;
 }
 
@@ -4406,9 +4406,9 @@ public class WriteIntegration : SdkModel
 /// can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
 public class WriteIntegrationHub : SdkModel 
 {
-  /// URL of the hub.
+  /// <summary>URL of the hub.</summary>
   public string? url { get; set; } = null;
-  /// (Write-Only) An authorization key that will be sent to the integration hub on every request.
+  /// <summary>(Write-Only) An authorization key that will be sent to the integration hub on every request.</summary>
   public string? authorization_token { get; set; } = null;
 }
 
@@ -4416,7 +4416,7 @@ public class WriteIntegrationHub : SdkModel
 /// can
 public class WriteInternalHelpResources : SdkModel 
 {
-  /// If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
+  /// <summary>If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker</summary>
   public bool? enabled { get; set; } = null;
 }
 
@@ -4424,9 +4424,9 @@ public class WriteInternalHelpResources : SdkModel
 /// can
 public class WriteInternalHelpResourcesContent : SdkModel 
 {
-  /// Text to display in the help menu item which will display the internal help resources
+  /// <summary>Text to display in the help menu item which will display the internal help resources</summary>
   public string? organization_name { get; set; } = null;
-  /// Content to be displayed in the internal help resources page/modal
+  /// <summary>Content to be displayed in the internal help resources page/modal</summary>
   public string? markdown_content { get; set; } = null;
 }
 
@@ -4434,73 +4434,73 @@ public class WriteInternalHelpResourcesContent : SdkModel
 /// can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
 public class WriteLDAPConfig : SdkModel 
 {
-  /// Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+  /// <summary>Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.</summary>
   public bool? alternate_email_login_allowed { get; set; } = null;
-  /// (Write-Only)  Password for the LDAP account used to access the LDAP server
+  /// <summary>(Write-Only)  Password for the LDAP account used to access the LDAP server</summary>
   public string? auth_password { get; set; } = null;
-  /// Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
+  /// <summary>Users will not be allowed to login at all unless a role for them is found in LDAP if set to true</summary>
   public bool? auth_requires_role { get; set; } = null;
-  /// Distinguished name of LDAP account used to access the LDAP server
+  /// <summary>Distinguished name of LDAP account used to access the LDAP server</summary>
   public string? auth_username { get; set; } = null;
-  /// LDAP server hostname
+  /// <summary>LDAP server hostname</summary>
   public string? connection_host { get; set; } = null;
-  /// LDAP host port
+  /// <summary>LDAP host port</summary>
   public string? connection_port { get; set; } = null;
-  /// Use Transport Layer Security
+  /// <summary>Use Transport Layer Security</summary>
   public bool? connection_tls { get; set; } = null;
-  /// Do not verify peer when using TLS
+  /// <summary>Do not verify peer when using TLS</summary>
   public bool? connection_tls_no_verify { get; set; } = null;
-  /// (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
+  /// <summary>(Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP</summary>
   public long[]? default_new_user_group_ids { get; set; } = null;
-  /// (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
+  /// <summary>(Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP</summary>
   public long[]? default_new_user_role_ids { get; set; } = null;
-  /// Enable/Disable LDAP authentication for the server
+  /// <summary>Enable/Disable LDAP authentication for the server</summary>
   public bool? enabled { get; set; } = null;
-  /// Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.
+  /// <summary>Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.</summary>
   public bool? force_no_page { get; set; } = null;
-  /// Base dn for finding groups in LDAP searches
+  /// <summary>Base dn for finding groups in LDAP searches</summary>
   public string? groups_base_dn { get; set; } = null;
-  /// Identifier for a strategy for how Looker will search for groups in the LDAP server
+  /// <summary>Identifier for a strategy for how Looker will search for groups in the LDAP server</summary>
   public string? groups_finder_type { get; set; } = null;
-  /// LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
+  /// <summary>LDAP Group attribute that signifies the members of the groups. Most commonly 'member'</summary>
   public string? groups_member_attribute { get; set; } = null;
-  /// Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
+  /// <summary>Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches</summary>
   public string? groups_objectclasses { get; set; } = null;
-  /// LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
+  /// <summary>LDAP Group attribute that signifies the user in a group. Most commonly 'dn'</summary>
   public string? groups_user_attribute { get; set; } = null;
-  /// (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
+  /// <summary>(Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids</summary>
   public LDAPGroupWrite[]? groups_with_role_ids { get; set; } = null;
-  /// Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
+  /// <summary>Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.</summary>
   public bool? merge_new_users_by_email { get; set; } = null;
-  /// Set user roles in Looker based on groups from LDAP
+  /// <summary>Set user roles in Looker based on groups from LDAP</summary>
   public bool? set_roles_from_groups { get; set; } = null;
-  /// (Write-Only)  Test LDAP user password. For ldap tests only.
+  /// <summary>(Write-Only)  Test LDAP user password. For ldap tests only.</summary>
   public string? test_ldap_password { get; set; } = null;
-  /// (Write-Only)  Test LDAP user login id. For ldap tests only.
+  /// <summary>(Write-Only)  Test LDAP user login id. For ldap tests only.</summary>
   public string? test_ldap_user { get; set; } = null;
-  /// Name of user record attributes used to indicate email address field
+  /// <summary>Name of user record attributes used to indicate email address field</summary>
   public string? user_attribute_map_email { get; set; } = null;
-  /// Name of user record attributes used to indicate first name
+  /// <summary>Name of user record attributes used to indicate first name</summary>
   public string? user_attribute_map_first_name { get; set; } = null;
-  /// Name of user record attributes used to indicate last name
+  /// <summary>Name of user record attributes used to indicate last name</summary>
   public string? user_attribute_map_last_name { get; set; } = null;
-  /// Name of user record attributes used to indicate unique record id
+  /// <summary>Name of user record attributes used to indicate unique record id</summary>
   public string? user_attribute_map_ldap_id { get; set; } = null;
-  /// (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
+  /// <summary>(Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids</summary>
   public LDAPUserAttributeWrite[]? user_attributes_with_ids { get; set; } = null;
-  /// Distinguished name of LDAP node used as the base for user searches
+  /// <summary>Distinguished name of LDAP node used as the base for user searches</summary>
   public string? user_bind_base_dn { get; set; } = null;
-  /// (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
+  /// <summary>(Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.</summary>
   public string? user_custom_filter { get; set; } = null;
-  /// Name(s) of user record attributes used for matching user login id (comma separated list)
+  /// <summary>Name(s) of user record attributes used for matching user login id (comma separated list)</summary>
   public string? user_id_attribute_names { get; set; } = null;
-  /// (Optional) Name of user record objectclass used for finding user during login id
+  /// <summary>(Optional) Name of user record objectclass used for finding user during login id</summary>
   public string? user_objectclass { get; set; } = null;
-  /// Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+  /// <summary>Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.</summary>
   public bool? allow_normal_group_membership { get; set; } = null;
-  /// LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
+  /// <summary>LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.</summary>
   public bool? allow_roles_from_normal_groups { get; set; } = null;
-  /// Allows roles to be directly assigned to LDAP auth'd users.
+  /// <summary>Allows roles to be directly assigned to LDAP auth'd users.</summary>
   public bool? allow_direct_roles { get; set; } = null;
 }
 
@@ -4508,7 +4508,7 @@ public class WriteLDAPConfig : SdkModel
 /// can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
 public class WriteLegacyFeature : SdkModel 
 {
-  /// Whether this feature has been enabled by a user
+  /// <summary>Whether this feature has been enabled by a user</summary>
   public bool? enabled_locally { get; set; } = null;
 }
 
@@ -4516,7 +4516,7 @@ public class WriteLegacyFeature : SdkModel
 /// can, content_metadata_id, id, title
 public class WriteLookBasic : SdkModel 
 {
-  /// User Id
+  /// <summary>User Id</summary>
   public long? user_id { get; set; } = null;
 }
 
@@ -4524,13 +4524,13 @@ public class WriteLookBasic : SdkModel
 /// can, explores, has_content, label
 public class WriteLookmlModel : SdkModel 
 {
-  /// Array of names of connections this model is allowed to use
+  /// <summary>Array of names of connections this model is allowed to use</summary>
   public string[]? allowed_db_connection_names { get; set; } = null;
-  /// Name of the model. Also used as the unique identifier
+  /// <summary>Name of the model. Also used as the unique identifier</summary>
   public string? name { get; set; } = null;
-  /// Name of project containing the model
+  /// <summary>Name of project containing the model</summary>
   public string? project_name { get; set; } = null;
-  /// Is this model allowed to use all current and future connections
+  /// <summary>Is this model allowed to use all current and future connections</summary>
   public bool? unlimited_db_connections { get; set; } = null;
 }
 
@@ -4538,22 +4538,22 @@ public class WriteLookmlModel : SdkModel
 /// can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
 public class WriteLookWithQuery : SdkModel 
 {
-  /// Look Title
+  /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
-  /// User Id
+  /// <summary>User Id</summary>
   public long? user_id { get; set; } = null;
-  /// Whether or not a look is 'soft' deleted.
+  /// <summary>Whether or not a look is 'soft' deleted.</summary>
   public bool? deleted { get; set; } = null;
-  /// Description
+  /// <summary>Description</summary>
   public string? description { get; set; } = null;
-  /// auto-run query when Look viewed
+  /// <summary>auto-run query when Look viewed</summary>
   public bool? is_run_on_load { get; set; } = null;
-  /// Is Public
+  /// <summary>Is Public</summary>
   public bool? @public { get; set; } = null;
-  /// Query Id
+  /// <summary>Query Id</summary>
   public long? query_id { get; set; } = null;
   public WriteFolderBase? folder { get; set; }
-  /// Folder Id
+  /// <summary>Folder Id</summary>
   public string? folder_id { get; set; } = null;
   public WriteQuery? query { get; set; }
 }
@@ -4562,19 +4562,19 @@ public class WriteLookWithQuery : SdkModel
 /// can, id, result_maker_id
 public class WriteMergeQuery : SdkModel 
 {
-  /// Column Limit
+  /// <summary>Column Limit</summary>
   public string? column_limit { get; set; } = null;
-  /// Dynamic Fields
+  /// <summary>Dynamic Fields</summary>
   public string? dynamic_fields { get; set; } = null;
-  /// Pivots
+  /// <summary>Pivots</summary>
   public string[]? pivots { get; set; } = null;
-  /// Sorts
+  /// <summary>Sorts</summary>
   public string[]? sorts { get; set; } = null;
-  /// Source Queries defining the results to be merged.
+  /// <summary>Source Queries defining the results to be merged.</summary>
   public MergeQuerySourceQuery[]? source_queries { get; set; } = null;
-  /// Total
+  /// <summary>Total</summary>
   public bool? total { get; set; } = null;
-  /// Visualization Config
+  /// <summary>Visualization Config</summary>
   public StringDictionary<string>? vis_config { get; set; } = null;
 }
 
@@ -4583,7 +4583,7 @@ public class WriteMergeQuery : SdkModel
 public class WriteModelSet : SdkModel 
 {
   public string[]? models { get; set; } = null;
-  /// Name of ModelSet
+  /// <summary>Name of ModelSet</summary>
   public string? name { get; set; } = null;
 }
 
@@ -4591,15 +4591,15 @@ public class WriteModelSet : SdkModel
 /// can, client_guid, tokens_invalid_before, activated_users
 public class WriteOauthClientApp : SdkModel 
 {
-  /// The uri with which this application will receive an auth code by browser redirect.
+  /// <summary>The uri with which this application will receive an auth code by browser redirect.</summary>
   public string? redirect_uri { get; set; } = null;
-  /// The application's display name
+  /// <summary>The application's display name</summary>
   public string? display_name { get; set; } = null;
-  /// A description of the application that will be displayed to users
+  /// <summary>A description of the application that will be displayed to users</summary>
   public string? description { get; set; } = null;
-  /// When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
+  /// <summary>When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.</summary>
   public bool? enabled { get; set; } = null;
-  /// If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
+  /// <summary>If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance</summary>
   public long? group_id { get; set; } = null;
 }
 
@@ -4607,53 +4607,53 @@ public class WriteOauthClientApp : SdkModel
 /// can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
 public class WriteOIDCConfig : SdkModel 
 {
-  /// Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+  /// <summary>Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.</summary>
   public bool? alternate_email_login_allowed { get; set; } = null;
-  /// OpenID Provider Audience
+  /// <summary>OpenID Provider Audience</summary>
   public string? audience { get; set; } = null;
-  /// Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
+  /// <summary>Users will not be allowed to login at all unless a role for them is found in OIDC if set to true</summary>
   public bool? auth_requires_role { get; set; } = null;
-  /// OpenID Provider Authorization Url
+  /// <summary>OpenID Provider Authorization Url</summary>
   public Url? authorization_endpoint { get; set; } = null;
-  /// (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
+  /// <summary>(Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC</summary>
   public long[]? default_new_user_group_ids { get; set; } = null;
-  /// (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
+  /// <summary>(Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC</summary>
   public long[]? default_new_user_role_ids { get; set; } = null;
-  /// Enable/Disable OIDC authentication for the server
+  /// <summary>Enable/Disable OIDC authentication for the server</summary>
   public bool? enabled { get; set; } = null;
-  /// Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
+  /// <summary>Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'</summary>
   public string? groups_attribute { get; set; } = null;
-  /// (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
+  /// <summary>(Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids</summary>
   public OIDCGroupWrite[]? groups_with_role_ids { get; set; } = null;
-  /// Relying Party Identifier (provided by OpenID Provider)
+  /// <summary>Relying Party Identifier (provided by OpenID Provider)</summary>
   public string? identifier { get; set; } = null;
-  /// OpenID Provider Issuer
+  /// <summary>OpenID Provider Issuer</summary>
   public string? issuer { get; set; } = null;
-  /// Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+  /// <summary>Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'</summary>
   public string? new_user_migration_types { get; set; } = null;
-  /// Array of scopes to request.
+  /// <summary>Array of scopes to request.</summary>
   public string[]? scopes { get; set; } = null;
-  /// (Write-Only) Relying Party Secret (provided by OpenID Provider)
+  /// <summary>(Write-Only) Relying Party Secret (provided by OpenID Provider)</summary>
   public string? secret { get; set; } = null;
-  /// Set user roles in Looker based on groups from OIDC
+  /// <summary>Set user roles in Looker based on groups from OIDC</summary>
   public bool? set_roles_from_groups { get; set; } = null;
-  /// OpenID Provider Token Url
+  /// <summary>OpenID Provider Token Url</summary>
   public string? token_endpoint { get; set; } = null;
-  /// Name of user record attributes used to indicate email address field
+  /// <summary>Name of user record attributes used to indicate email address field</summary>
   public string? user_attribute_map_email { get; set; } = null;
-  /// Name of user record attributes used to indicate first name
+  /// <summary>Name of user record attributes used to indicate first name</summary>
   public string? user_attribute_map_first_name { get; set; } = null;
-  /// Name of user record attributes used to indicate last name
+  /// <summary>Name of user record attributes used to indicate last name</summary>
   public string? user_attribute_map_last_name { get; set; } = null;
-  /// (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
+  /// <summary>(Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids</summary>
   public OIDCUserAttributeWrite[]? user_attributes_with_ids { get; set; } = null;
-  /// OpenID Provider User Information Url
+  /// <summary>OpenID Provider User Information Url</summary>
   public Url? userinfo_endpoint { get; set; } = null;
-  /// Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+  /// <summary>Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.</summary>
   public bool? allow_normal_group_membership { get; set; } = null;
-  /// OIDC auth'd users will inherit roles from non-reflected Looker groups.
+  /// <summary>OIDC auth'd users will inherit roles from non-reflected Looker groups.</summary>
   public bool? allow_roles_from_normal_groups { get; set; } = null;
-  /// Allows roles to be directly assigned to OIDC auth'd users.
+  /// <summary>Allows roles to be directly assigned to OIDC auth'd users.</summary>
   public bool? allow_direct_roles { get; set; } = null;
 }
 
@@ -4661,13 +4661,13 @@ public class WriteOIDCConfig : SdkModel
 /// can
 public class WritePasswordConfig : SdkModel 
 {
-  /// Minimum number of characters required for a new password.  Must be between 7 and 100
+  /// <summary>Minimum number of characters required for a new password.  Must be between 7 and 100</summary>
   public long? min_length { get; set; } = null;
-  /// Require at least one numeric character
+  /// <summary>Require at least one numeric character</summary>
   public bool? require_numeric { get; set; } = null;
-  /// Require at least one uppercase and one lowercase letter
+  /// <summary>Require at least one uppercase and one lowercase letter</summary>
   public bool? require_upperlower { get; set; } = null;
-  /// Require at least one special character
+  /// <summary>Require at least one special character</summary>
   public bool? require_special { get; set; } = null;
 }
 
@@ -4675,7 +4675,7 @@ public class WritePasswordConfig : SdkModel
 /// can, all_access, built_in, id, url
 public class WritePermissionSet : SdkModel 
 {
-  /// Name of PermissionSet
+  /// <summary>Name of PermissionSet</summary>
   public string? name { get; set; } = null;
   public string[]? permissions { get; set; } = null;
 }
@@ -4684,39 +4684,39 @@ public class WritePermissionSet : SdkModel
 /// can, id, uses_git, is_example
 public class WriteProject : SdkModel 
 {
-  /// Project display name
+  /// <summary>Project display name</summary>
   public string? name { get; set; } = null;
-  /// Git remote repository url
+  /// <summary>Git remote repository url</summary>
   public string? git_remote_url { get; set; } = null;
-  /// Git username for HTTPS authentication. (For production only, if using user attributes.)
+  /// <summary>Git username for HTTPS authentication. (For production only, if using user attributes.)</summary>
   public string? git_username { get; set; } = null;
-  /// (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
+  /// <summary>(Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)</summary>
   public string? git_password { get; set; } = null;
-  /// User attribute name for username in per-user HTTPS authentication.
+  /// <summary>User attribute name for username in per-user HTTPS authentication.</summary>
   public string? git_username_user_attribute { get; set; } = null;
-  /// User attribute name for password in per-user HTTPS authentication.
+  /// <summary>User attribute name for password in per-user HTTPS authentication.</summary>
   public string? git_password_user_attribute { get; set; } = null;
-  /// Name of the git service provider
+  /// <summary>Name of the git service provider</summary>
   public string? git_service_name { get; set; } = null;
-  /// Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
+  /// <summary>Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)</summary>
   public long? git_application_server_http_port { get; set; } = null;
-  /// Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+  /// <summary>Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".</summary>
   public string? git_application_server_http_scheme { get; set; } = null;
-  /// (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
+  /// <summary>(Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.</summary>
   public string? deploy_secret { get; set; } = null;
-  /// (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
+  /// <summary>(Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.</summary>
   public bool? unset_deploy_secret { get; set; } = null;
-  /// The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+  /// <summary>The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".</summary>
   public string? pull_request_mode { get; set; } = null;
-  /// Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
+  /// <summary>Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository</summary>
   public bool? validation_required { get; set; } = null;
-  /// If true, folders are enabled for this project
+  /// <summary>If true, folders are enabled for this project</summary>
   public bool? folders_enabled { get; set; } = null;
-  /// If true, advanced git release management is enabled for this project
+  /// <summary>If true, advanced git release management is enabled for this project</summary>
   public bool? git_release_mgmt_enabled { get; set; } = null;
-  /// Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
+  /// <summary>Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).</summary>
   public bool? allow_warnings { get; set; } = null;
-  /// Status of dependencies in your manifest & lockfile
+  /// <summary>Status of dependencies in your manifest & lockfile</summary>
   public string? dependency_status { get; set; } = null;
 }
 
@@ -4724,43 +4724,43 @@ public class WriteProject : SdkModel
 /// can, id, slug, share_url, expanded_share_url, url, has_table_calculations
 public class WriteQuery : SdkModel 
 {
-  /// Model
+  /// <summary>Model</summary>
   public string model { get; set; } = "";
-  /// Explore Name
+  /// <summary>Explore Name</summary>
   public string view { get; set; } = "";
-  /// Fields
+  /// <summary>Fields</summary>
   public string[]? fields { get; set; } = null;
-  /// Pivots
+  /// <summary>Pivots</summary>
   public string[]? pivots { get; set; } = null;
-  /// Fill Fields
+  /// <summary>Fill Fields</summary>
   public string[]? fill_fields { get; set; } = null;
-  /// Filters
+  /// <summary>Filters</summary>
   public StringDictionary<string>? filters { get; set; } = null;
-  /// Filter Expression
+  /// <summary>Filter Expression</summary>
   public string? filter_expression { get; set; } = null;
-  /// Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
+  /// <summary>Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.</summary>
   public string[]? sorts { get; set; } = null;
-  /// Limit
+  /// <summary>Limit</summary>
   public string? limit { get; set; } = null;
-  /// Column Limit
+  /// <summary>Column Limit</summary>
   public string? column_limit { get; set; } = null;
-  /// Total
+  /// <summary>Total</summary>
   public bool? total { get; set; } = null;
-  /// Raw Total
+  /// <summary>Raw Total</summary>
   public string? row_total { get; set; } = null;
-  /// Fields on which to run subtotals
+  /// <summary>Fields on which to run subtotals</summary>
   public string[]? subtotals { get; set; } = null;
-  /// Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
+  /// <summary>Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.</summary>
   public StringDictionary<object>? vis_config { get; set; } = null;
-  /// The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
+  /// <summary>The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.</summary>
   public StringDictionary<object>? filter_config { get; set; } = null;
-  /// Visible UI Sections
+  /// <summary>Visible UI Sections</summary>
   public string? visible_ui_sections { get; set; } = null;
-  /// Dynamic Fields
+  /// <summary>Dynamic Fields</summary>
   public string? dynamic_fields { get; set; } = null;
-  /// Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
+  /// <summary>Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.</summary>
   public string? client_id { get; set; } = null;
-  /// Query Timezone
+  /// <summary>Query Timezone</summary>
   public string? query_timezone { get; set; } = null;
 }
 
@@ -4768,11 +4768,11 @@ public class WriteQuery : SdkModel
 /// can, id, root_project_id, remote_url, is_configured
 public class WriteRepositoryCredential : SdkModel 
 {
-  /// Git username for HTTPS authentication.
+  /// <summary>Git username for HTTPS authentication.</summary>
   public string? git_username { get; set; } = null;
-  /// (Write-Only) Git password for HTTPS authentication.
+  /// <summary>(Write-Only) Git password for HTTPS authentication.</summary>
   public string? git_password { get; set; } = null;
-  /// Public deploy key for SSH authentication.
+  /// <summary>Public deploy key for SSH authentication.</summary>
   public string? ssh_public_key { get; set; } = null;
 }
 
@@ -4787,13 +4787,13 @@ public class WriteResultMakerWithIdVisConfigAndDynamicFields : SdkModel
 /// can, id, url, users_url
 public class WriteRole : SdkModel 
 {
-  /// Name of Role
+  /// <summary>Name of Role</summary>
   public string? name { get; set; } = null;
   public WritePermissionSet? permission_set { get; set; }
-  /// (Write-Only) Id of permission set
+  /// <summary>(Write-Only) Id of permission set</summary>
   public long? permission_set_id { get; set; } = null;
   public WriteModelSet? model_set { get; set; }
-  /// (Write-Only) Id of model set
+  /// <summary>(Write-Only) Id of model set</summary>
   public long? model_set_id { get; set; } = null;
 }
 
@@ -4801,53 +4801,53 @@ public class WriteRole : SdkModel
 /// can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
 public class WriteSamlConfig : SdkModel 
 {
-  /// Enable/Disable Saml authentication for the server
+  /// <summary>Enable/Disable Saml authentication for the server</summary>
   public bool? enabled { get; set; } = null;
-  /// Identity Provider Certificate (provided by IdP)
+  /// <summary>Identity Provider Certificate (provided by IdP)</summary>
   public string? idp_cert { get; set; } = null;
-  /// Identity Provider Url (provided by IdP)
+  /// <summary>Identity Provider Url (provided by IdP)</summary>
   public string? idp_url { get; set; } = null;
-  /// Identity Provider Issuer (provided by IdP)
+  /// <summary>Identity Provider Issuer (provided by IdP)</summary>
   public string? idp_issuer { get; set; } = null;
-  /// Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
+  /// <summary>Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.</summary>
   public string? idp_audience { get; set; } = null;
-  /// Count of seconds of clock drift to allow when validating timestamps of assertions.
+  /// <summary>Count of seconds of clock drift to allow when validating timestamps of assertions.</summary>
   public long? allowed_clock_drift { get; set; } = null;
-  /// Name of user record attributes used to indicate email address field
+  /// <summary>Name of user record attributes used to indicate email address field</summary>
   public string? user_attribute_map_email { get; set; } = null;
-  /// Name of user record attributes used to indicate first name
+  /// <summary>Name of user record attributes used to indicate first name</summary>
   public string? user_attribute_map_first_name { get; set; } = null;
-  /// Name of user record attributes used to indicate last name
+  /// <summary>Name of user record attributes used to indicate last name</summary>
   public string? user_attribute_map_last_name { get; set; } = null;
-  /// Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+  /// <summary>Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'</summary>
   public string? new_user_migration_types { get; set; } = null;
-  /// Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+  /// <summary>Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.</summary>
   public bool? alternate_email_login_allowed { get; set; } = null;
-  /// (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
+  /// <summary>(Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml</summary>
   public long[]? default_new_user_role_ids { get; set; } = null;
-  /// (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
+  /// <summary>(Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml</summary>
   public long[]? default_new_user_group_ids { get; set; } = null;
-  /// Set user roles in Looker based on groups from Saml
+  /// <summary>Set user roles in Looker based on groups from Saml</summary>
   public bool? set_roles_from_groups { get; set; } = null;
-  /// Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
+  /// <summary>Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'</summary>
   public string? groups_attribute { get; set; } = null;
-  /// (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
+  /// <summary>(Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids</summary>
   public SamlGroupWrite[]? groups_with_role_ids { get; set; } = null;
-  /// Users will not be allowed to login at all unless a role for them is found in Saml if set to true
+  /// <summary>Users will not be allowed to login at all unless a role for them is found in Saml if set to true</summary>
   public bool? auth_requires_role { get; set; } = null;
-  /// (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
+  /// <summary>(Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids</summary>
   public SamlUserAttributeWrite[]? user_attributes_with_ids { get; set; } = null;
-  /// Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
+  /// <summary>Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']</summary>
   public string? groups_finder_type { get; set; } = null;
-  /// Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
+  /// <summary>Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'</summary>
   public string? groups_member_value { get; set; } = null;
-  /// Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
+  /// <summary>Bypass the login page when user authentication is required. Redirect to IdP immediately instead.</summary>
   public bool? bypass_login_page { get; set; } = null;
-  /// Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+  /// <summary>Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.</summary>
   public bool? allow_normal_group_membership { get; set; } = null;
-  /// SAML auth'd users will inherit roles from non-reflected Looker groups.
+  /// <summary>SAML auth'd users will inherit roles from non-reflected Looker groups.</summary>
   public bool? allow_roles_from_normal_groups { get; set; } = null;
-  /// Allows roles to be directly assigned to SAML auth'd users.
+  /// <summary>Allows roles to be directly assigned to SAML auth'd users.</summary>
   public bool? allow_direct_roles { get; set; } = null;
 }
 
@@ -4855,57 +4855,57 @@ public class WriteSamlConfig : SdkModel
 /// id, created_at, updated_at, title, user, next_run_at, last_run_at, can
 public class WriteScheduledPlan : SdkModel 
 {
-  /// Name of this scheduled plan
+  /// <summary>Name of this scheduled plan</summary>
   public string? name { get; set; } = null;
-  /// User Id which owns this scheduled plan
+  /// <summary>User Id which owns this scheduled plan</summary>
   public long? user_id { get; set; } = null;
-  /// Whether schedule is run as recipient (only applicable for email recipients)
+  /// <summary>Whether schedule is run as recipient (only applicable for email recipients)</summary>
   public bool? run_as_recipient { get; set; } = null;
-  /// Whether the ScheduledPlan is enabled
+  /// <summary>Whether the ScheduledPlan is enabled</summary>
   public bool? enabled { get; set; } = null;
-  /// Id of a look
+  /// <summary>Id of a look</summary>
   public long? look_id { get; set; } = null;
-  /// Id of a dashboard
+  /// <summary>Id of a dashboard</summary>
   public long? dashboard_id { get; set; } = null;
-  /// Id of a LookML dashboard
+  /// <summary>Id of a LookML dashboard</summary>
   public string? lookml_dashboard_id { get; set; } = null;
-  /// Query string to run look or dashboard with
+  /// <summary>Query string to run look or dashboard with</summary>
   public string? filters_string { get; set; } = null;
-  /// (DEPRECATED) Alias for filters_string field
+  /// <summary>(DEPRECATED) Alias for filters_string field</summary>
   public string? dashboard_filters { get; set; } = null;
-  /// Delivery should occur if running the dashboard or look returns results
+  /// <summary>Delivery should occur if running the dashboard or look returns results</summary>
   public bool? require_results { get; set; } = null;
-  /// Delivery should occur if the dashboard look does not return results
+  /// <summary>Delivery should occur if the dashboard look does not return results</summary>
   public bool? require_no_results { get; set; } = null;
-  /// Delivery should occur if data have changed since the last run
+  /// <summary>Delivery should occur if data have changed since the last run</summary>
   public bool? require_change { get; set; } = null;
-  /// Will run an unlimited query and send all results.
+  /// <summary>Will run an unlimited query and send all results.</summary>
   public bool? send_all_results { get; set; } = null;
-  /// Vixie-Style crontab specification when to run
+  /// <summary>Vixie-Style crontab specification when to run</summary>
   public string? crontab { get; set; } = null;
-  /// Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
+  /// <summary>Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)</summary>
   public string? datagroup { get; set; } = null;
-  /// Timezone for interpreting the specified crontab (default is Looker instance timezone)
+  /// <summary>Timezone for interpreting the specified crontab (default is Looker instance timezone)</summary>
   public string? timezone { get; set; } = null;
-  /// Query id
+  /// <summary>Query id</summary>
   public string? query_id { get; set; } = null;
-  /// Scheduled plan destinations
+  /// <summary>Scheduled plan destinations</summary>
   public ScheduledPlanDestination[]? scheduled_plan_destination { get; set; } = null;
-  /// Whether the plan in question should only be run once (usually for testing)
+  /// <summary>Whether the plan in question should only be run once (usually for testing)</summary>
   public bool? run_once { get; set; } = null;
-  /// Whether links back to Looker should be included in this ScheduledPlan
+  /// <summary>Whether links back to Looker should be included in this ScheduledPlan</summary>
   public bool? include_links { get; set; } = null;
-  /// The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
+  /// <summary>The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".</summary>
   public string? pdf_paper_size { get; set; } = null;
-  /// Whether the PDF should be formatted for landscape orientation
+  /// <summary>Whether the PDF should be formatted for landscape orientation</summary>
   public bool? pdf_landscape { get; set; } = null;
-  /// Whether this schedule is in an embed context or not
+  /// <summary>Whether this schedule is in an embed context or not</summary>
   public bool? embed { get; set; } = null;
-  /// Color scheme of the dashboard if applicable
+  /// <summary>Color scheme of the dashboard if applicable</summary>
   public string? color_theme { get; set; } = null;
-  /// Whether or not to expand table vis to full length
+  /// <summary>Whether or not to expand table vis to full length</summary>
   public bool? long_tables { get; set; } = null;
-  /// The pixel width at which we render the inline table visualizations
+  /// <summary>The pixel width at which we render the inline table visualizations</summary>
   public long? inline_table_width { get; set; } = null;
 }
 
@@ -4913,15 +4913,15 @@ public class WriteScheduledPlan : SdkModel
 /// can
 public class WriteSessionConfig : SdkModel 
 {
-  /// Allow users to have persistent sessions when they login
+  /// <summary>Allow users to have persistent sessions when they login</summary>
   public bool? allow_persistent_sessions { get; set; } = null;
-  /// Number of minutes for user sessions.  Must be between 5 and 43200
+  /// <summary>Number of minutes for user sessions.  Must be between 5 and 43200</summary>
   public long? session_minutes { get; set; } = null;
-  /// Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
+  /// <summary>Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).</summary>
   public bool? unlimited_sessions_per_user { get; set; } = null;
-  /// Enforce session logout for sessions that are inactive for 15 minutes.
+  /// <summary>Enforce session logout for sessions that are inactive for 15 minutes.</summary>
   public bool? use_inactivity_based_logout { get; set; } = null;
-  /// Track location of session when user logs in.
+  /// <summary>Track location of session when user logs in.</summary>
   public bool? track_session_location { get; set; } = null;
 }
 
@@ -4929,11 +4929,11 @@ public class WriteSessionConfig : SdkModel
 /// can, id
 public class WriteTheme : SdkModel 
 {
-  /// Timestamp for when this theme becomes active. Null=always
+  /// <summary>Timestamp for when this theme becomes active. Null=always</summary>
   public DateTime? begin_at { get; set; } = null;
-  /// Timestamp for when this theme expires. Null=never
+  /// <summary>Timestamp for when this theme expires. Null=never</summary>
   public DateTime? end_at { get; set; } = null;
-  /// Name of theme. Can only be alphanumeric and underscores.
+  /// <summary>Name of theme. Can only be alphanumeric and underscores.</summary>
   public string? name { get; set; } = null;
   public ThemeSettings? settings { get; set; }
 }
@@ -4943,19 +4943,19 @@ public class WriteTheme : SdkModel
 public class WriteUser : SdkModel 
 {
   public WriteCredentialsEmail? credentials_email { get; set; }
-  /// First name
+  /// <summary>First name</summary>
   public string? first_name { get; set; } = null;
-  /// ID string for user's home folder
+  /// <summary>ID string for user's home folder</summary>
   public string? home_folder_id { get; set; } = null;
-  /// Account has been disabled
+  /// <summary>Account has been disabled</summary>
   public bool? is_disabled { get; set; } = null;
-  /// Last name
+  /// <summary>Last name</summary>
   public string? last_name { get; set; } = null;
-  /// User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
+  /// <summary>User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.</summary>
   public string? locale { get; set; } = null;
-  /// User's dev workspace has been checked for presence of applicable production projects
+  /// <summary>User's dev workspace has been checked for presence of applicable production projects</summary>
   public bool? models_dir_validated { get; set; } = null;
-  /// Per user dictionary of undocumented state information owned by the Looker UI.
+  /// <summary>Per user dictionary of undocumented state information owned by the Looker UI.</summary>
   public StringDictionary<string>? ui_state { get; set; } = null;
 }
 
@@ -4963,21 +4963,21 @@ public class WriteUser : SdkModel
 /// can, id, is_system, is_permanent
 public class WriteUserAttribute : SdkModel 
 {
-  /// Name of user attribute
+  /// <summary>Name of user attribute</summary>
   public string? name { get; set; } = null;
-  /// Human-friendly label for user attribute
+  /// <summary>Human-friendly label for user attribute</summary>
   public string? label { get; set; } = null;
-  /// Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
+  /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")</summary>
   public string? type { get; set; } = null;
-  /// Default value for when no value is set on the user
+  /// <summary>Default value for when no value is set on the user</summary>
   public string? default_value { get; set; } = null;
-  /// If true, users will not be able to view values of this attribute
+  /// <summary>If true, users will not be able to view values of this attribute</summary>
   public bool? value_is_hidden { get; set; } = null;
-  /// Non-admin users can see the values of their attributes and use them in filters
+  /// <summary>Non-admin users can see the values of their attributes and use them in filters</summary>
   public bool? user_can_view { get; set; } = null;
-  /// Users can change the value of this attribute for themselves
+  /// <summary>Users can change the value of this attribute for themselves</summary>
   public bool? user_can_edit { get; set; } = null;
-  /// Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
+  /// <summary>Destinations to which a hidden attribute may be sent. Once set, cannot be edited.</summary>
   public string? hidden_value_domain_whitelist { get; set; } = null;
 }
 
@@ -4985,7 +4985,7 @@ public class WriteUserAttribute : SdkModel
 /// can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
 public class WriteUserAttributeWithValue : SdkModel 
 {
-  /// Value of attribute for user
+  /// <summary>Value of attribute for user</summary>
   public string? value { get; set; } = null;
 }
 
@@ -4993,31 +4993,31 @@ public class WriteUserAttributeWithValue : SdkModel
 /// can, id, logo_url, favicon_url
 public class WriteWhitelabelConfiguration : SdkModel 
 {
-  /// Customer logo image. Expected base64 encoded data (write-only)
+  /// <summary>Customer logo image. Expected base64 encoded data (write-only)</summary>
   public string? logo_file { get; set; } = null;
-  /// Custom favicon image. Expected base64 encoded data (write-only)
+  /// <summary>Custom favicon image. Expected base64 encoded data (write-only)</summary>
   public string? favicon_file { get; set; } = null;
-  /// Default page title
+  /// <summary>Default page title</summary>
   public string? default_title { get; set; } = null;
-  /// Boolean to toggle showing help menus
+  /// <summary>Boolean to toggle showing help menus</summary>
   public bool? show_help_menu { get; set; } = null;
-  /// Boolean to toggle showing docs
+  /// <summary>Boolean to toggle showing docs</summary>
   public bool? show_docs { get; set; } = null;
-  /// Boolean to toggle showing email subscription options.
+  /// <summary>Boolean to toggle showing email subscription options.</summary>
   public bool? show_email_sub_options { get; set; } = null;
-  /// Boolean to toggle mentions of Looker in emails
+  /// <summary>Boolean to toggle mentions of Looker in emails</summary>
   public bool? allow_looker_mentions { get; set; } = null;
-  /// Boolean to toggle links to Looker in emails
+  /// <summary>Boolean to toggle links to Looker in emails</summary>
   public bool? allow_looker_links { get; set; } = null;
-  /// Allow subject line and email heading customization in customized emails”
+  /// <summary>Allow subject line and email heading customization in customized emails”</summary>
   public bool? custom_welcome_email_advanced { get; set; } = null;
-  /// Remove the word Looker from appearing in the account setup page
+  /// <summary>Remove the word Looker from appearing in the account setup page</summary>
   public bool? setup_mentions { get; set; } = null;
-  /// Remove Looker logo from Alerts
+  /// <summary>Remove Looker logo from Alerts</summary>
   public bool? alerts_logo { get; set; } = null;
-  /// Remove Looker links from Alerts
+  /// <summary>Remove Looker links from Alerts</summary>
   public bool? alerts_links { get; set; } = null;
-  /// Remove Looker mentions in home folder page when you don’t have any items saved
+  /// <summary>Remove Looker mentions in home folder page when you don’t have any items saved</summary>
   public bool? folders_mentions { get; set; } = null;
 }
 

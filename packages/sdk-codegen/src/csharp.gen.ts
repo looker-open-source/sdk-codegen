@@ -229,7 +229,7 @@ namespace Looker.SDK.API${this.apiRef}
     const arg = this.reserve(property.name)
     const pOpt = property.required ? '' : '?'
     return (
-      this.commentHeader(indent, this.describeProperty(property)) +
+      this.summary(indent, this.describeProperty(property)) +
       `${indent}public ${type.name}${pOpt} ${arg} ${getset}`
     )
   }
@@ -251,7 +251,6 @@ namespace Looker.SDK.API${this.apiRef}
     return this.commentHeader(indent, headComment)
   }
 
-  // TODO document parameters in methodHeader()
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
     const type = this.typeMap(method.type)
     let fragment = ''
@@ -363,7 +362,9 @@ namespace Looker.SDK.API${this.apiRef}
   }
 
   summary(indent: string, summary: string) {
-    return this.commentHeader(indent, `<summary>\n${summary}\n</summary>`)
+    if (!summary) return ''
+    const nl = summary.indexOf('\n') >= 0 ? '\n' : ''
+    return this.commentHeader(indent, `<summary>${nl}${summary}${nl}</summary>`)
   }
 
   paramComment(param: IParameter) {
