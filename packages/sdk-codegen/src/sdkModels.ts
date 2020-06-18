@@ -1990,6 +1990,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
 export interface IMappedType {
   name: string
   default: string
+  optional?: string
 }
 
 export interface ICodeGen {
