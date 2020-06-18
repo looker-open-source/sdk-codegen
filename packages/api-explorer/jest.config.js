@@ -26,7 +26,7 @@ module.exports = {
   automock: false,
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
   moduleNameMapper: {
-    '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
+    '\\.(css)$': '<rootDir>../../config/jest/styleMock.js',
   },
   setupFilesAfterEnv: ['./jest.setup.js'],
   testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],

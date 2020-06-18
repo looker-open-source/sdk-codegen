@@ -43,25 +43,27 @@ interface SideNavSearchProps {
   specKey: string
 }
 
+type SearchResult = ISearchResult | undefined
+
 export const SideNavSearch: FC<SideNavSearchProps> = ({ api, specKey }) => {
   const { searchSettings, setSearchSettings } = useContext(SearchContext)
   const [keywords, setKeywords] = useState(searchSettings.pattern)
-  const [results, setResults] = useState({} as ISearchResult)
+  const [results, setResults] = useState<SearchResult>(undefined)
 
-  const onChange = (event: BaseSyntheticEvent) => {
+  const handleChange = (event: BaseSyntheticEvent) => {
     setKeywords(event.currentTarget.value)
   }
 
   const debouncedKeywords = useDebounce(keywords, 250)
 
   useEffect(() => {
+    setSearchSettings(setPattern(keywords))
     if (debouncedKeywords) {
       const searchCriteria = CriteriaToSet(searchSettings.criteria)
-      setSearchSettings(setPattern(keywords))
       const results = api.search(keywords, searchCriteria)
       setResults(results)
     } else {
-      setResults({} as ISearchResult)
+      setResults(undefined)
     }
   }, [debouncedKeywords])
 
@@ -71,13 +73,16 @@ export const SideNavSearch: FC<SideNavSearchProps> = ({ api, specKey }) => {
         hideSearchIcon
         placeholder="Type your search"
         value={keywords}
-        onChange={onChange}
+        onChange={handleChange}
+        onClear={handleChange}
         width="100%"
         mb="xsmall"
       />
       <SearchCriteriaSelector />
       <Divider />
-      {results.message && <SearchResults specKey={specKey} {...results} />}
+      {results && results.message && (
+        <SearchResults specKey={specKey} {...results} />
+      )}
     </Box>
   )
 }

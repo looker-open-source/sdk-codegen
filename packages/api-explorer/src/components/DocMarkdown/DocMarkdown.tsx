@@ -25,9 +25,22 @@
 import React, { BaseSyntheticEvent, FC, useContext } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { useHistory } from 'react-router-dom'
+import {
+  Code,
+  Heading,
+  Paragraph,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  Link,
+  ListItem,
+  List,
+} from '@looker/components'
 
-import { SearchContext } from '../../context/search'
+import { SearchContext } from '../../context'
 import { highlightMarkdown, transformURL } from './utils'
+import { TableCell } from './TableCell'
 
 interface DocMarkdownProps {
   source: string
@@ -56,6 +69,19 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
         source={highlightMarkdown(pattern, source)}
         escapeHtml={false}
         transformLinkUri={transformURL.bind(null, specKey)}
+        renderers={{
+          heading: Heading,
+          paragraph: Paragraph,
+          inlineCode: Code,
+          link: Link,
+          list: List,
+          listItem: ListItem,
+          table: Table,
+          tableHead: TableHead,
+          tableBody: TableBody,
+          tableRow: TableRow,
+          tableCell: TableCell,
+        }}
       />
     </span>
   )
