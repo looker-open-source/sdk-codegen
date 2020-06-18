@@ -1,0 +1,3 @@
+{
+  "extends": "@looker/eslint-config/tsconfig.react"
+}

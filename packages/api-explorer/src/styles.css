@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+html,
+body,
+div,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+ol,
+ul,
+li,
+form,
+legend,
+label,
+table,
+header,
+footer,
+nav,
+section,
+figure {
+    margin: 0;
+    padding: 0;
+}
+  
+header,
+footer,
+nav,
+section,
+article,
+hgroup,
+figure {
+    display: block;
+}
+  
+html {
+    color: #4C535B;
+    font-family: "Open Sans", sans-serif;
+    font-size: 100%;
+    font-weight: 400;
+    height: 100%;
+}
+
+em, i {
+    font-style: italic
+}
+
+b, strong {
+    font-weight: 700;
+}
+
+.mainColumn h1,
+.mainColumn h2,
+.mainColumn h3,
+.mainColumn h4,
+.mainColumn h5,
+.mainColumn h6 {
+    color: #343c42;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+}
+
+.mainColumn h1 {
+    line-height: 1.1944444444;
+    margin-bottom: 1.25rem;
+}
+
+/* Max-width here keeps line lengths in check */
+.mainColumn p,
+.mainColumn ul,
+.mainColumn ol {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1.375rem;
+    max-width: 580px;
+}
+
+.mainColumn li ul,
+.mainColumn li ol {
+    margin-bottom: 0;
+}
+
+.mainColumn a {
+    color: #0087E1;
+    text-decoration: underline;
+}
+
+.mainColumn pre {
+    background-color: #343C42;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.875rem;
+    margin-bottom: 1.375rem;
+    overflow: auto;
+    padding: 1.25rem;
+    width: 100%;
+    max-width: 580px;
+}
+
+.mainColumn code {
+    font-family: 'Roboto Mono', monospace !important;
+    line-height: 1.5;
+}
+
+.mainColumn p code {
+    background-color: #f4f6f7;
+    border-radius: 4px;
+    color: #343c42;
+    padding: 0 0.125rem;
+}
+
+.mainColumn table {
+    border: 1px solid #dee1e5;
+    border-collapse: collapse;    
+    margin-bottom: 1.375rem;
+    overflow: auto;
+    width: 100%;
+}
+
+.mainColumn th {
+    background-color: #f4f6f7;
+    border-right: 1px solid #dee1e5;
+    font-weight: 600;
+    padding: 0.5rem;   
+}
+
+.mainColumn td {
+    border-top: 1px solid #dee1e5;
+    border-right: 1px solid #dee1e5;
+    text-align: left;
+    vertical-align: top;
+    padding: 0.5rem;
+}
