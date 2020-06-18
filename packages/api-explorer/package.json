@@ -14,7 +14,7 @@
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
   "scripts": {
-    "develop": "webpack-dev-server",
+    "develop": "webpack-dev-server --https",
     "playground": "webpack-dev-server ./src/playground/index.tsx",
     "lint:es": "eslint 'src/**/*.ts{,x}'",
     "lint:prettier": "prettier --check '{**/*.ts?(x),**/*.md?(x)}'",
@@ -90,8 +90,5 @@
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "styled-components": "^4.4.1"
-  },
-  "resolutions": {
-    "typescript": "3.8.2"
   }
 }
