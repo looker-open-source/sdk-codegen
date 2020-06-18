@@ -15,8 +15,7 @@ node_modules
 python/.tox/
 
 # code-gen
-/packages/icons/src/generated
-public/
+./public
 
 # lerna
 /packages/*/lib
