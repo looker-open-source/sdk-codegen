@@ -53,18 +53,16 @@ describe('csharp generator', () => {
 
   it('generates a type', () => {
     const type = apiTestModel.types.AccessToken
-    const expected = `public class AccessToken
+    const expected = `public class AccessToken : SdkModel 
 {
-  public AccessToken() { }
-
   /// Access Token used for API calls (read-only)
-  string access_token { get; set; } = null;
+  public string? access_token { get; set; } = null;
   /// Type of Token (read-only)
-  string token_type { get; set; } = null;
+  public string? token_type { get; set; } = null;
   /// Number of seconds before the token expires (read-only)
-  long expires_in { get; set; } = null;
+  public long? expires_in { get; set; } = null;
   /// Refresh token which can be used to obtain a new access token (read-only)
-  string refresh_token { get; set; } = null;
+  public string? refresh_token { get; set; } = null;
 }`
     const actual = gen.declareType(indent, type)
     expect(actual).toEqual(expected)
@@ -77,18 +75,19 @@ describe('csharp generator', () => {
 /// POST /sql_queries/{slug}/run/{result_format} -> string
 /// 
 /// **Note**: Binary content may be returned by this method.
-async Task<SdkResponse<TSuccess, TError>> run_sql_query<TSuccess, TError>(
+public async Task<SdkResponse<TSuccess, TError>> run_sql_query<TSuccess, TError>(
   /// <param name=string>slug of query</param>
-  slug: string,
+  string slug,
   /// <param name=string>Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]</param>
-  result_format: string,
+  string result_format,
   /// <param name=string>Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.</param>
-  download: string = null,
-  ITransportSettings options = null)
+  string? download = null,
+  ITransportSettings? options = null) where TSuccess : class where TError : Exception
 {
-    slug = EncodeParam(slug);
-    result_format = EncodeParam(result_format);
-  return this.AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/sql_queries/{slug}/run/{result_format}", new Values = {{ "download" = download }});
+    slug = SdkUtils.EncodeParam(slug);
+    result_format = SdkUtils.EncodeParam(result_format);
+  return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/sql_queries/{slug}/run/{result_format}", new Values {
+      { "download", download }},null,options);
 }`
     const actual = gen.declareMethod(indent, method)
     expect(actual).toEqual(expected)

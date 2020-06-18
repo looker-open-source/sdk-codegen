@@ -24,6 +24,7 @@
 
  */
 
+import { commentBlock } from '@looker/sdk-codegen-utils'
 import { CodeGen } from './codeGen'
 import {
   IMappedType,
@@ -129,7 +130,7 @@ export class CSharpGen extends CodeGen {
   nullStr = 'null'
   transport = 'Transport'
 
-  argDelimiter = ',\n'
+  argDelimiter = ','
   paramDelimiter = ',\n'
   propDelimiter = '\n'
 
@@ -137,6 +138,10 @@ export class CSharpGen extends CodeGen {
   endTypeStr = '\n}'
   needsRequestTypes = false
   willItStream = false
+
+  commentHeader(indent: string, text: string | undefined) {
+    return text ? `${commentBlock(text, indent, '/// ')}\n` : ''
+  }
 
   modelsPrologue(_indent: string) {
     return `#nullable enable
@@ -198,10 +203,12 @@ namespace Looker.SDK.API${this.apiRef}
     const mapped = this.typeMap(type)
     const arg = this.reserve(param.name)
     const pOpt = param.required ? '' : '?'
-    return (
-      this.commentHeader(indent, this.paramComment(param, mapped)) +
-      `${indent}${mapped.name}${pOpt} ${arg}`
-    )
+    const defaulting = param.required
+      ? ''
+      : mapped.optional
+      ? ` = ${mapped.optional}`
+      : ''
+    return `${indent}${mapped.name}${pOpt} ${arg}${defaulting}`
   }
 
   declareProperty(indent: string, property: IProperty): string {
@@ -209,10 +216,16 @@ namespace Looker.SDK.API${this.apiRef}
     // TODO notation for readonly support
     // let getset = property.readOnly ? '{ get; }' : '{ get; set; }'
     let getset = '{ get; set; }'
-    // Presumption is, if type.default has a value, it should be used for required properties in class
-    if (property.required && type.default) {
-      getset += ` = ${type.default};`
+    if (property.required) {
+      if (type.default) {
+        getset += ` = ${type.default};`
+      }
+    } else {
+      if (type.optional) {
+        getset += ` = ${type.optional};`
+      }
     }
+
     const arg = this.reserve(property.name)
     const pOpt = property.required ? '' : '?'
     return (
@@ -221,13 +234,26 @@ namespace Looker.SDK.API${this.apiRef}
     )
   }
 
-  // TODO document parameters in methodHeader()
-  methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
+  methodHeader(indent: string, method: IMethod) {
     const type = this.typeMap(method.type)
     const head = method.description?.trim()
     let headComment =
       (head ? `${head}\n\n` : '') +
       `${method.httpMethod} ${method.endpoint} -> ${type.name}`
+    if (method.responseIsBoth()) {
+      headComment += `\n\n**Note**: Binary content may be returned by this method.`
+    } else if (method.responseIsBinary()) {
+      headComment += `\n\n**Note**: Binary content is returned by this method.`
+    }
+
+    method.params.forEach((param) => (headComment += this.paramComment(param)))
+
+    return this.commentHeader(indent, headComment)
+  }
+
+  // TODO document parameters in methodHeader()
+  methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
+    const type = this.typeMap(method.type)
     let fragment = ''
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
@@ -248,14 +274,9 @@ namespace Looker.SDK.API${this.apiRef}
       fragment =
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
     }
-    if (method.responseIsBoth()) {
-      headComment += `\n\n**Note**: Binary content may be returned by this method.`
-    } else if (method.responseIsBinary()) {
-      headComment += `\n\n**Note**: Binary content is returned by this method.\n`
-    }
     const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
     const header =
-      this.commentHeader(indent, headComment) +
+      this.methodHeader(indent, method) +
       `${indent}public async Task<SdkResponse<TSuccess, TError>> ${method.name}<TSuccess, TError>(` +
       (streamer ? `\n${bump}${callback}` : '')
 
@@ -264,7 +285,7 @@ namespace Looker.SDK.API${this.apiRef}
       fragment +
       `${
         fragment ? ',' : ''
-      }\n${bump}ITransportSettings? options) where TSuccess : class where TError : Exception\n{${indent}\n`
+      }\n${bump}ITransportSettings? options = null) where TSuccess : class where TError : Exception\n{${indent}\n`
     )
   }
 
@@ -300,9 +321,21 @@ namespace Looker.SDK.API${this.apiRef}
     const bump = this.bumper(this.indentStr) + this.indentStr
     return args && args.length !== 0
       ? `new Values {\n${bump}${values.join(
-          this.argDelimiter + bump + prefix
+          `${this.argDelimiter.trim()}\n${bump}${prefix}`
         )}}`
       : this.nullStr
+  }
+
+  httpArgs(indent: string, method: IMethod) {
+    let result = this.argFill('', 'options')
+    // result = this.argFill(result, this.argGroup(indent, method.cookieArgs))
+    // result = this.argFill(result, this.argGroup(indent, method.headerArgs))
+    result = this.argFill(
+      result,
+      method.bodyArg ? method.bodyArg : this.nullStr
+    )
+    result = this.argFill(result, this.argGroup(indent, method.queryArgs))
+    return result
   }
 
   httpCall(indent: string, method: IMethod) {
@@ -313,7 +346,7 @@ namespace Looker.SDK.API${this.apiRef}
     const fragment = `AuthRequest<TSuccess, TError>(HttpMethod.${titleCase(
       method.httpMethod
     )}, ${dollah}"${method.endpoint}"${args ? ', ' + args : ''})`
-    return `${indent}return await ${this.it(fragment)};`
+    return `${indent}return await ${fragment};`
   }
 
   encodePathParams(indent: string, method: IMethod): string {
@@ -333,8 +366,10 @@ namespace Looker.SDK.API${this.apiRef}
     return this.commentHeader(indent, `<summary>\n${summary}\n</summary>`)
   }
 
-  paramComment(param: IParameter, mapped: IMappedType) {
-    return `<param name=${mapped.name}>${param.description}</param>`
+  paramComment(param: IParameter) {
+    return param.description
+      ? `\n<param name="${param.name}">${param.description}</param>`
+      : ''
   }
 
   returnComment(param: IParameter) {
@@ -352,26 +387,29 @@ namespace Looker.SDK.API${this.apiRef}
 
   typeMap(type: IType): IMappedType {
     super.typeMap(type)
+    // all optional types are Nullable<T> and should have a "default value" of null
+    // see https://stackoverflow.com/a/29153833 for discussion
     const mt = ''
     const quotes = '""'
+    const optional = this.nullStr
 
     const csTypes: Record<string, IMappedType> = {
-      any: { default: this.nullStr, name: 'object' },
-      boolean: { default: mt, name: 'bool' },
-      byte: { default: mt, name: 'byte' },
-      date: { default: this.nullStr, name: 'DateTime' },
-      datetime: { default: this.nullStr, name: 'DateTime' },
-      double: { default: mt, name: 'double' },
-      float: { default: mt, name: 'float' },
-      int32: { default: mt, name: 'int' },
-      int64: { default: mt, name: 'long' },
-      integer: { default: mt, name: 'int' },
-      number: { default: mt, name: 'double' },
-      object: { default: this.nullStr, name: 'object' },
-      password: { default: quotes, name: 'Password' },
-      string: { default: quotes, name: 'string' },
-      uri: { default: quotes, name: 'Url' },
-      url: { default: quotes, name: 'Url' },
+      any: { default: this.nullStr, name: 'object', optional },
+      boolean: { default: mt, name: 'bool', optional },
+      byte: { default: mt, name: 'byte', optional },
+      date: { default: mt, name: 'DateTime', optional },
+      datetime: { default: mt, name: 'DateTime', optional },
+      double: { default: mt, name: 'double', optional },
+      float: { default: mt, name: 'float', optional },
+      int32: { default: mt, name: 'int', optional },
+      int64: { default: mt, name: 'long', optional },
+      integer: { default: mt, name: 'int', optional },
+      number: { default: mt, name: 'double', optional },
+      object: { default: this.nullStr, name: 'object', optional },
+      password: { default: quotes, name: 'Password', optional },
+      string: { default: quotes, name: 'string', optional },
+      uri: { default: quotes, name: 'Url', optional },
+      url: { default: quotes, name: 'Url', optional },
       void: { default: mt, name: 'void' },
     }
 
@@ -380,14 +418,19 @@ namespace Looker.SDK.API${this.apiRef}
       const map = this.typeMap(type.elementType)
       switch (type.className) {
         case 'ArrayType':
-          return { default: this.nullStr, name: `${map.name}[]` }
+          return { default: this.nullStr, name: `${map.name}[]`, optional }
         case 'HashType':
           return {
             default: this.nullStr,
             name: `StringDictionary<${map.name}>`,
+            optional,
           }
         case 'DelimArrayType':
-          return { default: this.nullStr, name: `DelimArray<${map.name}>` }
+          return {
+            default: this.nullStr,
+            name: `DelimArray<${map.name}>`,
+            optional,
+          }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
