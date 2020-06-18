@@ -31,9 +31,12 @@ namespace Looker.RTL
             foreach(var item in this)
             {
                 sb.Append(SdkUtils.EncodeParam(item));
+                sb.Append(Delimiter);
             }
 
-            sb.Remove(sb.Length - 1, 1);
+            // remove last delimiter
+            if (Count > 1) sb.Remove(sb.Length - Delimiter.Length, Delimiter.Length);
+            
             return sb.ToString();
         }
     }

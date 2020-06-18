@@ -40,7 +40,24 @@ namespace sdkrtl.Tests
                 Assert.Equal(ResponseMode.Binary, actual);
             }
         }
-        
+
+        [Fact]
+        public void DelimArrayTest()
+        {
+            var ints = new DelimArray<int> {1,2,3};
+            var actual = ints.ToString();
+            Assert.Equal("1,2,3", actual);
+            var strings = new DelimArray<string> {"one", "two", "three"};
+            actual = strings.ToString();
+            Assert.Equal("one,two,three", actual);
+            strings.Delimiter = ", ";
+            actual = strings.ToString();
+            Assert.Equal("one, two, three", actual);
+            strings = new DelimArray<string> {"a b", "c d", "e f"};
+            actual = strings.ToString();
+            Assert.Equal("a+b,c+d,e+f", actual);
+            
+        }
         [Fact]
         public void StringModeTest()
         {
@@ -70,7 +87,6 @@ namespace sdkrtl.Tests
             Assert.Equal("true", actual);
             actual = SdkUtils.EncodeParam(2.3);
             Assert.Equal("2.3", actual);
-
         }
 
         [Fact]
