@@ -51,6 +51,13 @@ export const camelCase = (value: string) => {
   })
 }
 
+/**
+ * convert to TitleCase
+ * @param value string value to convert to TitleCase
+ */
+export const titleCase = (value: string) =>
+  value[0].toLocaleUpperCase() + value.substr(1).toLowerCase()
+
 export interface IModel {}
 
 /**
@@ -1983,6 +1990,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
 export interface IMappedType {
   name: string
   default: string
+  optional?: string
 }
 
 export interface ICodeGen {

@@ -222,7 +222,7 @@ export class NodeSession extends AuthSession {
           }
           return init
         },
-        this.settings
+        this.settings // TODO this may not be needed here
       )
 
       const accessToken = await this.ok(promise)

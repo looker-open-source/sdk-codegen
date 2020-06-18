@@ -83,6 +83,7 @@ export const commentBlock = (
   if (!text) return ''
   text = text.trim()
   if (!text) return ''
-  const indenter = indent + commentStr
-  return indenter + text.split('\n').join('\n' + indenter)
+  const indentation = indent + commentStr
+  const parts = text.split('\n')
+  return indentation + parts.join('\n' + indentation)
 }
