@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
-import { IApiConfig, ApiConfig, IApiSection } from '@looker/sdk/lib/browser'
+import { IApiConfig, ApiConfig, IApiSection } from '@looker/sdk'
 import { ApiModel } from '@looker/sdk-codegen'
 import * as Models from '@looker/sdk-codegen'
 

@@ -4,5 +4,5 @@
     "declaration": true,
     "emitDeclarationOnly": true
   },
-  "exclude": ["**/*.spec.ts", "**/*.test.ts", "**/testUtils/*.ts"]
+  "exclude": ["**/*.spec.ts?(x)", "**/*.test.ts?(x)", "**/testUtils/*.ts?(x)"]
 }
