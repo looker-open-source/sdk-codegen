@@ -24,7 +24,7 @@
 
 import { FC } from 'react'
 import { last } from 'lodash'
-import { IRawResponse } from '@looker/sdk'
+import { IRawResponse } from '@looker/sdk/lib/browser'
 
 import { responseHandlers } from './responseUtils'
 

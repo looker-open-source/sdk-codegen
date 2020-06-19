@@ -25,7 +25,7 @@
  */
 
 import * as fs from 'fs'
-import { ApiConfig } from '@looker/sdk'
+import { ApiConfig } from '@looker/sdk/lib/node'
 import { ApiModel } from '../sdkModels'
 
 interface IKeyAny {
