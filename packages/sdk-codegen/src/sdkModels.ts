@@ -64,6 +64,13 @@ export const camelCase = (value: string) => {
   return result
 }
 
+/**
+ * convert to TitleCase
+ * @param value string value to convert to TitleCase
+ */
+export const titleCase = (value: string) =>
+  value[0].toLocaleUpperCase() + value.substr(1).toLowerCase()
+
 export interface IModel {}
 
 /**
@@ -83,7 +90,8 @@ const localeSort = (a: string, b: string) => a.localeCompare(b)
 
 export interface ISymbol {
   name: string
-  type: IType
+  fullName: string
+  owner: string
 
   asHashString(): string
 
@@ -96,6 +104,22 @@ export interface ISymbol {
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(rx: RegExp, criteria: SearchCriteria): boolean
+}
+
+export interface ITypedSymbol extends ISymbol {
+  type: IType
+}
+
+export interface IParameter extends ITypedSymbol {
+  location: MethodParameterLocation
+  required: boolean
+  description: string
+
+  asProperty(): IProperty
+
+  asHashString(): string
+
+  doEncode(): boolean
 }
 
 export type KeyedCollection<T> = Record<string, T>
@@ -243,6 +267,11 @@ export interface IType {
   name: string
 
   /**
+   * fullName = name for types
+   */
+  fullName: string
+
+  /**
    * key/value collection of properties for this type
    */
   properties: PropertyList
@@ -364,19 +393,6 @@ export declare type MethodParameterLocation =
   | 'header'
   | 'cookie'
 
-export interface IParameter extends ISymbol {
-  type: IType
-  location: MethodParameterLocation
-  required: boolean
-  description: string
-
-  asProperty(): IProperty
-
-  asHashString(): string
-
-  doEncode(): boolean
-}
-
 export interface IMethodResponse {
   statusCode: number
   mediaType: string
@@ -430,7 +446,7 @@ class MethodResponse implements IMethodResponse {
   }
 }
 
-export interface IProperty extends ISymbol {
+export interface IProperty extends ITypedSymbol {
   required: boolean
   nullable: boolean
   description: string
@@ -450,12 +466,14 @@ export interface IProperty extends ISymbol {
 }
 
 class Symbol implements ISymbol {
-  name: string
-  type: IType
+  constructor(
+    public name: string,
+    public type: IType,
+    public owner: string = ''
+  ) {}
 
-  constructor(name: string, type: IType) {
-    this.name = name
-    this.type = type
+  get fullName(): string {
+    return `${this.owner ? this.owner + '.' : ''}${this.name}`
   }
 
   asHashString() {
@@ -485,7 +503,7 @@ class Symbol implements ISymbol {
   }
 }
 
-interface ISchemadSymbol extends ISymbol {
+interface ISchemadSymbol extends ITypedSymbol {
   /**
    * Original OpenAPI schema reference for this item
    */
@@ -515,8 +533,8 @@ interface ISchemadSymbol extends ISymbol {
 class SchemadSymbol extends Symbol implements ISchemadSymbol {
   schema: OAS.SchemaObject
 
-  constructor(name: string, type: IType, schema: OAS.SchemaObject) {
-    super(name, type)
+  constructor(name: string, type: IType, schema: OAS.SchemaObject, owner = '') {
+    super(name, type, owner)
     this.schema = schema
   }
 
@@ -544,9 +562,10 @@ class Property extends SchemadSymbol implements IProperty {
     name: string,
     type: IType,
     schema: OAS.SchemaObject,
+    owner = '',
     required: string[] = []
   ) {
-    super(name, type, schema)
+    super(name, type, schema, owner)
     this.required = !!(
       required.includes(name) || schema.required?.includes(name)
     )
@@ -599,16 +618,17 @@ class Property extends SchemadSymbol implements IProperty {
   }
 }
 
-export class Parameter implements IParameter {
+export class Parameter extends SchemadSymbol implements IParameter {
   description = ''
   location: MethodParameterLocation = 'query'
-  name: string
   required = false
-  type: IType
 
-  constructor(param: OAS.ParameterObject | Partial<IParameter>, type: IType) {
-    this.name = param.name!
-    this.type = type
+  constructor(
+    param: OAS.ParameterObject | Partial<IParameter>,
+    type: IType,
+    owner = ''
+  ) {
+    super(param.name!, type, type.schema, owner)
     this.description = param.description || ''
     if ('in' in param) {
       this.location = param.in
@@ -635,7 +655,7 @@ export class Parameter implements IParameter {
   }
 
   asProperty() {
-    return new Property(this.name, this.type, this.asSchemaObject())
+    return new Property(this.owner, this.type, this.asSchemaObject())
   }
 
   asHashString() {
@@ -973,6 +993,7 @@ export class Method extends SchemadSymbol implements IMethod {
    * @param {IParameter} param
    */
   addParam(api: IApiModel, param: IParameter) {
+    param.owner = this.name
     this.params.push(param)
     this.addType(api, param.type)
     return this
@@ -1248,7 +1269,7 @@ export class Method extends SchemadSymbol implements IMethod {
   }
 }
 
-export class Type implements IType {
+export class Type implements ISymbol, IType {
   readonly properties: PropertyList = {}
   readonly methodRefs: KeyList = new Set<string>()
   readonly types: KeyList = new Set<string>()
@@ -1258,6 +1279,14 @@ export class Type implements IType {
 
   constructor(public schema: OAS.SchemaObject, public name: string) {
     this.customType = name
+  }
+
+  get fullName(): string {
+    return this.name
+  }
+
+  get owner(): string {
+    return ""
   }
 
   get writeable(): IProperty[] {
@@ -1314,6 +1343,7 @@ export class Type implements IType {
           propName,
           propType,
           propSchema,
+          this.name,
           this.schema.required
         )
       }
@@ -1546,6 +1576,7 @@ export class WriteType extends Type {
             // nullable/optional if property is nullable or property is complex type
             nullable: p.nullable || !p.type.intrinsic,
           },
+          this.name,
           type.schema.required
         )
         const typeWriter = api.mayGetWriteableType(p.type)
@@ -1706,6 +1737,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
     }
     if (ApiModel.isTypeSearch(criteria)) {
       Object.entries(this.types).forEach(([key, type]) => {
+        if (!rx) {
+          throw Error(`${key} rx undefined`)
+        }
         if (type.search(rx, criteria)) {
           types[key] = type
         }
@@ -2057,6 +2091,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
           type = this.resolveType(p.schema || {}, p.style)
           param = p
         }
+        // Method parameters are a chicken/egg situation and ownership will be established in the Method constructor
         const mp = new Parameter(param, type)
         params.push(mp)
       }
@@ -2109,7 +2144,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       // TODO must be dynamic, create type
     }
 
-    const result = new Parameter(
+    return new Parameter(
       {
         description: '',
         location: strBody,
@@ -2118,14 +2153,13 @@ export class ApiModel implements ISymbolTable, IApiModel {
       } as Partial<IParameter>,
       type
     )
-
-    return result
   }
 }
 
 export interface IMappedType {
   name: string
   default: string
+  optional?: string
 }
 
 export interface ICodeGen {

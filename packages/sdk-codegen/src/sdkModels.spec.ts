@@ -46,8 +46,8 @@ import {
   IEnumType,
   mayQuote,
   enumName,
-  Type,
   ApiModel,
+  titleCase,
 } from './sdkModels'
 
 const config = TestConfig()
@@ -78,6 +78,37 @@ describe('sdkModels', () => {
     })
     it('foobar is Foobar', () => {
       expect(enumName('foobar')).toEqual(`Foobar`)
+    })
+  })
+
+  describe('full names', () => {
+    describe('for methods', () => {
+      it('method full name is eponymous', () => {
+        const method = apiTestModel.methods.search_looks
+        expect(method).toBeDefined()
+        expect(method.fullName).toEqual(method.name)
+      })
+
+      it('method.parameter full name has method name prefix', () => {
+        const method = apiTestModel.methods.search_looks
+        expect(method).toBeDefined()
+        const item = method.params[0]
+        expect(item.fullName).toEqual(`${method.name}.${item.name}`)
+      })
+    })
+    describe('for types', () => {})
+    it('type full name is eponymous', () => {
+      const method = apiTestModel.methods.search_looks
+      expect(method).toBeDefined()
+      expect(method.fullName).toEqual(method.name)
+    })
+
+    it('type.property full name has method name prefix', () => {
+      const type = apiTestModel.types.Dashboard
+      expect(type).toBeDefined()
+      Object.values(type.properties).forEach((item) => {
+        expect(item.fullName).toEqual(`${type.name}.${item.name}`)
+      })
     })
   })
 
@@ -268,7 +299,7 @@ describe('sdkModels', () => {
       const rf5: OAS.SchemaObject = {
         name: 'result_format',
         type: 'string',
-        'enum': [
+        enum: [
           'inline_json',
           'json',
           'json_detail',
@@ -794,6 +825,13 @@ describe('sdkModels', () => {
       const actual = JSON.stringify(item, null, 2)
       expect(actual).toBeDefined()
       expect(actual).toContain('"name": "dashboard_dashboard_elements"')
+    })
+  })
+
+  describe('titleCase', () => {
+    it('titlecases', () => {
+      const actual = titleCase('POST')
+      expect(actual).toEqual('Post')
     })
   })
 })

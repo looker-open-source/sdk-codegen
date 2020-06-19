@@ -249,11 +249,51 @@ class SwiftFormatter implements IReformat {
   }
 }
 
+class CsharpFormatter implements IReformat {
+  // TODO C# formatter https://github.com/dotnet/format
+  reformat(files: string[]): string {
+    return noFormatter('C#', files)
+  }
+
+  versionStamp(gen: ICodeGen) {
+    if (gen.versions) {
+      const stampFile = gen.fileName('rtl/Constants')
+      if (!isFileSync(stampFile)) {
+        warn(`${stampFile} was not found. Skipping version update.`)
+      }
+      let content = readFileSync(stampFile)
+      const lookerPattern = /LookerVersion = ['"].*['"]/i
+      const apiPattern = /ApiVersion = ['"].*['"]/i
+      const envPattern = /EnvironmentPrefix = ['"].*['"]/i
+      content = content.replace(
+        lookerPattern,
+        `LookerVersion = "${gen.versions.lookerVersion}"`
+      )
+      content = content.replace(
+        apiPattern,
+        `ApiVersion = "${gen.versions.apiVersion}"`
+      )
+      content = content.replace(
+        envPattern,
+        `EnvironmentPrefix = "${gen.environmentPrefix}"`
+      )
+      writeFile(stampFile, content)
+      return success(
+        `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
+      )
+    }
+    return warn(
+      'Version information was not retrieved. Skipping SDK version updating.'
+    )
+  }
+}
+
 type IFormatFiles = { [key: string]: string[] }
 
 type IFormatters = { [key: string]: IReformat }
 
 const fileFormatters: IFormatters = {
+  '.cs': new CsharpFormatter(),
   '.kt': new KotlinFormatter(),
   '.py': new PythonFormatter(),
   '.swift': new SwiftFormatter(),

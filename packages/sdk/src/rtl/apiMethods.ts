@@ -108,12 +108,10 @@ export class APIMethods {
     options: Partial<ITransportSettings>,
     authenticator?: Authenticator
   ) {
+    if (path.match(/^(http:\/\/|https:\/\/)/gi)) return path
     // is this an API-versioned call?
     const base = authenticator ? this.apiPath : options.base_url
-    if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {
-      path = `${base}${path}` // path was relative
-    }
-    return path
+    return `${base}${path}` // path was relative
   }
 
   /**

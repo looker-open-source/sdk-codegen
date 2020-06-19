@@ -19,7 +19,6 @@
   "author": "Looker",
   "license": "MIT",
   "scripts": {
-    "deploy": "yarn build && npm publish",
     "docs": "typedoc --mode file --out docs"
   },
   "bugs": {

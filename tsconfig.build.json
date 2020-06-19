@@ -4,5 +4,13 @@
     "declaration": true,
     "emitDeclarationOnly": true
   },
-  "exclude": ["**/*.spec.ts", "**/*.test.ts", "**/testUtils/*.ts"]
+  "exclude": [
+    "lib",
+    "node_modules",
+    "**/testUtils",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
 }
