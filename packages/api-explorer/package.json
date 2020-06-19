@@ -2,8 +2,13 @@
   "name": "@looker/api-explorer",
   "version": "0.1.0-alpha",
   "description": "Looker API Explorer",
-  "license": "MIT",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "author": "Looker",
+  "license": "MIT",
   "private": true,
   "repository": {
     "type": "git",
@@ -15,7 +20,8 @@
   },
   "scripts": {
     "develop": "webpack-dev-server --https",
-    "docs": "typedoc --mode file --out docs"
+    "docs": "typedoc --mode file --out docs",
+    "test": "jest -- src/"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
