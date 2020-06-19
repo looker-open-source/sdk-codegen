@@ -6,7 +6,7 @@ import {
   pathify,
   defaultRequestCallback,
 } from './requestUtils'
-import { testJsonResponse } from '../test-data'
+import { testJsonResponse } from '../../test-data'
 
 describe('pathify', () => {
   test('it returns unchanged path if no path params are specified', () => {

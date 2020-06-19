@@ -8,7 +8,7 @@ import {
   testJsonResponse,
   testTextResponse,
   testUnknownResponse,
-} from '../test-data'
+} from '../../test-data'
 import { ShowResponse } from './ShowResponse'
 
 test('it renders json responses', () => {
