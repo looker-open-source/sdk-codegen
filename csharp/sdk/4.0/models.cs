@@ -1,6 +1,32 @@
-// 234 API models: 181 Spec, 0 Request, 53 Write
+/// MIT License
+/// 
+/// Copyright (c) 2019 Looker Data Sciences, Inc.
+/// 
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+/// 
+/// The above copyright notice and this permission notice shall be included in all
+/// copies or substantial portions of the Software.
+/// 
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+/// SOFTWARE.
+
+/// 252 API models: 181 Spec, 0 Request, 53 Write, 18 Enum
+
 #nullable enable
 using System;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Looker.RTL;
 using Url = System.String;
 using Password = System.String;
@@ -12,7 +38,7 @@ namespace Looker.SDK.API40
 {
 
 
-public class AccessToken : SdkModel 
+public class AccessToken : SdkModel
 {
   /// <summary>Access Token used for API calls (read-only)</summary>
   public string? access_token { get; set; } = null;
@@ -24,7 +50,16 @@ public class AccessToken : SdkModel
   public string? refresh_token { get; set; } = null;
 }
 
-public class ApiSession : SdkModel 
+/// The appropriate horizontal text alignment the values of this field shoud be displayed in. Valid values are: "left", "right".
+public enum Align
+{
+  [EnumMember(Value = "left")]
+  left,
+  [EnumMember(Value = "right")]
+  right
+}
+
+public class ApiSession : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -34,7 +69,7 @@ public class ApiSession : SdkModel
   public long? sudo_user_id { get; set; } = null;
 }
 
-public class ApiVersion : SdkModel 
+public class ApiVersion : SdkModel
 {
   /// <summary>Current Looker release version number (read-only)</summary>
   public string? looker_release_version { get; set; } = null;
@@ -43,7 +78,7 @@ public class ApiVersion : SdkModel
   public ApiVersionElement[]? supported_versions { get; set; } = null;
 }
 
-public class ApiVersionElement : SdkModel 
+public class ApiVersionElement : SdkModel
 {
   /// <summary>Version number as it appears in '/api/xxx/' urls (read-only)</summary>
   public string? version { get; set; } = null;
@@ -55,7 +90,7 @@ public class ApiVersionElement : SdkModel
   public Url? swagger_url { get; set; } = null;
 }
 
-public class BackupConfiguration : SdkModel 
+public class BackupConfiguration : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -73,7 +108,7 @@ public class BackupConfiguration : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class Board : SdkModel 
+public class Board : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -101,7 +136,7 @@ public class Board : SdkModel
   public bool? primary_homepage { get; set; } = null;
 }
 
-public class BoardItem : SdkModel 
+public class BoardItem : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -139,7 +174,7 @@ public class BoardItem : SdkModel
   public long? view_count { get; set; } = null;
 }
 
-public class BoardSection : SdkModel 
+public class BoardSection : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -163,7 +198,20 @@ public class BoardSection : SdkModel
   public DateTime? updated_at { get; set; } = null;
 }
 
-public class ColorCollection : SdkModel 
+/// Field category Valid values are: "parameter", "filter", "measure", "dimension".
+public enum Category
+{
+  [EnumMember(Value = "parameter")]
+  parameter,
+  [EnumMember(Value = "filter")]
+  filter,
+  [EnumMember(Value = "measure")]
+  measure,
+  [EnumMember(Value = "dimension")]
+  dimension
+}
+
+public class ColorCollection : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
@@ -177,7 +225,7 @@ public class ColorCollection : SdkModel
   public ContinuousPalette[]? divergingPalettes { get; set; } = null;
 }
 
-public class ColorStop : SdkModel 
+public class ColorStop : SdkModel
 {
   /// <summary>CSS color string</summary>
   public string? color { get; set; } = null;
@@ -185,7 +233,7 @@ public class ColorStop : SdkModel
   public long? offset { get; set; } = null;
 }
 
-public class Command : SdkModel 
+public class Command : SdkModel
 {
   /// <summary>Id of the command record (read-only)</summary>
   public long? id { get; set; } = null;
@@ -198,10 +246,11 @@ public class Command : SdkModel
   /// <summary>Id of the content associated with the command</summary>
   public string? linked_content_id { get; set; } = null;
   /// <summary>Name of the command Valid values are: "dashboard", "lookml_dashboard".</summary>
-  public string? linked_content_type { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public LinkedContentType? linked_content_type { get; set; }
 }
 
-public class ContentFavorite : SdkModel 
+public class ContentFavorite : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
@@ -219,7 +268,7 @@ public class ContentFavorite : SdkModel
   public long? board_id { get; set; } = null;
 }
 
-public class ContentMeta : SdkModel 
+public class ContentMeta : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -245,7 +294,7 @@ public class ContentMeta : SdkModel
   public string? slug { get; set; } = null;
 }
 
-public class ContentMetaGroupUser : SdkModel 
+public class ContentMetaGroupUser : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -254,14 +303,15 @@ public class ContentMetaGroupUser : SdkModel
   /// <summary>Id of associated Content Metadata (read-only)</summary>
   public string? content_metadata_id { get; set; } = null;
   /// <summary>Type of permission: "view" or "edit" Valid values are: "view", "edit". (read-only)</summary>
-  public string? permission_type { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public PermissionType? permission_type { get; set; }
   /// <summary>ID of associated group (read-only)</summary>
   public long? group_id { get; set; } = null;
   /// <summary>ID of associated user (read-only)</summary>
   public long? user_id { get; set; } = null;
 }
 
-public class ContentValidation : SdkModel 
+public class ContentValidation : SdkModel
 {
   /// <summary>A list of content errors (read-only)</summary>
   public ContentValidatorError[]? content_with_errors { get; set; } = null;
@@ -279,7 +329,7 @@ public class ContentValidation : SdkModel
   public long? total_explores_validated { get; set; } = null;
 }
 
-public class ContentValidationDashboard : SdkModel 
+public class ContentValidationDashboard : SdkModel
 {
   /// <summary>Description</summary>
   public string? description { get; set; } = null;
@@ -290,7 +340,7 @@ public class ContentValidationDashboard : SdkModel
   public string? title { get; set; } = null;
 }
 
-public class ContentValidationDashboardElement : SdkModel 
+public class ContentValidationDashboardElement : SdkModel
 {
   /// <summary>Text tile body text</summary>
   public string? body_text { get; set; } = null;
@@ -322,7 +372,7 @@ public class ContentValidationDashboardElement : SdkModel
   public string? type { get; set; } = null;
 }
 
-public class ContentValidationDashboardFilter : SdkModel 
+public class ContentValidationDashboardFilter : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
@@ -344,7 +394,7 @@ public class ContentValidationDashboardFilter : SdkModel
   public string? dimension { get; set; } = null;
 }
 
-public class ContentValidationError : SdkModel 
+public class ContentValidationError : SdkModel
 {
   /// <summary>Error message (read-only)</summary>
   public string? message { get; set; } = null;
@@ -358,7 +408,7 @@ public class ContentValidationError : SdkModel
   public bool? removable { get; set; } = null;
 }
 
-public class ContentValidationFolder : SdkModel 
+public class ContentValidationFolder : SdkModel
 {
   /// <summary>Unique Name</summary>
   public string name { get; set; } = "";
@@ -366,7 +416,7 @@ public class ContentValidationFolder : SdkModel
   public string? id { get; set; } = null;
 }
 
-public class ContentValidationLook : SdkModel 
+public class ContentValidationLook : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
@@ -375,7 +425,7 @@ public class ContentValidationLook : SdkModel
   public ContentValidationFolder? folder { get; set; }
 }
 
-public class ContentValidationScheduledPlan : SdkModel 
+public class ContentValidationScheduledPlan : SdkModel
 {
   /// <summary>Name of this scheduled plan</summary>
   public string? name { get; set; } = null;
@@ -385,7 +435,7 @@ public class ContentValidationScheduledPlan : SdkModel
   public long? id { get; set; } = null;
 }
 
-public class ContentValidatorError : SdkModel 
+public class ContentValidatorError : SdkModel
 {
   public ContentValidationLook? look { get; set; }
   public ContentValidationDashboard? dashboard { get; set; }
@@ -398,7 +448,7 @@ public class ContentValidatorError : SdkModel
   public string? id { get; set; } = null;
 }
 
-public class ContentView : SdkModel 
+public class ContentView : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -424,7 +474,7 @@ public class ContentView : SdkModel
   public string? start_of_week_date { get; set; } = null;
 }
 
-public class ContinuousPalette : SdkModel 
+public class ContinuousPalette : SdkModel
 {
   /// <summary>Unique identity string (read-only)</summary>
   public string? id { get; set; } = null;
@@ -436,7 +486,7 @@ public class ContinuousPalette : SdkModel
   public ColorStop[]? stops { get; set; } = null;
 }
 
-public class CreateDashboardFilter : SdkModel 
+public class CreateDashboardFilter : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
@@ -470,7 +520,7 @@ public class CreateDashboardFilter : SdkModel
   public StringDictionary<object>? ui_config { get; set; } = null;
 }
 
-public class CreateDashboardRenderTask : SdkModel 
+public class CreateDashboardRenderTask : SdkModel
 {
   /// <summary>Filter values to apply to the dashboard queries, in URL query format</summary>
   public string? dashboard_filters { get; set; } = null;
@@ -478,7 +528,7 @@ public class CreateDashboardRenderTask : SdkModel
   public string? dashboard_style { get; set; } = null;
 }
 
-public class CreateFolder : SdkModel 
+public class CreateFolder : SdkModel
 {
   /// <summary>Unique Name</summary>
   public string name { get; set; } = "";
@@ -486,14 +536,15 @@ public class CreateFolder : SdkModel
   public string parent_id { get; set; } = "";
 }
 
-public class CreateQueryTask : SdkModel 
+public class CreateQueryTask : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Id of query to run</summary>
   public long query_id { get; set; }
   /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".</summary>
-  public string result_format { get; set; } = "";
+  [JsonConverter(typeof(StringEnumConverter))]
+  public ResultFormat result_format { get; set; }
   /// <summary>Source of query task</summary>
   public string? source { get; set; } = null;
   /// <summary>Create the task but defer execution</summary>
@@ -504,7 +555,7 @@ public class CreateQueryTask : SdkModel
   public string? dashboard_id { get; set; } = null;
 }
 
-public class CredentialsApi3 : SdkModel 
+public class CredentialsApi3 : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -522,7 +573,7 @@ public class CredentialsApi3 : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class CredentialsEmail : SdkModel 
+public class CredentialsEmail : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -546,7 +597,7 @@ public class CredentialsEmail : SdkModel
   public Url? user_url { get; set; } = null;
 }
 
-public class CredentialsEmbed : SdkModel 
+public class CredentialsEmbed : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -568,7 +619,7 @@ public class CredentialsEmbed : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class CredentialsGoogle : SdkModel 
+public class CredentialsGoogle : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -590,7 +641,7 @@ public class CredentialsGoogle : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class CredentialsLDAP : SdkModel 
+public class CredentialsLDAP : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -612,7 +663,7 @@ public class CredentialsLDAP : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class CredentialsLookerOpenid : SdkModel 
+public class CredentialsLookerOpenid : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -634,7 +685,7 @@ public class CredentialsLookerOpenid : SdkModel
   public Url? user_url { get; set; } = null;
 }
 
-public class CredentialsOIDC : SdkModel 
+public class CredentialsOIDC : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -654,7 +705,7 @@ public class CredentialsOIDC : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class CredentialsSaml : SdkModel 
+public class CredentialsSaml : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -674,7 +725,7 @@ public class CredentialsSaml : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class CredentialsTotp : SdkModel 
+public class CredentialsTotp : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -690,7 +741,7 @@ public class CredentialsTotp : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class CustomWelcomeEmail : SdkModel 
+public class CustomWelcomeEmail : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -704,7 +755,7 @@ public class CustomWelcomeEmail : SdkModel
   public string? header { get; set; } = null;
 }
 
-public class Dashboard : SdkModel 
+public class Dashboard : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -785,7 +836,7 @@ public class Dashboard : SdkModel
   public string? preferred_viewer { get; set; } = null;
 }
 
-public class DashboardAggregateTableLookml : SdkModel 
+public class DashboardAggregateTableLookml : SdkModel
 {
   /// <summary>Dashboard Id (read-only)</summary>
   public string? dashboard_id { get; set; } = null;
@@ -793,7 +844,7 @@ public class DashboardAggregateTableLookml : SdkModel
   public string? aggregate_table_lookml { get; set; } = null;
 }
 
-public class DashboardAppearance : SdkModel 
+public class DashboardAppearance : SdkModel
 {
   /// <summary>Page margin (side) width</summary>
   public long? page_side_margins { get; set; } = null;
@@ -811,7 +862,7 @@ public class DashboardAppearance : SdkModel
   public string? key_color { get; set; } = null;
 }
 
-public class DashboardBase : SdkModel 
+public class DashboardBase : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -841,7 +892,7 @@ public class DashboardBase : SdkModel
   public long? user_id { get; set; } = null;
 }
 
-public class DashboardElement : SdkModel 
+public class DashboardElement : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -898,7 +949,7 @@ public class DashboardElement : SdkModel
   public string? subtitle_text_as_html { get; set; } = null;
 }
 
-public class DashboardFilter : SdkModel 
+public class DashboardFilter : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -934,7 +985,7 @@ public class DashboardFilter : SdkModel
   public StringDictionary<object>? ui_config { get; set; } = null;
 }
 
-public class DashboardLayout : SdkModel 
+public class DashboardLayout : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -958,7 +1009,7 @@ public class DashboardLayout : SdkModel
   public DashboardLayoutComponent[]? dashboard_layout_components { get; set; } = null;
 }
 
-public class DashboardLayoutComponent : SdkModel 
+public class DashboardLayoutComponent : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -986,7 +1037,7 @@ public class DashboardLayoutComponent : SdkModel
   public string? vis_type { get; set; } = null;
 }
 
-public class DashboardLookml : SdkModel 
+public class DashboardLookml : SdkModel
 {
   /// <summary>Id of Dashboard (read-only)</summary>
   public string? dashboard_id { get; set; } = null;
@@ -994,14 +1045,14 @@ public class DashboardLookml : SdkModel
   public string? lookml { get; set; } = null;
 }
 
-public class DataActionForm : SdkModel 
+public class DataActionForm : SdkModel
 {
   public DataActionUserState? state { get; set; }
   /// <summary>Array of form fields. (read-only)</summary>
   public DataActionFormField[]? fields { get; set; } = null;
 }
 
-public class DataActionFormField : SdkModel 
+public class DataActionFormField : SdkModel
 {
   /// <summary>Name (read-only)</summary>
   public string? name { get; set; } = null;
@@ -1023,7 +1074,7 @@ public class DataActionFormField : SdkModel
   public DataActionFormSelectOption[]? options { get; set; } = null;
 }
 
-public class DataActionFormSelectOption : SdkModel 
+public class DataActionFormSelectOption : SdkModel
 {
   /// <summary>Name (read-only)</summary>
   public string? name { get; set; } = null;
@@ -1031,7 +1082,7 @@ public class DataActionFormSelectOption : SdkModel
   public string? label { get; set; } = null;
 }
 
-public class DataActionRequest : SdkModel 
+public class DataActionRequest : SdkModel
 {
   /// <summary>The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.</summary>
   public StringDictionary<string>? action { get; set; } = null;
@@ -1039,7 +1090,7 @@ public class DataActionRequest : SdkModel
   public StringDictionary<string>? form_values { get; set; } = null;
 }
 
-public class DataActionResponse : SdkModel 
+public class DataActionResponse : SdkModel
 {
   /// <summary>ID of the webhook event that sent this data action. In some error conditions, this may be null. (read-only)</summary>
   public string? webhook_id { get; set; } = null;
@@ -1052,7 +1103,7 @@ public class DataActionResponse : SdkModel
   public string? message { get; set; } = null;
 }
 
-public class DataActionUserState : SdkModel 
+public class DataActionUserState : SdkModel
 {
   /// <summary>User state data (read-only)</summary>
   public string? data { get; set; } = null;
@@ -1060,7 +1111,7 @@ public class DataActionUserState : SdkModel
   public long? refresh_time { get; set; } = null;
 }
 
-public class Datagroup : SdkModel 
+public class Datagroup : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1084,7 +1135,7 @@ public class Datagroup : SdkModel
   public long? triggered_at { get; set; } = null;
 }
 
-public class DBConnection : SdkModel 
+public class DBConnection : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1160,7 +1211,7 @@ public class DBConnection : SdkModel
   public bool? disable_context_comment { get; set; } = null;
 }
 
-public class DBConnectionBase : SdkModel 
+public class DBConnectionBase : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1171,7 +1222,7 @@ public class DBConnectionBase : SdkModel
   public Snippet[]? snippets { get; set; } = null;
 }
 
-public class DBConnectionOverride : SdkModel 
+public class DBConnectionOverride : SdkModel
 {
   /// <summary>Context in which to override (`pdt` is the only allowed value)</summary>
   public string? context { get; set; } = null;
@@ -1199,7 +1250,7 @@ public class DBConnectionOverride : SdkModel
   public string? after_connect_statements { get; set; } = null;
 }
 
-public class DBConnectionTestResult : SdkModel 
+public class DBConnectionTestResult : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1213,7 +1264,7 @@ public class DBConnectionTestResult : SdkModel
   public string? status { get; set; } = null;
 }
 
-public class DelegateOauthTest : SdkModel 
+public class DelegateOauthTest : SdkModel
 {
   /// <summary>Delegate Oauth Connection Name (read-only)</summary>
   public string? name { get; set; } = null;
@@ -1225,7 +1276,20 @@ public class DelegateOauthTest : SdkModel
   public bool? success { get; set; } = null;
 }
 
-public class Dialect : SdkModel 
+/// Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none".
+public enum DependencyStatus
+{
+  [EnumMember(Value = "lock_optional")]
+  lock_optional,
+  [EnumMember(Value = "lock_required")]
+  lock_required,
+  [EnumMember(Value = "lock_error")]
+  lock_error,
+  [EnumMember(Value = "install_none")]
+  install_none
+}
+
+public class Dialect : SdkModel
 {
   /// <summary>The name of the dialect (read-only)</summary>
   public string? name { get; set; } = null;
@@ -1255,7 +1319,7 @@ public class Dialect : SdkModel
   public bool? has_ssl_support { get; set; } = null;
 }
 
-public class DialectInfo : SdkModel 
+public class DialectInfo : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1274,7 +1338,7 @@ public class DialectInfo : SdkModel
   public DialectInfoOptions? supported_options { get; set; }
 }
 
-public class DialectInfoOptions : SdkModel 
+public class DialectInfoOptions : SdkModel
 {
   /// <summary>Has additional params support (read-only)</summary>
   public bool? additional_params { get; set; } = null;
@@ -1298,19 +1362,19 @@ public class DialectInfoOptions : SdkModel
   public bool? username_required { get; set; } = null;
 }
 
-public class DigestEmails : SdkModel 
+public class DigestEmails : SdkModel
 {
   /// <summary>Whether or not digest emails are enabled</summary>
   public bool? is_enabled { get; set; } = null;
 }
 
-public class DigestEmailSend : SdkModel 
+public class DigestEmailSend : SdkModel
 {
   /// <summary>True if content was successfully generated and delivered</summary>
   public bool? configuration_delivered { get; set; } = null;
 }
 
-public class DiscretePalette : SdkModel 
+public class DiscretePalette : SdkModel
 {
   /// <summary>Unique identity string (read-only)</summary>
   public string? id { get; set; } = null;
@@ -1322,7 +1386,7 @@ public class DiscretePalette : SdkModel
   public string[]? colors { get; set; } = null;
 }
 
-public class EmbedParams : SdkModel 
+public class EmbedParams : SdkModel
 {
   /// <summary>The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.</summary>
   public Url target_url { get; set; } = "";
@@ -1332,7 +1396,7 @@ public class EmbedParams : SdkModel
   public bool? force_logout_login { get; set; } = null;
 }
 
-public class EmbedSsoParams : SdkModel 
+public class EmbedSsoParams : SdkModel
 {
   /// <summary>The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.</summary>
   public Url target_url { get; set; } = "";
@@ -1362,13 +1426,13 @@ public class EmbedSsoParams : SdkModel
   public long? secret_id { get; set; } = null;
 }
 
-public class EmbedUrlResponse : SdkModel 
+public class EmbedUrlResponse : SdkModel
 {
   /// <summary>The embed URL. Any modification to this string will make the URL unusable. (read-only)</summary>
   public string? url { get; set; } = null;
 }
 
-public class Error : SdkModel 
+public class Error : SdkModel
 {
   /// <summary>Error details (read-only)</summary>
   public string message { get; set; } = "";
@@ -1376,7 +1440,16 @@ public class Error : SdkModel
   public Url documentation_url { get; set; } = "";
 }
 
-public class Folder : SdkModel 
+/// The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range".
+public enum FillStyle
+{
+  [EnumMember(Value = "enumeration")]
+  enumeration,
+  [EnumMember(Value = "range")]
+  range
+}
+
+public class Folder : SdkModel
 {
   /// <summary>Unique Name</summary>
   public string name { get; set; } = "";
@@ -1416,7 +1489,7 @@ public class Folder : SdkModel
   public LookWithDashboards[]? looks { get; set; } = null;
 }
 
-public class FolderBase : SdkModel 
+public class FolderBase : SdkModel
 {
   /// <summary>Unique Name</summary>
   public string name { get; set; } = "";
@@ -1452,7 +1525,25 @@ public class FolderBase : SdkModel
   public StringDictionary<bool>? can { get; set; } = null;
 }
 
-public class GitBranch : SdkModel 
+/// Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region".
+public enum Format
+{
+  [EnumMember(Value = "topojson")]
+  topojson,
+  [EnumMember(Value = "vector_tile_region")]
+  vector_tile_region
+}
+
+/// Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+public enum GitApplicationServerHttpScheme
+{
+  [EnumMember(Value = "http")]
+  http,
+  [EnumMember(Value = "https")]
+  https
+}
+
+public class GitBranch : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1490,7 +1581,7 @@ public class GitBranch : SdkModel
   public string? remote_ref { get; set; } = null;
 }
 
-public class GitConnectionTest : SdkModel 
+public class GitConnectionTest : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1500,7 +1591,7 @@ public class GitConnectionTest : SdkModel
   public string? id { get; set; } = null;
 }
 
-public class GitConnectionTestResult : SdkModel 
+public class GitConnectionTestResult : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1512,7 +1603,7 @@ public class GitConnectionTestResult : SdkModel
   public string? status { get; set; } = null;
 }
 
-public class GitStatus : SdkModel 
+public class GitStatus : SdkModel
 {
   /// <summary>Git action: add, delete, etc (read-only)</summary>
   public string? action { get; set; } = null;
@@ -1524,7 +1615,7 @@ public class GitStatus : SdkModel
   public string? text { get; set; } = null;
 }
 
-public class Group : SdkModel 
+public class Group : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1546,19 +1637,19 @@ public class Group : SdkModel
   public long? user_count { get; set; } = null;
 }
 
-public class GroupIdForGroupInclusion : SdkModel 
+public class GroupIdForGroupInclusion : SdkModel
 {
   /// <summary>Id of group (read-only)</summary>
   public long? group_id { get; set; } = null;
 }
 
-public class GroupIdForGroupUserInclusion : SdkModel 
+public class GroupIdForGroupUserInclusion : SdkModel
 {
   /// <summary>Id of user (read-only)</summary>
   public long? user_id { get; set; } = null;
 }
 
-public class GroupSearch : SdkModel 
+public class GroupSearch : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1582,7 +1673,7 @@ public class GroupSearch : SdkModel
   public Role[]? roles { get; set; } = null;
 }
 
-public class ImportedProject : SdkModel 
+public class ImportedProject : SdkModel
 {
   /// <summary>Dependency name (read-only)</summary>
   public string? name { get; set; } = null;
@@ -1594,7 +1685,7 @@ public class ImportedProject : SdkModel
   public bool? is_remote { get; set; } = null;
 }
 
-public class Integration : SdkModel 
+public class Integration : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1611,15 +1702,20 @@ public class Integration : SdkModel
   /// <summary>Array of params for the integration.</summary>
   public IntegrationParam[]? @params { get; set; } = null;
   /// <summary>A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)</summary>
-  public string[]? supported_formats { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public SupportedFormats? supported_formats { get; set; }
   /// <summary>A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)</summary>
-  public string[]? supported_action_types { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public SupportedActionTypes? supported_action_types { get; set; }
   /// <summary>A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (read-only)</summary>
-  public string[]? supported_formattings { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public SupportedFormattings? supported_formattings { get; set; }
   /// <summary>A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (read-only)</summary>
-  public string[]? supported_visualization_formattings { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public SupportedVisualizationFormattings? supported_visualization_formattings { get; set; }
   /// <summary>A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (read-only)</summary>
-  public string[]? supported_download_settings { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public SupportedDownloadSettings? supported_download_settings { get; set; }
   /// <summary>URL to an icon for the integration. (read-only)</summary>
   public string? icon_url { get; set; } = null;
   /// <summary>Whether the integration uses oauth. (read-only)</summary>
@@ -1632,7 +1728,7 @@ public class Integration : SdkModel
   public long[]? installed_delegate_oauth_targets { get; set; } = null;
 }
 
-public class IntegrationHub : SdkModel 
+public class IntegrationHub : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1658,7 +1754,7 @@ public class IntegrationHub : SdkModel
   public string? legal_agreement_text { get; set; } = null;
 }
 
-public class IntegrationParam : SdkModel 
+public class IntegrationParam : SdkModel
 {
   /// <summary>Name of the parameter.</summary>
   public string? name { get; set; } = null;
@@ -1682,7 +1778,7 @@ public class IntegrationParam : SdkModel
   public string? delegate_oauth_url { get; set; } = null;
 }
 
-public class IntegrationRequiredField : SdkModel 
+public class IntegrationRequiredField : SdkModel
 {
   /// <summary>Matches a field that has this tag. (read-only)</summary>
   public string? tag { get; set; } = null;
@@ -1692,7 +1788,7 @@ public class IntegrationRequiredField : SdkModel
   public string[]? all_tags { get; set; } = null;
 }
 
-public class IntegrationTestResult : SdkModel 
+public class IntegrationTestResult : SdkModel
 {
   /// <summary>Whether or not the test was successful (read-only)</summary>
   public bool? success { get; set; } = null;
@@ -1702,7 +1798,7 @@ public class IntegrationTestResult : SdkModel
   public DelegateOauthTest[]? delegate_oauth_result { get; set; } = null;
 }
 
-public class InternalHelpResources : SdkModel 
+public class InternalHelpResources : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1710,7 +1806,7 @@ public class InternalHelpResources : SdkModel
   public bool? enabled { get; set; } = null;
 }
 
-public class InternalHelpResourcesContent : SdkModel 
+public class InternalHelpResourcesContent : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1720,7 +1816,7 @@ public class InternalHelpResourcesContent : SdkModel
   public string? markdown_content { get; set; } = null;
 }
 
-public class LDAPConfig : SdkModel 
+public class LDAPConfig : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1810,7 +1906,7 @@ public class LDAPConfig : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class LDAPConfigTestIssue : SdkModel 
+public class LDAPConfigTestIssue : SdkModel
 {
   /// <summary>Severity of the issue. Error or Warning (read-only)</summary>
   public string? severity { get; set; } = null;
@@ -1818,7 +1914,7 @@ public class LDAPConfigTestIssue : SdkModel
   public string? message { get; set; } = null;
 }
 
-public class LDAPConfigTestResult : SdkModel 
+public class LDAPConfigTestResult : SdkModel
 {
   /// <summary>Additional details for error cases (read-only)</summary>
   public string? details { get; set; } = null;
@@ -1835,7 +1931,7 @@ public class LDAPConfigTestResult : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class LDAPGroupRead : SdkModel 
+public class LDAPGroupRead : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
@@ -1851,7 +1947,7 @@ public class LDAPGroupRead : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class LDAPGroupWrite : SdkModel 
+public class LDAPGroupWrite : SdkModel
 {
   /// <summary>Unique Id</summary>
   public long? id { get; set; } = null;
@@ -1867,7 +1963,7 @@ public class LDAPGroupWrite : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class LDAPUser : SdkModel 
+public class LDAPUser : SdkModel
 {
   /// <summary>Array of user's email addresses and aliases for use in migration (read-only)</summary>
   public string[]? all_emails { get; set; } = null;
@@ -1891,7 +1987,7 @@ public class LDAPUser : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class LDAPUserAttributeRead : SdkModel 
+public class LDAPUserAttributeRead : SdkModel
 {
   /// <summary>Name of User Attribute in LDAP (read-only)</summary>
   public string? name { get; set; } = null;
@@ -1903,7 +1999,7 @@ public class LDAPUserAttributeRead : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class LDAPUserAttributeWrite : SdkModel 
+public class LDAPUserAttributeWrite : SdkModel
 {
   /// <summary>Name of User Attribute in LDAP</summary>
   public string? name { get; set; } = null;
@@ -1915,7 +2011,7 @@ public class LDAPUserAttributeWrite : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class LegacyFeature : SdkModel 
+public class LegacyFeature : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -1945,7 +2041,16 @@ public class LegacyFeature : SdkModel
   public bool? has_disabled_on_upgrade { get; set; } = null;
 }
 
-public class Locale : SdkModel 
+/// Name of the command Valid values are: "dashboard", "lookml_dashboard".
+public enum LinkedContentType
+{
+  [EnumMember(Value = "dashboard")]
+  dashboard,
+  [EnumMember(Value = "lookml_dashboard")]
+  lookml_dashboard
+}
+
+public class Locale : SdkModel
 {
   /// <summary>Code for Locale (read-only)</summary>
   public string? code { get; set; } = null;
@@ -1955,7 +2060,7 @@ public class Locale : SdkModel
   public string? english_name { get; set; } = null;
 }
 
-public class LocalizationSettings : SdkModel 
+public class LocalizationSettings : SdkModel
 {
   /// <summary>Default locale for localization (read-only)</summary>
   public string? default_locale { get; set; } = null;
@@ -1963,7 +2068,7 @@ public class LocalizationSettings : SdkModel
   public string? localization_level { get; set; } = null;
 }
 
-public class Look : SdkModel 
+public class Look : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2025,7 +2130,7 @@ public class Look : SdkModel
   public long? view_count { get; set; } = null;
 }
 
-public class LookBasic : SdkModel 
+public class LookBasic : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2039,7 +2144,7 @@ public class LookBasic : SdkModel
   public long? user_id { get; set; } = null;
 }
 
-public class LookmlModel : SdkModel 
+public class LookmlModel : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2059,7 +2164,7 @@ public class LookmlModel : SdkModel
   public bool? unlimited_db_connections { get; set; } = null;
 }
 
-public class LookmlModelExplore : SdkModel 
+public class LookmlModelExplore : SdkModel
 {
   /// <summary>Fully qualified explore name (model name plus explore name) (read-only)</summary>
   public string? id { get; set; } = null;
@@ -2136,7 +2241,7 @@ public class LookmlModelExplore : SdkModel
   public LookmlModelExploreSupportedMeasureType[]? supported_measure_types { get; set; } = null;
 }
 
-public class LookmlModelExploreAccessFilter : SdkModel 
+public class LookmlModelExploreAccessFilter : SdkModel
 {
   /// <summary>Field to be filtered (read-only)</summary>
   public string? field { get; set; } = null;
@@ -2144,7 +2249,7 @@ public class LookmlModelExploreAccessFilter : SdkModel
   public string? user_attribute { get; set; } = null;
 }
 
-public class LookmlModelExploreAlias : SdkModel 
+public class LookmlModelExploreAlias : SdkModel
 {
   /// <summary>Name (read-only)</summary>
   public string? name { get; set; } = null;
@@ -2152,7 +2257,7 @@ public class LookmlModelExploreAlias : SdkModel
   public string? value { get; set; } = null;
 }
 
-public class LookmlModelExploreAlwaysFilter : SdkModel 
+public class LookmlModelExploreAlwaysFilter : SdkModel
 {
   /// <summary>Name (read-only)</summary>
   public string? name { get; set; } = null;
@@ -2160,7 +2265,7 @@ public class LookmlModelExploreAlwaysFilter : SdkModel
   public string? value { get; set; } = null;
 }
 
-public class LookmlModelExploreConditionallyFilter : SdkModel 
+public class LookmlModelExploreConditionallyFilter : SdkModel
 {
   /// <summary>Name (read-only)</summary>
   public string? name { get; set; } = null;
@@ -2168,7 +2273,7 @@ public class LookmlModelExploreConditionallyFilter : SdkModel
   public string? value { get; set; } = null;
 }
 
-public class LookmlModelExploreError : SdkModel 
+public class LookmlModelExploreError : SdkModel
 {
   /// <summary>Error Message (read-only)</summary>
   public string? message { get; set; } = null;
@@ -2180,14 +2285,16 @@ public class LookmlModelExploreError : SdkModel
   public bool? field_error { get; set; } = null;
 }
 
-public class LookmlModelExploreField : SdkModel 
+public class LookmlModelExploreField : SdkModel
 {
   /// <summary>The appropriate horizontal text alignment the values of this field shoud be displayed in. Valid values are: "left", "right". (read-only)</summary>
-  public string? align { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public Align? align { get; set; }
   /// <summary>Whether it's possible to filter on this field. (read-only)</summary>
   public bool? can_filter { get; set; } = null;
   /// <summary>Field category Valid values are: "parameter", "filter", "measure", "dimension". (read-only)</summary>
-  public string? category { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public Category? category { get; set; }
   /// <summary>The default value that this field uses when filtering. Null if there is no default value. (read-only)</summary>
   public string? default_filter_value { get; set; } = null;
   /// <summary>Description (read-only)</summary>
@@ -2201,7 +2308,8 @@ public class LookmlModelExploreField : SdkModel
   /// <summary>When presented in a field group via field_group_label, a shorter name of the field to be displayed in that context. (read-only)</summary>
   public string? field_group_variant { get; set; } = null;
   /// <summary>The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (read-only)</summary>
-  public string? fill_style { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public FillStyle? fill_style { get; set; }
   /// <summary>An offset (in months) from the calendar start month to the fiscal start month defined in the LookML model this field belongs to. (read-only)</summary>
   public long? fiscal_month_offset { get; set; } = null;
   /// <summary>Whether this field has a set of allowed_values specified in LookML. (read-only)</summary>
@@ -2269,7 +2377,8 @@ public class LookmlModelExploreField : SdkModel
   /// <summary>The LookML type of the field. (read-only)</summary>
   public string? type { get; set; } = null;
   /// <summary>An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)</summary>
-  public string[]? user_attribute_filter_types { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public UserAttributeFilterTypes? user_attribute_filter_types { get; set; }
   /// <summary>If specified, the LookML value format string for formatting values of this field. (read-only)</summary>
   public string? value_format { get; set; } = null;
   /// <summary>The name of the view this field belongs to. (read-only)</summary>
@@ -2279,12 +2388,13 @@ public class LookmlModelExploreField : SdkModel
   /// <summary>Whether this field was specified in "dynamic_fields" and is not part of the model. (read-only)</summary>
   public bool? dynamic { get; set; } = null;
   /// <summary>The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (read-only)</summary>
-  public string? week_start_day { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public WeekStartDay? week_start_day { get; set; }
   /// <summary>The number of times this field has been used in queries (read-only)</summary>
   public long? times_used { get; set; } = null;
 }
 
-public class LookmlModelExploreFieldEnumeration : SdkModel 
+public class LookmlModelExploreFieldEnumeration : SdkModel
 {
   /// <summary>Label (read-only)</summary>
   public string? label { get; set; } = null;
@@ -2292,7 +2402,7 @@ public class LookmlModelExploreFieldEnumeration : SdkModel
   public object? value { get; set; } = null;
 }
 
-public class LookmlModelExploreFieldMapLayer : SdkModel 
+public class LookmlModelExploreFieldMapLayer : SdkModel
 {
   /// <summary>URL to the map layer resource. (read-only)</summary>
   public string? url { get; set; } = null;
@@ -2307,7 +2417,8 @@ public class LookmlModelExploreFieldMapLayer : SdkModel
   /// <summary>The preferred geographic projection of the map layer when displayed in a visualization that supports multiple geographic projections. (read-only)</summary>
   public string? projection { get; set; } = null;
   /// <summary>Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (read-only)</summary>
-  public string? format { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public Format? format { get; set; }
   /// <summary>Specifies the URL to a JSON file that defines the geographic extents of each region available in the map layer. This data is used to automatically center the map on the available data for visualization purposes. The JSON file must be a JSON object where the keys are the mapping value of the feature (as specified by property_key) and the values are arrays of four numbers representing the west longitude, south latitude, east longitude, and north latitude extents of the region. The object must include a key for every possible value of property_key. (read-only)</summary>
   public string? extents_json_url { get; set; } = null;
   /// <summary>The minimum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)</summary>
@@ -2316,7 +2427,7 @@ public class LookmlModelExploreFieldMapLayer : SdkModel
   public long? min_zoom_level { get; set; } = null;
 }
 
-public class LookmlModelExploreFieldset : SdkModel 
+public class LookmlModelExploreFieldset : SdkModel
 {
   /// <summary>Array of dimensions (read-only)</summary>
   public LookmlModelExploreField[]? dimensions { get; set; } = null;
@@ -2328,7 +2439,7 @@ public class LookmlModelExploreFieldset : SdkModel
   public LookmlModelExploreField[]? parameters { get; set; } = null;
 }
 
-public class LookmlModelExploreFieldSqlCase : SdkModel 
+public class LookmlModelExploreFieldSqlCase : SdkModel
 {
   /// <summary>SQL Case label value (read-only)</summary>
   public string? value { get; set; } = null;
@@ -2336,15 +2447,16 @@ public class LookmlModelExploreFieldSqlCase : SdkModel
   public string? condition { get; set; } = null;
 }
 
-public class LookmlModelExploreFieldTimeInterval : SdkModel 
+public class LookmlModelExploreFieldTimeInterval : SdkModel
 {
   /// <summary>The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "year". (read-only)</summary>
-  public string? name { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public Name? name { get; set; }
   /// <summary>The number of intervals this field represents a grouping of. (read-only)</summary>
   public long? count { get; set; } = null;
 }
 
-public class LookmlModelExploreJoins : SdkModel 
+public class LookmlModelExploreJoins : SdkModel
 {
   /// <summary>Name of this join (and name of the view to join) (read-only)</summary>
   public string? name { get; set; } = null;
@@ -2374,7 +2486,7 @@ public class LookmlModelExploreJoins : SdkModel
   public string? view_label { get; set; } = null;
 }
 
-public class LookmlModelExploreSet : SdkModel 
+public class LookmlModelExploreSet : SdkModel
 {
   /// <summary>Name (read-only)</summary>
   public string? name { get; set; } = null;
@@ -2382,7 +2494,7 @@ public class LookmlModelExploreSet : SdkModel
   public string[]? value { get; set; } = null;
 }
 
-public class LookmlModelExploreSupportedMeasureType : SdkModel 
+public class LookmlModelExploreSupportedMeasureType : SdkModel
 {
   /// <summary> (read-only)</summary>
   public string? dimension_type { get; set; } = null;
@@ -2390,7 +2502,7 @@ public class LookmlModelExploreSupportedMeasureType : SdkModel
   public string[]? measure_types { get; set; } = null;
 }
 
-public class LookmlModelNavExplore : SdkModel 
+public class LookmlModelNavExplore : SdkModel
 {
   /// <summary>Name of the explore (read-only)</summary>
   public string? name { get; set; } = null;
@@ -2404,7 +2516,7 @@ public class LookmlModelNavExplore : SdkModel
   public string? group_label { get; set; } = null;
 }
 
-public class LookmlTest : SdkModel 
+public class LookmlTest : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2422,7 +2534,7 @@ public class LookmlTest : SdkModel
   public long? line { get; set; } = null;
 }
 
-public class LookmlTestResult : SdkModel 
+public class LookmlTestResult : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2442,7 +2554,7 @@ public class LookmlTestResult : SdkModel
   public bool? success { get; set; } = null;
 }
 
-public class LookModel : SdkModel 
+public class LookModel : SdkModel
 {
   /// <summary>Model Id (read-only)</summary>
   public string? id { get; set; } = null;
@@ -2450,7 +2562,7 @@ public class LookModel : SdkModel
   public string? label { get; set; } = null;
 }
 
-public class LookWithDashboards : SdkModel 
+public class LookWithDashboards : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2514,7 +2626,7 @@ public class LookWithDashboards : SdkModel
   public DashboardBase[]? dashboards { get; set; } = null;
 }
 
-public class LookWithQuery : SdkModel 
+public class LookWithQuery : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2579,7 +2691,7 @@ public class LookWithQuery : SdkModel
   public string? url { get; set; } = null;
 }
 
-public class Manifest : SdkModel 
+public class Manifest : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2590,7 +2702,7 @@ public class Manifest : SdkModel
   public LocalizationSettings? localization_settings { get; set; }
 }
 
-public class MergeFields : SdkModel 
+public class MergeFields : SdkModel
 {
   /// <summary>Field name to map onto in the merged results</summary>
   public string? field_name { get; set; } = null;
@@ -2598,7 +2710,7 @@ public class MergeFields : SdkModel
   public string? source_field_name { get; set; } = null;
 }
 
-public class MergeQuery : SdkModel 
+public class MergeQuery : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2622,7 +2734,7 @@ public class MergeQuery : SdkModel
   public StringDictionary<string>? vis_config { get; set; } = null;
 }
 
-public class MergeQuerySourceQuery : SdkModel 
+public class MergeQuerySourceQuery : SdkModel
 {
   /// <summary>An array defining which fields of the source query are mapped onto fields of the merge query</summary>
   public MergeFields[]? merge_fields { get; set; } = null;
@@ -2632,7 +2744,7 @@ public class MergeQuerySourceQuery : SdkModel
   public long? query_id { get; set; } = null;
 }
 
-public class ModelSet : SdkModel 
+public class ModelSet : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2649,7 +2761,7 @@ public class ModelSet : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class ModelsNotValidated : SdkModel 
+public class ModelsNotValidated : SdkModel
 {
   /// <summary>Model name (read-only)</summary>
   public string? name { get; set; } = null;
@@ -2657,7 +2769,30 @@ public class ModelsNotValidated : SdkModel
   public string? project_file_id { get; set; } = null;
 }
 
-public class OauthClientApp : SdkModel 
+/// The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "year".
+public enum Name
+{
+  [EnumMember(Value = "day")]
+  day,
+  [EnumMember(Value = "hour")]
+  hour,
+  [EnumMember(Value = "minute")]
+  minute,
+  [EnumMember(Value = "second")]
+  second,
+  [EnumMember(Value = "millisecond")]
+  millisecond,
+  [EnumMember(Value = "microsecond")]
+  microsecond,
+  [EnumMember(Value = "week")]
+  week,
+  [EnumMember(Value = "month")]
+  month,
+  [EnumMember(Value = "year")]
+  year
+}
+
+public class OauthClientApp : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2679,7 +2814,7 @@ public class OauthClientApp : SdkModel
   public UserPublic[]? activated_users { get; set; } = null;
 }
 
-public class OIDCConfig : SdkModel 
+public class OIDCConfig : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2749,7 +2884,7 @@ public class OIDCConfig : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class OIDCGroupRead : SdkModel 
+public class OIDCGroupRead : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
@@ -2763,7 +2898,7 @@ public class OIDCGroupRead : SdkModel
   public Role[]? roles { get; set; } = null;
 }
 
-public class OIDCGroupWrite : SdkModel 
+public class OIDCGroupWrite : SdkModel
 {
   /// <summary>Unique Id</summary>
   public long? id { get; set; } = null;
@@ -2777,7 +2912,7 @@ public class OIDCGroupWrite : SdkModel
   public long[]? role_ids { get; set; } = null;
 }
 
-public class OIDCUserAttributeRead : SdkModel 
+public class OIDCUserAttributeRead : SdkModel
 {
   /// <summary>Name of User Attribute in OIDC (read-only)</summary>
   public string? name { get; set; } = null;
@@ -2787,7 +2922,7 @@ public class OIDCUserAttributeRead : SdkModel
   public UserAttribute[]? user_attributes { get; set; } = null;
 }
 
-public class OIDCUserAttributeWrite : SdkModel 
+public class OIDCUserAttributeWrite : SdkModel
 {
   /// <summary>Name of User Attribute in OIDC</summary>
   public string? name { get; set; } = null;
@@ -2797,7 +2932,7 @@ public class OIDCUserAttributeWrite : SdkModel
   public long[]? user_attribute_ids { get; set; } = null;
 }
 
-public class PasswordConfig : SdkModel 
+public class PasswordConfig : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2811,7 +2946,7 @@ public class PasswordConfig : SdkModel
   public bool? require_special { get; set; } = null;
 }
 
-public class Permission : SdkModel 
+public class Permission : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2823,7 +2958,7 @@ public class Permission : SdkModel
   public string? description { get; set; } = null;
 }
 
-public class PermissionSet : SdkModel 
+public class PermissionSet : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2840,7 +2975,16 @@ public class PermissionSet : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class Project : SdkModel 
+/// Type of permission: "view" or "edit" Valid values are: "view", "edit".
+public enum PermissionType
+{
+  [EnumMember(Value = "view")]
+  view,
+  [EnumMember(Value = "edit")]
+  edit
+}
+
+public class Project : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2865,13 +3009,15 @@ public class Project : SdkModel
   /// <summary>Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)</summary>
   public long? git_application_server_http_port { get; set; } = null;
   /// <summary>Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".</summary>
-  public string? git_application_server_http_scheme { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public GitApplicationServerHttpScheme? git_application_server_http_scheme { get; set; }
   /// <summary>(Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.</summary>
   public string? deploy_secret { get; set; } = null;
   /// <summary>(Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.</summary>
   public bool? unset_deploy_secret { get; set; } = null;
   /// <summary>The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".</summary>
-  public string? pull_request_mode { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public PullRequestMode? pull_request_mode { get; set; }
   /// <summary>Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository</summary>
   public bool? validation_required { get; set; } = null;
   /// <summary>If true, folders are enabled for this project</summary>
@@ -2886,7 +3032,7 @@ public class Project : SdkModel
   public string? dependency_status { get; set; } = null;
 }
 
-public class ProjectError : SdkModel 
+public class ProjectError : SdkModel
 {
   /// <summary>A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)</summary>
   public string? code { get; set; } = null;
@@ -2914,7 +3060,7 @@ public class ProjectError : SdkModel
   public string? sanitized_message { get; set; } = null;
 }
 
-public class ProjectFile : SdkModel 
+public class ProjectFile : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2935,7 +3081,7 @@ public class ProjectFile : SdkModel
   public GitStatus? git_status { get; set; }
 }
 
-public class ProjectValidation : SdkModel 
+public class ProjectValidation : SdkModel
 {
   /// <summary>A list of project errors (read-only)</summary>
   public ProjectError[]? errors { get; set; } = null;
@@ -2947,7 +3093,7 @@ public class ProjectValidation : SdkModel
   public float? computation_time { get; set; } = null;
 }
 
-public class ProjectValidationCache : SdkModel 
+public class ProjectValidationCache : SdkModel
 {
   /// <summary>A list of project errors (read-only)</summary>
   public ProjectError[]? errors { get; set; } = null;
@@ -2961,7 +3107,7 @@ public class ProjectValidationCache : SdkModel
   public bool? stale { get; set; } = null;
 }
 
-public class ProjectWorkspace : SdkModel 
+public class ProjectWorkspace : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -2974,13 +3120,27 @@ public class ProjectWorkspace : SdkModel
   /// <summary>Git head revision name (read-only)</summary>
   public string? git_head { get; set; } = null;
   /// <summary>Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (read-only)</summary>
-  public string? dependency_status { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public DependencyStatus? dependency_status { get; set; }
   public GitBranch? git_branch { get; set; }
   /// <summary>The lookml syntax used by all files in this project (read-only)</summary>
   public string? lookml_type { get; set; } = null;
 }
 
-public class Query : SdkModel 
+/// The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+public enum PullRequestMode
+{
+  [EnumMember(Value = "off")]
+  off,
+  [EnumMember(Value = "links")]
+  links,
+  [EnumMember(Value = "recommended")]
+  recommended,
+  [EnumMember(Value = "required")]
+  required
+}
+
+public class Query : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3036,7 +3196,7 @@ public class Query : SdkModel
   public bool? has_table_calculations { get; set; } = null;
 }
 
-public class QueryTask : SdkModel 
+public class QueryTask : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3077,7 +3237,7 @@ public class QueryTask : SdkModel
   public string? result_format { get; set; } = null;
 }
 
-public class RenderTask : SdkModel 
+public class RenderTask : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3119,7 +3279,7 @@ public class RenderTask : SdkModel
   public long? width { get; set; } = null;
 }
 
-public class RepositoryCredential : SdkModel 
+public class RepositoryCredential : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3139,7 +3299,32 @@ public class RepositoryCredential : SdkModel
   public bool? is_configured { get; set; } = null;
 }
 
-public class ResultMakerFilterables : SdkModel 
+/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+public enum ResultFormat
+{
+  [EnumMember(Value = "inline_json")]
+  inline_json,
+  [EnumMember(Value = "json")]
+  json,
+  [EnumMember(Value = "json_detail")]
+  json_detail,
+  [EnumMember(Value = "json_fe")]
+  json_fe,
+  [EnumMember(Value = "csv")]
+  csv,
+  [EnumMember(Value = "html")]
+  html,
+  [EnumMember(Value = "md")]
+  md,
+  [EnumMember(Value = "txt")]
+  txt,
+  [EnumMember(Value = "xlsx")]
+  xlsx,
+  [EnumMember(Value = "gsxml")]
+  gsxml
+}
+
+public class ResultMakerFilterables : SdkModel
 {
   /// <summary>The model this filterable comes from (used for field suggestions). (read-only)</summary>
   public string? model { get; set; } = null;
@@ -3151,7 +3336,7 @@ public class ResultMakerFilterables : SdkModel
   public ResultMakerFilterablesListen[]? listen { get; set; } = null;
 }
 
-public class ResultMakerFilterablesListen : SdkModel 
+public class ResultMakerFilterablesListen : SdkModel
 {
   /// <summary>The name of a dashboard filter to listen to.</summary>
   public string? dashboard_filter_name { get; set; } = null;
@@ -3159,7 +3344,7 @@ public class ResultMakerFilterablesListen : SdkModel
   public string? field { get; set; } = null;
 }
 
-public class ResultMakerWithIdVisConfigAndDynamicFields : SdkModel 
+public class ResultMakerWithIdVisConfigAndDynamicFields : SdkModel
 {
   /// <summary>Unique Id. (read-only)</summary>
   public long? id { get; set; } = null;
@@ -3182,7 +3367,7 @@ public class ResultMakerWithIdVisConfigAndDynamicFields : SdkModel
   public StringDictionary<string>? vis_config { get; set; } = null;
 }
 
-public class Role : SdkModel 
+public class Role : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3202,7 +3387,7 @@ public class Role : SdkModel
   public Url? users_url { get; set; } = null;
 }
 
-public class RunningQueries : SdkModel 
+public class RunningQueries : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3244,7 +3429,7 @@ public class RunningQueries : SdkModel
   public string? sql { get; set; } = null;
 }
 
-public class SamlConfig : SdkModel 
+public class SamlConfig : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3314,7 +3499,7 @@ public class SamlConfig : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class SamlGroupRead : SdkModel 
+public class SamlGroupRead : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
@@ -3330,7 +3515,7 @@ public class SamlGroupRead : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class SamlGroupWrite : SdkModel 
+public class SamlGroupWrite : SdkModel
 {
   /// <summary>Unique Id</summary>
   public long? id { get; set; } = null;
@@ -3346,7 +3531,7 @@ public class SamlGroupWrite : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class SamlMetadataParseResult : SdkModel 
+public class SamlMetadataParseResult : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3358,7 +3543,7 @@ public class SamlMetadataParseResult : SdkModel
   public string? idp_cert { get; set; } = null;
 }
 
-public class SamlUserAttributeRead : SdkModel 
+public class SamlUserAttributeRead : SdkModel
 {
   /// <summary>Name of User Attribute in Saml (read-only)</summary>
   public string? name { get; set; } = null;
@@ -3370,7 +3555,7 @@ public class SamlUserAttributeRead : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class SamlUserAttributeWrite : SdkModel 
+public class SamlUserAttributeWrite : SdkModel
 {
   /// <summary>Name of User Attribute in Saml</summary>
   public string? name { get; set; } = null;
@@ -3382,7 +3567,7 @@ public class SamlUserAttributeWrite : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class ScheduledPlan : SdkModel 
+public class ScheduledPlan : SdkModel
 {
   /// <summary>Name of this scheduled plan</summary>
   public string? name { get; set; } = null;
@@ -3453,7 +3638,7 @@ public class ScheduledPlan : SdkModel
   public StringDictionary<bool>? can { get; set; } = null;
 }
 
-public class ScheduledPlanDestination : SdkModel 
+public class ScheduledPlanDestination : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
@@ -3479,7 +3664,7 @@ public class ScheduledPlanDestination : SdkModel
   public string? message { get; set; } = null;
 }
 
-public class Session : SdkModel 
+public class Session : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3513,7 +3698,7 @@ public class Session : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class SessionConfig : SdkModel 
+public class SessionConfig : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3529,7 +3714,7 @@ public class SessionConfig : SdkModel
   public bool? track_session_location { get; set; } = null;
 }
 
-public class Snippet : SdkModel 
+public class Snippet : SdkModel
 {
   /// <summary>Name of the snippet (read-only)</summary>
   public string? name { get; set; } = null;
@@ -3539,7 +3724,7 @@ public class Snippet : SdkModel
   public string? sql { get; set; } = null;
 }
 
-public class SqlQuery : SdkModel 
+public class SqlQuery : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3569,7 +3754,7 @@ public class SqlQuery : SdkModel
   public long? result_maker_id { get; set; } = null;
 }
 
-public class SqlQueryCreate : SdkModel 
+public class SqlQueryCreate : SdkModel
 {
   /// <summary>Name of the db connection on which to run this query</summary>
   public string? connection_name { get; set; } = null;
@@ -3583,7 +3768,76 @@ public class SqlQueryCreate : SdkModel
   public StringDictionary<object>? vis_config { get; set; } = null;
 }
 
-public class Theme : SdkModel 
+/// A list of action types the integration supports. Valid values are: "cell", "query", "dashboard".
+public enum SupportedActionTypes
+{
+  [EnumMember(Value = "cell")]
+  cell,
+  [EnumMember(Value = "query")]
+  query,
+  [EnumMember(Value = "dashboard")]
+  dashboard
+}
+
+/// A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url".
+public enum SupportedDownloadSettings
+{
+  [EnumMember(Value = "push")]
+  push,
+  [EnumMember(Value = "url")]
+  url
+}
+
+/// A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip".
+public enum SupportedFormats
+{
+  [EnumMember(Value = "txt")]
+  txt,
+  [EnumMember(Value = "csv")]
+  csv,
+  [EnumMember(Value = "inline_json")]
+  inline_json,
+  [EnumMember(Value = "json")]
+  json,
+  [EnumMember(Value = "json_label")]
+  json_label,
+  [EnumMember(Value = "json_detail")]
+  json_detail,
+  [EnumMember(Value = "json_detail_lite_stream")]
+  json_detail_lite_stream,
+  [EnumMember(Value = "xlsx")]
+  xlsx,
+  [EnumMember(Value = "html")]
+  html,
+  [EnumMember(Value = "wysiwyg_pdf")]
+  wysiwyg_pdf,
+  [EnumMember(Value = "assembled_pdf")]
+  assembled_pdf,
+  [EnumMember(Value = "wysiwyg_png")]
+  wysiwyg_png,
+  [EnumMember(Value = "csv_zip")]
+  csv_zip
+}
+
+/// A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted".
+public enum SupportedFormattings
+{
+  [EnumMember(Value = "formatted")]
+  formatted,
+  [EnumMember(Value = "unformatted")]
+  unformatted
+}
+
+/// A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply".
+public enum SupportedVisualizationFormattings
+{
+  [EnumMember(Value = "apply")]
+  apply,
+  [EnumMember(Value = "noapply")]
+  noapply
+}
+
+public class Theme : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3598,7 +3852,7 @@ public class Theme : SdkModel
   public ThemeSettings? settings { get; set; }
 }
 
-public class ThemeSettings : SdkModel 
+public class ThemeSettings : SdkModel
 {
   /// <summary>Default background color</summary>
   public string? background_color { get; set; } = null;
@@ -3636,7 +3890,7 @@ public class ThemeSettings : SdkModel
   public bool? tile_shadow { get; set; } = null;
 }
 
-public class Timezone : SdkModel 
+public class Timezone : SdkModel
 {
   /// <summary>Timezone (read-only)</summary>
   public string? value { get; set; } = null;
@@ -3646,7 +3900,7 @@ public class Timezone : SdkModel
   public string? group { get; set; } = null;
 }
 
-public class UpdateFolder : SdkModel 
+public class UpdateFolder : SdkModel
 {
   /// <summary>Unique Name</summary>
   public string? name { get; set; } = null;
@@ -3654,7 +3908,7 @@ public class UpdateFolder : SdkModel
   public string? parent_id { get; set; } = null;
 }
 
-public class User : SdkModel 
+public class User : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3721,7 +3975,7 @@ public class User : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class UserAttribute : SdkModel 
+public class UserAttribute : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3749,7 +4003,30 @@ public class UserAttribute : SdkModel
   public string? hidden_value_domain_whitelist { get; set; } = null;
 }
 
-public class UserAttributeGroupValue : SdkModel 
+/// An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode".
+public enum UserAttributeFilterTypes
+{
+  [EnumMember(Value = "advanced_filter_string")]
+  advanced_filter_string,
+  [EnumMember(Value = "advanced_filter_number")]
+  advanced_filter_number,
+  [EnumMember(Value = "advanced_filter_datetime")]
+  advanced_filter_datetime,
+  [EnumMember(Value = "string")]
+  @string,
+  [EnumMember(Value = "number")]
+  number,
+  [EnumMember(Value = "datetime")]
+  datetime,
+  [EnumMember(Value = "relative_url")]
+  relative_url,
+  [EnumMember(Value = "yesno")]
+  yesno,
+  [EnumMember(Value = "zipcode")]
+  zipcode
+}
+
+public class UserAttributeGroupValue : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3767,7 +4044,7 @@ public class UserAttributeGroupValue : SdkModel
   public string? value { get; set; } = null;
 }
 
-public class UserAttributeWithValue : SdkModel 
+public class UserAttributeWithValue : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3793,7 +4070,7 @@ public class UserAttributeWithValue : SdkModel
   public string? hidden_value_domain_whitelist { get; set; } = null;
 }
 
-public class UserLoginLockout : SdkModel 
+public class UserLoginLockout : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3817,7 +4094,7 @@ public class UserLoginLockout : SdkModel
   public DateTime? lockout_at { get; set; } = null;
 }
 
-public class UserPublic : SdkModel 
+public class UserPublic : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3835,7 +4112,7 @@ public class UserPublic : SdkModel
   public Url? url { get; set; } = null;
 }
 
-public class ValidationError : SdkModel 
+public class ValidationError : SdkModel
 {
   /// <summary>Error details (read-only)</summary>
   public string message { get; set; } = "";
@@ -3845,7 +4122,7 @@ public class ValidationError : SdkModel
   public Url documentation_url { get; set; } = "";
 }
 
-public class ValidationErrorDetail : SdkModel 
+public class ValidationErrorDetail : SdkModel
 {
   /// <summary>Field with error (read-only)</summary>
   public string? field { get; set; } = null;
@@ -3857,7 +4134,26 @@ public class ValidationErrorDetail : SdkModel
   public Url documentation_url { get; set; } = "";
 }
 
-public class WelcomeEmailTest : SdkModel 
+/// The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday".
+public enum WeekStartDay
+{
+  [EnumMember(Value = "monday")]
+  monday,
+  [EnumMember(Value = "tuesday")]
+  tuesday,
+  [EnumMember(Value = "wednesday")]
+  wednesday,
+  [EnumMember(Value = "thursday")]
+  thursday,
+  [EnumMember(Value = "friday")]
+  friday,
+  [EnumMember(Value = "saturday")]
+  saturday,
+  [EnumMember(Value = "sunday")]
+  sunday
+}
+
+public class WelcomeEmailTest : SdkModel
 {
   /// <summary>The content that would be sent in the body of a custom welcome email</summary>
   public string? content { get; set; } = null;
@@ -3867,7 +4163,7 @@ public class WelcomeEmailTest : SdkModel
   public string? header { get; set; } = null;
 }
 
-public class WhitelabelConfiguration : SdkModel 
+public class WhitelabelConfiguration : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3905,7 +4201,7 @@ public class WhitelabelConfiguration : SdkModel
   public bool? folders_mentions { get; set; } = null;
 }
 
-public class Workspace : SdkModel 
+public class Workspace : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -3917,7 +4213,7 @@ public class Workspace : SdkModel
 
 /// Dynamically generated writeable type for ApiSession removes properties:
 /// can, sudo_user_id
-public class WriteApiSession : SdkModel 
+public class WriteApiSession : SdkModel
 {
   /// <summary>The id of active workspace for this session</summary>
   public string? workspace_id { get; set; } = null;
@@ -3925,7 +4221,7 @@ public class WriteApiSession : SdkModel
 
 /// Dynamically generated writeable type for BackupConfiguration removes properties:
 /// can, url
-public class WriteBackupConfiguration : SdkModel 
+public class WriteBackupConfiguration : SdkModel
 {
   /// <summary>Type of backup: looker-s3 or custom-s3</summary>
   public string? type { get; set; } = null;
@@ -3941,7 +4237,7 @@ public class WriteBackupConfiguration : SdkModel
 
 /// Dynamically generated writeable type for Board removes properties:
 /// can, content_metadata_id, created_at, board_sections, id, updated_at, user_id, primary_homepage
-public class WriteBoard : SdkModel 
+public class WriteBoard : SdkModel
 {
   /// <summary>Date of board deletion</summary>
   public DateTime? deleted_at { get; set; } = null;
@@ -3955,7 +4251,7 @@ public class WriteBoard : SdkModel
 
 /// Dynamically generated writeable type for BoardItem removes properties:
 /// can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, location, title, url, view_count
-public class WriteBoardItem : SdkModel 
+public class WriteBoardItem : SdkModel
 {
   /// <summary>Dashboard to base this item on</summary>
   public long? dashboard_id { get; set; } = null;
@@ -3971,7 +4267,7 @@ public class WriteBoardItem : SdkModel
 
 /// Dynamically generated writeable type for BoardSection removes properties:
 /// can, created_at, board_items, id, updated_at
-public class WriteBoardSection : SdkModel 
+public class WriteBoardSection : SdkModel
 {
   /// <summary>Time at which this section was deleted.</summary>
   public DateTime? deleted_at { get; set; } = null;
@@ -3987,7 +4283,7 @@ public class WriteBoardSection : SdkModel
 
 /// Dynamically generated writeable type for ColorCollection removes properties:
 /// id
-public class WriteColorCollection : SdkModel 
+public class WriteColorCollection : SdkModel
 {
   /// <summary>Label of color collection</summary>
   public string? label { get; set; } = null;
@@ -4001,7 +4297,7 @@ public class WriteColorCollection : SdkModel
 
 /// Dynamically generated writeable type for Command removes properties:
 /// id, author_id
-public class WriteCommand : SdkModel 
+public class WriteCommand : SdkModel
 {
   /// <summary>Name of the command</summary>
   public string? name { get; set; } = null;
@@ -4010,12 +4306,13 @@ public class WriteCommand : SdkModel
   /// <summary>Id of the content associated with the command</summary>
   public string? linked_content_id { get; set; } = null;
   /// <summary>Name of the command Valid values are: "dashboard", "lookml_dashboard".</summary>
-  public string? linked_content_type { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public LinkedContentType? linked_content_type { get; set; }
 }
 
 /// Dynamically generated writeable type for ContentFavorite removes properties:
 /// id, look_id, dashboard_id, board_id
-public class WriteContentFavorite : SdkModel 
+public class WriteContentFavorite : SdkModel
 {
   /// <summary>User Id which owns this ContentFavorite</summary>
   public long? user_id { get; set; } = null;
@@ -4027,7 +4324,7 @@ public class WriteContentFavorite : SdkModel
 
 /// Dynamically generated writeable type for ContentMeta removes properties:
 /// can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug
-public class WriteContentMeta : SdkModel 
+public class WriteContentMeta : SdkModel
 {
   /// <summary>Whether content inherits its access levels from parent</summary>
   public bool? inherits { get; set; } = null;
@@ -4035,7 +4332,7 @@ public class WriteContentMeta : SdkModel
 
 /// Dynamically generated writeable type for CreateDashboardFilter removes properties:
 /// id, field
-public class WriteCreateDashboardFilter : SdkModel 
+public class WriteCreateDashboardFilter : SdkModel
 {
   /// <summary>Id of Dashboard</summary>
   public string dashboard_id { get; set; } = "";
@@ -4067,12 +4364,13 @@ public class WriteCreateDashboardFilter : SdkModel
 
 /// Dynamically generated writeable type for CreateQueryTask removes properties:
 /// can
-public class WriteCreateQueryTask : SdkModel 
+public class WriteCreateQueryTask : SdkModel
 {
   /// <summary>Id of query to run</summary>
   public long query_id { get; set; }
   /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".</summary>
-  public string result_format { get; set; } = "";
+  [JsonConverter(typeof(StringEnumConverter))]
+  public ResultFormat result_format { get; set; }
   /// <summary>Source of query task</summary>
   public string? source { get; set; } = null;
   /// <summary>Create the task but defer execution</summary>
@@ -4085,7 +4383,7 @@ public class WriteCreateQueryTask : SdkModel
 
 /// Dynamically generated writeable type for CredentialsEmail removes properties:
 /// can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
-public class WriteCredentialsEmail : SdkModel 
+public class WriteCredentialsEmail : SdkModel
 {
   /// <summary>EMail address used for user login</summary>
   public string? email { get; set; } = null;
@@ -4095,7 +4393,7 @@ public class WriteCredentialsEmail : SdkModel
 
 /// Dynamically generated writeable type for CustomWelcomeEmail removes properties:
 /// can
-public class WriteCustomWelcomeEmail : SdkModel 
+public class WriteCustomWelcomeEmail : SdkModel
 {
   /// <summary>If true, custom email content will replace the default body of welcome emails</summary>
   public bool? enabled { get; set; } = null;
@@ -4109,7 +4407,7 @@ public class WriteCustomWelcomeEmail : SdkModel
 
 /// Dynamically generated writeable type for Dashboard removes properties:
 /// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
-public class WriteDashboard : SdkModel 
+public class WriteDashboard : SdkModel
 {
   /// <summary>Description</summary>
   public string? description { get; set; } = null;
@@ -4155,14 +4453,14 @@ public class WriteDashboard : SdkModel
 
 /// Dynamically generated writeable type for DashboardBase removes properties:
 /// can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id
-public class WriteDashboardBase : SdkModel 
+public class WriteDashboardBase : SdkModel
 {
   public WriteFolderBase? folder { get; set; }
 }
 
 /// Dynamically generated writeable type for DashboardElement removes properties:
 /// can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
-public class WriteDashboardElement : SdkModel 
+public class WriteDashboardElement : SdkModel
 {
   /// <summary>Text tile body text</summary>
   public string? body_text { get; set; } = null;
@@ -4201,7 +4499,7 @@ public class WriteDashboardElement : SdkModel
 
 /// Dynamically generated writeable type for DashboardFilter removes properties:
 /// can, id, dashboard_id, field
-public class WriteDashboardFilter : SdkModel 
+public class WriteDashboardFilter : SdkModel
 {
   /// <summary>Name of filter</summary>
   public string? name { get; set; } = null;
@@ -4231,7 +4529,7 @@ public class WriteDashboardFilter : SdkModel
 
 /// Dynamically generated writeable type for DashboardLayout removes properties:
 /// can, id, deleted, dashboard_title, dashboard_layout_components
-public class WriteDashboardLayout : SdkModel 
+public class WriteDashboardLayout : SdkModel
 {
   /// <summary>Id of Dashboard</summary>
   public string? dashboard_id { get; set; } = null;
@@ -4247,7 +4545,7 @@ public class WriteDashboardLayout : SdkModel
 
 /// Dynamically generated writeable type for DashboardLayoutComponent removes properties:
 /// can, id, deleted, element_title, element_title_hidden, vis_type
-public class WriteDashboardLayoutComponent : SdkModel 
+public class WriteDashboardLayoutComponent : SdkModel
 {
   /// <summary>Id of Dashboard Layout</summary>
   public string? dashboard_layout_id { get; set; } = null;
@@ -4265,7 +4563,7 @@ public class WriteDashboardLayoutComponent : SdkModel
 
 /// Dynamically generated writeable type for Datagroup removes properties:
 /// can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
-public class WriteDatagroup : SdkModel 
+public class WriteDatagroup : SdkModel
 {
   /// <summary>UNIX timestamp before which cache entries are considered stale. Cannot be in the future.</summary>
   public long? stale_before { get; set; } = null;
@@ -4275,7 +4573,7 @@ public class WriteDatagroup : SdkModel
 
 /// Dynamically generated writeable type for DBConnection removes properties:
 /// can, dialect, snippets, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
-public class WriteDBConnection : SdkModel 
+public class WriteDBConnection : SdkModel
 {
   /// <summary>Name of the connection. Also used as the unique identifier</summary>
   public string? name { get; set; } = null;
@@ -4334,7 +4632,7 @@ public class WriteDBConnection : SdkModel
 
 /// Dynamically generated writeable type for DBConnectionOverride removes properties:
 /// has_password
-public class WriteDBConnectionOverride : SdkModel 
+public class WriteDBConnectionOverride : SdkModel
 {
   /// <summary>Context in which to override (`pdt` is the only allowed value)</summary>
   public string? context { get; set; } = null;
@@ -4362,7 +4660,7 @@ public class WriteDBConnectionOverride : SdkModel
 
 /// Dynamically generated writeable type for FolderBase removes properties:
 /// id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-public class WriteFolderBase : SdkModel 
+public class WriteFolderBase : SdkModel
 {
   /// <summary>Unique Name</summary>
   public string name { get; set; } = "";
@@ -4372,7 +4670,7 @@ public class WriteFolderBase : SdkModel
 
 /// Dynamically generated writeable type for GitBranch removes properties:
 /// can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
-public class WriteGitBranch : SdkModel 
+public class WriteGitBranch : SdkModel
 {
   /// <summary>The short name on the local. Updating `name` results in `git checkout <new_name>`</summary>
   public string? name { get; set; } = null;
@@ -4382,7 +4680,7 @@ public class WriteGitBranch : SdkModel
 
 /// Dynamically generated writeable type for Group removes properties:
 /// can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
-public class WriteGroup : SdkModel 
+public class WriteGroup : SdkModel
 {
   /// <summary>Group can be used in content access controls</summary>
   public bool? can_add_to_content_metadata { get; set; } = null;
@@ -4392,7 +4690,7 @@ public class WriteGroup : SdkModel
 
 /// Dynamically generated writeable type for Integration removes properties:
 /// can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
-public class WriteIntegration : SdkModel 
+public class WriteIntegration : SdkModel
 {
   /// <summary>Whether the integration is available to users.</summary>
   public bool? enabled { get; set; } = null;
@@ -4404,7 +4702,7 @@ public class WriteIntegration : SdkModel
 
 /// Dynamically generated writeable type for IntegrationHub removes properties:
 /// can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
-public class WriteIntegrationHub : SdkModel 
+public class WriteIntegrationHub : SdkModel
 {
   /// <summary>URL of the hub.</summary>
   public string? url { get; set; } = null;
@@ -4414,7 +4712,7 @@ public class WriteIntegrationHub : SdkModel
 
 /// Dynamically generated writeable type for InternalHelpResources removes properties:
 /// can
-public class WriteInternalHelpResources : SdkModel 
+public class WriteInternalHelpResources : SdkModel
 {
   /// <summary>If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker</summary>
   public bool? enabled { get; set; } = null;
@@ -4422,7 +4720,7 @@ public class WriteInternalHelpResources : SdkModel
 
 /// Dynamically generated writeable type for InternalHelpResourcesContent removes properties:
 /// can
-public class WriteInternalHelpResourcesContent : SdkModel 
+public class WriteInternalHelpResourcesContent : SdkModel
 {
   /// <summary>Text to display in the help menu item which will display the internal help resources</summary>
   public string? organization_name { get; set; } = null;
@@ -4432,7 +4730,7 @@ public class WriteInternalHelpResourcesContent : SdkModel
 
 /// Dynamically generated writeable type for LDAPConfig removes properties:
 /// can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
-public class WriteLDAPConfig : SdkModel 
+public class WriteLDAPConfig : SdkModel
 {
   /// <summary>Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.</summary>
   public bool? alternate_email_login_allowed { get; set; } = null;
@@ -4506,7 +4804,7 @@ public class WriteLDAPConfig : SdkModel
 
 /// Dynamically generated writeable type for LegacyFeature removes properties:
 /// can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
-public class WriteLegacyFeature : SdkModel 
+public class WriteLegacyFeature : SdkModel
 {
   /// <summary>Whether this feature has been enabled by a user</summary>
   public bool? enabled_locally { get; set; } = null;
@@ -4514,7 +4812,7 @@ public class WriteLegacyFeature : SdkModel
 
 /// Dynamically generated writeable type for LookBasic removes properties:
 /// can, content_metadata_id, id, title
-public class WriteLookBasic : SdkModel 
+public class WriteLookBasic : SdkModel
 {
   /// <summary>User Id</summary>
   public long? user_id { get; set; } = null;
@@ -4522,7 +4820,7 @@ public class WriteLookBasic : SdkModel
 
 /// Dynamically generated writeable type for LookmlModel removes properties:
 /// can, explores, has_content, label
-public class WriteLookmlModel : SdkModel 
+public class WriteLookmlModel : SdkModel
 {
   /// <summary>Array of names of connections this model is allowed to use</summary>
   public string[]? allowed_db_connection_names { get; set; } = null;
@@ -4536,7 +4834,7 @@ public class WriteLookmlModel : SdkModel
 
 /// Dynamically generated writeable type for LookWithQuery removes properties:
 /// can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
-public class WriteLookWithQuery : SdkModel 
+public class WriteLookWithQuery : SdkModel
 {
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
@@ -4560,7 +4858,7 @@ public class WriteLookWithQuery : SdkModel
 
 /// Dynamically generated writeable type for MergeQuery removes properties:
 /// can, id, result_maker_id
-public class WriteMergeQuery : SdkModel 
+public class WriteMergeQuery : SdkModel
 {
   /// <summary>Column Limit</summary>
   public string? column_limit { get; set; } = null;
@@ -4580,7 +4878,7 @@ public class WriteMergeQuery : SdkModel
 
 /// Dynamically generated writeable type for ModelSet removes properties:
 /// can, all_access, built_in, id, url
-public class WriteModelSet : SdkModel 
+public class WriteModelSet : SdkModel
 {
   public string[]? models { get; set; } = null;
   /// <summary>Name of ModelSet</summary>
@@ -4589,7 +4887,7 @@ public class WriteModelSet : SdkModel
 
 /// Dynamically generated writeable type for OauthClientApp removes properties:
 /// can, client_guid, tokens_invalid_before, activated_users
-public class WriteOauthClientApp : SdkModel 
+public class WriteOauthClientApp : SdkModel
 {
   /// <summary>The uri with which this application will receive an auth code by browser redirect.</summary>
   public string? redirect_uri { get; set; } = null;
@@ -4605,7 +4903,7 @@ public class WriteOauthClientApp : SdkModel
 
 /// Dynamically generated writeable type for OIDCConfig removes properties:
 /// can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
-public class WriteOIDCConfig : SdkModel 
+public class WriteOIDCConfig : SdkModel
 {
   /// <summary>Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.</summary>
   public bool? alternate_email_login_allowed { get; set; } = null;
@@ -4659,7 +4957,7 @@ public class WriteOIDCConfig : SdkModel
 
 /// Dynamically generated writeable type for PasswordConfig removes properties:
 /// can
-public class WritePasswordConfig : SdkModel 
+public class WritePasswordConfig : SdkModel
 {
   /// <summary>Minimum number of characters required for a new password.  Must be between 7 and 100</summary>
   public long? min_length { get; set; } = null;
@@ -4673,7 +4971,7 @@ public class WritePasswordConfig : SdkModel
 
 /// Dynamically generated writeable type for PermissionSet removes properties:
 /// can, all_access, built_in, id, url
-public class WritePermissionSet : SdkModel 
+public class WritePermissionSet : SdkModel
 {
   /// <summary>Name of PermissionSet</summary>
   public string? name { get; set; } = null;
@@ -4682,7 +4980,7 @@ public class WritePermissionSet : SdkModel
 
 /// Dynamically generated writeable type for Project removes properties:
 /// can, id, uses_git, is_example
-public class WriteProject : SdkModel 
+public class WriteProject : SdkModel
 {
   /// <summary>Project display name</summary>
   public string? name { get; set; } = null;
@@ -4701,13 +4999,15 @@ public class WriteProject : SdkModel
   /// <summary>Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)</summary>
   public long? git_application_server_http_port { get; set; } = null;
   /// <summary>Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".</summary>
-  public string? git_application_server_http_scheme { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public GitApplicationServerHttpScheme? git_application_server_http_scheme { get; set; }
   /// <summary>(Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.</summary>
   public string? deploy_secret { get; set; } = null;
   /// <summary>(Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.</summary>
   public bool? unset_deploy_secret { get; set; } = null;
   /// <summary>The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".</summary>
-  public string? pull_request_mode { get; set; } = null;
+  [JsonConverter(typeof(StringEnumConverter))]
+  public PullRequestMode? pull_request_mode { get; set; }
   /// <summary>Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository</summary>
   public bool? validation_required { get; set; } = null;
   /// <summary>If true, folders are enabled for this project</summary>
@@ -4722,7 +5022,7 @@ public class WriteProject : SdkModel
 
 /// Dynamically generated writeable type for Query removes properties:
 /// can, id, slug, share_url, expanded_share_url, url, has_table_calculations
-public class WriteQuery : SdkModel 
+public class WriteQuery : SdkModel
 {
   /// <summary>Model</summary>
   public string model { get; set; } = "";
@@ -4766,7 +5066,7 @@ public class WriteQuery : SdkModel
 
 /// Dynamically generated writeable type for RepositoryCredential removes properties:
 /// can, id, root_project_id, remote_url, is_configured
-public class WriteRepositoryCredential : SdkModel 
+public class WriteRepositoryCredential : SdkModel
 {
   /// <summary>Git username for HTTPS authentication.</summary>
   public string? git_username { get; set; } = null;
@@ -4778,14 +5078,14 @@ public class WriteRepositoryCredential : SdkModel
 
 /// Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes properties:
 /// id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
-public class WriteResultMakerWithIdVisConfigAndDynamicFields : SdkModel 
+public class WriteResultMakerWithIdVisConfigAndDynamicFields : SdkModel
 {
   public WriteQuery? query { get; set; }
 }
 
 /// Dynamically generated writeable type for Role removes properties:
 /// can, id, url, users_url
-public class WriteRole : SdkModel 
+public class WriteRole : SdkModel
 {
   /// <summary>Name of Role</summary>
   public string? name { get; set; } = null;
@@ -4799,7 +5099,7 @@ public class WriteRole : SdkModel
 
 /// Dynamically generated writeable type for SamlConfig removes properties:
 /// can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
-public class WriteSamlConfig : SdkModel 
+public class WriteSamlConfig : SdkModel
 {
   /// <summary>Enable/Disable Saml authentication for the server</summary>
   public bool? enabled { get; set; } = null;
@@ -4853,7 +5153,7 @@ public class WriteSamlConfig : SdkModel
 
 /// Dynamically generated writeable type for ScheduledPlan removes properties:
 /// id, created_at, updated_at, title, user, next_run_at, last_run_at, can
-public class WriteScheduledPlan : SdkModel 
+public class WriteScheduledPlan : SdkModel
 {
   /// <summary>Name of this scheduled plan</summary>
   public string? name { get; set; } = null;
@@ -4911,7 +5211,7 @@ public class WriteScheduledPlan : SdkModel
 
 /// Dynamically generated writeable type for SessionConfig removes properties:
 /// can
-public class WriteSessionConfig : SdkModel 
+public class WriteSessionConfig : SdkModel
 {
   /// <summary>Allow users to have persistent sessions when they login</summary>
   public bool? allow_persistent_sessions { get; set; } = null;
@@ -4927,7 +5227,7 @@ public class WriteSessionConfig : SdkModel
 
 /// Dynamically generated writeable type for Theme removes properties:
 /// can, id
-public class WriteTheme : SdkModel 
+public class WriteTheme : SdkModel
 {
   /// <summary>Timestamp for when this theme becomes active. Null=always</summary>
   public DateTime? begin_at { get; set; } = null;
@@ -4940,7 +5240,7 @@ public class WriteTheme : SdkModel
 
 /// Dynamically generated writeable type for User removes properties:
 /// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
-public class WriteUser : SdkModel 
+public class WriteUser : SdkModel
 {
   public WriteCredentialsEmail? credentials_email { get; set; }
   /// <summary>First name</summary>
@@ -4961,7 +5261,7 @@ public class WriteUser : SdkModel
 
 /// Dynamically generated writeable type for UserAttribute removes properties:
 /// can, id, is_system, is_permanent
-public class WriteUserAttribute : SdkModel 
+public class WriteUserAttribute : SdkModel
 {
   /// <summary>Name of user attribute</summary>
   public string? name { get; set; } = null;
@@ -4983,7 +5283,7 @@ public class WriteUserAttribute : SdkModel
 
 /// Dynamically generated writeable type for UserAttributeWithValue removes properties:
 /// can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
-public class WriteUserAttributeWithValue : SdkModel 
+public class WriteUserAttributeWithValue : SdkModel
 {
   /// <summary>Value of attribute for user</summary>
   public string? value { get; set; } = null;
@@ -4991,7 +5291,7 @@ public class WriteUserAttributeWithValue : SdkModel
 
 /// Dynamically generated writeable type for WhitelabelConfiguration removes properties:
 /// can, id, logo_url, favicon_url
-public class WriteWhitelabelConfiguration : SdkModel 
+public class WriteWhitelabelConfiguration : SdkModel
 {
   /// <summary>Customer logo image. Expected base64 encoded data (write-only)</summary>
   public string? logo_file { get; set; } = null;

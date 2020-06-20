@@ -50,26 +50,42 @@ const lookerValuesTag = 'x-looker-values'
 const enumTag = 'enum'
 
 /**
- * convert kebab-case or snake_case to camelCase
+ * convert string to camelCase
  * @param value string value to convert to camelCase
  */
 export const camelCase = (value: string) => {
-  let result = value.replace(/([-_][a-z])/gi, ($1) => {
+  if (!value) return ''
+  return value.replace(/([-_][a-z])/gi, ($1) => {
     return $1
       .toUpperCase()
       .replace('-', '')
       .replace('_', '')
   })
-  result = result[0].toLocaleUpperCase() + result.substring(1)
-  return result
 }
 
 /**
- * convert to TitleCase
+ * convert string to TitleCase
  * @param value string value to convert to TitleCase
  */
-export const titleCase = (value: string) =>
-  value[0].toLocaleUpperCase() + value.substr(1).toLowerCase()
+export const titleCase = (value: string) => {
+  if (!value) return ''
+  value = camelCase(value)
+  return value[0].toLocaleUpperCase() + value.substr(1)
+}
+
+/**
+ * Only first character of string should be uppercase
+ *
+ * Values are first converted to camelCase()
+ *
+ * @param value of string to convert
+ * @returns converted string
+ */
+export const firstCase = (value: string) => {
+  if (!value) return ''
+  value = camelCase(value)
+  return value[0].toLocaleUpperCase() + value.substr(1).toLocaleLowerCase()
+}
 
 export interface IModel {}
 
@@ -151,20 +167,6 @@ export const mayQuote = (value: any, quoteChar = `'`): string => {
   const simpleName = /^\w[\w]*$/gim
   if (simpleName.test(str)) return str
   return `${quoteChar}${str}${quoteChar}`
-}
-
-/**
- * Converts a name to its enum equivalent
- *
- * foo-bar = FooBar
- * foo_bar = FooBar
- * foobar = Foobar
- *
- * @param {string} name to enumify
- * @returns {string} Enum version of name
- */
-export const enumName = (name: string): string => {
-  return camelCase(name)
 }
 
 /**
@@ -655,7 +657,7 @@ export class Parameter extends SchemadSymbol implements IParameter {
   }
 
   asProperty() {
-    return new Property(this.owner, this.type, this.asSchemaObject())
+    return new Property(this.name, this.type, this.asSchemaObject())
   }
 
   asHashString() {
@@ -713,8 +715,14 @@ export interface IMethod extends ISchemadSymbol {
   /** Prefers 200 response with application/json as the response type */
   primaryResponse: IMethodResponse
 
+  /** If there's only one 200 or 204 response for this method, this is it's return type */
+  returnType: IMethodResponse | undefined
+
   /** List of all responses that can be returned by this REST call */
   responses: IMethodResponse[]
+
+  /** List of all 2xx responses */
+  okResponses: IMethodResponse[]
 
   /** Description (from the spec) of this method */
   description: string
@@ -877,12 +885,14 @@ export class Method extends SchemadSymbol implements IMethod {
   readonly endpoint: string
   readonly primaryResponse: IMethodResponse
   responses: IMethodResponse[]
+  readonly okResponses: IMethodResponse[]
   readonly params: IParameter[]
   readonly responseModes: Set<ResponseMode>
   readonly activityType: string
   readonly customTypes: KeyList
   readonly types: KeyList
   readonly rateLimited: boolean
+  readonly returnType: IMethodResponse | undefined
 
   constructor(
     api: IApiModel,
@@ -897,18 +907,28 @@ export class Method extends SchemadSymbol implements IMethod {
       throw new Error('Missing operationId')
     }
 
+    const okays = responses.filter((response) => {
+      return (
+        response.statusCode === StatusCode.OK ||
+        response.statusCode === StatusCode.NoContent
+      )
+    })
+    if (!okays) {
+      throw new Error(`Missing 2xx + application/json response in ${endpoint}`)
+    }
+
     const primaryResponse =
-      responses.find((response) => {
+      okays.find((response) => {
         // prefer json response over all other 200s
         return (
           response.statusCode === StatusCode.OK &&
           response.mediaType === 'application/json'
         )
       }) ||
-      responses.find((response) => {
+      okays.find((response) => {
         return response.statusCode === StatusCode.OK // accept any mediaType for 200 if none are json
       }) ||
-      responses.find((response) => {
+      okays.find((response) => {
         return response.statusCode === StatusCode.NoContent
       })
 
@@ -917,6 +937,12 @@ export class Method extends SchemadSymbol implements IMethod {
     }
 
     super(schema.operationId, primaryResponse.type, schema)
+    this.okResponses = okays
+    if (okays.length === 1) {
+      // There's only one return type for this function
+      this.returnType = primaryResponse
+    }
+
     this.customTypes = new Set<string>()
     this.types = new Set<string>()
     this.httpMethod = httpMethod
@@ -1274,11 +1300,13 @@ export class Type implements ISymbol, IType {
   readonly methodRefs: KeyList = new Set<string>()
   readonly types: KeyList = new Set<string>()
   readonly customTypes: KeyList = new Set<string>()
+  description: string
   customType: string
   refCount = 0
 
   constructor(public schema: OAS.SchemaObject, public name: string) {
     this.customType = name
+    this.description = this.schema.description || ''
   }
 
   get fullName(): string {
@@ -1286,7 +1314,7 @@ export class Type implements ISymbol, IType {
   }
 
   get owner(): string {
-    return ""
+    return ''
   }
 
   get writeable(): IProperty[] {
@@ -1311,10 +1339,6 @@ export class Type implements ISymbol, IType {
 
   get deprecated(): boolean {
     return this.schema.deprecated || this.schema['x-looker-deprecated'] || false
-  }
-
-  get description(): string {
-    return this.schema.description || ''
   }
 
   get title(): string {
@@ -1343,7 +1367,7 @@ export class Type implements ISymbol, IType {
           propName,
           propType,
           propSchema,
-          this.name,
+          this.name, // owner name
           this.schema.required
         )
       }
@@ -1576,7 +1600,7 @@ export class WriteType extends Type {
             // nullable/optional if property is nullable or property is complex type
             nullable: p.nullable || !p.type.intrinsic,
           },
-          this.name,
+          this.name, // owner name
           type.schema.required
         )
         const typeWriter = api.mayGetWriteableType(p.type)
@@ -1867,11 +1891,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
       return this.enumTypes[hash]
     }
 
-    type.name = enumName(type.name || typeName || 'Enum')
+    type.name = titleCase(type.name || typeName || 'Enum')
     if (type.name in this.types) {
       // Enum values don't match existing enum of this name. Pick a new name
       const baseName = methodName
-        ? enumName(`${methodName}_${type.name}`)
+        ? titleCase(`${methodName}_${type.name}`)
         : type.name
       let newName = baseName
       let i = 0
@@ -1879,6 +1903,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
         newName = `${baseName}${++i}`
       }
       type.name = newName
+    }
+    if (methodName) {
+      type.description = `Type defined in ${methodName}\n${type.description}`
     }
     this.enumTypes[hash] = type
     this.types[type.name] = type

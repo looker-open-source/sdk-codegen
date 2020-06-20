@@ -26,7 +26,7 @@
 
 import { TestConfig } from './testUtils'
 import { TypescriptGen } from './typescript.gen'
-import { enumName } from './sdkModels'
+import { titleCase } from './sdkModels'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
@@ -47,12 +47,13 @@ describe('typescript generator', () => {
 
     actual = gen.commentHeader(indent, text, ' ')
     expected = `/**
-    
+
  line 1
  line 2
 
  */
 `
+    expect(actual).toEqual(expected)
   })
 
   describe('parameter declarations', () => {
@@ -317,7 +318,7 @@ body: ICreateDashboardRenderTask`)
     it('required properties', () => {
       const type = apiTestModel.types.CreateQueryTask
       const actual = gen.declareType(indent, type)
-      const name = enumName('result_format')
+      const name = titleCase('result_format')
       expect(actual).toEqual(`export interface ICreateQueryTask {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -353,7 +354,7 @@ body: ICreateDashboardRenderTask`)
       const type =
         apiTestModel.types.CreateQueryTask.properties.result_format.type
       const actual = gen.declareType('', type)
-      const name = enumName('result_format')
+      const name = titleCase('result_format')
       expect(actual).toEqual(`/**
  * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
  */

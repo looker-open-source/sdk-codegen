@@ -1,4 +1,27 @@
-// 345 API methods
+/// MIT License
+/// 
+/// Copyright (c) 2019 Looker Data Sciences, Inc.
+/// 
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+/// 
+/// The above copyright notice and this permission notice shall be included in all
+/// copies or substantial portions of the Software.
+/// 
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+/// SOFTWARE.
+
+/// 345 API methods
+
 #nullable enable
 using System;
 using System.Net.Http;
@@ -18,12 +41,15 @@ namespace Looker.SDK.API31
   /// Accepts the legal agreement for a given integration hub. This only works for integration hubs that have legal_agreement_required set to true and legal_agreement_signed set to false.
   /// 
   /// POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> IntegrationHub
+  /// 
+  /// <returns><c>IntegrationHub</c> Integration hub (application/json)</returns>
+  /// 
   /// <param name="integration_hub_id">Id of integration_hub</param>
-  public async Task<SdkResponse<TSuccess, TError>> accept_integration_hub_legal_agreement<TSuccess, TError>(
+  public async Task<SdkResponse<IntegrationHub, Exception>> accept_integration_hub_legal_agreement(
     long integration_hub_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/integration_hubs/{integration_hub_id}/accept_legal_agreement", null,null,options);
+    return await AuthRequest<IntegrationHub, Exception>(HttpMethod.Post, $"/integration_hubs/{integration_hub_id}/accept_legal_agreement", null,null,options);
   }
 
   /// ### Get active themes
@@ -37,16 +63,19 @@ namespace Looker.SDK.API31
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   /// 
   /// GET /themes/active -> Theme[]
+  /// 
+  /// <returns><c>Theme[]</c> Themes (application/json)</returns>
+  /// 
   /// <param name="name">Name of theme</param>
   /// <param name="ts">Timestamp representing the target datetime for the active period. Defaults to 'now'</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> active_themes<TSuccess, TError>(
+  public async Task<SdkResponse<Theme[], Exception>> active_themes(
     string? name = null,
     DateTime? ts = null,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/themes/active", new Values {
+    return await AuthRequest<Theme[], Exception>(HttpMethod.Get, "/themes/active", new Values {
       { "name", name },
       { "ts", ts },
       { "fields", fields }},null,options);
@@ -55,25 +84,31 @@ namespace Looker.SDK.API31
   /// ### Adds a new group to a group.
   /// 
   /// POST /groups/{group_id}/groups -> Group
+  /// 
+  /// <returns><c>Group</c> Added group. (application/json)</returns>
+  /// 
   /// <param name="group_id">Id of group</param>
-  public async Task<SdkResponse<TSuccess, TError>> add_group_group<TSuccess, TError>(
+  public async Task<SdkResponse<Group, Exception>> add_group_group(
     long group_id,
     GroupIdForGroupInclusion body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/groups/{group_id}/groups", null,body,options);
+    return await AuthRequest<Group, Exception>(HttpMethod.Post, $"/groups/{group_id}/groups", null,body,options);
   }
 
   /// ### Adds a new user to a group.
   /// 
   /// POST /groups/{group_id}/users -> User
+  /// 
+  /// <returns><c>User</c> Added user. (application/json)</returns>
+  /// 
   /// <param name="group_id">Id of group</param>
-  public async Task<SdkResponse<TSuccess, TError>> add_group_user<TSuccess, TError>(
+  public async Task<SdkResponse<User, Exception>> add_group_user(
     long group_id,
     GroupIdForGroupUserInclusion body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/groups/{group_id}/users", null,body,options);
+    return await AuthRequest<User, Exception>(HttpMethod.Post, $"/groups/{group_id}/users", null,body,options);
   }
 
   /// ### Get an array of all existing Color Collections
@@ -86,38 +121,47 @@ namespace Looker.SDK.API31
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   /// 
   /// GET /color_collections -> ColorCollection[]
+  /// 
+  /// <returns><c>ColorCollection[]</c> ColorCollections (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_color_collections<TSuccess, TError>(
+  public async Task<SdkResponse<ColorCollection[], Exception>> all_color_collections(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/color_collections", new Values {
+    return await AuthRequest<ColorCollection[], Exception>(HttpMethod.Get, "/color_collections", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all connections.
   /// 
   /// GET /connections -> DBConnection[]
+  /// 
+  /// <returns><c>DBConnection[]</c> Connection (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_connections<TSuccess, TError>(
+  public async Task<SdkResponse<DBConnection[], Exception>> all_connections(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/connections", new Values {
+    return await AuthRequest<DBConnection[], Exception>(HttpMethod.Get, "/connections", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### All content metadata access records for a content metadata item.
   /// 
   /// GET /content_metadata_access -> ContentMetaGroupUser[]
+  /// 
+  /// <returns><c>ContentMetaGroupUser[]</c> Content Metadata Access (application/json)</returns>
+  /// 
   /// <param name="content_metadata_id">Id of content metadata</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_content_metadata_accesses<TSuccess, TError>(
+  public async Task<SdkResponse<ContentMetaGroupUser[], Exception>> all_content_metadata_accesses(
     long content_metadata_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/content_metadata_access", new Values {
+    return await AuthRequest<ContentMetaGroupUser[], Exception>(HttpMethod.Get, "/content_metadata_access", new Values {
       { "content_metadata_id", content_metadata_id },
       { "fields", fields }},null,options);
   }
@@ -125,14 +169,17 @@ namespace Looker.SDK.API31
   /// ### Get information about all content metadata in a space.
   /// 
   /// GET /content_metadata -> ContentMeta[]
+  /// 
+  /// <returns><c>ContentMeta[]</c> Content Metadata (application/json)</returns>
+  /// 
   /// <param name="parent_id">Parent space of content.</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_content_metadatas<TSuccess, TError>(
+  public async Task<SdkResponse<ContentMeta[], Exception>> all_content_metadatas(
     long parent_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/content_metadata", new Values {
+    return await AuthRequest<ContentMeta[], Exception>(HttpMethod.Get, "/content_metadata", new Values {
       { "parent_id", parent_id },
       { "fields", fields }},null,options);
   }
@@ -146,45 +193,56 @@ namespace Looker.SDK.API31
   /// Find **deleted dashboards** with [search_dashboards()](#!/Dashboard/search_dashboards)
   /// 
   /// GET /dashboards -> DashboardBase[]
+  /// 
+  /// <returns><c>DashboardBase[]</c> dashboards (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_dashboards<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardBase[], Exception>> all_dashboards(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/dashboards", new Values {
+    return await AuthRequest<DashboardBase[], Exception>(HttpMethod.Get, "/dashboards", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all datagroups.
   /// 
   /// GET /datagroups -> Datagroup[]
-  public async Task<SdkResponse<TSuccess, TError>> all_datagroups<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>Datagroup[]</c> Datagroup (application/json)</returns>
+  public async Task<SdkResponse<Datagroup[], Exception>> all_datagroups(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/datagroups", null,null,options);
+    return await AuthRequest<Datagroup[], Exception>(HttpMethod.Get, "/datagroups", null,null,options);
   }
 
   /// ### Get information about all dialects.
   /// 
   /// GET /dialect_info -> DialectInfo[]
+  /// 
+  /// <returns><c>DialectInfo[]</c> Dialect Info (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_dialect_infos<TSuccess, TError>(
+  public async Task<SdkResponse<DialectInfo[], Exception>> all_dialect_infos(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/dialect_info", new Values {
+    return await AuthRequest<DialectInfo[], Exception>(HttpMethod.Get, "/dialect_info", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all folders.
   /// 
   /// GET /folders -> Folder[]
+  /// 
+  /// <returns><c>Folder[]</c> Folder (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_folders<TSuccess, TError>(
+  public async Task<SdkResponse<Folder[], Exception>> all_folders(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/folders", new Values {
+    return await AuthRequest<Folder[], Exception>(HttpMethod.Get, "/folders", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -193,13 +251,16 @@ namespace Looker.SDK.API31
   /// Returns a list of git branches in the project repository
   /// 
   /// GET /projects/{project_id}/git_branches -> GitBranch[]
+  /// 
+  /// <returns><c>GitBranch[]</c> Git Branch (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_git_branches<TSuccess, TError>(
+  public async Task<SdkResponse<GitBranch[], Exception>> all_git_branches(
     string project_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/git_branches", null,null,options);
+    return await AuthRequest<GitBranch[], Exception>(HttpMethod.Get, $"/projects/{project_id}/git_branches", null,null,options);
   }
 
   /// ### Get All Git Connection Tests
@@ -214,49 +275,58 @@ namespace Looker.SDK.API31
   /// For example, a late-stage test for write access is meaningless if connecting to the git server (an early test) is failing.
   /// 
   /// GET /projects/{project_id}/git_connection_tests -> GitConnectionTest[]
+  /// 
+  /// <returns><c>GitConnectionTest[]</c> Git Connection Test (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
   /// <param name="remote_url">(Optional: leave blank for root project) The remote url for remote dependency to test.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_git_connection_tests<TSuccess, TError>(
+  public async Task<SdkResponse<GitConnectionTest[], Exception>> all_git_connection_tests(
     string project_id,
     string? remote_url = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/git_connection_tests", new Values {
+    return await AuthRequest<GitConnectionTest[], Exception>(HttpMethod.Get, $"/projects/{project_id}/git_connection_tests", new Values {
       { "remote_url", remote_url }},null,options);
   }
 
   /// ### Get information about all the groups in a group
   /// 
   /// GET /groups/{group_id}/groups -> Group[]
+  /// 
+  /// <returns><c>Group[]</c> All groups in group. (application/json)</returns>
+  /// 
   /// <param name="group_id">Id of group</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_group_groups<TSuccess, TError>(
+  public async Task<SdkResponse<Group[], Exception>> all_group_groups(
     long group_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/groups/{group_id}/groups", new Values {
+    return await AuthRequest<Group[], Exception>(HttpMethod.Get, $"/groups/{group_id}/groups", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all the users directly included in a group.
   /// 
   /// GET /groups/{group_id}/users -> User[]
+  /// 
+  /// <returns><c>User[]</c> All users in group. (application/json)</returns>
+  /// 
   /// <param name="group_id">Id of group</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
   /// <param name="sorts">Fields to sort by.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_group_users<TSuccess, TError>(
+  public async Task<SdkResponse<User[], Exception>> all_group_users(
     long group_id,
     string? fields = null,
     long? page = null,
     long? per_page = null,
     string? sorts = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/groups/{group_id}/users", new Values {
+    return await AuthRequest<User[], Exception>(HttpMethod.Get, $"/groups/{group_id}/users", new Values {
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
@@ -266,6 +336,9 @@ namespace Looker.SDK.API31
   /// ### Get information about all groups.
   /// 
   /// GET /groups -> Group[]
+  /// 
+  /// <returns><c>Group[]</c> Group (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
@@ -273,7 +346,7 @@ namespace Looker.SDK.API31
   /// <param name="ids">Optional of ids to get specific groups.</param>
   /// <param name="content_metadata_id">Id of content metadata to which groups must have access.</param>
   /// <param name="can_add_to_content_metadata">Select only groups that either can/cannot be given access to content.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_groups<TSuccess, TError>(
+  public async Task<SdkResponse<Group[], Exception>> all_groups(
     string? fields = null,
     long? page = null,
     long? per_page = null,
@@ -281,9 +354,9 @@ namespace Looker.SDK.API31
     DelimArray<long>? ids = null,
     long? content_metadata_id = null,
     bool? can_add_to_content_metadata = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/groups", new Values {
+    return await AuthRequest<Group[], Exception>(HttpMethod.Get, "/groups", new Values {
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
@@ -296,16 +369,19 @@ namespace Looker.SDK.API31
   /// ### Get information about all homepage items.
   /// 
   /// GET /homepage_items -> HomepageItem[]
+  /// 
+  /// <returns><c>HomepageItem[]</c> Homepage Item (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="homepage_section_id">Filter to a specific homepage section</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_homepage_items<TSuccess, TError>(
+  public async Task<SdkResponse<HomepageItem[], Exception>> all_homepage_items(
     string? fields = null,
     string? sorts = null,
     string? homepage_section_id = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/homepage_items", new Values {
+    return await AuthRequest<HomepageItem[], Exception>(HttpMethod.Get, "/homepage_items", new Values {
       { "fields", fields },
       { "sorts", sorts },
       { "homepage_section_id", homepage_section_id }},null,options);
@@ -314,14 +390,17 @@ namespace Looker.SDK.API31
   /// ### Get information about all homepage sections.
   /// 
   /// GET /homepage_sections -> HomepageSection[]
+  /// 
+  /// <returns><c>HomepageSection[]</c> Homepage section (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to sort by.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_homepage_sections<TSuccess, TError>(
+  public async Task<SdkResponse<HomepageSection[], Exception>> all_homepage_sections(
     string? fields = null,
     string? sorts = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/homepage_sections", new Values {
+    return await AuthRequest<HomepageSection[], Exception>(HttpMethod.Get, "/homepage_sections", new Values {
       { "fields", fields },
       { "sorts", sorts }},null,options);
   }
@@ -329,38 +408,47 @@ namespace Looker.SDK.API31
   /// ### Get information about all homepages.
   /// 
   /// GET /homepages -> Homepage[]
+  /// 
+  /// <returns><c>Homepage[]</c> Homepage (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_homepages<TSuccess, TError>(
+  public async Task<SdkResponse<Homepage[], Exception>> all_homepages(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/homepages", new Values {
+    return await AuthRequest<Homepage[], Exception>(HttpMethod.Get, "/homepages", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all Integration Hubs.
   /// 
   /// GET /integration_hubs -> IntegrationHub[]
+  /// 
+  /// <returns><c>IntegrationHub[]</c> Integration Hub (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_integration_hubs<TSuccess, TError>(
+  public async Task<SdkResponse<IntegrationHub[], Exception>> all_integration_hubs(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/integration_hubs", new Values {
+    return await AuthRequest<IntegrationHub[], Exception>(HttpMethod.Get, "/integration_hubs", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all Integrations.
   /// 
   /// GET /integrations -> Integration[]
+  /// 
+  /// <returns><c>Integration[]</c> Integration (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
   /// <param name="integration_hub_id">Filter to a specific provider</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_integrations<TSuccess, TError>(
+  public async Task<SdkResponse<Integration[], Exception>> all_integrations(
     string? fields = null,
     string? integration_hub_id = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/integrations", new Values {
+    return await AuthRequest<Integration[], Exception>(HttpMethod.Get, "/integrations", new Values {
       { "fields", fields },
       { "integration_hub_id", integration_hub_id }},null,options);
   }
@@ -368,30 +456,37 @@ namespace Looker.SDK.API31
   /// ### Get all legacy features.
   /// 
   /// GET /legacy_features -> LegacyFeature[]
-  public async Task<SdkResponse<TSuccess, TError>> all_legacy_features<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>LegacyFeature[]</c> Legacy Feature (application/json)</returns>
+  public async Task<SdkResponse<LegacyFeature[], Exception>> all_legacy_features(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/legacy_features", null,null,options);
+    return await AuthRequest<LegacyFeature[], Exception>(HttpMethod.Get, "/legacy_features", null,null,options);
   }
 
   /// ### Get a list of locales that Looker supports.
   /// 
   /// GET /locales -> Locale[]
-  public async Task<SdkResponse<TSuccess, TError>> all_locales<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>Locale[]</c> Locale (application/json)</returns>
+  public async Task<SdkResponse<Locale[], Exception>> all_locales(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/locales", null,null,options);
+    return await AuthRequest<Locale[], Exception>(HttpMethod.Get, "/locales", null,null,options);
   }
 
   /// ### Get information about all lookml models.
   /// 
   /// GET /lookml_models -> LookmlModel[]
+  /// 
+  /// <returns><c>LookmlModel[]</c> LookML Model (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_lookml_models<TSuccess, TError>(
+  public async Task<SdkResponse<LookmlModel[], Exception>> all_lookml_models(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/lookml_models", new Values {
+    return await AuthRequest<LookmlModel[], Exception>(HttpMethod.Get, "/lookml_models", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -402,15 +497,18 @@ namespace Looker.SDK.API31
   /// Call [Run LookML Test](#!/Project/run_lookml_test) to execute tests.
   /// 
   /// GET /projects/{project_id}/lookml_tests -> LookmlTest[]
+  /// 
+  /// <returns><c>LookmlTest[]</c> LookML Test (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
   /// <param name="file_id">File Id</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_lookml_tests<TSuccess, TError>(
+  public async Task<SdkResponse<LookmlTest[], Exception>> all_lookml_tests(
     string project_id,
     string? file_id = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/lookml_tests", new Values {
+    return await AuthRequest<LookmlTest[], Exception>(HttpMethod.Get, $"/projects/{project_id}/lookml_tests", new Values {
       { "file_id", file_id }},null,options);
   }
 
@@ -423,46 +521,57 @@ namespace Looker.SDK.API31
   /// Find **soft-deleted looks** with [search_looks()](#!/Look/search_looks)
   /// 
   /// GET /looks -> Look[]
+  /// 
+  /// <returns><c>Look[]</c> Look (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_looks<TSuccess, TError>(
+  public async Task<SdkResponse<Look[], Exception>> all_looks(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/looks", new Values {
+    return await AuthRequest<Look[], Exception>(HttpMethod.Get, "/looks", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all model sets.
   /// 
   /// GET /model_sets -> ModelSet[]
+  /// 
+  /// <returns><c>ModelSet[]</c> All model sets. (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_model_sets<TSuccess, TError>(
+  public async Task<SdkResponse<ModelSet[], Exception>> all_model_sets(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/model_sets", new Values {
+    return await AuthRequest<ModelSet[], Exception>(HttpMethod.Get, "/model_sets", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all permission sets.
   /// 
   /// GET /permission_sets -> PermissionSet[]
+  /// 
+  /// <returns><c>PermissionSet[]</c> Permission Set (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_permission_sets<TSuccess, TError>(
+  public async Task<SdkResponse<PermissionSet[], Exception>> all_permission_sets(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/permission_sets", new Values {
+    return await AuthRequest<PermissionSet[], Exception>(HttpMethod.Get, "/permission_sets", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get all supported permissions.
   /// 
   /// GET /permissions -> Permission[]
-  public async Task<SdkResponse<TSuccess, TError>> all_permissions<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>Permission[]</c> Permission (application/json)</returns>
+  public async Task<SdkResponse<Permission[], Exception>> all_permissions(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/permissions", null,null,options);
+    return await AuthRequest<Permission[], Exception>(HttpMethod.Get, "/permissions", null,null,options);
   }
 
   /// ### Get All Project Files
@@ -470,15 +579,18 @@ namespace Looker.SDK.API31
   /// Returns a list of the files in the project
   /// 
   /// GET /projects/{project_id}/files -> ProjectFile[]
+  /// 
+  /// <returns><c>ProjectFile[]</c> Project File (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
   /// <param name="fields">Requested fields</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_project_files<TSuccess, TError>(
+  public async Task<SdkResponse<ProjectFile[], Exception>> all_project_files(
     string project_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/files", new Values {
+    return await AuthRequest<ProjectFile[], Exception>(HttpMethod.Get, $"/projects/{project_id}/files", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -487,26 +599,32 @@ namespace Looker.SDK.API31
   /// Returns all projects visible to the current user
   /// 
   /// GET /projects -> Project[]
+  /// 
+  /// <returns><c>Project[]</c> Project (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_projects<TSuccess, TError>(
+  public async Task<SdkResponse<Project[], Exception>> all_projects(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/projects", new Values {
+    return await AuthRequest<Project[], Exception>(HttpMethod.Get, "/projects", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all roles.
   /// 
   /// GET /roles -> Role[]
+  /// 
+  /// <returns><c>Role[]</c> Role (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
   /// <param name="ids">Optional list of ids to get specific roles.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_roles<TSuccess, TError>(
+  public async Task<SdkResponse<Role[], Exception>> all_roles(
     string? fields = null,
     DelimArray<long>? ids = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/roles", new Values {
+    return await AuthRequest<Role[], Exception>(HttpMethod.Get, "/roles", new Values {
       { "fields", fields },
       { "ids", ids }},null,options);
   }
@@ -514,10 +632,12 @@ namespace Looker.SDK.API31
   /// Get information about all running queries.
   /// 
   /// GET /running_queries -> RunningQueries[]
-  public async Task<SdkResponse<TSuccess, TError>> all_running_queries<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>RunningQueries[]</c> Running Queries. (application/json)</returns>
+  public async Task<SdkResponse<RunningQueries[], Exception>> all_running_queries(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/running_queries", null,null,options);
+    return await AuthRequest<RunningQueries[], Exception>(HttpMethod.Get, "/running_queries", null,null,options);
   }
 
   /// ### List All Scheduled Plans
@@ -533,16 +653,19 @@ namespace Looker.SDK.API31
   /// The caller must have `see_schedules` permission to see other users' scheduled plans.
   /// 
   /// GET /scheduled_plans -> ScheduledPlan[]
+  /// 
+  /// <returns><c>ScheduledPlan[]</c> Scheduled Plan (application/json)</returns>
+  /// 
   /// <param name="user_id">Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.</param>
   /// <param name="fields">Comma delimited list of field names. If provided, only the fields specified will be included in the response</param>
   /// <param name="all_users">Return scheduled plans belonging to all users (caller needs see_schedules permission)</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_scheduled_plans<TSuccess, TError>(
+  public async Task<SdkResponse<ScheduledPlan[], Exception>> all_scheduled_plans(
     long? user_id = null,
     string? fields = null,
     bool? all_users = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/scheduled_plans", new Values {
+    return await AuthRequest<ScheduledPlan[], Exception>(HttpMethod.Get, "/scheduled_plans", new Values {
       { "user_id", user_id },
       { "fields", fields },
       { "all_users", all_users }},null,options);
@@ -551,12 +674,15 @@ namespace Looker.SDK.API31
   /// ### Get information about all spaces.
   /// 
   /// GET /spaces -> SpaceBase[]
+  /// 
+  /// <returns><c>SpaceBase[]</c> Space (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_spaces<TSuccess, TError>(
+  public async Task<SdkResponse<SpaceBase[], Exception>> all_spaces(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/spaces", new Values {
+    return await AuthRequest<SpaceBase[], Exception>(HttpMethod.Get, "/spaces", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -569,22 +695,27 @@ namespace Looker.SDK.API31
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   /// 
   /// GET /themes -> Theme[]
+  /// 
+  /// <returns><c>Theme[]</c> Themes (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_themes<TSuccess, TError>(
+  public async Task<SdkResponse<Theme[], Exception>> all_themes(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/themes", new Values {
+    return await AuthRequest<Theme[], Exception>(HttpMethod.Get, "/themes", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
   /// 
   /// GET /timezones -> Timezone[]
-  public async Task<SdkResponse<TSuccess, TError>> all_timezones<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>Timezone[]</c> Timezone (application/json)</returns>
+  public async Task<SdkResponse<Timezone[], Exception>> all_timezones(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/timezones", null,null,options);
+    return await AuthRequest<Timezone[], Exception>(HttpMethod.Get, "/timezones", null,null,options);
   }
 
   /// ### Returns all values of a user attribute defined by user groups, in precedence order.
@@ -596,28 +727,34 @@ namespace Looker.SDK.API31
   /// Results will only include groups that the caller's user account has permission to see.
   /// 
   /// GET /user_attributes/{user_attribute_id}/group_values -> UserAttributeGroupValue[]
+  /// 
+  /// <returns><c>UserAttributeGroupValue[]</c> All group values for attribute. (application/json)</returns>
+  /// 
   /// <param name="user_attribute_id">Id of user attribute</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_user_attribute_group_values<TSuccess, TError>(
+  public async Task<SdkResponse<UserAttributeGroupValue[], Exception>> all_user_attribute_group_values(
     long user_attribute_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/user_attributes/{user_attribute_id}/group_values", new Values {
+    return await AuthRequest<UserAttributeGroupValue[], Exception>(HttpMethod.Get, $"/user_attributes/{user_attribute_id}/group_values", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all user attributes.
   /// 
   /// GET /user_attributes -> UserAttribute[]
+  /// 
+  /// <returns><c>UserAttribute[]</c> User Attribute (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to order the results by. Sortable fields include: name, label</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_user_attributes<TSuccess, TError>(
+  public async Task<SdkResponse<UserAttribute[], Exception>> all_user_attributes(
     string? fields = null,
     string? sorts = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/user_attributes", new Values {
+    return await AuthRequest<UserAttribute[], Exception>(HttpMethod.Get, "/user_attributes", new Values {
       { "fields", fields },
       { "sorts", sorts }},null,options);
   }
@@ -625,74 +762,89 @@ namespace Looker.SDK.API31
   /// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
   /// 
   /// GET /users/{user_id}/credentials_api3 -> CredentialsApi3[]
+  /// 
+  /// <returns><c>CredentialsApi3[]</c> API 3 Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_user_credentials_api3s<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsApi3[], Exception>> all_user_credentials_api3s(
     long user_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_api3", new Values {
+    return await AuthRequest<CredentialsApi3[], Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_api3", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Embed login information for the specified user.
   /// 
   /// GET /users/{user_id}/credentials_embed -> CredentialsEmbed[]
+  /// 
+  /// <returns><c>CredentialsEmbed[]</c> Embedding Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_user_credentials_embeds<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsEmbed[], Exception>> all_user_credentials_embeds(
     long user_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_embed", new Values {
+    return await AuthRequest<CredentialsEmbed[], Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_embed", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get currently locked-out users.
   /// 
   /// GET /user_login_lockouts -> UserLoginLockout[]
+  /// 
+  /// <returns><c>UserLoginLockout[]</c> User Login Lockout (application/json)</returns>
+  /// 
   /// <param name="fields">Include only these fields in the response</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_user_login_lockouts<TSuccess, TError>(
+  public async Task<SdkResponse<UserLoginLockout[], Exception>> all_user_login_lockouts(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/user_login_lockouts", new Values {
+    return await AuthRequest<UserLoginLockout[], Exception>(HttpMethod.Get, "/user_login_lockouts", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Web login session for the specified user.
   /// 
   /// GET /users/{user_id}/sessions -> Session[]
+  /// 
+  /// <returns><c>Session[]</c> Web Login Session (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_user_sessions<TSuccess, TError>(
+  public async Task<SdkResponse<Session[], Exception>> all_user_sessions(
     long user_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/sessions", new Values {
+    return await AuthRequest<Session[], Exception>(HttpMethod.Get, $"/users/{user_id}/sessions", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all users.
   /// 
   /// GET /users -> User[]
+  /// 
+  /// <returns><c>User[]</c> All users. (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="ids">Optional list of ids to get specific users.</param>
-  public async Task<SdkResponse<TSuccess, TError>> all_users<TSuccess, TError>(
+  public async Task<SdkResponse<User[], Exception>> all_users(
     string? fields = null,
     long? page = null,
     long? per_page = null,
     string? sorts = null,
     DelimArray<long>? ids = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/users", new Values {
+    return await AuthRequest<User[], Exception>(HttpMethod.Get, "/users", new Values {
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
@@ -705,28 +857,34 @@ namespace Looker.SDK.API31
   /// Returns all workspaces available to the calling user.
   /// 
   /// GET /workspaces -> Workspace[]
-  public async Task<SdkResponse<TSuccess, TError>> all_workspaces<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>Workspace[]</c> Workspace (application/json)</returns>
+  public async Task<SdkResponse<Workspace[], Exception>> all_workspaces(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/workspaces", null,null,options);
+    return await AuthRequest<Workspace[], Exception>(HttpMethod.Get, "/workspaces", null,null,options);
   }
 
   /// ### WARNING: The Looker internal database backup function has been deprecated.
   /// 
   /// GET /backup_configuration -> BackupConfiguration
-  public async Task<SdkResponse<TSuccess, TError>> backup_configuration<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>BackupConfiguration</c> Current Backup Configuration (application/json)</returns>
+  public async Task<SdkResponse<BackupConfiguration, Exception>> backup_configuration(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/backup_configuration", null,null,options);
+    return await AuthRequest<BackupConfiguration, Exception>(HttpMethod.Get, "/backup_configuration", null,null,options);
   }
 
   /// Get the current Cloud Storage Configuration.
   /// 
   /// GET /cloud_storage -> BackupConfiguration
-  public async Task<SdkResponse<TSuccess, TError>> cloud_storage_configuration<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>BackupConfiguration</c> Current Cloud Storage Configuration (application/json)</returns>
+  public async Task<SdkResponse<BackupConfiguration, Exception>> cloud_storage_configuration(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/cloud_storage", null,null,options);
+    return await AuthRequest<BackupConfiguration, Exception>(HttpMethod.Get, "/cloud_storage", null,null,options);
   }
 
   /// ### Get a Color Collection by ID
@@ -741,15 +899,18 @@ namespace Looker.SDK.API31
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   /// 
   /// GET /color_collections/{collection_id} -> ColorCollection
+  /// 
+  /// <returns><c>ColorCollection</c> ColorCollection (application/json)</returns>
+  /// 
   /// <param name="collection_id">Id of Color Collection</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> color_collection<TSuccess, TError>(
+  public async Task<SdkResponse<ColorCollection, Exception>> color_collection(
     string collection_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       collection_id = SdkUtils.EncodeParam(collection_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/color_collections/{collection_id}", new Values {
+    return await AuthRequest<ColorCollection, Exception>(HttpMethod.Get, $"/color_collections/{collection_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -761,12 +922,15 @@ namespace Looker.SDK.API31
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   /// 
   /// GET /color_collections/custom -> ColorCollection[]
+  /// 
+  /// <returns><c>ColorCollection[]</c> ColorCollections (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> color_collections_custom<TSuccess, TError>(
+  public async Task<SdkResponse<ColorCollection[], Exception>> color_collections_custom(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/color_collections/custom", new Values {
+    return await AuthRequest<ColorCollection[], Exception>(HttpMethod.Get, "/color_collections/custom", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -778,55 +942,67 @@ namespace Looker.SDK.API31
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   /// 
   /// GET /color_collections/standard -> ColorCollection[]
+  /// 
+  /// <returns><c>ColorCollection[]</c> ColorCollections (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> color_collections_standard<TSuccess, TError>(
+  public async Task<SdkResponse<ColorCollection[], Exception>> color_collections_standard(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/color_collections/standard", new Values {
+    return await AuthRequest<ColorCollection[], Exception>(HttpMethod.Get, "/color_collections/standard", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about a connection.
   /// 
   /// GET /connections/{connection_name} -> DBConnection
+  /// 
+  /// <returns><c>DBConnection</c> Connection (application/json)</returns>
+  /// 
   /// <param name="connection_name">Name of connection</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> connection<TSuccess, TError>(
+  public async Task<SdkResponse<DBConnection, Exception>> connection(
     string connection_name,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       connection_name = SdkUtils.EncodeParam(connection_name);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/connections/{connection_name}", new Values {
+    return await AuthRequest<DBConnection, Exception>(HttpMethod.Get, $"/connections/{connection_name}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get favorite content by its id
   /// 
   /// GET /content_favorite/{content_favorite_id} -> ContentFavorite
+  /// 
+  /// <returns><c>ContentFavorite</c> Favorite Content (application/json)</returns>
+  /// 
   /// <param name="content_favorite_id">Id of favorite content</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> content_favorite<TSuccess, TError>(
+  public async Task<SdkResponse<ContentFavorite, Exception>> content_favorite(
     long content_favorite_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/content_favorite/{content_favorite_id}", new Values {
+    return await AuthRequest<ContentFavorite, Exception>(HttpMethod.Get, $"/content_favorite/{content_favorite_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about an individual content metadata record.
   /// 
   /// GET /content_metadata/{content_metadata_id} -> ContentMeta
+  /// 
+  /// <returns><c>ContentMeta</c> Content Metadata (application/json)</returns>
+  /// 
   /// <param name="content_metadata_id">Id of content metadata</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> content_metadata<TSuccess, TError>(
+  public async Task<SdkResponse<ContentMeta, Exception>> content_metadata(
     long content_metadata_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/content_metadata/{content_metadata_id}", new Values {
+    return await AuthRequest<ContentMeta, Exception>(HttpMethod.Get, $"/content_metadata/{content_metadata_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -836,12 +1012,15 @@ namespace Looker.SDK.API31
   /// Returns a list of errors found as well as metadata about the content validation run.
   /// 
   /// GET /content_validation -> ContentValidation
+  /// 
+  /// <returns><c>ContentValidation</c> Content validation results (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> content_validation<TSuccess, TError>(
+  public async Task<SdkResponse<ContentValidation, Exception>> content_validation(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/content_validation", new Values {
+    return await AuthRequest<ContentValidation, Exception>(HttpMethod.Get, "/content_validation", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -856,43 +1035,52 @@ namespace Looker.SDK.API31
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   /// 
   /// POST /color_collections -> ColorCollection
-  public async Task<SdkResponse<TSuccess, TError>> create_color_collection<TSuccess, TError>(
+  /// 
+  /// <returns><c>ColorCollection</c> ColorCollection (application/json)</returns>
+  public async Task<SdkResponse<ColorCollection, Exception>> create_color_collection(
     WriteColorCollection body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/color_collections", null,body,options);
+    return await AuthRequest<ColorCollection, Exception>(HttpMethod.Post, "/color_collections", null,body,options);
   }
 
   /// ### Create a connection using the specified configuration.
   /// 
   /// POST /connections -> DBConnection
-  public async Task<SdkResponse<TSuccess, TError>> create_connection<TSuccess, TError>(
+  /// 
+  /// <returns><c>DBConnection</c> Connection (application/json)</returns>
+  public async Task<SdkResponse<DBConnection, Exception>> create_connection(
     WriteDBConnection body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/connections", null,body,options);
+    return await AuthRequest<DBConnection, Exception>(HttpMethod.Post, "/connections", null,body,options);
   }
 
   /// ### Create favorite content
   /// 
   /// POST /content_favorite -> ContentFavorite
-  public async Task<SdkResponse<TSuccess, TError>> create_content_favorite<TSuccess, TError>(
+  /// 
+  /// <returns><c>ContentFavorite</c> Favorite Content (application/json)</returns>
+  public async Task<SdkResponse<ContentFavorite, Exception>> create_content_favorite(
     WriteContentFavorite body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/content_favorite", null,body,options);
+    return await AuthRequest<ContentFavorite, Exception>(HttpMethod.Post, "/content_favorite", null,body,options);
   }
 
   /// ### Create content metadata access.
   /// 
   /// POST /content_metadata_access -> ContentMetaGroupUser
+  /// 
+  /// <returns><c>ContentMetaGroupUser</c> Content Metadata Access (application/json)</returns>
+  /// 
   /// <param name="send_boards_notification_email">Optionally sends notification email when granting access to a board.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_content_metadata_access<TSuccess, TError>(
+  public async Task<SdkResponse<ContentMetaGroupUser, Exception>> create_content_metadata_access(
     ContentMetaGroupUser body,
     bool? send_boards_notification_email = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/content_metadata_access", new Values {
+    return await AuthRequest<ContentMetaGroupUser, Exception>(HttpMethod.Post, "/content_metadata_access", new Values {
       { "send_boards_notification_email", send_boards_notification_email }},body,options);
   }
 
@@ -912,49 +1100,60 @@ namespace Looker.SDK.API31
   /// You can **permanently delete** an existing dashboard with [delete_dashboard()](#!/Dashboard/delete_dashboard)
   /// 
   /// POST /dashboards -> Dashboard
-  public async Task<SdkResponse<TSuccess, TError>> create_dashboard<TSuccess, TError>(
+  /// 
+  /// <returns><c>Dashboard</c> Dashboard (application/json)</returns>
+  public async Task<SdkResponse<Dashboard, Exception>> create_dashboard(
     WriteDashboard body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/dashboards", null,body,options);
+    return await AuthRequest<Dashboard, Exception>(HttpMethod.Post, "/dashboards", null,body,options);
   }
 
   /// ### Create a dashboard element on the dashboard with a specific id.
   /// 
   /// POST /dashboard_elements -> DashboardElement
+  /// 
+  /// <returns><c>DashboardElement</c> DashboardElement (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_dashboard_element<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardElement, Exception>> create_dashboard_element(
     WriteDashboardElement body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/dashboard_elements", new Values {
+    return await AuthRequest<DashboardElement, Exception>(HttpMethod.Post, "/dashboard_elements", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Create a dashboard filter on the dashboard with a specific id.
   /// 
   /// POST /dashboard_filters -> DashboardFilter
+  /// 
+  /// <returns><c>DashboardFilter</c> Dashboard Filter (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_dashboard_filter<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardFilter, Exception>> create_dashboard_filter(
     WriteCreateDashboardFilter body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/dashboard_filters", new Values {
+    return await AuthRequest<DashboardFilter, Exception>(HttpMethod.Post, "/dashboard_filters", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Create a dashboard layout on the dashboard with a specific id.
   /// 
   /// POST /dashboard_layouts -> DashboardLayout
+  /// 
+  /// <returns><c>DashboardLayout</c> DashboardLayout (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_dashboard_layout<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardLayout, Exception>> create_dashboard_layout(
     WriteDashboardLayout body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/dashboard_layouts", new Values {
+    return await AuthRequest<DashboardLayout, Exception>(HttpMethod.Post, "/dashboard_layouts", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -965,6 +1164,9 @@ namespace Looker.SDK.API31
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
   /// 
   /// POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> RenderTask
+  /// 
+  /// <returns><c>RenderTask</c> Render Task (application/json)</returns>
+  /// 
   /// <param name="dashboard_id">Id of dashboard to render</param>
   /// <param name="result_format">Output type: pdf, png, or jpg</param>
   /// <param name="width">Output width in pixels</param>
@@ -972,7 +1174,7 @@ namespace Looker.SDK.API31
   /// <param name="fields">Requested fields.</param>
   /// <param name="pdf_paper_size">Paper size for pdf. Value can be one of: ["letter","legal","tabloid","a0","a1","a2","a3","a4","a5"]</param>
   /// <param name="pdf_landscape">Whether to render pdf in landscape paper orientation</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_dashboard_render_task<TSuccess, TError>(
+  public async Task<SdkResponse<RenderTask, Exception>> create_dashboard_render_task(
     long dashboard_id,
     string result_format,
     CreateDashboardRenderTask body,
@@ -981,10 +1183,10 @@ namespace Looker.SDK.API31
     string? fields = null,
     string? pdf_paper_size = null,
     bool? pdf_landscape = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       result_format = SdkUtils.EncodeParam(result_format);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/render_tasks/dashboards/{dashboard_id}/{result_format}", new Values {
+    return await AuthRequest<RenderTask, Exception>(HttpMethod.Post, $"/render_tasks/dashboards/{dashboard_id}/{result_format}", new Values {
       { "width", width },
       { "height", height },
       { "fields", fields },
@@ -997,10 +1199,12 @@ namespace Looker.SDK.API31
   /// Emails will be sent at a later time from Looker's internal system if the Digest Emails feature is enabled in settings.
   /// 
   /// POST /digest_email_send -> DigestEmailSend
-  public async Task<SdkResponse<TSuccess, TError>> create_digest_email_send<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>DigestEmailSend</c> Status of generating and sending the data (application/json)</returns>
+  public async Task<SdkResponse<DigestEmailSend, Exception>> create_digest_email_send(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/digest_email_send", null,null,options);
+    return await AuthRequest<DigestEmailSend, Exception>(HttpMethod.Post, "/digest_email_send", null,null,options);
   }
 
   /// ### Create a folder with specified information.
@@ -1009,11 +1213,13 @@ namespace Looker.SDK.API31
   /// returns 404 Not Found.
   /// 
   /// POST /folders -> Folder
-  public async Task<SdkResponse<TSuccess, TError>> create_folder<TSuccess, TError>(
+  /// 
+  /// <returns><c>Folder</c> Folder (application/json)</returns>
+  public async Task<SdkResponse<Folder, Exception>> create_folder(
     CreateFolder body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/folders", null,body,options);
+    return await AuthRequest<Folder, Exception>(HttpMethod.Post, "/folders", null,body,options);
   }
 
   /// ### Create and Checkout a Git Branch
@@ -1026,14 +1232,17 @@ namespace Looker.SDK.API31
   ///   If no ref is specified, HEAD of the current branch will be used as the start point for the new branch.
   /// 
   /// POST /projects/{project_id}/git_branch -> GitBranch
+  /// 
+  /// <returns><c>GitBranch</c> Git Branch (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_git_branch<TSuccess, TError>(
+  public async Task<SdkResponse<GitBranch, Exception>> create_git_branch(
     string project_id,
     WriteGitBranch body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/projects/{project_id}/git_branch", null,body,options);
+    return await AuthRequest<GitBranch, Exception>(HttpMethod.Post, $"/projects/{project_id}/git_branch", null,body,options);
   }
 
   /// ### Create Git Deploy Key
@@ -1047,64 +1256,79 @@ namespace Looker.SDK.API31
   /// validate and accept git requests from the Looker server.
   /// 
   /// POST /projects/{project_id}/git/deploy_key -> string
+  /// 
+  /// <returns><c>string</c> Project (text/plain)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_git_deploy_key<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> create_git_deploy_key(
     string project_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/projects/{project_id}/git/deploy_key", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Post, $"/projects/{project_id}/git/deploy_key", null,null,options);
   }
 
   /// ### Creates a new group (admin only).
   /// 
   /// POST /groups -> Group
+  /// 
+  /// <returns><c>Group</c> Group (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_group<TSuccess, TError>(
+  public async Task<SdkResponse<Group, Exception>> create_group(
     WriteGroup body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/groups", new Values {
+    return await AuthRequest<Group, Exception>(HttpMethod.Post, "/groups", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Create a new homepage.
   /// 
   /// POST /homepages -> Homepage
+  /// 
+  /// <returns><c>Homepage</c> Homepage (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_homepage<TSuccess, TError>(
+  public async Task<SdkResponse<Homepage, Exception>> create_homepage(
     WriteHomepage body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/homepages", new Values {
+    return await AuthRequest<Homepage, Exception>(HttpMethod.Post, "/homepages", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Create a new homepage item.
   /// 
   /// POST /homepage_items -> HomepageItem
+  /// 
+  /// <returns><c>HomepageItem</c> Homepage Item (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_homepage_item<TSuccess, TError>(
+  public async Task<SdkResponse<HomepageItem, Exception>> create_homepage_item(
     WriteHomepageItem body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/homepage_items", new Values {
+    return await AuthRequest<HomepageItem, Exception>(HttpMethod.Post, "/homepage_items", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Create a new homepage section.
   /// 
   /// POST /homepage_sections -> HomepageSection
+  /// 
+  /// <returns><c>HomepageSection</c> Homepage section (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_homepage_section<TSuccess, TError>(
+  public async Task<SdkResponse<HomepageSection, Exception>> create_homepage_section(
     WriteHomepageSection body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/homepage_sections", new Values {
+    return await AuthRequest<HomepageSection, Exception>(HttpMethod.Post, "/homepage_sections", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -1113,13 +1337,16 @@ namespace Looker.SDK.API31
   /// This API is rate limited to prevent it from being used for SSRF attacks
   /// 
   /// POST /integration_hubs -> IntegrationHub
+  /// 
+  /// <returns><c>IntegrationHub</c> Integration Hub (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_integration_hub<TSuccess, TError>(
+  public async Task<SdkResponse<IntegrationHub, Exception>> create_integration_hub(
     WriteIntegrationHub body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/integration_hubs", new Values {
+    return await AuthRequest<IntegrationHub, Exception>(HttpMethod.Post, "/integration_hubs", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -1132,13 +1359,16 @@ namespace Looker.SDK.API31
   /// in the call to `create_look()`.
   /// 
   /// POST /looks -> LookWithQuery
+  /// 
+  /// <returns><c>LookWithQuery</c> Look (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_look<TSuccess, TError>(
+  public async Task<SdkResponse<LookWithQuery, Exception>> create_look(
     WriteLookWithQuery body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/looks", new Values {
+    return await AuthRequest<LookWithQuery, Exception>(HttpMethod.Post, "/looks", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -1149,21 +1379,24 @@ namespace Looker.SDK.API31
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
   /// 
   /// POST /render_tasks/looks/{look_id}/{result_format} -> RenderTask
+  /// 
+  /// <returns><c>RenderTask</c> Render Task (application/json)</returns>
+  /// 
   /// <param name="look_id">Id of look to render</param>
   /// <param name="result_format">Output type: png, or jpg</param>
   /// <param name="width">Output width in pixels</param>
   /// <param name="height">Output height in pixels</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_look_render_task<TSuccess, TError>(
+  public async Task<SdkResponse<RenderTask, Exception>> create_look_render_task(
     long look_id,
     string result_format,
     long width,
     long height,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       result_format = SdkUtils.EncodeParam(result_format);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/render_tasks/looks/{look_id}/{result_format}", new Values {
+    return await AuthRequest<RenderTask, Exception>(HttpMethod.Post, $"/render_tasks/looks/{look_id}/{result_format}", new Values {
       { "width", width },
       { "height", height },
       { "fields", fields }},null,options);
@@ -1178,6 +1411,9 @@ namespace Looker.SDK.API31
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
   /// 
   /// POST /render_tasks/lookml_dashboards/{dashboard_id}/{result_format} -> RenderTask
+  /// 
+  /// <returns><c>RenderTask</c> Render Task (application/json)</returns>
+  /// 
   /// <param name="dashboard_id">Id of lookml dashboard to render</param>
   /// <param name="result_format">Output type: pdf, png, or jpg</param>
   /// <param name="width">Output width in pixels</param>
@@ -1185,7 +1421,7 @@ namespace Looker.SDK.API31
   /// <param name="fields">Requested fields.</param>
   /// <param name="pdf_paper_size">Paper size for pdf. Value can be one of: ["letter","legal","tabloid","a0","a1","a2","a3","a4","a5"]</param>
   /// <param name="pdf_landscape">Whether to render pdf in landscape</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_lookml_dashboard_render_task<TSuccess, TError>(
+  public async Task<SdkResponse<RenderTask, Exception>> create_lookml_dashboard_render_task(
     string dashboard_id,
     string result_format,
     CreateDashboardRenderTask body,
@@ -1194,11 +1430,11 @@ namespace Looker.SDK.API31
     string? fields = null,
     string? pdf_paper_size = null,
     bool? pdf_landscape = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
       result_format = SdkUtils.EncodeParam(result_format);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/render_tasks/lookml_dashboards/{dashboard_id}/{result_format}", new Values {
+    return await AuthRequest<RenderTask, Exception>(HttpMethod.Post, $"/render_tasks/lookml_dashboards/{dashboard_id}/{result_format}", new Values {
       { "width", width },
       { "height", height },
       { "fields", fields },
@@ -1209,11 +1445,13 @@ namespace Looker.SDK.API31
   /// ### Create a lookml model using the specified configuration.
   /// 
   /// POST /lookml_models -> LookmlModel
-  public async Task<SdkResponse<TSuccess, TError>> create_lookml_model<TSuccess, TError>(
+  /// 
+  /// <returns><c>LookmlModel</c> LookML Model (application/json)</returns>
+  public async Task<SdkResponse<LookmlModel, Exception>> create_lookml_model(
     WriteLookmlModel body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/lookml_models", null,body,options);
+    return await AuthRequest<LookmlModel, Exception>(HttpMethod.Post, "/lookml_models", null,body,options);
   }
 
   /// ### Create Merge Query
@@ -1235,44 +1473,53 @@ namespace Looker.SDK.API31
   /// change to the contents of a merge query will produce a new object with a new id.
   /// 
   /// POST /merge_queries -> MergeQuery
+  /// 
+  /// <returns><c>MergeQuery</c> Merge Query (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_merge_query<TSuccess, TError>(
+  public async Task<SdkResponse<MergeQuery, Exception>> create_merge_query(
     WriteMergeQuery? body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/merge_queries", new Values {
+    return await AuthRequest<MergeQuery, Exception>(HttpMethod.Post, "/merge_queries", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Create a model set with the specified information. Model sets are used by Roles.
   /// 
   /// POST /model_sets -> ModelSet
-  public async Task<SdkResponse<TSuccess, TError>> create_model_set<TSuccess, TError>(
+  /// 
+  /// <returns><c>ModelSet</c> Newly created ModelSet (application/json)</returns>
+  public async Task<SdkResponse<ModelSet, Exception>> create_model_set(
     WriteModelSet body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/model_sets", null,body,options);
+    return await AuthRequest<ModelSet, Exception>(HttpMethod.Post, "/model_sets", null,body,options);
   }
 
   /// ### Create a OIDC test configuration.
   /// 
   /// POST /oidc_test_configs -> OIDCConfig
-  public async Task<SdkResponse<TSuccess, TError>> create_oidc_test_config<TSuccess, TError>(
+  /// 
+  /// <returns><c>OIDCConfig</c> OIDC test config (application/json)</returns>
+  public async Task<SdkResponse<OIDCConfig, Exception>> create_oidc_test_config(
     WriteOIDCConfig body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/oidc_test_configs", null,body,options);
+    return await AuthRequest<OIDCConfig, Exception>(HttpMethod.Post, "/oidc_test_configs", null,body,options);
   }
 
   /// ### Create a permission set with the specified information. Permission sets are used by Roles.
   /// 
   /// POST /permission_sets -> PermissionSet
-  public async Task<SdkResponse<TSuccess, TError>> create_permission_set<TSuccess, TError>(
+  /// 
+  /// <returns><c>PermissionSet</c> Permission Set (application/json)</returns>
+  public async Task<SdkResponse<PermissionSet, Exception>> create_permission_set(
     WritePermissionSet body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/permission_sets", null,body,options);
+    return await AuthRequest<PermissionSet, Exception>(HttpMethod.Post, "/permission_sets", null,body,options);
   }
 
   /// ### Create A Project
@@ -1284,11 +1531,13 @@ namespace Looker.SDK.API31
   /// `git_remote_url` is not allowed. To configure Git for the newly created project, follow the instructions in `update_project`.
   /// 
   /// POST /projects -> Project
-  public async Task<SdkResponse<TSuccess, TError>> create_project<TSuccess, TError>(
+  /// 
+  /// <returns><c>Project</c> Project (application/json)</returns>
+  public async Task<SdkResponse<Project, Exception>> create_project(
     WriteProject body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/projects", null,body,options);
+    return await AuthRequest<Project, Exception>(HttpMethod.Post, "/projects", null,body,options);
   }
 
   /// ### Create a query.
@@ -1301,13 +1550,16 @@ namespace Looker.SDK.API31
   /// The query parameters are passed as json in the body of the request.
   /// 
   /// POST /queries -> Query
+  /// 
+  /// <returns><c>Query</c> Query (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_query<TSuccess, TError>(
+  public async Task<SdkResponse<Query, Exception>> create_query(
     WriteQuery body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/queries", new Values {
+    return await AuthRequest<Query, Exception>(HttpMethod.Post, "/queries", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -1318,21 +1570,24 @@ namespace Looker.SDK.API31
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
   /// 
   /// POST /render_tasks/queries/{query_id}/{result_format} -> RenderTask
+  /// 
+  /// <returns><c>RenderTask</c> Render Task (application/json)</returns>
+  /// 
   /// <param name="query_id">Id of the query to render</param>
   /// <param name="result_format">Output type: png or jpg</param>
   /// <param name="width">Output width in pixels</param>
   /// <param name="height">Output height in pixels</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_query_render_task<TSuccess, TError>(
+  public async Task<SdkResponse<RenderTask, Exception>> create_query_render_task(
     long query_id,
     string result_format,
     long width,
     long height,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       result_format = SdkUtils.EncodeParam(result_format);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/render_tasks/queries/{query_id}/{result_format}", new Values {
+    return await AuthRequest<RenderTask, Exception>(HttpMethod.Post, $"/render_tasks/queries/{query_id}/{result_format}", new Values {
       { "width", width },
       { "height", height },
       { "fields", fields }},null,options);
@@ -1346,6 +1601,9 @@ namespace Looker.SDK.API31
   /// After the query task status reaches "Complete", use [query_task_results(query_task_id)](#!/Query/query_task_results) to fetch the results of the query.
   /// 
   /// POST /query_tasks -> QueryTask
+  /// 
+  /// <returns><c>QueryTask</c> query_task (application/json)</returns>
+  /// 
   /// <param name="limit">Row limit (may override the limit in the saved query).</param>
   /// <param name="apply_formatting">Apply model-specified formatting to each result.</param>
   /// <param name="apply_vis">Apply visualization options to results.</param>
@@ -1359,7 +1617,7 @@ namespace Looker.SDK.API31
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
   /// <param name="fields">Requested fields</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_query_task<TSuccess, TError>(
+  public async Task<SdkResponse<QueryTask, Exception>> create_query_task(
     WriteCreateQueryTask body,
     long? limit = null,
     bool? apply_formatting = null,
@@ -1374,9 +1632,9 @@ namespace Looker.SDK.API31
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/query_tasks", new Values {
+    return await AuthRequest<QueryTask, Exception>(HttpMethod.Post, "/query_tasks", new Values {
       { "limit", limit },
       { "apply_formatting", apply_formatting },
       { "apply_vis", apply_vis },
@@ -1395,21 +1653,25 @@ namespace Looker.SDK.API31
   /// ### Create a role with the specified information.
   /// 
   /// POST /roles -> Role
-  public async Task<SdkResponse<TSuccess, TError>> create_role<TSuccess, TError>(
+  /// 
+  /// <returns><c>Role</c> Role (application/json)</returns>
+  public async Task<SdkResponse<Role, Exception>> create_role(
     WriteRole body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/roles", null,body,options);
+    return await AuthRequest<Role, Exception>(HttpMethod.Post, "/roles", null,body,options);
   }
 
   /// ### Create a SAML test configuration.
   /// 
   /// POST /saml_test_configs -> SamlConfig
-  public async Task<SdkResponse<TSuccess, TError>> create_saml_test_config<TSuccess, TError>(
+  /// 
+  /// <returns><c>SamlConfig</c> SAML test config (application/json)</returns>
+  public async Task<SdkResponse<SamlConfig, Exception>> create_saml_test_config(
     WriteSamlConfig body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/saml_test_configs", null,body,options);
+    return await AuthRequest<SamlConfig, Exception>(HttpMethod.Post, "/saml_test_configs", null,body,options);
   }
 
   /// ### Create a Scheduled Plan
@@ -1472,11 +1734,13 @@ namespace Looker.SDK.API31
   /// Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
   /// 
   /// POST /scheduled_plans -> ScheduledPlan
-  public async Task<SdkResponse<TSuccess, TError>> create_scheduled_plan<TSuccess, TError>(
+  /// 
+  /// <returns><c>ScheduledPlan</c> Scheduled Plan (application/json)</returns>
+  public async Task<SdkResponse<ScheduledPlan, Exception>> create_scheduled_plan(
     WriteScheduledPlan body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/scheduled_plans", null,body,options);
+    return await AuthRequest<ScheduledPlan, Exception>(HttpMethod.Post, "/scheduled_plans", null,body,options);
   }
 
   /// ### Create a space with specified information.
@@ -1485,11 +1749,13 @@ namespace Looker.SDK.API31
   /// returns 404 Not Found.
   /// 
   /// POST /spaces -> Space
-  public async Task<SdkResponse<TSuccess, TError>> create_space<TSuccess, TError>(
+  /// 
+  /// <returns><c>Space</c> Space (application/json)</returns>
+  public async Task<SdkResponse<Space, Exception>> create_space(
     CreateSpace body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/spaces", null,body,options);
+    return await AuthRequest<Space, Exception>(HttpMethod.Post, "/spaces", null,body,options);
   }
 
   /// ### Create a SQL Runner Query
@@ -1497,11 +1763,13 @@ namespace Looker.SDK.API31
   /// Either the `connection_name` or `model_name` parameter MUST be provided.
   /// 
   /// POST /sql_queries -> SqlQuery
-  public async Task<SdkResponse<TSuccess, TError>> create_sql_query<TSuccess, TError>(
+  /// 
+  /// <returns><c>SqlQuery</c> SQL Runner Query (application/json)</returns>
+  public async Task<SdkResponse<SqlQuery, Exception>> create_sql_query(
     SqlQueryCreate body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/sql_queries", null,body,options);
+    return await AuthRequest<SqlQuery, Exception>(HttpMethod.Post, "/sql_queries", null,body,options);
   }
 
   /// ### Create SSO Embed URL
@@ -1540,11 +1808,13 @@ namespace Looker.SDK.API31
   /// encrypted transport.
   /// 
   /// POST /embed/sso_url -> EmbedUrlResponse
-  public async Task<SdkResponse<TSuccess, TError>> create_sso_embed_url<TSuccess, TError>(
+  /// 
+  /// <returns><c>EmbedUrlResponse</c> Signed SSO URL (application/json)</returns>
+  public async Task<SdkResponse<EmbedUrlResponse, Exception>> create_sso_embed_url(
     EmbedSsoParams body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/embed/sso_url", null,body,options);
+    return await AuthRequest<EmbedUrlResponse, Exception>(HttpMethod.Post, "/embed/sso_url", null,body,options);
   }
 
   /// ### Create a theme
@@ -1564,23 +1834,28 @@ namespace Looker.SDK.API31
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   /// 
   /// POST /themes -> Theme
-  public async Task<SdkResponse<TSuccess, TError>> create_theme<TSuccess, TError>(
+  /// 
+  /// <returns><c>Theme</c> Theme (application/json)</returns>
+  public async Task<SdkResponse<Theme, Exception>> create_theme(
     WriteTheme body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/themes", null,body,options);
+    return await AuthRequest<Theme, Exception>(HttpMethod.Post, "/themes", null,body,options);
   }
 
   /// ### Create a user with the specified information.
   /// 
   /// POST /users -> User
+  /// 
+  /// <returns><c>User</c> Created User (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_user<TSuccess, TError>(
+  public async Task<SdkResponse<User, Exception>> create_user(
     WriteUser? body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/users", new Values {
+    return await AuthRequest<User, Exception>(HttpMethod.Post, "/users", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -1596,43 +1871,52 @@ namespace Looker.SDK.API31
   /// user attribute will fail with a 422 error.
   /// 
   /// POST /user_attributes -> UserAttribute
+  /// 
+  /// <returns><c>UserAttribute</c> User Attribute (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_user_attribute<TSuccess, TError>(
+  public async Task<SdkResponse<UserAttribute, Exception>> create_user_attribute(
     WriteUserAttribute body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/user_attributes", new Values {
+    return await AuthRequest<UserAttribute, Exception>(HttpMethod.Post, "/user_attributes", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
   /// 
   /// POST /users/{user_id}/credentials_api3 -> CredentialsApi3
+  /// 
+  /// <returns><c>CredentialsApi3</c> API 3 Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_user_credentials_api3<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsApi3, Exception>> create_user_credentials_api3(
     long user_id,
     CredentialsApi3? body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/users/{user_id}/credentials_api3", new Values {
+    return await AuthRequest<CredentialsApi3, Exception>(HttpMethod.Post, $"/users/{user_id}/credentials_api3", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Email/password login information for the specified user.
   /// 
   /// POST /users/{user_id}/credentials_email -> CredentialsEmail
+  /// 
+  /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_user_credentials_email<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsEmail, Exception>> create_user_credentials_email(
     long user_id,
     WriteCredentialsEmail body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/users/{user_id}/credentials_email", new Values {
+    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Post, $"/users/{user_id}/credentials_email", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -1647,16 +1931,19 @@ namespace Looker.SDK.API31
   /// This method can be called with an empty body.
   /// 
   /// POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
+  /// 
+  /// <returns><c>CredentialsEmail</c> email/password credential (application/json)</returns>
+  /// 
   /// <param name="user_id">Id of user</param>
   /// <param name="expires">Expiring token.</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_user_credentials_email_password_reset<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsEmail, Exception>> create_user_credentials_email_password_reset(
     long user_id,
     bool? expires = null,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/users/{user_id}/credentials_email/password_reset", new Values {
+    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Post, $"/users/{user_id}/credentials_email/password_reset", new Values {
       { "expires", expires },
       { "fields", fields }},null,options);
   }
@@ -1664,25 +1951,30 @@ namespace Looker.SDK.API31
   /// ### Two-factor login information for the specified user.
   /// 
   /// POST /users/{user_id}/credentials_totp -> CredentialsTotp
+  /// 
+  /// <returns><c>CredentialsTotp</c> Two-Factor Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> create_user_credentials_totp<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsTotp, Exception>> create_user_credentials_totp(
     long user_id,
     CredentialsTotp? body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/users/{user_id}/credentials_totp", new Values {
+    return await AuthRequest<CredentialsTotp, Exception>(HttpMethod.Post, $"/users/{user_id}/credentials_totp", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Get the current status and content of custom welcome emails
   /// 
   /// GET /custom_welcome_email -> CustomWelcomeEmail
-  public async Task<SdkResponse<TSuccess, TError>> custom_welcome_email<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>CustomWelcomeEmail</c> Custom Welcome Email (application/json)</returns>
+  public async Task<SdkResponse<CustomWelcomeEmail, Exception>> custom_welcome_email(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/custom_welcome_email", null,null,options);
+    return await AuthRequest<CustomWelcomeEmail, Exception>(HttpMethod.Get, "/custom_welcome_email", null,null,options);
   }
 
   /// ### Get information about a dashboard
@@ -1694,15 +1986,18 @@ namespace Looker.SDK.API31
   /// You can **Search** for dashboards with [search_dashboards()](#!/Dashboard/search_dashboards)
   /// 
   /// GET /dashboards/{dashboard_id} -> Dashboard
+  /// 
+  /// <returns><c>Dashboard</c> Dashboard (application/json)</returns>
+  /// 
   /// <param name="dashboard_id">Id of dashboard</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<Dashboard, Exception>> dashboard(
     string dashboard_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboards/{dashboard_id}", new Values {
+    return await AuthRequest<Dashboard, Exception>(HttpMethod.Get, $"/dashboards/{dashboard_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -1711,132 +2006,159 @@ namespace Looker.SDK.API31
   /// Returns a JSON object that contains the dashboard id and Aggregate Table lookml
   /// 
   /// GET /dashboards/aggregate_table_lookml/{dashboard_id} -> DashboardAggregateTableLookml
+  /// 
+  /// <returns><c>DashboardAggregateTableLookml</c> JSON for Aggregate Table LookML (application/json)</returns>
+  /// 
   /// <param name="dashboard_id">Id of dashboard</param>
-  public async Task<SdkResponse<TSuccess, TError>> dashboard_aggregate_table_lookml<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardAggregateTableLookml, Exception>> dashboard_aggregate_table_lookml(
     string dashboard_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboards/aggregate_table_lookml/{dashboard_id}", null,null,options);
+    return await AuthRequest<DashboardAggregateTableLookml, Exception>(HttpMethod.Get, $"/dashboards/aggregate_table_lookml/{dashboard_id}", null,null,options);
   }
 
   /// ### Get information about all the dashboard elements on a dashboard with a specific id.
   /// 
   /// GET /dashboards/{dashboard_id}/dashboard_elements -> DashboardElement[]
+  /// 
+  /// <returns><c>DashboardElement[]</c> DashboardElement (application/json)</returns>
+  /// 
   /// <param name="dashboard_id">Id of dashboard</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> dashboard_dashboard_elements<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardElement[], Exception>> dashboard_dashboard_elements(
     string dashboard_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboards/{dashboard_id}/dashboard_elements", new Values {
+    return await AuthRequest<DashboardElement[], Exception>(HttpMethod.Get, $"/dashboards/{dashboard_id}/dashboard_elements", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all the dashboard filters on a dashboard with a specific id.
   /// 
   /// GET /dashboards/{dashboard_id}/dashboard_filters -> DashboardFilter[]
+  /// 
+  /// <returns><c>DashboardFilter[]</c> Dashboard Filter (application/json)</returns>
+  /// 
   /// <param name="dashboard_id">Id of dashboard</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> dashboard_dashboard_filters<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardFilter[], Exception>> dashboard_dashboard_filters(
     string dashboard_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboards/{dashboard_id}/dashboard_filters", new Values {
+    return await AuthRequest<DashboardFilter[], Exception>(HttpMethod.Get, $"/dashboards/{dashboard_id}/dashboard_filters", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all the dashboard elements on a dashboard with a specific id.
   /// 
   /// GET /dashboards/{dashboard_id}/dashboard_layouts -> DashboardLayout[]
+  /// 
+  /// <returns><c>DashboardLayout[]</c> DashboardLayout (application/json)</returns>
+  /// 
   /// <param name="dashboard_id">Id of dashboard</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> dashboard_dashboard_layouts<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardLayout[], Exception>> dashboard_dashboard_layouts(
     string dashboard_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboards/{dashboard_id}/dashboard_layouts", new Values {
+    return await AuthRequest<DashboardLayout[], Exception>(HttpMethod.Get, $"/dashboards/{dashboard_id}/dashboard_layouts", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about the dashboard element with a specific id.
   /// 
   /// GET /dashboard_elements/{dashboard_element_id} -> DashboardElement
+  /// 
+  /// <returns><c>DashboardElement</c> DashboardElement (application/json)</returns>
+  /// 
   /// <param name="dashboard_element_id">Id of dashboard element</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> dashboard_element<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardElement, Exception>> dashboard_element(
     string dashboard_element_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_element_id = SdkUtils.EncodeParam(dashboard_element_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboard_elements/{dashboard_element_id}", new Values {
+    return await AuthRequest<DashboardElement, Exception>(HttpMethod.Get, $"/dashboard_elements/{dashboard_element_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about the dashboard filters with a specific id.
   /// 
   /// GET /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
+  /// 
+  /// <returns><c>DashboardFilter</c> Dashboard Filter (application/json)</returns>
+  /// 
   /// <param name="dashboard_filter_id">Id of dashboard filters</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> dashboard_filter<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardFilter, Exception>> dashboard_filter(
     string dashboard_filter_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_filter_id = SdkUtils.EncodeParam(dashboard_filter_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboard_filters/{dashboard_filter_id}", new Values {
+    return await AuthRequest<DashboardFilter, Exception>(HttpMethod.Get, $"/dashboard_filters/{dashboard_filter_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about the dashboard layouts with a specific id.
   /// 
   /// GET /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
+  /// 
+  /// <returns><c>DashboardLayout</c> DashboardLayout (application/json)</returns>
+  /// 
   /// <param name="dashboard_layout_id">Id of dashboard layouts</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> dashboard_layout<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardLayout, Exception>> dashboard_layout(
     string dashboard_layout_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_layout_id = SdkUtils.EncodeParam(dashboard_layout_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboard_layouts/{dashboard_layout_id}", new Values {
+    return await AuthRequest<DashboardLayout, Exception>(HttpMethod.Get, $"/dashboard_layouts/{dashboard_layout_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about the dashboard elements with a specific id.
   /// 
   /// GET /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
+  /// 
+  /// <returns><c>DashboardLayoutComponent</c> DashboardLayoutComponent (application/json)</returns>
+  /// 
   /// <param name="dashboard_layout_component_id">Id of dashboard layout component</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> dashboard_layout_component<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardLayoutComponent, Exception>> dashboard_layout_component(
     string dashboard_layout_component_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_layout_component_id = SdkUtils.EncodeParam(dashboard_layout_component_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboard_layout_components/{dashboard_layout_component_id}", new Values {
+    return await AuthRequest<DashboardLayoutComponent, Exception>(HttpMethod.Get, $"/dashboard_layout_components/{dashboard_layout_component_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all the dashboard layout components for a dashboard layout with a specific id.
   /// 
   /// GET /dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components -> DashboardLayoutComponent[]
+  /// 
+  /// <returns><c>DashboardLayoutComponent[]</c> DashboardLayoutComponent (application/json)</returns>
+  /// 
   /// <param name="dashboard_layout_id">Id of dashboard layout component</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> dashboard_layout_dashboard_layout_components<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardLayoutComponent[], Exception>> dashboard_layout_dashboard_layout_components(
     string dashboard_layout_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_layout_id = SdkUtils.EncodeParam(dashboard_layout_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components", new Values {
+    return await AuthRequest<DashboardLayoutComponent[], Exception>(HttpMethod.Get, $"/dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -1845,25 +2167,31 @@ namespace Looker.SDK.API31
   /// Returns a JSON object that contains the dashboard id and the full lookml
   /// 
   /// GET /dashboards/lookml/{dashboard_id} -> DashboardLookml
+  /// 
+  /// <returns><c>DashboardLookml</c> json of dashboard (application/json)</returns>
+  /// 
   /// <param name="dashboard_id">Id of dashboard</param>
-  public async Task<SdkResponse<TSuccess, TError>> dashboard_lookml<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardLookml, Exception>> dashboard_lookml(
     string dashboard_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/dashboards/lookml/{dashboard_id}", null,null,options);
+    return await AuthRequest<DashboardLookml, Exception>(HttpMethod.Get, $"/dashboards/lookml/{dashboard_id}", null,null,options);
   }
 
   /// ### Get information about a datagroup.
   /// 
   /// GET /datagroups/{datagroup_id} -> Datagroup
+  /// 
+  /// <returns><c>Datagroup</c> Datagroup (application/json)</returns>
+  /// 
   /// <param name="datagroup_id">ID of datagroup.</param>
-  public async Task<SdkResponse<TSuccess, TError>> datagroup<TSuccess, TError>(
+  public async Task<SdkResponse<Datagroup, Exception>> datagroup(
     string datagroup_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       datagroup_id = SdkUtils.EncodeParam(datagroup_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/datagroups/{datagroup_id}", null,null,options);
+    return await AuthRequest<Datagroup, Exception>(HttpMethod.Get, $"/datagroups/{datagroup_id}", null,null,options);
   }
 
   /// ### Get the default color collection
@@ -1873,10 +2201,12 @@ namespace Looker.SDK.API31
   /// Set the default color collection with [ColorCollection](#!/ColorCollection/set_default_color_collection)
   /// 
   /// GET /color_collections/default -> ColorCollection
-  public async Task<SdkResponse<TSuccess, TError>> default_color_collection<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>ColorCollection</c> ColorCollection (application/json)</returns>
+  public async Task<SdkResponse<ColorCollection, Exception>> default_color_collection(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/color_collections/default", null,null,options);
+    return await AuthRequest<ColorCollection, Exception>(HttpMethod.Get, "/color_collections/default", null,null,options);
   }
 
   /// ### Get the default theme
@@ -1888,12 +2218,15 @@ namespace Looker.SDK.API31
   /// The optional `ts` parameter can specify a different timestamp than "now." If specified, it returns the default theme at the time indicated.
   /// 
   /// GET /themes/default -> Theme
+  /// 
+  /// <returns><c>Theme</c> Theme (application/json)</returns>
+  /// 
   /// <param name="ts">Timestamp representing the target datetime for the active period. Defaults to 'now'</param>
-  public async Task<SdkResponse<TSuccess, TError>> default_theme<TSuccess, TError>(
+  public async Task<SdkResponse<Theme, Exception>> default_theme(
     DateTime? ts = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/themes/default", new Values {
+    return await AuthRequest<Theme, Exception>(HttpMethod.Get, "/themes/default", new Values {
       { "ts", ts }},null,options);
   }
 
@@ -1907,62 +2240,77 @@ namespace Looker.SDK.API31
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   /// 
   /// DELETE /color_collections/{collection_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="collection_id">Id of Color Collection</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_color_collection<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_color_collection(
     string collection_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       collection_id = SdkUtils.EncodeParam(collection_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/color_collections/{collection_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/color_collections/{collection_id}", null,null,options);
   }
 
   /// ### Delete a connection.
   /// 
   /// DELETE /connections/{connection_name} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="connection_name">Name of connection</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_connection<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_connection(
     string connection_name,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       connection_name = SdkUtils.EncodeParam(connection_name);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/connections/{connection_name}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/connections/{connection_name}", null,null,options);
   }
 
   /// ### Delete a connection override.
   /// 
   /// DELETE /connections/{connection_name}/connection_override/{override_context} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="connection_name">Name of connection</param>
   /// <param name="override_context">Context of connection override</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_connection_override<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_connection_override(
     string connection_name,
     string override_context,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       connection_name = SdkUtils.EncodeParam(connection_name);
       override_context = SdkUtils.EncodeParam(override_context);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/connections/{connection_name}/connection_override/{override_context}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/connections/{connection_name}/connection_override/{override_context}", null,null,options);
   }
 
   /// ### Delete favorite content
   /// 
   /// DELETE /content_favorite/{content_favorite_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="content_favorite_id">Id of favorite content</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_content_favorite<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_content_favorite(
     long content_favorite_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/content_favorite/{content_favorite_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/content_favorite/{content_favorite_id}", null,null,options);
   }
 
   /// ### Remove content metadata access.
   /// 
   /// DELETE /content_metadata_access/{content_metadata_access_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="content_metadata_access_id">Id of content metadata access</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_content_metadata_access<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_content_metadata_access(
     long content_metadata_access_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/content_metadata_access/{content_metadata_access_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/content_metadata_access/{content_metadata_access_id}", null,null,options);
   }
 
   /// ### Delete the dashboard with the specified id
@@ -1974,62 +2322,77 @@ namespace Looker.SDK.API31
   /// Note: When a dashboard is deleted in the UI, it is soft deleted. Use this API call to permanently remove it, if desired.
   /// 
   /// DELETE /dashboards/{dashboard_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="dashboard_id">Id of dashboard</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_dashboard(
     string dashboard_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/dashboards/{dashboard_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/dashboards/{dashboard_id}", null,null,options);
   }
 
   /// ### Delete a dashboard element with a specific id.
   /// 
   /// DELETE /dashboard_elements/{dashboard_element_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="dashboard_element_id">Id of dashboard element</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_dashboard_element<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_dashboard_element(
     string dashboard_element_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_element_id = SdkUtils.EncodeParam(dashboard_element_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/dashboard_elements/{dashboard_element_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/dashboard_elements/{dashboard_element_id}", null,null,options);
   }
 
   /// ### Delete a dashboard filter with a specific id.
   /// 
   /// DELETE /dashboard_filters/{dashboard_filter_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="dashboard_filter_id">Id of dashboard filter</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_dashboard_filter<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_dashboard_filter(
     string dashboard_filter_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_filter_id = SdkUtils.EncodeParam(dashboard_filter_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/dashboard_filters/{dashboard_filter_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/dashboard_filters/{dashboard_filter_id}", null,null,options);
   }
 
   /// ### Delete a dashboard layout with a specific id.
   /// 
   /// DELETE /dashboard_layouts/{dashboard_layout_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="dashboard_layout_id">Id of dashboard layout</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_dashboard_layout<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_dashboard_layout(
     string dashboard_layout_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_layout_id = SdkUtils.EncodeParam(dashboard_layout_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/dashboard_layouts/{dashboard_layout_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/dashboard_layouts/{dashboard_layout_id}", null,null,options);
   }
 
   /// ### Delete the folder with a specific id including any children folders.
   /// **DANGER** this will delete all looks and dashboards in the folder.
   /// 
   /// DELETE /folders/{folder_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="folder_id">Id of folder</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_folder<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_folder(
     string folder_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/folders/{folder_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/folders/{folder_id}", null,null,options);
   }
 
   /// ### Delete the specified Git Branch
@@ -2037,97 +2400,121 @@ namespace Looker.SDK.API31
   /// Delete git branch specified in branch_name path param from local and remote of specified project repository
   /// 
   /// DELETE /projects/{project_id}/git_branch/{branch_name} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
   /// <param name="branch_name">Branch Name</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_git_branch<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_git_branch(
     string project_id,
     string branch_name,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
       branch_name = SdkUtils.EncodeParam(branch_name);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/projects/{project_id}/git_branch/{branch_name}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/projects/{project_id}/git_branch/{branch_name}", null,null,options);
   }
 
   /// ### Deletes a group (admin only).
   /// 
   /// DELETE /groups/{group_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="group_id">Id of group</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_group<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_group(
     long group_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/groups/{group_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/groups/{group_id}", null,null,options);
   }
 
   /// ### Removes a group from a group.
   /// 
   /// DELETE /groups/{group_id}/groups/{deleting_group_id} -> void
+  /// 
+  /// <returns><c>void</c> Group successfully deleted ()</returns>
+  /// 
   /// <param name="group_id">Id of group</param>
   /// <param name="deleting_group_id">Id of group to delete</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_group_from_group<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_group_from_group(
     long group_id,
     long deleting_group_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/groups/{group_id}/groups/{deleting_group_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/groups/{group_id}/groups/{deleting_group_id}", null,null,options);
   }
 
   /// ### Removes a user from a group.
   /// 
   /// DELETE /groups/{group_id}/users/{user_id} -> void
+  /// 
+  /// <returns><c>void</c> User successfully removed from group ()</returns>
+  /// 
   /// <param name="group_id">Id of group</param>
   /// <param name="user_id">Id of user to remove from group</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_group_user<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_group_user(
     long group_id,
     long user_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/groups/{group_id}/users/{user_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/groups/{group_id}/users/{user_id}", null,null,options);
   }
 
   /// ### Delete a homepage.
   /// 
   /// DELETE /homepages/{homepage_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="homepage_id">Id of homepage</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_homepage<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_homepage(
     long homepage_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/homepages/{homepage_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/homepages/{homepage_id}", null,null,options);
   }
 
   /// ### Delete a homepage item.
   /// 
   /// DELETE /homepage_items/{homepage_item_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="homepage_item_id">Id of homepage_item</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_homepage_item<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_homepage_item(
     long homepage_item_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/homepage_items/{homepage_item_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/homepage_items/{homepage_item_id}", null,null,options);
   }
 
   /// ### Delete a homepage section.
   /// 
   /// DELETE /homepage_sections/{homepage_section_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="homepage_section_id">Id of homepage_section</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_homepage_section<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_homepage_section(
     long homepage_section_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/homepage_sections/{homepage_section_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/homepage_sections/{homepage_section_id}", null,null,options);
   }
 
   /// ### Delete a Integration Hub.
   /// 
   /// DELETE /integration_hubs/{integration_hub_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="integration_hub_id">Id of integration_hub</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_integration_hub<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_integration_hub(
     long integration_hub_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/integration_hubs/{integration_hub_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/integration_hubs/{integration_hub_id}", null,null,options);
   }
 
   /// ### Permanently Delete a Look
@@ -2139,58 +2526,73 @@ namespace Looker.SDK.API31
   /// For information about soft-delete (which can be undone) see [update_look()](#!/Look/update_look).
   /// 
   /// DELETE /looks/{look_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="look_id">Id of look</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_look<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_look(
     long look_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/looks/{look_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/looks/{look_id}", null,null,options);
   }
 
   /// ### Delete a lookml model.
   /// 
   /// DELETE /lookml_models/{lookml_model_name} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="lookml_model_name">Name of lookml model.</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_lookml_model<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_lookml_model(
     string lookml_model_name,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       lookml_model_name = SdkUtils.EncodeParam(lookml_model_name);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/lookml_models/{lookml_model_name}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/lookml_models/{lookml_model_name}", null,null,options);
   }
 
   /// ### Delete the model set with a specific id.
   /// 
   /// DELETE /model_sets/{model_set_id} -> string
+  /// 
+  /// <returns><c>string</c> Model set succssfully deleted. (application/json)</returns>
+  /// 
   /// <param name="model_set_id">id of model set</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_model_set<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_model_set(
     long model_set_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/model_sets/{model_set_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/model_sets/{model_set_id}", null,null,options);
   }
 
   /// ### Delete a OIDC test configuration.
   /// 
   /// DELETE /oidc_test_configs/{test_slug} -> string
+  /// 
+  /// <returns><c>string</c> Test config succssfully deleted. (application/json)</returns>
+  /// 
   /// <param name="test_slug">Slug of test config</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_oidc_test_config<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_oidc_test_config(
     string test_slug,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       test_slug = SdkUtils.EncodeParam(test_slug);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/oidc_test_configs/{test_slug}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/oidc_test_configs/{test_slug}", null,null,options);
   }
 
   /// ### Delete the permission set with a specific id.
   /// 
   /// DELETE /permission_sets/{permission_set_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="permission_set_id">Id of permission set</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_permission_set<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_permission_set(
     long permission_set_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/permission_sets/{permission_set_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/permission_sets/{permission_set_id}", null,null,options);
   }
 
   /// ### Repository Credential for a remote dependency
@@ -2201,39 +2603,48 @@ namespace Looker.SDK.API31
   /// `credential_id` is required.
   /// 
   /// DELETE /projects/{root_project_id}/credential/{credential_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="root_project_id">Root Project Id</param>
   /// <param name="credential_id">Credential Id</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_repository_credential<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_repository_credential(
     string root_project_id,
     string credential_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       root_project_id = SdkUtils.EncodeParam(root_project_id);
       credential_id = SdkUtils.EncodeParam(credential_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/projects/{root_project_id}/credential/{credential_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/projects/{root_project_id}/credential/{credential_id}", null,null,options);
   }
 
   /// ### Delete the role with a specific id.
   /// 
   /// DELETE /roles/{role_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="role_id">id of role</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_role<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_role(
     long role_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/roles/{role_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/roles/{role_id}", null,null,options);
   }
 
   /// ### Delete a SAML test configuration.
   /// 
   /// DELETE /saml_test_configs/{test_slug} -> string
+  /// 
+  /// <returns><c>string</c> Test config succssfully deleted. (application/json)</returns>
+  /// 
   /// <param name="test_slug">Slug of test config</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_saml_test_config<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_saml_test_config(
     string test_slug,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       test_slug = SdkUtils.EncodeParam(test_slug);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/saml_test_configs/{test_slug}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/saml_test_configs/{test_slug}", null,null,options);
   }
 
   /// ### Delete a Scheduled Plan
@@ -2243,25 +2654,31 @@ namespace Looker.SDK.API31
   /// This delete cannot be undone.
   /// 
   /// DELETE /scheduled_plans/{scheduled_plan_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="scheduled_plan_id">Scheduled Plan Id</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_scheduled_plan<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_scheduled_plan(
     long scheduled_plan_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/scheduled_plans/{scheduled_plan_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/scheduled_plans/{scheduled_plan_id}", null,null,options);
   }
 
   /// ### Delete the space with a specific id including any children spaces.
   /// **DANGER** this will delete all looks and dashboards in the space.
   /// 
   /// DELETE /spaces/{space_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="space_id">Id of space</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_space<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_space(
     string space_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       space_id = SdkUtils.EncodeParam(space_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/spaces/{space_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/spaces/{space_id}", null,null,options);
   }
 
   /// ### Delete a specific theme by id
@@ -2275,13 +2692,16 @@ namespace Looker.SDK.API31
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   /// 
   /// DELETE /themes/{theme_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="theme_id">Id of theme</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_theme<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_theme(
     string theme_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       theme_id = SdkUtils.EncodeParam(theme_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/themes/{theme_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/themes/{theme_id}", null,null,options);
   }
 
   /// ### Delete the user with a specific id.
@@ -2289,36 +2709,45 @@ namespace Looker.SDK.API31
   /// **DANGER** this will delete the user and all looks and other information owned by the user.
   /// 
   /// DELETE /users/{user_id} -> string
+  /// 
+  /// <returns><c>string</c> User successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="user_id">Id of user</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user(
     long user_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}", null,null,options);
   }
 
   /// ### Delete a user attribute (admin only).
   /// 
   /// DELETE /user_attributes/{user_attribute_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="user_attribute_id">Id of user_attribute</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user_attribute<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user_attribute(
     long user_attribute_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/user_attributes/{user_attribute_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/user_attributes/{user_attribute_id}", null,null,options);
   }
 
   /// ### Remove a user attribute value from a group.
   /// 
   /// DELETE /groups/{group_id}/attribute_values/{user_attribute_id} -> void
+  /// 
+  /// <returns><c>void</c> Value successfully unset ()</returns>
+  /// 
   /// <param name="group_id">Id of group</param>
   /// <param name="user_attribute_id">Id of user attribute</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user_attribute_group_value<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user_attribute_group_value(
     long group_id,
     long user_attribute_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/groups/{group_id}/attribute_values/{user_attribute_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/groups/{group_id}/attribute_values/{user_attribute_id}", null,null,options);
   }
 
   /// ### Delete a user attribute value from a user's account settings.
@@ -2329,142 +2758,178 @@ namespace Looker.SDK.API31
   /// information about how user attribute values are resolved.
   /// 
   /// DELETE /users/{user_id}/attribute_values/{user_attribute_id} -> void
+  /// 
+  /// <returns><c>void</c> Deleted ()</returns>
+  /// 
   /// <param name="user_id">Id of user</param>
   /// <param name="user_attribute_id">Id of user attribute</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user_attribute_user_value<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user_attribute_user_value(
     long user_id,
     long user_attribute_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/attribute_values/{user_attribute_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/attribute_values/{user_attribute_id}", null,null,options);
   }
 
   /// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
   /// 
   /// DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="credentials_api3_id">id of API 3 Credential</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_api3<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user_credentials_api3(
     long user_id,
     long credentials_api3_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_api3/{credentials_api3_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_api3/{credentials_api3_id}", null,null,options);
   }
 
   /// ### Email/password login information for the specified user.
   /// 
   /// DELETE /users/{user_id}/credentials_email -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_email<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user_credentials_email(
     long user_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_email", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_email", null,null,options);
   }
 
   /// ### Embed login information for the specified user.
   /// 
   /// DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="credentials_embed_id">id of Embedding Credential</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_embed<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user_credentials_embed(
     long user_id,
     long credentials_embed_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_embed/{credentials_embed_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_embed/{credentials_embed_id}", null,null,options);
   }
 
   /// ### Google authentication login information for the specified user.
   /// 
   /// DELETE /users/{user_id}/credentials_google -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_google<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user_credentials_google(
     long user_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_google", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_google", null,null,options);
   }
 
   /// ### LDAP login information for the specified user.
   /// 
   /// DELETE /users/{user_id}/credentials_ldap -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_ldap<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user_credentials_ldap(
     long user_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_ldap", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_ldap", null,null,options);
   }
 
   /// ### Looker Openid login information for the specified user. Used by Looker Analysts.
   /// 
   /// DELETE /users/{user_id}/credentials_looker_openid -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_looker_openid<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user_credentials_looker_openid(
     long user_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_looker_openid", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_looker_openid", null,null,options);
   }
 
   /// ### OpenID Connect (OIDC) authentication login information for the specified user.
   /// 
   /// DELETE /users/{user_id}/credentials_oidc -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_oidc<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user_credentials_oidc(
     long user_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_oidc", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_oidc", null,null,options);
   }
 
   /// ### Saml authentication login information for the specified user.
   /// 
   /// DELETE /users/{user_id}/credentials_saml -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_saml<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user_credentials_saml(
     long user_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_saml", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_saml", null,null,options);
   }
 
   /// ### Two-factor login information for the specified user.
   /// 
   /// DELETE /users/{user_id}/credentials_totp -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user_credentials_totp<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user_credentials_totp(
     long user_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/credentials_totp", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_totp", null,null,options);
   }
 
   /// ### Removes login lockout for the associated user.
   /// 
   /// DELETE /user_login_lockout/{key} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="key">The key associated with the locked user</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user_login_lockout<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user_login_lockout(
     string key,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       key = SdkUtils.EncodeParam(key);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/user_login_lockout/{key}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/user_login_lockout/{key}", null,null,options);
   }
 
   /// ### Web login session for the specified user.
   /// 
   /// DELETE /users/{user_id}/sessions/{session_id} -> string
+  /// 
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="session_id">id of Web Login Session</param>
-  public async Task<SdkResponse<TSuccess, TError>> delete_user_session<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> delete_user_session(
     long user_id,
     long session_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/users/{user_id}/sessions/{session_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/sessions/{session_id}", null,null,options);
   }
 
   /// ### Deploy LookML from this Development Mode Project to Production
@@ -2481,22 +2946,30 @@ namespace Looker.SDK.API31
   /// 3. Pull the production branch into the production project.
   /// 
   /// POST /projects/{project_id}/deploy_to_production -> string
+  /// 
+  /// <returns>
+  /// <c>string</c> Project (application/json)
+  /// <c>void</c> Returns 204 if project was successfully deployed to production, otherwise 400 with an error message ()
+  /// </returns>
+  /// 
   /// <param name="project_id">Id of project</param>
-  public async Task<SdkResponse<TSuccess, TError>> deploy_to_production<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, Exception>> deploy_to_production<TSuccess>(
     string project_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null) where TSuccess : class
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/projects/{project_id}/deploy_to_production", null,null,options);
+    return await AuthRequest<TSuccess, Exception>(HttpMethod.Post, $"/projects/{project_id}/deploy_to_production", null,null,options);
   }
 
   /// ### Retrieve the value for whether or not digest emails is enabled
   /// 
   /// GET /digest_emails_enabled -> DigestEmails
-  public async Task<SdkResponse<TSuccess, TError>> digest_emails_enabled<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>DigestEmails</c> Digest_emails (application/json)</returns>
+  public async Task<SdkResponse<DigestEmails, Exception>> digest_emails_enabled(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/digest_emails_enabled", null,null,options);
+    return await AuthRequest<DigestEmails, Exception>(HttpMethod.Get, "/digest_emails_enabled", null,null,options);
   }
 
   /// ### Fetch the given url and parse it as a SAML IdP metadata document and return the result.
@@ -2504,33 +2977,40 @@ namespace Looker.SDK.API31
   /// can fetch it without requiring any special authentication.
   /// 
   /// POST /fetch_and_parse_saml_idp_metadata -> SamlMetadataParseResult
-  public async Task<SdkResponse<TSuccess, TError>> fetch_and_parse_saml_idp_metadata<TSuccess, TError>(
+  /// 
+  /// <returns><c>SamlMetadataParseResult</c> Parse result (application/json)</returns>
+  public async Task<SdkResponse<SamlMetadataParseResult, Exception>> fetch_and_parse_saml_idp_metadata(
     string body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/fetch_and_parse_saml_idp_metadata", null,body,options);
+    return await AuthRequest<SamlMetadataParseResult, Exception>(HttpMethod.Post, "/fetch_and_parse_saml_idp_metadata", null,body,options);
   }
 
   /// Returns the Integration form for presentation to the user.
   /// 
   /// POST /integrations/{integration_id}/form -> DataActionForm
+  /// 
+  /// <returns><c>DataActionForm</c> Data Action Form (application/json)</returns>
+  /// 
   /// <param name="integration_id">Id of integration</param>
-  public async Task<SdkResponse<TSuccess, TError>> fetch_integration_form<TSuccess, TError>(
+  public async Task<SdkResponse<DataActionForm, Exception>> fetch_integration_form(
     string integration_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       integration_id = SdkUtils.EncodeParam(integration_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/integrations/{integration_id}/form", null,null,options);
+    return await AuthRequest<DataActionForm, Exception>(HttpMethod.Post, $"/integrations/{integration_id}/form", null,null,options);
   }
 
   /// For some data actions, the remote server may supply a form requesting further user input. This endpoint takes a data action, asks the remote server to generate a form for it, and returns that form to you for presentation to the user.
   /// 
   /// POST /data_actions/form -> DataActionForm
-  public async Task<SdkResponse<TSuccess, TError>> fetch_remote_data_action_form<TSuccess, TError>(
+  /// 
+  /// <returns><c>DataActionForm</c> Data Action Form (application/json)</returns>
+  public async Task<SdkResponse<DataActionForm, Exception>> fetch_remote_data_action_form(
     StringDictionary<string> body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/data_actions/form", null,body,options);
+    return await AuthRequest<DataActionForm, Exception>(HttpMethod.Post, "/data_actions/form", null,body,options);
   }
 
   /// ### Get the specified Git Branch
@@ -2538,66 +3018,78 @@ namespace Looker.SDK.API31
   /// Returns the git branch specified in branch_name path param if it exists in the given project repository
   /// 
   /// GET /projects/{project_id}/git_branch/{branch_name} -> GitBranch
+  /// 
+  /// <returns><c>GitBranch</c> Git Branch (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
   /// <param name="branch_name">Branch Name</param>
-  public async Task<SdkResponse<TSuccess, TError>> find_git_branch<TSuccess, TError>(
+  public async Task<SdkResponse<GitBranch, Exception>> find_git_branch(
     string project_id,
     string branch_name,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
       branch_name = SdkUtils.EncodeParam(branch_name);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/git_branch/{branch_name}", null,null,options);
+    return await AuthRequest<GitBranch, Exception>(HttpMethod.Get, $"/projects/{project_id}/git_branch/{branch_name}", null,null,options);
   }
 
   /// ### Get information about the folder with a specific id.
   /// 
   /// GET /folders/{folder_id} -> Folder
+  /// 
+  /// <returns><c>Folder</c> Folder (application/json)</returns>
+  /// 
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> folder<TSuccess, TError>(
+  public async Task<SdkResponse<Folder, Exception>> folder(
     string folder_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/folders/{folder_id}", new Values {
+    return await AuthRequest<Folder, Exception>(HttpMethod.Get, $"/folders/{folder_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get the ancestors of a folder
   /// 
   /// GET /folders/{folder_id}/ancestors -> Folder[]
+  /// 
+  /// <returns><c>Folder[]</c> Folders (application/json)</returns>
+  /// 
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> folder_ancestors<TSuccess, TError>(
+  public async Task<SdkResponse<Folder[], Exception>> folder_ancestors(
     string folder_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/folders/{folder_id}/ancestors", new Values {
+    return await AuthRequest<Folder[], Exception>(HttpMethod.Get, $"/folders/{folder_id}/ancestors", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get the children of a folder.
   /// 
   /// GET /folders/{folder_id}/children -> Folder[]
+  /// 
+  /// <returns><c>Folder[]</c> Folders (application/json)</returns>
+  /// 
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
   /// <param name="sorts">Fields to sort by.</param>
-  public async Task<SdkResponse<TSuccess, TError>> folder_children<TSuccess, TError>(
+  public async Task<SdkResponse<Folder[], Exception>> folder_children(
     string folder_id,
     string? fields = null,
     long? page = null,
     long? per_page = null,
     string? sorts = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/folders/{folder_id}/children", new Values {
+    return await AuthRequest<Folder[], Exception>(HttpMethod.Get, $"/folders/{folder_id}/children", new Values {
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
@@ -2607,19 +3099,22 @@ namespace Looker.SDK.API31
   /// ### Search the children of a folder
   /// 
   /// GET /folders/{folder_id}/children/search -> Folder[]
+  /// 
+  /// <returns><c>Folder[]</c> Folders (application/json)</returns>
+  /// 
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="name">Match folder name.</param>
-  public async Task<SdkResponse<TSuccess, TError>> folder_children_search<TSuccess, TError>(
+  public async Task<SdkResponse<Folder[], Exception>> folder_children_search(
     string folder_id,
     string? fields = null,
     string? sorts = null,
     string? name = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/folders/{folder_id}/children/search", new Values {
+    return await AuthRequest<Folder[], Exception>(HttpMethod.Get, $"/folders/{folder_id}/children/search", new Values {
       { "fields", fields },
       { "sorts", sorts },
       { "name", name }},null,options);
@@ -2628,55 +3123,66 @@ namespace Looker.SDK.API31
   /// ### Get the dashboards in a folder
   /// 
   /// GET /folders/{folder_id}/dashboards -> Dashboard[]
+  /// 
+  /// <returns><c>Dashboard[]</c> Dashboard (application/json)</returns>
+  /// 
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> folder_dashboards<TSuccess, TError>(
+  public async Task<SdkResponse<Dashboard[], Exception>> folder_dashboards(
     string folder_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/folders/{folder_id}/dashboards", new Values {
+    return await AuthRequest<Dashboard[], Exception>(HttpMethod.Get, $"/folders/{folder_id}/dashboards", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get the looks in a folder
   /// 
   /// GET /folders/{folder_id}/looks -> LookWithQuery[]
+  /// 
+  /// <returns><c>LookWithQuery[]</c> Looks (application/json)</returns>
+  /// 
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> folder_looks<TSuccess, TError>(
+  public async Task<SdkResponse<LookWithQuery[], Exception>> folder_looks(
     string folder_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/folders/{folder_id}/looks", new Values {
+    return await AuthRequest<LookWithQuery[], Exception>(HttpMethod.Get, $"/folders/{folder_id}/looks", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get the parent of a folder
   /// 
   /// GET /folders/{folder_id}/parent -> Folder
+  /// 
+  /// <returns><c>Folder</c> Folder (application/json)</returns>
+  /// 
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> folder_parent<TSuccess, TError>(
+  public async Task<SdkResponse<Folder, Exception>> folder_parent(
     string folder_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/folders/{folder_id}/parent", new Values {
+    return await AuthRequest<Folder, Exception>(HttpMethod.Get, $"/folders/{folder_id}/parent", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Force all credentials_email users to reset their login passwords upon their next login.
   /// 
   /// PUT /password_config/force_password_reset_at_next_login_for_all_users -> string
-  public async Task<SdkResponse<TSuccess, TError>> force_password_reset_at_next_login_for_all_users<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>string</c> Password Config (application/json)</returns>
+  public async Task<SdkResponse<string, Exception>> force_password_reset_at_next_login_for_all_users(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, "/password_config/force_password_reset_at_next_login_for_all_users", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Put, "/password_config/force_password_reset_at_next_login_for_all_users", null,null,options);
   }
 
   /// ### Get all Repository Credentials for a project
@@ -2684,13 +3190,16 @@ namespace Looker.SDK.API31
   /// `root_project_id` is required.
   /// 
   /// GET /projects/{root_project_id}/credentials -> RepositoryCredential[]
+  /// 
+  /// <returns><c>RepositoryCredential[]</c> Repository Credential (application/json)</returns>
+  /// 
   /// <param name="root_project_id">Root Project Id</param>
-  public async Task<SdkResponse<TSuccess, TError>> get_all_repository_credentials<TSuccess, TError>(
+  public async Task<SdkResponse<RepositoryCredential[], Exception>> get_all_repository_credentials(
     string root_project_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       root_project_id = SdkUtils.EncodeParam(root_project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{root_project_id}/credentials", null,null,options);
+    return await AuthRequest<RepositoryCredential[], Exception>(HttpMethod.Get, $"/projects/{root_project_id}/credentials", null,null,options);
   }
 
   /// ### Get the Current Git Branch
@@ -2698,13 +3207,16 @@ namespace Looker.SDK.API31
   /// Returns the git branch currently checked out in the given project repository
   /// 
   /// GET /projects/{project_id}/git_branch -> GitBranch
+  /// 
+  /// <returns><c>GitBranch</c> Git Branch (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
-  public async Task<SdkResponse<TSuccess, TError>> git_branch<TSuccess, TError>(
+  public async Task<SdkResponse<GitBranch, Exception>> git_branch(
     string project_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/git_branch", null,null,options);
+    return await AuthRequest<GitBranch, Exception>(HttpMethod.Get, $"/projects/{project_id}/git_branch", null,null,options);
   }
 
   /// ### Git Deploy Key
@@ -2712,68 +3224,83 @@ namespace Looker.SDK.API31
   /// Returns the ssh public key previously created for a project's git repository.
   /// 
   /// GET /projects/{project_id}/git/deploy_key -> string
+  /// 
+  /// <returns><c>string</c> The text of the public key portion of the deploy_key (text/plain)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
-  public async Task<SdkResponse<TSuccess, TError>> git_deploy_key<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> git_deploy_key(
     string project_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/git/deploy_key", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Get, $"/projects/{project_id}/git/deploy_key", null,null,options);
   }
 
   /// ### Get information about a group.
   /// 
   /// GET /groups/{group_id} -> Group
+  /// 
+  /// <returns><c>Group</c> Group (application/json)</returns>
+  /// 
   /// <param name="group_id">Id of group</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> group<TSuccess, TError>(
+  public async Task<SdkResponse<Group, Exception>> group(
     long group_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/groups/{group_id}", new Values {
+    return await AuthRequest<Group, Exception>(HttpMethod.Get, $"/groups/{group_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about a homepage.
   /// 
   /// GET /homepages/{homepage_id} -> Homepage
+  /// 
+  /// <returns><c>Homepage</c> Homepage (application/json)</returns>
+  /// 
   /// <param name="homepage_id">Id of homepage</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> homepage<TSuccess, TError>(
+  public async Task<SdkResponse<Homepage, Exception>> homepage(
     long homepage_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/homepages/{homepage_id}", new Values {
+    return await AuthRequest<Homepage, Exception>(HttpMethod.Get, $"/homepages/{homepage_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about a homepage item.
   /// 
   /// GET /homepage_items/{homepage_item_id} -> HomepageItem
+  /// 
+  /// <returns><c>HomepageItem</c> Homepage Item (application/json)</returns>
+  /// 
   /// <param name="homepage_item_id">Id of homepage item</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> homepage_item<TSuccess, TError>(
+  public async Task<SdkResponse<HomepageItem, Exception>> homepage_item(
     long homepage_item_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/homepage_items/{homepage_item_id}", new Values {
+    return await AuthRequest<HomepageItem, Exception>(HttpMethod.Get, $"/homepage_items/{homepage_item_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about a homepage section.
   /// 
   /// GET /homepage_sections/{homepage_section_id} -> HomepageSection
+  /// 
+  /// <returns><c>HomepageSection</c> Homepage section (application/json)</returns>
+  /// 
   /// <param name="homepage_section_id">Id of homepage section</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> homepage_section<TSuccess, TError>(
+  public async Task<SdkResponse<HomepageSection, Exception>> homepage_section(
     long homepage_section_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/homepage_sections/{homepage_section_id}", new Values {
+    return await AuthRequest<HomepageSection, Exception>(HttpMethod.Get, $"/homepage_sections/{homepage_section_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -2791,79 +3318,95 @@ namespace Looker.SDK.API31
   /// **Unlink** a linked UDD by setting lookml_link_id to null with [update_dashboard()](#!/Dashboard/update_dashboard)
   /// 
   /// POST /dashboards/{lookml_dashboard_id}/import/{space_id} -> Dashboard
+  /// 
+  /// <returns><c>Dashboard</c> Dashboard (application/json)</returns>
+  /// 
   /// <param name="lookml_dashboard_id">Id of LookML dashboard</param>
   /// <param name="space_id">Id of space to import the dashboard to</param>
   /// <param name="raw_locale">If true, and this dashboard is localized, export it with the raw keys, not localized.</param>
-  public async Task<SdkResponse<TSuccess, TError>> import_lookml_dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<Dashboard, Exception>> import_lookml_dashboard(
     string lookml_dashboard_id,
     string space_id,
     WriteDashboard? body,
     bool? raw_locale = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       lookml_dashboard_id = SdkUtils.EncodeParam(lookml_dashboard_id);
       space_id = SdkUtils.EncodeParam(space_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/dashboards/{lookml_dashboard_id}/import/{space_id}", new Values {
+    return await AuthRequest<Dashboard, Exception>(HttpMethod.Post, $"/dashboards/{lookml_dashboard_id}/import/{space_id}", new Values {
       { "raw_locale", raw_locale }},body,options);
   }
 
   /// ### Get information about a Integration.
   /// 
   /// GET /integrations/{integration_id} -> Integration
+  /// 
+  /// <returns><c>Integration</c> Integration (application/json)</returns>
+  /// 
   /// <param name="integration_id">Id of integration</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> integration<TSuccess, TError>(
+  public async Task<SdkResponse<Integration, Exception>> integration(
     string integration_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       integration_id = SdkUtils.EncodeParam(integration_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/integrations/{integration_id}", new Values {
+    return await AuthRequest<Integration, Exception>(HttpMethod.Get, $"/integrations/{integration_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about a Integration Hub.
   /// 
   /// GET /integration_hubs/{integration_hub_id} -> IntegrationHub
+  /// 
+  /// <returns><c>IntegrationHub</c> Integration Hub (application/json)</returns>
+  /// 
   /// <param name="integration_hub_id">Id of Integration Hub</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> integration_hub<TSuccess, TError>(
+  public async Task<SdkResponse<IntegrationHub, Exception>> integration_hub(
     long integration_hub_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/integration_hubs/{integration_hub_id}", new Values {
+    return await AuthRequest<IntegrationHub, Exception>(HttpMethod.Get, $"/integration_hubs/{integration_hub_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get and set the options for internal help resources
   /// 
   /// GET /internal_help_resources_enabled -> InternalHelpResources
-  public async Task<SdkResponse<TSuccess, TError>> internal_help_resources<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>InternalHelpResources</c> Internal Help Resources (application/json)</returns>
+  public async Task<SdkResponse<InternalHelpResources, Exception>> internal_help_resources(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/internal_help_resources_enabled", null,null,options);
+    return await AuthRequest<InternalHelpResources, Exception>(HttpMethod.Get, "/internal_help_resources_enabled", null,null,options);
   }
 
   /// ### Set the menu item name and content for internal help resources
   /// 
   /// GET /internal_help_resources_content -> InternalHelpResourcesContent
-  public async Task<SdkResponse<TSuccess, TError>> internal_help_resources_content<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>InternalHelpResourcesContent</c> Internal Help Resources Content (application/json)</returns>
+  public async Task<SdkResponse<InternalHelpResourcesContent, Exception>> internal_help_resources_content(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/internal_help_resources_content", null,null,options);
+    return await AuthRequest<InternalHelpResourcesContent, Exception>(HttpMethod.Get, "/internal_help_resources_content", null,null,options);
   }
 
   /// Kill a query with a specific query_task_id.
   /// 
   /// DELETE /running_queries/{query_task_id} -> string
+  /// 
+  /// <returns><c>string</c> Query successfully killed. (application/json)</returns>
+  /// 
   /// <param name="query_task_id">Query task id.</param>
-  public async Task<SdkResponse<TSuccess, TError>> kill_query<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> kill_query(
     string query_task_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       query_task_id = SdkUtils.EncodeParam(query_task_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, $"/running_queries/{query_task_id}", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/running_queries/{query_task_id}", null,null,options);
   }
 
   /// ### Get the LDAP configuration.
@@ -2884,21 +3427,26 @@ namespace Looker.SDK.API31
   /// See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
   /// 
   /// GET /ldap_config -> LDAPConfig
-  public async Task<SdkResponse<TSuccess, TError>> ldap_config<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>LDAPConfig</c> LDAP Configuration. (application/json)</returns>
+  public async Task<SdkResponse<LDAPConfig, Exception>> ldap_config(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/ldap_config", null,null,options);
+    return await AuthRequest<LDAPConfig, Exception>(HttpMethod.Get, "/ldap_config", null,null,options);
   }
 
   /// ### Get information about the legacy feature with a specific id.
   /// 
   /// GET /legacy_features/{legacy_feature_id} -> LegacyFeature
+  /// 
+  /// <returns><c>LegacyFeature</c> Legacy Feature (application/json)</returns>
+  /// 
   /// <param name="legacy_feature_id">id of legacy feature</param>
-  public async Task<SdkResponse<TSuccess, TError>> legacy_feature<TSuccess, TError>(
+  public async Task<SdkResponse<LegacyFeature, Exception>> legacy_feature(
     long legacy_feature_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/legacy_features/{legacy_feature_id}", null,null,options);
+    return await AuthRequest<LegacyFeature, Exception>(HttpMethod.Get, $"/legacy_features/{legacy_feature_id}", null,null,options);
   }
 
   /// ### Present client credentials to obtain an authorization token
@@ -2931,14 +3479,17 @@ namespace Looker.SDK.API31
   /// For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API3](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
   /// 
   /// POST /login -> AccessToken
+  /// 
+  /// <returns><c>AccessToken</c> Access token with metadata. (application/json)</returns>
+  /// 
   /// <param name="client_id">client_id part of API3 Key.</param>
   /// <param name="client_secret">client_secret part of API3 Key.</param>
-  public async Task<SdkResponse<TSuccess, TError>> login<TSuccess, TError>(
+  public async Task<SdkResponse<AccessToken, Exception>> login(
     string? client_id = null,
     string? client_secret = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/login", new Values {
+    return await AuthRequest<AccessToken, Exception>(HttpMethod.Post, "/login", new Values {
       { "client_id", client_id },
       { "client_secret", client_secret }},null,options);
   }
@@ -2961,24 +3512,29 @@ namespace Looker.SDK.API31
   /// See 'login' for more detail on the access token and how to use it.
   /// 
   /// POST /login/{user_id} -> AccessToken
+  /// 
+  /// <returns><c>AccessToken</c> Access token with metadata. (application/json)</returns>
+  /// 
   /// <param name="user_id">Id of user.</param>
   /// <param name="associative">When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.</param>
-  public async Task<SdkResponse<TSuccess, TError>> login_user<TSuccess, TError>(
+  public async Task<SdkResponse<AccessToken, Exception>> login_user(
     long user_id,
     bool? associative = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/login/{user_id}", new Values {
+    return await AuthRequest<AccessToken, Exception>(HttpMethod.Post, $"/login/{user_id}", new Values {
       { "associative", associative }},null,options);
   }
 
   /// ### Logout of the API and invalidate the current access token.
   /// 
   /// DELETE /logout -> string
-  public async Task<SdkResponse<TSuccess, TError>> logout<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>string</c> Logged out successfully. (application/json)</returns>
+  public async Task<SdkResponse<string, Exception>> logout(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Delete, "/logout", null,null,options);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, "/logout", null,null,options);
   }
 
   /// ### Get a Look.
@@ -2986,47 +3542,56 @@ namespace Looker.SDK.API31
   /// Returns detailed information about a Look and its associated Query.
   /// 
   /// GET /looks/{look_id} -> LookWithQuery
+  /// 
+  /// <returns><c>LookWithQuery</c> Look (application/json)</returns>
+  /// 
   /// <param name="look_id">Id of look</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> look<TSuccess, TError>(
+  public async Task<SdkResponse<LookWithQuery, Exception>> look(
     long look_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/looks/{look_id}", new Values {
+    return await AuthRequest<LookWithQuery, Exception>(HttpMethod.Get, $"/looks/{look_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about a lookml model.
   /// 
   /// GET /lookml_models/{lookml_model_name} -> LookmlModel
+  /// 
+  /// <returns><c>LookmlModel</c> LookML Model (application/json)</returns>
+  /// 
   /// <param name="lookml_model_name">Name of lookml model.</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> lookml_model<TSuccess, TError>(
+  public async Task<SdkResponse<LookmlModel, Exception>> lookml_model(
     string lookml_model_name,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       lookml_model_name = SdkUtils.EncodeParam(lookml_model_name);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/lookml_models/{lookml_model_name}", new Values {
+    return await AuthRequest<LookmlModel, Exception>(HttpMethod.Get, $"/lookml_models/{lookml_model_name}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about a lookml model explore.
   /// 
   /// GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> LookmlModelExplore
+  /// 
+  /// <returns><c>LookmlModelExplore</c> LookML Model Explore (application/json)</returns>
+  /// 
   /// <param name="lookml_model_name">Name of lookml model.</param>
   /// <param name="explore_name">Name of explore.</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> lookml_model_explore<TSuccess, TError>(
+  public async Task<SdkResponse<LookmlModelExplore, Exception>> lookml_model_explore(
     string lookml_model_name,
     string explore_name,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       lookml_model_name = SdkUtils.EncodeParam(lookml_model_name);
       explore_name = SdkUtils.EncodeParam(explore_name);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/lookml_models/{lookml_model_name}/explores/{explore_name}", new Values {
+    return await AuthRequest<LookmlModelExplore, Exception>(HttpMethod.Get, $"/lookml_models/{lookml_model_name}/explores/{explore_name}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -3035,24 +3600,30 @@ namespace Looker.SDK.API31
   /// Returns the project with the given project id
   /// 
   /// GET /projects/{project_id}/manifest -> Manifest
+  /// 
+  /// <returns><c>Manifest</c> Manifest (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
-  public async Task<SdkResponse<TSuccess, TError>> manifest<TSuccess, TError>(
+  public async Task<SdkResponse<Manifest, Exception>> manifest(
     string project_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/manifest", null,null,options);
+    return await AuthRequest<Manifest, Exception>(HttpMethod.Get, $"/projects/{project_id}/manifest", null,null,options);
   }
 
   /// ### Get information about the current user; i.e. the user account currently calling the API.
   /// 
   /// GET /user -> User
+  /// 
+  /// <returns><c>User</c> Current user. (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> me<TSuccess, TError>(
+  public async Task<SdkResponse<User, Exception>> me(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/user", new Values {
+    return await AuthRequest<User, Exception>(HttpMethod.Get, "/user", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -3061,29 +3632,35 @@ namespace Looker.SDK.API31
   /// Returns a merge query object given its id.
   /// 
   /// GET /merge_queries/{merge_query_id} -> MergeQuery
+  /// 
+  /// <returns><c>MergeQuery</c> Merge Query (application/json)</returns>
+  /// 
   /// <param name="merge_query_id">Merge Query Id</param>
   /// <param name="fields">Requested fields</param>
-  public async Task<SdkResponse<TSuccess, TError>> merge_query<TSuccess, TError>(
+  public async Task<SdkResponse<MergeQuery, Exception>> merge_query(
     string merge_query_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       merge_query_id = SdkUtils.EncodeParam(merge_query_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/merge_queries/{merge_query_id}", new Values {
+    return await AuthRequest<MergeQuery, Exception>(HttpMethod.Get, $"/merge_queries/{merge_query_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about the model set with a specific id.
   /// 
   /// GET /model_sets/{model_set_id} -> ModelSet
+  /// 
+  /// <returns><c>ModelSet</c> Specified model set. (application/json)</returns>
+  /// 
   /// <param name="model_set_id">Id of model set</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> model_set<TSuccess, TError>(
+  public async Task<SdkResponse<ModelSet, Exception>> model_set(
     long model_set_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/model_sets/{model_set_id}", new Values {
+    return await AuthRequest<ModelSet, Exception>(HttpMethod.Get, $"/model_sets/{model_set_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -3101,64 +3678,78 @@ namespace Looker.SDK.API31
   /// OIDC is enabled or disabled for Looker using the **enabled** field.
   /// 
   /// GET /oidc_config -> OIDCConfig
-  public async Task<SdkResponse<TSuccess, TError>> oidc_config<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>OIDCConfig</c> OIDC Configuration. (application/json)</returns>
+  public async Task<SdkResponse<OIDCConfig, Exception>> oidc_config(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/oidc_config", null,null,options);
+    return await AuthRequest<OIDCConfig, Exception>(HttpMethod.Get, "/oidc_config", null,null,options);
   }
 
   /// ### Get a OIDC test configuration by test_slug.
   /// 
   /// GET /oidc_test_configs/{test_slug} -> OIDCConfig
+  /// 
+  /// <returns><c>OIDCConfig</c> OIDC test config. (application/json)</returns>
+  /// 
   /// <param name="test_slug">Slug of test config</param>
-  public async Task<SdkResponse<TSuccess, TError>> oidc_test_config<TSuccess, TError>(
+  public async Task<SdkResponse<OIDCConfig, Exception>> oidc_test_config(
     string test_slug,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       test_slug = SdkUtils.EncodeParam(test_slug);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/oidc_test_configs/{test_slug}", null,null,options);
+    return await AuthRequest<OIDCConfig, Exception>(HttpMethod.Get, $"/oidc_test_configs/{test_slug}", null,null,options);
   }
 
   /// ### Parse the given xml as a SAML IdP metadata document and return the result.
   /// 
   /// POST /parse_saml_idp_metadata -> SamlMetadataParseResult
-  public async Task<SdkResponse<TSuccess, TError>> parse_saml_idp_metadata<TSuccess, TError>(
+  /// 
+  /// <returns><c>SamlMetadataParseResult</c> Parse result (application/json)</returns>
+  public async Task<SdkResponse<SamlMetadataParseResult, Exception>> parse_saml_idp_metadata(
     string body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/parse_saml_idp_metadata", null,body,options);
+    return await AuthRequest<SamlMetadataParseResult, Exception>(HttpMethod.Post, "/parse_saml_idp_metadata", null,body,options);
   }
 
   /// ### Get password config.
   /// 
   /// GET /password_config -> PasswordConfig
-  public async Task<SdkResponse<TSuccess, TError>> password_config<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>PasswordConfig</c> Password Config (application/json)</returns>
+  public async Task<SdkResponse<PasswordConfig, Exception>> password_config(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/password_config", null,null,options);
+    return await AuthRequest<PasswordConfig, Exception>(HttpMethod.Get, "/password_config", null,null,options);
   }
 
   /// Perform a data action. The data action object can be obtained from query results, and used to perform an arbitrary action.
   /// 
   /// POST /data_actions -> DataActionResponse
-  public async Task<SdkResponse<TSuccess, TError>> perform_data_action<TSuccess, TError>(
+  /// 
+  /// <returns><c>DataActionResponse</c> Data Action Response (application/json)</returns>
+  public async Task<SdkResponse<DataActionResponse, Exception>> perform_data_action(
     DataActionRequest body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/data_actions", null,body,options);
+    return await AuthRequest<DataActionResponse, Exception>(HttpMethod.Post, "/data_actions", null,body,options);
   }
 
   /// ### Get information about the permission set with a specific id.
   /// 
   /// GET /permission_sets/{permission_set_id} -> PermissionSet
+  /// 
+  /// <returns><c>PermissionSet</c> Permission Set (application/json)</returns>
+  /// 
   /// <param name="permission_set_id">Id of permission set</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> permission_set<TSuccess, TError>(
+  public async Task<SdkResponse<PermissionSet, Exception>> permission_set(
     long permission_set_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/permission_sets/{permission_set_id}", new Values {
+    return await AuthRequest<PermissionSet, Exception>(HttpMethod.Get, $"/permission_sets/{permission_set_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -3167,15 +3758,18 @@ namespace Looker.SDK.API31
   /// Returns the project with the given project id
   /// 
   /// GET /projects/{project_id} -> Project
+  /// 
+  /// <returns><c>Project</c> Project (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
   /// <param name="fields">Requested fields</param>
-  public async Task<SdkResponse<TSuccess, TError>> project<TSuccess, TError>(
+  public async Task<SdkResponse<Project, Exception>> project(
     string project_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}", new Values {
+    return await AuthRequest<Project, Exception>(HttpMethod.Get, $"/projects/{project_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -3184,17 +3778,20 @@ namespace Looker.SDK.API31
   /// Returns information about a file in the project
   /// 
   /// GET /projects/{project_id}/files/file -> ProjectFile
+  /// 
+  /// <returns><c>ProjectFile</c> Project File (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
   /// <param name="file_id">File Id</param>
   /// <param name="fields">Requested fields</param>
-  public async Task<SdkResponse<TSuccess, TError>> project_file<TSuccess, TError>(
+  public async Task<SdkResponse<ProjectFile, Exception>> project_file(
     string project_id,
     string file_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/files/file", new Values {
+    return await AuthRequest<ProjectFile, Exception>(HttpMethod.Get, $"/projects/{project_id}/files/file", new Values {
       { "file_id", file_id },
       { "fields", fields }},null,options);
   }
@@ -3213,15 +3810,21 @@ namespace Looker.SDK.API31
   /// reflect the current state of the project.
   /// 
   /// GET /projects/{project_id}/validate -> ProjectValidationCache
+  /// 
+  /// <returns>
+  /// <c>ProjectValidationCache</c> Project validation results (application/json)
+  /// <c>void</c> Deleted ()
+  /// </returns>
+  /// 
   /// <param name="project_id">Project Id</param>
   /// <param name="fields">Requested fields</param>
-  public async Task<SdkResponse<TSuccess, TError>> project_validation_results<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, Exception>> project_validation_results<TSuccess>(
     string project_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null) where TSuccess : class
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/validate", new Values {
+    return await AuthRequest<TSuccess, Exception>(HttpMethod.Get, $"/projects/{project_id}/validate", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -3230,15 +3833,18 @@ namespace Looker.SDK.API31
   /// Returns information about the state of the project files in the currently selected workspace
   /// 
   /// GET /projects/{project_id}/current_workspace -> ProjectWorkspace
+  /// 
+  /// <returns><c>ProjectWorkspace</c> Project Workspace (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
   /// <param name="fields">Requested fields</param>
-  public async Task<SdkResponse<TSuccess, TError>> project_workspace<TSuccess, TError>(
+  public async Task<SdkResponse<ProjectWorkspace, Exception>> project_workspace(
     string project_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/current_workspace", new Values {
+    return await AuthRequest<ProjectWorkspace, Exception>(HttpMethod.Get, $"/projects/{project_id}/current_workspace", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -3261,14 +3867,17 @@ namespace Looker.SDK.API31
   /// creating new queries and can usually just be ignored.
   /// 
   /// GET /queries/{query_id} -> Query
+  /// 
+  /// <returns><c>Query</c> Query (application/json)</returns>
+  /// 
   /// <param name="query_id">Id of query</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> query<TSuccess, TError>(
+  public async Task<SdkResponse<Query, Exception>> query(
     long query_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/queries/{query_id}", new Values {
+    return await AuthRequest<Query, Exception>(HttpMethod.Get, $"/queries/{query_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -3291,15 +3900,18 @@ namespace Looker.SDK.API31
   /// 'aogBgL6o3cKK1jN3RoZl5s' is the slug.
   /// 
   /// GET /queries/slug/{slug} -> Query
+  /// 
+  /// <returns><c>Query</c> Query (application/json)</returns>
+  /// 
   /// <param name="slug">Slug of query</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> query_for_slug<TSuccess, TError>(
+  public async Task<SdkResponse<Query, Exception>> query_for_slug(
     string slug,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       slug = SdkUtils.EncodeParam(slug);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/queries/slug/{slug}", new Values {
+    return await AuthRequest<Query, Exception>(HttpMethod.Get, $"/queries/slug/{slug}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -3312,15 +3924,18 @@ namespace Looker.SDK.API31
   /// Use [create_query_task()](#!/Query/create_query_task) to create an async query task.
   /// 
   /// GET /query_tasks/{query_task_id} -> QueryTask
+  /// 
+  /// <returns><c>QueryTask</c> query_task (application/json)</returns>
+  /// 
   /// <param name="query_task_id">ID of the Query Task</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> query_task<TSuccess, TError>(
+  public async Task<SdkResponse<QueryTask, Exception>> query_task(
     string query_task_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       query_task_id = SdkUtils.EncodeParam(query_task_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/query_tasks/{query_task_id}", new Values {
+    return await AuthRequest<QueryTask, Exception>(HttpMethod.Get, $"/query_tasks/{query_task_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -3333,12 +3948,15 @@ namespace Looker.SDK.API31
   /// If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
   /// 
   /// GET /query_tasks/multi_results -> StringDictionary<string>
+  /// 
+  /// <returns><c>StringDictionary<string></c> Multiple query results (application/json)</returns>
+  /// 
   /// <param name="query_task_ids">List of Query Task IDs</param>
-  public async Task<SdkResponse<TSuccess, TError>> query_task_multi_results<TSuccess, TError>(
+  public async Task<SdkResponse<StringDictionary<string>, Exception>> query_task_multi_results(
     DelimArray<string> query_task_ids,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/query_tasks/multi_results", new Values {
+    return await AuthRequest<StringDictionary<string>, Exception>(HttpMethod.Get, "/query_tasks/multi_results", new Values {
       { "query_task_ids", query_task_ids }},null,options);
   }
 
@@ -3367,13 +3985,21 @@ namespace Looker.SDK.API31
   /// These data formats can only carry row data, and error info is not row data.
   /// 
   /// GET /query_tasks/{query_task_id}/results -> string
+  /// 
+  /// <returns>
+  /// <c>string</c> The query results. (text)
+  /// <c>string</c> The query results. (application/json)
+  /// <c>string</c> The query is not finished (text)
+  /// <c>string</c> The query is not finished (application/json)
+  /// </returns>
+  /// 
   /// <param name="query_task_id">ID of the Query Task</param>
-  public async Task<SdkResponse<TSuccess, TError>> query_task_results<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, Exception>> query_task_results<TSuccess>(
     string query_task_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null) where TSuccess : class
 {  
       query_task_id = SdkUtils.EncodeParam(query_task_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/query_tasks/{query_task_id}/results", null,null,options);
+    return await AuthRequest<TSuccess, Exception>(HttpMethod.Get, $"/query_tasks/{query_task_id}/results", null,null,options);
   }
 
   /// ### Get information about a render task.
@@ -3383,15 +4009,18 @@ namespace Looker.SDK.API31
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
   /// 
   /// GET /render_tasks/{render_task_id} -> RenderTask
+  /// 
+  /// <returns><c>RenderTask</c> Render Task (application/json)</returns>
+  /// 
   /// <param name="render_task_id">Id of render task</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> render_task<TSuccess, TError>(
+  public async Task<SdkResponse<RenderTask, Exception>> render_task(
     string render_task_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       render_task_id = SdkUtils.EncodeParam(render_task_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/render_tasks/{render_task_id}", new Values {
+    return await AuthRequest<RenderTask, Exception>(HttpMethod.Get, $"/render_tasks/{render_task_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -3416,13 +4045,20 @@ namespace Looker.SDK.API31
   /// GET /render_tasks/{render_task_id}/results -> string
   /// 
   /// **Note**: Binary content is returned by this method.
+  /// 
+  /// <returns>
+  /// <c>string</c> Document or image (image/jpeg)
+  /// <c>string</c> Document or image (image/png)
+  /// <c>string</c> Document or image (application/pdf)
+  /// </returns>
+  /// 
   /// <param name="render_task_id">Id of render task</param>
-  public async Task<SdkResponse<TSuccess, TError>> render_task_results<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, Exception>> render_task_results<TSuccess>(
     string render_task_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null) where TSuccess : class
 {  
       render_task_id = SdkUtils.EncodeParam(render_task_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/render_tasks/{render_task_id}/results", null,null,options);
+    return await AuthRequest<TSuccess, Exception>(HttpMethod.Get, $"/render_tasks/{render_task_id}/results", null,null,options);
   }
 
   /// ### Reset a project to the revision of the project that is in production.
@@ -3430,13 +4066,19 @@ namespace Looker.SDK.API31
   /// **DANGER** this will delete any changes that have not been pushed to a remote repository.
   /// 
   /// POST /projects/{project_id}/reset_to_production -> string
+  /// 
+  /// <returns>
+  /// <c>string</c> Project (application/json)
+  /// <c>void</c> Returns 204 if project was successfully reset, otherwise 400 with an error message ()
+  /// </returns>
+  /// 
   /// <param name="project_id">Id of project</param>
-  public async Task<SdkResponse<TSuccess, TError>> reset_project_to_production<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, Exception>> reset_project_to_production<TSuccess>(
     string project_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null) where TSuccess : class
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/projects/{project_id}/reset_to_production", null,null,options);
+    return await AuthRequest<TSuccess, Exception>(HttpMethod.Post, $"/projects/{project_id}/reset_to_production", null,null,options);
   }
 
   /// ### Reset a project development branch to the revision of the project that is on the remote.
@@ -3444,53 +4086,68 @@ namespace Looker.SDK.API31
   /// **DANGER** this will delete any changes that have not been pushed to a remote repository.
   /// 
   /// POST /projects/{project_id}/reset_to_remote -> string
+  /// 
+  /// <returns>
+  /// <c>string</c> Project (application/json)
+  /// <c>void</c> Returns 204 if project was successfully reset, otherwise 400 with an error message ()
+  /// </returns>
+  /// 
   /// <param name="project_id">Id of project</param>
-  public async Task<SdkResponse<TSuccess, TError>> reset_project_to_remote<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, Exception>> reset_project_to_remote<TSuccess>(
     string project_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null) where TSuccess : class
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/projects/{project_id}/reset_to_remote", null,null,options);
+    return await AuthRequest<TSuccess, Exception>(HttpMethod.Post, $"/projects/{project_id}/reset_to_remote", null,null,options);
   }
 
   /// ### Get information about the role with a specific id.
   /// 
   /// GET /roles/{role_id} -> Role
+  /// 
+  /// <returns><c>Role</c> Role (application/json)</returns>
+  /// 
   /// <param name="role_id">id of role</param>
-  public async Task<SdkResponse<TSuccess, TError>> role<TSuccess, TError>(
+  public async Task<SdkResponse<Role, Exception>> role(
     long role_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/roles/{role_id}", null,null,options);
+    return await AuthRequest<Role, Exception>(HttpMethod.Get, $"/roles/{role_id}", null,null,options);
   }
 
   /// ### Get information about all the groups with the role that has a specific id.
   /// 
   /// GET /roles/{role_id}/groups -> Group[]
+  /// 
+  /// <returns><c>Group[]</c> Groups with role. (application/json)</returns>
+  /// 
   /// <param name="role_id">id of role</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> role_groups<TSuccess, TError>(
+  public async Task<SdkResponse<Group[], Exception>> role_groups(
     long role_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/roles/{role_id}/groups", new Values {
+    return await AuthRequest<Group[], Exception>(HttpMethod.Get, $"/roles/{role_id}/groups", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about all the users with the role that has a specific id.
   /// 
   /// GET /roles/{role_id}/users -> User[]
+  /// 
+  /// <returns><c>User[]</c> Users with role. (application/json)</returns>
+  /// 
   /// <param name="role_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="direct_association_only">Get only users associated directly with the role: exclude those only associated through groups.</param>
-  public async Task<SdkResponse<TSuccess, TError>> role_users<TSuccess, TError>(
+  public async Task<SdkResponse<User[], Exception>> role_users(
     long role_id,
     string? fields = null,
     bool? direct_association_only = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/roles/{role_id}/users", new Values {
+    return await AuthRequest<User[], Exception>(HttpMethod.Get, $"/roles/{role_id}/users", new Values {
       { "fields", fields },
       { "direct_association_only", direct_association_only }},null,options);
   }
@@ -3504,18 +4161,21 @@ namespace Looker.SDK.API31
   /// Tests should be run in the order they are returned by [Get All Git Connection Tests](#!/Project/all_git_connection_tests).
   /// 
   /// GET /projects/{project_id}/git_connection_tests/{test_id} -> GitConnectionTestResult
+  /// 
+  /// <returns><c>GitConnectionTestResult</c> Git Connection Test Result (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
   /// <param name="test_id">Test Id</param>
   /// <param name="remote_url">(Optional: leave blank for root project) The remote url for remote dependency to test.</param>
-  public async Task<SdkResponse<TSuccess, TError>> run_git_connection_test<TSuccess, TError>(
+  public async Task<SdkResponse<GitConnectionTestResult, Exception>> run_git_connection_test(
     string project_id,
     string test_id,
     string? remote_url = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
       test_id = SdkUtils.EncodeParam(test_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/git_connection_tests/{test_id}", new Values {
+    return await AuthRequest<GitConnectionTestResult, Exception>(HttpMethod.Get, $"/projects/{project_id}/git_connection_tests/{test_id}", new Values {
       { "remote_url", remote_url }},null,options);
   }
 
@@ -3573,6 +4233,14 @@ namespace Looker.SDK.API31
   /// POST /queries/run/{result_format} -> string
   /// 
   /// **Note**: Binary content may be returned by this method.
+  /// 
+  /// <returns>
+  /// <c>string</c> Query Result (text)
+  /// <c>string</c> Query Result (application/json)
+  /// <c>string</c> Query Result (image/png)
+  /// <c>string</c> Query Result (image/jpeg)
+  /// </returns>
+  /// 
   /// <param name="result_format">Format of result</param>
   /// <param name="limit">Row limit (may override the limit in the saved query).</param>
   /// <param name="apply_formatting">Apply model-specified formatting to each result.</param>
@@ -3586,7 +4254,7 @@ namespace Looker.SDK.API31
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
-  public async Task<SdkResponse<TSuccess, TError>> run_inline_query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, Exception>> run_inline_query<TSuccess>(
     string result_format,
     WriteQuery body,
     long? limit = null,
@@ -3601,10 +4269,10 @@ namespace Looker.SDK.API31
     string? path_prefix = null,
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null) where TSuccess : class
 {  
       result_format = SdkUtils.EncodeParam(result_format);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/queries/run/{result_format}", new Values {
+    return await AuthRequest<TSuccess, Exception>(HttpMethod.Post, $"/queries/run/{result_format}", new Values {
       { "limit", limit },
       { "apply_formatting", apply_formatting },
       { "apply_vis", apply_vis },
@@ -3641,6 +4309,14 @@ namespace Looker.SDK.API31
   /// GET /looks/{look_id}/run/{result_format} -> string
   /// 
   /// **Note**: Binary content may be returned by this method.
+  /// 
+  /// <returns>
+  /// <c>string</c> Look (text)
+  /// <c>string</c> Look (application/json)
+  /// <c>string</c> Look (image/png)
+  /// <c>string</c> Look (image/jpeg)
+  /// </returns>
+  /// 
   /// <param name="look_id">Id of look</param>
   /// <param name="result_format">Format of result</param>
   /// <param name="limit">Row limit (may override the limit in the saved query).</param>
@@ -3655,7 +4331,7 @@ namespace Looker.SDK.API31
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
-  public async Task<SdkResponse<TSuccess, TError>> run_look<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, Exception>> run_look<TSuccess>(
     long look_id,
     string result_format,
     long? limit = null,
@@ -3670,10 +4346,10 @@ namespace Looker.SDK.API31
     string? path_prefix = null,
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null) where TSuccess : class
 {  
       result_format = SdkUtils.EncodeParam(result_format);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/looks/{look_id}/run/{result_format}", new Values {
+    return await AuthRequest<TSuccess, Exception>(HttpMethod.Get, $"/looks/{look_id}/run/{result_format}", new Values {
       { "limit", limit },
       { "apply_formatting", apply_formatting },
       { "apply_vis", apply_vis },
@@ -3693,19 +4369,22 @@ namespace Looker.SDK.API31
   /// Runs all tests in the project, optionally filtered by file, test, and/or model.
   /// 
   /// GET /projects/{project_id}/lookml_tests/run -> LookmlTestResult[]
+  /// 
+  /// <returns><c>LookmlTestResult[]</c> LookML Test Results (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
   /// <param name="file_id">File Name</param>
   /// <param name="test">Test Name</param>
   /// <param name="model">Model Name</param>
-  public async Task<SdkResponse<TSuccess, TError>> run_lookml_test<TSuccess, TError>(
+  public async Task<SdkResponse<LookmlTestResult[], Exception>> run_lookml_test(
     string project_id,
     string? file_id = null,
     string? test = null,
     string? model = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/projects/{project_id}/lookml_tests/run", new Values {
+    return await AuthRequest<LookmlTestResult[], Exception>(HttpMethod.Get, $"/projects/{project_id}/lookml_tests/run", new Values {
       { "file_id", file_id },
       { "test", test },
       { "model", model }},null,options);
@@ -3736,6 +4415,14 @@ namespace Looker.SDK.API31
   /// GET /queries/{query_id}/run/{result_format} -> string
   /// 
   /// **Note**: Binary content may be returned by this method.
+  /// 
+  /// <returns>
+  /// <c>string</c> Query (text)
+  /// <c>string</c> Query (application/json)
+  /// <c>string</c> Query (image/png)
+  /// <c>string</c> Query (image/jpeg)
+  /// </returns>
+  /// 
   /// <param name="query_id">Id of query</param>
   /// <param name="result_format">Format of result</param>
   /// <param name="limit">Row limit (may override the limit in the saved query).</param>
@@ -3750,7 +4437,7 @@ namespace Looker.SDK.API31
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
-  public async Task<SdkResponse<TSuccess, TError>> run_query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, Exception>> run_query<TSuccess>(
     long query_id,
     string result_format,
     long? limit = null,
@@ -3765,10 +4452,10 @@ namespace Looker.SDK.API31
     string? path_prefix = null,
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null) where TSuccess : class
 {  
       result_format = SdkUtils.EncodeParam(result_format);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/queries/{query_id}/run/{result_format}", new Values {
+    return await AuthRequest<TSuccess, Exception>(HttpMethod.Get, $"/queries/{query_id}/run/{result_format}", new Values {
       { "limit", limit },
       { "apply_formatting", apply_formatting },
       { "apply_vis", apply_vis },
@@ -3788,18 +4475,26 @@ namespace Looker.SDK.API31
   /// POST /sql_queries/{slug}/run/{result_format} -> string
   /// 
   /// **Note**: Binary content may be returned by this method.
+  /// 
+  /// <returns>
+  /// <c>string</c> SQL Runner Query (text)
+  /// <c>string</c> SQL Runner Query (application/json)
+  /// <c>string</c> SQL Runner Query (image/png)
+  /// <c>string</c> SQL Runner Query (image/jpeg)
+  /// </returns>
+  /// 
   /// <param name="slug">slug of query</param>
   /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]</param>
   /// <param name="download">Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.</param>
-  public async Task<SdkResponse<TSuccess, TError>> run_sql_query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, Exception>> run_sql_query<TSuccess>(
     string slug,
     string result_format,
     string? download = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null) where TSuccess : class
 {  
       slug = SdkUtils.EncodeParam(slug);
       result_format = SdkUtils.EncodeParam(result_format);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/sql_queries/{slug}/run/{result_format}", new Values {
+    return await AuthRequest<TSuccess, Exception>(HttpMethod.Post, $"/sql_queries/{slug}/run/{result_format}", new Values {
       { "download", download }},null,options);
   }
 
@@ -3859,19 +4554,27 @@ namespace Looker.SDK.API31
   /// GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> string
   /// 
   /// **Note**: Binary content may be returned by this method.
+  /// 
+  /// <returns>
+  /// <c>string</c> Query (text)
+  /// <c>string</c> Query (application/json)
+  /// <c>string</c> Query (image/png)
+  /// <c>string</c> Query (image/jpeg)
+  /// </returns>
+  /// 
   /// <param name="model_name">Model name</param>
   /// <param name="view_name">View name</param>
   /// <param name="result_format">Format of result</param>
-  public async Task<SdkResponse<TSuccess, TError>> run_url_encoded_query<TSuccess, TError>(
+  public async Task<SdkResponse<TSuccess, Exception>> run_url_encoded_query<TSuccess>(
     string model_name,
     string view_name,
     string result_format,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null) where TSuccess : class
 {  
       model_name = SdkUtils.EncodeParam(model_name);
       view_name = SdkUtils.EncodeParam(view_name);
       result_format = SdkUtils.EncodeParam(result_format);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/queries/models/{model_name}/views/{view_name}/run/{result_format}", null,null,options);
+    return await AuthRequest<TSuccess, Exception>(HttpMethod.Get, $"/queries/models/{model_name}/views/{view_name}/run/{result_format}", null,null,options);
   }
 
   /// ### Get the SAML configuration.
@@ -3888,22 +4591,27 @@ namespace Looker.SDK.API31
   /// SAML is enabled or disabled for Looker using the **enabled** field.
   /// 
   /// GET /saml_config -> SamlConfig
-  public async Task<SdkResponse<TSuccess, TError>> saml_config<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>SamlConfig</c> SAML Configuration. (application/json)</returns>
+  public async Task<SdkResponse<SamlConfig, Exception>> saml_config(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/saml_config", null,null,options);
+    return await AuthRequest<SamlConfig, Exception>(HttpMethod.Get, "/saml_config", null,null,options);
   }
 
   /// ### Get a SAML test configuration by test_slug.
   /// 
   /// GET /saml_test_configs/{test_slug} -> SamlConfig
+  /// 
+  /// <returns><c>SamlConfig</c> SAML test config. (application/json)</returns>
+  /// 
   /// <param name="test_slug">Slug of test config</param>
-  public async Task<SdkResponse<TSuccess, TError>> saml_test_config<TSuccess, TError>(
+  public async Task<SdkResponse<SamlConfig, Exception>> saml_test_config(
     string test_slug,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       test_slug = SdkUtils.EncodeParam(test_slug);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/saml_test_configs/{test_slug}", null,null,options);
+    return await AuthRequest<SamlConfig, Exception>(HttpMethod.Get, $"/saml_test_configs/{test_slug}", null,null,options);
   }
 
   /// ### Get Information About a Scheduled Plan
@@ -3911,14 +4619,17 @@ namespace Looker.SDK.API31
   /// Admins can fetch information about other users' Scheduled Plans.
   /// 
   /// GET /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
+  /// 
+  /// <returns><c>ScheduledPlan</c> Scheduled Plan (application/json)</returns>
+  /// 
   /// <param name="scheduled_plan_id">Scheduled Plan Id</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> scheduled_plan<TSuccess, TError>(
+  public async Task<SdkResponse<ScheduledPlan, Exception>> scheduled_plan(
     long scheduled_plan_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/scheduled_plans/{scheduled_plan_id}", new Values {
+    return await AuthRequest<ScheduledPlan, Exception>(HttpMethod.Get, $"/scheduled_plans/{scheduled_plan_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -3961,11 +4672,13 @@ namespace Looker.SDK.API31
   /// Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
   /// 
   /// POST /scheduled_plans/run_once -> ScheduledPlan
-  public async Task<SdkResponse<TSuccess, TError>> scheduled_plan_run_once<TSuccess, TError>(
+  /// 
+  /// <returns><c>ScheduledPlan</c> Scheduled Plan (application/json)</returns>
+  public async Task<SdkResponse<ScheduledPlan, Exception>> scheduled_plan_run_once(
     WriteScheduledPlan body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/scheduled_plans/run_once", null,body,options);
+    return await AuthRequest<ScheduledPlan, Exception>(HttpMethod.Post, "/scheduled_plans/run_once", null,body,options);
   }
 
   /// ### Run a Scheduled Plan By Id Immediately
@@ -4017,13 +4730,16 @@ namespace Looker.SDK.API31
   /// This API is rate limited to prevent it from being used for relay spam or DoS attacks
   /// 
   /// POST /scheduled_plans/{scheduled_plan_id}/run_once -> ScheduledPlan
+  /// 
+  /// <returns><c>ScheduledPlan</c> Scheduled Plan (application/json)</returns>
+  /// 
   /// <param name="scheduled_plan_id">Id of schedule plan to copy and run</param>
-  public async Task<SdkResponse<TSuccess, TError>> scheduled_plan_run_once_by_id<TSuccess, TError>(
+  public async Task<SdkResponse<ScheduledPlan, Exception>> scheduled_plan_run_once_by_id(
     long scheduled_plan_id,
     WriteScheduledPlan? body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/scheduled_plans/{scheduled_plan_id}/run_once", null,body,options);
+    return await AuthRequest<ScheduledPlan, Exception>(HttpMethod.Post, $"/scheduled_plans/{scheduled_plan_id}/run_once", null,body,options);
   }
 
   /// ### Get Scheduled Plans for a Dashboard
@@ -4039,18 +4755,21 @@ namespace Looker.SDK.API31
   /// The caller must have `see_schedules` permission to see other users' scheduled plans.
   /// 
   /// GET /scheduled_plans/dashboard/{dashboard_id} -> ScheduledPlan[]
+  /// 
+  /// <returns><c>ScheduledPlan[]</c> Scheduled Plan (application/json)</returns>
+  /// 
   /// <param name="dashboard_id">Dashboard Id</param>
   /// <param name="user_id">User Id (default is requesting user if not specified)</param>
   /// <param name="all_users">Return scheduled plans belonging to all users for the dashboard</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> scheduled_plans_for_dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<ScheduledPlan[], Exception>> scheduled_plans_for_dashboard(
     long dashboard_id,
     long? user_id = null,
     bool? all_users = null,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/scheduled_plans/dashboard/{dashboard_id}", new Values {
+    return await AuthRequest<ScheduledPlan[], Exception>(HttpMethod.Get, $"/scheduled_plans/dashboard/{dashboard_id}", new Values {
       { "user_id", user_id },
       { "all_users", all_users },
       { "fields", fields }},null,options);
@@ -4069,18 +4788,21 @@ namespace Looker.SDK.API31
   /// The caller must have `see_schedules` permission to see other users' scheduled plans.
   /// 
   /// GET /scheduled_plans/look/{look_id} -> ScheduledPlan[]
+  /// 
+  /// <returns><c>ScheduledPlan[]</c> Scheduled Plan (application/json)</returns>
+  /// 
   /// <param name="look_id">Look Id</param>
   /// <param name="user_id">User Id (default is requesting user if not specified)</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="all_users">Return scheduled plans belonging to all users for the look</param>
-  public async Task<SdkResponse<TSuccess, TError>> scheduled_plans_for_look<TSuccess, TError>(
+  public async Task<SdkResponse<ScheduledPlan[], Exception>> scheduled_plans_for_look(
     long look_id,
     long? user_id = null,
     string? fields = null,
     bool? all_users = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/scheduled_plans/look/{look_id}", new Values {
+    return await AuthRequest<ScheduledPlan[], Exception>(HttpMethod.Get, $"/scheduled_plans/look/{look_id}", new Values {
       { "user_id", user_id },
       { "fields", fields },
       { "all_users", all_users }},null,options);
@@ -4099,18 +4821,21 @@ namespace Looker.SDK.API31
   /// The caller must have `see_schedules` permission to see other users' scheduled plans.
   /// 
   /// GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id} -> ScheduledPlan[]
+  /// 
+  /// <returns><c>ScheduledPlan[]</c> Scheduled Plan (application/json)</returns>
+  /// 
   /// <param name="lookml_dashboard_id">LookML Dashboard Id</param>
   /// <param name="user_id">User Id (default is requesting user if not specified)</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="all_users">Return scheduled plans belonging to all users for the dashboard</param>
-  public async Task<SdkResponse<TSuccess, TError>> scheduled_plans_for_lookml_dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<ScheduledPlan[], Exception>> scheduled_plans_for_lookml_dashboard(
     long lookml_dashboard_id,
     long? user_id = null,
     string? fields = null,
     bool? all_users = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/scheduled_plans/lookml_dashboard/{lookml_dashboard_id}", new Values {
+    return await AuthRequest<ScheduledPlan[], Exception>(HttpMethod.Get, $"/scheduled_plans/lookml_dashboard/{lookml_dashboard_id}", new Values {
       { "user_id", user_id },
       { "fields", fields },
       { "all_users", all_users }},null,options);
@@ -4121,14 +4846,17 @@ namespace Looker.SDK.API31
   /// Returns scheduled plans owned by the caller for a given space id.
   /// 
   /// GET /scheduled_plans/space/{space_id} -> ScheduledPlan[]
+  /// 
+  /// <returns><c>ScheduledPlan[]</c> Scheduled Plan (application/json)</returns>
+  /// 
   /// <param name="space_id">Space Id</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> scheduled_plans_for_space<TSuccess, TError>(
+  public async Task<SdkResponse<ScheduledPlan[], Exception>> scheduled_plans_for_space(
     long space_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/scheduled_plans/space/{space_id}", new Values {
+    return await AuthRequest<ScheduledPlan[], Exception>(HttpMethod.Get, $"/scheduled_plans/space/{space_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -4156,6 +4884,9 @@ namespace Looker.SDK.API31
   /// Boolean search params accept only "true" and "false" as values.
   /// 
   /// GET /content_favorite/search -> ContentFavorite[]
+  /// 
+  /// <returns><c>ContentFavorite[]</c> Favorite Content (application/json)</returns>
+  /// 
   /// <param name="id">Match content favorite id(s)</param>
   /// <param name="user_id">Match user id(s)</param>
   /// <param name="content_metadata_id">Match content metadata id(s)</param>
@@ -4166,7 +4897,7 @@ namespace Looker.SDK.API31
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_content_favorites<TSuccess, TError>(
+  public async Task<SdkResponse<ContentFavorite[], Exception>> search_content_favorites(
     long? id = null,
     long? user_id = null,
     long? content_metadata_id = null,
@@ -4177,9 +4908,9 @@ namespace Looker.SDK.API31
     string? sorts = null,
     string? fields = null,
     bool? filter_or = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/content_favorite/search", new Values {
+    return await AuthRequest<ContentFavorite[], Exception>(HttpMethod.Get, "/content_favorite/search", new Values {
       { "id", id },
       { "user_id", user_id },
       { "content_metadata_id", content_metadata_id },
@@ -4216,6 +4947,9 @@ namespace Looker.SDK.API31
   /// Boolean search params accept only "true" and "false" as values.
   /// 
   /// GET /content_view/search -> ContentView[]
+  /// 
+  /// <returns><c>ContentView[]</c> Content View (application/json)</returns>
+  /// 
   /// <param name="view_count">Match view count</param>
   /// <param name="group_id">Match Group Id</param>
   /// <param name="look_id">Match look_id</param>
@@ -4229,7 +4963,7 @@ namespace Looker.SDK.API31
   /// <param name="offset">Number of results to skip before returning data</param>
   /// <param name="sorts">Fields to sort by</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_content_views<TSuccess, TError>(
+  public async Task<SdkResponse<ContentView[], Exception>> search_content_views(
     long? view_count = null,
     long? group_id = null,
     string? look_id = null,
@@ -4243,9 +4977,9 @@ namespace Looker.SDK.API31
     long? offset = null,
     string? sorts = null,
     bool? filter_or = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/content_view/search", new Values {
+    return await AuthRequest<ContentView[], Exception>(HttpMethod.Get, "/content_view/search", new Values {
       { "view_count", view_count },
       { "group_id", group_id },
       { "look_id", look_id },
@@ -4287,6 +5021,9 @@ namespace Looker.SDK.API31
   /// Boolean search params accept only "true" and "false" as values.
   /// 
   /// GET /dashboard_elements/search -> DashboardElement[]
+  /// 
+  /// <returns><c>DashboardElement[]</c> Dashboard elements (application/json)</returns>
+  /// 
   /// <param name="dashboard_id">Select elements that refer to a given dashboard id</param>
   /// <param name="look_id">Select elements that refer to a given look id</param>
   /// <param name="title">Match the title of element</param>
@@ -4294,7 +5031,7 @@ namespace Looker.SDK.API31
   /// <param name="fields">Requested fields.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   /// <param name="sorts">Fields to sort by. Sortable fields: [:look_id, :dashboard_id, :deleted, :title]</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_dashboard_elements<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardElement[], Exception>> search_dashboard_elements(
     long? dashboard_id = null,
     long? look_id = null,
     string? title = null,
@@ -4302,9 +5039,9 @@ namespace Looker.SDK.API31
     string? fields = null,
     bool? filter_or = null,
     string? sorts = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/dashboard_elements/search", new Values {
+    return await AuthRequest<DashboardElement[], Exception>(HttpMethod.Get, "/dashboard_elements/search", new Values {
       { "dashboard_id", dashboard_id },
       { "look_id", look_id },
       { "title", title },
@@ -4345,6 +5082,9 @@ namespace Looker.SDK.API31
   /// Get a **single dashboard** by id with [dashboard()](#!/Dashboard/dashboard)
   /// 
   /// GET /dashboards/search -> Dashboard[]
+  /// 
+  /// <returns><c>Dashboard[]</c> dashboards (application/json)</returns>
+  /// 
   /// <param name="id">Match dashboard id.</param>
   /// <param name="slug">Match dashboard slug.</param>
   /// <param name="title">Match Dashboard title.</param>
@@ -4364,7 +5104,7 @@ namespace Looker.SDK.API31
   /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="sorts">One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_dashboards<TSuccess, TError>(
+  public async Task<SdkResponse<Dashboard[], Exception>> search_dashboards(
     long? id = null,
     string? slug = null,
     string? title = null,
@@ -4384,9 +5124,9 @@ namespace Looker.SDK.API31
     long? offset = null,
     string? sorts = null,
     bool? filter_or = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/dashboards/search", new Values {
+    return await AuthRequest<Dashboard[], Exception>(HttpMethod.Get, "/dashboards/search", new Values {
       { "id", id },
       { "slug", slug },
       { "title", title },
@@ -4411,6 +5151,9 @@ namespace Looker.SDK.API31
   /// Search for folders by creator id, parent id, name, etc
   /// 
   /// GET /folders/search -> Folder[]
+  /// 
+  /// <returns><c>Folder[]</c> folders (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
@@ -4422,7 +5165,7 @@ namespace Looker.SDK.API31
   /// <param name="parent_id">Filter on a children of a particular folder.</param>
   /// <param name="creator_id">Filter on folder created by a particular user.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_folders<TSuccess, TError>(
+  public async Task<SdkResponse<Folder[], Exception>> search_folders(
     string? fields = null,
     long? page = null,
     long? per_page = null,
@@ -4434,9 +5177,9 @@ namespace Looker.SDK.API31
     string? parent_id = null,
     string? creator_id = null,
     bool? filter_or = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/folders/search", new Values {
+    return await AuthRequest<Folder[], Exception>(HttpMethod.Get, "/folders/search", new Values {
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
@@ -4476,6 +5219,9 @@ namespace Looker.SDK.API31
   /// Boolean search params accept only "true" and "false" as values.
   /// 
   /// GET /groups/search -> GroupSearch[]
+  /// 
+  /// <returns><c>GroupSearch[]</c> Group (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
   /// <param name="limit">Number of results to return (used with `offset`).</param>
   /// <param name="offset">Number of results to skip before returning any (used with `limit`).</param>
@@ -4486,7 +5232,7 @@ namespace Looker.SDK.API31
   /// <param name="external_group_id">Match group external_group_id.</param>
   /// <param name="externally_managed">Match group externally_managed.</param>
   /// <param name="externally_orphaned">Match group externally_orphaned.</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_groups<TSuccess, TError>(
+  public async Task<SdkResponse<GroupSearch[], Exception>> search_groups(
     string? fields = null,
     long? limit = null,
     long? offset = null,
@@ -4497,9 +5243,9 @@ namespace Looker.SDK.API31
     string? external_group_id = null,
     bool? externally_managed = null,
     bool? externally_orphaned = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/groups/search", new Values {
+    return await AuthRequest<GroupSearch[], Exception>(HttpMethod.Get, "/groups/search", new Values {
       { "fields", fields },
       { "limit", limit },
       { "offset", offset },
@@ -4536,6 +5282,9 @@ namespace Looker.SDK.API31
   /// Boolean search params accept only "true" and "false" as values.
   /// 
   /// GET /homepages/search -> Homepage[]
+  /// 
+  /// <returns><c>Homepage[]</c> homepages (application/json)</returns>
+  /// 
   /// <param name="title">Matches homepage title.</param>
   /// <param name="created_at">Matches the timestamp for when the homepage was created.</param>
   /// <param name="first_name">The first name of the user who created this homepage.</param>
@@ -4549,7 +5298,7 @@ namespace Looker.SDK.API31
   /// <param name="limit">The maximum number of items to return. (used with offset and takes priority over page and per_page)</param>
   /// <param name="sorts">The fields to sort the results by.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_homepages<TSuccess, TError>(
+  public async Task<SdkResponse<Homepage[], Exception>> search_homepages(
     string? title = null,
     string? created_at = null,
     string? first_name = null,
@@ -4563,9 +5312,9 @@ namespace Looker.SDK.API31
     long? limit = null,
     string? sorts = null,
     bool? filter_or = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/homepages/search", new Values {
+    return await AuthRequest<Homepage[], Exception>(HttpMethod.Get, "/homepages/search", new Values {
       { "title", title },
       { "created_at", created_at },
       { "first_name", first_name },
@@ -4610,6 +5359,9 @@ namespace Looker.SDK.API31
   /// Get a **single look** by id with [look(id)](#!/Look/look)
   /// 
   /// GET /looks/search -> Look[]
+  /// 
+  /// <returns><c>Look[]</c> looks (application/json)</returns>
+  /// 
   /// <param name="id">Match look id.</param>
   /// <param name="title">Match Look title.</param>
   /// <param name="description">Match Look description.</param>
@@ -4627,7 +5379,7 @@ namespace Looker.SDK.API31
   /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="sorts">One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :query_id]</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_looks<TSuccess, TError>(
+  public async Task<SdkResponse<Look[], Exception>> search_looks(
     string? id = null,
     string? title = null,
     string? description = null,
@@ -4645,9 +5397,9 @@ namespace Looker.SDK.API31
     long? offset = null,
     string? sorts = null,
     bool? filter_or = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/looks/search", new Values {
+    return await AuthRequest<Look[], Exception>(HttpMethod.Get, "/looks/search", new Values {
       { "id", id },
       { "title", title },
       { "description", description },
@@ -4691,6 +5443,9 @@ namespace Looker.SDK.API31
   /// Boolean search params accept only "true" and "false" as values.
   /// 
   /// GET /model_sets/search -> ModelSet[]
+  /// 
+  /// <returns><c>ModelSet[]</c> Model Set (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
   /// <param name="limit">Number of results to return (used with `offset`).</param>
   /// <param name="offset">Number of results to skip before returning any (used with `limit`).</param>
@@ -4700,7 +5455,7 @@ namespace Looker.SDK.API31
   /// <param name="all_access">Match model sets by all_access status.</param>
   /// <param name="built_in">Match model sets by built_in status.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression.</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_model_sets<TSuccess, TError>(
+  public async Task<SdkResponse<ModelSet[], Exception>> search_model_sets(
     string? fields = null,
     long? limit = null,
     long? offset = null,
@@ -4710,9 +5465,9 @@ namespace Looker.SDK.API31
     bool? all_access = null,
     bool? built_in = null,
     bool? filter_or = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/model_sets/search", new Values {
+    return await AuthRequest<ModelSet[], Exception>(HttpMethod.Get, "/model_sets/search", new Values {
       { "fields", fields },
       { "limit", limit },
       { "offset", offset },
@@ -4748,6 +5503,9 @@ namespace Looker.SDK.API31
   /// Boolean search params accept only "true" and "false" as values.
   /// 
   /// GET /permission_sets/search -> PermissionSet[]
+  /// 
+  /// <returns><c>PermissionSet[]</c> Permission Set (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
   /// <param name="limit">Number of results to return (used with `offset`).</param>
   /// <param name="offset">Number of results to skip before returning any (used with `limit`).</param>
@@ -4757,7 +5515,7 @@ namespace Looker.SDK.API31
   /// <param name="all_access">Match permission sets by all_access status.</param>
   /// <param name="built_in">Match permission sets by built_in status.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression.</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_permission_sets<TSuccess, TError>(
+  public async Task<SdkResponse<PermissionSet[], Exception>> search_permission_sets(
     string? fields = null,
     long? limit = null,
     long? offset = null,
@@ -4767,9 +5525,9 @@ namespace Looker.SDK.API31
     bool? all_access = null,
     bool? built_in = null,
     bool? filter_or = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/permission_sets/search", new Values {
+    return await AuthRequest<PermissionSet[], Exception>(HttpMethod.Get, "/permission_sets/search", new Values {
       { "fields", fields },
       { "limit", limit },
       { "offset", offset },
@@ -4807,6 +5565,9 @@ namespace Looker.SDK.API31
   /// Boolean search params accept only "true" and "false" as values.
   /// 
   /// GET /roles/search -> Role[]
+  /// 
+  /// <returns><c>Role[]</c> Role (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
   /// <param name="limit">Number of results to return (used with `offset`).</param>
   /// <param name="offset">Number of results to skip before returning any (used with `limit`).</param>
@@ -4815,7 +5576,7 @@ namespace Looker.SDK.API31
   /// <param name="name">Match role name.</param>
   /// <param name="built_in">Match roles by built_in status.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression.</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_roles<TSuccess, TError>(
+  public async Task<SdkResponse<Role[], Exception>> search_roles(
     string? fields = null,
     long? limit = null,
     long? offset = null,
@@ -4824,9 +5585,9 @@ namespace Looker.SDK.API31
     string? name = null,
     bool? built_in = null,
     bool? filter_or = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/roles/search", new Values {
+    return await AuthRequest<Role[], Exception>(HttpMethod.Get, "/roles/search", new Values {
       { "fields", fields },
       { "limit", limit },
       { "offset", offset },
@@ -4868,6 +5629,9 @@ namespace Looker.SDK.API31
   ///   Get a **single space** by id with [Space](#!/Space/space)
   /// 
   /// GET /spaces/search -> Space[]
+  /// 
+  /// <returns><c>Space[]</c> spaces (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
@@ -4879,7 +5643,7 @@ namespace Looker.SDK.API31
   /// <param name="parent_id">Filter on a children of a particular space.</param>
   /// <param name="creator_id">Filter on spaces created by a particular user.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_spaces<TSuccess, TError>(
+  public async Task<SdkResponse<Space[], Exception>> search_spaces(
     string? fields = null,
     long? page = null,
     long? per_page = null,
@@ -4891,9 +5655,9 @@ namespace Looker.SDK.API31
     string? parent_id = null,
     string? creator_id = null,
     bool? filter_or = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/spaces/search", new Values {
+    return await AuthRequest<Space[], Exception>(HttpMethod.Get, "/spaces/search", new Values {
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
@@ -4947,6 +5711,9 @@ namespace Looker.SDK.API31
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   /// 
   /// GET /themes/search -> Theme[]
+  /// 
+  /// <returns><c>Theme[]</c> Themes (application/json)</returns>
+  /// 
   /// <param name="id">Match theme id.</param>
   /// <param name="name">Match theme name.</param>
   /// <param name="begin_at">Timestamp for activation.</param>
@@ -4956,7 +5723,7 @@ namespace Looker.SDK.API31
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_themes<TSuccess, TError>(
+  public async Task<SdkResponse<Theme[], Exception>> search_themes(
     long? id = null,
     string? name = null,
     DateTime? begin_at = null,
@@ -4966,9 +5733,9 @@ namespace Looker.SDK.API31
     string? sorts = null,
     string? fields = null,
     bool? filter_or = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/themes/search", new Values {
+    return await AuthRequest<Theme[], Exception>(HttpMethod.Get, "/themes/search", new Values {
       { "id", id },
       { "name", name },
       { "begin_at", begin_at },
@@ -4983,6 +5750,9 @@ namespace Looker.SDK.API31
   /// ### Search currently locked-out users.
   /// 
   /// GET /user_login_lockouts/search -> UserLoginLockout[]
+  /// 
+  /// <returns><c>UserLoginLockout[]</c> User Login Lockout (application/json)</returns>
+  /// 
   /// <param name="fields">Include only these fields in the response</param>
   /// <param name="page">Return only page N of paginated results</param>
   /// <param name="per_page">Return N rows of data per page</param>
@@ -4992,7 +5762,7 @@ namespace Looker.SDK.API31
   /// <param name="email">Match email</param>
   /// <param name="remote_id">Match remote LDAP ID</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_user_login_lockouts<TSuccess, TError>(
+  public async Task<SdkResponse<UserLoginLockout[], Exception>> search_user_login_lockouts(
     string? fields = null,
     long? page = null,
     long? per_page = null,
@@ -5002,9 +5772,9 @@ namespace Looker.SDK.API31
     string? email = null,
     string? remote_id = null,
     bool? filter_or = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/user_login_lockouts/search", new Values {
+    return await AuthRequest<UserLoginLockout[], Exception>(HttpMethod.Get, "/user_login_lockouts/search", new Values {
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
@@ -5048,6 +5818,9 @@ namespace Looker.SDK.API31
   /// names of other users who are members of the same group as the user.
   /// 
   /// GET /users/search -> User[]
+  /// 
+  /// <returns><c>User[]</c> Matching users. (application/json)</returns>
+  /// 
   /// <param name="fields">Include only these fields in the response</param>
   /// <param name="page">Return only page N of paginated results</param>
   /// <param name="per_page">Return N rows of data per page</param>
@@ -5061,7 +5834,7 @@ namespace Looker.SDK.API31
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   /// <param name="content_metadata_id">Search for users who have access to this content_metadata item</param>
   /// <param name="group_id">Search for users who are direct members of this group</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_users<TSuccess, TError>(
+  public async Task<SdkResponse<User[], Exception>> search_users(
     string? fields = null,
     long? page = null,
     long? per_page = null,
@@ -5075,9 +5848,9 @@ namespace Looker.SDK.API31
     bool? filter_or = null,
     long? content_metadata_id = null,
     long? group_id = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/users/search", new Values {
+    return await AuthRequest<User[], Exception>(HttpMethod.Get, "/users/search", new Values {
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
@@ -5101,6 +5874,9 @@ namespace Looker.SDK.API31
   /// Any additional search params will be combined into a logical AND expression.
   /// 
   /// GET /users/search/names/{pattern} -> User[]
+  /// 
+  /// <returns><c>User[]</c> Matching users. (application/json)</returns>
+  /// 
   /// <param name="pattern">Pattern to match</param>
   /// <param name="fields">Include only these fields in the response</param>
   /// <param name="page">Return only page N of paginated results</param>
@@ -5112,7 +5888,7 @@ namespace Looker.SDK.API31
   /// <param name="verified_looker_employee">Match Verified Looker employee</param>
   /// <param name="email">Match Email Address</param>
   /// <param name="is_disabled">Include or exclude disabled accounts in the results</param>
-  public async Task<SdkResponse<TSuccess, TError>> search_users_names<TSuccess, TError>(
+  public async Task<SdkResponse<User[], Exception>> search_users_names(
     string pattern,
     string? fields = null,
     long? page = null,
@@ -5124,10 +5900,10 @@ namespace Looker.SDK.API31
     bool? verified_looker_employee = null,
     string? email = null,
     bool? is_disabled = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       pattern = SdkUtils.EncodeParam(pattern);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/search/names/{pattern}", new Values {
+    return await AuthRequest<User[], Exception>(HttpMethod.Get, $"/users/search/names/{pattern}", new Values {
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
@@ -5145,19 +5921,23 @@ namespace Looker.SDK.API31
   /// Returns information about the current API session, such as which workspace is selected for the session.
   /// 
   /// GET /session -> ApiSession
-  public async Task<SdkResponse<TSuccess, TError>> session<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>ApiSession</c> Session (application/json)</returns>
+  public async Task<SdkResponse<ApiSession, Exception>> session(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/session", null,null,options);
+    return await AuthRequest<ApiSession, Exception>(HttpMethod.Get, "/session", null,null,options);
   }
 
   /// ### Get session config.
   /// 
   /// GET /session_config -> SessionConfig
-  public async Task<SdkResponse<TSuccess, TError>> session_config<TSuccess, TError>(
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+  /// 
+  /// <returns><c>SessionConfig</c> Session Config (application/json)</returns>
+  public async Task<SdkResponse<SessionConfig, Exception>> session_config(
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/session_config", null,null,options);
+    return await AuthRequest<SessionConfig, Exception>(HttpMethod.Get, "/session_config", null,null,options);
   }
 
   /// ### Set the global default Color Collection by ID
@@ -5166,12 +5946,15 @@ namespace Looker.SDK.API31
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   /// 
   /// PUT /color_collections/default -> ColorCollection
+  /// 
+  /// <returns><c>ColorCollection</c> ColorCollection (application/json)</returns>
+  /// 
   /// <param name="collection_id">ID of color collection to set as default</param>
-  public async Task<SdkResponse<TSuccess, TError>> set_default_color_collection<TSuccess, TError>(
+  public async Task<SdkResponse<ColorCollection, Exception>> set_default_color_collection(
     string collection_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, "/color_collections/default", new Values {
+    return await AuthRequest<ColorCollection, Exception>(HttpMethod.Put, "/color_collections/default", new Values {
       { "collection_id", collection_id }},null,options);
   }
 
@@ -5188,37 +5971,46 @@ namespace Looker.SDK.API31
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   /// 
   /// PUT /themes/default -> Theme
+  /// 
+  /// <returns><c>Theme</c> Theme (application/json)</returns>
+  /// 
   /// <param name="name">Name of theme to set as default</param>
-  public async Task<SdkResponse<TSuccess, TError>> set_default_theme<TSuccess, TError>(
+  public async Task<SdkResponse<Theme, Exception>> set_default_theme(
     string name,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, "/themes/default", new Values {
+    return await AuthRequest<Theme, Exception>(HttpMethod.Put, "/themes/default", new Values {
       { "name", name }},null,options);
   }
 
   /// ### Set all groups for a role, removing all existing group associations from that role.
   /// 
   /// PUT /roles/{role_id}/groups -> Group[]
+  /// 
+  /// <returns><c>Group[]</c> Groups with role. (application/json)</returns>
+  /// 
   /// <param name="role_id">Id of Role</param>
-  public async Task<SdkResponse<TSuccess, TError>> set_role_groups<TSuccess, TError>(
+  public async Task<SdkResponse<Group[], Exception>> set_role_groups(
     long role_id,
     long[] body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, $"/roles/{role_id}/groups", null,body,options);
+    return await AuthRequest<Group[], Exception>(HttpMethod.Put, $"/roles/{role_id}/groups", null,body,options);
   }
 
   /// ### Set all the users of the role with a specific id.
   /// 
   /// PUT /roles/{role_id}/users -> User[]
+  /// 
+  /// <returns><c>User[]</c> Users with role. (application/json)</returns>
+  /// 
   /// <param name="role_id">id of role</param>
-  public async Task<SdkResponse<TSuccess, TError>> set_role_users<TSuccess, TError>(
+  public async Task<SdkResponse<User[], Exception>> set_role_users(
     long role_id,
     long[] body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, $"/roles/{role_id}/users", null,body,options);
+    return await AuthRequest<User[], Exception>(HttpMethod.Put, $"/roles/{role_id}/users", null,body,options);
   }
 
   /// ### Define values for a user attribute across a set of groups, in priority order.
@@ -5243,13 +6035,16 @@ namespace Looker.SDK.API31
   /// To set a user attribute value for all members of a group, see [Set User Attribute Group Value](#!/Group/update_user_attribute_group_value).
   /// 
   /// POST /user_attributes/{user_attribute_id}/group_values -> UserAttributeGroupValue[]
+  /// 
+  /// <returns><c>UserAttributeGroupValue[]</c> Array of group values. (application/json)</returns>
+  /// 
   /// <param name="user_attribute_id">Id of user attribute</param>
-  public async Task<SdkResponse<TSuccess, TError>> set_user_attribute_group_values<TSuccess, TError>(
+  public async Task<SdkResponse<UserAttributeGroupValue[], Exception>> set_user_attribute_group_values(
     long user_attribute_id,
     UserAttributeGroupValue[] body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/user_attributes/{user_attribute_id}/group_values", null,body,options);
+    return await AuthRequest<UserAttributeGroupValue[], Exception>(HttpMethod.Post, $"/user_attributes/{user_attribute_id}/group_values", null,body,options);
   }
 
   /// ### Store a custom value for a user attribute in a user's account settings.
@@ -5257,80 +6052,95 @@ namespace Looker.SDK.API31
   /// Per-user user attribute values take precedence over group or default values.
   /// 
   /// PATCH /users/{user_id}/attribute_values/{user_attribute_id} -> UserAttributeWithValue
+  /// 
+  /// <returns><c>UserAttributeWithValue</c> User attribute value. (application/json)</returns>
+  /// 
   /// <param name="user_id">Id of user</param>
   /// <param name="user_attribute_id">Id of user attribute</param>
-  public async Task<SdkResponse<TSuccess, TError>> set_user_attribute_user_value<TSuccess, TError>(
+  public async Task<SdkResponse<UserAttributeWithValue, Exception>> set_user_attribute_user_value(
     long user_id,
     long user_attribute_id,
     WriteUserAttributeWithValue body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/users/{user_id}/attribute_values/{user_attribute_id}", null,body,options);
+    return await AuthRequest<UserAttributeWithValue, Exception>(HttpMethod.Patch, $"/users/{user_id}/attribute_values/{user_attribute_id}", null,body,options);
   }
 
   /// ### Set roles of the user with a specific id.
   /// 
   /// PUT /users/{user_id}/roles -> Role[]
+  /// 
+  /// <returns><c>Role[]</c> Roles of user. (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> set_user_roles<TSuccess, TError>(
+  public async Task<SdkResponse<Role[], Exception>> set_user_roles(
     long user_id,
     long[] body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, $"/users/{user_id}/roles", new Values {
+    return await AuthRequest<Role[], Exception>(HttpMethod.Put, $"/users/{user_id}/roles", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Get information about the space with a specific id.
   /// 
   /// GET /spaces/{space_id} -> Space
+  /// 
+  /// <returns><c>Space</c> Space (application/json)</returns>
+  /// 
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> space<TSuccess, TError>(
+  public async Task<SdkResponse<Space, Exception>> space(
     string space_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       space_id = SdkUtils.EncodeParam(space_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/spaces/{space_id}", new Values {
+    return await AuthRequest<Space, Exception>(HttpMethod.Get, $"/spaces/{space_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get the ancestors of a space
   /// 
   /// GET /spaces/{space_id}/ancestors -> Space[]
+  /// 
+  /// <returns><c>Space[]</c> Spaces (application/json)</returns>
+  /// 
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> space_ancestors<TSuccess, TError>(
+  public async Task<SdkResponse<Space[], Exception>> space_ancestors(
     string space_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       space_id = SdkUtils.EncodeParam(space_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/spaces/{space_id}/ancestors", new Values {
+    return await AuthRequest<Space[], Exception>(HttpMethod.Get, $"/spaces/{space_id}/ancestors", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get the children of a space.
   /// 
   /// GET /spaces/{space_id}/children -> Space[]
+  /// 
+  /// <returns><c>Space[]</c> Spaces (application/json)</returns>
+  /// 
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
   /// <param name="sorts">Fields to sort by.</param>
-  public async Task<SdkResponse<TSuccess, TError>> space_children<TSuccess, TError>(
+  public async Task<SdkResponse<Space[], Exception>> space_children(
     string space_id,
     string? fields = null,
     long? page = null,
     long? per_page = null,
     string? sorts = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       space_id = SdkUtils.EncodeParam(space_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/spaces/{space_id}/children", new Values {
+    return await AuthRequest<Space[], Exception>(HttpMethod.Get, $"/spaces/{space_id}/children", new Values {
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
@@ -5340,19 +6150,22 @@ namespace Looker.SDK.API31
   /// ### Search the children of a space
   /// 
   /// GET /spaces/{space_id}/children/search -> Space[]
+  /// 
+  /// <returns><c>Space[]</c> Spaces (application/json)</returns>
+  /// 
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="name">Match Space name.</param>
-  public async Task<SdkResponse<TSuccess, TError>> space_children_search<TSuccess, TError>(
+  public async Task<SdkResponse<Space[], Exception>> space_children_search(
     string space_id,
     string? fields = null,
     string? sorts = null,
     string? name = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       space_id = SdkUtils.EncodeParam(space_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/spaces/{space_id}/children/search", new Values {
+    return await AuthRequest<Space[], Exception>(HttpMethod.Get, $"/spaces/{space_id}/children/search", new Values {
       { "fields", fields },
       { "sorts", sorts },
       { "name", name }},null,options);
@@ -5361,58 +6174,70 @@ namespace Looker.SDK.API31
   /// ### Get the dashboards in a space
   /// 
   /// GET /spaces/{space_id}/dashboards -> Dashboard[]
+  /// 
+  /// <returns><c>Dashboard[]</c> Dashboard (application/json)</returns>
+  /// 
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> space_dashboards<TSuccess, TError>(
+  public async Task<SdkResponse<Dashboard[], Exception>> space_dashboards(
     string space_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       space_id = SdkUtils.EncodeParam(space_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/spaces/{space_id}/dashboards", new Values {
+    return await AuthRequest<Dashboard[], Exception>(HttpMethod.Get, $"/spaces/{space_id}/dashboards", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get the looks in a space
   /// 
   /// GET /spaces/{space_id}/looks -> LookWithQuery[]
+  /// 
+  /// <returns><c>LookWithQuery[]</c> Looks (application/json)</returns>
+  /// 
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> space_looks<TSuccess, TError>(
+  public async Task<SdkResponse<LookWithQuery[], Exception>> space_looks(
     string space_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       space_id = SdkUtils.EncodeParam(space_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/spaces/{space_id}/looks", new Values {
+    return await AuthRequest<LookWithQuery[], Exception>(HttpMethod.Get, $"/spaces/{space_id}/looks", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get the parent of a space
   /// 
   /// GET /spaces/{space_id}/parent -> Space
+  /// 
+  /// <returns><c>Space</c> Space (application/json)</returns>
+  /// 
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> space_parent<TSuccess, TError>(
+  public async Task<SdkResponse<Space, Exception>> space_parent(
     string space_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       space_id = SdkUtils.EncodeParam(space_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/spaces/{space_id}/parent", new Values {
+    return await AuthRequest<Space, Exception>(HttpMethod.Get, $"/spaces/{space_id}/parent", new Values {
       { "fields", fields }},null,options);
   }
 
   /// Get a SQL Runner query.
   /// 
   /// GET /sql_queries/{slug} -> SqlQuery
+  /// 
+  /// <returns><c>SqlQuery</c> SQL Runner Query (application/json)</returns>
+  /// 
   /// <param name="slug">slug of query</param>
-  public async Task<SdkResponse<TSuccess, TError>> sql_query<TSuccess, TError>(
+  public async Task<SdkResponse<SqlQuery, Exception>> sql_query(
     string slug,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       slug = SdkUtils.EncodeParam(slug);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/sql_queries/{slug}", null,null,options);
+    return await AuthRequest<SqlQuery, Exception>(HttpMethod.Get, $"/sql_queries/{slug}", null,null,options);
   }
 
   /// ### Update all linked dashboards to match the specified LookML dashboard.
@@ -5426,16 +6251,19 @@ namespace Looker.SDK.API31
   /// To **link** or **unlink** a UDD set the `lookml_link_id` property with [update_dashboard()](#!/Dashboard/update_dashboard)
   /// 
   /// PATCH /dashboards/{lookml_dashboard_id}/sync -> long[]
+  /// 
+  /// <returns><c>long[]</c> Ids of all the dashboards that were updated by this operation (application/json)</returns>
+  /// 
   /// <param name="lookml_dashboard_id">Id of LookML dashboard, in the form 'model::dashboardname'</param>
   /// <param name="raw_locale">If true, and this dashboard is localized, export it with the raw keys, not localized.</param>
-  public async Task<SdkResponse<TSuccess, TError>> sync_lookml_dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<long[], Exception>> sync_lookml_dashboard(
     string lookml_dashboard_id,
     WriteDashboard body,
     bool? raw_locale = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       lookml_dashboard_id = SdkUtils.EncodeParam(lookml_dashboard_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/dashboards/{lookml_dashboard_id}/sync", new Values {
+    return await AuthRequest<long[], Exception>(HttpMethod.Patch, $"/dashboards/{lookml_dashboard_id}/sync", new Values {
       { "raw_locale", raw_locale }},body,options);
   }
 
@@ -5449,15 +6277,18 @@ namespace Looker.SDK.API31
   /// Unsupported tests in the request will be ignored.
   /// 
   /// PUT /connections/{connection_name}/test -> DBConnectionTestResult[]
+  /// 
+  /// <returns><c>DBConnectionTestResult[]</c> Test results (application/json)</returns>
+  /// 
   /// <param name="connection_name">Name of connection</param>
   /// <param name="tests">Array of names of tests to run</param>
-  public async Task<SdkResponse<TSuccess, TError>> test_connection<TSuccess, TError>(
+  public async Task<SdkResponse<DBConnectionTestResult[], Exception>> test_connection(
     string connection_name,
     DelimArray<string>? tests = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       connection_name = SdkUtils.EncodeParam(connection_name);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, $"/connections/{connection_name}/test", new Values {
+    return await AuthRequest<DBConnectionTestResult[], Exception>(HttpMethod.Put, $"/connections/{connection_name}/test", new Values {
       { "tests", tests }},null,options);
   }
 
@@ -5471,26 +6302,32 @@ namespace Looker.SDK.API31
   /// Unsupported tests in the request will be ignored.
   /// 
   /// PUT /connections/test -> DBConnectionTestResult[]
+  /// 
+  /// <returns><c>DBConnectionTestResult[]</c> Test results (application/json)</returns>
+  /// 
   /// <param name="tests">Array of names of tests to run</param>
-  public async Task<SdkResponse<TSuccess, TError>> test_connection_config<TSuccess, TError>(
+  public async Task<SdkResponse<DBConnectionTestResult[], Exception>> test_connection_config(
     WriteDBConnection body,
     DelimArray<string>? tests = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, "/connections/test", new Values {
+    return await AuthRequest<DBConnectionTestResult[], Exception>(HttpMethod.Put, "/connections/test", new Values {
       { "tests", tests }},body,options);
   }
 
   /// Tests the integration to make sure all the settings are working.
   /// 
   /// POST /integrations/{integration_id}/test -> IntegrationTestResult
+  /// 
+  /// <returns><c>IntegrationTestResult</c> Test Result (application/json)</returns>
+  /// 
   /// <param name="integration_id">Id of integration</param>
-  public async Task<SdkResponse<TSuccess, TError>> test_integration<TSuccess, TError>(
+  public async Task<SdkResponse<IntegrationTestResult, Exception>> test_integration(
     string integration_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       integration_id = SdkUtils.EncodeParam(integration_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/integrations/{integration_id}/test", null,null,options);
+    return await AuthRequest<IntegrationTestResult, Exception>(HttpMethod.Post, $"/integrations/{integration_id}/test", null,null,options);
   }
 
   /// ### Test the connection authentication settings for an LDAP configuration.
@@ -5515,11 +6352,13 @@ namespace Looker.SDK.API31
   /// The active LDAP settings are not modified.
   /// 
   /// PUT /ldap_config/test_auth -> LDAPConfigTestResult
-  public async Task<SdkResponse<TSuccess, TError>> test_ldap_config_auth<TSuccess, TError>(
+  /// 
+  /// <returns><c>LDAPConfigTestResult</c> Result info. (application/json)</returns>
+  public async Task<SdkResponse<LDAPConfigTestResult, Exception>> test_ldap_config_auth(
     WriteLDAPConfig body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, "/ldap_config/test_auth", null,body,options);
+    return await AuthRequest<LDAPConfigTestResult, Exception>(HttpMethod.Put, "/ldap_config/test_auth", null,body,options);
   }
 
   /// ### Test the connection settings for an LDAP configuration.
@@ -5542,11 +6381,13 @@ namespace Looker.SDK.API31
   /// The active LDAP settings are not modified.
   /// 
   /// PUT /ldap_config/test_connection -> LDAPConfigTestResult
-  public async Task<SdkResponse<TSuccess, TError>> test_ldap_config_connection<TSuccess, TError>(
+  /// 
+  /// <returns><c>LDAPConfigTestResult</c> Result info. (application/json)</returns>
+  public async Task<SdkResponse<LDAPConfigTestResult, Exception>> test_ldap_config_connection(
     WriteLDAPConfig body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, "/ldap_config/test_connection", null,body,options);
+    return await AuthRequest<LDAPConfigTestResult, Exception>(HttpMethod.Put, "/ldap_config/test_connection", null,body,options);
   }
 
   /// ### Test the user authentication settings for an LDAP configuration.
@@ -5560,11 +6401,13 @@ namespace Looker.SDK.API31
   /// The active LDAP settings are not modified.
   /// 
   /// PUT /ldap_config/test_user_auth -> LDAPConfigTestResult
-  public async Task<SdkResponse<TSuccess, TError>> test_ldap_config_user_auth<TSuccess, TError>(
+  /// 
+  /// <returns><c>LDAPConfigTestResult</c> Result info. (application/json)</returns>
+  public async Task<SdkResponse<LDAPConfigTestResult, Exception>> test_ldap_config_user_auth(
     WriteLDAPConfig body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, "/ldap_config/test_user_auth", null,body,options);
+    return await AuthRequest<LDAPConfigTestResult, Exception>(HttpMethod.Put, "/ldap_config/test_user_auth", null,body,options);
   }
 
   /// ### Test the user authentication settings for an LDAP configuration without authenticating the user.
@@ -5578,11 +6421,13 @@ namespace Looker.SDK.API31
   /// The active LDAP settings are not modified.
   /// 
   /// PUT /ldap_config/test_user_info -> LDAPConfigTestResult
-  public async Task<SdkResponse<TSuccess, TError>> test_ldap_config_user_info<TSuccess, TError>(
+  /// 
+  /// <returns><c>LDAPConfigTestResult</c> Result info. (application/json)</returns>
+  public async Task<SdkResponse<LDAPConfigTestResult, Exception>> test_ldap_config_user_info(
     WriteLDAPConfig body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, "/ldap_config/test_user_info", null,body,options);
+    return await AuthRequest<LDAPConfigTestResult, Exception>(HttpMethod.Put, "/ldap_config/test_user_info", null,body,options);
   }
 
   /// ### Get a theme by ID
@@ -5592,15 +6437,18 @@ namespace Looker.SDK.API31
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   /// 
   /// GET /themes/{theme_id} -> Theme
+  /// 
+  /// <returns><c>Theme</c> Theme (application/json)</returns>
+  /// 
   /// <param name="theme_id">Id of theme</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> theme<TSuccess, TError>(
+  public async Task<SdkResponse<Theme, Exception>> theme(
     string theme_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       theme_id = SdkUtils.EncodeParam(theme_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/themes/{theme_id}", new Values {
+    return await AuthRequest<Theme, Exception>(HttpMethod.Get, $"/themes/{theme_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -5612,14 +6460,17 @@ namespace Looker.SDK.API31
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   /// 
   /// GET /themes/theme_or_default -> Theme
+  /// 
+  /// <returns><c>Theme</c> Theme (application/json)</returns>
+  /// 
   /// <param name="name">Name of theme</param>
   /// <param name="ts">Timestamp representing the target datetime for the active period. Defaults to 'now'</param>
-  public async Task<SdkResponse<TSuccess, TError>> theme_or_default<TSuccess, TError>(
+  public async Task<SdkResponse<Theme, Exception>> theme_or_default(
     string name,
     DateTime? ts = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/themes/theme_or_default", new Values {
+    return await AuthRequest<Theme, Exception>(HttpMethod.Get, "/themes/theme_or_default", new Values {
       { "name", name },
       { "ts", ts }},null,options);
   }
@@ -5627,95 +6478,116 @@ namespace Looker.SDK.API31
   /// ### WARNING: The Looker internal database backup function has been deprecated.
   /// 
   /// PATCH /backup_configuration -> BackupConfiguration
-  public async Task<SdkResponse<TSuccess, TError>> update_backup_configuration<TSuccess, TError>(
+  /// 
+  /// <returns><c>BackupConfiguration</c> New state for specified model set. (application/json)</returns>
+  public async Task<SdkResponse<BackupConfiguration, Exception>> update_backup_configuration(
     WriteBackupConfiguration body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/backup_configuration", null,body,options);
+    return await AuthRequest<BackupConfiguration, Exception>(HttpMethod.Patch, "/backup_configuration", null,body,options);
   }
 
   /// Update the current Cloud Storage Configuration.
   /// 
   /// PATCH /cloud_storage -> BackupConfiguration
-  public async Task<SdkResponse<TSuccess, TError>> update_cloud_storage_configuration<TSuccess, TError>(
+  /// 
+  /// <returns><c>BackupConfiguration</c> New state for specified model set. (application/json)</returns>
+  public async Task<SdkResponse<BackupConfiguration, Exception>> update_cloud_storage_configuration(
     WriteBackupConfiguration body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/cloud_storage", null,body,options);
+    return await AuthRequest<BackupConfiguration, Exception>(HttpMethod.Patch, "/cloud_storage", null,body,options);
   }
 
   /// ### Update a custom color collection by id.
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   /// 
   /// PATCH /color_collections/{collection_id} -> ColorCollection
+  /// 
+  /// <returns><c>ColorCollection</c> ColorCollection (application/json)</returns>
+  /// 
   /// <param name="collection_id">Id of Custom Color Collection</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_color_collection<TSuccess, TError>(
+  public async Task<SdkResponse<ColorCollection, Exception>> update_color_collection(
     string collection_id,
     WriteColorCollection body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       collection_id = SdkUtils.EncodeParam(collection_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/color_collections/{collection_id}", null,body,options);
+    return await AuthRequest<ColorCollection, Exception>(HttpMethod.Patch, $"/color_collections/{collection_id}", null,body,options);
   }
 
   /// ### Update a connection using the specified configuration.
   /// 
   /// PATCH /connections/{connection_name} -> DBConnection
+  /// 
+  /// <returns><c>DBConnection</c> Connection (application/json)</returns>
+  /// 
   /// <param name="connection_name">Name of connection</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_connection<TSuccess, TError>(
+  public async Task<SdkResponse<DBConnection, Exception>> update_connection(
     string connection_name,
     WriteDBConnection body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       connection_name = SdkUtils.EncodeParam(connection_name);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/connections/{connection_name}", null,body,options);
+    return await AuthRequest<DBConnection, Exception>(HttpMethod.Patch, $"/connections/{connection_name}", null,body,options);
   }
 
   /// ### Move a piece of content.
   /// 
   /// PATCH /content_metadata/{content_metadata_id} -> ContentMeta
+  /// 
+  /// <returns><c>ContentMeta</c> Content Metadata (application/json)</returns>
+  /// 
   /// <param name="content_metadata_id">Id of content metadata</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_content_metadata<TSuccess, TError>(
+  public async Task<SdkResponse<ContentMeta, Exception>> update_content_metadata(
     long content_metadata_id,
     WriteContentMeta body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/content_metadata/{content_metadata_id}", null,body,options);
+    return await AuthRequest<ContentMeta, Exception>(HttpMethod.Patch, $"/content_metadata/{content_metadata_id}", null,body,options);
   }
 
   /// ### Update type of access for content metadata.
   /// 
   /// PUT /content_metadata_access/{content_metadata_access_id} -> ContentMetaGroupUser
+  /// 
+  /// <returns><c>ContentMetaGroupUser</c> Content Metadata Access (application/json)</returns>
+  /// 
   /// <param name="content_metadata_access_id">Id of content metadata access</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_content_metadata_access<TSuccess, TError>(
+  public async Task<SdkResponse<ContentMetaGroupUser, Exception>> update_content_metadata_access(
     long content_metadata_access_id,
     ContentMetaGroupUser body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, $"/content_metadata_access/{content_metadata_access_id}", null,body,options);
+    return await AuthRequest<ContentMetaGroupUser, Exception>(HttpMethod.Put, $"/content_metadata_access/{content_metadata_access_id}", null,body,options);
   }
 
   /// Update custom welcome email setting and values. Optionally send a test email with the new content to the currently logged in user.
   /// 
   /// PATCH /custom_welcome_email -> CustomWelcomeEmail
+  /// 
+  /// <returns><c>CustomWelcomeEmail</c> Custom Welcome Email (application/json)</returns>
+  /// 
   /// <param name="send_test_welcome_email">If true a test email with the content from the request will be sent to the current user after saving</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_custom_welcome_email<TSuccess, TError>(
+  public async Task<SdkResponse<CustomWelcomeEmail, Exception>> update_custom_welcome_email(
     WriteCustomWelcomeEmail body,
     bool? send_test_welcome_email = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/custom_welcome_email", new Values {
+    return await AuthRequest<CustomWelcomeEmail, Exception>(HttpMethod.Patch, "/custom_welcome_email", new Values {
       { "send_test_welcome_email", send_test_welcome_email }},body,options);
   }
 
   /// Requests to this endpoint will send a welcome email with the custom content provided in the body to the currently logged in user.
   /// 
   /// PUT /custom_welcome_email_test -> WelcomeEmailTest
-  public async Task<SdkResponse<TSuccess, TError>> update_custom_welcome_email_test<TSuccess, TError>(
+  /// 
+  /// <returns><c>WelcomeEmailTest</c> Send Test Welcome Email (application/json)</returns>
+  public async Task<SdkResponse<WelcomeEmailTest, Exception>> update_custom_welcome_email_test(
     WelcomeEmailTest body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, "/custom_welcome_email_test", null,body,options);
+    return await AuthRequest<WelcomeEmailTest, Exception>(HttpMethod.Put, "/custom_welcome_email_test", null,body,options);
   }
 
   /// ### Update a dashboard
@@ -5730,114 +6602,137 @@ namespace Looker.SDK.API31
   /// response body for information about exactly which fields are missing or contain invalid data.
   /// 
   /// PATCH /dashboards/{dashboard_id} -> Dashboard
+  /// 
+  /// <returns><c>Dashboard</c> Dashboard (application/json)</returns>
+  /// 
   /// <param name="dashboard_id">Id of dashboard</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_dashboard<TSuccess, TError>(
+  public async Task<SdkResponse<Dashboard, Exception>> update_dashboard(
     string dashboard_id,
     WriteDashboard body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/dashboards/{dashboard_id}", null,body,options);
+    return await AuthRequest<Dashboard, Exception>(HttpMethod.Patch, $"/dashboards/{dashboard_id}", null,body,options);
   }
 
   /// ### Update the dashboard element with a specific id.
   /// 
   /// PATCH /dashboard_elements/{dashboard_element_id} -> DashboardElement
+  /// 
+  /// <returns><c>DashboardElement</c> DashboardElement (application/json)</returns>
+  /// 
   /// <param name="dashboard_element_id">Id of dashboard element</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_dashboard_element<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardElement, Exception>> update_dashboard_element(
     string dashboard_element_id,
     WriteDashboardElement body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_element_id = SdkUtils.EncodeParam(dashboard_element_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/dashboard_elements/{dashboard_element_id}", new Values {
+    return await AuthRequest<DashboardElement, Exception>(HttpMethod.Patch, $"/dashboard_elements/{dashboard_element_id}", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Update the dashboard filter with a specific id.
   /// 
   /// PATCH /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
+  /// 
+  /// <returns><c>DashboardFilter</c> Dashboard Filter (application/json)</returns>
+  /// 
   /// <param name="dashboard_filter_id">Id of dashboard filter</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_dashboard_filter<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardFilter, Exception>> update_dashboard_filter(
     string dashboard_filter_id,
     WriteDashboardFilter body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_filter_id = SdkUtils.EncodeParam(dashboard_filter_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/dashboard_filters/{dashboard_filter_id}", new Values {
+    return await AuthRequest<DashboardFilter, Exception>(HttpMethod.Patch, $"/dashboard_filters/{dashboard_filter_id}", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Update the dashboard layout with a specific id.
   /// 
   /// PATCH /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
+  /// 
+  /// <returns><c>DashboardLayout</c> DashboardLayout (application/json)</returns>
+  /// 
   /// <param name="dashboard_layout_id">Id of dashboard layout</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_dashboard_layout<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardLayout, Exception>> update_dashboard_layout(
     string dashboard_layout_id,
     WriteDashboardLayout body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_layout_id = SdkUtils.EncodeParam(dashboard_layout_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/dashboard_layouts/{dashboard_layout_id}", new Values {
+    return await AuthRequest<DashboardLayout, Exception>(HttpMethod.Patch, $"/dashboard_layouts/{dashboard_layout_id}", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Update the dashboard element with a specific id.
   /// 
   /// PATCH /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
+  /// 
+  /// <returns><c>DashboardLayoutComponent</c> DashboardLayoutComponent (application/json)</returns>
+  /// 
   /// <param name="dashboard_layout_component_id">Id of dashboard layout component</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_dashboard_layout_component<TSuccess, TError>(
+  public async Task<SdkResponse<DashboardLayoutComponent, Exception>> update_dashboard_layout_component(
     string dashboard_layout_component_id,
     WriteDashboardLayoutComponent body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       dashboard_layout_component_id = SdkUtils.EncodeParam(dashboard_layout_component_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/dashboard_layout_components/{dashboard_layout_component_id}", new Values {
+    return await AuthRequest<DashboardLayoutComponent, Exception>(HttpMethod.Patch, $"/dashboard_layout_components/{dashboard_layout_component_id}", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Update a datagroup using the specified params.
   /// 
   /// PATCH /datagroups/{datagroup_id} -> Datagroup
+  /// 
+  /// <returns><c>Datagroup</c> Datagroup (application/json)</returns>
+  /// 
   /// <param name="datagroup_id">ID of datagroup.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_datagroup<TSuccess, TError>(
+  public async Task<SdkResponse<Datagroup, Exception>> update_datagroup(
     string datagroup_id,
     WriteDatagroup body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       datagroup_id = SdkUtils.EncodeParam(datagroup_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/datagroups/{datagroup_id}", null,body,options);
+    return await AuthRequest<Datagroup, Exception>(HttpMethod.Patch, $"/datagroups/{datagroup_id}", null,body,options);
   }
 
   /// ### Update the setting for enabling/disabling digest emails
   /// 
   /// PATCH /digest_emails_enabled -> DigestEmails
-  public async Task<SdkResponse<TSuccess, TError>> update_digest_emails_enabled<TSuccess, TError>(
+  /// 
+  /// <returns><c>DigestEmails</c> Digest_emails (application/json)</returns>
+  public async Task<SdkResponse<DigestEmails, Exception>> update_digest_emails_enabled(
     DigestEmails body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/digest_emails_enabled", null,body,options);
+    return await AuthRequest<DigestEmails, Exception>(HttpMethod.Patch, "/digest_emails_enabled", null,body,options);
   }
 
   /// ### Update the folder with a specific id.
   /// 
   /// PATCH /folders/{folder_id} -> Folder
+  /// 
+  /// <returns><c>Folder</c> Folder (application/json)</returns>
+  /// 
   /// <param name="folder_id">Id of folder</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_folder<TSuccess, TError>(
+  public async Task<SdkResponse<Folder, Exception>> update_folder(
     string folder_id,
     UpdateFolder body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/folders/{folder_id}", null,body,options);
+    return await AuthRequest<Folder, Exception>(HttpMethod.Patch, $"/folders/{folder_id}", null,body,options);
   }
 
   /// ### Checkout and/or reset --hard an existing Git Branch
@@ -5851,89 +6746,107 @@ namespace Looker.SDK.API31
   ///   **DANGER** hard reset will be force pushed to the remote. Unsaved changes and commits may be permanently lost.
   /// 
   /// PUT /projects/{project_id}/git_branch -> GitBranch
+  /// 
+  /// <returns><c>GitBranch</c> Git Branch (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_git_branch<TSuccess, TError>(
+  public async Task<SdkResponse<GitBranch, Exception>> update_git_branch(
     string project_id,
     WriteGitBranch body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, $"/projects/{project_id}/git_branch", null,body,options);
+    return await AuthRequest<GitBranch, Exception>(HttpMethod.Put, $"/projects/{project_id}/git_branch", null,body,options);
   }
 
   /// ### Updates the a group (admin only).
   /// 
   /// PATCH /groups/{group_id} -> Group
+  /// 
+  /// <returns><c>Group</c> Group (application/json)</returns>
+  /// 
   /// <param name="group_id">Id of group</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_group<TSuccess, TError>(
+  public async Task<SdkResponse<Group, Exception>> update_group(
     long group_id,
     WriteGroup body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/groups/{group_id}", new Values {
+    return await AuthRequest<Group, Exception>(HttpMethod.Patch, $"/groups/{group_id}", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Update a homepage definition.
   /// 
   /// PATCH /homepages/{homepage_id} -> Homepage
+  /// 
+  /// <returns><c>Homepage</c> Homepage (application/json)</returns>
+  /// 
   /// <param name="homepage_id">Id of homepage</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_homepage<TSuccess, TError>(
+  public async Task<SdkResponse<Homepage, Exception>> update_homepage(
     long homepage_id,
     WriteHomepage body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/homepages/{homepage_id}", new Values {
+    return await AuthRequest<Homepage, Exception>(HttpMethod.Patch, $"/homepages/{homepage_id}", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Update a homepage item definition.
   /// 
   /// PATCH /homepage_items/{homepage_item_id} -> HomepageItem
+  /// 
+  /// <returns><c>HomepageItem</c> Homepage Item (application/json)</returns>
+  /// 
   /// <param name="homepage_item_id">Id of homepage item</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_homepage_item<TSuccess, TError>(
+  public async Task<SdkResponse<HomepageItem, Exception>> update_homepage_item(
     long homepage_item_id,
     WriteHomepageItem body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/homepage_items/{homepage_item_id}", new Values {
+    return await AuthRequest<HomepageItem, Exception>(HttpMethod.Patch, $"/homepage_items/{homepage_item_id}", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Update a homepage section definition.
   /// 
   /// PATCH /homepage_sections/{homepage_section_id} -> HomepageSection
+  /// 
+  /// <returns><c>HomepageSection</c> Homepage section (application/json)</returns>
+  /// 
   /// <param name="homepage_section_id">Id of homepage section</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_homepage_section<TSuccess, TError>(
+  public async Task<SdkResponse<HomepageSection, Exception>> update_homepage_section(
     long homepage_section_id,
     WriteHomepageSection body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/homepage_sections/{homepage_section_id}", new Values {
+    return await AuthRequest<HomepageSection, Exception>(HttpMethod.Patch, $"/homepage_sections/{homepage_section_id}", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Update parameters on a Integration.
   /// 
   /// PATCH /integrations/{integration_id} -> Integration
+  /// 
+  /// <returns><c>Integration</c> Integration (application/json)</returns>
+  /// 
   /// <param name="integration_id">Id of integration</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_integration<TSuccess, TError>(
+  public async Task<SdkResponse<Integration, Exception>> update_integration(
     string integration_id,
     WriteIntegration body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       integration_id = SdkUtils.EncodeParam(integration_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/integrations/{integration_id}", new Values {
+    return await AuthRequest<Integration, Exception>(HttpMethod.Patch, $"/integrations/{integration_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -5942,36 +6855,43 @@ namespace Looker.SDK.API31
   /// This API is rate limited to prevent it from being used for SSRF attacks
   /// 
   /// PATCH /integration_hubs/{integration_hub_id} -> IntegrationHub
+  /// 
+  /// <returns><c>IntegrationHub</c> Integration Hub (application/json)</returns>
+  /// 
   /// <param name="integration_hub_id">Id of Integration Hub</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_integration_hub<TSuccess, TError>(
+  public async Task<SdkResponse<IntegrationHub, Exception>> update_integration_hub(
     long integration_hub_id,
     WriteIntegrationHub body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/integration_hubs/{integration_hub_id}", new Values {
+    return await AuthRequest<IntegrationHub, Exception>(HttpMethod.Patch, $"/integration_hubs/{integration_hub_id}", new Values {
       { "fields", fields }},body,options);
   }
 
   /// Update internal help resources settings
   /// 
   /// PATCH /internal_help_resources -> InternalHelpResources
-  public async Task<SdkResponse<TSuccess, TError>> update_internal_help_resources<TSuccess, TError>(
+  /// 
+  /// <returns><c>InternalHelpResources</c> Custom Welcome Email (application/json)</returns>
+  public async Task<SdkResponse<InternalHelpResources, Exception>> update_internal_help_resources(
     WriteInternalHelpResources body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/internal_help_resources", null,body,options);
+    return await AuthRequest<InternalHelpResources, Exception>(HttpMethod.Patch, "/internal_help_resources", null,body,options);
   }
 
   /// Update internal help resources content
   /// 
   /// PATCH /internal_help_resources_content -> InternalHelpResourcesContent
-  public async Task<SdkResponse<TSuccess, TError>> update_internal_help_resources_content<TSuccess, TError>(
+  /// 
+  /// <returns><c>InternalHelpResourcesContent</c> Internal Help Resources Content (application/json)</returns>
+  public async Task<SdkResponse<InternalHelpResourcesContent, Exception>> update_internal_help_resources_content(
     WriteInternalHelpResourcesContent body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/internal_help_resources_content", null,body,options);
+    return await AuthRequest<InternalHelpResourcesContent, Exception>(HttpMethod.Patch, "/internal_help_resources_content", null,body,options);
   }
 
   /// ### Update the LDAP configuration.
@@ -5987,23 +6907,28 @@ namespace Looker.SDK.API31
   /// See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
   /// 
   /// PATCH /ldap_config -> LDAPConfig
-  public async Task<SdkResponse<TSuccess, TError>> update_ldap_config<TSuccess, TError>(
+  /// 
+  /// <returns><c>LDAPConfig</c> New state for LDAP Configuration. (application/json)</returns>
+  public async Task<SdkResponse<LDAPConfig, Exception>> update_ldap_config(
     WriteLDAPConfig body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/ldap_config", null,body,options);
+    return await AuthRequest<LDAPConfig, Exception>(HttpMethod.Patch, "/ldap_config", null,body,options);
   }
 
   /// ### Update information about the legacy feature with a specific id.
   /// 
   /// PATCH /legacy_features/{legacy_feature_id} -> LegacyFeature
+  /// 
+  /// <returns><c>LegacyFeature</c> Legacy Feature (application/json)</returns>
+  /// 
   /// <param name="legacy_feature_id">id of legacy feature</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_legacy_feature<TSuccess, TError>(
+  public async Task<SdkResponse<LegacyFeature, Exception>> update_legacy_feature(
     long legacy_feature_id,
     WriteLegacyFeature body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/legacy_features/{legacy_feature_id}", null,body,options);
+    return await AuthRequest<LegacyFeature, Exception>(HttpMethod.Patch, $"/legacy_features/{legacy_feature_id}", null,body,options);
   }
 
   /// ### Modify a Look
@@ -6028,41 +6953,50 @@ namespace Looker.SDK.API31
   /// database and destroyed. There is no "undo" for `delete_look()`.
   /// 
   /// PATCH /looks/{look_id} -> LookWithQuery
+  /// 
+  /// <returns><c>LookWithQuery</c> Look (application/json)</returns>
+  /// 
   /// <param name="look_id">Id of look</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_look<TSuccess, TError>(
+  public async Task<SdkResponse<LookWithQuery, Exception>> update_look(
     long look_id,
     WriteLookWithQuery body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/looks/{look_id}", new Values {
+    return await AuthRequest<LookWithQuery, Exception>(HttpMethod.Patch, $"/looks/{look_id}", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Update a lookml model using the specified configuration.
   /// 
   /// PATCH /lookml_models/{lookml_model_name} -> LookmlModel
+  /// 
+  /// <returns><c>LookmlModel</c> LookML Model (application/json)</returns>
+  /// 
   /// <param name="lookml_model_name">Name of lookml model.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_lookml_model<TSuccess, TError>(
+  public async Task<SdkResponse<LookmlModel, Exception>> update_lookml_model(
     string lookml_model_name,
     WriteLookmlModel body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       lookml_model_name = SdkUtils.EncodeParam(lookml_model_name);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/lookml_models/{lookml_model_name}", null,body,options);
+    return await AuthRequest<LookmlModel, Exception>(HttpMethod.Patch, $"/lookml_models/{lookml_model_name}", null,body,options);
   }
 
   /// ### Update information about the model set with a specific id.
   /// 
   /// PATCH /model_sets/{model_set_id} -> ModelSet
+  /// 
+  /// <returns><c>ModelSet</c> New state for specified model set. (application/json)</returns>
+  /// 
   /// <param name="model_set_id">id of model set</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_model_set<TSuccess, TError>(
+  public async Task<SdkResponse<ModelSet, Exception>> update_model_set(
     long model_set_id,
     WriteModelSet body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/model_sets/{model_set_id}", null,body,options);
+    return await AuthRequest<ModelSet, Exception>(HttpMethod.Patch, $"/model_sets/{model_set_id}", null,body,options);
   }
 
   /// ### Update the OIDC configuration.
@@ -6076,33 +7010,40 @@ namespace Looker.SDK.API31
   /// It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
   /// 
   /// PATCH /oidc_config -> OIDCConfig
-  public async Task<SdkResponse<TSuccess, TError>> update_oidc_config<TSuccess, TError>(
+  /// 
+  /// <returns><c>OIDCConfig</c> New state for OIDC Configuration. (application/json)</returns>
+  public async Task<SdkResponse<OIDCConfig, Exception>> update_oidc_config(
     WriteOIDCConfig body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/oidc_config", null,body,options);
+    return await AuthRequest<OIDCConfig, Exception>(HttpMethod.Patch, "/oidc_config", null,body,options);
   }
 
   /// ### Update password config.
   /// 
   /// PATCH /password_config -> PasswordConfig
-  public async Task<SdkResponse<TSuccess, TError>> update_password_config<TSuccess, TError>(
+  /// 
+  /// <returns><c>PasswordConfig</c> Password Config (application/json)</returns>
+  public async Task<SdkResponse<PasswordConfig, Exception>> update_password_config(
     WritePasswordConfig body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/password_config", null,body,options);
+    return await AuthRequest<PasswordConfig, Exception>(HttpMethod.Patch, "/password_config", null,body,options);
   }
 
   /// ### Update information about the permission set with a specific id.
   /// 
   /// PATCH /permission_sets/{permission_set_id} -> PermissionSet
+  /// 
+  /// <returns><c>PermissionSet</c> Permission Set (application/json)</returns>
+  /// 
   /// <param name="permission_set_id">id of permission set</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_permission_set<TSuccess, TError>(
+  public async Task<SdkResponse<PermissionSet, Exception>> update_permission_set(
     long permission_set_id,
     WritePermissionSet body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/permission_sets/{permission_set_id}", null,body,options);
+    return await AuthRequest<PermissionSet, Exception>(HttpMethod.Patch, $"/permission_sets/{permission_set_id}", null,body,options);
   }
 
   /// ### Update Project Configuration
@@ -6129,16 +7070,19 @@ namespace Looker.SDK.API31
   /// 1. Call `update_project` setting `git_remote_url` to null and `git_service_name` to "bare".
   /// 
   /// PATCH /projects/{project_id} -> Project
+  /// 
+  /// <returns><c>Project</c> Project (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
   /// <param name="fields">Requested fields</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_project<TSuccess, TError>(
+  public async Task<SdkResponse<Project, Exception>> update_project(
     string project_id,
     WriteProject body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/projects/{project_id}", new Values {
+    return await AuthRequest<Project, Exception>(HttpMethod.Patch, $"/projects/{project_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -6150,29 +7094,35 @@ namespace Looker.SDK.API31
   /// `credential_id` is required.
   /// 
   /// PUT /projects/{root_project_id}/credential/{credential_id} -> RepositoryCredential
+  /// 
+  /// <returns><c>RepositoryCredential</c> Repository Credential (application/json)</returns>
+  /// 
   /// <param name="root_project_id">Root Project Id</param>
   /// <param name="credential_id">Credential Id</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_repository_credential<TSuccess, TError>(
+  public async Task<SdkResponse<RepositoryCredential, Exception>> update_repository_credential(
     string root_project_id,
     string credential_id,
     WriteRepositoryCredential body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       root_project_id = SdkUtils.EncodeParam(root_project_id);
       credential_id = SdkUtils.EncodeParam(credential_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, $"/projects/{root_project_id}/credential/{credential_id}", null,body,options);
+    return await AuthRequest<RepositoryCredential, Exception>(HttpMethod.Put, $"/projects/{root_project_id}/credential/{credential_id}", null,body,options);
   }
 
   /// ### Update information about the role with a specific id.
   /// 
   /// PATCH /roles/{role_id} -> Role
+  /// 
+  /// <returns><c>Role</c> Role (application/json)</returns>
+  /// 
   /// <param name="role_id">id of role</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_role<TSuccess, TError>(
+  public async Task<SdkResponse<Role, Exception>> update_role(
     long role_id,
     WriteRole body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/roles/{role_id}", null,body,options);
+    return await AuthRequest<Role, Exception>(HttpMethod.Patch, $"/roles/{role_id}", null,body,options);
   }
 
   /// ### Update the SAML configuration.
@@ -6186,11 +7136,13 @@ namespace Looker.SDK.API31
   /// It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
   /// 
   /// PATCH /saml_config -> SamlConfig
-  public async Task<SdkResponse<TSuccess, TError>> update_saml_config<TSuccess, TError>(
+  /// 
+  /// <returns><c>SamlConfig</c> New state for SAML Configuration. (application/json)</returns>
+  public async Task<SdkResponse<SamlConfig, Exception>> update_saml_config(
     WriteSamlConfig body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/saml_config", null,body,options);
+    return await AuthRequest<SamlConfig, Exception>(HttpMethod.Patch, "/saml_config", null,body,options);
   }
 
   /// ### Update a Scheduled Plan
@@ -6237,13 +7189,16 @@ namespace Looker.SDK.API31
   /// Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
   /// 
   /// PATCH /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
+  /// 
+  /// <returns><c>ScheduledPlan</c> Scheduled Plan (application/json)</returns>
+  /// 
   /// <param name="scheduled_plan_id">Scheduled Plan Id</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_scheduled_plan<TSuccess, TError>(
+  public async Task<SdkResponse<ScheduledPlan, Exception>> update_scheduled_plan(
     long scheduled_plan_id,
     WriteScheduledPlan body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/scheduled_plans/{scheduled_plan_id}", null,body,options);
+    return await AuthRequest<ScheduledPlan, Exception>(HttpMethod.Patch, $"/scheduled_plans/{scheduled_plan_id}", null,body,options);
   }
 
   /// ### Update API Session
@@ -6268,34 +7223,41 @@ namespace Looker.SDK.API31
   /// API sessions, be sure to select the dev workspace after each login.
   /// 
   /// PATCH /session -> ApiSession
-  public async Task<SdkResponse<TSuccess, TError>> update_session<TSuccess, TError>(
+  /// 
+  /// <returns><c>ApiSession</c> Session (application/json)</returns>
+  public async Task<SdkResponse<ApiSession, Exception>> update_session(
     WriteApiSession body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/session", null,body,options);
+    return await AuthRequest<ApiSession, Exception>(HttpMethod.Patch, "/session", null,body,options);
   }
 
   /// ### Update session config.
   /// 
   /// PATCH /session_config -> SessionConfig
-  public async Task<SdkResponse<TSuccess, TError>> update_session_config<TSuccess, TError>(
+  /// 
+  /// <returns><c>SessionConfig</c> Session Config (application/json)</returns>
+  public async Task<SdkResponse<SessionConfig, Exception>> update_session_config(
     WriteSessionConfig body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, "/session_config", null,body,options);
+    return await AuthRequest<SessionConfig, Exception>(HttpMethod.Patch, "/session_config", null,body,options);
   }
 
   /// ### Update the space with a specific id.
   /// 
   /// PATCH /spaces/{space_id} -> Space
+  /// 
+  /// <returns><c>Space</c> Space (application/json)</returns>
+  /// 
   /// <param name="space_id">Id of space</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_space<TSuccess, TError>(
+  public async Task<SdkResponse<Space, Exception>> update_space(
     string space_id,
     UpdateSpace body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       space_id = SdkUtils.EncodeParam(space_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/spaces/{space_id}", null,body,options);
+    return await AuthRequest<Space, Exception>(HttpMethod.Patch, $"/spaces/{space_id}", null,body,options);
   }
 
   /// ### Update the theme by id.
@@ -6303,43 +7265,52 @@ namespace Looker.SDK.API31
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   /// 
   /// PATCH /themes/{theme_id} -> Theme
+  /// 
+  /// <returns><c>Theme</c> Theme (application/json)</returns>
+  /// 
   /// <param name="theme_id">Id of theme</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_theme<TSuccess, TError>(
+  public async Task<SdkResponse<Theme, Exception>> update_theme(
     string theme_id,
     WriteTheme body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       theme_id = SdkUtils.EncodeParam(theme_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/themes/{theme_id}", null,body,options);
+    return await AuthRequest<Theme, Exception>(HttpMethod.Patch, $"/themes/{theme_id}", null,body,options);
   }
 
   /// ### Update information about the user with a specific id.
   /// 
   /// PATCH /users/{user_id} -> User
+  /// 
+  /// <returns><c>User</c> New state for specified user. (application/json)</returns>
+  /// 
   /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_user<TSuccess, TError>(
+  public async Task<SdkResponse<User, Exception>> update_user(
     long user_id,
     WriteUser body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/users/{user_id}", new Values {
+    return await AuthRequest<User, Exception>(HttpMethod.Patch, $"/users/{user_id}", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Update a user attribute definition.
   /// 
   /// PATCH /user_attributes/{user_attribute_id} -> UserAttribute
+  /// 
+  /// <returns><c>UserAttribute</c> User Attribute (application/json)</returns>
+  /// 
   /// <param name="user_attribute_id">Id of user attribute</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_user_attribute<TSuccess, TError>(
+  public async Task<SdkResponse<UserAttribute, Exception>> update_user_attribute(
     long user_attribute_id,
     WriteUserAttribute body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/user_attributes/{user_attribute_id}", new Values {
+    return await AuthRequest<UserAttribute, Exception>(HttpMethod.Patch, $"/user_attributes/{user_attribute_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -6348,40 +7319,48 @@ namespace Looker.SDK.API31
   /// For information about how user attribute values are calculated, see [Set User Attribute Group Values](#!/UserAttribute/set_user_attribute_group_values).
   /// 
   /// PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> UserAttributeGroupValue
+  /// 
+  /// <returns><c>UserAttributeGroupValue</c> Group value object. (application/json)</returns>
+  /// 
   /// <param name="group_id">Id of group</param>
   /// <param name="user_attribute_id">Id of user attribute</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_user_attribute_group_value<TSuccess, TError>(
+  public async Task<SdkResponse<UserAttributeGroupValue, Exception>> update_user_attribute_group_value(
     long group_id,
     long user_attribute_id,
     UserAttributeGroupValue body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/groups/{group_id}/attribute_values/{user_attribute_id}", null,body,options);
+    return await AuthRequest<UserAttributeGroupValue, Exception>(HttpMethod.Patch, $"/groups/{group_id}/attribute_values/{user_attribute_id}", null,body,options);
   }
 
   /// ### Email/password login information for the specified user.
   /// 
   /// PATCH /users/{user_id}/credentials_email -> CredentialsEmail
+  /// 
+  /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> update_user_credentials_email<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsEmail, Exception>> update_user_credentials_email(
     long user_id,
     WriteCredentialsEmail body,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Patch, $"/users/{user_id}/credentials_email", new Values {
+    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Patch, $"/users/{user_id}/credentials_email", new Values {
       { "fields", fields }},body,options);
   }
 
   /// ### Update the whitelabel configuration
   /// 
   /// PUT /whitelabel_configuration -> WhitelabelConfiguration
-  public async Task<SdkResponse<TSuccess, TError>> update_whitelabel_configuration<TSuccess, TError>(
+  /// 
+  /// <returns><c>WhitelabelConfiguration</c> Whitelabel configuration (application/json)</returns>
+  public async Task<SdkResponse<WhitelabelConfiguration, Exception>> update_whitelabel_configuration(
     WriteWhitelabelConfiguration body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Put, "/whitelabel_configuration", null,body,options);
+    return await AuthRequest<WhitelabelConfiguration, Exception>(HttpMethod.Put, "/whitelabel_configuration", null,body,options);
   }
 
   /// ### Get information about the user with a specific id.
@@ -6391,28 +7370,34 @@ namespace Looker.SDK.API31
   /// The user name and avatar url, but no sensitive information.
   /// 
   /// GET /users/{user_id} -> User
+  /// 
+  /// <returns><c>User</c> Specified user. (application/json)</returns>
+  /// 
   /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user<TSuccess, TError>(
+  public async Task<SdkResponse<User, Exception>> user(
     long user_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}", new Values {
+    return await AuthRequest<User, Exception>(HttpMethod.Get, $"/users/{user_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about a user attribute.
   /// 
   /// GET /user_attributes/{user_attribute_id} -> UserAttribute
+  /// 
+  /// <returns><c>UserAttribute</c> User Attribute (application/json)</returns>
+  /// 
   /// <param name="user_attribute_id">Id of user attribute</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user_attribute<TSuccess, TError>(
+  public async Task<SdkResponse<UserAttribute, Exception>> user_attribute(
     long user_attribute_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/user_attributes/{user_attribute_id}", new Values {
+    return await AuthRequest<UserAttribute, Exception>(HttpMethod.Get, $"/user_attributes/{user_attribute_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -6434,20 +7419,23 @@ namespace Looker.SDK.API31
   /// The value of all hidden user attributes will be blank.
   /// 
   /// GET /users/{user_id}/attribute_values -> UserAttributeWithValue[]
+  /// 
+  /// <returns><c>UserAttributeWithValue[]</c> Value of user attribute. (application/json)</returns>
+  /// 
   /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="user_attribute_ids">Specific user attributes to request. Omit or leave blank to request all user attributes.</param>
   /// <param name="all_values">If true, returns all values in the search path instead of just the first value found. Useful for debugging group precedence.</param>
   /// <param name="include_unset">If true, returns an empty record for each requested attribute that has no user, group, or default value.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user_attribute_user_values<TSuccess, TError>(
+  public async Task<SdkResponse<UserAttributeWithValue[], Exception>> user_attribute_user_values(
     long user_id,
     string? fields = null,
     DelimArray<long>? user_attribute_ids = null,
     bool? all_values = null,
     bool? include_unset = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/attribute_values", new Values {
+    return await AuthRequest<UserAttributeWithValue[], Exception>(HttpMethod.Get, $"/users/{user_id}/attribute_values", new Values {
       { "fields", fields },
       { "user_attribute_ids", user_attribute_ids },
       { "all_values", all_values },
@@ -6457,130 +7445,157 @@ namespace Looker.SDK.API31
   /// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
   /// 
   /// GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
+  /// 
+  /// <returns><c>CredentialsApi3</c> API 3 Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">Id of user</param>
   /// <param name="credentials_api3_id">Id of API 3 Credential</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user_credentials_api3<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsApi3, Exception>> user_credentials_api3(
     long user_id,
     long credentials_api3_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_api3/{credentials_api3_id}", new Values {
+    return await AuthRequest<CredentialsApi3, Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_api3/{credentials_api3_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Email/password login information for the specified user.
   /// 
   /// GET /users/{user_id}/credentials_email -> CredentialsEmail
+  /// 
+  /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user_credentials_email<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsEmail, Exception>> user_credentials_email(
     long user_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_email", new Values {
+    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_email", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Embed login information for the specified user.
   /// 
   /// GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
+  /// 
+  /// <returns><c>CredentialsEmbed</c> Embedding Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">Id of user</param>
   /// <param name="credentials_embed_id">Id of Embedding Credential</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user_credentials_embed<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsEmbed, Exception>> user_credentials_embed(
     long user_id,
     long credentials_embed_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_embed/{credentials_embed_id}", new Values {
+    return await AuthRequest<CredentialsEmbed, Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_embed/{credentials_embed_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Google authentication login information for the specified user.
   /// 
   /// GET /users/{user_id}/credentials_google -> CredentialsGoogle
+  /// 
+  /// <returns><c>CredentialsGoogle</c> Google Auth Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user_credentials_google<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsGoogle, Exception>> user_credentials_google(
     long user_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_google", new Values {
+    return await AuthRequest<CredentialsGoogle, Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_google", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### LDAP login information for the specified user.
   /// 
   /// GET /users/{user_id}/credentials_ldap -> CredentialsLDAP
+  /// 
+  /// <returns><c>CredentialsLDAP</c> LDAP Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user_credentials_ldap<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsLDAP, Exception>> user_credentials_ldap(
     long user_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_ldap", new Values {
+    return await AuthRequest<CredentialsLDAP, Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_ldap", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Looker Openid login information for the specified user. Used by Looker Analysts.
   /// 
   /// GET /users/{user_id}/credentials_looker_openid -> CredentialsLookerOpenid
+  /// 
+  /// <returns><c>CredentialsLookerOpenid</c> Looker OpenId Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user_credentials_looker_openid<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsLookerOpenid, Exception>> user_credentials_looker_openid(
     long user_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_looker_openid", new Values {
+    return await AuthRequest<CredentialsLookerOpenid, Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_looker_openid", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### OpenID Connect (OIDC) authentication login information for the specified user.
   /// 
   /// GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
+  /// 
+  /// <returns><c>CredentialsOIDC</c> OIDC Auth Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user_credentials_oidc<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsOIDC, Exception>> user_credentials_oidc(
     long user_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_oidc", new Values {
+    return await AuthRequest<CredentialsOIDC, Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_oidc", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Saml authentication login information for the specified user.
   /// 
   /// GET /users/{user_id}/credentials_saml -> CredentialsSaml
+  /// 
+  /// <returns><c>CredentialsSaml</c> Saml Auth Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user_credentials_saml<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsSaml, Exception>> user_credentials_saml(
     long user_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_saml", new Values {
+    return await AuthRequest<CredentialsSaml, Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_saml", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Two-factor login information for the specified user.
   /// 
   /// GET /users/{user_id}/credentials_totp -> CredentialsTotp
+  /// 
+  /// <returns><c>CredentialsTotp</c> Two-Factor Credential (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user_credentials_totp<TSuccess, TError>(
+  public async Task<SdkResponse<CredentialsTotp, Exception>> user_credentials_totp(
     long user_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/credentials_totp", new Values {
+    return await AuthRequest<CredentialsTotp, Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_totp", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -6614,34 +7629,40 @@ namespace Looker.SDK.API31
   /// NOTE: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
   /// 
   /// GET /users/credential/{credential_type}/{credential_id} -> User
+  /// 
+  /// <returns><c>User</c> Specified user. (application/json)</returns>
+  /// 
   /// <param name="credential_type">Type name of credential</param>
   /// <param name="credential_id">Id of credential</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user_for_credential<TSuccess, TError>(
+  public async Task<SdkResponse<User, Exception>> user_for_credential(
     string credential_type,
     string credential_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       credential_type = SdkUtils.EncodeParam(credential_type);
       credential_id = SdkUtils.EncodeParam(credential_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/credential/{credential_type}/{credential_id}", new Values {
+    return await AuthRequest<User, Exception>(HttpMethod.Get, $"/users/credential/{credential_type}/{credential_id}", new Values {
       { "fields", fields }},null,options);
   }
 
   /// ### Get information about roles of a given user
   /// 
   /// GET /users/{user_id}/roles -> Role[]
+  /// 
+  /// <returns><c>Role[]</c> Roles of user. (application/json)</returns>
+  /// 
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="direct_association_only">Get only roles associated directly with the user: exclude those only associated through groups.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user_roles<TSuccess, TError>(
+  public async Task<SdkResponse<Role[], Exception>> user_roles(
     long user_id,
     string? fields = null,
     bool? direct_association_only = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/roles", new Values {
+    return await AuthRequest<Role[], Exception>(HttpMethod.Get, $"/users/{user_id}/roles", new Values {
       { "fields", fields },
       { "direct_association_only", direct_association_only }},null,options);
   }
@@ -6649,16 +7670,19 @@ namespace Looker.SDK.API31
   /// ### Web login session for the specified user.
   /// 
   /// GET /users/{user_id}/sessions/{session_id} -> Session
+  /// 
+  /// <returns><c>Session</c> Web Login Session (application/json)</returns>
+  /// 
   /// <param name="user_id">Id of user</param>
   /// <param name="session_id">Id of Web Login Session</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> user_session<TSuccess, TError>(
+  public async Task<SdkResponse<Session, Exception>> user_session(
     long user_id,
     long session_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/users/{user_id}/sessions/{session_id}", new Values {
+    return await AuthRequest<Session, Exception>(HttpMethod.Get, $"/users/{user_id}/sessions/{session_id}", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -6673,15 +7697,18 @@ namespace Looker.SDK.API31
   /// the most recent project validation (without recomputing), use `project_validation_results(project_id)`
   /// 
   /// POST /projects/{project_id}/validate -> ProjectValidation
+  /// 
+  /// <returns><c>ProjectValidation</c> Project validation results (application/json)</returns>
+  /// 
   /// <param name="project_id">Project Id</param>
   /// <param name="fields">Requested fields</param>
-  public async Task<SdkResponse<TSuccess, TError>> validate_project<TSuccess, TError>(
+  public async Task<SdkResponse<ProjectValidation, Exception>> validate_project(
     string project_id,
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, $"/projects/{project_id}/validate", new Values {
+    return await AuthRequest<ProjectValidation, Exception>(HttpMethod.Post, $"/projects/{project_id}/validate", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -6694,11 +7721,16 @@ namespace Looker.SDK.API31
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
   /// 
   /// POST /themes/validate -> ValidationError
-  public async Task<SdkResponse<TSuccess, TError>> validate_theme<TSuccess, TError>(
+  /// 
+  /// <returns>
+  /// <c>ValidationError</c> Theme validation results (application/json)
+  /// <c>string</c> No errors detected with the theme (application/json)
+  /// </returns>
+  public async Task<SdkResponse<TSuccess, Exception>> validate_theme<TSuccess>(
     WriteTheme body,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null) where TSuccess : class
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Post, "/themes/validate", null,body,options);
+    return await AuthRequest<TSuccess, Exception>(HttpMethod.Post, "/themes/validate", null,body,options);
   }
 
   /// ### Get a vector image representing the contents of a dashboard or look.
@@ -6707,30 +7739,36 @@ namespace Looker.SDK.API31
   /// reflect the actual data displayed in the respective visualizations.
   /// 
   /// GET /vector_thumbnail/{type}/{resource_id} -> string
+  /// 
+  /// <returns><c>string</c> Vector thumbnail (image/svg+xml)</returns>
+  /// 
   /// <param name="type">Either dashboard or look</param>
   /// <param name="resource_id">ID of the dashboard or look to render</param>
   /// <param name="reload">Whether or not to refresh the rendered image with the latest content</param>
-  public async Task<SdkResponse<TSuccess, TError>> vector_thumbnail<TSuccess, TError>(
+  public async Task<SdkResponse<string, Exception>> vector_thumbnail(
     string type,
     string resource_id,
     string? reload = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       type = SdkUtils.EncodeParam(type);
       resource_id = SdkUtils.EncodeParam(resource_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/vector_thumbnail/{type}/{resource_id}", new Values {
+    return await AuthRequest<string, Exception>(HttpMethod.Get, $"/vector_thumbnail/{type}/{resource_id}", new Values {
       { "reload", reload }},null,options);
   }
 
   /// ### Get information about all API versions supported by this Looker instance.
   /// 
   /// GET /versions -> ApiVersion
+  /// 
+  /// <returns><c>ApiVersion</c> ApiVersion (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> versions<TSuccess, TError>(
+  public async Task<SdkResponse<ApiVersion, Exception>> versions(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/versions", new Values {
+    return await AuthRequest<ApiVersion, Exception>(HttpMethod.Get, "/versions", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -6738,12 +7776,15 @@ namespace Looker.SDK.API31
   /// ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
   /// 
   /// GET /whitelabel_configuration -> WhitelabelConfiguration
+  /// 
+  /// <returns><c>WhitelabelConfiguration</c> Whitelabel configuration (application/json)</returns>
+  /// 
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<TSuccess, TError>> whitelabel_configuration<TSuccess, TError>(
+  public async Task<SdkResponse<WhitelabelConfiguration, Exception>> whitelabel_configuration(
     string? fields = null,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, "/whitelabel_configuration", new Values {
+    return await AuthRequest<WhitelabelConfiguration, Exception>(HttpMethod.Get, "/whitelabel_configuration", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -6778,13 +7819,16 @@ namespace Looker.SDK.API31
   /// later and use update_session(workspace_id: "dev") to select the dev workspace for the new API session.
   /// 
   /// GET /workspaces/{workspace_id} -> Workspace
+  /// 
+  /// <returns><c>Workspace</c> Workspace (application/json)</returns>
+  /// 
   /// <param name="workspace_id">Id of the workspace </param>
-  public async Task<SdkResponse<TSuccess, TError>> workspace<TSuccess, TError>(
+  public async Task<SdkResponse<Workspace, Exception>> workspace(
     string workspace_id,
-    ITransportSettings? options = null) where TSuccess : class where TError : Exception
+    ITransportSettings? options = null)
 {  
       workspace_id = SdkUtils.EncodeParam(workspace_id);
-    return await AuthRequest<TSuccess, TError>(HttpMethod.Get, $"/workspaces/{workspace_id}", null,null,options);
+    return await AuthRequest<Workspace, Exception>(HttpMethod.Get, $"/workspaces/{workspace_id}", null,null,options);
   }
   }
 }

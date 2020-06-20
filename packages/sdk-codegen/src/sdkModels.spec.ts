@@ -45,9 +45,10 @@ import {
   EnumType,
   IEnumType,
   mayQuote,
-  enumName,
   ApiModel,
   titleCase,
+  camelCase,
+  firstCase,
 } from './sdkModels'
 
 const config = TestConfig()
@@ -69,15 +70,57 @@ describe('sdkModels', () => {
     })
   })
 
-  describe('enumName', () => {
+  describe('camelCase', () => {
+    it('empty is empty', () => {
+      expect(camelCase('')).toEqual('')
+    })
+    it('foo-bar is fooBar', () => {
+      expect(camelCase('foo-bar')).toEqual('fooBar')
+    })
+    it('foo_bar is fooBar', () => {
+      expect(camelCase('foo_bar')).toEqual('fooBar')
+    })
+    it('foobar is foobar', () => {
+      expect(camelCase('foobar')).toEqual('foobar')
+    })
+    it('FOOBAR is FOOBAR', () => {
+      expect(camelCase('FOOBAR')).toEqual('FOOBAR')
+    })
+  })
+
+  describe('titleCase', () => {
+    it('empty is empty', () => {
+      expect(titleCase('')).toEqual('')
+    })
     it('foo-bar is FooBar', () => {
-      expect(enumName('foo-bar')).toEqual('FooBar')
+      expect(titleCase('foo-bar')).toEqual('FooBar')
     })
     it('foo_bar is FooBar', () => {
-      expect(enumName('foo_bar')).toEqual('FooBar')
+      expect(titleCase('foo_bar')).toEqual('FooBar')
+    })
+    it('foobar is foobar', () => {
+      expect(titleCase('foobar')).toEqual('Foobar')
+    })
+    it('FOOBAR is Foobar', () => {
+      expect(titleCase('FOOBAR')).toEqual('FOOBAR')
+    })
+  })
+
+  describe('firstCase', () => {
+    it('empty is empty', () => {
+      expect(firstCase('')).toEqual('')
+    })
+    it('foo-bar is Foobar', () => {
+      expect(firstCase('foo-bar')).toEqual('Foobar')
+    })
+    it('foo_bar is Foobar', () => {
+      expect(firstCase('foo_bar')).toEqual('Foobar')
     })
     it('foobar is Foobar', () => {
-      expect(enumName('foobar')).toEqual(`Foobar`)
+      expect(firstCase('foobar')).toEqual('Foobar')
+    })
+    it('FOOBAR is Foobar', () => {
+      expect(firstCase('FOOBAR')).toEqual('Foobar')
     })
   })
 
@@ -96,18 +139,20 @@ describe('sdkModels', () => {
         expect(item.fullName).toEqual(`${method.name}.${item.name}`)
       })
     })
-    describe('for types', () => {})
-    it('type full name is eponymous', () => {
-      const method = apiTestModel.methods.search_looks
-      expect(method).toBeDefined()
-      expect(method.fullName).toEqual(method.name)
-    })
 
-    it('type.property full name has method name prefix', () => {
-      const type = apiTestModel.types.Dashboard
-      expect(type).toBeDefined()
-      Object.values(type.properties).forEach((item) => {
-        expect(item.fullName).toEqual(`${type.name}.${item.name}`)
+    describe('for types', () => {
+      it('type full name is eponymous', () => {
+        const method = apiTestModel.methods.search_looks
+        expect(method).toBeDefined()
+        expect(method.fullName).toEqual(method.name)
+      })
+
+      it('type.property full name has method name prefix', () => {
+        const type = apiTestModel.types.Dashboard
+        expect(type).toBeDefined()
+        Object.values(type.properties).forEach((item) => {
+          expect(item.fullName).toEqual(`${type.name}.${item.name}`)
+        })
       })
     })
   })
@@ -177,6 +222,12 @@ describe('sdkModels', () => {
         expect(r.description).not.toEqual('')
       })
     })
+
+    it('ok responses are unique', () => {
+      const method = apiTestModel.methods.run_sql_query
+      const actual = method.okResponses
+      expect(actual.length).toEqual(4)
+    })
   })
 
   describe('required properties', () => {
@@ -242,15 +293,15 @@ describe('sdkModels', () => {
       if (!(num instanceof EnumType))
         console.error(`${type.name}.${propName} should be EnumType`)
       expect(num).toBeInstanceOf(EnumType)
-      expect(num.name).toEqual(enumName(propName))
+      expect(num.name).toEqual(titleCase(propName))
       expect(num.values).toEqual(values)
     }
 
     it('registers enum types', () => {
       const types = apiTestModel.types
-      expect(types[enumName('supported_action_types')]).toBeDefined()
-      expect(types[enumName('supported_formattings')]).toBeDefined()
-      expect(types[enumName('pull_request_mode')]).toBeDefined()
+      expect(types[titleCase('supported_action_types')]).toBeDefined()
+      expect(types[titleCase('supported_formattings')]).toBeDefined()
+      expect(types[titleCase('pull_request_mode')]).toBeDefined()
     })
 
     describe('enum naming', () => {
@@ -318,7 +369,7 @@ describe('sdkModels', () => {
       it('enum types are renamed and not overwritten', () => {
         const api = new ApiModel({} as OAS.OpenAPIObject)
         const actual1 = api.resolveType(rf1)
-        const name1 = enumName(rf1.name)
+        const name1 = titleCase(rf1.name)
         expect(actual1.name).toEqual(name1)
 
         // Returns first enum for same values
@@ -327,14 +378,14 @@ describe('sdkModels', () => {
         expect(actual5.description).toEqual(actual1.description)
 
         const actual2 = api.resolveType(rf2)
-        const name2 = `${enumName(rf2.name)}1`
+        const name2 = `${titleCase(rf2.name)}1`
         expect(actual2.name).toEqual(name2)
 
         const actual3 = api.resolveType(rf3, undefined, 'result_format')
         expect(actual3.name).toEqual('ResultFormat2')
 
         const actual4 = api.resolveType(rf4, undefined, undefined, 'Meth')
-        const name4 = `Meth${enumName(rf4.name)}`
+        const name4 = `Meth${titleCase(rf4.name)}`
         expect(actual4.name).toEqual(name4)
       })
     })
@@ -825,13 +876,6 @@ describe('sdkModels', () => {
       const actual = JSON.stringify(item, null, 2)
       expect(actual).toBeDefined()
       expect(actual).toContain('"name": "dashboard_dashboard_elements"')
-    })
-  })
-
-  describe('titleCase', () => {
-    it('titlecases', () => {
-      const actual = titleCase('POST')
-      expect(actual).toEqual('Post')
     })
   })
 })

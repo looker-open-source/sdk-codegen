@@ -113,6 +113,9 @@ export const getFormatter = (
   api: ApiModel,
   versions?: IVersionInfo
 ): ICodeGen | undefined => {
+  format = format.toLocaleLowerCase()
+  // Convenience alias
+  if (format === 'c#') format = 'csharp'
   const generators = Languages.filter((x) => x.factory !== undefined)
   const language = generators.find(
     (item) => item.language.toLowerCase() === format.toLowerCase()
