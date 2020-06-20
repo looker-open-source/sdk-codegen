@@ -26,7 +26,12 @@
 
 import * as OAS from 'openapi3-ts'
 import md5 from 'blueimp-md5'
-import { HttpMethod, ResponseMode, responseMode, StatusCode } from '@looker/sdk'
+import {
+  HttpMethod,
+  ResponseMode,
+  responseMode,
+  StatusCode,
+} from '@looker/sdk/lib/browser'
 import { IVersionInfo } from './codeGen'
 
 /**
