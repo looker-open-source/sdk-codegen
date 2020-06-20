@@ -30,10 +30,12 @@ import { TestConfig } from '../testUtils'
 import { NodeSession } from '../rtl/nodeSession'
 import { Looker40SDK as LookerSDK } from '../sdk/4.0/methods'
 import {
+  ICreateQueryTask,
   IQuery,
   IRequestRunInlineQuery,
   IUser,
   IWriteQuery,
+  ResultFormat,
 } from '../sdk/4.0/models'
 import {
   ApiConfig,
@@ -347,7 +349,7 @@ describe('LookerNodeSDK', () => {
       expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     })
 
-    xit('search_looks fields filter', async () => {
+    it('search_looks fields filter', async () => {
       const sdk = new LookerSDK(session)
       const actual = await sdk.ok(
         sdk.search_looks({
@@ -534,8 +536,30 @@ describe('LookerNodeSDK', () => {
     )
   })
 
+  describe('Types with enums', () => {
+    it('CreateQueryTask serializes and deserializes', () => {
+      let task: ICreateQueryTask = {
+        query_id: 1,
+        result_format: ResultFormat.inline_json,
+        dashboard_id: '1',
+        source: 'local',
+      }
+      let json = JSON.stringify(task)
+      let actual: ICreateQueryTask = JSON.parse(json)
+      expect(actual).toEqual(task)
+      task = {
+        query_id: 1,
+        result_format: 'inline_json' as ResultFormat,
+        dashboard_id: '1',
+        source: 'local',
+      }
+      json = JSON.stringify(task)
+      actual = JSON.parse(json)
+      expect(actual).toEqual(task)
+    })
+  })
   describe('Query calls', () => {
-    xit(
+    it(
       'create and run query',
       async () => {
         const sdk = new LookerSDK(session)
@@ -580,7 +604,7 @@ describe('LookerNodeSDK', () => {
       testTimeout
     )
 
-    xit(
+    it(
       'run_inline_query',
       async () => {
         const sdk = new LookerSDK(session)

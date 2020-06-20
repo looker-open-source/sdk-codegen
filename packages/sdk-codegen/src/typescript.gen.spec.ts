@@ -350,12 +350,14 @@ body: ICreateDashboardRenderTask`)
   dashboard_id?: string
 }`)
     })
-    it('enum declaration', () => {
-      const type =
-        apiTestModel.types.CreateQueryTask.properties.result_format.type
-      const actual = gen.declareType('', type)
-      const name = titleCase('result_format')
-      expect(actual).toEqual(`/**
+
+    describe('enums', () => {
+      it('declaration', () => {
+        const type =
+          apiTestModel.types.CreateQueryTask.properties.result_format.type
+        const actual = gen.declareType('', type)
+        const name = titleCase('result_format')
+        expect(actual).toEqual(`/**
  * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
  */
 export enum ${name} {
@@ -370,6 +372,7 @@ export enum ${name} {
   xlsx = 'xlsx',
   gsxml = 'gsxml'
 }`)
+      })
     })
   })
 })
