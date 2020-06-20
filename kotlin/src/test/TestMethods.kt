@@ -237,9 +237,9 @@ class TestMethods {
                     query_id = id,
                     source = "test",
                     result_format = ResultFormat.csv)
-            val created = sdk.ok<CreateQueryTask>(sdk.create_query_task(task))
+            val created = sdk.ok<QueryTask>(sdk.create_query_task(task))
             assertEquals(id, created.query_id, "Query id matches")
-            assertEquals(ResultFormat.csv, created.result_format, "Result format matches")
+            assertEquals(ResultFormat.csv.toString(), created.result_format)
         }
     }
 
