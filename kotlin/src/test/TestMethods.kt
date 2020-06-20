@@ -95,7 +95,7 @@ class TestMethods {
     }
 
     private fun prepDashboard(): Dashboard {
-        val items = sdk.ok<Array<DashboardBase>>(sdk.all_dashboards("id"))
+        val items: Array<DashboardBase> = sdk.ok(sdk.all_dashboards("id"))
         if (items.count() > 0) {
             val base = items.first()
             return sdk.ok(sdk.dashboard(base.id!!))
@@ -228,6 +228,21 @@ class TestMethods {
     /*
     functional tests
      */
+
+    @test
+    fun testEnumProcessing() {
+        val query = sdk.ok<Query>(sdk.create_query(simpleQuery()))
+        query.id?.let { id ->
+            var task = WriteCreateQueryTask(
+                    query_id = id,
+                    source = "test",
+                    result_format = ResultFormat.csv)
+            val created = sdk.ok<CreateQueryTask>(sdk.create_query_task(task))
+            assertEquals(id, created.query_id, "Query id matches")
+            assertEquals(ResultFormat.csv, created.result_format, "Result format matches")
+        }
+    }
+
     @test
     fun testMe() {
         val me = sdk.ok<User>(sdk.me())
