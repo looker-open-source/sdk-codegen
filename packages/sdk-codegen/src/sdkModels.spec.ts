@@ -369,24 +369,23 @@ describe('sdkModels', () => {
       it('enum types are renamed and not overwritten', () => {
         const api = new ApiModel({} as OAS.OpenAPIObject)
         const actual1 = api.resolveType(rf1)
-        const name1 = titleCase(rf1.name)
-        expect(actual1.name).toEqual(name1)
+        expect(actual1.name).toEqual('ResultFormat')
 
         // Returns first enum for same values
+        // the `style` parameter is undefined because it is not part of this tests. Because Typescript arguments are
+        // positional only (no named arguments) the parameter must be skipped with an "ignore this" value
         const actual5 = api.resolveType(rf5, undefined, 'Foo')
-        expect(actual5.name).toEqual(name1)
+        expect(actual5.name).toEqual('ResultFormat')
         expect(actual5.description).toEqual(actual1.description)
 
         const actual2 = api.resolveType(rf2)
-        const name2 = `${titleCase(rf2.name)}1`
-        expect(actual2.name).toEqual(name2)
+        expect(actual2.name).toEqual('ResultFormat1')
 
         const actual3 = api.resolveType(rf3, undefined, 'result_format')
         expect(actual3.name).toEqual('ResultFormat2')
 
         const actual4 = api.resolveType(rf4, undefined, undefined, 'Meth')
-        const name4 = `Meth${titleCase(rf4.name)}`
-        expect(actual4.name).toEqual(name4)
+        expect(actual4.name).toEqual('MethResultFormat')
       })
     })
 
