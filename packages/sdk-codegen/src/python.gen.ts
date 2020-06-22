@@ -134,8 +134,8 @@ class ${this.packageName}(api_methods.APIMethods):
   modelsPrologue = (_indent: string) => `
 # ${this.warnEditing()}
 import datetime
-from typing import Any, MutableMapping, Optional, Sequence
 import enum
+from typing import Any, MutableMapping, Optional, Sequence
 
 import attr
 
