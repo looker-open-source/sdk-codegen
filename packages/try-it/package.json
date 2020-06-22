@@ -47,9 +47,6 @@
     "@looker/sdk": "^0.3.3-alpha.0",
     "@looker/sdk-codegen": "^0.1.2-alpha.18+551e4fe",
     "@looker/sdk-codegen-utils": "^0.1.0-alpha.2",
-    "@testing-library/jest-dom": "^5.5.0",
-    "@types/lodash": "^4.14.144",
-    "@types/node": "^13.13.4",
     "@types/readable-stream": "^2.3.5",
     "lerna": "^3.20.2",
     "lint-staged": "^10.2.2",
@@ -59,8 +56,7 @@
     "react-ace": "^8.1.0",
     "react-dom": "^16.13.1",
     "react-is": "^16.13.1",
-    "styled-components": "^4.4.1",
-    "typescript": "^3.8.2"
+    "styled-components": "^4.4.1"
   },
   "resolutions": {
     "typescript": "3.8.2"

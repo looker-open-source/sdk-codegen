@@ -1,11 +1,9 @@
 {
   "compilerOptions": {
-    "module": "esnext",
-    "target": "esnext",
-
+    "lib": ["ES2019", "dom"],
+    "module": "commonjs",
+    "target": "ES2019",
     "jsx": "react",
-    "lib": ["es6", "es2017.object", "dom"],
-
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,

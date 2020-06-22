@@ -45,9 +45,7 @@ describe('csharp generator', () => {
   it('summary comment', () => {
     const text = 'description'
     const actual = gen.summary(indent, text)
-    expect(actual).toEqual(`/// <summary>
-/// ${text}
-/// </summary>
+    expect(actual).toEqual(`/// <summary>description</summary>
 `)
   })
 
@@ -55,13 +53,13 @@ describe('csharp generator', () => {
     const type = apiTestModel.types.AccessToken
     const expected = `public class AccessToken : SdkModel 
 {
-  /// Access Token used for API calls (read-only)
+  /// <summary>Access Token used for API calls (read-only)</summary>
   public string? access_token { get; set; } = null;
-  /// Type of Token (read-only)
+  /// <summary>Type of Token (read-only)</summary>
   public string? token_type { get; set; } = null;
-  /// Number of seconds before the token expires (read-only)
+  /// <summary>Number of seconds before the token expires (read-only)</summary>
   public long? expires_in { get; set; } = null;
-  /// Refresh token which can be used to obtain a new access token (read-only)
+  /// <summary>Refresh token which can be used to obtain a new access token (read-only)</summary>
   public string? refresh_token { get; set; } = null;
 }`
     const actual = gen.declareType(indent, type)
@@ -75,12 +73,12 @@ describe('csharp generator', () => {
 /// POST /sql_queries/{slug}/run/{result_format} -> string
 /// 
 /// **Note**: Binary content may be returned by this method.
+/// <param name="slug">slug of query</param>
+/// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]</param>
+/// <param name="download">Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.</param>
 public async Task<SdkResponse<TSuccess, TError>> run_sql_query<TSuccess, TError>(
-  /// <param name=string>slug of query</param>
   string slug,
-  /// <param name=string>Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]</param>
   string result_format,
-  /// <param name=string>Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.</param>
   string? download = null,
   ITransportSettings? options = null) where TSuccess : class where TError : Exception
 {

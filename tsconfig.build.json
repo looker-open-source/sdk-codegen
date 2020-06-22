@@ -8,10 +8,10 @@
     "lib",
     "node_modules",
     "**/testUtils",
+    "**/test-data",
     "**/*.spec.ts",
     "**/*.spec.tsx",
     "**/*.test.ts",
     "**/*.test.tsx",
-    "**/test-data"
   ]
 }
