@@ -45,6 +45,8 @@ module.exports = (api) => {
           '**/*.spec.tsx',
           '__snapshots__',
           '__tests__',
+          '**/testUtils',
+          '**/test-data',
         ],
       },
     },

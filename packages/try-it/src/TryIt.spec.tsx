@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 import { BrowserTransport } from '@looker/sdk/lib/browser'
 
 import { TryIt } from './TryIt'
-import { testTextResponse } from '../test-data'
+import { testTextResponse } from './test-data'
 
 describe('TryIt', () => {
   const inputs = [

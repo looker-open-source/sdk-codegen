@@ -26,6 +26,8 @@ module.exports = {
   automock: false,
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
   moduleNameMapper: {
+    '@looker/sdk/lib/browser$': '<rootDir>/../sdk',
+    '@looker/((?!components|design|icons)(.+))$': '<rootDir>/../$1/src',
     '\\.(css)$': '<rootDir>../../config/jest/styleMock.js',
   },
   setupFilesAfterEnv: ['./jest.setup.js'],
