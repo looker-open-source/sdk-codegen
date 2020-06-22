@@ -21,6 +21,7 @@ pytest-mock = "*"
 twine = "*"
 pillow = "*"
 tox = "*"
+tox-pyenv = "*"
 
 [packages]
 requests = "*"

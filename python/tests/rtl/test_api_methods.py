@@ -201,13 +201,13 @@ def test_return_raises_an_SDKError_for_bad_responses(api):
 @pytest.mark.parametrize(
     "method_path, expected_url",
     [
-        ("/user", "https://self-signed.looker.com:19999/api/3.1/user"),
-        ("user", "https://self-signed.looker.com:19999/api/3.1/user"),
-        ("/user/1", "https://self-signed.looker.com:19999/api/3.1/user/1"),
-        ("user/1", "https://self-signed.looker.com:19999/api/3.1/user/1"),
+        ("/user", "/api/3.1/user"),
+        ("user", "/api/3.1/user"),
+        ("/user/1", "/api/3.1/user/1"),
+        ("user/1", "/api/3.1/user/1"),
     ],
 )
 def test_api_versioned_url_is_built_properly(
     api: api_methods.APIMethods, method_path: str, expected_url: str
 ):
-    assert api._path(method_path) == expected_url
+    assert api._path(method_path).endswith(expected_url)
