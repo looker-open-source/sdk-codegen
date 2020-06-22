@@ -1,17 +1,17 @@
 /// MIT License
-/// 
+///
 /// Copyright (c) 2019 Looker Data Sciences, Inc.
-/// 
+///
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in all
 /// copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,11 +39,11 @@ namespace Looker.SDK.API31
     public Looker31SDK(IAuthSession authSession): base(authSession, "3.1") { }
 
   /// Accepts the legal agreement for a given integration hub. This only works for integration hubs that have legal_agreement_required set to true and legal_agreement_signed set to false.
-  /// 
+  ///
   /// POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> IntegrationHub
-  /// 
+  ///
   /// <returns><c>IntegrationHub</c> Integration hub (application/json)</returns>
-  /// 
+  ///
   /// <param name="integration_hub_id">Id of integration_hub</param>
   public async Task<SdkResponse<IntegrationHub, Exception>> accept_integration_hub_legal_agreement(
     long integration_hub_id,
@@ -53,19 +53,19 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get active themes
-  /// 
+  ///
   /// Returns an array of active themes.
-  /// 
+  ///
   /// If the `name` parameter is specified, it will return an array with one theme if it's active and found.
-  /// 
+  ///
   /// The optional `ts` parameter can specify a different timestamp than "now."
-  /// 
+  ///
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-  /// 
+  ///
   /// GET /themes/active -> Theme[]
-  /// 
+  ///
   /// <returns><c>Theme[]</c> Themes (application/json)</returns>
-  /// 
+  ///
   /// <param name="name">Name of theme</param>
   /// <param name="ts">Timestamp representing the target datetime for the active period. Defaults to 'now'</param>
   /// <param name="fields">Requested fields.</param>
@@ -82,11 +82,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Adds a new group to a group.
-  /// 
+  ///
   /// POST /groups/{group_id}/groups -> Group
-  /// 
+  ///
   /// <returns><c>Group</c> Added group. (application/json)</returns>
-  /// 
+  ///
   /// <param name="group_id">Id of group</param>
   public async Task<SdkResponse<Group, Exception>> add_group_group(
     long group_id,
@@ -97,11 +97,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Adds a new user to a group.
-  /// 
+  ///
   /// POST /groups/{group_id}/users -> User
-  /// 
+  ///
   /// <returns><c>User</c> Added user. (application/json)</returns>
-  /// 
+  ///
   /// <param name="group_id">Id of group</param>
   public async Task<SdkResponse<User, Exception>> add_group_user(
     long group_id,
@@ -113,17 +113,17 @@ namespace Looker.SDK.API31
 
   /// ### Get an array of all existing Color Collections
   /// Get a **single** color collection by id with [ColorCollection](#!/ColorCollection/color_collection)
-  /// 
+  ///
   /// Get all **standard** color collections with [ColorCollection](#!/ColorCollection/color_collections_standard)
-  /// 
+  ///
   /// Get all **custom** color collections with [ColorCollection](#!/ColorCollection/color_collections_custom)
-  /// 
+  ///
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-  /// 
+  ///
   /// GET /color_collections -> ColorCollection[]
-  /// 
+  ///
   /// <returns><c>ColorCollection[]</c> ColorCollections (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<ColorCollection[], Exception>> all_color_collections(
     string? fields = null,
@@ -134,11 +134,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all connections.
-  /// 
+  ///
   /// GET /connections -> DBConnection[]
-  /// 
+  ///
   /// <returns><c>DBConnection[]</c> Connection (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DBConnection[], Exception>> all_connections(
     string? fields = null,
@@ -149,11 +149,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### All content metadata access records for a content metadata item.
-  /// 
+  ///
   /// GET /content_metadata_access -> ContentMetaGroupUser[]
-  /// 
+  ///
   /// <returns><c>ContentMetaGroupUser[]</c> Content Metadata Access (application/json)</returns>
-  /// 
+  ///
   /// <param name="content_metadata_id">Id of content metadata</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<ContentMetaGroupUser[], Exception>> all_content_metadata_accesses(
@@ -167,11 +167,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all content metadata in a space.
-  /// 
+  ///
   /// GET /content_metadata -> ContentMeta[]
-  /// 
+  ///
   /// <returns><c>ContentMeta[]</c> Content Metadata (application/json)</returns>
-  /// 
+  ///
   /// <param name="parent_id">Parent space of content.</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<ContentMeta[], Exception>> all_content_metadatas(
@@ -185,17 +185,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all active dashboards.
-  /// 
+  ///
   /// Returns an array of **abbreviated dashboard objects**. Dashboards marked as deleted are excluded from this list.
-  /// 
+  ///
   /// Get the **full details** of a specific dashboard by id with [dashboard()](#!/Dashboard/dashboard)
-  /// 
+  ///
   /// Find **deleted dashboards** with [search_dashboards()](#!/Dashboard/search_dashboards)
-  /// 
+  ///
   /// GET /dashboards -> DashboardBase[]
-  /// 
+  ///
   /// <returns><c>DashboardBase[]</c> dashboards (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardBase[], Exception>> all_dashboards(
     string? fields = null,
@@ -206,9 +206,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all datagroups.
-  /// 
+  ///
   /// GET /datagroups -> Datagroup[]
-  /// 
+  ///
   /// <returns><c>Datagroup[]</c> Datagroup (application/json)</returns>
   public async Task<SdkResponse<Datagroup[], Exception>> all_datagroups(
     ITransportSettings? options = null)
@@ -217,11 +217,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all dialects.
-  /// 
+  ///
   /// GET /dialect_info -> DialectInfo[]
-  /// 
+  ///
   /// <returns><c>DialectInfo[]</c> Dialect Info (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DialectInfo[], Exception>> all_dialect_infos(
     string? fields = null,
@@ -232,11 +232,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all folders.
-  /// 
+  ///
   /// GET /folders -> Folder[]
-  /// 
+  ///
   /// <returns><c>Folder[]</c> Folder (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Folder[], Exception>> all_folders(
     string? fields = null,
@@ -247,13 +247,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get All Git Branches
-  /// 
+  ///
   /// Returns a list of git branches in the project repository
-  /// 
+  ///
   /// GET /projects/{project_id}/git_branches -> GitBranch[]
-  /// 
+  ///
   /// <returns><c>GitBranch[]</c> Git Branch (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   public async Task<SdkResponse<GitBranch[], Exception>> all_git_branches(
     string project_id,
@@ -264,20 +264,20 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get All Git Connection Tests
-  /// 
+  ///
   /// dev mode required.
   ///   - Call `update_session` to select the 'dev' workspace.
-  /// 
+  ///
   /// Returns a list of tests which can be run against a project's (or the dependency project for the provided remote_url) git connection. Call [Run Git Connection Test](#!/Project/run_git_connection_test) to execute each test in sequence.
-  /// 
+  ///
   /// Tests are ordered by increasing specificity. Tests should be run in the order returned because later tests require functionality tested by tests earlier in the test list.
-  /// 
+  ///
   /// For example, a late-stage test for write access is meaningless if connecting to the git server (an early test) is failing.
-  /// 
+  ///
   /// GET /projects/{project_id}/git_connection_tests -> GitConnectionTest[]
-  /// 
+  ///
   /// <returns><c>GitConnectionTest[]</c> Git Connection Test (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   /// <param name="remote_url">(Optional: leave blank for root project) The remote url for remote dependency to test.</param>
   public async Task<SdkResponse<GitConnectionTest[], Exception>> all_git_connection_tests(
@@ -291,11 +291,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all the groups in a group
-  /// 
+  ///
   /// GET /groups/{group_id}/groups -> Group[]
-  /// 
+  ///
   /// <returns><c>Group[]</c> All groups in group. (application/json)</returns>
-  /// 
+  ///
   /// <param name="group_id">Id of group</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Group[], Exception>> all_group_groups(
@@ -308,11 +308,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all the users directly included in a group.
-  /// 
+  ///
   /// GET /groups/{group_id}/users -> User[]
-  /// 
+  ///
   /// <returns><c>User[]</c> All users in group. (application/json)</returns>
-  /// 
+  ///
   /// <param name="group_id">Id of group</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
@@ -334,11 +334,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all groups.
-  /// 
+  ///
   /// GET /groups -> Group[]
-  /// 
+  ///
   /// <returns><c>Group[]</c> Group (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
@@ -367,11 +367,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all homepage items.
-  /// 
+  ///
   /// GET /homepage_items -> HomepageItem[]
-  /// 
+  ///
   /// <returns><c>HomepageItem[]</c> Homepage Item (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="homepage_section_id">Filter to a specific homepage section</param>
@@ -388,11 +388,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all homepage sections.
-  /// 
+  ///
   /// GET /homepage_sections -> HomepageSection[]
-  /// 
+  ///
   /// <returns><c>HomepageSection[]</c> Homepage section (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to sort by.</param>
   public async Task<SdkResponse<HomepageSection[], Exception>> all_homepage_sections(
@@ -406,11 +406,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all homepages.
-  /// 
+  ///
   /// GET /homepages -> Homepage[]
-  /// 
+  ///
   /// <returns><c>Homepage[]</c> Homepage (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Homepage[], Exception>> all_homepages(
     string? fields = null,
@@ -421,11 +421,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all Integration Hubs.
-  /// 
+  ///
   /// GET /integration_hubs -> IntegrationHub[]
-  /// 
+  ///
   /// <returns><c>IntegrationHub[]</c> Integration Hub (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<IntegrationHub[], Exception>> all_integration_hubs(
     string? fields = null,
@@ -436,11 +436,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all Integrations.
-  /// 
+  ///
   /// GET /integrations -> Integration[]
-  /// 
+  ///
   /// <returns><c>Integration[]</c> Integration (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="integration_hub_id">Filter to a specific provider</param>
   public async Task<SdkResponse<Integration[], Exception>> all_integrations(
@@ -454,9 +454,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get all legacy features.
-  /// 
+  ///
   /// GET /legacy_features -> LegacyFeature[]
-  /// 
+  ///
   /// <returns><c>LegacyFeature[]</c> Legacy Feature (application/json)</returns>
   public async Task<SdkResponse<LegacyFeature[], Exception>> all_legacy_features(
     ITransportSettings? options = null)
@@ -465,9 +465,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get a list of locales that Looker supports.
-  /// 
+  ///
   /// GET /locales -> Locale[]
-  /// 
+  ///
   /// <returns><c>Locale[]</c> Locale (application/json)</returns>
   public async Task<SdkResponse<Locale[], Exception>> all_locales(
     ITransportSettings? options = null)
@@ -476,11 +476,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all lookml models.
-  /// 
+  ///
   /// GET /lookml_models -> LookmlModel[]
-  /// 
+  ///
   /// <returns><c>LookmlModel[]</c> LookML Model (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<LookmlModel[], Exception>> all_lookml_models(
     string? fields = null,
@@ -491,15 +491,15 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get All LookML Tests
-  /// 
+  ///
   /// Returns a list of tests which can be run to validate a project's LookML code and/or the underlying data,
   /// optionally filtered by the file id.
   /// Call [Run LookML Test](#!/Project/run_lookml_test) to execute tests.
-  /// 
+  ///
   /// GET /projects/{project_id}/lookml_tests -> LookmlTest[]
-  /// 
+  ///
   /// <returns><c>LookmlTest[]</c> LookML Test (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   /// <param name="file_id">File Id</param>
   public async Task<SdkResponse<LookmlTest[], Exception>> all_lookml_tests(
@@ -513,17 +513,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all active Looks
-  /// 
+  ///
   /// Returns an array of **abbreviated Look objects** describing all the looks that the caller has access to. Soft-deleted Looks are **not** included.
-  /// 
+  ///
   /// Get the **full details** of a specific look by id with [look(id)](#!/Look/look)
-  /// 
+  ///
   /// Find **soft-deleted looks** with [search_looks()](#!/Look/search_looks)
-  /// 
+  ///
   /// GET /looks -> Look[]
-  /// 
+  ///
   /// <returns><c>Look[]</c> Look (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Look[], Exception>> all_looks(
     string? fields = null,
@@ -534,11 +534,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all model sets.
-  /// 
+  ///
   /// GET /model_sets -> ModelSet[]
-  /// 
+  ///
   /// <returns><c>ModelSet[]</c> All model sets. (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<ModelSet[], Exception>> all_model_sets(
     string? fields = null,
@@ -549,11 +549,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all permission sets.
-  /// 
+  ///
   /// GET /permission_sets -> PermissionSet[]
-  /// 
+  ///
   /// <returns><c>PermissionSet[]</c> Permission Set (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<PermissionSet[], Exception>> all_permission_sets(
     string? fields = null,
@@ -564,9 +564,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get all supported permissions.
-  /// 
+  ///
   /// GET /permissions -> Permission[]
-  /// 
+  ///
   /// <returns><c>Permission[]</c> Permission (application/json)</returns>
   public async Task<SdkResponse<Permission[], Exception>> all_permissions(
     ITransportSettings? options = null)
@@ -575,13 +575,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get All Project Files
-  /// 
+  ///
   /// Returns a list of the files in the project
-  /// 
+  ///
   /// GET /projects/{project_id}/files -> ProjectFile[]
-  /// 
+  ///
   /// <returns><c>ProjectFile[]</c> Project File (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<ProjectFile[], Exception>> all_project_files(
@@ -595,13 +595,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get All Projects
-  /// 
+  ///
   /// Returns all projects visible to the current user
-  /// 
+  ///
   /// GET /projects -> Project[]
-  /// 
+  ///
   /// <returns><c>Project[]</c> Project (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<Project[], Exception>> all_projects(
     string? fields = null,
@@ -612,11 +612,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all roles.
-  /// 
+  ///
   /// GET /roles -> Role[]
-  /// 
+  ///
   /// <returns><c>Role[]</c> Role (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="ids">Optional list of ids to get specific roles.</param>
   public async Task<SdkResponse<Role[], Exception>> all_roles(
@@ -630,9 +630,9 @@ namespace Looker.SDK.API31
   }
 
   /// Get information about all running queries.
-  /// 
+  ///
   /// GET /running_queries -> RunningQueries[]
-  /// 
+  ///
   /// <returns><c>RunningQueries[]</c> Running Queries. (application/json)</returns>
   public async Task<SdkResponse<RunningQueries[], Exception>> all_running_queries(
     ITransportSettings? options = null)
@@ -641,21 +641,21 @@ namespace Looker.SDK.API31
   }
 
   /// ### List All Scheduled Plans
-  /// 
+  ///
   /// Returns all scheduled plans which belong to the caller or given user.
-  /// 
+  ///
   /// If no user_id is provided, this function returns the scheduled plans owned by the caller.
-  /// 
-  /// 
+  ///
+  ///
   /// To list all schedules for all users, pass `all_users=true`.
-  /// 
-  /// 
+  ///
+  ///
   /// The caller must have `see_schedules` permission to see other users' scheduled plans.
-  /// 
+  ///
   /// GET /scheduled_plans -> ScheduledPlan[]
-  /// 
+  ///
   /// <returns><c>ScheduledPlan[]</c> Scheduled Plan (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.</param>
   /// <param name="fields">Comma delimited list of field names. If provided, only the fields specified will be included in the response</param>
   /// <param name="all_users">Return scheduled plans belonging to all users (caller needs see_schedules permission)</param>
@@ -672,11 +672,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all spaces.
-  /// 
+  ///
   /// GET /spaces -> SpaceBase[]
-  /// 
+  ///
   /// <returns><c>SpaceBase[]</c> Space (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<SpaceBase[], Exception>> all_spaces(
     string? fields = null,
@@ -687,17 +687,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get an array of all existing themes
-  /// 
+  ///
   /// Get a **single theme** by id with [Theme](#!/Theme/theme)
-  /// 
+  ///
   /// This method returns an array of all existing themes. The active time for the theme is not considered.
-  /// 
+  ///
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-  /// 
+  ///
   /// GET /themes -> Theme[]
-  /// 
+  ///
   /// <returns><c>Theme[]</c> Themes (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Theme[], Exception>> all_themes(
     string? fields = null,
@@ -708,9 +708,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
-  /// 
+  ///
   /// GET /timezones -> Timezone[]
-  /// 
+  ///
   /// <returns><c>Timezone[]</c> Timezone (application/json)</returns>
   public async Task<SdkResponse<Timezone[], Exception>> all_timezones(
     ITransportSettings? options = null)
@@ -719,17 +719,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Returns all values of a user attribute defined by user groups, in precedence order.
-  /// 
+  ///
   /// A user may be a member of multiple groups which define different values for a given user attribute.
   /// The order of group-values in the response determines precedence for selecting which group-value applies
   /// to a given user.  For more information, see [Set User Attribute Group Values](#!/UserAttribute/set_user_attribute_group_values).
-  /// 
+  ///
   /// Results will only include groups that the caller's user account has permission to see.
-  /// 
+  ///
   /// GET /user_attributes/{user_attribute_id}/group_values -> UserAttributeGroupValue[]
-  /// 
+  ///
   /// <returns><c>UserAttributeGroupValue[]</c> All group values for attribute. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_attribute_id">Id of user attribute</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<UserAttributeGroupValue[], Exception>> all_user_attribute_group_values(
@@ -742,11 +742,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all user attributes.
-  /// 
+  ///
   /// GET /user_attributes -> UserAttribute[]
-  /// 
+  ///
   /// <returns><c>UserAttribute[]</c> User Attribute (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to order the results by. Sortable fields include: name, label</param>
   public async Task<SdkResponse<UserAttribute[], Exception>> all_user_attributes(
@@ -760,11 +760,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
-  /// 
+  ///
   /// GET /users/{user_id}/credentials_api3 -> CredentialsApi3[]
-  /// 
+  ///
   /// <returns><c>CredentialsApi3[]</c> API 3 Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsApi3[], Exception>> all_user_credentials_api3s(
@@ -777,11 +777,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Embed login information for the specified user.
-  /// 
+  ///
   /// GET /users/{user_id}/credentials_embed -> CredentialsEmbed[]
-  /// 
+  ///
   /// <returns><c>CredentialsEmbed[]</c> Embedding Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsEmbed[], Exception>> all_user_credentials_embeds(
@@ -794,11 +794,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get currently locked-out users.
-  /// 
+  ///
   /// GET /user_login_lockouts -> UserLoginLockout[]
-  /// 
+  ///
   /// <returns><c>UserLoginLockout[]</c> User Login Lockout (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Include only these fields in the response</param>
   public async Task<SdkResponse<UserLoginLockout[], Exception>> all_user_login_lockouts(
     string? fields = null,
@@ -809,11 +809,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Web login session for the specified user.
-  /// 
+  ///
   /// GET /users/{user_id}/sessions -> Session[]
-  /// 
+  ///
   /// <returns><c>Session[]</c> Web Login Session (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Session[], Exception>> all_user_sessions(
@@ -826,11 +826,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all users.
-  /// 
+  ///
   /// GET /users -> User[]
-  /// 
+  ///
   /// <returns><c>User[]</c> All users. (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
@@ -853,11 +853,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get All Workspaces
-  /// 
+  ///
   /// Returns all workspaces available to the calling user.
-  /// 
+  ///
   /// GET /workspaces -> Workspace[]
-  /// 
+  ///
   /// <returns><c>Workspace[]</c> Workspace (application/json)</returns>
   public async Task<SdkResponse<Workspace[], Exception>> all_workspaces(
     ITransportSettings? options = null)
@@ -866,9 +866,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### WARNING: The Looker internal database backup function has been deprecated.
-  /// 
+  ///
   /// GET /backup_configuration -> BackupConfiguration
-  /// 
+  ///
   /// <returns><c>BackupConfiguration</c> Current Backup Configuration (application/json)</returns>
   public async Task<SdkResponse<BackupConfiguration, Exception>> backup_configuration(
     ITransportSettings? options = null)
@@ -877,9 +877,9 @@ namespace Looker.SDK.API31
   }
 
   /// Get the current Cloud Storage Configuration.
-  /// 
+  ///
   /// GET /cloud_storage -> BackupConfiguration
-  /// 
+  ///
   /// <returns><c>BackupConfiguration</c> Current Cloud Storage Configuration (application/json)</returns>
   public async Task<SdkResponse<BackupConfiguration, Exception>> cloud_storage_configuration(
     ITransportSettings? options = null)
@@ -888,20 +888,20 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get a Color Collection by ID
-  /// 
+  ///
   /// Use this to retrieve a specific Color Collection.
   /// Get a **single** color collection by id with [ColorCollection](#!/ColorCollection/color_collection)
-  /// 
+  ///
   /// Get all **standard** color collections with [ColorCollection](#!/ColorCollection/color_collections_standard)
-  /// 
+  ///
   /// Get all **custom** color collections with [ColorCollection](#!/ColorCollection/color_collections_custom)
-  /// 
+  ///
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-  /// 
+  ///
   /// GET /color_collections/{collection_id} -> ColorCollection
-  /// 
+  ///
   /// <returns><c>ColorCollection</c> ColorCollection (application/json)</returns>
-  /// 
+  ///
   /// <param name="collection_id">Id of Color Collection</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<ColorCollection, Exception>> color_collection(
@@ -916,15 +916,15 @@ namespace Looker.SDK.API31
 
   /// ### Get an array of all existing **Custom** Color Collections
   /// Get a **single** color collection by id with [ColorCollection](#!/ColorCollection/color_collection)
-  /// 
+  ///
   /// Get all **standard** color collections with [ColorCollection](#!/ColorCollection/color_collections_standard)
-  /// 
+  ///
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-  /// 
+  ///
   /// GET /color_collections/custom -> ColorCollection[]
-  /// 
+  ///
   /// <returns><c>ColorCollection[]</c> ColorCollections (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<ColorCollection[], Exception>> color_collections_custom(
     string? fields = null,
@@ -936,15 +936,15 @@ namespace Looker.SDK.API31
 
   /// ### Get an array of all existing **Standard** Color Collections
   /// Get a **single** color collection by id with [ColorCollection](#!/ColorCollection/color_collection)
-  /// 
+  ///
   /// Get all **custom** color collections with [ColorCollection](#!/ColorCollection/color_collections_custom)
-  /// 
+  ///
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-  /// 
+  ///
   /// GET /color_collections/standard -> ColorCollection[]
-  /// 
+  ///
   /// <returns><c>ColorCollection[]</c> ColorCollections (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<ColorCollection[], Exception>> color_collections_standard(
     string? fields = null,
@@ -955,11 +955,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about a connection.
-  /// 
+  ///
   /// GET /connections/{connection_name} -> DBConnection
-  /// 
+  ///
   /// <returns><c>DBConnection</c> Connection (application/json)</returns>
-  /// 
+  ///
   /// <param name="connection_name">Name of connection</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DBConnection, Exception>> connection(
@@ -973,11 +973,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get favorite content by its id
-  /// 
+  ///
   /// GET /content_favorite/{content_favorite_id} -> ContentFavorite
-  /// 
+  ///
   /// <returns><c>ContentFavorite</c> Favorite Content (application/json)</returns>
-  /// 
+  ///
   /// <param name="content_favorite_id">Id of favorite content</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<ContentFavorite, Exception>> content_favorite(
@@ -990,11 +990,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about an individual content metadata record.
-  /// 
+  ///
   /// GET /content_metadata/{content_metadata_id} -> ContentMeta
-  /// 
+  ///
   /// <returns><c>ContentMeta</c> Content Metadata (application/json)</returns>
-  /// 
+  ///
   /// <param name="content_metadata_id">Id of content metadata</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<ContentMeta, Exception>> content_metadata(
@@ -1007,14 +1007,14 @@ namespace Looker.SDK.API31
   }
 
   /// ### Validate All Content
-  /// 
+  ///
   /// Performs validation of all looks and dashboards
   /// Returns a list of errors found as well as metadata about the content validation run.
-  /// 
+  ///
   /// GET /content_validation -> ContentValidation
-  /// 
+  ///
   /// <returns><c>ContentValidation</c> Content validation results (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<ContentValidation, Exception>> content_validation(
     string? fields = null,
@@ -1025,17 +1025,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a custom color collection with the specified information
-  /// 
+  ///
   /// Creates a new custom color collection object, returning the details, including the created id.
-  /// 
+  ///
   /// **Update** an existing color collection with [Update Color Collection](#!/ColorCollection/update_color_collection)
-  /// 
+  ///
   /// **Permanently delete** an existing custom color collection with [Delete Color Collection](#!/ColorCollection/delete_color_collection)
-  /// 
+  ///
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-  /// 
+  ///
   /// POST /color_collections -> ColorCollection
-  /// 
+  ///
   /// <returns><c>ColorCollection</c> ColorCollection (application/json)</returns>
   public async Task<SdkResponse<ColorCollection, Exception>> create_color_collection(
     WriteColorCollection body,
@@ -1045,9 +1045,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a connection using the specified configuration.
-  /// 
+  ///
   /// POST /connections -> DBConnection
-  /// 
+  ///
   /// <returns><c>DBConnection</c> Connection (application/json)</returns>
   public async Task<SdkResponse<DBConnection, Exception>> create_connection(
     WriteDBConnection body,
@@ -1057,9 +1057,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create favorite content
-  /// 
+  ///
   /// POST /content_favorite -> ContentFavorite
-  /// 
+  ///
   /// <returns><c>ContentFavorite</c> Favorite Content (application/json)</returns>
   public async Task<SdkResponse<ContentFavorite, Exception>> create_content_favorite(
     WriteContentFavorite body,
@@ -1069,11 +1069,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create content metadata access.
-  /// 
+  ///
   /// POST /content_metadata_access -> ContentMetaGroupUser
-  /// 
+  ///
   /// <returns><c>ContentMetaGroupUser</c> Content Metadata Access (application/json)</returns>
-  /// 
+  ///
   /// <param name="send_boards_notification_email">Optionally sends notification email when granting access to a board.</param>
   public async Task<SdkResponse<ContentMetaGroupUser, Exception>> create_content_metadata_access(
     ContentMetaGroupUser body,
@@ -1085,22 +1085,22 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a new dashboard
-  /// 
+  ///
   /// Creates a new dashboard object and returns the details of the newly created dashboard.
-  /// 
+  ///
   /// `Title`, `user_id`, and `space_id` are all required fields.
   /// `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
   /// A dashboard's `title` must be unique within the space in which it resides.
-  /// 
+  ///
   /// If you receive a 422 error response when creating a dashboard, be sure to look at the
   /// response body for information about exactly which fields are missing or contain invalid data.
-  /// 
+  ///
   /// You can **update** an existing dashboard with [update_dashboard()](#!/Dashboard/update_dashboard)
-  /// 
+  ///
   /// You can **permanently delete** an existing dashboard with [delete_dashboard()](#!/Dashboard/delete_dashboard)
-  /// 
+  ///
   /// POST /dashboards -> Dashboard
-  /// 
+  ///
   /// <returns><c>Dashboard</c> Dashboard (application/json)</returns>
   public async Task<SdkResponse<Dashboard, Exception>> create_dashboard(
     WriteDashboard body,
@@ -1110,11 +1110,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a dashboard element on the dashboard with a specific id.
-  /// 
+  ///
   /// POST /dashboard_elements -> DashboardElement
-  /// 
+  ///
   /// <returns><c>DashboardElement</c> DashboardElement (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardElement, Exception>> create_dashboard_element(
     WriteDashboardElement body,
@@ -1126,11 +1126,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a dashboard filter on the dashboard with a specific id.
-  /// 
+  ///
   /// POST /dashboard_filters -> DashboardFilter
-  /// 
+  ///
   /// <returns><c>DashboardFilter</c> Dashboard Filter (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<DashboardFilter, Exception>> create_dashboard_filter(
     WriteCreateDashboardFilter body,
@@ -1142,11 +1142,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a dashboard layout on the dashboard with a specific id.
-  /// 
+  ///
   /// POST /dashboard_layouts -> DashboardLayout
-  /// 
+  ///
   /// <returns><c>DashboardLayout</c> DashboardLayout (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardLayout, Exception>> create_dashboard_layout(
     WriteDashboardLayout body,
@@ -1158,15 +1158,15 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a new task to render a dashboard to a document or image.
-  /// 
+  ///
   /// Returns a render task object.
   /// To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
-  /// 
+  ///
   /// POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> RenderTask
-  /// 
+  ///
   /// <returns><c>RenderTask</c> Render Task (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_id">Id of dashboard to render</param>
   /// <param name="result_format">Output type: pdf, png, or jpg</param>
   /// <param name="width">Output width in pixels</param>
@@ -1197,9 +1197,9 @@ namespace Looker.SDK.API31
   /// ### Trigger the generation of digest email records and send them to Looker's internal system. This does not send
   /// any actual emails, it generates records containing content which may be of interest for users who have become inactive.
   /// Emails will be sent at a later time from Looker's internal system if the Digest Emails feature is enabled in settings.
-  /// 
+  ///
   /// POST /digest_email_send -> DigestEmailSend
-  /// 
+  ///
   /// <returns><c>DigestEmailSend</c> Status of generating and sending the data (application/json)</returns>
   public async Task<SdkResponse<DigestEmailSend, Exception>> create_digest_email_send(
     ITransportSettings? options = null)
@@ -1208,12 +1208,12 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a folder with specified information.
-  /// 
+  ///
   /// Caller must have permission to edit the parent folder and to create folders, otherwise the request
   /// returns 404 Not Found.
-  /// 
+  ///
   /// POST /folders -> Folder
-  /// 
+  ///
   /// <returns><c>Folder</c> Folder (application/json)</returns>
   public async Task<SdkResponse<Folder, Exception>> create_folder(
     CreateFolder body,
@@ -1223,18 +1223,18 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create and Checkout a Git Branch
-  /// 
+  ///
   /// Creates and checks out a new branch in the given project repository
   /// Only allowed in development mode
   ///   - Call `update_session` to select the 'dev' workspace.
-  /// 
+  ///
   /// Optionally specify a branch name, tag name or commit SHA as the start point in the ref field.
   ///   If no ref is specified, HEAD of the current branch will be used as the start point for the new branch.
-  /// 
+  ///
   /// POST /projects/{project_id}/git_branch -> GitBranch
-  /// 
+  ///
   /// <returns><c>GitBranch</c> Git Branch (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   public async Task<SdkResponse<GitBranch, Exception>> create_git_branch(
     string project_id,
@@ -1246,19 +1246,19 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create Git Deploy Key
-  /// 
+  ///
   /// Create a public/private key pair for authenticating ssh git requests from Looker to a remote git repository
   /// for a particular Looker project.
-  /// 
+  ///
   /// Returns the public key of the generated ssh key pair.
-  /// 
+  ///
   /// Copy this public key to your remote git repository's ssh keys configuration so that the remote git service can
   /// validate and accept git requests from the Looker server.
-  /// 
+  ///
   /// POST /projects/{project_id}/git/deploy_key -> string
-  /// 
+  ///
   /// <returns><c>string</c> Project (text/plain)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   public async Task<SdkResponse<string, Exception>> create_git_deploy_key(
     string project_id,
@@ -1269,11 +1269,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Creates a new group (admin only).
-  /// 
+  ///
   /// POST /groups -> Group
-  /// 
+  ///
   /// <returns><c>Group</c> Group (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Group, Exception>> create_group(
     WriteGroup body,
@@ -1285,11 +1285,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a new homepage.
-  /// 
+  ///
   /// POST /homepages -> Homepage
-  /// 
+  ///
   /// <returns><c>Homepage</c> Homepage (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Homepage, Exception>> create_homepage(
     WriteHomepage body,
@@ -1301,11 +1301,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a new homepage item.
-  /// 
+  ///
   /// POST /homepage_items -> HomepageItem
-  /// 
+  ///
   /// <returns><c>HomepageItem</c> Homepage Item (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<HomepageItem, Exception>> create_homepage_item(
     WriteHomepageItem body,
@@ -1317,11 +1317,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a new homepage section.
-  /// 
+  ///
   /// POST /homepage_sections -> HomepageSection
-  /// 
+  ///
   /// <returns><c>HomepageSection</c> Homepage section (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<HomepageSection, Exception>> create_homepage_section(
     WriteHomepageSection body,
@@ -1333,13 +1333,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a new Integration Hub.
-  /// 
+  ///
   /// This API is rate limited to prevent it from being used for SSRF attacks
-  /// 
+  ///
   /// POST /integration_hubs -> IntegrationHub
-  /// 
+  ///
   /// <returns><c>IntegrationHub</c> Integration Hub (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<IntegrationHub, Exception>> create_integration_hub(
     WriteIntegrationHub body,
@@ -1351,17 +1351,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a Look
-  /// 
+  ///
   /// To create a look to display query data, first create the query with [create_query()](#!/Query/create_query)
   /// then assign the query's id to the `query_id` property in the call to `create_look()`.
-  /// 
+  ///
   /// To place the look into a particular space, assign the space's id to the `space_id` property
   /// in the call to `create_look()`.
-  /// 
+  ///
   /// POST /looks -> LookWithQuery
-  /// 
+  ///
   /// <returns><c>LookWithQuery</c> Look (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<LookWithQuery, Exception>> create_look(
     WriteLookWithQuery body,
@@ -1373,15 +1373,15 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a new task to render a look to an image.
-  /// 
+  ///
   /// Returns a render task object.
   /// To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
-  /// 
+  ///
   /// POST /render_tasks/looks/{look_id}/{result_format} -> RenderTask
-  /// 
+  ///
   /// <returns><c>RenderTask</c> Render Task (application/json)</returns>
-  /// 
+  ///
   /// <param name="look_id">Id of look to render</param>
   /// <param name="result_format">Output type: png, or jpg</param>
   /// <param name="width">Output width in pixels</param>
@@ -1403,17 +1403,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a new task to render a lookml dashboard to a document or image.
-  /// 
+  ///
   /// # DEPRECATED:  Use [create_dashboard_render_task()](#!/RenderTask/create_dashboard_render_task) in API 4.0+
-  /// 
+  ///
   /// Returns a render task object.
   /// To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
-  /// 
+  ///
   /// POST /render_tasks/lookml_dashboards/{dashboard_id}/{result_format} -> RenderTask
-  /// 
+  ///
   /// <returns><c>RenderTask</c> Render Task (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_id">Id of lookml dashboard to render</param>
   /// <param name="result_format">Output type: pdf, png, or jpg</param>
   /// <param name="width">Output width in pixels</param>
@@ -1443,9 +1443,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a lookml model using the specified configuration.
-  /// 
+  ///
   /// POST /lookml_models -> LookmlModel
-  /// 
+  ///
   /// <returns><c>LookmlModel</c> LookML Model (application/json)</returns>
   public async Task<SdkResponse<LookmlModel, Exception>> create_lookml_model(
     WriteLookmlModel body,
@@ -1455,27 +1455,27 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create Merge Query
-  /// 
+  ///
   /// Creates a new merge query object.
-  /// 
+  ///
   /// A merge query takes the results of one or more queries and combines (merges) the results
   /// according to field mapping definitions. The result is similar to a SQL left outer join.
-  /// 
+  ///
   /// A merge query can merge results of queries from different SQL databases.
-  /// 
+  ///
   /// The order that queries are defined in the source_queries array property is significant. The
   /// first query in the array defines the primary key into which the results of subsequent
   /// queries will be merged.
-  /// 
+  ///
   /// Like model/view query objects, merge queries are immutable and have structural identity - if
   /// you make a request to create a new merge query that is identical to an existing merge query,
   /// the existing merge query will be returned instead of creating a duplicate. Conversely, any
   /// change to the contents of a merge query will produce a new object with a new id.
-  /// 
+  ///
   /// POST /merge_queries -> MergeQuery
-  /// 
+  ///
   /// <returns><c>MergeQuery</c> Merge Query (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<MergeQuery, Exception>> create_merge_query(
     WriteMergeQuery? body,
@@ -1487,9 +1487,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a model set with the specified information. Model sets are used by Roles.
-  /// 
+  ///
   /// POST /model_sets -> ModelSet
-  /// 
+  ///
   /// <returns><c>ModelSet</c> Newly created ModelSet (application/json)</returns>
   public async Task<SdkResponse<ModelSet, Exception>> create_model_set(
     WriteModelSet body,
@@ -1499,9 +1499,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a OIDC test configuration.
-  /// 
+  ///
   /// POST /oidc_test_configs -> OIDCConfig
-  /// 
+  ///
   /// <returns><c>OIDCConfig</c> OIDC test config (application/json)</returns>
   public async Task<SdkResponse<OIDCConfig, Exception>> create_oidc_test_config(
     WriteOIDCConfig body,
@@ -1511,9 +1511,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a permission set with the specified information. Permission sets are used by Roles.
-  /// 
+  ///
   /// POST /permission_sets -> PermissionSet
-  /// 
+  ///
   /// <returns><c>PermissionSet</c> Permission Set (application/json)</returns>
   public async Task<SdkResponse<PermissionSet, Exception>> create_permission_set(
     WritePermissionSet body,
@@ -1523,15 +1523,15 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create A Project
-  /// 
+  ///
   /// dev mode required.
   /// - Call `update_session` to select the 'dev' workspace.
-  /// 
+  ///
   /// `name` is required.
   /// `git_remote_url` is not allowed. To configure Git for the newly created project, follow the instructions in `update_project`.
-  /// 
+  ///
   /// POST /projects -> Project
-  /// 
+  ///
   /// <returns><c>Project</c> Project (application/json)</returns>
   public async Task<SdkResponse<Project, Exception>> create_project(
     WriteProject body,
@@ -1541,18 +1541,18 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a query.
-  /// 
+  ///
   /// This allows you to create a new query that you can later run. Looker queries are immutable once created
   /// and are not deleted. If you create a query that is exactly like an existing query then the existing query
   /// will be returned and no new query will be created. Whether a new query is created or not, you can use
   /// the 'id' in the returned query with the 'run' method.
-  /// 
+  ///
   /// The query parameters are passed as json in the body of the request.
-  /// 
+  ///
   /// POST /queries -> Query
-  /// 
+  ///
   /// <returns><c>Query</c> Query (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Query, Exception>> create_query(
     WriteQuery body,
@@ -1564,15 +1564,15 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a new task to render an existing query to an image.
-  /// 
+  ///
   /// Returns a render task object.
   /// To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
-  /// 
+  ///
   /// POST /render_tasks/queries/{query_id}/{result_format} -> RenderTask
-  /// 
+  ///
   /// <returns><c>RenderTask</c> Render Task (application/json)</returns>
-  /// 
+  ///
   /// <param name="query_id">Id of the query to render</param>
   /// <param name="result_format">Output type: png or jpg</param>
   /// <param name="width">Output width in pixels</param>
@@ -1594,16 +1594,16 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create an async query task
-  /// 
+  ///
   /// Creates a query task (job) to run a previously created query asynchronously. Returns a Query Task ID.
-  /// 
+  ///
   /// Use [query_task(query_task_id)](#!/Query/query_task) to check the execution status of the query task.
   /// After the query task status reaches "Complete", use [query_task_results(query_task_id)](#!/Query/query_task_results) to fetch the results of the query.
-  /// 
+  ///
   /// POST /query_tasks -> QueryTask
-  /// 
+  ///
   /// <returns><c>QueryTask</c> query_task (application/json)</returns>
-  /// 
+  ///
   /// <param name="limit">Row limit (may override the limit in the saved query).</param>
   /// <param name="apply_formatting">Apply model-specified formatting to each result.</param>
   /// <param name="apply_vis">Apply visualization options to results.</param>
@@ -1651,9 +1651,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a role with the specified information.
-  /// 
+  ///
   /// POST /roles -> Role
-  /// 
+  ///
   /// <returns><c>Role</c> Role (application/json)</returns>
   public async Task<SdkResponse<Role, Exception>> create_role(
     WriteRole body,
@@ -1663,9 +1663,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a SAML test configuration.
-  /// 
+  ///
   /// POST /saml_test_configs -> SamlConfig
-  /// 
+  ///
   /// <returns><c>SamlConfig</c> SAML test config (application/json)</returns>
   public async Task<SdkResponse<SamlConfig, Exception>> create_saml_test_config(
     WriteSamlConfig body,
@@ -1675,9 +1675,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a Scheduled Plan
-  /// 
+  ///
   /// Create a scheduled plan to render a Look or Dashboard on a recurring schedule.
-  /// 
+  ///
   /// To create a scheduled plan, you MUST provide values for the following fields:
   /// `name`
   /// and
@@ -1686,37 +1686,37 @@ namespace Looker.SDK.API31
   /// `cron_tab` or `datagroup`
   /// and
   /// at least one scheduled_plan_destination
-  /// 
+  ///
   /// A scheduled plan MUST have at least one scheduled_plan_destination defined.
-  /// 
+  ///
   /// When `look_id` is set, `require_no_results`, `require_results`, and `require_change` are all required.
-  /// 
+  ///
   /// If `create_scheduled_plan` fails with a 422 error, be sure to look at the error messages in the response which will explain exactly what fields are missing or values that are incompatible.
-  /// 
+  ///
   /// The queries that provide the data for the look or dashboard are run in the context of user account that owns the scheduled plan.
-  /// 
+  ///
   /// When `run_as_recipient` is `false` or not specified, the queries that provide the data for the
   /// look or dashboard are run in the context of user account that owns the scheduled plan.
-  /// 
+  ///
   /// When `run_as_recipient` is `true` and all the email recipients are Looker user accounts, the
   /// queries are run in the context of each recipient, so different recipients may see different
   /// data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://looker.com/docs/r/admin/run-as-recipient).
-  /// 
+  ///
   /// Admins can create and modify scheduled plans on behalf of other users by specifying a user id.
   /// Non-admin users may not create or modify scheduled plans by or for other users.
-  /// 
+  ///
   /// #### Email Permissions:
-  /// 
+  ///
   /// For details about permissions required to schedule delivery to email and the safeguards
   /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
-  /// 
-  /// 
+  ///
+  ///
   /// #### Scheduled Plan Destination Formats
-  /// 
+  ///
   /// Scheduled plan destinations must specify the data format to produce and send to the destination.
-  /// 
+  ///
   /// Formats:
-  /// 
+  ///
   /// | format | Description
   /// | :-----------: | :--- |
   /// | json | A JSON object containing a `data` property which contains an array of JSON objects, one per row. No metadata.
@@ -1730,11 +1730,11 @@ namespace Looker.SDK.API31
   /// | assembled_pdf | Dashboard rendered in a single column layout to produce a PDF document
   /// | wysiwyg_png | Dashboard rendered in a tiled layout to produce a PNG image
   /// ||
-  /// 
+  ///
   /// Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
-  /// 
+  ///
   /// POST /scheduled_plans -> ScheduledPlan
-  /// 
+  ///
   /// <returns><c>ScheduledPlan</c> Scheduled Plan (application/json)</returns>
   public async Task<SdkResponse<ScheduledPlan, Exception>> create_scheduled_plan(
     WriteScheduledPlan body,
@@ -1744,12 +1744,12 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a space with specified information.
-  /// 
+  ///
   /// Caller must have permission to edit the parent space and to create spaces, otherwise the request
   /// returns 404 Not Found.
-  /// 
+  ///
   /// POST /spaces -> Space
-  /// 
+  ///
   /// <returns><c>Space</c> Space (application/json)</returns>
   public async Task<SdkResponse<Space, Exception>> create_space(
     CreateSpace body,
@@ -1759,11 +1759,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a SQL Runner Query
-  /// 
+  ///
   /// Either the `connection_name` or `model_name` parameter MUST be provided.
-  /// 
+  ///
   /// POST /sql_queries -> SqlQuery
-  /// 
+  ///
   /// <returns><c>SqlQuery</c> SQL Runner Query (application/json)</returns>
   public async Task<SdkResponse<SqlQuery, Exception>> create_sql_query(
     SqlQueryCreate body,
@@ -1773,42 +1773,42 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create SSO Embed URL
-  /// 
+  ///
   /// Creates an SSO embed URL and cryptographically signs it with an embed secret.
   /// This signed URL can then be used to instantiate a Looker embed session in a PBL web application.
   /// Do not make any modifications to this URL - any change may invalidate the signature and
   /// cause the URL to fail to load a Looker embed session.
-  /// 
+  ///
   /// A signed SSO embed URL can only be used once. After it has been used to request a page from the
   /// Looker server, the URL is invalid. Future requests using the same URL will fail. This is to prevent
   /// 'replay attacks'.
-  /// 
+  ///
   /// The `target_url` property must be a complete URL of a Looker UI page - scheme, hostname, path and query params.
   /// To load a dashboard with id 56 and with a filter of `Date=1 years`, the looker URL would look like `https:/myname.looker.com/dashboards/56?Date=1%20years`.
   /// The best way to obtain this target_url is to navigate to the desired Looker page in your web browser,
   /// copy the URL shown in the browser address bar and paste it into the `target_url` property as a quoted string value in this API request.
-  /// 
+  ///
   /// Permissions for the embed user are defined by the groups in which the embed user is a member (group_ids property)
   /// and the lists of models and permissions assigned to the embed user.
   /// At a minimum, you must provide values for either the group_ids property, or both the models and permissions properties.
   /// These properties are additive; an embed user can be a member of certain groups AND be granted access to models and permissions.
-  /// 
+  ///
   /// The embed user's access is the union of permissions granted by the group_ids, models, and permissions properties.
-  /// 
+  ///
   /// This function does not strictly require all group_ids, user attribute names, or model names to exist at the moment the
   /// SSO embed url is created. Unknown group_id, user attribute names or model names will be passed through to the output URL.
   /// To diagnose potential problems with an SSO embed URL, you can copy the signed URL into the Embed URI Validator text box in `<your looker instance>/admin/embed`.
-  /// 
+  ///
   /// The `secret_id` parameter is optional. If specified, its value must be the id of an active secret defined in the Looker instance.
   /// if not specified, the URL will be signed using the newest active secret defined in the Looker instance.
-  /// 
+  ///
   /// #### Security Note
   /// Protect this signed URL as you would an access token or password credentials - do not write
   /// it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
   /// encrypted transport.
-  /// 
+  ///
   /// POST /embed/sso_url -> EmbedUrlResponse
-  /// 
+  ///
   /// <returns><c>EmbedUrlResponse</c> Signed SSO URL (application/json)</returns>
   public async Task<SdkResponse<EmbedUrlResponse, Exception>> create_sso_embed_url(
     EmbedSsoParams body,
@@ -1818,23 +1818,23 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a theme
-  /// 
+  ///
   /// Creates a new theme object, returning the theme details, including the created id.
-  /// 
+  ///
   /// If `settings` are not specified, the default theme settings will be copied into the new theme.
-  /// 
+  ///
   /// The theme `name` can only contain alphanumeric characters or underscores. Theme names should not contain any confidential information, such as customer names.
-  /// 
+  ///
   /// **Update** an existing theme with [Update Theme](#!/Theme/update_theme)
-  /// 
+  ///
   /// **Permanently delete** an existing theme with [Delete Theme](#!/Theme/delete_theme)
-  /// 
+  ///
   /// For more information, see [Creating and Applying Themes](https://looker.com/docs/r/admin/themes).
-  /// 
+  ///
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-  /// 
+  ///
   /// POST /themes -> Theme
-  /// 
+  ///
   /// <returns><c>Theme</c> Theme (application/json)</returns>
   public async Task<SdkResponse<Theme, Exception>> create_theme(
     WriteTheme body,
@@ -1844,11 +1844,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a user with the specified information.
-  /// 
+  ///
   /// POST /users -> User
-  /// 
+  ///
   /// <returns><c>User</c> Created User (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<User, Exception>> create_user(
     WriteUser? body,
@@ -1860,20 +1860,20 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create a new user attribute
-  /// 
+  ///
   /// Permission information for a user attribute is conveyed through the `can` and `user_can_edit` fields.
   /// The `user_can_edit` field indicates whether an attribute is user-editable _anywhere_ in the application.
   /// The `can` field gives more granular access information, with the `set_value` child field indicating whether
   /// an attribute's value can be set by [Setting the User Attribute User Value](#!/User/set_user_attribute_user_value).
-  /// 
+  ///
   /// Note: `name` and `label` fields must be unique across all user attributes in the Looker instance.
   /// Attempting to create a new user attribute with a name or label that duplicates an existing
   /// user attribute will fail with a 422 error.
-  /// 
+  ///
   /// POST /user_attributes -> UserAttribute
-  /// 
+  ///
   /// <returns><c>UserAttribute</c> User Attribute (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<UserAttribute, Exception>> create_user_attribute(
     WriteUserAttribute body,
@@ -1885,11 +1885,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
-  /// 
+  ///
   /// POST /users/{user_id}/credentials_api3 -> CredentialsApi3
-  /// 
+  ///
   /// <returns><c>CredentialsApi3</c> API 3 Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsApi3, Exception>> create_user_credentials_api3(
@@ -1903,11 +1903,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Email/password login information for the specified user.
-  /// 
+  ///
   /// POST /users/{user_id}/credentials_email -> CredentialsEmail
-  /// 
+  ///
   /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsEmail, Exception>> create_user_credentials_email(
@@ -1929,11 +1929,11 @@ namespace Looker.SDK.API31
   /// Invitation emails for new users typically are not set to expire.
   /// The expire period is always 60 minutes when expires is enabled.
   /// This method can be called with an empty body.
-  /// 
+  ///
   /// POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
-  /// 
+  ///
   /// <returns><c>CredentialsEmail</c> email/password credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">Id of user</param>
   /// <param name="expires">Expiring token.</param>
   /// <param name="fields">Requested fields.</param>
@@ -1949,11 +1949,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Two-factor login information for the specified user.
-  /// 
+  ///
   /// POST /users/{user_id}/credentials_totp -> CredentialsTotp
-  /// 
+  ///
   /// <returns><c>CredentialsTotp</c> Two-Factor Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsTotp, Exception>> create_user_credentials_totp(
@@ -1967,9 +1967,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the current status and content of custom welcome emails
-  /// 
+  ///
   /// GET /custom_welcome_email -> CustomWelcomeEmail
-  /// 
+  ///
   /// <returns><c>CustomWelcomeEmail</c> Custom Welcome Email (application/json)</returns>
   public async Task<SdkResponse<CustomWelcomeEmail, Exception>> custom_welcome_email(
     ITransportSettings? options = null)
@@ -1978,17 +1978,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about a dashboard
-  /// 
+  ///
   /// Returns the full details of the identified dashboard object
-  /// 
+  ///
   /// Get a **summary list** of all active dashboards with [all_dashboards()](#!/Dashboard/all_dashboards)
-  /// 
+  ///
   /// You can **Search** for dashboards with [search_dashboards()](#!/Dashboard/search_dashboards)
-  /// 
+  ///
   /// GET /dashboards/{dashboard_id} -> Dashboard
-  /// 
+  ///
   /// <returns><c>Dashboard</c> Dashboard (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_id">Id of dashboard</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Dashboard, Exception>> dashboard(
@@ -2002,13 +2002,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get Aggregate Table LookML for Each Query on a Dahboard
-  /// 
+  ///
   /// Returns a JSON object that contains the dashboard id and Aggregate Table lookml
-  /// 
+  ///
   /// GET /dashboards/aggregate_table_lookml/{dashboard_id} -> DashboardAggregateTableLookml
-  /// 
+  ///
   /// <returns><c>DashboardAggregateTableLookml</c> JSON for Aggregate Table LookML (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_id">Id of dashboard</param>
   public async Task<SdkResponse<DashboardAggregateTableLookml, Exception>> dashboard_aggregate_table_lookml(
     string dashboard_id,
@@ -2019,11 +2019,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all the dashboard elements on a dashboard with a specific id.
-  /// 
+  ///
   /// GET /dashboards/{dashboard_id}/dashboard_elements -> DashboardElement[]
-  /// 
+  ///
   /// <returns><c>DashboardElement[]</c> DashboardElement (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_id">Id of dashboard</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardElement[], Exception>> dashboard_dashboard_elements(
@@ -2037,11 +2037,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all the dashboard filters on a dashboard with a specific id.
-  /// 
+  ///
   /// GET /dashboards/{dashboard_id}/dashboard_filters -> DashboardFilter[]
-  /// 
+  ///
   /// <returns><c>DashboardFilter[]</c> Dashboard Filter (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_id">Id of dashboard</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardFilter[], Exception>> dashboard_dashboard_filters(
@@ -2055,11 +2055,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all the dashboard elements on a dashboard with a specific id.
-  /// 
+  ///
   /// GET /dashboards/{dashboard_id}/dashboard_layouts -> DashboardLayout[]
-  /// 
+  ///
   /// <returns><c>DashboardLayout[]</c> DashboardLayout (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_id">Id of dashboard</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardLayout[], Exception>> dashboard_dashboard_layouts(
@@ -2073,11 +2073,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about the dashboard element with a specific id.
-  /// 
+  ///
   /// GET /dashboard_elements/{dashboard_element_id} -> DashboardElement
-  /// 
+  ///
   /// <returns><c>DashboardElement</c> DashboardElement (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_element_id">Id of dashboard element</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardElement, Exception>> dashboard_element(
@@ -2091,11 +2091,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about the dashboard filters with a specific id.
-  /// 
+  ///
   /// GET /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
-  /// 
+  ///
   /// <returns><c>DashboardFilter</c> Dashboard Filter (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_filter_id">Id of dashboard filters</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardFilter, Exception>> dashboard_filter(
@@ -2109,11 +2109,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about the dashboard layouts with a specific id.
-  /// 
+  ///
   /// GET /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
-  /// 
+  ///
   /// <returns><c>DashboardLayout</c> DashboardLayout (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_layout_id">Id of dashboard layouts</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardLayout, Exception>> dashboard_layout(
@@ -2127,11 +2127,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about the dashboard elements with a specific id.
-  /// 
+  ///
   /// GET /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
-  /// 
+  ///
   /// <returns><c>DashboardLayoutComponent</c> DashboardLayoutComponent (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_layout_component_id">Id of dashboard layout component</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardLayoutComponent, Exception>> dashboard_layout_component(
@@ -2145,11 +2145,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all the dashboard layout components for a dashboard layout with a specific id.
-  /// 
+  ///
   /// GET /dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components -> DashboardLayoutComponent[]
-  /// 
+  ///
   /// <returns><c>DashboardLayoutComponent[]</c> DashboardLayoutComponent (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_layout_id">Id of dashboard layout component</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardLayoutComponent[], Exception>> dashboard_layout_dashboard_layout_components(
@@ -2163,13 +2163,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get lookml of a UDD
-  /// 
+  ///
   /// Returns a JSON object that contains the dashboard id and the full lookml
-  /// 
+  ///
   /// GET /dashboards/lookml/{dashboard_id} -> DashboardLookml
-  /// 
+  ///
   /// <returns><c>DashboardLookml</c> json of dashboard (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_id">Id of dashboard</param>
   public async Task<SdkResponse<DashboardLookml, Exception>> dashboard_lookml(
     string dashboard_id,
@@ -2180,11 +2180,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about a datagroup.
-  /// 
+  ///
   /// GET /datagroups/{datagroup_id} -> Datagroup
-  /// 
+  ///
   /// <returns><c>Datagroup</c> Datagroup (application/json)</returns>
-  /// 
+  ///
   /// <param name="datagroup_id">ID of datagroup.</param>
   public async Task<SdkResponse<Datagroup, Exception>> datagroup(
     string datagroup_id,
@@ -2195,13 +2195,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the default color collection
-  /// 
+  ///
   /// Use this to retrieve the default Color Collection.
-  /// 
+  ///
   /// Set the default color collection with [ColorCollection](#!/ColorCollection/set_default_color_collection)
-  /// 
+  ///
   /// GET /color_collections/default -> ColorCollection
-  /// 
+  ///
   /// <returns><c>ColorCollection</c> ColorCollection (application/json)</returns>
   public async Task<SdkResponse<ColorCollection, Exception>> default_color_collection(
     ITransportSettings? options = null)
@@ -2210,17 +2210,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the default theme
-  /// 
+  ///
   /// Returns the active theme object set as the default.
-  /// 
+  ///
   /// The **default** theme name can be set in the UI on the Admin|Theme UI page
-  /// 
+  ///
   /// The optional `ts` parameter can specify a different timestamp than "now." If specified, it returns the default theme at the time indicated.
-  /// 
+  ///
   /// GET /themes/default -> Theme
-  /// 
+  ///
   /// <returns><c>Theme</c> Theme (application/json)</returns>
-  /// 
+  ///
   /// <param name="ts">Timestamp representing the target datetime for the active period. Defaults to 'now'</param>
   public async Task<SdkResponse<Theme, Exception>> default_theme(
     DateTime? ts = null,
@@ -2231,18 +2231,18 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a custom color collection by id
-  /// 
+  ///
   /// This operation permanently deletes the identified **Custom** color collection.
-  /// 
+  ///
   /// **Standard** color collections cannot be deleted
-  /// 
+  ///
   /// Because multiple color collections can have the same label, they must be deleted by ID, not name.
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-  /// 
+  ///
   /// DELETE /color_collections/{collection_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="collection_id">Id of Color Collection</param>
   public async Task<SdkResponse<string, Exception>> delete_color_collection(
     string collection_id,
@@ -2253,11 +2253,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a connection.
-  /// 
+  ///
   /// DELETE /connections/{connection_name} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="connection_name">Name of connection</param>
   public async Task<SdkResponse<string, Exception>> delete_connection(
     string connection_name,
@@ -2268,11 +2268,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a connection override.
-  /// 
+  ///
   /// DELETE /connections/{connection_name}/connection_override/{override_context} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="connection_name">Name of connection</param>
   /// <param name="override_context">Context of connection override</param>
   public async Task<SdkResponse<string, Exception>> delete_connection_override(
@@ -2286,11 +2286,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete favorite content
-  /// 
+  ///
   /// DELETE /content_favorite/{content_favorite_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="content_favorite_id">Id of favorite content</param>
   public async Task<SdkResponse<string, Exception>> delete_content_favorite(
     long content_favorite_id,
@@ -2300,11 +2300,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Remove content metadata access.
-  /// 
+  ///
   /// DELETE /content_metadata_access/{content_metadata_access_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="content_metadata_access_id">Id of content metadata access</param>
   public async Task<SdkResponse<string, Exception>> delete_content_metadata_access(
     long content_metadata_access_id,
@@ -2314,17 +2314,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete the dashboard with the specified id
-  /// 
+  ///
   /// Permanently **deletes** a dashboard. (The dashboard cannot be recovered after this operation.)
-  /// 
+  ///
   /// "Soft" delete or hide a dashboard by setting its `deleted` status to `True` with [update_dashboard()](#!/Dashboard/update_dashboard).
-  /// 
+  ///
   /// Note: When a dashboard is deleted in the UI, it is soft deleted. Use this API call to permanently remove it, if desired.
-  /// 
+  ///
   /// DELETE /dashboards/{dashboard_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_id">Id of dashboard</param>
   public async Task<SdkResponse<string, Exception>> delete_dashboard(
     string dashboard_id,
@@ -2335,11 +2335,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a dashboard element with a specific id.
-  /// 
+  ///
   /// DELETE /dashboard_elements/{dashboard_element_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_element_id">Id of dashboard element</param>
   public async Task<SdkResponse<string, Exception>> delete_dashboard_element(
     string dashboard_element_id,
@@ -2350,11 +2350,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a dashboard filter with a specific id.
-  /// 
+  ///
   /// DELETE /dashboard_filters/{dashboard_filter_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_filter_id">Id of dashboard filter</param>
   public async Task<SdkResponse<string, Exception>> delete_dashboard_filter(
     string dashboard_filter_id,
@@ -2365,11 +2365,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a dashboard layout with a specific id.
-  /// 
+  ///
   /// DELETE /dashboard_layouts/{dashboard_layout_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_layout_id">Id of dashboard layout</param>
   public async Task<SdkResponse<string, Exception>> delete_dashboard_layout(
     string dashboard_layout_id,
@@ -2381,11 +2381,11 @@ namespace Looker.SDK.API31
 
   /// ### Delete the folder with a specific id including any children folders.
   /// **DANGER** this will delete all looks and dashboards in the folder.
-  /// 
+  ///
   /// DELETE /folders/{folder_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="folder_id">Id of folder</param>
   public async Task<SdkResponse<string, Exception>> delete_folder(
     string folder_id,
@@ -2396,13 +2396,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete the specified Git Branch
-  /// 
+  ///
   /// Delete git branch specified in branch_name path param from local and remote of specified project repository
-  /// 
+  ///
   /// DELETE /projects/{project_id}/git_branch/{branch_name} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   /// <param name="branch_name">Branch Name</param>
   public async Task<SdkResponse<string, Exception>> delete_git_branch(
@@ -2416,11 +2416,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Deletes a group (admin only).
-  /// 
+  ///
   /// DELETE /groups/{group_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="group_id">Id of group</param>
   public async Task<SdkResponse<string, Exception>> delete_group(
     long group_id,
@@ -2430,11 +2430,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Removes a group from a group.
-  /// 
+  ///
   /// DELETE /groups/{group_id}/groups/{deleting_group_id} -> void
-  /// 
+  ///
   /// <returns><c>void</c> Group successfully deleted ()</returns>
-  /// 
+  ///
   /// <param name="group_id">Id of group</param>
   /// <param name="deleting_group_id">Id of group to delete</param>
   public async Task<SdkResponse<string, Exception>> delete_group_from_group(
@@ -2446,11 +2446,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Removes a user from a group.
-  /// 
+  ///
   /// DELETE /groups/{group_id}/users/{user_id} -> void
-  /// 
+  ///
   /// <returns><c>void</c> User successfully removed from group ()</returns>
-  /// 
+  ///
   /// <param name="group_id">Id of group</param>
   /// <param name="user_id">Id of user to remove from group</param>
   public async Task<SdkResponse<string, Exception>> delete_group_user(
@@ -2462,11 +2462,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a homepage.
-  /// 
+  ///
   /// DELETE /homepages/{homepage_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="homepage_id">Id of homepage</param>
   public async Task<SdkResponse<string, Exception>> delete_homepage(
     long homepage_id,
@@ -2476,11 +2476,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a homepage item.
-  /// 
+  ///
   /// DELETE /homepage_items/{homepage_item_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="homepage_item_id">Id of homepage_item</param>
   public async Task<SdkResponse<string, Exception>> delete_homepage_item(
     long homepage_item_id,
@@ -2490,11 +2490,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a homepage section.
-  /// 
+  ///
   /// DELETE /homepage_sections/{homepage_section_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="homepage_section_id">Id of homepage_section</param>
   public async Task<SdkResponse<string, Exception>> delete_homepage_section(
     long homepage_section_id,
@@ -2504,11 +2504,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a Integration Hub.
-  /// 
+  ///
   /// DELETE /integration_hubs/{integration_hub_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="integration_hub_id">Id of integration_hub</param>
   public async Task<SdkResponse<string, Exception>> delete_integration_hub(
     long integration_hub_id,
@@ -2518,17 +2518,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Permanently Delete a Look
-  /// 
+  ///
   /// This operation **permanently** removes a look from the Looker database.
-  /// 
+  ///
   /// NOTE: There is no "undo" for this kind of delete.
-  /// 
+  ///
   /// For information about soft-delete (which can be undone) see [update_look()](#!/Look/update_look).
-  /// 
+  ///
   /// DELETE /looks/{look_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="look_id">Id of look</param>
   public async Task<SdkResponse<string, Exception>> delete_look(
     long look_id,
@@ -2538,11 +2538,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a lookml model.
-  /// 
+  ///
   /// DELETE /lookml_models/{lookml_model_name} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="lookml_model_name">Name of lookml model.</param>
   public async Task<SdkResponse<string, Exception>> delete_lookml_model(
     string lookml_model_name,
@@ -2553,11 +2553,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete the model set with a specific id.
-  /// 
+  ///
   /// DELETE /model_sets/{model_set_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Model set succssfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="model_set_id">id of model set</param>
   public async Task<SdkResponse<string, Exception>> delete_model_set(
     long model_set_id,
@@ -2567,11 +2567,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a OIDC test configuration.
-  /// 
+  ///
   /// DELETE /oidc_test_configs/{test_slug} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Test config succssfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="test_slug">Slug of test config</param>
   public async Task<SdkResponse<string, Exception>> delete_oidc_test_config(
     string test_slug,
@@ -2582,11 +2582,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete the permission set with a specific id.
-  /// 
+  ///
   /// DELETE /permission_sets/{permission_set_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="permission_set_id">Id of permission set</param>
   public async Task<SdkResponse<string, Exception>> delete_permission_set(
     long permission_set_id,
@@ -2596,16 +2596,16 @@ namespace Looker.SDK.API31
   }
 
   /// ### Repository Credential for a remote dependency
-  /// 
+  ///
   /// Admin required.
-  /// 
+  ///
   /// `root_project_id` is required.
   /// `credential_id` is required.
-  /// 
+  ///
   /// DELETE /projects/{root_project_id}/credential/{credential_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="root_project_id">Root Project Id</param>
   /// <param name="credential_id">Credential Id</param>
   public async Task<SdkResponse<string, Exception>> delete_repository_credential(
@@ -2619,11 +2619,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete the role with a specific id.
-  /// 
+  ///
   /// DELETE /roles/{role_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="role_id">id of role</param>
   public async Task<SdkResponse<string, Exception>> delete_role(
     long role_id,
@@ -2633,11 +2633,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a SAML test configuration.
-  /// 
+  ///
   /// DELETE /saml_test_configs/{test_slug} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Test config succssfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="test_slug">Slug of test config</param>
   public async Task<SdkResponse<string, Exception>> delete_saml_test_config(
     string test_slug,
@@ -2648,15 +2648,15 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a Scheduled Plan
-  /// 
+  ///
   /// Normal users can only delete their own scheduled plans.
   /// Admins can delete other users' scheduled plans.
   /// This delete cannot be undone.
-  /// 
+  ///
   /// DELETE /scheduled_plans/{scheduled_plan_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="scheduled_plan_id">Scheduled Plan Id</param>
   public async Task<SdkResponse<string, Exception>> delete_scheduled_plan(
     long scheduled_plan_id,
@@ -2667,11 +2667,11 @@ namespace Looker.SDK.API31
 
   /// ### Delete the space with a specific id including any children spaces.
   /// **DANGER** this will delete all looks and dashboards in the space.
-  /// 
+  ///
   /// DELETE /spaces/{space_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="space_id">Id of space</param>
   public async Task<SdkResponse<string, Exception>> delete_space(
     string space_id,
@@ -2682,19 +2682,19 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a specific theme by id
-  /// 
+  ///
   /// This operation permanently deletes the identified theme from the database.
-  /// 
+  ///
   /// Because multiple themes can have the same name (with different activation time spans) themes can only be deleted by ID.
-  /// 
+  ///
   /// All IDs associated with a theme name can be retrieved by searching for the theme name with [Theme Search](#!/Theme/search).
-  /// 
+  ///
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-  /// 
+  ///
   /// DELETE /themes/{theme_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="theme_id">Id of theme</param>
   public async Task<SdkResponse<string, Exception>> delete_theme(
     string theme_id,
@@ -2705,13 +2705,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete the user with a specific id.
-  /// 
+  ///
   /// **DANGER** this will delete the user and all looks and other information owned by the user.
-  /// 
+  ///
   /// DELETE /users/{user_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> User successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user(
     long user_id,
@@ -2721,11 +2721,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a user attribute (admin only).
-  /// 
+  ///
   /// DELETE /user_attributes/{user_attribute_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_attribute_id">Id of user_attribute</param>
   public async Task<SdkResponse<string, Exception>> delete_user_attribute(
     long user_attribute_id,
@@ -2735,11 +2735,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Remove a user attribute value from a group.
-  /// 
+  ///
   /// DELETE /groups/{group_id}/attribute_values/{user_attribute_id} -> void
-  /// 
+  ///
   /// <returns><c>void</c> Value successfully unset ()</returns>
-  /// 
+  ///
   /// <param name="group_id">Id of group</param>
   /// <param name="user_attribute_id">Id of user attribute</param>
   public async Task<SdkResponse<string, Exception>> delete_user_attribute_group_value(
@@ -2751,16 +2751,16 @@ namespace Looker.SDK.API31
   }
 
   /// ### Delete a user attribute value from a user's account settings.
-  /// 
+  ///
   /// After the user attribute value is deleted from the user's account settings, subsequent requests
   /// for the user attribute value for this user will draw from the user's groups or the default
   /// value of the user attribute. See [Get User Attribute Values](#!/User/user_attribute_user_values) for more
   /// information about how user attribute values are resolved.
-  /// 
+  ///
   /// DELETE /users/{user_id}/attribute_values/{user_attribute_id} -> void
-  /// 
+  ///
   /// <returns><c>void</c> Deleted ()</returns>
-  /// 
+  ///
   /// <param name="user_id">Id of user</param>
   /// <param name="user_attribute_id">Id of user attribute</param>
   public async Task<SdkResponse<string, Exception>> delete_user_attribute_user_value(
@@ -2772,11 +2772,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
-  /// 
+  ///
   /// DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="credentials_api3_id">id of API 3 Credential</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_api3(
@@ -2788,11 +2788,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Email/password login information for the specified user.
-  /// 
+  ///
   /// DELETE /users/{user_id}/credentials_email -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_email(
     long user_id,
@@ -2802,11 +2802,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Embed login information for the specified user.
-  /// 
+  ///
   /// DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="credentials_embed_id">id of Embedding Credential</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_embed(
@@ -2818,11 +2818,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Google authentication login information for the specified user.
-  /// 
+  ///
   /// DELETE /users/{user_id}/credentials_google -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_google(
     long user_id,
@@ -2832,11 +2832,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### LDAP login information for the specified user.
-  /// 
+  ///
   /// DELETE /users/{user_id}/credentials_ldap -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_ldap(
     long user_id,
@@ -2846,11 +2846,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Looker Openid login information for the specified user. Used by Looker Analysts.
-  /// 
+  ///
   /// DELETE /users/{user_id}/credentials_looker_openid -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_looker_openid(
     long user_id,
@@ -2860,11 +2860,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### OpenID Connect (OIDC) authentication login information for the specified user.
-  /// 
+  ///
   /// DELETE /users/{user_id}/credentials_oidc -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_oidc(
     long user_id,
@@ -2874,11 +2874,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Saml authentication login information for the specified user.
-  /// 
+  ///
   /// DELETE /users/{user_id}/credentials_saml -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_saml(
     long user_id,
@@ -2888,11 +2888,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Two-factor login information for the specified user.
-  /// 
+  ///
   /// DELETE /users/{user_id}/credentials_totp -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_totp(
     long user_id,
@@ -2902,11 +2902,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Removes login lockout for the associated user.
-  /// 
+  ///
   /// DELETE /user_login_lockout/{key} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="key">The key associated with the locked user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_login_lockout(
     string key,
@@ -2917,11 +2917,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Web login session for the specified user.
-  /// 
+  ///
   /// DELETE /users/{user_id}/sessions/{session_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="session_id">id of Web Login Session</param>
   public async Task<SdkResponse<string, Exception>> delete_user_session(
@@ -2933,25 +2933,25 @@ namespace Looker.SDK.API31
   }
 
   /// ### Deploy LookML from this Development Mode Project to Production
-  /// 
+  ///
   /// Git must have been configured, must be in dev mode and deploy permission required
-  /// 
+  ///
   /// Deploy is a two / three step process:
-  /// 
+  ///
   /// 1. Push commits in current branch of dev mode project to the production branch (origin/master).
   ///    Note a. This step is skipped in read-only projects.
   ///    Note b. If this step is unsuccessful for any reason (e.g. rejected non-fastforward because production branch has
   ///              commits not in current branch), subsequent steps will be skipped.
   /// 2. If this is the first deploy of this project, create the production project with git repository.
   /// 3. Pull the production branch into the production project.
-  /// 
+  ///
   /// POST /projects/{project_id}/deploy_to_production -> string
-  /// 
+  ///
   /// <returns>
   /// <c>string</c> Project (application/json)
   /// <c>void</c> Returns 204 if project was successfully deployed to production, otherwise 400 with an error message ()
   /// </returns>
-  /// 
+  ///
   /// <param name="project_id">Id of project</param>
   public async Task<SdkResponse<TSuccess, Exception>> deploy_to_production<TSuccess>(
     string project_id,
@@ -2962,9 +2962,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Retrieve the value for whether or not digest emails is enabled
-  /// 
+  ///
   /// GET /digest_emails_enabled -> DigestEmails
-  /// 
+  ///
   /// <returns><c>DigestEmails</c> Digest_emails (application/json)</returns>
   public async Task<SdkResponse<DigestEmails, Exception>> digest_emails_enabled(
     ITransportSettings? options = null)
@@ -2975,9 +2975,9 @@ namespace Looker.SDK.API31
   /// ### Fetch the given url and parse it as a SAML IdP metadata document and return the result.
   /// Note that this requires that the url be public or at least at a location where the Looker instance
   /// can fetch it without requiring any special authentication.
-  /// 
+  ///
   /// POST /fetch_and_parse_saml_idp_metadata -> SamlMetadataParseResult
-  /// 
+  ///
   /// <returns><c>SamlMetadataParseResult</c> Parse result (application/json)</returns>
   public async Task<SdkResponse<SamlMetadataParseResult, Exception>> fetch_and_parse_saml_idp_metadata(
     string body,
@@ -2987,11 +2987,11 @@ namespace Looker.SDK.API31
   }
 
   /// Returns the Integration form for presentation to the user.
-  /// 
+  ///
   /// POST /integrations/{integration_id}/form -> DataActionForm
-  /// 
+  ///
   /// <returns><c>DataActionForm</c> Data Action Form (application/json)</returns>
-  /// 
+  ///
   /// <param name="integration_id">Id of integration</param>
   public async Task<SdkResponse<DataActionForm, Exception>> fetch_integration_form(
     string integration_id,
@@ -3002,9 +3002,9 @@ namespace Looker.SDK.API31
   }
 
   /// For some data actions, the remote server may supply a form requesting further user input. This endpoint takes a data action, asks the remote server to generate a form for it, and returns that form to you for presentation to the user.
-  /// 
+  ///
   /// POST /data_actions/form -> DataActionForm
-  /// 
+  ///
   /// <returns><c>DataActionForm</c> Data Action Form (application/json)</returns>
   public async Task<SdkResponse<DataActionForm, Exception>> fetch_remote_data_action_form(
     StringDictionary<string> body,
@@ -3014,13 +3014,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the specified Git Branch
-  /// 
+  ///
   /// Returns the git branch specified in branch_name path param if it exists in the given project repository
-  /// 
+  ///
   /// GET /projects/{project_id}/git_branch/{branch_name} -> GitBranch
-  /// 
+  ///
   /// <returns><c>GitBranch</c> Git Branch (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   /// <param name="branch_name">Branch Name</param>
   public async Task<SdkResponse<GitBranch, Exception>> find_git_branch(
@@ -3034,11 +3034,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about the folder with a specific id.
-  /// 
+  ///
   /// GET /folders/{folder_id} -> Folder
-  /// 
+  ///
   /// <returns><c>Folder</c> Folder (application/json)</returns>
-  /// 
+  ///
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Folder, Exception>> folder(
@@ -3052,11 +3052,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the ancestors of a folder
-  /// 
+  ///
   /// GET /folders/{folder_id}/ancestors -> Folder[]
-  /// 
+  ///
   /// <returns><c>Folder[]</c> Folders (application/json)</returns>
-  /// 
+  ///
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Folder[], Exception>> folder_ancestors(
@@ -3070,11 +3070,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the children of a folder.
-  /// 
+  ///
   /// GET /folders/{folder_id}/children -> Folder[]
-  /// 
+  ///
   /// <returns><c>Folder[]</c> Folders (application/json)</returns>
-  /// 
+  ///
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
@@ -3097,11 +3097,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search the children of a folder
-  /// 
+  ///
   /// GET /folders/{folder_id}/children/search -> Folder[]
-  /// 
+  ///
   /// <returns><c>Folder[]</c> Folders (application/json)</returns>
-  /// 
+  ///
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to sort by.</param>
@@ -3121,11 +3121,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the dashboards in a folder
-  /// 
+  ///
   /// GET /folders/{folder_id}/dashboards -> Dashboard[]
-  /// 
+  ///
   /// <returns><c>Dashboard[]</c> Dashboard (application/json)</returns>
-  /// 
+  ///
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Dashboard[], Exception>> folder_dashboards(
@@ -3139,11 +3139,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the looks in a folder
-  /// 
+  ///
   /// GET /folders/{folder_id}/looks -> LookWithQuery[]
-  /// 
+  ///
   /// <returns><c>LookWithQuery[]</c> Looks (application/json)</returns>
-  /// 
+  ///
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<LookWithQuery[], Exception>> folder_looks(
@@ -3157,11 +3157,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the parent of a folder
-  /// 
+  ///
   /// GET /folders/{folder_id}/parent -> Folder
-  /// 
+  ///
   /// <returns><c>Folder</c> Folder (application/json)</returns>
-  /// 
+  ///
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Folder, Exception>> folder_parent(
@@ -3175,9 +3175,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Force all credentials_email users to reset their login passwords upon their next login.
-  /// 
+  ///
   /// PUT /password_config/force_password_reset_at_next_login_for_all_users -> string
-  /// 
+  ///
   /// <returns><c>string</c> Password Config (application/json)</returns>
   public async Task<SdkResponse<string, Exception>> force_password_reset_at_next_login_for_all_users(
     ITransportSettings? options = null)
@@ -3186,13 +3186,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get all Repository Credentials for a project
-  /// 
+  ///
   /// `root_project_id` is required.
-  /// 
+  ///
   /// GET /projects/{root_project_id}/credentials -> RepositoryCredential[]
-  /// 
+  ///
   /// <returns><c>RepositoryCredential[]</c> Repository Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="root_project_id">Root Project Id</param>
   public async Task<SdkResponse<RepositoryCredential[], Exception>> get_all_repository_credentials(
     string root_project_id,
@@ -3203,13 +3203,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the Current Git Branch
-  /// 
+  ///
   /// Returns the git branch currently checked out in the given project repository
-  /// 
+  ///
   /// GET /projects/{project_id}/git_branch -> GitBranch
-  /// 
+  ///
   /// <returns><c>GitBranch</c> Git Branch (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   public async Task<SdkResponse<GitBranch, Exception>> git_branch(
     string project_id,
@@ -3220,13 +3220,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Git Deploy Key
-  /// 
+  ///
   /// Returns the ssh public key previously created for a project's git repository.
-  /// 
+  ///
   /// GET /projects/{project_id}/git/deploy_key -> string
-  /// 
+  ///
   /// <returns><c>string</c> The text of the public key portion of the deploy_key (text/plain)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   public async Task<SdkResponse<string, Exception>> git_deploy_key(
     string project_id,
@@ -3237,11 +3237,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about a group.
-  /// 
+  ///
   /// GET /groups/{group_id} -> Group
-  /// 
+  ///
   /// <returns><c>Group</c> Group (application/json)</returns>
-  /// 
+  ///
   /// <param name="group_id">Id of group</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Group, Exception>> group(
@@ -3254,11 +3254,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about a homepage.
-  /// 
+  ///
   /// GET /homepages/{homepage_id} -> Homepage
-  /// 
+  ///
   /// <returns><c>Homepage</c> Homepage (application/json)</returns>
-  /// 
+  ///
   /// <param name="homepage_id">Id of homepage</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Homepage, Exception>> homepage(
@@ -3271,11 +3271,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about a homepage item.
-  /// 
+  ///
   /// GET /homepage_items/{homepage_item_id} -> HomepageItem
-  /// 
+  ///
   /// <returns><c>HomepageItem</c> Homepage Item (application/json)</returns>
-  /// 
+  ///
   /// <param name="homepage_item_id">Id of homepage item</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<HomepageItem, Exception>> homepage_item(
@@ -3288,11 +3288,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about a homepage section.
-  /// 
+  ///
   /// GET /homepage_sections/{homepage_section_id} -> HomepageSection
-  /// 
+  ///
   /// <returns><c>HomepageSection</c> Homepage section (application/json)</returns>
-  /// 
+  ///
   /// <param name="homepage_section_id">Id of homepage section</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<HomepageSection, Exception>> homepage_section(
@@ -3307,20 +3307,20 @@ namespace Looker.SDK.API31
   /// ### Import a LookML dashboard to a space as a UDD
   /// Creates a UDD (a dashboard which exists in the Looker database rather than as a LookML file) from the LookML dashboard
   /// and puts it in the space specified. The created UDD will have a lookml_link_id which links to the original LookML dashboard.
-  /// 
+  ///
   /// To give the imported dashboard specify a (e.g. title: "my title") in the body of your request, otherwise the imported
   /// dashboard will have the same title as the original LookML dashboard.
-  /// 
+  ///
   /// For this operation to succeed the user must have permission to see the LookML dashboard in question, and have permission to
   /// create content in the space the dashboard is being imported to.
-  /// 
+  ///
   /// **Sync** a linked UDD with [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard)
   /// **Unlink** a linked UDD by setting lookml_link_id to null with [update_dashboard()](#!/Dashboard/update_dashboard)
-  /// 
+  ///
   /// POST /dashboards/{lookml_dashboard_id}/import/{space_id} -> Dashboard
-  /// 
+  ///
   /// <returns><c>Dashboard</c> Dashboard (application/json)</returns>
-  /// 
+  ///
   /// <param name="lookml_dashboard_id">Id of LookML dashboard</param>
   /// <param name="space_id">Id of space to import the dashboard to</param>
   /// <param name="raw_locale">If true, and this dashboard is localized, export it with the raw keys, not localized.</param>
@@ -3338,11 +3338,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about a Integration.
-  /// 
+  ///
   /// GET /integrations/{integration_id} -> Integration
-  /// 
+  ///
   /// <returns><c>Integration</c> Integration (application/json)</returns>
-  /// 
+  ///
   /// <param name="integration_id">Id of integration</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Integration, Exception>> integration(
@@ -3356,11 +3356,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about a Integration Hub.
-  /// 
+  ///
   /// GET /integration_hubs/{integration_hub_id} -> IntegrationHub
-  /// 
+  ///
   /// <returns><c>IntegrationHub</c> Integration Hub (application/json)</returns>
-  /// 
+  ///
   /// <param name="integration_hub_id">Id of Integration Hub</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<IntegrationHub, Exception>> integration_hub(
@@ -3373,9 +3373,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get and set the options for internal help resources
-  /// 
+  ///
   /// GET /internal_help_resources_enabled -> InternalHelpResources
-  /// 
+  ///
   /// <returns><c>InternalHelpResources</c> Internal Help Resources (application/json)</returns>
   public async Task<SdkResponse<InternalHelpResources, Exception>> internal_help_resources(
     ITransportSettings? options = null)
@@ -3384,9 +3384,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Set the menu item name and content for internal help resources
-  /// 
+  ///
   /// GET /internal_help_resources_content -> InternalHelpResourcesContent
-  /// 
+  ///
   /// <returns><c>InternalHelpResourcesContent</c> Internal Help Resources Content (application/json)</returns>
   public async Task<SdkResponse<InternalHelpResourcesContent, Exception>> internal_help_resources_content(
     ITransportSettings? options = null)
@@ -3395,11 +3395,11 @@ namespace Looker.SDK.API31
   }
 
   /// Kill a query with a specific query_task_id.
-  /// 
+  ///
   /// DELETE /running_queries/{query_task_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Query successfully killed. (application/json)</returns>
-  /// 
+  ///
   /// <param name="query_task_id">Query task id.</param>
   public async Task<SdkResponse<string, Exception>> kill_query(
     string query_task_id,
@@ -3410,24 +3410,24 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the LDAP configuration.
-  /// 
+  ///
   /// Looker can be optionally configured to authenticate users against an Active Directory or other LDAP directory server.
   /// LDAP setup requires coordination with an administrator of that directory server.
-  /// 
+  ///
   /// Only Looker administrators can read and update the LDAP configuration.
-  /// 
+  ///
   /// Configuring LDAP impacts authentication for all users. This configuration should be done carefully.
-  /// 
+  ///
   /// Looker maintains a single LDAP configuration. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
-  /// 
+  ///
   /// LDAP is enabled or disabled for Looker using the **enabled** field.
-  /// 
+  ///
   /// Looker will never return an **auth_password** field. That value can be set, but never retrieved.
-  /// 
+  ///
   /// See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
-  /// 
+  ///
   /// GET /ldap_config -> LDAPConfig
-  /// 
+  ///
   /// <returns><c>LDAPConfig</c> LDAP Configuration. (application/json)</returns>
   public async Task<SdkResponse<LDAPConfig, Exception>> ldap_config(
     ITransportSettings? options = null)
@@ -3436,11 +3436,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about the legacy feature with a specific id.
-  /// 
+  ///
   /// GET /legacy_features/{legacy_feature_id} -> LegacyFeature
-  /// 
+  ///
   /// <returns><c>LegacyFeature</c> Legacy Feature (application/json)</returns>
-  /// 
+  ///
   /// <param name="legacy_feature_id">id of legacy feature</param>
   public async Task<SdkResponse<LegacyFeature, Exception>> legacy_feature(
     long legacy_feature_id,
@@ -3450,11 +3450,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Present client credentials to obtain an authorization token
-  /// 
+  ///
   /// Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://looker.com/docs/r/api/outh2_resource_owner_pc) pattern.
   /// The client credentials required for this login must be obtained by creating an API3 key on a user account
   /// in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
-  /// 
+  ///
   /// The access token returned by `login` must be used in the HTTP Authorization header of subsequent
   /// API requests, like this:
   /// ```
@@ -3462,26 +3462,26 @@ namespace Looker.SDK.API31
   /// ```
   /// Replace "4QDkCy..." with the `access_token` value returned by `login`.
   /// The word `token` is a string literal and must be included exactly as shown.
-  /// 
+  ///
   /// This function can accept `client_id` and `client_secret` parameters as URL query params or as www-form-urlencoded params in the body of the HTTP request. Since there is a small risk that URL parameters may be visible to intermediate nodes on the network route (proxies, routers, etc), passing credentials in the body of the request is considered more secure than URL params.
-  /// 
+  ///
   /// Example of passing credentials in the HTTP request body:
   /// ````
   /// POST HTTP /login
   /// Content-Type: application/x-www-form-urlencoded
-  /// 
+  ///
   /// client_id=CGc9B7v7J48dQSJvxxx&client_secret=nNVS9cSS3xNpSC9JdsBvvvvv
   /// ````
-  /// 
+  ///
   /// ### Best Practice:
   /// Always pass credentials in body params. Pass credentials in URL query params **only** when you cannot pass body params due to application, tool, or other limitations.
-  /// 
+  ///
   /// For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API3](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
-  /// 
+  ///
   /// POST /login -> AccessToken
-  /// 
+  ///
   /// <returns><c>AccessToken</c> Access token with metadata. (application/json)</returns>
-  /// 
+  ///
   /// <param name="client_id">client_id part of API3 Key.</param>
   /// <param name="client_secret">client_secret part of API3 Key.</param>
   public async Task<SdkResponse<AccessToken, Exception>> login(
@@ -3495,26 +3495,26 @@ namespace Looker.SDK.API31
   }
 
   /// ### Create an access token that runs as a given user.
-  /// 
+  ///
   /// This can only be called by an authenticated admin user. It allows that admin to generate a new
   /// authentication token for the user with the given user id. That token can then be used for subsequent
   /// API calls - which are then performed *as* that target user.
-  /// 
+  ///
   /// The target user does *not* need to have a pre-existing API client_id/client_secret pair. And, no such
   /// credentials are created by this call.
-  /// 
+  ///
   /// This allows for building systems where api user authentication for an arbitrary number of users is done
   /// outside of Looker and funneled through a single 'service account' with admin permissions. Note that a
   /// new access token is generated on each call. If target users are going to be making numerous API
   /// calls in a short period then it is wise to cache this authentication token rather than call this before
   /// each of those API calls.
-  /// 
+  ///
   /// See 'login' for more detail on the access token and how to use it.
-  /// 
+  ///
   /// POST /login/{user_id} -> AccessToken
-  /// 
+  ///
   /// <returns><c>AccessToken</c> Access token with metadata. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">Id of user.</param>
   /// <param name="associative">When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.</param>
   public async Task<SdkResponse<AccessToken, Exception>> login_user(
@@ -3527,9 +3527,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Logout of the API and invalidate the current access token.
-  /// 
+  ///
   /// DELETE /logout -> string
-  /// 
+  ///
   /// <returns><c>string</c> Logged out successfully. (application/json)</returns>
   public async Task<SdkResponse<string, Exception>> logout(
     ITransportSettings? options = null)
@@ -3538,13 +3538,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get a Look.
-  /// 
+  ///
   /// Returns detailed information about a Look and its associated Query.
-  /// 
+  ///
   /// GET /looks/{look_id} -> LookWithQuery
-  /// 
+  ///
   /// <returns><c>LookWithQuery</c> Look (application/json)</returns>
-  /// 
+  ///
   /// <param name="look_id">Id of look</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<LookWithQuery, Exception>> look(
@@ -3557,11 +3557,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about a lookml model.
-  /// 
+  ///
   /// GET /lookml_models/{lookml_model_name} -> LookmlModel
-  /// 
+  ///
   /// <returns><c>LookmlModel</c> LookML Model (application/json)</returns>
-  /// 
+  ///
   /// <param name="lookml_model_name">Name of lookml model.</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<LookmlModel, Exception>> lookml_model(
@@ -3575,11 +3575,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about a lookml model explore.
-  /// 
+  ///
   /// GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> LookmlModelExplore
-  /// 
+  ///
   /// <returns><c>LookmlModelExplore</c> LookML Model Explore (application/json)</returns>
-  /// 
+  ///
   /// <param name="lookml_model_name">Name of lookml model.</param>
   /// <param name="explore_name">Name of explore.</param>
   /// <param name="fields">Requested fields.</param>
@@ -3596,13 +3596,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get A Projects Manifest object
-  /// 
+  ///
   /// Returns the project with the given project id
-  /// 
+  ///
   /// GET /projects/{project_id}/manifest -> Manifest
-  /// 
+  ///
   /// <returns><c>Manifest</c> Manifest (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   public async Task<SdkResponse<Manifest, Exception>> manifest(
     string project_id,
@@ -3613,11 +3613,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about the current user; i.e. the user account currently calling the API.
-  /// 
+  ///
   /// GET /user -> User
-  /// 
+  ///
   /// <returns><c>User</c> Current user. (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<User, Exception>> me(
     string? fields = null,
@@ -3628,13 +3628,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get Merge Query
-  /// 
+  ///
   /// Returns a merge query object given its id.
-  /// 
+  ///
   /// GET /merge_queries/{merge_query_id} -> MergeQuery
-  /// 
+  ///
   /// <returns><c>MergeQuery</c> Merge Query (application/json)</returns>
-  /// 
+  ///
   /// <param name="merge_query_id">Merge Query Id</param>
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<MergeQuery, Exception>> merge_query(
@@ -3648,11 +3648,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about the model set with a specific id.
-  /// 
+  ///
   /// GET /model_sets/{model_set_id} -> ModelSet
-  /// 
+  ///
   /// <returns><c>ModelSet</c> Specified model set. (application/json)</returns>
-  /// 
+  ///
   /// <param name="model_set_id">Id of model set</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<ModelSet, Exception>> model_set(
@@ -3665,20 +3665,20 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the OIDC configuration.
-  /// 
+  ///
   /// Looker can be optionally configured to authenticate users against an OpenID Connect (OIDC)
   /// authentication server. OIDC setup requires coordination with an administrator of that server.
-  /// 
+  ///
   /// Only Looker administrators can read and update the OIDC configuration.
-  /// 
+  ///
   /// Configuring OIDC impacts authentication for all users. This configuration should be done carefully.
-  /// 
+  ///
   /// Looker maintains a single OIDC configuation. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
-  /// 
+  ///
   /// OIDC is enabled or disabled for Looker using the **enabled** field.
-  /// 
+  ///
   /// GET /oidc_config -> OIDCConfig
-  /// 
+  ///
   /// <returns><c>OIDCConfig</c> OIDC Configuration. (application/json)</returns>
   public async Task<SdkResponse<OIDCConfig, Exception>> oidc_config(
     ITransportSettings? options = null)
@@ -3687,11 +3687,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get a OIDC test configuration by test_slug.
-  /// 
+  ///
   /// GET /oidc_test_configs/{test_slug} -> OIDCConfig
-  /// 
+  ///
   /// <returns><c>OIDCConfig</c> OIDC test config. (application/json)</returns>
-  /// 
+  ///
   /// <param name="test_slug">Slug of test config</param>
   public async Task<SdkResponse<OIDCConfig, Exception>> oidc_test_config(
     string test_slug,
@@ -3702,9 +3702,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Parse the given xml as a SAML IdP metadata document and return the result.
-  /// 
+  ///
   /// POST /parse_saml_idp_metadata -> SamlMetadataParseResult
-  /// 
+  ///
   /// <returns><c>SamlMetadataParseResult</c> Parse result (application/json)</returns>
   public async Task<SdkResponse<SamlMetadataParseResult, Exception>> parse_saml_idp_metadata(
     string body,
@@ -3714,9 +3714,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get password config.
-  /// 
+  ///
   /// GET /password_config -> PasswordConfig
-  /// 
+  ///
   /// <returns><c>PasswordConfig</c> Password Config (application/json)</returns>
   public async Task<SdkResponse<PasswordConfig, Exception>> password_config(
     ITransportSettings? options = null)
@@ -3725,9 +3725,9 @@ namespace Looker.SDK.API31
   }
 
   /// Perform a data action. The data action object can be obtained from query results, and used to perform an arbitrary action.
-  /// 
+  ///
   /// POST /data_actions -> DataActionResponse
-  /// 
+  ///
   /// <returns><c>DataActionResponse</c> Data Action Response (application/json)</returns>
   public async Task<SdkResponse<DataActionResponse, Exception>> perform_data_action(
     DataActionRequest body,
@@ -3737,11 +3737,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about the permission set with a specific id.
-  /// 
+  ///
   /// GET /permission_sets/{permission_set_id} -> PermissionSet
-  /// 
+  ///
   /// <returns><c>PermissionSet</c> Permission Set (application/json)</returns>
-  /// 
+  ///
   /// <param name="permission_set_id">Id of permission set</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<PermissionSet, Exception>> permission_set(
@@ -3754,13 +3754,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get A Project
-  /// 
+  ///
   /// Returns the project with the given project id
-  /// 
+  ///
   /// GET /projects/{project_id} -> Project
-  /// 
+  ///
   /// <returns><c>Project</c> Project (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<Project, Exception>> project(
@@ -3774,13 +3774,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get Project File Info
-  /// 
+  ///
   /// Returns information about a file in the project
-  /// 
+  ///
   /// GET /projects/{project_id}/files/file -> ProjectFile
-  /// 
+  ///
   /// <returns><c>ProjectFile</c> Project File (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   /// <param name="file_id">File Id</param>
   /// <param name="fields">Requested fields</param>
@@ -3797,25 +3797,25 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get Cached Project Validation Results
-  /// 
+  ///
   /// Returns the cached results of a previous project validation calculation, if any.
   /// Returns http status 204 No Content if no validation results exist.
-  /// 
+  ///
   /// Validating the content of all the files in a project can be computationally intensive
   /// for large projects. Use this API to simply fetch the results of the most recent
   /// project validation rather than revalidating the entire project from scratch.
-  /// 
+  ///
   /// A value of `"stale": true` in the response indicates that the project has changed since
   /// the cached validation results were computed. The cached validation results may no longer
   /// reflect the current state of the project.
-  /// 
+  ///
   /// GET /projects/{project_id}/validate -> ProjectValidationCache
-  /// 
+  ///
   /// <returns>
   /// <c>ProjectValidationCache</c> Project validation results (application/json)
   /// <c>void</c> Deleted ()
   /// </returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<TSuccess, Exception>> project_validation_results<TSuccess>(
@@ -3829,13 +3829,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get Project Workspace
-  /// 
+  ///
   /// Returns information about the state of the project files in the currently selected workspace
-  /// 
+  ///
   /// GET /projects/{project_id}/current_workspace -> ProjectWorkspace
-  /// 
+  ///
   /// <returns><c>ProjectWorkspace</c> Project Workspace (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<ProjectWorkspace, Exception>> project_workspace(
@@ -3849,27 +3849,27 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get a previously created query by id.
-  /// 
+  ///
   /// A Looker query object includes the various parameters that define a database query that has been run or
   /// could be run in the future. These parameters include: model, view, fields, filters, pivots, etc.
   /// Query *results* are not part of the query object.
-  /// 
+  ///
   /// Query objects are unique and immutable. Query objects are created automatically in Looker as users explore data.
   /// Looker does not delete them; they become part of the query history. When asked to create a query for
   /// any given set of parameters, Looker will first try to find an existing query object with matching
   /// parameters and will only create a new object when an appropriate object can not be found.
-  /// 
+  ///
   /// This 'get' method is used to get the details about a query for a given id. See the other methods here
   /// to 'create' and 'run' queries.
-  /// 
+  ///
   /// Note that some fields like 'filter_config' and 'vis_config' etc are specific to how the Looker UI
   /// builds queries and visualizations and are not generally useful for API use. They are not required when
   /// creating new queries and can usually just be ignored.
-  /// 
+  ///
   /// GET /queries/{query_id} -> Query
-  /// 
+  ///
   /// <returns><c>Query</c> Query (application/json)</returns>
-  /// 
+  ///
   /// <param name="query_id">Id of query</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Query, Exception>> query(
@@ -3882,27 +3882,27 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the query for a given query slug.
-  /// 
+  ///
   /// This returns the query for the 'slug' in a query share URL.
-  /// 
+  ///
   /// The 'slug' is a randomly chosen short string that is used as an alternative to the query's id value
   /// for use in URLs etc. This method exists as a convenience to help you use the API to 'find' queries that
   /// have been created using the Looker UI.
-  /// 
+  ///
   /// You can use the Looker explore page to build a query and then choose the 'Share' option to
   /// show the share url for the query. Share urls generally look something like 'https://looker.yourcompany/x/vwGSbfc'.
   /// The trailing 'vwGSbfc' is the share slug. You can pass that string to this api method to get details about the query.
   /// Those details include the 'id' that you can use to run the query. Or, you can copy the query body
   /// (perhaps with your own modification) and use that as the basis to make/run new queries.
-  /// 
+  ///
   /// This will also work with slugs from Looker explore urls like
   /// 'https://looker.yourcompany/explore/ecommerce/orders?qid=aogBgL6o3cKK1jN3RoZl5s'. In this case
   /// 'aogBgL6o3cKK1jN3RoZl5s' is the slug.
-  /// 
+  ///
   /// GET /queries/slug/{slug} -> Query
-  /// 
+  ///
   /// <returns><c>Query</c> Query (application/json)</returns>
-  /// 
+  ///
   /// <param name="slug">Slug of query</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Query, Exception>> query_for_slug(
@@ -3916,17 +3916,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get Query Task details
-  /// 
+  ///
   /// Use this function to check the status of an async query task. After the status
   /// reaches "Complete", you can call [query_task_results(query_task_id)](#!/Query/query_task_results) to
   /// retrieve the results of the query.
-  /// 
+  ///
   /// Use [create_query_task()](#!/Query/create_query_task) to create an async query task.
-  /// 
+  ///
   /// GET /query_tasks/{query_task_id} -> QueryTask
-  /// 
+  ///
   /// <returns><c>QueryTask</c> query_task (application/json)</returns>
-  /// 
+  ///
   /// <param name="query_task_id">ID of the Query Task</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<QueryTask, Exception>> query_task(
@@ -3940,17 +3940,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Fetch results of multiple async queries
-  /// 
+  ///
   /// Returns the results of multiple async queries in one request.
-  /// 
+  ///
   /// For Query Tasks that are not completed, the response will include the execution status of the Query Task but will not include query results.
   /// Query Tasks whose results have expired will have a status of 'expired'.
   /// If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
-  /// 
+  ///
   /// GET /query_tasks/multi_results -> StringDictionary<string>
-  /// 
+  ///
   /// <returns><c>StringDictionary<string></c> Multiple query results (application/json)</returns>
-  /// 
+  ///
   /// <param name="query_task_ids">List of Query Task IDs</param>
   public async Task<SdkResponse<StringDictionary<string>, Exception>> query_task_multi_results(
     DelimArray<string> query_task_ids,
@@ -3961,38 +3961,38 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get Async Query Results
-  /// 
+  ///
   /// Returns the results of an async query task if the query has completed.
-  /// 
+  ///
   /// If the query task is still running or waiting to run, this function returns 204 No Content.
-  /// 
+  ///
   /// If the query task ID is invalid or the cached results of the query task have expired, this function returns 404 Not Found.
-  /// 
+  ///
   /// Use [query_task(query_task_id)](#!/Query/query_task) to check the execution status of the query task
   /// Call query_task_results only after the query task status reaches "Complete".
-  /// 
+  ///
   /// You can also use [query_task_multi_results()](#!/Query/query_task_multi_results) retrieve the
   /// results of multiple async query tasks at the same time.
-  /// 
+  ///
   /// #### SQL Error Handling:
   /// If the query fails due to a SQL db error, how this is communicated depends on the result_format you requested in `create_query_task()`.
-  /// 
+  ///
   /// For `json_detail` result_format: `query_task_results()` will respond with HTTP status '200 OK' and db SQL error info
   /// will be in the `errors` property of the response object. The 'data' property will be empty.
-  /// 
+  ///
   /// For all other result formats: `query_task_results()` will respond with HTTP status `400 Bad Request` and some db SQL error info
   /// will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
   /// These data formats can only carry row data, and error info is not row data.
-  /// 
+  ///
   /// GET /query_tasks/{query_task_id}/results -> string
-  /// 
+  ///
   /// <returns>
   /// <c>string</c> The query results. (text)
   /// <c>string</c> The query results. (application/json)
   /// <c>string</c> The query is not finished (text)
   /// <c>string</c> The query is not finished (application/json)
   /// </returns>
-  /// 
+  ///
   /// <param name="query_task_id">ID of the Query Task</param>
   public async Task<SdkResponse<TSuccess, Exception>> query_task_results<TSuccess>(
     string query_task_id,
@@ -4003,15 +4003,15 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about a render task.
-  /// 
+  ///
   /// Returns a render task object.
   /// To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
-  /// 
+  ///
   /// GET /render_tasks/{render_task_id} -> RenderTask
-  /// 
+  ///
   /// <returns><c>RenderTask</c> Render Task (application/json)</returns>
-  /// 
+  ///
   /// <param name="render_task_id">Id of render task</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<RenderTask, Exception>> render_task(
@@ -4025,33 +4025,33 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the document or image produced by a completed render task.
-  /// 
+  ///
   /// Note that the PDF or image result will be a binary blob in the HTTP response, as indicated by the
   /// Content-Type in the response headers. This may require specialized (or at least different) handling than text
   /// responses such as JSON. You may need to tell your HTTP client that the response is binary so that it does not
   /// attempt to parse the binary data as text.
-  /// 
+  ///
   /// If the render task exists but has not finished rendering the results, the response HTTP status will be
   /// **202 Accepted**, the response body will be empty, and the response will have a Retry-After header indicating
   /// that the caller should repeat the request at a later time.
-  /// 
+  ///
   /// Returns 404 if the render task cannot be found, if the cached result has expired, or if the caller
   /// does not have permission to view the results.
-  /// 
+  ///
   /// For detailed information about the status of the render task, use [Render Task](#!/RenderTask/render_task).
   /// Polling loops waiting for completion of a render task would be better served by polling **render_task(id)** until
   /// the task status reaches completion (or error) instead of polling **render_task_results(id)** alone.
-  /// 
+  ///
   /// GET /render_tasks/{render_task_id}/results -> string
-  /// 
+  ///
   /// **Note**: Binary content is returned by this method.
-  /// 
+  ///
   /// <returns>
   /// <c>string</c> Document or image (image/jpeg)
   /// <c>string</c> Document or image (image/png)
   /// <c>string</c> Document or image (application/pdf)
   /// </returns>
-  /// 
+  ///
   /// <param name="render_task_id">Id of render task</param>
   public async Task<SdkResponse<TSuccess, Exception>> render_task_results<TSuccess>(
     string render_task_id,
@@ -4062,16 +4062,16 @@ namespace Looker.SDK.API31
   }
 
   /// ### Reset a project to the revision of the project that is in production.
-  /// 
+  ///
   /// **DANGER** this will delete any changes that have not been pushed to a remote repository.
-  /// 
+  ///
   /// POST /projects/{project_id}/reset_to_production -> string
-  /// 
+  ///
   /// <returns>
   /// <c>string</c> Project (application/json)
   /// <c>void</c> Returns 204 if project was successfully reset, otherwise 400 with an error message ()
   /// </returns>
-  /// 
+  ///
   /// <param name="project_id">Id of project</param>
   public async Task<SdkResponse<TSuccess, Exception>> reset_project_to_production<TSuccess>(
     string project_id,
@@ -4082,16 +4082,16 @@ namespace Looker.SDK.API31
   }
 
   /// ### Reset a project development branch to the revision of the project that is on the remote.
-  /// 
+  ///
   /// **DANGER** this will delete any changes that have not been pushed to a remote repository.
-  /// 
+  ///
   /// POST /projects/{project_id}/reset_to_remote -> string
-  /// 
+  ///
   /// <returns>
   /// <c>string</c> Project (application/json)
   /// <c>void</c> Returns 204 if project was successfully reset, otherwise 400 with an error message ()
   /// </returns>
-  /// 
+  ///
   /// <param name="project_id">Id of project</param>
   public async Task<SdkResponse<TSuccess, Exception>> reset_project_to_remote<TSuccess>(
     string project_id,
@@ -4102,11 +4102,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about the role with a specific id.
-  /// 
+  ///
   /// GET /roles/{role_id} -> Role
-  /// 
+  ///
   /// <returns><c>Role</c> Role (application/json)</returns>
-  /// 
+  ///
   /// <param name="role_id">id of role</param>
   public async Task<SdkResponse<Role, Exception>> role(
     long role_id,
@@ -4116,11 +4116,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all the groups with the role that has a specific id.
-  /// 
+  ///
   /// GET /roles/{role_id}/groups -> Group[]
-  /// 
+  ///
   /// <returns><c>Group[]</c> Groups with role. (application/json)</returns>
-  /// 
+  ///
   /// <param name="role_id">id of role</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Group[], Exception>> role_groups(
@@ -4133,11 +4133,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all the users with the role that has a specific id.
-  /// 
+  ///
   /// GET /roles/{role_id}/users -> User[]
-  /// 
+  ///
   /// <returns><c>User[]</c> Users with role. (application/json)</returns>
-  /// 
+  ///
   /// <param name="role_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="direct_association_only">Get only users associated directly with the role: exclude those only associated through groups.</param>
@@ -4153,17 +4153,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Run a git connection test
-  /// 
+  ///
   /// Run the named test on the git service used by this project (or the dependency project for the provided remote_url) and return the result. This
   /// is intended to help debug git connections when things do not work properly, to give
   /// more helpful information about why a git url is not working with Looker.
-  /// 
+  ///
   /// Tests should be run in the order they are returned by [Get All Git Connection Tests](#!/Project/all_git_connection_tests).
-  /// 
+  ///
   /// GET /projects/{project_id}/git_connection_tests/{test_id} -> GitConnectionTestResult
-  /// 
+  ///
   /// <returns><c>GitConnectionTestResult</c> Git Connection Test Result (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   /// <param name="test_id">Test Id</param>
   /// <param name="remote_url">(Optional: leave blank for root project) The remote url for remote dependency to test.</param>
@@ -4180,10 +4180,10 @@ namespace Looker.SDK.API31
   }
 
   /// ### Run the query that is specified inline in the posted body.
-  /// 
+  ///
   /// This allows running a query as defined in json in the posted body. This combines
   /// the two actions of posting & running a query into one step.
-  /// 
+  ///
   /// Here is an example body in json:
   /// ```
   /// {
@@ -4196,7 +4196,7 @@ namespace Looker.SDK.API31
   ///   "query_timezone":"America/Los_Angeles"
   /// }
   /// ```
-  /// 
+  ///
   /// When using the Ruby SDK this would be passed as a Ruby hash like:
   /// ```
   /// {
@@ -4212,11 +4212,11 @@ namespace Looker.SDK.API31
   ///  :query_timezone=>"America/Los_Angeles",
   /// }
   /// ```
-  /// 
+  ///
   /// This will return the result of running the query in the format specified by the 'result_format' parameter.
-  /// 
+  ///
   /// Supported formats:
-  /// 
+  ///
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
@@ -4229,18 +4229,18 @@ namespace Looker.SDK.API31
   /// | sql | Returns the generated SQL rather than running the query
   /// | png | A PNG image of the visualization of the query
   /// | jpg | A JPG image of the visualization of the query
-  /// 
+  ///
   /// POST /queries/run/{result_format} -> string
-  /// 
+  ///
   /// **Note**: Binary content may be returned by this method.
-  /// 
+  ///
   /// <returns>
   /// <c>string</c> Query Result (text)
   /// <c>string</c> Query Result (application/json)
   /// <c>string</c> Query Result (image/png)
   /// <c>string</c> Query Result (image/jpeg)
   /// </returns>
-  /// 
+  ///
   /// <param name="result_format">Format of result</param>
   /// <param name="limit">Row limit (may override the limit in the saved query).</param>
   /// <param name="apply_formatting">Apply model-specified formatting to each result.</param>
@@ -4288,11 +4288,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Run a Look
-  /// 
+  ///
   /// Runs a given look's query and returns the results in the requested format.
-  /// 
+  ///
   /// Supported formats:
-  /// 
+  ///
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
@@ -4305,18 +4305,18 @@ namespace Looker.SDK.API31
   /// | sql | Returns the generated SQL rather than running the query
   /// | png | A PNG image of the visualization of the query
   /// | jpg | A JPG image of the visualization of the query
-  /// 
+  ///
   /// GET /looks/{look_id}/run/{result_format} -> string
-  /// 
+  ///
   /// **Note**: Binary content may be returned by this method.
-  /// 
+  ///
   /// <returns>
   /// <c>string</c> Look (text)
   /// <c>string</c> Look (application/json)
   /// <c>string</c> Look (image/png)
   /// <c>string</c> Look (image/jpeg)
   /// </returns>
-  /// 
+  ///
   /// <param name="look_id">Id of look</param>
   /// <param name="result_format">Format of result</param>
   /// <param name="limit">Row limit (may override the limit in the saved query).</param>
@@ -4365,13 +4365,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Run LookML Tests
-  /// 
+  ///
   /// Runs all tests in the project, optionally filtered by file, test, and/or model.
-  /// 
+  ///
   /// GET /projects/{project_id}/lookml_tests/run -> LookmlTestResult[]
-  /// 
+  ///
   /// <returns><c>LookmlTestResult[]</c> LookML Test Results (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   /// <param name="file_id">File Name</param>
   /// <param name="test">Test Name</param>
@@ -4391,14 +4391,14 @@ namespace Looker.SDK.API31
   }
 
   /// ### Run a saved query.
-  /// 
+  ///
   /// This runs a previously saved query. You can use this on a query that was generated in the Looker UI
   /// or one that you have explicitly created using the API. You can also use a query 'id' from a saved 'Look'.
-  /// 
+  ///
   /// The 'result_format' parameter specifies the desired structure and format of the response.
-  /// 
+  ///
   /// Supported formats:
-  /// 
+  ///
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
@@ -4411,18 +4411,18 @@ namespace Looker.SDK.API31
   /// | sql | Returns the generated SQL rather than running the query
   /// | png | A PNG image of the visualization of the query
   /// | jpg | A JPG image of the visualization of the query
-  /// 
+  ///
   /// GET /queries/{query_id}/run/{result_format} -> string
-  /// 
+  ///
   /// **Note**: Binary content may be returned by this method.
-  /// 
+  ///
   /// <returns>
   /// <c>string</c> Query (text)
   /// <c>string</c> Query (application/json)
   /// <c>string</c> Query (image/png)
   /// <c>string</c> Query (image/jpeg)
   /// </returns>
-  /// 
+  ///
   /// <param name="query_id">Id of query</param>
   /// <param name="result_format">Format of result</param>
   /// <param name="limit">Row limit (may override the limit in the saved query).</param>
@@ -4471,18 +4471,18 @@ namespace Looker.SDK.API31
   }
 
   /// Execute a SQL Runner query in a given result_format.
-  /// 
+  ///
   /// POST /sql_queries/{slug}/run/{result_format} -> string
-  /// 
+  ///
   /// **Note**: Binary content may be returned by this method.
-  /// 
+  ///
   /// <returns>
   /// <c>string</c> SQL Runner Query (text)
   /// <c>string</c> SQL Runner Query (application/json)
   /// <c>string</c> SQL Runner Query (image/png)
   /// <c>string</c> SQL Runner Query (image/jpeg)
   /// </returns>
-  /// 
+  ///
   /// <param name="slug">slug of query</param>
   /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]</param>
   /// <param name="download">Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.</param>
@@ -4499,27 +4499,27 @@ namespace Looker.SDK.API31
   }
 
   /// ### Run an URL encoded query.
-  /// 
+  ///
   /// This requires the caller to encode the specifiers for the query into the URL query part using
   /// Looker-specific syntax as explained below.
-  /// 
+  ///
   /// Generally, you would want to use one of the methods that takes the parameters as json in the POST body
   /// for creating and/or running queries. This method exists for cases where one really needs to encode the
   /// parameters into the URL of a single 'GET' request. This matches the way that the Looker UI formats
   /// 'explore' URLs etc.
-  /// 
+  ///
   /// The parameters here are very similar to the json body formatting except that the filter syntax is
   /// tricky. Unfortunately, this format makes this method not currently callible via the 'Try it out!' button
   /// in this documentation page. But, this is callable  when creating URLs manually or when using the Looker SDK.
-  /// 
+  ///
   /// Here is an example inline query URL:
-  /// 
+  ///
   /// ```
   /// https://looker.mycompany.com:19999/api/3.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles
   /// ```
-  /// 
+  ///
   /// When invoking this endpoint with the Ruby SDK, pass the query parameter parts as a hash. The hash to match the above would look like:
-  /// 
+  ///
   /// ```ruby
   /// query_params =
   /// {
@@ -4530,14 +4530,14 @@ namespace Looker.SDK.API31
   ///   :query_timezone => "America/Los_Angeles"
   /// }
   /// response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
-  /// 
+  ///
   /// ```
-  /// 
+  ///
   /// Again, it is generally easier to use the variant of this method that passes the full query in the POST body.
   /// This method is available for cases where other alternatives won't fit the need.
-  /// 
+  ///
   /// Supported formats:
-  /// 
+  ///
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
@@ -4550,18 +4550,18 @@ namespace Looker.SDK.API31
   /// | sql | Returns the generated SQL rather than running the query
   /// | png | A PNG image of the visualization of the query
   /// | jpg | A JPG image of the visualization of the query
-  /// 
+  ///
   /// GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> string
-  /// 
+  ///
   /// **Note**: Binary content may be returned by this method.
-  /// 
+  ///
   /// <returns>
   /// <c>string</c> Query (text)
   /// <c>string</c> Query (application/json)
   /// <c>string</c> Query (image/png)
   /// <c>string</c> Query (image/jpeg)
   /// </returns>
-  /// 
+  ///
   /// <param name="model_name">Model name</param>
   /// <param name="view_name">View name</param>
   /// <param name="result_format">Format of result</param>
@@ -4578,20 +4578,20 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the SAML configuration.
-  /// 
+  ///
   /// Looker can be optionally configured to authenticate users against a SAML authentication server.
   /// SAML setup requires coordination with an administrator of that server.
-  /// 
+  ///
   /// Only Looker administrators can read and update the SAML configuration.
-  /// 
+  ///
   /// Configuring SAML impacts authentication for all users. This configuration should be done carefully.
-  /// 
+  ///
   /// Looker maintains a single SAML configuation. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
-  /// 
+  ///
   /// SAML is enabled or disabled for Looker using the **enabled** field.
-  /// 
+  ///
   /// GET /saml_config -> SamlConfig
-  /// 
+  ///
   /// <returns><c>SamlConfig</c> SAML Configuration. (application/json)</returns>
   public async Task<SdkResponse<SamlConfig, Exception>> saml_config(
     ITransportSettings? options = null)
@@ -4600,11 +4600,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get a SAML test configuration by test_slug.
-  /// 
+  ///
   /// GET /saml_test_configs/{test_slug} -> SamlConfig
-  /// 
+  ///
   /// <returns><c>SamlConfig</c> SAML test config. (application/json)</returns>
-  /// 
+  ///
   /// <param name="test_slug">Slug of test config</param>
   public async Task<SdkResponse<SamlConfig, Exception>> saml_test_config(
     string test_slug,
@@ -4615,13 +4615,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get Information About a Scheduled Plan
-  /// 
+  ///
   /// Admins can fetch information about other users' Scheduled Plans.
-  /// 
+  ///
   /// GET /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
-  /// 
+  ///
   /// <returns><c>ScheduledPlan</c> Scheduled Plan (application/json)</returns>
-  /// 
+  ///
   /// <param name="scheduled_plan_id">Scheduled Plan Id</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<ScheduledPlan, Exception>> scheduled_plan(
@@ -4634,27 +4634,27 @@ namespace Looker.SDK.API31
   }
 
   /// ### Run a Scheduled Plan Immediately
-  /// 
+  ///
   /// Create a scheduled plan that runs only once, and immediately.
-  /// 
+  ///
   /// This can be useful for testing a Scheduled Plan before committing to a production schedule.
-  /// 
+  ///
   /// Admins can create scheduled plans on behalf of other users by specifying a user id.
-  /// 
+  ///
   /// This API is rate limited to prevent it from being used for relay spam or DoS attacks
-  /// 
+  ///
   /// #### Email Permissions:
-  /// 
+  ///
   /// For details about permissions required to schedule delivery to email and the safeguards
   /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
-  /// 
-  /// 
+  ///
+  ///
   /// #### Scheduled Plan Destination Formats
-  /// 
+  ///
   /// Scheduled plan destinations must specify the data format to produce and send to the destination.
-  /// 
+  ///
   /// Formats:
-  /// 
+  ///
   /// | format | Description
   /// | :-----------: | :--- |
   /// | json | A JSON object containing a `data` property which contains an array of JSON objects, one per row. No metadata.
@@ -4668,11 +4668,11 @@ namespace Looker.SDK.API31
   /// | assembled_pdf | Dashboard rendered in a single column layout to produce a PDF document
   /// | wysiwyg_png | Dashboard rendered in a tiled layout to produce a PNG image
   /// ||
-  /// 
+  ///
   /// Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
-  /// 
+  ///
   /// POST /scheduled_plans/run_once -> ScheduledPlan
-  /// 
+  ///
   /// <returns><c>ScheduledPlan</c> Scheduled Plan (application/json)</returns>
   public async Task<SdkResponse<ScheduledPlan, Exception>> scheduled_plan_run_once(
     WriteScheduledPlan body,
@@ -4685,30 +4685,30 @@ namespace Looker.SDK.API31
   /// This function creates a run-once schedule plan based on an existing scheduled plan,
   /// applies modifications (if any) to the new scheduled plan, and runs the new schedule plan immediately.
   /// This can be useful for testing modifications to an existing scheduled plan before committing to a production schedule.
-  /// 
+  ///
   /// This function internally performs the following operations:
-  /// 
+  ///
   /// 1. Copies the properties of the existing scheduled plan into a new scheduled plan
   /// 2. Copies any properties passed in the JSON body of this request into the new scheduled plan (replacing the original values)
   /// 3. Creates the new scheduled plan
   /// 4. Runs the new scheduled plan
-  /// 
+  ///
   /// The original scheduled plan is not modified by this operation.
   /// Admins can create, modify, and run scheduled plans on behalf of other users by specifying a user id.
   /// Non-admins can only create, modify, and run their own scheduled plans.
-  /// 
+  ///
   /// #### Email Permissions:
-  /// 
+  ///
   /// For details about permissions required to schedule delivery to email and the safeguards
   /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
-  /// 
-  /// 
+  ///
+  ///
   /// #### Scheduled Plan Destination Formats
-  /// 
+  ///
   /// Scheduled plan destinations must specify the data format to produce and send to the destination.
-  /// 
+  ///
   /// Formats:
-  /// 
+  ///
   /// | format | Description
   /// | :-----------: | :--- |
   /// | json | A JSON object containing a `data` property which contains an array of JSON objects, one per row. No metadata.
@@ -4722,17 +4722,17 @@ namespace Looker.SDK.API31
   /// | assembled_pdf | Dashboard rendered in a single column layout to produce a PDF document
   /// | wysiwyg_png | Dashboard rendered in a tiled layout to produce a PNG image
   /// ||
-  /// 
+  ///
   /// Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
-  /// 
-  /// 
-  /// 
+  ///
+  ///
+  ///
   /// This API is rate limited to prevent it from being used for relay spam or DoS attacks
-  /// 
+  ///
   /// POST /scheduled_plans/{scheduled_plan_id}/run_once -> ScheduledPlan
-  /// 
+  ///
   /// <returns><c>ScheduledPlan</c> Scheduled Plan (application/json)</returns>
-  /// 
+  ///
   /// <param name="scheduled_plan_id">Id of schedule plan to copy and run</param>
   public async Task<SdkResponse<ScheduledPlan, Exception>> scheduled_plan_run_once_by_id(
     long scheduled_plan_id,
@@ -4743,21 +4743,21 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get Scheduled Plans for a Dashboard
-  /// 
+  ///
   /// Returns all scheduled plans for a dashboard which belong to the caller or given user.
-  /// 
+  ///
   /// If no user_id is provided, this function returns the scheduled plans owned by the caller.
-  /// 
-  /// 
+  ///
+  ///
   /// To list all schedules for all users, pass `all_users=true`.
-  /// 
-  /// 
+  ///
+  ///
   /// The caller must have `see_schedules` permission to see other users' scheduled plans.
-  /// 
+  ///
   /// GET /scheduled_plans/dashboard/{dashboard_id} -> ScheduledPlan[]
-  /// 
+  ///
   /// <returns><c>ScheduledPlan[]</c> Scheduled Plan (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_id">Dashboard Id</param>
   /// <param name="user_id">User Id (default is requesting user if not specified)</param>
   /// <param name="all_users">Return scheduled plans belonging to all users for the dashboard</param>
@@ -4776,21 +4776,21 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get Scheduled Plans for a Look
-  /// 
+  ///
   /// Returns all scheduled plans for a look which belong to the caller or given user.
-  /// 
+  ///
   /// If no user_id is provided, this function returns the scheduled plans owned by the caller.
-  /// 
-  /// 
+  ///
+  ///
   /// To list all schedules for all users, pass `all_users=true`.
-  /// 
-  /// 
+  ///
+  ///
   /// The caller must have `see_schedules` permission to see other users' scheduled plans.
-  /// 
+  ///
   /// GET /scheduled_plans/look/{look_id} -> ScheduledPlan[]
-  /// 
+  ///
   /// <returns><c>ScheduledPlan[]</c> Scheduled Plan (application/json)</returns>
-  /// 
+  ///
   /// <param name="look_id">Look Id</param>
   /// <param name="user_id">User Id (default is requesting user if not specified)</param>
   /// <param name="fields">Requested fields.</param>
@@ -4809,21 +4809,21 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get Scheduled Plans for a LookML Dashboard
-  /// 
+  ///
   /// Returns all scheduled plans for a LookML Dashboard which belong to the caller or given user.
-  /// 
+  ///
   /// If no user_id is provided, this function returns the scheduled plans owned by the caller.
-  /// 
-  /// 
+  ///
+  ///
   /// To list all schedules for all users, pass `all_users=true`.
-  /// 
-  /// 
+  ///
+  ///
   /// The caller must have `see_schedules` permission to see other users' scheduled plans.
-  /// 
+  ///
   /// GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id} -> ScheduledPlan[]
-  /// 
+  ///
   /// <returns><c>ScheduledPlan[]</c> Scheduled Plan (application/json)</returns>
-  /// 
+  ///
   /// <param name="lookml_dashboard_id">LookML Dashboard Id</param>
   /// <param name="user_id">User Id (default is requesting user if not specified)</param>
   /// <param name="fields">Requested fields.</param>
@@ -4842,13 +4842,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get Scheduled Plans for a Space
-  /// 
+  ///
   /// Returns scheduled plans owned by the caller for a given space id.
-  /// 
+  ///
   /// GET /scheduled_plans/space/{space_id} -> ScheduledPlan[]
-  /// 
+  ///
   /// <returns><c>ScheduledPlan[]</c> Scheduled Plan (application/json)</returns>
-  /// 
+  ///
   /// <param name="space_id">Space Id</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<ScheduledPlan[], Exception>> scheduled_plans_for_space(
@@ -4861,32 +4861,32 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search Favorite Content
-  /// 
+  ///
   /// If multiple search params are given and `filter_or` is FALSE or not specified,
   /// search params are combined in a logical AND operation.
   /// Only rows that match *all* search param criteria will be returned.
-  /// 
+  ///
   /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
   /// Results will include rows that match **any** of the search criteria.
-  /// 
+  ///
   /// String search params use case-insensitive matching.
   /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
   /// example="dan%" will match "danger" and "Danzig" but not "David"
   /// example="D_m%" will match "Damage" and "dump"
-  /// 
+  ///
   /// Integer search params can accept a single value or a comma separated list of values. The multiple
   /// values will be combined under a logical OR operation - results will match at least one of
   /// the given values.
-  /// 
+  ///
   /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
   /// or exclude (respectively) rows where the column is null.
-  /// 
+  ///
   /// Boolean search params accept only "true" and "false" as values.
-  /// 
+  ///
   /// GET /content_favorite/search -> ContentFavorite[]
-  /// 
+  ///
   /// <returns><c>ContentFavorite[]</c> Favorite Content (application/json)</returns>
-  /// 
+  ///
   /// <param name="id">Match content favorite id(s)</param>
   /// <param name="user_id">Match user id(s)</param>
   /// <param name="content_metadata_id">Match content metadata id(s)</param>
@@ -4924,32 +4924,32 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search Content Views
-  /// 
+  ///
   /// If multiple search params are given and `filter_or` is FALSE or not specified,
   /// search params are combined in a logical AND operation.
   /// Only rows that match *all* search param criteria will be returned.
-  /// 
+  ///
   /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
   /// Results will include rows that match **any** of the search criteria.
-  /// 
+  ///
   /// String search params use case-insensitive matching.
   /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
   /// example="dan%" will match "danger" and "Danzig" but not "David"
   /// example="D_m%" will match "Damage" and "dump"
-  /// 
+  ///
   /// Integer search params can accept a single value or a comma separated list of values. The multiple
   /// values will be combined under a logical OR operation - results will match at least one of
   /// the given values.
-  /// 
+  ///
   /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
   /// or exclude (respectively) rows where the column is null.
-  /// 
+  ///
   /// Boolean search params accept only "true" and "false" as values.
-  /// 
+  ///
   /// GET /content_view/search -> ContentView[]
-  /// 
+  ///
   /// <returns><c>ContentView[]</c> Content View (application/json)</returns>
-  /// 
+  ///
   /// <param name="view_count">Match view count</param>
   /// <param name="group_id">Match Group Id</param>
   /// <param name="look_id">Match look_id</param>
@@ -4996,34 +4996,34 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search Dashboard Elements
-  /// 
+  ///
   /// Returns an **array of DashboardElement objects** that match the specified search criteria.
-  /// 
+  ///
   /// If multiple search params are given and `filter_or` is FALSE or not specified,
   /// search params are combined in a logical AND operation.
   /// Only rows that match *all* search param criteria will be returned.
-  /// 
+  ///
   /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
   /// Results will include rows that match **any** of the search criteria.
-  /// 
+  ///
   /// String search params use case-insensitive matching.
   /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
   /// example="dan%" will match "danger" and "Danzig" but not "David"
   /// example="D_m%" will match "Damage" and "dump"
-  /// 
+  ///
   /// Integer search params can accept a single value or a comma separated list of values. The multiple
   /// values will be combined under a logical OR operation - results will match at least one of
   /// the given values.
-  /// 
+  ///
   /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
   /// or exclude (respectively) rows where the column is null.
-  /// 
+  ///
   /// Boolean search params accept only "true" and "false" as values.
-  /// 
+  ///
   /// GET /dashboard_elements/search -> DashboardElement[]
-  /// 
+  ///
   /// <returns><c>DashboardElement[]</c> Dashboard elements (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_id">Select elements that refer to a given dashboard id</param>
   /// <param name="look_id">Select elements that refer to a given look id</param>
   /// <param name="title">Match the title of element</param>
@@ -5052,39 +5052,39 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search Dashboards
-  /// 
+  ///
   /// Returns an **array of dashboard objects** that match the specified search criteria.
-  /// 
+  ///
   /// If multiple search params are given and `filter_or` is FALSE or not specified,
   /// search params are combined in a logical AND operation.
   /// Only rows that match *all* search param criteria will be returned.
-  /// 
+  ///
   /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
   /// Results will include rows that match **any** of the search criteria.
-  /// 
+  ///
   /// String search params use case-insensitive matching.
   /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
   /// example="dan%" will match "danger" and "Danzig" but not "David"
   /// example="D_m%" will match "Damage" and "dump"
-  /// 
+  ///
   /// Integer search params can accept a single value or a comma separated list of values. The multiple
   /// values will be combined under a logical OR operation - results will match at least one of
   /// the given values.
-  /// 
+  ///
   /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
   /// or exclude (respectively) rows where the column is null.
-  /// 
+  ///
   /// Boolean search params accept only "true" and "false" as values.
-  /// 
-  /// 
+  ///
+  ///
   /// The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
-  /// 
+  ///
   /// Get a **single dashboard** by id with [dashboard()](#!/Dashboard/dashboard)
-  /// 
+  ///
   /// GET /dashboards/search -> Dashboard[]
-  /// 
+  ///
   /// <returns><c>Dashboard[]</c> dashboards (application/json)</returns>
-  /// 
+  ///
   /// <param name="id">Match dashboard id.</param>
   /// <param name="slug">Match dashboard slug.</param>
   /// <param name="title">Match Dashboard title.</param>
@@ -5149,11 +5149,11 @@ namespace Looker.SDK.API31
   }
 
   /// Search for folders by creator id, parent id, name, etc
-  /// 
+  ///
   /// GET /folders/search -> Folder[]
-  /// 
+  ///
   /// <returns><c>Folder[]</c> folders (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
@@ -5194,34 +5194,34 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search groups
-  /// 
+  ///
   /// Returns all group records that match the given search criteria.
-  /// 
+  ///
   /// If multiple search params are given and `filter_or` is FALSE or not specified,
   /// search params are combined in a logical AND operation.
   /// Only rows that match *all* search param criteria will be returned.
-  /// 
+  ///
   /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
   /// Results will include rows that match **any** of the search criteria.
-  /// 
+  ///
   /// String search params use case-insensitive matching.
   /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
   /// example="dan%" will match "danger" and "Danzig" but not "David"
   /// example="D_m%" will match "Damage" and "dump"
-  /// 
+  ///
   /// Integer search params can accept a single value or a comma separated list of values. The multiple
   /// values will be combined under a logical OR operation - results will match at least one of
   /// the given values.
-  /// 
+  ///
   /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
   /// or exclude (respectively) rows where the column is null.
-  /// 
+  ///
   /// Boolean search params accept only "true" and "false" as values.
-  /// 
+  ///
   /// GET /groups/search -> GroupSearch[]
-  /// 
+  ///
   /// <returns><c>GroupSearch[]</c> Group (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="limit">Number of results to return (used with `offset`).</param>
   /// <param name="offset">Number of results to skip before returning any (used with `limit`).</param>
@@ -5259,32 +5259,32 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search Homepages
-  /// 
+  ///
   /// If multiple search params are given and `filter_or` is FALSE or not specified,
   /// search params are combined in a logical AND operation.
   /// Only rows that match *all* search param criteria will be returned.
-  /// 
+  ///
   /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
   /// Results will include rows that match **any** of the search criteria.
-  /// 
+  ///
   /// String search params use case-insensitive matching.
   /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
   /// example="dan%" will match "danger" and "Danzig" but not "David"
   /// example="D_m%" will match "Damage" and "dump"
-  /// 
+  ///
   /// Integer search params can accept a single value or a comma separated list of values. The multiple
   /// values will be combined under a logical OR operation - results will match at least one of
   /// the given values.
-  /// 
+  ///
   /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
   /// or exclude (respectively) rows where the column is null.
-  /// 
+  ///
   /// Boolean search params accept only "true" and "false" as values.
-  /// 
+  ///
   /// GET /homepages/search -> Homepage[]
-  /// 
+  ///
   /// <returns><c>Homepage[]</c> homepages (application/json)</returns>
-  /// 
+  ///
   /// <param name="title">Matches homepage title.</param>
   /// <param name="created_at">Matches the timestamp for when the homepage was created.</param>
   /// <param name="first_name">The first name of the user who created this homepage.</param>
@@ -5331,37 +5331,37 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search Looks
-  /// 
+  ///
   /// Returns an **array of Look objects** that match the specified search criteria.
-  /// 
+  ///
   /// If multiple search params are given and `filter_or` is FALSE or not specified,
   /// search params are combined in a logical AND operation.
   /// Only rows that match *all* search param criteria will be returned.
-  /// 
+  ///
   /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
   /// Results will include rows that match **any** of the search criteria.
-  /// 
+  ///
   /// String search params use case-insensitive matching.
   /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
   /// example="dan%" will match "danger" and "Danzig" but not "David"
   /// example="D_m%" will match "Damage" and "dump"
-  /// 
+  ///
   /// Integer search params can accept a single value or a comma separated list of values. The multiple
   /// values will be combined under a logical OR operation - results will match at least one of
   /// the given values.
-  /// 
+  ///
   /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
   /// or exclude (respectively) rows where the column is null.
-  /// 
+  ///
   /// Boolean search params accept only "true" and "false" as values.
-  /// 
-  /// 
+  ///
+  ///
   /// Get a **single look** by id with [look(id)](#!/Look/look)
-  /// 
+  ///
   /// GET /looks/search -> Look[]
-  /// 
+  ///
   /// <returns><c>Look[]</c> looks (application/json)</returns>
-  /// 
+  ///
   /// <param name="id">Match look id.</param>
   /// <param name="title">Match Look title.</param>
   /// <param name="description">Match Look description.</param>
@@ -5424,28 +5424,28 @@ namespace Looker.SDK.API31
   /// If multiple search params are given and `filter_or` is FALSE or not specified,
   /// search params are combined in a logical AND operation.
   /// Only rows that match *all* search param criteria will be returned.
-  /// 
+  ///
   /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
   /// Results will include rows that match **any** of the search criteria.
-  /// 
+  ///
   /// String search params use case-insensitive matching.
   /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
   /// example="dan%" will match "danger" and "Danzig" but not "David"
   /// example="D_m%" will match "Damage" and "dump"
-  /// 
+  ///
   /// Integer search params can accept a single value or a comma separated list of values. The multiple
   /// values will be combined under a logical OR operation - results will match at least one of
   /// the given values.
-  /// 
+  ///
   /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
   /// or exclude (respectively) rows where the column is null.
-  /// 
+  ///
   /// Boolean search params accept only "true" and "false" as values.
-  /// 
+  ///
   /// GET /model_sets/search -> ModelSet[]
-  /// 
+  ///
   /// <returns><c>ModelSet[]</c> Model Set (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="limit">Number of results to return (used with `offset`).</param>
   /// <param name="offset">Number of results to skip before returning any (used with `limit`).</param>
@@ -5484,28 +5484,28 @@ namespace Looker.SDK.API31
   /// If multiple search params are given and `filter_or` is FALSE or not specified,
   /// search params are combined in a logical AND operation.
   /// Only rows that match *all* search param criteria will be returned.
-  /// 
+  ///
   /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
   /// Results will include rows that match **any** of the search criteria.
-  /// 
+  ///
   /// String search params use case-insensitive matching.
   /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
   /// example="dan%" will match "danger" and "Danzig" but not "David"
   /// example="D_m%" will match "Damage" and "dump"
-  /// 
+  ///
   /// Integer search params can accept a single value or a comma separated list of values. The multiple
   /// values will be combined under a logical OR operation - results will match at least one of
   /// the given values.
-  /// 
+  ///
   /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
   /// or exclude (respectively) rows where the column is null.
-  /// 
+  ///
   /// Boolean search params accept only "true" and "false" as values.
-  /// 
+  ///
   /// GET /permission_sets/search -> PermissionSet[]
-  /// 
+  ///
   /// <returns><c>PermissionSet[]</c> Permission Set (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="limit">Number of results to return (used with `offset`).</param>
   /// <param name="offset">Number of results to skip before returning any (used with `limit`).</param>
@@ -5540,34 +5540,34 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search roles
-  /// 
+  ///
   /// Returns all role records that match the given search criteria.
-  /// 
+  ///
   /// If multiple search params are given and `filter_or` is FALSE or not specified,
   /// search params are combined in a logical AND operation.
   /// Only rows that match *all* search param criteria will be returned.
-  /// 
+  ///
   /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
   /// Results will include rows that match **any** of the search criteria.
-  /// 
+  ///
   /// String search params use case-insensitive matching.
   /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
   /// example="dan%" will match "danger" and "Danzig" but not "David"
   /// example="D_m%" will match "Damage" and "dump"
-  /// 
+  ///
   /// Integer search params can accept a single value or a comma separated list of values. The multiple
   /// values will be combined under a logical OR operation - results will match at least one of
   /// the given values.
-  /// 
+  ///
   /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
   /// or exclude (respectively) rows where the column is null.
-  /// 
+  ///
   /// Boolean search params accept only "true" and "false" as values.
-  /// 
+  ///
   /// GET /roles/search -> Role[]
-  /// 
+  ///
   /// <returns><c>Role[]</c> Role (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="limit">Number of results to return (used with `offset`).</param>
   /// <param name="offset">Number of results to skip before returning any (used with `limit`).</param>
@@ -5599,39 +5599,39 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search Spaces
-  /// 
+  ///
   ///   Returns an **array of space objects** that match the given search criteria.
-  /// 
+  ///
   ///   If multiple search params are given and `filter_or` is FALSE or not specified,
   /// search params are combined in a logical AND operation.
   /// Only rows that match *all* search param criteria will be returned.
-  /// 
+  ///
   /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
   /// Results will include rows that match **any** of the search criteria.
-  /// 
+  ///
   /// String search params use case-insensitive matching.
   /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
   /// example="dan%" will match "danger" and "Danzig" but not "David"
   /// example="D_m%" will match "Damage" and "dump"
-  /// 
+  ///
   /// Integer search params can accept a single value or a comma separated list of values. The multiple
   /// values will be combined under a logical OR operation - results will match at least one of
   /// the given values.
-  /// 
+  ///
   /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
   /// or exclude (respectively) rows where the column is null.
-  /// 
+  ///
   /// Boolean search params accept only "true" and "false" as values.
-  /// 
-  /// 
+  ///
+  ///
   ///   The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
-  /// 
+  ///
   ///   Get a **single space** by id with [Space](#!/Space/space)
-  /// 
+  ///
   /// GET /spaces/search -> Space[]
-  /// 
+  ///
   /// <returns><c>Space[]</c> spaces (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
@@ -5672,48 +5672,48 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search all themes for matching criteria.
-  /// 
+  ///
   /// Returns an **array of theme objects** that match the specified search criteria.
-  /// 
+  ///
   /// | Search Parameters | Description
   /// | :-------------------: | :------ |
   /// | `begin_at` only | Find themes active at or after `begin_at`
   /// | `end_at` only | Find themes active at or before `end_at`
   /// | both set | Find themes with an active inclusive period between `begin_at` and `end_at`
-  /// 
+  ///
   /// Note: Range matching requires boolean AND logic.
   /// When using `begin_at` and `end_at` together, do not use `filter_or`=TRUE
-  /// 
+  ///
   /// If multiple search params are given and `filter_or` is FALSE or not specified,
   /// search params are combined in a logical AND operation.
   /// Only rows that match *all* search param criteria will be returned.
-  /// 
+  ///
   /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
   /// Results will include rows that match **any** of the search criteria.
-  /// 
+  ///
   /// String search params use case-insensitive matching.
   /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
   /// example="dan%" will match "danger" and "Danzig" but not "David"
   /// example="D_m%" will match "Damage" and "dump"
-  /// 
+  ///
   /// Integer search params can accept a single value or a comma separated list of values. The multiple
   /// values will be combined under a logical OR operation - results will match at least one of
   /// the given values.
-  /// 
+  ///
   /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
   /// or exclude (respectively) rows where the column is null.
-  /// 
+  ///
   /// Boolean search params accept only "true" and "false" as values.
-  /// 
-  /// 
+  ///
+  ///
   /// Get a **single theme** by id with [Theme](#!/Theme/theme)
-  /// 
+  ///
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-  /// 
+  ///
   /// GET /themes/search -> Theme[]
-  /// 
+  ///
   /// <returns><c>Theme[]</c> Themes (application/json)</returns>
-  /// 
+  ///
   /// <param name="id">Match theme id.</param>
   /// <param name="name">Match theme name.</param>
   /// <param name="begin_at">Timestamp for activation.</param>
@@ -5748,11 +5748,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search currently locked-out users.
-  /// 
+  ///
   /// GET /user_login_lockouts/search -> UserLoginLockout[]
-  /// 
+  ///
   /// <returns><c>UserLoginLockout[]</c> User Login Lockout (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Include only these fields in the response</param>
   /// <param name="page">Return only page N of paginated results</param>
   /// <param name="per_page">Return N rows of data per page</param>
@@ -5787,40 +5787,40 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search users
-  /// 
+  ///
   /// Returns all<sup>*</sup> user records that match the given search criteria.
-  /// 
+  ///
   /// If multiple search params are given and `filter_or` is FALSE or not specified,
   /// search params are combined in a logical AND operation.
   /// Only rows that match *all* search param criteria will be returned.
-  /// 
+  ///
   /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
   /// Results will include rows that match **any** of the search criteria.
-  /// 
+  ///
   /// String search params use case-insensitive matching.
   /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
   /// example="dan%" will match "danger" and "Danzig" but not "David"
   /// example="D_m%" will match "Damage" and "dump"
-  /// 
+  ///
   /// Integer search params can accept a single value or a comma separated list of values. The multiple
   /// values will be combined under a logical OR operation - results will match at least one of
   /// the given values.
-  /// 
+  ///
   /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
   /// or exclude (respectively) rows where the column is null.
-  /// 
+  ///
   /// Boolean search params accept only "true" and "false" as values.
-  /// 
-  /// 
+  ///
+  ///
   /// (<sup>*</sup>) Results are always filtered to the level of information the caller is permitted to view.
   /// Looker admins can see all user details; normal users in an open system can see
   /// names of other users but no details; normal users in a closed system can only see
   /// names of other users who are members of the same group as the user.
-  /// 
+  ///
   /// GET /users/search -> User[]
-  /// 
+  ///
   /// <returns><c>User[]</c> Matching users. (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Include only these fields in the response</param>
   /// <param name="page">Return only page N of paginated results</param>
   /// <param name="per_page">Return N rows of data per page</param>
@@ -5867,16 +5867,16 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search for user accounts by name
-  /// 
+  ///
   /// Returns all user accounts where `first_name` OR `last_name` OR `email` field values match a pattern.
   /// The pattern can contain `%` and `_` wildcards as in SQL LIKE expressions.
-  /// 
+  ///
   /// Any additional search params will be combined into a logical AND expression.
-  /// 
+  ///
   /// GET /users/search/names/{pattern} -> User[]
-  /// 
+  ///
   /// <returns><c>User[]</c> Matching users. (application/json)</returns>
-  /// 
+  ///
   /// <param name="pattern">Pattern to match</param>
   /// <param name="fields">Include only these fields in the response</param>
   /// <param name="page">Return only page N of paginated results</param>
@@ -5917,11 +5917,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get API Session
-  /// 
+  ///
   /// Returns information about the current API session, such as which workspace is selected for the session.
-  /// 
+  ///
   /// GET /session -> ApiSession
-  /// 
+  ///
   /// <returns><c>ApiSession</c> Session (application/json)</returns>
   public async Task<SdkResponse<ApiSession, Exception>> session(
     ITransportSettings? options = null)
@@ -5930,9 +5930,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get session config.
-  /// 
+  ///
   /// GET /session_config -> SessionConfig
-  /// 
+  ///
   /// <returns><c>SessionConfig</c> Session Config (application/json)</returns>
   public async Task<SdkResponse<SessionConfig, Exception>> session_config(
     ITransportSettings? options = null)
@@ -5941,14 +5941,14 @@ namespace Looker.SDK.API31
   }
 
   /// ### Set the global default Color Collection by ID
-  /// 
+  ///
   /// Returns the new specified default Color Collection object.
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-  /// 
+  ///
   /// PUT /color_collections/default -> ColorCollection
-  /// 
+  ///
   /// <returns><c>ColorCollection</c> ColorCollection (application/json)</returns>
-  /// 
+  ///
   /// <param name="collection_id">ID of color collection to set as default</param>
   public async Task<SdkResponse<ColorCollection, Exception>> set_default_color_collection(
     string collection_id,
@@ -5959,21 +5959,21 @@ namespace Looker.SDK.API31
   }
 
   /// ### Set the global default theme by theme name
-  /// 
+  ///
   /// Only Admin users can call this function.
-  /// 
+  ///
   /// Only an active theme with no expiration (`end_at` not set) can be assigned as the default theme. As long as a theme has an active record with no expiration, it can be set as the default.
-  /// 
+  ///
   /// [Create Theme](#!/Theme/create) has detailed information on rules for default and active themes
-  /// 
+  ///
   /// Returns the new specified default theme object.
-  /// 
+  ///
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-  /// 
+  ///
   /// PUT /themes/default -> Theme
-  /// 
+  ///
   /// <returns><c>Theme</c> Theme (application/json)</returns>
-  /// 
+  ///
   /// <param name="name">Name of theme to set as default</param>
   public async Task<SdkResponse<Theme, Exception>> set_default_theme(
     string name,
@@ -5984,11 +5984,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Set all groups for a role, removing all existing group associations from that role.
-  /// 
+  ///
   /// PUT /roles/{role_id}/groups -> Group[]
-  /// 
+  ///
   /// <returns><c>Group[]</c> Groups with role. (application/json)</returns>
-  /// 
+  ///
   /// <param name="role_id">Id of Role</param>
   public async Task<SdkResponse<Group[], Exception>> set_role_groups(
     long role_id,
@@ -5999,11 +5999,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Set all the users of the role with a specific id.
-  /// 
+  ///
   /// PUT /roles/{role_id}/users -> User[]
-  /// 
+  ///
   /// <returns><c>User[]</c> Users with role. (application/json)</returns>
-  /// 
+  ///
   /// <param name="role_id">id of role</param>
   public async Task<SdkResponse<User[], Exception>> set_role_users(
     long role_id,
@@ -6014,30 +6014,30 @@ namespace Looker.SDK.API31
   }
 
   /// ### Define values for a user attribute across a set of groups, in priority order.
-  /// 
+  ///
   /// This function defines all values for a user attribute defined by user groups. This is a global setting, potentially affecting
   /// all users in the system. This function replaces any existing group value definitions for the indicated user attribute.
-  /// 
+  ///
   /// The value of a user attribute for a given user is determined by searching the following locations, in this order:
-  /// 
+  ///
   /// 1. the user's account settings
   /// 2. the groups that the user is a member of
   /// 3. the default value of the user attribute, if any
-  /// 
+  ///
   /// The user may be a member of multiple groups which define different values for that user attribute. The order of items in the group_values parameter
   /// determines which group takes priority for that user. Lowest array index wins.
-  /// 
+  ///
   /// An alternate method to indicate the selection precedence of group-values is to assign numbers to the 'rank' property of each
   /// group-value object in the array. Lowest 'rank' value wins. If you use this technique, you must assign a
   /// rank value to every group-value object in the array.
-  /// 
+  ///
   ///   To set a user attribute value for a single user, see [Set User Attribute User Value](#!/User/set_user_attribute_user_value).
   /// To set a user attribute value for all members of a group, see [Set User Attribute Group Value](#!/Group/update_user_attribute_group_value).
-  /// 
+  ///
   /// POST /user_attributes/{user_attribute_id}/group_values -> UserAttributeGroupValue[]
-  /// 
+  ///
   /// <returns><c>UserAttributeGroupValue[]</c> Array of group values. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_attribute_id">Id of user attribute</param>
   public async Task<SdkResponse<UserAttributeGroupValue[], Exception>> set_user_attribute_group_values(
     long user_attribute_id,
@@ -6048,13 +6048,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Store a custom value for a user attribute in a user's account settings.
-  /// 
+  ///
   /// Per-user user attribute values take precedence over group or default values.
-  /// 
+  ///
   /// PATCH /users/{user_id}/attribute_values/{user_attribute_id} -> UserAttributeWithValue
-  /// 
+  ///
   /// <returns><c>UserAttributeWithValue</c> User attribute value. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">Id of user</param>
   /// <param name="user_attribute_id">Id of user attribute</param>
   public async Task<SdkResponse<UserAttributeWithValue, Exception>> set_user_attribute_user_value(
@@ -6067,11 +6067,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Set roles of the user with a specific id.
-  /// 
+  ///
   /// PUT /users/{user_id}/roles -> Role[]
-  /// 
+  ///
   /// <returns><c>Role[]</c> Roles of user. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Role[], Exception>> set_user_roles(
@@ -6085,11 +6085,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about the space with a specific id.
-  /// 
+  ///
   /// GET /spaces/{space_id} -> Space
-  /// 
+  ///
   /// <returns><c>Space</c> Space (application/json)</returns>
-  /// 
+  ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Space, Exception>> space(
@@ -6103,11 +6103,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the ancestors of a space
-  /// 
+  ///
   /// GET /spaces/{space_id}/ancestors -> Space[]
-  /// 
+  ///
   /// <returns><c>Space[]</c> Spaces (application/json)</returns>
-  /// 
+  ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Space[], Exception>> space_ancestors(
@@ -6121,11 +6121,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the children of a space.
-  /// 
+  ///
   /// GET /spaces/{space_id}/children -> Space[]
-  /// 
+  ///
   /// <returns><c>Space[]</c> Spaces (application/json)</returns>
-  /// 
+  ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
@@ -6148,11 +6148,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Search the children of a space
-  /// 
+  ///
   /// GET /spaces/{space_id}/children/search -> Space[]
-  /// 
+  ///
   /// <returns><c>Space[]</c> Spaces (application/json)</returns>
-  /// 
+  ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to sort by.</param>
@@ -6172,11 +6172,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the dashboards in a space
-  /// 
+  ///
   /// GET /spaces/{space_id}/dashboards -> Dashboard[]
-  /// 
+  ///
   /// <returns><c>Dashboard[]</c> Dashboard (application/json)</returns>
-  /// 
+  ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Dashboard[], Exception>> space_dashboards(
@@ -6190,11 +6190,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the looks in a space
-  /// 
+  ///
   /// GET /spaces/{space_id}/looks -> LookWithQuery[]
-  /// 
+  ///
   /// <returns><c>LookWithQuery[]</c> Looks (application/json)</returns>
-  /// 
+  ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<LookWithQuery[], Exception>> space_looks(
@@ -6208,11 +6208,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the parent of a space
-  /// 
+  ///
   /// GET /spaces/{space_id}/parent -> Space
-  /// 
+  ///
   /// <returns><c>Space</c> Space (application/json)</returns>
-  /// 
+  ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Space, Exception>> space_parent(
@@ -6226,11 +6226,11 @@ namespace Looker.SDK.API31
   }
 
   /// Get a SQL Runner query.
-  /// 
+  ///
   /// GET /sql_queries/{slug} -> SqlQuery
-  /// 
+  ///
   /// <returns><c>SqlQuery</c> SQL Runner Query (application/json)</returns>
-  /// 
+  ///
   /// <param name="slug">slug of query</param>
   public async Task<SdkResponse<SqlQuery, Exception>> sql_query(
     string slug,
@@ -6241,19 +6241,19 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update all linked dashboards to match the specified LookML dashboard.
-  /// 
+  ///
   /// Any UDD (a dashboard which exists in the Looker database rather than as a LookML file) which has a `lookml_link_id`
   /// property value referring to a LookML dashboard's id (model::dashboardname) will be updated so that it matches the current state of the LookML dashboard.
-  /// 
+  ///
   /// For this operation to succeed the user must have permission to view the LookML dashboard, and only linked dashboards
   /// that the user has permission to update will be synced.
-  /// 
+  ///
   /// To **link** or **unlink** a UDD set the `lookml_link_id` property with [update_dashboard()](#!/Dashboard/update_dashboard)
-  /// 
+  ///
   /// PATCH /dashboards/{lookml_dashboard_id}/sync -> long[]
-  /// 
+  ///
   /// <returns><c>long[]</c> Ids of all the dashboards that were updated by this operation (application/json)</returns>
-  /// 
+  ///
   /// <param name="lookml_dashboard_id">Id of LookML dashboard, in the form 'model::dashboardname'</param>
   /// <param name="raw_locale">If true, and this dashboard is localized, export it with the raw keys, not localized.</param>
   public async Task<SdkResponse<long[], Exception>> sync_lookml_dashboard(
@@ -6268,18 +6268,18 @@ namespace Looker.SDK.API31
   }
 
   /// ### Test an existing connection.
-  /// 
+  ///
   /// Note that a connection's 'dialect' property has a 'connection_tests' property that lists the
   /// specific types of tests that the connection supports.
-  /// 
+  ///
   /// This API is rate limited.
-  /// 
+  ///
   /// Unsupported tests in the request will be ignored.
-  /// 
+  ///
   /// PUT /connections/{connection_name}/test -> DBConnectionTestResult[]
-  /// 
+  ///
   /// <returns><c>DBConnectionTestResult[]</c> Test results (application/json)</returns>
-  /// 
+  ///
   /// <param name="connection_name">Name of connection</param>
   /// <param name="tests">Array of names of tests to run</param>
   public async Task<SdkResponse<DBConnectionTestResult[], Exception>> test_connection(
@@ -6293,18 +6293,18 @@ namespace Looker.SDK.API31
   }
 
   /// ### Test a connection configuration.
-  /// 
+  ///
   /// Note that a connection's 'dialect' property has a 'connection_tests' property that lists the
   /// specific types of tests that the connection supports.
-  /// 
+  ///
   /// This API is rate limited.
-  /// 
+  ///
   /// Unsupported tests in the request will be ignored.
-  /// 
+  ///
   /// PUT /connections/test -> DBConnectionTestResult[]
-  /// 
+  ///
   /// <returns><c>DBConnectionTestResult[]</c> Test results (application/json)</returns>
-  /// 
+  ///
   /// <param name="tests">Array of names of tests to run</param>
   public async Task<SdkResponse<DBConnectionTestResult[], Exception>> test_connection_config(
     WriteDBConnection body,
@@ -6316,11 +6316,11 @@ namespace Looker.SDK.API31
   }
 
   /// Tests the integration to make sure all the settings are working.
-  /// 
+  ///
   /// POST /integrations/{integration_id}/test -> IntegrationTestResult
-  /// 
+  ///
   /// <returns><c>IntegrationTestResult</c> Test Result (application/json)</returns>
-  /// 
+  ///
   /// <param name="integration_id">Id of integration</param>
   public async Task<SdkResponse<IntegrationTestResult, Exception>> test_integration(
     string integration_id,
@@ -6331,11 +6331,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Test the connection authentication settings for an LDAP configuration.
-  /// 
+  ///
   /// This tests that the connection is possible and that a 'server' account to be used by Looker can       authenticate to the LDAP server given connection and authentication information.
-  /// 
+  ///
   /// **connection_host**, **connection_port**, and **auth_username**, are required.       **connection_tls** and **auth_password** are optional.
-  /// 
+  ///
   /// Example:
   /// ```json
   /// {
@@ -6346,13 +6346,13 @@ namespace Looker.SDK.API31
   ///   "auth_password": "secret"
   /// }
   /// ```
-  /// 
+  ///
   /// Looker will never return an **auth_password**. If this request omits the **auth_password** field, then       the **auth_password** value from the active config (if present) will be used for the test.
-  /// 
+  ///
   /// The active LDAP settings are not modified.
-  /// 
+  ///
   /// PUT /ldap_config/test_auth -> LDAPConfigTestResult
-  /// 
+  ///
   /// <returns><c>LDAPConfigTestResult</c> Result info. (application/json)</returns>
   public async Task<SdkResponse<LDAPConfigTestResult, Exception>> test_ldap_config_auth(
     WriteLDAPConfig body,
@@ -6362,11 +6362,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Test the connection settings for an LDAP configuration.
-  /// 
+  ///
   /// This tests that the connection is possible given a connection_host and connection_port.
-  /// 
+  ///
   /// **connection_host** and **connection_port** are required. **connection_tls** is optional.
-  /// 
+  ///
   /// Example:
   /// ```json
   /// {
@@ -6375,13 +6375,13 @@ namespace Looker.SDK.API31
   ///   "connection_tls": true
   /// }
   /// ```
-  /// 
+  ///
   /// No authentication to the LDAP server is attempted.
-  /// 
+  ///
   /// The active LDAP settings are not modified.
-  /// 
+  ///
   /// PUT /ldap_config/test_connection -> LDAPConfigTestResult
-  /// 
+  ///
   /// <returns><c>LDAPConfigTestResult</c> Result info. (application/json)</returns>
   public async Task<SdkResponse<LDAPConfigTestResult, Exception>> test_ldap_config_connection(
     WriteLDAPConfig body,
@@ -6391,17 +6391,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Test the user authentication settings for an LDAP configuration.
-  /// 
+  ///
   /// This test accepts a full LDAP configuration along with a username/password pair and attempts to       authenticate the user with the LDAP server. The configuration is validated before attempting the       authentication.
-  /// 
+  ///
   /// Looker will never return an **auth_password**. If this request omits the **auth_password** field, then       the **auth_password** value from the active config (if present) will be used for the test.
-  /// 
+  ///
   /// **test_ldap_user** and **test_ldap_password** are required.
-  /// 
+  ///
   /// The active LDAP settings are not modified.
-  /// 
+  ///
   /// PUT /ldap_config/test_user_auth -> LDAPConfigTestResult
-  /// 
+  ///
   /// <returns><c>LDAPConfigTestResult</c> Result info. (application/json)</returns>
   public async Task<SdkResponse<LDAPConfigTestResult, Exception>> test_ldap_config_user_auth(
     WriteLDAPConfig body,
@@ -6411,17 +6411,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Test the user authentication settings for an LDAP configuration without authenticating the user.
-  /// 
+  ///
   /// This test will let you easily test the mapping for user properties and roles for any user without      needing to authenticate as that user.
-  /// 
+  ///
   /// This test accepts a full LDAP configuration along with a username and attempts to find the full info      for the user from the LDAP server without actually authenticating the user. So, user password is not      required.The configuration is validated before attempting to contact the server.
-  /// 
+  ///
   /// **test_ldap_user** is required.
-  /// 
+  ///
   /// The active LDAP settings are not modified.
-  /// 
+  ///
   /// PUT /ldap_config/test_user_info -> LDAPConfigTestResult
-  /// 
+  ///
   /// <returns><c>LDAPConfigTestResult</c> Result info. (application/json)</returns>
   public async Task<SdkResponse<LDAPConfigTestResult, Exception>> test_ldap_config_user_info(
     WriteLDAPConfig body,
@@ -6431,15 +6431,15 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get a theme by ID
-  /// 
+  ///
   /// Use this to retrieve a specific theme, whether or not it's currently active.
-  /// 
+  ///
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-  /// 
+  ///
   /// GET /themes/{theme_id} -> Theme
-  /// 
+  ///
   /// <returns><c>Theme</c> Theme (application/json)</returns>
-  /// 
+  ///
   /// <param name="theme_id">Id of theme</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Theme, Exception>> theme(
@@ -6453,16 +6453,16 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get the named theme if it's active. Otherwise, return the default theme
-  /// 
+  ///
   /// The optional `ts` parameter can specify a different timestamp than "now."
   /// Note: API users with `show` ability can call this function
-  /// 
+  ///
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-  /// 
+  ///
   /// GET /themes/theme_or_default -> Theme
-  /// 
+  ///
   /// <returns><c>Theme</c> Theme (application/json)</returns>
-  /// 
+  ///
   /// <param name="name">Name of theme</param>
   /// <param name="ts">Timestamp representing the target datetime for the active period. Defaults to 'now'</param>
   public async Task<SdkResponse<Theme, Exception>> theme_or_default(
@@ -6476,9 +6476,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### WARNING: The Looker internal database backup function has been deprecated.
-  /// 
+  ///
   /// PATCH /backup_configuration -> BackupConfiguration
-  /// 
+  ///
   /// <returns><c>BackupConfiguration</c> New state for specified model set. (application/json)</returns>
   public async Task<SdkResponse<BackupConfiguration, Exception>> update_backup_configuration(
     WriteBackupConfiguration body,
@@ -6488,9 +6488,9 @@ namespace Looker.SDK.API31
   }
 
   /// Update the current Cloud Storage Configuration.
-  /// 
+  ///
   /// PATCH /cloud_storage -> BackupConfiguration
-  /// 
+  ///
   /// <returns><c>BackupConfiguration</c> New state for specified model set. (application/json)</returns>
   public async Task<SdkResponse<BackupConfiguration, Exception>> update_cloud_storage_configuration(
     WriteBackupConfiguration body,
@@ -6501,11 +6501,11 @@ namespace Looker.SDK.API31
 
   /// ### Update a custom color collection by id.
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-  /// 
+  ///
   /// PATCH /color_collections/{collection_id} -> ColorCollection
-  /// 
+  ///
   /// <returns><c>ColorCollection</c> ColorCollection (application/json)</returns>
-  /// 
+  ///
   /// <param name="collection_id">Id of Custom Color Collection</param>
   public async Task<SdkResponse<ColorCollection, Exception>> update_color_collection(
     string collection_id,
@@ -6517,11 +6517,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update a connection using the specified configuration.
-  /// 
+  ///
   /// PATCH /connections/{connection_name} -> DBConnection
-  /// 
+  ///
   /// <returns><c>DBConnection</c> Connection (application/json)</returns>
-  /// 
+  ///
   /// <param name="connection_name">Name of connection</param>
   public async Task<SdkResponse<DBConnection, Exception>> update_connection(
     string connection_name,
@@ -6533,11 +6533,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Move a piece of content.
-  /// 
+  ///
   /// PATCH /content_metadata/{content_metadata_id} -> ContentMeta
-  /// 
+  ///
   /// <returns><c>ContentMeta</c> Content Metadata (application/json)</returns>
-  /// 
+  ///
   /// <param name="content_metadata_id">Id of content metadata</param>
   public async Task<SdkResponse<ContentMeta, Exception>> update_content_metadata(
     long content_metadata_id,
@@ -6548,11 +6548,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update type of access for content metadata.
-  /// 
+  ///
   /// PUT /content_metadata_access/{content_metadata_access_id} -> ContentMetaGroupUser
-  /// 
+  ///
   /// <returns><c>ContentMetaGroupUser</c> Content Metadata Access (application/json)</returns>
-  /// 
+  ///
   /// <param name="content_metadata_access_id">Id of content metadata access</param>
   public async Task<SdkResponse<ContentMetaGroupUser, Exception>> update_content_metadata_access(
     long content_metadata_access_id,
@@ -6563,11 +6563,11 @@ namespace Looker.SDK.API31
   }
 
   /// Update custom welcome email setting and values. Optionally send a test email with the new content to the currently logged in user.
-  /// 
+  ///
   /// PATCH /custom_welcome_email -> CustomWelcomeEmail
-  /// 
+  ///
   /// <returns><c>CustomWelcomeEmail</c> Custom Welcome Email (application/json)</returns>
-  /// 
+  ///
   /// <param name="send_test_welcome_email">If true a test email with the content from the request will be sent to the current user after saving</param>
   public async Task<SdkResponse<CustomWelcomeEmail, Exception>> update_custom_welcome_email(
     WriteCustomWelcomeEmail body,
@@ -6579,9 +6579,9 @@ namespace Looker.SDK.API31
   }
 
   /// Requests to this endpoint will send a welcome email with the custom content provided in the body to the currently logged in user.
-  /// 
+  ///
   /// PUT /custom_welcome_email_test -> WelcomeEmailTest
-  /// 
+  ///
   /// <returns><c>WelcomeEmailTest</c> Send Test Welcome Email (application/json)</returns>
   public async Task<SdkResponse<WelcomeEmailTest, Exception>> update_custom_welcome_email_test(
     WelcomeEmailTest body,
@@ -6591,20 +6591,20 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update a dashboard
-  /// 
+  ///
   /// You can use this function to change the string and integer properties of
   /// a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
   /// cannot be modified by this function - use the update functions for the respective
   /// nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
   /// to modify nested objects referenced by a dashboard.
-  /// 
+  ///
   /// If you receive a 422 error response when updating a dashboard, be sure to look at the
   /// response body for information about exactly which fields are missing or contain invalid data.
-  /// 
+  ///
   /// PATCH /dashboards/{dashboard_id} -> Dashboard
-  /// 
+  ///
   /// <returns><c>Dashboard</c> Dashboard (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_id">Id of dashboard</param>
   public async Task<SdkResponse<Dashboard, Exception>> update_dashboard(
     string dashboard_id,
@@ -6616,11 +6616,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update the dashboard element with a specific id.
-  /// 
+  ///
   /// PATCH /dashboard_elements/{dashboard_element_id} -> DashboardElement
-  /// 
+  ///
   /// <returns><c>DashboardElement</c> DashboardElement (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_element_id">Id of dashboard element</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardElement, Exception>> update_dashboard_element(
@@ -6635,11 +6635,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update the dashboard filter with a specific id.
-  /// 
+  ///
   /// PATCH /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
-  /// 
+  ///
   /// <returns><c>DashboardFilter</c> Dashboard Filter (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_filter_id">Id of dashboard filter</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardFilter, Exception>> update_dashboard_filter(
@@ -6654,11 +6654,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update the dashboard layout with a specific id.
-  /// 
+  ///
   /// PATCH /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
-  /// 
+  ///
   /// <returns><c>DashboardLayout</c> DashboardLayout (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_layout_id">Id of dashboard layout</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardLayout, Exception>> update_dashboard_layout(
@@ -6673,11 +6673,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update the dashboard element with a specific id.
-  /// 
+  ///
   /// PATCH /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
-  /// 
+  ///
   /// <returns><c>DashboardLayoutComponent</c> DashboardLayoutComponent (application/json)</returns>
-  /// 
+  ///
   /// <param name="dashboard_layout_component_id">Id of dashboard layout component</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<DashboardLayoutComponent, Exception>> update_dashboard_layout_component(
@@ -6692,11 +6692,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update a datagroup using the specified params.
-  /// 
+  ///
   /// PATCH /datagroups/{datagroup_id} -> Datagroup
-  /// 
+  ///
   /// <returns><c>Datagroup</c> Datagroup (application/json)</returns>
-  /// 
+  ///
   /// <param name="datagroup_id">ID of datagroup.</param>
   public async Task<SdkResponse<Datagroup, Exception>> update_datagroup(
     string datagroup_id,
@@ -6708,9 +6708,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update the setting for enabling/disabling digest emails
-  /// 
+  ///
   /// PATCH /digest_emails_enabled -> DigestEmails
-  /// 
+  ///
   /// <returns><c>DigestEmails</c> Digest_emails (application/json)</returns>
   public async Task<SdkResponse<DigestEmails, Exception>> update_digest_emails_enabled(
     DigestEmails body,
@@ -6720,11 +6720,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update the folder with a specific id.
-  /// 
+  ///
   /// PATCH /folders/{folder_id} -> Folder
-  /// 
+  ///
   /// <returns><c>Folder</c> Folder (application/json)</returns>
-  /// 
+  ///
   /// <param name="folder_id">Id of folder</param>
   public async Task<SdkResponse<Folder, Exception>> update_folder(
     string folder_id,
@@ -6736,19 +6736,19 @@ namespace Looker.SDK.API31
   }
 
   /// ### Checkout and/or reset --hard an existing Git Branch
-  /// 
+  ///
   /// Only allowed in development mode
   ///   - Call `update_session` to select the 'dev' workspace.
-  /// 
+  ///
   /// Checkout an existing branch if name field is different from the name of the currently checked out branch.
-  /// 
+  ///
   /// Optionally specify a branch name, tag name or commit SHA to which the branch should be reset.
   ///   **DANGER** hard reset will be force pushed to the remote. Unsaved changes and commits may be permanently lost.
-  /// 
+  ///
   /// PUT /projects/{project_id}/git_branch -> GitBranch
-  /// 
+  ///
   /// <returns><c>GitBranch</c> Git Branch (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   public async Task<SdkResponse<GitBranch, Exception>> update_git_branch(
     string project_id,
@@ -6760,11 +6760,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Updates the a group (admin only).
-  /// 
+  ///
   /// PATCH /groups/{group_id} -> Group
-  /// 
+  ///
   /// <returns><c>Group</c> Group (application/json)</returns>
-  /// 
+  ///
   /// <param name="group_id">Id of group</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Group, Exception>> update_group(
@@ -6778,11 +6778,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update a homepage definition.
-  /// 
+  ///
   /// PATCH /homepages/{homepage_id} -> Homepage
-  /// 
+  ///
   /// <returns><c>Homepage</c> Homepage (application/json)</returns>
-  /// 
+  ///
   /// <param name="homepage_id">Id of homepage</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Homepage, Exception>> update_homepage(
@@ -6796,11 +6796,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update a homepage item definition.
-  /// 
+  ///
   /// PATCH /homepage_items/{homepage_item_id} -> HomepageItem
-  /// 
+  ///
   /// <returns><c>HomepageItem</c> Homepage Item (application/json)</returns>
-  /// 
+  ///
   /// <param name="homepage_item_id">Id of homepage item</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<HomepageItem, Exception>> update_homepage_item(
@@ -6814,11 +6814,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update a homepage section definition.
-  /// 
+  ///
   /// PATCH /homepage_sections/{homepage_section_id} -> HomepageSection
-  /// 
+  ///
   /// <returns><c>HomepageSection</c> Homepage section (application/json)</returns>
-  /// 
+  ///
   /// <param name="homepage_section_id">Id of homepage section</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<HomepageSection, Exception>> update_homepage_section(
@@ -6832,11 +6832,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update parameters on a Integration.
-  /// 
+  ///
   /// PATCH /integrations/{integration_id} -> Integration
-  /// 
+  ///
   /// <returns><c>Integration</c> Integration (application/json)</returns>
-  /// 
+  ///
   /// <param name="integration_id">Id of integration</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Integration, Exception>> update_integration(
@@ -6851,13 +6851,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update a Integration Hub definition.
-  /// 
+  ///
   /// This API is rate limited to prevent it from being used for SSRF attacks
-  /// 
+  ///
   /// PATCH /integration_hubs/{integration_hub_id} -> IntegrationHub
-  /// 
+  ///
   /// <returns><c>IntegrationHub</c> Integration Hub (application/json)</returns>
-  /// 
+  ///
   /// <param name="integration_hub_id">Id of Integration Hub</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<IntegrationHub, Exception>> update_integration_hub(
@@ -6871,9 +6871,9 @@ namespace Looker.SDK.API31
   }
 
   /// Update internal help resources settings
-  /// 
+  ///
   /// PATCH /internal_help_resources -> InternalHelpResources
-  /// 
+  ///
   /// <returns><c>InternalHelpResources</c> Custom Welcome Email (application/json)</returns>
   public async Task<SdkResponse<InternalHelpResources, Exception>> update_internal_help_resources(
     WriteInternalHelpResources body,
@@ -6883,9 +6883,9 @@ namespace Looker.SDK.API31
   }
 
   /// Update internal help resources content
-  /// 
+  ///
   /// PATCH /internal_help_resources_content -> InternalHelpResourcesContent
-  /// 
+  ///
   /// <returns><c>InternalHelpResourcesContent</c> Internal Help Resources Content (application/json)</returns>
   public async Task<SdkResponse<InternalHelpResourcesContent, Exception>> update_internal_help_resources_content(
     WriteInternalHelpResourcesContent body,
@@ -6895,19 +6895,19 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update the LDAP configuration.
-  /// 
+  ///
   /// Configuring LDAP impacts authentication for all users. This configuration should be done carefully.
-  /// 
+  ///
   /// Only Looker administrators can read and update the LDAP configuration.
-  /// 
+  ///
   /// LDAP is enabled or disabled for Looker using the **enabled** field.
-  /// 
+  ///
   /// It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
-  /// 
+  ///
   /// See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
-  /// 
+  ///
   /// PATCH /ldap_config -> LDAPConfig
-  /// 
+  ///
   /// <returns><c>LDAPConfig</c> New state for LDAP Configuration. (application/json)</returns>
   public async Task<SdkResponse<LDAPConfig, Exception>> update_ldap_config(
     WriteLDAPConfig body,
@@ -6917,11 +6917,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update information about the legacy feature with a specific id.
-  /// 
+  ///
   /// PATCH /legacy_features/{legacy_feature_id} -> LegacyFeature
-  /// 
+  ///
   /// <returns><c>LegacyFeature</c> Legacy Feature (application/json)</returns>
-  /// 
+  ///
   /// <param name="legacy_feature_id">id of legacy feature</param>
   public async Task<SdkResponse<LegacyFeature, Exception>> update_legacy_feature(
     long legacy_feature_id,
@@ -6932,30 +6932,30 @@ namespace Looker.SDK.API31
   }
 
   /// ### Modify a Look
-  /// 
+  ///
   /// Use this function to modify parts of a look. Property values given in a call to `update_look` are
   /// applied to the existing look, so there's no need to include properties whose values are not changing.
   /// It's best to specify only the properties you want to change and leave everything else out
   /// of your `update_look` call. **Look properties marked 'read-only' will be ignored.**
-  /// 
+  ///
   /// When a user deletes a look in the Looker UI, the look data remains in the database but is
   /// marked with a deleted flag ("soft-deleted"). Soft-deleted looks can be undeleted (by an admin)
   /// if the delete was in error.
-  /// 
+  ///
   /// To soft-delete a look via the API, use [update_look()](#!/Look/update_look) to change the look's `deleted` property to `true`.
   /// You can undelete a look by calling `update_look` to change the look's `deleted` property to `false`.
-  /// 
+  ///
   /// Soft-deleted looks are excluded from the results of [all_looks()](#!/Look/all_looks) and [search_looks()](#!/Look/search_looks), so they
   /// essentially disappear from view even though they still reside in the db.
   /// In API 3.1 and later, you can pass `deleted: true` as a parameter to [search_looks()](#!/3.1/Look/search_looks) to list soft-deleted looks.
-  /// 
+  ///
   /// NOTE: [delete_look()](#!/Look/delete_look) performs a "hard delete" - the look data is removed from the Looker
   /// database and destroyed. There is no "undo" for `delete_look()`.
-  /// 
+  ///
   /// PATCH /looks/{look_id} -> LookWithQuery
-  /// 
+  ///
   /// <returns><c>LookWithQuery</c> Look (application/json)</returns>
-  /// 
+  ///
   /// <param name="look_id">Id of look</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<LookWithQuery, Exception>> update_look(
@@ -6969,11 +6969,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update a lookml model using the specified configuration.
-  /// 
+  ///
   /// PATCH /lookml_models/{lookml_model_name} -> LookmlModel
-  /// 
+  ///
   /// <returns><c>LookmlModel</c> LookML Model (application/json)</returns>
-  /// 
+  ///
   /// <param name="lookml_model_name">Name of lookml model.</param>
   public async Task<SdkResponse<LookmlModel, Exception>> update_lookml_model(
     string lookml_model_name,
@@ -6985,11 +6985,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update information about the model set with a specific id.
-  /// 
+  ///
   /// PATCH /model_sets/{model_set_id} -> ModelSet
-  /// 
+  ///
   /// <returns><c>ModelSet</c> New state for specified model set. (application/json)</returns>
-  /// 
+  ///
   /// <param name="model_set_id">id of model set</param>
   public async Task<SdkResponse<ModelSet, Exception>> update_model_set(
     long model_set_id,
@@ -7000,17 +7000,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update the OIDC configuration.
-  /// 
+  ///
   /// Configuring OIDC impacts authentication for all users. This configuration should be done carefully.
-  /// 
+  ///
   /// Only Looker administrators can read and update the OIDC configuration.
-  /// 
+  ///
   /// OIDC is enabled or disabled for Looker using the **enabled** field.
-  /// 
+  ///
   /// It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
-  /// 
+  ///
   /// PATCH /oidc_config -> OIDCConfig
-  /// 
+  ///
   /// <returns><c>OIDCConfig</c> New state for OIDC Configuration. (application/json)</returns>
   public async Task<SdkResponse<OIDCConfig, Exception>> update_oidc_config(
     WriteOIDCConfig body,
@@ -7020,9 +7020,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update password config.
-  /// 
+  ///
   /// PATCH /password_config -> PasswordConfig
-  /// 
+  ///
   /// <returns><c>PasswordConfig</c> Password Config (application/json)</returns>
   public async Task<SdkResponse<PasswordConfig, Exception>> update_password_config(
     WritePasswordConfig body,
@@ -7032,11 +7032,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update information about the permission set with a specific id.
-  /// 
+  ///
   /// PATCH /permission_sets/{permission_set_id} -> PermissionSet
-  /// 
+  ///
   /// <returns><c>PermissionSet</c> Permission Set (application/json)</returns>
-  /// 
+  ///
   /// <param name="permission_set_id">id of permission set</param>
   public async Task<SdkResponse<PermissionSet, Exception>> update_permission_set(
     long permission_set_id,
@@ -7047,32 +7047,32 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update Project Configuration
-  /// 
+  ///
   /// Apply changes to a project's configuration.
-  /// 
-  /// 
+  ///
+  ///
   /// #### Configuring Git for a Project
-  /// 
+  ///
   /// To set up a Looker project with a remote git repository, follow these steps:
-  /// 
+  ///
   /// 1. Call `update_session` to select the 'dev' workspace.
   /// 1. Call `create_git_deploy_key` to create a new deploy key for the project
   /// 1. Copy the deploy key text into the remote git repository's ssh key configuration
   /// 1. Call `update_project` to set project's `git_remote_url` ()and `git_service_name`, if necessary).
-  /// 
+  ///
   /// When you modify a project's `git_remote_url`, Looker connects to the remote repository to fetch
   /// metadata. The remote git repository MUST be configured with the Looker-generated deploy
   /// key for this project prior to setting the project's `git_remote_url`.
-  /// 
+  ///
   /// To set up a Looker project with a git repository residing on the Looker server (a 'bare' git repo):
-  /// 
+  ///
   /// 1. Call `update_session` to select the 'dev' workspace.
   /// 1. Call `update_project` setting `git_remote_url` to null and `git_service_name` to "bare".
-  /// 
+  ///
   /// PATCH /projects/{project_id} -> Project
-  /// 
+  ///
   /// <returns><c>Project</c> Project (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<Project, Exception>> update_project(
@@ -7087,16 +7087,16 @@ namespace Looker.SDK.API31
   }
 
   /// ### Configure Repository Credential for a remote dependency
-  /// 
+  ///
   /// Admin required.
-  /// 
+  ///
   /// `root_project_id` is required.
   /// `credential_id` is required.
-  /// 
+  ///
   /// PUT /projects/{root_project_id}/credential/{credential_id} -> RepositoryCredential
-  /// 
+  ///
   /// <returns><c>RepositoryCredential</c> Repository Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="root_project_id">Root Project Id</param>
   /// <param name="credential_id">Credential Id</param>
   public async Task<SdkResponse<RepositoryCredential, Exception>> update_repository_credential(
@@ -7111,11 +7111,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update information about the role with a specific id.
-  /// 
+  ///
   /// PATCH /roles/{role_id} -> Role
-  /// 
+  ///
   /// <returns><c>Role</c> Role (application/json)</returns>
-  /// 
+  ///
   /// <param name="role_id">id of role</param>
   public async Task<SdkResponse<Role, Exception>> update_role(
     long role_id,
@@ -7126,17 +7126,17 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update the SAML configuration.
-  /// 
+  ///
   /// Configuring SAML impacts authentication for all users. This configuration should be done carefully.
-  /// 
+  ///
   /// Only Looker administrators can read and update the SAML configuration.
-  /// 
+  ///
   /// SAML is enabled or disabled for Looker using the **enabled** field.
-  /// 
+  ///
   /// It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
-  /// 
+  ///
   /// PATCH /saml_config -> SamlConfig
-  /// 
+  ///
   /// <returns><c>SamlConfig</c> New state for SAML Configuration. (application/json)</returns>
   public async Task<SdkResponse<SamlConfig, Exception>> update_saml_config(
     WriteSamlConfig body,
@@ -7146,32 +7146,32 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update a Scheduled Plan
-  /// 
+  ///
   /// Admins can update other users' Scheduled Plans.
-  /// 
+  ///
   /// Note: Any scheduled plan destinations specified in an update will **replace** all scheduled plan destinations
   /// currently defined for the scheduled plan.
-  /// 
+  ///
   /// For Example: If a scheduled plan has destinations A, B, and C, and you call update on this scheduled plan
   /// specifying only B in the destinations, then destinations A and C will be deleted by the update.
-  /// 
+  ///
   /// Updating a scheduled plan to assign null or an empty array to the scheduled_plan_destinations property is an error, as a scheduled plan must always have at least one destination.
-  /// 
+  ///
   /// If you omit the scheduled_plan_destinations property from the object passed to update, then the destinations
   /// defined on the original scheduled plan will remain unchanged.
-  /// 
+  ///
   /// #### Email Permissions:
-  /// 
+  ///
   /// For details about permissions required to schedule delivery to email and the safeguards
   /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
-  /// 
-  /// 
+  ///
+  ///
   /// #### Scheduled Plan Destination Formats
-  /// 
+  ///
   /// Scheduled plan destinations must specify the data format to produce and send to the destination.
-  /// 
+  ///
   /// Formats:
-  /// 
+  ///
   /// | format | Description
   /// | :-----------: | :--- |
   /// | json | A JSON object containing a `data` property which contains an array of JSON objects, one per row. No metadata.
@@ -7185,13 +7185,13 @@ namespace Looker.SDK.API31
   /// | assembled_pdf | Dashboard rendered in a single column layout to produce a PDF document
   /// | wysiwyg_png | Dashboard rendered in a tiled layout to produce a PNG image
   /// ||
-  /// 
+  ///
   /// Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
-  /// 
+  ///
   /// PATCH /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
-  /// 
+  ///
   /// <returns><c>ScheduledPlan</c> Scheduled Plan (application/json)</returns>
-  /// 
+  ///
   /// <param name="scheduled_plan_id">Scheduled Plan Id</param>
   public async Task<SdkResponse<ScheduledPlan, Exception>> update_scheduled_plan(
     long scheduled_plan_id,
@@ -7202,28 +7202,28 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update API Session
-  /// 
+  ///
   /// #### API Session Workspace
-  /// 
+  ///
   /// You can use this endpoint to change the active workspace for the current API session.
-  /// 
+  ///
   /// Only one workspace can be active in a session. The active workspace can be changed
   /// any number of times in a session.
-  /// 
+  ///
   /// The default workspace for API sessions is the "production" workspace.
-  /// 
+  ///
   /// All Looker APIs that use projects or lookml models (such as running queries) will
   /// use the version of project and model files defined by this workspace for the lifetime of the
   /// current API session or until the session workspace is changed again.
-  /// 
+  ///
   /// An API session has the same lifetime as the access_token used to authenticate API requests. Each successful
   /// API login generates a new access_token and a new API session.
-  /// 
+  ///
   /// If your Looker API client application needs to work in a dev workspace across multiple
   /// API sessions, be sure to select the dev workspace after each login.
-  /// 
+  ///
   /// PATCH /session -> ApiSession
-  /// 
+  ///
   /// <returns><c>ApiSession</c> Session (application/json)</returns>
   public async Task<SdkResponse<ApiSession, Exception>> update_session(
     WriteApiSession body,
@@ -7233,9 +7233,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update session config.
-  /// 
+  ///
   /// PATCH /session_config -> SessionConfig
-  /// 
+  ///
   /// <returns><c>SessionConfig</c> Session Config (application/json)</returns>
   public async Task<SdkResponse<SessionConfig, Exception>> update_session_config(
     WriteSessionConfig body,
@@ -7245,11 +7245,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update the space with a specific id.
-  /// 
+  ///
   /// PATCH /spaces/{space_id} -> Space
-  /// 
+  ///
   /// <returns><c>Space</c> Space (application/json)</returns>
-  /// 
+  ///
   /// <param name="space_id">Id of space</param>
   public async Task<SdkResponse<Space, Exception>> update_space(
     string space_id,
@@ -7261,13 +7261,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update the theme by id.
-  /// 
+  ///
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-  /// 
+  ///
   /// PATCH /themes/{theme_id} -> Theme
-  /// 
+  ///
   /// <returns><c>Theme</c> Theme (application/json)</returns>
-  /// 
+  ///
   /// <param name="theme_id">Id of theme</param>
   public async Task<SdkResponse<Theme, Exception>> update_theme(
     string theme_id,
@@ -7279,11 +7279,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update information about the user with a specific id.
-  /// 
+  ///
   /// PATCH /users/{user_id} -> User
-  /// 
+  ///
   /// <returns><c>User</c> New state for specified user. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<User, Exception>> update_user(
@@ -7297,11 +7297,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update a user attribute definition.
-  /// 
+  ///
   /// PATCH /user_attributes/{user_attribute_id} -> UserAttribute
-  /// 
+  ///
   /// <returns><c>UserAttribute</c> User Attribute (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_attribute_id">Id of user attribute</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<UserAttribute, Exception>> update_user_attribute(
@@ -7315,13 +7315,13 @@ namespace Looker.SDK.API31
   }
 
   /// ### Set the value of a user attribute for a group.
-  /// 
+  ///
   /// For information about how user attribute values are calculated, see [Set User Attribute Group Values](#!/UserAttribute/set_user_attribute_group_values).
-  /// 
+  ///
   /// PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> UserAttributeGroupValue
-  /// 
+  ///
   /// <returns><c>UserAttributeGroupValue</c> Group value object. (application/json)</returns>
-  /// 
+  ///
   /// <param name="group_id">Id of group</param>
   /// <param name="user_attribute_id">Id of user attribute</param>
   public async Task<SdkResponse<UserAttributeGroupValue, Exception>> update_user_attribute_group_value(
@@ -7334,11 +7334,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Email/password login information for the specified user.
-  /// 
+  ///
   /// PATCH /users/{user_id}/credentials_email -> CredentialsEmail
-  /// 
+  ///
   /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsEmail, Exception>> update_user_credentials_email(
@@ -7352,9 +7352,9 @@ namespace Looker.SDK.API31
   }
 
   /// ### Update the whitelabel configuration
-  /// 
+  ///
   /// PUT /whitelabel_configuration -> WhitelabelConfiguration
-  /// 
+  ///
   /// <returns><c>WhitelabelConfiguration</c> Whitelabel configuration (application/json)</returns>
   public async Task<SdkResponse<WhitelabelConfiguration, Exception>> update_whitelabel_configuration(
     WriteWhitelabelConfiguration body,
@@ -7364,15 +7364,15 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about the user with a specific id.
-  /// 
+  ///
   /// If the caller is an admin or the caller is the user being specified, then full user information will
   /// be returned. Otherwise, a minimal 'public' variant of the user information will be returned. This contains
   /// The user name and avatar url, but no sensitive information.
-  /// 
+  ///
   /// GET /users/{user_id} -> User
-  /// 
+  ///
   /// <returns><c>User</c> Specified user. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<User, Exception>> user(
@@ -7385,11 +7385,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about a user attribute.
-  /// 
+  ///
   /// GET /user_attributes/{user_attribute_id} -> UserAttribute
-  /// 
+  ///
   /// <returns><c>UserAttribute</c> User Attribute (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_attribute_id">Id of user attribute</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<UserAttribute, Exception>> user_attribute(
@@ -7402,26 +7402,26 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get user attribute values for a given user.
-  /// 
+  ///
   /// Returns the values of specified user attributes (or all user attributes) for a certain user.
-  /// 
+  ///
   /// A value for each user attribute is searched for in the following locations, in this order:
-  /// 
+  ///
   /// 1. in the user's account information
   /// 1. in groups that the user is a member of
   /// 1. the default value of the user attribute
-  /// 
+  ///
   /// If more than one group has a value defined for a user attribute, the group with the lowest rank wins.
-  /// 
+  ///
   /// The response will only include user attributes for which values were found. Use `include_unset=true` to include
   /// empty records for user attributes with no value.
-  /// 
+  ///
   /// The value of all hidden user attributes will be blank.
-  /// 
+  ///
   /// GET /users/{user_id}/attribute_values -> UserAttributeWithValue[]
-  /// 
+  ///
   /// <returns><c>UserAttributeWithValue[]</c> Value of user attribute. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="user_attribute_ids">Specific user attributes to request. Omit or leave blank to request all user attributes.</param>
@@ -7443,11 +7443,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
-  /// 
+  ///
   /// GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
-  /// 
+  ///
   /// <returns><c>CredentialsApi3</c> API 3 Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">Id of user</param>
   /// <param name="credentials_api3_id">Id of API 3 Credential</param>
   /// <param name="fields">Requested fields.</param>
@@ -7462,11 +7462,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Email/password login information for the specified user.
-  /// 
+  ///
   /// GET /users/{user_id}/credentials_email -> CredentialsEmail
-  /// 
+  ///
   /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsEmail, Exception>> user_credentials_email(
@@ -7479,11 +7479,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Embed login information for the specified user.
-  /// 
+  ///
   /// GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
-  /// 
+  ///
   /// <returns><c>CredentialsEmbed</c> Embedding Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">Id of user</param>
   /// <param name="credentials_embed_id">Id of Embedding Credential</param>
   /// <param name="fields">Requested fields.</param>
@@ -7498,11 +7498,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Google authentication login information for the specified user.
-  /// 
+  ///
   /// GET /users/{user_id}/credentials_google -> CredentialsGoogle
-  /// 
+  ///
   /// <returns><c>CredentialsGoogle</c> Google Auth Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsGoogle, Exception>> user_credentials_google(
@@ -7515,11 +7515,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### LDAP login information for the specified user.
-  /// 
+  ///
   /// GET /users/{user_id}/credentials_ldap -> CredentialsLDAP
-  /// 
+  ///
   /// <returns><c>CredentialsLDAP</c> LDAP Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsLDAP, Exception>> user_credentials_ldap(
@@ -7532,11 +7532,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Looker Openid login information for the specified user. Used by Looker Analysts.
-  /// 
+  ///
   /// GET /users/{user_id}/credentials_looker_openid -> CredentialsLookerOpenid
-  /// 
+  ///
   /// <returns><c>CredentialsLookerOpenid</c> Looker OpenId Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsLookerOpenid, Exception>> user_credentials_looker_openid(
@@ -7549,11 +7549,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### OpenID Connect (OIDC) authentication login information for the specified user.
-  /// 
+  ///
   /// GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
-  /// 
+  ///
   /// <returns><c>CredentialsOIDC</c> OIDC Auth Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsOIDC, Exception>> user_credentials_oidc(
@@ -7566,11 +7566,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Saml authentication login information for the specified user.
-  /// 
+  ///
   /// GET /users/{user_id}/credentials_saml -> CredentialsSaml
-  /// 
+  ///
   /// <returns><c>CredentialsSaml</c> Saml Auth Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsSaml, Exception>> user_credentials_saml(
@@ -7583,11 +7583,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Two-factor login information for the specified user.
-  /// 
+  ///
   /// GET /users/{user_id}/credentials_totp -> CredentialsTotp
-  /// 
+  ///
   /// <returns><c>CredentialsTotp</c> Two-Factor Credential (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsTotp, Exception>> user_credentials_totp(
@@ -7600,20 +7600,20 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about the user with a credential of given type with specific id.
-  /// 
+  ///
   /// This is used to do things like find users by their embed external_user_id. Or, find the user with
   /// a given api3 client_id, etc. The 'credential_type' matchs the 'type' name of the various credential
   /// types. It must be one of the values listed in the table below. The 'credential_id' is your unique Id
   /// for the user and is specific to each type of credential.
-  /// 
+  ///
   /// An example using the Ruby sdk might look like:
-  /// 
+  ///
   /// `sdk.user_for_credential('embed', 'customer-4959425')`
-  /// 
+  ///
   /// This table shows the supported 'Credential Type' strings. The right column is for reference; it shows
   /// which field in the given credential type is actually searched when finding a user with the supplied
   /// 'credential_id'.
-  /// 
+  ///
   /// | Credential Types | Id Field Matched |
   /// | ---------------- | ---------------- |
   /// | email            | email            |
@@ -7625,13 +7625,13 @@ namespace Looker.SDK.API31
   /// | api3             | client_id        |
   /// | embed            | external_user_id |
   /// | looker_openid    | email            |
-  /// 
+  ///
   /// NOTE: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
-  /// 
+  ///
   /// GET /users/credential/{credential_type}/{credential_id} -> User
-  /// 
+  ///
   /// <returns><c>User</c> Specified user. (application/json)</returns>
-  /// 
+  ///
   /// <param name="credential_type">Type name of credential</param>
   /// <param name="credential_id">Id of credential</param>
   /// <param name="fields">Requested fields.</param>
@@ -7648,11 +7648,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about roles of a given user
-  /// 
+  ///
   /// GET /users/{user_id}/roles -> Role[]
-  /// 
+  ///
   /// <returns><c>Role[]</c> Roles of user. (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="direct_association_only">Get only roles associated directly with the user: exclude those only associated through groups.</param>
@@ -7668,11 +7668,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Web login session for the specified user.
-  /// 
+  ///
   /// GET /users/{user_id}/sessions/{session_id} -> Session
-  /// 
+  ///
   /// <returns><c>Session</c> Web Login Session (application/json)</returns>
-  /// 
+  ///
   /// <param name="user_id">Id of user</param>
   /// <param name="session_id">Id of Web Login Session</param>
   /// <param name="fields">Requested fields.</param>
@@ -7687,19 +7687,19 @@ namespace Looker.SDK.API31
   }
 
   /// ### Validate Project
-  /// 
+  ///
   /// Performs lint validation of all lookml files in the project.
   /// Returns a list of errors found, if any.
-  /// 
+  ///
   /// Validating the content of all the files in a project can be computationally intensive
   /// for large projects. For best performance, call `validate_project(project_id)` only
   /// when you really want to recompute project validation. To quickly display the results of
   /// the most recent project validation (without recomputing), use `project_validation_results(project_id)`
-  /// 
+  ///
   /// POST /projects/{project_id}/validate -> ProjectValidation
-  /// 
+  ///
   /// <returns><c>ProjectValidation</c> Project validation results (application/json)</returns>
-  /// 
+  ///
   /// <param name="project_id">Project Id</param>
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<ProjectValidation, Exception>> validate_project(
@@ -7713,15 +7713,15 @@ namespace Looker.SDK.API31
   }
 
   /// ### Validate a theme with the specified information
-  /// 
+  ///
   /// Validates all values set for the theme, returning any errors encountered, or 200 OK if valid
-  /// 
+  ///
   /// See [Create Theme](#!/Theme/create_theme) for constraints
-  /// 
+  ///
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-  /// 
+  ///
   /// POST /themes/validate -> ValidationError
-  /// 
+  ///
   /// <returns>
   /// <c>ValidationError</c> Theme validation results (application/json)
   /// <c>string</c> No errors detected with the theme (application/json)
@@ -7734,14 +7734,14 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get a vector image representing the contents of a dashboard or look.
-  /// 
+  ///
   /// The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
   /// reflect the actual data displayed in the respective visualizations.
-  /// 
+  ///
   /// GET /vector_thumbnail/{type}/{resource_id} -> string
-  /// 
+  ///
   /// <returns><c>string</c> Vector thumbnail (image/svg+xml)</returns>
-  /// 
+  ///
   /// <param name="type">Either dashboard or look</param>
   /// <param name="resource_id">ID of the dashboard or look to render</param>
   /// <param name="reload">Whether or not to refresh the rendered image with the latest content</param>
@@ -7758,11 +7758,11 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get information about all API versions supported by this Looker instance.
-  /// 
+  ///
   /// GET /versions -> ApiVersion
-  /// 
+  ///
   /// <returns><c>ApiVersion</c> ApiVersion (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<ApiVersion, Exception>> versions(
     string? fields = null,
@@ -7774,11 +7774,11 @@ namespace Looker.SDK.API31
 
   /// ### This feature is enabled only by special license.
   /// ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
-  /// 
+  ///
   /// GET /whitelabel_configuration -> WhitelabelConfiguration
-  /// 
+  ///
   /// <returns><c>WhitelabelConfiguration</c> Whitelabel configuration (application/json)</returns>
-  /// 
+  ///
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<WhitelabelConfiguration, Exception>> whitelabel_configuration(
     string? fields = null,
@@ -7789,39 +7789,39 @@ namespace Looker.SDK.API31
   }
 
   /// ### Get A Workspace
-  /// 
+  ///
   /// Returns information about a workspace such as the git status and selected branches
   /// of all projects available to the caller's user account.
-  /// 
+  ///
   /// A workspace defines which versions of project files will be used to evaluate expressions
   /// and operations that use model definitions - operations such as running queries or rendering dashboards.
   /// Each project has its own git repository, and each project in a workspace may be configured to reference
   /// particular branch or revision within their respective repositories.
-  /// 
+  ///
   /// There are two predefined workspaces available: "production" and "dev".
-  /// 
+  ///
   /// The production workspace is shared across all Looker users. Models in the production workspace are read-only.
   /// Changing files in production is accomplished by modifying files in a git branch and using Pull Requests
   /// to merge the changes from the dev branch into the production branch, and then telling
   /// Looker to sync with production.
-  /// 
+  ///
   /// The dev workspace is local to each Looker user. Changes made to project/model files in the dev workspace only affect
   /// that user, and only when the dev workspace is selected as the active workspace for the API session.
   /// (See set_session_workspace()).
-  /// 
+  ///
   /// The dev workspace is NOT unique to an API session. Two applications accessing the Looker API using
   /// the same user account will see the same files in the dev workspace. To avoid collisions between
   /// API clients it's best to have each client login with API3 credentials for a different user account.
-  /// 
+  ///
   /// Changes made to files in a dev workspace are persistent across API sessions. It's a good
   /// idea to commit any changes you've made to the git repository, but not strictly required. Your modified files
   /// reside in a special user-specific directory on the Looker server and will still be there when you login in again
   /// later and use update_session(workspace_id: "dev") to select the dev workspace for the new API session.
-  /// 
+  ///
   /// GET /workspaces/{workspace_id} -> Workspace
-  /// 
+  ///
   /// <returns><c>Workspace</c> Workspace (application/json)</returns>
-  /// 
+  ///
   /// <param name="workspace_id">Id of the workspace </param>
   public async Task<SdkResponse<Workspace, Exception>> workspace(
     string workspace_id,

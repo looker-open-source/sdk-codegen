@@ -1,19 +1,19 @@
 /**
 
  MIT License
- 
+
  Copyright (c) 2019 Looker Data Sciences, Inc.
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in all
  copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -38,7 +38,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Accepts the legal agreement for a given integration hub. This only works for integration hubs that have legal_agreement_required set to true and legal_agreement_signed set to false.
-     * 
+     *
      * POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> IntegrationHub
      */
     func accept_integration_hub_legal_agreement(
@@ -55,13 +55,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Activate an app for a user
-     * 
+     *
      * Activates a user for a given oauth client app. This indicates the user has been informed that
      * the app will have access to the user's looker data, and that the user has accepted and allowed
      * the app to use their Looker account.
-     * 
+     *
      * Activating a user for an app that the user is already activated with returns a success response.
-     * 
+     *
      * POST /oauth_client_apps/{client_guid}/users/{user_id} -> String
      */
     func activate_app_user(
@@ -88,15 +88,15 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get active themes
-     * 
+     *
      * Returns an array of active themes.
-     * 
+     *
      * If the `name` parameter is specified, it will return an array with one theme if it's active and found.
-     * 
+     *
      * The optional `ts` parameter can specify a different timestamp than "now."
-     * 
+     *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-     * 
+     *
      * GET /themes/active -> [Theme]
      */
     func active_themes(
@@ -121,7 +121,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Adds a new group to a group.
-     * 
+     *
      * POST /groups/{group_id}/groups -> LkGroup
      */
     func add_group_group(
@@ -142,7 +142,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Adds a new user to a group.
-     * 
+     *
      * POST /groups/{group_id}/users -> User
      */
     func add_group_user(
@@ -163,7 +163,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all board items.
-     * 
+     *
      * GET /board_items -> [BoardItem]
      */
     func all_board_items(
@@ -188,7 +188,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all board sections.
-     * 
+     *
      * GET /board_sections -> [BoardSection]
      */
     func all_board_sections(
@@ -209,7 +209,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all boards.
-     * 
+     *
      * GET /boards -> [Board]
      */
     func all_boards(
@@ -227,13 +227,13 @@ class LookerSDKStream: APIMethods {
     /**
      * ### Get an array of all existing Color Collections
      * Get a **single** color collection by id with [ColorCollection](#!/ColorCollection/color_collection)
-     * 
+     *
      * Get all **standard** color collections with [ColorCollection](#!/ColorCollection/color_collections_standard)
-     * 
+     *
      * Get all **custom** color collections with [ColorCollection](#!/ColorCollection/color_collections_custom)
-     * 
+     *
      * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-     * 
+     *
      * GET /color_collections -> [ColorCollection]
      */
     func all_color_collections(
@@ -250,7 +250,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all connections.
-     * 
+     *
      * GET /connections -> [DBConnection]
      */
     func all_connections(
@@ -267,7 +267,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### All content metadata access records for a content metadata item.
-     * 
+     *
      * GET /content_metadata_access -> [ContentMetaGroupUser]
      */
     func all_content_metadata_accesses(
@@ -288,7 +288,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all content metadata in a space.
-     * 
+     *
      * GET /content_metadata -> [ContentMeta]
      */
     func all_content_metadatas(
@@ -309,13 +309,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all active dashboards.
-     * 
+     *
      * Returns an array of **abbreviated dashboard objects**. Dashboards marked as deleted are excluded from this list.
-     * 
+     *
      * Get the **full details** of a specific dashboard by id with [dashboard()](#!/Dashboard/dashboard)
-     * 
+     *
      * Find **deleted dashboards** with [search_dashboards()](#!/Dashboard/search_dashboards)
-     * 
+     *
      * GET /dashboards -> [DashboardBase]
      */
     func all_dashboards(
@@ -332,7 +332,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all datagroups.
-     * 
+     *
      * GET /datagroups -> [Datagroup]
      */
     func all_datagroups(
@@ -344,7 +344,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all dialects.
-     * 
+     *
      * GET /dialect_info -> [DialectInfo]
      */
     func all_dialect_infos(
@@ -361,7 +361,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all folders.
-     * 
+     *
      * GET /folders -> [Folder]
      */
     func all_folders(
@@ -378,9 +378,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get All Git Branches
-     * 
+     *
      * Returns a list of git branches in the project repository
-     * 
+     *
      * GET /projects/{project_id}/git_branches -> [GitBranch]
      */
     func all_git_branches(
@@ -397,16 +397,16 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get All Git Connection Tests
-     * 
+     *
      * dev mode required.
      *   - Call `update_session` to select the 'dev' workspace.
-     * 
+     *
      * Returns a list of tests which can be run against a project's (or the dependency project for the provided remote_url) git connection. Call [Run Git Connection Test](#!/Project/run_git_connection_test) to execute each test in sequence.
-     * 
+     *
      * Tests are ordered by increasing specificity. Tests should be run in the order returned because later tests require functionality tested by tests earlier in the test list.
-     * 
+     *
      * For example, a late-stage test for write access is meaningless if connecting to the git server (an early test) is failing.
-     * 
+     *
      * GET /projects/{project_id}/git_connection_tests -> [GitConnectionTest]
      */
     func all_git_connection_tests(
@@ -428,7 +428,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all the groups in a group
-     * 
+     *
      * GET /groups/{group_id}/groups -> [LkGroup]
      */
     func all_group_groups(
@@ -450,7 +450,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all the users directly included in a group.
-     * 
+     *
      * GET /groups/{group_id}/users -> [User]
      */
     func all_group_users(
@@ -484,7 +484,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all groups.
-     * 
+     *
      * GET /groups -> [LkGroup]
      */
     func all_groups(
@@ -525,7 +525,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all Integration Hubs.
-     * 
+     *
      * GET /integration_hubs -> [IntegrationHub]
      */
     func all_integration_hubs(
@@ -542,7 +542,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all Integrations.
-     * 
+     *
      * GET /integrations -> [Integration]
      */
     func all_integrations(
@@ -563,7 +563,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get all legacy features.
-     * 
+     *
      * GET /legacy_features -> [LegacyFeature]
      */
     func all_legacy_features(
@@ -575,7 +575,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get a list of locales that Looker supports.
-     * 
+     *
      * GET /locales -> [LkLocale]
      */
     func all_locales(
@@ -587,7 +587,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all lookml models.
-     * 
+     *
      * GET /lookml_models -> [LookmlModel]
      */
     func all_lookml_models(
@@ -604,11 +604,11 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get All LookML Tests
-     * 
+     *
      * Returns a list of tests which can be run to validate a project's LookML code and/or the underlying data,
      * optionally filtered by the file id.
      * Call [Run LookML Test](#!/Project/run_lookml_test) to execute tests.
-     * 
+     *
      * GET /projects/{project_id}/lookml_tests -> [LookmlTest]
      */
     func all_lookml_tests(
@@ -630,13 +630,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all active Looks
-     * 
+     *
      * Returns an array of **abbreviated Look objects** describing all the looks that the caller has access to. Soft-deleted Looks are **not** included.
-     * 
+     *
      * Get the **full details** of a specific look by id with [look(id)](#!/Look/look)
-     * 
+     *
      * Find **soft-deleted looks** with [search_looks()](#!/Look/search_looks)
-     * 
+     *
      * GET /looks -> [Look]
      */
     func all_looks(
@@ -653,7 +653,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all model sets.
-     * 
+     *
      * GET /model_sets -> [ModelSet]
      */
     func all_model_sets(
@@ -670,13 +670,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### List All OAuth Client Apps
-     * 
+     *
      * Lists all applications registered to use OAuth2 login with this Looker instance, including
      * enabled and disabled apps.
-     * 
+     *
      * Results are filtered to include only the apps that the caller (current user)
      * has permission to see.
-     * 
+     *
      * GET /oauth_client_apps -> [OauthClientApp]
      */
     func all_oauth_client_apps(
@@ -693,7 +693,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all permission sets.
-     * 
+     *
      * GET /permission_sets -> [PermissionSet]
      */
     func all_permission_sets(
@@ -710,7 +710,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get all supported permissions.
-     * 
+     *
      * GET /permissions -> [Permission]
      */
     func all_permissions(
@@ -722,9 +722,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get All Project Files
-     * 
+     *
      * Returns a list of the files in the project
-     * 
+     *
      * GET /projects/{project_id}/files -> [ProjectFile]
      */
     func all_project_files(
@@ -746,9 +746,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get All Projects
-     * 
+     *
      * Returns all projects visible to the current user
-     * 
+     *
      * GET /projects -> [Project]
      */
     func all_projects(
@@ -765,7 +765,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all roles.
-     * 
+     *
      * GET /roles -> [Role]
      */
     func all_roles(
@@ -786,7 +786,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Get information about all running queries.
-     * 
+     *
      * GET /running_queries -> [RunningQueries]
      */
     func all_running_queries(
@@ -798,17 +798,17 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### List All Scheduled Plans
-     * 
+     *
      * Returns all scheduled plans which belong to the caller or given user.
-     * 
+     *
      * If no user_id is provided, this function returns the scheduled plans owned by the caller.
-     * 
-     * 
+     *
+     *
      * To list all schedules for all users, pass `all_users=true`.
-     * 
-     * 
+     *
+     *
      * The caller must have `see_schedules` permission to see other users' scheduled plans.
-     * 
+     *
      * GET /scheduled_plans -> [ScheduledPlan]
      */
     func all_scheduled_plans(
@@ -833,13 +833,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get an array of all existing themes
-     * 
+     *
      * Get a **single theme** by id with [Theme](#!/Theme/theme)
-     * 
+     *
      * This method returns an array of all existing themes. The active time for the theme is not considered.
-     * 
+     *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-     * 
+     *
      * GET /themes -> [Theme]
      */
     func all_themes(
@@ -856,7 +856,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
-     * 
+     *
      * GET /timezones -> [Timezone]
      */
     func all_timezones(
@@ -868,13 +868,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Returns all values of a user attribute defined by user groups, in precedence order.
-     * 
+     *
      * A user may be a member of multiple groups which define different values for a given user attribute.
      * The order of group-values in the response determines precedence for selecting which group-value applies
      * to a given user.  For more information, see [Set User Attribute Group Values](#!/UserAttribute/set_user_attribute_group_values).
-     * 
+     *
      * Results will only include groups that the caller's user account has permission to see.
-     * 
+     *
      * GET /user_attributes/{user_attribute_id}/group_values -> [UserAttributeGroupValue]
      */
     func all_user_attribute_group_values(
@@ -896,7 +896,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all user attributes.
-     * 
+     *
      * GET /user_attributes -> [UserAttribute]
      */
     func all_user_attributes(
@@ -917,7 +917,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
-     * 
+     *
      * GET /users/{user_id}/credentials_api3 -> [CredentialsApi3]
      */
     func all_user_credentials_api3s(
@@ -939,7 +939,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Embed login information for the specified user.
-     * 
+     *
      * GET /users/{user_id}/credentials_embed -> [CredentialsEmbed]
      */
     func all_user_credentials_embeds(
@@ -961,7 +961,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get currently locked-out users.
-     * 
+     *
      * GET /user_login_lockouts -> [UserLoginLockout]
      */
     func all_user_login_lockouts(
@@ -978,7 +978,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Web login session for the specified user.
-     * 
+     *
      * GET /users/{user_id}/sessions -> [Session]
      */
     func all_user_sessions(
@@ -1000,7 +1000,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all users.
-     * 
+     *
      * GET /users -> [User]
      */
     func all_users(
@@ -1033,9 +1033,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get All Workspaces
-     * 
+     *
      * Returns all workspaces available to the calling user.
-     * 
+     *
      * GET /workspaces -> [Workspace]
      */
     func all_workspaces(
@@ -1047,7 +1047,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about a board.
-     * 
+     *
      * GET /boards/{board_id} -> Board
      */
     func board(
@@ -1069,7 +1069,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about a board item.
-     * 
+     *
      * GET /board_items/{board_item_id} -> BoardItem
      */
     func board_item(
@@ -1091,7 +1091,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about a board section.
-     * 
+     *
      * GET /board_sections/{board_section_id} -> BoardSection
      */
     func board_section(
@@ -1113,7 +1113,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Get the current Cloud Storage Configuration.
-     * 
+     *
      * GET /cloud_storage -> BackupConfiguration
      */
     func cloud_storage_configuration(
@@ -1125,16 +1125,16 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get a Color Collection by ID
-     * 
+     *
      * Use this to retrieve a specific Color Collection.
      * Get a **single** color collection by id with [ColorCollection](#!/ColorCollection/color_collection)
-     * 
+     *
      * Get all **standard** color collections with [ColorCollection](#!/ColorCollection/color_collections_standard)
-     * 
+     *
      * Get all **custom** color collections with [ColorCollection](#!/ColorCollection/color_collections_custom)
-     * 
+     *
      * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-     * 
+     *
      * GET /color_collections/{collection_id} -> ColorCollection
      */
     func color_collection(
@@ -1157,11 +1157,11 @@ class LookerSDKStream: APIMethods {
     /**
      * ### Get an array of all existing **Custom** Color Collections
      * Get a **single** color collection by id with [ColorCollection](#!/ColorCollection/color_collection)
-     * 
+     *
      * Get all **standard** color collections with [ColorCollection](#!/ColorCollection/color_collections_standard)
-     * 
+     *
      * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-     * 
+     *
      * GET /color_collections/custom -> [ColorCollection]
      */
     func color_collections_custom(
@@ -1179,11 +1179,11 @@ class LookerSDKStream: APIMethods {
     /**
      * ### Get an array of all existing **Standard** Color Collections
      * Get a **single** color collection by id with [ColorCollection](#!/ColorCollection/color_collection)
-     * 
+     *
      * Get all **custom** color collections with [ColorCollection](#!/ColorCollection/color_collections_custom)
-     * 
+     *
      * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-     * 
+     *
      * GET /color_collections/standard -> [ColorCollection]
      */
     func color_collections_standard(
@@ -1200,7 +1200,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about a connection.
-     * 
+     *
      * GET /connections/{connection_name} -> DBConnection
      */
     func connection(
@@ -1222,7 +1222,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get favorite content by its id
-     * 
+     *
      * GET /content_favorite/{content_favorite_id} -> ContentFavorite
      */
     func content_favorite(
@@ -1244,7 +1244,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about an individual content metadata record.
-     * 
+     *
      * GET /content_metadata/{content_metadata_id} -> ContentMeta
      */
     func content_metadata(
@@ -1266,10 +1266,10 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Validate All Content
-     * 
+     *
      * Performs validation of all looks and dashboards
      * Returns a list of errors found as well as metadata about the content validation run.
-     * 
+     *
      * GET /content_validation -> ContentValidation
      */
     func content_validation(
@@ -1286,7 +1286,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a new board.
-     * 
+     *
      * POST /boards -> Board
      */
     func create_board(
@@ -1307,7 +1307,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a new board item.
-     * 
+     *
      * POST /board_items -> BoardItem
      */
     func create_board_item(
@@ -1328,7 +1328,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a new board section.
-     * 
+     *
      * POST /board_sections -> BoardSection
      */
     func create_board_section(
@@ -1349,15 +1349,15 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a custom color collection with the specified information
-     * 
+     *
      * Creates a new custom color collection object, returning the details, including the created id.
-     * 
+     *
      * **Update** an existing color collection with [Update Color Collection](#!/ColorCollection/update_color_collection)
-     * 
+     *
      * **Permanently delete** an existing custom color collection with [Delete Color Collection](#!/ColorCollection/delete_color_collection)
-     * 
+     *
      * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-     * 
+     *
      * POST /color_collections -> ColorCollection
      */
     func create_color_collection(
@@ -1375,7 +1375,7 @@ class LookerSDKStream: APIMethods {
      * ### Create a new command.
      * # Required fields: [:name, :linked_content_id, :linked_content_type]
      * #
-     * 
+     *
      * POST /commands -> Command
      */
     func create_command(
@@ -1391,7 +1391,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a connection using the specified configuration.
-     * 
+     *
      * POST /connections -> DBConnection
      */
     func create_connection(
@@ -1407,7 +1407,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create favorite content
-     * 
+     *
      * POST /content_favorite -> ContentFavorite
      */
     func create_content_favorite(
@@ -1423,7 +1423,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create content metadata access.
-     * 
+     *
      * POST /content_metadata_access -> ContentMetaGroupUser
      */
     func create_content_metadata_access(
@@ -1444,20 +1444,20 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a new dashboard
-     * 
+     *
      * Creates a new dashboard object and returns the details of the newly created dashboard.
-     * 
+     *
      * `Title`, `user_id`, and `space_id` are all required fields.
      * `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
      * A dashboard's `title` must be unique within the space in which it resides.
-     * 
+     *
      * If you receive a 422 error response when creating a dashboard, be sure to look at the
      * response body for information about exactly which fields are missing or contain invalid data.
-     * 
+     *
      * You can **update** an existing dashboard with [update_dashboard()](#!/Dashboard/update_dashboard)
-     * 
+     *
      * You can **permanently delete** an existing dashboard with [delete_dashboard()](#!/Dashboard/delete_dashboard)
-     * 
+     *
      * POST /dashboards -> Dashboard
      */
     func create_dashboard(
@@ -1473,7 +1473,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a dashboard element on the dashboard with a specific id.
-     * 
+     *
      * POST /dashboard_elements -> DashboardElement
      */
     func create_dashboard_element(
@@ -1494,7 +1494,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a dashboard filter on the dashboard with a specific id.
-     * 
+     *
      * POST /dashboard_filters -> DashboardFilter
      */
     func create_dashboard_filter(
@@ -1515,7 +1515,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a dashboard layout on the dashboard with a specific id.
-     * 
+     *
      * POST /dashboard_layouts -> DashboardLayout
      */
     func create_dashboard_layout(
@@ -1536,11 +1536,11 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a new task to render a dashboard to a document or image.
-     * 
+     *
      * Returns a render task object.
      * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
      * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
-     * 
+     *
      * POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> RenderTask
      */
     func create_dashboard_render_task(
@@ -1593,7 +1593,7 @@ class LookerSDKStream: APIMethods {
      * ### Trigger the generation of digest email records and send them to Looker's internal system. This does not send
      * any actual emails, it generates records containing content which may be of interest for users who have become inactive.
      * Emails will be sent at a later time from Looker's internal system if the Digest Emails feature is enabled in settings.
-     * 
+     *
      * POST /digest_email_send -> DigestEmailSend
      */
     func create_digest_email_send(
@@ -1605,25 +1605,25 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create an Embed URL
-     * 
+     *
      * Creates an embed URL that runs as the Looker user making this API call. ("Embed as me")
      * This embed URL can then be used to instantiate a Looker embed session in a
      * "Powered by Looker" (PBL) web application.
-     * 
+     *
      * An embed URL can only be used once, and must be used within 5 minutes of being created. After it
      * has been used to request a page from the Looker server, the URL is invalid. Future requests using
      * the same URL will fail. This is to prevent 'replay attacks'.
-     * 
+     *
      * The `target_url` property must be a complete URL of a Looker UI page - scheme, hostname, path and query params.
      * To load a dashboard with id 56 and with a filter of `Date=1 years`, the looker URL would look like `https://myname.looker.com/dashboards/56?Date=1%20years`.
      * The best way to obtain this target_url is to navigate to the desired Looker page in your web browser,
      * copy the URL shown in the browser address bar and paste it into the `target_url` property as a quoted string value in this API request.
-     * 
+     *
      * #### Security Note
      * Protect this embed URL as you would an access token or password credentials - do not write
      * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
      * encrypted transport.
-     * 
+     *
      * POST /embed/token_url/me -> EmbedUrlResponse
      */
     func create_embed_url_as_me(
@@ -1639,10 +1639,10 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a folder with specified information.
-     * 
+     *
      * Caller must have permission to edit the parent folder and to create folders, otherwise the request
      * returns 404 Not Found.
-     * 
+     *
      * POST /folders -> Folder
      */
     func create_folder(
@@ -1658,14 +1658,14 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create and Checkout a Git Branch
-     * 
+     *
      * Creates and checks out a new branch in the given project repository
      * Only allowed in development mode
      *   - Call `update_session` to select the 'dev' workspace.
-     * 
+     *
      * Optionally specify a branch name, tag name or commit SHA as the start point in the ref field.
      *   If no ref is specified, HEAD of the current branch will be used as the start point for the new branch.
-     * 
+     *
      * POST /projects/{project_id}/git_branch -> GitBranch
      */
     func create_git_branch(
@@ -1686,15 +1686,15 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create Git Deploy Key
-     * 
+     *
      * Create a public/private key pair for authenticating ssh git requests from Looker to a remote git repository
      * for a particular Looker project.
-     * 
+     *
      * Returns the public key of the generated ssh key pair.
-     * 
+     *
      * Copy this public key to your remote git repository's ssh keys configuration so that the remote git service can
      * validate and accept git requests from the Looker server.
-     * 
+     *
      * POST /projects/{project_id}/git/deploy_key -> String
      */
     func create_git_deploy_key(
@@ -1711,7 +1711,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Creates a new group (admin only).
-     * 
+     *
      * POST /groups -> LkGroup
      */
     func create_group(
@@ -1732,9 +1732,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a new Integration Hub.
-     * 
+     *
      * This API is rate limited to prevent it from being used for SSRF attacks
-     * 
+     *
      * POST /integration_hubs -> IntegrationHub
      */
     func create_integration_hub(
@@ -1755,13 +1755,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a Look
-     * 
+     *
      * To create a look to display query data, first create the query with [create_query()](#!/Query/create_query)
      * then assign the query's id to the `query_id` property in the call to `create_look()`.
-     * 
+     *
      * To place the look into a particular space, assign the space's id to the `space_id` property
      * in the call to `create_look()`.
-     * 
+     *
      * POST /looks -> LookWithQuery
      */
     func create_look(
@@ -1782,11 +1782,11 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a new task to render a look to an image.
-     * 
+     *
      * Returns a render task object.
      * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
      * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
-     * 
+     *
      * POST /render_tasks/looks/{look_id}/{result_format} -> RenderTask
      */
     func create_look_render_task(
@@ -1821,7 +1821,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a lookml model using the specified configuration.
-     * 
+     *
      * POST /lookml_models -> LookmlModel
      */
     func create_lookml_model(
@@ -1837,23 +1837,23 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create Merge Query
-     * 
+     *
      * Creates a new merge query object.
-     * 
+     *
      * A merge query takes the results of one or more queries and combines (merges) the results
      * according to field mapping definitions. The result is similar to a SQL left outer join.
-     * 
+     *
      * A merge query can merge results of queries from different SQL databases.
-     * 
+     *
      * The order that queries are defined in the source_queries array property is significant. The
      * first query in the array defines the primary key into which the results of subsequent
      * queries will be merged.
-     * 
+     *
      * Like model/view query objects, merge queries are immutable and have structural identity - if
      * you make a request to create a new merge query that is identical to an existing merge query,
      * the existing merge query will be returned instead of creating a duplicate. Conversely, any
      * change to the contents of a merge query will produce a new object with a new id.
-     * 
+     *
      * POST /merge_queries -> MergeQuery
      */
     func create_merge_query(
@@ -1874,7 +1874,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a model set with the specified information. Model sets are used by Roles.
-     * 
+     *
      * POST /model_sets -> ModelSet
      */
     func create_model_set(
@@ -1890,7 +1890,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a OIDC test configuration.
-     * 
+     *
      * POST /oidc_test_configs -> OIDCConfig
      */
     func create_oidc_test_config(
@@ -1906,7 +1906,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a permission set with the specified information. Permission sets are used by Roles.
-     * 
+     *
      * POST /permission_sets -> PermissionSet
      */
     func create_permission_set(
@@ -1922,13 +1922,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create A Project
-     * 
+     *
      * dev mode required.
      * - Call `update_session` to select the 'dev' workspace.
-     * 
+     *
      * `name` is required.
      * `git_remote_url` is not allowed. To configure Git for the newly created project, follow the instructions in `update_project`.
-     * 
+     *
      * POST /projects -> Project
      */
     func create_project(
@@ -1944,14 +1944,14 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a query.
-     * 
+     *
      * This allows you to create a new query that you can later run. Looker queries are immutable once created
      * and are not deleted. If you create a query that is exactly like an existing query then the existing query
      * will be returned and no new query will be created. Whether a new query is created or not, you can use
      * the 'id' in the returned query with the 'run' method.
-     * 
+     *
      * The query parameters are passed as json in the body of the request.
-     * 
+     *
      * POST /queries -> Query
      */
     func create_query(
@@ -1972,11 +1972,11 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a new task to render an existing query to an image.
-     * 
+     *
      * Returns a render task object.
      * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
      * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
-     * 
+     *
      * POST /render_tasks/queries/{query_id}/{result_format} -> RenderTask
      */
     func create_query_render_task(
@@ -2011,12 +2011,12 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create an async query task
-     * 
+     *
      * Creates a query task (job) to run a previously created query asynchronously. Returns a Query Task ID.
-     * 
+     *
      * Use [query_task(query_task_id)](#!/Query/query_task) to check the execution status of the query task.
      * After the query task status reaches "Complete", use [query_task_results(query_task_id)](#!/Query/query_task_results) to fetch the results of the query.
-     * 
+     *
      * POST /query_tasks -> QueryTask
      */
     func create_query_task(
@@ -2085,7 +2085,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a role with the specified information.
-     * 
+     *
      * POST /roles -> Role
      */
     func create_role(
@@ -2101,7 +2101,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a SAML test configuration.
-     * 
+     *
      * POST /saml_test_configs -> SamlConfig
      */
     func create_saml_test_config(
@@ -2117,9 +2117,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a Scheduled Plan
-     * 
+     *
      * Create a scheduled plan to render a Look or Dashboard on a recurring schedule.
-     * 
+     *
      * To create a scheduled plan, you MUST provide values for the following fields:
      * `name`
      * and
@@ -2128,37 +2128,37 @@ class LookerSDKStream: APIMethods {
      * `cron_tab` or `datagroup`
      * and
      * at least one scheduled_plan_destination
-     * 
+     *
      * A scheduled plan MUST have at least one scheduled_plan_destination defined.
-     * 
+     *
      * When `look_id` is set, `require_no_results`, `require_results`, and `require_change` are all required.
-     * 
+     *
      * If `create_scheduled_plan` fails with a 422 error, be sure to look at the error messages in the response which will explain exactly what fields are missing or values that are incompatible.
-     * 
+     *
      * The queries that provide the data for the look or dashboard are run in the context of user account that owns the scheduled plan.
-     * 
+     *
      * When `run_as_recipient` is `false` or not specified, the queries that provide the data for the
      * look or dashboard are run in the context of user account that owns the scheduled plan.
-     * 
+     *
      * When `run_as_recipient` is `true` and all the email recipients are Looker user accounts, the
      * queries are run in the context of each recipient, so different recipients may see different
      * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://looker.com/docs/r/admin/run-as-recipient).
-     * 
+     *
      * Admins can create and modify scheduled plans on behalf of other users by specifying a user id.
      * Non-admin users may not create or modify scheduled plans by or for other users.
-     * 
+     *
      * #### Email Permissions:
-     * 
+     *
      * For details about permissions required to schedule delivery to email and the safeguards
      * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
-     * 
-     * 
+     *
+     *
      * #### Scheduled Plan Destination Formats
-     * 
+     *
      * Scheduled plan destinations must specify the data format to produce and send to the destination.
-     * 
+     *
      * Formats:
-     * 
+     *
      * | format | Description
      * | :-----------: | :--- |
      * | json | A JSON object containing a `data` property which contains an array of JSON objects, one per row. No metadata.
@@ -2172,9 +2172,9 @@ class LookerSDKStream: APIMethods {
      * | assembled_pdf | Dashboard rendered in a single column layout to produce a PDF document
      * | wysiwyg_png | Dashboard rendered in a tiled layout to produce a PNG image
      * ||
-     * 
+     *
      * Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
-     * 
+     *
      * POST /scheduled_plans -> ScheduledPlan
      */
     func create_scheduled_plan(
@@ -2190,9 +2190,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a SQL Runner Query
-     * 
+     *
      * Either the `connection_name` or `model_name` parameter MUST be provided.
-     * 
+     *
      * POST /sql_queries -> SqlQuery
      */
     func create_sql_query(
@@ -2208,40 +2208,40 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create SSO Embed URL
-     * 
+     *
      * Creates an SSO embed URL and cryptographically signs it with an embed secret.
      * This signed URL can then be used to instantiate a Looker embed session in a PBL web application.
      * Do not make any modifications to this URL - any change may invalidate the signature and
      * cause the URL to fail to load a Looker embed session.
-     * 
+     *
      * A signed SSO embed URL can only be used once. After it has been used to request a page from the
      * Looker server, the URL is invalid. Future requests using the same URL will fail. This is to prevent
      * 'replay attacks'.
-     * 
+     *
      * The `target_url` property must be a complete URL of a Looker UI page - scheme, hostname, path and query params.
      * To load a dashboard with id 56 and with a filter of `Date=1 years`, the looker URL would look like `https:/myname.looker.com/dashboards/56?Date=1%20years`.
      * The best way to obtain this target_url is to navigate to the desired Looker page in your web browser,
      * copy the URL shown in the browser address bar and paste it into the `target_url` property as a quoted string value in this API request.
-     * 
+     *
      * Permissions for the embed user are defined by the groups in which the embed user is a member (group_ids property)
      * and the lists of models and permissions assigned to the embed user.
      * At a minimum, you must provide values for either the group_ids property, or both the models and permissions properties.
      * These properties are additive; an embed user can be a member of certain groups AND be granted access to models and permissions.
-     * 
+     *
      * The embed user's access is the union of permissions granted by the group_ids, models, and permissions properties.
-     * 
+     *
      * This function does not strictly require all group_ids, user attribute names, or model names to exist at the moment the
      * SSO embed url is created. Unknown group_id, user attribute names or model names will be passed through to the output URL.
      * To diagnose potential problems with an SSO embed URL, you can copy the signed URL into the Embed URI Validator text box in `<your looker instance>/admin/embed`.
-     * 
+     *
      * The `secret_id` parameter is optional. If specified, its value must be the id of an active secret defined in the Looker instance.
      * if not specified, the URL will be signed using the newest active secret defined in the Looker instance.
-     * 
+     *
      * #### Security Note
      * Protect this signed URL as you would an access token or password credentials - do not write
      * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
      * encrypted transport.
-     * 
+     *
      * POST /embed/sso_url -> EmbedUrlResponse
      */
     func create_sso_embed_url(
@@ -2257,21 +2257,21 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a theme
-     * 
+     *
      * Creates a new theme object, returning the theme details, including the created id.
-     * 
+     *
      * If `settings` are not specified, the default theme settings will be copied into the new theme.
-     * 
+     *
      * The theme `name` can only contain alphanumeric characters or underscores. Theme names should not contain any confidential information, such as customer names.
-     * 
+     *
      * **Update** an existing theme with [Update Theme](#!/Theme/update_theme)
-     * 
+     *
      * **Permanently delete** an existing theme with [Delete Theme](#!/Theme/delete_theme)
-     * 
+     *
      * For more information, see [Creating and Applying Themes](https://looker.com/docs/r/admin/themes).
-     * 
+     *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-     * 
+     *
      * POST /themes -> Theme
      */
     func create_theme(
@@ -2287,7 +2287,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a user with the specified information.
-     * 
+     *
      * POST /users -> User
      */
     func create_user(
@@ -2308,16 +2308,16 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a new user attribute
-     * 
+     *
      * Permission information for a user attribute is conveyed through the `can` and `user_can_edit` fields.
      * The `user_can_edit` field indicates whether an attribute is user-editable _anywhere_ in the application.
      * The `can` field gives more granular access information, with the `set_value` child field indicating whether
      * an attribute's value can be set by [Setting the User Attribute User Value](#!/User/set_user_attribute_user_value).
-     * 
+     *
      * Note: `name` and `label` fields must be unique across all user attributes in the Looker instance.
      * Attempting to create a new user attribute with a name or label that duplicates an existing
      * user attribute will fail with a 422 error.
-     * 
+     *
      * POST /user_attributes -> UserAttribute
      */
     func create_user_attribute(
@@ -2338,7 +2338,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
-     * 
+     *
      * POST /users/{user_id}/credentials_api3 -> CredentialsApi3
      */
     func create_user_credentials_api3(
@@ -2364,7 +2364,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Email/password login information for the specified user.
-     * 
+     *
      * POST /users/{user_id}/credentials_email -> CredentialsEmail
      */
     func create_user_credentials_email(
@@ -2398,7 +2398,7 @@ class LookerSDKStream: APIMethods {
      * Invitation emails for new users typically are not set to expire.
      * The expire period is always 60 minutes when expires is enabled.
      * This method can be called with an empty body.
-     * 
+     *
      * POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
      */
     func create_user_credentials_email_password_reset(
@@ -2424,7 +2424,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Two-factor login information for the specified user.
-     * 
+     *
      * POST /users/{user_id}/credentials_totp -> CredentialsTotp
      */
     func create_user_credentials_totp(
@@ -2450,7 +2450,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the current status and content of custom welcome emails
-     * 
+     *
      * GET /custom_welcome_email -> CustomWelcomeEmail
      */
     func custom_welcome_email(
@@ -2462,13 +2462,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about a dashboard
-     * 
+     *
      * Returns the full details of the identified dashboard object
-     * 
+     *
      * Get a **summary list** of all active dashboards with [all_dashboards()](#!/Dashboard/all_dashboards)
-     * 
+     *
      * You can **Search** for dashboards with [search_dashboards()](#!/Dashboard/search_dashboards)
-     * 
+     *
      * GET /dashboards/{dashboard_id} -> Dashboard
      */
     func dashboard(
@@ -2490,9 +2490,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get Aggregate Table LookML for Each Query on a Dahboard
-     * 
+     *
      * Returns a JSON object that contains the dashboard id and Aggregate Table lookml
-     * 
+     *
      * GET /dashboards/aggregate_table_lookml/{dashboard_id} -> DashboardAggregateTableLookml
      */
     func dashboard_aggregate_table_lookml(
@@ -2509,7 +2509,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all the dashboard elements on a dashboard with a specific id.
-     * 
+     *
      * GET /dashboards/{dashboard_id}/dashboard_elements -> [DashboardElement]
      */
     func dashboard_dashboard_elements(
@@ -2531,7 +2531,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all the dashboard filters on a dashboard with a specific id.
-     * 
+     *
      * GET /dashboards/{dashboard_id}/dashboard_filters -> [DashboardFilter]
      */
     func dashboard_dashboard_filters(
@@ -2553,7 +2553,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all the dashboard elements on a dashboard with a specific id.
-     * 
+     *
      * GET /dashboards/{dashboard_id}/dashboard_layouts -> [DashboardLayout]
      */
     func dashboard_dashboard_layouts(
@@ -2575,7 +2575,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about the dashboard element with a specific id.
-     * 
+     *
      * GET /dashboard_elements/{dashboard_element_id} -> DashboardElement
      */
     func dashboard_element(
@@ -2597,7 +2597,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about the dashboard filters with a specific id.
-     * 
+     *
      * GET /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
      */
     func dashboard_filter(
@@ -2619,7 +2619,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about the dashboard layouts with a specific id.
-     * 
+     *
      * GET /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
      */
     func dashboard_layout(
@@ -2641,7 +2641,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about the dashboard elements with a specific id.
-     * 
+     *
      * GET /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
      */
     func dashboard_layout_component(
@@ -2663,7 +2663,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all the dashboard layout components for a dashboard layout with a specific id.
-     * 
+     *
      * GET /dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components -> [DashboardLayoutComponent]
      */
     func dashboard_layout_dashboard_layout_components(
@@ -2685,9 +2685,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get lookml of a UDD
-     * 
+     *
      * Returns a JSON object that contains the dashboard id and the full lookml
-     * 
+     *
      * GET /dashboards/lookml/{dashboard_id} -> DashboardLookml
      */
     func dashboard_lookml(
@@ -2704,7 +2704,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about a datagroup.
-     * 
+     *
      * GET /datagroups/{datagroup_id} -> Datagroup
      */
     func datagroup(
@@ -2721,16 +2721,16 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Deactivate an app for a user
-     * 
+     *
      * Deactivate a user for a given oauth client app. All tokens issued to the app for
      * this user will be invalid immediately. Before the user can use the app with their
      * Looker account, the user will have to read and accept an account use disclosure statement for the app.
-     * 
+     *
      * Admin users can deactivate other users, but non-admin users can only deactivate themselves.
-     * 
+     *
      * As with most REST DELETE operations, this endpoint does not return an error if the indicated
      * resource (app or user) does not exist or has already been deactivated.
-     * 
+     *
      * DELETE /oauth_client_apps/{client_guid}/users/{user_id} -> String
      */
     func deactivate_app_user(
@@ -2757,11 +2757,11 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the default color collection
-     * 
+     *
      * Use this to retrieve the default Color Collection.
-     * 
+     *
      * Set the default color collection with [ColorCollection](#!/ColorCollection/set_default_color_collection)
-     * 
+     *
      * GET /color_collections/default -> ColorCollection
      */
     func default_color_collection(
@@ -2773,13 +2773,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the default theme
-     * 
+     *
      * Returns the active theme object set as the default.
-     * 
+     *
      * The **default** theme name can be set in the UI on the Admin|Theme UI page
-     * 
+     *
      * The optional `ts` parameter can specify a different timestamp than "now." If specified, it returns the default theme at the time indicated.
-     * 
+     *
      * GET /themes/default -> Theme
      */
     func default_theme(
@@ -2796,7 +2796,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a board.
-     * 
+     *
      * DELETE /boards/{board_id} -> String
      */
     func delete_board(
@@ -2813,7 +2813,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a board item.
-     * 
+     *
      * DELETE /board_items/{board_item_id} -> String
      */
     func delete_board_item(
@@ -2830,7 +2830,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a board section.
-     * 
+     *
      * DELETE /board_sections/{board_section_id} -> String
      */
     func delete_board_section(
@@ -2847,14 +2847,14 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a custom color collection by id
-     * 
+     *
      * This operation permanently deletes the identified **Custom** color collection.
-     * 
+     *
      * **Standard** color collections cannot be deleted
-     * 
+     *
      * Because multiple color collections can have the same label, they must be deleted by ID, not name.
      * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-     * 
+     *
      * DELETE /color_collections/{collection_id} -> String
      */
     func delete_color_collection(
@@ -2871,7 +2871,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete an existing custom command.
-     * 
+     *
      * DELETE /commands/{command_id} -> Voidable
      */
     func delete_command(
@@ -2888,7 +2888,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a connection.
-     * 
+     *
      * DELETE /connections/{connection_name} -> String
      */
     func delete_connection(
@@ -2905,7 +2905,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a connection override.
-     * 
+     *
      * DELETE /connections/{connection_name}/connection_override/{override_context} -> String
      */
     func delete_connection_override(
@@ -2927,7 +2927,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete favorite content
-     * 
+     *
      * DELETE /content_favorite/{content_favorite_id} -> String
      */
     func delete_content_favorite(
@@ -2944,7 +2944,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Remove content metadata access.
-     * 
+     *
      * DELETE /content_metadata_access/{content_metadata_access_id} -> String
      */
     func delete_content_metadata_access(
@@ -2961,13 +2961,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete the dashboard with the specified id
-     * 
+     *
      * Permanently **deletes** a dashboard. (The dashboard cannot be recovered after this operation.)
-     * 
+     *
      * "Soft" delete or hide a dashboard by setting its `deleted` status to `True` with [update_dashboard()](#!/Dashboard/update_dashboard).
-     * 
+     *
      * Note: When a dashboard is deleted in the UI, it is soft deleted. Use this API call to permanently remove it, if desired.
-     * 
+     *
      * DELETE /dashboards/{dashboard_id} -> String
      */
     func delete_dashboard(
@@ -2984,7 +2984,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a dashboard element with a specific id.
-     * 
+     *
      * DELETE /dashboard_elements/{dashboard_element_id} -> String
      */
     func delete_dashboard_element(
@@ -3001,7 +3001,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a dashboard filter with a specific id.
-     * 
+     *
      * DELETE /dashboard_filters/{dashboard_filter_id} -> String
      */
     func delete_dashboard_filter(
@@ -3018,7 +3018,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a dashboard layout with a specific id.
-     * 
+     *
      * DELETE /dashboard_layouts/{dashboard_layout_id} -> String
      */
     func delete_dashboard_layout(
@@ -3036,7 +3036,7 @@ class LookerSDKStream: APIMethods {
     /**
      * ### Delete the folder with a specific id including any children folders.
      * **DANGER** this will delete all looks and dashboards in the folder.
-     * 
+     *
      * DELETE /folders/{folder_id} -> String
      */
     func delete_folder(
@@ -3053,9 +3053,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete the specified Git Branch
-     * 
+     *
      * Delete git branch specified in branch_name path param from local and remote of specified project repository
-     * 
+     *
      * DELETE /projects/{project_id}/git_branch/{branch_name} -> String
      */
     func delete_git_branch(
@@ -3077,7 +3077,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Deletes a group (admin only).
-     * 
+     *
      * DELETE /groups/{group_id} -> String
      */
     func delete_group(
@@ -3094,7 +3094,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Removes a group from a group.
-     * 
+     *
      * DELETE /groups/{group_id}/groups/{deleting_group_id} -> Voidable
      */
     func delete_group_from_group(
@@ -3116,7 +3116,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Removes a user from a group.
-     * 
+     *
      * DELETE /groups/{group_id}/users/{user_id} -> Voidable
      */
     func delete_group_user(
@@ -3138,7 +3138,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a Integration Hub.
-     * 
+     *
      * DELETE /integration_hubs/{integration_hub_id} -> String
      */
     func delete_integration_hub(
@@ -3155,13 +3155,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Permanently Delete a Look
-     * 
+     *
      * This operation **permanently** removes a look from the Looker database.
-     * 
+     *
      * NOTE: There is no "undo" for this kind of delete.
-     * 
+     *
      * For information about soft-delete (which can be undone) see [update_look()](#!/Look/update_look).
-     * 
+     *
      * DELETE /looks/{look_id} -> String
      */
     func delete_look(
@@ -3178,7 +3178,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a lookml model.
-     * 
+     *
      * DELETE /lookml_models/{lookml_model_name} -> String
      */
     func delete_lookml_model(
@@ -3195,7 +3195,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete the model set with a specific id.
-     * 
+     *
      * DELETE /model_sets/{model_set_id} -> String
      */
     func delete_model_set(
@@ -3212,12 +3212,12 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete OAuth Client App
-     * 
+     *
      * Deletes the registration info of the app with the matching client_guid.
      * All active sessions and tokens issued for this app will immediately become invalid.
-     * 
+     *
      * ### Note: this deletion cannot be undone.
-     * 
+     *
      * DELETE /oauth_client_apps/{client_guid} -> String
      */
     func delete_oauth_client_app(
@@ -3234,7 +3234,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a OIDC test configuration.
-     * 
+     *
      * DELETE /oidc_test_configs/{test_slug} -> String
      */
     func delete_oidc_test_config(
@@ -3251,7 +3251,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete the permission set with a specific id.
-     * 
+     *
      * DELETE /permission_sets/{permission_set_id} -> String
      */
     func delete_permission_set(
@@ -3268,12 +3268,12 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Repository Credential for a remote dependency
-     * 
+     *
      * Admin required.
-     * 
+     *
      * `root_project_id` is required.
      * `credential_id` is required.
-     * 
+     *
      * DELETE /projects/{root_project_id}/credential/{credential_id} -> String
      */
     func delete_repository_credential(
@@ -3295,7 +3295,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete the role with a specific id.
-     * 
+     *
      * DELETE /roles/{role_id} -> String
      */
     func delete_role(
@@ -3312,7 +3312,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a SAML test configuration.
-     * 
+     *
      * DELETE /saml_test_configs/{test_slug} -> String
      */
     func delete_saml_test_config(
@@ -3329,11 +3329,11 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a Scheduled Plan
-     * 
+     *
      * Normal users can only delete their own scheduled plans.
      * Admins can delete other users' scheduled plans.
      * This delete cannot be undone.
-     * 
+     *
      * DELETE /scheduled_plans/{scheduled_plan_id} -> String
      */
     func delete_scheduled_plan(
@@ -3350,15 +3350,15 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a specific theme by id
-     * 
+     *
      * This operation permanently deletes the identified theme from the database.
-     * 
+     *
      * Because multiple themes can have the same name (with different activation time spans) themes can only be deleted by ID.
-     * 
+     *
      * All IDs associated with a theme name can be retrieved by searching for the theme name with [Theme Search](#!/Theme/search).
-     * 
+     *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-     * 
+     *
      * DELETE /themes/{theme_id} -> String
      */
     func delete_theme(
@@ -3375,9 +3375,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete the user with a specific id.
-     * 
+     *
      * **DANGER** this will delete the user and all looks and other information owned by the user.
-     * 
+     *
      * DELETE /users/{user_id} -> String
      */
     func delete_user(
@@ -3394,7 +3394,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a user attribute (admin only).
-     * 
+     *
      * DELETE /user_attributes/{user_attribute_id} -> String
      */
     func delete_user_attribute(
@@ -3411,7 +3411,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Remove a user attribute value from a group.
-     * 
+     *
      * DELETE /groups/{group_id}/attribute_values/{user_attribute_id} -> Voidable
      */
     func delete_user_attribute_group_value(
@@ -3433,12 +3433,12 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete a user attribute value from a user's account settings.
-     * 
+     *
      * After the user attribute value is deleted from the user's account settings, subsequent requests
      * for the user attribute value for this user will draw from the user's groups or the default
      * value of the user attribute. See [Get User Attribute Values](#!/User/user_attribute_user_values) for more
      * information about how user attribute values are resolved.
-     * 
+     *
      * DELETE /users/{user_id}/attribute_values/{user_attribute_id} -> Voidable
      */
     func delete_user_attribute_user_value(
@@ -3460,7 +3460,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
-     * 
+     *
      * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> String
      */
     func delete_user_credentials_api3(
@@ -3482,7 +3482,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Email/password login information for the specified user.
-     * 
+     *
      * DELETE /users/{user_id}/credentials_email -> String
      */
     func delete_user_credentials_email(
@@ -3499,7 +3499,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Embed login information for the specified user.
-     * 
+     *
      * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> String
      */
     func delete_user_credentials_embed(
@@ -3521,7 +3521,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Google authentication login information for the specified user.
-     * 
+     *
      * DELETE /users/{user_id}/credentials_google -> String
      */
     func delete_user_credentials_google(
@@ -3538,7 +3538,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### LDAP login information for the specified user.
-     * 
+     *
      * DELETE /users/{user_id}/credentials_ldap -> String
      */
     func delete_user_credentials_ldap(
@@ -3555,7 +3555,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Looker Openid login information for the specified user. Used by Looker Analysts.
-     * 
+     *
      * DELETE /users/{user_id}/credentials_looker_openid -> String
      */
     func delete_user_credentials_looker_openid(
@@ -3572,7 +3572,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### OpenID Connect (OIDC) authentication login information for the specified user.
-     * 
+     *
      * DELETE /users/{user_id}/credentials_oidc -> String
      */
     func delete_user_credentials_oidc(
@@ -3589,7 +3589,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Saml authentication login information for the specified user.
-     * 
+     *
      * DELETE /users/{user_id}/credentials_saml -> String
      */
     func delete_user_credentials_saml(
@@ -3606,7 +3606,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Two-factor login information for the specified user.
-     * 
+     *
      * DELETE /users/{user_id}/credentials_totp -> String
      */
     func delete_user_credentials_totp(
@@ -3623,7 +3623,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Removes login lockout for the associated user.
-     * 
+     *
      * DELETE /user_login_lockout/{key} -> String
      */
     func delete_user_login_lockout(
@@ -3640,7 +3640,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Web login session for the specified user.
-     * 
+     *
      * DELETE /users/{user_id}/sessions/{session_id} -> String
      */
     func delete_user_session(
@@ -3662,18 +3662,18 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Deploy LookML from this Development Mode Project to Production
-     * 
+     *
      * Git must have been configured, must be in dev mode and deploy permission required
-     * 
+     *
      * Deploy is a two / three step process:
-     * 
+     *
      * 1. Push commits in current branch of dev mode project to the production branch (origin/master).
      *    Note a. This step is skipped in read-only projects.
      *    Note b. If this step is unsuccessful for any reason (e.g. rejected non-fastforward because production branch has
      *              commits not in current branch), subsequent steps will be skipped.
      * 2. If this is the first deploy of this project, create the production project with git repository.
      * 3. Pull the production branch into the production project.
-     * 
+     *
      * POST /projects/{project_id}/deploy_to_production -> String
      */
     func deploy_to_production(
@@ -3690,7 +3690,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Retrieve the value for whether or not digest emails is enabled
-     * 
+     *
      * GET /digest_emails_enabled -> DigestEmails
      */
     func digest_emails_enabled(
@@ -3704,7 +3704,7 @@ class LookerSDKStream: APIMethods {
      * ### Fetch the given url and parse it as a SAML IdP metadata document and return the result.
      * Note that this requires that the url be public or at least at a location where the Looker instance
      * can fetch it without requiring any special authentication.
-     * 
+     *
      * POST /fetch_and_parse_saml_idp_metadata -> SamlMetadataParseResult
      */
     func fetch_and_parse_saml_idp_metadata(
@@ -3720,7 +3720,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Returns the Integration form for presentation to the user.
-     * 
+     *
      * POST /integrations/{integration_id}/form -> DataActionForm
      */
     func fetch_integration_form(
@@ -3737,7 +3737,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * For some data actions, the remote server may supply a form requesting further user input. This endpoint takes a data action, asks the remote server to generate a form for it, and returns that form to you for presentation to the user.
-     * 
+     *
      * POST /data_actions/form -> DataActionForm
      */
     func fetch_remote_data_action_form(
@@ -3753,9 +3753,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the specified Git Branch
-     * 
+     *
      * Returns the git branch specified in branch_name path param if it exists in the given project repository
-     * 
+     *
      * GET /projects/{project_id}/git_branch/{branch_name} -> GitBranch
      */
     func find_git_branch(
@@ -3777,7 +3777,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about the folder with a specific id.
-     * 
+     *
      * GET /folders/{folder_id} -> Folder
      */
     func folder(
@@ -3799,7 +3799,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the ancestors of a folder
-     * 
+     *
      * GET /folders/{folder_id}/ancestors -> [Folder]
      */
     func folder_ancestors(
@@ -3821,7 +3821,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the children of a folder.
-     * 
+     *
      * GET /folders/{folder_id}/children -> [Folder]
      */
     func folder_children(
@@ -3855,7 +3855,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Search the children of a folder
-     * 
+     *
      * GET /folders/{folder_id}/children/search -> [Folder]
      */
     func folder_children_search(
@@ -3885,7 +3885,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the dashboards in a folder
-     * 
+     *
      * GET /folders/{folder_id}/dashboards -> [Dashboard]
      */
     func folder_dashboards(
@@ -3907,7 +3907,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the looks in a folder
-     * 
+     *
      * GET /folders/{folder_id}/looks -> [LookWithQuery]
      */
     func folder_looks(
@@ -3929,7 +3929,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the parent of a folder
-     * 
+     *
      * GET /folders/{folder_id}/parent -> Folder
      */
     func folder_parent(
@@ -3951,7 +3951,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Force all credentials_email users to reset their login passwords upon their next login.
-     * 
+     *
      * PUT /password_config/force_password_reset_at_next_login_for_all_users -> String
      */
     func force_password_reset_at_next_login_for_all_users(
@@ -3963,7 +3963,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get All Commands.
-     * 
+     *
      * GET /commands -> [Command]
      */
     func get_all_commands(
@@ -3988,9 +3988,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get all Repository Credentials for a project
-     * 
+     *
      * `root_project_id` is required.
-     * 
+     *
      * GET /projects/{root_project_id}/credentials -> [RepositoryCredential]
      */
     func get_all_repository_credentials(
@@ -4007,9 +4007,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the Current Git Branch
-     * 
+     *
      * Returns the git branch currently checked out in the given project repository
-     * 
+     *
      * GET /projects/{project_id}/git_branch -> GitBranch
      */
     func git_branch(
@@ -4026,9 +4026,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Git Deploy Key
-     * 
+     *
      * Returns the ssh public key previously created for a project's git repository.
-     * 
+     *
      * GET /projects/{project_id}/git/deploy_key -> String
      */
     func git_deploy_key(
@@ -4045,7 +4045,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about a group.
-     * 
+     *
      * GET /groups/{group_id} -> LkGroup
      */
     func group(
@@ -4069,16 +4069,16 @@ class LookerSDKStream: APIMethods {
      * ### Import a LookML dashboard to a space as a UDD
      * Creates a UDD (a dashboard which exists in the Looker database rather than as a LookML file) from the LookML dashboard
      * and puts it in the space specified. The created UDD will have a lookml_link_id which links to the original LookML dashboard.
-     * 
+     *
      * To give the imported dashboard specify a (e.g. title: "my title") in the body of your request, otherwise the imported
      * dashboard will have the same title as the original LookML dashboard.
-     * 
+     *
      * For this operation to succeed the user must have permission to see the LookML dashboard in question, and have permission to
      * create content in the space the dashboard is being imported to.
-     * 
+     *
      * **Sync** a linked UDD with [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard)
      * **Unlink** a linked UDD by setting lookml_link_id to null with [update_dashboard()](#!/Dashboard/update_dashboard)
-     * 
+     *
      * POST /dashboards/{lookml_dashboard_id}/import/{space_id} -> Dashboard
      */
     func import_lookml_dashboard(
@@ -4109,7 +4109,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about a Integration.
-     * 
+     *
      * GET /integrations/{integration_id} -> Integration
      */
     func integration(
@@ -4131,7 +4131,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about a Integration Hub.
-     * 
+     *
      * GET /integration_hubs/{integration_hub_id} -> IntegrationHub
      */
     func integration_hub(
@@ -4153,7 +4153,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get and set the options for internal help resources
-     * 
+     *
      * GET /internal_help_resources_enabled -> InternalHelpResources
      */
     func internal_help_resources(
@@ -4165,7 +4165,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Set the menu item name and content for internal help resources
-     * 
+     *
      * GET /internal_help_resources_content -> InternalHelpResourcesContent
      */
     func internal_help_resources_content(
@@ -4177,10 +4177,10 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Invalidate All Issued Tokens
-     * 
+     *
      * Immediately invalidates all auth codes, sessions, access tokens and refresh tokens issued for
      * this app for ALL USERS of this app.
-     * 
+     *
      * DELETE /oauth_client_apps/{client_guid}/tokens -> String
      */
     func invalidate_tokens(
@@ -4197,7 +4197,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Kill a query with a specific query_task_id.
-     * 
+     *
      * DELETE /running_queries/{query_task_id} -> String
      */
     func kill_query(
@@ -4214,22 +4214,22 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the LDAP configuration.
-     * 
+     *
      * Looker can be optionally configured to authenticate users against an Active Directory or other LDAP directory server.
      * LDAP setup requires coordination with an administrator of that directory server.
-     * 
+     *
      * Only Looker administrators can read and update the LDAP configuration.
-     * 
+     *
      * Configuring LDAP impacts authentication for all users. This configuration should be done carefully.
-     * 
+     *
      * Looker maintains a single LDAP configuration. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
-     * 
+     *
      * LDAP is enabled or disabled for Looker using the **enabled** field.
-     * 
+     *
      * Looker will never return an **auth_password** field. That value can be set, but never retrieved.
-     * 
+     *
      * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
-     * 
+     *
      * GET /ldap_config -> LDAPConfig
      */
     func ldap_config(
@@ -4241,7 +4241,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about the legacy feature with a specific id.
-     * 
+     *
      * GET /legacy_features/{legacy_feature_id} -> LegacyFeature
      */
     func legacy_feature(
@@ -4258,13 +4258,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Generate Lockfile for All LookML Dependencies
-     * 
+     *
      *       Git must have been configured, must be in dev mode and deploy permission required
-     * 
+     *
      *       Install_all is a two step process
      *       1. For each remote_dependency in a project the dependency manager will resolve any ambiguous ref.
      *       2. The project will then write out a lockfile including each remote_dependency with its resolved ref.
-     * 
+     *
      * POST /projects/{project_id}/manifest/lock_all -> String
      */
     func lock_all(
@@ -4286,11 +4286,11 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Present client credentials to obtain an authorization token
-     * 
+     *
      * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://looker.com/docs/r/api/outh2_resource_owner_pc) pattern.
      * The client credentials required for this login must be obtained by creating an API3 key on a user account
      * in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
-     * 
+     *
      * The access token returned by `login` must be used in the HTTP Authorization header of subsequent
      * API requests, like this:
      * ```
@@ -4298,22 +4298,22 @@ class LookerSDKStream: APIMethods {
      * ```
      * Replace "4QDkCy..." with the `access_token` value returned by `login`.
      * The word `token` is a string literal and must be included exactly as shown.
-     * 
+     *
      * This function can accept `client_id` and `client_secret` parameters as URL query params or as www-form-urlencoded params in the body of the HTTP request. Since there is a small risk that URL parameters may be visible to intermediate nodes on the network route (proxies, routers, etc), passing credentials in the body of the request is considered more secure than URL params.
-     * 
+     *
      * Example of passing credentials in the HTTP request body:
      * ````
      * POST HTTP /login
      * Content-Type: application/x-www-form-urlencoded
-     * 
+     *
      * client_id=CGc9B7v7J48dQSJvxxx&client_secret=nNVS9cSS3xNpSC9JdsBvvvvv
      * ````
-     * 
+     *
      * ### Best Practice:
      * Always pass credentials in body params. Pass credentials in URL query params **only** when you cannot pass body params due to application, tool, or other limitations.
-     * 
+     *
      * For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API3](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
-     * 
+     *
      * POST /login -> AccessToken
      */
     func login(
@@ -4334,22 +4334,22 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Create an access token that runs as a given user.
-     * 
+     *
      * This can only be called by an authenticated admin user. It allows that admin to generate a new
      * authentication token for the user with the given user id. That token can then be used for subsequent
      * API calls - which are then performed *as* that target user.
-     * 
+     *
      * The target user does *not* need to have a pre-existing API client_id/client_secret pair. And, no such
      * credentials are created by this call.
-     * 
+     *
      * This allows for building systems where api user authentication for an arbitrary number of users is done
      * outside of Looker and funneled through a single 'service account' with admin permissions. Note that a
      * new access token is generated on each call. If target users are going to be making numerous API
      * calls in a short period then it is wise to cache this authentication token rather than call this before
      * each of those API calls.
-     * 
+     *
      * See 'login' for more detail on the access token and how to use it.
-     * 
+     *
      * POST /login/{user_id} -> AccessToken
      */
     func login_user(
@@ -4371,7 +4371,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Logout of the API and invalidate the current access token.
-     * 
+     *
      * DELETE /logout -> String
      */
     func logout(
@@ -4383,9 +4383,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get a Look.
-     * 
+     *
      * Returns detailed information about a Look and its associated Query.
-     * 
+     *
      * GET /looks/{look_id} -> LookWithQuery
      */
     func look(
@@ -4407,7 +4407,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about a lookml model.
-     * 
+     *
      * GET /lookml_models/{lookml_model_name} -> LookmlModel
      */
     func lookml_model(
@@ -4429,7 +4429,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about a lookml model explore.
-     * 
+     *
      * GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> LookmlModelExplore
      */
     func lookml_model_explore(
@@ -4456,9 +4456,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get A Projects Manifest object
-     * 
+     *
      * Returns the project with the given project id
-     * 
+     *
      * GET /projects/{project_id}/manifest -> Manifest
      */
     func manifest(
@@ -4475,7 +4475,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about the current user; i.e. the user account currently calling the API.
-     * 
+     *
      * GET /user -> User
      */
     func me(
@@ -4492,9 +4492,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get Merge Query
-     * 
+     *
      * Returns a merge query object given its id.
-     * 
+     *
      * GET /merge_queries/{merge_query_id} -> MergeQuery
      */
     func merge_query(
@@ -4516,7 +4516,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about the model set with a specific id.
-     * 
+     *
      * GET /model_sets/{model_set_id} -> ModelSet
      */
     func model_set(
@@ -4538,9 +4538,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get Oauth Client App
-     * 
+     *
      * Returns the registered app client with matching client_guid.
-     * 
+     *
      * GET /oauth_client_apps/{client_guid} -> OauthClientApp
      */
     func oauth_client_app(
@@ -4562,18 +4562,18 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the OIDC configuration.
-     * 
+     *
      * Looker can be optionally configured to authenticate users against an OpenID Connect (OIDC)
      * authentication server. OIDC setup requires coordination with an administrator of that server.
-     * 
+     *
      * Only Looker administrators can read and update the OIDC configuration.
-     * 
+     *
      * Configuring OIDC impacts authentication for all users. This configuration should be done carefully.
-     * 
+     *
      * Looker maintains a single OIDC configuation. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
-     * 
+     *
      * OIDC is enabled or disabled for Looker using the **enabled** field.
-     * 
+     *
      * GET /oidc_config -> OIDCConfig
      */
     func oidc_config(
@@ -4585,7 +4585,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get a OIDC test configuration by test_slug.
-     * 
+     *
      * GET /oidc_test_configs/{test_slug} -> OIDCConfig
      */
     func oidc_test_config(
@@ -4602,7 +4602,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Parse the given xml as a SAML IdP metadata document and return the result.
-     * 
+     *
      * POST /parse_saml_idp_metadata -> SamlMetadataParseResult
      */
     func parse_saml_idp_metadata(
@@ -4618,7 +4618,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get password config.
-     * 
+     *
      * GET /password_config -> PasswordConfig
      */
     func password_config(
@@ -4630,7 +4630,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Perform a data action. The data action object can be obtained from query results, and used to perform an arbitrary action.
-     * 
+     *
      * POST /data_actions -> DataActionResponse
      */
     func perform_data_action(
@@ -4646,7 +4646,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about the permission set with a specific id.
-     * 
+     *
      * GET /permission_sets/{permission_set_id} -> PermissionSet
      */
     func permission_set(
@@ -4668,9 +4668,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get A Project
-     * 
+     *
      * Returns the project with the given project id
-     * 
+     *
      * GET /projects/{project_id} -> Project
      */
     func project(
@@ -4692,9 +4692,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get Project File Info
-     * 
+     *
      * Returns information about a file in the project
-     * 
+     *
      * GET /projects/{project_id}/files/file -> ProjectFile
      */
     func project_file(
@@ -4720,18 +4720,18 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get Cached Project Validation Results
-     * 
+     *
      * Returns the cached results of a previous project validation calculation, if any.
      * Returns http status 204 No Content if no validation results exist.
-     * 
+     *
      * Validating the content of all the files in a project can be computationally intensive
      * for large projects. Use this API to simply fetch the results of the most recent
      * project validation rather than revalidating the entire project from scratch.
-     * 
+     *
      * A value of `"stale": true` in the response indicates that the project has changed since
      * the cached validation results were computed. The cached validation results may no longer
      * reflect the current state of the project.
-     * 
+     *
      * GET /projects/{project_id}/validate -> ProjectValidationCache
      */
     func project_validation_results(
@@ -4753,9 +4753,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get Project Workspace
-     * 
+     *
      * Returns information about the state of the project files in the currently selected workspace
-     * 
+     *
      * GET /projects/{project_id}/current_workspace -> ProjectWorkspace
      */
     func project_workspace(
@@ -4777,23 +4777,23 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get a previously created query by id.
-     * 
+     *
      * A Looker query object includes the various parameters that define a database query that has been run or
      * could be run in the future. These parameters include: model, view, fields, filters, pivots, etc.
      * Query *results* are not part of the query object.
-     * 
+     *
      * Query objects are unique and immutable. Query objects are created automatically in Looker as users explore data.
      * Looker does not delete them; they become part of the query history. When asked to create a query for
      * any given set of parameters, Looker will first try to find an existing query object with matching
      * parameters and will only create a new object when an appropriate object can not be found.
-     * 
+     *
      * This 'get' method is used to get the details about a query for a given id. See the other methods here
      * to 'create' and 'run' queries.
-     * 
+     *
      * Note that some fields like 'filter_config' and 'vis_config' etc are specific to how the Looker UI
      * builds queries and visualizations and are not generally useful for API use. They are not required when
      * creating new queries and can usually just be ignored.
-     * 
+     *
      * GET /queries/{query_id} -> Query
      */
     func query(
@@ -4815,23 +4815,23 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the query for a given query slug.
-     * 
+     *
      * This returns the query for the 'slug' in a query share URL.
-     * 
+     *
      * The 'slug' is a randomly chosen short string that is used as an alternative to the query's id value
      * for use in URLs etc. This method exists as a convenience to help you use the API to 'find' queries that
      * have been created using the Looker UI.
-     * 
+     *
      * You can use the Looker explore page to build a query and then choose the 'Share' option to
      * show the share url for the query. Share urls generally look something like 'https://looker.yourcompany/x/vwGSbfc'.
      * The trailing 'vwGSbfc' is the share slug. You can pass that string to this api method to get details about the query.
      * Those details include the 'id' that you can use to run the query. Or, you can copy the query body
      * (perhaps with your own modification) and use that as the basis to make/run new queries.
-     * 
+     *
      * This will also work with slugs from Looker explore urls like
      * 'https://looker.yourcompany/explore/ecommerce/orders?qid=aogBgL6o3cKK1jN3RoZl5s'. In this case
      * 'aogBgL6o3cKK1jN3RoZl5s' is the slug.
-     * 
+     *
      * GET /queries/slug/{slug} -> Query
      */
     func query_for_slug(
@@ -4853,13 +4853,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get Query Task details
-     * 
+     *
      * Use this function to check the status of an async query task. After the status
      * reaches "Complete", you can call [query_task_results(query_task_id)](#!/Query/query_task_results) to
      * retrieve the results of the query.
-     * 
+     *
      * Use [create_query_task()](#!/Query/create_query_task) to create an async query task.
-     * 
+     *
      * GET /query_tasks/{query_task_id} -> QueryTask
      */
     func query_task(
@@ -4881,13 +4881,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Fetch results of multiple async queries
-     * 
+     *
      * Returns the results of multiple async queries in one request.
-     * 
+     *
      * For Query Tasks that are not completed, the response will include the execution status of the Query Task but will not include query results.
      * Query Tasks whose results have expired will have a status of 'expired'.
      * If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
-     * 
+     *
      * GET /query_tasks/multi_results -> StringDictionary<AnyCodable>
      */
     func query_task_multi_results(
@@ -4904,29 +4904,29 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get Async Query Results
-     * 
+     *
      * Returns the results of an async query task if the query has completed.
-     * 
+     *
      * If the query task is still running or waiting to run, this function returns 204 No Content.
-     * 
+     *
      * If the query task ID is invalid or the cached results of the query task have expired, this function returns 404 Not Found.
-     * 
+     *
      * Use [query_task(query_task_id)](#!/Query/query_task) to check the execution status of the query task
      * Call query_task_results only after the query task status reaches "Complete".
-     * 
+     *
      * You can also use [query_task_multi_results()](#!/Query/query_task_multi_results) retrieve the
      * results of multiple async query tasks at the same time.
-     * 
+     *
      * #### SQL Error Handling:
      * If the query fails due to a SQL db error, how this is communicated depends on the result_format you requested in `create_query_task()`.
-     * 
+     *
      * For `json_detail` result_format: `query_task_results()` will respond with HTTP status '200 OK' and db SQL error info
      * will be in the `errors` property of the response object. The 'data' property will be empty.
-     * 
+     *
      * For all other result formats: `query_task_results()` will respond with HTTP status `400 Bad Request` and some db SQL error info
      * will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
      * These data formats can only carry row data, and error info is not row data.
-     * 
+     *
      * GET /query_tasks/{query_task_id}/results -> String
      */
     func query_task_results(
@@ -4943,12 +4943,12 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Register an OAuth2 Client App
-     * 
+     *
      * Registers details identifying an external web app or native app as an OAuth2 login client of the Looker instance.
      * The app registration must provide a unique client_guid and redirect_uri that the app will present
      * in OAuth login requests. If the client_guid and redirect_uri parameters in the login request do not match
      * the app details registered with the Looker instance, the request is assumed to be a forgery and is rejected.
-     * 
+     *
      * POST /oauth_client_apps/{client_guid} -> OauthClientApp
      */
     func register_oauth_client_app(
@@ -4974,11 +4974,11 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about a render task.
-     * 
+     *
      * Returns a render task object.
      * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
      * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
-     * 
+     *
      * GET /render_tasks/{render_task_id} -> RenderTask
      */
     func render_task(
@@ -5000,25 +5000,25 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the document or image produced by a completed render task.
-     * 
+     *
      * Note that the PDF or image result will be a binary blob in the HTTP response, as indicated by the
      * Content-Type in the response headers. This may require specialized (or at least different) handling than text
      * responses such as JSON. You may need to tell your HTTP client that the response is binary so that it does not
      * attempt to parse the binary data as text.
-     * 
+     *
      * If the render task exists but has not finished rendering the results, the response HTTP status will be
      * **202 Accepted**, the response body will be empty, and the response will have a Retry-After header indicating
      * that the caller should repeat the request at a later time.
-     * 
+     *
      * Returns 404 if the render task cannot be found, if the cached result has expired, or if the caller
      * does not have permission to view the results.
-     * 
+     *
      * For detailed information about the status of the render task, use [Render Task](#!/RenderTask/render_task).
      * Polling loops waiting for completion of a render task would be better served by polling **render_task(id)** until
      * the task status reaches completion (or error) instead of polling **render_task_results(id)** alone.
-     * 
+     *
      * GET /render_tasks/{render_task_id}/results -> String
-     * 
+     *
      * **Note**: Binary content is returned by this method.
      */
     func render_task_results(
@@ -5035,9 +5035,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Reset a project to the revision of the project that is in production.
-     * 
+     *
      * **DANGER** this will delete any changes that have not been pushed to a remote repository.
-     * 
+     *
      * POST /projects/{project_id}/reset_to_production -> String
      */
     func reset_project_to_production(
@@ -5054,9 +5054,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Reset a project development branch to the revision of the project that is on the remote.
-     * 
+     *
      * **DANGER** this will delete any changes that have not been pushed to a remote repository.
-     * 
+     *
      * POST /projects/{project_id}/reset_to_remote -> String
      */
     func reset_project_to_remote(
@@ -5073,7 +5073,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about the role with a specific id.
-     * 
+     *
      * GET /roles/{role_id} -> Role
      */
     func role(
@@ -5090,7 +5090,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all the groups with the role that has a specific id.
-     * 
+     *
      * GET /roles/{role_id}/groups -> [LkGroup]
      */
     func role_groups(
@@ -5112,7 +5112,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all the users with the role that has a specific id.
-     * 
+     *
      * GET /roles/{role_id}/users -> [User]
      */
     func role_users(
@@ -5138,13 +5138,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Run a git connection test
-     * 
+     *
      * Run the named test on the git service used by this project (or the dependency project for the provided remote_url) and return the result. This
      * is intended to help debug git connections when things do not work properly, to give
      * more helpful information about why a git url is not working with Looker.
-     * 
+     *
      * Tests should be run in the order they are returned by [Get All Git Connection Tests](#!/Project/all_git_connection_tests).
-     * 
+     *
      * GET /projects/{project_id}/git_connection_tests/{test_id} -> GitConnectionTestResult
      */
     func run_git_connection_test(
@@ -5171,10 +5171,10 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Run the query that is specified inline in the posted body.
-     * 
+     *
      * This allows running a query as defined in json in the posted body. This combines
      * the two actions of posting & running a query into one step.
-     * 
+     *
      * Here is an example body in json:
      * ```
      * {
@@ -5187,7 +5187,7 @@ class LookerSDKStream: APIMethods {
      *   "query_timezone":"America/Los_Angeles"
      * }
      * ```
-     * 
+     *
      * When using the Ruby SDK this would be passed as a Ruby hash like:
      * ```
      * {
@@ -5203,11 +5203,11 @@ class LookerSDKStream: APIMethods {
      *  :query_timezone=>"America/Los_Angeles",
      * }
      * ```
-     * 
+     *
      * This will return the result of running the query in the format specified by the 'result_format' parameter.
-     * 
+     *
      * Supported formats:
-     * 
+     *
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
@@ -5220,9 +5220,9 @@ class LookerSDKStream: APIMethods {
      * | sql | Returns the generated SQL rather than running the query
      * | png | A PNG image of the visualization of the query
      * | jpg | A JPG image of the visualization of the query
-     * 
+     *
      * POST /queries/run/{result_format} -> String
-     * 
+     *
      * **Note**: Binary content may be returned by this method.
      */
     func run_inline_query(
@@ -5292,11 +5292,11 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Run a Look
-     * 
+     *
      * Runs a given look's query and returns the results in the requested format.
-     * 
+     *
      * Supported formats:
-     * 
+     *
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
@@ -5309,9 +5309,9 @@ class LookerSDKStream: APIMethods {
      * | sql | Returns the generated SQL rather than running the query
      * | png | A PNG image of the visualization of the query
      * | jpg | A JPG image of the visualization of the query
-     * 
+     *
      * GET /looks/{look_id}/run/{result_format} -> String
-     * 
+     *
      * **Note**: Binary content may be returned by this method.
      */
     func run_look(
@@ -5382,9 +5382,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Run LookML Tests
-     * 
+     *
      * Runs all tests in the project, optionally filtered by file, test, and/or model.
-     * 
+     *
      * GET /projects/{project_id}/lookml_tests/run -> [LookmlTestResult]
      */
     func run_lookml_test(
@@ -5414,14 +5414,14 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Run a saved query.
-     * 
+     *
      * This runs a previously saved query. You can use this on a query that was generated in the Looker UI
      * or one that you have explicitly created using the API. You can also use a query 'id' from a saved 'Look'.
-     * 
+     *
      * The 'result_format' parameter specifies the desired structure and format of the response.
-     * 
+     *
      * Supported formats:
-     * 
+     *
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
@@ -5434,9 +5434,9 @@ class LookerSDKStream: APIMethods {
      * | sql | Returns the generated SQL rather than running the query
      * | png | A PNG image of the visualization of the query
      * | jpg | A JPG image of the visualization of the query
-     * 
+     *
      * GET /queries/{query_id}/run/{result_format} -> String
-     * 
+     *
      * **Note**: Binary content may be returned by this method.
      */
     func run_query(
@@ -5507,9 +5507,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Execute a SQL Runner query in a given result_format.
-     * 
+     *
      * POST /sql_queries/{slug}/run/{result_format} -> String
-     * 
+     *
      * **Note**: Binary content may be returned by this method.
      */
     func run_sql_query(
@@ -5536,27 +5536,27 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Run an URL encoded query.
-     * 
+     *
      * This requires the caller to encode the specifiers for the query into the URL query part using
      * Looker-specific syntax as explained below.
-     * 
+     *
      * Generally, you would want to use one of the methods that takes the parameters as json in the POST body
      * for creating and/or running queries. This method exists for cases where one really needs to encode the
      * parameters into the URL of a single 'GET' request. This matches the way that the Looker UI formats
      * 'explore' URLs etc.
-     * 
+     *
      * The parameters here are very similar to the json body formatting except that the filter syntax is
      * tricky. Unfortunately, this format makes this method not currently callible via the 'Try it out!' button
      * in this documentation page. But, this is callable  when creating URLs manually or when using the Looker SDK.
-     * 
+     *
      * Here is an example inline query URL:
-     * 
+     *
      * ```
      * https://looker.mycompany.com:19999/api/3.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles
      * ```
-     * 
+     *
      * When invoking this endpoint with the Ruby SDK, pass the query parameter parts as a hash. The hash to match the above would look like:
-     * 
+     *
      * ```ruby
      * query_params =
      * {
@@ -5567,14 +5567,14 @@ class LookerSDKStream: APIMethods {
      *   :query_timezone => "America/Los_Angeles"
      * }
      * response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
-     * 
+     *
      * ```
-     * 
+     *
      * Again, it is generally easier to use the variant of this method that passes the full query in the POST body.
      * This method is available for cases where other alternatives won't fit the need.
-     * 
+     *
      * Supported formats:
-     * 
+     *
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
@@ -5587,9 +5587,9 @@ class LookerSDKStream: APIMethods {
      * | sql | Returns the generated SQL rather than running the query
      * | png | A PNG image of the visualization of the query
      * | jpg | A JPG image of the visualization of the query
-     * 
+     *
      * GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> String
-     * 
+     *
      * **Note**: Binary content may be returned by this method.
      */
     func run_url_encoded_query(
@@ -5616,18 +5616,18 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the SAML configuration.
-     * 
+     *
      * Looker can be optionally configured to authenticate users against a SAML authentication server.
      * SAML setup requires coordination with an administrator of that server.
-     * 
+     *
      * Only Looker administrators can read and update the SAML configuration.
-     * 
+     *
      * Configuring SAML impacts authentication for all users. This configuration should be done carefully.
-     * 
+     *
      * Looker maintains a single SAML configuation. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
-     * 
+     *
      * SAML is enabled or disabled for Looker using the **enabled** field.
-     * 
+     *
      * GET /saml_config -> SamlConfig
      */
     func saml_config(
@@ -5639,7 +5639,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get a SAML test configuration by test_slug.
-     * 
+     *
      * GET /saml_test_configs/{test_slug} -> SamlConfig
      */
     func saml_test_config(
@@ -5656,9 +5656,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get Information About a Scheduled Plan
-     * 
+     *
      * Admins can fetch information about other users' Scheduled Plans.
-     * 
+     *
      * GET /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
      */
     func scheduled_plan(
@@ -5680,27 +5680,27 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Run a Scheduled Plan Immediately
-     * 
+     *
      * Create a scheduled plan that runs only once, and immediately.
-     * 
+     *
      * This can be useful for testing a Scheduled Plan before committing to a production schedule.
-     * 
+     *
      * Admins can create scheduled plans on behalf of other users by specifying a user id.
-     * 
+     *
      * This API is rate limited to prevent it from being used for relay spam or DoS attacks
-     * 
+     *
      * #### Email Permissions:
-     * 
+     *
      * For details about permissions required to schedule delivery to email and the safeguards
      * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
-     * 
-     * 
+     *
+     *
      * #### Scheduled Plan Destination Formats
-     * 
+     *
      * Scheduled plan destinations must specify the data format to produce and send to the destination.
-     * 
+     *
      * Formats:
-     * 
+     *
      * | format | Description
      * | :-----------: | :--- |
      * | json | A JSON object containing a `data` property which contains an array of JSON objects, one per row. No metadata.
@@ -5714,9 +5714,9 @@ class LookerSDKStream: APIMethods {
      * | assembled_pdf | Dashboard rendered in a single column layout to produce a PDF document
      * | wysiwyg_png | Dashboard rendered in a tiled layout to produce a PNG image
      * ||
-     * 
+     *
      * Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
-     * 
+     *
      * POST /scheduled_plans/run_once -> ScheduledPlan
      */
     func scheduled_plan_run_once(
@@ -5735,30 +5735,30 @@ class LookerSDKStream: APIMethods {
      * This function creates a run-once schedule plan based on an existing scheduled plan,
      * applies modifications (if any) to the new scheduled plan, and runs the new schedule plan immediately.
      * This can be useful for testing modifications to an existing scheduled plan before committing to a production schedule.
-     * 
+     *
      * This function internally performs the following operations:
-     * 
+     *
      * 1. Copies the properties of the existing scheduled plan into a new scheduled plan
      * 2. Copies any properties passed in the JSON body of this request into the new scheduled plan (replacing the original values)
      * 3. Creates the new scheduled plan
      * 4. Runs the new scheduled plan
-     * 
+     *
      * The original scheduled plan is not modified by this operation.
      * Admins can create, modify, and run scheduled plans on behalf of other users by specifying a user id.
      * Non-admins can only create, modify, and run their own scheduled plans.
-     * 
+     *
      * #### Email Permissions:
-     * 
+     *
      * For details about permissions required to schedule delivery to email and the safeguards
      * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
-     * 
-     * 
+     *
+     *
      * #### Scheduled Plan Destination Formats
-     * 
+     *
      * Scheduled plan destinations must specify the data format to produce and send to the destination.
-     * 
+     *
      * Formats:
-     * 
+     *
      * | format | Description
      * | :-----------: | :--- |
      * | json | A JSON object containing a `data` property which contains an array of JSON objects, one per row. No metadata.
@@ -5772,13 +5772,13 @@ class LookerSDKStream: APIMethods {
      * | assembled_pdf | Dashboard rendered in a single column layout to produce a PDF document
      * | wysiwyg_png | Dashboard rendered in a tiled layout to produce a PNG image
      * ||
-     * 
+     *
      * Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * This API is rate limited to prevent it from being used for relay spam or DoS attacks
-     * 
+     *
      * POST /scheduled_plans/{scheduled_plan_id}/run_once -> ScheduledPlan
      */
     func scheduled_plan_run_once_by_id(
@@ -5799,17 +5799,17 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get Scheduled Plans for a Dashboard
-     * 
+     *
      * Returns all scheduled plans for a dashboard which belong to the caller or given user.
-     * 
+     *
      * If no user_id is provided, this function returns the scheduled plans owned by the caller.
-     * 
-     * 
+     *
+     *
      * To list all schedules for all users, pass `all_users=true`.
-     * 
-     * 
+     *
+     *
      * The caller must have `see_schedules` permission to see other users' scheduled plans.
-     * 
+     *
      * GET /scheduled_plans/dashboard/{dashboard_id} -> [ScheduledPlan]
      */
     func scheduled_plans_for_dashboard(
@@ -5839,17 +5839,17 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get Scheduled Plans for a Look
-     * 
+     *
      * Returns all scheduled plans for a look which belong to the caller or given user.
-     * 
+     *
      * If no user_id is provided, this function returns the scheduled plans owned by the caller.
-     * 
-     * 
+     *
+     *
      * To list all schedules for all users, pass `all_users=true`.
-     * 
-     * 
+     *
+     *
      * The caller must have `see_schedules` permission to see other users' scheduled plans.
-     * 
+     *
      * GET /scheduled_plans/look/{look_id} -> [ScheduledPlan]
      */
     func scheduled_plans_for_look(
@@ -5879,17 +5879,17 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get Scheduled Plans for a LookML Dashboard
-     * 
+     *
      * Returns all scheduled plans for a LookML Dashboard which belong to the caller or given user.
-     * 
+     *
      * If no user_id is provided, this function returns the scheduled plans owned by the caller.
-     * 
-     * 
+     *
+     *
      * To list all schedules for all users, pass `all_users=true`.
-     * 
-     * 
+     *
+     *
      * The caller must have `see_schedules` permission to see other users' scheduled plans.
-     * 
+     *
      * GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id} -> [ScheduledPlan]
      */
     func scheduled_plans_for_lookml_dashboard(
@@ -5919,9 +5919,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get Scheduled Plans for a Space
-     * 
+     *
      * Returns scheduled plans owned by the caller for a given space id.
-     * 
+     *
      * GET /scheduled_plans/space/{space_id} -> [ScheduledPlan]
      */
     func scheduled_plans_for_space(
@@ -5943,28 +5943,28 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Search Boards
-     * 
+     *
      * If multiple search params are given and `filter_or` is FALSE or not specified,
      * search params are combined in a logical AND operation.
      * Only rows that match *all* search param criteria will be returned.
-     * 
+     *
      * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
      * Results will include rows that match **any** of the search criteria.
-     * 
+     *
      * String search params use case-insensitive matching.
      * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
      * example="dan%" will match "danger" and "Danzig" but not "David"
      * example="D_m%" will match "Damage" and "dump"
-     * 
+     *
      * Integer search params can accept a single value or a comma separated list of values. The multiple
      * values will be combined under a logical OR operation - results will match at least one of
      * the given values.
-     * 
+     *
      * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
      * or exclude (respectively) rows where the column is null.
-     * 
+     *
      * Boolean search params accept only "true" and "false" as values.
-     * 
+     *
      * GET /boards/search -> [Board]
      */
     func search_boards(
@@ -6029,28 +6029,28 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Search Favorite Content
-     * 
+     *
      * If multiple search params are given and `filter_or` is FALSE or not specified,
      * search params are combined in a logical AND operation.
      * Only rows that match *all* search param criteria will be returned.
-     * 
+     *
      * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
      * Results will include rows that match **any** of the search criteria.
-     * 
+     *
      * String search params use case-insensitive matching.
      * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
      * example="dan%" will match "danger" and "Danzig" but not "David"
      * example="D_m%" will match "Damage" and "dump"
-     * 
+     *
      * Integer search params can accept a single value or a comma separated list of values. The multiple
      * values will be combined under a logical OR operation - results will match at least one of
      * the given values.
-     * 
+     *
      * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
      * or exclude (respectively) rows where the column is null.
-     * 
+     *
      * Boolean search params accept only "true" and "false" as values.
-     * 
+     *
      * GET /content_favorite/search -> [ContentFavorite]
      */
     func search_content_favorites(
@@ -6107,28 +6107,28 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Search Content Views
-     * 
+     *
      * If multiple search params are given and `filter_or` is FALSE or not specified,
      * search params are combined in a logical AND operation.
      * Only rows that match *all* search param criteria will be returned.
-     * 
+     *
      * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
      * Results will include rows that match **any** of the search criteria.
-     * 
+     *
      * String search params use case-insensitive matching.
      * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
      * example="dan%" will match "danger" and "Danzig" but not "David"
      * example="D_m%" will match "Damage" and "dump"
-     * 
+     *
      * Integer search params can accept a single value or a comma separated list of values. The multiple
      * values will be combined under a logical OR operation - results will match at least one of
      * the given values.
-     * 
+     *
      * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
      * or exclude (respectively) rows where the column is null.
-     * 
+     *
      * Boolean search params accept only "true" and "false" as values.
-     * 
+     *
      * GET /content_view/search -> [ContentView]
      */
     func search_content_views(
@@ -6193,30 +6193,30 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Search Dashboard Elements
-     * 
+     *
      * Returns an **array of DashboardElement objects** that match the specified search criteria.
-     * 
+     *
      * If multiple search params are given and `filter_or` is FALSE or not specified,
      * search params are combined in a logical AND operation.
      * Only rows that match *all* search param criteria will be returned.
-     * 
+     *
      * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
      * Results will include rows that match **any** of the search criteria.
-     * 
+     *
      * String search params use case-insensitive matching.
      * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
      * example="dan%" will match "danger" and "Danzig" but not "David"
      * example="D_m%" will match "Damage" and "dump"
-     * 
+     *
      * Integer search params can accept a single value or a comma separated list of values. The multiple
      * values will be combined under a logical OR operation - results will match at least one of
      * the given values.
-     * 
+     *
      * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
      * or exclude (respectively) rows where the column is null.
-     * 
+     *
      * Boolean search params accept only "true" and "false" as values.
-     * 
+     *
      * GET /dashboard_elements/search -> [DashboardElement]
      */
     func search_dashboard_elements(
@@ -6257,35 +6257,35 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Search Dashboards
-     * 
+     *
      * Returns an **array of dashboard objects** that match the specified search criteria.
-     * 
+     *
      * If multiple search params are given and `filter_or` is FALSE or not specified,
      * search params are combined in a logical AND operation.
      * Only rows that match *all* search param criteria will be returned.
-     * 
+     *
      * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
      * Results will include rows that match **any** of the search criteria.
-     * 
+     *
      * String search params use case-insensitive matching.
      * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
      * example="dan%" will match "danger" and "Danzig" but not "David"
      * example="D_m%" will match "Damage" and "dump"
-     * 
+     *
      * Integer search params can accept a single value or a comma separated list of values. The multiple
      * values will be combined under a logical OR operation - results will match at least one of
      * the given values.
-     * 
+     *
      * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
      * or exclude (respectively) rows where the column is null.
-     * 
+     *
      * Boolean search params accept only "true" and "false" as values.
-     * 
-     * 
+     *
+     *
      * The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
-     * 
+     *
      * Get a **single dashboard** by id with [dashboard()](#!/Dashboard/dashboard)
-     * 
+     *
      * GET /dashboards/search -> [Dashboard]
      */
     func search_dashboards(
@@ -6374,7 +6374,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Search for folders by creator id, parent id, name, etc
-     * 
+     *
      * GET /folders/search -> [Folder]
      */
     func search_folders(
@@ -6431,30 +6431,30 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Search groups
-     * 
+     *
      * Returns all group records that match the given search criteria.
-     * 
+     *
      * If multiple search params are given and `filter_or` is FALSE or not specified,
      * search params are combined in a logical AND operation.
      * Only rows that match *all* search param criteria will be returned.
-     * 
+     *
      * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
      * Results will include rows that match **any** of the search criteria.
-     * 
+     *
      * String search params use case-insensitive matching.
      * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
      * example="dan%" will match "danger" and "Danzig" but not "David"
      * example="D_m%" will match "Damage" and "dump"
-     * 
+     *
      * Integer search params can accept a single value or a comma separated list of values. The multiple
      * values will be combined under a logical OR operation - results will match at least one of
      * the given values.
-     * 
+     *
      * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
      * or exclude (respectively) rows where the column is null.
-     * 
+     *
      * Boolean search params accept only "true" and "false" as values.
-     * 
+     *
      * GET /groups/search -> [GroupSearch]
      */
     func search_groups(
@@ -6507,33 +6507,33 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Search Looks
-     * 
+     *
      * Returns an **array of Look objects** that match the specified search criteria.
-     * 
+     *
      * If multiple search params are given and `filter_or` is FALSE or not specified,
      * search params are combined in a logical AND operation.
      * Only rows that match *all* search param criteria will be returned.
-     * 
+     *
      * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
      * Results will include rows that match **any** of the search criteria.
-     * 
+     *
      * String search params use case-insensitive matching.
      * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
      * example="dan%" will match "danger" and "Danzig" but not "David"
      * example="D_m%" will match "Damage" and "dump"
-     * 
+     *
      * Integer search params can accept a single value or a comma separated list of values. The multiple
      * values will be combined under a logical OR operation - results will match at least one of
      * the given values.
-     * 
+     *
      * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
      * or exclude (respectively) rows where the column is null.
-     * 
+     *
      * Boolean search params accept only "true" and "false" as values.
-     * 
-     * 
+     *
+     *
      * Get a **single look** by id with [look(id)](#!/Look/look)
-     * 
+     *
      * GET /looks/search -> [Look]
      */
     func search_looks(
@@ -6622,24 +6622,24 @@ class LookerSDKStream: APIMethods {
      * If multiple search params are given and `filter_or` is FALSE or not specified,
      * search params are combined in a logical AND operation.
      * Only rows that match *all* search param criteria will be returned.
-     * 
+     *
      * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
      * Results will include rows that match **any** of the search criteria.
-     * 
+     *
      * String search params use case-insensitive matching.
      * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
      * example="dan%" will match "danger" and "Danzig" but not "David"
      * example="D_m%" will match "Damage" and "dump"
-     * 
+     *
      * Integer search params can accept a single value or a comma separated list of values. The multiple
      * values will be combined under a logical OR operation - results will match at least one of
      * the given values.
-     * 
+     *
      * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
      * or exclude (respectively) rows where the column is null.
-     * 
+     *
      * Boolean search params accept only "true" and "false" as values.
-     * 
+     *
      * GET /model_sets/search -> [ModelSet]
      */
     func search_model_sets(
@@ -6692,24 +6692,24 @@ class LookerSDKStream: APIMethods {
      * If multiple search params are given and `filter_or` is FALSE or not specified,
      * search params are combined in a logical AND operation.
      * Only rows that match *all* search param criteria will be returned.
-     * 
+     *
      * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
      * Results will include rows that match **any** of the search criteria.
-     * 
+     *
      * String search params use case-insensitive matching.
      * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
      * example="dan%" will match "danger" and "Danzig" but not "David"
      * example="D_m%" will match "Damage" and "dump"
-     * 
+     *
      * Integer search params can accept a single value or a comma separated list of values. The multiple
      * values will be combined under a logical OR operation - results will match at least one of
      * the given values.
-     * 
+     *
      * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
      * or exclude (respectively) rows where the column is null.
-     * 
+     *
      * Boolean search params accept only "true" and "false" as values.
-     * 
+     *
      * GET /permission_sets/search -> [PermissionSet]
      */
     func search_permission_sets(
@@ -6758,30 +6758,30 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Search roles
-     * 
+     *
      * Returns all role records that match the given search criteria.
-     * 
+     *
      * If multiple search params are given and `filter_or` is FALSE or not specified,
      * search params are combined in a logical AND operation.
      * Only rows that match *all* search param criteria will be returned.
-     * 
+     *
      * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
      * Results will include rows that match **any** of the search criteria.
-     * 
+     *
      * String search params use case-insensitive matching.
      * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
      * example="dan%" will match "danger" and "Danzig" but not "David"
      * example="D_m%" will match "Damage" and "dump"
-     * 
+     *
      * Integer search params can accept a single value or a comma separated list of values. The multiple
      * values will be combined under a logical OR operation - results will match at least one of
      * the given values.
-     * 
+     *
      * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
      * or exclude (respectively) rows where the column is null.
-     * 
+     *
      * Boolean search params accept only "true" and "false" as values.
-     * 
+     *
      * GET /roles/search -> [Role]
      */
     func search_roles(
@@ -6826,44 +6826,44 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Search all themes for matching criteria.
-     * 
+     *
      * Returns an **array of theme objects** that match the specified search criteria.
-     * 
+     *
      * | Search Parameters | Description
      * | :-------------------: | :------ |
      * | `begin_at` only | Find themes active at or after `begin_at`
      * | `end_at` only | Find themes active at or before `end_at`
      * | both set | Find themes with an active inclusive period between `begin_at` and `end_at`
-     * 
+     *
      * Note: Range matching requires boolean AND logic.
      * When using `begin_at` and `end_at` together, do not use `filter_or`=TRUE
-     * 
+     *
      * If multiple search params are given and `filter_or` is FALSE or not specified,
      * search params are combined in a logical AND operation.
      * Only rows that match *all* search param criteria will be returned.
-     * 
+     *
      * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
      * Results will include rows that match **any** of the search criteria.
-     * 
+     *
      * String search params use case-insensitive matching.
      * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
      * example="dan%" will match "danger" and "Danzig" but not "David"
      * example="D_m%" will match "Damage" and "dump"
-     * 
+     *
      * Integer search params can accept a single value or a comma separated list of values. The multiple
      * values will be combined under a logical OR operation - results will match at least one of
      * the given values.
-     * 
+     *
      * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
      * or exclude (respectively) rows where the column is null.
-     * 
+     *
      * Boolean search params accept only "true" and "false" as values.
-     * 
-     * 
+     *
+     *
      * Get a **single theme** by id with [Theme](#!/Theme/theme)
-     * 
+     *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-     * 
+     *
      * GET /themes/search -> [Theme]
      */
     func search_themes(
@@ -6912,7 +6912,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Search currently locked-out users.
-     * 
+     *
      * GET /user_login_lockouts/search -> [UserLoginLockout]
      */
     func search_user_login_lockouts(
@@ -6961,36 +6961,36 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Search users
-     * 
+     *
      * Returns all<sup>*</sup> user records that match the given search criteria.
-     * 
+     *
      * If multiple search params are given and `filter_or` is FALSE or not specified,
      * search params are combined in a logical AND operation.
      * Only rows that match *all* search param criteria will be returned.
-     * 
+     *
      * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
      * Results will include rows that match **any** of the search criteria.
-     * 
+     *
      * String search params use case-insensitive matching.
      * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
      * example="dan%" will match "danger" and "Danzig" but not "David"
      * example="D_m%" will match "Damage" and "dump"
-     * 
+     *
      * Integer search params can accept a single value or a comma separated list of values. The multiple
      * values will be combined under a logical OR operation - results will match at least one of
      * the given values.
-     * 
+     *
      * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
      * or exclude (respectively) rows where the column is null.
-     * 
+     *
      * Boolean search params accept only "true" and "false" as values.
-     * 
-     * 
+     *
+     *
      * (<sup>*</sup>) Results are always filtered to the level of information the caller is permitted to view.
      * Looker admins can see all user details; normal users in an open system can see
      * names of other users but no details; normal users in a closed system can only see
      * names of other users who are members of the same group as the user.
-     * 
+     *
      * GET /users/search -> [User]
      */
     func search_users(
@@ -7055,12 +7055,12 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Search for user accounts by name
-     * 
+     *
      * Returns all user accounts where `first_name` OR `last_name` OR `email` field values match a pattern.
      * The pattern can contain `%` and `_` wildcards as in SQL LIKE expressions.
-     * 
+     *
      * Any additional search params will be combined into a logical AND expression.
-     * 
+     *
      * GET /users/search/names/{pattern} -> [User]
      */
     func search_users_names(
@@ -7118,9 +7118,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get API Session
-     * 
+     *
      * Returns information about the current API session, such as which workspace is selected for the session.
-     * 
+     *
      * GET /session -> ApiSession
      */
     func session(
@@ -7132,7 +7132,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get session config.
-     * 
+     *
      * GET /session_config -> SessionConfig
      */
     func session_config(
@@ -7144,10 +7144,10 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Set the global default Color Collection by ID
-     * 
+     *
      * Returns the new specified default Color Collection object.
      * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-     * 
+     *
      * PUT /color_collections/default -> ColorCollection
      */
     func set_default_color_collection(
@@ -7164,17 +7164,17 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Set the global default theme by theme name
-     * 
+     *
      * Only Admin users can call this function.
-     * 
+     *
      * Only an active theme with no expiration (`end_at` not set) can be assigned as the default theme. As long as a theme has an active record with no expiration, it can be set as the default.
-     * 
+     *
      * [Create Theme](#!/Theme/create) has detailed information on rules for default and active themes
-     * 
+     *
      * Returns the new specified default theme object.
-     * 
+     *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-     * 
+     *
      * PUT /themes/default -> Theme
      */
     func set_default_theme(
@@ -7191,7 +7191,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Set all groups for a role, removing all existing group associations from that role.
-     * 
+     *
      * PUT /roles/{role_id}/groups -> [LkGroup]
      */
     func set_role_groups(
@@ -7212,7 +7212,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Set all the users of the role with a specific id.
-     * 
+     *
      * PUT /roles/{role_id}/users -> [User]
      */
     func set_role_users(
@@ -7233,26 +7233,26 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Define values for a user attribute across a set of groups, in priority order.
-     * 
+     *
      * This function defines all values for a user attribute defined by user groups. This is a global setting, potentially affecting
      * all users in the system. This function replaces any existing group value definitions for the indicated user attribute.
-     * 
+     *
      * The value of a user attribute for a given user is determined by searching the following locations, in this order:
-     * 
+     *
      * 1. the user's account settings
      * 2. the groups that the user is a member of
      * 3. the default value of the user attribute, if any
-     * 
+     *
      * The user may be a member of multiple groups which define different values for that user attribute. The order of items in the group_values parameter
      * determines which group takes priority for that user. Lowest array index wins.
-     * 
+     *
      * An alternate method to indicate the selection precedence of group-values is to assign numbers to the 'rank' property of each
      * group-value object in the array. Lowest 'rank' value wins. If you use this technique, you must assign a
      * rank value to every group-value object in the array.
-     * 
+     *
      *   To set a user attribute value for a single user, see [Set User Attribute User Value](#!/User/set_user_attribute_user_value).
      * To set a user attribute value for all members of a group, see [Set User Attribute Group Value](#!/Group/update_user_attribute_group_value).
-     * 
+     *
      * POST /user_attributes/{user_attribute_id}/group_values -> [UserAttributeGroupValue]
      */
     func set_user_attribute_group_values(
@@ -7273,9 +7273,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Store a custom value for a user attribute in a user's account settings.
-     * 
+     *
      * Per-user user attribute values take precedence over group or default values.
-     * 
+     *
      * PATCH /users/{user_id}/attribute_values/{user_attribute_id} -> UserAttributeWithValue
      */
     func set_user_attribute_user_value(
@@ -7301,7 +7301,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Set roles of the user with a specific id.
-     * 
+     *
      * PUT /users/{user_id}/roles -> [Role]
      */
     func set_user_roles(
@@ -7327,7 +7327,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Get a SQL Runner query.
-     * 
+     *
      * GET /sql_queries/{slug} -> SqlQuery
      */
     func sql_query(
@@ -7344,15 +7344,15 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update all linked dashboards to match the specified LookML dashboard.
-     * 
+     *
      * Any UDD (a dashboard which exists in the Looker database rather than as a LookML file) which has a `lookml_link_id`
      * property value referring to a LookML dashboard's id (model::dashboardname) will be updated so that it matches the current state of the LookML dashboard.
-     * 
+     *
      * For this operation to succeed the user must have permission to view the LookML dashboard, and only linked dashboards
      * that the user has permission to update will be synced.
-     * 
+     *
      * To **link** or **unlink** a UDD set the `lookml_link_id` property with [update_dashboard()](#!/Dashboard/update_dashboard)
-     * 
+     *
      * PATCH /dashboards/{lookml_dashboard_id}/sync -> [Int64]
      */
     func sync_lookml_dashboard(
@@ -7378,14 +7378,14 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Test an existing connection.
-     * 
+     *
      * Note that a connection's 'dialect' property has a 'connection_tests' property that lists the
      * specific types of tests that the connection supports.
-     * 
+     *
      * This API is rate limited.
-     * 
+     *
      * Unsupported tests in the request will be ignored.
-     * 
+     *
      * PUT /connections/{connection_name}/test -> [DBConnectionTestResult]
      */
     func test_connection(
@@ -7407,14 +7407,14 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Test a connection configuration.
-     * 
+     *
      * Note that a connection's 'dialect' property has a 'connection_tests' property that lists the
      * specific types of tests that the connection supports.
-     * 
+     *
      * This API is rate limited.
-     * 
+     *
      * Unsupported tests in the request will be ignored.
-     * 
+     *
      * PUT /connections/test -> [DBConnectionTestResult]
      */
     func test_connection_config(
@@ -7435,7 +7435,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Tests the integration to make sure all the settings are working.
-     * 
+     *
      * POST /integrations/{integration_id}/test -> IntegrationTestResult
      */
     func test_integration(
@@ -7452,11 +7452,11 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Test the connection authentication settings for an LDAP configuration.
-     * 
+     *
      * This tests that the connection is possible and that a 'server' account to be used by Looker can       authenticate to the LDAP server given connection and authentication information.
-     * 
+     *
      * **connection_host**, **connection_port**, and **auth_username**, are required.       **connection_tls** and **auth_password** are optional.
-     * 
+     *
      * Example:
      * ```json
      * {
@@ -7467,11 +7467,11 @@ class LookerSDKStream: APIMethods {
      *   "auth_password": "secret"
      * }
      * ```
-     * 
+     *
      * Looker will never return an **auth_password**. If this request omits the **auth_password** field, then       the **auth_password** value from the active config (if present) will be used for the test.
-     * 
+     *
      * The active LDAP settings are not modified.
-     * 
+     *
      * PUT /ldap_config/test_auth -> LDAPConfigTestResult
      */
     func test_ldap_config_auth(
@@ -7487,11 +7487,11 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Test the connection settings for an LDAP configuration.
-     * 
+     *
      * This tests that the connection is possible given a connection_host and connection_port.
-     * 
+     *
      * **connection_host** and **connection_port** are required. **connection_tls** is optional.
-     * 
+     *
      * Example:
      * ```json
      * {
@@ -7500,11 +7500,11 @@ class LookerSDKStream: APIMethods {
      *   "connection_tls": true
      * }
      * ```
-     * 
+     *
      * No authentication to the LDAP server is attempted.
-     * 
+     *
      * The active LDAP settings are not modified.
-     * 
+     *
      * PUT /ldap_config/test_connection -> LDAPConfigTestResult
      */
     func test_ldap_config_connection(
@@ -7520,15 +7520,15 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Test the user authentication settings for an LDAP configuration.
-     * 
+     *
      * This test accepts a full LDAP configuration along with a username/password pair and attempts to       authenticate the user with the LDAP server. The configuration is validated before attempting the       authentication.
-     * 
+     *
      * Looker will never return an **auth_password**. If this request omits the **auth_password** field, then       the **auth_password** value from the active config (if present) will be used for the test.
-     * 
+     *
      * **test_ldap_user** and **test_ldap_password** are required.
-     * 
+     *
      * The active LDAP settings are not modified.
-     * 
+     *
      * PUT /ldap_config/test_user_auth -> LDAPConfigTestResult
      */
     func test_ldap_config_user_auth(
@@ -7544,15 +7544,15 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Test the user authentication settings for an LDAP configuration without authenticating the user.
-     * 
+     *
      * This test will let you easily test the mapping for user properties and roles for any user without      needing to authenticate as that user.
-     * 
+     *
      * This test accepts a full LDAP configuration along with a username and attempts to find the full info      for the user from the LDAP server without actually authenticating the user. So, user password is not      required.The configuration is validated before attempting to contact the server.
-     * 
+     *
      * **test_ldap_user** is required.
-     * 
+     *
      * The active LDAP settings are not modified.
-     * 
+     *
      * PUT /ldap_config/test_user_info -> LDAPConfigTestResult
      */
     func test_ldap_config_user_info(
@@ -7568,11 +7568,11 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get a theme by ID
-     * 
+     *
      * Use this to retrieve a specific theme, whether or not it's currently active.
-     * 
+     *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-     * 
+     *
      * GET /themes/{theme_id} -> Theme
      */
     func theme(
@@ -7594,12 +7594,12 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get the named theme if it's active. Otherwise, return the default theme
-     * 
+     *
      * The optional `ts` parameter can specify a different timestamp than "now."
      * Note: API users with `show` ability can call this function
-     * 
+     *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-     * 
+     *
      * GET /themes/theme_or_default -> Theme
      */
     func theme_or_default(
@@ -7620,7 +7620,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update a board definition.
-     * 
+     *
      * PATCH /boards/{board_id} -> Board
      */
     func update_board(
@@ -7646,7 +7646,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update a board item definition.
-     * 
+     *
      * PATCH /board_items/{board_item_id} -> BoardItem
      */
     func update_board_item(
@@ -7672,7 +7672,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update a board section definition.
-     * 
+     *
      * PATCH /board_sections/{board_section_id} -> BoardSection
      */
     func update_board_section(
@@ -7698,7 +7698,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Update the current Cloud Storage Configuration.
-     * 
+     *
      * PATCH /cloud_storage -> BackupConfiguration
      */
     func update_cloud_storage_configuration(
@@ -7715,7 +7715,7 @@ class LookerSDKStream: APIMethods {
     /**
      * ### Update a custom color collection by id.
      * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
-     * 
+     *
      * PATCH /color_collections/{collection_id} -> ColorCollection
      */
     func update_color_collection(
@@ -7736,7 +7736,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update a connection using the specified configuration.
-     * 
+     *
      * PATCH /connections/{connection_name} -> DBConnection
      */
     func update_connection(
@@ -7757,7 +7757,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Move a piece of content.
-     * 
+     *
      * PATCH /content_metadata/{content_metadata_id} -> ContentMeta
      */
     func update_content_metadata(
@@ -7778,7 +7778,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update type of access for content metadata.
-     * 
+     *
      * PUT /content_metadata_access/{content_metadata_access_id} -> ContentMetaGroupUser
      */
     func update_content_metadata_access(
@@ -7799,7 +7799,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Update custom welcome email setting and values. Optionally send a test email with the new content to the currently logged in user.
-     * 
+     *
      * PATCH /custom_welcome_email -> CustomWelcomeEmail
      */
     func update_custom_welcome_email(
@@ -7820,7 +7820,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Requests to this endpoint will send a welcome email with the custom content provided in the body to the currently logged in user.
-     * 
+     *
      * PUT /custom_welcome_email_test -> WelcomeEmailTest
      */
     func update_custom_welcome_email_test(
@@ -7836,16 +7836,16 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update a dashboard
-     * 
+     *
      * You can use this function to change the string and integer properties of
      * a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
      * cannot be modified by this function - use the update functions for the respective
      * nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
      * to modify nested objects referenced by a dashboard.
-     * 
+     *
      * If you receive a 422 error response when updating a dashboard, be sure to look at the
      * response body for information about exactly which fields are missing or contain invalid data.
-     * 
+     *
      * PATCH /dashboards/{dashboard_id} -> Dashboard
      */
     func update_dashboard(
@@ -7866,7 +7866,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update the dashboard element with a specific id.
-     * 
+     *
      * PATCH /dashboard_elements/{dashboard_element_id} -> DashboardElement
      */
     func update_dashboard_element(
@@ -7892,7 +7892,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update the dashboard filter with a specific id.
-     * 
+     *
      * PATCH /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
      */
     func update_dashboard_filter(
@@ -7918,7 +7918,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update the dashboard layout with a specific id.
-     * 
+     *
      * PATCH /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
      */
     func update_dashboard_layout(
@@ -7944,7 +7944,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update the dashboard element with a specific id.
-     * 
+     *
      * PATCH /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
      */
     func update_dashboard_layout_component(
@@ -7970,7 +7970,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update a datagroup using the specified params.
-     * 
+     *
      * PATCH /datagroups/{datagroup_id} -> Datagroup
      */
     func update_datagroup(
@@ -7991,7 +7991,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update the setting for enabling/disabling digest emails
-     * 
+     *
      * PATCH /digest_emails_enabled -> DigestEmails
      */
     func update_digest_emails_enabled(
@@ -8007,7 +8007,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update the folder with a specific id.
-     * 
+     *
      * PATCH /folders/{folder_id} -> Folder
      */
     func update_folder(
@@ -8028,15 +8028,15 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Checkout and/or reset --hard an existing Git Branch
-     * 
+     *
      * Only allowed in development mode
      *   - Call `update_session` to select the 'dev' workspace.
-     * 
+     *
      * Checkout an existing branch if name field is different from the name of the currently checked out branch.
-     * 
+     *
      * Optionally specify a branch name, tag name or commit SHA to which the branch should be reset.
      *   **DANGER** hard reset will be force pushed to the remote. Unsaved changes and commits may be permanently lost.
-     * 
+     *
      * PUT /projects/{project_id}/git_branch -> GitBranch
      */
     func update_git_branch(
@@ -8057,7 +8057,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Updates the a group (admin only).
-     * 
+     *
      * PATCH /groups/{group_id} -> LkGroup
      */
     func update_group(
@@ -8083,7 +8083,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update parameters on a Integration.
-     * 
+     *
      * PATCH /integrations/{integration_id} -> Integration
      */
     func update_integration(
@@ -8109,9 +8109,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update a Integration Hub definition.
-     * 
+     *
      * This API is rate limited to prevent it from being used for SSRF attacks
-     * 
+     *
      * PATCH /integration_hubs/{integration_hub_id} -> IntegrationHub
      */
     func update_integration_hub(
@@ -8137,7 +8137,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Update internal help resources settings
-     * 
+     *
      * PATCH /internal_help_resources -> InternalHelpResources
      */
     func update_internal_help_resources(
@@ -8153,7 +8153,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * Update internal help resources content
-     * 
+     *
      * PATCH /internal_help_resources_content -> InternalHelpResourcesContent
      */
     func update_internal_help_resources_content(
@@ -8169,17 +8169,17 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update the LDAP configuration.
-     * 
+     *
      * Configuring LDAP impacts authentication for all users. This configuration should be done carefully.
-     * 
+     *
      * Only Looker administrators can read and update the LDAP configuration.
-     * 
+     *
      * LDAP is enabled or disabled for Looker using the **enabled** field.
-     * 
+     *
      * It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
-     * 
+     *
      * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
-     * 
+     *
      * PATCH /ldap_config -> LDAPConfig
      */
     func update_ldap_config(
@@ -8195,7 +8195,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update information about the legacy feature with a specific id.
-     * 
+     *
      * PATCH /legacy_features/{legacy_feature_id} -> LegacyFeature
      */
     func update_legacy_feature(
@@ -8216,26 +8216,26 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Modify a Look
-     * 
+     *
      * Use this function to modify parts of a look. Property values given in a call to `update_look` are
      * applied to the existing look, so there's no need to include properties whose values are not changing.
      * It's best to specify only the properties you want to change and leave everything else out
      * of your `update_look` call. **Look properties marked 'read-only' will be ignored.**
-     * 
+     *
      * When a user deletes a look in the Looker UI, the look data remains in the database but is
      * marked with a deleted flag ("soft-deleted"). Soft-deleted looks can be undeleted (by an admin)
      * if the delete was in error.
-     * 
+     *
      * To soft-delete a look via the API, use [update_look()](#!/Look/update_look) to change the look's `deleted` property to `true`.
      * You can undelete a look by calling `update_look` to change the look's `deleted` property to `false`.
-     * 
+     *
      * Soft-deleted looks are excluded from the results of [all_looks()](#!/Look/all_looks) and [search_looks()](#!/Look/search_looks), so they
      * essentially disappear from view even though they still reside in the db.
      * In API 3.1 and later, you can pass `deleted: true` as a parameter to [search_looks()](#!/3.1/Look/search_looks) to list soft-deleted looks.
-     * 
+     *
      * NOTE: [delete_look()](#!/Look/delete_look) performs a "hard delete" - the look data is removed from the Looker
      * database and destroyed. There is no "undo" for `delete_look()`.
-     * 
+     *
      * PATCH /looks/{look_id} -> LookWithQuery
      */
     func update_look(
@@ -8261,7 +8261,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update a lookml model using the specified configuration.
-     * 
+     *
      * PATCH /lookml_models/{lookml_model_name} -> LookmlModel
      */
     func update_lookml_model(
@@ -8282,7 +8282,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update information about the model set with a specific id.
-     * 
+     *
      * PATCH /model_sets/{model_set_id} -> ModelSet
      */
     func update_model_set(
@@ -8303,9 +8303,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update OAuth2 Client App Details
-     * 
+     *
      * Modifies the details a previously registered OAuth2 login client app.
-     * 
+     *
      * PATCH /oauth_client_apps/{client_guid} -> OauthClientApp
      */
     func update_oauth_client_app(
@@ -8331,15 +8331,15 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update the OIDC configuration.
-     * 
+     *
      * Configuring OIDC impacts authentication for all users. This configuration should be done carefully.
-     * 
+     *
      * Only Looker administrators can read and update the OIDC configuration.
-     * 
+     *
      * OIDC is enabled or disabled for Looker using the **enabled** field.
-     * 
+     *
      * It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
-     * 
+     *
      * PATCH /oidc_config -> OIDCConfig
      */
     func update_oidc_config(
@@ -8355,7 +8355,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update password config.
-     * 
+     *
      * PATCH /password_config -> PasswordConfig
      */
     func update_password_config(
@@ -8371,7 +8371,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update information about the permission set with a specific id.
-     * 
+     *
      * PATCH /permission_sets/{permission_set_id} -> PermissionSet
      */
     func update_permission_set(
@@ -8392,28 +8392,28 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update Project Configuration
-     * 
+     *
      * Apply changes to a project's configuration.
-     * 
-     * 
+     *
+     *
      * #### Configuring Git for a Project
-     * 
+     *
      * To set up a Looker project with a remote git repository, follow these steps:
-     * 
+     *
      * 1. Call `update_session` to select the 'dev' workspace.
      * 1. Call `create_git_deploy_key` to create a new deploy key for the project
      * 1. Copy the deploy key text into the remote git repository's ssh key configuration
      * 1. Call `update_project` to set project's `git_remote_url` ()and `git_service_name`, if necessary).
-     * 
+     *
      * When you modify a project's `git_remote_url`, Looker connects to the remote repository to fetch
      * metadata. The remote git repository MUST be configured with the Looker-generated deploy
      * key for this project prior to setting the project's `git_remote_url`.
-     * 
+     *
      * To set up a Looker project with a git repository residing on the Looker server (a 'bare' git repo):
-     * 
+     *
      * 1. Call `update_session` to select the 'dev' workspace.
      * 1. Call `update_project` setting `git_remote_url` to null and `git_service_name` to "bare".
-     * 
+     *
      * PATCH /projects/{project_id} -> Project
      */
     func update_project(
@@ -8439,12 +8439,12 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Configure Repository Credential for a remote dependency
-     * 
+     *
      * Admin required.
-     * 
+     *
      * `root_project_id` is required.
      * `credential_id` is required.
-     * 
+     *
      * PUT /projects/{root_project_id}/credential/{credential_id} -> RepositoryCredential
      */
     func update_repository_credential(
@@ -8470,7 +8470,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update information about the role with a specific id.
-     * 
+     *
      * PATCH /roles/{role_id} -> Role
      */
     func update_role(
@@ -8491,15 +8491,15 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update the SAML configuration.
-     * 
+     *
      * Configuring SAML impacts authentication for all users. This configuration should be done carefully.
-     * 
+     *
      * Only Looker administrators can read and update the SAML configuration.
-     * 
+     *
      * SAML is enabled or disabled for Looker using the **enabled** field.
-     * 
+     *
      * It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
-     * 
+     *
      * PATCH /saml_config -> SamlConfig
      */
     func update_saml_config(
@@ -8515,32 +8515,32 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update a Scheduled Plan
-     * 
+     *
      * Admins can update other users' Scheduled Plans.
-     * 
+     *
      * Note: Any scheduled plan destinations specified in an update will **replace** all scheduled plan destinations
      * currently defined for the scheduled plan.
-     * 
+     *
      * For Example: If a scheduled plan has destinations A, B, and C, and you call update on this scheduled plan
      * specifying only B in the destinations, then destinations A and C will be deleted by the update.
-     * 
+     *
      * Updating a scheduled plan to assign null or an empty array to the scheduled_plan_destinations property is an error, as a scheduled plan must always have at least one destination.
-     * 
+     *
      * If you omit the scheduled_plan_destinations property from the object passed to update, then the destinations
      * defined on the original scheduled plan will remain unchanged.
-     * 
+     *
      * #### Email Permissions:
-     * 
+     *
      * For details about permissions required to schedule delivery to email and the safeguards
      * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
-     * 
-     * 
+     *
+     *
      * #### Scheduled Plan Destination Formats
-     * 
+     *
      * Scheduled plan destinations must specify the data format to produce and send to the destination.
-     * 
+     *
      * Formats:
-     * 
+     *
      * | format | Description
      * | :-----------: | :--- |
      * | json | A JSON object containing a `data` property which contains an array of JSON objects, one per row. No metadata.
@@ -8554,9 +8554,9 @@ class LookerSDKStream: APIMethods {
      * | assembled_pdf | Dashboard rendered in a single column layout to produce a PDF document
      * | wysiwyg_png | Dashboard rendered in a tiled layout to produce a PNG image
      * ||
-     * 
+     *
      * Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
-     * 
+     *
      * PATCH /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
      */
     func update_scheduled_plan(
@@ -8577,26 +8577,26 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update API Session
-     * 
+     *
      * #### API Session Workspace
-     * 
+     *
      * You can use this endpoint to change the active workspace for the current API session.
-     * 
+     *
      * Only one workspace can be active in a session. The active workspace can be changed
      * any number of times in a session.
-     * 
+     *
      * The default workspace for API sessions is the "production" workspace.
-     * 
+     *
      * All Looker APIs that use projects or lookml models (such as running queries) will
      * use the version of project and model files defined by this workspace for the lifetime of the
      * current API session or until the session workspace is changed again.
-     * 
+     *
      * An API session has the same lifetime as the access_token used to authenticate API requests. Each successful
      * API login generates a new access_token and a new API session.
-     * 
+     *
      * If your Looker API client application needs to work in a dev workspace across multiple
      * API sessions, be sure to select the dev workspace after each login.
-     * 
+     *
      * PATCH /session -> ApiSession
      */
     func update_session(
@@ -8612,7 +8612,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update session config.
-     * 
+     *
      * PATCH /session_config -> SessionConfig
      */
     func update_session_config(
@@ -8628,9 +8628,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update the theme by id.
-     * 
+     *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-     * 
+     *
      * PATCH /themes/{theme_id} -> Theme
      */
     func update_theme(
@@ -8651,7 +8651,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update information about the user with a specific id.
-     * 
+     *
      * PATCH /users/{user_id} -> User
      */
     func update_user(
@@ -8677,7 +8677,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update a user attribute definition.
-     * 
+     *
      * PATCH /user_attributes/{user_attribute_id} -> UserAttribute
      */
     func update_user_attribute(
@@ -8703,9 +8703,9 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Set the value of a user attribute for a group.
-     * 
+     *
      * For information about how user attribute values are calculated, see [Set User Attribute Group Values](#!/UserAttribute/set_user_attribute_group_values).
-     * 
+     *
      * PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> UserAttributeGroupValue
      */
     func update_user_attribute_group_value(
@@ -8731,7 +8731,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Email/password login information for the specified user.
-     * 
+     *
      * PATCH /users/{user_id}/credentials_email -> CredentialsEmail
      */
     func update_user_credentials_email(
@@ -8757,7 +8757,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Update the whitelabel configuration
-     * 
+     *
      * PUT /whitelabel_configuration -> WhitelabelConfiguration
      */
     func update_whitelabel_configuration(
@@ -8773,11 +8773,11 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about the user with a specific id.
-     * 
+     *
      * If the caller is an admin or the caller is the user being specified, then full user information will
      * be returned. Otherwise, a minimal 'public' variant of the user information will be returned. This contains
      * The user name and avatar url, but no sensitive information.
-     * 
+     *
      * GET /users/{user_id} -> User
      */
     func user(
@@ -8799,7 +8799,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about a user attribute.
-     * 
+     *
      * GET /user_attributes/{user_attribute_id} -> UserAttribute
      */
     func user_attribute(
@@ -8821,22 +8821,22 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get user attribute values for a given user.
-     * 
+     *
      * Returns the values of specified user attributes (or all user attributes) for a certain user.
-     * 
+     *
      * A value for each user attribute is searched for in the following locations, in this order:
-     * 
+     *
      * 1. in the user's account information
      * 1. in groups that the user is a member of
      * 1. the default value of the user attribute
-     * 
+     *
      * If more than one group has a value defined for a user attribute, the group with the lowest rank wins.
-     * 
+     *
      * The response will only include user attributes for which values were found. Use `include_unset=true` to include
      * empty records for user attributes with no value.
-     * 
+     *
      * The value of all hidden user attributes will be blank.
-     * 
+     *
      * GET /users/{user_id}/attribute_values -> [UserAttributeWithValue]
      */
     func user_attribute_user_values(
@@ -8870,7 +8870,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
-     * 
+     *
      * GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
      */
     func user_credentials_api3(
@@ -8897,7 +8897,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Email/password login information for the specified user.
-     * 
+     *
      * GET /users/{user_id}/credentials_email -> CredentialsEmail
      */
     func user_credentials_email(
@@ -8919,7 +8919,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Embed login information for the specified user.
-     * 
+     *
      * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
      */
     func user_credentials_embed(
@@ -8946,7 +8946,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Google authentication login information for the specified user.
-     * 
+     *
      * GET /users/{user_id}/credentials_google -> CredentialsGoogle
      */
     func user_credentials_google(
@@ -8968,7 +8968,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### LDAP login information for the specified user.
-     * 
+     *
      * GET /users/{user_id}/credentials_ldap -> CredentialsLDAP
      */
     func user_credentials_ldap(
@@ -8990,7 +8990,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Looker Openid login information for the specified user. Used by Looker Analysts.
-     * 
+     *
      * GET /users/{user_id}/credentials_looker_openid -> CredentialsLookerOpenid
      */
     func user_credentials_looker_openid(
@@ -9012,7 +9012,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### OpenID Connect (OIDC) authentication login information for the specified user.
-     * 
+     *
      * GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
      */
     func user_credentials_oidc(
@@ -9034,7 +9034,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Saml authentication login information for the specified user.
-     * 
+     *
      * GET /users/{user_id}/credentials_saml -> CredentialsSaml
      */
     func user_credentials_saml(
@@ -9056,7 +9056,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Two-factor login information for the specified user.
-     * 
+     *
      * GET /users/{user_id}/credentials_totp -> CredentialsTotp
      */
     func user_credentials_totp(
@@ -9078,20 +9078,20 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about the user with a credential of given type with specific id.
-     * 
+     *
      * This is used to do things like find users by their embed external_user_id. Or, find the user with
      * a given api3 client_id, etc. The 'credential_type' matchs the 'type' name of the various credential
      * types. It must be one of the values listed in the table below. The 'credential_id' is your unique Id
      * for the user and is specific to each type of credential.
-     * 
+     *
      * An example using the Ruby sdk might look like:
-     * 
+     *
      * `sdk.user_for_credential('embed', 'customer-4959425')`
-     * 
+     *
      * This table shows the supported 'Credential Type' strings. The right column is for reference; it shows
      * which field in the given credential type is actually searched when finding a user with the supplied
      * 'credential_id'.
-     * 
+     *
      * | Credential Types | Id Field Matched |
      * | ---------------- | ---------------- |
      * | email            | email            |
@@ -9103,9 +9103,9 @@ class LookerSDKStream: APIMethods {
      * | api3             | client_id        |
      * | embed            | external_user_id |
      * | looker_openid    | email            |
-     * 
+     *
      * NOTE: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
-     * 
+     *
      * GET /users/credential/{credential_type}/{credential_id} -> User
      */
     func user_for_credential(
@@ -9132,7 +9132,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about roles of a given user
-     * 
+     *
      * GET /users/{user_id}/roles -> [Role]
      */
     func user_roles(
@@ -9158,7 +9158,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Web login session for the specified user.
-     * 
+     *
      * GET /users/{user_id}/sessions/{session_id} -> Session
      */
     func user_session(
@@ -9185,15 +9185,15 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Validate Project
-     * 
+     *
      * Performs lint validation of all lookml files in the project.
      * Returns a list of errors found, if any.
-     * 
+     *
      * Validating the content of all the files in a project can be computationally intensive
      * for large projects. For best performance, call `validate_project(project_id)` only
      * when you really want to recompute project validation. To quickly display the results of
      * the most recent project validation (without recomputing), use `project_validation_results(project_id)`
-     * 
+     *
      * POST /projects/{project_id}/validate -> ProjectValidation
      */
     func validate_project(
@@ -9215,13 +9215,13 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Validate a theme with the specified information
-     * 
+     *
      * Validates all values set for the theme, returning any errors encountered, or 200 OK if valid
-     * 
+     *
      * See [Create Theme](#!/Theme/create_theme) for constraints
-     * 
+     *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or support@looker.com to update your license for this feature.
-     * 
+     *
      * POST /themes/validate -> ValidationError
      */
     func validate_theme(
@@ -9237,10 +9237,10 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get a vector image representing the contents of a dashboard or look.
-     * 
+     *
      * The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
      * reflect the actual data displayed in the respective visualizations.
-     * 
+     *
      * GET /vector_thumbnail/{type}/{resource_id} -> String
      */
     func vector_thumbnail(
@@ -9267,7 +9267,7 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get information about all API versions supported by this Looker instance.
-     * 
+     *
      * GET /versions -> ApiVersion
      */
     func versions(
@@ -9285,7 +9285,7 @@ class LookerSDKStream: APIMethods {
     /**
      * ### This feature is enabled only by special license.
      * ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
-     * 
+     *
      * GET /whitelabel_configuration -> WhitelabelConfiguration
      */
     func whitelabel_configuration(
@@ -9302,35 +9302,35 @@ class LookerSDKStream: APIMethods {
 
     /**
      * ### Get A Workspace
-     * 
+     *
      * Returns information about a workspace such as the git status and selected branches
      * of all projects available to the caller's user account.
-     * 
+     *
      * A workspace defines which versions of project files will be used to evaluate expressions
      * and operations that use model definitions - operations such as running queries or rendering dashboards.
      * Each project has its own git repository, and each project in a workspace may be configured to reference
      * particular branch or revision within their respective repositories.
-     * 
+     *
      * There are two predefined workspaces available: "production" and "dev".
-     * 
+     *
      * The production workspace is shared across all Looker users. Models in the production workspace are read-only.
      * Changing files in production is accomplished by modifying files in a git branch and using Pull Requests
      * to merge the changes from the dev branch into the production branch, and then telling
      * Looker to sync with production.
-     * 
+     *
      * The dev workspace is local to each Looker user. Changes made to project/model files in the dev workspace only affect
      * that user, and only when the dev workspace is selected as the active workspace for the API session.
      * (See set_session_workspace()).
-     * 
+     *
      * The dev workspace is NOT unique to an API session. Two applications accessing the Looker API using
      * the same user account will see the same files in the dev workspace. To avoid collisions between
      * API clients it's best to have each client login with API3 credentials for a different user account.
-     * 
+     *
      * Changes made to files in a dev workspace are persistent across API sessions. It's a good
      * idea to commit any changes you've made to the git repository, but not strictly required. Your modified files
      * reside in a special user-specific directory on the Looker server and will still be there when you login in again
      * later and use update_session(workspace_id: "dev") to select the dev workspace for the new API session.
-     * 
+     *
      * GET /workspaces/{workspace_id} -> Workspace
      */
     func workspace(

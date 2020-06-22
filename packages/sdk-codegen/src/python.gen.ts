@@ -56,7 +56,7 @@ export class PythonGen extends CodeGen {
   endTypeStr = ''
 
   // keyword.kwlist
-  pythonKeywords = [
+  pythonKeywords = new Set<string>([
     'False',
     'None',
     'True',
@@ -92,7 +92,7 @@ export class PythonGen extends CodeGen {
     'while',
     'with',
     'yield',
-  ]
+  ])
 
   readonly pythonTypes: Record<string, IMappedType> = {
     any: { default: this.nullStr, name: 'Any' },
@@ -133,11 +133,10 @@ class ${this.packageName}(api_methods.APIMethods):
 
   modelsPrologue = (_indent: string) => `
 # ${this.warnEditing()}
+import attr
 import datetime
 import enum
 from typing import Any, MutableMapping, Optional, Sequence
-
-import attr
 
 from ${this.packagePath}.rtl import model
 from ${this.packagePath}.rtl import serialize as sr
@@ -187,7 +186,7 @@ ${this.hooks.join('\n')}
   declareProperty(indent: string, property: IProperty) {
     const mappedType = this.typeMapModels(property.type)
     let propName = property.name
-    if (this.pythonKeywords.includes(propName)) {
+    if (this.pythonKeywords.has(propName)) {
       propName = propName + '_'
     }
     let propType = mappedType.name
@@ -448,7 +447,7 @@ ${this.hooks.join('\n')}
     if (!isEnum) {
       for (const prop of Object.values(type.properties)) {
         let propName = prop.name
-        if (this.pythonKeywords.includes(propName)) {
+        if (this.pythonKeywords.has(propName)) {
           propName = propName + '_'
           usesReservedPythonKeyword = true
         }
@@ -512,7 +511,7 @@ ${this.hooks.join('\n')}
             name: `models.DelimSequence[${map.name}]`,
           }
         case 'EnumType':
-          return { default: '', name: `models.${type.name}` }
+          return { default: '', name: `"${type.name}"` }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }

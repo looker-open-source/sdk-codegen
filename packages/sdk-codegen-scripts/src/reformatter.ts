@@ -119,7 +119,7 @@ class TypescriptFormatter implements IReformat {
     files.forEach((f) => {
       this.reformatFile(f)
     })
-    return success(`Reformatted Typescript files\n:  ${files.join(fileSep)}`)
+    return success(`Reformatted Typescript files:\n  ${files.join(fileSep)}`)
   }
 
   reformatFile(fileName: string) {
