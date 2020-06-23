@@ -82,7 +82,7 @@ export const createRequestParams = (
  * @param queryParams Collection of query params
  * @param body Collection of body params
  */
-export const defaultRequestCallback = async (
+export const defaultTryItCallback = async (
   httpMethod: TryItHttpMethod,
   endpoint: string,
   pathParams: TryItValues,

@@ -1,0 +1,25 @@
+{
+  "name": "@looker/extension-api-explorer",
+  "version": "1.0.0",
+  "description": "Looker API Explorer extension version  ",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack-dev-server --hot --disable-host-check --port 8080 --https"
+  },
+  "dependencies": {
+    "@looker/api-explorer": "^0.1.0-alpha",
+    "@looker/try-it": "^0.1.0-alpha",
+    "@looker/extension-sdk": "^0.9.0",
+    "@looker/extension-sdk-react": "^0.6.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "resolutions": {
+    "typescript": "3.8.2"
+  }
+}

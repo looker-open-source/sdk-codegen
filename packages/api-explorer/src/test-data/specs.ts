@@ -1,6 +1,6 @@
 import { ApiModel } from '@looker/sdk-codegen'
 
-import { SpecItems } from '../App'
+import { SpecItems } from '../ApiExplorer'
 import { initDefaultSpecState } from '../reducers'
 
 export const specs: SpecItems = {
