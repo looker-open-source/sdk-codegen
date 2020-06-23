@@ -30,7 +30,7 @@ namespace sdkrtl.Tests
         [Fact]
         public async void AllDashboardsTest()
         {
-            var actual = await sdk.Ok(sdk.all_dashboards<Dashboard[], Exception>());
+            var actual = await sdk.Ok(sdk.all_dashboards());
             Assert.NotNull(actual);
             Assert.True(actual.Length > 0);
             var dashes = actual
@@ -43,7 +43,7 @@ namespace sdkrtl.Tests
         [Fact]
         public async void MeTest()
         {
-            var actual = await sdk.Ok(sdk.me<User, Exception>());
+            var actual = await sdk.Ok(sdk.me());
             Assert.NotNull(actual);
             Assert.NotNull(actual.first_name);
         }

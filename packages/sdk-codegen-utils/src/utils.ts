@@ -84,6 +84,6 @@ export const commentBlock = (
   text = text.trim()
   if (!text) return ''
   const indentation = indent + commentStr
-  const parts = text.split('\n')
-  return indentation + parts.join('\n' + indentation)
+  const parts = text.split('\n').map((x) => `${indentation}${x}`.trimRight())
+  return parts.join('\n')
 }

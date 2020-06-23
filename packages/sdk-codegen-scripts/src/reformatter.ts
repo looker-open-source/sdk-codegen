@@ -102,27 +102,28 @@ class PythonFormatter implements IReformat {
   }
 }
 
-class TypescriptFormatter implements IReformat {
-  formatOptions: prettier.Options = {
-    bracketSpacing: true,
-    endOfLine: 'auto',
-    parser: 'typescript',
-    proseWrap: 'preserve',
-    quoteProps: 'as-needed',
-    semi: false,
-    singleQuote: true,
-    trailingComma: 'all',
-  }
+const prettierOptions: prettier.Options = {
+  bracketSpacing: true,
+  endOfLine: 'auto',
+  parser: 'typescript',
+  proseWrap: 'preserve',
+  quoteProps: 'as-needed',
+  semi: false,
+  singleQuote: true,
+  trailingComma: 'es5',
+  arrowParens: 'always',
+}
 
+class TypescriptFormatter implements IReformat {
   reformat(files: string[]): string {
     files.forEach((f) => {
       this.reformatFile(f)
     })
-    return success(`Reformatted Typescript files\n:  ${files.join(fileSep)}`)
+    return success(`Reformatted Typescript files:\n  ${files.join(fileSep)}`)
   }
 
   reformatFile(fileName: string) {
-    const source = prettier.format(readFileSync(fileName), this.formatOptions)
+    const source = prettier.format(readFileSync(fileName), prettierOptions)
     if (source) {
       writeFile(fileName, source)
     }

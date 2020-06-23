@@ -23,18 +23,46 @@
  SOFTWARE.
 
  */
-process.env.TZ = 'UTC'
 
-module.exports = {
-  automock: false,
-  moduleDirectories: ['./node_modules', './packages'],
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
-  moduleNameMapper: {
-    '@looker/(.+)/lib/browser$': '<rootDir>/packages/$1/src',
-    '@looker/(.+)$': '<rootDir>/packages/$1/src',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/config/jest/fileMock.js',
-  },
-  setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
-  testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
-}
+import { TestConfig } from './testUtils'
+import { IEnumType } from './sdkModels'
+import { KotlinGen } from './kotlin.gen'
+
+const config = TestConfig()
+const apiTestModel = config.apiTestModel
+const gen = new KotlinGen(apiTestModel)
+const indent = ''
+
+describe('Kotlin generator', () => {
+  describe('comment header', () => {
+    it('is empty with no comment', () => {
+      expect(gen.commentHeader(indent, '')).toEqual('')
+    })
+
+    it('is four lines with a two line comment', () => {
+      const expected = `/**
+ * foo
+ * bar
+ */
+`
+      expect(gen.commentHeader(indent, 'foo\nbar')).toEqual(expected)
+    })
+  })
+
+  describe('types', () => {
+    it('enum type', () => {
+      const type = apiTestModel.types.PermissionType as IEnumType
+      expect(type).toBeDefined()
+      expect(type.values).toEqual(['view', 'edit'])
+      const actual = gen.declareType('', type)
+      const expected = `/**
+ * Type of permission: "view" or "edit" Valid values are: "view", "edit".
+ */
+enum class PermissionType : Serializable {
+  view,
+  edit
+}`
+      expect(actual).toEqual(expected)
+    })
+  })
+})

@@ -26,23 +26,40 @@
 
 import * as OAS from 'openapi3-ts'
 import md5 from 'blueimp-md5'
-import { HttpMethod, ResponseMode, responseMode, StatusCode } from '@looker/sdk/lib/browser'
+import {
+  HttpMethod,
+  ResponseMode,
+  responseMode,
+  StatusCode,
+} from '@looker/sdk/lib/browser'
 import { IVersionInfo } from './codeGen'
+
+/**
+ * Handy specification references
+ * https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schema-object
+ * https://swagger.io/docs/specification/data-models/data-types/
+ */
 
 export const strBody = 'body'
 export const strRequest = 'Request'
 export const strWrite = 'Write'
 export declare type Arg = string
 
-// handy refs
-// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schema-object
-// https://swagger.io/docs/specification/data-models/data-types/
+/**
+ * Tags for types that have an `x-looker-values` or `enum` specification
+ * according to https://swagger.io/docs/specification/data-models/enums/
+ *
+ * Ordinarily, if the OpenAPI specification is created by SDK Codegen, `x-looker-values` will already be converted to `enum`
+ */
+const lookerValuesTag = 'x-looker-values'
+const enumTag = 'enum'
 
 /**
- * convert kebab-case or snake_case to camelCase
+ * convert string to camelCase
  * @param value string value to convert to camelCase
  */
 export const camelCase = (value: string) => {
+  if (!value) return ''
   return value.replace(/([-_][a-z])/gi, ($1) => {
     return $1
       .toUpperCase()
@@ -52,11 +69,28 @@ export const camelCase = (value: string) => {
 }
 
 /**
- * convert to TitleCase
+ * convert string to TitleCase
  * @param value string value to convert to TitleCase
  */
-export const titleCase = (value: string) =>
-  value[0].toLocaleUpperCase() + value.substr(1).toLowerCase()
+export const titleCase = (value: string) => {
+  if (!value) return ''
+  value = camelCase(value)
+  return value[0].toLocaleUpperCase() + value.substr(1)
+}
+
+/**
+ * Only first character of string should be uppercase
+ *
+ * Values are first converted to camelCase()
+ *
+ * @param value of string to convert
+ * @returns converted string
+ */
+export const firstCase = (value: string) => {
+  if (!value) return ''
+  value = camelCase(value)
+  return value[0].toLocaleUpperCase() + value.substr(1).toLocaleLowerCase()
+}
 
 export interface IModel {}
 
@@ -77,7 +111,8 @@ const localeSort = (a: string, b: string) => a.localeCompare(b)
 
 export interface ISymbol {
   name: string
-  type: IType
+  fullName: string
+  owner: string
 
   asHashString(): string
 
@@ -92,12 +127,29 @@ export interface ISymbol {
   search(rx: RegExp, criteria: SearchCriteria): boolean
 }
 
+export interface ITypedSymbol extends ISymbol {
+  type: IType
+}
+
+export interface IParameter extends ITypedSymbol {
+  location: MethodParameterLocation
+  required: boolean
+  description: string
+
+  asProperty(): IProperty
+
+  asHashString(): string
+
+  doEncode(): boolean
+}
+
 export type KeyedCollection<T> = Record<string, T>
 export type MethodList = KeyedCollection<IMethod>
 export type TypeList = KeyedCollection<IType>
 export type TagList = KeyedCollection<MethodList>
 export type PropertyList = KeyedCollection<IProperty>
 export type KeyList = Set<string>
+export type EnumValueType = string | number
 
 /**
  * Returns sorted string array for IKeylist type
@@ -106,6 +158,20 @@ export type KeyList = Set<string>
  */
 export const keyValues = (keys: KeyList): string[] => {
   return Array.from(keys.values()).sort()
+}
+
+/**
+ * Optionally quote a string if quotes are required
+ * @param value to convert to string and optionally quote
+ * @param {string} quoteChar defaults to "'"
+ * @returns {string} the quoted or unquoted value
+ */
+export const mayQuote = (value: any, quoteChar = `'`): string => {
+  const str = value.toString()
+  if (!str) return ''
+  const simpleName = /^\w[\w]*$/gim
+  if (simpleName.test(str)) return str
+  return `${quoteChar}${str}${quoteChar}`
 }
 
 /**
@@ -206,6 +272,11 @@ export interface IType {
    * Name of the type
    */
   name: string
+
+  /**
+   * fullName = name for types
+   */
+  fullName: string
 
   /**
    * key/value collection of properties for this type
@@ -318,25 +389,16 @@ export interface IType {
   search(rx: RegExp, criteria: SearchCriteria): boolean
 }
 
+export interface IEnumType extends IType {
+  values: EnumValueType[]
+}
+
 export declare type MethodParameterLocation =
   | 'path'
   | 'body'
   | 'query'
   | 'header'
   | 'cookie'
-
-export interface IParameter extends ISymbol {
-  type: IType
-  location: MethodParameterLocation
-  required: boolean
-  description: string
-
-  asProperty(): IProperty
-
-  asHashString(): string
-
-  doEncode(): boolean
-}
 
 export interface IMethodResponse {
   statusCode: number
@@ -391,7 +453,7 @@ class MethodResponse implements IMethodResponse {
   }
 }
 
-export interface IProperty extends ISymbol {
+export interface IProperty extends ITypedSymbol {
   required: boolean
   nullable: boolean
   description: string
@@ -404,19 +466,21 @@ export interface IProperty extends ISymbol {
   /**
    * Search this item for a regular expression pattern
    * @param {RegExp} rx regular expression to match
-   * @param {SearchCriteria} criteria items to examine for the search
+   * @param {SearchCriteria} include items to examine for the search
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(rx: RegExp, include: SearchCriteria): boolean
 }
 
 class Symbol implements ISymbol {
-  name: string
-  type: IType
+  constructor(
+    public name: string,
+    public type: IType,
+    public owner: string = ''
+  ) {}
 
-  constructor(name: string, type: IType) {
-    this.name = name
-    this.type = type
+  get fullName(): string {
+    return `${this.owner ? this.owner + '.' : ''}${this.name}`
   }
 
   asHashString() {
@@ -446,7 +510,7 @@ class Symbol implements ISymbol {
   }
 }
 
-interface ISchemadSymbol extends ISymbol {
+interface ISchemadSymbol extends ITypedSymbol {
   /**
    * Original OpenAPI schema reference for this item
    */
@@ -476,8 +540,8 @@ interface ISchemadSymbol extends ISymbol {
 class SchemadSymbol extends Symbol implements ISchemadSymbol {
   schema: OAS.SchemaObject
 
-  constructor(name: string, type: IType, schema: OAS.SchemaObject) {
-    super(name, type)
+  constructor(name: string, type: IType, schema: OAS.SchemaObject, owner = '') {
+    super(name, type, owner)
     this.schema = schema
   }
 
@@ -505,9 +569,10 @@ class Property extends SchemadSymbol implements IProperty {
     name: string,
     type: IType,
     schema: OAS.SchemaObject,
+    owner = '',
     required: string[] = []
   ) {
-    super(name, type, schema)
+    super(name, type, schema, owner)
     this.required = !!(
       required.includes(name) || schema.required?.includes(name)
     )
@@ -560,16 +625,17 @@ class Property extends SchemadSymbol implements IProperty {
   }
 }
 
-export class Parameter implements IParameter {
+export class Parameter extends SchemadSymbol implements IParameter {
   description = ''
   location: MethodParameterLocation = 'query'
-  name: string
   required = false
-  type: IType
 
-  constructor(param: OAS.ParameterObject | Partial<IParameter>, type: IType) {
-    this.name = param.name!
-    this.type = type
+  constructor(
+    param: OAS.ParameterObject | Partial<IParameter>,
+    type: IType,
+    owner = ''
+  ) {
+    super(param.name!, type, type.schema, owner)
     this.description = param.description || ''
     if ('in' in param) {
       this.location = param.in
@@ -590,7 +656,7 @@ export class Parameter implements IParameter {
       readOnly: false,
       // || this.location === strBody),
       required: this.required ? [this.name] : undefined,
-      type: this.type.name,
+      type: this.type.name || this.name,
       writeOnly: false,
     } as OAS.SchemaObject
   }
@@ -654,8 +720,14 @@ export interface IMethod extends ISchemadSymbol {
   /** Prefers 200 response with application/json as the response type */
   primaryResponse: IMethodResponse
 
+  /** If there's only one 200 or 204 response for this method, this is it's return type */
+  returnType: IMethodResponse | undefined
+
   /** List of all responses that can be returned by this REST call */
   responses: IMethodResponse[]
+
+  /** List of all 2xx responses */
+  okResponses: IMethodResponse[]
 
   /** Description (from the spec) of this method */
   description: string
@@ -818,12 +890,14 @@ export class Method extends SchemadSymbol implements IMethod {
   readonly endpoint: string
   readonly primaryResponse: IMethodResponse
   responses: IMethodResponse[]
+  readonly okResponses: IMethodResponse[]
   readonly params: IParameter[]
   readonly responseModes: Set<ResponseMode>
   readonly activityType: string
   readonly customTypes: KeyList
   readonly types: KeyList
   readonly rateLimited: boolean
+  readonly returnType: IMethodResponse | undefined
 
   constructor(
     api: IApiModel,
@@ -838,18 +912,28 @@ export class Method extends SchemadSymbol implements IMethod {
       throw new Error('Missing operationId')
     }
 
+    const okays = responses.filter((response) => {
+      return (
+        response.statusCode === StatusCode.OK ||
+        response.statusCode === StatusCode.NoContent
+      )
+    })
+    if (!okays) {
+      throw new Error(`Missing 2xx + application/json response in ${endpoint}`)
+    }
+
     const primaryResponse =
-      responses.find((response) => {
+      okays.find((response) => {
         // prefer json response over all other 200s
         return (
           response.statusCode === StatusCode.OK &&
           response.mediaType === 'application/json'
         )
       }) ||
-      responses.find((response) => {
+      okays.find((response) => {
         return response.statusCode === StatusCode.OK // accept any mediaType for 200 if none are json
       }) ||
-      responses.find((response) => {
+      okays.find((response) => {
         return response.statusCode === StatusCode.NoContent
       })
 
@@ -858,6 +942,12 @@ export class Method extends SchemadSymbol implements IMethod {
     }
 
     super(schema.operationId, primaryResponse.type, schema)
+    this.okResponses = okays
+    if (okays.length === 1) {
+      // There's only one return type for this function
+      this.returnType = primaryResponse
+    }
+
     this.customTypes = new Set<string>()
     this.types = new Set<string>()
     this.httpMethod = httpMethod
@@ -882,8 +972,8 @@ export class Method extends SchemadSymbol implements IMethod {
    *
    * See https://github.com/OAI/OpenAPI-Specification/issues/1539 for more color commentary
    *
-   * @param {OAS.OperationObject} op to check for rate limiting
-   * @returns {boolean} true if any rate limiting attribute is defined for the op
+   * @param op to check for rate limiting
+   * @returns true if any rate limiting attribute is defined for the op
    */
   static isRateLimited(op: OAS.OperationObject): boolean {
     if (op['x-looker-rate-limited']) return true
@@ -917,7 +1007,7 @@ export class Method extends SchemadSymbol implements IMethod {
       api.getRequestType(this)
     }
 
-    Object.entries(this.params).forEach(([_, param]) => {
+    Object.entries(this.params).forEach(([, param]) => {
       const writer = api.mayGetWriteableType(param.type)
       if (writer) {
         this.types.add(writer.name)
@@ -934,6 +1024,7 @@ export class Method extends SchemadSymbol implements IMethod {
    * @param {IParameter} param
    */
   addParam(api: IApiModel, param: IParameter) {
+    param.owner = this.name
     this.params.push(param)
     this.addType(api, param.type)
     return this
@@ -941,7 +1032,8 @@ export class Method extends SchemadSymbol implements IMethod {
 
   /**
    * Adds the type to the method type xrefs and adds the method to the types xref
-   * @param {IType} type
+   * @param api ApiModel for tracking type
+   * @param type Type to add
    */
   addType(api: IApiModel, type: IType) {
     this.types.add(type.name)
@@ -1208,23 +1300,33 @@ export class Method extends SchemadSymbol implements IMethod {
   }
 }
 
-export class Type implements IType {
+export class Type implements ISymbol, IType {
   readonly properties: PropertyList = {}
   readonly methodRefs: KeyList = new Set<string>()
   readonly types: KeyList = new Set<string>()
   readonly customTypes: KeyList = new Set<string>()
+  description: string
   customType: string
   refCount = 0
 
   constructor(public schema: OAS.SchemaObject, public name: string) {
     this.customType = name
+    this.description = this.schema.description || ''
+  }
+
+  get fullName(): string {
+    return this.name
+  }
+
+  get owner(): string {
+    return ''
   }
 
   get writeable(): IProperty[] {
     const result: IProperty[] = []
     Object.entries(this.properties)
-      .filter(([_, prop]) => !(prop.readOnly || prop.type.readOnly))
-      .forEach(([_, prop]) => result.push(prop))
+      .filter(([, prop]) => !(prop.readOnly || prop.type.readOnly))
+      .forEach(([, prop]) => result.push(prop))
     return result
   }
 
@@ -1244,10 +1346,6 @@ export class Type implements IType {
     return this.schema.deprecated || this.schema['x-looker-deprecated'] || false
   }
 
-  get description(): string {
-    return this.schema.description || ''
-  }
-
   get title(): string {
     return this.schema.title || ''
   }
@@ -1257,13 +1355,16 @@ export class Type implements IType {
   }
 
   get readOnly(): boolean {
-    return Object.entries(this.properties).every(([_, prop]) => prop.readOnly)
+    return Object.entries(this.properties).every(([, prop]) => prop.readOnly)
   }
 
-  load(symbols: ISymbolTable): void {
+  load(api: ApiModel): void {
     Object.entries(this.schema.properties || {}).forEach(
       ([propName, propSchema]) => {
-        const propType = symbols.resolveType(propSchema)
+        const propType = api.resolveType(propSchema, undefined, propName)
+        if (propType.className === 'EnumType') {
+          api.registerEnum(propType, propName)
+        }
         this.types.add(propType.name)
         const customType = propType.customType
         if (customType) this.customTypes.add(customType)
@@ -1271,6 +1372,7 @@ export class Type implements IType {
           propName,
           propType,
           propSchema,
+          this.name, // owner name
           this.schema.required
         )
       }
@@ -1285,8 +1387,8 @@ export class Type implements IType {
     let result = `${this.name}:`
     Object.entries(this.properties)
       // put properties in alphabetical order first
-      .sort(([a, _], [b, __]) => a.localeCompare(b))
-      .forEach(([_, prop]) => {
+      .sort(([a], [b]) => a.localeCompare(b))
+      .forEach(([, prop]) => {
         result += prop.asHashString() + ':'
       })
     return result
@@ -1300,7 +1402,7 @@ export class Type implements IType {
     const selfType = this.name
     // test for directly recursive type references
     return Object.entries(this.properties).some(
-      ([_, prop]) => prop.type.name === selfType
+      ([, prop]) => prop.type.name === selfType
     )
   }
 
@@ -1346,7 +1448,7 @@ export class Type implements IType {
       if (this.deprecated) result += searchIt('deprecated')
     }
     if (criteria.has(SearchCriterion.property)) {
-      Object.entries(this.properties).forEach(([_, prop]) => {
+      Object.entries(this.properties).forEach(([, prop]) => {
         result += prop.searchString(criteria)
       })
     }
@@ -1366,6 +1468,46 @@ export class ArrayType extends Type {
 
   get readOnly() {
     return this.elementType.readOnly
+  }
+}
+
+export class EnumType extends Type implements IEnumType {
+  readonly values: EnumValueType[]
+
+  constructor(public elementType: IType, schema: OAS.SchemaObject) {
+    super(schema, schema.name)
+    this.customType = elementType.customType
+    if (lookerValuesTag in schema) {
+      this.values = schema[lookerValuesTag]
+    } else if (enumTag in schema) {
+      this.values = schema[enumTag] as EnumValueType[]
+    } else {
+      throw new Error(
+        `${schema.name} is an enum but has no defined enum values`
+      )
+    }
+  }
+
+  searchString(criteria: SearchCriteria): string {
+    let result = super.searchString(criteria)
+    if (criteria.has(SearchCriterion.property)) {
+      for (const val in this.values) {
+        result += searchIt(val.toString())
+      }
+    }
+    return result
+  }
+
+  get className(): string {
+    return 'EnumType'
+  }
+
+  get readOnly() {
+    return this.elementType.readOnly
+  }
+
+  asHashString() {
+    return this.values.join()
   }
 }
 
@@ -1463,6 +1605,7 @@ export class WriteType extends Type {
             // nullable/optional if property is nullable or property is complex type
             nullable: p.nullable || !p.type.intrinsic,
           },
+          this.name, // owner name
           type.schema.required
         )
         const typeWriter = api.mayGetWriteableType(p.type)
@@ -1474,8 +1617,8 @@ export class WriteType extends Type {
   private static readonlyProps = (properties: PropertyList): IProperty[] => {
     const result: IProperty[] = []
     Object.entries(properties)
-      .filter(([_, prop]) => prop.readOnly || prop.type.readOnly)
-      .forEach(([_, prop]) => result.push(prop))
+      .filter(([, prop]) => prop.readOnly || prop.type.readOnly)
+      .forEach(([, prop]) => result.push(prop))
     return result
   }
 }
@@ -1501,12 +1644,13 @@ export interface IApiModel extends IModel {
 }
 
 export class ApiModel implements ISymbolTable, IApiModel {
+  private requestTypes: TypeList = {}
+  private enumTypes: TypeList = {}
+  private refs: TypeList = {}
   readonly schema: OAS.OpenAPIObject | undefined
   methods: MethodList = {}
   types: TypeList = {}
-  requestTypes: TypeList = {}
   tags: TagList = {}
-  private refs: TypeList = {}
 
   constructor(spec: OAS.OpenAPIObject) {
     ;[
@@ -1589,8 +1733,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   /**
    * Search this item for a regular expression pattern
-   * @param {RegExp} rx regular expression to match
-   * @param {SearchCriteria} criteria items to examine for the search
+   * @param expression regular expression to match
+   * @param criteria items to examine for the search
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(
@@ -1622,6 +1766,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
     }
     if (ApiModel.isTypeSearch(criteria)) {
       Object.entries(this.types).forEach(([key, type]) => {
+        if (!rx) {
+          throw Error(`${key} rx undefined`)
+        }
         if (type.search(rx, criteria)) {
           types[key] = type
         }
@@ -1644,12 +1791,18 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return item
   }
 
+  private schemaHasEnums(schema: OAS.SchemaObject) {
+    return lookerValuesTag in schema || enumTag in schema
+  }
+
   /**
    *   Retrieve an api object via its JSON path
    */
   resolveType(
     schema: string | OAS.SchemaObject | OAS.ReferenceObject,
-    style?: string
+    style?: string,
+    typeName?: string,
+    methodName?: string
   ): IType {
     if (typeof schema === 'string') {
       if (schema.indexOf('/requestBodies/') < 0)
@@ -1661,7 +1814,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
           ['content', 'application/json', 'schema', '$ref'],
           deref
         )
-        if (ref) return this.resolveType(ref)
+        if (ref) return this.resolveType(ref, style, typeName, methodName)
       }
     } else if (OAS.isReferenceObject(schema)) {
       return this.refs[schema.$ref]
@@ -1677,7 +1830,23 @@ export class ApiModel implements ISymbolTable, IApiModel {
           // FKA 'csv'
           return new DelimArrayType(this.resolveType(schema.items), schema)
         }
+        if (this.schemaHasEnums(schema)) {
+          const result = new EnumType(this.resolveType(schema.items), schema)
+          if (result) {
+            // If defined, it may get reassigned
+            return this.registerEnum(result, typeName, methodName)
+          }
+          return result
+        }
         return new ArrayType(this.resolveType(schema.items), schema)
+      }
+      if (this.schemaHasEnums(schema)) {
+        const result = new EnumType(this.resolveType(schema.type), schema)
+        if (result) {
+          // If defined, it may get reassigned
+          return this.registerEnum(result, typeName, methodName)
+        }
+        return result
       }
       if (schema.type === 'object' && schema.additionalProperties) {
         if (schema.additionalProperties !== true) {
@@ -1715,6 +1884,39 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return request
   }
 
+  registerEnum(type: IType, typeName?: string, methodName?: string) {
+    if (!(type instanceof EnumType)) return type
+    const num = type as EnumType
+    const hash = md5(num.asHashString())
+
+    if (hash in this.enumTypes) {
+      /**
+       * whatever type this was, it's now the same as the existing enum type
+       */
+      return this.enumTypes[hash]
+    }
+
+    type.name = titleCase(type.name || typeName || 'Enum')
+    if (type.name in this.types) {
+      // Enum values don't match existing enum of this name. Pick a new name
+      const baseName = methodName
+        ? titleCase(`${methodName}_${type.name}`)
+        : type.name
+      let newName = baseName
+      let i = 0
+      while (newName in this.types) {
+        newName = `${baseName}${++i}`
+      }
+      type.name = newName
+    }
+    if (methodName) {
+      type.description = `Type defined in ${methodName}\n${type.description}`
+    }
+    this.enumTypes[hash] = type
+    this.types[type.name] = type
+    return type
+  }
+
   /**
    * only gets the request type if more than one method parameter is optional
    *
@@ -1726,7 +1928,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
    */
   private _getRequestType(method: IMethod) {
     if (method.optionalParams.length <= 1) return undefined
-    // matches method params hash against current request types
+    // matches method params ONLY value hash against current request types
     let paramHash = ''
     method.allParams.forEach((p) => (paramHash += p.asHashString()))
     const hash = md5(paramHash)
@@ -1764,7 +1966,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
    * @returns {IType | undefined} either writeable type or undefined
    */
   mayGetWriteableType(type: IType) {
-    const props = Object.entries(type.properties).map(([_, prop]) => prop)
+    const props = Object.entries(type.properties).map(([, prop]) => prop)
     const writes = type.writeable
     // do we have any readOnly properties?
     if (writes.length === 0 || writes.length === props.length) return undefined
@@ -1780,7 +1982,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
    * establishes any dynamically-generated request or writeable types
    */
   loadDynamicTypes() {
-    Object.entries(this.methods).forEach(([_, method]) => {
+    Object.entries(this.methods).forEach(([, method]) => {
       method.makeTypes(this)
     })
   }
@@ -1802,8 +2004,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
   sortLists() {
     this.methods = this.sortList(this.methods)
     this.types = this.sortList(this.types)
-    this.requestTypes = this.sortList(this.requestTypes)
-    this.refs = this.sortList(this.refs)
+    // this.requestTypes = this.sortList(this.requestTypes)
+    // this.refs = this.sortList(this.refs)
     this.tags = this.sortList(this.tags)
     const keys = Object.keys(this.tags).sort(localeSort)
     keys.forEach((key) => {
@@ -1921,6 +2123,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
           type = this.resolveType(p.schema || {}, p.style)
           param = p
         }
+        // Method parameters are a chicken/egg situation and ownership will be established in the Method constructor
         const mp = new Parameter(param, type)
         params.push(mp)
       }
@@ -1973,7 +2176,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       // TODO must be dynamic, create type
     }
 
-    const result = new Parameter(
+    return new Parameter(
       {
         description: '',
         location: strBody,
@@ -1982,8 +2185,6 @@ export class ApiModel implements ISymbolTable, IApiModel {
       } as Partial<IParameter>,
       type
     )
-
-    return result
   }
 }
 
@@ -2057,8 +2258,14 @@ export interface ICodeGen {
   /** parameter delimiter. Typically ",\n" */
   paramDelimiter: string
 
-  /** property delimiter. Typically, ",\n" */
+  /** property delimiter. Typically, "\n" or ",\n" */
   propDelimiter: string
+
+  /** enum value delimiter. Typically, ",\n" */
+  enumDelimiter: string
+
+  /** quote character/string to use for quoted strings. Typically, '"' or "'" */
+  codeQuote: string
 
   /**
    * Does this language require request types to be generated because it doesn't
@@ -2147,11 +2354,16 @@ export interface ICodeGen {
 
   /**
    * generate an optional comment header if the comment is not empty
-   * @param {string} indent code indentation
-   * @param {string | undefined} text
-   * @returns {string} comment (or not)
+   * @param indent code indentation
+   * @param text of comment, can be multi-line
+   * @param commentStr comment character for multi-line comments
+   * @returns comment (or not)
    */
-  commentHeader(indent: string, text: string | undefined): string
+  commentHeader(
+    indent: string,
+    text: string | undefined,
+    commentStr?: string
+  ): string
 
   /**
    * group argument names together
@@ -2333,12 +2545,20 @@ export interface ICodeGen {
   describeProperty(property: IProperty): string
 
   /**
-   * generates type property
-   * @param {string} indent
+   * generates type property declaration
+   * @param {string} indent code indentation
    * @param {IProperty} property to declare
    * @returns {string} source code
    */
   declareProperty(indent: string, property: IProperty): string
+
+  /**
+   * generates an enum value declaration
+   * @param {string} indent code indentation
+   * @param {EnumValueType} value to declare
+   * @returns {string} source code
+   */
+  declareEnumValue(indent: string, value: EnumValueType): string
 
   /**
    * if countError is false, no import reference to Error or IError should be included
