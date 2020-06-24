@@ -25,6 +25,7 @@
 import React, { FC } from 'react'
 import { Flex, Space } from '@looker/components'
 import { useParams } from 'react-router-dom'
+import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 import { TryIt, TryItHttpMethod } from '@looker/try-it'
 
 import {
@@ -34,7 +35,6 @@ import {
   DocSDKs,
   Main,
 } from '../../components'
-
 import {
   DocActivityType,
   DocRateLimited,
@@ -43,7 +43,6 @@ import {
   DocOperation,
 } from './components'
 import { createInputs } from './utils'
-import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 
 interface DocMethodProps {
   api: ApiModel
