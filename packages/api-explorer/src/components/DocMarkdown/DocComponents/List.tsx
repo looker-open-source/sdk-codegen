@@ -23,21 +23,9 @@
  SOFTWARE.
 
  */
-import { IMethodResponse } from '@looker/sdk-codegen'
-import React, { FC } from 'react'
-import { Tooltip } from '@looker/components'
+import { List } from '@looker/components'
+import styled from 'styled-components'
 
-export interface DocPrimaryResponseProps {
-  response: IMethodResponse
-}
+export const StyledList = styled(List)``
 
-export const DocPrimaryResponse: FC<DocPrimaryResponseProps> = ({
-  response,
-}) => (
-  <Tooltip
-    content={`${response.description} ${response.mediaType}`}
-    placement="bottom"
-  >
-    {response.type.name}
-  </Tooltip>
-)
+StyledList.defaultProps = { mb: 'large' }

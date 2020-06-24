@@ -1,33 +1,33 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2020 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 import React, { FC, useReducer, useState } from 'react'
 import { Sidebar, SidebarGroup, SidebarItem, Box } from '@looker/components'
 import styled from 'styled-components'
-import {
-  BrowserRouter as Router,
-} from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
 import { SearchContext } from './context'
 import { Header, SideNav, SideNavToggle } from './components'
@@ -100,17 +100,13 @@ interface SidebarStyleProps {
 const SidebarDivider = styled.div<SidebarStyleProps>`
   transition: border 0.3s;
   border-left: 1px solid
-    ${({ theme, open }) =>
-      open ? theme.colors.palette.charcoal200 : 'transparent'};
+    ${({ theme, open }) => (open ? theme.colors.ui2 : 'transparent')};
   grid-area: divider;
   overflow: visible;
   position: relative;
   &:hover {
     border-left: 1px solid
-      ${({ theme, open }) =>
-        open
-          ? theme.colors.palette.charcoal300
-          : theme.colors.palette.charcoal200};
+      ${({ theme, open }) => (open ? theme.colors.ui3 : theme.colors.ui2)};
   }
 `
 
@@ -126,17 +122,17 @@ const PageLayout = styled.div<SidebarStyleProps>`
     grid-area: sidebar;
     width: 20rem;
     z-index: 0;
-    padding: 0 ${(props) => props.theme.space.medium} !important;
+    padding: 0 ${({ theme }) => theme.space.medium};
 
     button {
-      color: ${(props) => props.theme.colors.palette.charcoal700};
+      color: ${({ theme }) => theme.colors.text1};
       cursor: pointer;
       min-height: 2.25rem;
 
       &:hover,
       &:focus,
       &[aria-expanded='true'] {
-        color: ${(props) => props.theme.colors.palette.purple400};
+        color: ${({ theme }) => theme.colors.key};
       }
     }
   }
@@ -152,34 +148,35 @@ const PageLayout = styled.div<SidebarStyleProps>`
 
   ${SidebarGroup} {
     > div {
-      border-left: 1px dashed
-        ${(props) => props.theme.colors.palette.charcoal200};
-      padding: ${(props) => props.theme.space.xxsmall} 0
-        ${(props) => props.theme.space.xxsmall}
-        ${(props) => props.theme.space.xsmall};
+      border-left: 1px dashed ${({ theme }) => theme.colors.ui2};
+      padding: ${({ theme }) => `${theme.space.xxsmall} 0
+        ${theme.space.xxsmall}
+        ${theme.space.xsmall}`};
+    }
+
+    .active > span {
+      background-color: ${({ theme }) => theme.colors.ui1};
+      font-weight: ${({ theme }) => theme.fontWeights.semiBold};
+
+      span {
+        border: 1px solid ${({ theme }) => theme.colors.ui2};
+      }
     }
   }
 
   ${SidebarItem} {
-    font-size: ${(props) => props.theme.fontSizes.small};
+    font-size: ${({ theme }) => theme.fontSizes.small};
 
     & {
       border-radius: 4px;
       display: flex;
       align-items: center;
-      padding: ${(props) => props.theme.space.xsmall}
-        ${(props) => props.theme.space.xsmall} !important;
+      padding: ${({ theme }) => theme.space.xsmall};
     }
 
     &:hover,
-    &:focus,
-    .active & {
-      background-color: ${(props) =>
-        props.theme.colors.palette.charcoal100} !important;
-    }
-
-    .active & {
-      font-weight: 600;
+    &:focus {
+      background-color: ${({ theme }) => theme.colors.ui1};
     }
   }
 

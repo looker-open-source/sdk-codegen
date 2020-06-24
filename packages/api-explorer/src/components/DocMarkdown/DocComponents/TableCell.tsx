@@ -23,21 +23,8 @@
  SOFTWARE.
 
  */
-import { IMethodResponse } from '@looker/sdk-codegen'
-import React, { FC } from 'react'
-import { Tooltip } from '@looker/components'
+import React, { FC, PropsWithChildren } from 'react'
+import { TableDataCell, TableHeaderCell } from '@looker/components'
 
-export interface DocPrimaryResponseProps {
-  response: IMethodResponse
-}
-
-export const DocPrimaryResponse: FC<DocPrimaryResponseProps> = ({
-  response,
-}) => (
-  <Tooltip
-    content={`${response.description} ${response.mediaType}`}
-    placement="bottom"
-  >
-    {response.type.name}
-  </Tooltip>
-)
+export const TableCell: FC<PropsWithChildren<any>> = (props) =>
+  props.isHeader ? <TableHeaderCell {...props} /> : <TableDataCell {...props} />

@@ -23,21 +23,11 @@
  SOFTWARE.
 
  */
-import { IMethodResponse } from '@looker/sdk-codegen'
-import React, { FC } from 'react'
-import { Tooltip } from '@looker/components'
+import { Paragraph } from '@looker/components'
+import styled from 'styled-components'
 
-export interface DocPrimaryResponseProps {
-  response: IMethodResponse
-}
+export const StyledParagraph = styled(Paragraph)`
+  color: ${({ theme }) => theme.colors.text2};
+`
 
-export const DocPrimaryResponse: FC<DocPrimaryResponseProps> = ({
-  response,
-}) => (
-  <Tooltip
-    content={`${response.description} ${response.mediaType}`}
-    placement="bottom"
-  >
-    {response.type.name}
-  </Tooltip>
-)
+StyledParagraph.defaultProps = { mb: 'large' }
