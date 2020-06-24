@@ -28,6 +28,7 @@ import React from 'react'
 import {
   Box,
   Heading,
+  SpaceVertical,
   Tab,
   TabList,
   TabPanel,
@@ -70,10 +71,12 @@ export const DocSDKs: React.FC<LanguageSDKProps> = ({ api, method, type }) => {
   const languageKey = () => (method ? method.name : type!.name)
 
   return (
-    <Box pt="large" pb="large">
-      <StyledHeading as="h2" fontWeight="semiBold" mb="medium">
-        Language SDK declarations
-      </StyledHeading>
+    <Box py="large">
+      <SpaceVertical mb="medium">
+        <StyledHeading as="h2" fontWeight="semiBold">
+          Language SDK declarations
+        </StyledHeading>
+      </SpaceVertical>
       <TabList {...tabs}>
         {Object.keys(generators).map((language) => (
           <Tab key={`${languageKey()}.${language}`}>{language}</Tab>

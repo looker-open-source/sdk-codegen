@@ -24,14 +24,15 @@
 
  */
 
+import React from 'react'
 import { Heading } from '@looker/components'
-import styled from 'styled-components'
 
-export const DocTitle = styled(Heading)``
-
-DocTitle.defaultProps = {
-  fontSize: 'xxxlarge',
-  fontWeight: 'semiBold',
-  as: 'h1',
-  mb: 'xxsmall',
-}
+export const DocTitle = (props) => (
+  <Heading
+    fontSize="xxxlarge"
+    fontWeight="semiBold"
+    as="h1"
+    mb="xxsmall"
+    {...props}
+  />
+)

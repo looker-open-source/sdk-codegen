@@ -38,9 +38,9 @@ import {
 import { SearchContext } from '../../context'
 import { highlightMarkdown, transformURL } from './utils'
 import {
+  CodeBlockWrapper,
   TableCell,
   StyledCode,
-  StyledCodeBlock,
   StyledHeading,
   StyledList,
   StyledParagraph,
@@ -75,7 +75,7 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
         escapeHtml={false}
         transformLinkUri={transformURL.bind(null, specKey)}
         renderers={{
-          code: StyledCodeBlock,
+          code: CodeBlockWrapper,
           heading: StyledHeading,
           paragraph: StyledParagraph,
           inlineCode: StyledCode,

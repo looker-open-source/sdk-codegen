@@ -23,9 +23,14 @@
  SOFTWARE.
 
  */
+import React, { FC, PropsWithChildren } from 'react'
 import { CodeBlock } from '@looker/components'
 import styled from 'styled-components'
 
 export const StyledCodeBlock = styled(CodeBlock)``
 
 StyledCodeBlock.defaultProps = { mb: 'large' }
+
+export const CodeBlockWrapper: FC<PropsWithChildren<any>> = (props) => (
+  <StyledCodeBlock>{props.value}</StyledCodeBlock>
+)

@@ -40,7 +40,7 @@ export const DocPseudo: FC<PseudoProps> = ({ method }) => {
   const resType = method.primaryResponse
 
   return (
-    <Flex alignItems="flex-start" fontSize="small" fontWeight="normal">
+    <Flex alignItems="flex-start">
       <Code fontSize="small" fontWeight="normal">
         {`${method.operationId}(`}
         <DocParams parameters={args} />

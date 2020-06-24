@@ -24,7 +24,7 @@
 
  */
 import { IParameter } from '@looker/sdk-codegen'
-import React, { FC } from 'react'
+import React, { FC, Fragment } from 'react'
 
 import { DocParam } from './DocParam'
 
@@ -33,12 +33,12 @@ export interface DocArgsProps {
 }
 
 export const DocParams: FC<DocArgsProps> = ({ parameters }) => (
-  <span>
+  <>
     {parameters.map((a, index) => (
-      <span key={index}>
+      <Fragment key={index}>
         {index ? ', ' : ''}
         <DocParam parameter={a} key={index} />
-      </span>
+      </Fragment>
     ))}
-  </span>
+  </>
 )

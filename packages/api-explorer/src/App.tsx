@@ -149,9 +149,11 @@ const PageLayout = styled.div<SidebarStyleProps>`
   ${SidebarGroup} {
     > div {
       border-left: 1px dashed ${({ theme }) => theme.colors.ui2};
-      padding: ${({ theme }) => `${theme.space.xxsmall} 0
-        ${theme.space.xxsmall}
-        ${theme.space.xsmall}`};
+      padding: ${({
+        theme: {
+          space: { xxsmall, xsmall },
+        },
+      }) => `${xxsmall} 0 ${xxsmall} ${xsmall}`};
     }
 
     .active > span {

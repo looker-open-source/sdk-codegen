@@ -36,6 +36,6 @@ export const DocParam: FC<DocArgProps> = ({ parameter }) => (
     content={`${parameter.type.name} ${parameter.description}`}
     placement="bottom"
   >
-    {parameter.required ? parameter.name : `[${parameter.name}]`}
+    <span>{parameter.required ? parameter.name : `[${parameter.name}]`}</span>
   </Tooltip>
 )

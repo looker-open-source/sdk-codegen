@@ -25,7 +25,7 @@
  */
 
 import React, { FC } from 'react'
-import { Box, Flex, Space } from '@looker/components'
+import { Flex, Space } from '@looker/components'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 import { useParams } from 'react-router-dom'
 
@@ -75,10 +75,10 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
       <DocMarkdown source={method.description} specKey={specKey} />
       <DocSDKs api={api} method={method} />
       {seeTypes.length > 0 && (
-        <Box mb="large">
+        <Flex mb="large">
           Referenced types:
           <DocReferences items={seeTypes} api={api} specKey={specKey} />
-        </Box>
+        </Flex>
       )}
       {method.responses && <DocResponse responses={method.responses} />}
       <TryIt

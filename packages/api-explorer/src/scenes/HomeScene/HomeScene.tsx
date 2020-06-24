@@ -28,7 +28,6 @@ import { ApiModel } from '@looker/sdk-codegen'
 import React, { FC } from 'react'
 import { useParams } from 'react-router-dom'
 
-import styled from 'styled-components'
 import { DocMarkdown, Main } from '../../components'
 
 interface DocHomeProps {
@@ -39,21 +38,17 @@ interface DocHomeParams {
   specKey: string
 }
 
-export const StyledHeading = styled(Heading)``
-
-StyledHeading.defaultProps = {
-  as: 'h1',
-  fontSize: 'xxxlarge',
-  fontWeight: 'semiBold',
-  mb: 'xsmall',
-}
-
 export const HomeScene: FC<DocHomeProps> = ({ api }) => {
   const { specKey } = useParams<DocHomeParams>()
 
   return (
     <Main>
-      <StyledHeading>{`Looker API ${specKey} Reference`}</StyledHeading>
+      <Heading
+        as="h1"
+        mb="xsmall"
+        fontSize="xxxlarge"
+        fontWeight="semiBold"
+      >{`Looker API ${specKey} Reference`}</Heading>
       <DocMarkdown source={api.schema?.info.description!} specKey={specKey} />
     </Main>
   )

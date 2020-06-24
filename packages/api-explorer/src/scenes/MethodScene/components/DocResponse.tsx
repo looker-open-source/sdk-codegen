@@ -28,6 +28,7 @@ import React, { FC } from 'react'
 import {
   Box,
   Heading,
+  SpaceVertical,
   Tab,
   TabList,
   TabPanel,
@@ -40,8 +41,6 @@ import {
 } from '@looker/components'
 import { IMethodResponse } from '@looker/sdk-codegen'
 
-import styled from 'styled-components'
-
 import { DocCode } from '../../../components'
 import { copyAndCleanResponse } from '../utils'
 
@@ -49,16 +48,16 @@ interface DocResponseProps {
   responses: IMethodResponse[]
 }
 
-const StyledHeading = styled(Heading)``
-
 export const DocResponse: FC<DocResponseProps> = ({ responses }) => {
   const tabs = useTabs()
 
   return (
     <Box pt="large" pb="xxlarge">
-      <StyledHeading as="h2" fontWeight="semiBold" mb="medium">
-        Responses
-      </StyledHeading>
+      <SpaceVertical mb="medium">
+        <Heading as="h2" fontWeight="semiBold">
+          Responses
+        </Heading>
+      </SpaceVertical>
       <TabList {...tabs}>
         {responses.map((response, index) => (
           <Tab
