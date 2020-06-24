@@ -65,6 +65,7 @@ export class APIMethods {
     type: new (authSession: IAuthSession) => T,
     authSession: IAuthSession
   ): T {
+    // eslint-disable-next-line new-cap
     return new type(authSession)
   }
 
@@ -109,7 +110,7 @@ export class APIMethods {
   ) {
     if (path.match(/^(http:\/\/|https:\/\/)/gi)) return path
     // is this an API-versioned call?
-    const base = (authenticator ? this.apiPath : options.base_url)!
+    const base = authenticator ? this.apiPath : options.base_url
     return `${base}${path}` // path was relative
   }
 

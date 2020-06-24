@@ -1,4 +1,32 @@
-// 345 API methods
+/**
+
+ MIT License
+
+ Copyright (c) 2019 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+ */
+
+/**
+ * 345 API methods
+ */
 
 import { Readable } from 'readable-stream'
 import { APIMethods } from '../../rtl/apiMethods'
@@ -224,7 +252,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} integration_hub_id Id of integration_hub
      */
     integration_hub_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IIntegrationHub>(
       callback,
@@ -232,7 +260,7 @@ export class Looker31SDKStream extends APIMethods {
       `/integration_hubs/${integration_hub_id}/accept_legal_agreement`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -252,7 +280,7 @@ export class Looker31SDKStream extends APIMethods {
   async active_themes(
     callback: (readable: Readable) => Promise<ITheme[]>,
     request: IRequestActiveThemes,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ITheme[]>(
       callback,
@@ -260,7 +288,7 @@ export class Looker31SDKStream extends APIMethods {
       '/themes/active',
       { name: request.name, ts: request.ts, fields: request.fields },
       null,
-      options,
+      options
     )
   }
 
@@ -279,7 +307,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IGroupIdForGroupInclusion>} body
      */
     body: Partial<IGroupIdForGroupInclusion>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroup>(
       callback,
@@ -287,7 +315,7 @@ export class Looker31SDKStream extends APIMethods {
       `/groups/${group_id}/groups`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -306,7 +334,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IGroupIdForGroupUserInclusion>} body
      */
     body: Partial<IGroupIdForGroupUserInclusion>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUser>(
       callback,
@@ -314,7 +342,7 @@ export class Looker31SDKStream extends APIMethods {
       `/groups/${group_id}/users`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -336,7 +364,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IColorCollection[]>(
       callback,
@@ -344,7 +372,7 @@ export class Looker31SDKStream extends APIMethods {
       '/color_collections',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -359,7 +387,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDBConnection[]>(
       callback,
@@ -367,7 +395,7 @@ export class Looker31SDKStream extends APIMethods {
       '/connections',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -386,7 +414,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentMetaGroupUser[]>(
       callback,
@@ -394,7 +422,7 @@ export class Looker31SDKStream extends APIMethods {
       '/content_metadata_access',
       { content_metadata_id, fields },
       null,
-      options,
+      options
     )
   }
 
@@ -413,7 +441,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentMeta[]>(
       callback,
@@ -421,7 +449,7 @@ export class Looker31SDKStream extends APIMethods {
       '/content_metadata',
       { parent_id, fields },
       null,
-      options,
+      options
     )
   }
 
@@ -442,7 +470,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDashboardBase[]>(
       callback,
@@ -450,7 +478,7 @@ export class Looker31SDKStream extends APIMethods {
       '/dashboards',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -461,7 +489,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async all_datagroups(
     callback: (readable: Readable) => Promise<IDatagroup[]>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDatagroup[]>(
       callback,
@@ -469,7 +497,7 @@ export class Looker31SDKStream extends APIMethods {
       '/datagroups',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -484,7 +512,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDialectInfo[]>(
       callback,
@@ -492,7 +520,7 @@ export class Looker31SDKStream extends APIMethods {
       '/dialect_info',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -507,7 +535,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IFolder[]>(
       callback,
@@ -515,7 +543,7 @@ export class Looker31SDKStream extends APIMethods {
       '/folders',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -532,7 +560,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} project_id Project Id
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<IGitBranch[]>(
@@ -541,7 +569,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/git_branches`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -569,7 +597,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
      */
     remote_url?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<IGitConnectionTest[]>(
@@ -578,7 +606,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/git_connection_tests`,
       { remote_url },
       null,
-      options,
+      options
     )
   }
 
@@ -597,7 +625,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroup[]>(
       callback,
@@ -605,7 +633,7 @@ export class Looker31SDKStream extends APIMethods {
       `/groups/${group_id}/groups`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -617,7 +645,7 @@ export class Looker31SDKStream extends APIMethods {
   async all_group_users(
     callback: (readable: Readable) => Promise<IUser[]>,
     request: IRequestAllGroupUsers,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUser[]>(
       callback,
@@ -630,7 +658,7 @@ export class Looker31SDKStream extends APIMethods {
         sorts: request.sorts,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -642,7 +670,7 @@ export class Looker31SDKStream extends APIMethods {
   async all_groups(
     callback: (readable: Readable) => Promise<IGroup[]>,
     request: IRequestAllGroups,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroup[]>(
       callback,
@@ -658,7 +686,7 @@ export class Looker31SDKStream extends APIMethods {
         can_add_to_content_metadata: request.can_add_to_content_metadata,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -670,7 +698,7 @@ export class Looker31SDKStream extends APIMethods {
   async all_homepage_items(
     callback: (readable: Readable) => Promise<IHomepageItem[]>,
     request: IRequestAllHomepageItems,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IHomepageItem[]>(
       callback,
@@ -682,7 +710,7 @@ export class Looker31SDKStream extends APIMethods {
         homepage_section_id: request.homepage_section_id,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -694,7 +722,7 @@ export class Looker31SDKStream extends APIMethods {
   async all_homepage_sections(
     callback: (readable: Readable) => Promise<IHomepageSection[]>,
     request: IRequestAllHomepageSections,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IHomepageSection[]>(
       callback,
@@ -702,7 +730,7 @@ export class Looker31SDKStream extends APIMethods {
       '/homepage_sections',
       { fields: request.fields, sorts: request.sorts },
       null,
-      options,
+      options
     )
   }
 
@@ -717,7 +745,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IHomepage[]>(
       callback,
@@ -725,7 +753,7 @@ export class Looker31SDKStream extends APIMethods {
       '/homepages',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -740,7 +768,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IIntegrationHub[]>(
       callback,
@@ -748,7 +776,7 @@ export class Looker31SDKStream extends APIMethods {
       '/integration_hubs',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -760,7 +788,7 @@ export class Looker31SDKStream extends APIMethods {
   async all_integrations(
     callback: (readable: Readable) => Promise<IIntegration[]>,
     request: IRequestAllIntegrations,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IIntegration[]>(
       callback,
@@ -771,7 +799,7 @@ export class Looker31SDKStream extends APIMethods {
         integration_hub_id: request.integration_hub_id,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -782,7 +810,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async all_legacy_features(
     callback: (readable: Readable) => Promise<ILegacyFeature[]>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILegacyFeature[]>(
       callback,
@@ -790,7 +818,7 @@ export class Looker31SDKStream extends APIMethods {
       '/legacy_features',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -801,7 +829,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async all_locales(
     callback: (readable: Readable) => Promise<ILocale[]>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILocale[]>(
       callback,
@@ -809,7 +837,7 @@ export class Looker31SDKStream extends APIMethods {
       '/locales',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -824,7 +852,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILookmlModel[]>(
       callback,
@@ -832,7 +860,7 @@ export class Looker31SDKStream extends APIMethods {
       '/lookml_models',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -855,7 +883,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} file_id File Id
      */
     file_id?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<ILookmlTest[]>(
@@ -864,7 +892,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/lookml_tests`,
       { file_id },
       null,
-      options,
+      options
     )
   }
 
@@ -885,7 +913,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILook[]>(
       callback,
@@ -893,7 +921,7 @@ export class Looker31SDKStream extends APIMethods {
       '/looks',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -908,7 +936,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IModelSet[]>(
       callback,
@@ -916,7 +944,7 @@ export class Looker31SDKStream extends APIMethods {
       '/model_sets',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -931,7 +959,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IPermissionSet[]>(
       callback,
@@ -939,7 +967,7 @@ export class Looker31SDKStream extends APIMethods {
       '/permission_sets',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -950,7 +978,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async all_permissions(
     callback: (readable: Readable) => Promise<IPermission[]>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IPermission[]>(
       callback,
@@ -958,7 +986,7 @@ export class Looker31SDKStream extends APIMethods {
       '/permissions',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -979,7 +1007,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<IProjectFile[]>(
@@ -988,7 +1016,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/files`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1005,7 +1033,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IProject[]>(
       callback,
@@ -1013,7 +1041,7 @@ export class Looker31SDKStream extends APIMethods {
       '/projects',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1025,7 +1053,7 @@ export class Looker31SDKStream extends APIMethods {
   async all_roles(
     callback: (readable: Readable) => Promise<IRole[]>,
     request: IRequestAllRoles,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IRole[]>(
       callback,
@@ -1033,7 +1061,7 @@ export class Looker31SDKStream extends APIMethods {
       '/roles',
       { fields: request.fields, ids: request.ids },
       null,
-      options,
+      options
     )
   }
 
@@ -1044,7 +1072,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async all_running_queries(
     callback: (readable: Readable) => Promise<IRunningQueries[]>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IRunningQueries[]>(
       callback,
@@ -1052,7 +1080,7 @@ export class Looker31SDKStream extends APIMethods {
       '/running_queries',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -1074,7 +1102,7 @@ export class Looker31SDKStream extends APIMethods {
   async all_scheduled_plans(
     callback: (readable: Readable) => Promise<IScheduledPlan[]>,
     request: IRequestAllScheduledPlans,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IScheduledPlan[]>(
       callback,
@@ -1086,7 +1114,7 @@ export class Looker31SDKStream extends APIMethods {
         all_users: request.all_users,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -1101,7 +1129,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISpaceBase[]>(
       callback,
@@ -1109,7 +1137,7 @@ export class Looker31SDKStream extends APIMethods {
       '/spaces',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1130,7 +1158,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ITheme[]>(
       callback,
@@ -1138,7 +1166,7 @@ export class Looker31SDKStream extends APIMethods {
       '/themes',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1149,7 +1177,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async all_timezones(
     callback: (readable: Readable) => Promise<ITimezone[]>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ITimezone[]>(
       callback,
@@ -1157,7 +1185,7 @@ export class Looker31SDKStream extends APIMethods {
       '/timezones',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -1182,7 +1210,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserAttributeGroupValue[]>(
       callback,
@@ -1190,7 +1218,7 @@ export class Looker31SDKStream extends APIMethods {
       `/user_attributes/${user_attribute_id}/group_values`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1202,7 +1230,7 @@ export class Looker31SDKStream extends APIMethods {
   async all_user_attributes(
     callback: (readable: Readable) => Promise<IUserAttribute[]>,
     request: IRequestAllHomepageSections,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserAttribute[]>(
       callback,
@@ -1210,7 +1238,7 @@ export class Looker31SDKStream extends APIMethods {
       '/user_attributes',
       { fields: request.fields, sorts: request.sorts },
       null,
-      options,
+      options
     )
   }
 
@@ -1229,7 +1257,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsApi3[]>(
       callback,
@@ -1237,7 +1265,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_api3`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1256,7 +1284,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsEmbed[]>(
       callback,
@@ -1264,7 +1292,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_embed`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1279,7 +1307,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Include only these fields in the response
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserLoginLockout[]>(
       callback,
@@ -1287,7 +1315,7 @@ export class Looker31SDKStream extends APIMethods {
       '/user_login_lockouts',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1306,7 +1334,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISession[]>(
       callback,
@@ -1314,7 +1342,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/sessions`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1326,7 +1354,7 @@ export class Looker31SDKStream extends APIMethods {
   async all_users(
     callback: (readable: Readable) => Promise<IUser[]>,
     request: IRequestAllUsers,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUser[]>(
       callback,
@@ -1340,7 +1368,7 @@ export class Looker31SDKStream extends APIMethods {
         ids: request.ids,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -1353,7 +1381,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async all_workspaces(
     callback: (readable: Readable) => Promise<IWorkspace[]>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IWorkspace[]>(
       callback,
@@ -1361,7 +1389,7 @@ export class Looker31SDKStream extends APIMethods {
       '/workspaces',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -1372,7 +1400,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async backup_configuration(
     callback: (readable: Readable) => Promise<IBackupConfiguration>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IBackupConfiguration>(
       callback,
@@ -1380,7 +1408,7 @@ export class Looker31SDKStream extends APIMethods {
       '/backup_configuration',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -1391,7 +1419,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async cloud_storage_configuration(
     callback: (readable: Readable) => Promise<IBackupConfiguration>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IBackupConfiguration>(
       callback,
@@ -1399,7 +1427,7 @@ export class Looker31SDKStream extends APIMethods {
       '/cloud_storage',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -1427,7 +1455,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     collection_id = encodeParam(collection_id)
     return this.authStream<IColorCollection>(
@@ -1436,7 +1464,7 @@ export class Looker31SDKStream extends APIMethods {
       `/color_collections/${collection_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1456,7 +1484,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IColorCollection[]>(
       callback,
@@ -1464,7 +1492,7 @@ export class Looker31SDKStream extends APIMethods {
       '/color_collections/custom',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1484,7 +1512,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IColorCollection[]>(
       callback,
@@ -1492,7 +1520,7 @@ export class Looker31SDKStream extends APIMethods {
       '/color_collections/standard',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1511,7 +1539,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     connection_name = encodeParam(connection_name)
     return this.authStream<IDBConnection>(
@@ -1520,7 +1548,7 @@ export class Looker31SDKStream extends APIMethods {
       `/connections/${connection_name}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1539,7 +1567,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentFavorite>(
       callback,
@@ -1547,7 +1575,7 @@ export class Looker31SDKStream extends APIMethods {
       `/content_favorite/${content_favorite_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1566,7 +1594,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentMeta>(
       callback,
@@ -1574,7 +1602,7 @@ export class Looker31SDKStream extends APIMethods {
       `/content_metadata/${content_metadata_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1592,7 +1620,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentValidation>(
       callback,
@@ -1600,7 +1628,7 @@ export class Looker31SDKStream extends APIMethods {
       '/content_validation',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -1623,7 +1651,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteColorCollection>} body
      */
     body: Partial<IWriteColorCollection>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IColorCollection>(
       callback,
@@ -1631,7 +1659,7 @@ export class Looker31SDKStream extends APIMethods {
       '/color_collections',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -1646,7 +1674,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteDBConnection>} body
      */
     body: Partial<IWriteDBConnection>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDBConnection>(
       callback,
@@ -1654,7 +1682,7 @@ export class Looker31SDKStream extends APIMethods {
       '/connections',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -1669,7 +1697,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteContentFavorite>} body
      */
     body: Partial<IWriteContentFavorite>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentFavorite>(
       callback,
@@ -1677,7 +1705,7 @@ export class Looker31SDKStream extends APIMethods {
       '/content_favorite',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -1696,7 +1724,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {boolean} send_boards_notification_email Optionally sends notification email when granting access to a board.
      */
     send_boards_notification_email?: boolean,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentMetaGroupUser>(
       callback,
@@ -1704,7 +1732,7 @@ export class Looker31SDKStream extends APIMethods {
       '/content_metadata_access',
       { send_boards_notification_email },
       body,
-      options,
+      options
     )
   }
 
@@ -1732,7 +1760,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteDashboard>} body
      */
     body: Partial<IWriteDashboard>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDashboard>(
       callback,
@@ -1740,7 +1768,7 @@ export class Looker31SDKStream extends APIMethods {
       '/dashboards',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -1759,7 +1787,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDashboardElement>(
       callback,
@@ -1767,7 +1795,7 @@ export class Looker31SDKStream extends APIMethods {
       '/dashboard_elements',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -1786,7 +1814,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDashboardFilter>(
       callback,
@@ -1794,7 +1822,7 @@ export class Looker31SDKStream extends APIMethods {
       '/dashboard_filters',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -1813,7 +1841,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDashboardLayout>(
       callback,
@@ -1821,7 +1849,7 @@ export class Looker31SDKStream extends APIMethods {
       '/dashboard_layouts',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -1837,7 +1865,7 @@ export class Looker31SDKStream extends APIMethods {
   async create_dashboard_render_task(
     callback: (readable: Readable) => Promise<IRenderTask>,
     request: IRequestCreateDashboardRenderTask,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.result_format = encodeParam(request.result_format)
     return this.authStream<IRenderTask>(
@@ -1852,7 +1880,7 @@ export class Looker31SDKStream extends APIMethods {
         pdf_landscape: request.pdf_landscape,
       },
       request.body,
-      options,
+      options
     )
   }
 
@@ -1865,7 +1893,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async create_digest_email_send(
     callback: (readable: Readable) => Promise<IDigestEmailSend>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDigestEmailSend>(
       callback,
@@ -1873,7 +1901,7 @@ export class Looker31SDKStream extends APIMethods {
       '/digest_email_send',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -1891,7 +1919,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<ICreateFolder>} body
      */
     body: Partial<ICreateFolder>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IFolder>(
       callback,
@@ -1899,7 +1927,7 @@ export class Looker31SDKStream extends APIMethods {
       '/folders',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -1925,7 +1953,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteGitBranch>} body
      */
     body: Partial<IWriteGitBranch>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<IGitBranch>(
@@ -1934,7 +1962,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/git_branch`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -1957,7 +1985,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} project_id Project Id
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<string>(
@@ -1966,7 +1994,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/git/deploy_key`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -1985,7 +2013,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroup>(
       callback,
@@ -1993,7 +2021,7 @@ export class Looker31SDKStream extends APIMethods {
       '/groups',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2012,7 +2040,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IHomepage>(
       callback,
@@ -2020,7 +2048,7 @@ export class Looker31SDKStream extends APIMethods {
       '/homepages',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2039,7 +2067,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IHomepageItem>(
       callback,
@@ -2047,7 +2075,7 @@ export class Looker31SDKStream extends APIMethods {
       '/homepage_items',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2066,7 +2094,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IHomepageSection>(
       callback,
@@ -2074,7 +2102,7 @@ export class Looker31SDKStream extends APIMethods {
       '/homepage_sections',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2095,7 +2123,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IIntegrationHub>(
       callback,
@@ -2103,7 +2131,7 @@ export class Looker31SDKStream extends APIMethods {
       '/integration_hubs',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2128,7 +2156,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILookWithQuery>(
       callback,
@@ -2136,7 +2164,7 @@ export class Looker31SDKStream extends APIMethods {
       '/looks',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2171,7 +2199,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     result_format = encodeParam(result_format)
     return this.authStream<IRenderTask>(
@@ -2180,7 +2208,7 @@ export class Looker31SDKStream extends APIMethods {
       `/render_tasks/looks/${look_id}/${result_format}`,
       { width, height, fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2198,7 +2226,7 @@ export class Looker31SDKStream extends APIMethods {
   async create_lookml_dashboard_render_task(
     callback: (readable: Readable) => Promise<IRenderTask>,
     request: IRequestCreateLookmlDashboardRenderTask,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.dashboard_id = encodeParam(request.dashboard_id)
     request.result_format = encodeParam(request.result_format)
@@ -2214,7 +2242,7 @@ export class Looker31SDKStream extends APIMethods {
         pdf_landscape: request.pdf_landscape,
       },
       request.body,
-      options,
+      options
     )
   }
 
@@ -2229,7 +2257,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteLookmlModel>} body
      */
     body: Partial<IWriteLookmlModel>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILookmlModel>(
       callback,
@@ -2237,7 +2265,7 @@ export class Looker31SDKStream extends APIMethods {
       '/lookml_models',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2272,7 +2300,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IMergeQuery>(
       callback,
@@ -2280,7 +2308,7 @@ export class Looker31SDKStream extends APIMethods {
       '/merge_queries',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2295,7 +2323,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteModelSet>} body
      */
     body: Partial<IWriteModelSet>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IModelSet>(
       callback,
@@ -2303,7 +2331,7 @@ export class Looker31SDKStream extends APIMethods {
       '/model_sets',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2318,7 +2346,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteOIDCConfig>} body
      */
     body: Partial<IWriteOIDCConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IOIDCConfig>(
       callback,
@@ -2326,7 +2354,7 @@ export class Looker31SDKStream extends APIMethods {
       '/oidc_test_configs',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2341,7 +2369,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWritePermissionSet>} body
      */
     body: Partial<IWritePermissionSet>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IPermissionSet>(
       callback,
@@ -2349,7 +2377,7 @@ export class Looker31SDKStream extends APIMethods {
       '/permission_sets',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2370,7 +2398,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteProject>} body
      */
     body: Partial<IWriteProject>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IProject>(
       callback,
@@ -2378,7 +2406,7 @@ export class Looker31SDKStream extends APIMethods {
       '/projects',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2404,7 +2432,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IQuery>(
       callback,
@@ -2412,7 +2440,7 @@ export class Looker31SDKStream extends APIMethods {
       '/queries',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2447,7 +2475,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     result_format = encodeParam(result_format)
     return this.authStream<IRenderTask>(
@@ -2456,7 +2484,7 @@ export class Looker31SDKStream extends APIMethods {
       `/render_tasks/queries/${query_id}/${result_format}`,
       { width, height, fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2473,7 +2501,7 @@ export class Looker31SDKStream extends APIMethods {
   async create_query_task(
     callback: (readable: Readable) => Promise<IQueryTask>,
     request: IRequestCreateQueryTask,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IQueryTask>(
       callback,
@@ -2495,7 +2523,7 @@ export class Looker31SDKStream extends APIMethods {
         fields: request.fields,
       },
       request.body,
-      options,
+      options
     )
   }
 
@@ -2510,7 +2538,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteRole>} body
      */
     body: Partial<IWriteRole>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IRole>(
       callback,
@@ -2518,7 +2546,7 @@ export class Looker31SDKStream extends APIMethods {
       '/roles',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2533,7 +2561,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteSamlConfig>} body
      */
     body: Partial<IWriteSamlConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISamlConfig>(
       callback,
@@ -2541,7 +2569,7 @@ export class Looker31SDKStream extends APIMethods {
       '/saml_test_configs',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2613,7 +2641,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteScheduledPlan>} body
      */
     body: Partial<IWriteScheduledPlan>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IScheduledPlan>(
       callback,
@@ -2621,7 +2649,7 @@ export class Looker31SDKStream extends APIMethods {
       '/scheduled_plans',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2639,7 +2667,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<ICreateSpace>} body
      */
     body: Partial<ICreateSpace>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISpace>(
       callback,
@@ -2647,7 +2675,7 @@ export class Looker31SDKStream extends APIMethods {
       '/spaces',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2664,7 +2692,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<ISqlQueryCreate>} body
      */
     body: Partial<ISqlQueryCreate>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISqlQuery>(
       callback,
@@ -2672,7 +2700,7 @@ export class Looker31SDKStream extends APIMethods {
       '/sql_queries',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2720,7 +2748,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IEmbedSsoParams>} body
      */
     body: Partial<IEmbedSsoParams>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IEmbedUrlResponse>(
       callback,
@@ -2728,7 +2756,7 @@ export class Looker31SDKStream extends APIMethods {
       '/embed/sso_url',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2757,7 +2785,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteTheme>} body
      */
     body: Partial<IWriteTheme>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ITheme>(
       callback,
@@ -2765,7 +2793,7 @@ export class Looker31SDKStream extends APIMethods {
       '/themes',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -2784,7 +2812,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUser>(
       callback,
@@ -2792,7 +2820,7 @@ export class Looker31SDKStream extends APIMethods {
       '/users',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2820,7 +2848,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserAttribute>(
       callback,
@@ -2828,7 +2856,7 @@ export class Looker31SDKStream extends APIMethods {
       '/user_attributes',
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2851,7 +2879,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsApi3>(
       callback,
@@ -2859,7 +2887,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_api3`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2882,7 +2910,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsEmail>(
       callback,
@@ -2890,7 +2918,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_email`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2910,7 +2938,7 @@ export class Looker31SDKStream extends APIMethods {
   async create_user_credentials_email_password_reset(
     callback: (readable: Readable) => Promise<ICredentialsEmail>,
     request: IRequestCreateUserCredentialsEmailPasswordReset,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsEmail>(
       callback,
@@ -2918,7 +2946,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${request.user_id}/credentials_email/password_reset`,
       { expires: request.expires, fields: request.fields },
       null,
-      options,
+      options
     )
   }
 
@@ -2941,7 +2969,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsTotp>(
       callback,
@@ -2949,7 +2977,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_totp`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -2960,7 +2988,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async custom_welcome_email(
     callback: (readable: Readable) => Promise<ICustomWelcomeEmail>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICustomWelcomeEmail>(
       callback,
@@ -2968,7 +2996,7 @@ export class Looker31SDKStream extends APIMethods {
       '/custom_welcome_email',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -2993,7 +3021,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.authStream<IDashboard>(
@@ -3002,7 +3030,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboards/${dashboard_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -3019,7 +3047,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} dashboard_id Id of dashboard
      */
     dashboard_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.authStream<IDashboardAggregateTableLookml>(
@@ -3028,7 +3056,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboards/aggregate_table_lookml/${dashboard_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3047,7 +3075,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.authStream<IDashboardElement[]>(
@@ -3056,7 +3084,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboards/${dashboard_id}/dashboard_elements`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -3075,7 +3103,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.authStream<IDashboardFilter[]>(
@@ -3084,7 +3112,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboards/${dashboard_id}/dashboard_filters`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -3103,7 +3131,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.authStream<IDashboardLayout[]>(
@@ -3112,7 +3140,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboards/${dashboard_id}/dashboard_layouts`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -3131,7 +3159,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_element_id = encodeParam(dashboard_element_id)
     return this.authStream<IDashboardElement>(
@@ -3140,7 +3168,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboard_elements/${dashboard_element_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -3159,7 +3187,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_filter_id = encodeParam(dashboard_filter_id)
     return this.authStream<IDashboardFilter>(
@@ -3168,7 +3196,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboard_filters/${dashboard_filter_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -3187,7 +3215,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_layout_id = encodeParam(dashboard_layout_id)
     return this.authStream<IDashboardLayout>(
@@ -3196,7 +3224,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboard_layouts/${dashboard_layout_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -3215,7 +3243,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_layout_component_id = encodeParam(dashboard_layout_component_id)
     return this.authStream<IDashboardLayoutComponent>(
@@ -3224,7 +3252,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboard_layout_components/${dashboard_layout_component_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -3243,7 +3271,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_layout_id = encodeParam(dashboard_layout_id)
     return this.authStream<IDashboardLayoutComponent[]>(
@@ -3252,7 +3280,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboard_layouts/${dashboard_layout_id}/dashboard_layout_components`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -3269,7 +3297,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} dashboard_id Id of dashboard
      */
     dashboard_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.authStream<IDashboardLookml>(
@@ -3278,7 +3306,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboards/lookml/${dashboard_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3293,7 +3321,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} datagroup_id ID of datagroup.
      */
     datagroup_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     datagroup_id = encodeParam(datagroup_id)
     return this.authStream<IDatagroup>(
@@ -3302,7 +3330,7 @@ export class Looker31SDKStream extends APIMethods {
       `/datagroups/${datagroup_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3317,7 +3345,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async default_color_collection(
     callback: (readable: Readable) => Promise<IColorCollection>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IColorCollection>(
       callback,
@@ -3325,7 +3353,7 @@ export class Looker31SDKStream extends APIMethods {
       '/color_collections/default',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3346,7 +3374,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
      */
     ts?: Date,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ITheme>(
       callback,
@@ -3354,7 +3382,7 @@ export class Looker31SDKStream extends APIMethods {
       '/themes/default',
       { ts },
       null,
-      options,
+      options
     )
   }
 
@@ -3376,7 +3404,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} collection_id Id of Color Collection
      */
     collection_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     collection_id = encodeParam(collection_id)
     return this.authStream<string>(
@@ -3385,7 +3413,7 @@ export class Looker31SDKStream extends APIMethods {
       `/color_collections/${collection_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3400,7 +3428,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} connection_name Name of connection
      */
     connection_name: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     connection_name = encodeParam(connection_name)
     return this.authStream<string>(
@@ -3409,7 +3437,7 @@ export class Looker31SDKStream extends APIMethods {
       `/connections/${connection_name}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3428,7 +3456,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} override_context Context of connection override
      */
     override_context: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     connection_name = encodeParam(connection_name)
     override_context = encodeParam(override_context)
@@ -3438,7 +3466,7 @@ export class Looker31SDKStream extends APIMethods {
       `/connections/${connection_name}/connection_override/${override_context}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3453,7 +3481,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} content_favorite_id Id of favorite content
      */
     content_favorite_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -3461,7 +3489,7 @@ export class Looker31SDKStream extends APIMethods {
       `/content_favorite/${content_favorite_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3476,7 +3504,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} content_metadata_access_id Id of content metadata access
      */
     content_metadata_access_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -3484,7 +3512,7 @@ export class Looker31SDKStream extends APIMethods {
       `/content_metadata_access/${content_metadata_access_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3505,7 +3533,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} dashboard_id Id of dashboard
      */
     dashboard_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.authStream<string>(
@@ -3514,7 +3542,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboards/${dashboard_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3529,7 +3557,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} dashboard_element_id Id of dashboard element
      */
     dashboard_element_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_element_id = encodeParam(dashboard_element_id)
     return this.authStream<string>(
@@ -3538,7 +3566,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboard_elements/${dashboard_element_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3553,7 +3581,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} dashboard_filter_id Id of dashboard filter
      */
     dashboard_filter_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_filter_id = encodeParam(dashboard_filter_id)
     return this.authStream<string>(
@@ -3562,7 +3590,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboard_filters/${dashboard_filter_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3577,7 +3605,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} dashboard_layout_id Id of dashboard layout
      */
     dashboard_layout_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_layout_id = encodeParam(dashboard_layout_id)
     return this.authStream<string>(
@@ -3586,7 +3614,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboard_layouts/${dashboard_layout_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3602,7 +3630,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} folder_id Id of folder
      */
     folder_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     folder_id = encodeParam(folder_id)
     return this.authStream<string>(
@@ -3611,7 +3639,7 @@ export class Looker31SDKStream extends APIMethods {
       `/folders/${folder_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3632,7 +3660,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} branch_name Branch Name
      */
     branch_name: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     branch_name = encodeParam(branch_name)
@@ -3642,7 +3670,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/git_branch/${branch_name}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3657,7 +3685,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} group_id Id of group
      */
     group_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -3665,7 +3693,7 @@ export class Looker31SDKStream extends APIMethods {
       `/groups/${group_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3684,7 +3712,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} deleting_group_id Id of group to delete
      */
     deleting_group_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<void>(
       callback,
@@ -3692,7 +3720,7 @@ export class Looker31SDKStream extends APIMethods {
       `/groups/${group_id}/groups/${deleting_group_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3711,7 +3739,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} user_id Id of user to remove from group
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<void>(
       callback,
@@ -3719,7 +3747,7 @@ export class Looker31SDKStream extends APIMethods {
       `/groups/${group_id}/users/${user_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3734,7 +3762,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} homepage_id Id of homepage
      */
     homepage_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -3742,7 +3770,7 @@ export class Looker31SDKStream extends APIMethods {
       `/homepages/${homepage_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3757,7 +3785,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} homepage_item_id Id of homepage_item
      */
     homepage_item_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -3765,7 +3793,7 @@ export class Looker31SDKStream extends APIMethods {
       `/homepage_items/${homepage_item_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3780,7 +3808,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} homepage_section_id Id of homepage_section
      */
     homepage_section_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -3788,7 +3816,7 @@ export class Looker31SDKStream extends APIMethods {
       `/homepage_sections/${homepage_section_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3803,7 +3831,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} integration_hub_id Id of integration_hub
      */
     integration_hub_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -3811,7 +3839,7 @@ export class Looker31SDKStream extends APIMethods {
       `/integration_hubs/${integration_hub_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3832,7 +3860,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} look_id Id of look
      */
     look_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -3840,7 +3868,7 @@ export class Looker31SDKStream extends APIMethods {
       `/looks/${look_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3855,7 +3883,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} lookml_model_name Name of lookml model.
      */
     lookml_model_name: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     lookml_model_name = encodeParam(lookml_model_name)
     return this.authStream<string>(
@@ -3864,7 +3892,7 @@ export class Looker31SDKStream extends APIMethods {
       `/lookml_models/${lookml_model_name}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3879,7 +3907,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} model_set_id id of model set
      */
     model_set_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -3887,7 +3915,7 @@ export class Looker31SDKStream extends APIMethods {
       `/model_sets/${model_set_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3902,7 +3930,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} test_slug Slug of test config
      */
     test_slug: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     test_slug = encodeParam(test_slug)
     return this.authStream<string>(
@@ -3911,7 +3939,7 @@ export class Looker31SDKStream extends APIMethods {
       `/oidc_test_configs/${test_slug}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3926,7 +3954,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} permission_set_id Id of permission set
      */
     permission_set_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -3934,7 +3962,7 @@ export class Looker31SDKStream extends APIMethods {
       `/permission_sets/${permission_set_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3958,7 +3986,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} credential_id Credential Id
      */
     credential_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     root_project_id = encodeParam(root_project_id)
     credential_id = encodeParam(credential_id)
@@ -3968,7 +3996,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${root_project_id}/credential/${credential_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -3983,7 +4011,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} role_id id of role
      */
     role_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -3991,7 +4019,7 @@ export class Looker31SDKStream extends APIMethods {
       `/roles/${role_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4006,7 +4034,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} test_slug Slug of test config
      */
     test_slug: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     test_slug = encodeParam(test_slug)
     return this.authStream<string>(
@@ -4015,7 +4043,7 @@ export class Looker31SDKStream extends APIMethods {
       `/saml_test_configs/${test_slug}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4034,7 +4062,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} scheduled_plan_id Scheduled Plan Id
      */
     scheduled_plan_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -4042,7 +4070,7 @@ export class Looker31SDKStream extends APIMethods {
       `/scheduled_plans/${scheduled_plan_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4058,7 +4086,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} space_id Id of space
      */
     space_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     space_id = encodeParam(space_id)
     return this.authStream<string>(
@@ -4067,7 +4095,7 @@ export class Looker31SDKStream extends APIMethods {
       `/spaces/${space_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4090,7 +4118,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} theme_id Id of theme
      */
     theme_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     theme_id = encodeParam(theme_id)
     return this.authStream<string>(
@@ -4099,7 +4127,7 @@ export class Looker31SDKStream extends APIMethods {
       `/themes/${theme_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4116,7 +4144,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} user_id Id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -4124,7 +4152,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4139,7 +4167,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} user_attribute_id Id of user_attribute
      */
     user_attribute_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -4147,7 +4175,7 @@ export class Looker31SDKStream extends APIMethods {
       `/user_attributes/${user_attribute_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4166,7 +4194,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} user_attribute_id Id of user attribute
      */
     user_attribute_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<void>(
       callback,
@@ -4174,7 +4202,7 @@ export class Looker31SDKStream extends APIMethods {
       `/groups/${group_id}/attribute_values/${user_attribute_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4198,7 +4226,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} user_attribute_id Id of user attribute
      */
     user_attribute_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<void>(
       callback,
@@ -4206,7 +4234,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/attribute_values/${user_attribute_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4225,7 +4253,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} credentials_api3_id id of API 3 Credential
      */
     credentials_api3_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -4233,7 +4261,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_api3/${credentials_api3_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4248,7 +4276,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} user_id id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -4256,7 +4284,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_email`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4275,7 +4303,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} credentials_embed_id id of Embedding Credential
      */
     credentials_embed_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -4283,7 +4311,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_embed/${credentials_embed_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4298,7 +4326,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} user_id id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -4306,7 +4334,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_google`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4321,7 +4349,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} user_id id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -4329,7 +4357,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_ldap`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4344,7 +4372,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} user_id id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -4352,7 +4380,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_looker_openid`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4367,7 +4395,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} user_id id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -4375,7 +4403,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_oidc`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4390,7 +4418,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} user_id id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -4398,7 +4426,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_saml`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4413,7 +4441,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} user_id id of user
      */
     user_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -4421,7 +4449,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_totp`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4436,7 +4464,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} key The key associated with the locked user
      */
     key: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     key = encodeParam(key)
     return this.authStream<string>(
@@ -4445,7 +4473,7 @@ export class Looker31SDKStream extends APIMethods {
       `/user_login_lockout/${key}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4464,7 +4492,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} session_id id of Web Login Session
      */
     session_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -4472,7 +4500,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/sessions/${session_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4498,7 +4526,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} project_id Id of project
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<string>(
@@ -4507,7 +4535,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/deploy_to_production`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4518,7 +4546,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async digest_emails_enabled(
     callback: (readable: Readable) => Promise<IDigestEmails>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDigestEmails>(
       callback,
@@ -4526,7 +4554,7 @@ export class Looker31SDKStream extends APIMethods {
       '/digest_emails_enabled',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4543,7 +4571,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<string>} body
      */
     body: Partial<string>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISamlMetadataParseResult>(
       callback,
@@ -4551,7 +4579,7 @@ export class Looker31SDKStream extends APIMethods {
       '/fetch_and_parse_saml_idp_metadata',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -4566,7 +4594,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} integration_id Id of integration
      */
     integration_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     integration_id = encodeParam(integration_id)
     return this.authStream<IDataActionForm>(
@@ -4575,7 +4603,7 @@ export class Looker31SDKStream extends APIMethods {
       `/integrations/${integration_id}/form`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4590,7 +4618,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IDictionary<string>>} body
      */
     body: Partial<IDictionary<string>>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDataActionForm>(
       callback,
@@ -4598,7 +4626,7 @@ export class Looker31SDKStream extends APIMethods {
       '/data_actions/form',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -4619,7 +4647,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} branch_name Branch Name
      */
     branch_name: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     branch_name = encodeParam(branch_name)
@@ -4629,7 +4657,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/git_branch/${branch_name}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4648,7 +4676,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     folder_id = encodeParam(folder_id)
     return this.authStream<IFolder>(
@@ -4657,7 +4685,7 @@ export class Looker31SDKStream extends APIMethods {
       `/folders/${folder_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4676,7 +4704,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     folder_id = encodeParam(folder_id)
     return this.authStream<IFolder[]>(
@@ -4685,7 +4713,7 @@ export class Looker31SDKStream extends APIMethods {
       `/folders/${folder_id}/ancestors`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4697,7 +4725,7 @@ export class Looker31SDKStream extends APIMethods {
   async folder_children(
     callback: (readable: Readable) => Promise<IFolder[]>,
     request: IRequestFolderChildren,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.folder_id = encodeParam(request.folder_id)
     return this.authStream<IFolder[]>(
@@ -4711,7 +4739,7 @@ export class Looker31SDKStream extends APIMethods {
         sorts: request.sorts,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -4723,7 +4751,7 @@ export class Looker31SDKStream extends APIMethods {
   async folder_children_search(
     callback: (readable: Readable) => Promise<IFolder[]>,
     request: IRequestFolderChildrenSearch,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.folder_id = encodeParam(request.folder_id)
     return this.authStream<IFolder[]>(
@@ -4732,7 +4760,7 @@ export class Looker31SDKStream extends APIMethods {
       `/folders/${request.folder_id}/children/search`,
       { fields: request.fields, sorts: request.sorts, name: request.name },
       null,
-      options,
+      options
     )
   }
 
@@ -4751,7 +4779,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     folder_id = encodeParam(folder_id)
     return this.authStream<IDashboard[]>(
@@ -4760,7 +4788,7 @@ export class Looker31SDKStream extends APIMethods {
       `/folders/${folder_id}/dashboards`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4779,7 +4807,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     folder_id = encodeParam(folder_id)
     return this.authStream<ILookWithQuery[]>(
@@ -4788,7 +4816,7 @@ export class Looker31SDKStream extends APIMethods {
       `/folders/${folder_id}/looks`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4807,7 +4835,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     folder_id = encodeParam(folder_id)
     return this.authStream<IFolder>(
@@ -4816,7 +4844,7 @@ export class Looker31SDKStream extends APIMethods {
       `/folders/${folder_id}/parent`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4827,7 +4855,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async force_password_reset_at_next_login_for_all_users(
     callback: (readable: Readable) => Promise<string>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -4835,7 +4863,7 @@ export class Looker31SDKStream extends APIMethods {
       '/password_config/force_password_reset_at_next_login_for_all_users',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4852,7 +4880,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} root_project_id Root Project Id
      */
     root_project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     root_project_id = encodeParam(root_project_id)
     return this.authStream<IRepositoryCredential[]>(
@@ -4861,7 +4889,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${root_project_id}/credentials`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4878,7 +4906,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} project_id Project Id
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<IGitBranch>(
@@ -4887,7 +4915,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/git_branch`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4904,7 +4932,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} project_id Project Id
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<string>(
@@ -4913,7 +4941,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/git/deploy_key`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -4932,7 +4960,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroup>(
       callback,
@@ -4940,7 +4968,7 @@ export class Looker31SDKStream extends APIMethods {
       `/groups/${group_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4959,7 +4987,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IHomepage>(
       callback,
@@ -4967,7 +4995,7 @@ export class Looker31SDKStream extends APIMethods {
       `/homepages/${homepage_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -4986,7 +5014,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IHomepageItem>(
       callback,
@@ -4994,7 +5022,7 @@ export class Looker31SDKStream extends APIMethods {
       `/homepage_items/${homepage_item_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5013,7 +5041,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IHomepageSection>(
       callback,
@@ -5021,7 +5049,7 @@ export class Looker31SDKStream extends APIMethods {
       `/homepage_sections/${homepage_section_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5059,7 +5087,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {boolean} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
      */
     raw_locale?: boolean,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     lookml_dashboard_id = encodeParam(lookml_dashboard_id)
     space_id = encodeParam(space_id)
@@ -5069,7 +5097,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboards/${lookml_dashboard_id}/import/${space_id}`,
       { raw_locale },
       body,
-      options,
+      options
     )
   }
 
@@ -5088,7 +5116,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     integration_id = encodeParam(integration_id)
     return this.authStream<IIntegration>(
@@ -5097,7 +5125,7 @@ export class Looker31SDKStream extends APIMethods {
       `/integrations/${integration_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5116,7 +5144,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IIntegrationHub>(
       callback,
@@ -5124,7 +5152,7 @@ export class Looker31SDKStream extends APIMethods {
       `/integration_hubs/${integration_hub_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5135,7 +5163,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async internal_help_resources(
     callback: (readable: Readable) => Promise<IInternalHelpResources>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IInternalHelpResources>(
       callback,
@@ -5143,7 +5171,7 @@ export class Looker31SDKStream extends APIMethods {
       '/internal_help_resources_enabled',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5154,7 +5182,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async internal_help_resources_content(
     callback: (readable: Readable) => Promise<IInternalHelpResourcesContent>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IInternalHelpResourcesContent>(
       callback,
@@ -5162,7 +5190,7 @@ export class Looker31SDKStream extends APIMethods {
       '/internal_help_resources_content',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5177,7 +5205,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} query_task_id Query task id.
      */
     query_task_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     query_task_id = encodeParam(query_task_id)
     return this.authStream<string>(
@@ -5186,7 +5214,7 @@ export class Looker31SDKStream extends APIMethods {
       `/running_queries/${query_task_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5212,7 +5240,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async ldap_config(
     callback: (readable: Readable) => Promise<ILDAPConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILDAPConfig>(
       callback,
@@ -5220,7 +5248,7 @@ export class Looker31SDKStream extends APIMethods {
       '/ldap_config',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5235,7 +5263,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} legacy_feature_id id of legacy feature
      */
     legacy_feature_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILegacyFeature>(
       callback,
@@ -5243,7 +5271,7 @@ export class Looker31SDKStream extends APIMethods {
       `/legacy_features/${legacy_feature_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5282,7 +5310,7 @@ export class Looker31SDKStream extends APIMethods {
   async login(
     callback: (readable: Readable) => Promise<IAccessToken>,
     request: IRequestLogin,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IAccessToken>(
       callback,
@@ -5290,7 +5318,7 @@ export class Looker31SDKStream extends APIMethods {
       '/login',
       { client_id: request.client_id, client_secret: request.client_secret },
       null,
-      options,
+      options
     )
   }
 
@@ -5324,7 +5352,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {boolean} associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
      */
     associative?: boolean,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IAccessToken>(
       callback,
@@ -5332,7 +5360,7 @@ export class Looker31SDKStream extends APIMethods {
       `/login/${user_id}`,
       { associative },
       null,
-      options,
+      options
     )
   }
 
@@ -5343,7 +5371,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async logout(
     callback: (readable: Readable) => Promise<string>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<string>(
       callback,
@@ -5351,7 +5379,7 @@ export class Looker31SDKStream extends APIMethods {
       '/logout',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5372,7 +5400,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILookWithQuery>(
       callback,
@@ -5380,7 +5408,7 @@ export class Looker31SDKStream extends APIMethods {
       `/looks/${look_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5399,7 +5427,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     lookml_model_name = encodeParam(lookml_model_name)
     return this.authStream<ILookmlModel>(
@@ -5408,7 +5436,7 @@ export class Looker31SDKStream extends APIMethods {
       `/lookml_models/${lookml_model_name}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5431,7 +5459,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     lookml_model_name = encodeParam(lookml_model_name)
     explore_name = encodeParam(explore_name)
@@ -5441,7 +5469,7 @@ export class Looker31SDKStream extends APIMethods {
       `/lookml_models/${lookml_model_name}/explores/${explore_name}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5458,7 +5486,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} project_id Project Id
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<IManifest>(
@@ -5467,7 +5495,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/manifest`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5482,7 +5510,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUser>(
       callback,
@@ -5490,7 +5518,7 @@ export class Looker31SDKStream extends APIMethods {
       '/user',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5511,7 +5539,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     merge_query_id = encodeParam(merge_query_id)
     return this.authStream<IMergeQuery>(
@@ -5520,7 +5548,7 @@ export class Looker31SDKStream extends APIMethods {
       `/merge_queries/${merge_query_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5539,7 +5567,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IModelSet>(
       callback,
@@ -5547,7 +5575,7 @@ export class Looker31SDKStream extends APIMethods {
       `/model_sets/${model_set_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5569,7 +5597,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async oidc_config(
     callback: (readable: Readable) => Promise<IOIDCConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IOIDCConfig>(
       callback,
@@ -5577,7 +5605,7 @@ export class Looker31SDKStream extends APIMethods {
       '/oidc_config',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5592,7 +5620,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} test_slug Slug of test config
      */
     test_slug: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     test_slug = encodeParam(test_slug)
     return this.authStream<IOIDCConfig>(
@@ -5601,7 +5629,7 @@ export class Looker31SDKStream extends APIMethods {
       `/oidc_test_configs/${test_slug}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5616,7 +5644,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<string>} body
      */
     body: Partial<string>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISamlMetadataParseResult>(
       callback,
@@ -5624,7 +5652,7 @@ export class Looker31SDKStream extends APIMethods {
       '/parse_saml_idp_metadata',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -5635,7 +5663,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async password_config(
     callback: (readable: Readable) => Promise<IPasswordConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IPasswordConfig>(
       callback,
@@ -5643,7 +5671,7 @@ export class Looker31SDKStream extends APIMethods {
       '/password_config',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -5658,7 +5686,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IDataActionRequest>} body
      */
     body: Partial<IDataActionRequest>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDataActionResponse>(
       callback,
@@ -5666,7 +5694,7 @@ export class Looker31SDKStream extends APIMethods {
       '/data_actions',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -5685,7 +5713,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IPermissionSet>(
       callback,
@@ -5693,7 +5721,7 @@ export class Looker31SDKStream extends APIMethods {
       `/permission_sets/${permission_set_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5714,7 +5742,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<IProject>(
@@ -5723,7 +5751,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5748,7 +5776,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<IProjectFile>(
@@ -5757,7 +5785,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/files/file`,
       { file_id, fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5787,7 +5815,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<IProjectValidationCache>(
@@ -5796,7 +5824,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/validate`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5817,7 +5845,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<IProjectWorkspace>(
@@ -5826,7 +5854,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/current_workspace`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5861,7 +5889,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IQuery>(
       callback,
@@ -5869,7 +5897,7 @@ export class Looker31SDKStream extends APIMethods {
       `/queries/${query_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5904,7 +5932,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     slug = encodeParam(slug)
     return this.authStream<IQuery>(
@@ -5913,7 +5941,7 @@ export class Looker31SDKStream extends APIMethods {
       `/queries/slug/${slug}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5938,7 +5966,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     query_task_id = encodeParam(query_task_id)
     return this.authStream<IQueryTask>(
@@ -5947,7 +5975,7 @@ export class Looker31SDKStream extends APIMethods {
       `/query_tasks/${query_task_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -5968,7 +5996,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {DelimArray<string>} query_task_ids List of Query Task IDs
      */
     query_task_ids: DelimArray<string>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDictionary<string>>(
       callback,
@@ -5976,7 +6004,7 @@ export class Looker31SDKStream extends APIMethods {
       '/query_tasks/multi_results',
       { query_task_ids },
       null,
-      options,
+      options
     )
   }
 
@@ -6013,7 +6041,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} query_task_id ID of the Query Task
      */
     query_task_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     query_task_id = encodeParam(query_task_id)
     return this.authStream<string>(
@@ -6022,7 +6050,7 @@ export class Looker31SDKStream extends APIMethods {
       `/query_tasks/${query_task_id}/results`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -6045,7 +6073,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     render_task_id = encodeParam(render_task_id)
     return this.authStream<IRenderTask>(
@@ -6054,7 +6082,7 @@ export class Looker31SDKStream extends APIMethods {
       `/render_tasks/${render_task_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -6087,7 +6115,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} render_task_id Id of render task
      */
     render_task_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     render_task_id = encodeParam(render_task_id)
     return this.authStream<string>(
@@ -6096,7 +6124,7 @@ export class Looker31SDKStream extends APIMethods {
       `/render_tasks/${render_task_id}/results`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -6113,7 +6141,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} project_id Id of project
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<string>(
@@ -6122,7 +6150,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/reset_to_production`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -6139,7 +6167,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} project_id Id of project
      */
     project_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<string>(
@@ -6148,7 +6176,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/reset_to_remote`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -6163,7 +6191,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {number} role_id id of role
      */
     role_id: number,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IRole>(
       callback,
@@ -6171,7 +6199,7 @@ export class Looker31SDKStream extends APIMethods {
       `/roles/${role_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -6190,7 +6218,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroup[]>(
       callback,
@@ -6198,7 +6226,7 @@ export class Looker31SDKStream extends APIMethods {
       `/roles/${role_id}/groups`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -6210,7 +6238,7 @@ export class Looker31SDKStream extends APIMethods {
   async role_users(
     callback: (readable: Readable) => Promise<IUser[]>,
     request: IRequestRoleUsers,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUser[]>(
       callback,
@@ -6221,7 +6249,7 @@ export class Looker31SDKStream extends APIMethods {
         direct_association_only: request.direct_association_only,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6250,7 +6278,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
      */
     remote_url?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     test_id = encodeParam(test_id)
@@ -6260,7 +6288,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/git_connection_tests/${test_id}`,
       { remote_url },
       null,
-      options,
+      options
     )
   }
 
@@ -6323,7 +6351,7 @@ export class Looker31SDKStream extends APIMethods {
   async run_inline_query(
     callback: (readable: Readable) => Promise<string>,
     request: IRequestRunInlineQuery,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.result_format = encodeParam(request.result_format)
     return this.authStream<string>(
@@ -6345,7 +6373,7 @@ export class Looker31SDKStream extends APIMethods {
         server_table_calcs: request.server_table_calcs,
       },
       request.body,
-      options,
+      options
     )
   }
 
@@ -6376,7 +6404,7 @@ export class Looker31SDKStream extends APIMethods {
   async run_look(
     callback: (readable: Readable) => Promise<string>,
     request: IRequestRunLook,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.result_format = encodeParam(request.result_format)
     return this.authStream<string>(
@@ -6398,7 +6426,7 @@ export class Looker31SDKStream extends APIMethods {
         server_table_calcs: request.server_table_calcs,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6412,7 +6440,7 @@ export class Looker31SDKStream extends APIMethods {
   async run_lookml_test(
     callback: (readable: Readable) => Promise<ILookmlTestResult[]>,
     request: IRequestRunLookmlTest,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.project_id = encodeParam(request.project_id)
     return this.authStream<ILookmlTestResult[]>(
@@ -6421,7 +6449,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${request.project_id}/lookml_tests/run`,
       { file_id: request.file_id, test: request.test, model: request.model },
       null,
-      options,
+      options
     )
   }
 
@@ -6455,7 +6483,7 @@ export class Looker31SDKStream extends APIMethods {
   async run_query(
     callback: (readable: Readable) => Promise<string>,
     request: IRequestRunQuery,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.result_format = encodeParam(request.result_format)
     return this.authStream<string>(
@@ -6477,7 +6505,7 @@ export class Looker31SDKStream extends APIMethods {
         server_table_calcs: request.server_table_calcs,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6502,7 +6530,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
      */
     download?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     slug = encodeParam(slug)
     result_format = encodeParam(result_format)
@@ -6512,7 +6540,7 @@ export class Looker31SDKStream extends APIMethods {
       `/sql_queries/${slug}/run/${result_format}`,
       { download },
       null,
-      options,
+      options
     )
   }
 
@@ -6588,7 +6616,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} result_format Format of result
      */
     result_format: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     model_name = encodeParam(model_name)
     view_name = encodeParam(view_name)
@@ -6599,7 +6627,7 @@ export class Looker31SDKStream extends APIMethods {
       `/queries/models/${model_name}/views/${view_name}/run/${result_format}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -6621,7 +6649,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async saml_config(
     callback: (readable: Readable) => Promise<ISamlConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISamlConfig>(
       callback,
@@ -6629,7 +6657,7 @@ export class Looker31SDKStream extends APIMethods {
       '/saml_config',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -6644,7 +6672,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} test_slug Slug of test config
      */
     test_slug: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     test_slug = encodeParam(test_slug)
     return this.authStream<ISamlConfig>(
@@ -6653,7 +6681,7 @@ export class Looker31SDKStream extends APIMethods {
       `/saml_test_configs/${test_slug}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -6674,7 +6702,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IScheduledPlan>(
       callback,
@@ -6682,7 +6710,7 @@ export class Looker31SDKStream extends APIMethods {
       `/scheduled_plans/${scheduled_plan_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -6733,7 +6761,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteScheduledPlan>} body
      */
     body: Partial<IWriteScheduledPlan>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IScheduledPlan>(
       callback,
@@ -6741,7 +6769,7 @@ export class Looker31SDKStream extends APIMethods {
       '/scheduled_plans/run_once',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -6806,7 +6834,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteScheduledPlan>} body
      */
     body?: Partial<IWriteScheduledPlan>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IScheduledPlan>(
       callback,
@@ -6814,7 +6842,7 @@ export class Looker31SDKStream extends APIMethods {
       `/scheduled_plans/${scheduled_plan_id}/run_once`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -6836,7 +6864,7 @@ export class Looker31SDKStream extends APIMethods {
   async scheduled_plans_for_dashboard(
     callback: (readable: Readable) => Promise<IScheduledPlan[]>,
     request: IRequestScheduledPlansForDashboard,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IScheduledPlan[]>(
       callback,
@@ -6848,7 +6876,7 @@ export class Looker31SDKStream extends APIMethods {
         fields: request.fields,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6870,7 +6898,7 @@ export class Looker31SDKStream extends APIMethods {
   async scheduled_plans_for_look(
     callback: (readable: Readable) => Promise<IScheduledPlan[]>,
     request: IRequestScheduledPlansForLook,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IScheduledPlan[]>(
       callback,
@@ -6882,7 +6910,7 @@ export class Looker31SDKStream extends APIMethods {
         all_users: request.all_users,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6904,7 +6932,7 @@ export class Looker31SDKStream extends APIMethods {
   async scheduled_plans_for_lookml_dashboard(
     callback: (readable: Readable) => Promise<IScheduledPlan[]>,
     request: IRequestScheduledPlansForLookmlDashboard,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IScheduledPlan[]>(
       callback,
@@ -6916,7 +6944,7 @@ export class Looker31SDKStream extends APIMethods {
         all_users: request.all_users,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -6937,7 +6965,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IScheduledPlan[]>(
       callback,
@@ -6945,7 +6973,7 @@ export class Looker31SDKStream extends APIMethods {
       `/scheduled_plans/space/${space_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -6978,7 +7006,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_content_favorites(
     callback: (readable: Readable) => Promise<IContentFavorite[]>,
     request: IRequestSearchContentFavorites,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentFavorite[]>(
       callback,
@@ -6997,7 +7025,7 @@ export class Looker31SDKStream extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7030,7 +7058,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_content_views(
     callback: (readable: Readable) => Promise<IContentView[]>,
     request: IRequestSearchContentViews,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentView[]>(
       callback,
@@ -7052,7 +7080,7 @@ export class Looker31SDKStream extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7087,7 +7115,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_dashboard_elements(
     callback: (readable: Readable) => Promise<IDashboardElement[]>,
     request: IRequestSearchDashboardElements,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDashboardElement[]>(
       callback,
@@ -7103,7 +7131,7 @@ export class Looker31SDKStream extends APIMethods {
         sorts: request.sorts,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7143,7 +7171,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_dashboards(
     callback: (readable: Readable) => Promise<IDashboard[]>,
     request: IRequestSearchDashboards,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDashboard[]>(
       callback,
@@ -7171,7 +7199,7 @@ export class Looker31SDKStream extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7183,7 +7211,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_folders(
     callback: (readable: Readable) => Promise<IFolder[]>,
     request: IRequestSearchSpaces,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IFolder[]>(
       callback,
@@ -7203,7 +7231,7 @@ export class Looker31SDKStream extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7238,7 +7266,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_groups(
     callback: (readable: Readable) => Promise<IGroupSearch[]>,
     request: IRequestSearchGroups,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroupSearch[]>(
       callback,
@@ -7257,7 +7285,7 @@ export class Looker31SDKStream extends APIMethods {
         externally_orphaned: request.externally_orphaned,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7290,7 +7318,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_homepages(
     callback: (readable: Readable) => Promise<IHomepage[]>,
     request: IRequestSearchHomepages,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IHomepage[]>(
       callback,
@@ -7312,7 +7340,7 @@ export class Looker31SDKStream extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7350,7 +7378,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_looks(
     callback: (readable: Readable) => Promise<ILook[]>,
     request: IRequestSearchLooks,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILook[]>(
       callback,
@@ -7376,7 +7404,7 @@ export class Looker31SDKStream extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7409,7 +7437,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_model_sets(
     callback: (readable: Readable) => Promise<IModelSet[]>,
     request: IRequestSearchModelSets,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IModelSet[]>(
       callback,
@@ -7427,7 +7455,7 @@ export class Looker31SDKStream extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7460,7 +7488,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_permission_sets(
     callback: (readable: Readable) => Promise<IPermissionSet[]>,
     request: IRequestSearchModelSets,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IPermissionSet[]>(
       callback,
@@ -7478,7 +7506,7 @@ export class Looker31SDKStream extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7513,7 +7541,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_roles(
     callback: (readable: Readable) => Promise<IRole[]>,
     request: IRequestSearchRoles,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IRole[]>(
       callback,
@@ -7530,7 +7558,7 @@ export class Looker31SDKStream extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7570,7 +7598,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_spaces(
     callback: (readable: Readable) => Promise<ISpace[]>,
     request: IRequestSearchSpaces,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISpace[]>(
       callback,
@@ -7590,7 +7618,7 @@ export class Looker31SDKStream extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7639,7 +7667,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_themes(
     callback: (readable: Readable) => Promise<ITheme[]>,
     request: IRequestSearchThemes,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ITheme[]>(
       callback,
@@ -7657,7 +7685,7 @@ export class Looker31SDKStream extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7669,7 +7697,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_user_login_lockouts(
     callback: (readable: Readable) => Promise<IUserLoginLockout[]>,
     request: IRequestSearchUserLoginLockouts,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserLoginLockout[]>(
       callback,
@@ -7687,7 +7715,7 @@ export class Looker31SDKStream extends APIMethods {
         filter_or: request.filter_or,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7728,7 +7756,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_users(
     callback: (readable: Readable) => Promise<IUser[]>,
     request: IRequestSearchUsers,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUser[]>(
       callback,
@@ -7750,7 +7778,7 @@ export class Looker31SDKStream extends APIMethods {
         group_id: request.group_id,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7767,7 +7795,7 @@ export class Looker31SDKStream extends APIMethods {
   async search_users_names(
     callback: (readable: Readable) => Promise<IUser[]>,
     request: IRequestSearchUsersNames,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.pattern = encodeParam(request.pattern)
     return this.authStream<IUser[]>(
@@ -7787,7 +7815,7 @@ export class Looker31SDKStream extends APIMethods {
         is_disabled: request.is_disabled,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -7800,7 +7828,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async session(
     callback: (readable: Readable) => Promise<IApiSession>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IApiSession>(
       callback,
@@ -7808,7 +7836,7 @@ export class Looker31SDKStream extends APIMethods {
       '/session',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -7819,7 +7847,7 @@ export class Looker31SDKStream extends APIMethods {
    */
   async session_config(
     callback: (readable: Readable) => Promise<ISessionConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISessionConfig>(
       callback,
@@ -7827,7 +7855,7 @@ export class Looker31SDKStream extends APIMethods {
       '/session_config',
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -7845,7 +7873,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} collection_id ID of color collection to set as default
      */
     collection_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IColorCollection>(
       callback,
@@ -7853,7 +7881,7 @@ export class Looker31SDKStream extends APIMethods {
       '/color_collections/default',
       { collection_id },
       null,
-      options,
+      options
     )
   }
 
@@ -7878,7 +7906,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} name Name of theme to set as default
      */
     name: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ITheme>(
       callback,
@@ -7886,7 +7914,7 @@ export class Looker31SDKStream extends APIMethods {
       '/themes/default',
       { name },
       null,
-      options,
+      options
     )
   }
 
@@ -7905,7 +7933,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<number[]>} body
      */
     body: Partial<number[]>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroup[]>(
       callback,
@@ -7913,7 +7941,7 @@ export class Looker31SDKStream extends APIMethods {
       `/roles/${role_id}/groups`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7932,7 +7960,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<number[]>} body
      */
     body: Partial<number[]>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUser[]>(
       callback,
@@ -7940,7 +7968,7 @@ export class Looker31SDKStream extends APIMethods {
       `/roles/${role_id}/users`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -7978,7 +8006,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IUserAttributeGroupValue[]>} body
      */
     body: Partial<IUserAttributeGroupValue[]>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserAttributeGroupValue[]>(
       callback,
@@ -7986,7 +8014,7 @@ export class Looker31SDKStream extends APIMethods {
       `/user_attributes/${user_attribute_id}/group_values`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8011,7 +8039,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteUserAttributeWithValue>} body
      */
     body: Partial<IWriteUserAttributeWithValue>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserAttributeWithValue>(
       callback,
@@ -8019,7 +8047,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/attribute_values/${user_attribute_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8042,7 +8070,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IRole[]>(
       callback,
@@ -8050,7 +8078,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/roles`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8069,7 +8097,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     space_id = encodeParam(space_id)
     return this.authStream<ISpace>(
@@ -8078,7 +8106,7 @@ export class Looker31SDKStream extends APIMethods {
       `/spaces/${space_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -8097,7 +8125,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     space_id = encodeParam(space_id)
     return this.authStream<ISpace[]>(
@@ -8106,7 +8134,7 @@ export class Looker31SDKStream extends APIMethods {
       `/spaces/${space_id}/ancestors`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -8118,7 +8146,7 @@ export class Looker31SDKStream extends APIMethods {
   async space_children(
     callback: (readable: Readable) => Promise<ISpace[]>,
     request: IRequestSpaceChildren,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.space_id = encodeParam(request.space_id)
     return this.authStream<ISpace[]>(
@@ -8132,7 +8160,7 @@ export class Looker31SDKStream extends APIMethods {
         sorts: request.sorts,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -8144,7 +8172,7 @@ export class Looker31SDKStream extends APIMethods {
   async space_children_search(
     callback: (readable: Readable) => Promise<ISpace[]>,
     request: IRequestSpaceChildrenSearch,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     request.space_id = encodeParam(request.space_id)
     return this.authStream<ISpace[]>(
@@ -8153,7 +8181,7 @@ export class Looker31SDKStream extends APIMethods {
       `/spaces/${request.space_id}/children/search`,
       { fields: request.fields, sorts: request.sorts, name: request.name },
       null,
-      options,
+      options
     )
   }
 
@@ -8172,7 +8200,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     space_id = encodeParam(space_id)
     return this.authStream<IDashboard[]>(
@@ -8181,7 +8209,7 @@ export class Looker31SDKStream extends APIMethods {
       `/spaces/${space_id}/dashboards`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -8200,7 +8228,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     space_id = encodeParam(space_id)
     return this.authStream<ILookWithQuery[]>(
@@ -8209,7 +8237,7 @@ export class Looker31SDKStream extends APIMethods {
       `/spaces/${space_id}/looks`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -8228,7 +8256,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     space_id = encodeParam(space_id)
     return this.authStream<ISpace>(
@@ -8237,7 +8265,7 @@ export class Looker31SDKStream extends APIMethods {
       `/spaces/${space_id}/parent`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -8252,7 +8280,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} slug slug of query
      */
     slug: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     slug = encodeParam(slug)
     return this.authStream<ISqlQuery>(
@@ -8261,7 +8289,7 @@ export class Looker31SDKStream extends APIMethods {
       `/sql_queries/${slug}`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -8292,7 +8320,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {boolean} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
      */
     raw_locale?: boolean,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     lookml_dashboard_id = encodeParam(lookml_dashboard_id)
     return this.authStream<number[]>(
@@ -8301,7 +8329,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboards/${lookml_dashboard_id}/sync`,
       { raw_locale },
       body,
-      options,
+      options
     )
   }
 
@@ -8327,7 +8355,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {DelimArray<string>} tests Array of names of tests to run
      */
     tests?: DelimArray<string>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     connection_name = encodeParam(connection_name)
     return this.authStream<IDBConnectionTestResult[]>(
@@ -8336,7 +8364,7 @@ export class Looker31SDKStream extends APIMethods {
       `/connections/${connection_name}/test`,
       { tests },
       null,
-      options,
+      options
     )
   }
 
@@ -8362,7 +8390,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {DelimArray<string>} tests Array of names of tests to run
      */
     tests?: DelimArray<string>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDBConnectionTestResult[]>(
       callback,
@@ -8370,7 +8398,7 @@ export class Looker31SDKStream extends APIMethods {
       '/connections/test',
       { tests },
       body,
-      options,
+      options
     )
   }
 
@@ -8385,7 +8413,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} integration_id Id of integration
      */
     integration_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     integration_id = encodeParam(integration_id)
     return this.authStream<IIntegrationTestResult>(
@@ -8394,7 +8422,7 @@ export class Looker31SDKStream extends APIMethods {
       `/integrations/${integration_id}/test`,
       null,
       null,
-      options,
+      options
     )
   }
 
@@ -8428,7 +8456,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteLDAPConfig>} body
      */
     body: Partial<IWriteLDAPConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILDAPConfigTestResult>(
       callback,
@@ -8436,7 +8464,7 @@ export class Looker31SDKStream extends APIMethods {
       '/ldap_config/test_auth',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8468,7 +8496,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteLDAPConfig>} body
      */
     body: Partial<IWriteLDAPConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILDAPConfigTestResult>(
       callback,
@@ -8476,7 +8504,7 @@ export class Looker31SDKStream extends APIMethods {
       '/ldap_config/test_connection',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8499,7 +8527,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteLDAPConfig>} body
      */
     body: Partial<IWriteLDAPConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILDAPConfigTestResult>(
       callback,
@@ -8507,7 +8535,7 @@ export class Looker31SDKStream extends APIMethods {
       '/ldap_config/test_user_auth',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8530,7 +8558,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteLDAPConfig>} body
      */
     body: Partial<IWriteLDAPConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILDAPConfigTestResult>(
       callback,
@@ -8538,7 +8566,7 @@ export class Looker31SDKStream extends APIMethods {
       '/ldap_config/test_user_info',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8561,7 +8589,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     theme_id = encodeParam(theme_id)
     return this.authStream<ITheme>(
@@ -8570,7 +8598,7 @@ export class Looker31SDKStream extends APIMethods {
       `/themes/${theme_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -8594,7 +8622,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
      */
     ts?: Date,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ITheme>(
       callback,
@@ -8602,7 +8630,7 @@ export class Looker31SDKStream extends APIMethods {
       '/themes/theme_or_default',
       { name, ts },
       null,
-      options,
+      options
     )
   }
 
@@ -8617,7 +8645,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteBackupConfiguration>} body
      */
     body: Partial<IWriteBackupConfiguration>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IBackupConfiguration>(
       callback,
@@ -8625,7 +8653,7 @@ export class Looker31SDKStream extends APIMethods {
       '/backup_configuration',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8640,7 +8668,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteBackupConfiguration>} body
      */
     body: Partial<IWriteBackupConfiguration>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IBackupConfiguration>(
       callback,
@@ -8648,7 +8676,7 @@ export class Looker31SDKStream extends APIMethods {
       '/cloud_storage',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8668,7 +8696,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteColorCollection>} body
      */
     body: Partial<IWriteColorCollection>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     collection_id = encodeParam(collection_id)
     return this.authStream<IColorCollection>(
@@ -8677,7 +8705,7 @@ export class Looker31SDKStream extends APIMethods {
       `/color_collections/${collection_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8696,7 +8724,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteDBConnection>} body
      */
     body: Partial<IWriteDBConnection>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     connection_name = encodeParam(connection_name)
     return this.authStream<IDBConnection>(
@@ -8705,7 +8733,7 @@ export class Looker31SDKStream extends APIMethods {
       `/connections/${connection_name}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8724,7 +8752,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteContentMeta>} body
      */
     body: Partial<IWriteContentMeta>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentMeta>(
       callback,
@@ -8732,7 +8760,7 @@ export class Looker31SDKStream extends APIMethods {
       `/content_metadata/${content_metadata_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8751,7 +8779,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IContentMetaGroupUser>} body
      */
     body: Partial<IContentMetaGroupUser>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentMetaGroupUser>(
       callback,
@@ -8759,7 +8787,7 @@ export class Looker31SDKStream extends APIMethods {
       `/content_metadata_access/${content_metadata_access_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8778,7 +8806,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {boolean} send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
      */
     send_test_welcome_email?: boolean,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICustomWelcomeEmail>(
       callback,
@@ -8786,7 +8814,7 @@ export class Looker31SDKStream extends APIMethods {
       '/custom_welcome_email',
       { send_test_welcome_email },
       body,
-      options,
+      options
     )
   }
 
@@ -8801,7 +8829,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWelcomeEmailTest>} body
      */
     body: Partial<IWelcomeEmailTest>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IWelcomeEmailTest>(
       callback,
@@ -8809,7 +8837,7 @@ export class Looker31SDKStream extends APIMethods {
       '/custom_welcome_email_test',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8837,7 +8865,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteDashboard>} body
      */
     body: Partial<IWriteDashboard>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_id = encodeParam(dashboard_id)
     return this.authStream<IDashboard>(
@@ -8846,7 +8874,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboards/${dashboard_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -8869,7 +8897,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_element_id = encodeParam(dashboard_element_id)
     return this.authStream<IDashboardElement>(
@@ -8878,7 +8906,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboard_elements/${dashboard_element_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8901,7 +8929,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_filter_id = encodeParam(dashboard_filter_id)
     return this.authStream<IDashboardFilter>(
@@ -8910,7 +8938,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboard_filters/${dashboard_filter_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8933,7 +8961,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_layout_id = encodeParam(dashboard_layout_id)
     return this.authStream<IDashboardLayout>(
@@ -8942,7 +8970,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboard_layouts/${dashboard_layout_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8965,7 +8993,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     dashboard_layout_component_id = encodeParam(dashboard_layout_component_id)
     return this.authStream<IDashboardLayoutComponent>(
@@ -8974,7 +9002,7 @@ export class Looker31SDKStream extends APIMethods {
       `/dashboard_layout_components/${dashboard_layout_component_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -8993,7 +9021,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteDatagroup>} body
      */
     body: Partial<IWriteDatagroup>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     datagroup_id = encodeParam(datagroup_id)
     return this.authStream<IDatagroup>(
@@ -9002,7 +9030,7 @@ export class Looker31SDKStream extends APIMethods {
       `/datagroups/${datagroup_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9017,7 +9045,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IDigestEmails>} body
      */
     body: Partial<IDigestEmails>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDigestEmails>(
       callback,
@@ -9025,7 +9053,7 @@ export class Looker31SDKStream extends APIMethods {
       '/digest_emails_enabled',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9044,7 +9072,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IUpdateFolder>} body
      */
     body: Partial<IUpdateFolder>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     folder_id = encodeParam(folder_id)
     return this.authStream<IFolder>(
@@ -9053,7 +9081,7 @@ export class Looker31SDKStream extends APIMethods {
       `/folders/${folder_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9080,7 +9108,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteGitBranch>} body
      */
     body: Partial<IWriteGitBranch>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<IGitBranch>(
@@ -9089,7 +9117,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/git_branch`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9112,7 +9140,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroup>(
       callback,
@@ -9120,7 +9148,7 @@ export class Looker31SDKStream extends APIMethods {
       `/groups/${group_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -9143,7 +9171,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IHomepage>(
       callback,
@@ -9151,7 +9179,7 @@ export class Looker31SDKStream extends APIMethods {
       `/homepages/${homepage_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -9174,7 +9202,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IHomepageItem>(
       callback,
@@ -9182,7 +9210,7 @@ export class Looker31SDKStream extends APIMethods {
       `/homepage_items/${homepage_item_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -9205,7 +9233,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IHomepageSection>(
       callback,
@@ -9213,7 +9241,7 @@ export class Looker31SDKStream extends APIMethods {
       `/homepage_sections/${homepage_section_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -9236,7 +9264,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     integration_id = encodeParam(integration_id)
     return this.authStream<IIntegration>(
@@ -9245,7 +9273,7 @@ export class Looker31SDKStream extends APIMethods {
       `/integrations/${integration_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -9270,7 +9298,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IIntegrationHub>(
       callback,
@@ -9278,7 +9306,7 @@ export class Looker31SDKStream extends APIMethods {
       `/integration_hubs/${integration_hub_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -9293,7 +9321,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteInternalHelpResources>} body
      */
     body: Partial<IWriteInternalHelpResources>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IInternalHelpResources>(
       callback,
@@ -9301,7 +9329,7 @@ export class Looker31SDKStream extends APIMethods {
       '/internal_help_resources',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9316,7 +9344,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteInternalHelpResourcesContent>} body
      */
     body: Partial<IWriteInternalHelpResourcesContent>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IInternalHelpResourcesContent>(
       callback,
@@ -9324,7 +9352,7 @@ export class Looker31SDKStream extends APIMethods {
       '/internal_help_resources_content',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9349,7 +9377,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteLDAPConfig>} body
      */
     body: Partial<IWriteLDAPConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILDAPConfig>(
       callback,
@@ -9357,7 +9385,7 @@ export class Looker31SDKStream extends APIMethods {
       '/ldap_config',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9376,7 +9404,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteLegacyFeature>} body
      */
     body: Partial<IWriteLegacyFeature>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILegacyFeature>(
       callback,
@@ -9384,7 +9412,7 @@ export class Looker31SDKStream extends APIMethods {
       `/legacy_features/${legacy_feature_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9426,7 +9454,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILookWithQuery>(
       callback,
@@ -9434,7 +9462,7 @@ export class Looker31SDKStream extends APIMethods {
       `/looks/${look_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -9453,7 +9481,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteLookmlModel>} body
      */
     body: Partial<IWriteLookmlModel>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     lookml_model_name = encodeParam(lookml_model_name)
     return this.authStream<ILookmlModel>(
@@ -9462,7 +9490,7 @@ export class Looker31SDKStream extends APIMethods {
       `/lookml_models/${lookml_model_name}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9481,7 +9509,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteModelSet>} body
      */
     body: Partial<IWriteModelSet>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IModelSet>(
       callback,
@@ -9489,7 +9517,7 @@ export class Looker31SDKStream extends APIMethods {
       `/model_sets/${model_set_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9512,7 +9540,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteOIDCConfig>} body
      */
     body: Partial<IWriteOIDCConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IOIDCConfig>(
       callback,
@@ -9520,7 +9548,7 @@ export class Looker31SDKStream extends APIMethods {
       '/oidc_config',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9535,7 +9563,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWritePasswordConfig>} body
      */
     body: Partial<IWritePasswordConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IPasswordConfig>(
       callback,
@@ -9543,7 +9571,7 @@ export class Looker31SDKStream extends APIMethods {
       '/password_config',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9562,7 +9590,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWritePermissionSet>} body
      */
     body: Partial<IWritePermissionSet>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IPermissionSet>(
       callback,
@@ -9570,7 +9598,7 @@ export class Looker31SDKStream extends APIMethods {
       `/permission_sets/${permission_set_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9614,7 +9642,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<IProject>(
@@ -9623,7 +9651,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -9651,7 +9679,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteRepositoryCredential>} body
      */
     body: Partial<IWriteRepositoryCredential>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     root_project_id = encodeParam(root_project_id)
     credential_id = encodeParam(credential_id)
@@ -9661,7 +9689,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${root_project_id}/credential/${credential_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9680,7 +9708,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteRole>} body
      */
     body: Partial<IWriteRole>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IRole>(
       callback,
@@ -9688,7 +9716,7 @@ export class Looker31SDKStream extends APIMethods {
       `/roles/${role_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9711,7 +9739,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteSamlConfig>} body
      */
     body: Partial<IWriteSamlConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISamlConfig>(
       callback,
@@ -9719,7 +9747,7 @@ export class Looker31SDKStream extends APIMethods {
       '/saml_config',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9779,7 +9807,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteScheduledPlan>} body
      */
     body: Partial<IWriteScheduledPlan>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IScheduledPlan>(
       callback,
@@ -9787,7 +9815,7 @@ export class Looker31SDKStream extends APIMethods {
       `/scheduled_plans/${scheduled_plan_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9821,7 +9849,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteApiSession>} body
      */
     body: Partial<IWriteApiSession>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IApiSession>(
       callback,
@@ -9829,7 +9857,7 @@ export class Looker31SDKStream extends APIMethods {
       '/session',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9844,7 +9872,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteSessionConfig>} body
      */
     body: Partial<IWriteSessionConfig>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISessionConfig>(
       callback,
@@ -9852,7 +9880,7 @@ export class Looker31SDKStream extends APIMethods {
       '/session_config',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9871,7 +9899,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IUpdateSpace>} body
      */
     body: Partial<IUpdateSpace>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     space_id = encodeParam(space_id)
     return this.authStream<ISpace>(
@@ -9880,7 +9908,7 @@ export class Looker31SDKStream extends APIMethods {
       `/spaces/${space_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9901,7 +9929,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteTheme>} body
      */
     body: Partial<IWriteTheme>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     theme_id = encodeParam(theme_id)
     return this.authStream<ITheme>(
@@ -9910,7 +9938,7 @@ export class Looker31SDKStream extends APIMethods {
       `/themes/${theme_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -9933,7 +9961,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUser>(
       callback,
@@ -9941,7 +9969,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -9964,7 +9992,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserAttribute>(
       callback,
@@ -9972,7 +10000,7 @@ export class Looker31SDKStream extends APIMethods {
       `/user_attributes/${user_attribute_id}`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -9997,7 +10025,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IUserAttributeGroupValue>} body
      */
     body: Partial<IUserAttributeGroupValue>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserAttributeGroupValue>(
       callback,
@@ -10005,7 +10033,7 @@ export class Looker31SDKStream extends APIMethods {
       `/groups/${group_id}/attribute_values/${user_attribute_id}`,
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -10028,7 +10056,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsEmail>(
       callback,
@@ -10036,7 +10064,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_email`,
       { fields },
       body,
-      options,
+      options
     )
   }
 
@@ -10051,7 +10079,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteWhitelabelConfiguration>} body
      */
     body: Partial<IWriteWhitelabelConfiguration>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IWhitelabelConfiguration>(
       callback,
@@ -10059,7 +10087,7 @@ export class Looker31SDKStream extends APIMethods {
       '/whitelabel_configuration',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -10082,7 +10110,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUser>(
       callback,
@@ -10090,7 +10118,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10109,7 +10137,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserAttribute>(
       callback,
@@ -10117,7 +10145,7 @@ export class Looker31SDKStream extends APIMethods {
       `/user_attributes/${user_attribute_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10144,7 +10172,7 @@ export class Looker31SDKStream extends APIMethods {
   async user_attribute_user_values(
     callback: (readable: Readable) => Promise<IUserAttributeWithValue[]>,
     request: IRequestUserAttributeUserValues,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserAttributeWithValue[]>(
       callback,
@@ -10157,7 +10185,7 @@ export class Looker31SDKStream extends APIMethods {
         include_unset: request.include_unset,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -10180,7 +10208,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsApi3>(
       callback,
@@ -10188,7 +10216,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_api3/${credentials_api3_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10207,7 +10235,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsEmail>(
       callback,
@@ -10215,7 +10243,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_email`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10238,7 +10266,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsEmbed>(
       callback,
@@ -10246,7 +10274,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_embed/${credentials_embed_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10265,7 +10293,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsGoogle>(
       callback,
@@ -10273,7 +10301,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_google`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10292,7 +10320,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsLDAP>(
       callback,
@@ -10300,7 +10328,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_ldap`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10319,7 +10347,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsLookerOpenid>(
       callback,
@@ -10327,7 +10355,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_looker_openid`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10346,7 +10374,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsOIDC>(
       callback,
@@ -10354,7 +10382,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_oidc`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10373,7 +10401,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsSaml>(
       callback,
@@ -10381,7 +10409,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_saml`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10400,7 +10428,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsTotp>(
       callback,
@@ -10408,7 +10436,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/credentials_totp`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10458,7 +10486,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     credential_type = encodeParam(credential_type)
     credential_id = encodeParam(credential_id)
@@ -10468,7 +10496,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/credential/${credential_type}/${credential_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10480,7 +10508,7 @@ export class Looker31SDKStream extends APIMethods {
   async user_roles(
     callback: (readable: Readable) => Promise<IRole[]>,
     request: IRequestUserRoles,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IRole[]>(
       callback,
@@ -10491,7 +10519,7 @@ export class Looker31SDKStream extends APIMethods {
         direct_association_only: request.direct_association_only,
       },
       null,
-      options,
+      options
     )
   }
 
@@ -10514,7 +10542,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISession>(
       callback,
@@ -10522,7 +10550,7 @@ export class Looker31SDKStream extends APIMethods {
       `/users/${user_id}/sessions/${session_id}`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10549,7 +10577,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     project_id = encodeParam(project_id)
     return this.authStream<IProjectValidation>(
@@ -10558,7 +10586,7 @@ export class Looker31SDKStream extends APIMethods {
       `/projects/${project_id}/validate`,
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10579,7 +10607,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {Partial<IWriteTheme>} body
      */
     body: Partial<IWriteTheme>,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IValidationError>(
       callback,
@@ -10587,7 +10615,7 @@ export class Looker31SDKStream extends APIMethods {
       '/themes/validate',
       null,
       body,
-      options,
+      options
     )
   }
 
@@ -10613,7 +10641,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} reload Whether or not to refresh the rendered image with the latest content
      */
     reload?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     type = encodeParam(type)
     resource_id = encodeParam(resource_id)
@@ -10623,7 +10651,7 @@ export class Looker31SDKStream extends APIMethods {
       `/vector_thumbnail/${type}/${resource_id}`,
       { reload },
       null,
-      options,
+      options
     )
   }
 
@@ -10638,7 +10666,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IApiVersion>(
       callback,
@@ -10646,7 +10674,7 @@ export class Looker31SDKStream extends APIMethods {
       '/versions',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10662,7 +10690,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} fields Requested fields.
      */
     fields?: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IWhitelabelConfiguration>(
       callback,
@@ -10670,7 +10698,7 @@ export class Looker31SDKStream extends APIMethods {
       '/whitelabel_configuration',
       { fields },
       null,
-      options,
+      options
     )
   }
 
@@ -10713,7 +10741,7 @@ export class Looker31SDKStream extends APIMethods {
      * @param {string} workspace_id Id of the workspace
      */
     workspace_id: string,
-    options?: Partial<ITransportSettings>,
+    options?: Partial<ITransportSettings>
   ) {
     workspace_id = encodeParam(workspace_id)
     return this.authStream<IWorkspace>(
@@ -10722,7 +10750,7 @@ export class Looker31SDKStream extends APIMethods {
       `/workspaces/${workspace_id}`,
       null,
       null,
-      options,
+      options
     )
   }
 }

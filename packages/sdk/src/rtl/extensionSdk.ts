@@ -87,6 +87,7 @@ export class LookerExtensionSDK {
     const transport = new ExtensionTransport(settings, hostConnection)
     const session = new ExtensionSession(settings, transport)
     if (type) {
+      // eslint-disable-next-line new-cap
       return new type(session)
     } else {
       // work around TS2322

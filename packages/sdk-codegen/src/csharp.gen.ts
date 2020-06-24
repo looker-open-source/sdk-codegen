@@ -33,8 +33,10 @@ import {
   IType,
   IProperty,
   strBody,
-  titleCase,
+  firstCase,
   Arg,
+  EnumType,
+  EnumValueType,
 } from './sdkModels'
 
 // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/
@@ -138,6 +140,7 @@ export class CSharpGen extends CodeGen {
   endTypeStr = '\n}'
   needsRequestTypes = false
   willItStream = false
+  codeQuote = '"'
 
   commentHeader(indent: string, text: string | undefined) {
     return text ? `${commentBlock(text, indent, '/// ')}\n` : ''
@@ -146,6 +149,9 @@ export class CSharpGen extends CodeGen {
   modelsPrologue(_indent: string) {
     return `#nullable enable
 using System;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Looker.RTL;
 using Url = System.String;
 using Password = System.String;
@@ -228,8 +234,13 @@ namespace Looker.SDK.API${this.apiRef}
 
     const arg = this.reserve(property.name)
     const pOpt = property.required ? '' : '?'
+    const attr =
+      property.type instanceof EnumType
+        ? `${indent}[JsonConverter(typeof(StringEnumConverter))]\n`
+        : ''
     return (
       this.summary(indent, this.describeProperty(property)) +
+      attr +
       `${indent}public ${type.name}${pOpt} ${arg} ${getset}`
     )
   }
@@ -246,45 +257,48 @@ namespace Looker.SDK.API${this.apiRef}
       headComment += `\n\n**Note**: Binary content is returned by this method.`
     }
 
+    headComment += this.returnComment(method)
     method.params.forEach((param) => (headComment += this.paramComment(param)))
 
     return this.commentHeader(indent, headComment)
   }
 
+  genericBits(method: IMethod) {
+    let success = 'TSuccess'
+    let generic = '<TSuccess>'
+    let constraint = ' where TSuccess : class'
+    if (method.returnType) {
+      const ret = method.returnType
+      const type = this.typeMap(ret.type)
+      success = type.name === 'void' ? 'string' : type.name
+      generic = ''
+      constraint = ''
+    }
+    return { success, generic, constraint }
+  }
+
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
     const type = this.typeMap(method.type)
-    let fragment = ''
-    const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
 
-    if (requestType) {
-      // use the request type that will be generated in models.ts
-      // No longer using Partial<T> by default here because required and optional are supposed to be accurate
-      // However, for update methods (iow, patch) Partial<T> is still necessary since only the delta gets set
-      fragment =
-        method.httpMethod === 'PATCH'
-          ? `request: Partial<I${requestType}>`
-          : `request: I${requestType}`
-    } else {
-      const params: string[] = []
-      const args = method.allParams // get the params in signature order
-      if (args && args.length > 0)
-        args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
-      fragment =
-        params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
-    }
+    const params: string[] = []
+    const args = method.allParams // get the params in signature order
+    if (args && args.length > 0)
+      args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
+    const fragment = params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
     const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
+    const bits = this.genericBits(method)
     const header =
       this.methodHeader(indent, method) +
-      `${indent}public async Task<SdkResponse<TSuccess, TError>> ${method.name}<TSuccess, TError>(` +
+      `${indent}public async Task<SdkResponse<${bits.success}, Exception>> ${method.name}${bits.generic}(` +
       (streamer ? `\n${bump}${callback}` : '')
 
     return (
       header +
       fragment +
-      `${
-        fragment ? ',' : ''
-      }\n${bump}ITransportSettings? options = null) where TSuccess : class where TError : Exception\n{${indent}\n`
+      `${fragment ? ',' : ''}\n${bump}ITransportSettings? options = null)${
+        bits.constraint
+      }\n{${indent}\n`
     )
   }
 
@@ -342,9 +356,12 @@ namespace Looker.SDK.API${this.apiRef}
     const args = this.httpArgs(bump, method)
     const dollah = method.pathArgs.length ? '$' : ''
     // const errors = `(${this.errorResponses(indent, method)})`
-    const fragment = `AuthRequest<TSuccess, TError>(HttpMethod.${titleCase(
-      method.httpMethod
-    )}, ${dollah}"${method.endpoint}"${args ? ', ' + args : ''})`
+    const bits = this.genericBits(method)
+    const fragment = `AuthRequest<${
+      bits.success
+    }, Exception>(HttpMethod.${firstCase(method.httpMethod)}, ${dollah}"${
+      method.endpoint
+    }"${args ? ', ' + args : ''})`
     return `${indent}return await ${fragment};`
   }
 
@@ -373,16 +390,35 @@ namespace Looker.SDK.API${this.apiRef}
       : ''
   }
 
-  returnComment(param: IParameter) {
-    return `${this.commentStr}<returns>${param.description}</returns>`
+  returnComment(method: IMethod) {
+    const type = method.returnType
+    if (type) {
+      const mapped = this.typeMap(type.type)
+      return `\n\n<returns><c>${mapped.name}</c> ${type.description} (${type.mediaType})</returns>\n`
+    }
+    const desc: string[] = []
+    method.okResponses.forEach((r) => {
+      const mapped = this.typeMap(r.type)
+      desc.push(`<c>${mapped.name}</c> ${r.description} (${r.mediaType})`)
+    })
+    const lines = desc.join('\n')
+    return `\n\n<returns>\n${lines}\n</returns>\n`
+  }
+
+  declareEnumValue(indent: string, value: EnumValueType) {
+    return `${indent}[EnumMember(Value = "${value}")]
+${indent}${this.reserve(value.toString())}`
   }
 
   // TODO document properties in `typeHeader()` instead of inline
   // TODO create class constructor for all required parameters
   typeSignature(indent: string, type: IType) {
+    const isEnum = type instanceof EnumType
+    const kind = isEnum ? 'enum' : 'class'
+    const parent = isEnum ? '' : ' : SdkModel'
     return (
       this.commentHeader(indent, type.description) +
-      `${indent}public class ${type.name} : SdkModel \n{\n`
+      `${indent}public ${kind} ${this.reserve(type.name)}${parent}\n{\n`
     )
   }
 
@@ -432,6 +468,8 @@ namespace Looker.SDK.API${this.apiRef}
             name: `DelimArray<${map.name}>`,
             optional,
           }
+        case 'EnumType':
+          return { default: '', name: type.name }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }

@@ -25,9 +25,10 @@
  */
 
 import React, { FC } from 'react'
-import { Box, Flex, Space } from '@looker/components'
-import { ApiModel, typeRefs } from '@looker/sdk-codegen'
+import { Flex, Space } from '@looker/components'
 import { useParams } from 'react-router-dom'
+import { ApiModel, typeRefs } from '@looker/sdk-codegen'
+import { TryIt, TryItHttpMethod } from '@looker/try-it'
 
 import {
   DocMarkdown,
@@ -35,8 +36,6 @@ import {
   DocTitle,
   DocSDKs,
   Main,
-  TryIt,
-  TryItHttpMethod,
 } from '../../components'
 import {
   DocActivityType,

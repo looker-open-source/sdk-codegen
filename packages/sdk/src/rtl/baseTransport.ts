@@ -116,7 +116,6 @@ export abstract class BaseTransport implements ITransport {
    * @param path Request path
    * @param options Transport settings
    * @param queryParams Collection of query Params
-   * @param authenticator optional callback
    * @returns the fully specified request path including any query string parameters
    */
   makeUrl(
@@ -125,7 +124,7 @@ export abstract class BaseTransport implements ITransport {
     queryParams?: Values
   ) {
     // is this an API-versioned call?
-    const base = options.base_url!
+    const base = options.base_url
     if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {
       path = `${base}${path}` // path was relative
     }

@@ -25,7 +25,7 @@
  */
 
 import { TestConfig } from './testUtils'
-import { fixConversion, openApiStyle, swapXLookerNullable } from './convert'
+import { fixConversion, openApiStyle, swapXLookerTags } from './convert'
 import { readFileSync } from './nodeUtils'
 
 const config = TestConfig()
@@ -331,7 +331,7 @@ const openApiFrag = `
 `
 
 describe('spec conversion', () => {
-  it('swaps out x-looker-nullable', () => {
+  it('swaps out x-looker-tags', () => {
     const input = `
 "can": {
   "type": "object",
@@ -368,13 +368,34 @@ describe('spec conversion', () => {
   "description": "Is Hidden",
   "x-looker-nullable": false
 },
+"supported_formats": {
+  "type": "array",
+  "items": { "type": "string" },
+  "readOnly": true,
+  "x-looker-values": [
+    "txt",
+    "csv",
+    "inline_json",
+    "json",
+    "json_label",
+    "json_detail",
+    "json_detail_lite_stream",
+    "xlsx",
+    "html",
+    "wysiwyg_pdf",
+    "assembled_pdf",
+    "wysiwyg_png",
+    "csv_zip"
+  ],
+  "description": "A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: \\"txt\\", \\"csv\\", \\"inline_json\\", \\"json\\", \\"json_label\\", \\"json_detail\\", \\"json_detail_lite_stream\\", \\"xlsx\\", \\"html\\", \\"wysiwyg_pdf\\", \\"assembled_pdf\\", \\"wysiwyg_png\\", \\"csv_zip\\".",
+  "nullable": false
+},
 `
-    const actual = swapXLookerNullable(input)
-    const puzzle = input.replace(/x-looker-nullable/gi, 'nullable')
-    expect(actual).toEqual(puzzle)
-
+    const actual = swapXLookerTags(input)
     expect(actual).toContain('"nullable": true')
     expect(actual).not.toContain('"x-looker-nullable": true')
+    expect(actual).toContain('"enum": [')
+    expect(actual).not.toContain('"x-looker-values": [')
   })
 
   it('collectionFormat to style', () => {

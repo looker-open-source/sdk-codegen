@@ -43,10 +43,11 @@ import {
   Values,
   IRequestHeaders,
   LookerAppId,
-  IRawResponse,
+  IRawResponse, agentPrefix,
 } from './transport'
 import { BaseTransport } from './baseTransport'
 import { ICryptoHash } from './cryptoHash'
+import { lookerVersion } from './constants'
 
 export class NodeCryptoHash implements ICryptoHash {
   secureRandom(byteCount: number): string {
@@ -129,7 +130,7 @@ export class NodeTransport extends BaseTransport {
       const statusMessage = `${method} ${path}`
       let statusCode = 404
       let contentType = 'text'
-      let body = ''
+      let body: string
       if (e instanceof StatusCodeError) {
         statusCode = e.statusCode
         const text = e.message
@@ -200,7 +201,7 @@ export class NodeTransport extends BaseTransport {
    * @returns {request.Request}
    */
   protected requestor(props: RequestOptions): Request {
-    const method = props.method!.toString().toUpperCase() as HttpMethod
+    const method = props.method?.toString().toUpperCase() as HttpMethod
     switch (method) {
       case 'GET':
         return rq.get(props)
@@ -321,8 +322,11 @@ export class NodeTransport extends BaseTransport {
     options?: Partial<ITransportSettings>
   ) {
     options = options ? { ...this.options, ...options } : this.options
+    if (!options.agentTag) {
+      options.agentTag = `${agentPrefix} ${lookerVersion}`
+    }
     const headers: IRequestHeaders = {
-      [LookerAppId]: options.agentTag!,
+      [LookerAppId]: options.agentTag,
       ...options.headers,
     }
 

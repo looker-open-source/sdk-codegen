@@ -26,6 +26,7 @@
 
 import {
   Arg,
+  EnumType,
   IMappedType,
   IMethod,
   IParameter,
@@ -49,11 +50,13 @@ export class PythonGen extends CodeGen {
   paramDelimiter = ',\n'
   propDelimiter = '\n'
   dataStructureDelimiter = ', '
+  enumDelimiter = '\n'
+  codeQuote = '"'
 
   endTypeStr = ''
 
   // keyword.kwlist
-  pythonKeywords = [
+  pythonKeywords = new Set<string>([
     'False',
     'None',
     'True',
@@ -89,7 +92,7 @@ export class PythonGen extends CodeGen {
     'while',
     'with',
     'yield',
-  ]
+  ])
 
   readonly pythonTypes: Record<string, IMappedType> = {
     any: { default: this.nullStr, name: 'Any' },
@@ -130,10 +133,10 @@ class ${this.packageName}(api_methods.APIMethods):
 
   modelsPrologue = (_indent: string) => `
 # ${this.warnEditing()}
-import datetime
-from typing import Any, MutableMapping, Optional, Sequence
-
 import attr
+import datetime
+import enum
+from typing import Any, MutableMapping, Optional, Sequence
 
 from ${this.packagePath}.rtl import model
 from ${this.packagePath}.rtl import serialize as sr
@@ -183,7 +186,7 @@ ${this.hooks.join('\n')}
   declareProperty(indent: string, property: IProperty) {
     const mappedType = this.typeMapModels(property.type)
     let propName = property.name
-    if (this.pythonKeywords.includes(propName)) {
+    if (this.pythonKeywords.has(propName)) {
       propName = propName + '_'
     }
     let propType = mappedType.name
@@ -436,44 +439,52 @@ ${this.hooks.join('\n')}
     const bump = this.bumper(indent)
     const b2 = this.bumper(bump)
     const attrs: string[] = []
-    let usesReservedPythonKeyword = false
-    for (const prop of Object.values(type.properties)) {
-      let propName = prop.name
-      if (this.pythonKeywords.includes(propName)) {
-        propName = propName + '_'
-        usesReservedPythonKeyword = true
-      }
-      let attr = `${b2}${propName}:`
-      if (prop.description) {
-        attr += ` ${prop.description}`
-      }
-      attrs.push(attr)
-    }
-
+    const isEnum = type instanceof EnumType
+    const baseClass = isEnum ? 'enum.Enum' : 'model.Model'
     let attrsArgs = 'auto_attribs=True, kw_only=True'
-    if (this.methodInputModelTypes.has(type)) {
-      attrsArgs += ', init=False'
+    let usesReservedPythonKeyword = false
+
+    if (!isEnum) {
+      for (const prop of Object.values(type.properties)) {
+        let propName = prop.name
+        if (this.pythonKeywords.has(propName)) {
+          propName = propName + '_'
+          usesReservedPythonKeyword = true
+        }
+        let attr = `${b2}${propName}:`
+        if (prop.description) {
+          attr += ` ${prop.description}`
+        }
+        attrs.push(attr)
+      }
+
+      if (this.methodInputModelTypes.has(type)) {
+        attrsArgs += ', init=False'
+      }
+
+      const forwardRef = `ForwardRef("${type.name}")`
+      this.hooks.push(
+        `sr.converter${this.apiRef}.register_structure_hook(\n${bump}${forwardRef},  # type: ignore\n${bump}${this.structureHook}  # type:ignore\n)`
+      )
+      if (usesReservedPythonKeyword) {
+        this.hooks.push(
+          `sr.converter${this.apiRef}.register_structure_hook(\n${bump}${type.name},  # type: ignore\n${bump}${this.structureHook}  # type:ignore\n)`
+        )
+      }
     }
 
-    const forwardRef = `ForwardRef("${type.name}")`
-    this.hooks.push(
-      `sr.converter${this.apiRef}.register_structure_hook(\n${bump}${forwardRef},  # type: ignore\n${bump}${this.structureHook}  # type:ignore\n)`
-    )
-    if (usesReservedPythonKeyword) {
-      this.hooks.push(
-        `sr.converter${this.apiRef}.register_structure_hook(\n${bump}${type.name},  # type: ignore\n${bump}${this.structureHook}  # type:ignore\n)`
-      )
-    }
-    return (
+    let result =
       `\n` +
-      `${indent}@attr.s(${attrsArgs})\n` +
-      `${indent}class ${type.name}(model.Model):\n` +
+      (isEnum ? '' : `${indent}@attr.s(${attrsArgs})\n`) +
+      `${indent}class ${type.name}(${baseClass}):\n` +
       `${bump}"""\n` +
-      (type.description ? `${bump}${type.description}\n\n` : '') +
-      `${bump}Attributes:\n` +
-      `${attrs.join('\n')}\n` +
-      `${bump}"""\n`
-    )
+      (type.description ? `${bump}${type.description}\n\n` : '')
+
+    if (attrs.length > 0) {
+      result += `${bump}Attributes:\n` + `${attrs.join('\n')}\n`
+    }
+
+    return result + `${bump}"""\n`
   }
 
   summary(indent: string, text: string | undefined) {
@@ -499,6 +510,8 @@ ${this.hooks.join('\n')}
             default: this.nullStr,
             name: `models.DelimSequence[${map.name}]`,
           }
+        case 'EnumType':
+          return { default: '', name: `"${type.name}"` }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
