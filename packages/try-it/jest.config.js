@@ -27,16 +27,13 @@
 process.env.TZ = 'UTC'
 
 module.exports = {
+  // TODO we SHOULD be able to just use the root jest.config.js for this
   automock: false,
-  moduleDirectories: ['./node_modules', './packages'],
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
   moduleNameMapper: {
-    '@looker/sdk/lib/browser': '<rootDir>/packages/sdk/src',
-    '@looker/sdk/lib/node': '<rootDir>/packages/sdk/src',
+    '@looker/sdk/lib/browser$': '<rootDir>/../sdk',
     '@looker/((?!components|design|icons)(.+))$': '<rootDir>/packages/$1/src',
-    '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/config/jest/fileMock.js',
+    '\\.(css)$': '<rootDir>../../config/jest/styleMock.js',
   },
   restoreMocks: true,
   setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],

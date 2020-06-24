@@ -46,6 +46,7 @@ module.exports = (api) => {
           '__snapshots__',
           '__tests__',
           '**/testUtils',
+          '**/test-data',
         ],
       },
     },

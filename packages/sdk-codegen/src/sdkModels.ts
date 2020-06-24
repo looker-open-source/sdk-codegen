@@ -539,18 +539,16 @@ interface ISchemadSymbol extends ITypedSymbol {
 
 class SchemadSymbol extends Symbol implements ISchemadSymbol {
   schema: OAS.SchemaObject
+  description: string
 
   constructor(name: string, type: IType, schema: OAS.SchemaObject, owner = '') {
     super(name, type, owner)
     this.schema = schema
+    this.description = this.schema.description || ''
   }
 
   get status(): string {
     return this.schema['x-looker-status'] || ''
-  }
-
-  get description(): string {
-    return this.schema.description || ''
   }
 
   get deprecated(): boolean {
