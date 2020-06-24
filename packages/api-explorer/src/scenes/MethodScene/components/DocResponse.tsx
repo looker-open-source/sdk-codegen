@@ -39,6 +39,7 @@ import {
   TableRow,
   useTabs,
 } from '@looker/components'
+import styled from 'styled-components'
 import { IMethodResponse } from '@looker/sdk-codegen'
 
 import { DocCode } from '../../../components'
@@ -48,15 +49,19 @@ interface DocResponseProps {
   responses: IMethodResponse[]
 }
 
+const Heading2 = styled(Heading)`
+  color: ${({ theme }) => theme.colors.text2};
+`
+
 export const DocResponse: FC<DocResponseProps> = ({ responses }) => {
   const tabs = useTabs()
 
   return (
     <Box pt="large" pb="xxlarge">
       <SpaceVertical mb="medium">
-        <Heading as="h2" fontWeight="semiBold">
+        <Heading2 as="h2" fontWeight="semiBold">
           Responses
-        </Heading>
+        </Heading2>
       </SpaceVertical>
       <TabList {...tabs}>
         {responses.map((response, index) => (
