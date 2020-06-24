@@ -58,15 +58,102 @@ export class SwiftGen extends CodeGen {
   endTypeStr = `\n}`
   needsRequestTypes = false
   willItStream = true
-  keywords =
-    'associatedtype,class,deinit,enum,extension,fileprivate,func,import,init,inout,internal,let,open,' +
-    'operator,private,protocol,public,static,struct,subscript,typealias,var,break,case,continue,default,' +
-    'defer,do,else,fallthrough,for,guard,if,in,repeat,return,switch,where,while,' +
-    'as,Any,catch,false,is,nil,rethrows,super,self,Self,throw,throws,true,try,' +
-    '_,#available,#colorLiteral,#column,#else,#elseif,#endif,#file,#fileLiteral,#function,#if,#imageLiteral,' +
-    '#line,#selector,and #sourceLocation,associativity,convenience,dynamic,didSet,final,get,infix,indirect,' +
-    'lazy,left,mutating,none,nonmutating,optional,override,postfix,precedence,prefix,Protocol,required,right,' +
-    'set,Type,unowned,weak,willSet'.split(',')
+  keywords = new Set<string>([
+    'associatedtype',
+    'class',
+    'deinit',
+    'enum',
+    'extension',
+    'fileprivate',
+    'func',
+    'import',
+    'init',
+    'inout',
+    'internal',
+    'let',
+    'open',
+    'operator',
+    'private',
+    'protocol',
+    'public',
+    'static',
+    'struct',
+    'subscript',
+    'typealias',
+    'var',
+    'break',
+    'case',
+    'continue',
+    'default',
+    'defer',
+    'do',
+    'else',
+    'fallthrough',
+    'for',
+    'guard',
+    'if',
+    'in',
+    'repeat',
+    'return',
+    'switch',
+    'where',
+    'while',
+    'as',
+    'Any',
+    'catch',
+    'false',
+    'is',
+    'nil',
+    'rethrows',
+    'super',
+    'self',
+    'Self',
+    'throw',
+    'throws',
+    'true',
+    'try',
+    '_',
+    '#available',
+    '#colorLiteral',
+    '#column',
+    '#else',
+    '#elseif',
+    '#endif',
+    '#file',
+    '#fileLiteral',
+    '#function',
+    '#if',
+    '#imageLiteral',
+    '#line',
+    '#selector',
+    'and #sourceLocation',
+    'associativity',
+    'convenience',
+    'dynamic',
+    'didSet',
+    'final',
+    'get',
+    'infix',
+    'indirect',
+    'lazy',
+    'left',
+    'mutating',
+    'none',
+    'nonmutating',
+    'optional',
+    'override',
+    'postfix',
+    'precedence',
+    'prefix',
+    'Protocol',
+    'required',
+    'right',
+    'set',
+    'Type',
+    'unowned',
+    'weak',
+    'willSet',
+  ])
 
   supportsMultiApi(): boolean {
     return false
@@ -112,8 +199,8 @@ import Foundation
     return '\n'
   }
 
-  private reserve(name: string) {
-    if (this.keywords.includes(name)) {
+  reserve(name: string) {
+    if (this.keywords.has(name)) {
       return `\`${name}\``
     }
     return name

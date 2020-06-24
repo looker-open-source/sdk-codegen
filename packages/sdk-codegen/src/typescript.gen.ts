@@ -32,6 +32,7 @@ import {
   IMethod,
   IParameter,
   IProperty,
+  isSpecialName,
   IType,
   strBody,
 } from './sdkModels'
@@ -167,14 +168,15 @@ export interface IDictionary<T> {
         `${indent}${property.name}${optional}: ${this.typeName(property.type)}`
       )
     }
-    const type = this.typeMap(property.type)
+    const mapped = this.typeMap(property.type)
     return (
       this.commentHeader(indent, this.describeProperty(property)) +
-      `${indent}${property.name}${optional}: ${type.name}`
+      `${indent}${this.reserve(property.name)}${optional}: ${mapped.name}`
     )
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
+    // TODO remove mapped name type signature?
     return `@param {${mapped.name}} ${param.name} ${param.description}`
   }
 
@@ -193,17 +195,17 @@ export interface IDictionary<T> {
     }
     return (
       this.commentHeader(indent, this.paramComment(param, mapped)) +
-      `${indent}${param.name}${pOpt}: ${mapped.name}` +
+      `${indent}${this.reserve(param.name)}${pOpt}: ${mapped.name}` +
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
   }
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
-    const type = this.typeMap(method.type)
+    const mapped = this.typeMap(method.type)
     const head = method.description?.trim()
     let headComment =
       (head ? `${head}\n\n` : '') +
-      `${method.httpMethod} ${method.endpoint} -> ${type.name}`
+      `${method.httpMethod} ${method.endpoint} -> ${mapped.name}`
     let fragment = ''
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
@@ -229,7 +231,7 @@ export interface IDictionary<T> {
     } else if (method.responseIsBinary()) {
       headComment += `\n\n**Note**: Binary content is returned by this method.\n`
     }
-    const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
+    const callback = `callback: (readable: Readable) => Promise<${mapped.name}>,`
     const header =
       this.commentHeader(indent, headComment) +
       `${indent}async ${method.name}(` +
@@ -252,11 +254,10 @@ export interface IDictionary<T> {
     const bump = indent + this.indentStr
     let encodings = ''
     if (method.pathParams.length > 0) {
+      const prefix = this.useRequest(method) ? 'request' : ''
       for (const param of method.pathParams) {
         if (param.doEncode()) {
-          const name = this.useRequest(method)
-            ? `request.${param.name}`
-            : param.name
+          const name = this.accessor(param.name, prefix)
           encodings += `${bump}${name} = encodeParam(${name})\n`
         }
       }
@@ -288,14 +289,16 @@ export interface IDictionary<T> {
     )
   }
 
+  reserve(name: string): string {
+    if (!isSpecialName(name)) return name
+    return `'${name}'`
+  }
+
   private typeName(type: IType) {
-    if (type.customType) {
-      if (type instanceof EnumType) {
-        return type.name
-      }
-      return `I${type.name}`
+    if (type.customType && !(type instanceof EnumType)) {
+      return this.reserve(`I${type.name}`)
     }
-    return type.name
+    return this.reserve(type.name)
   }
 
   typeSignature(indent: string, type: IType) {
@@ -324,19 +327,42 @@ export interface IDictionary<T> {
     if (!args || args.length === 0) return this.nullStr
     const hash: string[] = []
     for (const arg of args) {
+      const reserved = this.reserve(arg)
       if (prefix) {
-        hash.push(`${arg}: ${prefix}${arg}`)
+        hash.push(`${reserved}: ${this.accessor(arg, prefix)}`)
       } else {
-        hash.push(arg)
+        hash.push(reserved)
       }
     }
     return `\n${indent}{${hash.join(this.argDelimiter)}}`
   }
 
+  /**
+   * Determine the type of accessor needed for the symbol name
+   *
+   * If the prefix is defined:
+   *   If the name is special, use array accessor
+   *   If the name is simple, use dotted notation
+   *
+   * With no prefix, return the "reserved" version of the name, which may be the same as name
+   *
+   * @param name variable to access
+   * @param prefix optional prefix for accessor
+   * @returns one of 4 possible accessor patterns
+   */
+  accessor(name: string, prefix?: string) {
+    const reserved = this.reserve(name)
+    if (!prefix) return reserved
+    if (reserved === name) return `${prefix}.${name}`
+    return `${prefix}[${reserved}]`
+  }
+
   argList(indent: string, args: Arg[], prefix?: string) {
     prefix = prefix || ''
+    const bits = args.map((a) => this.accessor(a, prefix))
+
     return args && args.length !== 0
-      ? `\n${indent}${prefix}${args.join(this.argDelimiter + prefix)}`
+      ? `\n${indent}${bits.join(this.argDelimiter)}`
       : this.nullStr
   }
 
@@ -358,7 +384,7 @@ export interface IDictionary<T> {
   //   null, bodyArg
   //   {queryArgs...}
   httpArgs(indent: string, method: IMethod) {
-    const request = this.useRequest(method) ? 'request.' : ''
+    const request = this.useRequest(method) ? 'request' : ''
     // add options at the end of the request calls. this will cause all other arguments to be
     // filled in but there's no way to avoid this for passing in the last optional parameter.
     // Fortunately, this code bloat is minimal and also hidden from the consumer.
@@ -378,12 +404,12 @@ export interface IDictionary<T> {
 
   httpCall(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
-    const type = this.typeMap(method.type)
+    const mapped = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     const errors = this.errorResponses(indent, method)
     return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${
-      type.name
+      mapped.name
     }, ${errors}>(${this.httpPath(method.endpoint, request)}${
       args ? ', ' + args : ''
     })`
@@ -391,12 +417,12 @@ export interface IDictionary<T> {
 
   streamCall(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
-    const type = this.typeMap(method.type)
+    const mapped = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     // const errors = this.errorResponses(indent, method)
     return `${indent}return ${this.it('authStream')}<${
-      type.name
+      mapped.name
     }>(callback, '${method.httpMethod.toUpperCase()}', ${this.httpPath(
       method.endpoint,
       request

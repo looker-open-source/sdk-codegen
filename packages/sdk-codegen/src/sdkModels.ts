@@ -68,6 +68,21 @@ export const camelCase = (value: string) => {
   })
 }
 
+/** simple symbol name pattern */
+const simpleName = /^[a-z_][a-z_\d]*$/im
+
+/**
+ * Does this name have special characters?
+ * @param name to name check
+ * @returns true if the name isn't a standard variable name
+ */
+export const isSpecialName = (name: string) => {
+  if (!name) return false
+  // simple naming pattern that should theoretically just work
+  const result = simpleName.test(name)
+  return !result
+}
+
 /**
  * convert string to TitleCase
  * @param value string value to convert to TitleCase
@@ -168,9 +183,7 @@ export const keyValues = (keys: KeyList): string[] => {
  */
 export const mayQuote = (value: any, quoteChar = `'`): string => {
   const str = value.toString()
-  if (!str) return ''
-  const simpleName = /^\w[\w]*$/gim
-  if (simpleName.test(str)) return str
+  if (!isSpecialName(name)) return str
   return `${quoteChar}${str}${quoteChar}`
 }
 
@@ -2323,6 +2336,13 @@ export interface ICodeGen {
    * @returns {string} generated code
    */
   streamsPrologue(indent: string): string
+
+  /**
+   * aliases or escapes names that are the language's reserved words, or must be treated specially, like hyphenate names
+   * @param name symbol name to reserve
+   * @returns either the original name, or the transformed "reserved" version of it
+   */
+  reserve(name: string): string
 
   /**
    * standard code to insert at the top of the generated "models" file(s)

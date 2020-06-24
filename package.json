@@ -67,7 +67,6 @@
     "@types/jest": "^24.0.13",
     "@types/js-yaml": "^3.12.1",
     "@types/lodash": "^4.14.144",
-    "@types/mustache": "^0.8.32",
     "@types/node": "^13.13.4",
     "@types/prettier": "^1.18.2",
     "@types/readable-stream": "^2.3.5",
@@ -103,7 +102,7 @@
     "react-dom": "^16.13.1",
     "styled-components": "^4.4.1",
     "ts-node": "^8.1.0",
-    "typescript": "^3.8.3",
+    "typescript": "3.8.2",
     "webpack": "^4.43.0"
   },
   "dependencies": {},

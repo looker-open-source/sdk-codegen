@@ -49,6 +49,7 @@ import {
   titleCase,
   camelCase,
   firstCase,
+  isSpecialName,
 } from './sdkModels'
 
 const config = TestConfig()
@@ -283,6 +284,27 @@ describe('sdkModels', () => {
           expect(actual.properties.look_id).toBeDefined()
         }
       })
+    })
+  })
+
+  describe('special symbol names', () => {
+    it.each<[string, boolean]>([
+      ['IFoo', false],
+      ['If00', false],
+      ['I_foo', false],
+      ['ba a a', true],
+      ['foo', false],
+      ['hi-fen', true],
+      ['_a', false],
+      ['$1', true],
+      ['ABC', false],
+      ['ABC ', true],
+      [' ABC', true],
+      ['012', true],
+      ['_012', false],
+      ['', false],
+    ])('isSpecialName("%s") is %s', (actual, expected) => {
+      expect(isSpecialName(actual)).toEqual(expected)
     })
   })
 

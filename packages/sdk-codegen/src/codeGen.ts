@@ -104,6 +104,10 @@ export abstract class CodeGen implements ICodeGen {
    */
   abstract methodsEpilogue(indent: string): string
 
+  reserve(name: string) {
+    return name
+  }
+
   streamsPrologue(_indent: string) {
     return ''
   }

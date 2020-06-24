@@ -181,7 +181,7 @@ body: Partial<IWriteDashboard>`)
       expect(method).toBeDefined()
       const expected = `/**
  * ### Email/password login information for the specified user.
- * 
+ *
  * POST /users/{user_id}/credentials_email -> ICredentialsEmail
  */
 async create_user_credentials_email(
@@ -207,7 +207,7 @@ async create_user_credentials_email(
       expect(method).toBeDefined()
       const expected = `/**
  * ### Get information about all datagroups.
- * 
+ *
  * GET /datagroups -> IDatagroup[]
  */
 async all_datagroups(
@@ -258,6 +258,17 @@ async all_datagroups(
       const expected = `return this.get<ITheme[], IError>('/themes/active', 
   {name: request.name, ts: request.ts, fields: request.fields}, null, options)`
       const actual = gen.httpCall(indent, method)
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('accessor syntax', () => {
+    it.each<[string, string, string]>([
+      ['foo', '', 'foo'],
+      ['foo', 'bar', 'bar.foo'],
+      ['f-o-o', 'bar', "bar['f-o-o']"],
+    ])('name:"%s" prefix:"%s" should be "%s"', (name, prefix, expected) => {
+      const actual = gen.accessor(name, prefix)
       expect(actual).toEqual(expected)
     })
   })
@@ -349,6 +360,65 @@ body: ICreateDashboardRenderTask`)
    */
   dashboard_id?: string
 }`)
+    })
+
+    describe('special symbol names', () => {
+      interface HiFen {
+        'a-one': string
+        'a two': boolean
+        'a-three': number
+      }
+
+      it('handles special names in json', () => {
+        const json = `{"a-one":"one", "a two":true, "a-three":3}`
+        const actual: HiFen = JSON.parse(json)
+        expect(actual['a-one']).toEqual('one')
+        expect(actual['a two']).toEqual(true)
+        expect(actual['a-three']).toEqual(3)
+      })
+
+      it('reserves special names in method parameters', () => {
+        const method = apiTestModel.methods.me
+        const save = method.params[0].name
+        method.params[0].name = 'hi-test'
+        const actual = gen.declareMethod(indent, method)
+        method.params[0].name = save
+        const expected = `/**
+ * ### Get information about the current user; i.e. the user account currently calling the API.
+ *
+ * GET /user -> IUser
+ */
+async me(
+  /**
+   * @param {string} hi-test Requested fields.
+   */
+  'hi-test'?: string,
+  options?: Partial<ITransportSettings>) {
+  return this.get<IUser, IError>('/user', 
+    {'hi-test'}, null, options)
+}`
+        expect(actual).toEqual(expected)
+      })
+
+      it('reserves special names in method request objects', () => {
+        const method = apiTestModel.methods.role_users
+        const swap = 2
+        const save = method.params[swap].name
+        method.params[swap].name = 'direct-association-only'
+        const actual = gen.declareMethod(indent, method)
+        method.params[swap].name = save
+        const expected = `/**
+ * ### Get information about all the users with the role that has a specific id.
+ *
+ * GET /roles/{role_id}/users -> IUser[]
+ */
+async role_users(request: IRequestRoleUsers,
+  options?: Partial<ITransportSettings>) {
+  return this.get<IUser[], IError>(\`/roles/\${request.role_id}/users\`, 
+    {fields: request.fields, 'direct-association-only': request['direct-association-only']}, null, options)
+}`
+        expect(actual).toEqual(expected)
+      })
     })
 
     describe('enums', () => {
