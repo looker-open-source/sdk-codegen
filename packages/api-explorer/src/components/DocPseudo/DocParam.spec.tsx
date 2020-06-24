@@ -27,7 +27,7 @@ describe('DocParam', () => {
     })
   })
 
-  test('optional optional params in square brackets', () => {
+  test('optional params in square brackets', () => {
     renderWithTheme(<DocParam parameter={optionalParam} />)
     expect(screen.getByText(`[${optionalParam.name}]`)).toBeInTheDocument()
   })

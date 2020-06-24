@@ -24,24 +24,9 @@
 
  */
 
-process.env.TZ = 'UTC'
+import React, { FC, PropsWithChildren } from 'react'
+import { CodeBlock } from '@looker/components'
 
-module.exports = {
-  automock: false,
-  moduleDirectories: ['./node_modules', './packages'],
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
-  moduleNameMapper: {
-    '@looker/sdk/lib/browser': '<rootDir>/packages/sdk/src',
-    '@looker/sdk/lib/node': '<rootDir>/packages/sdk/src',
-    '@looker/((?!components|design|icons)(.+))$': '<rootDir>/packages/$1/src',
-    '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/config/jest/fileMock.js',
-  },
-  restoreMocks: true,
-  setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
-  testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
-  },
-}
+export const CodeBlockWrapper: FC<PropsWithChildren<any>> = (props) => (
+  <CodeBlock>{props.value}</CodeBlock>
+)

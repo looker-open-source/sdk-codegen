@@ -8,6 +8,7 @@ import {
 } from '@looker/components'
 
 import { TryItInput, TryItValues } from '../TryIt'
+
 import { CodeStructure } from './CodeStructure'
 
 const inputTextType = (type: string) => {
