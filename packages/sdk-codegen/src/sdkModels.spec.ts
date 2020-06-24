@@ -42,13 +42,121 @@ import {
   SearchCriterionTerm,
   SetToCriteria,
   typeRefs,
+  EnumType,
+  IEnumType,
+  mayQuote,
+  ApiModel,
   titleCase,
+  camelCase,
+  firstCase,
 } from './sdkModels'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
 
 describe('sdkModels', () => {
+  describe('mayQuote', () => {
+    it('quotes foo-bar', () => {
+      expect(mayQuote('foo-bar')).toEqual(`'foo-bar'`)
+    })
+    it('does not quote foo_bar', () => {
+      expect(mayQuote('foo_bar')).toEqual(`foo_bar`)
+    })
+    it('quotes " foo_bar"', () => {
+      expect(mayQuote(' foo_bar')).toEqual(`' foo_bar'`)
+    })
+    it('does not quote _foo_bar_', () => {
+      expect(mayQuote('_foo_bar_')).toEqual(`_foo_bar_`)
+    })
+  })
+
+  describe('camelCase', () => {
+    it('empty is empty', () => {
+      expect(camelCase('')).toEqual('')
+    })
+    it('foo-bar is fooBar', () => {
+      expect(camelCase('foo-bar')).toEqual('fooBar')
+    })
+    it('foo_bar is fooBar', () => {
+      expect(camelCase('foo_bar')).toEqual('fooBar')
+    })
+    it('foobar is foobar', () => {
+      expect(camelCase('foobar')).toEqual('foobar')
+    })
+    it('FOOBAR is FOOBAR', () => {
+      expect(camelCase('FOOBAR')).toEqual('FOOBAR')
+    })
+  })
+
+  describe('titleCase', () => {
+    it('empty is empty', () => {
+      expect(titleCase('')).toEqual('')
+    })
+    it('foo-bar is FooBar', () => {
+      expect(titleCase('foo-bar')).toEqual('FooBar')
+    })
+    it('foo_bar is FooBar', () => {
+      expect(titleCase('foo_bar')).toEqual('FooBar')
+    })
+    it('foobar is foobar', () => {
+      expect(titleCase('foobar')).toEqual('Foobar')
+    })
+    it('FOOBAR is Foobar', () => {
+      expect(titleCase('FOOBAR')).toEqual('FOOBAR')
+    })
+  })
+
+  describe('firstCase', () => {
+    it('empty is empty', () => {
+      expect(firstCase('')).toEqual('')
+    })
+    it('foo-bar is Foobar', () => {
+      expect(firstCase('foo-bar')).toEqual('Foobar')
+    })
+    it('foo_bar is Foobar', () => {
+      expect(firstCase('foo_bar')).toEqual('Foobar')
+    })
+    it('foobar is Foobar', () => {
+      expect(firstCase('foobar')).toEqual('Foobar')
+    })
+    it('FOOBAR is Foobar', () => {
+      expect(firstCase('FOOBAR')).toEqual('Foobar')
+    })
+  })
+
+  describe('full names', () => {
+    describe('for methods', () => {
+      it('method full name is eponymous', () => {
+        const method = apiTestModel.methods.search_looks
+        expect(method).toBeDefined()
+        expect(method.fullName).toEqual(method.name)
+      })
+
+      it('method.parameter full name has method name prefix', () => {
+        const method = apiTestModel.methods.search_looks
+        expect(method).toBeDefined()
+        const item = method.params[0]
+        expect(item.fullName).toEqual(`${method.name}.${item.name}`)
+      })
+    })
+
+    describe('for types', () => {
+      it('type full name is eponymous', () => {
+        const method = apiTestModel.methods.search_looks
+        expect(method).toBeDefined()
+        expect(method.fullName).toEqual(method.name)
+      })
+
+      it('type.property full name has method name prefix', () => {
+        const type = apiTestModel.types.Dashboard
+        expect(type).toBeDefined()
+        Object.values(type.properties).forEach((item) => {
+          expect(item.fullName).toEqual(`${type.name}.${item.name}`)
+        })
+      })
+    })
+  })
+
   describe('request type determination', () => {
     it('search_looks', () => {
       const method = apiTestModel.methods.search_looks
@@ -114,6 +222,12 @@ describe('sdkModels', () => {
         expect(r.description).not.toEqual('')
       })
     })
+
+    it('ok responses are unique', () => {
+      const method = apiTestModel.methods.run_sql_query
+      const actual = method.okResponses
+      expect(actual.length).toEqual(4)
+    })
   })
 
   describe('required properties', () => {
@@ -132,9 +246,9 @@ describe('sdkModels', () => {
         apiTestModel.types.CreateQueryTask
       )
       expect(type).toBeDefined()
-      expect(type!.properties.query_id.required).toEqual(true)
-      expect(type!.properties.result_format.required).toEqual(true)
-      expect(type!.properties.source.required).toEqual(false)
+      expect(type?.properties.query_id.required).toEqual(true)
+      expect(type?.properties.result_format.required).toEqual(true)
+      expect(type?.properties.source.required).toEqual(false)
     })
   })
 
@@ -172,35 +286,142 @@ describe('sdkModels', () => {
     })
   })
 
-  const localeSort = (a: string, b: string) => a.localeCompare(b)
+  describe('enum types', () => {
+    const checkEnum = (type: IType, propName: string, values: any[]) => {
+      const num = type.properties[propName].type as IEnumType
+      expect(num).toBeDefined()
+      if (!(num instanceof EnumType))
+        console.error(`${type.name}.${propName} should be EnumType`)
+      expect(num).toBeInstanceOf(EnumType)
+      expect(num.name).toEqual(titleCase(propName))
+      expect(num.values).toEqual(values)
+    }
 
-  describe('sorting it out', () => {
-    it('sorts methods', () => {
-      const list = apiTestModel.methods
-      const keys = Object.keys(list)
-      const sortedKeys = Object.keys(list).sort(localeSort)
-      expect(keys).toEqual(sortedKeys)
+    it('registers enum types', () => {
+      const types = apiTestModel.types
+      expect(types[titleCase('supported_action_types')]).toBeDefined()
+      expect(types[titleCase('supported_formattings')]).toBeDefined()
+      expect(types[titleCase('pull_request_mode')]).toBeDefined()
     })
 
-    // it('sorts types', () => {
-    //   const list = apiTestModel.types
-    //   const keys = Object.keys(list)
-    //   const sortedKeys = Object.keys(list).sort(localeSort)
-    //   expect(keys).toEqual(sortedKeys)
-    // })
+    describe('enum naming', () => {
+      const rf1: OAS.SchemaObject = {
+        name: 'result_format',
+        type: 'string',
+        'x-looker-values': [
+          'inline_json',
+          'json',
+          'json_detail',
+          'json_fe',
+          'csv',
+          'html',
+          'md',
+          'txt',
+          'xlsx',
+          'gsxml',
+        ],
+        description: 'RF1',
+        nullable: true,
+      }
 
-    it('sorts tags and methods in tags', () => {
-      const list = apiTestModel.tags
-      const keys = Object.keys(list)
-      const sortedKeys = Object.keys(list).sort(localeSort)
-      expect(keys).toEqual(sortedKeys)
+      const rf2: OAS.SchemaObject = {
+        name: 'result_format',
+        type: 'string',
+        'x-looker-values': ['pdf', 'png', 'jpeg'],
+        description: 'RF2',
+        nullable: true,
+      }
 
-      keys.forEach((key) => {
-        const methods = list[key]
-        const methodKeys = Object.keys(methods)
-        const sortedMethodKeys = Object.keys(methods).sort(localeSort)
-        expect(methodKeys).toEqual(sortedMethodKeys)
+      const rf3: OAS.SchemaObject = {
+        type: 'string',
+        'x-looker-values': ['csv', 'html', 'txt'],
+        description: 'RF3',
+        nullable: true,
+      }
+
+      const rf4: OAS.SchemaObject = {
+        name: 'result_format',
+        type: 'string',
+        'x-looker-values': ['csv', 'html', 'txt', 'xlsx'],
+        description: 'RF4',
+        nullable: true,
+      }
+
+      const rf5: OAS.SchemaObject = {
+        name: 'result_format',
+        type: 'string',
+        enum: [
+          'inline_json',
+          'json',
+          'json_detail',
+          'json_fe',
+          'csv',
+          'html',
+          'md',
+          'txt',
+          'xlsx',
+          'gsxml',
+        ],
+        description: 'RF5',
+        nullable: true,
+      }
+
+      it('enum types are renamed and not overwritten', () => {
+        const api = new ApiModel({} as OAS.OpenAPIObject)
+        const actual1 = api.resolveType(rf1)
+        expect(actual1.name).toEqual('ResultFormat')
+
+        // Returns first enum for same values
+        // the `style` parameter is undefined because it is not part of this tests. Because Typescript arguments are
+        // positional only (no named arguments) the parameter must be skipped with an "ignore this" value
+        const actual5 = api.resolveType(rf5, undefined, 'Foo')
+        expect(actual5.name).toEqual('ResultFormat')
+        expect(actual5.description).toEqual(actual1.description)
+
+        const actual2 = api.resolveType(rf2)
+        expect(actual2.name).toEqual('ResultFormat1')
+
+        const actual3 = api.resolveType(rf3, undefined, 'result_format')
+        expect(actual3.name).toEqual('ResultFormat2')
+
+        const actual4 = api.resolveType(rf4, undefined, undefined, 'Meth')
+        expect(actual4.name).toEqual('MethResultFormat')
       })
+    })
+
+    it('enum from array type', () => {
+      const type = apiTestModel.types.Integration
+      expect(type).toBeDefined()
+      checkEnum(type, 'supported_formats', [
+        'txt',
+        'csv',
+        'inline_json',
+        'json',
+        'json_label',
+        'json_detail',
+        'json_detail_lite_stream',
+        'xlsx',
+        'html',
+        'wysiwyg_pdf',
+        'assembled_pdf',
+        'wysiwyg_png',
+        'csv_zip',
+      ])
+      checkEnum(type, 'supported_action_types', ['cell', 'query', 'dashboard'])
+      checkEnum(type, 'supported_formattings', ['formatted', 'unformatted'])
+      checkEnum(type, 'supported_download_settings', ['push', 'url'])
+    })
+
+    it('enum from string type', () => {
+      const type = apiTestModel.types.Project
+      expect(type).toBeDefined()
+      checkEnum(type, 'git_application_server_http_scheme', ['http', 'https'])
+      checkEnum(type, 'pull_request_mode', [
+        'off',
+        'links',
+        'recommended',
+        'required',
+      ])
     })
   })
 
@@ -654,13 +875,6 @@ describe('sdkModels', () => {
       const actual = JSON.stringify(item, null, 2)
       expect(actual).toBeDefined()
       expect(actual).toContain('"name": "dashboard_dashboard_elements"')
-    })
-  })
-
-  describe('titleCase', () => {
-    it('titlecases', () => {
-      const actual = titleCase('POST')
-      expect(actual).toEqual('Post')
     })
   })
 })

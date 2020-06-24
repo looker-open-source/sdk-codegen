@@ -26,6 +26,7 @@
 
 import { TestConfig } from './testUtils'
 import { TypescriptGen } from './typescript.gen'
+import { titleCase } from './sdkModels'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
@@ -36,10 +37,20 @@ const indent = ''
 describe('typescript generator', () => {
   it('comment header', () => {
     const text = 'line 1\nline 2'
-    const actual = gen.commentHeader(indent, text)
-    const expected = `/**
+    let actual = gen.commentHeader(indent, text)
+    let expected = `/**
  * line 1
  * line 2
+ */
+`
+    expect(actual).toEqual(expected)
+
+    actual = gen.commentHeader(indent, text, ' ')
+    expected = `/**
+
+ line 1
+ line 2
+
  */
 `
     expect(actual).toEqual(expected)
@@ -269,31 +280,12 @@ dashboard_id: string`)
  * body parameter for dynamically created request type
  */
 body: ICreateDashboardRenderTask`)
-        //         const actual = gen.declareType(indent, type!)
-        //         expect(actual).toEqual(`// Dynamically generated request type for create_dashboard_render_task
-        // export interface IRequestcreate_dashboard_render_task{
-        //   // Id of dashboard to render
-        //   dashboard_id: number
-        //   // Output type: pdf, png, or jpg
-        //   result_format: string
-        //   body: Partial<ICreateDashboardRenderTask>
-        //   // Output width in pixels
-        //   width: number
-        //   // Output height in pixels
-        //   height: number
-        //   // Requested fields.
-        //   fields?: string
-        //   // Paper size for pdf
-        //   pdf_paper_size?: string
-        //   // Whether to render pdf in landscape
-        //   pdf_landscape?: boolean
-        // }`)
       }
     })
     it('with arrays and hashes', () => {
       const type = apiTestModel.types.Workspace
       const actual = gen.declareType(indent, type)
-      expect(actual).toEqual(`export interface IWorkspace{
+      expect(actual).toEqual(`export interface IWorkspace {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
@@ -311,7 +303,7 @@ body: ICreateDashboardRenderTask`)
     it('with refs, arrays and nullable', () => {
       const type = apiTestModel.types.ApiVersion
       const actual = gen.declareType(indent, type)
-      expect(actual).toEqual(`export interface IApiVersion{
+      expect(actual).toEqual(`export interface IApiVersion {
   /**
    * Current Looker release version number (read-only)
    */
@@ -326,7 +318,8 @@ body: ICreateDashboardRenderTask`)
     it('required properties', () => {
       const type = apiTestModel.types.CreateQueryTask
       const actual = gen.declareType(indent, type)
-      expect(actual).toEqual(`export interface ICreateQueryTask{
+      const name = titleCase('result_format')
+      expect(actual).toEqual(`export interface ICreateQueryTask {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
@@ -338,7 +331,7 @@ body: ICreateDashboardRenderTask`)
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: string
+  result_format: ${name}
   /**
    * Source of query task
    */
@@ -356,6 +349,30 @@ body: ICreateDashboardRenderTask`)
    */
   dashboard_id?: string
 }`)
+    })
+
+    describe('enums', () => {
+      it('declaration', () => {
+        const type =
+          apiTestModel.types.CreateQueryTask.properties.result_format.type
+        const actual = gen.declareType('', type)
+        const name = titleCase('result_format')
+        expect(actual).toEqual(`/**
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ */
+export enum ${name} {
+  inline_json = 'inline_json',
+  json = 'json',
+  json_detail = 'json_detail',
+  json_fe = 'json_fe',
+  csv = 'csv',
+  html = 'html',
+  md = 'md',
+  txt = 'txt',
+  xlsx = 'xlsx',
+  gsxml = 'gsxml'
+}`)
+      })
     })
   })
 })

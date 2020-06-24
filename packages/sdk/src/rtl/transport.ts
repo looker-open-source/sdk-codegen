@@ -43,8 +43,10 @@ const tracing = false
  */
 export function trace(message: string, info?: any) {
   if (tracing) {
+    // eslint-disable-next-line no-console
     console.debug(message)
     if (info) {
+      // eslint-disable-next-line no-console
       console.debug({ info })
     }
   }
@@ -395,11 +397,10 @@ export function encodeParams(values?: Values) {
   if (!values) return ''
 
   const keys = Object.keys(values)
-  const params = keys
+  return keys
     .filter((k) => values[k] !== undefined) // `null` and `false` will both be passe
     .map((k) => k + '=' + encodeParam(values[k]))
     .join('&')
-  return params
 }
 
 /**

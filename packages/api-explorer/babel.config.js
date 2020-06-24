@@ -49,6 +49,15 @@ module.exports = (api) => {
     ],
     presets: [
       [
+        '@babel/preset-env',
+        {
+          targets: {
+            esmodules: true,
+          },
+          useBuiltIns: false,
+        },
+      ],
+      [
         '@babel/preset-react',
         {
           development: process.env.BABEL_ENV !== 'build',

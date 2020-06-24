@@ -55,7 +55,7 @@ interface LanguageSDKProps {
   type?: IType
 }
 
-const StyledHeading = styled(Heading)`
+const Heading3 = styled(Heading)`
   color: ${({ theme }) => theme.colors.text3};
 `
 
@@ -73,9 +73,9 @@ export const DocSDKs: React.FC<LanguageSDKProps> = ({ api, method, type }) => {
   return (
     <Box py="large">
       <SpaceVertical mb="medium">
-        <StyledHeading as="h2" fontWeight="semiBold">
+        <Heading3 as="h2" fontWeight="semiBold">
           Language SDK declarations
-        </StyledHeading>
+        </Heading3>
       </SpaceVertical>
       <TabList {...tabs}>
         {Object.keys(generators).map((language) => (

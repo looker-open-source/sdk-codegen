@@ -26,17 +26,16 @@
 
 import React, { FC } from 'react'
 import { Flex, Space } from '@looker/components'
-import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 import { useParams } from 'react-router-dom'
+import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 
+import { TryIt, TryItHttpMethod } from '@looker/try-it'
 import {
   DocMarkdown,
   DocReferences,
   DocTitle,
   DocSDKs,
   Main,
-  TryIt,
-  TryItHttpMethod,
 } from '../../components'
 import {
   DocActivityType,
