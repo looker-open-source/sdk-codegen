@@ -36,10 +36,15 @@ import { writeSpecFile } from './fetchSpec'
  * @param {string} spec
  * @returns {Promise<string>} name of the file written
  */
-export const swapXLookerNullable = (spec: string) => {
-  const swapRegex = /x-looker-nullable/gi
-  const nullable = 'nullable'
-  return spec.replace(swapRegex, nullable)
+export const swapXLookerTags = (spec: string) => {
+  const swaps = [
+    { pattern: /x-looker-nullable/gi, replacement: 'nullable' },
+    { pattern: /x-looker-values/gi, replacement: 'enum' },
+  ]
+  swaps.forEach((swap) => {
+    spec = spec.replace(swap.pattern, swap.replacement)
+  })
+  return spec
 }
 
 type OpenApiStyle = ParameterStyle | undefined
@@ -97,9 +102,14 @@ const findOpenApiParam = (
  *
  * @param {string} openApiSpec
  * @param {string} swaggerSpec
+ * @param logIt true to output fixes to console.log, false to skip them. Defaults to false.
  * @returns {string} modified openApiSpec
  */
-export const fixConversion = (openApiSpec: string, swaggerSpec: string) => {
+export const fixConversion = (
+  openApiSpec: string,
+  swaggerSpec: string,
+  logIt = false
+) => {
   const swagger = JSON.parse(swaggerSpec)
   const api = JSON.parse(openApiSpec)
   const paths = swagger.paths
@@ -159,9 +169,11 @@ export const fixConversion = (openApiSpec: string, swaggerSpec: string) => {
   })
 
   if (fixes.length > 0) {
-    // create the variable to avoid Typescript string template limitation
-    const fixed = fixes.join('\n')
-    log(`Fixed ${fixes.length} OpenAPI conversion issues:\n${fixed}`)
+    if (logIt) {
+      // create the variable to avoid Typescript string template limitation
+      const fixed = fixes.join('\n')
+      log(`Fixed ${fixes.length} OpenAPI conversion issues:\n${fixed}`)
+    }
 
     // Return the modified API as an unformatted string
     return JSON.stringify(api)
@@ -170,17 +182,16 @@ export const fixConversion = (openApiSpec: string, swaggerSpec: string) => {
 }
 
 /**
- * Replaces x-looker-nullable with nullable for parameters and properties in a file
+ * Replaces Looker-specific tags with OpenAPI equivalents
  * @param {string} openApiFile name of the Open API file to process
  * @returns {Promise<string>} the string contents of the updated spec
  */
-export const swapNullableInFile = (openApiFile: string) => {
+export const swapXLookerTagsInFile = (openApiFile: string) => {
   if (!isFileSync(openApiFile)) {
     return quit(`${openApiFile} was not found`)
   }
-  log(`replacing "x-looker-nullable" with "nullable" in ${openApiFile} ...`)
   const spec = readFileSync(openApiFile)
-  return swapXLookerNullable(spec)
+  return swapXLookerTags(spec)
 }
 
 /**
@@ -213,7 +224,7 @@ export const convertSpec = (
     if (!isFileSync(openApiFilename)) {
       return fail('convertSpec', `creating ${openApiFilename} failed`)
     }
-    let spec = swapNullableInFile(openApiFilename)
+    let spec = swapXLookerTagsInFile(openApiFilename)
     spec = fixConversion(spec, readFileSync(swaggerFilename))
     writeSpecFile(openApiFilename, spec)
     success(`Fixed up ${openApiFilename}`)

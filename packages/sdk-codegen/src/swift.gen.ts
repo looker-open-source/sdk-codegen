@@ -27,11 +27,14 @@
 import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
+  EnumType,
+  EnumValueType,
   IMappedType,
   IMethod,
   IParameter,
   IProperty,
   IType,
+  mayQuote,
   strBody,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
@@ -48,6 +51,8 @@ export class SwiftGen extends CodeGen {
   argDelimiter = ', '
   paramDelimiter = ',\n'
   propDelimiter = '\n'
+  enumDelimiter = '\n'
+  codeQuote = '"'
 
   indentStr = '    '
   endTypeStr = `\n}`
@@ -119,10 +124,20 @@ import Foundation
     return this.fileName(`sdk/${baseFileName}`)
   }
 
-  commentHeader(indent: string, text: string | undefined) {
-    return text
-      ? `${indent}/**\n${commentBlock(text, indent, ' * ')}\n${indent} */\n`
-      : ''
+  commentHeader(indent: string, text: string | undefined, commentStr = ' * ') {
+    if (!text) return ''
+    if (commentStr === ' ') {
+      return `${indent}/**\n\n${commentBlock(
+        text,
+        indent,
+        commentStr
+      )}\n\n${indent} */\n`
+    }
+    return `${indent}/**\n${commentBlock(
+      text,
+      indent,
+      commentStr
+    )}\n${indent} */\n`
   }
 
   declareProperty(indent: string, property: IProperty) {
@@ -259,17 +274,30 @@ import Foundation
   // declareType(indent: string, type: IType): string {
   //   return super.declareType(this.bumper(indent), type)
   // }
+  declareEnumValue(indent: string, value: EnumValueType) {
+    const quote = typeof value === 'string' ? this.codeQuote : ''
+    return `${indent}case ${mayQuote(value)} = ${quote}${value}${quote}`
+  }
 
   typeSignature(indent: string, type: IType) {
     const recursive = type.isRecursive()
-    const structOrClass = recursive ? 'class' : 'struct'
+    let typeName = recursive ? 'class' : 'struct'
+    let baseClass = 'SDKModel'
+    const isEnum = type instanceof EnumType
+    if (isEnum) {
+      typeName = 'enum'
+      const num = type as EnumType
+      const mapped = this.typeMap(num.elementType)
+      baseClass = `${mapped.name}, Codable`
+    }
+
     const needClass = recursive
       ? '\nRecursive type references must use Class instead of Struct'
       : ''
     const mapped = this.typeMap(type)
     return (
       this.commentHeader(indent, type.description + needClass) +
-      `${indent}${structOrClass} ${mapped.name}: SDKModel {\n`
+      `${indent}${typeName} ${mapped.name}: ${baseClass} {\n`
     )
   }
 
@@ -395,7 +423,7 @@ import Foundation
   httpCall(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
     const type = this.typeMap(method.type)
-    const bump = indent + this.indentStr
+    const bump = this.bumper(indent)
     const args = this.httpArgs(bump, method)
     const errors = this.errorResponses(indent, method)
     return `${indent}let result: SDKResponse<${
@@ -452,7 +480,7 @@ ${indent}return result`
     const swiftTypes: Record<string, IMappedType> = {
       Error: { default: '', name: `${ns}Error` },
       Group: { default: '', name: `${ns}Group` },
-      Locale: { default: '', name: `${ns}Group` },
+      Locale: { default: '', name: `${ns}Locale` },
       any: { default: this.nullStr, name: 'AnyCodable' },
       boolean: { default: this.nullStr, name: 'Bool' },
       byte: { default: this.nullStr, name: 'binary' },
@@ -486,6 +514,8 @@ ${indent}return result`
         }
         case 'DelimArrayType':
           return { default: 'nil', name: `DelimArray<${map.name}>` }
+        case 'EnumType':
+          return { default: 'nil', name: type.name }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }

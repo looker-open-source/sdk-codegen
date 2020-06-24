@@ -34,6 +34,9 @@ import {
   IProperty,
   IMappedType,
   ApiModel,
+  EnumType,
+  EnumValueType,
+  mayQuote,
 } from './sdkModels'
 
 export interface IVersionInfo {
@@ -52,7 +55,9 @@ export abstract class CodeGen implements ICodeGen {
   fileExtension = '.code'
   argDelimiter = ', '
   paramDelimiter = ',\n'
-  propDelimiter = ',\n'
+  propDelimiter = '\n'
+  enumDelimiter = ',\n'
+  codeQuote = `'`
 
   indentStr = '  '
   commentStr = '// '
@@ -123,6 +128,11 @@ export abstract class CodeGen implements ICodeGen {
     param: IParameter
   ): string
 
+  declareEnumValue(indent: string, value: EnumValueType) {
+    const quote = typeof value === 'string' ? this.codeQuote : ''
+    return `${indent}${mayQuote(value)} = ${quote}${value}${quote}`
+  }
+
   abstract declareProperty(indent: string, property: IProperty): string
 
   abstract typeSignature(indent: string, type: IType): string
@@ -181,7 +191,11 @@ export abstract class CodeGen implements ICodeGen {
     return commentBlock(description, indent, this.commentStr)
   }
 
-  commentHeader(indent: string, text: string | undefined) {
+  commentHeader(
+    indent: string,
+    text: string | undefined,
+    _commentStr?: string
+  ) {
     return text ? `${this.comment(indent, text)}\n` : ''
   }
 
@@ -208,13 +222,22 @@ export abstract class CodeGen implements ICodeGen {
   declareType(indent: string, type: IType) {
     const bump = this.bumper(indent)
     const props: string[] = []
-    // TODO skip read-only properties when we correctly tag read-only attributes
-    Object.values(type.properties).forEach((prop) =>
-      props.push(this.declareProperty(bump, prop))
-    )
+    let propertyValues = ''
+    if (type instanceof EnumType) {
+      const num = type as EnumType
+      num.values.forEach((value) =>
+        props.push(this.declareEnumValue(bump, value))
+      )
+      propertyValues = props.join(this.enumDelimiter)
+    } else {
+      Object.values(type.properties).forEach((prop) =>
+        props.push(this.declareProperty(bump, prop))
+      )
+      propertyValues = props.join(this.propDelimiter)
+    }
     return (
       this.typeSignature(indent, type) +
-      props.join(this.propDelimiter) +
+      propertyValues +
       this.construct(indent, type) +
       `${this.endTypeStr ? indent : ''}${this.endTypeStr}`
     )

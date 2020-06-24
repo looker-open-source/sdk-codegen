@@ -161,12 +161,22 @@
           "@typescript-eslint/interface-name-prefix": "off",
           "@typescript-eslint/no-unused-vars": "warn",
           "@typescript-eslint/camelcase": "off",
-          "sort-keys-fix/sort-keys-fix": "off"
+          "sort-keys": "off",
+          "sort-keys-fix/sort-keys-fix": "off",
+          "no-useless-constructor": "off",
+          "@typescript-eslint/no-empty-interface": "off"
         }
       }
     ]
   },
   "prettier": "@looker/prettier-config",
+  "prettierConfig": {
+    "overrides": {
+      "rules": {
+        "trailingComma": "all"
+      }
+    }
+  },
   "keywords": [],
   "resolutions": {
     "set-value": "^2.0.1",
