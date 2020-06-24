@@ -75,7 +75,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
       <DocSDKs api={api} method={method} />
       {seeTypes.length > 0 && (
         <Flex mb="large">
-          Referenced types:
+          <Flex mr="xsmall">Referenced types:</Flex>
           <DocReferences items={seeTypes} api={api} specKey={specKey} />
         </Flex>
       )}

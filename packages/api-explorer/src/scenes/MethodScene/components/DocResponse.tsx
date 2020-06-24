@@ -28,6 +28,7 @@ import React, { FC } from 'react'
 import {
   Box,
   Heading,
+  MessageBar,
   SpaceVertical,
   Tab,
   TabList,
@@ -36,7 +37,6 @@ import {
   Table,
   TableHead,
   TableRow,
-  TableHeaderCell,
   useTabs,
 } from '@looker/components'
 import { IMethodResponse } from '@looker/sdk-codegen'
@@ -71,10 +71,12 @@ export const DocResponse: FC<DocResponseProps> = ({ responses }) => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableHeaderCell>
-                    {response.statusCode}: {response.description}{' '}
-                    {response.mediaType}
-                  </TableHeaderCell>
+                  <SpaceVertical py="small">
+                    <MessageBar intent="inform">
+                      {response.statusCode}: {response.description}{' '}
+                      {response.mediaType}
+                    </MessageBar>
+                  </SpaceVertical>
                 </TableRow>
               </TableHead>
             </Table>

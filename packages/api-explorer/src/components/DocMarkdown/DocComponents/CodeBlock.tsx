@@ -29,7 +29,7 @@ import styled from 'styled-components'
 
 export const StyledCodeBlock = styled(CodeBlock)``
 
-StyledCodeBlock.defaultProps = { mb: 'large' }
+StyledCodeBlock.defaultProps = { fontSize: 'large', mb: 'large' }
 
 export const CodeBlockWrapper: FC<PropsWithChildren<any>> = (props) => (
   <StyledCodeBlock>{props.value}</StyledCodeBlock>
