@@ -26,7 +26,7 @@
 
 import React, { FC, Dispatch } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Flex, FlexItem, Heading } from '@looker/components'
+import { Flex, FlexItem, Heading, Space, Text } from '@looker/components'
 import styled from 'styled-components'
 
 import { SpecItems } from '../../App'
@@ -38,20 +38,6 @@ const StyledHeaderWrapper = styled(Flex)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.ui2};
   flex-direction: row;
   height: 66px;
-`
-
-const StyledNavLink = styled(NavLink)`
-  color: ${({ theme }) => theme.colors.key};
-  display: flex;
-  align-items: center;
-  font-size: ${({ theme }) => theme.fontSizes.xlarge};
-
-  svg {
-    margin-right: ${({ theme }) => theme.space.small};
-    width: 100%;
-    max-width: 100px;
-    height: auto;
-  }
 `
 
 interface HeaderProps {
@@ -69,13 +55,16 @@ export const Header: FC<HeaderProps> = ({ specs, spec, specDispatch }) => (
     pb="medium"
     pl="large"
   >
-    <FlexItem>
+    <FlexItem align-items="center">
       <Heading fontSize="xxlarge">
-        <Flex>
-          <StyledNavLink to={`/${spec.key}`}>
-            <Logo /> API Explorer
-          </StyledNavLink>
-        </Flex>
+        <NavLink to={`/${spec.key}`}>
+          <Space gap="small">
+            <Logo />
+            <Text color="key" fontSize="xlarge">
+              API Explorer
+            </Text>
+          </Space>
+        </NavLink>
       </Heading>
     </FlexItem>
     <FlexItem>

@@ -52,6 +52,7 @@ function getMethodColor(method: HttpMethod) {
       return 'warn'
   }
 }
+
 const StyledBadge = styled(Badge)`
   border-radius: 4px;
   padding-top: ${({ theme }) => theme.space.xxsmall};
