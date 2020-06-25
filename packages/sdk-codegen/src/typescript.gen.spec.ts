@@ -26,7 +26,7 @@
 
 import { TestConfig } from './testUtils'
 import { TypescriptGen } from './typescript.gen'
-import { titleCase } from './sdkModels'
+import { EnumType, titleCase } from './sdkModels'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
@@ -271,6 +271,28 @@ async all_datagroups(
       const actual = gen.accessor(name, prefix)
       expect(actual).toEqual(expected)
     })
+
+    it('method with request body', () => {
+      const method = apiTestModel.methods.create_dashboard_render_task
+      const expected = `/**
+ * ### Create a new task to render a dashboard to a document or image.
+ *
+ * Returns a render task object.
+ * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+ * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+ *
+ * POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> IRenderTask
+ */
+async create_dashboard_render_task(request: IRequestCreateDashboardRenderTask,
+  options?: Partial<ITransportSettings>) {
+    request.dashboard_id = encodeParam(request.dashboard_id)
+    request.result_format = encodeParam(request.result_format)
+  return this.post<IRenderTask, IError | IValidationError>(\`/render_tasks/dashboards/\${request.dashboard_id}/\${request.result_format}\`, 
+    {width: request.width, height: request.height, fields: request.fields, pdf_paper_size: request.pdf_paper_size, pdf_landscape: request.pdf_landscape, long_tables: request.long_tables}, request.body, options)
+}`
+      const actual = gen.declareMethod(indent, method)
+      expect(actual).toEqual(expected)
+    })
   })
 
   describe('type creation', () => {
@@ -422,15 +444,15 @@ async role_users(request: IRequestRoleUsers,
     })
 
     describe('enums', () => {
-      it('declaration', () => {
+      it('Result format declaration', () => {
         const type =
           apiTestModel.types.CreateQueryTask.properties.result_format.type
+        expect(type instanceof EnumType).toBeTruthy()
         const actual = gen.declareType('', type)
-        const name = titleCase('result_format')
         expect(actual).toEqual(`/**
  * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
  */
-export enum ${name} {
+export enum ResultFormat {
   inline_json = 'inline_json',
   json = 'json',
   json_detail = 'json_detail',
@@ -441,6 +463,19 @@ export enum ${name} {
   txt = 'txt',
   xlsx = 'xlsx',
   gsxml = 'gsxml'
+}`)
+      })
+      it('Align declaration', () => {
+        const type =
+          apiTestModel.types.LookmlModelExploreField.properties.align.type
+        expect(type instanceof EnumType).toBeTruthy()
+        const actual = gen.declareType('', type)
+        expect(actual).toEqual(`/**
+ * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
+ */
+export enum Align {
+  left = 'left',
+  right = 'right'
 }`)
       })
     })

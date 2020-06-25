@@ -27084,7 +27084,7 @@
             "type": "string",
             "readOnly": true,
             "x-looker-values": ["left", "right"],
-            "description": "The appropriate horizontal text alignment the values of this field shoud be displayed in. Valid values are: \"left\", \"right\".",
+            "description": "The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: \"left\", \"right\".",
             "nullable": false
           },
           "can_filter": {

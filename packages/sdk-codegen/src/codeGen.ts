@@ -227,17 +227,21 @@ export abstract class CodeGen implements ICodeGen {
     const bump = this.bumper(indent)
     const props: string[] = []
     let propertyValues = ''
-    if (type instanceof EnumType) {
-      const num = type as EnumType
-      num.values.forEach((value) =>
-        props.push(this.declareEnumValue(bump, value))
-      )
-      propertyValues = props.join(this.enumDelimiter)
-    } else {
-      Object.values(type.properties).forEach((prop) =>
-        props.push(this.declareProperty(bump, prop))
-      )
-      propertyValues = props.join(this.propDelimiter)
+    try {
+      if (type instanceof EnumType) {
+        const num = type as EnumType
+        num.values.forEach((value) =>
+          props.push(this.declareEnumValue(bump, value))
+        )
+        propertyValues = props.join(this.enumDelimiter)
+      } else {
+        Object.values(type.properties).forEach((prop) =>
+          props.push(this.declareProperty(bump, prop))
+        )
+        propertyValues = props.join(this.propDelimiter)
+      }
+    } catch {
+      throw new Error(JSON.stringify(type, null, 2))
     }
     return (
       this.typeSignature(indent, type) +

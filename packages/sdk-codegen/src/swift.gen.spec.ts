@@ -66,4 +66,47 @@ enum PermissionType: String, Codable {
       expect(actual).toEqual(expected)
     })
   })
+
+  // export interface IApiSession {
+  //   /**
+  //    * Operations the current user is able to perform on this object (read-only)
+  //    */
+  //   can?: IDictionary<boolean>
+  //   /**
+  //    * The id of active workspace for this session
+  //    */
+  //   workspace_id?: string
+  //   /**
+  //    * The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)
+  //    */
+  //   sudo_user_id?: number
+  // }
+
+  describe('special symbols', () => {
+    it('generates coding keys', () => {
+      const type = apiTestModel.types.ApiSession
+      const can = type.properties.can
+      const work = type.properties.workspace_id
+      can.name = 'can-it'
+      work.name = 'workspace-id'
+      const actual = gen.declareType(indent, type)
+      can.name = 'can'
+      work.name = 'workspace_id'
+      const expected = `struct ApiSession: SDKModel {
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    var can_it: StringDictionary<Bool>?
+    /**
+     * The id of active workspace for this session
+     */
+    var workspace_id: String?
+    /**
+     * The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)
+     */
+    var sudo_user_id: Int64?
+}`
+      expect(actual).toEqual(expected)
+    })
+  })
 })

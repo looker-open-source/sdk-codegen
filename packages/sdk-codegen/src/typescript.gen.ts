@@ -119,8 +119,8 @@ export class ${this.packageName}Stream extends APIMethods {
 
   modelsPrologue(_indent: string) {
     return `
-import { Url } from '../../rtl/constants'
 import { DelimArray } from '../../rtl/delimArray'
+import { Url } from '../../rtl/constants'
 
 /*
  * ${this.warnEditing()}
@@ -158,7 +158,6 @@ export interface IDictionary<T> {
     if (property.name === strBody) {
       // TODO refactor this hack to track context when the body parameter is created for the request type
       property.type.refCount++
-      // No longer using Partial<T> because required and optional are supposed to be accurate
       return (
         this.commentHeader(
           indent,
@@ -393,7 +392,7 @@ export interface IDictionary<T> {
     // result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
     result = this.argFill(
       result,
-      method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr
+      method.bodyArg ? this.accessor(method.bodyArg, request) : this.nullStr
     )
     result = this.argFill(
       result,

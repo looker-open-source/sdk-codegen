@@ -183,7 +183,7 @@ export const keyValues = (keys: KeyList): string[] => {
  */
 export const mayQuote = (value: any, quoteChar = `'`): string => {
   const str = value.toString()
-  if (!isSpecialName(name)) return str
+  if (!isSpecialName(str)) return str
   return `${quoteChar}${str}${quoteChar}`
 }
 
