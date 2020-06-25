@@ -34,7 +34,8 @@ import {
   ExtensionContextData,
 } from '@looker/extension-sdk-react'
 import { TryItCallback } from '@looker/try-it'
-import { IRawResponse } from '@looker/sdk'
+import { IRawResponse } from '@looker/sdk/lib/browser'
+import { pathify } from '../../try-it/lib/components/requestUtils'
 
 const specs: ApiExplorerProps = {
   specs: {
@@ -70,11 +71,10 @@ export const ApiExplorerProvider: FC = () => {
       queryParams,
       body
     ): Promise<IRawResponse> => {
-      // const resp = await core40SDK.authSession.transport.rawRequest(
+      const url = pathify(path, pathParams)
       const resp = await core40SDK.authSession.transport.rawRequest(
         httpMethod,
-        path,
-        pathParams,
+        url,
         queryParams,
         body
       )
