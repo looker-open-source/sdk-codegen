@@ -105,8 +105,8 @@ const SidebarDivider = styled.div<SidebarStyleProps>`
   overflow: visible;
   position: relative;
   &:hover {
-    border-left: 1px solid
-      ${({ theme, open }) => (open ? theme.colors.ui3 : theme.colors.ui2)};
+    border-color: ${({ theme, open }) =>
+      open ? theme.colors.ui3 : 'transparent'};
   }
 `
 
