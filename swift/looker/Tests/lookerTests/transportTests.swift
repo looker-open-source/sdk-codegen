@@ -350,6 +350,10 @@ class transportTests: XCTestCase {
     }
     """
     struct hiFenWithCodingKeys: SDKModel {
+        private enum CodingKeys : String, CodingKey {
+            case bool_val = "bool-val", int_val = "int-val", dub_val = "dub-val", str_val = "str-val", date_val = "date-val", nada_val = "nada-val", dict_val = "dict-val", rat_nest = "rat-nest"
+        }
+        
         var bool_val: Bool?
         var int_val: Int?
         var dub_val: Double?
@@ -359,9 +363,6 @@ class transportTests: XCTestCase {
         var dict_val: StringDictionary<AnyCodable>?
         var rat_nest: AnyCodable?
         
-        private enum CodingKeys : String, CodingKey {
-            case bool_val = "bool-val", int_val = "int-val", dub_val = "dub-val", str_val = "str-val", date_val = "date-val", nada_val = "nada-val", dict_val = "dict-val", rat_nest = "rat-nest"
-        }
     }
     
     /// Create a custom json handler for hyphens https://stackoverflow.com/questions/44396500/how-do-i-use-custom-keys-with-swift-4s-decodable-protocol/44396824#44396824
@@ -399,73 +400,5 @@ class transportTests: XCTestCase {
         XCTAssertTrue(json.contains("dict-val"))
         XCTAssertTrue(json.contains("rat-nest"))
     }
-    
-    func testAutoHyphenate() {
-    let encoder = JSONEncoder()
-    encoder.keyEncodingStrategy = .convertToUpperCamelCase
-    let encoded = try encoder.encode(address)
-}
-
-// wrapper to allow us to substitute our mapped string keys.
-struct AnyCodingKey : CodingKey {
-
-  var stringValue: String
-  var intValue: Int?
-
-  init(_ base: CodingKey) {
-    self.init(stringValue: base.stringValue, intValue: base.intValue)
-  }
-
-  init(stringValue: String) {
-    self.stringValue = stringValue
-  }
-
-  init(intValue: Int) {
-    self.stringValue = "\(intValue)"
-    self.intValue = intValue
-  }
-
-  init(stringValue: String, intValue: Int?) {
-    self.stringValue = stringValue
-    self.intValue = intValue
-  }
-}
-
-extension JSONEncoder.KeyEncodingStrategy {
-
-  static var convertToUpperCamelCase: JSONEncoder.KeyEncodingStrategy {
-    return .custom { codingKeys in
-
-      var key = AnyCodingKey(codingKeys.last!)
-
-      // uppercase first letter
-      if let firstChar = key.stringValue.first {
-        let i = key.stringValue.startIndex
-        key.stringValue.replaceSubrange(
-          i ... i, with: String(firstChar).uppercased()
-        )
-      }
-      return key
-    }
-  }
-}
-
-extension JSONDecoder.KeyDecodingStrategy {
-
-  static var convertFromUpperCamelCase: JSONDecoder.KeyDecodingStrategy {
-    return .custom { codingKeys in
-
-      var key = AnyCodingKey(codingKeys.last!)
-
-      // lowercase first letter
-      if let firstChar = key.stringValue.first {
-        let i = key.stringValue.startIndex
-        key.stringValue.replaceSubrange(
-          i ... i, with: String(firstChar).lowercased()
-        )
-      }
-      return key
-    }
-  }
 }
 

@@ -358,6 +358,21 @@ import Foundation
     )
   }
 
+  codingKeys(indent: string, type: IType) {
+    if (!type.hasSpecialNeeds) return ''
+
+    const bump = this.bumper(indent)
+    const bump2 = this.bumper(bump)
+    const keys = Object.values(type.properties).map(
+      (p) => p.name + (p.hasSpecialNeeds ? ` = "${p.jsonName}"` : '')
+    )
+    return (
+      `\n${bump}private enum CodingKeys : String, CodingKey {` +
+      `\n${bump2}case ${keys.join(', ')}` +
+      `\n${bump}}\n`
+    )
+  }
+
   // declareType(indent: string, type: IType): string {
   //   return super.declareType(this.bumper(indent), type)
   // }
@@ -378,13 +393,15 @@ import Foundation
       baseClass = `${mapped.name}, Codable`
     }
 
+    const keys = this.codingKeys(indent, type)
+
     const needClass = recursive
       ? '\nRecursive type references must use Class instead of Struct'
       : ''
     const mapped = this.typeMap(type)
     return (
       this.commentHeader(indent, type.description + needClass) +
-      `${indent}${typeName} ${mapped.name}: ${baseClass} {\n`
+      `${indent}${typeName} ${mapped.name}: ${baseClass} {\n${keys}`
     )
   }
 

@@ -33,6 +33,7 @@
 
 package com.looker.sdk
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.looker.rtl.*
 import java.io.Serializable
 import java.util.*
@@ -41,16 +42,17 @@ data class AccessToken (
   /**
    * Access Token used for API calls (read-only)
    */
+  @param:JsonProperty("access_token") @get:JsonProperty("access_token")
   var access_token: String? = null,
-  /**
+        /**
    * Type of Token (read-only)
    */
   var token_type: String? = null,
-  /**
+        /**
    * Number of seconds before the token expires (read-only)
    */
   var expires_in: Long? = null,
-  /**
+        /**
    * Refresh token which can be used to obtain a new access token (read-only)
    */
   var refresh_token: String? = null

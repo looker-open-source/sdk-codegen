@@ -50,6 +50,7 @@ import {
   camelCase,
   firstCase,
   isSpecialName,
+  safeName,
 } from './sdkModels'
 
 const config = TestConfig()
@@ -72,38 +73,62 @@ describe('sdkModels', () => {
   })
 
   describe('camelCase', () => {
-    it('empty is empty', () => {
-      expect(camelCase('')).toEqual('')
+    it.each<[string, string]>([
+      ['', ''],
+      ['foo-bar', 'fooBar'],
+      ['foo -bar', 'fooBar'],
+      ['foo- bar', 'fooBar'],
+      ['foo --  bar', 'fooBar'],
+      ['foo bar', 'fooBar'],
+      ['foo bar--', 'fooBar'],
+      ['foo bar   ', 'fooBar'],
+      ['foo_bar', 'fooBar'],
+      ['foo   bar', 'fooBar'],
+      ['foo -  bar  - - baz', 'fooBarBaz'],
+      ['Foo  -  Bar', 'FooBar'],
+      ['FOOBAR', 'FOOBAR'],
+    ])('"%s" is "%s"', (actual, expected) => {
+      expect(camelCase(actual)).toEqual(expected)
     })
-    it('foo-bar is fooBar', () => {
-      expect(camelCase('foo-bar')).toEqual('fooBar')
-    })
-    it('foo_bar is fooBar', () => {
-      expect(camelCase('foo_bar')).toEqual('fooBar')
-    })
-    it('foobar is foobar', () => {
-      expect(camelCase('foobar')).toEqual('foobar')
-    })
-    it('FOOBAR is FOOBAR', () => {
-      expect(camelCase('FOOBAR')).toEqual('FOOBAR')
+  })
+
+  describe('safeName', () => {
+    it.each<[string, string]>([
+      ['', ''],
+      ['foo-bar', 'foo_bar'],
+      ['foo -bar', 'foo_bar'],
+      ['foo- bar', 'foo_bar'],
+      ['foo --  bar', 'foo_bar'],
+      ['foo bar', 'foo_bar'],
+      ['foo bar--', 'foo_bar_'],
+      ['foo bar   ', 'foo_bar_'],
+      ['foo_bar', 'foo_bar'],
+      ['foo   bar', 'foo_bar'],
+      ['foo -  bar  - - baz', 'foo_bar_baz'],
+      ['Foo  -  Bar', 'Foo_Bar'],
+      ['FOOBAR', 'FOOBAR'],
+    ])('"%s" is "%s"', (actual, expected) => {
+      expect(safeName(actual)).toEqual(expected)
     })
   })
 
   describe('titleCase', () => {
-    it('empty is empty', () => {
-      expect(titleCase('')).toEqual('')
-    })
-    it('foo-bar is FooBar', () => {
-      expect(titleCase('foo-bar')).toEqual('FooBar')
-    })
-    it('foo_bar is FooBar', () => {
-      expect(titleCase('foo_bar')).toEqual('FooBar')
-    })
-    it('foobar is foobar', () => {
-      expect(titleCase('foobar')).toEqual('Foobar')
-    })
-    it('FOOBAR is Foobar', () => {
-      expect(titleCase('FOOBAR')).toEqual('FOOBAR')
+    it.each<[string, string]>([
+      ['', ''],
+      ['foo-bar', 'FooBar'],
+      ['foo -bar', 'FooBar'],
+      ['foo- bar', 'FooBar'],
+      ['foo --  bar', 'FooBar'],
+      ['foo bar', 'FooBar'],
+      ['foo bar--', 'FooBar'],
+      ['foo bar   ', 'FooBar'],
+      ['foo_bar', 'FooBar'],
+      ['foo   bar', 'FooBar'],
+      ['foo -  bar  - - baz', 'FooBarBaz'],
+      ['Foo  -  Bar', 'FooBar'],
+      ['FOOBAR', 'FOOBAR'],
+    ])('"%s" is "%s"', (actual, expected) => {
+      expect(titleCase(actual)).toEqual(expected)
     })
   })
 
@@ -158,6 +183,26 @@ describe('sdkModels', () => {
     })
   })
 
+  describe('special needs', () => {
+    it('HyphenType has special needs', () => {
+      const type = apiTestModel.types.HyphenType
+      expect(type).toBeDefined()
+      expect(type.hasSpecialNeeds).toEqual(true)
+      expect(type.properties.project_name.hasSpecialNeeds).toEqual(false)
+      expect(type.properties.project_digest.hasSpecialNeeds).toEqual(true)
+      expect(type.properties.computation_time.hasSpecialNeeds).toEqual(true)
+      expect(type.properties.project_name.jsonName).toEqual('')
+      expect(type.properties.project_digest.jsonName).toEqual('project-digest')
+      expect(type.properties.computation_time.jsonName).toEqual(
+        'computation time'
+      )
+    })
+    it('Dashboard has no special needs', () => {
+      const type = apiTestModel.types.Dashboard
+      expect(type).toBeDefined()
+      expect(type.hasSpecialNeeds).toEqual(false)
+    })
+  })
   describe('request type determination', () => {
     it('search_looks', () => {
       const method = apiTestModel.methods.search_looks
@@ -734,6 +779,22 @@ describe('sdkModels', () => {
         const methods = allMethods(actual.tags)
         expect(Object.entries(methods).length).toEqual(33)
         expect(Object.entries(actual.types).length).toEqual(27)
+      })
+
+      it('search special names', () => {
+        const type = apiTestModel.types.HyphenType
+        expect(type).toBeDefined()
+        const search = type.searchString(standardSet)
+        expect(search).toContain('computation time')
+        expect(search).toContain('project-digest')
+        let actual = apiTestModel.search('computation time', standardSet)
+        let methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(0)
+        expect(Object.entries(actual.types).length).toEqual(1)
+        actual = apiTestModel.search('project-digest', standardSet)
+        methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(0)
+        expect(Object.entries(actual.types).length).toEqual(1)
       })
 
       it('search for word', () => {

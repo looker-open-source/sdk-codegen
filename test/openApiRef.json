@@ -24983,6 +24983,30 @@
         },
         "x-looker-status": "stable"
       },
+      "HyphenType": {
+        "properties": {
+          "project_name": {
+            "type": "string",
+            "readOnly": true,
+            "description": "A normal variable name",
+            "nullable": true
+          },
+          "project-digest": {
+            "type": "string",
+            "readOnly": true,
+            "description": "A hyphenated property name",
+            "nullable": true
+          },
+          "computation time": {
+            "type": "number",
+            "format": "float",
+            "readOnly": true,
+            "description": "A spaced out property name",
+            "nullable": true
+          }
+        },
+        "x-looker-status": "experimental"
+      },
       "ImportedProject": {
         "properties": {
           "name": {

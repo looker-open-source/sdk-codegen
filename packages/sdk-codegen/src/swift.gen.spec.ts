@@ -67,44 +67,27 @@ enum PermissionType: String, Codable {
     })
   })
 
-  // export interface IApiSession {
-  //   /**
-  //    * Operations the current user is able to perform on this object (read-only)
-  //    */
-  //   can?: IDictionary<boolean>
-  //   /**
-  //    * The id of active workspace for this session
-  //    */
-  //   workspace_id?: string
-  //   /**
-  //    * The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)
-  //    */
-  //   sudo_user_id?: number
-  // }
-
   describe('special symbols', () => {
     it('generates coding keys', () => {
-      const type = apiTestModel.types.ApiSession
-      const can = type.properties.can
-      const work = type.properties.workspace_id
-      can.name = 'can-it'
-      work.name = 'workspace-id'
+      const type = apiTestModel.types.HyphenType
       const actual = gen.declareType(indent, type)
-      can.name = 'can'
-      work.name = 'workspace_id'
-      const expected = `struct ApiSession: SDKModel {
+      const expected = `struct HyphenType: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case project_name, project_digest = "project-digest", computation_time = "computation time"
+    }
     /**
-     * Operations the current user is able to perform on this object (read-only)
+     * A normal variable name (read-only)
      */
-    var can_it: StringDictionary<Bool>?
+    var project_name: String?
     /**
-     * The id of active workspace for this session
+     * A hyphenated property name (read-only)
      */
-    var workspace_id: String?
+    var project_digest: String?
     /**
-     * The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)
+     * A spaced out property name (read-only)
      */
-    var sudo_user_id: Int64?
+    var computation_time: Float?
 }`
       expect(actual).toEqual(expected)
     })
