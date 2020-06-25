@@ -51,7 +51,7 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
             <SidebarItem key={method.name} as="span">
               <>
                 <MethodBadge verb={method.httpMethod} />
-                {highlightHTML(pattern, method.operationId)}
+                {highlightHTML(pattern, method.summary)}
               </>
             </SidebarItem>
           </NavLink>

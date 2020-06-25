@@ -41,6 +41,21 @@ import { IMethodResponse } from '@looker/sdk-codegen'
 import { DocCode } from '../../../components'
 import { copyAndCleanResponse } from '../utils'
 
+/*
+  TODO:
+  > Responses
+    - 200 Look
+        - png
+        - csv
+        - html
+        - ...
+    - 400 Bad Request
+        -
+    - 404 Not found
+        -
+    - 422 Validation Error
+ */
+
 interface DocResponseProps {
   responses: IMethodResponse[]
 }

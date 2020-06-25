@@ -24,17 +24,18 @@
 
 import React, { FC, Dispatch } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Heading, Flex, FlexItem } from '@looker/components'
+import { Heading, Flex, FlexItem, Box } from '@looker/components'
 import styled from 'styled-components'
 
 import { SpecItems } from '../../App'
 import { SpecState, SpecAction } from '../../reducers'
 import { ApiSpecSelector } from './ApiSpecSelector'
+import { Search } from '../Search'
 
 const StyledHeaderWrapper = styled(Flex)`
   border-bottom 1px solid ${(props) => props.theme.colors.palette.charcoal200};
   flex-direction: row;
-  height: 66px;
+  height: 100px;
 `
 
 interface HeaderProps {
@@ -57,6 +58,9 @@ export const Header: FC<HeaderProps> = ({ specs, spec, specDispatch }) => (
         <NavLink to={`/${spec.key}`}>API Explorer</NavLink>
       </Heading>
     </FlexItem>
+    <Box width="50%">
+      <Search api={spec.api} specKey={spec.key} />
+    </Box>
     <FlexItem>
       <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
     </FlexItem>
