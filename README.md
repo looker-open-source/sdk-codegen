@@ -79,7 +79,7 @@ Instructions for using the Looker SDK for Python are at <https://pypi.org/projec
 
 ### Installing the Typescript/Javascript SDK
 
-Instructions for the Looker SDK for Typescript/Javascript are at <https://www.npmjs.com/package/@looker/sdk>. The source for this package's documentation is at [typescript/looker/README.md](typescript/looker/README.md).
+Instructions for the Looker SDK for Typescript/Javascript are at <https://www.npmjs.com/package/@looker/sdk>. The source for this package's documentation is at [packages/sdk/README.md](packages/sdk/README.md).
 
 If you do want to use the generation options for another language, read on.
 
