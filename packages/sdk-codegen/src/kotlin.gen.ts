@@ -148,7 +148,7 @@ import java.util.*
     const optional = !property.required ? '? = null' : ''
     const type = this.typeMap(property.type)
     const attr = property.hasSpecialNeeds
-      ? `${indent}@param:JsonProperty("${property.jsonName}") @get:JsonProperty("${property.jsonName}")\n`
+      ? `${indent}@JsonProperty("${property.jsonName}")\n`
       : ''
     return (
       this.commentHeader(indent, this.describeProperty(property)) +
