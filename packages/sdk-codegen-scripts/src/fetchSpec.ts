@@ -202,7 +202,7 @@ export const login = async (props: ISDKConfigProps) => {
       throw new Error('Access token could not be retrieved.')
     }
   } catch (err) {
-    console.error(err)
+    throw err
   }
 }
 
@@ -236,7 +236,11 @@ export const getUrl = async (
   )
 }
 
-export const authGetUrl = async (props: ISDKConfigProps, url: string) => {
+export const authGetUrl = async (
+  props: ISDKConfigProps,
+  url: string,
+  failQuits = true
+) => {
   let token = null
   let content: any = null
   try {
@@ -254,7 +258,12 @@ export const authGetUrl = async (props: ISDKConfigProps, url: string) => {
   }
 
   if (badAuth(content)) {
-    return quit('Authentication failed')
+    const authFailed = 'Authentication failed'
+    if (failQuits) {
+      return quit(authFailed)
+    } else {
+      throw new Error(authFailed)
+    }
   }
   return content
 }
@@ -267,10 +276,16 @@ export const fetchLookerVersion = async (
   props: ISDKConfigProps,
   versions?: any
 ) => {
+  let lookerVersion = ''
   if (!versions) {
-    versions = await fetchLookerVersions(props)
+    try {
+      versions = await fetchLookerVersions(props)
+      const matches = versions.looker_release_version.match(/^\d+\.\d+/i)
+      lookerVersion = matches.lookerVersion
+    } catch (e) {
+      warn(`Could not retrieve looker release version: ${e.message}`)
+    }
   }
-  const [lookerVersion] = versions.looker_release_version.match(/^\d+\.\d+/gi)
   return lookerVersion
 }
 

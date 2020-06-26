@@ -66,4 +66,30 @@ enum PermissionType: String, Codable {
       expect(actual).toEqual(expected)
     })
   })
+
+  describe('special symbols', () => {
+    it('generates coding keys', () => {
+      const type = apiTestModel.types.HyphenType
+      const actual = gen.declareType(indent, type)
+      const expected = `struct HyphenType: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case project_name, project_digest = "project-digest", computation_time = "computation time"
+    }
+    /**
+     * A normal variable name (read-only)
+     */
+    var project_name: String?
+    /**
+     * A hyphenated property name (read-only)
+     */
+    var project_digest: String?
+    /**
+     * A spaced out property name (read-only)
+     */
+    var computation_time: Float?
+}`
+      expect(actual).toEqual(expected)
+    })
+  })
 })

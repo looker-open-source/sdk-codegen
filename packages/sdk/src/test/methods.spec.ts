@@ -906,7 +906,6 @@ describe('LookerNodeSDK', () => {
     })
   })
 
-  /*
   function mimeType(data: string) {
     //        var sig = [UInt8](repeating: 0, count: 20)
     //        data.copyBytes(to: &sig, count: 20)
@@ -933,7 +932,7 @@ describe('LookerNodeSDK', () => {
     }
   }
 
-  function simpleQuery(): Partial<IWriteQuery> {
+  const simpleQuery = (): Partial<IWriteQuery> => {
     return {
       fields: ['dashboard.id', 'dashboard.title', 'dashboard.count'],
       limit: '100',
@@ -941,18 +940,38 @@ describe('LookerNodeSDK', () => {
       view: 'dashboard',
     }
   }
-  */
 
-  // TODO resurrect this when the API bug is fixed
-  // describe('Binary download', () => {
-  //   it('PNG and JPG download', async () => {
-  //     const sdk = new LookerSDK(session)
-  //     const query = await sdk.ok(sdk.create_query(simpleQuery()))
-  //     const png = await sdk.ok(sdk.run_query({query_id: query.id!, result_format: 'png'}))
-  //     const jpg = await sdk.ok(sdk.run_query({query_id: query.id!, result_format: 'jpg'}))
-  //     expect(mimeType(png)).toEqual('image/png')
-  //     expect(mimeType(jpg)).toEqual('image/jpeg') // Houston, we have a problem with jpg being a png
-  //   }, testTimeout)
-  //
-  // })
+  describe('Binary download', () => {
+    it(
+      'PNG and JPG download',
+      async () => {
+        const sdk = new LookerSDK(session)
+        const query = await sdk.ok(sdk.create_query(simpleQuery()))
+        const png = await sdk.ok(
+          sdk.run_query({ query_id: query.id!, result_format: 'png' })
+        )
+        expect(mimeType(png)).toEqual('image/png')
+        // TODO resurrect this when the API bug is fixed
+        // const jpg = await sdk.ok(
+        //   sdk.run_query({ query_id: query.id!, result_format: 'jpg' })
+        // )
+        // expect(mimeType(jpg)).toEqual('image/jpeg') // Houston, we have a problem with jpg being a png
+      },
+      testTimeout
+    )
+    it(
+      'run look PNG download',
+      async () => {
+        const sdk = new LookerSDK(session)
+        const looks = await sdk.ok(sdk.all_looks('id'))
+        expect(looks.length).toBeGreaterThan(0)
+        const look = looks[0]
+        const png = await sdk.ok(
+          sdk.run_look({ look_id: look.id!, result_format: 'png' })
+        )
+        expect(mimeType(png)).toEqual('image/png')
+      },
+      testTimeout
+    )
+  })
 })
