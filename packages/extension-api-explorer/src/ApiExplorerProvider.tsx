@@ -33,9 +33,8 @@ import {
   ExtensionContext,
   ExtensionContextData,
 } from '@looker/extension-sdk-react'
-import { TryItCallback } from '@looker/try-it'
+import { TryItCallback, pathify } from '@looker/try-it'
 import { IRawResponse } from '@looker/sdk/lib/browser'
-import { pathify } from '../../try-it/lib/components/requestUtils'
 
 const specs: ApiExplorerProps = {
   specs: {
@@ -79,21 +78,6 @@ export const ApiExplorerProvider: FC = () => {
         body
       )
       return resp
-
-      // let content = resp
-      // let contentType = 'text'
-      // if (resp instanceof Object) {
-      //   content = JSON.stringify(resp, null, 2)
-      //   contentType = 'application/json'
-      // }
-      //
-      // return {
-      //   ok: true,
-      //   statusCode: 200,
-      //   statusMessage: 'Try It result',
-      //   contentType,
-      //   body: content,
-      // }
     }
   }
 

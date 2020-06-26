@@ -24,7 +24,7 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, useState } from 'react'
+import React, { BaseSyntheticEvent, FC, useState, useEffect } from 'react'
 import {
   TabList,
   useTabs,
@@ -35,6 +35,8 @@ import {
   Text,
   Heading,
   Box,
+  Spinner,
+  Flex,
 } from '@looker/components'
 import { IRawResponse } from '@looker/sdk/lib/browser'
 
@@ -43,6 +45,7 @@ import {
   ShowResponse,
   createRequestParams,
   defaultTryItCallback,
+  pathify,
 } from './components'
 
 export type TryItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
@@ -84,7 +87,8 @@ export const TryIt: FC<TryItProps> = ({
   tryItCallback,
 }) => {
   const [requestContent, setRequestContent] = useState({})
-  // const [resp, setResp] = useState<ResponseContent>(undefined)
+  const [activePathParams, setActivePathParams] = useState(undefined)
+  const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] = useState<ResponseContent>(
     undefined
   )
@@ -99,11 +103,17 @@ export const TryIt: FC<TryItProps> = ({
       inputs,
       requestContent
     )
+    setActivePathParams(pathParams)
+    tabs.onSelectTab(1)
+    setLoading(true)
     setResponseContent(
       await callback(httpMethod, endpoint, pathParams, queryParams, body)
     )
-    tabs.onSelectTab(1)
   }
+
+  useEffect(() => {
+    setLoading(!responseContent)
+  }, [responseContent])
 
   return (
     <Box>
@@ -125,6 +135,14 @@ export const TryIt: FC<TryItProps> = ({
           />
         </TabPanel>
         <TabPanel key="response">
+          {loading && (
+            <>
+              <Flex>
+                <Spinner />
+                {`${httpMethod} ${pathify(endpoint, activePathParams)}`}
+              </Flex>
+            </>
+          )}
           {responseContent && <ShowResponse response={responseContent} />}
         </TabPanel>
       </TabPanels>

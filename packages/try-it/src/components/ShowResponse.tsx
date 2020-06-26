@@ -26,6 +26,7 @@
 
 import React, { FC } from 'react'
 import { last } from 'lodash'
+import { Heading } from '@looker/components'
 import { IRawResponse } from '@looker/sdk/lib/browser'
 
 import { responseHandlers } from './responseUtils'
@@ -44,7 +45,7 @@ export const ShowResponse: FC<ShowResponseProps> = ({ response }) => {
   }
   return (
     <>
-      {`${response.statusCode}: ${response.contentType}`}
+      <Heading as="h4">{`${response.statusCode}: ${response.contentType}`}</Heading>
       {pickedHandler.component(response)}
     </>
   )
