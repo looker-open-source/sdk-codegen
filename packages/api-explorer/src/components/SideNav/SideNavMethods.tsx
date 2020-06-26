@@ -25,13 +25,13 @@
  */
 
 import React, { FC, useContext } from 'react'
-import { SidebarItem } from '@looker/components'
+import { SidebarItem, Space } from '@looker/components'
 import { MethodList } from '@looker/sdk-codegen'
 import { NavLink } from 'react-router-dom'
 
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
-import { MethodBadge } from './MethodBadge'
+import { MethodBadge } from '../../components/MethodBadge'
 
 interface MethodsProps {
   methods: MethodList
@@ -51,10 +51,12 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
         <li key={method.name}>
           <NavLink to={buildMethodPath(specKey, tag, method.name)}>
             <SidebarItem key={method.name} as="span">
-              <>
-                <MethodBadge verb={method.httpMethod} />
-                {highlightHTML(pattern, method.operationId)}
-              </>
+              <Space gap="xsmall">
+                <MethodBadge alignTextCenter compact method={method.httpMethod}>
+                  {method.httpMethod.toUpperCase()}
+                </MethodBadge>
+                <span>{highlightHTML(pattern, method.operationId)}</span>
+              </Space>
             </SidebarItem>
           </NavLink>
         </li>

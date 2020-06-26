@@ -160,8 +160,9 @@ const PageLayout = styled.div<SidebarStyleProps>`
       background-color: ${({ theme }) => theme.colors.ui1};
       font-weight: ${({ theme }) => theme.fontWeights.semiBold};
 
-      span {
+      div > div {
         border: 1px solid ${({ theme }) => theme.colors.ui2};
+        font-weight: ${({ theme }) => theme.fontWeights.normal};
       }
     }
   }

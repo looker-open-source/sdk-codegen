@@ -25,12 +25,13 @@
  */
 import React, { FC } from 'react'
 import { generatePressed, intentUIBlend } from '@looker/design-tokens'
-import { Flex } from '@looker/components'
 import { HttpMethod } from '@looker/sdk/src'
 import styled, { css } from 'styled-components'
 
 interface MethodBadgeProps {
   method: HttpMethod
+  compact?: boolean
+  alignTextCenter?: boolean
 }
 
 function getMethodColor(method: HttpMethod) {
@@ -68,13 +69,27 @@ const badgeIntent = (intent: BadgeIntent) =>
 
 const MethodBadgeInternal = styled.div<MethodBadgeProps>`
   ${(props) => badgeIntent(getMethodColor(props.method))};
+  border: 1px solid transparent;
   border-radius: 4px;
-  padding-top: ${({ theme }) => theme.space.xxsmall};
-  padding-bottom: ${({ theme }) => theme.space.xxsmall};
+  font-size: ${({ theme, compact }) =>
+    `${compact ? `calc(${theme.fontSizes.large}/2)` : theme.fontSizes.small}`};
+  padding: ${({ theme, compact }) => `${theme.space.xxsmall}
+    ${compact ? '0' : theme.space.xsmall}`};
+  text-align: ${(props) => (props.alignTextCenter ? 'center' : 'left')};
+  min-width: 2.5rem;
 `
 
-export const MethodBadge: FC<MethodBadgeProps> = ({ method, ...props }) => (
-  <MethodBadgeInternal method={method}>
-    <Flex alignItems="center">{props.children}</Flex>
+export const MethodBadge: FC<MethodBadgeProps> = ({
+  alignTextCenter,
+  method,
+  compact,
+  ...props
+}) => (
+  <MethodBadgeInternal
+    alignTextCenter={alignTextCenter}
+    compact={compact}
+    method={method}
+  >
+    {props.children}
   </MethodBadgeInternal>
 )
