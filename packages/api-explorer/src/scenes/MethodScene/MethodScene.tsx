@@ -28,13 +28,7 @@ import { useParams } from 'react-router-dom'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 import { TryIt, TryItHttpMethod } from '@looker/try-it'
 
-import {
-  DocMarkdown,
-  DocReferences,
-  DocTitle,
-  DocSDKs,
-  Main,
-} from '../../components'
+import { DocMarkdown, DocReferences, DocTitle, DocSDKs } from '../../components'
 import {
   DocActivityType,
   DocRateLimited,
@@ -59,13 +53,13 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
   const seeTypes = typeRefs(api, method.customTypes)
 
   return (
-    <Main>
+    <>
       <DocTitle title={method.summary} />
       <Flex mb="xxlarge">
         <Space gap="large">
-          <DocStatus status={method.status} />
-          {method.activityType === 'db_query' && <DocActivityType />}
-          {method.rateLimited && <DocRateLimited />}
+          <DocStatus method={method} />
+          <DocActivityType method={method} />
+          <DocRateLimited method={method} />
         </Space>
       </Flex>
       <DocOperation method={method} />
@@ -83,6 +77,6 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         httpMethod={method.httpMethod as TryItHttpMethod}
         endpoint={method.endpoint}
       />
-    </Main>
+    </>
   )
 }

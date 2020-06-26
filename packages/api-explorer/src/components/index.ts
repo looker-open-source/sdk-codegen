@@ -1,4 +1,5 @@
 export { DocCode } from './DocCode'
+export { DocMethodSummary } from './DocMethodSummary'
 export { DocMarkdown } from './DocMarkdown'
 export { DocPseudo } from './DocPseudo'
 export { DocReferences } from './DocReferences'

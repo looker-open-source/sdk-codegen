@@ -23,7 +23,34 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { MethodScene } from './MethodScene'
-export { TypeScene } from './TypeScene'
-export { TagScene } from './TagScene'
+import React, { FC } from 'react'
+import { Card, CardContent, Space, Text } from '@looker/components'
+import { IMethod } from '@looker/sdk-codegen'
+
+import { MethodBadge } from '../SideNav/MethodBadge'
+import {
+  DocActivityType,
+  DocRateLimited,
+} from '../../scenes/MethodScene/components'
+import { DocSummaryStatus } from './DocSummaryStatus'
+
+interface DocMethodSummaryProps {
+  method: IMethod
+}
+
+export const DocMethodSummary: FC<DocMethodSummaryProps> = ({ method }) => {
+  return (
+    <Card raised>
+      <CardContent>
+        <Space>
+          <MethodBadge verb={method.httpMethod} />
+          {method.summary}
+          <DocSummaryStatus method={method} />
+          <DocRateLimited method={method} />
+          <DocActivityType method={method} />
+        </Space>
+        <Text variant="subdued">{method.endpoint}</Text>
+      </CardContent>
+    </Card>
+  )
+}

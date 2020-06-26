@@ -8,7 +8,6 @@ describe('cleanResponse', () => {
     expect(actual).not.toHaveProperty(responsePropsToOmit)
     Object.values(actual).forEach((val) => {
       if (val instanceof Object) {
-
         expect(val).not.toHaveProperty(responsePropsToOmit)
       }
     })

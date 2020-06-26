@@ -25,12 +25,10 @@
 import React, { FC, useReducer, useState } from 'react'
 import { Sidebar, SidebarGroup, SidebarItem, Box } from '@looker/components'
 import styled from 'styled-components'
-import {
-  BrowserRouter as Router,
-} from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
 import { SearchContext } from './context'
-import { Header, SideNav, SideNavToggle } from './components'
+import { Header, SideNav, SideNavToggle, Main } from './components'
 import {
   specReducer,
   initDefaultSpecState,
@@ -83,7 +81,9 @@ const App: FC<ApiExplorerProps> = ({ specs }) => {
             />
           </SidebarDivider>
           <Box className={isSideNavOpen ? 'doc open' : 'doc'}>
-            <AppRouter api={spec.api} specKey={spec.key} />
+            <Main>
+              <AppRouter api={spec.api} specKey={spec.key} />
+            </Main>
           </Box>
         </PageLayout>
       </Router>
