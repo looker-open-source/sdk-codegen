@@ -67,7 +67,6 @@
     "@types/jest": "^25.2.3",
     "@types/js-yaml": "^3.12.1",
     "@types/lodash": "^4.14.144",
-    "@types/mustache": "^0.8.32",
     "@types/node": "^13.13.4",
     "@types/prettier": "^1.18.2",
     "@types/readable-stream": "^2.3.5",
@@ -101,8 +100,8 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "styled-components": "^4.4.1",
-    "ts-node": "^8.1.0",
     "ts-jest": "^26.0.0",
+    "ts-node": "^8.1.0",
     "typescript": "3.8.2",
     "webpack": "^4.43.0"
   },
@@ -158,12 +157,23 @@
         "rules": {
           "@typescript-eslint/interface-name-prefix": "off",
           "@typescript-eslint/no-unused-vars": "warn",
-          "@typescript-eslint/camelcase": "off"
+          "@typescript-eslint/camelcase": "off",
+          "sort-keys": "off",
+          "sort-keys-fix/sort-keys-fix": "off",
+          "no-useless-constructor": "off",
+          "@typescript-eslint/no-empty-interface": "off"
         }
       }
     ]
   },
   "prettier": "@looker/prettier-config",
+  "prettierConfig": {
+    "overrides": {
+      "rules": {
+        "trailingComma": "all"
+      }
+    }
+  },
   "keywords": [],
   "resolutions": {
     "set-value": "^2.0.1",

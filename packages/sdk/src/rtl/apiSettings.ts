@@ -135,11 +135,11 @@ export class ApiSettings implements IApiSettings {
       'base_url' in settings ? unquote(settings.base_url) : this.base_url
     this.verify_ssl =
       'verify_ssl' in settings
-        ? isTrue(unquote(settings.verify_ssl!.toString()))
+        ? isTrue(unquote(settings.verify_ssl?.toString()))
         : this.verify_ssl
     this.timeout =
       'timeout' in settings
-        ? parseInt(unquote(settings.timeout!.toString()), 10)
+        ? parseInt(unquote(settings.timeout?.toString()), 10)
         : this.timeout
     if (!this.isConfigured()) {
       throw new Error(strBadConfiguration)
@@ -152,7 +152,7 @@ export class ApiSettings implements IApiSettings {
 
   /**
    * Default dynamic configuration reader
-   * @param section key/name of configuration section to read
+   * @param _section key/name of configuration section to read
    * @returns an empty `IAPISection`
    */
   readConfig(_section?: string): IApiSection {

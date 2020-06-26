@@ -27,11 +27,14 @@
 import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
+  EnumType,
+  EnumValueType,
   IMappedType,
   IMethod,
   IParameter,
   IProperty,
   IType,
+  mayQuote,
   strBody,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
@@ -48,6 +51,8 @@ export class KotlinGen extends CodeGen {
   argDelimiter = ', '
   paramDelimiter = ',\n'
   propDelimiter = ',\n'
+  codeQuote = '"'
+  enumDelimiter = ',\n'
 
   indentStr = '  '
   endTypeStr = '\n) : Serializable'
@@ -111,6 +116,7 @@ class ${this.sdkClassName()}Stream(authSession: AuthSession) : APIMethods(authSe
 
 package com.looker.sdk${this.apiNamespace()}
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.looker.rtl.*
 import java.io.Serializable
 import java.util.*
@@ -121,17 +127,32 @@ import java.util.*
     return ''
   }
 
-  commentHeader(indent: string, text: string | undefined) {
-    return text
-      ? `${indent}/**\n${commentBlock(text, indent, ' * ')}\n${indent} */\n`
-      : ''
+  // TODO create methodHeader(IMethod) and typeHeader(IType) https://kotlinlang.org/docs/reference/kotlin-doc.html
+  commentHeader(indent: string, text: string | undefined, commentStr = ' * ') {
+    if (!text) return ''
+    if (commentStr === ' ') {
+      return `${indent}/**\n\n${commentBlock(
+        text,
+        indent,
+        commentStr
+      )}\n\n${indent} */\n`
+    }
+    return `${indent}/**\n${commentBlock(
+      text,
+      indent,
+      commentStr
+    )}\n${indent} */\n`
   }
 
   declareProperty(indent: string, property: IProperty) {
     const optional = !property.required ? '? = null' : ''
     const type = this.typeMap(property.type)
+    const attr = property.hasSpecialNeeds
+      ? `${indent}@param:JsonProperty("${property.jsonName}") @get:JsonProperty("${property.jsonName}")\n`
+      : ''
     return (
       this.commentHeader(indent, this.describeProperty(property)) +
+      attr +
       `${indent}var ${property.name}: ${type.name}${optional}`
     )
   }
@@ -234,10 +255,43 @@ import java.util.*
     )
   }
 
+  declareEnumValue(indent: string, value: EnumValueType) {
+    return `${indent}${mayQuote(value)}`
+  }
+
   typeSignature(indent: string, type: IType) {
+    const isEnum = type instanceof EnumType
+    const kind = isEnum ? 'enum' : 'data'
+    const opener = isEnum ? ': Serializable {' : '('
     return (
       this.commentHeader(indent, type.description) +
-      `${indent}data class ${type.name} (\n`
+      `${indent}${kind} class ${type.name} ${opener}\n`
+    )
+  }
+
+  declareType(indent: string, type: IType) {
+    const bump = this.bumper(indent)
+    const props: string[] = []
+    let ender = this.endTypeStr
+    let propertyValues = ''
+    if (type instanceof EnumType) {
+      ender = `\n}`
+      const num = type as EnumType
+      num.values.forEach((value) =>
+        props.push(this.declareEnumValue(bump, value))
+      )
+      propertyValues = props.join(this.enumDelimiter)
+    } else {
+      Object.values(type.properties).forEach((prop) =>
+        props.push(this.declareProperty(bump, prop))
+      )
+      propertyValues = props.join(this.propDelimiter)
+    }
+    return (
+      this.typeSignature(indent, type) +
+      propertyValues +
+      this.construct(indent, type) +
+      `${this.endTypeStr ? indent : ''}${ender}`
     )
   }
 
@@ -400,6 +454,8 @@ import java.util.*
         }
         case 'DelimArrayType':
           return { default: this.nullStr, name: `DelimArray<${map.name}>` }
+        case 'EnumType':
+          return { default: '', name: type.name }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }

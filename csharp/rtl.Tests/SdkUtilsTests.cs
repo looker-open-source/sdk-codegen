@@ -1,10 +1,58 @@
 using System;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Looker.RTL;
 using Xunit;
 using Xunit.Abstractions;
+// ReSharper disable InconsistentNaming
 
 namespace sdkrtl.Tests
 {
+    // public class EnumStrings
+    // {
+    //     public string[] Values
+    //     {
+    //         get
+    //         {
+    //             var t = this.GetType();
+    //             var names = t
+    //                 .GetProperties()
+    //                 .Where(prop => prop.CanRead && prop.PropertyType.IsPublic)
+    //                 .Select(p => p.Name)
+    //                 .ToArray();
+    //             return names;
+    //         }
+    //     }
+    // }
+
+    // Good enum/json ref https://bytefish.de/blog/enums_json_net/
+    public enum ResultFormat
+    {
+        [EnumMember(Value = "csv")]
+        csv,
+        [EnumMember(Value = "json")]
+        json,
+        [EnumMember(Value = "json_detail")]
+        json_detail,
+        [EnumMember(Value = "png")]
+        png
+    }
+
+    /// <summary>
+    /// Test version of a "create query" object
+    /// </summary>
+    public class EnumUsage
+    {
+        /// <summary>Input result format</summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public ResultFormat input { get; set; }
+        
+        /// <summary>Output result format</summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public ResultFormat output { get; set; }
+    }
+    
     /// <summary>
     /// Utility function tests
     /// </summary>
@@ -14,16 +62,32 @@ namespace sdkrtl.Tests
     public class SdkUtilsTests
     {
         private readonly ITestOutputHelper _testOutputHelper;
-        private TestConfig _config;
-        private dynamic _contentTypes;
+        private readonly dynamic _contentTypes;
         
         public SdkUtilsTests(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
-            _config = new TestConfig();
-            _contentTypes = _config.TestData["content_types"];
+            var config = new TestConfig();
+            _contentTypes = config.TestData["content_types"];
         }
 
+        [Fact]
+        public void ValidEnumStringTest()
+        {
+            var json = "{\"input\":\"csv\",\"output\":\"json_detail\"}";
+            var obj = JsonConvert.DeserializeObject<EnumUsage>(json);
+            Assert.Equal(ResultFormat.csv, obj.input);
+            Assert.Equal(ResultFormat.json_detail, obj.output);
+        }
+        
+        [Fact]
+        public void BadEnumStringTest()
+        {
+            var json = "{\"input\":\"foo\",\"output\":\"bar\"}";
+            var ex = Assert.Throws < JsonSerializationException>(() => JsonConvert.DeserializeObject<EnumUsage>(json));
+            Assert.StartsWith("Error converting value \"foo\" to type 'sdkrtl.Tests.ResultFormat'.", ex.Message);
+        }
+        
         [Fact]
         public void BinaryModeTest()
         {

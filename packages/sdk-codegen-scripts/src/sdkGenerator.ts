@@ -28,7 +28,6 @@
 
 import * as Models from '@looker/sdk-codegen'
 import { success } from '@looker/sdk-codegen-utils'
-import { IntrinsicType, RequestType } from '@looker/sdk-codegen'
 import { readFileSync } from './nodeUtils'
 
 export const specFromFile = (specFile: string): Models.ApiModel => {
@@ -39,6 +38,8 @@ export const specFromFile = (specFile: string): Models.ApiModel => {
 export interface IGeneratorCtor<T extends Models.IModel> {
   new (model: T, formatter: Models.ICodeGen): Generator<T>
 }
+
+const licenseText = readFileSync('./LICENSE')
 
 export abstract class Generator<T extends Models.IModel> {
   codeFormatter: Models.ICodeGen
@@ -59,6 +60,7 @@ export abstract class Generator<T extends Models.IModel> {
     delimiter?: string
   ): this {
     const strs = list.map((model) => {
+      // eslint-disable-next-line new-cap
       return new ctor(model, this.codeFormatter).render(indent)
     })
     if (delimiter) {
@@ -80,23 +82,25 @@ export abstract class Generator<T extends Models.IModel> {
     return this
   }
 
-  pIf(expr: any, str?: string | string[]): this {
-    if (expr) {
-      this.p(str)
-    }
-    return this
-  }
+  // pIf(expr: any, str?: string | string[]): this {
+  //   if (expr) {
+  //     this.p(str)
+  //   }
+  //   return this
+  // }
 
   toString(indent: string): string {
     return indent + this.buf.join('\n' + indent)
   }
 }
 
+const noComment = ' '
+
 export class MethodGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
     const items: string[] = []
     // reset refcounts for ALL types so dynamic import statement will work
-    Object.entries(this.model.types).forEach(([_, type]) => (type.refCount = 0))
+    Object.entries(this.model.types).forEach(([, type]) => (type.refCount = 0))
     Object.keys(this.model.methods)
       .sort((a, b) => a.localeCompare(b))
       .forEach((key) =>
@@ -106,7 +110,8 @@ export class MethodGenerator extends Generator<Models.IApiModel> {
       )
     const tally = `${items.length} API methods`
     success(tally)
-    return this.p(`${this.codeFormatter.comment('', tally)}`)
+    return this.p(this.codeFormatter.commentHeader('', licenseText, noComment))
+      .p(this.codeFormatter.commentHeader('', tally))
       .p(this.codeFormatter.methodsPrologue(indent))
       .p(items.join('\n\n'))
       .p(this.codeFormatter.methodsEpilogue(indent))
@@ -118,7 +123,7 @@ export class StreamGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
     const items: string[] = []
     // reset refcounts for ALL types so dynamic import statement will work
-    Object.entries(this.model.types).forEach(([_, type]) => (type.refCount = 0))
+    Object.entries(this.model.types).forEach(([, type]) => (type.refCount = 0))
     Object.keys(this.model.methods)
       .sort((a, b) => a.localeCompare(b))
       .forEach((key) =>
@@ -128,7 +133,8 @@ export class StreamGenerator extends Generator<Models.IApiModel> {
       )
     const tally = `${items.length} API methods`
     success(tally)
-    return this.p(`${this.codeFormatter.comment('', tally)}`)
+    return this.p(this.codeFormatter.commentHeader('', licenseText, noComment))
+      .p(this.codeFormatter.commentHeader('', tally))
       .p(this.codeFormatter.streamsPrologue(indent))
       .p(items.join('\n\n'))
       .p(this.codeFormatter.methodsEpilogue(indent))
@@ -143,11 +149,10 @@ export class TypeGenerator extends Generator<Models.IApiModel> {
       .sort((a, b) => a.localeCompare(b))
       .forEach((key) => {
         const type = this.model.types[key]
-
-        if (!(type instanceof IntrinsicType)) {
+        if (!(type instanceof Models.IntrinsicType)) {
           if (
             this.codeFormatter.needsRequestTypes ||
-            !(type instanceof RequestType)
+            !(type instanceof Models.RequestType)
           ) {
             items.push(
               this.codeFormatter.declareType(indent, this.model.types[key])
@@ -157,9 +162,10 @@ export class TypeGenerator extends Generator<Models.IApiModel> {
       })
 
     const counts = this.typeTally(this.model.types)
-    const tally = `${counts.total} API models: ${counts.standard} Spec, ${counts.request} Request, ${counts.write} Write`
+    const tally = `${counts.total} API models: ${counts.standard} Spec, ${counts.request} Request, ${counts.write} Write, ${counts.enums} Enum`
     success(tally)
-    return this.p(`${this.codeFormatter.comment('', tally)}`)
+    return this.p(this.codeFormatter.commentHeader('', licenseText, noComment))
+      .p(this.codeFormatter.commentHeader('', tally))
       .p(this.codeFormatter.modelsPrologue(indent))
       .p(items.join('\n\n'))
       .p(this.codeFormatter.modelsEpilogue(indent))
@@ -170,17 +176,26 @@ export class TypeGenerator extends Generator<Models.IApiModel> {
     let request = 0
     let write = 0
     let standard = 0
+    let enums = 0
     Object.values(types)
-      .filter((type) => !(type instanceof IntrinsicType))
+      .filter((type) => !(type instanceof Models.IntrinsicType))
       .forEach((type) => {
         if (type instanceof Models.RequestType) {
           if (type.refCount > 0) request++
         } else if (type instanceof Models.WriteType) {
           if (type.refCount > 0) write++
+        } else if (type instanceof Models.EnumType) {
+          if (type.refCount > 0) enums++
         } else {
           standard++
         }
       })
-    return { request, standard, total: standard + write + request, write }
+    return {
+      request,
+      standard,
+      total: standard + write + request + enums,
+      write,
+      enums,
+    }
   }
 }

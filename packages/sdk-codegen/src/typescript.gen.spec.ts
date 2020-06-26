@@ -26,6 +26,7 @@
 
 import { TestConfig } from './testUtils'
 import { TypescriptGen } from './typescript.gen'
+import { EnumType, titleCase } from './sdkModels'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
@@ -36,10 +37,20 @@ const indent = ''
 describe('typescript generator', () => {
   it('comment header', () => {
     const text = 'line 1\nline 2'
-    const actual = gen.commentHeader(indent, text)
-    const expected = `/**
+    let actual = gen.commentHeader(indent, text)
+    let expected = `/**
  * line 1
  * line 2
+ */
+`
+    expect(actual).toEqual(expected)
+
+    actual = gen.commentHeader(indent, text, ' ')
+    expected = `/**
+
+ line 1
+ line 2
+
  */
 `
     expect(actual).toEqual(expected)
@@ -170,7 +181,7 @@ body: Partial<IWriteDashboard>`)
       expect(method).toBeDefined()
       const expected = `/**
  * ### Email/password login information for the specified user.
- * 
+ *
  * POST /users/{user_id}/credentials_email -> ICredentialsEmail
  */
 async create_user_credentials_email(
@@ -196,7 +207,7 @@ async create_user_credentials_email(
       expect(method).toBeDefined()
       const expected = `/**
  * ### Get information about all datagroups.
- * 
+ *
  * GET /datagroups -> IDatagroup[]
  */
 async all_datagroups(
@@ -251,6 +262,39 @@ async all_datagroups(
     })
   })
 
+  describe('accessor syntax', () => {
+    it.each<[string, string, string]>([
+      ['foo', '', 'foo'],
+      ['foo', 'bar', 'bar.foo'],
+      ['f-o-o', 'bar', "bar['f-o-o']"],
+    ])('name:"%s" prefix:"%s" should be "%s"', (name, prefix, expected) => {
+      const actual = gen.accessor(name, prefix)
+      expect(actual).toEqual(expected)
+    })
+
+    it('method with request body', () => {
+      const method = apiTestModel.methods.create_dashboard_render_task
+      const expected = `/**
+ * ### Create a new task to render a dashboard to a document or image.
+ *
+ * Returns a render task object.
+ * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+ * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+ *
+ * POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> IRenderTask
+ */
+async create_dashboard_render_task(request: IRequestCreateDashboardRenderTask,
+  options?: Partial<ITransportSettings>) {
+    request.dashboard_id = encodeParam(request.dashboard_id)
+    request.result_format = encodeParam(request.result_format)
+  return this.post<IRenderTask, IError | IValidationError>(\`/render_tasks/dashboards/\${request.dashboard_id}/\${request.result_format}\`, 
+    {width: request.width, height: request.height, fields: request.fields, pdf_paper_size: request.pdf_paper_size, pdf_landscape: request.pdf_landscape, long_tables: request.long_tables}, request.body, options)
+}`
+      const actual = gen.declareMethod(indent, method)
+      expect(actual).toEqual(expected)
+    })
+  })
+
   describe('type creation', () => {
     it('request type with body', () => {
       const method = apiTestModel.methods.create_dashboard_render_task
@@ -269,31 +313,12 @@ dashboard_id: string`)
  * body parameter for dynamically created request type
  */
 body: ICreateDashboardRenderTask`)
-        //         const actual = gen.declareType(indent, type!)
-        //         expect(actual).toEqual(`// Dynamically generated request type for create_dashboard_render_task
-        // export interface IRequestcreate_dashboard_render_task{
-        //   // Id of dashboard to render
-        //   dashboard_id: number
-        //   // Output type: pdf, png, or jpg
-        //   result_format: string
-        //   body: Partial<ICreateDashboardRenderTask>
-        //   // Output width in pixels
-        //   width: number
-        //   // Output height in pixels
-        //   height: number
-        //   // Requested fields.
-        //   fields?: string
-        //   // Paper size for pdf
-        //   pdf_paper_size?: string
-        //   // Whether to render pdf in landscape
-        //   pdf_landscape?: boolean
-        // }`)
       }
     })
     it('with arrays and hashes', () => {
       const type = apiTestModel.types.Workspace
       const actual = gen.declareType(indent, type)
-      expect(actual).toEqual(`export interface IWorkspace{
+      expect(actual).toEqual(`export interface IWorkspace {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
@@ -311,7 +336,7 @@ body: ICreateDashboardRenderTask`)
     it('with refs, arrays and nullable', () => {
       const type = apiTestModel.types.ApiVersion
       const actual = gen.declareType(indent, type)
-      expect(actual).toEqual(`export interface IApiVersion{
+      expect(actual).toEqual(`export interface IApiVersion {
   /**
    * Current Looker release version number (read-only)
    */
@@ -326,7 +351,8 @@ body: ICreateDashboardRenderTask`)
     it('required properties', () => {
       const type = apiTestModel.types.CreateQueryTask
       const actual = gen.declareType(indent, type)
-      expect(actual).toEqual(`export interface ICreateQueryTask{
+      const name = titleCase('result_format')
+      expect(actual).toEqual(`export interface ICreateQueryTask {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
@@ -338,7 +364,7 @@ body: ICreateDashboardRenderTask`)
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: string
+  result_format: ${name}
   /**
    * Source of query task
    */
@@ -356,6 +382,102 @@ body: ICreateDashboardRenderTask`)
    */
   dashboard_id?: string
 }`)
+    })
+
+    describe('special symbol names', () => {
+      interface HiFen {
+        'a-one': string
+        'a two': boolean
+        'a-three': number
+      }
+
+      it('handles special names in json', () => {
+        const json = `{"a-one":"one", "a two":true, "a-three":3}`
+        const actual: HiFen = JSON.parse(json)
+        expect(actual['a-one']).toEqual('one')
+        expect(actual['a two']).toEqual(true)
+        expect(actual['a-three']).toEqual(3)
+      })
+
+      it('reserves special names in method parameters', () => {
+        const method = apiTestModel.methods.me
+        const save = method.params[0].name
+        method.params[0].name = 'hi-test'
+        const actual = gen.declareMethod(indent, method)
+        method.params[0].name = save
+        const expected = `/**
+ * ### Get information about the current user; i.e. the user account currently calling the API.
+ *
+ * GET /user -> IUser
+ */
+async me(
+  /**
+   * @param {string} hi-test Requested fields.
+   */
+  'hi-test'?: string,
+  options?: Partial<ITransportSettings>) {
+  return this.get<IUser, IError>('/user', 
+    {'hi-test'}, null, options)
+}`
+        expect(actual).toEqual(expected)
+      })
+
+      it('reserves special names in method request objects', () => {
+        const method = apiTestModel.methods.role_users
+        const swap = 2
+        const save = method.params[swap].name
+        method.params[swap].name = 'direct-association-only'
+        const actual = gen.declareMethod(indent, method)
+        method.params[swap].name = save
+        const expected = `/**
+ * ### Get information about all the users with the role that has a specific id.
+ *
+ * GET /roles/{role_id}/users -> IUser[]
+ */
+async role_users(request: IRequestRoleUsers,
+  options?: Partial<ITransportSettings>) {
+  return this.get<IUser[], IError>(\`/roles/\${request.role_id}/users\`, 
+    {fields: request.fields, 'direct-association-only': request['direct-association-only']}, null, options)
+}`
+        expect(actual).toEqual(expected)
+      })
+    })
+
+    describe('enums', () => {
+      it('Result format declaration', () => {
+        const type =
+          apiTestModel.types.CreateQueryTask.properties.result_format.type
+        expect(type instanceof EnumType).toBeTruthy()
+        const actual = gen.declareType('', type)
+        expect(actual).toEqual(`/**
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ */
+export enum ResultFormat {
+  inline_json = 'inline_json',
+  json = 'json',
+  json_detail = 'json_detail',
+  json_fe = 'json_fe',
+  csv = 'csv',
+  html = 'html',
+  md = 'md',
+  txt = 'txt',
+  xlsx = 'xlsx',
+  gsxml = 'gsxml'
+}`)
+      })
+      it('Align declaration', () => {
+        const type =
+          apiTestModel.types.LookmlModelExploreField.properties.align.type
+        expect(type instanceof EnumType).toBeTruthy()
+        const actual = gen.declareType('', type)
+        expect(actual).toEqual(`/**
+ * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
+ */
+export enum Align {
+  left = 'left',
+  right = 'right'
+}`)
+      })
     })
   })
 })

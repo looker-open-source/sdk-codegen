@@ -27,10 +27,12 @@
 import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
+  EnumType,
   IMappedType,
   IMethod,
   IParameter,
   IProperty,
+  isSpecialName,
   IType,
   strBody,
 } from './sdkModels'
@@ -81,12 +83,12 @@ import { IDictionary, ${this.typeNames().join(', ')} } from './models'
 export class ${this.packageName} extends APIMethods {
 
   public stream: ${this.packageName}Stream
-  
+
   constructor(authSession: IAuthSession) {
     super(authSession, '${this.apiVersion}')
-    this.stream = new ${this.packageName}Stream(authSession)  
+    this.stream = new ${this.packageName}Stream(authSession)
   }
-  
+
 `
   }
 
@@ -117,8 +119,8 @@ export class ${this.packageName}Stream extends APIMethods {
 
   modelsPrologue(_indent: string) {
     return `
-import { Url } from '../../rtl/constants'
 import { DelimArray } from '../../rtl/delimArray'
+import { Url } from '../../rtl/constants'
 
 /*
  * ${this.warnEditing()}
@@ -135,10 +137,20 @@ export interface IDictionary<T> {
     return ''
   }
 
-  commentHeader(indent: string, text: string | undefined) {
-    return text
-      ? `${indent}/**\n${commentBlock(text, indent, ' * ')}\n${indent} */\n`
-      : ''
+  commentHeader(indent: string, text: string | undefined, commentStr = ' * ') {
+    if (!text) return ''
+    if (commentStr === ' ') {
+      return `${indent}/**\n\n${commentBlock(
+        text,
+        indent,
+        commentStr
+      )}\n\n${indent} */\n`
+    }
+    return `${indent}/**\n${commentBlock(
+      text,
+      indent,
+      commentStr
+    )}\n${indent} */\n`
   }
 
   declareProperty(indent: string, property: IProperty) {
@@ -146,23 +158,24 @@ export interface IDictionary<T> {
     if (property.name === strBody) {
       // TODO refactor this hack to track context when the body parameter is created for the request type
       property.type.refCount++
-      // No longer using Partial<T> because required and optional are supposed to be accurate
       return (
         this.commentHeader(
           indent,
           property.description ||
             'body parameter for dynamically created request type'
-        ) + `${indent}${property.name}${optional}: I${property.type.name}`
+        ) +
+        `${indent}${property.name}${optional}: ${this.typeName(property.type)}`
       )
     }
-    const type = this.typeMap(property.type)
+    const mapped = this.typeMap(property.type)
     return (
       this.commentHeader(indent, this.describeProperty(property)) +
-      `${indent}${property.name}${optional}: ${type.name}`
+      `${indent}${this.reserve(property.name)}${optional}: ${mapped.name}`
     )
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
+    // TODO remove mapped name type signature?
     return `@param {${mapped.name}} ${param.name} ${param.description}`
   }
 
@@ -181,17 +194,17 @@ export interface IDictionary<T> {
     }
     return (
       this.commentHeader(indent, this.paramComment(param, mapped)) +
-      `${indent}${param.name}${pOpt}: ${mapped.name}` +
+      `${indent}${this.reserve(param.name)}${pOpt}: ${mapped.name}` +
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
   }
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
-    const type = this.typeMap(method.type)
+    const mapped = this.typeMap(method.type)
     const head = method.description?.trim()
     let headComment =
       (head ? `${head}\n\n` : '') +
-      `${method.httpMethod} ${method.endpoint} -> ${type.name}`
+      `${method.httpMethod} ${method.endpoint} -> ${mapped.name}`
     let fragment = ''
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
@@ -217,7 +230,7 @@ export interface IDictionary<T> {
     } else if (method.responseIsBinary()) {
       headComment += `\n\n**Note**: Binary content is returned by this method.\n`
     }
-    const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
+    const callback = `callback: (readable: Readable) => Promise<${mapped.name}>,`
     const header =
       this.commentHeader(indent, headComment) +
       `${indent}async ${method.name}(` +
@@ -240,11 +253,10 @@ export interface IDictionary<T> {
     const bump = indent + this.indentStr
     let encodings = ''
     if (method.pathParams.length > 0) {
+      const prefix = this.useRequest(method) ? 'request' : ''
       for (const param of method.pathParams) {
         if (param.doEncode()) {
-          const name = this.useRequest(method)
-            ? `request.${param.name}`
-            : param.name
+          const name = this.accessor(param.name, prefix)
           encodings += `${bump}${name} = encodeParam(${name})\n`
         }
       }
@@ -276,16 +288,29 @@ export interface IDictionary<T> {
     )
   }
 
+  reserve(name: string): string {
+    if (!isSpecialName(name)) return name
+    return `'${name}'`
+  }
+
+  private typeName(type: IType) {
+    if (type.customType && !(type instanceof EnumType)) {
+      return this.reserve(`I${type.name}`)
+    }
+    return this.reserve(type.name)
+  }
+
   typeSignature(indent: string, type: IType) {
+    const meta = type instanceof EnumType ? 'enum' : 'interface'
     return (
       this.commentHeader(indent, type.description) +
-      `${indent}export interface I${type.name}{\n`
+      `${indent}export ${meta} ${this.typeName(type)} {\n`
     )
   }
 
   errorResponses(_indent: string, method: IMethod) {
     const results: string[] = method.errorResponses.map(
-      (r) => `I${r.type.name}`
+      (r) => `${this.typeName(r.type)}`
     )
     return results.join(' | ')
   }
@@ -301,19 +326,42 @@ export interface IDictionary<T> {
     if (!args || args.length === 0) return this.nullStr
     const hash: string[] = []
     for (const arg of args) {
+      const reserved = this.reserve(arg)
       if (prefix) {
-        hash.push(`${arg}: ${prefix}${arg}`)
+        hash.push(`${reserved}: ${this.accessor(arg, prefix)}`)
       } else {
-        hash.push(arg)
+        hash.push(reserved)
       }
     }
     return `\n${indent}{${hash.join(this.argDelimiter)}}`
   }
 
+  /**
+   * Determine the type of accessor needed for the symbol name
+   *
+   * If the prefix is defined:
+   *   If the name is special, use array accessor
+   *   If the name is simple, use dotted notation
+   *
+   * With no prefix, return the "reserved" version of the name, which may be the same as name
+   *
+   * @param name variable to access
+   * @param prefix optional prefix for accessor
+   * @returns one of 4 possible accessor patterns
+   */
+  accessor(name: string, prefix?: string) {
+    const reserved = this.reserve(name)
+    if (!prefix) return reserved
+    if (reserved === name) return `${prefix}.${name}`
+    return `${prefix}[${reserved}]`
+  }
+
   argList(indent: string, args: Arg[], prefix?: string) {
     prefix = prefix || ''
+    const bits = args.map((a) => this.accessor(a, prefix))
+
     return args && args.length !== 0
-      ? `\n${indent}${prefix}${args.join(this.argDelimiter + prefix)}`
+      ? `\n${indent}${bits.join(this.argDelimiter)}`
       : this.nullStr
   }
 
@@ -335,7 +383,7 @@ export interface IDictionary<T> {
   //   null, bodyArg
   //   {queryArgs...}
   httpArgs(indent: string, method: IMethod) {
-    const request = this.useRequest(method) ? 'request.' : ''
+    const request = this.useRequest(method) ? 'request' : ''
     // add options at the end of the request calls. this will cause all other arguments to be
     // filled in but there's no way to avoid this for passing in the last optional parameter.
     // Fortunately, this code bloat is minimal and also hidden from the consumer.
@@ -344,7 +392,7 @@ export interface IDictionary<T> {
     // result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
     result = this.argFill(
       result,
-      method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr
+      method.bodyArg ? this.accessor(method.bodyArg, request) : this.nullStr
     )
     result = this.argFill(
       result,
@@ -355,12 +403,12 @@ export interface IDictionary<T> {
 
   httpCall(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
-    const type = this.typeMap(method.type)
+    const mapped = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     const errors = this.errorResponses(indent, method)
     return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${
-      type.name
+      mapped.name
     }, ${errors}>(${this.httpPath(method.endpoint, request)}${
       args ? ', ' + args : ''
     })`
@@ -368,12 +416,12 @@ export interface IDictionary<T> {
 
   streamCall(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
-    const type = this.typeMap(method.type)
+    const mapped = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     // const errors = this.errorResponses(indent, method)
     return `${indent}return ${this.it('authStream')}<${
-      type.name
+      mapped.name
     }>(callback, '${method.httpMethod.toUpperCase()}', ${this.httpPath(
       method.endpoint,
       request
@@ -396,11 +444,7 @@ export interface IDictionary<T> {
     const types = this.api.types
     Object.values(types)
       .filter((type) => type.refCount > 0 && !type.intrinsic)
-      .forEach((type) => names.push(`I${type.name}`))
-    // TODO import default constants if necessary
-    // Object.values(types)
-    //   .filter(type => type instanceof RequestType)
-    //   .forEach(type => names.push(`${strDefault}${type.name.substring(strRequest.length)}`))
+      .forEach((type) => names.push(this.typeName(type)))
     return names
   }
 
@@ -439,12 +483,14 @@ export interface IDictionary<T> {
           return { default: '{}', name: `IDictionary<${map.name}>` }
         case 'DelimArrayType':
           return { default: '', name: `DelimArray<${map.name}>` }
+        case 'EnumType':
+          return { default: '', name: this.typeName(type) }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
 
     if (type.name) {
-      return tsTypes[type.name] || { default: '', name: `I${type.name}` } // No null default for complex types
+      return tsTypes[type.name] || { default: '', name: this.typeName(type) } // No null default for complex types
     } else {
       throw new Error('Cannot output a nameless type.')
     }

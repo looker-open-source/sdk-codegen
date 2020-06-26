@@ -35,6 +35,7 @@ import {
   supportedVersion,
   logConvertSpec,
   openApiFileName,
+  fetchLookerVersion,
 } from './fetchSpec'
 import { ISDKConfigProps } from './sdkConfig'
 import { isFileSync } from './nodeUtils'
@@ -45,6 +46,11 @@ const props = (config.section as unknown) as ISDKConfigProps
 props.api_version = '4.0'
 
 describe('fetch operations', () => {
+  it('default lookerVersion when server is not available', async () => {
+    const actual = await fetchLookerVersion(props)
+    expect(actual).toEqual('')
+  })
+
   it('gets version info', async () => {
     expect(props).toBeDefined()
     const version = await getVersionInfo(props)

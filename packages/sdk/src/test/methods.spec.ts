@@ -30,10 +30,12 @@ import { TestConfig } from '../testUtils'
 import { NodeSession } from '../rtl/nodeSession'
 import { Looker40SDK as LookerSDK } from '../sdk/4.0/methods'
 import {
+  ICreateQueryTask,
   IQuery,
   IRequestRunInlineQuery,
   IUser,
   IWriteQuery,
+  ResultFormat,
 } from '../sdk/4.0/models'
 import {
   ApiConfig,
@@ -347,7 +349,7 @@ describe('LookerNodeSDK', () => {
       expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     })
 
-    xit('search_looks fields filter', async () => {
+    it('search_looks fields filter', async () => {
       const sdk = new LookerSDK(session)
       const actual = await sdk.ok(
         sdk.search_looks({
@@ -534,8 +536,30 @@ describe('LookerNodeSDK', () => {
     )
   })
 
+  describe('Types with enums', () => {
+    it('CreateQueryTask serializes and deserializes', () => {
+      let task: ICreateQueryTask = {
+        query_id: 1,
+        result_format: ResultFormat.inline_json,
+        dashboard_id: '1',
+        source: 'local',
+      }
+      let json = JSON.stringify(task)
+      let actual: ICreateQueryTask = JSON.parse(json)
+      expect(actual).toEqual(task)
+      task = {
+        query_id: 1,
+        result_format: 'inline_json' as ResultFormat,
+        dashboard_id: '1',
+        source: 'local',
+      }
+      json = JSON.stringify(task)
+      actual = JSON.parse(json)
+      expect(actual).toEqual(task)
+    })
+  })
   describe('Query calls', () => {
-    xit(
+    it(
       'create and run query',
       async () => {
         const sdk = new LookerSDK(session)
@@ -580,7 +604,7 @@ describe('LookerNodeSDK', () => {
       testTimeout
     )
 
-    xit(
+    it(
       'run_inline_query',
       async () => {
         const sdk = new LookerSDK(session)
@@ -882,7 +906,6 @@ describe('LookerNodeSDK', () => {
     })
   })
 
-  /*
   function mimeType(data: string) {
     //        var sig = [UInt8](repeating: 0, count: 20)
     //        data.copyBytes(to: &sig, count: 20)
@@ -909,7 +932,7 @@ describe('LookerNodeSDK', () => {
     }
   }
 
-  function simpleQuery(): Partial<IWriteQuery> {
+  const simpleQuery = (): Partial<IWriteQuery> => {
     return {
       fields: ['dashboard.id', 'dashboard.title', 'dashboard.count'],
       limit: '100',
@@ -917,18 +940,38 @@ describe('LookerNodeSDK', () => {
       view: 'dashboard',
     }
   }
-  */
 
-  // TODO resurrect this when the API bug is fixed
-  // describe('Binary download', () => {
-  //   it('PNG and JPG download', async () => {
-  //     const sdk = new LookerSDK(session)
-  //     const query = await sdk.ok(sdk.create_query(simpleQuery()))
-  //     const png = await sdk.ok(sdk.run_query({query_id: query.id!, result_format: 'png'}))
-  //     const jpg = await sdk.ok(sdk.run_query({query_id: query.id!, result_format: 'jpg'}))
-  //     expect(mimeType(png)).toEqual('image/png')
-  //     expect(mimeType(jpg)).toEqual('image/jpeg') // Houston, we have a problem with jpg being a png
-  //   }, testTimeout)
-  //
-  // })
+  describe('Binary download', () => {
+    it(
+      'PNG and JPG download',
+      async () => {
+        const sdk = new LookerSDK(session)
+        const query = await sdk.ok(sdk.create_query(simpleQuery()))
+        const png = await sdk.ok(
+          sdk.run_query({ query_id: query.id!, result_format: 'png' })
+        )
+        expect(mimeType(png)).toEqual('image/png')
+        // TODO resurrect this when the API bug is fixed
+        // const jpg = await sdk.ok(
+        //   sdk.run_query({ query_id: query.id!, result_format: 'jpg' })
+        // )
+        // expect(mimeType(jpg)).toEqual('image/jpeg') // Houston, we have a problem with jpg being a png
+      },
+      testTimeout
+    )
+    it(
+      'run look PNG download',
+      async () => {
+        const sdk = new LookerSDK(session)
+        const looks = await sdk.ok(sdk.all_looks('id'))
+        expect(looks.length).toBeGreaterThan(0)
+        const look = looks[0]
+        const png = await sdk.ok(
+          sdk.run_look({ look_id: look.id!, result_format: 'png' })
+        )
+        expect(mimeType(png)).toEqual('image/png')
+      },
+      testTimeout
+    )
+  })
 })

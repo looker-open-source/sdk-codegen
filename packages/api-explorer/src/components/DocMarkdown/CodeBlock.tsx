@@ -24,30 +24,9 @@
 
  */
 
-import React, { FC } from 'react'
-import { last } from 'lodash'
-import { Heading } from '@looker/components'
-import { IRawResponse } from '@looker/sdk/lib/browser'
+import React, { FC, PropsWithChildren } from 'react'
+import { CodeBlock } from '@looker/components'
 
-import { responseHandlers } from './responseUtils'
-
-interface ShowResponseProps {
-  response: IRawResponse
-}
-
-export const ShowResponse: FC<ShowResponseProps> = ({ response }) => {
-  let pickedHandler = last(responseHandlers)!
-  for (const handler of responseHandlers) {
-    if (handler.isRecognized(response.contentType)) {
-      pickedHandler = handler
-      break
-    }
-  }
-
-  return (
-    <>
-      <Heading as="h4">{`${response.statusCode}: ${response.contentType}`}</Heading>
-      {pickedHandler.component(response)}
-    </>
-  )
-}
+export const CodeBlockWrapper: FC<PropsWithChildren<any>> = (props) => (
+  <CodeBlock>{props.value}</CodeBlock>
+)

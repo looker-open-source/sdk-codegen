@@ -27,11 +27,14 @@
 import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
+  EnumType,
+  EnumValueType,
   IMappedType,
   IMethod,
   IParameter,
   IProperty,
   IType,
+  mayQuote,
   strBody,
 } from './sdkModels'
 import { CodeGen } from './codeGen'
@@ -48,20 +51,109 @@ export class SwiftGen extends CodeGen {
   argDelimiter = ', '
   paramDelimiter = ',\n'
   propDelimiter = '\n'
+  enumDelimiter = '\n'
+  codeQuote = '"'
 
   indentStr = '    '
   endTypeStr = `\n}`
   needsRequestTypes = false
   willItStream = true
-  keywords =
-    'associatedtype,class,deinit,enum,extension,fileprivate,func,import,init,inout,internal,let,open,' +
-    'operator,private,protocol,public,static,struct,subscript,typealias,var,break,case,continue,default,' +
-    'defer,do,else,fallthrough,for,guard,if,in,repeat,return,switch,where,while,' +
-    'as,Any,catch,false,is,nil,rethrows,super,self,Self,throw,throws,true,try,' +
-    '_,#available,#colorLiteral,#column,#else,#elseif,#endif,#file,#fileLiteral,#function,#if,#imageLiteral,' +
-    '#line,#selector,and #sourceLocation,associativity,convenience,dynamic,didSet,final,get,infix,indirect,' +
-    'lazy,left,mutating,none,nonmutating,optional,override,postfix,precedence,prefix,Protocol,required,right,' +
-    'set,Type,unowned,weak,willSet'.split(',')
+  keywords = new Set<string>([
+    'associatedtype',
+    'class',
+    'deinit',
+    'enum',
+    'extension',
+    'fileprivate',
+    'func',
+    'import',
+    'init',
+    'inout',
+    'internal',
+    'let',
+    'open',
+    'operator',
+    'private',
+    'protocol',
+    'public',
+    'static',
+    'struct',
+    'subscript',
+    'typealias',
+    'var',
+    'break',
+    'case',
+    'continue',
+    'default',
+    'defer',
+    'do',
+    'else',
+    'fallthrough',
+    'for',
+    'guard',
+    'if',
+    'in',
+    'repeat',
+    'return',
+    'switch',
+    'where',
+    'while',
+    'as',
+    'Any',
+    'catch',
+    'false',
+    'is',
+    'nil',
+    'rethrows',
+    'super',
+    'self',
+    'Self',
+    'throw',
+    'throws',
+    'true',
+    'try',
+    '_',
+    '#available',
+    '#colorLiteral',
+    '#column',
+    '#else',
+    '#elseif',
+    '#endif',
+    '#file',
+    '#fileLiteral',
+    '#function',
+    '#if',
+    '#imageLiteral',
+    '#line',
+    '#selector',
+    'and #sourceLocation',
+    'associativity',
+    'convenience',
+    'dynamic',
+    'didSet',
+    'final',
+    'get',
+    'infix',
+    'indirect',
+    'lazy',
+    'left',
+    'mutating',
+    'none',
+    'nonmutating',
+    'optional',
+    'override',
+    'postfix',
+    'precedence',
+    'prefix',
+    'Protocol',
+    'required',
+    'right',
+    'set',
+    'Type',
+    'unowned',
+    'weak',
+    'willSet',
+  ])
 
   supportsMultiApi(): boolean {
     return false
@@ -107,8 +199,8 @@ import Foundation
     return '\n'
   }
 
-  private reserve(name: string) {
-    if (this.keywords.includes(name)) {
+  reserve(name: string) {
+    if (this.keywords.has(name)) {
       return `\`${name}\``
     }
     return name
@@ -119,10 +211,20 @@ import Foundation
     return this.fileName(`sdk/${baseFileName}`)
   }
 
-  commentHeader(indent: string, text: string | undefined) {
-    return text
-      ? `${indent}/**\n${commentBlock(text, indent, ' * ')}\n${indent} */\n`
-      : ''
+  commentHeader(indent: string, text: string | undefined, commentStr = ' * ') {
+    if (!text) return ''
+    if (commentStr === ' ') {
+      return `${indent}/**\n\n${commentBlock(
+        text,
+        indent,
+        commentStr
+      )}\n\n${indent} */\n`
+    }
+    return `${indent}/**\n${commentBlock(
+      text,
+      indent,
+      commentStr
+    )}\n${indent} */\n`
   }
 
   declareProperty(indent: string, property: IProperty) {
@@ -256,20 +358,50 @@ import Foundation
     )
   }
 
+  codingKeys(indent: string, type: IType) {
+    if (!type.hasSpecialNeeds) return ''
+
+    const bump = this.bumper(indent)
+    const bump2 = this.bumper(bump)
+    const keys = Object.values(type.properties).map(
+      (p) => p.name + (p.hasSpecialNeeds ? ` = "${p.jsonName}"` : '')
+    )
+    return (
+      `\n${bump}private enum CodingKeys : String, CodingKey {` +
+      `\n${bump2}case ${keys.join(', ')}` +
+      `\n${bump}}\n`
+    )
+  }
+
   // declareType(indent: string, type: IType): string {
   //   return super.declareType(this.bumper(indent), type)
   // }
+  declareEnumValue(indent: string, value: EnumValueType) {
+    const quote = typeof value === 'string' ? this.codeQuote : ''
+    return `${indent}case ${mayQuote(value)} = ${quote}${value}${quote}`
+  }
 
   typeSignature(indent: string, type: IType) {
     const recursive = type.isRecursive()
-    const structOrClass = recursive ? 'class' : 'struct'
+    let typeName = recursive ? 'class' : 'struct'
+    let baseClass = 'SDKModel'
+    const isEnum = type instanceof EnumType
+    if (isEnum) {
+      typeName = 'enum'
+      const num = type as EnumType
+      const mapped = this.typeMap(num.elementType)
+      baseClass = `${mapped.name}, Codable`
+    }
+
+    const keys = this.codingKeys(indent, type)
+
     const needClass = recursive
       ? '\nRecursive type references must use Class instead of Struct'
       : ''
     const mapped = this.typeMap(type)
     return (
       this.commentHeader(indent, type.description + needClass) +
-      `${indent}${structOrClass} ${mapped.name}: SDKModel {\n`
+      `${indent}${typeName} ${mapped.name}: ${baseClass} {\n${keys}`
     )
   }
 
@@ -395,7 +527,7 @@ import Foundation
   httpCall(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
     const type = this.typeMap(method.type)
-    const bump = indent + this.indentStr
+    const bump = this.bumper(indent)
     const args = this.httpArgs(bump, method)
     const errors = this.errorResponses(indent, method)
     return `${indent}let result: SDKResponse<${
@@ -452,7 +584,7 @@ ${indent}return result`
     const swiftTypes: Record<string, IMappedType> = {
       Error: { default: '', name: `${ns}Error` },
       Group: { default: '', name: `${ns}Group` },
-      Locale: { default: '', name: `${ns}Group` },
+      Locale: { default: '', name: `${ns}Locale` },
       any: { default: this.nullStr, name: 'AnyCodable' },
       boolean: { default: this.nullStr, name: 'Bool' },
       byte: { default: this.nullStr, name: 'binary' },
@@ -486,6 +618,8 @@ ${indent}return result`
         }
         case 'DelimArrayType':
           return { default: 'nil', name: `DelimArray<${map.name}>` }
+        case 'EnumType':
+          return { default: 'nil', name: type.name }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }

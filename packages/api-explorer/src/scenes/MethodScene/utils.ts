@@ -32,7 +32,7 @@ import {
   IType,
   IMethod,
 } from '@looker/sdk-codegen'
-import { TryItInput } from '../../../../try-it'
+import { TryItInput } from '@looker/try-it'
 
 // TODO: use potential equivalent from sdk-codegen, confirm formats
 export const getTypeDefault = (type: string) => {
