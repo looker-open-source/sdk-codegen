@@ -49,17 +49,19 @@ describe('NodeTransport', () => {
     )
   })
 
-  it('gracefully handles Node-level transport errors', async () => {
-    const response = await xp.rawRequest('GET', badPath)
-    const errorMessage = `GET ${badPath}`
-    expect(response).toBeDefined()
-    expect(response.ok).toEqual(false)
-    expect(response.statusCode).toEqual(404)
-    expect(response.body).toBeDefined()
-    expect(response.body.indexOf(errorMessage)).toEqual(0)
-    expect(response.body.length).toBeGreaterThan(0)
-    expect(response.statusMessage.indexOf('"type":"Buffer":')).toEqual(-1)
-    expect(response.statusMessage.indexOf(errorMessage)).toEqual(0)
+  describe('transport errors', () => {
+    it('gracefully handles Node-level transport errors', async () => {
+      const response = await xp.rawRequest('GET', badPath)
+      const errorMessage = `GET ${badPath}`
+      expect(response).toBeDefined()
+      expect(response.ok).toEqual(false)
+      expect(response.statusCode).toEqual(404)
+      expect(response.body).toBeDefined()
+      expect(response.body.indexOf(errorMessage)).toEqual(0)
+      expect(response.body.length).toBeGreaterThan(0)
+      expect(response.statusMessage.indexOf('"type":"Buffer":')).toEqual(-1)
+      expect(response.statusMessage.indexOf(errorMessage)).toEqual(0)
+    })
   })
 
   it('retrieves fully qualified url', async () => {
