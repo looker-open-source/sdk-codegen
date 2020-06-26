@@ -162,7 +162,6 @@ const PageLayout = styled.div<SidebarStyleProps>`
 
       div > div {
         border: 1px solid ${({ theme }) => theme.colors.ui2};
-        font-weight: ${({ theme }) => theme.fontWeights.normal};
       }
     }
   }

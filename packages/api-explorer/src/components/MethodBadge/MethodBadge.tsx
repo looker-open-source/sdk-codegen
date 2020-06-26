@@ -73,6 +73,7 @@ const MethodBadgeInternal = styled.div<MethodBadgeProps>`
   border-radius: 4px;
   font-size: ${({ theme, compact }) =>
     `${compact ? `calc(${theme.fontSizes.large}/2)` : theme.fontSizes.small}`};
+  font-weight: ${({ theme }) => `${theme.fontWeights.semiBold}`};
   padding: ${({ theme, compact }) => `${theme.space.xxsmall}
     ${compact ? '0' : theme.space.xsmall}`};
   text-align: ${(props) => (props.alignTextCenter ? 'center' : 'left')};

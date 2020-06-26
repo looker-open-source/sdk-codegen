@@ -65,7 +65,11 @@ const StatusBadgeInternal = styled.div<DocStatusProps>`
   border-radius: 4px;
   font-size: ${({ theme }) => `${theme.fontSizes.small}`};
   font-weight: ${({ theme }) => `${theme.fontWeights.semiBold}`};
-  padding: ${({ theme }) => `${theme.space.xxsmall} ${theme.space.xsmall}`};
+  padding: ${({
+    theme: {
+      space: { xxsmall, xsmall },
+    },
+  }) => `${xxsmall} ${xsmall}`};
 `
 
 export const DocStatus: FC<DocStatusProps> = ({ status }) => (
