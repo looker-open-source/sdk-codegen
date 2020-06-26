@@ -8,6 +8,7 @@
     "start": "webpack-dev-server --hot --disable-host-check --port 8080 --https"
   },
   "dependencies": {
+    "@looker/sdk": "^0.3.3-alpha.0",
     "@looker/api-explorer": "^0.1.0-alpha",
     "@looker/try-it": "^0.1.0-alpha",
     "@looker/extension-sdk": "^0.9.0",

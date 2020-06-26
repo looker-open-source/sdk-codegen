@@ -33,7 +33,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const root = document.createElement('div')
   document.body.appendChild(root)
   ReactDOM.render(
-    <ExtensionProvider requiredLookerVersion=">7.0.0">
+    <ExtensionProvider requiredLookerVersion=">=7.11.0">
       <ApiExplorerProvider />
     </ExtensionProvider>,
     root
