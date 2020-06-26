@@ -25,39 +25,13 @@
  */
 import React, { FC } from 'react'
 import { IMethod } from '@looker/sdk-codegen'
-import { Badge, Code, Flex, SpaceVertical, Text } from '@looker/components'
-import { HttpMethod } from '@looker/sdk/src'
+import { Code, Flex, SpaceVertical, Text } from '@looker/components'
 import styled from 'styled-components'
-import { DocPseudo } from '../../../components'
+import { DocPseudo, MethodBadge } from '../../../components'
 
 interface DocOperationProps {
   method: IMethod
 }
-
-function getMethodColor(method: HttpMethod) {
-  switch (method) {
-    case 'DELETE':
-      return 'critical'
-    case 'GET':
-      return 'inform'
-    case 'HEAD':
-      return 'neutral'
-    case 'PATCH':
-      return 'warn'
-    case 'POST':
-      return 'positive'
-    case 'PUT':
-      return 'key'
-    case 'TRACE':
-      return 'warn'
-  }
-}
-
-const StyledBadge = styled(Badge)`
-  border-radius: 4px;
-  padding-top: ${({ theme }) => theme.space.xxsmall};
-  padding-bottom: ${({ theme }) => theme.space.xxsmall};
-`
 
 const StyledEndpointLabel = styled(Text)``
 StyledEndpointLabel.defaultProps = {
@@ -68,24 +42,22 @@ StyledEndpointLabel.defaultProps = {
 }
 
 export const DocOperation: FC<DocOperationProps> = ({ method }) => (
-  <SpaceVertical mb="xlarge" gap="xsmall">
+  <SpaceVertical mb="large" gap="xsmall">
     <div>
-      <StyledBadge intent={getMethodColor(method.httpMethod)}>
+      <MethodBadge method={method.httpMethod}>
         <Flex alignItems="center">
           <StyledEndpointLabel>SDK:</StyledEndpointLabel>
           <DocPseudo method={method} />
         </Flex>
-      </StyledBadge>
-    </div>
-    <div>
-      <StyledBadge intent={getMethodColor(method.httpMethod)}>
+      </MethodBadge>
+      <MethodBadge method={method.httpMethod}>
         <Flex alignItems="center">
           <StyledEndpointLabel>{method.httpMethod}:</StyledEndpointLabel>
           <Code fontSize="small" fontWeight="normal">
             {method.endpoint}
           </Code>
         </Flex>
-      </StyledBadge>
+      </MethodBadge>
     </div>
   </SpaceVertical>
 )

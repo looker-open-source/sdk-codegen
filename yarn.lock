@@ -2184,6 +2184,13 @@
   dependencies:
     "@looker/design-tokens" "^0.8.7"
 
+"@looker/components-providers@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@looker/components-providers/-/components-providers-0.9.1.tgz#9a47890db3dcd32715fb66472ab2fd5de614e8e5"
+  integrity sha512-bvLsf7aEtBwr0a8e0AN73xuaVogzum03kUM3O2B9cto6g5auJv4alVZaQVNLE+LeKav0/I6dgqnq7O/ElNB7fA==
+  dependencies:
+    "@looker/design-tokens" "^0.9.1"
+
 "@looker/components-test-utils@^0.7.36":
   version "0.7.36"
   resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-0.7.36.tgz#2de68473d728b61f11fd744cfe8dbe2dae190e2f"
@@ -2213,6 +2220,30 @@
     styled-system "^5.1.5"
     uuid "^8.1.0"
 
+"@looker/components@^0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@looker/components/-/components-0.9.2.tgz#47df873a007bb9f56567f4c448ceb5942bd9237f"
+  integrity sha512-VqpxBwNw3s4hRdzl0VyiTVKfeHJ0W+nLl4hy1g30COXp+SlmBvRjQOiObzo62wWjYab+RgP25CScswnyicSIJQ==
+  dependencies:
+    "@looker/components-providers" "^0.9.1"
+    "@looker/design-tokens" "^0.9.1"
+    "@looker/icons" "^0.9.2"
+    "@popperjs/core" "^2.4.2"
+    d3-color "^1.4.1"
+    d3-hsv "^0.1.0"
+    date-fns "^2.14.0"
+    date-fns-tz "^1.0.10"
+    focus-trap "^5.1.0"
+    lodash "^4.17.15"
+    polished "^3.6.5"
+    react-day-picker "^7.4.8"
+    react-hotkeys "^2.0.0"
+    react-resize-detector "^5.0.4"
+    react-transition-group "^4.3.0"
+    resize-observer-polyfill "^1.5.1"
+    styled-system "^5.1.5"
+    uuid "^8.1.0"
+
 "@looker/design-tokens@^0.8.7":
   version "0.8.7"
   resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-0.8.7.tgz#a0afeb41fd5b5bd7c1f84c7f6dc92fa47464e9a6"
@@ -2221,6 +2252,17 @@
     "@types/styled-system" "^5.1.9"
     lodash "^4.17.15"
     polished "^3.6.4"
+    styled-system "^5.1.5"
+
+"@looker/design-tokens@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-0.9.1.tgz#0770224beb30b02fa9f7ae3e75cf325e1e9968aa"
+  integrity sha512-Ql3OwsISumMWClpCC7xImQQST8MiLG+9H/Nbk/Kd7rvHU6ziKC6W9GIaZ3GUMzbesBm2iemzp4vRMERD7EAFwQ==
+  dependencies:
+    "@styled-system/props" "^5.1.5"
+    "@types/styled-system" "^5.1.9"
+    lodash "^4.17.15"
+    polished "^3.6.5"
     styled-system "^5.1.5"
 
 "@looker/eslint-config@^1.0.14":
@@ -2252,6 +2294,11 @@
   version "0.8.7"
   resolved "https://registry.yarnpkg.com/@looker/icons/-/icons-0.8.7.tgz#909f0316454635cbb09cb698034e1eca3fe983f7"
   integrity sha512-WfKpsf3p418c0oZdhGpr5xRAUYf/TlFY5IfJnb/bSBABfW+U8NOBWTm0xGQOnMd4ec6QCNDCWWUrUK4n9zPcCQ==
+
+"@looker/icons@^0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@looker/icons/-/icons-0.9.2.tgz#3d3ed57731d0005006bf77d7bc1d4457e0f0dcee"
+  integrity sha512-mqtpkNnqbQz//xE6JgJyl8656wjKgADX/L4AC8Q3Gi+OoNynYKwQVv7YMOJRzJgOW9gPmrYQJnoVyiGiTPpZWA==
 
 "@looker/prettier-config@^1.0.15":
   version "1.0.15"
@@ -2413,7 +2460,7 @@
   resolved "https://registry.yarnpkg.com/@openapitools/openapi-generator-cli/-/openapi-generator-cli-1.0.2-4.2.0.tgz#21d27c65a8a17358edd6089182e8875f1511bb12"
   integrity sha512-rkr7fDUyU06wjszO/chRVtITS5dN4FFg4i6/zuLIVMKcpGNIq2vjw2NJhNG11vjA/aBnnFMFrvC4z99O5Wsuiw==
 
-"@popperjs/core@^2.4.1":
+"@popperjs/core@^2.4.1", "@popperjs/core@^2.4.2":
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.4.2.tgz#7c6dc4ecef16149fd7a736710baa1b811017fdca"
   integrity sha512-JlGTGRYHC2QK+DDbePyXdBdooxFq2+noLfWpRqJtkxcb/oYWzOF0kcbfvvbWrwevCC1l6hLUg1wHYT+ona5BWQ==
@@ -2606,6 +2653,13 @@
   integrity sha512-60IZfMXEOOZe3l1mCu6sj/2NAyUmES2kR9Kzp7s2D3P4qKsZWxD1Se1+wJvevb+1TP+ZMkGPEYYXRyU8M1aF5A==
   dependencies:
     "@styled-system/core" "^5.1.2"
+
+"@styled-system/props@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@styled-system/props/-/props-5.1.5.tgz#f50bf40e8fc8393726f06cbcd096a39a7d779ce4"
+  integrity sha512-FXhbzq2KueZpGaHxaDm8dowIEWqIMcgsKs6tBl6Y6S0njG9vC8dBMI6WSLDnzMoSqIX3nSKHmOmpzpoihdDewg==
+  dependencies:
+    styled-system "^5.1.5"
 
 "@styled-system/shadow@^5.1.2":
   version "5.1.2"
@@ -11285,7 +11339,7 @@ pn@^1.1.0:
   resolved "https://registry.yarnpkg.com/pn/-/pn-1.1.0.tgz#e2f4cef0e219f463c179ab37463e4e1ecdccbafb"
   integrity sha512-2qHaIQr2VLRFoxe2nASzsV6ef4yOOH+Fi9FBOVH6cqeSgUnoyySPZkxzLuzd+RYOQTRpROA0ztTMqxROKSb/nA==
 
-polished@^3.6.4:
+polished@^3.6.4, polished@^3.6.5:
   version "3.6.5"
   resolved "https://registry.yarnpkg.com/polished/-/polished-3.6.5.tgz#dbefdde64c675935ec55119fe2a2ab627ca82e9c"
   integrity sha512-VwhC9MlhW7O5dg/z7k32dabcAFW1VI2+7fSe8cE/kXcfL7mVdoa5UxciYGW2sJU78ldDLT6+ROEKIZKFNTnUXQ==
@@ -11839,6 +11893,17 @@ react-resize-detector@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-4.2.3.tgz#7df258668a30bdfd88e655bbdb27db7fd7b23127"
   integrity sha512-4AeS6lxdz2KOgDZaOVt1duoDHrbYwSrUX32KeM9j6t9ISyRphoJbTRCMS1aPFxZHFqcCGLT1gMl3lEcSWZNW0A==
+  dependencies:
+    lodash "^4.17.15"
+    lodash-es "^4.17.15"
+    prop-types "^15.7.2"
+    raf-schd "^4.0.2"
+    resize-observer-polyfill "^1.5.1"
+
+react-resize-detector@^5.0.4:
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-5.0.6.tgz#7a5b67df1117af83249fbda8bda33df29b0b7e22"
+  integrity sha512-wvyK350xvq3GgRDd8ENE0T5wqTBniGhKuK0rGHeg0L79AlW+2Be6ulecGCzCpC6CE7Zshohf1GZyDaf2onoGFg==
   dependencies:
     lodash "^4.17.15"
     lodash-es "^4.17.15"

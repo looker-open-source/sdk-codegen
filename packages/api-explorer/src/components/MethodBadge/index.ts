@@ -23,10 +23,4 @@
  SOFTWARE.
 
  */
-
-import React, { FC, PropsWithChildren } from 'react'
-import { CodeBlock } from '@looker/components'
-
-export const CodeBlockWrapper: FC<PropsWithChildren<any>> = (props) => (
-  <CodeBlock>{props.value}</CodeBlock>
-)
+export { MethodBadge } from './MethodBadge'

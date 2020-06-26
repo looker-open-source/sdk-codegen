@@ -46,7 +46,9 @@ export const SideNavToggle: FC<SideNavToggleProps> = ({
       <IconButton
         shape="round"
         icon={iconName}
-        onClick={onClick}        
+        onClick={onClick}
+        label="Toggle Sidebar"
+        tooltipDisabled
         size="small"
         outline
       />

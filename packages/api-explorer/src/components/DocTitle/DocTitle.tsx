@@ -27,7 +27,7 @@
 import React from 'react'
 import { Heading } from '@looker/components'
 
-export const DocTitle = (props) => (
+export const DocTitle: React.FC = (props) => (
   <Heading
     fontSize="xxxlarge"
     fontWeight="semiBold"
