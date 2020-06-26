@@ -16,15 +16,15 @@ struct SimpleUser : SDKModel {
 
 @available(OSX 10.15, *)
 class transportTests: XCTestCase {
-    
+
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-    
+
     func checkRegex(_ exp: String, _ desc: String = "") {
         do {
             let regex = try NSRegularExpression(exp)
@@ -33,7 +33,7 @@ class transportTests: XCTestCase {
             print(error)
         }
     }
-    
+
     func testRegexExtension() {
         checkRegex(Constants.matchModeString, "string match")
         checkRegex(Constants.matchCharset, "charset match")
@@ -41,17 +41,17 @@ class transportTests: XCTestCase {
         checkRegex(Constants.applicationJson, "application/json")
         checkRegex(Constants.matchCharsetUtf8, "utf-8 match")
     }
-    
+
     func testApproxEquals() {
         XCTAssertTrue("application/json" ~= Constants.matchModeString)
     }
-    
+
     func testPatterns() {
         XCTAssertNotNil(contentPatternBinary, "Binary should be compiled")
         XCTAssertNotNil(charsetUtf8Pattern, "Charset should be compiled")
         XCTAssertNotNil(contentPatternString, "String should be compiled")
     }
-    
+
     func testStringMode() {
         let data = config.testData["content_types"]?.value
         let contentTypes = data as! [String:[String]]
@@ -61,7 +61,7 @@ class transportTests: XCTestCase {
             XCTAssertEqual(ResponseMode.string, mode, "\(t) should be string")
         }
     }
-    
+
     func testBinaryMode() {
         let data = config.testData["content_types"]?.value
         let contentTypes = data as! [String:[String]]
@@ -71,7 +71,7 @@ class transportTests: XCTestCase {
             XCTAssertEqual(ResponseMode.binary, mode, "\(t) should be binary")
         }
     }
-    
+
     func testDeserialize() {
         let jsonString = """
         {
@@ -96,7 +96,7 @@ class transportTests: XCTestCase {
         XCTAssertEqual(user.last, "Zzeebra")
         XCTAssertEqual(user.email, "zz@foo.bar")
     }
-    
+
     //    func dictToJson(dict: StringDictionary<Variant?>) -> String {
     //        var result = ""
     //        dict.flatMap({(arg: (key: String, value: Variant?)) -> String in let (key, value) = arg; return {
@@ -105,7 +105,7 @@ class transportTests: XCTestCase {
     //        })
     //        return result
     //    }
-    
+
     let visJson = """
 {
 "bool":true,
@@ -118,7 +118,7 @@ class transportTests: XCTestCase {
 "ratnest": [ { "one": 1, "two": "two" }, "three", {"four":4} ]
 }
 """
-    
+
     // Relevant SO https://stackoverflow.com/questions/46279992/any-when-decoding-json-with-codable
     // Using AnyCodable from https://github.com/Flight-School/AnyCodable
     func testDictFromJson() {
@@ -134,7 +134,7 @@ class transportTests: XCTestCase {
         let int = vis_config["int"] as! Int64
         XCTAssertEqual(int, 1)
         let nada = vis_config["nada"]
-        
+
         if "\(nada!)" == "nil" {
             // nada is nil as expected
         } else {
@@ -170,26 +170,26 @@ class transportTests: XCTestCase {
         json = String(decoding: data, as: UTF8.self)
         XCTAssertTrue(json.contains("Updated string"), "str should be updated")
     }
-    
+
     func testQueryParamsAllNil() {
         let values: Values = [ "Not": nil, "A": nil, "Darned": nil, "Thing!": nil ]
         let actual = addQueryParams("empty", values)
         XCTAssertEqual(actual, "empty")
     }
-    
+
     func testQueryParams1() {
         let values: Values = [ "One": 1 ]
         let actual = addQueryParams("Wonderful", values)
         XCTAssertEqual(actual, "Wonderful?One=1")
     }
-    
+
     func testQueryParamsNil() {
         let opt: Bool? = nil
         let values: Values = ["Missing": opt, "Num": 1]
         let actual = addQueryParams("Some", values)
         XCTAssertEqual(actual, "Some?Num=1")
     }
-    
+
     func testQueryParamsDelimArrayInt() {
         let ids: DelimArray<Int> = [1,2,3]
         var values: Values = [ "Ids": ids ]
@@ -200,7 +200,7 @@ class transportTests: XCTestCase {
         actual = addQueryParams("Int", values)
         XCTAssertEqual(actual, "Int?Ids=1%2C2%2C3")
     }
-    
+
     func testQueryParamsDelimArrayInt32() {
         let ids: DelimArray<Int32> = [1,2,3]
         var values: Values = [ "Ids": ids ]
@@ -211,7 +211,7 @@ class transportTests: XCTestCase {
         actual = addQueryParams("Int", values)
         XCTAssertEqual(actual, "Int?Ids=1%2C2%2C3")
     }
-    
+
     func testQueryParamsDelimArrayInt64() {
         let ids: DelimArray<Int64> = [1,2,3]
         var values: Values = [ "Ids": ids ]
@@ -222,7 +222,7 @@ class transportTests: XCTestCase {
         actual = addQueryParams("Int", values)
         XCTAssertEqual(actual, "Int?Ids=1%2C2%2C3")
     }
-    
+
     func testQueryParamsDelimString() {
         let names: DelimArray<String> = ["LLoyd?", "ZZooey#"]
         var values: Values = [ "Names": names]
@@ -233,7 +233,7 @@ class transportTests: XCTestCase {
         actual = addQueryParams("String", values)
         XCTAssertEqual(actual, "String?Names=LLoyd%3F%2CZZooey%23")
     }
-    
+
     func testQueryParamsDelimArrayDouble() {
         let nums: DelimArray<Double> = [2.2,3.3]
         var values: Values = [ "Nums": nums]
@@ -244,7 +244,7 @@ class transportTests: XCTestCase {
         actual = addQueryParams("Double", values)
         XCTAssertEqual(actual, "Double?Nums=2.2%2C3.3")
     }
-    
+
     func testQueryParamsDelimArrayFloat() {
         let nums: DelimArray<Float> = [2.2,3.3]
         var values: Values = [ "Nums": nums]
@@ -255,7 +255,7 @@ class transportTests: XCTestCase {
         actual = addQueryParams("Float", values)
         XCTAssertEqual(actual, "Float?Nums=2.2%2C3.3")
     }
-    
+
     func testQueryParamsDelimArrayBool() {
         let flags: DelimArray<Bool> = [false, true]
         var values: Values = [ "Flags": flags]
@@ -266,7 +266,7 @@ class transportTests: XCTestCase {
         actual = addQueryParams("Bool", values)
         XCTAssertEqual(actual, "Bool?Flags=false%2Ctrue")
     }
-    
+
     func testPerc() {
         var url = URLComponents()
         url.setQueryItems(with: ["foo": "%"])
@@ -277,9 +277,9 @@ class transportTests: XCTestCase {
         XCTAssertEqual(encodeParam("%%"), "%25%25")
         XCTAssertEqual(encodeParam("cat%"), "cat%25")
         XCTAssertEqual(encodeParam("%cat"), "%25cat")
-        
+
     }
-    
+
     func testEncodeParam() {
         let today = DateFormatter.iso8601Full.date(from: "2020-01-01T14:48:00.00Z")
         XCTAssertEqual(encodeParam(today), "2020-01-01T14%3A48%3A00.000Z")
@@ -336,7 +336,7 @@ class transportTests: XCTestCase {
             XCTAssertEqual(encodeParam(v), "George%2CRingo%2CPaul%2CJohn")
         }
     }
-    
+
     let hiFen = """
     {
     "bool-val":true,
@@ -353,7 +353,7 @@ class transportTests: XCTestCase {
         private enum CodingKeys : String, CodingKey {
             case bool_val = "bool-val", int_val = "int-val", dub_val = "dub-val", str_val = "str-val", date_val = "date-val", nada_val = "nada-val", dict_val = "dict-val", rat_nest = "rat-nest"
         }
-        
+
         var bool_val: Bool?
         var int_val: Int?
         var dub_val: Double?
@@ -362,9 +362,9 @@ class transportTests: XCTestCase {
         var nada_val: AnyCodable?
         var dict_val: StringDictionary<AnyCodable>?
         var rat_nest: AnyCodable?
-        
+
     }
-    
+
     /// Create a custom json handler for hyphens https://stackoverflow.com/questions/44396500/how-do-i-use-custom-keys-with-swift-4s-decodable-protocol/44396824#44396824
     func testHyphenWithCodingKeys() {
         var actual: hiFenWithCodingKeys = try! deserialize(hiFen)
@@ -401,4 +401,3 @@ class transportTests: XCTestCase {
         XCTAssertTrue(json.contains("rat-nest"))
     }
 }
-
