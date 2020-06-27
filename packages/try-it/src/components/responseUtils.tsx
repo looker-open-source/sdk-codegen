@@ -47,7 +47,11 @@ const ShowHTML = (response: IRawResponse) => (
 
 const ShowUnknown = (response: IRawResponse) => (
   <Paragraph>
-    {`Received ${response.body.length} bytes of ${response.contentType} data.`}
+    {`Received ${
+      response.body instanceof Blob
+        ? response.body.size
+        : response.body.toString().length
+    } bytes of ${response.contentType} data.`}
   </Paragraph>
 )
 

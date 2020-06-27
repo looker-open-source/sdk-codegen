@@ -52,6 +52,7 @@ describe('c# generator', () => {
     expect(actual).toEqual(expected)
   })
 
+
   describe('summarizes', () => {
     it('one line', () => {
       const text = 'description'

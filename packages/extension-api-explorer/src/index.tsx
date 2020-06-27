@@ -23,10 +23,19 @@
  SOFTWARE.
 
  */
-export { RequestForm } from './RequestForm'
-export { ShowResponse } from './ShowResponse'
-export {
-  createRequestParams,
-  defaultTryItCallback,
-  pathify,
-} from './requestUtils'
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { ExtensionProvider } from '@looker/extension-sdk-react/lib'
+import { ApiExplorerProvider } from './ApiExplorerProvider'
+
+window.addEventListener('DOMContentLoaded', () => {
+  const root = document.createElement('div')
+  document.body.appendChild(root)
+  ReactDOM.render(
+    <ExtensionProvider requiredLookerVersion=">7.10.0">
+      <ApiExplorerProvider />
+    </ExtensionProvider>,
+    root
+  )
+})

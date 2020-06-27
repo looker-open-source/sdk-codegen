@@ -24,10 +24,8 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { theme, ComponentsProvider } from '@looker/components'
-import { ThemeProvider } from 'styled-components'
-import App, { ApiExplorerProps } from './App'
-import { ExplorerStyle } from './components'
+import { BrowserRouter as Router } from 'react-router-dom'
+import ApiExplorer, { ApiExplorerProps } from './ApiExplorer'
 import './styles.css'
 
 const specs: ApiExplorerProps = {
@@ -52,10 +50,8 @@ const specs: ApiExplorerProps = {
 }
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
-    <ComponentsProvider />
-    <ExplorerStyle />
-    <App {...specs} />
-  </ThemeProvider>,
+  <Router>
+    <ApiExplorer {...specs} />
+  </Router>,
   document.getElementById('container')
 )

@@ -84,7 +84,6 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-mdx": "^1.6.8",
     "eslint-plugin-prettier": "^3.1.3",
-    "eslint-plugin-sort-keys-fix": "^1.1.1",
     "jest": "^26.0.1",
     "jest-canvas-mock": "^2.2.0",
     "jest-junit": "^10.0.0",
@@ -127,8 +126,7 @@
     ],
     "plugins": [
       "header",
-      "prettier",
-      "sort-keys-fix"
+      "prettier"
     ],
     "rules": {
       "prettier/prettier": "error",
@@ -138,7 +136,7 @@
         "config/license-header.js"
       ],
       "import/default": "off",
-      "sort-keys-fix/sort-keys-fix": "off"
+      "sort-keys": "off"
     },
     "settings": {
       "import/resolver": {

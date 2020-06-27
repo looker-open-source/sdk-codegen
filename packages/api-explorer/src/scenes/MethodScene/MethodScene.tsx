@@ -25,8 +25,8 @@
 import React, { FC } from 'react'
 import { Flex, Space } from '@looker/components'
 import { useParams } from 'react-router-dom'
+import { TryIt, TryItCallback, TryItHttpMethod } from '@looker/try-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
-import { TryIt, TryItHttpMethod } from '@looker/try-it'
 
 import {
   DocMarkdown,
@@ -35,6 +35,7 @@ import {
   DocSDKs,
   Main,
 } from '../../components'
+
 import {
   DocActivityType,
   DocRateLimited,
@@ -46,6 +47,7 @@ import { createInputs } from './utils'
 
 interface DocMethodProps {
   api: ApiModel
+  tryItCallback?: TryItCallback
 }
 
 interface DocMethodParams {
@@ -53,7 +55,7 @@ interface DocMethodParams {
   specKey: string
 }
 
-export const MethodScene: FC<DocMethodProps> = ({ api }) => {
+export const MethodScene: FC<DocMethodProps> = ({ api, tryItCallback }) => {
   const { methodName, specKey } = useParams<DocMethodParams>()
   const method = api.methods[methodName]
   const seeTypes = typeRefs(api, method.customTypes)
@@ -82,6 +84,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         inputs={createInputs(api, method)}
         httpMethod={method.httpMethod as TryItHttpMethod}
         endpoint={method.endpoint}
+        tryItCallback={tryItCallback}
       />
     </Main>
   )

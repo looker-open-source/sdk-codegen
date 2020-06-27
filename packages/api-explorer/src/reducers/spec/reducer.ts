@@ -23,7 +23,7 @@
  */
 
 import { ApiModel } from '@looker/sdk-codegen'
-import { SpecItem, SpecItems } from '../../App'
+import { SpecItem, SpecItems } from '../../ApiExplorer'
 import { fetchSpec } from './utils'
 
 export interface SpecState extends SpecItem {
