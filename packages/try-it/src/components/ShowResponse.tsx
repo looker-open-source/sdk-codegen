@@ -33,9 +33,15 @@ import { responseHandlers } from './responseUtils'
 
 interface ShowResponseProps {
   response: IRawResponse
+  verb?: string
+  path?: string
 }
 
-export const ShowResponse: FC<ShowResponseProps> = ({ response }) => {
+export const ShowResponse: FC<ShowResponseProps> = ({
+  response,
+  verb,
+  path,
+}) => {
   let pickedHandler = last(responseHandlers)!
   for (const handler of responseHandlers) {
     if (handler.isRecognized(response.contentType)) {
@@ -44,9 +50,12 @@ export const ShowResponse: FC<ShowResponseProps> = ({ response }) => {
     }
   }
 
+  // TODO make a badge for the verb
   return (
     <>
-      <Heading as="h4">{`${response.statusCode}: ${response.contentType}`}</Heading>
+      <Heading as="h4">{`${verb || ''} ${path || ''} ${response.statusCode}: ${
+        response.contentType
+      }`}</Heading>
       {pickedHandler.component(response)}
     </>
   )

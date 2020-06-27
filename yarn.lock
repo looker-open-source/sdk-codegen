@@ -2264,10 +2264,10 @@
   dependencies:
     ts-loader "^6.1.2"
 
-"@looker/extension-sdk@^0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@looker/extension-sdk/-/extension-sdk-0.9.0.tgz#fcce0e8f4ce21123a28046c537f638cdf789c32d"
-  integrity sha512-2jN2q7+ZlW6z+CgX2ZDf3y7DE5TeW3y935bIh4xQYiCITweD/N5sFktKxEioAZkt7giTkse36iklfNnRfgoS9w==
+"@looker/extension-sdk@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@looker/extension-sdk/-/extension-sdk-0.10.0.tgz#a3d193c6e7571c42599db73c8ec7bace0db09483"
+  integrity sha512-ii9JB9BKO2dYHWg7490uzTi7n9xc9YregUDtYw5RTdAnRCLoDqklnV9DQ8DNS49H+B5FoTYO7gNZ36kinjCrNA==
   dependencies:
     "@looker/chatty" "^2.2.0"
     "@looker/sdk" "0.3.0-beta.1"
@@ -14144,7 +14144,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@3.8.2, typescript@^3.6.0, typescript@^3.8.3:
+typescript@3.8.2, typescript@^3.6.0, typescript@^3.8.2, typescript@^3.8.3:
   version "3.8.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.2.tgz#91d6868aaead7da74f493c553aeff76c0c0b1d5a"
   integrity sha512-EgOVgL/4xfVrCMbhYKUQTdF37SQn4Iw73H5BgCrF1Abdun7Kwy/QZsE/ssAy0y4LxBbvua3PIbFsbRczWWnDdQ==

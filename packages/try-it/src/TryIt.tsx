@@ -143,7 +143,13 @@ export const TryIt: FC<TryItProps> = ({
               </Flex>
             </>
           )}
-          {responseContent && <ShowResponse response={responseContent} />}
+          {responseContent && (
+            <ShowResponse
+              response={responseContent}
+              verb={httpMethod}
+              path={pathify(endpoint, activePathParams)}
+            />
+          )}
         </TabPanel>
       </TabPanels>
     </Box>
