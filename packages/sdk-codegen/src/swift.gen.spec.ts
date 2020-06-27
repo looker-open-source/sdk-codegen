@@ -55,8 +55,7 @@ describe('swift generator', () => {
       expect(type).toBeDefined()
       expect(type.values).toEqual(['view', 'edit'])
       const actual = gen.declareType('', type)
-      const expected = `
-/**
+      const expected = `/**
  * Type of permission: "view" or "edit" Valid values are: "view", "edit".
  */
 enum PermissionType: String, Codable {

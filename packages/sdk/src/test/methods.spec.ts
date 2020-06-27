@@ -906,6 +906,9 @@ describe('LookerNodeSDK', () => {
     })
   })
 
+  /*
+  This test should only be run if specifically needed. It's costly and really only checks the API, not the SDK
+
   function mimeType(data: string) {
     //        var sig = [UInt8](repeating: 0, count: 20)
     //        data.copyBytes(to: &sig, count: 20)
@@ -974,4 +977,5 @@ describe('LookerNodeSDK', () => {
       testTimeout
     )
   })
+   */
 })

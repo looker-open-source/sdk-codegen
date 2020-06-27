@@ -75,12 +75,12 @@ enum class PermissionType : Serializable {
   /**
    * A hyphenated property name (read-only)
    */
-  @param:JsonProperty("project-digest") @get:JsonProperty("project-digest")
+  @JsonProperty("project-digest")
   var project_digest: String? = null,
   /**
    * A spaced out property name (read-only)
    */
-  @param:JsonProperty("computation time") @get:JsonProperty("computation time")
+  @JsonProperty("computation time")
   var computation_time: Float? = null
 ) : Serializable`
       expect(actual).toEqual(expected)
