@@ -23,40 +23,35 @@
  SOFTWARE.
 
  */
-import { IMethod, ISearchResult, TagList } from '@looker/sdk-codegen'
 import React, { FC } from 'react'
-import { ComboboxList } from '@looker/components'
+import { TagList } from '@looker/sdk-codegen'
+import { NavLink } from 'react-router-dom'
+import { ComboboxOption, Icon } from '@looker/components'
 
-import { TypeResults } from './TypeResults'
-import { MethodResults } from './MethodResults'
+import { buildMethodPath } from '../../utils'
 
-const allMethods = (tags: TagList): Array<IMethod> => {
-  const result: Array<IMethod> = []
-  Object.values(tags).forEach((methods) => {
-    Object.values(methods).forEach((method) => {
-      result.push(method)
-    })
-  })
-  return result
-}
-
-interface SearchResultsProps extends ISearchResult {
+interface MethodResultsProps {
   specKey: string
+  tags: TagList
 }
 
-export const SearchResults: FC<SearchResultsProps> = ({
-  tags,
-  types,
-  specKey,
-}) => {
-  const methods = allMethods(tags)
-  const methodMatches = Object.entries(methods).length > 0
-  const typeMatches = Object.entries(types).length > 0
-
-  return (
-    <ComboboxList closeOnSelect={true}>
-      {methodMatches && <MethodResults specKey={specKey} tags={tags} />}
-      {typeMatches && <TypeResults specKey={specKey} types={types} />}
-    </ComboboxList>
-  )
-}
+export const MethodResults: FC<MethodResultsProps> = ({ specKey, tags }) => (
+  <>
+    {Object.entries(tags).map(([tag, methods]) =>
+      Object.values(methods).map((method) => (
+        <NavLink
+          key={method.name}
+          to={buildMethodPath(specKey, tag, method.name)}
+        >
+          <ComboboxOption value={method.name} indicator={false}>
+            {method.summary}
+            <Icon name="CaretLeft" />
+            {tag}
+            <Icon name="CaretLeft" />
+            {'Methods'}
+          </ComboboxOption>
+        </NavLink>
+      ))
+    )}
+  </>
+)

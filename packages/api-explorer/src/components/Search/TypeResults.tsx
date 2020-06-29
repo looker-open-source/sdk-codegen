@@ -23,40 +23,30 @@
  SOFTWARE.
 
  */
-import { IMethod, ISearchResult, TagList } from '@looker/sdk-codegen'
 import React, { FC } from 'react'
-import { ComboboxList } from '@looker/components'
+import { IntrinsicType, TypeList } from '@looker/sdk-codegen'
+import { NavLink } from 'react-router-dom'
+import { ComboboxOption, Icon } from '@looker/components'
 
-import { TypeResults } from './TypeResults'
-import { MethodResults } from './MethodResults'
+import { buildTypePath } from '../../utils'
 
-const allMethods = (tags: TagList): Array<IMethod> => {
-  const result: Array<IMethod> = []
-  Object.values(tags).forEach((methods) => {
-    Object.values(methods).forEach((method) => {
-      result.push(method)
-    })
-  })
-  return result
-}
-
-interface SearchResultsProps extends ISearchResult {
+interface TypeResultsProps {
   specKey: string
+  types: TypeList
 }
 
-export const SearchResults: FC<SearchResultsProps> = ({
-  tags,
-  types,
-  specKey,
-}) => {
-  const methods = allMethods(tags)
-  const methodMatches = Object.entries(methods).length > 0
-  const typeMatches = Object.entries(types).length > 0
-
-  return (
-    <ComboboxList closeOnSelect={true}>
-      {methodMatches && <MethodResults specKey={specKey} tags={tags} />}
-      {typeMatches && <TypeResults specKey={specKey} types={types} />}
-    </ComboboxList>
-  )
-}
+export const TypeResults: FC<TypeResultsProps> = ({ specKey, types }) => (
+  <>
+    {Object.values(types)
+      .filter((type) => !(type instanceof IntrinsicType))
+      .map((type) => (
+        <NavLink key={type.name} to={buildTypePath(specKey, type.name)}>
+          <ComboboxOption value={type.name} indicator={false}>
+            {type.name}
+            <Icon name="CaretLeft" />
+            {'Types'}
+          </ComboboxOption>
+        </NavLink>
+      ))}
+  </>
+)

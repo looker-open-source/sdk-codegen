@@ -34,37 +34,17 @@ import React, {
 import {
   Combobox,
   ComboboxInput,
-  ComboboxList,
-  ComboboxOption,
-  Divider,
-  Heading,
-  Icon,
-  Flex,
-  Box,
   Space,
-  MenuDisclosure,
-  Menu,
-  MenuItem,
-  MenuList,
+  MessageBar,
+  ComboboxOptionObject,
 } from '@looker/components'
-import { NavLink } from 'react-router-dom'
-import {
-  CriteriaToSet,
-  IApiModel,
-  IMethod,
-  IntrinsicType,
-  ISearchResult,
-  TagList,
-  TypeList,
-} from '@looker/sdk-codegen'
+import { CriteriaToSet, IApiModel, ISearchResult } from '@looker/sdk-codegen'
 
-import { SearchContext } from '../../context/search'
-import { setPattern } from '../../reducers/search'
-import { buildTypePath, buildMethodPath } from '../../utils'
-import useDebounce from './hooks'
+import { SearchContext } from '../../context'
+import { setPattern } from '../../reducers'
+import { useDebounce } from './hooks'
 import { SearchCriteriaSelector } from './SearchCriteriaSelector'
-import { FlexItem } from '@looker/components'
-import { MessageBar } from '@looker/components'
+import { SearchResults } from './SearchResults'
 
 type SearchResult = ISearchResult | undefined
 
@@ -75,39 +55,43 @@ interface SearchProps {
 
 export const Search: FC<SearchProps> = ({ api, specKey }) => {
   const { searchSettings, setSearchSettings } = useContext(SearchContext)
-  const [error, setError] = useState('')
   const [keywords, setKeywords] = useState(searchSettings.pattern)
   const [results, setResults] = useState<SearchResult>(undefined)
-
+  const [selectedResult, setSelectedResult] = useState<ComboboxOptionObject>()
+  const [error, setError] = useState('')
   const debouncedKeywords = useDebounce(keywords, 250)
 
-  const handleChange = (event: BaseSyntheticEvent) => {
-    setKeywords(event.currentTarget.value)
+  const handleSelect = (option?: ComboboxOptionObject) => {
+    /** Search input cleared by clear search icon */
+    if (!option) setKeywords('')
+    setSelectedResult(option)
+    // TODO: decide whether to highlight based on keywords or selected option
+    setSearchSettings(setPattern(keywords))
   }
 
-  // TODO: setSearchSettings pattern when user clicks result item
+  const handleInputChange = (event: BaseSyntheticEvent) =>
+    setKeywords(event.currentTarget.value)
+
   useEffect(() => {
-    setSearchSettings(setPattern(keywords))
+    let results
     if (debouncedKeywords) {
       const searchCriteria = CriteriaToSet(searchSettings.criteria)
-      const results = api.search(keywords, searchCriteria)
-      results.message.includes('Error')
-        ? setError('Invalid search expression')
-        : setResults(results)
-    } else {
-      setResults(undefined)
+      results = api.search(keywords, searchCriteria)
+      if (results.message.includes('Error')) setError(results.message)
     }
+    setResults(results)
   }, [debouncedKeywords])
 
+  /** Focus search input when '/' is pressed */
   const inputRef = React.useRef()
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === '/' && !inputRef.current.isFocused()) {
-      event.preventDefault()
+    if (event.key === '/' && document.activeElement !== inputRef.current) {
       inputRef.current && inputRef.current.focus()
+      event.preventDefault()
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener('keydown', handleKeyDown)
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
@@ -117,17 +101,16 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
   return (
     <>
       <Space>
-        <Combobox value={{ value: keywords }} width="100%">
+        <Combobox width="100%" onChange={handleSelect} value={selectedResult}>
           <ComboboxInput
             autoFocus
-            disabled={searchSettings.criteria.length === 0}
-            onChange={handleChange}
-            selectOnClick={true}
             autoComplete={false}
-            isClearable={true}
+            disabled={!searchSettings.criteria.length}
+            isClearable
+            onChange={handleInputChange}
             placeholder={
               searchSettings.criteria.length
-                ? `Searching in ${searchSettings.criteria.join(', ')}`
+                ? `Searching in ${searchSettings.criteria.join(', ')}.`
                 : `No search criteria selected.`
             }
             ref={inputRef}
@@ -139,7 +122,6 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
       {error && (
         <MessageBar
           height="10px"
-          mr="large"
           intent="critical"
           canDismiss
           onDismiss={() => setError('')}
@@ -150,87 +132,3 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
     </>
   )
 }
-
-const allMethods = (tags: TagList): Array<IMethod> => {
-  const result: Array<IMethod> = []
-  Object.values(tags).forEach((methods) => {
-    Object.values(methods).forEach((method) => {
-      result.push(method)
-    })
-  })
-  return result
-}
-
-const SearchResults: FC<ISearchResult & { specKey: string }> = ({
-  tags,
-  types,
-  specKey,
-}) => {
-  const methods = allMethods(tags)
-  const methodMatches = Object.entries(methods).length
-  const typeMatches = Object.entries(types).length
-
-  const typesRender = typeMatches > 0 && (
-    <TypeResults specKey={specKey} types={types} />
-  )
-
-  const methodsRender = methodMatches > 0 && (
-    <MethodResults specKey={specKey} tags={tags} />
-  )
-  return (
-    <ComboboxList closeOnSelect={true}>
-      {methodsRender}
-      {methodMatches && typesRender && <Divider />}
-      {typesRender}
-    </ComboboxList>
-  )
-}
-
-interface MethodResultsProps {
-  specKey: string
-  tags: TagList
-}
-
-// TODO: Add pin icon which when clicked opens a new tab
-const MethodResults: FC<MethodResultsProps> = ({ specKey, tags }) => (
-  <>
-    {Object.entries(tags).map(([tag, methods]) =>
-      Object.values(methods).map((method) => (
-        <NavLink
-          key={method.name}
-          to={buildMethodPath(specKey, tag, method.name)}
-        >
-          <ComboboxOption
-            key={method.name}
-            value={buildMethodPath(specKey, tag, method.name)}
-            indicator={false}
-          >
-            {method.summary}
-            <Icon name="CaretLeft" />
-            {tag}
-            <Icon name="CaretLeft" />
-            {'Methods'}
-          </ComboboxOption>
-        </NavLink>
-      ))
-    )}
-  </>
-)
-
-interface TypeResultsProps {
-  specKey: string
-  types: TypeList
-}
-
-const TypeResults: FC<TypeResultsProps> = ({ specKey, types }) => (
-  <>
-    <Heading as="h4">Types</Heading>
-    {Object.values(types)
-      .filter((type) => !(type instanceof IntrinsicType))
-      .map((type) => (
-        <NavLink key={type.name} to={buildTypePath(specKey, type.name)}>
-          <ComboboxOption value={type.name} indicator={false} />
-        </NavLink>
-      ))}
-  </>
-)

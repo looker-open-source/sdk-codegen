@@ -34,7 +34,6 @@ import {
 import { useRouteMatch } from 'react-router-dom'
 import { ApiModel } from '@looker/sdk-codegen'
 
-import { SideNavSearch } from '../Search'
 import { SideNavTags } from './SideNavTags'
 import { SideNavTypes } from './SideNavTypes'
 
@@ -61,14 +60,10 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
   return (
     <Box paddingTop="small">
       <TabList {...tabs}>
-        <Tab>Search</Tab>
         <Tab>Methods</Tab>
         <Tab>Types</Tab>
       </TabList>
       <TabPanels {...tabs}>
-        <TabPanel>
-          <SideNavSearch api={api} specKey={specKey} />
-        </TabPanel>
         <TabPanel>
           <SideNavTags tags={tags} specKey={specKey} />
         </TabPanel>

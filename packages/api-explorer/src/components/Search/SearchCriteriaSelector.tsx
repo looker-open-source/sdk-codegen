@@ -65,7 +65,7 @@ export const SearchCriteriaSelector: FC = () => {
       }
       placement="right"
     >
-      <Icon name="GearOutline" />
+      <Icon name="GearOutline" size="small" />
     </Popover>
   )
 }
