@@ -29,6 +29,7 @@ import { ComboboxList } from '@looker/components'
 
 import { TypeResults } from './TypeResults'
 import { MethodResults } from './MethodResults'
+import { ListItem } from '@looker/components'
 
 const allMethods = (tags: TagList): Array<IMethod> => {
   const result: Array<IMethod> = []
@@ -55,6 +56,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
 
   return (
     <ComboboxList closeOnSelect={true}>
+      {!methodMatches && !typeMatches && <ListItem>No matches found.</ListItem>}
       {methodMatches && <MethodResults specKey={specKey} tags={tags} />}
       {typeMatches && <TypeResults specKey={specKey} types={types} />}
     </ComboboxList>

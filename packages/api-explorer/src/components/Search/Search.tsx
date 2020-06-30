@@ -30,12 +30,12 @@ import React, {
   useContext,
   useEffect,
   useState,
+  useRef,
 } from 'react'
 import {
   Combobox,
   ComboboxInput,
   Space,
-  MessageBar,
   ComboboxOptionObject,
 } from '@looker/components'
 import { CriteriaToSet, IApiModel, ISearchResult } from '@looker/sdk-codegen'
@@ -52,38 +52,36 @@ interface SearchProps {
   api: IApiModel
   specKey: string
 }
-
+/* eslint-disable  @typescript-eslint/ban-ts-ignore  */
 export const Search: FC<SearchProps> = ({ api, specKey }) => {
   const { searchSettings, setSearchSettings } = useContext(SearchContext)
-  const [keywords, setKeywords] = useState(searchSettings.pattern)
+  const [pattern, setSearchPattern] = useState(searchSettings.pattern)
   const [results, setResults] = useState<SearchResult>(undefined)
   const [selectedResult, setSelectedResult] = useState<ComboboxOptionObject>()
-  const [error, setError] = useState('')
-  const debouncedKeywords = useDebounce(keywords, 250)
+  const debouncedPattern = useDebounce(pattern, 250)
 
-  const handleSelect = (option?: ComboboxOptionObject) => {
-    /** Search input cleared by clear search icon */
-    if (!option) setKeywords('')
-    setSelectedResult(option)
-    // TODO: decide whether to highlight based on keywords or selected option
-    setSearchSettings(setPattern(keywords))
+  const handleInputChange = (event: BaseSyntheticEvent) => {
+    setSearchPattern(event.currentTarget.value)
   }
 
-  const handleInputChange = (event: BaseSyntheticEvent) =>
-    setKeywords(event.currentTarget.value)
+  const handleSelect = (option?: ComboboxOptionObject) => {
+    /** Determine if trigger is select or clear action */
+    const value = option ? pattern : ''
+    setSearchSettings(setPattern(value))
+    setSelectedResult({ value })
+  }
 
   useEffect(() => {
     let results
-    if (debouncedKeywords) {
+    if (debouncedPattern) {
       const searchCriteria = CriteriaToSet(searchSettings.criteria)
-      results = api.search(keywords, searchCriteria)
-      if (results.message.includes('Error')) setError(results.message)
+      results = api.search(pattern, searchCriteria)
     }
     setResults(results)
-  }, [debouncedKeywords])
+  }, [debouncedPattern])
 
   /** Focus search input when '/' is pressed */
-  const inputRef = React.useRef()
+  const inputRef = useRef<HTMLInputElement>(null)
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === '/' && document.activeElement !== inputRef.current) {
       inputRef.current && inputRef.current.focus()
@@ -119,16 +117,6 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
         </Combobox>
         <SearchCriteriaSelector />
       </Space>
-      {error && (
-        <MessageBar
-          height="10px"
-          intent="critical"
-          canDismiss
-          onDismiss={() => setError('')}
-        >
-          Something went wrong
-        </MessageBar>
-      )}
     </>
   )
 }
