@@ -9,13 +9,15 @@ import {
 
 import { TryItHttpMethod, TryItInput, TryItValues } from '../TryIt'
 
+// https://docs.looker.com/reference/api-and-integration/api-cors
+// TODO create a separate file for TryItSettings and the default request handler
 const settings = {
   ...DefaultSettings(),
   agentTag: 'TryIt',
   base_url: 'https://self-signed.looker.com:19999',
 } as IApiSettings
 
-class ApixSettings extends ApiSettings {
+class TryItSettings extends ApiSettings {
   constructor(settings: Partial<IApiSettings>) {
     super({ ...settings, ...{ client_id: 'looker.api-explorer' } })
   }
@@ -41,7 +43,7 @@ class ApixSettings extends ApiSettings {
 
 // TODO get these values from the stand-alone TryIt provider
 
-const sdk = LookerBrowserSDK.init40(new ApixSettings(settings))
+const sdk = LookerBrowserSDK.init40(new TryItSettings(settings))
 
 /**
  * Replaces {foo} with vars[foo] in provided path
