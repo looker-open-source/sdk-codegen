@@ -26,12 +26,10 @@
 import React, { FC, useState } from 'react'
 import { ApiModel, MethodList } from '@looker/sdk-codegen'
 import { useParams, NavLink } from 'react-router-dom'
+import { ButtonGroup, ButtonTransparent, Grid } from '@looker/components'
+
 import { DocTitle, DocMethodSummary } from '../../components'
-import { ButtonGroup, ButtonTransparent } from '@looker/components'
-import { ButtonSetOption } from '@looker/components/lib/Button/ButtonSet'
 import { buildMethodPath } from '../../utils'
-import { Button } from '@looker/components'
-import { Grid } from '@looker/components'
 
 interface TagSceneProps {
   api: ApiModel

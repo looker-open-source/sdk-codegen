@@ -27,11 +27,7 @@ import React, { FC } from 'react'
 import { Card, CardContent, Space, Text } from '@looker/components'
 import { IMethod } from '@looker/sdk-codegen'
 
-import { MethodBadge } from '../SideNav/MethodBadge'
-import {
-  DocActivityType,
-  DocRateLimited,
-} from '../../scenes/MethodScene/components'
+import { DocActivityType, DocRateLimited, MethodBadge } from '../../components'
 import { DocSummaryStatus } from './DocSummaryStatus'
 
 interface DocMethodSummaryProps {
