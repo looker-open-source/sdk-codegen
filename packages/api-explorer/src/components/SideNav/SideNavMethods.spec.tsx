@@ -37,7 +37,7 @@ describe('SideNavMethods', () => {
       ),
       highlightPattern
     )
-    const sideNavItem = screen.getByText('dash')
+    const sideNavItem = screen.getByText('Dash')
     expect(sideNavItem).toBeDefined()
   })
 })

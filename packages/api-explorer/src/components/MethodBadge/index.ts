@@ -23,6 +23,4 @@
  SOFTWARE.
 
  */
-export { DocOperation } from './DocOperation'
-export { DocResponse } from './DocResponse'
-export { DocStatus } from './DocStatus'
+export { MethodBadge } from './MethodBadge'

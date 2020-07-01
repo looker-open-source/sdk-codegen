@@ -23,14 +23,13 @@
  */
 
 import React, { FC, useContext } from 'react'
-import { SidebarItem, Text } from '@looker/components'
+import { SidebarItem, Heading } from '@looker/components'
 import { MethodList } from '@looker/sdk-codegen'
 import { NavLink } from 'react-router-dom'
 
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
-import { MethodBadge } from './MethodBadge'
-import { Heading } from '@looker/components'
+import { MethodBadge } from '../MethodBadge'
 
 interface MethodsProps {
   methods: MethodList
