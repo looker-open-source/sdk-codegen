@@ -32,7 +32,7 @@ import {
   Box,
   ComponentsProvider,
 } from '@looker/components'
-import { styled } from 'styled-components'
+import styled from 'styled-components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
 import { TryItCallback } from '@looker/try-it'
 
