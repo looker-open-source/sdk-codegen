@@ -26,5 +26,5 @@
     "suppressImplicitAnyIndexErrors": true
   },
   "exclude": ["lib", "node_modules"],
-  "include": []
+  "include": ["*.css"]
 }

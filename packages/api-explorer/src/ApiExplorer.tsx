@@ -1,34 +1,49 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2020 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 import React, { FC, useReducer, useState } from 'react'
-import { Sidebar, SidebarGroup, SidebarItem, Box } from '@looker/components'
+import {
+  Box,
+  ComponentsProvider,
+  Sidebar,
+  SidebarGroup,
+  SidebarItem,
+} from '@looker/components'
 import styled from 'styled-components'
-import { BrowserRouter as Router } from 'react-router-dom'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
+import { TryItCallback } from '@looker/try-it'
+
 import { SearchContext } from './context'
-import { Header, SideNav, SideNavToggle, Main } from './components'
+import {
+  ExplorerStyle,
+  Header,
+  SideNav,
+  SideNavToggle,
+  Main,
+} from './components'
 import {
   specReducer,
   initDefaultSpecState,
@@ -48,11 +63,11 @@ export interface SpecItem {
 export type SpecItems = KeyedCollection<SpecItem>
 
 export interface ApiExplorerProps {
-  // request provider
+  tryItCallback?: TryItCallback
   specs: SpecItems
 }
 
-const App: FC<ApiExplorerProps> = ({ specs }) => {
+const ApiExplorer: FC<ApiExplorerProps> = ({ specs, tryItCallback }) => {
   const [spec, specDispatch] = useReducer(
     specReducer,
     initDefaultSpecState(specs)
@@ -68,8 +83,9 @@ const App: FC<ApiExplorerProps> = ({ specs }) => {
   }
 
   return (
-    <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
-      <Router>
+    <ComponentsProvider>
+      <ExplorerStyle />
+      <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
         <Header specs={specs} spec={spec} specDispatch={specDispatch} />
         <PageLayout open={isSideNavOpen}>
           {isSideNavOpen && <SideNav api={spec.api} specKey={spec.key} />}
@@ -82,16 +98,20 @@ const App: FC<ApiExplorerProps> = ({ specs }) => {
           </SidebarDivider>
           <Box className={isSideNavOpen ? 'doc open' : 'doc'}>
             <Main>
-              <AppRouter api={spec.api} specKey={spec.key} />
+              <AppRouter
+                api={spec.api}
+                specKey={spec.key}
+                tryItCallback={tryItCallback}
+              />
             </Main>
           </Box>
         </PageLayout>
-      </Router>
-    </SearchContext.Provider>
+      </SearchContext.Provider>
+    </ComponentsProvider>
   )
 }
 
-export default App
+export default ApiExplorer
 
 interface SidebarStyleProps {
   open: boolean

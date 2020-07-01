@@ -37,7 +37,7 @@ import {
   LookerAppId,
   agentPrefix,
   Values,
-  IRawResponse,
+  IRawResponse, responseMode, ResponseMode,
 } from './transport'
 import { BaseTransport } from './baseTransport'
 import { lookerVersion } from './constants'
@@ -113,8 +113,9 @@ export class BrowserTransport extends BaseTransport {
 
     const res = await req
     const contentType = String(res.headers.get('content-type'))
+    const mode = responseMode(contentType)
     return {
-      body: await res.text(),
+      body: mode === ResponseMode.binary ? await res.blob() : await res.text(),
       contentType,
       ok: true,
       statusCode: res.status,

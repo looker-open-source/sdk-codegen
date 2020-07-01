@@ -52,6 +52,7 @@ describe('c# generator', () => {
     expect(actual).toEqual(expected)
   })
 
+
   describe('summarizes', () => {
     it('one line', () => {
       const text = 'description'
@@ -86,6 +87,22 @@ describe('c# generator', () => {
 }`
       const actual = gen.declareType(indent, type)
       expect(actual).toEqual(expected)
+    })
+
+    it('with special names', () => {
+      const type = apiTestModel.types.HyphenType
+      const actual = gen.declareType(indent, type)
+      expect(actual).toEqual(`public class HyphenType : SdkModel
+{
+  /// <summary>A normal variable name (read-only)</summary>
+  public string? project_name { get; set; } = null;
+  /// <summary>A hyphenated property name (read-only)</summary>
+  [JsonProperty("project-digest")]
+  public string? project_digest { get; set; } = null;
+  /// <summary>A spaced out property name (read-only)</summary>
+  [JsonProperty("computation time")]
+  public float? computation_time { get; set; } = null;
+}`)
     })
 
     it('with arrays and hashes', () => {
@@ -158,18 +175,18 @@ public enum UserAttributeFilterTypes
     it('generates a method with multiple return types', () => {
       const method = apiTestModel.methods.run_sql_query
       const expected = `/// Execute a SQL Runner query in a given result_format.
-/// 
+///
 /// POST /sql_queries/{slug}/run/{result_format} -> string
-/// 
+///
 /// **Note**: Binary content may be returned by this method.
-/// 
+///
 /// <returns>
 /// <c>string</c> SQL Runner Query (text)
 /// <c>string</c> SQL Runner Query (application/json)
 /// <c>string</c> SQL Runner Query (image/png)
 /// <c>string</c> SQL Runner Query (image/jpeg)
 /// </returns>
-/// 
+///
 /// <param name="slug">slug of query</param>
 /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]</param>
 /// <param name="download">Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.</param>
@@ -190,17 +207,17 @@ public async Task<SdkResponse<TSuccess, Exception>> run_sql_query<TSuccess>(
     it('generates a method with a single return type', () => {
       const method = apiTestModel.methods.query_task_multi_results
       const expected = `/// ### Fetch results of multiple async queries
-/// 
+///
 /// Returns the results of multiple async queries in one request.
-/// 
+///
 /// For Query Tasks that are not completed, the response will include the execution status of the Query Task but will not include query results.
 /// Query Tasks whose results have expired will have a status of 'expired'.
 /// If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
-/// 
+///
 /// GET /query_tasks/multi_results -> StringDictionary<string>
-/// 
+///
 /// <returns><c>StringDictionary<string></c> Multiple query results (application/json)</returns>
-/// 
+///
 /// <param name="query_task_ids">List of Query Task IDs</param>
 public async Task<SdkResponse<StringDictionary<string>, Exception>> query_task_multi_results(
   DelimArray<string> query_task_ids,

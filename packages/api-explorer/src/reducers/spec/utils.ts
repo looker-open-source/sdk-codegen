@@ -24,9 +24,10 @@
 
  */
 
-import { SpecItems } from '../../App'
-import { SpecState } from './reducer'
 import { ApiModel } from '@looker/sdk-codegen'
+
+import { SpecItems } from '../../ApiExplorer'
+import { SpecState } from './reducer'
 
 /**
  * Given a collection of specs, it returns the spec marked as default, the one

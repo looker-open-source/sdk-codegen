@@ -40,7 +40,7 @@ class transportTests: XCTestCase {
         checkRegex(Constants.matchModeBinary, "binary match")
         checkRegex(Constants.applicationJson, "application/json")
         checkRegex(Constants.matchCharsetUtf8, "utf-8 match")
-}
+    }
 
     func testApproxEquals() {
         XCTAssertTrue("application/json" ~= Constants.matchModeString)
@@ -61,7 +61,7 @@ class transportTests: XCTestCase {
             XCTAssertEqual(ResponseMode.string, mode, "\(t) should be string")
         }
     }
-    
+
     func testBinaryMode() {
         let data = config.testData["content_types"]?.value
         let contentTypes = data as! [String:[String]]
@@ -97,14 +97,14 @@ class transportTests: XCTestCase {
         XCTAssertEqual(user.email, "zz@foo.bar")
     }
 
-//    func dictToJson(dict: StringDictionary<Variant?>) -> String {
-//        var result = ""
-//        dict.flatMap({(arg: (key: String, value: Variant?)) -> String in let (key, value) = arg; return {
-//            let v = value?.toJson() ?? "null"
-//            return "\"\(key)\":\(v)" }
-//        })
-//        return result
-//    }
+    //    func dictToJson(dict: StringDictionary<Variant?>) -> String {
+    //        var result = ""
+    //        dict.flatMap({(arg: (key: String, value: Variant?)) -> String in let (key, value) = arg; return {
+    //            let v = value?.toJson() ?? "null"
+    //            return "\"\(key)\":\(v)" }
+    //        })
+    //        return result
+    //    }
 
     let visJson = """
 {
@@ -123,7 +123,7 @@ class transportTests: XCTestCase {
     // Using AnyCodable from https://github.com/Flight-School/AnyCodable
     func testDictFromJson() {
         var vis_config: StringDictionary<AnyCodable>? = try! deserialize(visJson)
-//        let vis_config: StringDictionary<Variant?>? = try! deserialize(visJson)
+        //        let vis_config: StringDictionary<Variant?>? = try! deserialize(visJson)
         var data = try! serialize(vis_config)
         var json = String(decoding: data, as: UTF8.self)
         XCTAssertNotNil(vis_config)
@@ -277,9 +277,9 @@ class transportTests: XCTestCase {
         XCTAssertEqual(encodeParam("%%"), "%25%25")
         XCTAssertEqual(encodeParam("cat%"), "cat%25")
         XCTAssertEqual(encodeParam("%cat"), "%25cat")
-        
+
     }
-    
+
     func testEncodeParam() {
         let today = DateFormatter.iso8601Full.date(from: "2020-01-01T14:48:00.00Z")
         XCTAssertEqual(encodeParam(today), "2020-01-01T14%3A48%3A00.000Z")
@@ -312,7 +312,7 @@ class transportTests: XCTestCase {
             ["!", "%21"]
         ]
         for e in checks {
-//            XCTAssertEqual(e[0], e[1].decodeUri(), "Value: '\(e[0])'")
+            //            XCTAssertEqual(e[0], e[1].decodeUri(), "Value: '\(e[0])'")
             XCTAssertEqual(encodeParam(e[0]), e[1], "Value: '\(e[0])'")
         }
         let ids: DelimArray<Int64> = [1,2,3]
@@ -335,5 +335,69 @@ class transportTests: XCTestCase {
             XCTAssertEqual(v.toString(), "George,Ringo,Paul,John")
             XCTAssertEqual(encodeParam(v), "George%2CRingo%2CPaul%2CJohn")
         }
+    }
+
+    let hiFen = """
+    {
+    "bool-val":true,
+    "int-val":1,
+    "dub-val":2.3,
+    "str-val":"Simple string",
+    "date-val":"2018-03-15T13:16:34.692-07:00",
+    "nada-val":null,
+    "dict-val": {"A":4, "B": 2, "C": true},
+    "rat-nest": [ { "one": 1, "two": "two" }, "three", {"four":4} ]
+    }
+    """
+    struct hiFenWithCodingKeys: SDKModel {
+        private enum CodingKeys : String, CodingKey {
+            case bool_val = "bool-val", int_val = "int-val", dub_val = "dub-val", str_val = "str-val", date_val = "date-val", nada_val = "nada-val", dict_val = "dict-val", rat_nest = "rat-nest"
+        }
+
+        var bool_val: Bool?
+        var int_val: Int?
+        var dub_val: Double?
+        var str_val: String?
+        var date_val: Date?
+        var nada_val: AnyCodable?
+        var dict_val: StringDictionary<AnyCodable>?
+        var rat_nest: AnyCodable?
+
+    }
+
+    /// Create a custom json handler for hyphens https://stackoverflow.com/questions/44396500/how-do-i-use-custom-keys-with-swift-4s-decodable-protocol/44396824#44396824
+    func testHyphenWithCodingKeys() {
+        var actual: hiFenWithCodingKeys = try! deserialize(hiFen)
+        XCTAssertNotNil(actual)
+        XCTAssertEqual(actual.bool_val, true)
+        XCTAssertEqual(actual.int_val, 1)
+        XCTAssertEqual(actual.dub_val, 2.3)
+        XCTAssertEqual(actual.str_val, "Simple string")
+        XCTAssertEqual(actual.nada_val, nil)
+        var data = try! serialize(actual)
+        var json = String(decoding: data, as: UTF8.self)
+        XCTAssertNotNil(json)
+        XCTAssertTrue(json.contains("bool-val"))
+        XCTAssertTrue(json.contains("int-val"))
+        XCTAssertTrue(json.contains("dub-val"))
+        XCTAssertTrue(json.contains("str-val"))
+        XCTAssertTrue(json.contains("date-val"))
+        // Skips optional when set to null
+        XCTAssertFalse(json.contains("nada-val"))
+        XCTAssertTrue(json.contains("dict-val"))
+        XCTAssertTrue(json.contains("rat-nest"))
+        actual.nada_val = "nada"
+        actual.str_val = nil
+        data = try! serialize(actual)
+        json = String(decoding: data, as: UTF8.self)
+        XCTAssertNotNil(json)
+        XCTAssertTrue(json.contains("bool-val"))
+        XCTAssertTrue(json.contains("int-val"))
+        XCTAssertTrue(json.contains("dub-val"))
+        XCTAssertFalse(json.contains("str-val"))
+        XCTAssertTrue(json.contains("date-val"))
+        XCTAssertTrue(json.contains("nada-val"))
+        XCTAssertTrue(json.contains("dict-val"))
+        XCTAssertTrue(json.contains("rat-nest"))
     }
 }

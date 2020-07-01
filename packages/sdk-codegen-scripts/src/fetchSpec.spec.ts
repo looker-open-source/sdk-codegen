@@ -35,6 +35,7 @@ import {
   supportedVersion,
   logConvertSpec,
   openApiFileName,
+  fetchLookerVersion,
 } from './fetchSpec'
 import { ISDKConfigProps } from './sdkConfig'
 import { isFileSync } from './nodeUtils'
@@ -45,6 +46,20 @@ const props = (config.section as unknown) as ISDKConfigProps
 props.api_version = '4.0'
 
 describe('fetch operations', () => {
+  it('defaults lookerVersion when server is not responding', async () => {
+    const testProps = JSON.parse(JSON.stringify(props))
+    testProps.base_url = 'https://bogus-server.looker.com:99'
+    const actual = await fetchLookerVersion(testProps, undefined, {
+      timeout: 5,
+    })
+    expect(actual).toEqual('')
+  }, 36000)
+
+  it('gets lookerVersion with good server', async () => {
+    const actual = await fetchLookerVersion(props)
+    expect(actual).not.toEqual('')
+  })
+
   it('gets version info', async () => {
     expect(props).toBeDefined()
     const version = await getVersionInfo(props)
