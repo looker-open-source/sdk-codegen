@@ -32,11 +32,13 @@ import { ICodeGen } from '@looker/sdk-codegen'
 import { isFileSync, readFileSync, run, utf8Encoding } from './nodeUtils'
 
 export interface IReformat {
+  fileSep: string
+  language: string
   reformat(files: string[]): string
   versionStamp(gen: ICodeGen): string
+  skipping(): string
+  reformatted(files: string[]): string
 }
-
-const fileSep = '\n  '
 
 /**
  * wrapper function for writing reformatted files with utf-8 encoding synchronously
@@ -47,7 +49,39 @@ const writeFile = (fileName: string, content: string) => {
   fs.writeFileSync(fileName, content, utf8Encoding)
 }
 
-class PythonFormatter implements IReformat {
+const noFormatter = (language: string, files: string[]) => {
+  const list = files.join('\n  ')
+  return warn(
+    `There is no ${language} formatter. Skipped reformatting of:\n  ${list}`
+  )
+}
+
+abstract class BaseFormatter implements IReformat {
+  constructor(public language: string, public fileSep = `  \n`) {}
+  reformat(files: string[]): string {
+    return noFormatter(this.language, files)
+  }
+
+  abstract versionStamp(gen: ICodeGen): string
+
+  skipping() {
+    return warn(
+      `Version information was not retrieved. Skipping ${this.language} SDK version updating.`
+    )
+  }
+
+  reformatted(files: string[]) {
+    return success(
+      `Reformatted ${this.language} files:\n  ${files.join(this.fileSep)}`
+    )
+  }
+}
+
+class PythonFormatter extends BaseFormatter {
+  constructor() {
+    super('Python')
+  }
+
   instructions =
     'To reformat Python files, please install pipenv: https://docs.pipenv.org/en/latest/install/#installing-pipenv'
 
@@ -62,14 +96,14 @@ class PythonFormatter implements IReformat {
       const list = files.join(' ')
       // pipenv check completed without error
       run('pipenv', ['run', 'black', list])
-      return success(`Reformatted Python files:\n  ${files.join(fileSep)}`)
+      return success(files)
     } else {
       return danger(this.instructions)
     }
   }
 
   versionStamp(gen: ICodeGen) {
-    if (gen.versions) {
+    if (gen.versions && gen.versions.lookerVersion) {
       const stampFile = gen.fileName('rtl/constants')
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
@@ -114,12 +148,16 @@ const prettierOptions: prettier.Options = {
   arrowParens: 'always',
 }
 
-class TypescriptFormatter implements IReformat {
+class TypescriptFormatter extends BaseFormatter {
+  constructor() {
+    super('Typescript')
+  }
+
   reformat(files: string[]): string {
     files.forEach((f) => {
       this.reformatFile(f)
     })
-    return success(`Reformatted Typescript files:\n  ${files.join(fileSep)}`)
+    return success(files)
   }
 
   reformatFile(fileName: string) {
@@ -131,7 +169,7 @@ class TypescriptFormatter implements IReformat {
   }
 
   versionStamp(gen: ICodeGen) {
-    if (gen.versions) {
+    if (gen.versions && gen.versions.lookerVersion) {
       const stampFile = gen.fileName('rtl/constants')
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
@@ -163,22 +201,14 @@ class TypescriptFormatter implements IReformat {
     )
   }
 }
-
-const noFormatter = (language: string, files: string[]) => {
-  const list = files.join(fileSep)
-  return warn(
-    `There is no ${language} formatter. Skipped reformatting of:\n  ${list}`
-  )
-}
-
-class KotlinFormatter implements IReformat {
+class KotlinFormatter extends BaseFormatter {
   // TODO Kotlin formatter
-  reformat(files: string[]): string {
-    return noFormatter('Kotlin', files)
+  constructor() {
+    super('Kotlin')
   }
 
   versionStamp(gen: ICodeGen) {
-    if (gen.versions) {
+    if (gen.versions && gen.versions.lookerVersion) {
       const stampFile = gen.fileName('rtl/Constants')
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
@@ -210,14 +240,14 @@ class KotlinFormatter implements IReformat {
   }
 }
 
-class SwiftFormatter implements IReformat {
+class SwiftFormatter extends BaseFormatter {
   // TODO Swift formatter
-  reformat(files: string[]): string {
-    return noFormatter('Swift', files)
+  constructor() {
+    super('Swift')
   }
 
   versionStamp(gen: ICodeGen) {
-    if (gen.versions) {
+    if (gen.versions && gen.versions.lookerVersion) {
       const stampFile = gen.fileName('rtl/constants')
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
@@ -249,14 +279,14 @@ class SwiftFormatter implements IReformat {
   }
 }
 
-class CsharpFormatter implements IReformat {
+class CsharpFormatter extends BaseFormatter {
   // TODO C# formatter https://github.com/dotnet/format
-  reformat(files: string[]): string {
-    return noFormatter('C#', files)
+  constructor() {
+    super('C#')
   }
 
   versionStamp(gen: ICodeGen) {
-    if (gen.versions) {
+    if (gen.versions && gen.versions.lookerVersion) {
       const stampFile = gen.fileName('rtl/Constants')
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)

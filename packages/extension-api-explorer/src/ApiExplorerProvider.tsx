@@ -24,37 +24,62 @@
 
  */
 
-import React from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
-import ReactDOM from 'react-dom'
-
-import ApiExplorer, { ApiExplorerProps } from './ApiExplorer'
-import './styles.css'
+import React, { FC, useContext } from 'react'
+import ApiExplorer, {
+  ApiExplorerProps,
+} from '@looker/api-explorer/src/ApiExplorer'
+import { useRouteMatch } from 'react-router-dom'
+import {
+  ExtensionContext,
+  ExtensionContextData,
+} from '@looker/extension-sdk-react'
+import { TryItCallback, pathify } from '@looker/try-it'
+import { IRawResponse } from '@looker/sdk/lib/browser'
 
 const specs: ApiExplorerProps = {
   specs: {
     '3.0': {
       status: 'stable',
       specURL: 'https://self-signed.looker.com:19999/api/3.0/swagger.json',
-      specContent: require('../specs/Looker.3.0.oas.json'),
+      specContent: require('../../api-explorer/specs/Looker.3.0.oas.json'),
     },
     '3.1': {
       status: 'current',
       isDefault: true,
       specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
-      specContent: require('../specs/Looker.3.1.oas.json'),
+      specContent: require('../../api-explorer/specs/Looker.3.1.oas.json'),
     },
     '4.0': {
       status: 'experimental',
       specURL: 'https://self-signed.looker.com:19999/api/4.0/swagger.json',
-      specContent: require('../specs/Looker.4.0.oas.json'),
+      specContent: require('../../api-explorer/specs/Looker.4.0.oas.json'),
     },
   },
 }
 
-ReactDOM.render(
-  <Router>
-    <ApiExplorer {...specs} />
-  </Router>,
-  document.getElementById('container')
-)
+export const ApiExplorerProvider: FC = () => {
+  const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
+  const { core40SDK } = useContext<ExtensionContextData>(ExtensionContext)
+  let tryItCallback: TryItCallback | undefined
+
+  if (match && match.params.specKey) {
+    tryItCallback = async (
+      httpMethod,
+      path,
+      pathParams,
+      queryParams,
+      body
+    ): Promise<IRawResponse> => {
+      const url = pathify(path, pathParams)
+      const resp = await core40SDK.authSession.transport.rawRequest(
+        httpMethod,
+        url,
+        queryParams,
+        body
+      )
+      return resp
+    }
+  }
+
+  return <ApiExplorer {...specs} tryItCallback={tryItCallback} />
+}

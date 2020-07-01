@@ -27,7 +27,7 @@ import { NavLink } from 'react-router-dom'
 import { Heading, Flex, FlexItem, Box } from '@looker/components'
 import styled from 'styled-components'
 
-import { SpecItems } from '../../App'
+import { SpecItems } from '../../ApiExplorer'
 import { SpecState, SpecAction } from '../../reducers'
 import { ApiSpecSelector } from './ApiSpecSelector'
 import { Search } from '../Search'

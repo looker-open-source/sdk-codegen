@@ -55,13 +55,38 @@ describe('swift generator', () => {
       expect(type).toBeDefined()
       expect(type.values).toEqual(['view', 'edit'])
       const actual = gen.declareType('', type)
-      const expected = `
-/**
+      const expected = `/**
  * Type of permission: "view" or "edit" Valid values are: "view", "edit".
  */
 enum PermissionType: String, Codable {
     case view = "view"
     case edit = "edit"
+}`
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('special symbols', () => {
+    it('generates coding keys', () => {
+      const type = apiTestModel.types.HyphenType
+      const actual = gen.declareType(indent, type)
+      const expected = `struct HyphenType: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case project_name, project_digest = "project-digest", computation_time = "computation time"
+    }
+    /**
+     * A normal variable name (read-only)
+     */
+    var project_name: String?
+    /**
+     * A hyphenated property name (read-only)
+     */
+    var project_digest: String?
+    /**
+     * A spaced out property name (read-only)
+     */
+    var computation_time: Float?
 }`
       expect(actual).toEqual(expected)
     })

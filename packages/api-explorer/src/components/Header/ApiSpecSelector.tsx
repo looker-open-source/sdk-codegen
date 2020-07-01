@@ -27,7 +27,7 @@ import { FieldSelect } from '@looker/components'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { SpecItems } from '../../App'
+import { SpecItems } from '../../ApiExplorer'
 import { SpecAction, SpecState } from '../../reducers'
 import { selectSpec } from '../../reducers'
 

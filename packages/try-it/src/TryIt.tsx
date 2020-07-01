@@ -1,28 +1,30 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2020 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
-import React, { BaseSyntheticEvent, FC, useState } from 'react'
+import React, { BaseSyntheticEvent, FC, useState, useEffect } from 'react'
 import {
   TabList,
   useTabs,
@@ -33,6 +35,8 @@ import {
   Text,
   Heading,
   Box,
+  Spinner,
+  Flex,
 } from '@looker/components'
 import { IRawResponse } from '@looker/sdk/lib/browser'
 
@@ -40,7 +44,8 @@ import {
   RequestForm,
   ShowResponse,
   createRequestParams,
-  defaultRequestCallback,
+  defaultTryItCallback,
+  pathify,
 } from './components'
 
 export type TryItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
@@ -70,7 +75,7 @@ interface TryItProps {
   inputs: TryItInput[]
   httpMethod: TryItHttpMethod
   endpoint: string
-  requestCallback?: TryItCallback
+  tryItCallback?: TryItCallback
 }
 
 type ResponseContent = IRawResponse | undefined
@@ -79,17 +84,18 @@ export const TryIt: FC<TryItProps> = ({
   inputs,
   httpMethod,
   endpoint,
-  requestCallback,
+  tryItCallback,
 }) => {
   const [requestContent, setRequestContent] = useState({})
-  // const [resp, setResp] = useState<ResponseContent>(undefined)
+  const [activePathParams, setActivePathParams] = useState(undefined)
+  const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] = useState<ResponseContent>(
     undefined
   )
   const tabs = useTabs()
 
   // TODO: Make jest stop complaining when using the ?? syntax below
-  const callback = requestCallback || defaultRequestCallback
+  const callback = tryItCallback || defaultTryItCallback
 
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
@@ -97,10 +103,17 @@ export const TryIt: FC<TryItProps> = ({
       inputs,
       requestContent
     )
+    setActivePathParams(pathParams)
+    tabs.onSelectTab(1)
+    setLoading(true)
     setResponseContent(
       await callback(httpMethod, endpoint, pathParams, queryParams, body)
     )
   }
+
+  useEffect(() => {
+    setLoading(!responseContent)
+  }, [responseContent])
 
   return (
     <Box>
@@ -122,7 +135,21 @@ export const TryIt: FC<TryItProps> = ({
           />
         </TabPanel>
         <TabPanel key="response">
-          {responseContent && <ShowResponse response={responseContent} />}
+          {loading && (
+            <>
+              <Flex>
+                <Spinner />
+                {`${httpMethod} ${pathify(endpoint, activePathParams)}`}
+              </Flex>
+            </>
+          )}
+          {responseContent && (
+            <ShowResponse
+              response={responseContent}
+              verb={httpMethod}
+              path={pathify(endpoint, activePathParams)}
+            />
+          )}
         </TabPanel>
       </TabPanels>
     </Box>
