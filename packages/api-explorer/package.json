@@ -18,7 +18,8 @@
   "scripts": {
     "test": "jest -- src/",
     "develop": "webpack-dev-server --https",
-    "docs": "typedoc --mode file --out docs"
+    "docs": "typedoc --mode file --out docs",
+    "register": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' scripts/register.ts"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

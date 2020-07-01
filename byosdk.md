@@ -355,8 +355,8 @@ extension, the run-time environment can provide API authentication support witho
 When an SDK supports significantly different runtime behavior, use a different `AuthSession` implementation.
 For example, the Typescript SDK has:
 
-- [`BrowserSession`](packages/sdk/src/rtl/browserSession.ts) for browser-based same-origin usage
-- [`CorsSession`](packages/sdk/src/rtl/corsSession.ts) for browser-based CORS usage
+- [`CSRFSession`](packages/sdk/src/rtl/CSRFSession.ts) for browser-based same-origin usage
+- [`BrowserSession`](packages/sdk/src/rtl/browserSession.ts) for browser-based CORS usage
 - [`NodeSession`](packages/sdk/src/rtl/nodeSession.ts) for node-based usage
 - [`OAuthSession`](packages/sdk/src/rtl/oauthSession.ts) for OAuth2-based usage
 - [`ProxySession`](packages/sdk/src/rtl/proxySession.ts) for proxy-based usage

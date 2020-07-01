@@ -1,18 +1,47 @@
 import {
-  BrowserTransport,
+  ApiSettings,
+  DefaultSettings,
+  IApiSettings,
+  IApiSection,
   IRawResponse,
-  ITransportSettings,
+  LookerBrowserSDK,
 } from '@looker/sdk/lib/browser'
 
 import { TryItHttpMethod, TryItInput, TryItValues } from '../TryIt'
 
-const options: ITransportSettings = {
+const settings = {
+  ...DefaultSettings(),
   agentTag: 'TryIt',
-  base_url: '',
-  verify_ssl: true,
-  timeout: 120,
+  base_url: 'https://self-signed.looker.com:19999',
+} as IApiSettings
+
+class ApixSettings extends ApiSettings {
+  constructor(settings: Partial<IApiSettings>) {
+    super({ ...settings, ...{ client_id: 'looker.api-explorer' } })
+  }
+
+  isConfigured(): boolean {
+    const creds = this.readConfig()
+    return (
+      super.isConfigured() && 'redirect_uri' in creds && 'looker_url' in creds
+    )
+  }
+
+  readConfig(_section?: string): IApiSection {
+    return {
+      ...super.readConfig(_section),
+      ...{
+        client_id: 'looker.api-explorer',
+        looker_url: 'https://self-signed.looker.com:9999',
+        redirect_uri: 'https://localhost:8080',
+      },
+    }
+  }
 }
-const transport = new BrowserTransport(options)
+
+// TODO get these values from the stand-alone TryIt provider
+
+const sdk = LookerBrowserSDK.init40(new ApixSettings(settings))
 
 /**
  * Replaces {foo} with vars[foo] in provided path
@@ -76,6 +105,7 @@ export const createRequestParams = (
 
 /**
  * Makes an http request using the SDK browser transport rawRequest method
+ * @param specKey API version to Try
  * @param httpMethod Request operation
  * @param endpoint Request path with path params in curly braces e.g. /queries/{query_id}/run/{result_format}
  * @param pathParams Collection of path params
@@ -83,12 +113,20 @@ export const createRequestParams = (
  * @param body Collection of body params
  */
 export const defaultTryItCallback = async (
+  specKey: string,
   httpMethod: TryItHttpMethod,
   endpoint: string,
   pathParams: TryItValues,
   queryParams: TryItValues,
   body: any
 ): Promise<IRawResponse> => {
-  const url = pathify(endpoint, pathParams)
-  return await transport.rawRequest(httpMethod, url, queryParams, body)
+  // TODO provide the API path generically
+  const url = `/api/${specKey}${pathify(endpoint, pathParams)}`
+  return await sdk.authSession.transport.rawRequest(
+    httpMethod,
+    url,
+    queryParams,
+    body,
+    (props) => sdk.authSession.authenticate(props)
+  )
 }

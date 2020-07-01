@@ -27,9 +27,9 @@ import { Looker31SDK } from '../sdk/3.1/methods'
 import { Looker40SDK } from '../sdk/4.0/methods'
 import { BrowserTransport } from './browserTransport'
 import { ITransport } from './transport'
-import { BrowserSession } from './browserSession'
 import { DefaultSettings, IApiSettings } from './apiSettings'
 import { IAuthSession } from './authSession'
+import { BrowserSession } from './browserSession'
 
 export const BrowserSettings = (): IApiSettings => {
   const settings = DefaultSettings()
@@ -45,7 +45,7 @@ export class LookerBrowserSDK {
    *
    * @param transport Defaults to a `BrowserTransport` object
    *
-   * @param session Defaults to `BrowserSession` which defers user authentication
+   * @param session Defaults to `BrowserSession` which uses OAuth authentication flow and CORS requests
    */
   static init31(
     settings?: IApiSettings,
@@ -65,7 +65,7 @@ export class LookerBrowserSDK {
    *
    * @param transport Defaults to a `BrowserTransport` object
    *
-   * @param session Defaults to `BrowserSession` which defers user authentication
+   * @param session Defaults to `BrowserSession` which uses OAuth authentication flow and CORS requests
    */
   static init40(
     settings?: IApiSettings,

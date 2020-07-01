@@ -62,8 +62,10 @@ export class OAuthSession extends AuthSession {
       'base_url',
       'looker_url',
     ]
+    const creds = { ...this.settings, ...this.settings.readConfig() }
+
     keys.forEach((key) => {
-      const value = this.settings[key]
+      const value = creds[key]
       if (!value) {
         throw sdkError({
           message: `Missing required configuration setting: '${key}'`,

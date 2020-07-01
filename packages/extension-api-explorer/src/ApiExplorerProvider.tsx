@@ -64,6 +64,7 @@ export const ApiExplorerProvider: FC = () => {
 
   if (match && match.params.specKey) {
     tryItCallback = async (
+      _specKey,
       httpMethod,
       path,
       pathParams,

@@ -24,57 +24,79 @@
 
  */
 
-import { IApiSettings } from './apiSettings'
-import { IRequestProps, ITransport } from './transport'
 import { BrowserTransport } from './browserTransport'
-import { AuthSession } from './authSession'
+import {
+  ITransport,
+  IRequestProps,
+  LookerAppId,
+  agentPrefix,
+} from './transport'
+import { IApiSettings } from './apiSettings'
+import { AuthToken } from './authToken'
+import { OAuthSession } from './oauthSession'
+import { BrowserServices } from './browserServices'
 
 /**
- * This BrowserSession is only for use within the Looker UI or script that
- * executes in the Looker UI. Not for use by third party web apps. Looker UI web
- * service endpoints require that requests must contain a CSRF token to block third
- * party request forgeries. The actual login state is conveyed via encrypted browser
- * cookies exclusive to the looker domain, which the browser implicitly includes on
- * all web requests to looker UI web service.
+ * An AuthSession class intended for use with CORS requests
+ *
+ * This session uses `authenticate()` to establish a token via the overridden `getToken()` before
+ * decorating the requests with the authentication information to call the API endpoint.
+ *
+ * The Looker API `login` endpoint is not available via CORS calls, so `getToken()` needs to be
+ * implemented in the descendant of this class that's instantiated for the browser run-time. This
+ * can be a brokered "get token" operation from a proxy server, or some other method of getting
+ * the token.
+ *
+ * Or, you can call activeToken.setToken to assign an auth token after construction. This disables
+ * auto token management.
+ *
  */
-export class BrowserSession extends AuthSession {
-  _activeToken = ''
+export class BrowserSession extends OAuthSession {
+  activeToken = new AuthToken()
+
   constructor(public settings: IApiSettings, transport?: ITransport) {
-    super(settings, transport || new BrowserTransport(settings))
-  }
-
-  get activeToken() {
-    if (!this._activeToken) {
-      const meta = document.head.querySelector(
-        '[name=csrf-token]'
-      ) as HTMLMetaElement
-      this._activeToken = meta ? meta.content : ''
-    }
-    return this._activeToken
-  }
-
-  async getToken() {
-    return this.activeToken
+    super(
+      new BrowserServices({
+        settings,
+        transport: transport || new BrowserTransport(settings),
+      })
+    )
   }
 
   /**
-   * Returns true if the same origin browser session has a CRSF token established
-   * that can be used for API authentication
-   */
-  isAuthenticated() {
-    const token = this.activeToken
-    if (!token) return false
-    return true
-  }
-
-  /**
-   * Authenticates a request with the CSRF token if it is active
+   * This implementation calls the inheritor-implemented `getToken()` method to retrieve the authentication token for
+   * the Looker API server because the `/login` endpoint is not available via CORS for the Looker API.
    *
-   * @param props Request properties to decorate
+   * @param props the properties of the request
+   * @returns the same request properties with "authentication" data added
+   *
    */
   async authenticate(props: IRequestProps) {
-    const token = this.activeToken
-    if (token) props.headers['X-CSRF-TOKEN'] = token
+    props = await super.authenticate(props)
+    if (this.isAuthenticated()) {
+      /**
+       * Session is authenticated
+       * set CORS mode
+       */
+      props.mode = 'cors'
+
+      /**
+       * remove any credentials attribute that may have been set
+       */
+      delete props.credentials
+
+      /**
+       * replace the headers argument with required values
+       * Note: using new Headers() to construct the headers breaks CORS for the Looker API. Don't know why yet
+       */
+      props.headers = {
+        /** Provide the authentication information */
+        Authorization: `Bearer ${this.activeToken.access_token}`,
+        /** Identify the SDK */
+        [LookerAppId]: agentPrefix,
+      }
+    }
+
     return props
   }
 }

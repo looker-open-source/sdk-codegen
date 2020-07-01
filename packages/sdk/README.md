@@ -45,7 +45,7 @@ client_secret=your_API3_client_secret
 ```
 
 **Note**: If the application using the Looker SDK is going to be committed to a version control system, be sure to
-**ignore** the `looker.ini` file so the API credentials aren't unintentionally published.
+**ignore** the `looker.ini` file to avoid publishing your API credentials.
 
 ### Use the SDK in your code
 
@@ -80,6 +80,10 @@ import { LookerNodeSDK } from '@looker/sdk/lib/node'
   }
 })()
 ```
+
+### Using the Browser SDK
+
+The default auth/auth mode for the Browser SDK uses CORS, so your Looker instance will need to be configured for CORS support, which is available in Looker 7.10 and above.
 
 ### Developing with multiple API versions ###
 
