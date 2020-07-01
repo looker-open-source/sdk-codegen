@@ -64,7 +64,7 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
     setSearchPattern(event.currentTarget.value)
   }
 
-  const handleSelect = (option?: ComboboxOptionObject) => {
+  const handleSelectOrClear = (option?: ComboboxOptionObject) => {
     /** Determine if trigger is select or clear action */
     const value = option ? pattern : ''
     setSearchSettings(setPattern(value))
@@ -99,7 +99,11 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
   return (
     <>
       <Space>
-        <Combobox width="100%" onChange={handleSelect} value={selectedResult}>
+        <Combobox
+          width="100%"
+          onChange={handleSelectOrClear}
+          value={selectedResult}
+        >
           <ComboboxInput
             autoFocus
             autoComplete={false}
