@@ -2229,10 +2229,10 @@
     styled-system "^5.1.5"
     uuid "^8.1.0"
 
-"@looker/components@^0.9.4":
-  version "0.9.4"
-  resolved "https://registry.yarnpkg.com/@looker/components/-/components-0.9.4.tgz#10889e27b26393271e70ca617bb063495fa16477"
-  integrity sha512-JnEoyvGglG+HwNUhF1zsYX1JHyc1YBn21qhoZHmrXSLjwn+kF4uFktUejiWK9wqP9pjkfDqvp/yUM7EDZpUxSw==
+"@looker/components@^0.9.5":
+  version "0.9.5"
+  resolved "https://registry.yarnpkg.com/@looker/components/-/components-0.9.5.tgz#8270b2bd0bb5640cf86212be5ad669cb2074d1ba"
+  integrity sha512-uLilLibtwEGENBOYj1InNGHhVASYHeMi4lZlLytZyvuYJVRkm4HGrFNLWZoT9t3PTVUxH5hg8HtCK4eDUVbdVw==
   dependencies:
     "@looker/components-providers" "^0.9.4"
     "@looker/design-tokens" "^0.9.1"
