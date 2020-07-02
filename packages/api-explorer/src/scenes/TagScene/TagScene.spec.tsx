@@ -23,3 +23,86 @@
  SOFTWARE.
 
  */
+import React from 'react'
+import { Route } from 'react-router-dom'
+import { screen, waitFor } from '@testing-library/react'
+import { withThemeProvider } from '@looker/components-test-utils'
+import userEvent from '@testing-library/user-event'
+
+import { api } from '../../test-data'
+import { renderWithRouter } from '../../test-utils'
+import { TagScene } from './TagScene'
+
+const opBtnNames = /ALL|GET|POST|PUT|PATCH|DELETE/
+
+describe('TagScene', () => {
+  test('it renders operation buttons and all methods for a given method tag', () => {
+    renderWithRouter(
+      withThemeProvider(
+        <Route path="/:specKey/methods/:methodTag">
+          <TagScene api={api} />
+        </Route>
+      ),
+      ['/3.1/methods/ColorCollection']
+    )
+    expect(
+      screen.getAllByRole('button', {
+        name: opBtnNames,
+      })
+    ).toHaveLength(6)
+    expect(screen.getAllByText(/^\/color_collections.*/)).toHaveLength(
+      Object.keys(api.tags.ColorCollection).length
+    )
+    expect(
+      screen.getByText('/color_collections/standard').closest('a')
+    ).toHaveAttribute(
+      'href',
+      '/3.1/methods/ColorCollection/color_collections_standard'
+    )
+  })
+
+  test('it only renders operation buttons for operations that exist under that tag', () => {
+    /** ApiAuth contains two POST methods and a DELETE method */
+    renderWithRouter(
+      withThemeProvider(
+        <Route path="/:specKey/methods/:methodTag">
+          <TagScene api={api} />
+        </Route>
+      ),
+      ['/3.1/methods/ApiAuth']
+    )
+    expect(
+      screen.getAllByRole('button', {
+        name: opBtnNames,
+      })
+    ).toHaveLength(3)
+  })
+
+  test('it filters methods by operation type', async () => {
+    renderWithRouter(
+      withThemeProvider(
+        <Route path="/:specKey/methods/:methodTag">
+          <TagScene api={api} />
+        </Route>
+      ),
+      ['/3.1/methods/Look']
+    )
+    const allLookMethods = /^\/look.*/
+    expect(screen.getAllByText(allLookMethods)).toHaveLength(7)
+    /** Filter out the 3 GET methods */
+    userEvent.click(screen.getByRole('button', { name: 'GET' }))
+    await waitFor(() => {
+      expect(screen.getAllByText(allLookMethods)).toHaveLength(3)
+    })
+    /** Filter out the 1 DELETE method */
+    userEvent.click(screen.getByRole('button', { name: 'DELETE' }))
+    await waitFor(() => {
+      expect(screen.getAllByText(allLookMethods)).toHaveLength(2)
+    })
+    /** Restore original state */
+    userEvent.click(screen.getByRole('button', { name: 'ALL' }))
+    await waitFor(() => {
+      expect(screen.getAllByText(allLookMethods)).toHaveLength(7)
+    })
+  })
+})

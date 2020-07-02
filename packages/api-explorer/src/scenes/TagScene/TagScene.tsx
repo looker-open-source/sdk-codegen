@@ -24,25 +24,16 @@
 
  */
 import React, { FC, useState } from 'react'
-import { ApiModel, MethodList } from '@looker/sdk-codegen'
+import { ApiModel } from '@looker/sdk-codegen'
 import { useParams, NavLink } from 'react-router-dom'
 import { ButtonGroup, ButtonTransparent, Grid } from '@looker/components'
 
 import { DocTitle, DocMethodSummary } from '../../components'
 import { buildMethodPath } from '../../utils'
+import { getOperations } from './utils'
 
 interface TagSceneProps {
   api: ApiModel
-}
-
-const getOperations = (methods: MethodList) => {
-  const operationsSet = new Set<string>()
-  Object.values(methods).forEach((method) => {
-    operationsSet.add(method.httpMethod)
-  })
-  return Array.from(operationsSet.values()).map((op) => ({
-    value: op,
-  }))
 }
 
 interface TagSceneParams {
@@ -82,7 +73,7 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
               key={index}
               to={buildMethodPath(specKey, tag.name, method.name)}
             >
-              <Grid columns={1}>
+              <Grid columns={1} padding="xsmall">
                 <DocMethodSummary key={index} method={method} />
               </Grid>
             </NavLink>

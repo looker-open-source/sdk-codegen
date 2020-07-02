@@ -54,7 +54,7 @@ export const pickTooltipContent = (status: string) => {
     case 'beta':
       return 'This beta endpoint is under development and subject to change.'
     case 'experimental':
-      return 'This experimental endpoint will very likely change.'
+      return 'This experimental endpoint is not fully developed and may be significantly changed or completely removed in future releases.'
     case 'deprecated':
       return 'This endpoint has been deprecated and will be removed in the future.'
     case 'stable':
