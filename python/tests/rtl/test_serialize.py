@@ -21,6 +21,7 @@
 # THE SOFTWARE.
 
 import copy
+import enum
 import functools
 import json
 
@@ -32,6 +33,7 @@ try:
 except ImportError:
     from typing import _ForwardRef as ForwardRef  # type: ignore
 
+# from .. import attr
 import attr
 import cattr
 import pytest  # type: ignore
@@ -40,64 +42,183 @@ from looker_sdk.rtl import model as ml
 from looker_sdk.rtl import serialize as sr
 
 
-@attr.s(auto_attribs=True, kw_only=True)
+class Enum1(enum.Enum):
+    """Predifined enum, used as ForwardRef.
+    """
+
+    entry1 = "entry1"
+
+
+@attr.s(auto_attribs=True, init=False)
+class ModelNoRefs1(ml.Model):
+    """Predifined model, used as ForwardRef.
+
+    Since this model has no properties that are forwardrefs to other
+    objects we can just decorate the class rather than doing the
+    __annotations__ hack.
+    """
+
+    name1: str
+
+    def __init__(self, *, name1: str):
+        self.name1 = name1
+
+
+@attr.s(auto_attribs=True, init=False)
 class Model(ml.Model):
+    """Representative model.
+
+    [De]Serialization of API models relies on the attrs and cattrs
+    libraries with some additional customization. This model represents
+    these custom treatments and provides documentation for how and why
+    they are needed.
+    """
+
+    # enum1 and model_no_refs1 are both defined before this class
+    # yet we will still refer to them using forward reference (double quotes)
+    # because we do not keep track of definition order in the generated code
+    enum1: "Enum1"
+    model_no_refs1: "ModelNoRefs1"
+
+    # enum2 and model_no_refs2 are both defined after this class and so the
+    # forward reference annotation is required.
+    enum2: "Enum2"
+    model_no_refs2: "ModelNoRefs2"
+
+    # Optional[] and List[]
+    list_enum1: Sequence["Enum1"]
+    list_model_no_refs1: Sequence["ModelNoRefs1"]
+    opt_enum1: Optional["Enum1"] = None
+    opt_model_no_refs1: Optional["ModelNoRefs1"] = None
+
+    # standard types
     id: Optional[int] = None
     name: Optional[str] = None
+
+    # testing reserved keyword translations
     class_: Optional[str] = None
-    finally_: Optional[Sequence["ChildModel"]] = None
+    finally_: Optional[Sequence[int]] = None
 
-
-@attr.s(auto_attribs=True, kw_only=True)
-class ChildModel(ml.Model):
-    id: Optional[int] = None
-    import_: Optional[str] = None
-
-
-@attr.s(auto_attribs=True, kw_only=True, init=False)
-class WriteModel(ml.Model):
-    id: int
-    name: Optional[str] = None
-    class_: Optional[str] = None
-    finally_: Optional[Sequence["ChildModel"]] = None
+    # Because this model has "bare" forward ref annotated properties
+    # (enum1, enum2, model_no_refs1, and model_no_refs2) we need to tell
+    # the attr library that they're actually ForwardRef objects so that
+    # cattr will match our forward_ref_structure_hook structure hook
+    #
+    #
+    # Note: just doing the following:
+    #
+    # `converter.register_structure_hook("Enum1", structure_hook)`
+    #
+    # does not work. cattr stores these hooks using functools singledispatch
+    # which in turn creates a weakref.WeakKeyDictionary for the dispatch_cache.
+    # While the registration happens, the cache lookup throws a TypeError
+    # instead of a KeyError so we never look in the registry.
+    __annotations__ = {
+        # python generates these entries as "enum1": "Enum1" etc, we need
+        # them to be of the form "enum1": ForwardRef("Enum1")
+        "enum1": ForwardRef("Enum1"),
+        "model_no_refs1": ForwardRef("ModelNoRefs1"),
+        "enum2": ForwardRef("Enum2"),
+        "model_no_refs2": ForwardRef("ModelNoRefs2"),
+        # python "correctly" inserts the remaining entries but we have to
+        # define all or nothing using this API
+        "list_enum1": Sequence["Enum1"],
+        "list_model_no_refs1": Sequence["ModelNoRefs1"],
+        "opt_enum1": Optional["Enum1"],
+        "opt_model_no_refs1": Optional["ModelNoRefs1"],
+        "id": Optional[int],
+        "name": Optional[str],
+        "class_": Optional[str],
+        "finally_": Optional[Sequence[int]],
+    }
 
     def __init__(
         self,
         *,
-        id: int,
+        enum1: "Enum1",
+        model_no_refs1: "ModelNoRefs1",
+        enum2: "Enum2",
+        model_no_refs2: "ModelNoRefs2",
+        list_enum1: Sequence["Enum1"],
+        list_model_no_refs1: Sequence["ModelNoRefs1"],
+        opt_enum1: Optional["Enum1"] = None,
+        opt_model_no_refs1: Optional["ModelNoRefs1"] = None,
+        id: Optional[int] = None,
         name: Optional[str] = None,
         class_: Optional[str] = None,
-        finally_: Optional[Sequence["ChildModel"]] = None
+        finally_: Optional[Sequence[int]] = None,
     ):
+        """Keep mypy and IDE suggestions happy.
+
+        We cannot use the built in __init__ generation attrs offers
+        because mypy complains about unknown keyword argument, even
+        when kw_only=True is set below. Furthermore, IDEs do not pickup
+        on the attrs generated __init__ so completion suggestion fails
+        for insantiating these classes otherwise.
+        """
+        self.enum1 = enum1
+        self.model_no_refs1 = model_no_refs1
+        self.enum2 = enum2
+        self.model_no_refs2 = model_no_refs2
+        self.list_enum1 = list_enum1
+        self.list_model_no_refs1 = list_model_no_refs1
+        self.opt_enum1 = opt_enum1
+        self.opt_model_no_refs1 = opt_model_no_refs1
         self.id = id
         self.name = name
         self.class_ = class_
         self.finally_ = finally_
 
 
-@attr.s(auto_attribs=True, kw_only=True, init=False)
-class WriteChildModel(ml.Model):
-    id: int
-    import_: Optional[str] = None
+class Enum2(enum.Enum):
+    """Post defined enum, used as ForwardRef.
+    """
 
-    def __init__(self, *, id: int, import_: Optional[str] = None):
-        self.id = id
-        self.import_ = import_
+    entry2 = "entry2"
+
+
+@attr.s(auto_attribs=True, init=False)
+class ModelNoRefs2(ml.Model):
+    """Post defined model, used as ForwardRef.
+
+    Since this model has no properties that are forwardrefs to other
+    objects we can just decorate the class rather than doing the
+    __annotations__ hack.
+    """
+
+    name2: str
+
+    def __init__(self, *, name2: str):
+        self.name2 = name2
 
 
 converter = cattr.Converter()
-structure_hook = functools.partial(sr.structure_hook, globals(), converter)
+structure_hook = functools.partial(sr.forward_ref_structure_hook, globals(), converter)
+translate_keys_structure_hook = functools.partial(
+    sr.translate_keys_structure_hook, converter
+)
 converter.register_structure_hook(ForwardRef("Model"), structure_hook)
 converter.register_structure_hook(ForwardRef("ChildModel"), structure_hook)
-converter.register_structure_hook(ForwardRef("WriteModel"), structure_hook)
-converter.register_structure_hook(ForwardRef("WriteChildModel"), structure_hook)
-converter.register_structure_hook(Model, structure_hook)
+converter.register_structure_hook(ForwardRef("Enum1"), structure_hook)
+converter.register_structure_hook(ForwardRef("Enum2"), structure_hook)
+converter.register_structure_hook(ForwardRef("ModelNoRefs1"), structure_hook)
+converter.register_structure_hook(ForwardRef("ModelNoRefs2"), structure_hook)
+converter.register_structure_hook(Model, translate_keys_structure_hook)
+
 
 MODEL_DATA = {
+    "enum1": "entry1",
+    "model_no_refs1": {"name1": "model_no_refs1_name"},
+    "enum2": "entry2",
+    "model_no_refs2": {"name2": "model_no_refs2_name"},
+    "list_enum1": ["entry1"],
+    "list_model_no_refs1": [{"name1": "model_no_refs1_name"}],
+    "opt_enum1": "entry1",
+    "opt_model_no_refs1": {"name1": "model_no_refs1_name"},
     "id": 1,
     "name": "my-name",
     "class": "model-name",
-    "finally": [{"id": 1, "import": "child1"}, {"id": 2, "import": "child2"}],
+    "finally": [1, 2, 3],
 }
 
 
@@ -107,78 +228,109 @@ def test_deserialize_single():
     Should handle python reserved keywords as well as attempting to
     convert field values to proper type.
     """
-    # check that type conversion happens
+    # check that type conversion happens, str -> int in this case
     data = copy.deepcopy(MODEL_DATA)
-    data["finally"][0]["id"] = "1"
+    data["id"] = "1"
 
-    model = sr.deserialize(data=json.dumps(data), structure=Model, converter=converter)
-    assert isinstance(model, Model)
-    assert isinstance(model.id, int)
-    assert model.id == 1
-    assert isinstance(model.name, str)
-    assert model.name == "my-name"
-    assert isinstance(model.class_, str)
-    assert model.class_ == "model-name"
-    assert isinstance(model.finally_, list)
-    assert len(model.finally_) == 2
-    for child in model.finally_:
-        assert isinstance(child, ChildModel)
-        assert isinstance(child.id, int)
+    d = json.dumps(data)
+    model = sr.deserialize(data=d, structure=Model, converter=converter)
+    assert model == Model(
+        enum1=Enum1.entry1,
+        model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        enum2=Enum2.entry2,
+        model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
+        list_enum1=[Enum1.entry1],
+        list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
+        opt_enum1=Enum1.entry1,
+        opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        id=1,
+        name="my-name",
+        class_="model-name",
+        finally_=[1, 2, 3],
+    )
 
 
 def test_deserialize_list():
     # check that type conversion happens
-    data = [MODEL_DATA, MODEL_DATA]
+    data = [MODEL_DATA]
 
     models = sr.deserialize(
         data=json.dumps(data), structure=Sequence[Model], converter=converter
     )
-    assert isinstance(models, list)
-    assert len(models) == 2
-    for model in models:
-        assert isinstance(model.finally_, list)
-        assert len(model.finally_) == 2
-        for child in model.finally_:
-            assert isinstance(child, ChildModel)
-            assert isinstance(child.id, int)
+    assert models == [
+        Model(
+            enum1=Enum1.entry1,
+            model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+            enum2=Enum2.entry2,
+            model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
+            list_enum1=[Enum1.entry1],
+            list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
+            opt_enum1=Enum1.entry1,
+            opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+            id=1,
+            name="my-name",
+            class_="model-name",
+            finally_=[1, 2, 3],
+        ),
+    ]
 
 
 def test_deserialize_partial():
     data = copy.deepcopy(MODEL_DATA)
     del data["id"]
-    del data["finally"][0]["id"]
+    del data["opt_enum1"]
+    del data["opt_model_no_refs1"]
 
     model = sr.deserialize(data=json.dumps(data), structure=Model, converter=converter)
-    assert isinstance(model, Model)
-    assert model.id is None
-    assert isinstance(model.name, str)
-    assert model.name == "my-name"
-    assert isinstance(model.finally_, list)
-    assert len(model.finally_) == 2
-    assert model.finally_[0].id is None
-    assert model.finally_[1].id == 2
+    assert model == Model(
+        enum1=Enum1.entry1,
+        model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        enum2=Enum2.entry2,
+        model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
+        list_enum1=[Enum1.entry1],
+        list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
+        opt_enum1=None,
+        opt_model_no_refs1=None,
+        id=None,
+        name="my-name",
+        class_="model-name",
+        finally_=[1, 2, 3],
+    )
 
 
 def test_deserialize_with_null():
     data = copy.deepcopy(MODEL_DATA)
 
-    # json.dumps sets these to null
+    # json.dumps sets None to null
     data["id"] = None
-    data["finally"][0]["id"] = None
+    data["opt_enum1"] = None
+    data["opt_model_no_refs1"] = None
 
     model = sr.deserialize(data=json.dumps(data), structure=Model, converter=converter)
-    assert isinstance(model, Model)
-    assert model.id is None
-    assert isinstance(model.name, str)
-    assert model.name == "my-name"
-    assert isinstance(model.finally_, list)
-    assert len(model.finally_) == 2
-    assert model.finally_[0].id is None
-    assert model.finally_[1].id == 2
+    assert model == Model(
+        enum1=Enum1.entry1,
+        model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        enum2=Enum2.entry2,
+        model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
+        list_enum1=[Enum1.entry1],
+        list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
+        opt_enum1=None,
+        opt_model_no_refs1=None,
+        id=None,
+        name="my-name",
+        class_="model-name",
+        finally_=[1, 2, 3],
+    )
 
 
 @pytest.mark.parametrize(
-    "data, structure", [(MODEL_DATA, Sequence[Model]), ([MODEL_DATA], Model)]
+    "data, structure",
+    [
+        # ??
+        # Error: mypy: Variable "tests.rtl.test_serialize.Model" is not valid as a type
+        (MODEL_DATA, Sequence[Model]),  # type: ignore
+        ([MODEL_DATA], Model),
+    ],
 )
 def test_deserialize_data_structure_mismatch(data, structure):
     data = json.dumps(data)
@@ -187,28 +339,38 @@ def test_deserialize_data_structure_mismatch(data, structure):
 
 
 def test_serialize_single():
-    model = WriteModel(
+    model = Model(
+        enum1=Enum1.entry1,
+        model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        enum2=Enum2.entry2,
+        model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
+        list_enum1=[Enum1.entry1],
+        list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
+        opt_enum1=Enum1.entry1,
+        opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
         id=1,
         name="my-name",
         class_="model-name",
-        finally_=[
-            WriteChildModel(id=1, import_="child1"),
-            WriteChildModel(id=2, import_="child2"),
-        ],
+        finally_=[1, 2, 3],
     )
     expected = json.dumps(MODEL_DATA).encode("utf-8")
     assert sr.serialize(model) == expected
 
 
 def test_serialize_sequence():
-    model = WriteModel(
+    model = Model(
+        enum1=Enum1.entry1,
+        model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        enum2=Enum2.entry2,
+        model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
+        list_enum1=[Enum1.entry1],
+        list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
+        opt_enum1=Enum1.entry1,
+        opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
         id=1,
         name="my-name",
         class_="model-name",
-        finally_=[
-            WriteChildModel(id=1, import_="child1"),
-            WriteChildModel(id=2, import_="child2"),
-        ],
+        finally_=[1, 2, 3],
     )
     expected = json.dumps([MODEL_DATA, MODEL_DATA]).encode("utf-8")
     assert sr.serialize([model, model]) == expected
@@ -217,29 +379,56 @@ def test_serialize_sequence():
 def test_serialize_partial():
     """Do not send json null for model None field values.
     """
-    model = WriteModel(id=1, finally_=[WriteChildModel(id=1)])
-    expected = json.dumps({"id": 1, "finally": [{"id": 1}]}).encode("utf-8")
+    model = Model(
+        enum1=Enum1.entry1,
+        model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        enum2=Enum2.entry2,
+        model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
+        list_enum1=[Enum1.entry1],
+        list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
+    )
+    expected = json.dumps(
+        {
+            "enum1": "entry1",
+            "model_no_refs1": {"name1": "model_no_refs1_name"},
+            "enum2": "entry2",
+            "model_no_refs2": {"name2": "model_no_refs2_name"},
+            "list_enum1": ["entry1"],
+            "list_model_no_refs1": [{"name1": "model_no_refs1_name"}],
+        }
+    ).encode("utf-8")
     assert sr.serialize(model) == expected
 
 
 def test_serialize_explict_null():
     """Send json null for model field EXPLICIT_NULL values.
     """
-    model = WriteModel(
-        id=1,
+    # pass EXPLICIT_NULL into constructor
+    model = Model(
+        enum1=Enum1.entry1,
+        model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        enum2=Enum2.entry2,
+        model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
+        list_enum1=[Enum1.entry1],
+        list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         name=ml.EXPLICIT_NULL,
         class_=ml.EXPLICIT_NULL,
-        finally_=[
-            WriteChildModel(id=1, import_="child1"),
-            WriteChildModel(id=2, import_="child2"),
-        ],
     )
-    model.finally_[0].import_ = ml.EXPLICIT_NULL
+    # set property to EXPLICIT_NULL
+    model.finally_ = ml.EXPLICIT_NULL
 
-    data = copy.deepcopy(MODEL_DATA)
-    # json.dumps sets these to null
-    data["name"] = None
-    data["class"] = None
-    data["finally"][0]["import"] = None
-    expected = json.dumps(data).encode("utf-8")
+    expected = json.dumps(
+        {
+            "enum1": "entry1",
+            "model_no_refs1": {"name1": "model_no_refs1_name"},
+            "enum2": "entry2",
+            "model_no_refs2": {"name2": "model_no_refs2_name"},
+            "list_enum1": ["entry1"],
+            "list_model_no_refs1": [{"name1": "model_no_refs1_name"}],
+            # json.dumps puts these into the json as null
+            "name": None,
+            "class": None,
+            "finally": None,
+        }
+    ).encode("utf-8")
     assert sr.serialize(model) == expected

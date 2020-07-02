@@ -289,17 +289,16 @@ export const fetchLookerVersion = async (
   versions?: any,
   options?: Partial<ITransportSettings>
 ) => {
-  let lookerVersion = ''
   if (!versions) {
     try {
       versions = await fetchLookerVersions(props, options)
-      const matches = versions.looker_release_version.match(/^\d+\.\d+/i)
-      lookerVersion = matches[0]
     } catch (e) {
       warn(`Could not retrieve looker release version: ${e.message}`)
+      return ''
     }
   }
-  return lookerVersion
+  const matches = versions.looker_release_version.match(/^\d+\.\d+/i)
+  return matches[0]
 }
 
 /**

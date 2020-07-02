@@ -213,7 +213,7 @@ export const convertSpec = (
     // patch to fix up small errors in source definition (not required, just to ensure smooth process)
     // indent no spaces
     // output to openApiFilename
-    run('swagger2openapi', [
+    run('yarn swagger2openapi', [
       swaggerFilename,
       '-p',
       '-i',

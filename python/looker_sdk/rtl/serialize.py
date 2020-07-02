@@ -23,24 +23,19 @@
 """Deserialize API response into models
 """
 import datetime
+import enum
 import functools
 import json
 import keyword
 import sys
-
-# ignoring "Module 'typing' has no attribute 'ForwardRef'"
-from typing import (  # type: ignore
+from typing import (
     Callable,
     MutableMapping,
     Sequence,
     Type,
+    TypeVar,
     Union,
 )
-
-try:
-    from typing import ForwardRef  # type: ignore
-except ImportError:
-    from typing import _ForwardRef as ForwardRef  # type: ignore
 
 import cattr
 
@@ -96,8 +91,25 @@ def serialize(api_model: TModelOrSequence) -> bytes:
     return json.dumps(data).encode("utf-8")  # type: ignore
 
 
-def structure_hook(context, converter, data, type_):
-    """cattr structure hook used in generated models.
+def _tr_data_keys(data):
+    """Map top level json keys to model property names.
+
+    Currently this translates reserved python keywords like "from" => "from_"
+    """
+    for reserved in keyword.kwlist:
+        if reserved in data and isinstance(data, dict):
+            data[f"{reserved}_"] = data.pop(reserved)
+    return data
+
+
+def translate_keys_structure_hook(converter, data, model_type):
+    """Applied only to models.Model
+    """
+    return converter.structure_attrs_fromdict(_tr_data_keys(data), model_type)
+
+
+def forward_ref_structure_hook(context, converter, data, forward_ref):
+    """Applied to ForwardRef model and enum annotations
 
     - Map reserved words in json keys to approriate (safe) names in model.
     - handle ForwardRef types until github.com/Tinche/cattrs/pull/42/ is fixed
@@ -105,12 +117,15 @@ def structure_hook(context, converter, data, type_):
        partial func to register the hook. Once the issue is resolved we can
        remove "context" and the partial.
     """
-    for reserved in keyword.kwlist:
-        if reserved in data:
-            data[f"{reserved}_"] = data.pop(reserved)
-    if isinstance(type_, ForwardRef):
-        type_ = eval(type_.__forward_arg__, context, locals())
-    instance = converter.structure_attrs_fromdict(data, type_)
+    data = _tr_data_keys(data)
+    actual_type = eval(forward_ref.__forward_arg__, context, locals())
+    if issubclass(actual_type, enum.Enum):
+        instance = converter.structure(data, actual_type)
+    elif issubclass(actual_type, model.Model):
+        # cannot use converter.structure - recursion error
+        instance = converter.structure_attrs_fromdict(data, actual_type)
+    else:
+        raise DeserializeError(f"Unknown type to deserialize: {actual_type}")
     return instance
 
 
