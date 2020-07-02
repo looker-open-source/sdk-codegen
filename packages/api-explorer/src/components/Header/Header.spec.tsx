@@ -28,7 +28,7 @@ describe('Header', () => {
         <Header specs={specs} spec={specState} specDispatch={specDispatch} />
       )
     )
-    const selector = screen.getByRole('textbox')
+    const selector = screen.getByRole('textbox', { name: 'Version' })
     expect(selector).toHaveValue(specState.key)
   })
 })

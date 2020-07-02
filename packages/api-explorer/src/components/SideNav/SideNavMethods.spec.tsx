@@ -37,7 +37,7 @@ describe('SideNavMethods', () => {
       ),
       highlightPattern
     )
-    const sideNavItem = screen.getByText('dash')
-    expect(sideNavItem).toBeDefined()
+    const match = screen.getByText('Dash')
+    expect(match).toContainHTML('<span class="hi">Dash</span>')
   })
 })

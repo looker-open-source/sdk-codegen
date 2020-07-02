@@ -20,9 +20,9 @@ describe('SideNav', () => {
       withThemeProvider(<SideNav api={testApi} specKey={'3.1'} />)
     )
     const tabs = screen.getAllByRole('button', {
-      name: /^Methods|Types|Search$/,
+      name: /^Methods|Types$/,
     })
-    expect(tabs).toHaveLength(3)
+    expect(tabs).toHaveLength(2)
   })
 
   test('Methods tab is the default active tab', () => {
