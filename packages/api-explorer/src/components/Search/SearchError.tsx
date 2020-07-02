@@ -24,40 +24,17 @@
 
  */
 import React, { FC } from 'react'
-import { IMethod, ISearchResult, TagList } from '@looker/sdk-codegen'
-import { ComboboxList, ListItem } from '@looker/components'
+import { ComboboxList, Icon, ListItem, Text } from '@looker/components'
 
-import { TypeResults } from './TypeResults'
-import { MethodResults } from './MethodResults'
-
-const allMethods = (tags: TagList): Array<IMethod> => {
-  const result: Array<IMethod> = []
-  Object.values(tags).forEach((methods) => {
-    Object.values(methods).forEach((method) => {
-      result.push(method)
-    })
-  })
-  return result
+interface SearchErrorProps {
+  error: string
 }
 
-interface SearchResultsProps extends ISearchResult {
-  specKey: string
-}
-
-export const SearchResults: FC<SearchResultsProps> = ({
-  tags,
-  types,
-  specKey,
-}) => {
-  const methods = allMethods(tags)
-  const methodMatches = Object.entries(methods).length > 0
-  const typeMatches = Object.entries(types).length > 0
-
-  return (
-    <ComboboxList closeOnSelect={true}>
-      {!methodMatches && !typeMatches && <ListItem>No matches found.</ListItem>}
-      {methodMatches && <MethodResults specKey={specKey} tags={tags} />}
-      {typeMatches && <TypeResults specKey={specKey} types={types} />}
-    </ComboboxList>
-  )
-}
+export const SearchError: FC<SearchErrorProps> = ({ error }) => (
+  <ComboboxList>
+    <ListItem>
+      <Icon name="Error" size="small" color="critical" mr="xxsmall" />
+      <Text>{error}</Text>
+    </ListItem>
+  </ComboboxList>
+)

@@ -24,35 +24,24 @@
 
  */
 import React from 'react'
-import { screen, waitFor, fireEvent } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import { withThemeProvider } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
+import { SearchCriterion } from '@looker/sdk-codegen'
 
-import { renderWithSearch } from '../../test-utils'
+import { renderWithSearch, renderWithSearchAndRouter } from '../../test-utils'
 import { api } from '../../test-data'
 import { defaultSearchState } from '../../reducers'
 import { Search } from './Search'
 
 describe('Search', () => {
-  test('it renders', () => {
+  test('it renders a search bar with criteria as placeholder text', () => {
     renderWithSearch(withThemeProvider(<Search api={api} specKey={'3.1'} />))
     expect(screen.getByRole('combobox')).toBeInTheDocument()
     expect(screen.getByRole('textbox')).toHaveProperty(
       'placeholder',
       `Searching in ${defaultSearchState.criteria.join(', ')}.`
     )
-  })
-
-  test('pressing forward slash focuses search input', () => {
-    renderWithSearch(withThemeProvider(<Search api={api} specKey={'3.1'} />))
-    const input = screen.getByRole('textbox')
-    input.blur()
-    expect(input).not.toHaveFocus()
-    fireEvent.keyPress(document, { key: '/', code: 'Slash' })
-    waitFor(() => {
-      expect(input).not.toHaveFocus()
-    })
-    expect(input).toHaveValue('')
   })
 
   test('search can be cleared', () => {
@@ -64,12 +53,67 @@ describe('Search', () => {
     expect(input).toHaveValue('')
   })
 
-  test('it shows results for valid search strings', () => {
-    renderWithSearch(withThemeProvider(<Search api={api} specKey={'3.1'} />))
+  test('it shows results for a valid search pattern', async () => {
+    renderWithSearchAndRouter(
+      withThemeProvider(<Search api={api} specKey={'3.1'} />)
+    )
     const input = screen.getByRole('textbox')
-    userEvent.type(input, 'writedashboard')
-    waitFor(() => {
-      //
+    userEvent.type(input, 'Dashboard')
+    await waitFor(() => {
+      expect(screen.getByRole('listbox')).toBeInTheDocument()
+    })
+    const method = screen.getByText('Get All Dashboards', { exact: false })
+    expect(method.closest('a')).toHaveAttribute(
+      'href',
+      '/3.1/methods/Dashboard/all_dashboards'
+    )
+    const type = screen.getByText('WriteDashboardBase', { exact: false })
+    expect(type.closest('a')).toHaveAttribute(
+      'href',
+      '/3.1/types/WriteDashboardBase'
+    )
+  })
+
+  test('it renders an error for an invalid search pattern', async () => {
+    renderWithSearchAndRouter(
+      withThemeProvider(<Search api={api} specKey={'3.1'} />)
+    )
+    const input = screen.getByRole('textbox')
+    await userEvent.type(input, '[')
+    await waitFor(() => {
+      expect(screen.getByRole('listbox')).toBeInTheDocument()
+    })
+    expect(
+      screen.getByText(
+        'Error: Invalid search expression SyntaxError: Invalid regular expression: /[/: Unterminated character class'
+      )
+    ).toBeInTheDocument()
+    userEvent.clear(input)
+    await waitFor(() => {
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+    })
+  })
+
+  test('search is disabled if no search criteria are selected', () => {
+    renderWithSearchAndRouter(
+      withThemeProvider(<Search api={api} specKey={'3.1'} />),
+      '',
+      []
+    )
+    const search = screen.getByRole('textbox')
+    expect(search).toBeDisabled()
+    expect(search).toHaveProperty('placeholder', 'No search criteria selected.')
+  })
+
+  test('search settings show all criteria', async () => {
+    renderWithSearchAndRouter(
+      withThemeProvider(<Search api={api} specKey={'3.1'} />)
+    )
+    userEvent.click(screen.getByTitle('Gear Outline'))
+    await waitFor(() => {
+      const criteria = screen.getAllByRole('checkbox')
+      /** This will change when we fuse some of the search criteria */
+      expect(criteria).toHaveLength(Object.keys(SearchCriterion).length / 2)
     })
   })
 })

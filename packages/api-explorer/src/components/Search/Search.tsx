@@ -45,6 +45,7 @@ import { setPattern } from '../../reducers'
 import { useDebounce } from './hooks'
 import { SearchCriteriaSelector } from './SearchCriteriaSelector'
 import { SearchResults } from './SearchResults'
+import { SearchError } from './SearchError'
 
 type SearchResult = ISearchResult | undefined
 
@@ -52,13 +53,13 @@ interface SearchProps {
   api: IApiModel
   specKey: string
 }
-/* eslint-disable  @typescript-eslint/ban-ts-ignore  */
+
 export const Search: FC<SearchProps> = ({ api, specKey }) => {
   const { searchSettings, setSearchSettings } = useContext(SearchContext)
   const [pattern, setSearchPattern] = useState(searchSettings.pattern)
-  const [results, setResults] = useState<SearchResult>(undefined)
-  const [selectedResult, setSelectedResult] = useState<ComboboxOptionObject>()
   const debouncedPattern = useDebounce(pattern, 250)
+  const [error, setError] = useState('')
+  const [searchResults, setSearchResults] = useState<SearchResult>(undefined)
 
   const handleInputChange = (event: BaseSyntheticEvent) => {
     setSearchPattern(event.currentTarget.value)
@@ -68,7 +69,11 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
     /** Determine if trigger is select or clear action */
     const value = option ? pattern : ''
     setSearchSettings(setPattern(value))
-    setSelectedResult({ value })
+    if (!value) {
+      setSearchResults(undefined)
+      setSearchPattern(value)
+      setError('')
+    }
   }
 
   useEffect(() => {
@@ -77,7 +82,10 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
       const searchCriteria = CriteriaToSet(searchSettings.criteria)
       results = api.search(pattern, searchCriteria)
     }
-    setResults(results)
+    results && results.message.includes('Error')
+      ? setError(results.message)
+      : setError('')
+    setSearchResults(results)
   }, [debouncedPattern])
 
   /** Focus search input when '/' is pressed */
@@ -102,7 +110,7 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
         <Combobox
           width="100%"
           onChange={handleSelectOrClear}
-          value={selectedResult}
+          value={{ value: pattern }}
         >
           <ComboboxInput
             autoFocus
@@ -117,7 +125,10 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
             }
             ref={inputRef}
           />
-          {results && <SearchResults {...results} specKey={specKey} />}
+          {error && <SearchError error={error} />}
+          {!error && searchResults && (
+            <SearchResults {...searchResults} specKey={specKey} />
+          )}
         </Combobox>
         <SearchCriteriaSelector />
       </Space>
