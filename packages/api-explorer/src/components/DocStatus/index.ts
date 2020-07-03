@@ -23,20 +23,4 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { screen } from '@testing-library/react'
-import { renderWithTheme } from '@looker/components-test-utils'
-
-import { api } from '../../../test-data'
-import { DocStatus } from './DocStatus'
-
-describe('DocStatus', () => {
-  test.each([
-    ['stable', api.methods.login],
-    ['beta', api.methods.all_folders],
-    ['deprecated', api.methods.backup_configuration],
-  ])('it renders a %s badge for a %s method', (status, method) => {
-    renderWithTheme(<DocStatus method={method} />)
-    expect(screen.getByText(status.toLocaleUpperCase())).toBeInTheDocument()
-  })
-})
+export { DocStatus } from './DocStatus'

@@ -33,12 +33,13 @@ import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 import {
   DocActivityType,
   DocMarkdown,
-  DocReferences,
   DocRateLimited,
+  DocReferences,
   DocSDKs,
+  DocStatus,
   DocTitle,
 } from '../../components'
-import { DocResponse, DocStatus, DocOperation } from './components'
+import { DocResponse, DocOperation } from './components'
 import { createInputs } from './utils'
 
 interface DocMethodProps {
