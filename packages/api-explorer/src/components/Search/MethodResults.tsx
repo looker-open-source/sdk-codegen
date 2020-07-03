@@ -23,44 +23,35 @@
  SOFTWARE.
 
  */
-
-import React, { FC, useContext } from 'react'
-import { SidebarItem, Heading } from '@looker/components'
-import { MethodList } from '@looker/sdk-codegen'
+import React, { FC } from 'react'
+import { TagList } from '@looker/sdk-codegen'
 import { NavLink } from 'react-router-dom'
+import { ComboboxOption, Icon } from '@looker/components'
 
-import { buildMethodPath, highlightHTML } from '../../utils'
-import { SearchContext } from '../../context'
-import { MethodBadge } from './MethodBadge'
+import { buildMethodPath } from '../../utils'
 
-interface MethodsProps {
-  methods: MethodList
-  tag: string
+interface MethodResultsProps {
   specKey: string
+  tags: TagList
 }
 
-export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
-
-  // TODO: make selected item visible
-  return (
-    <ul>
-      {Object.values(methods).map((method) => (
-        <li key={method.name}>
-          <NavLink to={buildMethodPath(specKey, tag, method.name)}>
-            <SidebarItem key={method.name} as="span">
-              <>
-                <MethodBadge verb={method.httpMethod} />
-                <Heading as="h5" truncate>
-                  {highlightHTML(pattern, method.summary)}
-                </Heading>
-              </>
-            </SidebarItem>
-          </NavLink>
-        </li>
-      ))}
-    </ul>
-  )
-}
+export const MethodResults: FC<MethodResultsProps> = ({ specKey, tags }) => (
+  <>
+    {Object.entries(tags).map(([tag, methods]) =>
+      Object.values(methods).map((method) => (
+        <NavLink
+          key={method.name}
+          to={buildMethodPath(specKey, tag, method.name)}
+        >
+          <ComboboxOption value={method.name} indicator={false}>
+            {method.summary}
+            <Icon name="CaretLeft" />
+            {tag}
+            <Icon name="CaretLeft" />
+            {'Methods'}
+          </ComboboxOption>
+        </NavLink>
+      ))
+    )}
+  </>
+)

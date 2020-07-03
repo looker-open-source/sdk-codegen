@@ -23,38 +23,18 @@
  SOFTWARE.
 
  */
+import React, { FC } from 'react'
+import { ComboboxList, Icon, ListItem, Text } from '@looker/components'
 
-import React, { FC, useContext } from 'react'
-import { Heading, Sidebar, SidebarItem } from '@looker/components'
-import { TypeList, IntrinsicType } from '@looker/sdk-codegen'
-import { NavLink } from 'react-router-dom'
-
-import { buildTypePath, highlightHTML } from '../../utils'
-import { SearchContext } from '../../context'
-
-interface TypeProps {
-  specKey: string
-  types: TypeList
+interface SearchErrorProps {
+  error: string
 }
 
-export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
-
-  return (
-    <Sidebar>
-      {Object.values(types)
-        .filter((type) => !(type instanceof IntrinsicType))
-        .map((type) => (
-          <NavLink key={type.name} to={buildTypePath(specKey, type.name)}>
-            <SidebarItem as="span">
-              <Heading as="h5" truncate>
-                {highlightHTML(pattern, type.name)}
-              </Heading>
-            </SidebarItem>
-          </NavLink>
-        ))}
-    </Sidebar>
-  )
-}
+export const SearchError: FC<SearchErrorProps> = ({ error }) => (
+  <ComboboxList>
+    <ListItem>
+      <Icon name="Error" size="small" color="critical" mr="xxsmall" />
+      <Text>{error}</Text>
+    </ListItem>
+  </ComboboxList>
+)

@@ -23,44 +23,30 @@
  SOFTWARE.
 
  */
-
-import React, { FC, useContext } from 'react'
-import { SidebarItem, Heading } from '@looker/components'
-import { MethodList } from '@looker/sdk-codegen'
+import React, { FC } from 'react'
+import { IntrinsicType, TypeList } from '@looker/sdk-codegen'
 import { NavLink } from 'react-router-dom'
+import { ComboboxOption, Icon } from '@looker/components'
 
-import { buildMethodPath, highlightHTML } from '../../utils'
-import { SearchContext } from '../../context'
-import { MethodBadge } from './MethodBadge'
+import { buildTypePath } from '../../utils'
 
-interface MethodsProps {
-  methods: MethodList
-  tag: string
+interface TypeResultsProps {
   specKey: string
+  types: TypeList
 }
 
-export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
-
-  // TODO: make selected item visible
-  return (
-    <ul>
-      {Object.values(methods).map((method) => (
-        <li key={method.name}>
-          <NavLink to={buildMethodPath(specKey, tag, method.name)}>
-            <SidebarItem key={method.name} as="span">
-              <>
-                <MethodBadge verb={method.httpMethod} />
-                <Heading as="h5" truncate>
-                  {highlightHTML(pattern, method.summary)}
-                </Heading>
-              </>
-            </SidebarItem>
-          </NavLink>
-        </li>
+export const TypeResults: FC<TypeResultsProps> = ({ specKey, types }) => (
+  <>
+    {Object.values(types)
+      .filter((type) => !(type instanceof IntrinsicType))
+      .map((type) => (
+        <NavLink key={type.name} to={buildTypePath(specKey, type.name)}>
+          <ComboboxOption value={type.name} indicator={false}>
+            {type.name}
+            <Icon name="CaretLeft" />
+            {'Types'}
+          </ComboboxOption>
+        </NavLink>
       ))}
-    </ul>
-  )
-}
+  </>
+)

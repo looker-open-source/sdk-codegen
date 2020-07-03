@@ -30,10 +30,9 @@ import {
   SidebarGroup,
   SidebarItem,
   Box,
-  theme,
   ComponentsProvider,
 } from '@looker/components'
-import styled, { ThemeProvider } from 'styled-components'
+import styled from 'styled-components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
 import { TryItCallback } from '@looker/try-it'
 
@@ -78,8 +77,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs, tryItCallback }) => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <ComponentsProvider />
+    <ComponentsProvider>
       <ExplorerStyle />
       <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
         <Header specs={specs} spec={spec} specDispatch={specDispatch} />
@@ -101,7 +99,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs, tryItCallback }) => {
           </Box>
         </PageLayout>
       </SearchContext.Provider>
-    </ThemeProvider>
+    </ComponentsProvider>
   )
 }
 
