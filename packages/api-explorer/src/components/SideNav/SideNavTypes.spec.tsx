@@ -1,3 +1,28 @@
+/*
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+ */
 import React from 'react'
 import { screen } from '@testing-library/react'
 
@@ -32,20 +57,4 @@ describe('SideNavTypes', () => {
     const match = screen.getByText(/dash/i)
     expect(match).toContainHTML('<span class="hi">Dash</span>')
   })
-
-  // TODO: Figure out why the below is not failing when it should be.
-  // test('types are rendered in the same order as received', () => {
-  //   const typeNames = Object.keys(api.types)
-  //     .filter((typeName) => !(api.types[typeName] instanceof IntrinsicType))
-  //     .slice(1, 30)
-  //   expect(typeNames).toEqual(typeNames.sort())
-  //   const types = {}
-  //   typeNames.forEach((typeName) => (types[typeName] = api.types[typeName]))
-  //   renderWithSearchAndRouter(<SideNavTypes specKey={'3.1'} types={types} />)
-  //
-  //   const links = screen.getAllByRole('link')
-  //   const sideNavItems = links.map((item) => item.textContent) as string[]
-  //   expect(sideNavItems.length).toEqual(typeNames.length)
-  //   expect(sideNavItems).toEqual(typeNames)
-  // })
 })

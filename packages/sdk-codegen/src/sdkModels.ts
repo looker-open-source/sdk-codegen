@@ -305,6 +305,16 @@ export interface IType extends ISymbol {
   properties: PropertyList
 
   /**
+   * key/value collection of required properties for this type
+   */
+  requiredProperties: PropertyList
+
+  /**
+   * key/value collection of optional properties for this type
+   */
+  optionalProperties: PropertyList
+
+  /**
    * List of writeable properties for this type
    */
   writeable: IProperty[]
@@ -1390,6 +1400,26 @@ export class Type implements IType {
 
   get readOnly(): boolean {
     return Object.entries(this.properties).every(([, prop]) => prop.readOnly)
+  }
+
+  private filterRequiredProps(required: boolean) {
+    const filteredProps: PropertyList = {}
+    for (const key in this.properties) {
+      const prop = this.properties[key]
+      const condition = required ? prop.required : !prop.required
+      if (condition) {
+        filteredProps[key] = prop
+      }
+    }
+    return filteredProps
+  }
+
+  get requiredProperties() {
+    return this.filterRequiredProps(true)
+  }
+
+  get optionalProperties() {
+    return this.filterRequiredProps(false)
   }
 
   get hasSpecialNeeds(): boolean {
@@ -2575,6 +2605,13 @@ export interface ICodeGen {
    * @returns {string} source code
    */
   construct(indent: string, type: IType): string
+
+  /**
+   * produces list of properties for declareType
+   * @param {IType} type to generate
+   * @returns {PropertyList} list of properties
+   */
+  typeProperties(type: IType): IProperty[]
 
   /**
    * generates entire type declaration

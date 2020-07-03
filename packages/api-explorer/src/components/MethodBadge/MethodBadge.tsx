@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import React, { FC } from 'react'
 import { Badge } from '@looker/components'
 import styled from 'styled-components'

@@ -23,38 +23,30 @@
  SOFTWARE.
 
  */
-
-import React, { FC, useContext } from 'react'
-import { Heading, Sidebar, SidebarItem } from '@looker/components'
-import { TypeList, IntrinsicType } from '@looker/sdk-codegen'
+import React, { FC } from 'react'
+import { IntrinsicType, TypeList } from '@looker/sdk-codegen'
 import { NavLink } from 'react-router-dom'
+import { ComboboxOption, Icon } from '@looker/components'
 
-import { buildTypePath, highlightHTML } from '../../utils'
-import { SearchContext } from '../../context'
+import { buildTypePath } from '../../utils'
 
-interface TypeProps {
+interface TypeResultsProps {
   specKey: string
   types: TypeList
 }
 
-export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
-
-  return (
-    <Sidebar>
-      {Object.values(types)
-        .filter((type) => !(type instanceof IntrinsicType))
-        .map((type) => (
-          <NavLink key={type.name} to={buildTypePath(specKey, type.name)}>
-            <SidebarItem as="span">
-              <Heading as="h5" truncate>
-                {highlightHTML(pattern, type.name)}
-              </Heading>
-            </SidebarItem>
-          </NavLink>
-        ))}
-    </Sidebar>
-  )
-}
+export const TypeResults: FC<TypeResultsProps> = ({ specKey, types }) => (
+  <>
+    {Object.values(types)
+      .filter((type) => !(type instanceof IntrinsicType))
+      .map((type) => (
+        <NavLink key={type.name} to={buildTypePath(specKey, type.name)}>
+          <ComboboxOption value={type.name} indicator={false}>
+            {type.name}
+            <Icon name="CaretLeft" />
+            {'Types'}
+          </ComboboxOption>
+        </NavLink>
+      ))}
+  </>
+)
