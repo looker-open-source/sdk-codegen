@@ -23,7 +23,28 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { MethodScene } from './MethodScene'
-export { TypeScene } from './TypeScene'
-export { TagScene } from './TagScene'
+import React from 'react'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { screen, fireEvent, waitFor } from '@testing-library/react'
+
+import { api } from '../../test-data'
+import { DocActivityType } from './DocActivityType'
+
+describe('DocActivityType', () => {
+  const method = api.methods.run_inline_query
+  test('it renders', () => {
+    renderWithTheme(<DocActivityType method={method} />)
+    expect(screen.getByText('db_query')).toBeInTheDocument()
+  })
+
+  test('it displays a tooltip with the right information on hover', async () => {
+    renderWithTheme(<DocActivityType method={method} />)
+    const costSymbol = screen.getByText('$')
+    await waitFor(() => {
+      fireEvent.mouseOver(costSymbol)
+      expect(screen.getByRole('tooltip')).toHaveTextContent(
+        'Call volume for this endpoint counts toward the "db_query" API activity category.'
+      )
+    })
+  })
+})

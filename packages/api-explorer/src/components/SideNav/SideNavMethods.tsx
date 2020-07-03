@@ -31,7 +31,7 @@ import { NavLink } from 'react-router-dom'
 
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
-import { MethodBadge } from './MethodBadge'
+import { MethodBadge } from '../MethodBadge'
 
 interface MethodsProps {
   methods: MethodList

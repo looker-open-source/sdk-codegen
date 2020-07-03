@@ -23,7 +23,29 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { MethodScene } from './MethodScene'
-export { TypeScene } from './TypeScene'
-export { TagScene } from './TagScene'
+import React from 'react'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { screen, fireEvent, waitFor } from '@testing-library/react'
+
+import { api } from '../../test-data'
+import { DocMethodSummary } from './DocMethodSummary'
+
+describe('DocMethodSummary', () => {
+  test('it renders a method summary', async () => {
+    const method = api.methods.run_inline_query
+    renderWithTheme(<DocMethodSummary method={method} />)
+    expect(
+      screen.getByText(method.httpMethod.toLocaleUpperCase())
+    ).toBeInTheDocument()
+    expect(screen.getByText(method.summary)).toBeInTheDocument()
+    expect(screen.getByText(method.endpoint)).toBeInTheDocument()
+    await waitFor(() => {
+      const statusIcon = screen.getByTitle('Circle Check')
+      fireEvent.mouseOver(statusIcon)
+      expect(screen.getByRole('tooltip')).toHaveTextContent(
+        'This endpoint is considered stable for this API version.'
+      )
+    })
+    expect(screen.getByText('db_query')).toBeInTheDocument()
+  })
+})

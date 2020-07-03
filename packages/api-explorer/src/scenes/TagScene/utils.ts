@@ -23,7 +23,18 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { MethodScene } from './MethodScene'
-export { TypeScene } from './TypeScene'
-export { TagScene } from './TagScene'
+import { MethodList } from '@looker/sdk-codegen'
+
+/**
+ * Given a list of methods it returns a list of distinct operations
+ * @param methods A list of methods
+ */
+export const getOperations = (methods: MethodList) => {
+  const operationsSet = new Set<string>()
+  Object.values(methods).forEach((method) => {
+    operationsSet.add(method.httpMethod)
+  })
+  return Array.from(operationsSet.values()).map((op) => ({
+    value: op,
+  }))
+}

@@ -23,7 +23,18 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { MethodScene } from './MethodScene'
-export { TypeScene } from './TypeScene'
-export { TagScene } from './TagScene'
+import React, { FC } from 'react'
+import { Tooltip } from '@looker/components'
+import { IMethod } from '@looker/sdk-codegen'
+
+import { pickStatus, pickTooltipContent } from './utils'
+
+interface DocSummaryStatusProps {
+  method: IMethod
+}
+
+export const DocSummaryStatus: FC<DocSummaryStatusProps> = ({ method }) => (
+  <Tooltip content={<>{pickTooltipContent(method.status)}</>}>
+    {pickStatus(method.status)}
+  </Tooltip>
+)

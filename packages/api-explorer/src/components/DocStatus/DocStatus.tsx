@@ -1,9 +1,10 @@
 import React, { FC } from 'react'
 import { Badge } from '@looker/components'
 import styled from 'styled-components'
+import { IMethod } from '@looker/sdk-codegen'
 
 interface DocStatusProps {
-  status: string
+  method: IMethod
 }
 
 const StyledBadge = styled(Badge)`
@@ -30,8 +31,8 @@ const StyledBadge = styled(Badge)`
   }
 `
 
-export const DocStatus: FC<DocStatusProps> = ({ status }) => (
-  <StyledBadge className={status.toLowerCase()}>
-    {status.toUpperCase()}
+export const DocStatus: FC<DocStatusProps> = ({ method }) => (
+  <StyledBadge className={method.status.toLowerCase()}>
+    {method.status.toUpperCase()}
   </StyledBadge>
 )
