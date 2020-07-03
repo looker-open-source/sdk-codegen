@@ -255,32 +255,32 @@ def test_it_runs_inline_query(sdk: mtds.Looker31SDK, queries_system_activity: TQ
 @pytest.mark.usefixtures("remove_test_looks")
 def test_crud_look(sdk: mtds.Looker31SDK, looks):
     """Test creating, retrieving, updating and deleting a look."""
-    for l in looks:
-        request = create_query_request(l["query"][0], "10")
+    for look_data in looks:
+        request = create_query_request(look_data["query"][0], "10")
         query = sdk.create_query(request)
 
         look = sdk.create_look(
             ml.WriteLookWithQuery(
-                title=l.get("title"),
-                description=l.get("description"),
-                deleted=l.get("deleted"),
-                is_run_on_load=l.get("is_run_on_load"),
-                public=l.get("public"),
+                title=look_data.get("title"),
+                description=look_data.get("description"),
+                deleted=look_data.get("deleted"),
+                is_run_on_load=look_data.get("is_run_on_load"),
+                public=look_data.get("public"),
                 query_id=query.id,
-                space_id=l.get("space_id") or str(sdk.me().personal_space_id),
+                space_id=look_data.get("space_id") or str(sdk.me().personal_space_id),
             )
         )
 
         assert isinstance(look, ml.LookWithQuery)
-        assert look.title == l.get("title")
-        assert look.description == l.get("description")
-        assert look.deleted == l.get("deleted")
-        assert look.is_run_on_load == l.get("is_run_on_load")
+        assert look.title == look_data.get("title")
+        assert look.description == look_data.get("description")
+        assert look.deleted == look_data.get("deleted")
+        assert look.is_run_on_load == look_data.get("is_run_on_load")
         # TODO this is broken for local dev but works for CI...
-        # assert look.public == l.get("public")
+        # assert look.public == look_data.get("public")
         assert look.query_id == query.id
-        assert look.space_id == l.get("space_id") or sdk.me().home_space_id
-        assert look.user_id == l.get("user_id") or sdk.me().id
+        assert look.space_id == look_data.get("space_id") or sdk.me().home_space_id
+        assert look.user_id == look_data.get("user_id") or sdk.me().id
 
         # Update
         assert isinstance(look.id, int)
@@ -351,6 +351,26 @@ def test_search_look_and_run(sdk: mtds.Looker31SDK):
     actual = sdk.run_look(look_id=look.id, result_format="json_label")
     assert "Dashboard Count" in actual
     assert "Dashboard ID" in actual
+
+
+def test_enum(sdk: mtds.Looker31SDK):
+    # TODO: there is currently no example in the Looker API of a "bare"
+    # ForwardRef property on a model that is returned by the API. We
+    # have unittests deserializing into "bare" ForwardRef properties,
+    # that will have to do for now.
+    query = ml.WriteQuery(
+        model="system__activity",
+        view="dashboard",
+        fields=["dashboard.id", "dashboard.title", "dashboard.count"],
+    )
+    query_id = sdk.create_query(query).id
+    assert query_id
+    task = ml.WriteCreateQueryTask(
+        query_id=query_id, source="test", result_format=ml.ResultFormat.csv
+    )
+    created = sdk.create_query_task(task)
+    # created.result_format is type str, not ResultFormat.csv
+    assert ml.ResultFormat.csv.value == created.result_format
 
 
 def create_query_request(q, limit: Optional[str] = None) -> ml.WriteQuery:

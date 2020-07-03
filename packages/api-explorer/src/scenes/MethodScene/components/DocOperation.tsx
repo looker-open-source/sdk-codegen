@@ -43,13 +43,13 @@ StyledEndpointLabel.defaultProps = {
 
 export const DocOperation: FC<DocOperationProps> = ({ method }) => (
   <SpaceVertical align="start" mb="large" gap="xsmall">
-    <MethodBadge method={method.httpMethod}>
+    <MethodBadge httpMethod={method.httpMethod}>
       <Flex alignItems="center">
         <StyledEndpointLabel>SDK:</StyledEndpointLabel>
         <DocPseudo method={method} />
       </Flex>
     </MethodBadge>
-    <MethodBadge method={method.httpMethod}>
+    <MethodBadge httpMethod={method.httpMethod}>
       <Flex alignItems="center">
         <StyledEndpointLabel>{method.httpMethod}:</StyledEndpointLabel>
         <Code fontSize="small" fontWeight="normal">

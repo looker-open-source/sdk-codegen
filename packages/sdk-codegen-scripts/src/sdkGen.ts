@@ -92,8 +92,27 @@ const writeFile = (fileName: string, content: string): string => {
     const config = SDKConfig()
     for (const language of languages) {
       const [name, props] = Object.entries(config)[0]
-      const lookerVersions = await fetchLookerVersions(props)
-      const lookerVersion = await fetchLookerVersion(props, lookerVersions)
+      let lookerVersions = {}
+      let lookerVersion = ''
+      try {
+        lookerVersions = await fetchLookerVersions(props)
+        lookerVersion = await fetchLookerVersion(props, lookerVersions)
+      } catch {
+        // Looker server may not be required, so default things for the generator
+        lookerVersions = {
+          supported_versions: [
+            {
+              version: '3.1',
+              swagger_url: `https://${props.base_url}/api/3.1/swagger.json`,
+            },
+            {
+              version: '4.0',
+              swagger_url: `https://${props.base_url}/api/4.0/swagger.json`,
+            },
+          ],
+        }
+        lookerVersion = ''
+      }
       // Iterate through all specified API versions
       const apis = apiVersions(props)
       const lastApi = apis[apis.length - 1]

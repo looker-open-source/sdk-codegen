@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import React, { FC } from 'react'
 import {
   TabList,
@@ -35,7 +36,6 @@ import {
 import { useRouteMatch } from 'react-router-dom'
 import { ApiModel } from '@looker/sdk-codegen'
 
-import { SideNavSearch } from '../Search'
 import { SideNavTags } from './SideNavTags'
 import { SideNavTypes } from './SideNavTypes'
 
@@ -49,7 +49,7 @@ interface SideNavParams {
 }
 
 export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
-  const tabNames = ['search', 'methods', 'types']
+  const tabNames = ['methods', 'types']
   const match = useRouteMatch<SideNavParams>(`/:specKey/:sideNavTab?`)
   let defaultIndex = tabNames.indexOf('methods')
   if (match && match.params.sideNavTab) {
@@ -62,14 +62,10 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
   return (
     <Box paddingTop="small">
       <TabList {...tabs}>
-        <Tab>Search</Tab>
         <Tab>Methods</Tab>
         <Tab>Types</Tab>
       </TabList>
       <TabPanels {...tabs}>
-        <TabPanel>
-          <SideNavSearch api={api} specKey={specKey} />
-        </TabPanel>
         <TabPanel>
           <SideNavTags tags={tags} specKey={specKey} />
         </TabPanel>

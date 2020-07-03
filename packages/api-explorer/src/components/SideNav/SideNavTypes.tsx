@@ -25,7 +25,7 @@
  */
 
 import React, { FC, useContext } from 'react'
-import { Sidebar, SidebarItem } from '@looker/components'
+import { Heading, Sidebar, SidebarItem } from '@looker/components'
 import { TypeList, IntrinsicType } from '@looker/sdk-codegen'
 import { NavLink } from 'react-router-dom'
 
@@ -49,7 +49,9 @@ export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
         .map((type) => (
           <NavLink key={type.name} to={buildTypePath(specKey, type.name)}>
             <SidebarItem as="span">
-              {highlightHTML(pattern, type.name)}
+              <Heading as="h5" truncate>
+                {highlightHTML(pattern, type.name)}
+              </Heading>
             </SidebarItem>
           </NavLink>
         ))}

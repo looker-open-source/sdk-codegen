@@ -1,12 +1,12 @@
 import { BrowserTransport } from '@looker/sdk/lib/browser'
 
 import { TryItInput } from '../TryIt'
+import { testJsonResponse } from '../test-data'
 import {
   createRequestParams,
   pathify,
-  defaultRequestCallback,
+  defaultTryItCallback,
 } from './requestUtils'
-import { testJsonResponse } from '../test-data'
 
 describe('pathify', () => {
   test('it returns unchanged path if no path params are specified', () => {
@@ -113,7 +113,7 @@ describe('defaultRequestCallback', () => {
       .spyOn(BrowserTransport.prototype, 'rawRequest')
       .mockResolvedValueOnce(testJsonResponse)
 
-    const resp = await defaultRequestCallback(
+    const resp = await defaultTryItCallback(
       'POST',
       '/queries/run/{result_format}',
       { result_format: 'json' },

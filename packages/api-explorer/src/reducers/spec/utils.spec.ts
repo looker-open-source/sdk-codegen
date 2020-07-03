@@ -2,7 +2,7 @@ import { ApiModel } from '@looker/sdk-codegen'
 import { omit } from 'lodash'
 
 import { specs } from '../../test-data'
-import { SpecItems } from '../../App'
+import { SpecItems } from '../../ApiExplorer'
 import {
   getDefaultSpecKey,
   parseSpec,

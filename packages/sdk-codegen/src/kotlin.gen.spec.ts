@@ -64,5 +64,26 @@ enum class PermissionType : Serializable {
 }`
       expect(actual).toEqual(expected)
     })
+    it('special needs', () => {
+      const type = apiTestModel.types.HyphenType
+      const actual = gen.declareType('', type)
+      const expected = `data class HyphenType (
+  /**
+   * A normal variable name (read-only)
+   */
+  var project_name: String? = null,
+  /**
+   * A hyphenated property name (read-only)
+   */
+  @JsonProperty("project-digest")
+  var project_digest: String? = null,
+  /**
+   * A spaced out property name (read-only)
+   */
+  @JsonProperty("computation time")
+  var computation_time: Float? = null
+) : Serializable`
+      expect(actual).toEqual(expected)
+    })
   })
 })

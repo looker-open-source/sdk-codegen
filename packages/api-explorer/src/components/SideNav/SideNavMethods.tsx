@@ -25,7 +25,7 @@
  */
 
 import React, { FC, useContext } from 'react'
-import { SidebarItem, Space } from '@looker/components'
+import { Heading, SidebarItem, Space } from '@looker/components'
 import { MethodList } from '@looker/sdk-codegen'
 import { NavLink } from 'react-router-dom'
 
@@ -44,7 +44,6 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
     searchSettings: { pattern },
   } = useContext(SearchContext)
 
-  // TODO: make selected item visible
   return (
     <ul>
       {Object.values(methods).map((method) => (
@@ -52,10 +51,12 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
           <NavLink to={buildMethodPath(specKey, tag, method.name)}>
             <SidebarItem key={method.name} as="span">
               <Space gap="xsmall">
-                <MethodBadge alignTextCenter compact method={method.httpMethod}>
+                <MethodBadge alignTextCenter compact httpMethod={method.httpMethod}>
                   {method.httpMethod.toUpperCase()}
                 </MethodBadge>
-                <span>{highlightHTML(pattern, method.operationId)}</span>
+                <Heading as="h5" truncate>
+                  {highlightHTML(pattern, method.summary)}
+                </Heading>{' '}
               </Space>
             </SidebarItem>
           </NavLink>

@@ -26,12 +26,13 @@
 import React, { FC } from 'react'
 import { generatePressed, intentUIBlend } from '@looker/design-tokens'
 import styled, { css } from 'styled-components'
+import { IMethod } from '@looker/sdk-codegen'
 
 interface DocStatusProps {
-  status: string
+  method: IMethod
 }
 
-function getStatusColor(status) {
+const getStatusColor = (status: string) => {
   switch (status) {
     case 'beta':
       return 'key'
@@ -61,7 +62,7 @@ const statusIntent = (intent: BadgeIntent) =>
   `
 
 const StatusBadgeInternal = styled.div<DocStatusProps>`
-  ${(props) => statusIntent(getStatusColor(props.status))};
+  ${(props) => statusIntent(getStatusColor(props.method.status))};
   border-radius: 4px;
   font-size: ${({ theme }) => `${theme.fontSizes.small}`};
   font-weight: ${({ theme }) => `${theme.fontWeights.semiBold}`};
@@ -72,8 +73,8 @@ const StatusBadgeInternal = styled.div<DocStatusProps>`
   }) => `${xxsmall} ${xsmall}`};
 `
 
-export const DocStatus: FC<DocStatusProps> = ({ status }) => (
-  <StatusBadgeInternal status={status} className={status}>
-    {status.toUpperCase()}
+export const DocStatus: FC<DocStatusProps> = ({ method }) => (
+  <StatusBadgeInternal method={method} className={method.status}>
+    {method.status.toLocaleUpperCase()}
   </StatusBadgeInternal>
 )

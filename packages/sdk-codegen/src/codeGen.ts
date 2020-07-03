@@ -104,6 +104,10 @@ export abstract class CodeGen implements ICodeGen {
    */
   abstract methodsEpilogue(indent: string): string
 
+  reserve(name: string) {
+    return name
+  }
+
   streamsPrologue(_indent: string) {
     return ''
   }
@@ -219,21 +223,29 @@ export abstract class CodeGen implements ICodeGen {
     return this.itself ? `${this.itself}.${value}` : value
   }
 
+  typeProperties(type: IType) {
+    return Object.values(type.properties)
+  }
+
   declareType(indent: string, type: IType) {
     const bump = this.bumper(indent)
     const props: string[] = []
     let propertyValues = ''
-    if (type instanceof EnumType) {
-      const num = type as EnumType
-      num.values.forEach((value) =>
-        props.push(this.declareEnumValue(bump, value))
-      )
-      propertyValues = props.join(this.enumDelimiter)
-    } else {
-      Object.values(type.properties).forEach((prop) =>
-        props.push(this.declareProperty(bump, prop))
-      )
-      propertyValues = props.join(this.propDelimiter)
+    try {
+      if (type instanceof EnumType) {
+        const num = type as EnumType
+        num.values.forEach((value) =>
+          props.push(this.declareEnumValue(bump, value))
+        )
+        propertyValues = props.join(this.enumDelimiter)
+      } else {
+        this.typeProperties(type).forEach((prop) =>
+          props.push(this.declareProperty(bump, prop))
+        )
+        propertyValues = props.join(this.propDelimiter)
+      }
+    } catch {
+      throw new Error(JSON.stringify(type, null, 2))
     }
     return (
       this.typeSignature(indent, type) +

@@ -26,11 +26,12 @@
 
 import React, { FC, Dispatch } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Flex, FlexItem, Heading, Space, Text } from '@looker/components'
+import { Flex, FlexItem, Heading, Space, Text, Box } from '@looker/components'
 import styled from 'styled-components'
 
-import { SpecItems } from '../../App'
+import { SpecItems } from '../../ApiExplorer'
 import { SpecState, SpecAction } from '../../reducers'
+import { Search } from '../Search'
 import { Logo } from './svg'
 import { ApiSpecSelector } from './ApiSpecSelector'
 
@@ -67,6 +68,9 @@ export const Header: FC<HeaderProps> = ({ specs, spec, specDispatch }) => (
         </NavLink>
       </Heading>
     </FlexItem>
+    <Box width="50%">
+      <Search api={spec.api} specKey={spec.key} />
+    </Box>
     <FlexItem>
       <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
     </FlexItem>

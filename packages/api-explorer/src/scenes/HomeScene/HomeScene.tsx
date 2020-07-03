@@ -28,7 +28,7 @@ import { ApiModel } from '@looker/sdk-codegen'
 import React, { FC } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { DocMarkdown, Main } from '../../components'
+import { DocMarkdown } from '../../components'
 
 interface DocHomeProps {
   api: ApiModel
@@ -42,7 +42,7 @@ export const HomeScene: FC<DocHomeProps> = ({ api }) => {
   const { specKey } = useParams<DocHomeParams>()
 
   return (
-    <Main>
+    <>
       <Heading
         as="h1"
         mb="xsmall"
@@ -50,6 +50,6 @@ export const HomeScene: FC<DocHomeProps> = ({ api }) => {
         fontWeight="semiBold"
       >{`Looker API ${specKey} Reference`}</Heading>
       <DocMarkdown source={api.schema?.info.description!} specKey={specKey} />
-    </Main>
+    </>
   )
 }

@@ -41,13 +41,16 @@ def users(_test_data) -> List[Dict[str, str]]:
 def email_domain(_test_data) -> str:
     return _test_data["email_domain"]
 
+
 @pytest.fixture(scope="session")
 def string_content_types(_test_data) -> List[str]:
     return _test_data["content_types"]["string"]
 
+
 @pytest.fixture(scope="session")
 def binary_content_types(_test_data) -> List[str]:
     return _test_data["content_types"]["binary"]
+
 
 TTestData = Dict[str, Union[str, List[Dict[str, str]]]]
 
@@ -86,6 +89,7 @@ def create_test_users(
 ):
     user_ids: List[int] = []
     for u in users:
+        # TODO: if the test crashes it doesn't clean up the users.
         user = sdk40.create_user(
             models40.WriteUser(first_name=u["first_name"], last_name=u["last_name"])
         )

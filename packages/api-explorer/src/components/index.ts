@@ -23,15 +23,19 @@
  SOFTWARE.
 
  */
+export { DocActivityType } from './DocActivityType'
 export { DocCode } from './DocCode'
+export { DocMethodSummary } from './DocMethodSummary'
 export { DocMarkdown } from './DocMarkdown'
 export { DocPseudo } from './DocPseudo'
+export { DocRateLimited } from './DocRateLimited'
 export { DocReferences } from './DocReferences'
+export { DocSDKs } from './DocSDKs'
+export { DocStatus } from './DocStatus'
 export { DocTitle } from './DocTitle'
 export { ExplorerStyle } from './ExplorerStyle'
 export { Header } from './Header'
-export { DocSDKs } from './DocSDKs'
 export { Main } from './MainWrapper'
+export { MethodBadge } from './MethodBadge'
 export { SideNav } from './SideNav'
 export { SideNavToggle } from './SideNavToggle'
-export { MethodBadge } from './MethodBadge'

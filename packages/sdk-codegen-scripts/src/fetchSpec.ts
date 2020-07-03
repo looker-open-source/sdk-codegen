@@ -96,7 +96,7 @@ export const specTransport = (props: ISDKConfigProps) => {
   const options: ITransportSettings = {
     agentTag: 'SDK Codegen',
     base_url: props.base_url,
-    timeout: defaultTimeout,
+    timeout: ((props as unknown) as any).timeout || defaultTimeout,
     verify_ssl: props.verify_ssl,
   }
   transport = new NodeTransport(options)
@@ -202,7 +202,7 @@ export const login = async (props: ISDKConfigProps) => {
       throw new Error('Access token could not be retrieved.')
     }
   } catch (err) {
-    console.error(err)
+    throw err
   }
 }
 
@@ -224,54 +224,81 @@ export const getUrl = async (
 ) => {
   const xp = specTransport(props)
   // log(`GETting ${url} ...`)
-  return sdkOk<string, Error>(
-    xp.request<string, Error>(
-      'GET',
-      url,
-      undefined,
-      undefined,
-      undefined,
-      options
-    )
+  return await sdkOk<string, Error>(
+    xp.request('GET', url, undefined, undefined, undefined, options)
   )
+  //
+  // const response = await xp.rawRequest(
+  //   'GET',
+  //   url,
+  //   undefined,
+  //   undefined,
+  //   undefined,
+  //   options
+  // )
+  // if (!response.ok) {
+  //   throw new Error(response.body)
+  // }
+  // return response.body.toString()
 }
 
-export const authGetUrl = async (props: ISDKConfigProps, url: string) => {
+export const authGetUrl = async (
+  props: ISDKConfigProps,
+  url: string,
+  failQuits = true,
+  options?: Partial<ITransportSettings>
+) => {
   let token = null
   let content: any = null
   try {
     // Try first without login. Most Looker instances don't require auth for spec retrieval
-    content = await getUrl(props, url)
+    content = await getUrl(props, url, options)
   } catch (err) {
+    if (err.message.indexOf('ETIMEDOUT') > 0) {
+      throw err
+    }
     // Whoops!  Ok, try again with login
     token = await login(props)
-    content = await getUrl(props, url, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    options = { options, ...{ headers: { Authorization: `Bearer ${token}` } } }
+    content = await getUrl(props, url, options)
     if (token) {
       await logout(props, token)
     }
   }
 
   if (badAuth(content)) {
-    return quit('Authentication failed')
+    const authFailed = 'Authentication failed'
+    if (failQuits) {
+      return quit(authFailed)
+    } else {
+      throw new Error(authFailed)
+    }
   }
   return content
 }
 
-export const fetchLookerVersions = async (props: ISDKConfigProps) => {
-  return await authGetUrl(props, `${props.base_url}/versions`)
+export const fetchLookerVersions = async (
+  props: ISDKConfigProps,
+  options?: Partial<ITransportSettings>
+) => {
+  return await authGetUrl(props, `${props.base_url}/versions`, false, options)
 }
 
 export const fetchLookerVersion = async (
   props: ISDKConfigProps,
-  versions?: any
+  versions?: any,
+  options?: Partial<ITransportSettings>
 ) => {
   if (!versions) {
-    versions = await fetchLookerVersions(props)
+    try {
+      versions = await fetchLookerVersions(props, options)
+    } catch (e) {
+      warn(`Could not retrieve looker release version: ${e.message}`)
+      return ''
+    }
   }
-  const [lookerVersion] = versions.looker_release_version.match(/^\d+\.\d+/gi)
-  return lookerVersion
+  const matches = versions.looker_release_version.match(/^\d+\.\d+/i)
+  return matches[0]
 }
 
 /**

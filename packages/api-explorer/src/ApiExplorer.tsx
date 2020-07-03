@@ -25,12 +25,23 @@
  */
 
 import React, { FC, useReducer, useState } from 'react'
-import { Sidebar, SidebarGroup, SidebarItem, Box } from '@looker/components'
+import {
+  Box,
+  ComponentsProvider,
+  Sidebar, SidebarGroup, SidebarItem,
+} from '@looker/components'
 import styled from 'styled-components'
-import { BrowserRouter as Router } from 'react-router-dom'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
+import { TryItCallback } from '@looker/try-it'
+
 import { SearchContext } from './context'
-import { Header, SideNav, SideNavToggle } from './components'
+import {
+  ExplorerStyle,
+  Header,
+  SideNav,
+  SideNavToggle,
+  Main,
+} from './components'
 import {
   specReducer,
   initDefaultSpecState,
@@ -50,11 +61,11 @@ export interface SpecItem {
 export type SpecItems = KeyedCollection<SpecItem>
 
 export interface ApiExplorerProps {
-  // request provider
+  tryItCallback?: TryItCallback
   specs: SpecItems
 }
 
-const App: FC<ApiExplorerProps> = ({ specs }) => {
+const ApiExplorer: FC<ApiExplorerProps> = ({ specs, tryItCallback }) => {
   const [spec, specDispatch] = useReducer(
     specReducer,
     initDefaultSpecState(specs)
@@ -70,8 +81,9 @@ const App: FC<ApiExplorerProps> = ({ specs }) => {
   }
 
   return (
-    <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
-      <Router>
+    <ComponentsProvider>
+      <ExplorerStyle />
+      <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
         <Header specs={specs} spec={spec} specDispatch={specDispatch} />
         <PageLayout open={isSideNavOpen}>
           {isSideNavOpen && <SideNav api={spec.api} specKey={spec.key} />}
@@ -83,15 +95,21 @@ const App: FC<ApiExplorerProps> = ({ specs }) => {
             />
           </SidebarDivider>
           <Box className={isSideNavOpen ? 'doc open' : 'doc'}>
-            <AppRouter api={spec.api} specKey={spec.key} />
+            <Main>
+              <AppRouter
+                api={spec.api}
+                specKey={spec.key}
+                tryItCallback={tryItCallback}
+              />
+            </Main>
           </Box>
         </PageLayout>
-      </Router>
-    </SearchContext.Provider>
+      </SearchContext.Provider>
+    </ComponentsProvider>
   )
 }
 
-export default App
+export default ApiExplorer
 
 interface SidebarStyleProps {
   open: boolean

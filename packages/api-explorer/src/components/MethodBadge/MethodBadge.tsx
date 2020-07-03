@@ -29,7 +29,7 @@ import { HttpMethod } from '@looker/sdk/src'
 import styled, { css } from 'styled-components'
 
 interface MethodBadgeProps {
-  method: HttpMethod
+  httpMethod: HttpMethod
   compact?: boolean
   alignTextCenter?: boolean
 }
@@ -68,7 +68,7 @@ const badgeIntent = (intent: BadgeIntent) =>
   `
 
 const MethodBadgeInternal = styled.div<MethodBadgeProps>`
-  ${(props) => badgeIntent(getMethodColor(props.method))};
+  ${(props) => badgeIntent(getMethodColor(props.httpMethod))};
   border: 1px solid transparent;
   border-radius: 4px;
   font-size: ${({ theme, compact }) =>
@@ -82,14 +82,14 @@ const MethodBadgeInternal = styled.div<MethodBadgeProps>`
 
 export const MethodBadge: FC<MethodBadgeProps> = ({
   alignTextCenter,
-  method,
+  httpMethod,
   compact,
   ...props
 }) => (
   <MethodBadgeInternal
     alignTextCenter={alignTextCenter}
     compact={compact}
-    method={method}
+    httpMethod={httpMethod}
   >
     {props.children}
   </MethodBadgeInternal>

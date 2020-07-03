@@ -27,27 +27,24 @@
 import React, { FC } from 'react'
 import { Flex, Space, Text } from '@looker/components'
 import { useParams } from 'react-router-dom'
+import { TryIt, TryItCallback, TryItHttpMethod } from '@looker/try-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 
-import { TryIt, TryItHttpMethod } from '@looker/try-it'
-import {
-  DocMarkdown,
-  DocReferences,
-  DocTitle,
-  DocSDKs,
-  Main,
-} from '../../components'
 import {
   DocActivityType,
+  DocMarkdown,
   DocRateLimited,
-  DocResponse,
+  DocReferences,
+  DocSDKs,
   DocStatus,
-  DocOperation,
-} from './components'
+  DocTitle,
+} from '../../components'
+import { DocResponse, DocOperation } from './components'
 import { createInputs } from './utils'
 
 interface DocMethodProps {
   api: ApiModel
+  tryItCallback?: TryItCallback
 }
 
 interface DocMethodParams {
@@ -55,19 +52,19 @@ interface DocMethodParams {
   specKey: string
 }
 
-export const MethodScene: FC<DocMethodProps> = ({ api }) => {
+export const MethodScene: FC<DocMethodProps> = ({ api, tryItCallback }) => {
   const { methodName, specKey } = useParams<DocMethodParams>()
   const method = api.methods[methodName]
   const seeTypes = typeRefs(api, method.customTypes)
 
   return (
-    <Main>
+    <>
       <DocTitle>{method.summary}</DocTitle>
       <Flex mb="xxlarge">
         <Space gap="large">
-          <DocStatus status={method.status} />
-          {method.activityType === 'db_query' && <DocActivityType />}
-          {method.rateLimited && <DocRateLimited />}
+          <DocStatus method={method} />
+          <DocActivityType method={method} />
+          <DocRateLimited method={method} />
         </Space>
       </Flex>
       <DocOperation method={method} />
@@ -84,7 +81,8 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         inputs={createInputs(api, method)}
         httpMethod={method.httpMethod as TryItHttpMethod}
         endpoint={method.endpoint}
+        tryItCallback={tryItCallback}
       />
-    </Main>
+    </>
   )
 }

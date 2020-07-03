@@ -234,10 +234,13 @@ namespace Looker.SDK.API${this.apiRef}
 
     const arg = this.reserve(property.name)
     const pOpt = property.required ? '' : '?'
-    const attr =
+    let attr =
       property.type instanceof EnumType
         ? `${indent}[JsonConverter(typeof(StringEnumConverter))]\n`
         : ''
+    if (property.hasSpecialNeeds) {
+      attr += `${indent}[JsonProperty("${property.jsonName}")]\n`
+    }
     return (
       this.summary(indent, this.describeProperty(property)) +
       attr +

@@ -116,6 +116,7 @@ class ${this.sdkClassName()}Stream(authSession: AuthSession) : APIMethods(authSe
 
 package com.looker.sdk${this.apiNamespace()}
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.looker.rtl.*
 import java.io.Serializable
 import java.util.*
@@ -146,8 +147,12 @@ import java.util.*
   declareProperty(indent: string, property: IProperty) {
     const optional = !property.required ? '? = null' : ''
     const type = this.typeMap(property.type)
+    const attr = property.hasSpecialNeeds
+      ? `${indent}@JsonProperty("${property.jsonName}")\n`
+      : ''
     return (
       this.commentHeader(indent, this.describeProperty(property)) +
+      attr +
       `${indent}var ${property.name}: ${type.name}${optional}`
     )
   }

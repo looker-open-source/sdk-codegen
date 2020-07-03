@@ -54,20 +54,42 @@ export declare type Arg = string
 const lookerValuesTag = 'x-looker-values'
 const enumTag = 'enum'
 
+/** simple symbol name pattern */
+const simpleName = /^[a-z_][a-z_\d]*$/im
+
+/**
+ * Does this name have special characters?
+ * @param name to name check
+ * @returns true if the name isn't a standard variable name
+ */
+export const isSpecialName = (name: string) => {
+  if (!name) return false
+  // simple naming pattern that should theoretically just work
+  const result = simpleName.test(name)
+  return !result
+}
+
+/**
+ * convert string to a safe variable name
+ *
+ * @param value string value to convert to a safe variable name
+ */
+export const safeName = (value: string) => {
+  if (!value) return ''
+  // TODO need to convert unicode characters also
+  return value.replace(/([-_ ]+)/g, '_')
+}
+
 /**
  * convert string to camelCase
  * @param value string value to convert to camelCase
  */
 export const camelCase = (value: string) => {
   if (!value) return ''
-  return value.replace(/([-_][a-z])/gi, ($1) => {
-    return $1
-      .toUpperCase()
-      .replace('-', '')
-      .replace('_', '')
+  return value.replace(/(([-_ ]+)[a-z])|([-_ ]+)/gi, ($1) => {
+    return $1.toLocaleUpperCase().replace(/([-_ ]+)/gi, '')
   })
 }
-
 /**
  * convert string to TitleCase
  * @param value string value to convert to TitleCase
@@ -113,6 +135,17 @@ export interface ISymbol {
   name: string
   fullName: string
   owner: string
+  /**
+   * if the specification name is a "special name" (e.g. the name contains hyphens or is unicode), it's saved here
+   * and the name property will have the supported name since not all SDK languages support special names.
+   * for example, "foo-bar" and "foo bar" would be saved in jsonName, and name="foo_bar"
+   */
+  jsonName: string
+
+  /**
+   * returns True if the symbol or any symbols it contains have a "special name"
+   */
+  hasSpecialNeeds: boolean
 
   asHashString(): string
 
@@ -168,9 +201,7 @@ export const keyValues = (keys: KeyList): string[] => {
  */
 export const mayQuote = (value: any, quoteChar = `'`): string => {
   const str = value.toString()
-  if (!str) return ''
-  const simpleName = /^\w[\w]*$/gim
-  if (simpleName.test(str)) return str
+  if (!isSpecialName(str)) return str
   return `${quoteChar}${str}${quoteChar}`
 }
 
@@ -267,21 +298,21 @@ export interface ISymbolTable extends ISymbolList {
   resolveType(schema: OAS.SchemaObject): IType
 }
 
-export interface IType {
-  /**
-   * Name of the type
-   */
-  name: string
-
-  /**
-   * fullName = name for types
-   */
-  fullName: string
-
+export interface IType extends ISymbol {
   /**
    * key/value collection of properties for this type
    */
   properties: PropertyList
+
+  /**
+   * key/value collection of required properties for this type
+   */
+  requiredProperties: PropertyList
+
+  /**
+   * key/value collection of optional properties for this type
+   */
+  optionalProperties: PropertyList
 
   /**
    * List of writeable properties for this type
@@ -473,11 +504,20 @@ export interface IProperty extends ITypedSymbol {
 }
 
 class Symbol implements ISymbol {
+  jsonName = ''
+  readonly hasSpecialNeeds: boolean = false
   constructor(
     public name: string,
     public type: IType,
     public owner: string = ''
-  ) {}
+  ) {
+    const snake = safeName(name)
+    if (snake !== name) {
+      this.jsonName = name
+      this.name = snake
+      this.hasSpecialNeeds = true
+    }
+  }
 
   get fullName(): string {
     return `${this.owner ? this.owner + '.' : ''}${this.name}`
@@ -505,7 +545,7 @@ class Symbol implements ISymbol {
       criteria.has(SearchCriterion.name) ||
       criteria.has(SearchCriterion.method)
     )
-      result += searchIt(this.name)
+      result += searchIt(this.name) + searchIt(this.jsonName)
     return result
   }
 }
@@ -1298,16 +1338,22 @@ export class Method extends SchemadSymbol implements IMethod {
   }
 }
 
-export class Type implements ISymbol, IType {
+export class Type implements IType {
   readonly properties: PropertyList = {}
   readonly methodRefs: KeyList = new Set<string>()
   readonly types: KeyList = new Set<string>()
   readonly customTypes: KeyList = new Set<string>()
   description: string
   customType: string
+  jsonName = ''
   refCount = 0
 
   constructor(public schema: OAS.SchemaObject, public name: string) {
+    const snake = safeName(name)
+    if (snake !== name) {
+      this.jsonName = name
+      this.name = snake
+    }
     this.customType = name
     this.description = this.schema.description || ''
   }
@@ -1356,6 +1402,32 @@ export class Type implements ISymbol, IType {
     return Object.entries(this.properties).every(([, prop]) => prop.readOnly)
   }
 
+  private filterRequiredProps(required: boolean) {
+    const filteredProps: PropertyList = {}
+    for (const key in this.properties) {
+      const prop = this.properties[key]
+      const condition = required ? prop.required : !prop.required
+      if (condition) {
+        filteredProps[key] = prop
+      }
+    }
+    return filteredProps
+  }
+
+  get requiredProperties() {
+    return this.filterRequiredProps(true)
+  }
+
+  get optionalProperties() {
+    return this.filterRequiredProps(false)
+  }
+
+  get hasSpecialNeeds(): boolean {
+    return !!Object.entries(this.properties).find(
+      ([, prop]) => prop.hasSpecialNeeds
+    )
+  }
+
   load(api: ApiModel): void {
     Object.entries(this.schema.properties || {}).forEach(
       ([propName, propSchema]) => {
@@ -1366,7 +1438,7 @@ export class Type implements ISymbol, IType {
         this.types.add(propType.name)
         const customType = propType.customType
         if (customType) this.customTypes.add(customType)
-        this.properties[propName] = new Property(
+        this.properties[safeName(propName)] = new Property(
           propName,
           propType,
           propSchema,
@@ -1608,7 +1680,7 @@ export class WriteType extends Type {
         )
         const typeWriter = api.mayGetWriteableType(p.type)
         if (typeWriter) writeProp.type = typeWriter
-        this.properties[p.name] = writeProp
+        this.properties[safeName(p.name)] = writeProp
       })
   }
 
@@ -2323,6 +2395,13 @@ export interface ICodeGen {
   streamsPrologue(indent: string): string
 
   /**
+   * aliases or escapes names that are the language's reserved words, or must be treated specially, like hyphenate names
+   * @param name symbol name to reserve
+   * @returns either the original name, or the transformed "reserved" version of it
+   */
+  reserve(name: string): string
+
+  /**
    * standard code to insert at the top of the generated "models" file(s)
    * @param {string} indent code indentation
    * @returns {string} generated code
@@ -2526,6 +2605,13 @@ export interface ICodeGen {
    * @returns {string} source code
    */
   construct(indent: string, type: IType): string
+
+  /**
+   * produces list of properties for declareType
+   * @param {IType} type to generate
+   * @returns {PropertyList} list of properties
+   */
+  typeProperties(type: IType): IProperty[]
 
   /**
    * generates entire type declaration
