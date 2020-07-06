@@ -25,12 +25,7 @@
  */
 
 import React, { FC, useReducer, useState } from 'react'
-import {
-  Box,
-  ComponentsProvider,
-  Sidebar, SidebarGroup, SidebarItem,
-} from '@looker/components'
-import styled from 'styled-components'
+import { Box, ComponentsProvider } from '@looker/components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
 import { TryItCallback } from '@looker/try-it'
 
@@ -38,9 +33,10 @@ import { SearchContext } from './context'
 import {
   ExplorerStyle,
   Header,
+  PageLayout,
   SideNav,
   SideNavToggle,
-  Main,
+  SideNavDivider,
 } from './components'
 import {
   specReducer,
@@ -87,21 +83,18 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs, tryItCallback }) => {
         <Header specs={specs} spec={spec} specDispatch={specDispatch} />
         <PageLayout open={isSideNavOpen}>
           {isSideNavOpen && <SideNav api={spec.api} specKey={spec.key} />}
-          <SidebarDivider open={isSideNavOpen}>
+          <SideNavDivider open={isSideNavOpen}>
             <SideNavToggle
               onClick={handleSideNavToggle}
               isOpen={isSideNavOpen}
-              headerHeight="84px"
             />
-          </SidebarDivider>
-          <Box className={isSideNavOpen ? 'doc open' : 'doc'}>
-            <Main>
-              <AppRouter
-                api={spec.api}
-                specKey={spec.key}
-                tryItCallback={tryItCallback}
-              />
-            </Main>
+          </SideNavDivider>
+          <Box className={isSideNavOpen ? 'main doc open' : 'main doc'}>
+            <AppRouter
+              api={spec.api}
+              specKey={spec.key}
+              tryItCallback={tryItCallback}
+            />
           </Box>
         </PageLayout>
       </SearchContext.Provider>
@@ -110,97 +103,3 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs, tryItCallback }) => {
 }
 
 export default ApiExplorer
-
-interface SidebarStyleProps {
-  open: boolean
-}
-
-const SidebarDivider = styled.div<SidebarStyleProps>`
-  transition: border 0.3s;
-  border-left: 1px solid
-    ${({ theme, open }) => (open ? theme.colors.ui2 : 'transparent')};
-  grid-area: divider;
-  overflow: visible;
-  position: relative;
-  &:hover {
-    border-color: ${({ theme, open }) =>
-      open ? theme.colors.ui3 : 'transparent'};
-  }
-`
-
-const PageLayout = styled.div<SidebarStyleProps>`
-  display: grid;
-  grid-template-rows: 1fr;
-  grid-template-columns: ${({ open }) =>
-    open ? '20rem 0 50rem' : '1.5rem 0 50rem'};
-  grid-template-areas: 'sidebar divider main';
-  position: relative;
-
-  ${Sidebar} {
-    grid-area: sidebar;
-    width: 20rem;
-    z-index: 0;
-    padding: 0 ${({ theme }) => theme.space.medium};
-
-    button {
-      color: ${({ theme }) => theme.colors.text1};
-      cursor: pointer;
-      min-height: 2.25rem;
-
-      &:hover,
-      &:focus,
-      &[aria-expanded='true'] {
-        color: ${({ theme }) => theme.colors.key};
-      }
-    }
-  }
-
-  .codeMarker {
-    background: yellow;
-    position: absolute;
-  }
-
-  .hi {
-    background: yellow;
-  }
-
-  ${SidebarGroup} {
-    > div {
-      border-left: 1px dashed ${({ theme }) => theme.colors.ui2};
-      padding: ${({
-        theme: {
-          space: { xxsmall, xsmall },
-        },
-      }) => `${xxsmall} 0 ${xxsmall} ${xsmall}`};
-    }
-
-    .active > span {
-      background-color: ${({ theme }) => theme.colors.ui1};
-      font-weight: ${({ theme }) => theme.fontWeights.semiBold};
-
-      div > div {
-        border: 1px solid ${({ theme }) => theme.colors.ui2};
-      }
-    }
-  }
-
-  ${SidebarItem} {
-    font-size: ${({ theme }) => theme.fontSizes.small};
-
-    & {
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      padding: ${({ theme }) => theme.space.xsmall};
-    }
-
-    &:hover,
-    &:focus {
-      background-color: ${({ theme }) => theme.colors.ui1};
-    }
-  }
-
-  .doc {
-    grid-area: main;
-  }
-`
