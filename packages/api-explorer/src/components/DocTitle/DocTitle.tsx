@@ -25,14 +25,8 @@
  */
 
 import React, { FC } from 'react'
-import { Heading } from '@looker/components'
+import { ApixHeading } from '../common'
 
 export const DocTitle: FC = (props) => (
-  <Heading
-    fontSize="xxxlarge"
-    fontWeight="semiBold"
-    as="h1"
-    mb="xxsmall"
-    {...props}
-  />
+  <ApixHeading fontSize="xxxlarge" as="h1" {...props} />
 )

@@ -15,8 +15,7 @@ describe('Header', () => {
         <Header specs={specs} spec={specState} specDispatch={specDispatch} />
       )
     )
-
-    expect(screen.getByText('API Explorer')).toHaveAttribute(
+    expect(screen.getByText('API Explorer').closest('a')).toHaveAttribute(
       'href',
       `/${specState.key}`
     )

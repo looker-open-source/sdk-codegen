@@ -36,16 +36,16 @@ import {
 } from '@looker/components'
 
 import { SearchContext } from '../../context'
-import { highlightMarkdown, transformURL } from './utils'
 import {
-  CodeBlockWrapper,
-  TableCell,
-  StyledCode,
-  StyledHeading,
-  StyledList,
-  StyledParagraph,
-  StyledTable,
-} from './DocComponents'
+  ApixCode,
+  ApixList,
+  ApixParagraph,
+  ApixHeading,
+  ApixTable,
+} from '../common'
+import { highlightMarkdown, transformURL } from './utils'
+import { CodeBlock } from './CodeBlock'
+import { TableCell } from './TableCell'
 
 interface DocMarkdownProps {
   source: string
@@ -75,14 +75,14 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
         escapeHtml={false}
         transformLinkUri={transformURL.bind(null, specKey)}
         renderers={{
-          code: CodeBlockWrapper,
-          heading: StyledHeading,
-          paragraph: StyledParagraph,
-          inlineCode: StyledCode,
+          code: CodeBlock,
+          heading: ApixHeading,
+          paragraph: ApixParagraph,
+          inlineCode: ApixCode,
           link: Link,
-          list: StyledList,
+          list: ApixList,
           listItem: ListItem,
-          table: StyledTable,
+          table: ApixTable,
           tableHead: TableHead,
           tableBody: TableBody,
           tableRow: TableRow,

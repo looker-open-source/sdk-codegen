@@ -24,10 +24,9 @@
 
  */
 
-import React from 'react'
+import React, { FC } from 'react'
 import {
   Box,
-  Heading,
   SpaceVertical,
   Tab,
   TabList,
@@ -44,7 +43,8 @@ import {
   IType,
   ApiModel,
 } from '@looker/sdk-codegen'
-import styled from 'styled-components'
+
+import { ApixHeading } from '../common'
 import { DocCode } from '../DocCode'
 import { noComment } from './utils'
 
@@ -54,11 +54,7 @@ interface LanguageSDKProps {
   type?: IType
 }
 
-const Heading2 = styled(Heading)`
-  color: ${({ theme }) => theme.colors.text2};
-`
-
-export const DocSDKs: React.FC<LanguageSDKProps> = ({ api, method, type }) => {
+export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
   const tabs = useTabs()
   const generators = {
     Kotlin: new KotlinGen(api),
@@ -72,9 +68,9 @@ export const DocSDKs: React.FC<LanguageSDKProps> = ({ api, method, type }) => {
   return (
     <Box py="large">
       <SpaceVertical mb="medium">
-        <Heading2 as="h2" fontWeight="semiBold">
+        <ApixHeading as="h2" fontWeight="semiBold">
           Language SDK declarations
-        </Heading2>
+        </ApixHeading>
       </SpaceVertical>
       <TabList {...tabs}>
         {Object.keys(generators).map((language) => (

@@ -25,6 +25,7 @@
  */
 import React from 'react'
 import { screen } from '@testing-library/react'
+import { withThemeProvider } from '@looker/components-test-utils'
 
 import { api } from '../../test-data'
 import { renderWithSearchAndRouter } from '../../test-utils'
@@ -33,12 +34,14 @@ import { SideNavTypes } from './SideNavTypes'
 describe('SideNavTypes', () => {
   test('it renders provided types', () => {
     renderWithSearchAndRouter(
-      <SideNavTypes
-        specKey={'3.1'}
-        types={{
-          Dashboard: api.types.Dashboard,
-        }}
-      />
+      withThemeProvider(
+        <SideNavTypes
+          specKey={'3.1'}
+          types={{
+            Dashboard: api.types.Dashboard,
+          }}
+        />
+      )
     )
     const dashboardType = screen.getByRole('link')
     expect(dashboardType).toHaveAttribute('href', '/3.1/types/Dashboard')
@@ -46,12 +49,14 @@ describe('SideNavTypes', () => {
 
   test('it highlights text matching search pattern', () => {
     renderWithSearchAndRouter(
-      <SideNavTypes
-        specKey={'3.1'}
-        types={{
-          Dashboard: api.types.Dashboard,
-        }}
-      />,
+      withThemeProvider(
+        <SideNavTypes
+          specKey={'3.1'}
+          types={{
+            Dashboard: api.types.Dashboard,
+          }}
+        />
+      ),
       'dash'
     )
     const match = screen.getByText(/dash/i)

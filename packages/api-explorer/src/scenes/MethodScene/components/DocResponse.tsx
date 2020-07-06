@@ -27,7 +27,6 @@
 import React, { FC } from 'react'
 import {
   Box,
-  Heading,
   MessageBar,
   SpaceVertical,
   Tab,
@@ -39,10 +38,9 @@ import {
   TableRow,
   useTabs,
 } from '@looker/components'
-import styled from 'styled-components'
 import { IMethodResponse } from '@looker/sdk-codegen'
 
-import { DocCode } from '../../../components'
+import { ApixHeading, DocCode } from '../../../components'
 import { copyAndCleanResponse } from '../utils'
 
 /*
@@ -64,19 +62,13 @@ interface DocResponseProps {
   responses: IMethodResponse[]
 }
 
-const Heading2 = styled(Heading)`
-  color: ${({ theme }) => theme.colors.text2};
-`
-
 export const DocResponse: FC<DocResponseProps> = ({ responses }) => {
   const tabs = useTabs()
 
   return (
     <Box pt="large" pb="xxlarge">
       <SpaceVertical mb="medium">
-        <Heading2 as="h2" fontWeight="semiBold">
-          Responses
-        </Heading2>
+        <ApixHeading as="h2">Responses</ApixHeading>
       </SpaceVertical>
       <TabList {...tabs}>
         {responses.map((response, index) => (
