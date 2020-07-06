@@ -34,7 +34,22 @@ interface MethodBadgeProps {
   alignTextCenter?: boolean
 }
 
-function getMethodColor(method: HttpMethod) {
+export const MethodBadge: FC<MethodBadgeProps> = ({
+  alignTextCenter,
+  httpMethod,
+  compact,
+  ...props
+}) => (
+  <MethodBadgeInternal
+    alignTextCenter={alignTextCenter}
+    compact={compact}
+    httpMethod={httpMethod}
+  >
+    {props.children}
+  </MethodBadgeInternal>
+)
+
+export const getMethodColor = (method: HttpMethod) => {
   switch (method) {
     case 'DELETE':
       return 'critical'
@@ -79,18 +94,3 @@ const MethodBadgeInternal = styled.div<MethodBadgeProps>`
   text-align: ${(props) => (props.alignTextCenter ? 'center' : 'left')};
   min-width: 2.5rem;
 `
-
-export const MethodBadge: FC<MethodBadgeProps> = ({
-  alignTextCenter,
-  httpMethod,
-  compact,
-  ...props
-}) => (
-  <MethodBadgeInternal
-    alignTextCenter={alignTextCenter}
-    compact={compact}
-    httpMethod={httpMethod}
-  >
-    {props.children}
-  </MethodBadgeInternal>
-)
