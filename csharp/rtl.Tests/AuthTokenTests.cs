@@ -39,5 +39,35 @@ namespace sdkrtl.Tests
             Assert.Equal(token.token_type, actual.token_type);
             Assert.True(actual.IsActive());
         }
+        
+        /// <summary>
+        /// Verify 10 second lag time is in effect
+        /// </summary>
+        [Fact]
+        public void LagTimeTest()
+        {
+            var token = new AccessToken
+            {
+                access_token = "all-access",
+                expires_in = 9,
+                token_type = "backstage"
+            };
+            var actual = new AuthToken(token);
+            Assert.Equal(token.access_token, actual.access_token);
+            Assert.Equal(token.expires_in, actual.expires_in);
+            Assert.Equal(token.token_type, actual.token_type);
+            Assert.False(actual.IsActive());
+            token = new AccessToken
+            {
+                access_token = "all-access",
+                expires_in = 11,
+                token_type = "backstage"
+            };
+            actual = new AuthToken(token);
+            Assert.Equal(token.access_token, actual.access_token);
+            Assert.Equal(token.expires_in, actual.expires_in);
+            Assert.Equal(token.token_type, actual.token_type);
+            Assert.True(actual.IsActive());
+        }
     }
 }

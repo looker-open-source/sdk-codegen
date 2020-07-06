@@ -38,6 +38,8 @@ protocol AccessTokenProtocol {
 //}
 
 struct AuthToken: AccessTokenProtocol, Codable {
+    /// Lag time is 10 seconds
+    static let lagTime = 10
     var access_token: String = ""
     var token_type: String = ""
     var expires_in: Int64 = 0
@@ -59,7 +61,7 @@ struct AuthToken: AccessTokenProtocol, Codable {
     }
     
     static func expiryDate(_ inSeconds: Int) -> Date {
-        let interval = inSeconds > 0 ? inSeconds : -10
+        let interval = inSeconds > 0 ? inSeconds - lagTime : -lagTime
         return Date.init(timeIntervalSinceNow: TimeInterval(interval))
     }
     

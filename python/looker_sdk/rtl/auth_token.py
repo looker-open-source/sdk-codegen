@@ -43,11 +43,12 @@ class AuthToken:
     def __init__(
         self, token: Optional[Union[models31.AccessToken, models40.AccessToken]] = None
     ):
+        self.lag_time = 10
         self.access_token: str = ""
         self.refresh_token: str = ""
         self.token_type: str = ""
         self.expires_in: int = 0
-        self.expires_at = datetime.datetime.now()
+        self.expires_at = datetime.datetime.now() + datetime.timedelta(seconds=-self.lag_time)
         if token is None:
             token = token_model()
         self.set_token(token)
@@ -60,14 +61,10 @@ class AuthToken:
         self.token_type = token.token_type or ""
         self.expires_in = token.expires_in or 0
 
-        exp = datetime.datetime.now()
-
+        lag = datetime.timedelta(seconds=-self.lag_time)
         if token.access_token and token.expires_in:
-            exp = exp + datetime.timedelta(seconds=token.expires_in)
-        else:
-            # set to expire 10 seconds ago
-            exp = exp + datetime.timedelta(seconds=-10)
-        self.expires_at = exp
+            lag = datetime.timedelta(seconds=token.expires_in - self.lag_time)
+        self.expires_at = datetime.datetime.now() + lag
 
     @property
     def is_active(self) -> bool:

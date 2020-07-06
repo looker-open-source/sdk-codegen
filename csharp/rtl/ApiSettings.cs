@@ -69,16 +69,26 @@ namespace Looker.RTL
         public IValues ReadConfig(string sectionName = null)
         {
             var parser = new FileIniDataParser();
-            var data = parser.ReadFile(FileName);
-            sectionName ??= SectionName;
-            var section = data[sectionName];
             IValues result = new Values();
-            foreach (var pair in section)
+            if (File.Exists(FileName))
             {
-                result[pair.KeyName] = pair.Value;
+                var data = parser.ReadFile(FileName);
+                sectionName ??= SectionName;
+                var section = data[sectionName];
+                // TODO: figure out how to make section.toDictionary() work
+                foreach (var pair in section)
+                {
+                    result[pair.KeyName] = pair.Value;
+                }
+            }
+            else
+            {
+                result["agentTag"] = AgentTag;
+                result["base_url"] = BaseUrl;
+                result["timeout"] = Timeout;
+                result["verify_ssl"] = VerifySsl;
             }
 
-            // TODO: figure out how to make section.toDictionary() work
             return result;
         }
 

@@ -39,14 +39,14 @@ data class AuthToken(
         var refreshToken: String? = null) {
 
     var expiresAt: LocalDateTime = LocalDateTime.now()
+    /** Lag time of 10 seconds */
+    val lagTime: Long = 10
 
 //    constructor(token: AuthToken) : this(token.accessToken, token.tokenType, token.expiresIn, token.expiresAt, token.refreshToken)
     constructor(token: AccessToken) : this(token.access_token!!, token.token_type!!, token.expires_in!!.toLong(), token.refresh_token)
 
     init {
-        if (expiresIn > 0) {
-            expiresAt = LocalDateTime.now().plusSeconds(expiresIn)
-        }
+        expiresAt = LocalDateTime.now().plusSeconds(if (expiresIn > 0) expiresIn - lagTime else -lagTime)
     }
 
     fun isActive(): Boolean {

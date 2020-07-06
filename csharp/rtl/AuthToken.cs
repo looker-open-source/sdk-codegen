@@ -33,6 +33,7 @@ namespace Looker.RTL
     /// </summary>
     public class AuthToken: IAccessToken
     {
+        private static long lagTime = 10;
         public string? access_token { get; set; }
         public string? token_type { get; set; }
 
@@ -40,7 +41,7 @@ namespace Looker.RTL
 
         public string? refresh_token { get; set; }
         // Give a 10 second expiration window to account for latency
-        public DateTime ExpiresAt { get; set; } = DateTime.Now.AddSeconds(-10);
+        public DateTime ExpiresAt { get; set; } = DateTime.Now.AddSeconds(-lagTime);
 
         public AuthToken() { }
 
@@ -66,9 +67,8 @@ namespace Looker.RTL
             }
 
             expires_in = token.expires_in;
-            if (token.access_token.IsNullOrEmpty()) return;
             access_token = token.access_token;
-            ExpiresAt = ExpiresAt.AddSeconds(expires_in);
+            ExpiresAt = DateTime.Now.AddSeconds(expires_in > 0 ? expires_in - lagTime : -lagTime);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Looker.RTL
         {
             access_token = null;
             expires_in = 0;
-            ExpiresAt = DateTime.Now.AddSeconds(-10);
+            ExpiresAt = DateTime.Now.AddSeconds(-lagTime);
             return this;
         }
     }
