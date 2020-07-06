@@ -23,12 +23,11 @@
  SOFTWARE.
 
  */
-import { Heading } from '@looker/components'
 import { ApiModel } from '@looker/sdk-codegen'
 import React, { FC } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { DocMarkdown } from '../../components'
+import { ApixHeading, DocMarkdown } from '../../components'
 
 interface DocHomeProps {
   api: ApiModel
@@ -43,12 +42,10 @@ export const HomeScene: FC<DocHomeProps> = ({ api }) => {
 
   return (
     <>
-      <Heading
+      <ApixHeading
         as="h1"
-        mb="xsmall"
         fontSize="xxxlarge"
-        fontWeight="semiBold"
-      >{`Looker API ${specKey} Reference`}</Heading>
+      >{`Looker API ${specKey} Reference`}</ApixHeading>
       <DocMarkdown source={api.schema?.info.description!} specKey={specKey} />
     </>
   )
