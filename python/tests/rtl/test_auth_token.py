@@ -46,3 +46,26 @@ def test_is_active_with_full_token():
     assert actual.token_type == "backstage"
     assert actual.expires_in == 3600
     assert actual.is_active is True
+
+
+def test_lag_time_is_used():
+    """Confirm active token when expiration is > lag time."""
+    actual = auth_token.AuthToken(
+        models.AccessToken(
+            access_token="all-access", token_type="backstage", expires_in=9
+        )
+    )
+
+    assert actual.access_token == "all-access"
+    assert actual.token_type == "backstage"
+    assert actual.expires_in == 9
+    assert actual.is_active is False
+
+    actual = auth_token.AuthToken(
+        models.AccessToken(
+            access_token="all-access", token_type="backstage", expires_in=11
+        )
+    )
+
+    assert actual.expires_in == 11
+    assert actual.is_active is True

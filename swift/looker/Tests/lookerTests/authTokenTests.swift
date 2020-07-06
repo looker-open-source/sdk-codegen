@@ -40,4 +40,11 @@ class authTokenTests: XCTestCase {
         }
     }
     
+    func testLagTime() {
+        var actual = AuthToken(AccessToken(access_token: "thisismytoken", token_type: "Bearer", expires_in: 9))
+        XCTAssertEqual(actual.isActive(), false, "9 seconds should be inactive")
+        actual = AuthToken(AccessToken(access_token: "thisismytoken", token_type: "Bearer", expires_in: 11))
+        XCTAssertEqual(actual.isActive(), true, "11 seconds should be inactive")
+
+    }
 }

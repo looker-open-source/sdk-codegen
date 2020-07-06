@@ -27,6 +27,8 @@
 import { IAccessToken } from '../sdk/4.0/models'
 
 export class AuthToken implements IAccessToken {
+  /** set the server response lag time to 10 seconds */
+  lagTime = 10
   access_token = ''
   token_type = ''
   refresh_token?: string
@@ -58,9 +60,9 @@ export class AuthToken implements IAccessToken {
     }
     const exp = new Date()
     if (this.access_token && this.expires_in) {
-      exp.setSeconds(exp.getSeconds() + this.expires_in)
+      exp.setSeconds(exp.getSeconds() + this.expires_in - this.lagTime)
     } else {
-      exp.setSeconds(exp.getSeconds() - 10) // set to expire 10 seconds ago
+      exp.setSeconds(exp.getSeconds() - this.lagTime) // set to expire 'lagTime' ago
     }
     this.expiresAt = exp
     return this
