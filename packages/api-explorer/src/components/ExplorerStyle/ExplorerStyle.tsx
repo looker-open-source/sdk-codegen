@@ -144,7 +144,7 @@ export const PageLayout = styled.div<SideNavStyleProps>`
     font-size: ${({ theme }) => theme.fontSizes.small};
 
     & {
-      border-radius: 4px;
+      border-radius: ${({ theme: { radii }}) => radii.medum};;
       display: flex;
       align-items: center;
       padding: ${({ theme }) => theme.space.xsmall};
