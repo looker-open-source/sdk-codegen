@@ -38,6 +38,6 @@ export const DocPrimaryResponse: FC<DocPrimaryResponseProps> = ({
     content={`${response.description} ${response.mediaType}`}
     placement="bottom"
   >
-    {response.type.name}
+    <span>{response.type.name}</span>
   </Tooltip>
 )
