@@ -23,18 +23,57 @@
  SOFTWARE.
 
  */
-import { Code } from '@looker/components'
 import styled from 'styled-components'
+import {
+  Code,
+  CodeBlock,
+  Heading,
+  List,
+  Paragraph,
+  Table,
+} from '@looker/components'
 
-export const StyledCode = styled(Code)`
+/**
+ * Common styled components to be used across the whole library
+ */
+export const ApixCode = styled(Code)`
   background-color: ${({ theme }) => theme.colors.ui1};
   border: 1px solid ${({ theme }) => theme.colors.ui2};
   border-radius: 4px;
 `
-
-StyledCode.defaultProps = {
+ApixCode.defaultProps = {
   fontSize: 'small',
   mb: 'large',
   pl: 'xxsmall',
   pr: 'xxsmall',
+}
+
+export const ApixHeading = styled(Heading)`
+  color: ${({ theme }) => theme.colors.text2};
+`
+ApixHeading.defaultProps = {
+  fontWeight: 'semiBold',
+  mb: 'xsmall',
+  pt: 'xsmall',
+}
+
+export const ApixList = styled(List)``
+ApixList.defaultProps = {
+  mb: 'large',
+}
+
+export const ApixParagraph = styled(Paragraph)`
+  color: ${({ theme }) => theme.colors.text2};
+`
+ApixParagraph.defaultProps = {
+  mb: 'large',
+}
+
+export const ApixTable = styled(Table)``
+ApixTable.defaultProps = { mb: 'large' }
+
+export const ApixCodeBlock = styled(CodeBlock)``
+ApixCodeBlock.defaultProps = {
+  fontSize: 'large',
+  mb: 'larger',
 }

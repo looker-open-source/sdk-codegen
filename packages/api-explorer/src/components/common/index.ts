@@ -23,14 +23,11 @@
  SOFTWARE.
 
  */
-import React, { FC, PropsWithChildren } from 'react'
-import { CodeBlock } from '@looker/components'
-import styled from 'styled-components'
-
-export const StyledCodeBlock = styled(CodeBlock)``
-
-StyledCodeBlock.defaultProps = { fontSize: 'large', mb: 'large' }
-
-export const CodeBlockWrapper: FC<PropsWithChildren<any>> = (props) => (
-  <StyledCodeBlock>{props.value}</StyledCodeBlock>
-)
+export {
+  ApixCode,
+  ApixCodeBlock,
+  ApixHeading,
+  ApixList,
+  ApixParagraph,
+  ApixTable,
+} from './common'

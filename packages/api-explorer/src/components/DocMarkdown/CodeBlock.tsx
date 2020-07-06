@@ -23,15 +23,9 @@
  SOFTWARE.
 
  */
-import { Heading } from '@looker/components'
-import styled from 'styled-components'
+import React, { FC, PropsWithChildren } from 'react'
+import { ApixCodeBlock } from '../common'
 
-export const StyledHeading = styled(Heading)`
-  color: ${({ theme }) => theme.colors.text2};
-`
-
-StyledHeading.defaultProps = {
-  fontWeight: 'semiBold',
-  mb: 'xsmall',
-  pt: 'xsmall',
-}
+export const CodeBlock: FC<PropsWithChildren<any>> = (props) => (
+  <ApixCodeBlock>{props.value}</ApixCodeBlock>
+)
