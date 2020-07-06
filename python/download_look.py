@@ -2,9 +2,10 @@ import sys
 import textwrap
 import time
 
-import exceptions
 import looker_sdk
 from looker_sdk import models
+
+import sdk_exceptions
 
 sdk = looker_sdk.init31("../looker.ini")
 
@@ -21,7 +22,7 @@ def main():
     image_format = sys.argv[4] if len(sys.argv) > 4 else "png"
 
     if not look_title:
-        raise exceptions.ArgumentError(
+        raise sdk_exceptions.ArgumentError(
             textwrap.dedent(
                 """
                 Please provide: <lookTitle> [<img_width>] [<img_height>] [<img_format>]
@@ -39,7 +40,7 @@ def get_look(title: str) -> models.Look:
     title = title.lower()
     look = next(iter(sdk.search_looks(title=title)), None)
     if not look:
-        raise exceptions.NotFoundError(f"look '{title}' was not found")
+        raise sdk_exceptions.NotFoundError(f"look '{title}' was not found")
     assert isinstance(look, models.Look)
     return look
 
@@ -51,7 +52,7 @@ def download_look(look: models.Look, result_format: str, width: int, height: int
     task = sdk.create_look_render_task(id, result_format, width, height,)
 
     if not (task and task.id):
-        raise exceptions.RenderTaskError(
+        raise sdk_exceptions.RenderTaskError(
             f"Could not create a render task for '{look.title}'"
         )
 
@@ -62,7 +63,7 @@ def download_look(look: models.Look, result_format: str, width: int, height: int
         poll = sdk.render_task(task.id)
         if poll.status == "failure":
             print(poll)
-            raise exceptions.RenderTaskError(f"Render failed for '{look.title}'")
+            raise sdk_exceptions.RenderTaskError(f"Render failed for '{look.title}'")
         elif poll.status == "success":
             break
         time.sleep(delay)

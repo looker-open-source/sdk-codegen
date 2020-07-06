@@ -1,10 +1,11 @@
-import exceptions
 import json
 import sys
 from typing import cast, Dict, List, Union
 
 import looker_sdk
 from looker_sdk import models, error
+
+import sdk_exceptions
 
 sdk = looker_sdk.init31("../looker.ini")
 
@@ -24,7 +25,7 @@ def main() -> None:
     filters: Dict[str, str] = {}
 
     if not (look_id and len(sys.argv[2:]) > 0 and len(sys.argv[2:]) % 2 == 0):
-        raise exceptions.ArgumentError(
+        raise sdk_exceptions.ArgumentError(
             "Please provide: <lookId> <filter_1> <filter_value_1> "
             "<filter_2> <filter_value_2> ..."
         )
@@ -43,7 +44,7 @@ def get_look_query(id: int) -> models.Query:
     try:
         look = sdk.look(id)
     except error.SDKError:
-        raise exceptions.NotFoundError(f"Error getting Look {id}")
+        raise sdk_exceptions.NotFoundError(f"Error getting Look {id}")
     else:
         query = look.query
         assert isinstance(query, models.Query)
@@ -59,7 +60,7 @@ def run_query_with_filter(query: models.Query, filters: Dict[str, str]) -> TJson
     try:
         json_ = sdk.run_inline_query("json", request, cache=False)
     except error.SDKError:
-        raise exceptions.RunInlineQueryError("Error running query")
+        raise sdk_exceptions.RunInlineQueryError("Error running query")
     else:
         json_resp = cast(TJson, json.loads(json_))
     return json_resp

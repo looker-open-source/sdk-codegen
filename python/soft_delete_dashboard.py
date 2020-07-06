@@ -1,10 +1,10 @@
 import sys
 from typing import Sequence
 
-import exceptions
 import looker_sdk
 from looker_sdk import error, models
 
+import sdk_exceptions
 
 sdk = looker_sdk.init31("../looker.ini")
 
@@ -19,7 +19,7 @@ def main():
     dashboard_title = sys.argv[1] if len(sys.argv) > 1 else ""
 
     if not dashboard_title:
-        raise exceptions.ArgumentError("Please provide: <dashboardTitle>")
+        raise sdk_exceptions.ArgumentError("Please provide: <dashboardTitle>")
 
     dashboards = get_dashboards(dashboard_title)
     delete_dashboards(dashboards)
@@ -30,7 +30,7 @@ def get_dashboards(title: str) -> Sequence[models.Dashboard]:
     lc_title = title.lower()
     results = sdk.search_dashboards(title=lc_title)
     if not results:
-        raise exceptions.NotFoundError(f'dashboard "{title}" not found')
+        raise sdk_exceptions.NotFoundError(f'dashboard "{title}" not found')
     assert isinstance(results, Sequence)
     return results
 

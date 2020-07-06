@@ -5,9 +5,10 @@ import textwrap
 import time
 from typing import cast, Dict, Optional
 
-import exceptions
 import looker_sdk
 from looker_sdk import models
+
+import sdk_exceptions
 
 sdk = looker_sdk.init31("../looker.ini")
 
@@ -28,7 +29,7 @@ def main():
     pdf_height = int(sys.argv[5]) if len(sys.argv) > 5 else 842
 
     if not dashboard_title:
-        raise exceptions.ArgumentError(
+        raise sdk_exceptions.ArgumentError(
             textwrap.dedent(
                 """
                 Please provide: <dashboard_title> [<dashboard_filters>] [<dashboard_style>] [<pdf_width>] [<pdf_height>]
@@ -47,7 +48,7 @@ def get_dashboard(title: str) -> Optional[models.Dashboard]:
     title = title.lower()
     dashboard = next(iter(sdk.search_dashboards(title=title)), None)
     if not dashboard:
-        raise exceptions.NotFoundError(f'dashboard "{title}" not found')
+        raise sdk_exceptions.NotFoundError(f'dashboard "{title}" not found')
     assert isinstance(dashboard, models.Dashboard)
     return dashboard
 
@@ -74,7 +75,7 @@ def download_dashboard(
     )
 
     if not (task and task.id):
-        raise exceptions.RenderTaskError(
+        raise sdk_exceptions.RenderTaskError(
             f'Could not create a render task for "{dashboard.title}"'
         )
 
@@ -85,7 +86,9 @@ def download_dashboard(
         poll = sdk.render_task(task.id)
         if poll.status == "failure":
             print(poll)
-            raise exceptions.RenderTaskError(f'Render failed for "{dashboard.title}"')
+            raise sdk_exceptions.RenderTaskError(
+                f'Render failed for "{dashboard.title}"'
+            )
         elif poll.status == "success":
             break
 

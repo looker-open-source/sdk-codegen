@@ -2,11 +2,10 @@ from functools import reduce
 import sys
 from typing import cast, MutableSequence, Sequence
 
-import exceptions
-
 import looker_sdk
 from looker_sdk import models
 
+import sdk_exceptions
 
 sdk = looker_sdk.init31("../looker.ini")
 
@@ -19,9 +18,9 @@ def main():
     connection_name = sys.argv[1] if len(sys.argv) > 1 else ""
 
     if not connection_name:
-        raise exceptions.ArgumentError("Please provide a connection name")
+        raise sdk_exceptions.ArgumentError("Please provide a connection name")
     elif connection_name in ["looker", "looker__internal__analytics"]:
-        raise exceptions.ArgumentError(
+        raise sdk_exceptions.ArgumentError(
             f"Connection '{connection_name}' is internal and cannot be tested."
         )
 
