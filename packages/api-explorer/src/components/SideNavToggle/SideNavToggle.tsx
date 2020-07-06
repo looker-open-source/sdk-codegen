@@ -26,23 +26,19 @@
 
 import React, { FC } from 'react'
 import { IconButton, IconNames } from '@looker/components'
-import styled from 'styled-components'
+
+import { SideNavToggleWrapper } from '../ExplorerStyle'
 
 interface SideNavToggleProps {
   isOpen: boolean
   onClick: () => void
-  headerHeight: string
 }
 
-export const SideNavToggle: FC<SideNavToggleProps> = ({
-  isOpen,
-  onClick,
-  headerHeight,
-}) => {
+export const SideNavToggle: FC<SideNavToggleProps> = ({ isOpen, onClick }) => {
   const iconName: IconNames = isOpen ? 'CaretLeft' : 'CaretRight'
 
   return (
-    <SideNavToggleWrapper headerHeight={headerHeight}>
+    <SideNavToggleWrapper>
       <IconButton
         shape="round"
         icon={iconName}
@@ -55,18 +51,3 @@ export const SideNavToggle: FC<SideNavToggleProps> = ({
     </SideNavToggleWrapper>
   )
 }
-
-interface WrapperProps {
-  headerHeight?: string
-}
-
-const SideNavToggleWrapper = styled.div<WrapperProps>`
-  position: relative;
-  margin-top: calc(${(props) => props.headerHeight} / 2);
-
-  ${IconButton} {
-    background: #fff;
-    transform: translateX(-50%) translateY(-50%);
-    position: fixed;
-  }
-`
