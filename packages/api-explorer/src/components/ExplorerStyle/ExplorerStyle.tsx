@@ -57,7 +57,7 @@ export const SideNavToggleWrapper = styled.div<SideNavWrapperProps>`
   margin-top: ${parseInt(HEADER_HEIGHT, 10) / 2};
 
   ${IconButton} {
-    background: #fff;
+    background: ${({ theme: { colors }}) => colors.background };
     transform: translateX(-50%) translateY(-50%);
     position: fixed;
   }
