@@ -27,6 +27,7 @@
 import React, { FC, useContext } from 'react'
 import { TypeList, IntrinsicType } from '@looker/sdk-codegen'
 import { NavLink } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { buildTypePath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
@@ -36,6 +37,24 @@ interface TypeProps {
   specKey: string
   types: TypeList
 }
+
+const SideNavTypesLink = styled(NavLink)`
+  cursor: pointer;
+  display: block;
+  padding: ${({
+    theme: {
+      space: { xsmall, large },
+    },
+  }) => `${xsmall} ${large}`};
+
+  &:hover,
+  &:focus,
+  &.active {
+    ${ApixHeading} {
+      color: ${({ theme }) => theme.colors.key};
+    }
+  }
+`
 
 export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
   const {
@@ -47,11 +66,14 @@ export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
       {Object.values(types)
         .filter((type) => !(type instanceof IntrinsicType))
         .map((type) => (
-          <NavLink key={type.name} to={buildTypePath(specKey, type.name)}>
-            <ApixHeading as="h5" mb="0" pt="0" fontWeight="light" truncate>
+          <SideNavTypesLink
+            key={type.name}
+            to={buildTypePath(specKey, type.name)}
+          >
+            <ApixHeading as="h5" mb="0" pt="0" fontWeight="semiBold" truncate>
               {highlightHTML(pattern, type.name)}
             </ApixHeading>
-          </NavLink>
+          </SideNavTypesLink>
         ))}
     </>
   )

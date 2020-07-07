@@ -29,6 +29,7 @@ import {
   Accordion,
   AccordionContent,
   AccordionDisclosure,
+  Icon,
   Space,
   ListItem,
   List,
@@ -48,11 +49,17 @@ interface MethodsProps {
   specKey: string
 }
 
-const StyledDisclosure = styled(AccordionDisclosure)<{ isOpen: boolean }>`
+const SideNavDisclosure = styled(AccordionDisclosure)<{ isOpen: boolean }>`
   padding-left: ${({ theme }) => theme.space.large};
   padding-right: ${({ theme }) => theme.space.large};
 
-  /*background-color: ${(props) => (props.isOpen ? 'green' : 'yellow')};*/
+  color: ${(props) =>
+    props.isOpen ? ({ theme }) => theme.colors.key : 'inherit'};
+
+  ${Icon} {
+    color: ${(props) =>
+      props.isOpen ? ({ theme }) => theme.colors.key : 'inherit'};
+  }
 
   &:hover,
   &:focus {
@@ -60,7 +67,7 @@ const StyledDisclosure = styled(AccordionDisclosure)<{ isOpen: boolean }>`
   }
 `
 
-const DashedBorderContent = styled.div`
+const SideNavContent = styled.div`
   padding: ${({
     theme: {
       space: { xxsmall, large },
@@ -68,21 +75,35 @@ const DashedBorderContent = styled.div`
   }) => `${xxsmall} ${large}`};
 `
 
-const StyledList = styled(List)`
+const SideNavList = styled(List)`
   border-left: dashed 1px ${({ theme }) => theme.colors.ui2};
-  padding-left: ${({ theme }) => theme.space.xxsmall};
+  padding: ${({ theme }) => theme.space.xxsmall} 0
+    ${({ theme }) => theme.space.xxsmall} ${({ theme }) => theme.space.xxsmall};
 `
 
-const StyledListItem = styled(ListItem)`
+const SideNavListItem = styled(ListItem)`
+  margin-bottom: 0;
+
   a {
     border-radius: ${({ theme: { radii } }) => radii.medium};
+    cursor: pointer;
     display: block;
-    padding: ${({ theme }) => theme.space.xxsmall};
+    padding: ${({ theme }) => theme.space.xsmall};
 
     &:hover,
     &:focus,
     &.active {
       background-color: ${({ theme }) => theme.colors.ui1};
+
+      ${MethodBadge} {
+        border: solid 1px ${({ theme }) => theme.colors.ui2};
+      }
+    }
+
+    &.active {
+      ${ApixHeading} {
+        font-weight: ${({ theme }) => theme.fontWeights.semiBold};
+      }
     }
   }
 `
@@ -100,14 +121,14 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
 
   return (
     <Accordion isOpen={isOpen} toggleOpen={setIsOpen}>
-      <StyledDisclosure isOpen={isOpen}>
+      <SideNavDisclosure isOpen={isOpen}>
         {highlightHTML(pattern, tag)}
-      </StyledDisclosure>
+      </SideNavDisclosure>
       <AccordionContent>
-        <DashedBorderContent>
-          <StyledList>
+        <SideNavContent>
+          <SideNavList>
             {Object.values(methods).map((method) => (
-              <StyledListItem key={method.name}>
+              <SideNavListItem key={method.name}>
                 <NavLink to={buildMethodPath(specKey, tag, method.name)}>
                   <Space gap="xsmall">
                     <MethodBadge
@@ -121,17 +142,17 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
                       as="h5"
                       mb="0"
                       pt="0"
-                      fontWeight="light"
+                      fontWeight="normal"
                       truncate
                     >
                       {highlightHTML(pattern, method.summary)}
                     </ApixHeading>
                   </Space>
                 </NavLink>
-              </StyledListItem>
+              </SideNavListItem>
             ))}
-          </StyledList>
-        </DashedBorderContent>
+          </SideNavList>
+        </SideNavContent>
       </AccordionContent>
     </Accordion>
   )

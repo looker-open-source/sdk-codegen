@@ -89,7 +89,10 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs, tryItCallback }) => {
               isOpen={isSideNavOpen}
             />
           </SideNavDivider>
-          <Box className={isSideNavOpen ? 'main doc open' : 'main doc'}>
+          <Box
+            className={isSideNavOpen ? 'main doc open' : 'main doc'}
+            p="xxlarge"
+          >
             <AppRouter
               api={spec.api}
               specKey={spec.key}

@@ -25,13 +25,7 @@
  */
 
 import styled, { css, createGlobalStyle } from 'styled-components'
-import {
-  Flex,
-  IconButton,
-  Sidebar,
-  SidebarGroup,
-  SidebarItem,
-} from '@looker/components'
+import { Flex, IconButton, Sidebar } from '@looker/components'
 
 export const HEADER_HEIGHT = '66px'
 
@@ -93,18 +87,6 @@ export const PageLayout = styled.div<SideNavStyleProps>`
     width: 20rem;
     z-index: 0;
     padding: 0 ${({ theme }) => theme.space.medium};
-
-    button {
-      color: ${({ theme }) => theme.colors.text1};
-      cursor: pointer;
-      min-height: 2.25rem;
-
-      &:hover,
-      &:focus,
-      &[aria-expanded='true'] {
-        color: ${({ theme }) => theme.colors.key};
-      }
-    }
   }
 
   .codeMarker {
@@ -116,46 +98,6 @@ export const PageLayout = styled.div<SideNavStyleProps>`
     background: yellow;
   }
 
-  .main {
-    padding: ${({ theme }) => theme.space.xxlarge};
-  }
-
-  ${SidebarGroup} {
-    > div {
-      border-left: 1px dashed ${({ theme }) => theme.colors.ui2};
-      padding: ${({
-        theme: {
-          space: { xxsmall, xsmall },
-        },
-      }) => `${xxsmall} 0 ${xxsmall} ${xsmall}`};
-    }
-
-    .active > span {
-      background-color: ${({ theme }) => theme.colors.ui1};
-      font-weight: ${({ theme }) => theme.fontWeights.semiBold};
-
-      div > div {
-        border: 1px solid ${({ theme }) => theme.colors.ui2};
-      }
-    }
-  }
-
-  ${SidebarItem} {
-    font-size: ${({ theme }) => theme.fontSizes.small};
-
-    & {
-      border-radius: ${({ theme: { radii } }) => radii.medium};
-      display: flex;
-      align-items: center;
-      padding: ${({ theme }) => theme.space.xsmall};
-    }
-
-    &:hover,
-    &:focus {
-      background-color: ${({ theme }) => theme.colors.ui1};
-    }
-  }
-
   .doc {
     grid-area: main;
   }
@@ -163,9 +105,9 @@ export const PageLayout = styled.div<SideNavStyleProps>`
 
 const reset = css`
   html {
-    color: #4c535b;
+    color: ${({ theme }) => theme.colors.text1};
     font-size: 100%;
-    font-weight: 400;
+    font-weight: ${({ theme }) => theme.fontWeights.normal};
   }
 
   html,

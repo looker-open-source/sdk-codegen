@@ -34,19 +34,8 @@ interface MethodBadgeProps {
   alignTextCenter?: boolean
 }
 
-export const MethodBadge: FC<MethodBadgeProps> = ({
-  alignTextCenter,
-  httpMethod,
-  compact,
-  ...props
-}) => (
-  <MethodBadgeInternal
-    alignTextCenter={alignTextCenter}
-    compact={compact}
-    httpMethod={httpMethod}
-  >
-    {props.children}
-  </MethodBadgeInternal>
+const MethodBadgeInternal: FC<MethodBadgeProps> = ({ ...props }) => (
+  <div {...props}>{props.children}</div>
 )
 
 export const getMethodColor = (method: HttpMethod) => {
@@ -82,7 +71,7 @@ const badgeIntent = (intent: BadgeIntent) =>
     color: ${({ theme }) => generatePressed(theme.colors[intent])};
   `
 
-const MethodBadgeInternal = styled.div<MethodBadgeProps>`
+export const MethodBadge = styled(MethodBadgeInternal)<MethodBadgeProps>`
   ${(props) => badgeIntent(getMethodColor(props.httpMethod))};
   border: 1px solid transparent;
   border-radius: 4px;
