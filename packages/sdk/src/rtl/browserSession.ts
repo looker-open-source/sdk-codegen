@@ -25,12 +25,7 @@
  */
 
 import { BrowserTransport } from './browserTransport'
-import {
-  ITransport,
-  IRequestProps,
-  LookerAppId,
-  agentPrefix,
-} from './transport'
+import { ITransport, IRequestProps, LookerAppId } from './transport'
 import { IApiSettings } from './apiSettings'
 import { AuthToken } from './authToken'
 import { OAuthSession } from './oauthSession'
@@ -93,7 +88,7 @@ export class BrowserSession extends OAuthSession {
         /** Provide the authentication information */
         Authorization: `Bearer ${this.activeToken.access_token}`,
         /** Identify the SDK */
-        [LookerAppId]: agentPrefix,
+        [LookerAppId]: this.settings.agentTag,
       }
     }
 

@@ -26,7 +26,7 @@
 
 import { IAccessToken, IError } from '..'
 import { AuthSession } from './authSession'
-import { IRequestProps, sdkError } from './transport'
+import { agentPrefix, IRequestProps, sdkError } from './transport'
 import { AuthToken } from './authToken'
 import { ICryptoHash } from './cryptoHash'
 import { IPlatformServices } from './platformServices'
@@ -85,6 +85,27 @@ export class OAuthSession extends AuthSession {
     return props
   }
 
+  async login(_sudoId?: string | number): Promise<any> {
+    if (!this.isAuthenticated()) {
+      const authUrl = await this.createAuthCodeRequestUrl(
+        'cors_api',
+        agentPrefix
+      )
+      const response = await this.transport.rawRequest('POST', authUrl)
+      if (!response.ok) {
+        console.error({ response })
+      }
+      const params = new URLSearchParams(response.body.toString())
+      const code = params.get('code')
+      if (!code) {
+        console.error({ params })
+      }
+      await this.redeemAuthCode(code!)
+      return await this.getToken()
+    }
+    return this.activeToken
+  }
+
   private async requestToken(
     body: IAuthCodeGrantTypeParams | IRefreshTokenGrantTypeParams
   ) {
@@ -113,16 +134,17 @@ export class OAuthSession extends AuthSession {
   ): Promise<string> {
     this.code_verifier = this.crypto.secureRandom(32)
     const code_challenge = await this.crypto.sha256Hash(this.code_verifier)
+    const config = this.settings.readConfig()
     const params: Record<string, string> = {
-      client_id: this.settings.client_id,
+      client_id: config.client_id,
       code_challenge: code_challenge,
       code_challenge_method: 'S256',
-      redirect_uri: this.settings.redirect_uri,
+      redirect_uri: config.redirect_uri,
       response_type: 'code',
       scope: scope,
       state: state,
     }
-    const url = new URL(this.settings.looker_url)
+    const url = new URL(config.looker_url)
     url.pathname = '/auth'
     url.search = new URLSearchParams(params).toString()
     return url.toString()
@@ -130,12 +152,13 @@ export class OAuthSession extends AuthSession {
 
   redeemAuthCodeBody(authCode: string, codeVerifier?: string) {
     const verifier = codeVerifier || this.code_verifier || ''
+    const config = this.settings.readConfig()
     return {
-      client_id: this.settings.client_id,
+      client_id: config.client_id,
       code: authCode,
       code_verifier: verifier,
       grant_type: 'authorization_code',
-      redirect_uri: this.settings.redirect_uri,
+      redirect_uri: config.redirect_uri,
     } as IAuthCodeGrantTypeParams
   }
 
@@ -156,10 +179,11 @@ export class OAuthSession extends AuthSession {
   async getToken() {
     if (!this.isAuthenticated()) {
       if (this.activeToken.refresh_token) {
+        const config = this.settings.readConfig()
         await this.requestToken({
-          client_id: this.settings.client_id,
+          client_id: config.client_id,
           grant_type: 'refresh_token',
-          redirect_uri: this.settings.redirect_uri,
+          redirect_uri: config.redirect_uri,
           refresh_token: this.activeToken.refresh_token,
         })
       }
