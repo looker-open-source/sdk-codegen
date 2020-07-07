@@ -33,9 +33,10 @@ import {
   ListItem,
   List,
 } from '@looker/components'
+
+import styled from 'styled-components'
 import { MethodList } from '@looker/sdk-codegen'
 import { NavLink, useRouteMatch } from 'react-router-dom'
-
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
 import { MethodBadge } from '../MethodBadge'
@@ -46,6 +47,45 @@ interface MethodsProps {
   tag: string
   specKey: string
 }
+
+const StyledDisclosure = styled(AccordionDisclosure)<{ isOpen: boolean }>`
+  padding-left: ${({ theme }) => theme.space.large};
+  padding-right: ${({ theme }) => theme.space.large};
+
+  /*background-color: ${(props) => (props.isOpen ? 'green' : 'yellow')};*/
+
+  &:hover,
+  &:focus {
+    color: ${({ theme }) => theme.colors.key};
+  }
+`
+
+const DashedBorderContent = styled.div`
+  padding: ${({
+    theme: {
+      space: { xxsmall, large },
+    },
+  }) => `${xxsmall} ${large}`};
+`
+
+const StyledList = styled(List)`
+  border-left: dashed 1px ${({ theme }) => theme.colors.ui2};
+  padding-left: ${({ theme }) => theme.space.xxsmall};
+`
+
+const StyledListItem = styled(ListItem)`
+  a {
+    border-radius: ${({ theme: { radii } }) => radii.medium};
+    display: block;
+    padding: ${({ theme }) => theme.space.xxsmall};
+
+    &:hover,
+    &:focus,
+    &.active {
+      background-color: ${({ theme }) => theme.colors.ui1};
+    }
+  }
+`
 
 export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
   const {
@@ -60,34 +100,38 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
 
   return (
     <Accordion isOpen={isOpen} toggleOpen={setIsOpen}>
-      <AccordionDisclosure>{highlightHTML(pattern, tag)}</AccordionDisclosure>
+      <StyledDisclosure isOpen={isOpen}>
+        {highlightHTML(pattern, tag)}
+      </StyledDisclosure>
       <AccordionContent>
-        <List>
-          {Object.values(methods).map((method) => (
-            <ListItem key={method.name}>
-              <NavLink to={buildMethodPath(specKey, tag, method.name)}>
-                <Space gap="xsmall">
-                  <MethodBadge
-                    alignTextCenter
-                    compact
-                    httpMethod={method.httpMethod}
-                  >
-                    {method.httpMethod.toUpperCase()}
-                  </MethodBadge>
-                  <ApixHeading
-                    as="h5"
-                    mb="0"
-                    pt="0"
-                    fontWeight="light"
-                    truncate
-                  >
-                    {highlightHTML(pattern, method.summary)}
-                  </ApixHeading>
-                </Space>
-              </NavLink>
-            </ListItem>
-          ))}
-        </List>
+        <DashedBorderContent>
+          <StyledList>
+            {Object.values(methods).map((method) => (
+              <StyledListItem key={method.name}>
+                <NavLink to={buildMethodPath(specKey, tag, method.name)}>
+                  <Space gap="xsmall">
+                    <MethodBadge
+                      alignTextCenter
+                      compact
+                      httpMethod={method.httpMethod}
+                    >
+                      {method.httpMethod.toUpperCase()}
+                    </MethodBadge>
+                    <ApixHeading
+                      as="h5"
+                      mb="0"
+                      pt="0"
+                      fontWeight="light"
+                      truncate
+                    >
+                      {highlightHTML(pattern, method.summary)}
+                    </ApixHeading>
+                  </Space>
+                </NavLink>
+              </StyledListItem>
+            ))}
+          </StyledList>
+        </DashedBorderContent>
       </AccordionContent>
     </Accordion>
   )
