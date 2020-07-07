@@ -30,6 +30,8 @@ import {
   AccordionContent,
   AccordionDisclosure,
   Space,
+  ListItem,
+  List,
 } from '@looker/components'
 import { MethodList } from '@looker/sdk-codegen'
 import { NavLink, useRouteMatch } from 'react-router-dom'
@@ -59,24 +61,34 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
   return (
     <Accordion isOpen={isOpen} toggleOpen={setIsOpen}>
       <AccordionDisclosure>{highlightHTML(pattern, tag)}</AccordionDisclosure>
-      {Object.values(methods).map((method) => (
-        <AccordionContent key={method.name}>
-          <NavLink to={buildMethodPath(specKey, tag, method.name)}>
-            <Space gap="xsmall">
-              <MethodBadge
-                alignTextCenter
-                compact
-                httpMethod={method.httpMethod}
-              >
-                {method.httpMethod.toUpperCase()}
-              </MethodBadge>
-              <ApixHeading as="h5" mb="0" pt="0" fontWeight="light" truncate>
-                {highlightHTML(pattern, method.summary)}
-              </ApixHeading>
-            </Space>
-          </NavLink>
-        </AccordionContent>
-      ))}
+      <AccordionContent>
+        <List>
+          {Object.values(methods).map((method) => (
+            <ListItem key={method.name}>
+              <NavLink to={buildMethodPath(specKey, tag, method.name)}>
+                <Space gap="xsmall">
+                  <MethodBadge
+                    alignTextCenter
+                    compact
+                    httpMethod={method.httpMethod}
+                  >
+                    {method.httpMethod.toUpperCase()}
+                  </MethodBadge>
+                  <ApixHeading
+                    as="h5"
+                    mb="0"
+                    pt="0"
+                    fontWeight="light"
+                    truncate
+                  >
+                    {highlightHTML(pattern, method.summary)}
+                  </ApixHeading>
+                </Space>
+              </NavLink>
+            </ListItem>
+          ))}
+        </List>
+      </AccordionContent>
     </Accordion>
   )
 }
