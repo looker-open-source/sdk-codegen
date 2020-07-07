@@ -285,6 +285,17 @@ describe('sdkModels', () => {
       expect(type.properties.query_id.required).toEqual(true)
       expect(type.properties.result_format.required).toEqual(true)
       expect(type.properties.source.required).toEqual(false)
+      expect(Object.keys(type.requiredProperties)).toEqual([
+        'query_id',
+        'result_format',
+      ])
+      expect(Object.keys(type.optionalProperties)).toEqual([
+        'can',
+        'source',
+        'deferred',
+        'look_id',
+        'dashboard_id',
+      ])
     })
 
     it('WriteCreateQueryTask', () => {

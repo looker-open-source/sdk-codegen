@@ -26,7 +26,7 @@ import React, { FC } from 'react'
 import { typeRefs, methodRefs, ApiModel } from '@looker/sdk-codegen'
 import { useParams } from 'react-router-dom'
 
-import { DocReferences, DocSDKs, Main } from '../../components'
+import { DocReferences, DocSDKs } from '../../components'
 
 interface DocTypeProps {
   api: ApiModel
@@ -44,7 +44,7 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
   const seeMethods = methodRefs(api, type.methodRefs)
 
   return (
-    <Main>
+    <>
       {seeTypes.length > 0 && (
         <>
           Referenced types:
@@ -58,6 +58,6 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
         </>
       )}
       <DocSDKs type={type} api={api} />
-    </Main>
+    </>
   )
 }

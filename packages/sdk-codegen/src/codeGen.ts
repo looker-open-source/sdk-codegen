@@ -223,6 +223,10 @@ export abstract class CodeGen implements ICodeGen {
     return this.itself ? `${this.itself}.${value}` : value
   }
 
+  typeProperties(type: IType) {
+    return Object.values(type.properties)
+  }
+
   declareType(indent: string, type: IType) {
     const bump = this.bumper(indent)
     const props: string[] = []
@@ -235,7 +239,7 @@ export abstract class CodeGen implements ICodeGen {
         )
         propertyValues = props.join(this.enumDelimiter)
       } else {
-        Object.values(type.properties).forEach((prop) =>
+        this.typeProperties(type).forEach((prop) =>
           props.push(this.declareProperty(bump, prop))
         )
         propertyValues = props.join(this.propDelimiter)

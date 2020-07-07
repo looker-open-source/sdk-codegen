@@ -29328,6 +29328,44 @@
         },
         "x-looker-status": "beta"
       },
+      "RequiredResponseWithSingleEnum": {
+        "properties": {
+          "query_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Id of query to run",
+            "nullable": true
+          },
+          "result_format": {
+            "type": "string",
+            "x-looker-values": [
+              "inline_json",
+              "json",
+              "json_detail",
+              "json_fe",
+              "csv",
+              "html",
+              "md",
+              "txt",
+              "xlsx",
+              "gsxml"
+            ],
+            "description": "Desired async query result format. Valid values are: \"inline_json\", \"json\", \"json_detail\", \"json_fe\", \"csv\", \"html\", \"md\", \"txt\", \"xlsx\", \"gsxml\".",
+            "nullable": true
+          },
+          "user": { "$ref": "#/components/schemas/UserPublic" },
+          "roles": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Role" },
+            "readOnly": true,
+            "description": "Roles assigned to group",
+            "x-looker-undocumented": false,
+            "nullable": true
+          }
+        },
+        "x-looker-status": "beta",
+        "required": ["query_id", "result_format", "user"]
+      },
       "ResultMakerFilterablesListen": {
         "properties": {
           "dashboard_filter_name": {

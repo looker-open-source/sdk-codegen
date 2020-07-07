@@ -26,19 +26,24 @@
 
 import React, { FC, useReducer, useState } from 'react'
 import {
+  Box,
+  ComponentsProvider,
   Sidebar,
   SidebarGroup,
   SidebarItem,
-  Box,
-  theme,
-  ComponentsProvider,
 } from '@looker/components'
-import styled, { ThemeProvider } from 'styled-components'
+import styled from 'styled-components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
 import { TryItCallback } from '@looker/try-it'
 
 import { SearchContext } from './context'
-import { ExplorerStyle, Header, SideNav, SideNavToggle } from './components'
+import {
+  ExplorerStyle,
+  Header,
+  SideNav,
+  SideNavToggle,
+  Main,
+} from './components'
 import {
   specReducer,
   initDefaultSpecState,
@@ -78,8 +83,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs, tryItCallback }) => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <ComponentsProvider />
+    <ComponentsProvider>
       <ExplorerStyle />
       <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
         <Header specs={specs} spec={spec} specDispatch={specDispatch} />
@@ -93,15 +97,17 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs, tryItCallback }) => {
             />
           </SidebarDivider>
           <Box className={isSideNavOpen ? 'doc open' : 'doc'}>
-            <AppRouter
-              api={spec.api}
-              specKey={spec.key}
-              tryItCallback={tryItCallback}
-            />
+            <Main>
+              <AppRouter
+                api={spec.api}
+                specKey={spec.key}
+                tryItCallback={tryItCallback}
+              />
+            </Main>
           </Box>
         </PageLayout>
       </SearchContext.Provider>
-    </ThemeProvider>
+    </ComponentsProvider>
   )
 }
 
