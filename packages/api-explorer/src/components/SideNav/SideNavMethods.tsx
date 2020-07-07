@@ -24,10 +24,15 @@
 
  */
 
-import React, { FC, useContext } from 'react'
-import { SidebarItem, Space } from '@looker/components'
+import React, { FC, useContext, useState } from 'react'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionDisclosure,
+  Space,
+} from '@looker/components'
 import { MethodList } from '@looker/sdk-codegen'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useRouteMatch } from 'react-router-dom'
 
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
@@ -44,29 +49,34 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
   const {
     searchSettings: { pattern },
   } = useContext(SearchContext)
+  const match = useRouteMatch<{ methodTag: string }>(
+    `/:specKey/methods/:methodTag/:methodName?`
+  )
+  const [isOpen, setIsOpen] = useState<boolean>(
+    match ? match.params.methodTag === tag : false
+  )
 
   return (
-    <ul>
+    <Accordion isOpen={isOpen} toggleOpen={setIsOpen}>
+      <AccordionDisclosure>{highlightHTML(pattern, tag)}</AccordionDisclosure>
       {Object.values(methods).map((method) => (
-        <li key={method.name}>
+        <AccordionContent key={method.name}>
           <NavLink to={buildMethodPath(specKey, tag, method.name)}>
-            <SidebarItem key={method.name} as="span">
-              <Space gap="xsmall">
-                <MethodBadge
-                  alignTextCenter
-                  compact
-                  httpMethod={method.httpMethod}
-                >
-                  {method.httpMethod.toUpperCase()}
-                </MethodBadge>
-                <ApixHeading as="h5" mb="0" pt="0" fontWeight="light" truncate>
-                  {highlightHTML(pattern, method.summary)}
-                </ApixHeading>
-              </Space>
-            </SidebarItem>
+            <Space gap="xsmall">
+              <MethodBadge
+                alignTextCenter
+                compact
+                httpMethod={method.httpMethod}
+              >
+                {method.httpMethod.toUpperCase()}
+              </MethodBadge>
+              <ApixHeading as="h5" mb="0" pt="0" fontWeight="light" truncate>
+                {highlightHTML(pattern, method.summary)}
+              </ApixHeading>
+            </Space>
           </NavLink>
-        </li>
+        </AccordionContent>
       ))}
-    </ul>
+    </Accordion>
   )
 }

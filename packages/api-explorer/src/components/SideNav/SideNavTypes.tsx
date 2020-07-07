@@ -25,7 +25,6 @@
  */
 
 import React, { FC, useContext } from 'react'
-import { Sidebar, SidebarItem } from '@looker/components'
 import { TypeList, IntrinsicType } from '@looker/sdk-codegen'
 import { NavLink } from 'react-router-dom'
 
@@ -44,18 +43,16 @@ export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
   } = useContext(SearchContext)
 
   return (
-    <Sidebar>
+    <>
       {Object.values(types)
         .filter((type) => !(type instanceof IntrinsicType))
         .map((type) => (
           <NavLink key={type.name} to={buildTypePath(specKey, type.name)}>
-            <SidebarItem as="span">
-              <ApixHeading as="h5" mb="0" pt="0" fontWeight="light" truncate>
-                {highlightHTML(pattern, type.name)}
-              </ApixHeading>
-            </SidebarItem>
+            <ApixHeading as="h5" mb="0" pt="0" fontWeight="light" truncate>
+              {highlightHTML(pattern, type.name)}
+            </ApixHeading>
           </NavLink>
         ))}
-    </Sidebar>
+    </>
   )
 }
