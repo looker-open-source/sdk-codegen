@@ -23,16 +23,16 @@
  SOFTWARE.
 
  */
+
 import React from 'react'
 
-export const Logo = () => {
+/**
+ * This SVG code is used to display the Looker logo in the header.
+ */
+
+export const Logo: React.FC = () => {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 74 20"
-      width="100"
-      height="auto"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 74 20" width="100px">
       <title>Looker</title>
       <g clipPath="url(#clip0)" fill="#5F6368">
         <path d="M6.056 0A1.719 1.719 0 004.63 2.678l.734-.734a.725.725 0 11.463.462l-.733.733A1.718 1.718 0 106.056 0zM5.373 5.006a2.67 2.67 0 00-.535-1.609l-.953.952a1.366 1.366 0 01-.261 1.648l.518 1.265a2.685 2.685 0 001.23-2.256z" />

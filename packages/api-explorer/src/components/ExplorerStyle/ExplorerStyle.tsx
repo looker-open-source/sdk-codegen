@@ -41,9 +41,9 @@ export const HEADER_HEIGHT = '66px'
 
 export const HeaderWrapper = styled(Flex).attrs({
   alignItems: 'center',
-  justifyContent: 'space-between',
-  height: HEADER_HEIGHT,
   flexDirection: 'row',
+  height: HEADER_HEIGHT,
+  justifyContent: 'space-between',
   pt: 'medium',
   pr: 'large',
   pb: 'medium',
@@ -57,13 +57,13 @@ interface SideNavWrapperProps {
 }
 
 export const SideNavToggleWrapper = styled.div<SideNavWrapperProps>`
-  position: relative;
   margin-top: ${parseInt(HEADER_HEIGHT, 10) / 2};
+  position: relative;
 
   ${IconButton} {
     background: ${({ theme: { colors } }) => colors.background};
-    transform: translateX(-50%) translateY(-50%);
     position: fixed;
+    transform: translateX(-50%) translateY(-50%);
   }
 `
 
@@ -72,12 +72,13 @@ interface SideNavStyleProps {
 }
 
 export const SideNavDivider = styled.div<SideNavStyleProps>`
-  transition: border 0.3s;
   border-left: 1px solid
     ${({ theme, open }) => (open ? theme.colors.ui2 : 'transparent')};
   grid-area: divider;
   overflow: visible;
   position: relative;
+  transition: border 0.3s;
+
   &:hover {
     border-color: ${({ theme, open }) =>
       open ? theme.colors.ui3 : 'transparent'};
@@ -87,11 +88,10 @@ export const SideNavDivider = styled.div<SideNavStyleProps>`
 export const SideNavDisclosure = styled(AccordionDisclosure)<{
   isOpen: boolean
 }>`
-  padding-left: ${({ theme }) => theme.space.large};
-  padding-right: ${({ theme }) => theme.space.large};
-
   color: ${(props) =>
     props.isOpen ? ({ theme }) => theme.colors.key : 'inherit'};
+  padding-left: ${({ theme }) => theme.space.large};
+  padding-right: ${({ theme }) => theme.space.large};
 
   ${Icon} {
     color: ${(props) =>
@@ -159,9 +159,9 @@ export const PageLayout = styled.div<SideNavStyleProps>`
 
   ${Sidebar} {
     grid-area: sidebar;
+    padding: 0 ${({ theme }) => theme.space.medium};
     width: 20rem;
     z-index: 0;
-    padding: 0 ${({ theme }) => theme.space.medium};
   }
 
   .codeMarker {
