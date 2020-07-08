@@ -86,7 +86,7 @@ export const InternalMethodBadge = styled.div<{
   border: 1px solid transparent;
   border-radius: 4px;
   font-size: ${({ theme, compact }) =>
-    `${compact ? `calc(${theme.fontSizes.large}/2)` : theme.fontSizes.small}`};
+    `${compact ? `calc(${theme.fontSizes.large}/2)` : theme.fontSizes.xsmall}`};
   font-weight: ${({ theme }) => `${theme.fontWeights.semiBold}`};
   padding: ${({ theme, compact }) => `${theme.space.xxsmall}
     ${compact ? '0' : theme.space.xsmall}`};

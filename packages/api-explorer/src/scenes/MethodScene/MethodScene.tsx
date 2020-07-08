@@ -59,7 +59,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api, tryItCallback }) => {
 
   return (
     <>
-      <Flex mb="xxsmall">
+      <Flex>
         <Space gap="large">
           <MethodBadge httpMethod={method.status}>
             {method.status.toUpperCase()}
