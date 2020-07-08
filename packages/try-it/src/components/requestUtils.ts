@@ -61,15 +61,14 @@ class TryItSettings extends ApiSettings {
       ...{
         client_id: 'looker.api-explorer',
         looker_url: 'https://self-signed.looker.com:9999',
-        redirect_uri: 'https://localhost:8080',
+        redirect_uri: 'https://localhost:8080/oauth',
       },
     }
   }
 }
 
 // TODO get these values from the stand-alone TryIt provider
-
-const sdk = LookerBrowserSDK.init40(new TryItSettings(settings))
+export const tryItSDK = LookerBrowserSDK.init40(new TryItSettings(settings))
 
 /**
  * Replaces {foo} with vars[foo] in provided path
@@ -149,13 +148,13 @@ export const defaultTryItCallback = async (
   body: any
 ): Promise<IRawResponse> => {
   // TODO provide the API path via callback
-  if (!sdk.authSession.isAuthenticated()) await sdk.ok(sdk.authSession.login())
+  if (!tryItSDK.authSession.isAuthenticated()) await tryItSDK.ok(tryItSDK.authSession.login())
   const url = `/api/${specKey}${pathify(endpoint, pathParams)}`
-  return await sdk.authSession.transport.rawRequest(
+  return await tryItSDK.authSession.transport.rawRequest(
     httpMethod,
     url,
     queryParams,
     body,
-    (props) => sdk.authSession.authenticate(props)
+    (props) => tryItSDK.authSession.authenticate(props)
   )
 }

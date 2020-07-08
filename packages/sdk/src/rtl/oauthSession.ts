@@ -48,8 +48,9 @@ interface IRefreshTokenGrantTypeParams {
 
 export class OAuthSession extends AuthSession {
   activeToken = new AuthToken()
-  code_verifier?: string
   crypto: ICryptoHash
+  private static readonly codeVerifierKey = 'looker_oauth_code_verifier'
+  private static readonly returnUrlKey = 'looker_oauth_return_url'
 
   constructor(services: IPlatformServices) {
     super(services.settings, services.transport)
@@ -74,9 +75,11 @@ export class OAuthSession extends AuthSession {
     })
   }
 
-  /*
-    Apply current auth token credentials to an HTTP request
-  */
+  /**
+   * Apply current auth token credentials to an HTTP request
+   * @param props request properties to update
+   * @returns updated request properties with auth information added
+   */
   async authenticate(props: IRequestProps): Promise<IRequestProps> {
     const token = await this.getToken()
     if (token.access_token) {
@@ -85,22 +88,80 @@ export class OAuthSession extends AuthSession {
     return props
   }
 
+  /**
+   * Gets session storage for OAuth code verification
+   * @returns saved code verifier
+   */
+  private get code_verifier() {
+    return sessionStorage.getItem(OAuthSession.codeVerifierKey)
+  }
+
+  /**
+   * Sets session storage for OAuth code verification
+   */
+  private set code_verifier(value: string | null) {
+    if (value === null) {
+      // only clear code_verifier if it's `null`
+      sessionStorage.removeItem(OAuthSession.codeVerifierKey)
+    } else {
+      sessionStorage.setItem(OAuthSession.codeVerifierKey, value)
+    }
+  }
+
+  /**
+   * URL to return to after login process completes
+   * @returns the URL that started the OAuth login process
+   */
+  private get returnUrl() {
+    return sessionStorage.getItem(OAuthSession.returnUrlKey)
+  }
+
+  /**
+   * Sets the return URL for successful OAuth login
+   */
+  private set returnUrl(value: string | null) {
+    if (!value) {
+      sessionStorage.removeItem(OAuthSession.returnUrlKey)
+    } else {
+      sessionStorage.setItem(OAuthSession.returnUrlKey, value)
+    }
+  }
+
+  /**
+   * Clears all Looker SDK OAuth-related session storage
+   */
+  clearStorage() {
+    sessionStorage.removeItem(OAuthSession.codeVerifierKey)
+    sessionStorage.removeItem(OAuthSession.returnUrlKey)
+  }
+
   async login(_sudoId?: string | number): Promise<any> {
     if (!this.isAuthenticated()) {
-      const authUrl = await this.createAuthCodeRequestUrl(
-        'cors_api',
-        agentPrefix
-      )
-      const response = await this.transport.rawRequest('POST', authUrl)
-      if (!response.ok) {
-        console.error({ response })
+      if (!this.returnUrl) {
+        // OAuth has not been initiated
+        const authUrl = await this.createAuthCodeRequestUrl(
+          'cors_api',
+          agentPrefix
+        )
+        this.returnUrl = window.location.href
+        // Save the current URL so redirected successful OAuth login can restore it
+        window.location.href = authUrl
+      } else {
+        // Return URL is stored, we must be coming back from OAuth request
+        // catch and release the stored return url at the start of the redemption
+        const retUrl = this.returnUrl!
+        this.returnUrl = null
+        if (!this.code_verifier) {
+          throw new Error('Expected code_verifier to be stored')
+        }
+        const params = new URLSearchParams(window.location.search)
+        const code = params.get('code')
+        if (!code) {
+          console.error({ params })
+        }
+        await this.redeemAuthCode(code!)
+        window.location.href = retUrl
       }
-      const params = new URLSearchParams(response.body.toString())
-      const code = params.get('code')
-      if (!code) {
-        console.error({ params })
-      }
-      await this.redeemAuthCode(code!)
       return await this.getToken()
     }
     return this.activeToken
@@ -212,6 +273,7 @@ export class OAuthSession extends AuthSession {
 
       // logout destroys the access_token AND the refresh_token
       this.activeToken = new AuthToken()
+      this.clearStorage()
       return true
     }
     return false
