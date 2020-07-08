@@ -24,7 +24,7 @@
 
  */
 
-import styled, { css, createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 import {
   AccordionDisclosure,
   Flex,
@@ -84,7 +84,9 @@ export const SideNavDivider = styled.div<SideNavStyleProps>`
   }
 `
 
-export const SideNavDisclosure = styled(AccordionDisclosure)<{ isOpen: boolean }>`
+export const SideNavDisclosure = styled(AccordionDisclosure)<{
+  isOpen: boolean
+}>`
   padding-left: ${({ theme }) => theme.space.large};
   padding-right: ${({ theme }) => theme.space.large};
 
@@ -143,6 +145,10 @@ export const SideNavListItem = styled(ListItem)`
   }
 `
 
+export const Main = styled.main`
+  padding: ${({ theme }) => theme.space.xxlarge};
+`
+
 export const PageLayout = styled.div<SideNavStyleProps>`
   display: grid;
   grid-template-rows: 1fr;
@@ -167,63 +173,7 @@ export const PageLayout = styled.div<SideNavStyleProps>`
     background: yellow;
   }
 
-  .doc {
+  ${Main} {
     grid-area: main;
   }
-`
-
-const reset = css`
-  html {
-    color: ${({ theme }) => theme.colors.text1};
-    font-size: 100%;
-    font-weight: ${({ theme }) => theme.fontWeights.normal};
-  }
-
-  html,
-  body {
-    height: 100%;
-  }
-
-  html,
-  div,
-  object,
-  iframe,
-  blockquote,
-  li,
-  form,
-  legend,
-  label,
-  table,
-  header,
-  footer,
-  nav,
-  section,
-  figure {
-    margin: 0;
-    padding: 0;
-  }
-
-  header,
-  footer,
-  nav,
-  section,
-  article,
-  hgroup,
-  figure {
-    display: block;
-  }
-
-  em,
-  i {
-    font-style: italic;
-  }
-
-  b,
-  strong {
-    font-weight: ${({ theme }) => theme.fontWeights.bold};
-  }
-`
-
-export const ExplorerStyle = createGlobalStyle`
-  ${reset}
 `

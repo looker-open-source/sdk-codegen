@@ -24,9 +24,9 @@
 
  */
 export {
-  ExplorerStyle,
   HEADER_HEIGHT,
   HeaderWrapper,
+  Main,
   PageLayout,
   SideNavDivider,
   SideNavToggleWrapper,

@@ -25,14 +25,14 @@
  */
 
 import React, { FC, useReducer, useState } from 'react'
-import { Box, ComponentsProvider } from '@looker/components'
+import { ComponentsProvider } from '@looker/components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
 import { TryItCallback } from '@looker/try-it'
 
 import { SearchContext } from './context'
 import {
-  ExplorerStyle,
   Header,
+  Main,
   PageLayout,
   SideNav,
   SideNavToggle,
@@ -78,7 +78,6 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs, tryItCallback }) => {
 
   return (
     <ComponentsProvider>
-      <ExplorerStyle />
       <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
         <Header specs={specs} spec={spec} specDispatch={specDispatch} />
         <PageLayout open={isSideNavOpen}>
@@ -89,16 +88,13 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs, tryItCallback }) => {
               isOpen={isSideNavOpen}
             />
           </SideNavDivider>
-          <Box
-            className={isSideNavOpen ? 'main doc open' : 'main doc'}
-            p="xxlarge"
-          >
+          <Main>
             <AppRouter
               api={spec.api}
               specKey={spec.key}
               tryItCallback={tryItCallback}
             />
-          </Box>
+          </Main>
         </PageLayout>
       </SearchContext.Provider>
     </ComponentsProvider>

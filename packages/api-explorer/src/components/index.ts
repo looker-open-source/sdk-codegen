@@ -44,7 +44,7 @@ export { DocTitle } from './DocTitle'
 export {
   HeaderWrapper,
   HEADER_HEIGHT,
-  ExplorerStyle,
+  Main,
   PageLayout,
   SideNavDivider,
 } from './ExplorerStyle'
