@@ -26,6 +26,7 @@
 
 import styled from 'styled-components'
 import {
+  Accordion,
   AccordionDisclosure,
   Flex,
   Icon,
@@ -162,6 +163,10 @@ export const PageLayout = styled.div<SideNavStyleProps>`
     padding: 0 ${({ theme }) => theme.space.medium};
     width: 20rem;
     z-index: 0;
+  }
+
+  ${AccordionDisclosure} {
+    height: auto;
   }
 
   .codeMarker {

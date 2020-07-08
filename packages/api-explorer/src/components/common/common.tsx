@@ -74,6 +74,6 @@ ApixTable.defaultProps = { mb: 'large' }
 
 export const ApixCodeBlock = styled(CodeBlock)``
 ApixCodeBlock.defaultProps = {
-  fontSize: 'large',
+  fontSize: 'small',
   mb: 'larger',
 }
