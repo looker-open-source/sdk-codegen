@@ -92,14 +92,14 @@ export class OAuthSession extends AuthSession {
    * Gets session storage for OAuth code verification
    * @returns saved code verifier
    */
-  private get code_verifier() {
+  get code_verifier() {
     return sessionStorage.getItem(OAuthSession.codeVerifierKey)
   }
 
   /**
    * Sets session storage for OAuth code verification
    */
-  private set code_verifier(value: string | null) {
+  set code_verifier(value: string | null) {
     if (value === null) {
       // only clear code_verifier if it's `null`
       sessionStorage.removeItem(OAuthSession.codeVerifierKey)
@@ -112,14 +112,14 @@ export class OAuthSession extends AuthSession {
    * URL to return to after login process completes
    * @returns the URL that started the OAuth login process
    */
-  private get returnUrl() {
+  get returnUrl() {
     return sessionStorage.getItem(OAuthSession.returnUrlKey)
   }
 
   /**
    * Sets the return URL for successful OAuth login
    */
-  private set returnUrl(value: string | null) {
+  set returnUrl(value: string | null) {
     if (!value) {
       sessionStorage.removeItem(OAuthSession.returnUrlKey)
     } else {
@@ -147,17 +147,19 @@ export class OAuthSession extends AuthSession {
         // Save the current URL so redirected successful OAuth login can restore it
         window.location.href = authUrl
       } else {
-        // Return URL is stored, we must be coming back from OAuth request
-        // catch and release the stored return url at the start of the redemption
-        const retUrl = this.returnUrl!
+        // If return URL is stored, we must be coming back from an OAuth request
+        // so catch and release the stored return url at the start of the redemption
+        const retUrl = this.returnUrl
         this.returnUrl = null
         if (!this.code_verifier) {
-          throw new Error('Expected code_verifier to be stored')
+          throw new Error('OAuth failed: expected code_verifier to be stored')
         }
         const params = new URLSearchParams(window.location.search)
         const code = params.get('code')
         if (!code) {
-          console.error({ params })
+          throw new Error(
+            `OAuth failed: no OAuth code parameter found in ${window.location.search}`
+          )
         }
         await this.redeemAuthCode(code!)
         window.location.href = retUrl

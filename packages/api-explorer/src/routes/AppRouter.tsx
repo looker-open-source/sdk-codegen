@@ -52,6 +52,9 @@ export const AppRouter: FC<AppRouterProps> = ({
 }) => (
   <Switch>
     <Redirect from="/" to={`/${specKey}/`} exact />
+    <Route path="/oauth">
+      <OAuthScene sdk={sdk} />
+    </Route>
     <Route path="/:specKey/(methods|types)?" exact>
       <HomeScene api={api} />
     </Route>
@@ -63,9 +66,6 @@ export const AppRouter: FC<AppRouterProps> = ({
     </Route>
     <Route path="/:specKey/types/:typeName">
       <TypeScene api={api} />
-    </Route>
-    <Route path="/oauth">
-      <OAuthScene sdk={sdk} />
     </Route>
   </Switch>
 )

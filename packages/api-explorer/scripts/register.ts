@@ -18,7 +18,7 @@ export const registerCorsApp = async (
   const sdk = LookerNodeSDK.init40(settings)
   try {
     let app = await sdk.ok(sdk.oauth_client_app(guid))
-    console.log(`${guid} is already registered as an OAuth application`)
+    console.log(`${guid} is already registered as OAuth application ${app.display_name}`)
     app = await sdk.ok(sdk.update_oauth_client_app(guid, appInfo))
     console.log(`Updated ${guid} settings`)
     console.debug({ app })
