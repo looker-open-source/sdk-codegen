@@ -25,7 +25,17 @@
  */
 
 import styled, { css, createGlobalStyle } from 'styled-components'
-import { Flex, IconButton, Sidebar } from '@looker/components'
+import {
+  AccordionDisclosure,
+  Flex,
+  Icon,
+  IconButton,
+  List,
+  ListItem,
+  Sidebar,
+} from '@looker/components'
+import { MethodBadge } from '../MethodBadge'
+import { ApixHeading } from '../common'
 
 export const HEADER_HEIGHT = '66px'
 
@@ -71,6 +81,65 @@ export const SideNavDivider = styled.div<SideNavStyleProps>`
   &:hover {
     border-color: ${({ theme, open }) =>
       open ? theme.colors.ui3 : 'transparent'};
+  }
+`
+
+export const SideNavDisclosure = styled(AccordionDisclosure)<{ isOpen: boolean }>`
+  padding-left: ${({ theme }) => theme.space.large};
+  padding-right: ${({ theme }) => theme.space.large};
+
+  color: ${(props) =>
+    props.isOpen ? ({ theme }) => theme.colors.key : 'inherit'};
+
+  ${Icon} {
+    color: ${(props) =>
+      props.isOpen ? ({ theme }) => theme.colors.key : 'inherit'};
+  }
+
+  &:hover,
+  &:focus {
+    color: ${({ theme }) => theme.colors.key};
+  }
+`
+
+export const SideNavContent = styled.div`
+  padding: ${({
+    theme: {
+      space: { xxsmall, large },
+    },
+  }) => `${xxsmall} ${large}`};
+`
+
+export const SideNavList = styled(List)`
+  border-left: dashed 1px ${({ theme }) => theme.colors.ui2};
+  padding: ${({ theme }) => theme.space.xxsmall} 0
+    ${({ theme }) => theme.space.xxsmall} ${({ theme }) => theme.space.xxsmall};
+`
+
+export const SideNavListItem = styled(ListItem)`
+  margin-bottom: 0;
+
+  a {
+    border-radius: ${({ theme: { radii } }) => radii.medium};
+    cursor: pointer;
+    display: block;
+    padding: ${({ theme }) => theme.space.xsmall};
+
+    &:hover,
+    &:focus,
+    &.active {
+      background-color: ${({ theme }) => theme.colors.ui1};
+
+      ${MethodBadge} {
+        border: solid 1px ${({ theme }) => theme.colors.ui2};
+      }
+    }
+
+    &.active {
+      ${ApixHeading} {
+        font-weight: ${({ theme }) => theme.fontWeights.semiBold};
+      }
+    }
   }
 `
 

@@ -25,88 +25,26 @@
  */
 
 import React, { FC, useContext, useState } from 'react'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionDisclosure,
-  Icon,
-  Space,
-  ListItem,
-  List,
-} from '@looker/components'
+import { Accordion, AccordionContent, Space } from '@looker/components'
 
-import styled from 'styled-components'
 import { MethodList } from '@looker/sdk-codegen'
 import { NavLink, useRouteMatch } from 'react-router-dom'
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
 import { MethodBadge } from '../MethodBadge'
 import { ApixHeading } from '../common'
+import {
+  SideNavDisclosure,
+  SideNavContent,
+  SideNavList,
+  SideNavListItem,
+} from '../ExplorerStyle'
 
 interface MethodsProps {
   methods: MethodList
   tag: string
   specKey: string
 }
-
-const SideNavDisclosure = styled(AccordionDisclosure)<{ isOpen: boolean }>`
-  padding-left: ${({ theme }) => theme.space.large};
-  padding-right: ${({ theme }) => theme.space.large};
-
-  color: ${(props) =>
-    props.isOpen ? ({ theme }) => theme.colors.key : 'inherit'};
-
-  ${Icon} {
-    color: ${(props) =>
-      props.isOpen ? ({ theme }) => theme.colors.key : 'inherit'};
-  }
-
-  &:hover,
-  &:focus {
-    color: ${({ theme }) => theme.colors.key};
-  }
-`
-
-const SideNavContent = styled.div`
-  padding: ${({
-    theme: {
-      space: { xxsmall, large },
-    },
-  }) => `${xxsmall} ${large}`};
-`
-
-const SideNavList = styled(List)`
-  border-left: dashed 1px ${({ theme }) => theme.colors.ui2};
-  padding: ${({ theme }) => theme.space.xxsmall} 0
-    ${({ theme }) => theme.space.xxsmall} ${({ theme }) => theme.space.xxsmall};
-`
-
-const SideNavListItem = styled(ListItem)`
-  margin-bottom: 0;
-
-  a {
-    border-radius: ${({ theme: { radii } }) => radii.medium};
-    cursor: pointer;
-    display: block;
-    padding: ${({ theme }) => theme.space.xsmall};
-
-    &:hover,
-    &:focus,
-    &.active {
-      background-color: ${({ theme }) => theme.colors.ui1};
-
-      ${MethodBadge} {
-        border: solid 1px ${({ theme }) => theme.colors.ui2};
-      }
-    }
-
-    &.active {
-      ${ApixHeading} {
-        font-weight: ${({ theme }) => theme.fontWeights.semiBold};
-      }
-    }
-  }
-`
 
 export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
   const {

@@ -30,4 +30,8 @@ export {
   PageLayout,
   SideNavDivider,
   SideNavToggleWrapper,
+  SideNavContent,
+  SideNavDisclosure,
+  SideNavList,
+  SideNavListItem,
 } from './ExplorerStyle'
