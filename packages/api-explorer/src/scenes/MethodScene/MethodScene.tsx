@@ -59,8 +59,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api, tryItCallback }) => {
 
   return (
     <>
-      <DocTitle>{method.summary}</DocTitle>
-      <Flex mb="xxlarge">
+      <Flex mb="xxsmall">
         <Space gap="large">
           <MethodBadge httpMethod={method.status}>
             {method.status.toUpperCase()}
@@ -69,6 +68,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api, tryItCallback }) => {
           <DocRateLimited method={method} />
         </Space>
       </Flex>
+      <DocTitle>{method.summary}</DocTitle>
       <DocOperation method={method} />
       <DocMarkdown source={method.description} specKey={specKey} />
       <DocSDKs api={api} method={method} />

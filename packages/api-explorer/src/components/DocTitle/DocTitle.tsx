@@ -28,5 +28,5 @@ import React, { FC } from 'react'
 import { ApixHeading } from '../common'
 
 export const DocTitle: FC = (props) => (
-  <ApixHeading fontSize="xxxlarge" as="h1" {...props} />
+  <ApixHeading fontSize="xxxlarge" as="h1" mb="xxlarge" {...props} />
 )
