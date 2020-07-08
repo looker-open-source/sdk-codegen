@@ -26,7 +26,6 @@
 
 import styled from 'styled-components'
 import {
-  Accordion,
   AccordionDisclosure,
   Flex,
   Icon,
