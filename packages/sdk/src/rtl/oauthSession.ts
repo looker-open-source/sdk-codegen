@@ -143,26 +143,29 @@ export class OAuthSession extends AuthSession {
           'cors_api',
           agentPrefix
         )
-        this.returnUrl = window.location.href
+        this.returnUrl = window.location.pathname + window.location.search
         // Save the current URL so redirected successful OAuth login can restore it
         window.location.href = authUrl
       } else {
         // If return URL is stored, we must be coming back from an OAuth request
         // so catch and release the stored return url at the start of the redemption
-        const retUrl = this.returnUrl
         this.returnUrl = null
         if (!this.code_verifier) {
-          throw new Error('OAuth failed: expected code_verifier to be stored')
+          return Promise.reject(
+            new Error('OAuth failed: expected code_verifier to be stored')
+          )
         }
         const params = new URLSearchParams(window.location.search)
         const code = params.get('code')
         if (!code) {
-          throw new Error(
-            `OAuth failed: no OAuth code parameter found in ${window.location.search}`
+          return Promise.reject(
+            new Error(
+              `OAuth failed: no OAuth code parameter found in ${window.location
+                .pathname + window.location.search}`
+            )
           )
         }
         await this.redeemAuthCode(code!)
-        window.location.href = retUrl
       }
       return await this.getToken()
     }

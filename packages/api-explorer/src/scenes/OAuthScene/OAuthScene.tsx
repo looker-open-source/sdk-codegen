@@ -27,8 +27,8 @@
 import React, { useEffect, useState } from 'react'
 import { BrowserSession, Looker40SDK } from '@looker/sdk/lib/browser'
 import { tryItSDK } from '@looker/try-it'
-import { Redirect } from 'react-router'
 import { Spinner, Text } from '@looker/components'
+import { useHistory } from 'react-router'
 
 interface OAuthSceneProps {
   sdk?: Looker40SDK
@@ -36,17 +36,20 @@ interface OAuthSceneProps {
 
 export const OAuthScene: React.FC<OAuthSceneProps> = ({ sdk }) => {
   const [loading, setLoading] = useState(true)
+  const history = useHistory()
   if (!sdk) sdk = tryItSDK
   const auth = sdk.authSession as BrowserSession
 
+  /** capture the stored return URL (if set) before `OAuthSession.login()` clears it */
   const newUrl = auth.returnUrl || `/`
 
   useEffect(() => {
     // TODO is async really this complicated? https://dev.to/alexandrudanpop/correctly-handling-async-await-in-react-components-part-2-4fl7
     async function login() {
-      console.log('logging in ...')
+      console.debug(`logging in for ${newUrl} destination ...`)
       try {
         await auth.login()
+        console.debug(`Authenticated? ${auth.isAuthenticated()}`)
       } catch (err) {
         console.error(err)
       }
@@ -54,7 +57,9 @@ export const OAuthScene: React.FC<OAuthSceneProps> = ({ sdk }) => {
 
     if (!auth.isAuthenticated()) {
       login().then(() => {
-        console.log('OAuth login completed')
+        console.debug(
+          `OAuth login completed for ${newUrl}: ${auth.isAuthenticated()}`
+        )
       })
     }
     setLoading(false)
@@ -72,9 +77,7 @@ export const OAuthScene: React.FC<OAuthSceneProps> = ({ sdk }) => {
           </Text>
         </>
       )}
-      {!loading && sdk && sdk.authSession.isAuthenticated() && (
-        <Redirect to={newUrl} />
-      )}
+      {!loading && auth && auth.isAuthenticated() && history.push(newUrl)}
     </>
   )
 }
