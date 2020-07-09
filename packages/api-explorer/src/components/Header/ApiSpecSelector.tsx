@@ -49,7 +49,10 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
   specDispatch,
 }) => {
   const history = useHistory()
-  const options = Object.keys(specs).map((k) => ({ value: k, label: k }))
+  const options = Object.entries(specs).map(([key, spec]) => ({
+    value: key,
+    label: `${key} (${spec.status})`,
+  }))
 
   const handleChange = (specKey: string) => {
     specDispatch(selectSpec(specs, specKey))
