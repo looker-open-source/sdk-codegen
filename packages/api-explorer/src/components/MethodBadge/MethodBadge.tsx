@@ -39,8 +39,9 @@ type MethodStatus = 'beta' | 'stable' | 'experimental' | 'deprecated' | 'inform'
 
 interface MethodBadgeProps {
   httpMethod: HttpMethod | MethodStatus | string
-  compact?: boolean
   alignTextCenter?: boolean
+  compact?: boolean
+  inCard?: boolean
 }
 
 /**
@@ -78,9 +79,10 @@ export const cssForIntent = (intent: ApixIntentNames) =>
   `
 
 export const InternalMethodBadge = styled.div<{
-  intent: ApixIntentNames
-  compact?: boolean
   alignTextCenter?: boolean
+  compact?: boolean
+  inCard?: boolean
+  intent: ApixIntentNames
 }>`
   ${(props) => cssForIntent(props.intent)};
   border: 1px solid transparent;
@@ -91,19 +93,21 @@ export const InternalMethodBadge = styled.div<{
   padding: ${({ theme, compact }) => `${theme.space.xxsmall}
     ${compact ? '0' : theme.space.xsmall}`};
   text-align: ${(props) => (props.alignTextCenter ? 'center' : 'left')};
-  min-width: 2.5rem;
+  min-width: ${({ inCard }) => `${inCard ? '3.7625rem' : '2.5rem'}`};
 `
 
 const MethodBadgeInternal: FC<MethodBadgeProps> = ({
   alignTextCenter,
   children,
   compact,
+  inCard,
   httpMethod,
   ...props
 }) => (
   <InternalMethodBadge
     alignTextCenter={alignTextCenter}
     compact={compact}
+    inCard={inCard}
     intent={intentForStatus(httpMethod)}
     {...props}
   >
