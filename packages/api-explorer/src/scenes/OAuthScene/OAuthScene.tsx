@@ -63,6 +63,7 @@ export const OAuthScene: React.FC<OAuthSceneProps> = ({ sdk }) => {
       })
     }
     setLoading(false)
+    history.push(newUrl)
   }, [])
 
   // TODO display OAuth login completed with a click to redirect, and redirect automatically after 3 seconds or so?
@@ -77,7 +78,6 @@ export const OAuthScene: React.FC<OAuthSceneProps> = ({ sdk }) => {
           </Text>
         </>
       )}
-      {!loading && auth && auth.isAuthenticated() && history.push(newUrl)}
     </>
   )
 }
