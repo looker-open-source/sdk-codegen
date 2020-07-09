@@ -26,9 +26,9 @@
 
 import React, { FC, useContext, useState } from 'react'
 import { Accordion, AccordionContent, Space } from '@looker/components'
-
 import { MethodList } from '@looker/sdk-codegen'
-import { NavLink, useRouteMatch } from 'react-router-dom'
+import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
+
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
 import { MethodBadge } from '../MethodBadge'
@@ -53,12 +53,19 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
   const match = useRouteMatch<{ methodTag: string }>(
     `/:specKey/methods/:methodTag/:methodName?`
   )
-  const [isOpen, setIsOpen] = useState<boolean>(
+  const [isOpen, setIsOpen] = useState(
     match ? match.params.methodTag === tag : false
   )
+  const history = useHistory()
+
+  const handleOpen = () => {
+    const _isOpen = !isOpen
+    setIsOpen(_isOpen)
+    if (_isOpen) history.push(`/${specKey}/methods/${tag}`)
+  }
 
   return (
-    <Accordion isOpen={isOpen} toggleOpen={setIsOpen}>
+    <Accordion isOpen={isOpen} toggleOpen={handleOpen}>
       <SideNavDisclosure isOpen={isOpen}>
         {highlightHTML(pattern, tag)}
       </SideNavDisclosure>

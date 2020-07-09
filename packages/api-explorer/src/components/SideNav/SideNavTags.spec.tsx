@@ -32,10 +32,11 @@ import { withThemeProvider } from '@looker/components-test-utils'
 import { api } from '../../test-data'
 import { renderWithSearchAndRouter } from '../../test-utils'
 import { SideNavTags } from './SideNavTags'
+import { createMemoryHistory } from 'history'
 
 describe('SideNavTags', () => {
+  const tags = pick(api.tags, ['ApiAuth', 'Dashboard'])
   test('it renders a provided tag and its methods', () => {
-    const tags = pick(api.tags, 'Dashboard')
     renderWithSearchAndRouter(
       withThemeProvider(<SideNavTags tags={tags} specKey={'3.1'} />)
     )
@@ -49,7 +50,6 @@ describe('SideNavTags', () => {
   })
 
   test('tags are rendered initially collapsed and expand when clicked', () => {
-    const tags = pick(api.tags, ['ApiAuth', 'Dashboard'])
     renderWithSearchAndRouter(
       withThemeProvider(<SideNavTags tags={tags} specKey={'3.1'} />)
     )
@@ -64,7 +64,6 @@ describe('SideNavTags', () => {
   })
 
   test('tag is expanded if specified in route', () => {
-    const tags = pick(api.tags, ['ApiAuth', 'Dashboard'])
     renderWithSearchAndRouter(
       withThemeProvider(<SideNavTags tags={tags} specKey={'3.1'} />),
       undefined,
