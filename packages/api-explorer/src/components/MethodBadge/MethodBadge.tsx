@@ -42,6 +42,7 @@ interface MethodBadgeProps {
   alignTextCenter?: boolean
   compact?: boolean
   inCard?: boolean
+  titleStatus?: boolean
 }
 
 /**
@@ -83,8 +84,11 @@ export const InternalMethodBadge = styled.div<{
   compact?: boolean
   inCard?: boolean
   intent: ApixIntentNames
+  titleStatus?: boolean
 }>`
   ${(props) => cssForIntent(props.intent)};
+  background: ${({ intent, theme, titleStatus }) =>
+    `${titleStatus ? theme.colors.ui1 : intentUIBlend(intent, 1)}`};
   border: 1px solid transparent;
   border-radius: 4px;
   font-size: ${({ theme, compact }) =>
@@ -101,6 +105,7 @@ const MethodBadgeInternal: FC<MethodBadgeProps> = ({
   children,
   compact,
   inCard,
+  titleStatus,
   httpMethod,
   ...props
 }) => (
@@ -108,6 +113,7 @@ const MethodBadgeInternal: FC<MethodBadgeProps> = ({
     alignTextCenter={alignTextCenter}
     compact={compact}
     inCard={inCard}
+    titleStatus={titleStatus}
     intent={intentForStatus(httpMethod)}
     {...props}
   >

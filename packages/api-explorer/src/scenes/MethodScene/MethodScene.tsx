@@ -60,15 +60,15 @@ export const MethodScene: FC<DocMethodProps> = ({ api, tryItCallback }) => {
   return (
     <>
       <Flex>
-        <Space gap="large">
-          <MethodBadge httpMethod={method.status}>
-            {method.status.toUpperCase()}
-          </MethodBadge>
-          <DocActivityType method={method} />
-          <DocRateLimited method={method} />
-        </Space>
+        <MethodBadge httpMethod={method.status} titleStatus>
+          {method.status.toUpperCase()}
+        </MethodBadge>
       </Flex>
       <DocTitle>{method.summary}</DocTitle>
+      <Space mb="xlarge" gap="small">
+        <DocActivityType method={method} />
+        <DocRateLimited method={method} />
+      </Space>
       <DocOperation method={method} />
       <DocMarkdown source={method.description} specKey={specKey} />
       <DocSDKs api={api} method={method} />
