@@ -26,35 +26,16 @@
 
 import React, { FC, useContext } from 'react'
 import { TypeList, IntrinsicType } from '@looker/sdk-codegen'
-import { NavLink } from 'react-router-dom'
-import styled from 'styled-components'
 
 import { buildTypePath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
 import { ApixHeading } from '../common'
+import { SideNavTypesLink } from '../ExplorerStyle'
 
 interface TypeProps {
   specKey: string
   types: TypeList
 }
-
-const SideNavTypesLink = styled(NavLink)`
-  cursor: pointer;
-  display: block;
-  padding: ${({
-    theme: {
-      space: { xsmall, large },
-    },
-  }) => `${xsmall} ${large}`};
-
-  &:hover,
-  &:focus,
-  &.active {
-    ${ApixHeading} {
-      color: ${({ theme }) => theme.colors.key};
-    }
-  }
-`
 
 export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
   const {

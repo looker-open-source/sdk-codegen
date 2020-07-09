@@ -34,4 +34,5 @@ export {
   SideNavDisclosure,
   SideNavList,
   SideNavListItem,
+  SideNavTypesLink,
 } from './ExplorerStyle'

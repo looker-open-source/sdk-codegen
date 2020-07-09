@@ -24,6 +24,7 @@
 
  */
 
+import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import {
   AccordionDisclosure,
@@ -141,6 +142,24 @@ export const SideNavListItem = styled(ListItem)`
       ${ApixHeading} {
         font-weight: ${({ theme }) => theme.fontWeights.semiBold};
       }
+    }
+  }
+`
+
+export const SideNavTypesLink = styled(NavLink)`
+  cursor: pointer;
+  display: block;
+  padding: ${({
+    theme: {
+      space: { xsmall, large },
+    },
+  }) => `${xsmall} ${large}`};
+
+  &:hover,
+  &:focus,
+  &.active {
+    ${ApixHeading} {
+      color: ${({ theme }) => theme.colors.key};
     }
   }
 `
