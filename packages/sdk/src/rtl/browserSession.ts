@@ -27,7 +27,6 @@
 import { BrowserTransport } from './browserTransport'
 import { ITransport, IRequestProps, LookerAppId } from './transport'
 import { IApiSettings } from './apiSettings'
-import { AuthToken } from './authToken'
 import { OAuthSession } from './oauthSession'
 import { BrowserServices } from './browserServices'
 
@@ -47,8 +46,6 @@ import { BrowserServices } from './browserServices'
  *
  */
 export class BrowserSession extends OAuthSession {
-  activeToken = new AuthToken()
-
   constructor(public settings: IApiSettings, transport?: ITransport) {
     super(
       new BrowserServices({
