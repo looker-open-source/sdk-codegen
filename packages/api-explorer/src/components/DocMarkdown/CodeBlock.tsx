@@ -23,10 +23,9 @@
  SOFTWARE.
 
  */
-
 import React, { FC, PropsWithChildren } from 'react'
-import { CodeBlock } from '@looker/components'
+import { ApixCodeBlock } from '../common'
 
-export const CodeBlockWrapper: FC<PropsWithChildren<any>> = (props) => (
-  <CodeBlock>{props.value}</CodeBlock>
+export const CodeBlock: FC<PropsWithChildren<any>> = (props) => (
+  <ApixCodeBlock>{props.value}</ApixCodeBlock>
 )

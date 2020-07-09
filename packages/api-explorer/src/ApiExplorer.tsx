@@ -25,14 +25,7 @@
  */
 
 import React, { FC, useReducer, useState } from 'react'
-import {
-  Box,
-  ComponentsProvider,
-  Sidebar,
-  SidebarGroup,
-  SidebarItem,
-} from '@looker/components'
-import styled from 'styled-components'
+import { Box, ComponentsProvider } from '@looker/components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
 import { TryItCallback } from '@looker/try-it'
 
@@ -40,9 +33,10 @@ import { SearchContext } from './context'
 import {
   ExplorerStyle,
   Header,
+  PageLayout,
   SideNav,
   SideNavToggle,
-  Main,
+  SideNavDivider,
 } from './components'
 import {
   specReducer,
@@ -89,21 +83,18 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs, tryItCallback }) => {
         <Header specs={specs} spec={spec} specDispatch={specDispatch} />
         <PageLayout open={isSideNavOpen}>
           {isSideNavOpen && <SideNav api={spec.api} specKey={spec.key} />}
-          <SidebarDivider open={isSideNavOpen}>
+          <SideNavDivider open={isSideNavOpen}>
             <SideNavToggle
               onClick={handleSideNavToggle}
               isOpen={isSideNavOpen}
-              headerHeight="84px"
             />
-          </SidebarDivider>
-          <Box className={isSideNavOpen ? 'doc open' : 'doc'}>
-            <Main>
-              <AppRouter
-                api={spec.api}
-                specKey={spec.key}
-                tryItCallback={tryItCallback}
-              />
-            </Main>
+          </SideNavDivider>
+          <Box className={isSideNavOpen ? 'main doc open' : 'main doc'}>
+            <AppRouter
+              api={spec.api}
+              specKey={spec.key}
+              tryItCallback={tryItCallback}
+            />
           </Box>
         </PageLayout>
       </SearchContext.Provider>
@@ -112,98 +103,3 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs, tryItCallback }) => {
 }
 
 export default ApiExplorer
-
-interface SidebarStyleProps {
-  open: boolean
-}
-
-const SidebarDivider = styled.div<SidebarStyleProps>`
-  transition: border 0.3s;
-  border-left: 1px solid
-    ${({ theme, open }) =>
-      open ? theme.colors.palette.charcoal200 : 'transparent'};
-  grid-area: divider;
-  overflow: visible;
-  position: relative;
-  &:hover {
-    border-left: 1px solid
-      ${({ theme, open }) =>
-        open
-          ? theme.colors.palette.charcoal300
-          : theme.colors.palette.charcoal200};
-  }
-`
-
-const PageLayout = styled.div<SidebarStyleProps>`
-  display: grid;
-  grid-template-rows: 1fr;
-  grid-template-columns: ${({ open }) =>
-    open ? '20rem 0 50rem' : '1.5rem 0 50rem'};
-  grid-template-areas: 'sidebar divider main';
-  position: relative;
-
-  ${Sidebar} {
-    grid-area: sidebar;
-    width: 20rem;
-    z-index: 0;
-    padding: 0 ${(props) => props.theme.space.medium} !important;
-
-    button {
-      color: ${(props) => props.theme.colors.palette.charcoal700};
-      cursor: pointer;
-      min-height: 2.25rem;
-
-      &:hover,
-      &:focus,
-      &[aria-expanded='true'] {
-        color: ${(props) => props.theme.colors.palette.purple400};
-      }
-    }
-  }
-
-  .codeMarker {
-    background: yellow;
-    position: absolute;
-  }
-
-  .hi {
-    background: yellow;
-  }
-
-  ${SidebarGroup} {
-    > div {
-      border-left: 1px dashed
-        ${(props) => props.theme.colors.palette.charcoal200};
-      padding: ${(props) => props.theme.space.xxsmall} 0
-        ${(props) => props.theme.space.xxsmall}
-        ${(props) => props.theme.space.xsmall};
-    }
-  }
-
-  ${SidebarItem} {
-    font-size: ${(props) => props.theme.fontSizes.small};
-
-    & {
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      padding: ${(props) => props.theme.space.xsmall}
-        ${(props) => props.theme.space.xsmall} !important;
-    }
-
-    &:hover,
-    &:focus,
-    .active & {
-      background-color: ${(props) =>
-        props.theme.colors.palette.charcoal100} !important;
-    }
-
-    .active & {
-      font-weight: 600;
-    }
-  }
-
-  .doc {
-    grid-area: main;
-  }
-`

@@ -28,22 +28,24 @@ import React, { BaseSyntheticEvent, FC, useContext } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { useHistory } from 'react-router-dom'
 import {
-  Code,
-  Heading,
-  Paragraph,
-  Table,
   TableHead,
   TableBody,
   TableRow,
   Link,
   ListItem,
-  List,
 } from '@looker/components'
 
 import { SearchContext } from '../../context'
+import {
+  ApixCode,
+  ApixList,
+  ApixParagraph,
+  ApixHeading,
+  ApixTable,
+} from '../common'
 import { highlightMarkdown, transformURL } from './utils'
+import { CodeBlock } from './CodeBlock'
 import { TableCell } from './TableCell'
-import { CodeBlockWrapper } from './CodeBlock'
 
 interface DocMarkdownProps {
   source: string
@@ -73,14 +75,14 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
         escapeHtml={false}
         transformLinkUri={transformURL.bind(null, specKey)}
         renderers={{
-          heading: Heading,
-          paragraph: Paragraph,
-          inlineCode: Code,
-          code: CodeBlockWrapper,
+          code: CodeBlock,
+          heading: ApixHeading,
+          paragraph: ApixParagraph,
+          inlineCode: ApixCode,
           link: Link,
-          list: List,
+          list: ApixList,
           listItem: ListItem,
-          table: Table,
+          table: ApixTable,
           tableHead: TableHead,
           tableBody: TableBody,
           tableRow: TableRow,

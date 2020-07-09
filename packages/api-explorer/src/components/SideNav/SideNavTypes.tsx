@@ -25,12 +25,13 @@
  */
 
 import React, { FC, useContext } from 'react'
-import { Heading, Sidebar, SidebarItem } from '@looker/components'
+import { Sidebar, SidebarItem } from '@looker/components'
 import { TypeList, IntrinsicType } from '@looker/sdk-codegen'
 import { NavLink } from 'react-router-dom'
 
 import { buildTypePath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
+import { ApixHeading } from '../common'
 
 interface TypeProps {
   specKey: string
@@ -49,9 +50,9 @@ export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
         .map((type) => (
           <NavLink key={type.name} to={buildTypePath(specKey, type.name)}>
             <SidebarItem as="span">
-              <Heading as="h5" truncate>
+              <ApixHeading as="h5" mb="0" pt="0" fontWeight="light" truncate>
                 {highlightHTML(pattern, type.name)}
-              </Heading>
+              </ApixHeading>
             </SidebarItem>
           </NavLink>
         ))}

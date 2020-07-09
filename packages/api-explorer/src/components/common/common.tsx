@@ -23,41 +23,57 @@
  SOFTWARE.
 
  */
+import styled from 'styled-components'
+import {
+  Code,
+  CodeBlock,
+  Heading,
+  List,
+  Paragraph,
+  Table,
+} from '@looker/components'
 
-import React, { FC, useContext } from 'react'
-import { Box } from '@looker/components'
-import { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
-import { Link } from 'react-router-dom'
-
-import { highlightHTML } from '../../utils'
-import { SearchContext } from '../../context'
-import { buildPath } from './utils'
-
-interface DocReferencesProps {
-  items: (IMethod | IType)[]
-  specKey: string
-  api: ApiModel
+/**
+ * Common styled components to be used across the whole library
+ */
+export const ApixCode = styled(Code)`
+  background-color: ${({ theme }) => theme.colors.ui1};
+  border: 1px solid ${({ theme }) => theme.colors.ui2};
+  border-radius: 4px;
+`
+ApixCode.defaultProps = {
+  fontSize: 'small',
+  mb: 'large',
+  pl: 'xxsmall',
+  pr: 'xxsmall',
 }
 
-export const DocReferences: FC<DocReferencesProps> = ({
-  items,
-  specKey,
-  api,
-}) => {
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
+export const ApixHeading = styled(Heading)`
+  color: ${({ theme }) => theme.colors.text2};
+`
+ApixHeading.defaultProps = {
+  fontWeight: 'semiBold',
+  mb: 'xsmall',
+  pt: 'xsmall',
+}
 
-  return (
-    <Box>
-      {items.map((item, index) => (
-        <span className="doc-link" key={item.name}>
-          {index ? ', ' : ''}
-          <Link to={buildPath(api, item, specKey)}>
-            {highlightHTML(pattern, item.name)}
-          </Link>
-        </span>
-      ))}
-    </Box>
-  )
+export const ApixList = styled(List)``
+ApixList.defaultProps = {
+  mb: 'large',
+}
+
+export const ApixParagraph = styled(Paragraph)`
+  color: ${({ theme }) => theme.colors.text2};
+`
+ApixParagraph.defaultProps = {
+  mb: 'large',
+}
+
+export const ApixTable = styled(Table)``
+ApixTable.defaultProps = { mb: 'large' }
+
+export const ApixCodeBlock = styled(CodeBlock)``
+ApixCodeBlock.defaultProps = {
+  fontSize: 'large',
+  mb: 'larger',
 }

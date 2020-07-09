@@ -25,13 +25,14 @@
  */
 
 import React, { FC, useContext } from 'react'
-import { SidebarItem, Heading } from '@looker/components'
+import { SidebarItem, Space } from '@looker/components'
 import { MethodList } from '@looker/sdk-codegen'
 import { NavLink } from 'react-router-dom'
 
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
 import { MethodBadge } from '../MethodBadge'
+import { ApixHeading } from '../common'
 
 interface MethodsProps {
   methods: MethodList
@@ -44,19 +45,24 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
     searchSettings: { pattern },
   } = useContext(SearchContext)
 
-  // TODO: make selected item visible
   return (
     <ul>
       {Object.values(methods).map((method) => (
         <li key={method.name}>
           <NavLink to={buildMethodPath(specKey, tag, method.name)}>
             <SidebarItem key={method.name} as="span">
-              <>
-                <MethodBadge verb={method.httpMethod} />
-                <Heading as="h5" truncate>
+              <Space gap="xsmall">
+                <MethodBadge
+                  alignTextCenter
+                  compact
+                  httpMethod={method.httpMethod}
+                >
+                  {method.httpMethod.toUpperCase()}
+                </MethodBadge>
+                <ApixHeading as="h5" mb="0" pt="0" fontWeight="light" truncate>
                   {highlightHTML(pattern, method.summary)}
-                </Heading>
-              </>
+                </ApixHeading>
+              </Space>
             </SidebarItem>
           </NavLink>
         </li>

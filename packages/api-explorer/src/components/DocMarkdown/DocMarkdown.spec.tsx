@@ -25,7 +25,11 @@
  */
 
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
+import {
+  renderWithTheme,
+  withThemeProvider,
+} from '@looker/components-test-utils'
 
 import { renderWithSearch } from '../../test-utils'
 import { DocMarkdown } from './DocMarkdown'
@@ -33,12 +37,14 @@ import { DocMarkdown } from './DocMarkdown'
 describe('DocMarkdown', () => {
   test('it renders markdown', () => {
     renderWithSearch(
-      <DocMarkdown
-        source={
-          '# Markdown Component \n Renders markdown using [ReactMarkdown](https://github.com/rexxars/react-markdown)'
-        }
-        specKey={'3.1'}
-      />
+      withThemeProvider(
+        <DocMarkdown
+          source={
+            '# Markdown Component \n Renders markdown using [ReactMarkdown](https://github.com/rexxars/react-markdown)'
+          }
+          specKey={'3.1'}
+        />
+      )
     )
     const heading = screen.getByRole('heading')
     expect(heading).toHaveTextContent('Markdown Component')
@@ -53,7 +59,7 @@ describe('DocMarkdown', () => {
   test('it remaps hashbang urls found in markdown input', () => {
     const input =
       'A link to the [create_dashboard](#!/Dashboard/create_dashboard) endpoint'
-    render(<DocMarkdown source={input} specKey={'3.1'} />)
+    renderWithTheme(<DocMarkdown source={input} specKey={'3.1'} />)
     expect(
       screen.findByText('A link to the create_dashboard endpoint')
     ).toBeDefined()
@@ -65,10 +71,12 @@ describe('DocMarkdown', () => {
 
   test('it leaves external urls untouched', () => {
     renderWithSearch(
-      <DocMarkdown
-        source={'[external_link](https://www.foo.com)'}
-        specKey={'3.1'}
-      />
+      withThemeProvider(
+        <DocMarkdown
+          source={'[external_link](https://www.foo.com)'}
+          specKey={'3.1'}
+        />
+      )
     )
     expect(screen.getByText('external_link')).toHaveAttribute(
       'href',
@@ -79,10 +87,12 @@ describe('DocMarkdown', () => {
   test('it highlights text matching search pattern', () => {
     const highlightPattern = 'spec'
     renderWithSearch(
-      <DocMarkdown
-        source={'An API Explorer to explore your OpenAPI spec'}
-        specKey={'3.1'}
-      />,
+      withThemeProvider(
+        <DocMarkdown
+          source={'An API Explorer to explore your OpenAPI spec'}
+          specKey={'3.1'}
+        />
+      ),
       highlightPattern
     )
     const mark = screen.getByText(highlightPattern)
@@ -92,12 +102,14 @@ describe('DocMarkdown', () => {
   test('it only highlights search matches in the display text of link', () => {
     const highlightPattern = 'dashboard'
     renderWithSearch(
-      <DocMarkdown
-        source={
-          'An inline styled link with matching text in both the link text and the href: [create_dashboard](/3.1/methods/Dashboard/create_dashboard)'
-        }
-        specKey={'3.1'}
-      />,
+      withThemeProvider(
+        <DocMarkdown
+          source={
+            'An inline styled link with matching text in both the link text and the href: [create_dashboard](/3.1/methods/Dashboard/create_dashboard)'
+          }
+          specKey={'3.1'}
+        />
+      ),
       highlightPattern
     )
     const link = screen.getByRole('link')
@@ -111,7 +123,7 @@ describe('DocMarkdown', () => {
   test('it renders code blocks', () => {
     const code =
       '```\nAuthorization: token 4QDkCyCtZzYgj4C2p2cj3csJH7zqS5RzKs2kTnG4\n```'
-    render(<DocMarkdown source={code} specKey={'3.1'} />)
+    renderWithTheme(<DocMarkdown source={code} specKey={'3.1'} />)
     expect(
       screen.getByText(
         'Authorization: token 4QDkCyCtZzYgj4C2p2cj3csJH7zqS5RzKs2kTnG4'
@@ -121,7 +133,7 @@ describe('DocMarkdown', () => {
 
   test('it renders inline code', () => {
     const markdown = 'Some text with code: `const noop = () => null`'
-    render(<DocMarkdown source={markdown} specKey={'3.1'} />)
+    renderWithTheme(<DocMarkdown source={markdown} specKey={'3.1'} />)
     expect(screen.getByText('const noop = () => null')).toBeInTheDocument()
   })
 })

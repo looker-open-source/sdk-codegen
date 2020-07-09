@@ -27,15 +27,10 @@
 import React, { FC, Dispatch } from 'react'
 import { FieldSelect } from '@looker/components'
 import { useHistory } from 'react-router-dom'
-import styled from 'styled-components'
 
 import { SpecItems } from '../../ApiExplorer'
 import { SpecAction, SpecState } from '../../reducers'
 import { selectSpec } from '../../reducers'
-
-const StyledFieldSelect = styled(FieldSelect)`
-  margin-bottom: 0;
-`
 
 interface ApiSpecSelectorProps {
   specs: SpecItems
@@ -57,11 +52,11 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
   }
 
   return (
-    <StyledFieldSelect
+    <FieldSelect
       defaultValue={spec.key}
+      options={options}
       aria-label="Version"
       label="Version"
-      options={options}
       mb="0"
       mr="large"
       onChange={handleChange}

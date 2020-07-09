@@ -23,59 +23,74 @@
  SOFTWARE.
 
  */
-
 import React, { FC } from 'react'
-import { Badge } from '@looker/components'
-import styled from 'styled-components'
+import { generatePressed, intentUIBlend } from '@looker/design-tokens'
+import { HttpMethod } from '@looker/sdk/src'
+import styled, { css } from 'styled-components'
 
 interface MethodBadgeProps {
-  verb: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'TRACE' | 'HEAD'
+  httpMethod: HttpMethod
+  compact?: boolean
+  alignTextCenter?: boolean
 }
 
-const StyledMethodBadge = styled(Badge)`
-  display: block;
-  font-size: 0.5rem;
-  margin-right: ${(props) => props.theme.space.xsmall};
-  padding: 0;
-  text-align: center;
-  min-width: 2.5rem;
-
-  &.get {
-    background-color: ${(props) => props.theme.colors.palette.blue100};
-    color: ${(props) => props.theme.colors.palette.blue600};
-  }
-
-  &.post {
-    background-color: ${(props) => props.theme.colors.palette.green100};
-    color: ${(props) => props.theme.colors.palette.green700};
-  }
-
-  &.put {
-    background-color: ${(props) => props.theme.colors.palette.purple100};
-    color: ${(props) => props.theme.colors.palette.purple700};
-  }
-
-  &.delete {
-    background-color: ${(props) => props.theme.colors.palette.red100};
-    color: ${(props) => props.theme.colors.palette.red600};
-  }
-
-  &.patch {
-    background-color: ${(props) => props.theme.colors.palette.yellow100};
-    color: ${(props) => props.theme.colors.palette.yellow900};
-  }
-
-  &.trace {
-    background-color: ${(props) => props.theme.colors.palette.yellow000};
-    color: ${(props) => props.theme.colors.palette.yellow600};
-  }
-
-  &.head {
-    background-color: ${(props) => props.theme.colors.palette.charcoal100};
-    color: ${(props) => props.theme.colors.palette.charcoal700};
-  }
-`
-
-export const MethodBadge: FC<MethodBadgeProps> = ({ verb }) => (
-  <StyledMethodBadge className={verb.toLowerCase()}>{verb}</StyledMethodBadge>
+export const MethodBadge: FC<MethodBadgeProps> = ({
+  alignTextCenter,
+  httpMethod,
+  compact,
+  ...props
+}) => (
+  <MethodBadgeInternal
+    alignTextCenter={alignTextCenter}
+    compact={compact}
+    httpMethod={httpMethod}
+  >
+    {props.children}
+  </MethodBadgeInternal>
 )
+
+export const getMethodColor = (method: HttpMethod) => {
+  switch (method) {
+    case 'DELETE':
+      return 'critical'
+    case 'GET':
+      return 'inform'
+    case 'HEAD':
+      return 'neutral'
+    case 'PATCH':
+      return 'warn'
+    case 'POST':
+      return 'positive'
+    case 'PUT':
+      return 'key'
+    case 'TRACE':
+      return 'warn'
+  }
+}
+
+type BadgeIntent =
+  | 'warn'
+  | 'positive'
+  | 'critical'
+  | 'inform'
+  | 'neutral'
+  | 'key'
+
+const badgeIntent = (intent: BadgeIntent) =>
+  css`
+    background: ${intentUIBlend(intent, 1)};
+    color: ${({ theme }) => generatePressed(theme.colors[intent])};
+  `
+
+const MethodBadgeInternal = styled.div<MethodBadgeProps>`
+  ${(props) => badgeIntent(getMethodColor(props.httpMethod))};
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: ${({ theme, compact }) =>
+    `${compact ? `calc(${theme.fontSizes.large}/2)` : theme.fontSizes.small}`};
+  font-weight: ${({ theme }) => `${theme.fontWeights.semiBold}`};
+  padding: ${({ theme, compact }) => `${theme.space.xxsmall}
+    ${compact ? '0' : theme.space.xsmall}`};
+  text-align: ${(props) => (props.alignTextCenter ? 'center' : 'left')};
+  min-width: 2.5rem;
+`

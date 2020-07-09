@@ -52,7 +52,7 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
 
   return (
     <>
-      <DocTitle title={`${tag.name}: ${tag.description}`} />
+      <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
       <ButtonTransparent
         disabled={value.length === allOptions.length}
         className="active"

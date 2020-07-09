@@ -25,7 +25,7 @@
  */
 
 import React, { FC } from 'react'
-import { Flex, Space } from '@looker/components'
+import { Flex, Space, Text } from '@looker/components'
 import { useParams } from 'react-router-dom'
 import { TryIt, TryItCallback, TryItHttpMethod } from '@looker/try-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
@@ -59,7 +59,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api, tryItCallback }) => {
 
   return (
     <>
-      <DocTitle title={method.summary} />
+      <DocTitle>{method.summary}</DocTitle>
       <Flex mb="xxlarge">
         <Space gap="large">
           <DocStatus method={method} />
@@ -71,10 +71,10 @@ export const MethodScene: FC<DocMethodProps> = ({ api, tryItCallback }) => {
       <DocMarkdown source={method.description} specKey={specKey} />
       <DocSDKs api={api} method={method} />
       {seeTypes.length > 0 && (
-        <>
-          Referenced types:
+        <Space mb="large" gap="xsmall">
+          <Text>Referenced types:</Text>
           <DocReferences items={seeTypes} api={api} specKey={specKey} />
-        </>
+        </Space>
       )}
       {method.responses && <DocResponse responses={method.responses} />}
       <TryIt

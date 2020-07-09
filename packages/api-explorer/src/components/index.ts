@@ -23,6 +23,14 @@
  SOFTWARE.
 
  */
+export {
+  ApixList,
+  ApixTable,
+  ApixCodeBlock,
+  ApixCode,
+  ApixParagraph,
+  ApixHeading,
+} from './common'
 export { DocActivityType } from './DocActivityType'
 export { DocCode } from './DocCode'
 export { DocMethodSummary } from './DocMethodSummary'
@@ -33,9 +41,14 @@ export { DocReferences } from './DocReferences'
 export { DocSDKs } from './DocSDKs'
 export { DocStatus } from './DocStatus'
 export { DocTitle } from './DocTitle'
-export { ExplorerStyle } from './ExplorerStyle'
+export {
+  HeaderWrapper,
+  HEADER_HEIGHT,
+  ExplorerStyle,
+  PageLayout,
+  SideNavDivider,
+} from './ExplorerStyle'
 export { Header } from './Header'
-export { Main } from './MainWrapper'
 export { MethodBadge } from './MethodBadge'
 export { SideNav } from './SideNav'
 export { SideNavToggle } from './SideNavToggle'

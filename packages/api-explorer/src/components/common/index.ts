@@ -23,41 +23,11 @@
  SOFTWARE.
 
  */
-
-import React, { FC, useContext } from 'react'
-import { Box } from '@looker/components'
-import { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
-import { Link } from 'react-router-dom'
-
-import { highlightHTML } from '../../utils'
-import { SearchContext } from '../../context'
-import { buildPath } from './utils'
-
-interface DocReferencesProps {
-  items: (IMethod | IType)[]
-  specKey: string
-  api: ApiModel
-}
-
-export const DocReferences: FC<DocReferencesProps> = ({
-  items,
-  specKey,
-  api,
-}) => {
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
-
-  return (
-    <Box>
-      {items.map((item, index) => (
-        <span className="doc-link" key={item.name}>
-          {index ? ', ' : ''}
-          <Link to={buildPath(api, item, specKey)}>
-            {highlightHTML(pattern, item.name)}
-          </Link>
-        </span>
-      ))}
-    </Box>
-  )
-}
+export {
+  ApixCode,
+  ApixCodeBlock,
+  ApixHeading,
+  ApixList,
+  ApixParagraph,
+  ApixTable,
+} from './common'

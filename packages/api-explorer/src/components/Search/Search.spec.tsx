@@ -109,7 +109,7 @@ describe('Search', () => {
     renderWithSearchAndRouter(
       withThemeProvider(<Search api={api} specKey={'3.1'} />)
     )
-    userEvent.click(screen.getByTitle('Gear Outline'))
+    userEvent.click(screen.getByTitle('Filter'))
     await waitFor(() => {
       const criteria = screen.getAllByRole('checkbox')
       /** This will change when we fuse some of the search criteria */

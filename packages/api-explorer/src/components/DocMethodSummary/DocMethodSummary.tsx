@@ -39,7 +39,7 @@ export const DocMethodSummary: FC<DocMethodSummaryProps> = ({ method }) => {
     <Card raised>
       <CardContent>
         <Space>
-          <MethodBadge verb={method.httpMethod} />
+          <MethodBadge httpMethod={method.httpMethod} />
           {method.summary}
           <DocSummaryStatus method={method} />
           <DocRateLimited method={method} />

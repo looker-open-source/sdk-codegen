@@ -26,19 +26,15 @@
 
 import React, { FC, Dispatch } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Heading, Flex, FlexItem, Box } from '@looker/components'
-import styled from 'styled-components'
+import { FlexItem, Space, Text, Box } from '@looker/components'
 
 import { SpecItems } from '../../ApiExplorer'
 import { SpecState, SpecAction } from '../../reducers'
 import { Search } from '../Search'
+import { HeaderWrapper } from '../ExplorerStyle'
+import { ApixHeading } from '../common'
+import { Logo } from './svg'
 import { ApiSpecSelector } from './ApiSpecSelector'
-
-const StyledHeaderWrapper = styled(Flex)`
-  border-bottom 1px solid ${(props) => props.theme.colors.palette.charcoal200};
-  flex-direction: row;
-  height: 66px;
-`
 
 interface HeaderProps {
   specs: SpecItems
@@ -47,18 +43,18 @@ interface HeaderProps {
 }
 
 export const Header: FC<HeaderProps> = ({ specs, spec, specDispatch }) => (
-  <StyledHeaderWrapper
-    alignItems="center"
-    justifyContent="space-between"
-    pt="medium"
-    pr="large"
-    pb="medium"
-    pl="large"
-  >
-    <FlexItem>
-      <Heading color="palette.charcoal500" fontSize="xxlarge">
-        <NavLink to={`/${spec.key}`}>API Explorer</NavLink>
-      </Heading>
+  <HeaderWrapper>
+    <FlexItem align-items="center">
+      <ApixHeading fontSize="xxlarge">
+        <NavLink to={`/${spec.key}`}>
+          <Space gap="small">
+            <Logo />
+            <Text color="key" fontSize="xlarge" fontWeight="light">
+              API Explorer
+            </Text>
+          </Space>
+        </NavLink>
+      </ApixHeading>
     </FlexItem>
     <Box width="50%">
       <Search api={spec.api} specKey={spec.key} />
@@ -66,5 +62,5 @@ export const Header: FC<HeaderProps> = ({ specs, spec, specDispatch }) => (
     <FlexItem>
       <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
     </FlexItem>
-  </StyledHeaderWrapper>
+  </HeaderWrapper>
 )
