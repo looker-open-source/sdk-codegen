@@ -29,5 +29,5 @@ export {
   createRequestParams,
   defaultTryItCallback,
   pathify,
-  tryItSDK,
 } from './requestUtils'
+export { tryItSDK } from './TryItSDK'

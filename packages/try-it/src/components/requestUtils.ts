@@ -24,51 +24,10 @@
 
  */
 
-import {
-  ApiSettings,
-  DefaultSettings,
-  IApiSettings,
-  IApiSection,
-  IRawResponse,
-  LookerBrowserSDK,
-} from '@looker/sdk/lib/browser'
+import { IRawResponse } from '@looker/sdk/lib/browser'
 
 import { TryItHttpMethod, TryItInput, TryItValues } from '../TryIt'
-
-// https://docs.looker.com/reference/api-and-integration/api-cors
-// TODO create a separate file for TryItSettings and the default request handler
-const settings = {
-  ...DefaultSettings(),
-  agentTag: 'TryIt',
-  base_url: 'https://self-signed.looker.com:19999',
-} as IApiSettings
-
-class TryItSettings extends ApiSettings {
-  constructor(settings: Partial<IApiSettings>) {
-    super({ ...settings, ...{ client_id: 'looker.api-explorer' } })
-  }
-
-  isConfigured(): boolean {
-    const creds = this.readConfig()
-    return (
-      super.isConfigured() && 'redirect_uri' in creds && 'looker_url' in creds
-    )
-  }
-
-  readConfig(_section?: string): IApiSection {
-    return {
-      ...super.readConfig(_section),
-      ...{
-        client_id: 'looker.api-explorer',
-        looker_url: 'https://self-signed.looker.com:9999',
-        redirect_uri: 'https://localhost:8080/oauth',
-      },
-    }
-  }
-}
-
-// TODO get these values from the stand-alone TryIt provider
-export const tryItSDK = LookerBrowserSDK.init40(new TryItSettings(settings))
+import { tryItSDK } from './TryItSDK'
 
 /**
  * Replaces {foo} with vars[foo] in provided path
@@ -148,7 +107,8 @@ export const defaultTryItCallback = async (
   body: any
 ): Promise<IRawResponse> => {
   // TODO provide the API path via callback
-  if (!tryItSDK.authSession.isAuthenticated()) await tryItSDK.ok(tryItSDK.authSession.login())
+  if (!tryItSDK.authSession.isAuthenticated())
+    await tryItSDK.ok(tryItSDK.authSession.login())
   const url = `/api/${specKey}${pathify(endpoint, pathParams)}`
   return await tryItSDK.authSession.transport.rawRequest(
     httpMethod,
