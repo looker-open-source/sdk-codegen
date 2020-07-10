@@ -89,15 +89,15 @@ describe('TagScene', () => {
     )
     const allLookMethods = /^\/look.*/
     expect(screen.getAllByText(allLookMethods)).toHaveLength(7)
-    /** Filter out the 3 GET methods */
+    /** Filter by GET operation */
     userEvent.click(screen.getByRole('button', { name: 'GET' }))
     await waitFor(() => {
-      expect(screen.getAllByText(allLookMethods)).toHaveLength(3)
+      expect(screen.getAllByText(allLookMethods)).toHaveLength(4)
     })
-    /** Filter out the 1 DELETE method */
+    /** Filter by DELETE operation */
     userEvent.click(screen.getByRole('button', { name: 'DELETE' }))
     await waitFor(() => {
-      expect(screen.getAllByText(allLookMethods)).toHaveLength(2)
+      expect(screen.getAllByText(allLookMethods)).toHaveLength(1)
     })
     /** Restore original state */
     userEvent.click(screen.getByRole('button', { name: 'ALL' }))

@@ -25,8 +25,8 @@
  */
 import React, { FC, useState } from 'react'
 import { ApiModel } from '@looker/sdk-codegen'
-import { useParams, NavLink } from 'react-router-dom'
-import { ButtonGroup, ButtonTransparent, Grid } from '@looker/components'
+import { useParams, NavLink, useHistory } from 'react-router-dom'
+import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 
 import { DocTitle, DocMethodSummary } from '../../components'
 import { buildMethodPath } from '../../utils'
@@ -42,33 +42,29 @@ interface TagSceneParams {
 }
 export const TagScene: FC<TagSceneProps> = ({ api }) => {
   const { specKey, methodTag } = useParams<TagSceneParams>()
-  const tag = Object.values(api.schema?.tags!).filter(
+  const history = useHistory()
+  if (!(methodTag in api.tags)) {
+    history.push('/methods')
+  }
+  const methods = api.tags[methodTag]
+  const tag = Object.values(api.schema?.tags!).find(
     (tag) => tag.name === methodTag
-  )[0]
-  const methods = api.tags[tag.name]
+  )!
   const operations = getOperations(methods)
-  const allOptions = operations.map((op) => op.value)
-  const [value, setValue] = useState<string[]>(operations.map((el) => el.value))
+  const [value, setValue] = useState('ALL')
 
   return (
     <>
       <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
-      <ButtonTransparent
-        disabled={value.length === allOptions.length}
-        className="active"
-        onClick={() => setValue(allOptions)}
-      >
-        ALL
-      </ButtonTransparent>
-      <ButtonGroup
-        value={value}
-        onChange={setValue}
-        padding="xsmall"
-        options={operations}
-      />
+      <ButtonToggle value={value} onChange={setValue}>
+        <ButtonItem key="ALL">ALL</ButtonItem>
+        {operations.map((op) => (
+          <ButtonItem key={op}>{op}</ButtonItem>
+        ))}
+      </ButtonToggle>
       {Object.values(methods).map(
         (method, index) =>
-          value.includes(method.httpMethod) && (
+          (value === method.httpMethod || value === 'ALL') && (
             <NavLink
               key={index}
               to={buildMethodPath(specKey, tag.name, method.name)}
