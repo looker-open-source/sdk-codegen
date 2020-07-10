@@ -29,6 +29,11 @@ module.exports = {
     contentBase: path.join(__dirname, 'public'),
     historyApiFallback: true,
     publicPath: '/dist/',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
   },
   devtool: 'inline-source-map',
   entry: './src/index.tsx',

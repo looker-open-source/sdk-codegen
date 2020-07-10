@@ -30,3 +30,4 @@ export {
   defaultTryItCallback,
   pathify,
 } from './requestUtils'
+export { tryItSDK } from './TryItSDK'

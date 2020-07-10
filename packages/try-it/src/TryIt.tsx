@@ -54,6 +54,7 @@ export type TryItValues = { [key: string]: any }
 
 export interface TryItCallback {
   (
+    specKey: string,
     httpMethod: TryItHttpMethod,
     path: string,
     pathParams: TryItValues,
@@ -72,6 +73,7 @@ export interface TryItInput {
 }
 
 interface TryItProps {
+  specKey: string
   inputs: TryItInput[]
   httpMethod: TryItHttpMethod
   endpoint: string
@@ -81,6 +83,7 @@ interface TryItProps {
 type ResponseContent = IRawResponse | undefined
 
 export const TryIt: FC<TryItProps> = ({
+  specKey,
   inputs,
   httpMethod,
   endpoint,
@@ -107,7 +110,14 @@ export const TryIt: FC<TryItProps> = ({
     tabs.onSelectTab(1)
     setLoading(true)
     setResponseContent(
-      await callback(httpMethod, endpoint, pathParams, queryParams, body)
+      await callback(
+        specKey,
+        httpMethod,
+        endpoint,
+        pathParams,
+        queryParams,
+        body
+      )
     )
   }
 

@@ -26,7 +26,7 @@
 
 import { IAccessToken, IError } from '..'
 import { AuthSession } from './authSession'
-import { IRequestProps, sdkError } from './transport'
+import { agentPrefix, IRequestProps, sdkError } from './transport'
 import { AuthToken } from './authToken'
 import { ICryptoHash } from './cryptoHash'
 import { IPlatformServices } from './platformServices'
@@ -48,8 +48,9 @@ interface IRefreshTokenGrantTypeParams {
 
 export class OAuthSession extends AuthSession {
   activeToken = new AuthToken()
-  code_verifier?: string
   crypto: ICryptoHash
+  private static readonly codeVerifierKey = 'looker_oauth_code_verifier'
+  private static readonly returnUrlKey = 'looker_oauth_return_url'
 
   constructor(services: IPlatformServices) {
     super(services.settings, services.transport)
@@ -62,8 +63,10 @@ export class OAuthSession extends AuthSession {
       'base_url',
       'looker_url',
     ]
+    const creds = { ...this.settings, ...this.settings.readConfig() }
+
     keys.forEach((key) => {
-      const value = this.settings[key]
+      const value = creds[key]
       if (!value) {
         throw sdkError({
           message: `Missing required configuration setting: '${key}'`,
@@ -72,15 +75,101 @@ export class OAuthSession extends AuthSession {
     })
   }
 
-  /*
-    Apply current auth token credentials to an HTTP request
-  */
+  /**
+   * Apply current auth token credentials to an HTTP request
+   * @param props request properties to update
+   * @returns updated request properties with auth information added
+   */
   async authenticate(props: IRequestProps): Promise<IRequestProps> {
     const token = await this.getToken()
     if (token.access_token) {
       props.headers.Authorization = `Bearer ${token.access_token}`
     }
     return props
+  }
+
+  /**
+   * Gets session storage for OAuth code verification
+   * @returns saved code verifier
+   */
+  get code_verifier() {
+    return sessionStorage.getItem(OAuthSession.codeVerifierKey)
+  }
+
+  /**
+   * Sets session storage for OAuth code verification
+   */
+  set code_verifier(value: string | null) {
+    if (value === null) {
+      // only clear code_verifier if it's `null`
+      sessionStorage.removeItem(OAuthSession.codeVerifierKey)
+    } else {
+      sessionStorage.setItem(OAuthSession.codeVerifierKey, value)
+    }
+  }
+
+  /**
+   * URL to return to after login process completes
+   * @returns the URL that started the OAuth login process
+   */
+  get returnUrl() {
+    return sessionStorage.getItem(OAuthSession.returnUrlKey)
+  }
+
+  /**
+   * Sets the return URL for successful OAuth login
+   */
+  set returnUrl(value: string | null) {
+    if (!value) {
+      sessionStorage.removeItem(OAuthSession.returnUrlKey)
+    } else {
+      sessionStorage.setItem(OAuthSession.returnUrlKey, value)
+    }
+  }
+
+  /**
+   * Clears all Looker SDK OAuth-related session storage
+   */
+  clearStorage() {
+    sessionStorage.removeItem(OAuthSession.codeVerifierKey)
+    sessionStorage.removeItem(OAuthSession.returnUrlKey)
+  }
+
+  async login(_sudoId?: string | number): Promise<any> {
+    if (!this.isAuthenticated()) {
+      if (!this.returnUrl) {
+        // OAuth has not been initiated
+        const authUrl = await this.createAuthCodeRequestUrl(
+          'cors_api',
+          agentPrefix
+        )
+        this.returnUrl = window.location.pathname + window.location.search
+        // Save the current URL so redirected successful OAuth login can restore it
+        window.location.href = authUrl
+      } else {
+        // If return URL is stored, we must be coming back from an OAuth request
+        // so catch and release the stored return url at the start of the redemption
+        this.returnUrl = null
+        if (!this.code_verifier) {
+          return Promise.reject(
+            new Error('OAuth failed: expected code_verifier to be stored')
+          )
+        }
+        const params = new URLSearchParams(window.location.search)
+        const code = params.get('code')
+        if (!code) {
+          return Promise.reject(
+            new Error(
+              `OAuth failed: no OAuth code parameter found in ${window.location
+                .pathname + window.location.search}`
+            )
+          )
+        }
+        await this.redeemAuthCode(code!)
+      }
+      return await this.getToken()
+    }
+    return this.activeToken
   }
 
   private async requestToken(
@@ -111,16 +200,17 @@ export class OAuthSession extends AuthSession {
   ): Promise<string> {
     this.code_verifier = this.crypto.secureRandom(32)
     const code_challenge = await this.crypto.sha256Hash(this.code_verifier)
+    const config = this.settings.readConfig()
     const params: Record<string, string> = {
-      client_id: this.settings.client_id,
+      client_id: config.client_id,
       code_challenge: code_challenge,
       code_challenge_method: 'S256',
-      redirect_uri: this.settings.redirect_uri,
+      redirect_uri: config.redirect_uri,
       response_type: 'code',
       scope: scope,
       state: state,
     }
-    const url = new URL(this.settings.looker_url)
+    const url = new URL(config.looker_url)
     url.pathname = '/auth'
     url.search = new URLSearchParams(params).toString()
     return url.toString()
@@ -128,12 +218,13 @@ export class OAuthSession extends AuthSession {
 
   redeemAuthCodeBody(authCode: string, codeVerifier?: string) {
     const verifier = codeVerifier || this.code_verifier || ''
+    const config = this.settings.readConfig()
     return {
-      client_id: this.settings.client_id,
+      client_id: config.client_id,
       code: authCode,
       code_verifier: verifier,
       grant_type: 'authorization_code',
-      redirect_uri: this.settings.redirect_uri,
+      redirect_uri: config.redirect_uri,
     } as IAuthCodeGrantTypeParams
   }
 
@@ -154,10 +245,11 @@ export class OAuthSession extends AuthSession {
   async getToken() {
     if (!this.isAuthenticated()) {
       if (this.activeToken.refresh_token) {
+        const config = this.settings.readConfig()
         await this.requestToken({
-          client_id: this.settings.client_id,
+          client_id: config.client_id,
           grant_type: 'refresh_token',
-          redirect_uri: this.settings.redirect_uri,
+          redirect_uri: config.redirect_uri,
           refresh_token: this.activeToken.refresh_token,
         })
       }
@@ -186,6 +278,7 @@ export class OAuthSession extends AuthSession {
 
       // logout destroys the access_token AND the refresh_token
       this.activeToken = new AuthToken()
+      this.clearStorage()
       return true
     }
     return false

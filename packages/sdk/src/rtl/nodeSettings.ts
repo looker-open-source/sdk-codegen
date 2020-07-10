@@ -31,14 +31,11 @@ import {
   ApiSettings,
   DefaultSettings,
   IApiSettings,
+  IApiSection,
   ValueSettings,
 } from './apiSettings'
 import { unquote } from './constants'
 import { sdkError } from './transport'
-
-export interface IApiSection {
-  [key: string]: string
-}
 
 /**
  * Read an environment key. Use defaultValue if it doesn't exist

@@ -37,7 +37,9 @@ import {
   LookerAppId,
   agentPrefix,
   Values,
-  IRawResponse, responseMode, ResponseMode,
+  IRawResponse,
+  responseMode,
+  ResponseMode,
 } from './transport'
 import { BaseTransport } from './baseTransport'
 import { lookerVersion } from './constants'
@@ -174,14 +176,19 @@ export class BrowserTransport extends BaseTransport {
       })
     }
 
+    // Make sure an empty body is undefined
+    if (!body) {
+      body = undefined
+    } else {
+      if (typeof body !== 'string') {
+        body = JSON.stringify(body)
+        headers['Content-Type'] = 'application/json'
+      }
+    }
     let props: IRequestProps = {
-      body: body
-        ? typeof body === 'string'
-          ? body
-          : JSON.stringify(body)
-        : undefined,
+      body,
       credentials: 'same-origin',
-      headers: headers,
+      headers,
       method,
       url: path,
     }

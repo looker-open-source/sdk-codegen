@@ -40,6 +40,7 @@ interface TagSceneParams {
   specKey: string
   methodTag: string
 }
+
 export const TagScene: FC<TagSceneProps> = ({ api }) => {
   const { specKey, methodTag } = useParams<TagSceneParams>()
   const tag = Object.values(api.schema?.tags!).filter(

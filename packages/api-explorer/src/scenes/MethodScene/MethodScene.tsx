@@ -80,6 +80,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api, tryItCallback }) => {
       )}
       {method.responses && <DocResponse responses={method.responses} />}
       <TryIt
+        specKey={specKey}
         inputs={createInputs(api, method)}
         httpMethod={method.httpMethod as TryItHttpMethod}
         endpoint={method.endpoint}

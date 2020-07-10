@@ -32,7 +32,6 @@ import {
   isTrue,
   unquote,
 } from './constants'
-import { IApiSection } from './nodeSettings'
 
 export interface IValueSettings {
   [name: string]: string
@@ -55,6 +54,10 @@ export const ApiConfigMap: IValueSettings = {
 export const strBadConfiguration = `${agentPrefix} configuration error:
 Missing required configuration values like base_url
 `
+
+export interface IApiSection {
+  [key: string]: string
+}
 
 export interface IApiSettings extends ITransportSettings {
   /**

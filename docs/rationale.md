@@ -6,7 +6,7 @@ This document will attempt to answer that question by providing Looker's goals a
 
 ## Support for multiple SDK languages
 
-The Looker API is used by customers with a wide variety of languages. Data scientists may like using `R` or `Python` while other customers may want to use `Typescript`, `Javascript`, `Java`, or `C#`.
+The Looker API is used with a wide variety of languages. Data scientists may like using `R` or `Python` while other customers may want to use `Typescript`, `Javascript`, `Java`, or `C#`.
 
 At the time of this writing, the SDK code generator only supports `Python` and `Typescript` so the examples used will be based on those languages.
 
@@ -186,7 +186,7 @@ This third-party tool loses some attributes during the conversion, so the SDK co
 
 ## Code generation
 
-The language-specific generators for [Python](src/gen/python.gen.ts) and [Typescript](src/gen/typescript.gen.ts) descend from a common class declared in [codeGen.ts](src/gen/codeGen.ts). The base `CodeGen` class implements the `ICodeGen` interface, which is the contract for all the language-specific options the generator needs to support. Expect to see the internal implementation of this source change throughout the beta process as we refine the generator. The public interface may get some extensions, but is less likely to have significant changes.
+The language-specific generators for [Python](/packages/sdk-codegen/src/python.gen.ts) and [Typescript](/packages/sdk-codegen/src/typescript.gen.ts) descend from a common class declared in [codeGen.ts](/packages/sdk-codegen/src/codeGen.ts). The base `CodeGen` class implements the `ICodeGen` interface, which is the contract for all the language-specific options the generator needs to support. Expect to see the internal implementation of this source change throughout the beta process as we refine the generator. The public interface may get some extensions, but is less likely to have significant changes.
 
 ### Model declarations
 

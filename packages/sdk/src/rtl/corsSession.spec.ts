@@ -25,7 +25,7 @@
  */
 
 import { IAccessToken } from '../sdk/4.0/models'
-import { CorsSession } from './corsSession'
+import { BrowserSession } from './browserSession'
 import { IApiSettings } from './apiSettings'
 import { IRequestProps, ITransport } from './transport'
 import { AuthSession } from './authSession'
@@ -39,7 +39,7 @@ const mockToken: IAccessToken = {
 /**
  * Mocking class for CorsSession getToken() tests
  */
-class CorsMock extends CorsSession {
+class CorsMock extends BrowserSession {
   constructor(public settings: IApiSettings, transport?: ITransport) {
     super(settings, transport)
   }
