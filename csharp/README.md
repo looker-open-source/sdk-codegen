@@ -2,7 +2,7 @@
 
 **C# SDK for Looker**
 
-Look# was developed using the principles in [Build Your Own SDK](../byosdk.md).
+Look# was developed using the principles in [Build Your Own SDK](/docs/byosdk.md).
 
 Look# has:
 

@@ -37,30 +37,26 @@ interface OAuthSceneProps {
 export const OAuthScene: React.FC<OAuthSceneProps> = ({ sdk }) => {
   const [loading, setLoading] = useState(true)
   const history = useHistory()
+  // Default to the OAuth/CORS sdk implementation
   if (!sdk) sdk = tryItSDK
   const auth = sdk.authSession as BrowserSession
 
-  /** capture the stored return URL (if set) before `OAuthSession.login()` clears it */
+  /** capture the stored return URL before `OAuthSession.login()` clears it */
   const newUrl = auth.returnUrl || `/`
 
   useEffect(() => {
-    // TODO is async really this complicated? https://dev.to/alexandrudanpop/correctly-handling-async-await-in-react-components-part-2-4fl7
     async function login() {
-      console.debug(`logging in for ${newUrl} destination ...`)
       try {
         await auth.login()
-        console.debug(`Authenticated? ${auth.isAuthenticated()}`)
       } catch (err) {
         console.error(err)
       }
     }
 
     if (!auth.isAuthenticated()) {
-      login().then(() => {
-        console.debug(
-          `OAuth login completed for ${newUrl}: ${auth.isAuthenticated()}`
-        )
-      })
+      login()
+        .then()
+        .catch((e) => console.error(e))
     }
     setLoading(false)
     history.push(newUrl)
