@@ -24,8 +24,9 @@
 
  */
 import React from 'react'
-import { screen } from '@testing-library/react'
 import { pick } from 'lodash'
+import userEvent from '@testing-library/user-event'
+import { screen } from '@testing-library/react'
 import { withThemeProvider } from '@looker/components-test-utils'
 
 import { api } from '../../test-data'
@@ -42,6 +43,7 @@ describe('SideNavMethods', () => {
         <SideNavMethods methods={methods} tag={tag} specKey={'3.1'} />
       )
     )
+    userEvent.click(screen.getByText(tag))
     const sideNavItems = screen.getAllByRole('link')
     expect(sideNavItems).toHaveLength(Object.keys(methods).length)
     expect(sideNavItems[0]).toHaveAttribute(
@@ -50,7 +52,7 @@ describe('SideNavMethods', () => {
     )
   })
 
-  test('it highlights text matching search pattern', () => {
+  test('it highlights text matching search pattern in both tag and methods', () => {
     const highlightPattern = 'dash'
     renderWithSearchAndRouter(
       withThemeProvider(
@@ -62,7 +64,11 @@ describe('SideNavMethods', () => {
       ),
       highlightPattern
     )
-    const match = screen.getByText('Dash')
-    expect(match).toContainHTML('<span class="hi">Dash</span>')
+    userEvent.click(screen.getByText('Dash'))
+    const matches = screen.getAllByText(/dash/i)
+    expect(matches).toHaveLength(2)
+    matches.forEach((match) => {
+      expect(match).toContainHTML('<span class="hi">Dash</span>')
+    })
   })
 })

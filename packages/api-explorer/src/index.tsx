@@ -29,7 +29,6 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 
 import ApiExplorer, { ApiExplorerProps } from './ApiExplorer'
-import './styles.css'
 
 const specs: ApiExplorerProps = {
   specs: {

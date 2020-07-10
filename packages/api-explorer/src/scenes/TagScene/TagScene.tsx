@@ -73,7 +73,7 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
               key={index}
               to={buildMethodPath(specKey, tag.name, method.name)}
             >
-              <Grid columns={1} padding="xsmall">
+              <Grid columns={1} py="xsmall">
                 <DocMethodSummary key={index} method={method} />
               </Grid>
             </NavLink>

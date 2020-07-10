@@ -24,54 +24,46 @@
 
  */
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react'
 import { pick } from 'lodash'
-
+import { screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { withThemeProvider } from '@looker/components-test-utils'
+
 import { api } from '../../test-data'
 import { renderWithSearchAndRouter } from '../../test-utils'
 import { SideNavTags } from './SideNavTags'
-
-const getExpanded = (tagButtons: HTMLElement[]) =>
-  tagButtons.filter((button) => button.getAttribute('aria-expanded') === 'true')
+import { createMemoryHistory } from 'history'
 
 describe('SideNavTags', () => {
+  const tags = pick(api.tags, ['ApiAuth', 'Dashboard'])
   test('it renders a provided tag and its methods', () => {
-    const tags = pick(api.tags, 'Dashboard')
     renderWithSearchAndRouter(
       withThemeProvider(<SideNavTags tags={tags} specKey={'3.1'} />)
     )
-
-    const tagButton = screen.getByRole('button', { name: /dashboard/i })
-    let isExpanded = tagButton.getAttribute('aria-expanded')
-    expect(isExpanded).toEqual('false')
-    expect(screen.queryAllByRole('link')).toHaveLength(0)
-
-    fireEvent.click(tagButton)
-
-    isExpanded = tagButton.getAttribute('aria-expanded')
-    expect(isExpanded).toEqual('true')
+    const tag = screen.getByText('Dashboard')
+    const tagContent = 'Create Dashboard'
+    expect(screen.queryByText(tagContent)).not.toBeInTheDocument()
+    userEvent.click(tag)
+    expect(screen.getByText(tagContent)).toBeInTheDocument()
     const methods = screen.getAllByRole('link')
     expect(methods).toHaveLength(Object.keys(tags.Dashboard).length)
   })
 
-  test('tags are rendered collapsed initially and expand when clicked', () => {
-    const tags = pick(api.tags, ['ApiAuth', 'Dashboard'])
+  test('tags are rendered initially collapsed and expand when clicked', () => {
     renderWithSearchAndRouter(
       withThemeProvider(<SideNavTags tags={tags} specKey={'3.1'} />)
     )
 
-    const allTagButtons = screen.getAllByRole('button')
-    expect(allTagButtons).toHaveLength(2)
-    expect(getExpanded(allTagButtons)).toHaveLength(0)
-
-    fireEvent.click(screen.getByRole('button', { name: /dashboard/i }))
-
-    expect(getExpanded(screen.getAllByRole('button'))).toHaveLength(1)
+    const allTags = screen.getAllByText(/ApiAuth|Dashboard/)
+    expect(allTags).toHaveLength(2)
+    expect(screen.queryByText('Login')).not.toBeInTheDocument()
+    expect(screen.queryByText('Create Dashboard')).not.toBeInTheDocument()
+    userEvent.click(allTags[0])
+    expect(screen.getByText('Login')).toBeInTheDocument()
+    expect(screen.queryByText('Create Dashboard')).not.toBeInTheDocument()
   })
 
   test('tag is expanded if specified in route', () => {
-    const tags = pick(api.tags, ['ApiAuth', 'Dashboard'])
     renderWithSearchAndRouter(
       withThemeProvider(<SideNavTags tags={tags} specKey={'3.1'} />),
       undefined,
@@ -79,10 +71,11 @@ describe('SideNavTags', () => {
       ['/3.1/methods/Dashboard']
     )
 
-    const allTagButtons = screen.getAllByRole('button')
-    expect(allTagButtons).toHaveLength(2)
-    const expandedTags = getExpanded(allTagButtons)
-    expect(expandedTags).toHaveLength(1)
-    expect(expandedTags[0]).toHaveTextContent('Dashboard')
+    const allTags = screen.getAllByText(/^(ApiAuth|Dashboard)$/)
+    expect(allTags).toHaveLength(2)
+    expect(screen.queryByText('Login')).not.toBeInTheDocument()
+    expect(screen.getAllByRole('link')).toHaveLength(
+      Object.keys(tags.Dashboard).length
+    )
   })
 })

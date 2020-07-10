@@ -36,7 +36,7 @@ import {
   DocRateLimited,
   DocReferences,
   DocSDKs,
-  DocStatus,
+  MethodBadge,
   DocTitle,
 } from '../../components'
 import { DocResponse, DocOperation } from './components'
@@ -59,14 +59,16 @@ export const MethodScene: FC<DocMethodProps> = ({ api, tryItCallback }) => {
 
   return (
     <>
-      <DocTitle>{method.summary}</DocTitle>
-      <Flex mb="xxlarge">
-        <Space gap="large">
-          <DocStatus method={method} />
-          <DocActivityType method={method} />
-          <DocRateLimited method={method} />
-        </Space>
+      <Flex>
+        <MethodBadge httpMethod={method.status} titleStatus>
+          {method.status.toUpperCase()}
+        </MethodBadge>
       </Flex>
+      <DocTitle>{method.summary}</DocTitle>
+      <Space mb="xlarge" gap="small">
+        <DocActivityType method={method} />
+        <DocRateLimited method={method} />
+      </Space>
       <DocOperation method={method} />
       <DocMarkdown source={method.description} specKey={specKey} />
       <DocSDKs api={api} method={method} />

@@ -24,10 +24,15 @@
 
  */
 export {
-  ExplorerStyle,
   HEADER_HEIGHT,
   HeaderWrapper,
+  Main,
   PageLayout,
   SideNavDivider,
   SideNavToggleWrapper,
+  SideNavContent,
+  SideNavDisclosure,
+  SideNavList,
+  SideNavListItem,
+  SideNavTypesLink,
 } from './ExplorerStyle'

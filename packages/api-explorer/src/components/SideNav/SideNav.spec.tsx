@@ -26,7 +26,8 @@
 import React from 'react'
 import { ApiModel } from '@looker/sdk-codegen'
 import { pick } from 'lodash'
-import { screen, fireEvent } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { screen } from '@testing-library/react'
 import { withThemeProvider } from '@looker/components-test-utils'
 
 import { api } from '../../test-data'
@@ -35,12 +36,13 @@ import { SideNav } from './SideNav'
 
 describe('SideNav', () => {
   const testApi = ({
-    tags: pick(api.tags, ['Query', 'ApiAuth']),
+    tags: pick(api.tags, ['Auth', 'ApiAuth']),
     types: pick(api.types, ['WriteDashboard', 'WriteQuery']),
   } as unknown) as ApiModel
+  const allTagsPattern = /^(Auth|ApiAuth)$/
+  const allTypesPattern = /^(WriteDashboard|WriteQuery)$/
 
   test('it renders all tabs', () => {
-    // TODO: this test will (and should) fail when search is moved into header.
     renderWithRouter(
       withThemeProvider(<SideNav api={testApi} specKey={'3.1'} />)
     )
@@ -54,32 +56,26 @@ describe('SideNav', () => {
     renderWithRouter(
       withThemeProvider(<SideNav api={testApi} specKey={'3.1'} />)
     )
+    expect(screen.getAllByText(allTagsPattern)).toHaveLength(2)
     expect(
-      screen.getAllByRole('button', { name: /^(ApiAuth|Query)$/ })
-    ).toHaveLength(2)
-    expect(
-      screen.queryAllByRole('link', { name: /^(WriteQuery|WriteDashboard)$/ })
+      screen.queryAllByRole('link', { name: allTypesPattern })
     ).toHaveLength(0)
 
-    fireEvent.click(screen.getByRole('button', { name: /^Types$/ }))
+    userEvent.click(screen.getByRole('button', { name: /^Types$/ }))
 
-    expect(
-      screen.queryAllByRole('button', { name: /^(ApiAuth|Query)$/ })
-    ).toHaveLength(0)
-    expect(
-      screen.getAllByRole('link', { name: /^(WriteDashboard|WriteQuery)$/ })
-    ).toHaveLength(2)
+    expect(screen.queryAllByText(allTagsPattern)).toHaveLength(0)
+    expect(screen.getAllByRole('link', { name: allTypesPattern })).toHaveLength(
+      2
+    )
   })
 
   test('url determines active tab', () => {
     renderWithRouter(withThemeProvider(<SideNav api={api} specKey={'3.1'} />), [
       '/3.1/types',
     ])
-    expect(
-      screen.queryAllByRole('button', { name: /^(ApiAuth|Query)$/ })
-    ).toHaveLength(0)
-    expect(
-      screen.getAllByRole('link', { name: /^(WriteDashboard|WriteQuery)$/ })
-    ).toHaveLength(2)
+    expect(screen.queryAllByText(allTagsPattern)).toHaveLength(0)
+    expect(screen.getAllByRole('link', { name: allTypesPattern })).toHaveLength(
+      2
+    )
   })
 })

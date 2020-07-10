@@ -24,15 +24,21 @@
 
  */
 
-import React, { FC, useContext } from 'react'
-import { SidebarItem, Space } from '@looker/components'
+import React, { FC, useContext, useState } from 'react'
+import { Accordion, AccordionContent, Space } from '@looker/components'
 import { MethodList } from '@looker/sdk-codegen'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
 
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
 import { MethodBadge } from '../MethodBadge'
 import { ApixHeading } from '../common'
+import {
+  SideNavDisclosure,
+  SideNavContent,
+  SideNavList,
+  SideNavListItem,
+} from '../ExplorerStyle'
 
 interface MethodsProps {
   methods: MethodList
@@ -44,29 +50,55 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
   const {
     searchSettings: { pattern },
   } = useContext(SearchContext)
+  const match = useRouteMatch<{ methodTag: string }>(
+    `/:specKey/methods/:methodTag/:methodName?`
+  )
+  const [isOpen, setIsOpen] = useState(
+    match ? match.params.methodTag === tag : false
+  )
+  const history = useHistory()
+
+  const handleOpen = () => {
+    const _isOpen = !isOpen
+    setIsOpen(_isOpen)
+    if (_isOpen) history.push(`/${specKey}/methods/${tag}`)
+  }
 
   return (
-    <ul>
-      {Object.values(methods).map((method) => (
-        <li key={method.name}>
-          <NavLink to={buildMethodPath(specKey, tag, method.name)}>
-            <SidebarItem key={method.name} as="span">
-              <Space gap="xsmall">
-                <MethodBadge
-                  alignTextCenter
-                  compact
-                  httpMethod={method.httpMethod}
-                >
-                  {method.httpMethod.toUpperCase()}
-                </MethodBadge>
-                <ApixHeading as="h5" mb="0" pt="0" fontWeight="light" truncate>
-                  {highlightHTML(pattern, method.summary)}
-                </ApixHeading>
-              </Space>
-            </SidebarItem>
-          </NavLink>
-        </li>
-      ))}
-    </ul>
+    <Accordion isOpen={isOpen} toggleOpen={handleOpen}>
+      <SideNavDisclosure isOpen={isOpen}>
+        {highlightHTML(pattern, tag)}
+      </SideNavDisclosure>
+      <AccordionContent>
+        <SideNavContent>
+          <SideNavList>
+            {Object.values(methods).map((method) => (
+              <SideNavListItem key={method.name}>
+                <NavLink to={buildMethodPath(specKey, tag, method.name)}>
+                  <Space gap="xsmall">
+                    <MethodBadge
+                      alignTextCenter
+                      compact
+                      httpMethod={method.httpMethod}
+                    >
+                      {method.httpMethod.toUpperCase()}
+                    </MethodBadge>
+                    <ApixHeading
+                      as="h5"
+                      mb="0"
+                      pt="0"
+                      fontWeight="normal"
+                      truncate
+                    >
+                      {highlightHTML(pattern, method.summary)}
+                    </ApixHeading>
+                  </Space>
+                </NavLink>
+              </SideNavListItem>
+            ))}
+          </SideNavList>
+        </SideNavContent>
+      </AccordionContent>
+    </Accordion>
   )
 }

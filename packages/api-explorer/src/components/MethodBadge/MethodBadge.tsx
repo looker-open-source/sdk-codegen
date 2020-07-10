@@ -24,73 +24,101 @@
 
  */
 import React, { FC } from 'react'
-import { generatePressed, intentUIBlend } from '@looker/design-tokens'
+import {
+  generatePressed,
+  intentUIBlend,
+  IntentNames,
+} from '@looker/design-tokens'
 import { HttpMethod } from '@looker/sdk/src'
 import styled, { css } from 'styled-components'
 
+/**
+ * Status of endpoint method.
+ */
+type MethodStatus = 'beta' | 'stable' | 'experimental' | 'deprecated' | 'inform'
+
 interface MethodBadgeProps {
-  httpMethod: HttpMethod
-  compact?: boolean
+  httpMethod: HttpMethod | MethodStatus | string
   alignTextCenter?: boolean
+  compact?: boolean
+  inCard?: boolean
+  titleStatus?: boolean
 }
 
-export const MethodBadge: FC<MethodBadgeProps> = ({
-  alignTextCenter,
-  httpMethod,
-  compact,
-  ...props
-}) => (
-  <MethodBadgeInternal
-    alignTextCenter={alignTextCenter}
-    compact={compact}
-    httpMethod={httpMethod}
-  >
-    {props.children}
-  </MethodBadgeInternal>
-)
+/**
+ * Intent names to display the correct color for the badge based on the HTTP Method.
+ */
+type ApixIntentNames = IntentNames | 'key'
 
-export const getMethodColor = (method: HttpMethod) => {
+export const intentForStatus = (method: HttpMethod | MethodStatus | string) => {
   switch (method) {
     case 'DELETE':
+    case 'deprecated':
       return 'critical'
-    case 'GET':
-      return 'inform'
     case 'HEAD':
       return 'neutral'
     case 'PATCH':
+    case 'TRACE':
+    case 'experimental':
       return 'warn'
     case 'POST':
+    case 'stable':
       return 'positive'
     case 'PUT':
+    case 'beta':
       return 'key'
-    case 'TRACE':
-      return 'warn'
+    case 'GET':
+    default:
+      return 'inform'
   }
 }
 
-type BadgeIntent =
-  | 'warn'
-  | 'positive'
-  | 'critical'
-  | 'inform'
-  | 'neutral'
-  | 'key'
-
-const badgeIntent = (intent: BadgeIntent) =>
+export const cssForIntent = (intent: ApixIntentNames) =>
   css`
     background: ${intentUIBlend(intent, 1)};
     color: ${({ theme }) => generatePressed(theme.colors[intent])};
   `
 
-const MethodBadgeInternal = styled.div<MethodBadgeProps>`
-  ${(props) => badgeIntent(getMethodColor(props.httpMethod))};
+export const InternalMethodBadge = styled.div<{
+  alignTextCenter?: boolean
+  compact?: boolean
+  inCard?: boolean
+  intent: ApixIntentNames
+  titleStatus?: boolean
+}>`
+  ${(props) => cssForIntent(props.intent)};
+  background: ${({ intent, theme, titleStatus }) =>
+    `${titleStatus ? theme.colors.ui1 : intentUIBlend(intent, 1)}`};
   border: 1px solid transparent;
   border-radius: 4px;
   font-size: ${({ theme, compact }) =>
-    `${compact ? `calc(${theme.fontSizes.large}/2)` : theme.fontSizes.small}`};
+    `${compact ? `calc(${theme.fontSizes.large}/2)` : theme.fontSizes.xsmall}`};
   font-weight: ${({ theme }) => `${theme.fontWeights.semiBold}`};
   padding: ${({ theme, compact }) => `${theme.space.xxsmall}
     ${compact ? '0' : theme.space.xsmall}`};
   text-align: ${(props) => (props.alignTextCenter ? 'center' : 'left')};
-  min-width: 2.5rem;
+  min-width: ${({ inCard }) => `${inCard ? '3.7625rem' : '2.5rem'}`};
 `
+
+const MethodBadgeInternal: FC<MethodBadgeProps> = ({
+  alignTextCenter,
+  children,
+  compact,
+  inCard,
+  titleStatus,
+  httpMethod,
+  ...props
+}) => (
+  <InternalMethodBadge
+    alignTextCenter={alignTextCenter}
+    compact={compact}
+    inCard={inCard}
+    titleStatus={titleStatus}
+    intent={intentForStatus(httpMethod)}
+    {...props}
+  >
+    {children}
+  </InternalMethodBadge>
+)
+
+export const MethodBadge = styled(MethodBadgeInternal)<MethodBadgeProps>``

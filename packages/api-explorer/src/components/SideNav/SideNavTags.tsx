@@ -25,38 +25,23 @@
  */
 
 import React, { FC } from 'react'
-import { Sidebar, SidebarGroup } from '@looker/components'
 import { TagList } from '@looker/sdk-codegen'
-import { useRouteMatch } from 'react-router-dom'
-
 import { SideNavMethods } from './SideNavMethods'
 
 interface TagsProps {
   tags: TagList
-  showChildren?: boolean
   specKey: string
 }
 
-export const SideNavTags: FC<TagsProps> = ({
-  tags,
-  showChildren = false,
-  specKey,
-}) => {
-  const match = useRouteMatch<{ methodTag: string }>(
-    `/:specKey/methods/:methodTag/:methodName?`
-  )
-
-  return (
-    <Sidebar>
-      {Object.keys(tags).map((tag) => (
-        <SidebarGroup
-          key={tag}
-          label={tag}
-          showChildren={match ? match.params.methodTag === tag : showChildren}
-        >
-          <SideNavMethods tag={tag} methods={tags[tag]} specKey={specKey} />
-        </SidebarGroup>
-      ))}
-    </Sidebar>
-  )
-}
+export const SideNavTags: FC<TagsProps> = ({ tags, specKey }) => (
+  <>
+    {Object.keys(tags).map((tag, index) => (
+      <SideNavMethods
+        key={index}
+        tag={tag}
+        methods={tags[tag]}
+        specKey={specKey}
+      />
+    ))}
+  </>
+)

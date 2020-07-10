@@ -24,7 +24,7 @@
 
  */
 import React from 'react'
-import { Icon, Status } from '@looker/components'
+import { Icon, Status, Text } from '@looker/components'
 
 /**
  * Return a Status react element based on an endpoint's status
@@ -33,15 +33,15 @@ import { Icon, Status } from '@looker/components'
 export const pickStatus = (status: string) => {
   switch (status.toLocaleLowerCase()) {
     case 'beta':
-      return <Status intent="warn" />
+      return <Text color="neutral">&beta;</Text>
     case 'experimental':
       return <Icon name="Beaker" />
     case 'deprecated':
-      return <Status intent="critical" />
+      return <Status intent="critical" size="small" />
     case 'stable':
-      return <Status intent="positive" />
+      return <Status intent="positive" size="small" />
     default:
-      return <Status intent="neutral" />
+      return <Status intent="neutral" size="small" />
   }
 }
 
