@@ -114,6 +114,7 @@ describe('defaultRequestCallback', () => {
       .mockResolvedValueOnce(testJsonResponse)
 
     const resp = await defaultTryItCallback(
+      '3.1',
       'POST',
       '/queries/run/{result_format}',
       { result_format: 'json' },
