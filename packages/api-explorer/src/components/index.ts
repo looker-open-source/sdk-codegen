@@ -23,14 +23,7 @@
  SOFTWARE.
 
  */
-export {
-  ApixList,
-  ApixTable,
-  ApixCodeBlock,
-  ApixCode,
-  ApixParagraph,
-  ApixHeading,
-} from './common'
+export { ApixHeading } from './common'
 export { DocActivityType } from './DocActivityType'
 export { DocCode } from './DocCode'
 export { DocMethodSummary } from './DocMethodSummary'

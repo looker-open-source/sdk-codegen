@@ -23,9 +23,42 @@
  SOFTWARE.
 
  */
-import React, { FC, PropsWithChildren } from 'react'
-import { ApixCodeBlock } from '../common'
+import styled from 'styled-components'
+import { Code, List, Paragraph, Table, CodeBlock } from '@looker/components'
 
-export const CodeBlock: FC<PropsWithChildren<any>> = (props) => (
-  <ApixCodeBlock>{props.value}</ApixCodeBlock>
-)
+/**
+ * Common styled components used by DocMarkdown
+ */
+
+export const MDCode = styled(Code)`
+  background-color: ${({ theme }) => theme.colors.ui1};
+  border: 1px solid ${({ theme }) => theme.colors.ui2};
+  border-radius: 4px;
+`
+MDCode.defaultProps = {
+  fontSize: 'small',
+  mb: 'large',
+  pl: 'xxsmall',
+  pr: 'xxsmall',
+}
+
+export const MDCodeBlock = styled(CodeBlock)``
+MDCodeBlock.defaultProps = {
+  fontSize: 'small',
+  mb: 'large',
+}
+
+export const MDParagraph = styled(Paragraph)`
+  color: ${({ theme }) => theme.colors.text2};
+`
+MDParagraph.defaultProps = {
+  mb: 'large',
+}
+
+export const MDList = styled(List)``
+MDList.defaultProps = {
+  mb: 'large',
+}
+
+export const MDTable = styled(Table)``
+MDTable.defaultProps = { mb: 'large' }
