@@ -29,6 +29,8 @@ import { BrowserSession } from './browserSession'
 import { IApiSettings } from './apiSettings'
 import { IRequestProps, ITransport } from './transport'
 import { AuthSession } from './authSession'
+import { AuthToken } from './authToken'
+import { MockOauthSettings } from './oauthSession.spec'
 
 const mockToken: IAccessToken = {
   access_token: 'mocked',
@@ -36,22 +38,24 @@ const mockToken: IAccessToken = {
   token_type: 'Bearer',
 }
 
+const settings = new MockOauthSettings()
+
 /**
- * Mocking class for CorsSession getToken() tests
+ * Mocking class for BrowserSession getToken() tests
  */
-class CorsMock extends BrowserSession {
+class BrowserSessionMock extends BrowserSession {
   constructor(public settings: IApiSettings, transport?: ITransport) {
     super(settings, transport)
   }
 
   async getToken() {
-    return Promise.resolve(mockToken)
+    return Promise.resolve(new AuthToken(mockToken))
   }
 }
 
-describe('CORS session', () => {
+describe('Browser session', () => {
   it('initialization', async () => {
-    const mock = new CorsMock({} as IApiSettings)
+    const mock = new BrowserSessionMock(settings)
     await expect(mock.login()).rejects.toEqual(AuthSession.TBD)
     expect(mock.isAuthenticated()).toEqual(false)
     expect(mock.isSudo()).toEqual(false)
@@ -60,13 +64,13 @@ describe('CORS session', () => {
   })
 
   it('getToken is mocked', async () => {
-    const mock = new CorsMock({} as IApiSettings)
+    const mock = new BrowserSessionMock(settings)
     const token = await mock.getToken()
     expect(token).toEqual(mockToken)
   })
 
   it('authenticate causes authentication', async () => {
-    const mock = new CorsMock({} as IApiSettings)
+    const mock = new BrowserSessionMock(settings)
     expect(mock.isAuthenticated()).toEqual(false)
     const props = await mock.authenticate({} as IRequestProps)
     expect(mock.isAuthenticated()).toEqual(true)
