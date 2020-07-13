@@ -56,7 +56,7 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
   return (
     <>
       <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
-      <ButtonToggle value={value} onChange={setValue}>
+      <ButtonToggle mb="small" mt="xlarge" value={value} onChange={setValue}>
         <ButtonItem key="ALL" padding="xsmall">
           ALL
         </ButtonItem>

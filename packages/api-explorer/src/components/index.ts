@@ -46,6 +46,8 @@ export {
   Main,
   PageLayout,
   SideNavDivider,
+  StatusBeta,
+  SummaryCard,
 } from './ExplorerStyle'
 export { Header } from './Header'
 export { MethodBadge } from './MethodBadge'
