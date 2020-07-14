@@ -28,6 +28,7 @@ import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import {
   AccordionDisclosure,
+  Card,
   Flex,
   Icon,
   IconButton,
@@ -199,4 +200,17 @@ export const PageLayout = styled.div<SideNavStyleProps>`
   ${Main} {
     grid-area: main;
   }
+`
+
+export const SummaryCard = styled(Card)`
+  border-color: ${({ theme }) => theme.colors.ui2};
+`
+
+export const StatusBeta = styled(Flex)`
+  align-items: center;
+  justify-content: center;
+  font-size: ${({ theme }) => theme.fontSizes.xxsmall};
+  color: ${({ theme }) => theme.colors.neutral};
+  width: 1.125rem;
+  height: 1.125rem;
 `

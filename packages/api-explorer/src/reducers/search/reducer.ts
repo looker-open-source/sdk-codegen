@@ -22,7 +22,11 @@
  * THE SOFTWARE.
  */
 
-import { SearchCriterionTerm } from '@looker/sdk-codegen'
+import {
+  SearchCriterionTerm,
+  SearchAll,
+  SetToCriteria,
+} from '@looker/sdk-codegen'
 
 export interface SearchState {
   pattern: string
@@ -35,7 +39,7 @@ export interface SearchAction {
 }
 
 export const defaultSearchState: SearchState = {
-  criteria: ['method', 'type', 'name', 'description', 'argument', 'property'],
+  criteria: SetToCriteria(SearchAll) as SearchCriterionTerm[],
   pattern: '',
 }
 
