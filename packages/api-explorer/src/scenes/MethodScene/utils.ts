@@ -40,29 +40,27 @@ import { TryItInput } from '@looker/try-it'
 export const getTypeDefault = (type: string) => {
   switch (type) {
     case 'boolean':
-      return true
+      return false
     case 'int64':
     case 'integer':
-      return 1
+      return 0
     case 'float':
     case 'double':
-      return 1.0
-      break
+      return 0.0
     case 'hostname':
     case 'ipv4':
     case 'ipv6':
     case 'uuid':
     case 'uri':
     case 'string':
-      return type
-    case 'string[]':
-      return ['string']
     case 'email':
-      return 'user@foo.com'
+      return ''
+    case 'string[]':
+      return []
     case 'object':
       return {}
     case 'datetime':
-      return new Date(Date.now())
+      return ''
     default:
       return ''
   }

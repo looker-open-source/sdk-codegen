@@ -43,7 +43,6 @@ import { CriteriaToSet, IApiModel, ISearchResult } from '@looker/sdk-codegen'
 import { SearchContext } from '../../context'
 import { setPattern } from '../../reducers'
 import { useDebounce } from './hooks'
-import { SearchCriteriaSelector } from './SearchCriteriaSelector'
 import { SearchResults } from './SearchResults'
 import { SearchError } from './SearchError'
 
@@ -130,7 +129,6 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
             <SearchResults {...searchResults} specKey={specKey} />
           )}
         </Combobox>
-        <SearchCriteriaSelector />
       </Space>
     </>
   )

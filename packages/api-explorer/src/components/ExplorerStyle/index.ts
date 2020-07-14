@@ -35,4 +35,6 @@ export {
   SideNavList,
   SideNavListItem,
   SideNavTypesLink,
+  StatusBeta,
+  SummaryCard,
 } from './ExplorerStyle'

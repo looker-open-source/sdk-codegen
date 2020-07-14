@@ -51,7 +51,7 @@ export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
             key={type.name}
             to={buildTypePath(specKey, type.name)}
           >
-            <ApixHeading as="h5" mb="0" pt="0" fontWeight="semiBold" truncate>
+            <ApixHeading as="h5" mb="0" pt="0" truncate>
               {highlightHTML(pattern, type.name)}
             </ApixHeading>
           </SideNavTypesLink>

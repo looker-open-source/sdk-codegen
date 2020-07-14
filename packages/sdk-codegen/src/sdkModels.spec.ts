@@ -794,6 +794,18 @@ describe('sdkModels', () => {
         expect(Object.entries(actual.types).length).toEqual(0)
       })
 
+      it('finds rate limited followed somewhere by db_query', () => {
+        const plan = apiTestModel.methods.scheduled_plan_run_once
+        const text = plan.searchString(SearchAll)
+        expect(text).toContain('rate limited')
+        expect(text).toContain('db_query')
+        const actual = apiTestModel.search('rate limited((.|\\n)*)db_query')
+        expect(actual).toBeDefined()
+        const methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(2)
+        expect(Object.entries(actual.types).length).toEqual(0)
+      })
+
       it('search anywhere', () => {
         const actual = apiTestModel.search('dashboard', modelAndTypeNames)
         const methods = allMethods(actual.tags)

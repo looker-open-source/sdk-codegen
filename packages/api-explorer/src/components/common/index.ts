@@ -23,11 +23,4 @@
  SOFTWARE.
 
  */
-export {
-  ApixCode,
-  ApixCodeBlock,
-  ApixHeading,
-  ApixList,
-  ApixParagraph,
-  ApixTable,
-} from './common'
+export { ApixHeading } from './common'

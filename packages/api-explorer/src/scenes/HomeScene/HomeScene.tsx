@@ -42,10 +42,7 @@ export const HomeScene: FC<DocHomeProps> = ({ api }) => {
 
   return (
     <>
-      <ApixHeading
-        as="h1"
-        fontSize="xxxlarge"
-      >{`Looker API ${specKey} Reference`}</ApixHeading>
+      <ApixHeading fontSize="xxxlarge">{`Looker API ${specKey} Reference`}</ApixHeading>
       <DocMarkdown source={api.schema?.info.description!} specKey={specKey} />
     </>
   )

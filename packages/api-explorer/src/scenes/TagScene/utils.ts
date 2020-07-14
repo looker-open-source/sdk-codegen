@@ -34,7 +34,5 @@ export const getOperations = (methods: MethodList) => {
   Object.values(methods).forEach((method) => {
     operationsSet.add(method.httpMethod)
   })
-  return Array.from(operationsSet.values()).map((op) => ({
-    value: op,
-  }))
+  return Array.from(operationsSet.values())
 }

@@ -1289,10 +1289,11 @@ export class Method extends SchemadSymbol implements IMethod {
     )
   }
 
-  searchString(criteria: SearchCriteria): string {
+  searchString(criteria: SearchCriteria = SearchAll): string {
     // Are we only searching for contained items of the method or not?
     if (!this.isMethodSearch(criteria)) return ''
     let result = super.searchString(criteria)
+    result += searchIt(this.summary) + searchIt(this.endpoint)
     if (criteria.has(SearchCriterion.method)) {
       if (criteria.has(SearchCriterion.description)) {
         result += searchIt(this.description)

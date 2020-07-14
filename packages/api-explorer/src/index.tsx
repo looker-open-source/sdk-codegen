@@ -39,12 +39,12 @@ const specs: ApiExplorerProps = {
     },
     '3.1': {
       status: 'current',
-      isDefault: true,
       specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
       specContent: require('../specs/Looker.3.1.oas.json'),
     },
     '4.0': {
       status: 'experimental',
+      isDefault: true,
       specURL: 'https://self-signed.looker.com:19999/api/4.0/swagger.json',
       specContent: require('../specs/Looker.4.0.oas.json'),
     },

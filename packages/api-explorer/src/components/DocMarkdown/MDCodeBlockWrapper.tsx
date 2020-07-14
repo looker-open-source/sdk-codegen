@@ -23,26 +23,9 @@
  SOFTWARE.
 
  */
-export { ApixHeading } from './common'
-export { DocActivityType } from './DocActivityType'
-export { DocCode } from './DocCode'
-export { DocMethodSummary } from './DocMethodSummary'
-export { DocMarkdown } from './DocMarkdown'
-export { DocPseudo } from './DocPseudo'
-export { DocRateLimited } from './DocRateLimited'
-export { DocReferences } from './DocReferences'
-export { DocSDKs } from './DocSDKs'
-export { DocTitle } from './DocTitle'
-export {
-  HeaderWrapper,
-  HEADER_HEIGHT,
-  Main,
-  PageLayout,
-  SideNavDivider,
-  StatusBeta,
-  SummaryCard,
-} from './ExplorerStyle'
-export { Header } from './Header'
-export { MethodBadge } from './MethodBadge'
-export { SideNav } from './SideNav'
-export { SideNavToggle } from './SideNavToggle'
+import React, { FC, PropsWithChildren } from 'react'
+import { MDCodeBlock } from './common'
+
+export const MDCodeBlockWrapper: FC<PropsWithChildren<any>> = (props) => (
+  <MDCodeBlock>{props.value}</MDCodeBlock>
+)
