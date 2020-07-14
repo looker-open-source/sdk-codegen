@@ -389,6 +389,11 @@ export interface IType extends ISymbol {
   customTypes: KeyList
 
   /**
+   * Names of custom types that have a property of this type
+   */
+  parentTypes: KeyList
+
+  /**
    * Hopefully temporary concession to build problems with instance of ArrayType checks etc failing
    */
   className: string
@@ -1344,6 +1349,7 @@ export class Type implements IType {
   readonly methodRefs: KeyList = new Set<string>()
   readonly types: KeyList = new Set<string>()
   readonly customTypes: KeyList = new Set<string>()
+  readonly parentTypes: KeyList = new Set<string>()
   description: string
   customType: string
   jsonName = ''
@@ -1433,9 +1439,12 @@ export class Type implements IType {
     Object.entries(this.schema.properties || {}).forEach(
       ([propName, propSchema]) => {
         const propType = api.resolveType(propSchema, undefined, propName)
-        if (propType.className === 'EnumType') {
+        // Using class name instead of instanceof check because Typescript linting complains about declaration order
+        if (propType.instanceOf('EnumType')) {
           api.registerEnum(propType, propName)
         }
+        // Track the "parent" reference for this type from the property reference
+        propType.parentTypes.add(this.name)
         this.types.add(propType.name)
         const customType = propType.customType
         if (customType) this.customTypes.add(customType)
@@ -1957,8 +1966,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   registerEnum(type: IType, typeName?: string, methodName?: string) {
     if (!(type instanceof EnumType)) return type
-    const num = type as EnumType
-    const hash = md5(num.asHashString())
+    const hash = md5(type.asHashString())
 
     if (hash in this.enumTypes) {
       /**
@@ -1982,6 +1990,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
     }
     if (methodName) {
       type.description = `Type defined in ${methodName}\n${type.description}`
+      const method = this.methods[methodName]
+      if (method) {
+        method.types.add(type.name)
+        method.customTypes.add(type.name)
+      }
     }
     this.enumTypes[hash] = type
     this.types[type.name] = type
@@ -2046,6 +2059,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     if (!result) result = this.makeWriteableType(hash, type)
     type.types.add(result.name)
     type.customTypes.add(result.name)
+    result.parentTypes.add(type.name)
     return result
   }
 
@@ -2078,10 +2092,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
     // this.requestTypes = this.sortList(this.requestTypes)
     // this.refs = this.sortList(this.refs)
     this.tags = this.sortList(this.tags)
-    const keys = Object.keys(this.tags).sort(localeSort)
-    keys.forEach((key) => {
-      this.tags[key] = this.sortList(this.tags[key])
-    })
+    // commented out to leave methods in natural order within the tag
+    // const keys = Object.keys(this.tags).sort(localeSort)
+    // keys.forEach((key) => {
+    //   this.tags[key] = this.sortList(this.tags[key])
+    // })
   }
 
   private load(): void {
