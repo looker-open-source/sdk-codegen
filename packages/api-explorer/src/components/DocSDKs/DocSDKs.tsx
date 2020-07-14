@@ -68,9 +68,7 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
   return (
     <Box py="large">
       <SpaceVertical mb="medium">
-        <ApixHeading as="h2" fontWeight="semiBold">
-          Language SDK declarations
-        </ApixHeading>
+        <ApixHeading as="h2">Language SDK declarations</ApixHeading>
       </SpaceVertical>
       <TabList {...tabs}>
         {Object.keys(generators).map((language) => (

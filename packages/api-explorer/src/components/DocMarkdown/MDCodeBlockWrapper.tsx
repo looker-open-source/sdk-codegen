@@ -23,4 +23,9 @@
  SOFTWARE.
 
  */
-export { ApixHeading } from './common'
+import React, { FC, PropsWithChildren } from 'react'
+import { MDCodeBlock } from './common'
+
+export const MDCodeBlockWrapper: FC<PropsWithChildren<any>> = (props) => (
+  <MDCodeBlock>{props.value}</MDCodeBlock>
+)
