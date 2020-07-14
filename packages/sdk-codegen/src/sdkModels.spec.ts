@@ -51,6 +51,7 @@ import {
   firstCase,
   isSpecialName,
   safeName,
+  SearchAll,
 } from './sdkModels'
 
 const config = TestConfig()
@@ -373,6 +374,7 @@ describe('sdkModels', () => {
       expect(num).toBeInstanceOf(EnumType)
       expect(num.name).toEqual(titleCase(propName))
       expect(num.values).toEqual(values)
+      expect(num.parentTypes.size).toBeGreaterThan(0)
     }
 
     it('registers enum types', () => {
@@ -500,6 +502,13 @@ describe('sdkModels', () => {
         'recommended',
         'required',
       ])
+    })
+
+    it('all enums have parents', () => {
+      const orphans = Object.values(apiTestModel.types).filter(
+        (t) => t instanceof EnumType && t.parentTypes.size === 0
+      )
+      expect(orphans.length).toEqual(0)
     })
   })
 
@@ -774,7 +783,7 @@ describe('sdkModels', () => {
       })
     })
 
-    describe('model search', () => {
+    describe('specification search', () => {
       it('target not found', () => {
         const actual = apiTestModel.search(
           'you will not find me anywhere in there, nuh uh'
@@ -782,6 +791,18 @@ describe('sdkModels', () => {
         expect(actual).toBeDefined()
         const methods = allMethods(actual.tags)
         expect(Object.entries(methods).length).toEqual(0)
+        expect(Object.entries(actual.types).length).toEqual(0)
+      })
+
+      it('finds rate limited followed somewhere by db_query', () => {
+        const plan = apiTestModel.methods.scheduled_plan_run_once
+        const text = plan.searchString(SearchAll)
+        expect(text).toContain('rate limited')
+        expect(text).toContain('db_query')
+        const actual = apiTestModel.search('rate limited((.|\\n)*)db_query')
+        expect(actual).toBeDefined()
+        const methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(2)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
 
@@ -848,13 +869,13 @@ describe('sdkModels', () => {
       it('beta items', () => {
         const actual = apiTestModel.search('beta', statusCriteria)
         expect(Object.entries(allMethods(actual.tags)).length).toEqual(201)
-        expect(Object.entries(actual.types).length).toEqual(103)
+        expect(Object.entries(actual.types).length).toEqual(104)
       })
 
       it('stable items', () => {
         const actual = apiTestModel.search('stable', statusCriteria)
         expect(Object.entries(allMethods(actual.tags)).length).toEqual(153)
-        expect(Object.entries(actual.types).length).toEqual(89)
+        expect(Object.entries(actual.types).length).toEqual(90)
       })
 
       it('db queries', () => {

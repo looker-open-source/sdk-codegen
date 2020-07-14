@@ -26,10 +26,33 @@
 
 import { ICryptoHash } from './cryptoHash'
 import { OAuthSession } from './oauthSession'
-import { DefaultSettings, IApiSettings } from './apiSettings'
+import {
+  ApiSettings,
+  DefaultSettings,
+  IApiSection,
+  IApiSettings,
+} from './apiSettings'
 import { BrowserCryptoHash, BrowserTransport } from './browserTransport'
 import { NodeCryptoHash, NodeTransport } from './nodeTransport'
 import { BrowserServices } from './browserServices'
+
+const allSettings = {
+  ...DefaultSettings(),
+  base_url: 'https://myinstance.looker.com:19999',
+  client_id: '123456',
+  looker_url: 'https://myinstance.looker.com:9999',
+  redirect_uri: 'https://myapp.com/redirect',
+} as IApiSettings
+
+export class MockOauthSettings extends ApiSettings {
+  constructor(private mocked: IApiSettings = allSettings) {
+    super(mocked)
+  }
+
+  readConfig(_section?: string): IApiSection {
+    return this.mocked
+  }
+}
 
 export class MockCrypto implements ICryptoHash {
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -46,19 +69,12 @@ export class MockCrypto implements ICryptoHash {
 }
 
 describe('oauthSession', () => {
-  const settings = {
-    ...DefaultSettings(),
-    base_url: 'https://myinstance.looker.com:19999',
-    client_id: '123456',
-    looker_url: 'https://myinstance.looker.com:9999',
-    redirect_uri: 'https://myapp.com/redirect',
-  } as IApiSettings
-
   it('fails if missing settings', () => {
-    for (const key of ['client_id', 'redirect_uri', 'base_url', 'looker_url']) {
-      const dup: any = { ...settings }
+    for (const key of ['client_id', 'redirect_uri', 'looker_url']) {
+      const dup: any = { ...allSettings }
       delete dup[key]
-      const svcs = new BrowserServices({ settings: dup })
+      const settings = new MockOauthSettings(dup)
+      const svcs = new BrowserServices({ settings })
       expect(() => new OAuthSession(svcs)).toThrow(
         `Missing required configuration setting: '${key}'`
       )
@@ -66,13 +82,14 @@ describe('oauthSession', () => {
   })
 
   it('defaults to BrowserTransport and BrowserCryptoHash', () => {
-    const services = new BrowserServices({ settings: settings })
+    const services = new BrowserServices({ settings: new MockOauthSettings() })
     const session = new OAuthSession(services)
     expect(session.transport).toBeInstanceOf(BrowserTransport)
     expect(session.crypto).toBeInstanceOf(BrowserCryptoHash)
   })
 
   it('accepts transport and crypto overrides via services', () => {
+    const settings = new MockOauthSettings()
     const transport = new NodeTransport(settings)
     const crypto = new MockCrypto()
     const services = new BrowserServices({
@@ -85,7 +102,7 @@ describe('oauthSession', () => {
 
     const session2 = new OAuthSession({
       crypto: crypto,
-      settings: settings,
+      settings,
       transport: transport,
     })
     expect(session2.transport).toEqual(transport)
@@ -96,6 +113,7 @@ describe('oauthSession', () => {
   // services param is not a partial, TypeScript will error for any hash
   // that does not provide all properties of IPlatformServices
   it('accepts transport and crypto overrides via duck type hash', () => {
+    const settings = new MockOauthSettings()
     const transport = new NodeTransport(settings)
     const crypto = new MockCrypto()
     const session = new OAuthSession({
@@ -110,7 +128,7 @@ describe('oauthSession', () => {
   it('createAuthCodeRequestUrl with live crypto', async () => {
     const services = new BrowserServices({
       crypto: new NodeCryptoHash(),
-      settings,
+      settings: new MockOauthSettings(),
     })
     const session = new OAuthSession(services)
     const urlstr = await session.createAuthCodeRequestUrl('api', 'mystate')
@@ -118,7 +136,7 @@ describe('oauthSession', () => {
     expect((session.code_verifier || '').length).toEqual(64)
 
     const url = new URL(urlstr)
-    expect(url.origin).toEqual(settings.looker_url)
+    expect(url.origin).toEqual(allSettings.looker_url)
     const params = url.searchParams
     const props: any = {}
     params.forEach((value, key) => {
@@ -138,13 +156,13 @@ describe('oauthSession', () => {
   it('createAuthCodeRequestUrl with mock constant code_verifier', async () => {
     const services = new BrowserServices({
       crypto: new MockCrypto(),
-      settings,
+      settings: new MockOauthSettings(),
     })
     const session = new OAuthSession(services)
     const urlstr = await session.createAuthCodeRequestUrl('api', 'mystate')
     expect(session.code_verifier).toEqual('feedface')
     const url = new URL(urlstr)
-    expect(url.origin).toEqual(settings.looker_url)
+    expect(url.origin).toEqual(allSettings.looker_url)
     expect(url.pathname).toEqual('/auth')
     const params = url.searchParams
     const props: any = {}
@@ -164,29 +182,29 @@ describe('oauthSession', () => {
 
   it('redeemAuthCode', async () => {
     const mockRequest = jest.fn().mockReturnValue({ ok: true, value: '' })
-    const transport = new BrowserTransport(settings)
+    const transport = new BrowserTransport(allSettings)
     transport.request = mockRequest as any
     const services = new BrowserServices({
       crypto: new MockCrypto(),
-      settings,
+      settings: new MockOauthSettings(),
       transport,
     })
     const session = new OAuthSession(services)
     await session.createAuthCodeRequestUrl('api', 'mystate')
     const authCode = 'abcdef'
     await session.redeemAuthCode(authCode)
-    const expected_url = new URL(settings.base_url)
+    const expected_url = new URL(allSettings.base_url)
     expected_url.pathname = 'api/token'
     expect(mockRequest).toHaveBeenCalledWith(
       'POST',
       expected_url.toString(),
       undefined,
       {
-        client_id: settings.client_id,
+        client_id: allSettings.client_id,
         code: authCode,
         code_verifier: 'feedface',
         grant_type: 'authorization_code',
-        redirect_uri: settings.redirect_uri,
+        redirect_uri: allSettings.redirect_uri,
       }
     )
   })
