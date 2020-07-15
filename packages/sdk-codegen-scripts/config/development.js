@@ -23,7 +23,6 @@
  SOFTWARE.
 
  */
-require('config')
 
 module.exports = {
   /*
