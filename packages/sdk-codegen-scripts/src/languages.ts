@@ -150,7 +150,6 @@ export const getFormatter = (
     const gen = language.factory(api, versions)
     if (config.has(format)) {
       const overrides = config.get<ICodeGen>(format)
-      console.debug({ overrides })
       // Spread operator loses class functions
       // gen = { ...gen, ...overrides }
       Object.keys(overrides).forEach((key) => {
