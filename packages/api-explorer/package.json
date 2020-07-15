@@ -18,7 +18,7 @@
   "scripts": {
     "test": "jest -- src/",
     "develop": "webpack-dev-server --https --disable-host-check",
-    "package": "tsc --skipLibCheck --noEmit && webpack --mode=production --config webpack.prod.config.js",
+    "package": "tsc --skipLibCheck --noEmit && webpack --config webpack.prod.config.js",
     "docs": "typedoc --mode file --out docs",
     "register": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' scripts/register.ts"
   },
