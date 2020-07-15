@@ -121,7 +121,7 @@ export interface IModel {}
  * @param {string} value to search
  * @returns {string} value plus search delimiter
  */
-const searchIt = (value: string) => (value ? value + '\n' : '')
+const searchIt = (value: string) => (value ? value + '\t' : '')
 
 /**
  * lambda function for local sorting
@@ -1295,15 +1295,16 @@ export class Method extends SchemadSymbol implements IMethod {
     let result = super.searchString(criteria)
     result += searchIt(this.summary) + searchIt(this.endpoint)
     if (criteria.has(SearchCriterion.method)) {
-      if (this.rateLimited) {
-        result += searchIt('rate limited')
-      }
       if (criteria.has(SearchCriterion.description)) {
         result += searchIt(this.description)
       }
     }
-    if (criteria.has(SearchCriterion.activityType))
+    if (criteria.has(SearchCriterion.activityType)) {
+      if (this.rateLimited) {
+        result += searchIt('rate_limited')
+      }
       result += searchIt(this.activityType)
+    }
     if (criteria.has(SearchCriterion.status)) {
       result += searchIt(this.status) + searchIt(this.deprecation)
     }
