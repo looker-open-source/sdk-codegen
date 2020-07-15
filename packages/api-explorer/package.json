@@ -16,7 +16,7 @@
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
   "scripts": {
-    "test": "jest -- src/",
+    "test": "jest",
     "develop": "webpack-dev-server --https --disable-host-check",
     "package": "tsc --skipLibCheck --noEmit && webpack --config webpack.prod.config.js",
     "docs": "typedoc --mode file --out docs",
