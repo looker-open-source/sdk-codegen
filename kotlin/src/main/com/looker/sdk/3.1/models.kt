@@ -25,7 +25,7 @@
  */
 
 /**
- * 252 API models: 184 Spec, 0 Request, 51 Write, 17 Enum
+ * 251 API models: 183 Spec, 0 Request, 51 Write, 17 Enum
  */
 
 
@@ -33,6 +33,7 @@
 
 package com.looker.sdk.api31
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.looker.rtl.*
 import java.io.Serializable
 import java.util.*
@@ -2579,45 +2580,6 @@ data class GroupIdForGroupUserInclusion (
    * Id of user (read-only)
    */
   var user_id: Long? = null
-) : Serializable
-
-data class GroupSearch (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
-  var can: Map<String,Boolean>? = null,
-  /**
-   * Group can be used in content access controls
-   */
-  var can_add_to_content_metadata: Boolean? = null,
-  /**
-   * Currently logged in user is group member (read-only)
-   */
-  var contains_current_user: Boolean? = null,
-  /**
-   * External Id group if embed group (read-only)
-   */
-  var external_group_id: String? = null,
-  /**
-   * Group membership controlled outside of Looker (read-only)
-   */
-  var externally_managed: Boolean? = null,
-  /**
-   * Unique Id (read-only)
-   */
-  var id: Long? = null,
-  /**
-   * New users are added to this group by default (read-only)
-   */
-  var include_by_default: Boolean? = null,
-  /**
-   * Name of group
-   */
-  var name: String? = null,
-  /**
-   * Number of users included in this group (read-only)
-   */
-  var user_count: Long? = null
 ) : Serializable
 
 data class Homepage (

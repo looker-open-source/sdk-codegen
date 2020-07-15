@@ -20,7 +20,7 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
-/// 252 API models: 184 Spec, 0 Request, 51 Write, 17 Enum
+/// 251 API models: 183 Spec, 0 Request, 51 Write, 17 Enum
 
 #nullable enable
 using System;
@@ -1550,28 +1550,6 @@ public class GroupIdForGroupUserInclusion : SdkModel
 {
   /// <summary>Id of user (read-only)</summary>
   public long? user_id { get; set; } = null;
-}
-
-public class GroupSearch : SdkModel
-{
-  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
-  public StringDictionary<bool>? can { get; set; } = null;
-  /// <summary>Group can be used in content access controls</summary>
-  public bool? can_add_to_content_metadata { get; set; } = null;
-  /// <summary>Currently logged in user is group member (read-only)</summary>
-  public bool? contains_current_user { get; set; } = null;
-  /// <summary>External Id group if embed group (read-only)</summary>
-  public string? external_group_id { get; set; } = null;
-  /// <summary>Group membership controlled outside of Looker (read-only)</summary>
-  public bool? externally_managed { get; set; } = null;
-  /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
-  /// <summary>New users are added to this group by default (read-only)</summary>
-  public bool? include_by_default { get; set; } = null;
-  /// <summary>Name of group</summary>
-  public string? name { get; set; } = null;
-  /// <summary>Number of users included in this group (read-only)</summary>
-  public long? user_count { get; set; } = null;
 }
 
 public class Homepage : SdkModel

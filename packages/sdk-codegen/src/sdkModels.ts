@@ -2288,6 +2288,24 @@ export interface ICodeGen {
    */
   codePath: string
 
+  /**
+   * folder for the Looker SDK reference
+   * e.g. 'looker_sdk' for Python. All python source would end up under `python/looker_sdk`
+   */
+  packagePath: string
+
+  /**
+   * Name of the SDK package
+   * e.g. 'Looker40SDK' for API 4.0. This package name is currently determined by the base `CodeGen` class
+   */
+  packageName: string
+
+  /**
+   * relative folder path for sdk file generation
+   * e.g. 'sdk` for python
+   */
+  sdkPath: string
+
   /** current version of the Api being generated */
   apiVersion: string
 
@@ -2296,18 +2314,6 @@ export interface ICodeGen {
    * e.g. LOOKERSDK
    */
   environmentPrefix: string
-
-  /**
-   * folder for the Looker SDK reference
-   * e.g. 'looker_sdk' for Python. All python source would end up under `python/looker_sdk`
-   */
-  packagePath: string
-
-  /**
-   * folder for the Looker SDK reference
-   * e.g. 'looker_sdk' for Python. All python source would end up under `python/looker_sdk`
-   */
-  packageName: string
 
   /**
    * name of api request instance variable
@@ -2368,7 +2374,7 @@ export interface ICodeGen {
 
   /**
    * Returns true if the SDK supports multiple API versions of models
-   * @returns {boolean} True if multi-API is supported
+   * @returns True if multi-API is supported
    */
   supportsMultiApi(): boolean
 
