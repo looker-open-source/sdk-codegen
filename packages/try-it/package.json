@@ -19,7 +19,7 @@
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
   "scripts": {
-    "test": "jest -- src/"
+    "test": "jest"
   },
   "devDependencies": {
     "@looker/components-test-utils": "^0.7.36",
