@@ -25,9 +25,12 @@
  */
 
 const base = require('../../jest.config')
+const packageName = require('./package.json').name.split('/')[1]
 
 module.exports = {
   ...base,
+  displayName: packageName,
+  name: packageName,
   rootDir: '../..',
-  testMatch: [`<rootDir>/packages/try-it/**/*.(spec|test).(ts|js)?(x)`],
+  testMatch: [`<rootDir>/packages/${packageName}/**/*.(spec|test).(ts|js)?(x)`],
 }
