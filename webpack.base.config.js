@@ -25,30 +25,32 @@
  */
 const path = require('path')
 
-module.exports = {
-  entry: {
-    app: path.join(__dirname, 'src/index.tsx'),
-  },
-  output: {
-    path: path.join(__dirname, '/dist'),
-    filename: 'bundle.js',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(ts|tsx)$/,
-        loader: 'babel-loader',
-        options: {
-          rootMode: 'upward',
+module.exports = function(packagePath = __dirname) {
+  return {
+    entry: {
+      app: path.join(packagePath, 'src/index.tsx'),
+    },
+    output: {
+      path: path.join(packagePath, '/dist'),
+      filename: 'bundle.js',
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(ts|tsx)$/,
+          loader: 'babel-loader',
+          options: {
+            rootMode: 'upward',
+          },
         },
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
-    ],
-  },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-  },
+        {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader'],
+        },
+      ],
+    },
+    resolve: {
+      extensions: ['.tsx', '.ts', '.js'],
+    },
+  }
 }

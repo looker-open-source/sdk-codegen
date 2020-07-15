@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-const base = require('../api-explorer/webpack.base.config')
+const base = require('../../webpack.base.config')(__dirname)
 
 module.exports = {
   ...base,
