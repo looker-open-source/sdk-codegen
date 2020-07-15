@@ -23,9 +23,32 @@
  SOFTWARE.
 
  */
-const base = require('./webpack.base.config')
+const path = require('path')
 
 module.exports = {
-  ...base,
-  mode: 'production',
+  entry: {
+    app: path.join(__dirname, 'src/index.tsx'),
+  },
+  output: {
+    path: path.join(__dirname, '/dist'),
+    filename: 'bundle.js',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(ts|tsx)$/,
+        loader: 'babel-loader',
+        options: {
+          rootMode: 'upward',
+        },
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
 }

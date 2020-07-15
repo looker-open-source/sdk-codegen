@@ -23,9 +23,22 @@
  SOFTWARE.
 
  */
+
+const path = require('path')
 const base = require('./webpack.base.config')
 
 module.exports = {
   ...base,
-  mode: 'production',
+  mode: 'development',
+  devServer: {
+    contentBase: path.join(__dirname, 'public'),
+    historyApiFallback: true,
+    publicPath: '/dist/',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+  },
+  devtool: 'inline-source-map',
 }

@@ -23,37 +23,9 @@
  SOFTWARE.
 
  */
-const path = require('path')
-
-const PATHS = {
-  app: path.join(__dirname, 'src/index.tsx'),
-}
+const base = require('../api-explorer/webpack.base.config')
 
 module.exports = {
-  entry: {
-    app: PATHS.app,
-  },
-  output: {
-    path: path.join(__dirname, '/dist'),
-    filename: 'bundle.js',
-  },
+  ...base,
   mode: 'production',
-  module: {
-    rules: [
-      {
-        test: /\.(ts|tsx)$/,
-        loader: 'babel-loader',
-        options: {
-          rootMode: 'upward',
-        },
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
-    ],
-  },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-  },
 }
