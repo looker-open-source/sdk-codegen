@@ -10,7 +10,7 @@ module.exports = {
     app: PATHS.app,
   },
   output: {
-    path: __dirname + '/dist',
+    path: path.join(__dirname + '/dist'),
     filename: 'bundle.js',
   },
   mode: 'production',
@@ -20,6 +20,9 @@ module.exports = {
         test: /\.(js|jsx|ts|tsx)$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
+        options: {
+          rootMode: 'upward',
+        },
         include: /src/,
         sideEffects: false,
       },
