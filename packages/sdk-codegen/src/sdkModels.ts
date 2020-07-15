@@ -121,7 +121,7 @@ export interface IModel {}
  * @param {string} value to search
  * @returns {string} value plus search delimiter
  */
-const searchIt = (value: string) => (value ? value + '\n' : '')
+const searchIt = (value: string) => (value ? value + '\t' : '')
 
 /**
  * lambda function for local sorting
@@ -1295,15 +1295,16 @@ export class Method extends SchemadSymbol implements IMethod {
     let result = super.searchString(criteria)
     result += searchIt(this.summary) + searchIt(this.endpoint)
     if (criteria.has(SearchCriterion.method)) {
-      if (this.rateLimited) {
-        result += searchIt('rate limited')
-      }
       if (criteria.has(SearchCriterion.description)) {
         result += searchIt(this.description)
       }
     }
-    if (criteria.has(SearchCriterion.activityType))
+    if (criteria.has(SearchCriterion.activityType)) {
+      if (this.rateLimited) {
+        result += searchIt('rate_limited')
+      }
       result += searchIt(this.activityType)
+    }
     if (criteria.has(SearchCriterion.status)) {
       result += searchIt(this.status) + searchIt(this.deprecation)
     }
@@ -2287,6 +2288,24 @@ export interface ICodeGen {
    */
   codePath: string
 
+  /**
+   * folder for the Looker SDK reference
+   * e.g. 'looker_sdk' for Python. All python source would end up under `python/looker_sdk`
+   */
+  packagePath: string
+
+  /**
+   * Name of the SDK package
+   * e.g. 'Looker40SDK' for API 4.0. This package name is currently determined by the base `CodeGen` class
+   */
+  packageName: string
+
+  /**
+   * relative folder path for sdk file generation
+   * e.g. 'sdk` for python
+   */
+  sdkPath: string
+
   /** current version of the Api being generated */
   apiVersion: string
 
@@ -2295,18 +2314,6 @@ export interface ICodeGen {
    * e.g. LOOKERSDK
    */
   environmentPrefix: string
-
-  /**
-   * folder for the Looker SDK reference
-   * e.g. 'looker_sdk' for Python. All python source would end up under `python/looker_sdk`
-   */
-  packagePath: string
-
-  /**
-   * folder for the Looker SDK reference
-   * e.g. 'looker_sdk' for Python. All python source would end up under `python/looker_sdk`
-   */
-  packageName: string
 
   /**
    * name of api request instance variable
@@ -2367,7 +2374,7 @@ export interface ICodeGen {
 
   /**
    * Returns true if the SDK supports multiple API versions of models
-   * @returns {boolean} True if multi-API is supported
+   * @returns True if multi-API is supported
    */
   supportsMultiApi(): boolean
 

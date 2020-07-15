@@ -5218,9 +5218,9 @@ namespace Looker.SDK.API31
   ///
   /// Boolean search params accept only "true" and "false" as values.
   ///
-  /// GET /groups/search -> GroupSearch[]
+  /// GET /groups/search -> Group[]
   ///
-  /// <returns><c>GroupSearch[]</c> Group (application/json)</returns>
+  /// <returns><c>Group[]</c> Group (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="limit">Number of results to return (used with `offset`).</param>
@@ -5232,7 +5232,7 @@ namespace Looker.SDK.API31
   /// <param name="external_group_id">Match group external_group_id.</param>
   /// <param name="externally_managed">Match group externally_managed.</param>
   /// <param name="externally_orphaned">Match group externally_orphaned.</param>
-  public async Task<SdkResponse<GroupSearch[], Exception>> search_groups(
+  public async Task<SdkResponse<Group[], Exception>> search_groups(
     string? fields = null,
     long? limit = null,
     long? offset = null,
@@ -5245,7 +5245,7 @@ namespace Looker.SDK.API31
     bool? externally_orphaned = null,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<GroupSearch[], Exception>(HttpMethod.Get, "/groups/search", new Values {
+    return await AuthRequest<Group[], Exception>(HttpMethod.Get, "/groups/search", new Values {
       { "fields", fields },
       { "limit", limit },
       { "offset", offset },

@@ -5609,7 +5609,7 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
    *
    * Boolean search params accept only "true" and "false" as values.
    *
-   * GET /groups/search -> Array<GroupSearch>
+   * GET /groups/search -> Array<Group>
    */
   @JvmOverloads fun search_groups(
     /**
@@ -5652,7 +5652,7 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Boolean} externally_orphaned Match group externally_orphaned.
      */
     externally_orphaned: Boolean? = null) : SDKResponse {
-      return this.get<Array<GroupSearch>>("/groups/search", 
+      return this.get<Array<Group>>("/groups/search", 
         mapOf("fields" to fields,
            "limit" to limit,
            "offset" to offset,

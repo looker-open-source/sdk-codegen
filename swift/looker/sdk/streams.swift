@@ -25,7 +25,7 @@
  */
 
 /**
- * 343 API methods
+ * 344 API methods
  */
 
 
@@ -6057,7 +6057,7 @@ class LookerSDKStream: APIMethods {
         /**
          * @param {Int64} id Match content favorite id(s)
          */
-        `id`: Int64? = nil,
+        id: Int64? = nil,
         /**
          * @param {String} user_id Match user id(s).To create a list of multiple ids, use commas as separators
          */
@@ -6292,7 +6292,7 @@ class LookerSDKStream: APIMethods {
         /**
          * @param {String} id Match dashboard id.
          */
-        `id`: String? = nil,
+        id: String? = nil,
         /**
          * @param {String} slug Match dashboard slug.
          */
@@ -6409,7 +6409,7 @@ class LookerSDKStream: APIMethods {
         /**
          * @param {Int64} id Match Space id
          */
-        `id`: Int64? = nil,
+        id: Int64? = nil,
         /**
          * @param {String} parent_id Filter on a children of a particular folder.
          */
@@ -6455,7 +6455,7 @@ class LookerSDKStream: APIMethods {
      *
      * Boolean search params accept only "true" and "false" as values.
      *
-     * GET /groups/search -> [GroupSearch]
+     * GET /groups/search -> [LkGroup]
      */
     func search_groups(
         /**
@@ -6481,7 +6481,7 @@ class LookerSDKStream: APIMethods {
         /**
          * @param {Int64} id Match group id.
          */
-        `id`: Int64? = nil,
+        id: Int64? = nil,
         /**
          * @param {String} name Match group name.
          */
@@ -6501,6 +6501,82 @@ class LookerSDKStream: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.get("/groups/search", 
+            ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or as Any?, "id": id, "name": name, "external_group_id": external_group_id, "externally_managed": externally_managed as Any?, "externally_orphaned": externally_orphaned as Any?], nil, options)
+        return result
+    }
+
+    /**
+     * ### Search groups include roles
+     *
+     * Returns all group records that match the given search criteria, and attaches any associated roles.
+     *
+     * If multiple search params are given and `filter_or` is FALSE or not specified,
+     * search params are combined in a logical AND operation.
+     * Only rows that match *all* search param criteria will be returned.
+     *
+     * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+     * Results will include rows that match **any** of the search criteria.
+     *
+     * String search params use case-insensitive matching.
+     * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+     * example="dan%" will match "danger" and "Danzig" but not "David"
+     * example="D_m%" will match "Damage" and "dump"
+     *
+     * Integer search params can accept a single value or a comma separated list of values. The multiple
+     * values will be combined under a logical OR operation - results will match at least one of
+     * the given values.
+     *
+     * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+     * or exclude (respectively) rows where the column is null.
+     *
+     * Boolean search params accept only "true" and "false" as values.
+     *
+     * GET /groups/search/with_roles -> [GroupSearch]
+     */
+    func search_groups_with_roles(
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        /**
+         * @param {Int64} limit Number of results to return (used with `offset`).
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any (used with `limit`).
+         */
+        offset: Int64? = nil,
+        /**
+         * @param {String} sorts Fields to sort by.
+         */
+        sorts: String? = nil,
+        /**
+         * @param {Bool} filter_or Combine given search criteria in a boolean OR expression
+         */
+        filter_or: Bool? = nil,
+        /**
+         * @param {Int64} id Match group id.
+         */
+        id: Int64? = nil,
+        /**
+         * @param {String} name Match group name.
+         */
+        name: String? = nil,
+        /**
+         * @param {String} external_group_id Match group external_group_id.
+         */
+        external_group_id: String? = nil,
+        /**
+         * @param {Bool} externally_managed Match group externally_managed.
+         */
+        externally_managed: Bool? = nil,
+        /**
+         * @param {Bool} externally_orphaned Match group externally_orphaned.
+         */
+        externally_orphaned: Bool? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/groups/search/with_roles", 
             ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or as Any?, "id": id, "name": name, "external_group_id": external_group_id, "externally_managed": externally_managed as Any?, "externally_orphaned": externally_orphaned as Any?], nil, options)
         return result
     }
@@ -6540,7 +6616,7 @@ class LookerSDKStream: APIMethods {
         /**
          * @param {String} id Match look id.
          */
-        `id`: String? = nil,
+        id: String? = nil,
         /**
          * @param {String} title Match Look title.
          */
@@ -6662,7 +6738,7 @@ class LookerSDKStream: APIMethods {
         /**
          * @param {Int64} id Match model set id.
          */
-        `id`: Int64? = nil,
+        id: Int64? = nil,
         /**
          * @param {String} name Match model set name.
          */
@@ -6732,7 +6808,7 @@ class LookerSDKStream: APIMethods {
         /**
          * @param {Int64} id Match permission set id.
          */
-        `id`: Int64? = nil,
+        id: Int64? = nil,
         /**
          * @param {String} name Match permission set name.
          */
@@ -6804,7 +6880,7 @@ class LookerSDKStream: APIMethods {
         /**
          * @param {Int64} id Match role id.
          */
-        `id`: Int64? = nil,
+        id: Int64? = nil,
         /**
          * @param {String} name Match role name.
          */
@@ -6870,7 +6946,7 @@ class LookerSDKStream: APIMethods {
         /**
          * @param {Int64} id Match theme id.
          */
-        `id`: Int64? = nil,
+        id: Int64? = nil,
         /**
          * @param {String} name Match theme name.
          */
@@ -7013,7 +7089,7 @@ class LookerSDKStream: APIMethods {
         /**
          * @param {String} id Match User Id.
          */
-        `id`: String? = nil,
+        id: String? = nil,
         /**
          * @param {String} first_name Match First name.
          */
@@ -7087,7 +7163,7 @@ class LookerSDKStream: APIMethods {
         /**
          * @param {Int64} id Match User Id
          */
-        `id`: Int64? = nil,
+        id: Int64? = nil,
         /**
          * @param {String} first_name Match First name
          */
@@ -9247,7 +9323,7 @@ class LookerSDKStream: APIMethods {
         /**
          * @param {String} type Either dashboard or look
          */
-        _ `type`: String,
+        _ type: String,
         /**
          * @param {String} resource_id ID of the dashboard or look to render
          */

@@ -33,6 +33,7 @@
 
 package com.looker.sdk
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.looker.rtl.*
 import java.io.Serializable
 import java.util.*

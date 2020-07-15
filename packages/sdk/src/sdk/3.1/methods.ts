@@ -89,7 +89,6 @@ import {
   IGroup,
   IGroupIdForGroupInclusion,
   IGroupIdForGroupUserInclusion,
-  IGroupSearch,
   IHomepage,
   IHomepageItem,
   IHomepageSection,
@@ -6405,13 +6404,13 @@ export class Looker31SDK extends APIMethods {
    *
    * Boolean search params accept only "true" and "false" as values.
    *
-   * GET /groups/search -> IGroupSearch[]
+   * GET /groups/search -> IGroup[]
    */
   async search_groups(
     request: IRequestSearchGroups,
     options?: Partial<ITransportSettings>
   ) {
-    return this.get<IGroupSearch[], IError>(
+    return this.get<IGroup[], IError>(
       '/groups/search',
       {
         fields: request.fields,

@@ -114,7 +114,7 @@ struct BackupConfiguration: SDKModel {
     /**
      * Type of backup: looker-s3 or custom-s3
      */
-    var `type`: String?
+    var type: String?
     /**
      * Name of bucket for custom-s3 backups
      */
@@ -165,7 +165,7 @@ struct Board: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * ids of the board sections in the order they should be displayed
      */
@@ -228,7 +228,7 @@ struct BoardItem: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * The container folder name of the content (read-only)
      */
@@ -287,7 +287,7 @@ struct BoardSection: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * ids of the board items in the order they should be displayed
      */
@@ -316,7 +316,7 @@ struct ColorCollection: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Label of color collection
      */
@@ -339,7 +339,7 @@ struct ColorStop: SDKModel {
     /**
      * CSS color string
      */
-    var `color`: String?
+    var color: String?
     /**
      * Offset in continuous palette (0 to 100)
      */
@@ -350,7 +350,7 @@ struct Command: SDKModel {
     /**
      * Id of the command record (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Id of the command author (read-only)
      */
@@ -377,7 +377,7 @@ struct ContentFavorite: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * User Id which owns this ContentFavorite
      */
@@ -410,7 +410,7 @@ struct ContentMeta: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Name or title of underlying content (read-only)
      */
@@ -457,7 +457,7 @@ struct ContentMetaGroupUser: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Id of associated Content Metadata (read-only)
      */
@@ -515,7 +515,7 @@ struct ContentValidationDashboard: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     var folder: ContentValidationFolder?
     /**
      * Dashboard Title
@@ -535,7 +535,7 @@ struct ContentValidationDashboardElement: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Id Of Look
      */
@@ -579,14 +579,14 @@ struct ContentValidationDashboardElement: SDKModel {
     /**
      * Type
      */
-    var `type`: String?
+    var type: String?
 }
 
 struct ContentValidationDashboardFilter: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Id of Dashboard (read-only)
      */
@@ -602,7 +602,7 @@ struct ContentValidationDashboardFilter: SDKModel {
     /**
      * Type of filter: one of date, number, string, or field
      */
-    var `type`: String?
+    var type: String?
     /**
      * Default value of filter
      */
@@ -652,14 +652,14 @@ struct ContentValidationFolder: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
 }
 
 struct ContentValidationLook: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Look Title
      */
@@ -679,7 +679,7 @@ struct ContentValidationScheduledPlan: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
 }
 
 struct ContentValidatorError: SDKModel {
@@ -695,7 +695,7 @@ struct ContentValidatorError: SDKModel {
     /**
      * An id unique to this piece of content for this validation run (read-only)
      */
-    var `id`: String?
+    var id: String?
 }
 
 struct ContentView: SDKModel {
@@ -706,7 +706,7 @@ struct ContentView: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Id of viewed Look (read-only)
      */
@@ -749,7 +749,7 @@ struct ContinuousPalette: SDKModel {
     /**
      * Unique identity string (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Label for palette
      */
@@ -757,7 +757,7 @@ struct ContinuousPalette: SDKModel {
     /**
      * Type of palette
      */
-    var `type`: String?
+    var type: String?
     /**
      * Array of ColorStops in the palette
      */
@@ -768,7 +768,7 @@ struct CreateDashboardFilter: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Id of Dashboard
      */
@@ -784,7 +784,7 @@ struct CreateDashboardFilter: SDKModel {
     /**
      * Type of filter: one of date, number, string, or field
      */
-    var `type`: String
+    var type: String
     /**
      * Default value of filter
      */
@@ -808,7 +808,7 @@ struct CreateDashboardFilter: SDKModel {
     /**
      * Display order of this filter relative to other filters
      */
-    var `row`: Int64?
+    var row: Int64?
     /**
      * Array of listeners for faceted filters
      */
@@ -865,7 +865,7 @@ struct CreateQueryTask: SDKModel {
     /**
      * Source of query task
      */
-    var `source`: String?
+    var source: String?
     /**
      * Create the task but defer execution
      */
@@ -888,7 +888,7 @@ struct CredentialsApi3: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * API key client_id (read-only)
      */
@@ -904,7 +904,7 @@ struct CredentialsApi3: SDKModel {
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var `type`: String?
+    var type: String?
     /**
      * Link to get this item (read-only)
      */
@@ -943,7 +943,7 @@ struct CredentialsEmail: SDKModel {
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var `type`: String?
+    var type: String?
     /**
      * Link to get this item (read-only)
      */
@@ -974,7 +974,7 @@ struct CredentialsEmbed: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Has this credential been disabled? (read-only)
      */
@@ -986,7 +986,7 @@ struct CredentialsEmbed: SDKModel {
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var `type`: String?
+    var type: String?
     /**
      * Link to get this item (read-only)
      */
@@ -1025,7 +1025,7 @@ struct CredentialsGoogle: SDKModel {
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var `type`: String?
+    var type: String?
     /**
      * Link to get this item (read-only)
      */
@@ -1064,7 +1064,7 @@ struct CredentialsLDAP: SDKModel {
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var `type`: String?
+    var type: String?
     /**
      * Link to get this item (read-only)
      */
@@ -1099,7 +1099,7 @@ struct CredentialsLookerOpenid: SDKModel {
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var `type`: String?
+    var type: String?
     /**
      * Link to get this item (read-only)
      */
@@ -1138,7 +1138,7 @@ struct CredentialsOIDC: SDKModel {
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var `type`: String?
+    var type: String?
     /**
      * Link to get this item (read-only)
      */
@@ -1173,7 +1173,7 @@ struct CredentialsSaml: SDKModel {
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var `type`: String?
+    var type: String?
     /**
      * Link to get this item (read-only)
      */
@@ -1196,7 +1196,7 @@ struct CredentialsTotp: SDKModel {
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var `type`: String?
+    var type: String?
     /**
      * User has verified (read-only)
      */
@@ -1254,7 +1254,7 @@ struct Dashboard: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     var model: LookModel?
     /**
      * Timezone in which the Dashboard will run by default.
@@ -1450,7 +1450,7 @@ struct DashboardBase: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     var model: LookModel?
     /**
      * Timezone in which the Dashboard will run by default. (read-only)
@@ -1503,7 +1503,7 @@ struct DashboardElement: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     var look: LookWithQuery?
     /**
      * Id Of Look
@@ -1570,7 +1570,7 @@ struct DashboardElement: SDKModel {
     /**
      * Type
      */
-    var `type`: String?
+    var type: String?
     /**
      * Count of Alerts associated to a dashboard element (read-only)
      */
@@ -1593,7 +1593,7 @@ struct DashboardFilter: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Id of Dashboard (read-only)
      */
@@ -1609,7 +1609,7 @@ struct DashboardFilter: SDKModel {
     /**
      * Type of filter: one of date, number, string, or field
      */
-    var `type`: String?
+    var type: String?
     /**
      * Default value of filter
      */
@@ -1633,7 +1633,7 @@ struct DashboardFilter: SDKModel {
     /**
      * Display order of this filter relative to other filters
      */
-    var `row`: Int64?
+    var row: Int64?
     /**
      * Array of listeners for faceted filters
      */
@@ -1660,7 +1660,7 @@ struct DashboardLayout: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Id of Dashboard
      */
@@ -1668,7 +1668,7 @@ struct DashboardLayout: SDKModel {
     /**
      * Type
      */
-    var `type`: String?
+    var type: String?
     /**
      * Is Active
      */
@@ -1703,7 +1703,7 @@ struct DashboardLayoutComponent: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Id of Dashboard Layout
      */
@@ -1715,11 +1715,11 @@ struct DashboardLayoutComponent: SDKModel {
     /**
      * Row
      */
-    var `row`: Int64?
+    var row: Int64?
     /**
      * Column
      */
-    var `column`: Int64?
+    var column: Int64?
     /**
      * Width
      */
@@ -1781,7 +1781,7 @@ struct DataActionFormField: SDKModel {
     /**
      * Type of field. (read-only)
      */
-    var `type`: String?
+    var type: String?
     /**
      * Default value of the field. (read-only)
      */
@@ -1869,7 +1869,7 @@ struct Datagroup: SDKModel {
     /**
      * Unique ID of the datagroup (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Name of the model containing the datagroup. Unique when combined with name. (read-only)
      */
@@ -1921,7 +1921,7 @@ struct DBConnection: SDKModel {
     /**
      * Port number on server
      */
-    var `port`: Int64?
+    var port: Int64?
     /**
      * Username for server authentication
      */
@@ -2073,7 +2073,7 @@ struct DBConnectionOverride: SDKModel {
     /**
      * Port number on server
      */
-    var `port`: String?
+    var port: String?
     /**
      * Username for server authentication
      */
@@ -2312,7 +2312,7 @@ struct DiscretePalette: SDKModel {
     /**
      * Unique identity string (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Label for palette
      */
@@ -2320,7 +2320,7 @@ struct DiscretePalette: SDKModel {
     /**
      * Type of palette
      */
-    var `type`: String?
+    var type: String?
     /**
      * Array of colors in the palette
      */
@@ -2435,7 +2435,7 @@ struct Folder: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Id of content metadata (read-only)
      */
@@ -2510,7 +2510,7 @@ struct FolderBase: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Id of content metadata (read-only)
      */
@@ -2645,7 +2645,7 @@ struct GitBranch: SDKModel {
     /**
      * The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
      */
-    var `ref`: String?
+    var ref: String?
     /**
      * The resolved ref of this branch remote. (read-only)
      */
@@ -2664,7 +2664,7 @@ struct GitConnectionTest: SDKModel {
     /**
      * A short string, uniquely naming this test (read-only)
      */
-    var `id`: String?
+    var id: String?
 }
 
 struct GitConnectionTestResult: SDKModel {
@@ -2675,7 +2675,7 @@ struct GitConnectionTestResult: SDKModel {
     /**
      * A short string, uniquely naming this test (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Additional data from the test (read-only)
      */
@@ -2729,7 +2729,7 @@ struct LkGroup: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * New users are added to this group by default (read-only)
      */
@@ -2782,7 +2782,7 @@ struct GroupSearch: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * New users are added to this group by default (read-only)
      */
@@ -2813,7 +2813,7 @@ struct ImportedProject: SDKModel {
     /**
      * Ref for a remote dependency (read-only)
      */
-    var `ref`: String?
+    var ref: String?
     /**
      * Flag signifying if a dependency is remote or local (read-only)
      */
@@ -2828,7 +2828,7 @@ struct Integration: SDKModel {
     /**
      * ID of the integration. (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * ID of the integration hub. (read-only)
      */
@@ -2899,7 +2899,7 @@ struct IntegrationHub: SDKModel {
     /**
      * ID of the hub. (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * URL of the hub.
      */
@@ -3255,7 +3255,7 @@ struct LDAPGroupRead: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Unique Id of group in Looker (read-only)
      */
@@ -3282,7 +3282,7 @@ struct LDAPGroupWrite: SDKModel {
     /**
      * Unique Id
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Unique Id of group in Looker (read-only)
      */
@@ -3394,7 +3394,7 @@ struct LegacyFeature: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Name (read-only)
      */
@@ -3487,7 +3487,7 @@ struct Look: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Look Title
      */
@@ -3604,7 +3604,7 @@ struct LookBasic: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Look Title (read-only)
      */
@@ -3654,7 +3654,7 @@ struct LookmlModelExplore: SDKModel {
     /**
      * Fully qualified explore name (model name plus explore name) (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Explore name (read-only)
      */
@@ -4031,7 +4031,7 @@ struct LookmlModelExploreField: SDKModel {
     /**
      * The LookML type of the field. (read-only)
      */
-    var `type`: String?
+    var type: String?
     /**
      * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
      */
@@ -4205,7 +4205,7 @@ struct LookmlModelExploreJoins: SDKModel {
     /**
      * The join type: left_outer, full_outer, inner, or cross (read-only)
      */
-    var `type`: String?
+    var type: String?
     /**
      * Label to display in UI selectors (read-only)
      */
@@ -4281,11 +4281,11 @@ struct LookmlTest: SDKModel {
     /**
      * Name of the LookML file containing this test. (read-only)
      */
-    var `file`: String?
+    var file: String?
     /**
      * Line number of this test in LookML. (read-only)
      */
-    var `line`: Int64?
+    var line: Int64?
 }
 
 struct LookmlTestResult: SDKModel {
@@ -4327,7 +4327,7 @@ struct LookModel: SDKModel {
     /**
      * Model Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Model Label (read-only)
      */
@@ -4346,7 +4346,7 @@ struct LookWithDashboards: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Look Title
      */
@@ -4467,7 +4467,7 @@ struct LookWithQuery: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Look Title
      */
@@ -4620,7 +4620,7 @@ struct MergeQuery: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Pivots
      */
@@ -4678,7 +4678,7 @@ struct ModelSet: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     var models: [String]?
     /**
      * Name of ModelSet
@@ -4894,7 +4894,7 @@ struct OIDCGroupRead: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Unique Id of group in Looker (read-only)
      */
@@ -4917,7 +4917,7 @@ struct OIDCGroupWrite: SDKModel {
     /**
      * Unique Id
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Unique Id of group in Looker (read-only)
      */
@@ -5024,7 +5024,7 @@ struct PermissionSet: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Name of PermissionSet
      */
@@ -5052,7 +5052,7 @@ struct Project: SDKModel {
     /**
      * Project Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Project display name
      */
@@ -5190,7 +5190,7 @@ struct ProjectFile: SDKModel {
     /**
      * An opaque token uniquely identifying a file within a project. Avoid parsing or decomposing the text of this token. This token is stable within a Looker release but may change between Looker releases (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Path, file name, and extension of the file relative to the project root directory (read-only)
      */
@@ -5202,7 +5202,7 @@ struct ProjectFile: SDKModel {
     /**
      * File type: model, view, etc (read-only)
      */
-    var `type`: String?
+    var type: String?
     /**
      * The extension of the file: .view.lkml, .model.lkml, etc (read-only)
      */
@@ -5310,7 +5310,7 @@ struct Query: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Model
      */
@@ -5417,7 +5417,7 @@ struct QueryTask: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Id of query
      */
@@ -5458,7 +5458,7 @@ struct QueryTask: SDKModel {
     /**
      * Source of query task.
      */
-    var `source`: String?
+    var source: String?
     /**
      * Runtime of prior queries. (read-only)
      */
@@ -5517,7 +5517,7 @@ struct RenderTask: SDKModel {
     /**
      * Id of this render task (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Id of look to render (read-only)
      */
@@ -5572,7 +5572,7 @@ struct RepositoryCredential: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * Root project Id (read-only)
      */
@@ -5649,7 +5649,7 @@ struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
     /**
      * Unique Id. (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * JSON string of dynamic field information. (read-only)
      */
@@ -5693,7 +5693,7 @@ struct Role: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Name of Role
      */
@@ -5726,7 +5726,7 @@ struct RunningQueries: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     var user: UserPublic?
     var query: Query?
     var sql_query: SqlQuery?
@@ -5746,7 +5746,7 @@ struct RunningQueries: SDKModel {
     /**
      * Source (look, dashboard, queryrunner, explore, etc.) (read-only)
      */
-    var `source`: String?
+    var source: String?
     /**
      * Node Id (read-only)
      */
@@ -5932,7 +5932,7 @@ struct SamlGroupRead: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Unique Id of group in Looker (read-only)
      */
@@ -5959,7 +5959,7 @@ struct SamlGroupWrite: SDKModel {
     /**
      * Unique Id
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Unique Id of group in Looker (read-only)
      */
@@ -6147,7 +6147,7 @@ struct ScheduledPlan: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Date and time when ScheduledPlan was created (read-only)
      */
@@ -6179,7 +6179,7 @@ struct ScheduledPlanDestination: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Id of a scheduled plan you own
      */
@@ -6207,7 +6207,7 @@ struct ScheduledPlanDestination: SDKModel {
     /**
      * Type of the address ('email', 'webhook', 's3', or 'sftp')
      */
-    var `type`: String?
+    var type: String?
     /**
      * JSON object containing parameters for external scheduling. For Amazon S3, this requires keys and values for access_key_id and region. For SFTP, this requires a key and value for username.
      */
@@ -6230,7 +6230,7 @@ struct Session: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * IP address of user when this session was initiated (read-only)
      */
@@ -6471,7 +6471,7 @@ struct Theme: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Name of theme. Can only be alphanumeric and underscores.
      */
@@ -6631,7 +6631,7 @@ struct User: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Account has been disabled
      */
@@ -6706,7 +6706,7 @@ struct UserAttribute: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Name of user attribute
      */
@@ -6718,7 +6718,7 @@ struct UserAttribute: SDKModel {
     /**
      * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
      */
-    var `type`: String?
+    var type: String?
     /**
      * Default value for when no value is set on the user
      */
@@ -6772,7 +6772,7 @@ struct UserAttributeGroupValue: SDKModel {
     /**
      * Unique Id of this group-attribute relation (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Id of group (read-only)
      */
@@ -6835,7 +6835,7 @@ struct UserAttributeWithValue: SDKModel {
     /**
      * How user got this value for this attribute (read-only)
      */
-    var `source`: String?
+    var source: String?
     /**
      * If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
      */
@@ -6858,7 +6858,7 @@ struct UserLoginLockout: SDKModel {
     /**
      * IP address of most recent failed attempt (read-only)
      */
-    var `ip`: String?
+    var ip: String?
     /**
      * User ID (read-only)
      */
@@ -6893,7 +6893,7 @@ struct UserPublic: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * First Name (read-only)
      */
@@ -6986,7 +6986,7 @@ struct WhitelabelConfiguration: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var `id`: Int64?
+    var id: Int64?
     /**
      * Customer logo image. Expected base64 encoded data (write-only)
      */
@@ -7057,7 +7057,7 @@ struct Workspace: SDKModel {
     /**
      * The unique id of this user workspace. Predefined workspace ids include "production" and "dev" (read-only)
      */
-    var `id`: String?
+    var id: String?
     /**
      * The local state of each project in the workspace (read-only)
      */
@@ -7083,7 +7083,7 @@ struct WriteBackupConfiguration: SDKModel {
     /**
      * Type of backup: looker-s3 or custom-s3
      */
-    var `type`: String?
+    var type: String?
     /**
      * Name of bucket for custom-s3 backups
      */
@@ -7273,7 +7273,7 @@ struct WriteCreateDashboardFilter: SDKModel {
     /**
      * Type of filter: one of date, number, string, or field
      */
-    var `type`: String
+    var type: String
     /**
      * Default value of filter
      */
@@ -7293,7 +7293,7 @@ struct WriteCreateDashboardFilter: SDKModel {
     /**
      * Display order of this filter relative to other filters
      */
-    var `row`: Int64?
+    var row: Int64?
     /**
      * Array of listeners for faceted filters
      */
@@ -7328,7 +7328,7 @@ struct WriteCreateQueryTask: SDKModel {
     /**
      * Source of query task
      */
-    var `source`: String?
+    var source: String?
     /**
      * Create the task but defer execution
      */
@@ -7541,7 +7541,7 @@ struct WriteDashboardElement: SDKModel {
     /**
      * Type
      */
-    var `type`: String?
+    var type: String?
 }
 
 /**
@@ -7560,7 +7560,7 @@ struct WriteDashboardFilter: SDKModel {
     /**
      * Type of filter: one of date, number, string, or field
      */
-    var `type`: String?
+    var type: String?
     /**
      * Default value of filter
      */
@@ -7580,7 +7580,7 @@ struct WriteDashboardFilter: SDKModel {
     /**
      * Display order of this filter relative to other filters
      */
-    var `row`: Int64?
+    var row: Int64?
     /**
      * Array of listeners for faceted filters
      */
@@ -7611,7 +7611,7 @@ struct WriteDashboardLayout: SDKModel {
     /**
      * Type
      */
-    var `type`: String?
+    var type: String?
     /**
      * Is Active
      */
@@ -7642,11 +7642,11 @@ struct WriteDashboardLayoutComponent: SDKModel {
     /**
      * Row
      */
-    var `row`: Int64?
+    var row: Int64?
     /**
      * Column
      */
-    var `column`: Int64?
+    var column: Int64?
     /**
      * Width
      */
@@ -7688,7 +7688,7 @@ struct WriteDBConnection: SDKModel {
     /**
      * Port number on server
      */
-    var `port`: Int64?
+    var port: Int64?
     /**
      * Username for server authentication
      */
@@ -7800,7 +7800,7 @@ struct WriteDBConnectionOverride: SDKModel {
     /**
      * Port number on server
      */
-    var `port`: String?
+    var port: String?
     /**
      * Username for server authentication
      */
@@ -7862,7 +7862,7 @@ struct WriteGitBranch: SDKModel {
     /**
      * The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
      */
-    var `ref`: String?
+    var ref: String?
 }
 
 /**
@@ -8900,7 +8900,7 @@ struct WriteUserAttribute: SDKModel {
     /**
      * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
      */
-    var `type`: String?
+    var type: String?
     /**
      * Default value for when no value is set on the user
      */

@@ -49,6 +49,7 @@ export abstract class CodeGen implements ICodeGen {
   willItStream = false
   codePath = './'
   packagePath = 'looker'
+  sdkPath = 'sdk'
   packageName = 'LookerSDK'
   environmentPrefix = this.packageName.toUpperCase()
   itself = ''
@@ -83,7 +84,7 @@ export abstract class CodeGen implements ICodeGen {
 
   /**
    * Returns true if the SDK supports multiple API versions of models
-   * @returns {boolean} True if multi-API is supported
+   * @returns True if multi-API is supported
    */
   supportsMultiApi() {
     // Currently, all but Swift support multiple APIs
@@ -184,7 +185,7 @@ export abstract class CodeGen implements ICodeGen {
   }
 
   sdkFileName(baseFileName: string) {
-    return this.fileName(`sdk/${this.apiVersion}/${baseFileName}`)
+    return this.fileName(`${this.sdkPath}/${this.apiVersion}/${baseFileName}`)
   }
 
   fileName(base: string) {
