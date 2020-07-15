@@ -24,6 +24,7 @@
 
  */
 
+import config from 'config'
 import {
   PythonGen,
   ICodeGen,
@@ -37,17 +38,23 @@ import {
 import { quit } from './nodeUtils'
 
 export interface IGeneratorSpec {
-  language: string // name of Open API Generator language to produce
+  /** name of language SDK to generate */
+  language: string
+  /** path name for legacy generator output. Defaults to language */
   path?: string
+  /** code generator constructor */
   factory?: (api: ApiModel, versions?: IVersionInfo) => ICodeGen
-  options?: string // generator options
+  /** options for the legacy code generator */
+  options?: string
+  /** name of the legacy language generator */
   legacy?: string // legacy language tag
 }
 
 // To disable generation of any language specification, you can just comment it out
 export const Languages: Array<IGeneratorSpec> = [
   {
-    factory: (api: ApiModel, versions?: IVersionInfo) => new CSharpGen(api, versions),
+    factory: (api: ApiModel, versions?: IVersionInfo) =>
+      new CSharpGen(api, versions),
     language: 'csharp',
     legacy: 'csharp',
     options: '-papiPackage=Looker -ppackageName=looker',
@@ -103,11 +110,22 @@ export const Languages: Array<IGeneratorSpec> = [
   // },
   // {
   //   language: 'typescript-fetch',
-  //   path: 'ts_fetch',
   //   options: '-papiPackage=looker -ppackageName=looker'
   // },
 ]
 
+/**
+ * constructs a language generator by name
+ *
+ * CodeGenerator settings can be overridden by creating a config file and adding an entry for the desired language
+ *
+ * See the `config` folder in this package for more sample config files
+ *
+ * @param format name of language to generate
+ * @param api API specification
+ * @param versions version info to use for stamping the agentTag
+ * @returns either an ICodeGen implementation or undefined
+ */
 export const getFormatter = (
   format: string,
   api: ApiModel,
@@ -129,7 +147,19 @@ export const getFormatter = (
     )
   }
   if (language && language.factory) {
-    return language.factory(api, versions)
+    const gen = language.factory(api, versions)
+    if (config.has(format)) {
+      const overrides = config.get<ICodeGen>(format)
+      console.debug({ overrides })
+      // Spread operator loses class functions
+      // gen = { ...gen, ...overrides }
+      Object.keys(overrides).forEach((key) => {
+        if (key in gen) {
+          gen[key] = overrides[key]
+        }
+      })
+    }
+    return gen
   }
   return undefined
 }
