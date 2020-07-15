@@ -6103,7 +6103,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Boolean search params accept only "true" and "false" as values.
     #
-    # GET /groups/search -> Sequence[models.GroupSearch]
+    # GET /groups/search -> Sequence[models.Group]
     def search_groups(
         self,
         # Requested fields.
@@ -6127,11 +6127,11 @@ class Looker31SDK(api_methods.APIMethods):
         # Match group externally_orphaned.
         externally_orphaned: Optional[bool] = None,
         transport_options: Optional[transport.PTransportSettings] = None,
-    ) -> Sequence[models.GroupSearch]:
+    ) -> Sequence[models.Group]:
         """Search Groups"""
         response = self.get(
             f"/groups/search",
-            Sequence[models.GroupSearch],
+            Sequence[models.Group],
             query_params={
                 "fields": fields,
                 "limit": limit,

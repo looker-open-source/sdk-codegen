@@ -25,7 +25,7 @@
  */
 
 /**
- * 343 API methods
+ * 344 API methods
  */
 
 import { Readable } from 'readable-stream'
@@ -7569,9 +7569,63 @@ export class Looker40SDKStream extends APIMethods {
    *
    * Boolean search params accept only "true" and "false" as values.
    *
-   * GET /groups/search -> IGroupSearch[]
+   * GET /groups/search -> IGroup[]
    */
   async search_groups(
+    callback: (readable: Readable) => Promise<IGroup[]>,
+    request: IRequestSearchGroups,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IGroup[]>(
+      callback,
+      'GET',
+      '/groups/search',
+      {
+        fields: request.fields,
+        limit: request.limit,
+        offset: request.offset,
+        sorts: request.sorts,
+        filter_or: request.filter_or,
+        id: request.id,
+        name: request.name,
+        external_group_id: request.external_group_id,
+        externally_managed: request.externally_managed,
+        externally_orphaned: request.externally_orphaned,
+      },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Search groups include roles
+   *
+   * Returns all group records that match the given search criteria, and attaches any associated roles.
+   *
+   * If multiple search params are given and `filter_or` is FALSE or not specified,
+   * search params are combined in a logical AND operation.
+   * Only rows that match *all* search param criteria will be returned.
+   *
+   * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+   * Results will include rows that match **any** of the search criteria.
+   *
+   * String search params use case-insensitive matching.
+   * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+   * example="dan%" will match "danger" and "Danzig" but not "David"
+   * example="D_m%" will match "Damage" and "dump"
+   *
+   * Integer search params can accept a single value or a comma separated list of values. The multiple
+   * values will be combined under a logical OR operation - results will match at least one of
+   * the given values.
+   *
+   * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+   * or exclude (respectively) rows where the column is null.
+   *
+   * Boolean search params accept only "true" and "false" as values.
+   *
+   * GET /groups/search/with_roles -> IGroupSearch[]
+   */
+  async search_groups_with_roles(
     callback: (readable: Readable) => Promise<IGroupSearch[]>,
     request: IRequestSearchGroups,
     options?: Partial<ITransportSettings>
@@ -7579,7 +7633,7 @@ export class Looker40SDKStream extends APIMethods {
     return this.authStream<IGroupSearch[]>(
       callback,
       'GET',
-      '/groups/search',
+      '/groups/search/with_roles',
       {
         fields: request.fields,
         limit: request.limit,

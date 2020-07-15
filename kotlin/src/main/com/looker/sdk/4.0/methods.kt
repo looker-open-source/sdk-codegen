@@ -25,7 +25,7 @@
  */
 
 /**
- * 343 API methods
+ * 344 API methods
  */
 
 
@@ -5883,7 +5883,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
    *
    * Boolean search params accept only "true" and "false" as values.
    *
-   * GET /groups/search -> Array<GroupSearch>
+   * GET /groups/search -> Array<Group>
    */
   @JvmOverloads fun search_groups(
     /**
@@ -5926,7 +5926,89 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Boolean} externally_orphaned Match group externally_orphaned.
      */
     externally_orphaned: Boolean? = null) : SDKResponse {
-      return this.get<Array<GroupSearch>>("/groups/search", 
+      return this.get<Array<Group>>("/groups/search", 
+        mapOf("fields" to fields,
+           "limit" to limit,
+           "offset" to offset,
+           "sorts" to sorts,
+           "filter_or" to filter_or,
+           "id" to id,
+           "name" to name,
+           "external_group_id" to external_group_id,
+           "externally_managed" to externally_managed,
+           "externally_orphaned" to externally_orphaned))
+  }
+
+  /**
+   * ### Search groups include roles
+   *
+   * Returns all group records that match the given search criteria, and attaches any associated roles.
+   *
+   * If multiple search params are given and `filter_or` is FALSE or not specified,
+   * search params are combined in a logical AND operation.
+   * Only rows that match *all* search param criteria will be returned.
+   *
+   * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+   * Results will include rows that match **any** of the search criteria.
+   *
+   * String search params use case-insensitive matching.
+   * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+   * example="dan%" will match "danger" and "Danzig" but not "David"
+   * example="D_m%" will match "Damage" and "dump"
+   *
+   * Integer search params can accept a single value or a comma separated list of values. The multiple
+   * values will be combined under a logical OR operation - results will match at least one of
+   * the given values.
+   *
+   * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+   * or exclude (respectively) rows where the column is null.
+   *
+   * Boolean search params accept only "true" and "false" as values.
+   *
+   * GET /groups/search/with_roles -> Array<GroupSearch>
+   */
+  @JvmOverloads fun search_groups_with_roles(
+    /**
+     * @param {String} fields Requested fields.
+     */
+    fields: String? = null,
+    /**
+     * @param {Long} limit Number of results to return (used with `offset`).
+     */
+    limit: Long? = null,
+    /**
+     * @param {Long} offset Number of results to skip before returning any (used with `limit`).
+     */
+    offset: Long? = null,
+    /**
+     * @param {String} sorts Fields to sort by.
+     */
+    sorts: String? = null,
+    /**
+     * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
+     */
+    filter_or: Boolean? = null,
+    /**
+     * @param {Long} id Match group id.
+     */
+    id: Long? = null,
+    /**
+     * @param {String} name Match group name.
+     */
+    name: String? = null,
+    /**
+     * @param {String} external_group_id Match group external_group_id.
+     */
+    external_group_id: String? = null,
+    /**
+     * @param {Boolean} externally_managed Match group externally_managed.
+     */
+    externally_managed: Boolean? = null,
+    /**
+     * @param {Boolean} externally_orphaned Match group externally_orphaned.
+     */
+    externally_orphaned: Boolean? = null) : SDKResponse {
+      return this.get<Array<GroupSearch>>("/groups/search/with_roles", 
         mapOf("fields" to fields,
            "limit" to limit,
            "offset" to offset,

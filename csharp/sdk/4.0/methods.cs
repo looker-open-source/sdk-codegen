@@ -20,7 +20,7 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
 
-/// 343 API methods
+/// 344 API methods
 
 #nullable enable
 using System;
@@ -5467,7 +5467,72 @@ namespace Looker.SDK.API40
   ///
   /// Boolean search params accept only "true" and "false" as values.
   ///
-  /// GET /groups/search -> GroupSearch[]
+  /// GET /groups/search -> Group[]
+  ///
+  /// <returns><c>Group[]</c> Group (application/json)</returns>
+  ///
+  /// <param name="fields">Requested fields.</param>
+  /// <param name="limit">Number of results to return (used with `offset`).</param>
+  /// <param name="offset">Number of results to skip before returning any (used with `limit`).</param>
+  /// <param name="sorts">Fields to sort by.</param>
+  /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
+  /// <param name="id">Match group id.</param>
+  /// <param name="name">Match group name.</param>
+  /// <param name="external_group_id">Match group external_group_id.</param>
+  /// <param name="externally_managed">Match group externally_managed.</param>
+  /// <param name="externally_orphaned">Match group externally_orphaned.</param>
+  public async Task<SdkResponse<Group[], Exception>> search_groups(
+    string? fields = null,
+    long? limit = null,
+    long? offset = null,
+    string? sorts = null,
+    bool? filter_or = null,
+    long? id = null,
+    string? name = null,
+    string? external_group_id = null,
+    bool? externally_managed = null,
+    bool? externally_orphaned = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Group[], Exception>(HttpMethod.Get, "/groups/search", new Values {
+      { "fields", fields },
+      { "limit", limit },
+      { "offset", offset },
+      { "sorts", sorts },
+      { "filter_or", filter_or },
+      { "id", id },
+      { "name", name },
+      { "external_group_id", external_group_id },
+      { "externally_managed", externally_managed },
+      { "externally_orphaned", externally_orphaned }},null,options);
+  }
+
+  /// ### Search groups include roles
+  ///
+  /// Returns all group records that match the given search criteria, and attaches any associated roles.
+  ///
+  /// If multiple search params are given and `filter_or` is FALSE or not specified,
+  /// search params are combined in a logical AND operation.
+  /// Only rows that match *all* search param criteria will be returned.
+  ///
+  /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+  /// Results will include rows that match **any** of the search criteria.
+  ///
+  /// String search params use case-insensitive matching.
+  /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+  /// example="dan%" will match "danger" and "Danzig" but not "David"
+  /// example="D_m%" will match "Damage" and "dump"
+  ///
+  /// Integer search params can accept a single value or a comma separated list of values. The multiple
+  /// values will be combined under a logical OR operation - results will match at least one of
+  /// the given values.
+  ///
+  /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+  /// or exclude (respectively) rows where the column is null.
+  ///
+  /// Boolean search params accept only "true" and "false" as values.
+  ///
+  /// GET /groups/search/with_roles -> GroupSearch[]
   ///
   /// <returns><c>GroupSearch[]</c> Group (application/json)</returns>
   ///
@@ -5481,7 +5546,7 @@ namespace Looker.SDK.API40
   /// <param name="external_group_id">Match group external_group_id.</param>
   /// <param name="externally_managed">Match group externally_managed.</param>
   /// <param name="externally_orphaned">Match group externally_orphaned.</param>
-  public async Task<SdkResponse<GroupSearch[], Exception>> search_groups(
+  public async Task<SdkResponse<GroupSearch[], Exception>> search_groups_with_roles(
     string? fields = null,
     long? limit = null,
     long? offset = null,
@@ -5494,7 +5559,7 @@ namespace Looker.SDK.API40
     bool? externally_orphaned = null,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<GroupSearch[], Exception>(HttpMethod.Get, "/groups/search", new Values {
+    return await AuthRequest<GroupSearch[], Exception>(HttpMethod.Get, "/groups/search/with_roles", new Values {
       { "fields", fields },
       { "limit", limit },
       { "offset", offset },
