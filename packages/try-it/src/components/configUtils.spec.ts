@@ -23,13 +23,40 @@
  SOFTWARE.
 
  */
+import {
+  getConfig,
+  removeConfig,
+  setConfig,
+  TryItConfigKey,
+} from './configUtils'
 
-export { ConfigForm } from './ConfigForm'
-export { RequestForm } from './RequestForm'
-export { ShowResponse } from './ShowResponse'
-export {
-  createRequestParams,
-  defaultTryItCallback,
-  pathify,
-} from './requestUtils'
-export { tryItSDK } from './TryItSDK'
+describe('configUtils', () => {
+  const testConfig = 'Try it config values'
+  beforeEach(() => {
+    removeConfig(TryItConfigKey)
+  })
+
+  afterEach(() => {
+    removeConfig(TryItConfigKey)
+  })
+
+  test('it saves config values to sessionStorage by default', () => {
+    setConfig(TryItConfigKey, testConfig)
+    const actual = getConfig(TryItConfigKey)
+    expect(actual).toEqual({ location: 'session', value: testConfig })
+  })
+
+  test('it reads config values from localStorage if they are not in sessionStorage', () => {
+    setConfig(TryItConfigKey, testConfig, 'local')
+    const actual = getConfig(TryItConfigKey)
+    expect(actual).toEqual({ location: 'local', value: testConfig })
+  })
+
+  test('removeConfig clears both session and local storage', () => {
+    setConfig(TryItConfigKey, testConfig, 'local')
+    setConfig(TryItConfigKey, testConfig, 'session')
+    removeConfig(TryItConfigKey)
+    const actual = getConfig(TryItConfigKey)
+    expect(actual).toEqual({ location: 'session', value: '' })
+  })
+})

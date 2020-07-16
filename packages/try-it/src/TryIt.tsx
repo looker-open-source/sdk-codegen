@@ -38,7 +38,7 @@ import {
   Spinner,
   Flex,
 } from '@looker/components'
-import { IRawResponse } from '@looker/sdk/lib/browser'
+import { IRawResponse, Looker40SDK } from '@looker/sdk/lib/browser'
 
 import {
   RequestForm,
@@ -46,6 +46,7 @@ import {
   createRequestParams,
   defaultTryItCallback,
   pathify,
+  ConfigForm,
 } from './components'
 
 export type TryItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
@@ -78,6 +79,7 @@ interface TryItProps {
   httpMethod: TryItHttpMethod
   endpoint: string
   tryItCallback?: TryItCallback
+  sdk?: Looker40SDK
 }
 
 type ResponseContent = IRawResponse | undefined
@@ -88,6 +90,7 @@ export const TryIt: FC<TryItProps> = ({
   httpMethod,
   endpoint,
   tryItCallback,
+  sdk,
 }) => {
   const [requestContent, setRequestContent] = useState({})
   const [activePathParams, setActivePathParams] = useState(undefined)
@@ -136,13 +139,16 @@ export const TryIt: FC<TryItProps> = ({
       </TabList>
       <TabPanels {...tabs}>
         <TabPanel key="request">
-          <RequestForm
-            httpMethod={httpMethod}
-            inputs={inputs}
-            requestContent={requestContent}
-            setRequestContent={setRequestContent}
-            handleSubmit={handleSubmit}
-          />
+          {sdk?.authSession.settings.isConfigured() && (
+            <RequestForm
+              httpMethod={httpMethod}
+              inputs={inputs}
+              requestContent={requestContent}
+              setRequestContent={setRequestContent}
+              handleSubmit={handleSubmit}
+            />
+          )}
+          {!sdk?.authSession.settings.isConfigured() && <ConfigForm />}
         </TabPanel>
         <TabPanel key="response">
           {loading && (

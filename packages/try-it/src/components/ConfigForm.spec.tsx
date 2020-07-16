@@ -24,12 +24,22 @@
 
  */
 
-export { ConfigForm } from './ConfigForm'
-export { RequestForm } from './RequestForm'
-export { ShowResponse } from './ShowResponse'
-export {
-  createRequestParams,
-  defaultTryItCallback,
-  pathify,
-} from './requestUtils'
-export { tryItSDK } from './TryItSDK'
+import React from 'react'
+import { screen } from '@testing-library/react'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { removeConfig, TryItConfigKey } from './configUtils'
+import { ConfigForm } from './ConfigForm'
+
+describe('ConfigForm', () => {
+  // const handleSubmit = jest.fn((e) => e.preventDefault())
+  // const setRequestContent = jest.fn()
+
+  beforeEach(() => {
+    removeConfig(TryItConfigKey)
+  })
+
+  test('it creates the config form', () => {
+    renderWithTheme(<ConfigForm />)
+    screen.debug()
+  })
+})
