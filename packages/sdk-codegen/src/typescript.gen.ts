@@ -153,6 +153,14 @@ export interface IDictionary<T> {
     )}\n${indent} */\n`
   }
 
+  beginRegion(indent: string, description: string): string {
+    return `${indent}//#region ${description}`
+  }
+
+  endRegion(indent: string, description: string): string {
+    return `${indent}//#endregion ${description}`
+  }
+
   declareProperty(indent: string, property: IProperty) {
     const optional = !property.required ? '?' : ''
     if (property.name === strBody) {

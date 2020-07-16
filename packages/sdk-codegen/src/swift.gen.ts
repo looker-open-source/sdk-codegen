@@ -227,6 +227,14 @@ import Foundation
     )}\n${indent} */\n`
   }
 
+  beginRegion(indent: string, description: string): string {
+    return `${indent}// MARK ${description}`
+  }
+
+  endRegion(_indent: string, _description: string): string {
+    return '' // No end MARK in Swift, and XCode appears to no longer process MARKs anyway
+  }
+
   declareProperty(indent: string, property: IProperty) {
     // const optional = (property.nullable || !property.required) ? '?' : ''
     const optional = property.required ? '' : '?'

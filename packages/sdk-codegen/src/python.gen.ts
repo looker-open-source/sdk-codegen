@@ -191,6 +191,16 @@ ${this.hooks.join('\n')}
       : this.nullStr
   }
 
+  beginRegion(indent: string, description: string): string {
+    // Sadly, Black reformats this to "# region" and IntelliJ doesn't recognize it either way
+    return `${indent}#region ${description}`
+  }
+
+  endRegion(indent: string, _description: string): string {
+    // Sadly, Black reformats this to "# endregion" and IntelliJ doesn't recognize it either way
+    return `${indent}#endregion`
+  }
+
   declareProperty(indent: string, property: IProperty, annotations = false) {
     const mappedType = this.typeMapModels(property.type)
     let propName = property.name

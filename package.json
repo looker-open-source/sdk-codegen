@@ -161,6 +161,7 @@
           "sort-keys": "off",
           "sort-keys-fix/sort-keys-fix": "off",
           "no-useless-constructor": "off",
+          "spaced-comment": "off",
           "@typescript-eslint/no-empty-interface": "off"
         }
       }

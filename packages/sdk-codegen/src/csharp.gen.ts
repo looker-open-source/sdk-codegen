@@ -333,7 +333,7 @@ namespace Looker.SDK.API${this.apiRef}
 
   argGroup(_indent: string, args: Arg[], prefix?: string) {
     prefix = prefix || ''
-    const values = args.map((arg) => `{ "${arg}", ${arg} }`)
+    const values = args.map((arg) => `{ "${arg}", ${this.reserve(arg)} }`)
     const bump = this.bumper(this.indentStr) + this.indentStr
     return args && args.length !== 0
       ? `new Values {\n${bump}${values.join(
