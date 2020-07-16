@@ -77,7 +77,7 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
                 <NavLink to={buildMethodPath(specKey, tag, method.name)}>
                   <Space gap="xsmall">
                     <MethodBadge
-                      alignTextCenter
+                      textAlign="center"
                       compact
                       httpMethod={method.httpMethod}
                     >

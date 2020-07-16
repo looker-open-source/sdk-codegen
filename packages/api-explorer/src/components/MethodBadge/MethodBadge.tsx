@@ -23,25 +23,30 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+
 import {
   generatePressed,
   intentUIBlend,
   IntentNames,
+  CompatibleHTMLProps,
+  typography,
+  TypographyProps,
 } from '@looker/design-tokens'
 import { HttpMethod } from '@looker/sdk/src'
 import styled, { css } from 'styled-components'
+import { MinWidthProps, minWidth } from 'styled-system'
 
 /**
  * Status of endpoint method.
  */
 type MethodStatus = 'beta' | 'stable' | 'experimental' | 'deprecated' | 'inform'
 
-interface MethodBadgeProps {
+interface MethodBadgeProps
+  extends CompatibleHTMLProps<HTMLDivElement>,
+    MinWidthProps,
+    TypographyProps {
   httpMethod: HttpMethod | MethodStatus | string
-  alignTextCenter?: boolean
   compact?: boolean
-  inCard?: boolean
   titleStatus?: boolean
 }
 
@@ -79,46 +84,25 @@ export const cssForIntent = (intent: ApixIntentNames) =>
     color: ${({ theme }) => generatePressed(theme.colors[intent])};
   `
 
-export const InternalMethodBadge = styled.div<{
-  alignTextCenter?: boolean
-  compact?: boolean
-  inCard?: boolean
-  intent: ApixIntentNames
-  titleStatus?: boolean
-}>`
-  ${(props) => cssForIntent(props.intent)};
-  background: ${({ intent, theme, titleStatus }) =>
-    `${titleStatus ? theme.colors.ui1 : intentUIBlend(intent, 1)}`};
-  border: 1px solid transparent;
-  border-radius: 4px;
-  font-size: ${({ theme, compact }) =>
-    `${compact ? `calc(${theme.fontSizes.large}/2)` : theme.fontSizes.xsmall}`};
-  font-weight: ${({ theme }) => `${theme.fontWeights.semiBold}`};
-  padding: ${({ theme, compact }) => `${theme.space.xxsmall}
-    ${compact ? '0' : theme.space.xsmall}`};
-  text-align: ${(props) => (props.alignTextCenter ? 'center' : 'left')};
-  min-width: ${({ inCard }) => `${inCard ? '3.7625rem' : '2.5rem'}`};
+export const MethodBadge = styled.div<MethodBadgeProps>`
+  ${typography}
+  ${minWidth}
+
+  ${({ httpMethod }) => cssForIntent(intentForStatus(httpMethod))};
+
+  background: ${({ httpMethod, titleStatus, theme: { colors } }) =>
+    titleStatus ? colors.ui1 : intentUIBlend(intentForStatus(httpMethod), 1)};
+  border-radius: ${({ theme: { radii } }) => radii.medium};
+
+  /** NOTE: This is below minimum accessibility threshold font-size */
+  ${({ compact }) => compact && `font-size: 9px;`}
+
+  padding: ${({ compact, theme: { space } }) =>
+    `${space.xxsmall} ${compact ? space.none : space.xsmall}`};
 `
 
-const MethodBadgeInternal: FC<MethodBadgeProps> = ({
-  alignTextCenter,
-  children,
-  compact,
-  inCard,
-  titleStatus,
-  httpMethod,
-  ...props
-}) => (
-  <InternalMethodBadge
-    alignTextCenter={alignTextCenter}
-    compact={compact}
-    inCard={inCard}
-    titleStatus={titleStatus}
-    intent={intentForStatus(httpMethod)}
-    {...props}
-  >
-    {children}
-  </InternalMethodBadge>
-)
-
-export const MethodBadge = styled(MethodBadgeInternal)<MethodBadgeProps>``
+MethodBadge.defaultProps = {
+  fontSize: 'xsmall',
+  fontWeight: 'semiBold',
+  minWidth: '2.5rem',
+}
