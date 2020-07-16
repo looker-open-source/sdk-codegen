@@ -27,7 +27,7 @@
  */
 
 import * as Models from '@looker/sdk-codegen'
-import { success } from '@looker/sdk-codegen-utils'
+import { success, warn } from '@looker/sdk-codegen-utils'
 import { readFileSync } from './nodeUtils'
 
 export const specFromFile = (specFile: string): Models.ApiModel => {
@@ -97,69 +97,89 @@ export abstract class Generator<T extends Models.IModel> {
 const noComment = ' '
 
 export class MethodGenerator extends Generator<Models.IApiModel> {
+  itemGenerator(indent: string, method: Models.IMethod) {
+    return this.codeFormatter.declareMethod(indent, method)
+  }
+
+  prologue(indent: string) {
+    return this.codeFormatter.methodsPrologue(indent)
+  }
+
+  epilogue(indent: string) {
+    return this.codeFormatter.methodsEpilogue(indent)
+  }
+
   render(indent: string) {
     const items: string[] = []
     // reset refcounts for ALL types so dynamic import statement will work
-    Object.entries(this.model.types).forEach(([, type]) => (type.refCount = 0))
-    Object.keys(this.model.methods)
-      .sort((a, b) => a.localeCompare(b))
-      .forEach((key) =>
-        items.push(
-          this.codeFormatter.declareMethod(indent, this.model.methods[key])
-        )
+    Object.values(this.model.types).forEach((type) => (type.refCount = 0))
+    let tagCount = 0
+    Object.entries(this.model.tags).forEach(([tagName, methods]) => {
+      const tag = this.model.spec.tags?.find(
+        (t) =>
+          t.name.localeCompare(tagName, undefined, { sensitivity: 'base' }) ===
+          0
       )
-    const tally = `${items.length} API methods`
+      if (!tag) {
+        warn(`Could not find tag ${tagName} in API specification`)
+      }
+      if (tag) {
+        tagCount++
+        items.push(
+          this.codeFormatter.beginRegion(
+            indent,
+            `${tag.name}: ${tag.description}`
+          )
+        )
+        Object.values(methods).forEach((method) => {
+          items.push(this.itemGenerator(indent, method))
+        })
+        items.push(
+          this.codeFormatter.endRegion(
+            indent,
+            `${tag.name}: ${tag.description}`
+          )
+        )
+      }
+    })
+    const tally = `${items.length - tagCount} API methods`
     success(tally)
     return this.p(this.codeFormatter.commentHeader('', licenseText, noComment))
       .p(this.codeFormatter.commentHeader('', tally))
-      .p(this.codeFormatter.methodsPrologue(indent))
+      .p(this.prologue(indent))
       .p(items.join('\n\n'))
-      .p(this.codeFormatter.methodsEpilogue(indent))
+      .p(this.epilogue(indent))
       .toString('')
   }
 }
 
-export class StreamGenerator extends Generator<Models.IApiModel> {
-  render(indent: string) {
-    const items: string[] = []
-    // reset refcounts for ALL types so dynamic import statement will work
-    Object.entries(this.model.types).forEach(([, type]) => (type.refCount = 0))
-    Object.keys(this.model.methods)
-      .sort((a, b) => a.localeCompare(b))
-      .forEach((key) =>
-        items.push(
-          this.codeFormatter.declareStreamer(indent, this.model.methods[key])
-        )
-      )
-    const tally = `${items.length} API methods`
-    success(tally)
-    return this.p(this.codeFormatter.commentHeader('', licenseText, noComment))
-      .p(this.codeFormatter.commentHeader('', tally))
-      .p(this.codeFormatter.streamsPrologue(indent))
-      .p(items.join('\n\n'))
-      .p(this.codeFormatter.methodsEpilogue(indent))
-      .toString('')
+export class StreamGenerator extends MethodGenerator {
+  itemGenerator(indent: string, method: Models.IMethod) {
+    return this.codeFormatter.declareStreamer(indent, method)
+  }
+
+  prologue(indent: string) {
+    return this.codeFormatter.streamsPrologue(indent)
+  }
+
+  epilogue(indent: string) {
+    return this.codeFormatter.methodsEpilogue(indent)
   }
 }
 
 export class TypeGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
     const items: string[] = []
-    Object.keys(this.model.types)
-      .sort((a, b) => a.localeCompare(b))
-      .forEach((key) => {
-        const type = this.model.types[key]
-        if (!(type instanceof Models.IntrinsicType)) {
-          if (
-            this.codeFormatter.needsRequestTypes ||
-            !(type instanceof Models.RequestType)
-          ) {
-            items.push(
-              this.codeFormatter.declareType(indent, this.model.types[key])
-            )
-          }
+    Object.values(this.model.types).forEach((type) => {
+      if (!(type instanceof Models.IntrinsicType)) {
+        if (
+          this.codeFormatter.needsRequestTypes ||
+          !(type instanceof Models.RequestType)
+        ) {
+          items.push(this.codeFormatter.declareType(indent, type))
         }
-      })
+      }
+    })
 
     const counts = this.typeTally(this.model.types)
     const tally = `${counts.total} API models: ${counts.standard} Spec, ${counts.request} Request, ${counts.write} Write, ${counts.enums} Enum`

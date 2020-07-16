@@ -52,12 +52,77 @@ import {
   isSpecialName,
   safeName,
   SearchAll,
+  KeyedCollection,
 } from './sdkModels'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
 
 describe('sdkModels', () => {
+  const checkSorted = (list: KeyedCollection<any>) => {
+    const actual = Object.keys(list)
+    const expected = actual.sort((a, b) => a.localeCompare(b))
+    expect(actual).toEqual(expected)
+  }
+
+  describe('ordering', () => {
+    it('has types in sorted order', () => {
+      checkSorted(apiTestModel.types)
+    })
+
+    it('has tags in sorted order', () => {
+      checkSorted(apiTestModel.tags)
+    })
+
+    it('has methods in sorted order', () => {
+      checkSorted(apiTestModel.methods)
+    })
+
+    describe('methods inside tags are in natural order', () => {
+      it('has Query methods in natural order', () => {
+        const actual = Object.keys(apiTestModel.tags.Query)
+        const expected = [
+          'create_query_task',
+          'query_task_multi_results',
+          'query_task',
+          'query_task_results',
+          'query',
+          'query_for_slug',
+          'create_query',
+          'run_query',
+          'run_inline_query',
+          'run_url_encoded_query',
+          'merge_query',
+          'create_merge_query',
+          'all_running_queries',
+          'kill_query',
+          'sql_query',
+          'create_sql_query',
+          'run_sql_query',
+        ]
+        expect(actual).toEqual(expected)
+      })
+
+      it('has Theme methods in natural order', () => {
+        const actual = Object.keys(apiTestModel.tags.Theme)
+        const expected = [
+          'all_themes',
+          'create_theme',
+          'search_themes',
+          'default_theme',
+          'set_default_theme',
+          'active_themes',
+          'theme_or_default',
+          'validate_theme',
+          'theme',
+          'update_theme',
+          'delete_theme',
+        ]
+        expect(actual).toEqual(expected)
+      })
+    })
+  })
+
   describe('mayQuote', () => {
     it('quotes foo-bar', () => {
       expect(mayQuote('foo-bar')).toEqual(`'foo-bar'`)

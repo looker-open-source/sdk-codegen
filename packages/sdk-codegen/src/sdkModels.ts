@@ -1705,6 +1705,7 @@ export class WriteType extends Type {
 }
 
 export interface IApiModel extends IModel {
+  spec: OAS.OpenAPIObject
   version: string
   description: string
   methods: MethodList
@@ -1728,13 +1729,12 @@ export class ApiModel implements ISymbolTable, IApiModel {
   private requestTypes: TypeList = {}
   private enumTypes: TypeList = {}
   private refs: TypeList = {}
-  readonly schema: OAS.OpenAPIObject | undefined
   methods: MethodList = {}
   types: TypeList = {}
   tags: TagList = {}
 
-  constructor(spec: OAS.OpenAPIObject) {
-    ;[
+  constructor(public readonly spec: OAS.OpenAPIObject) {
+    [
       'string',
       'integer',
       'int64',
@@ -1754,16 +1754,15 @@ export class ApiModel implements ISymbolTable, IApiModel {
       'any',
     ].forEach((name) => (this.types[name] = new IntrinsicType(name)))
 
-    this.schema = spec
     this.load()
   }
 
   get version(): string {
-    return this.schema?.info.version || ''
+    return this.spec?.info.version || ''
   }
 
   get description(): string {
-    return this.schema?.decription?.trim() || ''
+    return this.spec?.decription?.trim() || ''
   }
 
   static fromString(specContent: string): ApiModel {
@@ -1799,11 +1798,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
       let list: MethodList = tags[tag]
       if (!list) {
         list = {}
-        list[method.name] = method
         tags[tag] = list
-      } else {
-        list[method.name] = method
       }
+      list[method.name] = method
     }
     return tags
   }
@@ -1859,7 +1856,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   }
 
   // TODO replace this with get from underscore?
-  jsonPath(path: string | string[], item: any = this.schema, splitter = '/') {
+  jsonPath(path: string | string[], item: any = this.spec, splitter = '/') {
     let keys = path
     if (!(path instanceof Array)) {
       keys = path.split(splitter)
@@ -2101,8 +2098,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
   }
 
   private load(): void {
-    if (this.schema?.components?.schemas) {
-      Object.entries(this.schema.components.schemas).forEach(
+    if (this.spec?.components?.schemas) {
+      Object.entries(this.spec.components.schemas).forEach(
         ([name, schema]) => {
           const t = new Type(schema, name)
           // types[n] and corresponding refs[ref] MUST reference the same type instance!
@@ -2110,13 +2107,13 @@ export class ApiModel implements ISymbolTable, IApiModel {
           this.refs[`#/components/schemas/${name}`] = t
         }
       )
-      Object.keys(this.schema.components.schemas).forEach((name) => {
+      Object.keys(this.spec.components.schemas).forEach((name) => {
         ;(this.resolveType(name) as Type).load(this)
       })
     }
 
-    if (this.schema?.paths) {
-      Object.entries(this.schema.paths).forEach(([path, schema]) => {
+    if (this.spec?.paths) {
+      Object.entries(this.spec.paths).forEach(([path, schema]) => {
         const methods = this.loadMethods(path, schema)
         methods.forEach((method) => {
           this.methods[method.name] = method
@@ -2492,11 +2489,27 @@ export interface ICodeGen {
    * e.g.
    *  # this is a
    *  # multi-line comment block
-   * @param {string} indent code indentation
-   * @param {string} description as comment
-   * @returns {string} comment block
+   * @param indent code indentation
+   * @param description as comment
+   * @returns comment block
    */
   comment(indent: string, description: string): string
+
+  /**
+   * Generate a #region comment equivalent for the language
+   * @param indent code indentation
+   * @param description as comment
+   * @returns region comment
+   */
+  beginRegion(indent: string, description: string): string
+
+  /**
+   * Generate an #endregion comment equivalent for the language
+   * @param indent code indentation
+   * @param description as comment
+   * @returns region comment
+   */
+  endRegion(indent: string, description: string): string
 
   /**
    * generates the method signature including parameter list and return type.

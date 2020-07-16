@@ -48,7 +48,7 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
     history.push('/methods')
   }
   const methods = api.tags[methodTag]
-  const tag = Object.values(api.schema?.tags!).find(
+  const tag = Object.values(api.spec?.tags!).find(
     (tag) => tag.name === methodTag
   )!
   const operations = getOperations(methods)
