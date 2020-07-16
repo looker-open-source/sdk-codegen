@@ -23,14 +23,34 @@
  SOFTWARE.
 
  */
+const path = require('path')
 
-const base = require('../../jest.config')
-const packageName = require('./package.json').name.split('/')[1]
-
-module.exports = {
-  ...base,
-  displayName: packageName,
-  name: packageName,
-  rootDir: '../..',
-  testMatch: [`<rootDir>/packages/${packageName}/**/*.(spec|test).(ts|js)?(x)`],
+module.exports = function(packagePath = __dirname) {
+  return {
+    entry: {
+      app: path.join(packagePath, 'src/index.tsx'),
+    },
+    output: {
+      path: path.join(packagePath, '/dist'),
+      filename: 'bundle.js',
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(ts|tsx)$/,
+          loader: 'babel-loader',
+          options: {
+            rootMode: 'upward',
+          },
+        },
+        {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader'],
+        },
+      ],
+    },
+    resolve: {
+      extensions: ['.tsx', '.ts', '.js'],
+    },
+  }
 }

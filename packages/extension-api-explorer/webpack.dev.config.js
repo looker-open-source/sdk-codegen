@@ -24,11 +24,11 @@
 
  */
 
-const path = require('path')
+const base = require('../../webpack.base.config')(__dirname)
 
 module.exports = {
+  ...base,
   devServer: {
-    contentBase: path.join(__dirname, 'public'),
     historyApiFallback: true,
     publicPath: '/dist/',
     headers: {
@@ -39,28 +39,4 @@ module.exports = {
     },
   },
   devtool: 'inline-source-map',
-  entry: './src/index.tsx',
-
-  module: {
-    rules: [
-      {
-        loader: 'babel-loader',
-        options: {
-          rootMode: 'upward',
-        },
-        test: /\.tsx?$/,
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
-    ],
-  },
-  output: {
-    filename: 'bundle.js',
-    path: path.join(__dirname, 'public', 'dist'),
-  },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-  },
 }

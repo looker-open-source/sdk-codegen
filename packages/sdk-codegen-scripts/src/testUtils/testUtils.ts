@@ -25,7 +25,6 @@
  */
 
 import * as fs from 'fs'
-import * as yaml from 'js-yaml'
 import { IApiSection } from '@looker/sdk/lib/browser'
 import { IApiConfig, ApiConfig } from '@looker/sdk/lib/node'
 import { ApiModel } from '@looker/sdk-codegen'
@@ -65,14 +64,14 @@ export interface ITestConfig {
  * @constructor
  */
 export function TestConfig(rootPath = ''): ITestConfig {
-  const testFile = 'test/data.yml'
+  const testFile = 'data.yml.json'
   if (!rootPath) {
-    rootPath = fs.existsSync(testFile) ? '' : '../../'
+    rootPath = fs.existsSync(`test/${testFile}`) ? '' : '../../'
   }
   const localIni = process.env.LOOKERSDK_INI || `${rootPath}looker.ini`
   const testPath = `${rootPath}test/`
-  const dataFile = `${testPath}data.yml`
-  const testData = yaml.safeLoad(fs.readFileSync(dataFile, utf8))
+  const dataFile = `${testPath}${testFile}`
+  const testData = JSON.parse(fs.readFileSync(dataFile, utf8))
   const testIni = `${rootPath}${testData.iniFile}`
   const configContents = fs.readFileSync(localIni, utf8)
   const config = ApiConfig(configContents)

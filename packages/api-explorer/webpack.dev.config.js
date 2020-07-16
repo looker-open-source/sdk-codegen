@@ -24,13 +24,21 @@
 
  */
 
-const base = require('../../jest.config')
-const packageName = require('./package.json').name.split('/')[1]
+const path = require('path')
+const base = require('../../webpack.base.config')(__dirname)
 
 module.exports = {
   ...base,
-  displayName: packageName,
-  name: packageName,
-  rootDir: '../..',
-  testMatch: [`<rootDir>/packages/${packageName}/**/*.(spec|test).(ts|js)?(x)`],
+  mode: 'development',
+  devServer: {
+    contentBase: path.join(__dirname, 'public'),
+    historyApiFallback: true,
+    publicPath: '/dist/',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+  },
+  devtool: 'inline-source-map',
 }
