@@ -1,4 +1,3 @@
-
 /*
 
  MIT License
@@ -74,6 +73,7 @@ describe('TryIt', () => {
   test('it renders endpoint, request and response tabs, and form inputs', () => {
     renderWithTheme(
       <TryIt
+        specKey={'3.1'}
         inputs={inputs}
         httpMethod={'POST'}
         endpoint={'/run_query/{result_format}'}
@@ -100,6 +100,7 @@ describe('TryIt', () => {
       .mockResolvedValueOnce(testTextResponse)
     renderWithTheme(
       <TryIt
+        specKey={'3.1'}
         inputs={inputs}
         httpMethod={'POST'}
         endpoint={'/run_query/{result_format}'}
@@ -117,6 +118,7 @@ describe('TryIt', () => {
     const customTryItCallback = jest.fn().mockResolvedValue(testTextResponse)
     renderWithTheme(
       <TryIt
+        specKey={'3.1'}
         inputs={inputs}
         httpMethod={'POST'}
         endpoint={'/run_query/{result_format}'}

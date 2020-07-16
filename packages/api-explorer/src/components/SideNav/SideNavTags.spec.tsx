@@ -32,7 +32,6 @@ import { withThemeProvider } from '@looker/components-test-utils'
 import { api } from '../../test-data'
 import { renderWithSearchAndRouter } from '../../test-utils'
 import { SideNavTags } from './SideNavTags'
-import { createMemoryHistory } from 'history'
 
 describe('SideNavTags', () => {
   const tags = pick(api.tags, ['ApiAuth', 'Dashboard'])

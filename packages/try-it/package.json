@@ -19,27 +19,22 @@
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
   "scripts": {
-    "test": "jest -- src/"
+    "test": "jest"
   },
   "devDependencies": {
     "@looker/components-test-utils": "^0.7.36",
     "@testing-library/jest-dom": "^5.8.0",
     "@testing-library/react": "^10.0.4",
     "@testing-library/user-event": "^10.4.0",
-    "@types/jest": "^25.2.3",
-    "@types/lodash": "^4.14.153",
     "@types/react-test-renderer": "^16.9.2",
     "@types/styled-components": "^4.4.1",
     "@types/styled-system": "^5.1.9",
     "ace": "^1.3.0",
     "ace-builds": "^1.4.11",
     "enzyme": "^3.11.0",
-    "jest": "^26.0.1",
     "jest-config": "^25.3.0",
-    "jest-styled-components": "^6.3.4",
     "react-test-renderer": "^16.13.1",
     "style-loader": "^1.1.3",
-    "ts-jest": "^26.0.0",
     "typescript": "3.8.2"
   },
   "dependencies": {
@@ -48,10 +43,6 @@
     "@looker/sdk-codegen": "^0.1.2-alpha.18+551e4fe",
     "@looker/sdk-codegen-utils": "^0.1.0-alpha.2",
     "@types/readable-stream": "^2.3.5",
-    "lerna": "^3.20.2",
-    "lint-staged": "^10.2.2",
-    "lodash": "^4.17.15",
-    "openapi3-ts": "^1.3.0",
     "react": "^16.13.1",
     "react-ace": "^8.1.0",
     "react-dom": "^16.13.1",

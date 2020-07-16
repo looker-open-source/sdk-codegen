@@ -131,6 +131,12 @@
     "rules": {
       "prettier/prettier": "error",
       "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/camelcase": "off",
+      "@typescript-eslint/interface-name-prefix": "off",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "sort-keys-fix/sort-keys-fix": "off",
+      "no-useless-constructor": "off",
+      "@typescript-eslint/no-empty-interface": "off",
       "header/header": [
         2,
         "config/license-header.js"
@@ -151,19 +157,12 @@
     },
     "overrides": [
       {
-        "files": [
-          "**/*.ts"
-        ],
+        "files": ["*.js"],
         "rules": {
-          "@typescript-eslint/interface-name-prefix": "off",
-          "@typescript-eslint/no-unused-vars": "warn",
-          "@typescript-eslint/camelcase": "off",
-          "sort-keys": "off",
-          "sort-keys-fix/sort-keys-fix": "off",
-          "no-useless-constructor": "off",
-          "@typescript-eslint/no-empty-interface": "off"
+          "@typescript-eslint/no-var-requires": "off"
         }
       }
+
     ]
   },
   "prettier": "@looker/prettier-config",
