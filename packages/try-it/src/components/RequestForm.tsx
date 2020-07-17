@@ -41,7 +41,7 @@ interface RequestFormProps {
   httpMethod: TryItHttpMethod
   requestContent: TryItValues
   setRequestContent: Dispatch<{ [key: string]: any }>
-  allowConfig?: boolean
+  setHasConfig?: Dispatch<boolean>
 }
 
 export const RequestForm: FC<RequestFormProps> = ({
@@ -50,7 +50,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   handleSubmit,
   requestContent,
   setRequestContent,
-  allowConfig = false,
+  setHasConfig,
 }) => {
   const handleBoolChange = (e: BaseSyntheticEvent) => {
     setRequestContent({ ...requestContent, [e.target.name]: e.target.checked })
@@ -93,7 +93,7 @@ export const RequestForm: FC<RequestFormProps> = ({
       {httpMethod !== 'GET' && showDataChangeWarning()}
       <Space>
         <Button onClick={handleSubmit}>Try It</Button>
-        {allowConfig && <ConfigDialog />}
+        {setHasConfig && <ConfigDialog setHasConfig={setHasConfig} />}
       </Space>
     </Form>
   )

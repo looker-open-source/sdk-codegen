@@ -42,10 +42,10 @@ import {
   ValidationMessages,
 } from '@looker/components'
 import {
-  ConfigLocation,
-  getConfig,
-  removeConfig,
-  setConfig,
+  StorageLocation,
+  getStorage,
+  removeStorage,
+  setStorage,
   TryItConfigKey,
   validateUrl,
   validLocation,
@@ -72,7 +72,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   title = title || 'TryIt Configuration'
 
   // get configuration from storage, or default it
-  const storage = getConfig(TryItConfigKey)
+  const storage = getStorage(TryItConfigKey)
   let config = { base_url: '', looker_url: '' }
   const location = storage.location
   if (storage.value) config = JSON.parse(storage.value)
@@ -90,7 +90,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
 
   const handleFormSubmit = (e: BaseSyntheticEvent) => {
     e.preventDefault()
-    setConfig(
+    setStorage(
       TryItConfigKey,
       JSON.stringify({
         base_url: fields.baseUrl,
@@ -103,7 +103,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
 
   const handleRemove = (e: BaseSyntheticEvent) => {
     e.preventDefault()
-    removeConfig(TryItConfigKey)
+    removeStorage(TryItConfigKey)
     if (setHasConfig) setHasConfig(false)
   }
 
@@ -115,22 +115,21 @@ export const ConfigForm: FC<ConfigFormProps> = ({
 
   const handleUrlChange = (event: FormEvent<HTMLInputElement>) => {
     const name = event.currentTarget.name
-    handleInputChange(event)
 
     const newValidationMessages = { ...validationMessages }
 
     const url = validateUrl(event.currentTarget.value)
     if (url) {
-      const newFields = { ...fields }
-      // Potentially clean up url
-      fields[event.currentTarget.name] = url
-      setFields(newFields)
+      delete newValidationMessages[name]
+      // Update URL if it's been cleaned up
+      event.currentTarget.value = url
     } else {
       newValidationMessages[name] = {
         message: `'${event.currentTarget.value}' is not a valid url`,
         type: 'error',
       }
     }
+    handleInputChange(event)
 
     setValidationMessages(newValidationMessages)
   }
@@ -141,7 +140,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
 
     if (validLocation(location)) {
       const newFields = { ...fields }
-      newFields.location = location as ConfigLocation
+      newFields.location = location as StorageLocation
       setFields(newFields)
       delete newValidationMessages[name]
     } else {

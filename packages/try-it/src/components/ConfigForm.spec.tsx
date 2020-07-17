@@ -28,14 +28,19 @@ import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
-import { removeConfig, setConfig, TryItConfigKey } from './configUtils'
+import {
+  getStorage,
+  removeStorage,
+  setStorage,
+  TryItConfigKey,
+} from './configUtils'
 import { ConfigForm } from './ConfigForm'
 
 describe('ConfigForm', () => {
   // https://testing-library.com/docs/guide-which-query
 
   beforeEach(() => {
-    removeConfig(TryItConfigKey)
+    removeStorage(TryItConfigKey)
   })
 
   test('it creates an empty config form without stored config', async () => {
@@ -79,7 +84,7 @@ describe('ConfigForm', () => {
     ).toBeInTheDocument()
   })
 
-  test('it disables save for bad url', async () => {
+  test('it disables and enable save for bad and good urls', async () => {
     renderWithTheme(<ConfigForm />)
     const apiUrl = screen.getByRole('textbox', {
       name: /API server url/i,
@@ -96,6 +101,61 @@ describe('ConfigForm', () => {
       expect(button).not.toBeEnabled()
       expect(screen.getByText(`'bad' is not a valid url`)).toBeInTheDocument()
     })
+
+    fireEvent.change(apiUrl, { target: { value: '' } })
+    await userEvent.type(apiUrl, 'https:good')
+    await waitFor(() => {
+      expect(apiUrl).toHaveValue('https://good')
+      const button = screen.getByRole('button', {
+        name: 'Save',
+      }) as HTMLButtonElement
+      expect(button).toBeInTheDocument()
+      expect(button).toBeEnabled()
+    })
+  })
+
+  test('it saves and clears storage', async () => {
+    renderWithTheme(<ConfigForm />)
+    const apiUrl = screen.getByRole('textbox', {
+      name: /API server url/i,
+    }) as HTMLInputElement
+    expect(apiUrl).toBeInTheDocument()
+    expect(apiUrl).toHaveValue('')
+
+    const authUrl = screen.getByRole('textbox', {
+      name: /Auth server Url/i,
+    }) as HTMLInputElement
+    expect(authUrl).toBeInTheDocument()
+    expect(authUrl).toHaveValue('')
+
+    const save = screen.getByRole('button', {
+      name: 'Save',
+    }) as HTMLButtonElement
+    expect(save).toBeInTheDocument()
+
+    const remove = screen.getByRole('button', {
+      name: 'Save',
+    }) as HTMLButtonElement
+    expect(remove).toBeInTheDocument()
+
+    await userEvent.type(apiUrl, 'https://foo:199')
+    await userEvent.type(authUrl, 'https://foo:99')
+    await userEvent.click(save)
+    await waitFor(() => {
+      const storage = getStorage(TryItConfigKey)
+      expect(storage.location).toEqual('session')
+      expect(JSON.parse(storage.value)).toEqual({
+        base_url: 'https://foo.199',
+        looker_url: 'https://foo:99',
+      })
+    })
+
+    await userEvent.click(remove)
+    await waitFor(() => {
+      const storage = getStorage(TryItConfigKey)
+      expect(storage.location).toEqual('session')
+      expect(storage.value).toEqual('')
+    })
   })
 
   test('it can have a custom tile', () => {
@@ -105,7 +165,7 @@ describe('ConfigForm', () => {
   })
 
   test('it gets config from session storage', async () => {
-    setConfig(
+    setStorage(
       TryItConfigKey,
       JSON.stringify({
         base_url: 'http://base',
@@ -143,7 +203,7 @@ describe('ConfigForm', () => {
   })
 
   test('it gets config from local storage', async () => {
-    setConfig(
+    setStorage(
       TryItConfigKey,
       JSON.stringify({
         base_url: 'http://locb',

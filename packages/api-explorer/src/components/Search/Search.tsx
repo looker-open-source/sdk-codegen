@@ -87,10 +87,12 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
     setSearchResults(results)
   }, [debouncedPattern])
 
-  /** Focus search input when '/' is pressed */
+  // TODO make this hook pass through on HTMLInputElements
+  /** Focus search input when '/' is pressed if not in an input element */
   const inputRef = useRef<HTMLInputElement>(null)
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === '/' && document.activeElement !== inputRef.current) {
+      if (document.activeElement instanceof HTMLInputElement) return
       inputRef.current && inputRef.current.focus()
       event.preventDefault()
     }

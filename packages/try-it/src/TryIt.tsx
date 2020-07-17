@@ -48,9 +48,9 @@ import {
   pathify,
   ConfigForm,
   tryItSDK,
+  sdkNeedsConfig,
   TryItSettings,
 } from './components'
-import { sdkNeedsConfig } from './components/configUtils'
 
 export type TryItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
 
@@ -154,6 +154,7 @@ export const TryIt: FC<TryItProps> = ({
               requestContent={requestContent}
               setRequestContent={setRequestContent}
               handleSubmit={handleSubmit}
+              setHasConfig={setHasConfig}
             />
           )}
           {!hasConfig && <ConfigForm setHasConfig={setHasConfig} />}

@@ -24,15 +24,12 @@
 
  */
 
-import { Looker40SDK } from '@looker/sdk/lib/browser'
-import { TryItSettings } from './TryItSDK'
-
 export const TryItConfigKey = 'TryItConfig'
 
-export type ConfigLocation = 'session' | 'local'
+export type StorageLocation = 'session' | 'local'
 
 export interface IStorageValue {
-  location: ConfigLocation
+  location: StorageLocation
   value: string
 }
 
@@ -46,7 +43,7 @@ export interface IStorageValue {
  * @param defaultValue to retrieve. Defaults to ''
  * @returns the location where the key was found, and its value
  */
-export const getConfig = (key: string, defaultValue = ''): IStorageValue => {
+export const getStorage = (key: string, defaultValue = ''): IStorageValue => {
   let value = sessionStorage.getItem(key)
   if (value) {
     return {
@@ -67,13 +64,10 @@ export const getConfig = (key: string, defaultValue = ''): IStorageValue => {
   }
 }
 
-export const sdkNeedsConfig = (sdk: Looker40SDK) =>
-  sdk.authSession.settings instanceof TryItSettings
-
-export const setConfig = (
+export const setStorage = (
   key: string,
   value: string,
-  location: ConfigLocation = 'session'
+  location: StorageLocation = 'session'
 ): string => {
   switch (location.toLocaleLowerCase()) {
     case 'local':
@@ -86,7 +80,7 @@ export const setConfig = (
   return value
 }
 
-export const removeConfig = (key: string) => {
+export const removeStorage = (key: string) => {
   localStorage.removeItem(key)
   sessionStorage.removeItem(key)
 }

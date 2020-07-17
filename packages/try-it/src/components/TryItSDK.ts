@@ -29,9 +29,10 @@ import {
   DefaultSettings,
   IApiSection,
   IApiSettings,
+  Looker40SDK,
   LookerBrowserSDK,
 } from '@looker/sdk/lib/browser'
-import { getConfig, TryItConfigKey } from './configUtils'
+import { getStorage, TryItConfigKey } from './configUtils'
 
 // https://docs.looker.com/reference/api-and-integration/api-cors
 // TODO get base_url value from the stand-alone TryIt provider
@@ -47,12 +48,16 @@ export class TryItSettings extends ApiSettings {
   }
 
   private getStorage() {
-    return getConfig(TryItConfigKey)
+    return getStorage(TryItConfigKey)
   }
 
   authIsConfigured(): boolean {
     const storage = this.getStorage()
-    return !!storage.value
+    if (storage.value) {
+      const config = JSON.parse(storage.value)
+      return config.base_url && config.looker_url
+    }
+    return false
   }
 
   readConfig(_section?: string): IApiSection {
@@ -86,3 +91,6 @@ export class TryItSettings extends ApiSettings {
 }
 
 export const tryItSDK = LookerBrowserSDK.init40(new TryItSettings(settings))
+
+export const sdkNeedsConfig = (sdk: Looker40SDK) =>
+  sdk.authSession.settings instanceof TryItSettings

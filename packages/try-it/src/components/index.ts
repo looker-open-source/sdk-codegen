@@ -33,13 +33,13 @@ export {
   defaultTryItCallback,
   pathify,
 } from './requestUtils'
-// export {
-//   getConfig,
-//   removeConfig,
-//   sdkNeedsConfig,
-//   validateUrl,
-//   validLocation,
-//   TryItConfigKey,
-// } from './configUtils'
-export * from './configUtils'
-export { tryItSDK, TryItSettings } from './TryItSDK'
+export {
+  getStorage,
+  setStorage,
+  removeStorage,
+  validateUrl,
+  validLocation,
+  TryItConfigKey,
+} from './configUtils'
+
+export { tryItSDK, TryItSettings, sdkNeedsConfig } from './TryItSDK'

@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC } from 'react'
+import React, { Dispatch, FC } from 'react'
 import {
   DialogManager,
   DialogContent,
@@ -35,16 +35,18 @@ import { ConfigForm } from './ConfigForm'
 
 interface ConfigDialogProps {
   icon?: IconNames
+  setHasConfig?: Dispatch<boolean>
 }
 
 export const ConfigDialog: FC<ConfigDialogProps> = ({
   icon = 'GearOutline',
+  setHasConfig,
 }) => {
   return (
     <DialogManager
       content={
         <DialogContent>
-          <ConfigForm />
+          <ConfigForm setHasConfig={setHasConfig} />
         </DialogContent>
       }
     >
