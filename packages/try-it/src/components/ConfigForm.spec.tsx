@@ -134,7 +134,7 @@ describe('ConfigForm', () => {
     expect(save).toBeInTheDocument()
 
     const remove = screen.getByRole('button', {
-      name: 'Save',
+      name: 'Remove',
     }) as HTMLButtonElement
     expect(remove).toBeInTheDocument()
 
@@ -145,7 +145,7 @@ describe('ConfigForm', () => {
       const storage = getStorage(TryItConfigKey)
       expect(storage.location).toEqual('session')
       expect(JSON.parse(storage.value)).toEqual({
-        base_url: 'https://foo.199',
+        base_url: 'https://foo:199',
         looker_url: 'https://foo:99',
       })
     })

@@ -109,7 +109,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
 
   const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
     const newFields = { ...fields }
-    fields[event.currentTarget.name] = event.currentTarget.value
+    newFields[event.currentTarget.name] = event.currentTarget.value
     setFields(newFields)
   }
 
@@ -182,7 +182,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
           label="Save to"
           name="location"
           options={storageOptions}
-          defaultValue={location}
+          defaultValue={fields.location}
           onChange={handleLocationChange}
           inline
           required
