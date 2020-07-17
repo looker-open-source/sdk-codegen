@@ -26,12 +26,12 @@
 
 import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { screen } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { BrowserTransport } from '@looker/sdk/lib/browser'
 
 import { TryIt, TryItInput } from './TryIt'
 import { testTextResponse } from './test-data'
+import { tryItSDK } from './utils'
 
 describe('TryIt', () => {
   const inputs: TryItInput[] = [
@@ -96,8 +96,9 @@ describe('TryIt', () => {
 
   test('the form submit handler invokes the request callback on submit', async () => {
     const defaultRequestCallback = jest
-      .spyOn(BrowserTransport.prototype, 'rawRequest')
+      .spyOn(tryItSDK.authSession.transport, 'rawRequest')
       .mockResolvedValueOnce(testTextResponse)
+    jest.spyOn(tryItSDK.authSession, 'isAuthenticated').mockReturnValue(true)
     renderWithTheme(
       <TryIt
         specKey={'3.1'}
@@ -107,11 +108,12 @@ describe('TryIt', () => {
       />
     )
     userEvent.click(screen.getByRole('button', { name: 'Try It' }))
-    expect(defaultRequestCallback).toHaveBeenCalled()
-    userEvent.click(screen.getByRole('button', { name: 'Response' }))
-    expect(
-      await screen.findByText(testTextResponse.body.toString())
-    ).toBeInTheDocument()
+    await waitFor(() => {
+      expect(defaultRequestCallback).toHaveBeenCalled()
+      expect(
+        screen.queryByText(testTextResponse.body.toString())
+      ).toBeInTheDocument()
+    })
   })
 
   test('custom try it request callback overrides default', async () => {
@@ -126,10 +128,11 @@ describe('TryIt', () => {
       />
     )
     userEvent.click(screen.getByRole('button', { name: 'Try It' }))
-    expect(customTryItCallback).toHaveBeenCalled()
-    userEvent.click(screen.getByRole('button', { name: 'Response' }))
-    expect(
-      await screen.findByText(testTextResponse.body.toString())
-    ).toBeInTheDocument()
+    await waitFor(() => {
+      expect(customTryItCallback).toHaveBeenCalled()
+      expect(
+        screen.queryByText(testTextResponse.body.toString())
+      ).toBeInTheDocument()
+    })
   })
 })

@@ -23,8 +23,6 @@
  SOFTWARE.
 
  */
-import { BrowserTransport } from '@looker/sdk/lib/browser'
-
 import { TryItInput } from '../TryIt'
 import { testJsonResponse } from '../test-data'
 import {
@@ -32,6 +30,7 @@ import {
   pathify,
   defaultTryItCallback,
 } from './requestUtils'
+import { tryItSDK } from './TryItSDK'
 
 describe('pathify', () => {
   test('it returns unchanged path if no path params are specified', () => {
@@ -126,11 +125,12 @@ describe('createRequestParams', () => {
   })
 })
 
-describe('defaultRequestCallback', () => {
+describe('defaultTryItCallback', () => {
   test('it makes a request', async () => {
     const spy = jest
-      .spyOn(BrowserTransport.prototype, 'rawRequest')
+      .spyOn(tryItSDK.authSession.transport, 'rawRequest')
       .mockResolvedValueOnce(testJsonResponse)
+    jest.spyOn(tryItSDK.authSession, 'isAuthenticated').mockReturnValue(true)
 
     const resp = await defaultTryItCallback(
       '3.1',
@@ -143,7 +143,7 @@ describe('defaultRequestCallback', () => {
 
     expect(spy).toHaveBeenCalledWith(
       'POST',
-      '/queries/run/json',
+      '/api/3.1/queries/run/json',
       {
         fields: 'first_name, last_name',
       },
@@ -151,7 +151,8 @@ describe('defaultRequestCallback', () => {
         fields: ['orders.count'],
         model: 'thelook',
         view: 'orders',
-      }
+      },
+      expect.any(Function)
     )
     expect(resp).toEqual(testJsonResponse)
   })
