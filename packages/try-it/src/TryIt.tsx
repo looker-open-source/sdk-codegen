@@ -47,6 +47,7 @@ import {
   defaultTryItCallback,
   pathify,
   ConfigForm,
+  TryItSettings, tryItSDK,
 } from './components'
 
 export type TryItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
@@ -90,7 +91,7 @@ export const TryIt: FC<TryItProps> = ({
   httpMethod,
   endpoint,
   tryItCallback,
-  sdk,
+  sdk = tryItSDK,
 }) => {
   const [requestContent, setRequestContent] = useState({})
   const [activePathParams, setActivePathParams] = useState(undefined)
@@ -99,6 +100,11 @@ export const TryIt: FC<TryItProps> = ({
     undefined
   )
   const tabs = useTabs()
+
+  // A bit messy but it SHOULD work
+  const needsConfig =
+    sdk?.authSession.settings instanceof TryItSettings &&
+    !sdk?.authSession.settings.authIsConfigured()
 
   // TODO: Make jest stop complaining when using the ?? syntax below
   const callback = tryItCallback || defaultTryItCallback
@@ -139,7 +145,7 @@ export const TryIt: FC<TryItProps> = ({
       </TabList>
       <TabPanels {...tabs}>
         <TabPanel key="request">
-          {sdk?.authSession.settings.isConfigured() && (
+          {!needsConfig && (
             <RequestForm
               httpMethod={httpMethod}
               inputs={inputs}
@@ -148,7 +154,7 @@ export const TryIt: FC<TryItProps> = ({
               handleSubmit={handleSubmit}
             />
           )}
-          {!sdk?.authSession.settings.isConfigured() && <ConfigForm />}
+          {needsConfig && <ConfigForm />}
         </TabPanel>
         <TabPanel key="response">
           {loading && (

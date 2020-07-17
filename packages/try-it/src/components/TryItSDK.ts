@@ -31,38 +31,50 @@ import {
   IApiSettings,
   LookerBrowserSDK,
 } from '@looker/sdk/lib/browser'
+import { getConfig, TryItConfigKey } from './configUtils'
 
 // https://docs.looker.com/reference/api-and-integration/api-cors
 // TODO get base_url value from the stand-alone TryIt provider
 const settings = {
   ...DefaultSettings(),
-  agentTag: 'TryIt',
   base_url: 'https://self-signed.looker.com:19999',
+  agentTag: 'TryIt',
 } as IApiSettings
 
-class TryItSettings extends ApiSettings {
+export class TryItSettings extends ApiSettings {
   constructor(settings: Partial<IApiSettings>) {
     super(settings)
   }
 
-  isConfigured(): boolean {
-    const creds = this.readConfig()
-    return (
-      super.isConfigured() && 'redirect_uri' in creds && 'looker_url' in creds
-    )
+  authIsConfigured(): boolean {
+    const storage = getConfig(TryItConfigKey)
+    return !!storage.value
   }
 
   readConfig(_section?: string): IApiSection {
-    /**
-     * Use the values that can be resolved dynamically
-     */
-    const url = new URL(this.base_url)
-    const oauthServer = `${url.protocol}//${url.hostname}`
+    // Read server url values from storage
+    const storage = getConfig(TryItConfigKey)
+    // Init to empty object because Typescript/IntelliJ complains otherwise
+    let config = { base_url: '', looker_url: '' }
+    if (storage.value) {
+      config = JSON.parse(storage.value)
+    } else {
+      // derive Looker server URL from base_url
+      const url = new URL(this.base_url)
+      const authServer = `${url.protocol}//${url.hostname}`
+      config = {
+        base_url: this.base_url,
+        looker_url: `${authServer}:9999`,
+      }
+    }
+
+    const { base_url, looker_url } = config
     return {
       ...super.readConfig(_section),
       ...{
+        base_url,
+        looker_url: looker_url,
         client_id: 'looker.api-explorer',
-        looker_url: `${oauthServer}:9999`,
         redirect_uri: `${window.location.origin}/oauth`,
       },
     }

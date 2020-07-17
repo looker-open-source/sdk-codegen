@@ -23,40 +23,62 @@
  SOFTWARE.
 
  */
+
 import {
   getConfig,
   removeConfig,
   setConfig,
   TryItConfigKey,
+  validateUrl,
 } from './configUtils'
 
 describe('configUtils', () => {
-  const testConfig = 'Try it config values'
-  beforeEach(() => {
-    removeConfig(TryItConfigKey)
+  describe('storage', () => {
+    const testConfig = 'Try it config values'
+    beforeEach(() => {
+      removeConfig(TryItConfigKey)
+    })
+
+    afterEach(() => {
+      removeConfig(TryItConfigKey)
+    })
+
+    test('it saves config values to sessionStorage by default', () => {
+      setConfig(TryItConfigKey, testConfig)
+      const actual = getConfig(TryItConfigKey)
+      expect(actual).toEqual({ location: 'session', value: testConfig })
+    })
+
+    test('it reads config values from localStorage if they are not in sessionStorage', () => {
+      setConfig(TryItConfigKey, testConfig, 'local')
+      const actual = getConfig(TryItConfigKey)
+      expect(actual).toEqual({ location: 'local', value: testConfig })
+    })
+
+    test('removeConfig clears both session and local storage', () => {
+      setConfig(TryItConfigKey, testConfig, 'local')
+      setConfig(TryItConfigKey, testConfig, 'session')
+      removeConfig(TryItConfigKey)
+      const actual = getConfig(TryItConfigKey)
+      expect(actual).toEqual({ location: 'session', value: '' })
+    })
   })
 
-  afterEach(() => {
-    removeConfig(TryItConfigKey)
-  })
+  describe('validateUrl', () => {
+    test('invalid urls are empty', () => {
+      const actual = validateUrl('foo')
+      expect(actual).toEqual('')
+    })
 
-  test('it saves config values to sessionStorage by default', () => {
-    setConfig(TryItConfigKey, testConfig)
-    const actual = getConfig(TryItConfigKey)
-    expect(actual).toEqual({ location: 'session', value: testConfig })
-  })
-
-  test('it reads config values from localStorage if they are not in sessionStorage', () => {
-    setConfig(TryItConfigKey, testConfig, 'local')
-    const actual = getConfig(TryItConfigKey)
-    expect(actual).toEqual({ location: 'local', value: testConfig })
-  })
-
-  test('removeConfig clears both session and local storage', () => {
-    setConfig(TryItConfigKey, testConfig, 'local')
-    setConfig(TryItConfigKey, testConfig, 'session')
-    removeConfig(TryItConfigKey)
-    const actual = getConfig(TryItConfigKey)
-    expect(actual).toEqual({ location: 'session', value: '' })
+    test('parseable urls are normalized', () => {
+      let actual = validateUrl('http:foo')
+      expect(actual).toEqual('http://foo')
+      actual = validateUrl('https:/foo:19999/')
+      expect(actual).toEqual('https://foo:19999')
+      actual = validateUrl('https:/foo:19999/?foo=bar')
+      expect(actual).toEqual('https://foo:19999')
+      actual = validateUrl('https://foo:19999/')
+      expect(actual).toEqual('https://foo:19999')
+    })
   })
 })

@@ -69,7 +69,7 @@ export const setConfig = (
   value: string,
   location: ConfigLocation = 'session'
 ): string => {
-  switch (location) {
+  switch (location.toLocaleLowerCase()) {
     case 'local':
       localStorage.setItem(key, value)
       break
@@ -83,4 +83,22 @@ export const setConfig = (
 export const removeConfig = (key: string) => {
   localStorage.removeItem(key)
   sessionStorage.removeItem(key)
+}
+
+/**
+ * Validates URL and standardizes it
+ * @param url to validate
+ * @returns the standardized url.origin if it's valid, or an empty string if it's not
+ */
+export const validateUrl = (url: string) => {
+  try {
+    const result = new URL(url)
+    return result.origin
+  } catch {
+    return ''
+  }
+}
+
+export const validLocation = (location: string) => {
+  return ['local', 'session'].includes(location.toLocaleLowerCase())
 }

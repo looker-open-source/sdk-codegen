@@ -32,4 +32,4 @@ export {
   defaultTryItCallback,
   pathify,
 } from './requestUtils'
-export { tryItSDK } from './TryItSDK'
+export { tryItSDK, TryItSettings } from './TryItSDK'
