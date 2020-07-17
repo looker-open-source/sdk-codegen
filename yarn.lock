@@ -2153,13 +2153,6 @@
     debug "^2.2.0"
     es6-promise "^4.2.5"
 
-"@looker/components-providers@^0.8.7":
-  version "0.8.7"
-  resolved "https://registry.yarnpkg.com/@looker/components-providers/-/components-providers-0.8.7.tgz#efd1cf47996f8683b597a055acea343092b51e08"
-  integrity sha512-Y7gIrARTilAaO+rACSloLDl82IVJPqi/Ie4KBv4IMIoJn++D2llC4Ag59xW5lR//9ZzRES53nE1Awfpah/5YNg==
-  dependencies:
-    "@looker/design-tokens" "^0.8.7"
-
 "@looker/components-providers@^0.9.4":
   version "0.9.4"
   resolved "https://registry.yarnpkg.com/@looker/components-providers/-/components-providers-0.9.4.tgz#e0e3b8b94f512113d5c60b7fb64cef5ee849bd46"
@@ -2171,30 +2164,6 @@
   version "0.7.36"
   resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-0.7.36.tgz#2de68473d728b61f11fd744cfe8dbe2dae190e2f"
   integrity sha512-eT6EGgNnCwlBeZ3QYuKq/Mq+n1JataHVD9by3ONv7LrS1bpPg3Rhmdzg8MWoSPrXNj96fMsmvCjkKk6+mfT3yA==
-
-"@looker/components@^0.8.6":
-  version "0.8.7"
-  resolved "https://registry.yarnpkg.com/@looker/components/-/components-0.8.7.tgz#6427c793981865297c8a488d3cb5cd1bd0984e96"
-  integrity sha512-c29kNPjj3BhiZqvQBfX/145Eqe8haMb1wcOkhAOPR5r/LgX21W1A8D3Rj69n8rxHCZZi4X6+lpOoZqRb4Ahbew==
-  dependencies:
-    "@looker/components-providers" "^0.8.7"
-    "@looker/design-tokens" "^0.8.7"
-    "@looker/icons" "^0.8.7"
-    "@popperjs/core" "^2.4.1"
-    d3-color "^1.4.1"
-    d3-hsv "^0.1.0"
-    date-fns "^2.14.0"
-    date-fns-tz "^1.0.10"
-    focus-trap "^5.1.0"
-    lodash "^4.17.15"
-    polished "^3.6.4"
-    react-day-picker "^7.4.8"
-    react-hotkeys "^2.0.0"
-    react-resize-detector "^4.2.3"
-    react-transition-group "^4.3.0"
-    resize-observer-polyfill "^1.5.1"
-    styled-system "^5.1.5"
-    uuid "^8.1.0"
 
 "@looker/components@^0.9.5":
   version "0.9.5"
@@ -2219,16 +2188,6 @@
     resize-observer-polyfill "^1.5.1"
     styled-system "^5.1.5"
     uuid "^8.1.0"
-
-"@looker/design-tokens@^0.8.7":
-  version "0.8.7"
-  resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-0.8.7.tgz#a0afeb41fd5b5bd7c1f84c7f6dc92fa47464e9a6"
-  integrity sha512-d9w99nofh3WNOraNi/Xgf3sTEIaXJy8t3pynkjfRlp1hCldszIbohi3840nBaolWNjAtxZ8fLvmyv1qYIsT6oA==
-  dependencies:
-    "@types/styled-system" "^5.1.9"
-    lodash "^4.17.15"
-    polished "^3.6.4"
-    styled-system "^5.1.5"
 
 "@looker/design-tokens@^0.9.1":
   version "0.9.1"
@@ -2282,11 +2241,6 @@
     "@looker/sdk" "0.3.0-beta.1"
     deepmerge "^4.2.2"
     semver "^6.3.0"
-
-"@looker/icons@^0.8.7":
-  version "0.8.7"
-  resolved "https://registry.yarnpkg.com/@looker/icons/-/icons-0.8.7.tgz#909f0316454635cbb09cb698034e1eca3fe983f7"
-  integrity sha512-WfKpsf3p418c0oZdhGpr5xRAUYf/TlFY5IfJnb/bSBABfW+U8NOBWTm0xGQOnMd4ec6QCNDCWWUrUK4n9zPcCQ==
 
 "@looker/icons@^0.9.2":
   version "0.9.2"
@@ -2465,7 +2419,7 @@
   resolved "https://registry.yarnpkg.com/@openapitools/openapi-generator-cli/-/openapi-generator-cli-1.0.2-4.2.0.tgz#21d27c65a8a17358edd6089182e8875f1511bb12"
   integrity sha512-rkr7fDUyU06wjszO/chRVtITS5dN4FFg4i6/zuLIVMKcpGNIq2vjw2NJhNG11vjA/aBnnFMFrvC4z99O5Wsuiw==
 
-"@popperjs/core@^2.4.1", "@popperjs/core@^2.4.2":
+"@popperjs/core@^2.4.2":
   version "2.4.4"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.4.4.tgz#11d5db19bd178936ec89cd84519c4de439574398"
   integrity sha512-1oO6+dN5kdIA3sKPZhRGJTfGVP4SWV6KqlMOwry4J3HfyD68sl/3KmG7DeYUzvN+RbhXDnv/D8vNNB8168tAMg==
@@ -11392,7 +11346,7 @@ pn@^1.1.0:
   resolved "https://registry.yarnpkg.com/pn/-/pn-1.1.0.tgz#e2f4cef0e219f463c179ab37463e4e1ecdccbafb"
   integrity sha512-2qHaIQr2VLRFoxe2nASzsV6ef4yOOH+Fi9FBOVH6cqeSgUnoyySPZkxzLuzd+RYOQTRpROA0ztTMqxROKSb/nA==
 
-polished@^3.6.4, polished@^3.6.5:
+polished@^3.6.5:
   version "3.6.5"
   resolved "https://registry.yarnpkg.com/polished/-/polished-3.6.5.tgz#dbefdde64c675935ec55119fe2a2ab627ca82e9c"
   integrity sha512-VwhC9MlhW7O5dg/z7k32dabcAFW1VI2+7fSe8cE/kXcfL7mVdoa5UxciYGW2sJU78ldDLT6+ROEKIZKFNTnUXQ==
@@ -11936,17 +11890,6 @@ react-markdown@^4.3.1:
     unified "^6.1.5"
     unist-util-visit "^1.3.0"
     xtend "^4.0.1"
-
-react-resize-detector@^4.2.3:
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-4.2.3.tgz#7df258668a30bdfd88e655bbdb27db7fd7b23127"
-  integrity sha512-4AeS6lxdz2KOgDZaOVt1duoDHrbYwSrUX32KeM9j6t9ISyRphoJbTRCMS1aPFxZHFqcCGLT1gMl3lEcSWZNW0A==
-  dependencies:
-    lodash "^4.17.15"
-    lodash-es "^4.17.15"
-    prop-types "^15.7.2"
-    raf-schd "^4.0.2"
-    resize-observer-polyfill "^1.5.1"
 
 react-resize-detector@^5.0.4:
   version "5.0.6"

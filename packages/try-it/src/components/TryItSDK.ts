@@ -46,14 +46,18 @@ export class TryItSettings extends ApiSettings {
     super(settings)
   }
 
+  private getStorage() {
+    return getConfig(TryItConfigKey)
+  }
+
   authIsConfigured(): boolean {
-    const storage = getConfig(TryItConfigKey)
+    const storage = this.getStorage()
     return !!storage.value
   }
 
   readConfig(_section?: string): IApiSection {
     // Read server url values from storage
-    const storage = getConfig(TryItConfigKey)
+    const storage = this.getStorage()
     // Init to empty object because Typescript/IntelliJ complains otherwise
     let config = { base_url: '', looker_url: '' }
     if (storage.value) {

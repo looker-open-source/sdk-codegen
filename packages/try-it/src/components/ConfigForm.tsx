@@ -24,7 +24,13 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, FormEvent, useState } from 'react'
+import React, {
+  BaseSyntheticEvent,
+  Dispatch,
+  FC,
+  FormEvent,
+  useState,
+} from 'react'
 import {
   Button,
   FieldRadioGroup,
@@ -38,14 +44,17 @@ import {
 import {
   ConfigLocation,
   getConfig,
+  removeConfig,
   setConfig,
   TryItConfigKey,
-  validateUrl, validLocation,
+  validateUrl,
+  validLocation,
 } from './configUtils'
 
 interface ConfigFormProps {
   title?: string
   dialogue?: boolean
+  setHasConfig?: Dispatch<boolean>
 }
 
 const storageOptions = [
@@ -56,6 +65,7 @@ const storageOptions = [
 export const ConfigForm: FC<ConfigFormProps> = ({
   title,
   dialogue = false,
+  setHasConfig,
 }) => {
   // See https://codesandbox.io/s/youthful-surf-0g27j?file=/src/index.tsx for a prototype from Luke
   // TODO see about useReducer to clean this up a bit more
@@ -78,7 +88,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     ValidationMessages
   >({})
 
-  const handleSubmit = (e: BaseSyntheticEvent) => {
+  const handleFormSubmit = (e: BaseSyntheticEvent) => {
     e.preventDefault()
     setConfig(
       TryItConfigKey,
@@ -88,6 +98,13 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       }),
       fields.location
     )
+    if (setHasConfig) setHasConfig(true)
+  }
+
+  const handleRemove = (e: BaseSyntheticEvent) => {
+    e.preventDefault()
+    removeConfig(TryItConfigKey)
+    if (setHasConfig) setHasConfig(false)
   }
 
   const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
@@ -110,7 +127,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       setFields(newFields)
     } else {
       newValidationMessages[name] = {
-        message: "That's not a url!",
+        message: `'${event.currentTarget.value}' is not a valid url`,
         type: 'error',
       }
     }
@@ -119,7 +136,6 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   }
 
   const handleLocationChange = (location: string) => {
-    console.log(location)
     const name = 'location'
     const newValidationMessages = { ...validationMessages }
 
@@ -143,7 +159,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       <Heading>
         <Text>{title}</Text>
       </Heading>
-      <Form onSubmit={handleSubmit} validationMessages={validationMessages}>
+      <Form validationMessages={validationMessages}>
         <Fieldset legend="Server locations">
           <FieldText
             required
@@ -173,9 +189,15 @@ export const ConfigForm: FC<ConfigFormProps> = ({
           required
         />
         {!dialogue && (
-          <Button disabled={Object.keys(validationMessages).length > 0}>
-            Save
-          </Button>
+          <>
+            <Button
+              onClick={handleFormSubmit}
+              disabled={Object.keys(validationMessages).length > 0}
+            >
+              Save
+            </Button>
+            <Button onClick={handleRemove}>Remove</Button>
+          </>
         )}
       </Form>
     </>

@@ -24,22 +24,31 @@
 
  */
 
-export { ConfigDialog } from './ConfigDialog'
-export { ConfigForm } from './ConfigForm'
-export { RequestForm } from './RequestForm'
-export { ShowResponse } from './ShowResponse'
-export {
-  createRequestParams,
-  defaultTryItCallback,
-  pathify,
-} from './requestUtils'
-// export {
-//   getConfig,
-//   removeConfig,
-//   sdkNeedsConfig,
-//   validateUrl,
-//   validLocation,
-//   TryItConfigKey,
-// } from './configUtils'
-export * from './configUtils'
-export { tryItSDK, TryItSettings } from './TryItSDK'
+import React, { FC } from 'react'
+import {
+  DialogManager,
+  DialogContent,
+  Icon,
+  IconNames,
+} from '@looker/components'
+import { ConfigForm } from './ConfigForm'
+
+interface ConfigDialogProps {
+  icon?: IconNames
+}
+
+export const ConfigDialog: FC<ConfigDialogProps> = ({
+  icon = 'GearOutline',
+}) => {
+  return (
+    <DialogManager
+      content={
+        <DialogContent>
+          <ConfigForm />
+        </DialogContent>
+      }
+    >
+      <Icon name={icon} />
+    </DialogManager>
+  )
+}

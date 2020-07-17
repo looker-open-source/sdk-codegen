@@ -27,21 +27,17 @@
 import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
+import userEvent from '@testing-library/user-event'
 import { removeConfig, setConfig, TryItConfigKey } from './configUtils'
 import { ConfigForm } from './ConfigForm'
 
 describe('ConfigForm', () => {
-  // const handleSubmit = jest.fn((e) => e.preventDefault())
-  // const setRequestContent = jest.fn()
   // https://testing-library.com/docs/guide-which-query
 
   beforeEach(() => {
     removeConfig(TryItConfigKey)
   })
 
-  // TODO get button disabled tests working
-  // TODO check URL validation error messages
-  // TODO check required errors
   test('it creates an empty config form without stored config', async () => {
     renderWithTheme(<ConfigForm />)
     const title = screen.getByRole('heading') as HTMLHeadingElement
@@ -71,13 +67,34 @@ describe('ConfigForm', () => {
     expect(local).toBeInTheDocument()
     expect(local).not.toBeChecked()
 
-    fireEvent.change(apiUrl, { target: { value: '' } })
+    expect(
+      screen.getByRole('button', {
+        name: 'Save',
+      })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', {
+        name: 'Remove',
+      })
+    ).toBeInTheDocument()
+  })
+
+  test('it disables save for bad url', async () => {
+    renderWithTheme(<ConfigForm />)
+    const apiUrl = screen.getByRole('textbox', {
+      name: /API server url/i,
+    }) as HTMLInputElement
+    expect(apiUrl).toBeInTheDocument()
+    expect(apiUrl).toHaveValue('')
+
+    await userEvent.type(apiUrl, 'bad')
     await waitFor(() => {
       const button = screen.getByRole('button', {
         name: 'Save',
       }) as HTMLButtonElement
       expect(button).toBeInTheDocument()
       expect(button).not.toBeEnabled()
+      expect(screen.getByText(`'bad' is not a valid url`)).toBeInTheDocument()
     })
   })
 
@@ -123,15 +140,6 @@ describe('ConfigForm', () => {
     }) as HTMLInputElement
     expect(local).toBeInTheDocument()
     expect(local).not.toBeChecked()
-
-    fireEvent.change(apiUrl, { target: { value: apiUrl.value } })
-    await waitFor(() => {
-      const button = screen.getByRole('button', {
-        name: 'Save',
-      }) as HTMLButtonElement
-      expect(button).toBeInTheDocument()
-      // expect(button).not.toBeEnabled()
-    })
   })
 
   test('it gets config from local storage', async () => {

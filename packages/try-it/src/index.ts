@@ -24,5 +24,5 @@
 
  */
 export { TryIt, TryItInput, TryItCallback} from './TryIt'
-export type { TryItHttpMethod } from './TryIt'
 export { pathify, tryItSDK } from './components'
+export type { TryItHttpMethod } from './TryIt'

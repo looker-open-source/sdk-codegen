@@ -24,6 +24,9 @@
 
  */
 
+import { Looker40SDK } from '@looker/sdk/lib/browser'
+import { TryItSettings } from './TryItSDK'
+
 export const TryItConfigKey = 'TryItConfig'
 
 export type ConfigLocation = 'session' | 'local'
@@ -63,6 +66,9 @@ export const getConfig = (key: string, defaultValue = ''): IStorageValue => {
     value: defaultValue,
   }
 }
+
+export const sdkNeedsConfig = (sdk: Looker40SDK) =>
+  sdk.authSession.settings instanceof TryItSettings
 
 export const setConfig = (
   key: string,

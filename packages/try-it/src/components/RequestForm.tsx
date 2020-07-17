@@ -25,7 +25,7 @@
  */
 
 import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
-import { Button, Form } from '@looker/components'
+import { Button, Form, Space } from '@looker/components'
 
 import { TryItHttpMethod, TryItInput, TryItValues } from '../TryIt'
 import {
@@ -33,6 +33,7 @@ import {
   createComplexItem,
   showDataChangeWarning,
 } from './formUtils'
+import { ConfigDialog } from './ConfigDialog'
 
 interface RequestFormProps {
   inputs: TryItInput[]
@@ -40,6 +41,7 @@ interface RequestFormProps {
   httpMethod: TryItHttpMethod
   requestContent: TryItValues
   setRequestContent: Dispatch<{ [key: string]: any }>
+  allowConfig?: boolean
 }
 
 export const RequestForm: FC<RequestFormProps> = ({
@@ -48,6 +50,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   handleSubmit,
   requestContent,
   setRequestContent,
+  allowConfig = false,
 }) => {
   const handleBoolChange = (e: BaseSyntheticEvent) => {
     setRequestContent({ ...requestContent, [e.target.name]: e.target.checked })
@@ -74,7 +77,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form>
       {inputs.map((input) =>
         typeof input.type === 'string'
           ? createSimpleItem(
@@ -88,7 +91,10 @@ export const RequestForm: FC<RequestFormProps> = ({
           : createComplexItem(input, handleComplexChange, requestContent)
       )}
       {httpMethod !== 'GET' && showDataChangeWarning()}
-      <Button>Try It</Button>
+      <Space>
+        <Button onClick={handleSubmit}>Try It</Button>
+        {allowConfig && <ConfigDialog />}
+      </Space>
     </Form>
   )
 }
