@@ -42,7 +42,11 @@ export const DocMethodSummary: FC<DocMethodSummaryProps> = ({ method }) => {
     <SummaryCard>
       <CardContent>
         <Space align="start" between>
-          <MethodBadge httpMethod={method.httpMethod} alignTextCenter inCard>
+          <MethodBadge
+            httpMethod={method.httpMethod}
+            textAlign="center"
+            minWidth="3.7625rem"
+          >
             {method.httpMethod.toUpperCase()}
           </MethodBadge>
           <Flex alignItems="start" flexDirection="column" flex="1" mx="small">
