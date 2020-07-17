@@ -25,9 +25,3 @@
  */
 export { RequestForm } from './RequestForm'
 export { ShowResponse } from './ShowResponse'
-export {
-  createRequestParams,
-  defaultTryItCallback,
-  pathify,
-} from './requestUtils'
-export { tryItSDK } from './TryItSDK'
