@@ -102,7 +102,7 @@ export const createInputs = (
 ): TryItInput[] => {
   return method.allParams.map((param) => ({
     name: param.name,
-    location: `${param.location}`,
+    location: param.location,
     type:
       param.type instanceof IntrinsicType
         ? param.type.name
