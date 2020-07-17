@@ -23,17 +23,4 @@
  SOFTWARE.
 
  */
-
-export { ConfigDialog } from './ConfigDialog'
-export { ConfigForm } from './ConfigForm'
-export { RequestForm } from './RequestForm'
 export { ShowResponse } from './ShowResponse'
-export { MethodBadge } from './MethodBadge'
-export {
-  getStorage,
-  setStorage,
-  removeStorage,
-  validateUrl,
-  validLocation,
-  TryItConfigKey,
-} from './configUtils'

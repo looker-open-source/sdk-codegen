@@ -27,23 +27,34 @@
 import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
 import { Button, Form, Space } from '@looker/components'
 
-import { TryItHttpMethod, TryItInput, TryItValues } from '../TryIt'
+import { TryItHttpMethod, TryItInput, TryItValues } from '../../TryIt'
+import { ConfigDialog } from '../ConfigDialog'
 import {
   createSimpleItem,
   createComplexItem,
   showDataChangeWarning,
 } from './formUtils'
-import { ConfigDialog } from './ConfigDialog'
 
+/**
+ * Properties required by RequestForm
+ */
 interface RequestFormProps {
   inputs: TryItInput[]
+  /** A callback for submitting the form */
   handleSubmit: (e: BaseSyntheticEvent) => void
+  /** HTTP method used for this REST request */
   httpMethod: TryItHttpMethod
+  /** A collection type react state to store path, query and body parameters as entered by the user  */
   requestContent: TryItValues
+  /** A set state callback fn for populating requestContent on interaction with the request form */
   setRequestContent: Dispatch<{ [key: string]: any }>
   setHasConfig?: Dispatch<boolean>
 }
 
+/**
+ * Dynamically generates a REST request form and its form elements corresponding to parameters from an array of TryIt
+ * inputs
+ */
 export const RequestForm: FC<RequestFormProps> = ({
   inputs,
   httpMethod,

@@ -32,7 +32,7 @@ import {
   Looker40SDK,
   LookerBrowserSDK,
 } from '@looker/sdk/lib/browser'
-import { getStorage, TryItConfigKey } from './configUtils'
+import { getStorage, TryItConfigKey } from '../components/configUtils'
 
 // https://docs.looker.com/reference/api-and-integration/api-cors
 // TODO get base_url value from the stand-alone TryIt provider
@@ -42,6 +42,11 @@ const settings = {
   agentTag: 'TryIt',
 } as IApiSettings
 
+/***
+ * An OAuth Session configuration provider
+ *
+ * @class TryItSettings
+ */
 export class TryItSettings extends ApiSettings {
   constructor(settings: Partial<IApiSettings>) {
     super(settings)

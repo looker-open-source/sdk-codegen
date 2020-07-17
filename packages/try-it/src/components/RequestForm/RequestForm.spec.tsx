@@ -32,14 +32,9 @@ import userEvent from '@testing-library/user-event'
 import { RequestForm } from './RequestForm'
 
 describe('RequestForm', () => {
-  const handleSubmit = jest.fn((e) => e.preventDefault())
   const requestContent = {}
   const setRequestContent = jest.fn()
-
-  afterEach(() => {
-    handleSubmit.mockClear()
-    setRequestContent.mockClear()
-  })
+  const handleSubmit = jest.fn()
 
   test('it creates a form with a simple item and a submit button', () => {
     renderWithTheme(
@@ -143,6 +138,7 @@ describe('RequestForm', () => {
   })
 
   test('interacting with a complex item changes the request content', () => {
+    const handleSubmit = jest.fn((e) => e.preventDefault())
     renderWithTheme(
       <RequestForm
         inputs={[

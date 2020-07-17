@@ -23,19 +23,18 @@
  SOFTWARE.
 
  */
-
 import React, { BaseSyntheticEvent, Fragment } from 'react'
 import {
   FieldText,
   FieldToggleSwitch,
-  InputDate,
   Label,
   FieldCheckbox,
 } from '@looker/components'
 
-import { TryItInput, TryItValues } from '../TryIt'
+import { InputDate } from '@looker/components/lib/InputDate'
+import { TryItInput, TryItValues } from '../../TryIt'
 
-import { CodeStructure } from './CodeStructure'
+import { CodeStructure } from '../CodeStructure'
 
 const inputTextType = (type: string) => {
   switch (type) {

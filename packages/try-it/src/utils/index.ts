@@ -23,40 +23,9 @@
  SOFTWARE.
 
  */
-
-import React, { FC } from 'react'
-import { last } from 'lodash'
-import { Heading } from '@looker/components'
-import { IRawResponse } from '@looker/sdk/lib/browser'
-
-import { responseHandlers } from './responseUtils'
-
-interface ShowResponseProps {
-  response: IRawResponse
-  verb?: string
-  path?: string
-}
-
-export const ShowResponse: FC<ShowResponseProps> = ({
-  response,
-  verb,
-  path,
-}) => {
-  let pickedHandler = last(responseHandlers)!
-  for (const handler of responseHandlers) {
-    if (handler.isRecognized(response.contentType)) {
-      pickedHandler = handler
-      break
-    }
-  }
-
-  // TODO make a badge for the verb
-  return (
-    <>
-      <Heading as="h4">{`${verb || ''} ${path || ''} ${response.statusCode}: ${
-        response.contentType
-      }`}</Heading>
-      {pickedHandler.component(response)}
-    </>
-  )
-}
+export { tryItSDK, sdkNeedsConfig, TryItSettings } from './TryItSDK'
+export {
+  createRequestParams,
+  defaultTryItCallback,
+  pathify,
+} from './requestUtils'

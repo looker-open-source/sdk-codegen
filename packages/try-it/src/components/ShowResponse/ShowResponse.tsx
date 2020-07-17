@@ -23,36 +23,47 @@
  SOFTWARE.
 
  */
+
 import React, { FC } from 'react'
-import { IMethod } from '@looker/sdk-codegen'
-import { Code, Flex, SpaceVertical, Text } from '@looker/components'
-import { MethodBadge } from '@looker/try-it'
+import { last } from 'lodash'
+import { Heading } from '@looker/components'
+import { IRawResponse } from '@looker/sdk/lib/browser'
 
-import { DocPseudo } from '../../../components'
+import { responseHandlers } from './responseUtils'
 
-interface DocOperationProps {
-  method: IMethod
+interface ShowResponseProps {
+  /** A basic HTTP response for "raw" HTTP requests */
+  response: IRawResponse
+  /** HTTP Method */
+  verb?: string
+  /** HTTP request path */
+  path?: string
 }
 
-export const DocOperation: FC<DocOperationProps> = ({ method }) => (
-  <SpaceVertical align="start" mb="xlarge" gap="xsmall">
-    <MethodBadge httpMethod={method.httpMethod}>
-      <Flex alignItems="center">
-        <Text fontSize="xsmall" fontWeight="semiBold" mr="xxsmall">
-          SDK:
-        </Text>
-        <DocPseudo method={method} />
-      </Flex>
-    </MethodBadge>
-    <MethodBadge httpMethod={method.httpMethod}>
-      <Flex alignItems="center">
-        <Text fontSize="xsmall" fontWeight="semiBold" mr="xxsmall">
-          {method.httpMethod}:
-        </Text>
-        <Code fontSize="small" fontWeight="normal">
-          {method.endpoint}
-        </Code>
-      </Flex>
-    </MethodBadge>
-  </SpaceVertical>
-)
+/**
+ * Given an HTTP response it picks a response handler based on the content type and renders the body
+ */
+export const ShowResponse: FC<ShowResponseProps> = ({
+  response,
+  verb,
+  path,
+}) => {
+  let pickedHandler = last(responseHandlers)
+  for (const handler of responseHandlers) {
+    if (handler.isRecognized(response.contentType)) {
+      pickedHandler = handler
+      break
+    }
+  }
+
+  // TODO make a badge for the verb.
+  // Once we are satisfied with the badge in the api-explorer package it should be moved here
+  return (
+    <>
+      <Heading as="h4">{`${verb || ''} ${path || ''} ${response.statusCode}: ${
+        response.contentType
+      }`}</Heading>
+      {pickedHandler && pickedHandler.component(response)}
+    </>
+  )
+}

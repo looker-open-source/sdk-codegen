@@ -27,7 +27,12 @@
 import React, { FC } from 'react'
 import { Flex, Space, Text } from '@looker/components'
 import { useParams } from 'react-router-dom'
-import { TryIt, TryItCallback, TryItHttpMethod } from '@looker/try-it'
+import {
+  MethodBadge,
+  TryIt,
+  TryItCallback,
+  TryItHttpMethod,
+} from '@looker/try-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 import { Looker40SDK } from '@looker/sdk/lib/browser'
 
@@ -37,7 +42,6 @@ import {
   DocRateLimited,
   DocReferences,
   DocSDKs,
-  MethodBadge,
   DocTitle,
 } from '../../components'
 import { DocResponse, DocOperation } from './components'
@@ -54,7 +58,11 @@ interface DocMethodParams {
   specKey: string
 }
 
-export const MethodScene: FC<DocMethodProps> = ({ api, tryItCallback, sdk }) => {
+export const MethodScene: FC<DocMethodProps> = ({
+  api,
+  tryItCallback,
+  sdk,
+}) => {
   const { methodName, specKey } = useParams<DocMethodParams>()
   const method = api.methods[methodName]
   const seeTypes = typeRefs(api, method.customTypes)

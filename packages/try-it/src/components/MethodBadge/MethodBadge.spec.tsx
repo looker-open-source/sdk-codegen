@@ -31,6 +31,6 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import { MethodBadge } from './MethodBadge'
 
 test('MethodBadge renders with the provided verb', () => {
-  renderWithTheme(<MethodBadge httpMethod="GET" />)
+  renderWithTheme(<MethodBadge httpMethod="GET">GET</MethodBadge>)
   expect(screen.getByText('GET')).toBeInTheDocument()
 })
