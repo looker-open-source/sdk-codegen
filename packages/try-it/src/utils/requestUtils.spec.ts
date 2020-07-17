@@ -124,12 +124,6 @@ describe('createRequestParams', () => {
     )
     expect(body).toEqual(urlParams)
   })
-
-  test('it throws for invalid input locations', () => {
-    expect(() =>
-      createRequestParams([{ ...inputs[0], location: 'bogus' }], requestContent)
-    ).toThrowError("Invalid input location: 'bogus'")
-  })
 })
 
 describe('defaultRequestCallback', () => {

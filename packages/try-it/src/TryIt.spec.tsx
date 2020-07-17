@@ -30,11 +30,11 @@ import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserTransport } from '@looker/sdk/lib/browser'
 
-import { TryIt } from './TryIt'
+import { TryIt, TryItInput } from './TryIt'
 import { testTextResponse } from './test-data'
 
 describe('TryIt', () => {
-  const inputs = [
+  const inputs: TryItInput[] = [
     {
       name: 'result_format',
       location: 'path',
