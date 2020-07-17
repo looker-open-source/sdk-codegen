@@ -32,11 +32,17 @@ import { IRawResponse } from '@looker/sdk/lib/browser'
 import { responseHandlers } from './responseUtils'
 
 interface ShowResponseProps {
+  /** A basic HTTP response for "raw" HTTP requests */
   response: IRawResponse
+  /** HTTP Method */
   verb?: string
+  /** HTTP request path */
   path?: string
 }
 
+/**
+ * Given an HTTP response it picks a response handler based on the content type and renders the body
+ */
 export const ShowResponse: FC<ShowResponseProps> = ({
   response,
   verb,
@@ -50,7 +56,8 @@ export const ShowResponse: FC<ShowResponseProps> = ({
     }
   }
 
-  // TODO make a badge for the verb
+  // TODO make a badge for the verb.
+  // Once we are satisfied with the badge in the api-explorer package it should be moved here
   return (
     <>
       <Heading as="h4">{`${verb || ''} ${path || ''} ${response.statusCode}: ${
