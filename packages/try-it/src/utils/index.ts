@@ -23,36 +23,9 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { IMethod } from '@looker/sdk-codegen'
-import { Code, Flex, SpaceVertical, Text } from '@looker/components'
-import { MethodBadge } from '@looker/try-it'
-
-import { DocPseudo } from '../../../components'
-
-interface DocOperationProps {
-  method: IMethod
-}
-
-export const DocOperation: FC<DocOperationProps> = ({ method }) => (
-  <SpaceVertical align="start" mb="xlarge" gap="xsmall">
-    <MethodBadge httpMethod={method.httpMethod}>
-      <Flex alignItems="center">
-        <Text fontSize="xsmall" fontWeight="semiBold" mr="xxsmall">
-          SDK:
-        </Text>
-        <DocPseudo method={method} />
-      </Flex>
-    </MethodBadge>
-    <MethodBadge httpMethod={method.httpMethod}>
-      <Flex alignItems="center">
-        <Text fontSize="xsmall" fontWeight="semiBold" mr="xxsmall">
-          {method.httpMethod}:
-        </Text>
-        <Code fontSize="small" fontWeight="normal">
-          {method.endpoint}
-        </Code>
-      </Flex>
-    </MethodBadge>
-  </SpaceVertical>
-)
+export { tryItSDK } from './TryItSDK'
+export {
+  createRequestParams,
+  defaultTryItCallback,
+  pathify,
+} from './requestUtils'

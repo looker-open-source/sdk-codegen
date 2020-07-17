@@ -23,14 +23,4 @@
  SOFTWARE.
 
  */
-
-import React from 'react'
-import { screen } from '@testing-library/react'
-import { renderWithTheme } from '@looker/components-test-utils'
-
-import { MethodBadge } from './MethodBadge'
-
-test('MethodBadge renders with the provided verb', () => {
-  renderWithTheme(<MethodBadge httpMethod="GET" />)
-  expect(screen.getByText('GET')).toBeInTheDocument()
-})
+export { RequestForm } from './RequestForm'

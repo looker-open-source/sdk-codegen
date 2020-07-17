@@ -1,5 +1,28 @@
-import { BrowserTransport } from '@looker/sdk/lib/browser'
+/*
 
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+ */
 import { TryItInput } from '../TryIt'
 import { testJsonResponse } from '../test-data'
 import {
@@ -7,6 +30,7 @@ import {
   pathify,
   defaultTryItCallback,
 } from './requestUtils'
+import { tryItSDK } from './TryItSDK'
 
 describe('pathify', () => {
   test('it returns unchanged path if no path params are specified', () => {
@@ -99,19 +123,14 @@ describe('createRequestParams', () => {
     )
     expect(body).toEqual(urlParams)
   })
-
-  test('it throws for invalid input locations', () => {
-    expect(() =>
-      createRequestParams([{ ...inputs[0], location: 'bogus' }], requestContent)
-    ).toThrowError("Invalid input location: 'bogus'")
-  })
 })
 
-describe('defaultRequestCallback', () => {
+describe('defaultTryItCallback', () => {
   test('it makes a request', async () => {
     const spy = jest
-      .spyOn(BrowserTransport.prototype, 'rawRequest')
+      .spyOn(tryItSDK.authSession.transport, 'rawRequest')
       .mockResolvedValueOnce(testJsonResponse)
+    jest.spyOn(tryItSDK.authSession, 'isAuthenticated').mockReturnValue(true)
 
     const resp = await defaultTryItCallback(
       '3.1',
@@ -124,7 +143,7 @@ describe('defaultRequestCallback', () => {
 
     expect(spy).toHaveBeenCalledWith(
       'POST',
-      '/queries/run/json',
+      '/api/3.1/queries/run/json',
       {
         fields: 'first_name, last_name',
       },
@@ -132,7 +151,8 @@ describe('defaultRequestCallback', () => {
         fields: ['orders.count'],
         model: 'thelook',
         view: 'orders',
-      }
+      },
+      expect.any(Function)
     )
     expect(resp).toEqual(testJsonResponse)
   })

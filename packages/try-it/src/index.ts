@@ -23,6 +23,6 @@
  SOFTWARE.
 
  */
-export { TryIt, TryItInput, TryItCallback} from './TryIt'
-export type { TryItHttpMethod } from './TryIt'
-export { pathify, tryItSDK } from './components'
+export { TryIt, TryItInput, TryItCallback, TryItHttpMethod } from './TryIt'
+export { pathify, tryItSDK } from './utils'
+export { MethodBadge } from './components'

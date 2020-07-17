@@ -2241,6 +2241,17 @@
     polished "^3.6.5"
     styled-system "^5.1.5"
 
+"@looker/design-tokens@^0.9.6":
+  version "0.9.6"
+  resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-0.9.6.tgz#f53fc2b9d83c6fef362d78fe0d392050618679fe"
+  integrity sha512-cgXS8xFtncSkoAXrEAiHUGYWTsPO8L22woDPuSfDvajyFfuZztq+EINRyyXB1ZUOAXRtFc2b1SoCT96h7Uqg/g==
+  dependencies:
+    "@styled-system/props" "^5.1.5"
+    "@types/styled-system" "^5.1.9"
+    lodash "^4.17.19"
+    polished "^3.6.5"
+    styled-system "^5.1.5"
+
 "@looker/eslint-config@^1.0.14":
   version "1.0.16"
   resolved "https://registry.yarnpkg.com/@looker/eslint-config/-/eslint-config-1.0.16.tgz#6221efeb686b7c82f82817975892895599a231a7"
@@ -2912,6 +2923,11 @@
   version "4.14.155"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.155.tgz#e2b4514f46a261fd11542e47519c20ebce7bc23a"
   integrity sha512-vEcX7S7aPhsBCivxMwAANQburHBtfN9RdyXFk84IJmu2Z4Hkg1tOFgaslRiEqqvoLtbCBi6ika1EMspE+NZ9Lg==
+
+"@types/lodash@^4.14.157":
+  version "4.14.157"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.157.tgz#fdac1c52448861dfde1a2e1515dbc46e54926dc8"
+  integrity sha512-Ft5BNFmv2pHDgxV5JDsndOWTRJ+56zte0ZpYLowp03tW+K+t8u8YMOzAnpuqPgzX6WO1XpDIUm7u04M8vdDiVQ==
 
 "@types/minimatch@*":
   version "3.0.3"

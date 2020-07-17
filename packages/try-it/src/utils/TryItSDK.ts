@@ -40,6 +40,11 @@ const settings = {
   base_url: 'https://self-signed.looker.com:19999',
 } as IApiSettings
 
+/***
+ * An OAuth Session configuration provider
+ *
+ * @class TryItSettings
+ */
 class TryItSettings extends ApiSettings {
   constructor(settings: Partial<IApiSettings>) {
     super(settings)

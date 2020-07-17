@@ -27,7 +27,12 @@
 import React, { FC } from 'react'
 import { Flex, Space, Text } from '@looker/components'
 import { useParams } from 'react-router-dom'
-import { TryIt, TryItCallback, TryItHttpMethod } from '@looker/try-it'
+import {
+  MethodBadge,
+  TryIt,
+  TryItCallback,
+  TryItHttpMethod,
+} from '@looker/try-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 
 import {
@@ -36,7 +41,6 @@ import {
   DocRateLimited,
   DocReferences,
   DocSDKs,
-  MethodBadge,
   DocTitle,
 } from '../../components'
 import { DocResponse, DocOperation } from './components'
