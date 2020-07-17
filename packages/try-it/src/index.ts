@@ -25,3 +25,4 @@
  */
 export { TryIt, TryItInput, TryItCallback, TryItHttpMethod } from './TryIt'
 export { pathify, tryItSDK } from './utils'
+export { MethodBadge } from './components'

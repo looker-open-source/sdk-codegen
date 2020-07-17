@@ -43,6 +43,5 @@ export {
   SummaryCard,
 } from './ExplorerStyle'
 export { Header } from './Header'
-export { MethodBadge } from './MethodBadge'
 export { SideNav } from './SideNav'
 export { SideNavToggle } from './SideNavToggle'

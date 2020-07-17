@@ -36,7 +36,7 @@ import {
   ListItem,
   Sidebar,
 } from '@looker/components'
-import { MethodBadge } from '../MethodBadge'
+import { MethodBadge } from '@looker/try-it'
 import { ApixHeading } from '../common'
 
 export const HEADER_HEIGHT = '66px'

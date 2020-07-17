@@ -2241,6 +2241,17 @@
     polished "^3.6.5"
     styled-system "^5.1.5"
 
+"@looker/design-tokens@^0.9.6":
+  version "0.9.6"
+  resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-0.9.6.tgz#f53fc2b9d83c6fef362d78fe0d392050618679fe"
+  integrity sha512-cgXS8xFtncSkoAXrEAiHUGYWTsPO8L22woDPuSfDvajyFfuZztq+EINRyyXB1ZUOAXRtFc2b1SoCT96h7Uqg/g==
+  dependencies:
+    "@styled-system/props" "^5.1.5"
+    "@types/styled-system" "^5.1.9"
+    lodash "^4.17.19"
+    polished "^3.6.5"
+    styled-system "^5.1.5"
+
 "@looker/eslint-config@^1.0.14":
   version "1.0.16"
   resolved "https://registry.yarnpkg.com/@looker/eslint-config/-/eslint-config-1.0.16.tgz#6221efeb686b7c82f82817975892895599a231a7"
