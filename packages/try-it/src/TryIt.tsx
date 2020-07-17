@@ -55,7 +55,6 @@ export type TryItValues = { [key: string]: any }
  */
 export interface TryItCallback {
   /**
-   *
    * @param specKey  API version to use for the request
    * @param httpMethod Method of HTTP request
    * @param path Data for the body of the request
