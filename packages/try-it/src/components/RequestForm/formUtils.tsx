@@ -32,9 +32,8 @@ import {
 } from '@looker/components'
 
 import { InputDate } from '@looker/components/lib/InputDate'
-import { TryItInput, TryItValues } from '../../TryIt'
-
 import { CodeStructure } from '../CodeStructure'
+import { TryItInput, TryItValues } from '../../TryIt'
 
 const inputTextType = (type: string) => {
   switch (type) {

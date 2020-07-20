@@ -99,6 +99,5 @@ export const validateUrl = (url: string) => {
   }
 }
 
-export const validLocation = (location: string) => {
-  return ['local', 'session'].includes(location.toLocaleLowerCase())
-}
+export const validLocation = (location: string) =>
+  ['local', 'session'].includes(location.toLocaleLowerCase())
