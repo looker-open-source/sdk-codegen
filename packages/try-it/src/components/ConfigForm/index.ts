@@ -24,15 +24,13 @@
 
  */
 
-export { RequestForm } from './RequestForm'
-export { ShowResponse } from './ShowResponse'
-export { MethodBadge } from './MethodBadge'
+export { ConfigDialog } from './ConfigDialog'
+export { ConfigForm } from './ConfigForm'
 export {
-  ConfigForm,
   getStorage,
   setStorage,
   removeStorage,
   validateUrl,
   validLocation,
   TryItConfigKey,
-} from './ConfigForm'
+} from './configUtils'

@@ -32,7 +32,7 @@ import {
   Looker40SDK,
   LookerBrowserSDK,
 } from '@looker/sdk/lib/browser'
-import { getStorage, TryItConfigKey } from '../components/configUtils'
+import { getStorage, TryItConfigKey } from '../components'
 
 // https://docs.looker.com/reference/api-and-integration/api-cors
 // TODO get base_url value from the stand-alone TryIt provider

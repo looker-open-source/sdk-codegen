@@ -28,7 +28,7 @@ import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
 import { Button, Form, Space } from '@looker/components'
 
 import { TryItHttpMethod, TryItInput, TryItValues } from '../../TryIt'
-import { ConfigDialog } from '../ConfigDialog'
+import { ConfigDialog } from '../ConfigForm'
 import {
   createSimpleItem,
   createComplexItem,
