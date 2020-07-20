@@ -43,21 +43,6 @@ import { IMethodResponse } from '@looker/sdk-codegen'
 import { ApixHeading, DocCode } from '../../../components'
 import { copyAndCleanResponse } from '../utils'
 
-/*
-  TODO:
-  > Responses
-    - 200 Look
-        - png
-        - csv
-        - html
-        - ...
-    - 400 Bad Request
-        -
-    - 404 Not found
-        -
-    - 422 Validation Error
- */
-
 interface DocResponseProps {
   responses: IMethodResponse[]
 }
@@ -93,7 +78,6 @@ export const DocResponse: FC<DocResponseProps> = ({ responses }) => {
               </TableHead>
             </Table>
             <DocCode
-              language="json"
               code={JSON.stringify(copyAndCleanResponse(response), null, 2)}
             />
           </TabPanel>

@@ -51,19 +51,19 @@ const theme = require('ace-builds/src-noconflict/theme-dracula')
 
 interface DocCodeProps {
   code: string
-  language: string
+  language?: string
   fontSize?: number
   width?: string
 }
 
 export const DocCode: FC<DocCodeProps> = ({
   code,
-  language,
+  language = 'json',
   fontSize = 16,
   width = 'auto',
 }) => {
   const gen = findGenerator(language)
-  language = gen ? gen.language.toLocaleLowerCase() : json
+  if (gen) language = gen.language.toLocaleLowerCase()
   const {
     searchSettings: { pattern },
   } = useContext(SearchContext)

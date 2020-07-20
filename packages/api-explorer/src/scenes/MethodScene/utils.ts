@@ -24,7 +24,7 @@
 
  */
 
-import { omit } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
 import {
   ArrayType,
   DelimArrayType,
@@ -33,6 +33,8 @@ import {
   IntrinsicType,
   IType,
   IMethod,
+  IProperty,
+  IMethodResponse,
 } from '@looker/sdk-codegen'
 import { RunItInput } from '@looker/run-it'
 
@@ -96,11 +98,8 @@ const createSampleBody = (spec: IApiModel, type: IType) => {
   return recurse(type)
 }
 
-export const createInputs = (
-  spec: IApiModel,
-  method: IMethod
-): RunItInput[] => {
-  return method.allParams.map((param) => ({
+export const createInputs = (spec: IApiModel, method: IMethod): RunItInput[] =>
+  method.allParams.map((param) => ({
     name: param.name,
     location: param.location,
     type:
@@ -110,31 +109,75 @@ export const createInputs = (
     required: param.required,
     description: param.description,
   }))
+
+/**
+ * Given a list of properties names, check if they exist in the source and copy them to the destination
+ * @param source A source object
+ * @param destination A destination object
+ * @param propNames A list of property names
+ */
+const conditionalAdd = (
+  source: object,
+  destination: object,
+  propNames: string[]
+) => {
+  for (const prop in propNames) {
+    if (prop in source && source[prop]) destination[prop] = source[prop]
+  }
+  return destination
 }
 
-export const responsePropsToOmit = [
-  'properties',
-  'methodRefs',
-  'refs',
-  'customType',
-  'customTypes',
-  'refCount',
-  'types',
-  'schema',
-]
+/**
+ * Omit unwanted properties from a given property object
+ * @param val Property object
+ */
+export const cleanProperty = (val: IProperty) => ({
+  name: val.name,
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  type: cleanType(val.type) as IType,
+  ...conditionalAdd(val, {}, [
+    'description',
+    'readOnly',
+    'required',
+    'nullable',
+    'deprecated',
+    'values',
+  ]),
+})
 
-const cleanResponse = (val: object) => {
-  val = omit(val, responsePropsToOmit)
-  Object.keys(val).forEach((key) => {
-    const v = val[key]
-    if (v instanceof Object) {
-      val[key] = cleanResponse(v)
-    }
-  })
-  return val
+/**
+ * Omit unwanted metadata from a given type object
+ * @param val Type object
+ */
+export const cleanType = (val: IType) => {
+  const result = {
+    name: val.name,
+    description: val.description,
+  }
+  if (!isEmpty(val.properties)) {
+    // eslint-disable-next-line dot-notation
+    result['properties'] = {}
+    Object.entries(val.properties).forEach(
+      ([name, property]) =>
+        // eslint-disable-next-line dot-notation
+        (result['properties'][name] = cleanProperty(property))
+    )
+  }
+  return result
 }
 
-export const copyAndCleanResponse = (val: object) => {
-  const copy = { ...val }
-  return cleanResponse(copy)
+/**
+ * Given a response object, return a copy stripped of unwanted metadata
+ * @param val A method response object
+ */
+export const copyAndCleanResponse = (val: IMethodResponse) => {
+  switch (val.type.className) {
+    case 'ArrayType':
+    case 'HashType':
+    case 'DelimArrayType':
+    case 'EnumType':
+      return cleanType(cloneDeep(val.type.elementType!))
+    default:
+      return cleanType(cloneDeep(val.type))
+  }
 }

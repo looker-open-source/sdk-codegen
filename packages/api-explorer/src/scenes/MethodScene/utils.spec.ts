@@ -23,18 +23,14 @@
  SOFTWARE.
 
  */
-import { api } from '../../test-data'
-import { copyAndCleanResponse, responsePropsToOmit } from './utils'
 
-describe('cleanResponse', () => {
-  test('it omits the right paths', () => {
-    const obj = api.methods.theme.primaryResponse
-    const actual = copyAndCleanResponse(obj)
-    expect(actual).not.toHaveProperty(responsePropsToOmit)
-    Object.values(actual).forEach((val) => {
-      if (val instanceof Object) {
-        expect(val).not.toHaveProperty(responsePropsToOmit)
-      }
-    })
+import { api } from '../../test-data'
+import { copyAndCleanResponse } from './utils'
+
+describe('Response model utils', () => {
+  test('copyAndCleanResponse works', () => {
+    const orig = api.methods.run_look.primaryResponse
+    const actual = copyAndCleanResponse(orig)
+    expect(actual)
   })
 })
