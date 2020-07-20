@@ -52,6 +52,7 @@ import {
 } from './configUtils'
 
 interface ConfigFormProps {
+  /** Title for the config form */
   title?: string
   dialogue?: boolean
   setHasConfig?: Dispatch<boolean>
