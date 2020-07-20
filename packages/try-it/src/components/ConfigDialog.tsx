@@ -34,7 +34,9 @@ import {
 import { ConfigForm } from './ConfigForm'
 
 interface ConfigDialogProps {
+  /** Icon to use for config dialog */
   icon?: IconNames
+  /** A set state callback fn used to set a hasConfig flag indicating whether OAuth config details are present */
   setHasConfig?: Dispatch<boolean>
 }
 

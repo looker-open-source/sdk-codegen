@@ -48,6 +48,7 @@ interface RequestFormProps {
   requestContent: TryItValues
   /** A set state callback fn for populating requestContent on interaction with the request form */
   setRequestContent: Dispatch<{ [key: string]: any }>
+  /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
 }
 

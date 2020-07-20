@@ -52,8 +52,10 @@ import {
 } from './configUtils'
 
 interface ConfigFormProps {
+  /** Title for the config form */
   title?: string
   dialogue?: boolean
+  /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
 }
 
