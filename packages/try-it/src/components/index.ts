@@ -23,6 +23,16 @@
  SOFTWARE.
 
  */
+
 export { RequestForm } from './RequestForm'
 export { ShowResponse } from './ShowResponse'
 export { MethodBadge } from './MethodBadge'
+export {
+  ConfigForm,
+  getStorage,
+  setStorage,
+  removeStorage,
+  validateUrl,
+  validLocation,
+  TryItConfigKey,
+} from './ConfigForm'

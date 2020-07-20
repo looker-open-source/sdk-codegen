@@ -23,9 +23,14 @@
  SOFTWARE.
 
  */
-export { tryItSDK, sdkNeedsConfig, TryItSettings } from './TryItSDK'
+
+export { ConfigDialog } from './ConfigDialog'
+export { ConfigForm } from './ConfigForm'
 export {
-  createRequestParams,
-  defaultTryItCallback,
-  pathify,
-} from './requestUtils'
+  getStorage,
+  setStorage,
+  removeStorage,
+  validateUrl,
+  validLocation,
+  TryItConfigKey,
+} from './configUtils'

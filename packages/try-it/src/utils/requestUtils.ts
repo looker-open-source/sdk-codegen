@@ -31,7 +31,7 @@ import { tryItSDK } from './TryItSDK'
 
 /**
  * Replaces {foo} with vars[foo] in provided path
- * @param template Path with path param names
+ * @param path with templatized param names
  * @param vars Collection of path params
  * @returns Path with param names replaced with values
  */

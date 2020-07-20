@@ -23,9 +23,36 @@
  SOFTWARE.
 
  */
-export { tryItSDK, sdkNeedsConfig, TryItSettings } from './TryItSDK'
-export {
-  createRequestParams,
-  defaultTryItCallback,
-  pathify,
-} from './requestUtils'
+
+import React, { Dispatch, FC } from 'react'
+import {
+  DialogManager,
+  DialogContent,
+  Icon,
+  IconNames,
+} from '@looker/components'
+import { ConfigForm } from './ConfigForm'
+
+interface ConfigDialogProps {
+  /** Icon to use for config dialog */
+  icon?: IconNames
+  /** A set state callback fn used to set a hasConfig flag indicating whether OAuth config details are present */
+  setHasConfig?: Dispatch<boolean>
+}
+
+export const ConfigDialog: FC<ConfigDialogProps> = ({
+  icon = 'GearOutline',
+  setHasConfig,
+}) => {
+  return (
+    <DialogManager
+      content={
+        <DialogContent>
+          <ConfigForm setHasConfig={setHasConfig} />
+        </DialogContent>
+      }
+    >
+      <Icon name={icon} />
+    </DialogManager>
+  )
+}

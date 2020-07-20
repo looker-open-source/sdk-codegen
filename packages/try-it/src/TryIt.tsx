@@ -38,10 +38,17 @@ import {
   Spinner,
   Flex,
 } from '@looker/components'
-import { IRawResponse } from '@looker/sdk/lib/browser'
+import { IRawResponse, Looker40SDK } from '@looker/sdk/lib/browser'
 
-import { RequestForm, ShowResponse } from './components'
-import { createRequestParams, defaultTryItCallback, pathify } from './utils'
+import { RequestForm, ShowResponse, ConfigForm } from './components'
+import {
+  createRequestParams,
+  defaultTryItCallback,
+  pathify,
+  sdkNeedsConfig,
+  tryItSDK,
+  TryItSettings,
+} from './utils'
 
 export type TryItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
 
@@ -113,6 +120,7 @@ interface TryItProps {
   endpoint: string
   /** A optional HTTP request provider to override the default Looker browser SDK request provider */
   tryItCallback?: TryItCallback
+  sdk?: Looker40SDK
 }
 
 type ResponseContent = IRawResponse | undefined
@@ -127,6 +135,7 @@ export const TryIt: FC<TryItProps> = ({
   httpMethod,
   endpoint,
   tryItCallback,
+  sdk = tryItSDK,
 }) => {
   const [requestContent, setRequestContent] = useState({})
   const [activePathParams, setActivePathParams] = useState(undefined)
@@ -135,6 +144,13 @@ export const TryIt: FC<TryItProps> = ({
     undefined
   )
   const tabs = useTabs()
+  const configIsNeeded = sdkNeedsConfig(sdk)
+  const settings = sdk?.authSession.settings as TryItSettings
+  const [hasConfig, setHasConfig] = useState<boolean>(
+    !configIsNeeded || settings.authIsConfigured()
+  )
+
+  // TODO: Make jest stop complaining when using the ?? syntax below
   const callback = tryItCallback || defaultTryItCallback
 
   const handleSubmit = async (e: BaseSyntheticEvent) => {
@@ -173,13 +189,17 @@ export const TryIt: FC<TryItProps> = ({
       </TabList>
       <TabPanels {...tabs}>
         <TabPanel key="request">
-          <RequestForm
-            httpMethod={httpMethod}
-            inputs={inputs}
-            requestContent={requestContent}
-            setRequestContent={setRequestContent}
-            handleSubmit={handleSubmit}
-          />
+          {hasConfig && (
+            <RequestForm
+              httpMethod={httpMethod}
+              inputs={inputs}
+              requestContent={requestContent}
+              setRequestContent={setRequestContent}
+              handleSubmit={handleSubmit}
+              setHasConfig={setHasConfig}
+            />
+          )}
+          {!hasConfig && <ConfigForm setHasConfig={setHasConfig} />}
         </TabPanel>
         <TabPanel key="response">
           {loading && (

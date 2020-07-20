@@ -48,7 +48,7 @@ export const ShowResponse: FC<ShowResponseProps> = ({
   verb,
   path,
 }) => {
-  let pickedHandler = last(responseHandlers)!
+  let pickedHandler = last(responseHandlers)
   for (const handler of responseHandlers) {
     if (handler.isRecognized(response.contentType)) {
       pickedHandler = handler
@@ -63,7 +63,7 @@ export const ShowResponse: FC<ShowResponseProps> = ({
       <Heading as="h4">{`${verb || ''} ${path || ''} ${response.statusCode}: ${
         response.contentType
       }`}</Heading>
-      {pickedHandler.component(response)}
+      {pickedHandler && pickedHandler.component(response)}
     </>
   )
 }

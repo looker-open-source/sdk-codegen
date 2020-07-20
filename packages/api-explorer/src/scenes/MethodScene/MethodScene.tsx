@@ -34,6 +34,7 @@ import {
   TryItHttpMethod,
 } from '@looker/try-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
+import { Looker40SDK } from '@looker/sdk/lib/browser'
 
 import {
   DocActivityType,
@@ -49,6 +50,7 @@ import { createInputs } from './utils'
 interface DocMethodProps {
   api: ApiModel
   tryItCallback?: TryItCallback
+  sdk?: Looker40SDK
 }
 
 interface DocMethodParams {
@@ -56,7 +58,11 @@ interface DocMethodParams {
   specKey: string
 }
 
-export const MethodScene: FC<DocMethodProps> = ({ api, tryItCallback }) => {
+export const MethodScene: FC<DocMethodProps> = ({
+  api,
+  tryItCallback,
+  sdk,
+}) => {
   const { methodName, specKey } = useParams<DocMethodParams>()
   const method = api.methods[methodName]
   const seeTypes = typeRefs(api, method.customTypes)
@@ -89,6 +95,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api, tryItCallback }) => {
         httpMethod={method.httpMethod as TryItHttpMethod}
         endpoint={method.endpoint}
         tryItCallback={tryItCallback}
+        sdk={sdk}
       />
     </>
   )
