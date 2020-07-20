@@ -49,6 +49,8 @@ import {
   tryItSDK,
   TryItSettings,
 } from './utils'
+import { PerfTracker } from './components/PerfTracker/PerfTracker'
+import { PerfTimings } from './components/PerfTracker/perfUtils'
 
 export type TryItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
 
@@ -146,6 +148,7 @@ export const TryIt: FC<TryItProps> = ({
   const tabs = useTabs()
   const configIsNeeded = sdkNeedsConfig(sdk)
   const settings = sdk?.authSession.settings as TryItSettings
+  const perf = new PerfTimings()
   const [hasConfig, setHasConfig] = useState<boolean>(
     !configIsNeeded || settings.authIsConfigured()
   )
@@ -186,6 +189,7 @@ export const TryIt: FC<TryItProps> = ({
       <TabList {...tabs}>
         <Tab key="request">Request</Tab>
         <Tab key="response">Response</Tab>
+        <Tab key="performance">Performance</Tab>
       </TabList>
       <TabPanels {...tabs}>
         <TabPanel key="request">
@@ -217,6 +221,9 @@ export const TryIt: FC<TryItProps> = ({
               path={pathify(endpoint, activePathParams)}
             />
           )}
+        </TabPanel>
+        <TabPanel key="performance">
+          <PerfTracker perf={perf} />
         </TabPanel>
       </TabPanels>
     </Box>
