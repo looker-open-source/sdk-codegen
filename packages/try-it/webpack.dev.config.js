@@ -23,7 +23,22 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { MethodScene } from './MethodScene'
-export { TypeScene } from './TypeScene'
-export { TagScene } from './TagScene'
+
+const path = require('path')
+const base = require('../../webpack.base.config')(__dirname)
+
+module.exports = {
+  ...base,
+  mode: 'development',
+  devServer: {
+    contentBase: path.join(__dirname, 'playground'),
+    historyApiFallback: true,
+    publicPath: '/dist/',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+  },
+  devtool: 'inline-source-map',
+}

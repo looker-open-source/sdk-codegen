@@ -30,6 +30,7 @@ import {
   DialogContent,
   Icon,
   IconNames,
+  useToggle,
 } from '@looker/components'
 import { ConfigForm } from './ConfigForm'
 
@@ -44,13 +45,17 @@ export const ConfigDialog: FC<ConfigDialogProps> = ({
   icon = 'GearOutline',
   setHasConfig,
 }) => {
+  const { value, setOff } = useToggle()
   return (
     <DialogManager
+      isOpen={value}
+      onClose={() => setOff()}
       content={
         <DialogContent>
           <ConfigForm setHasConfig={setHasConfig} />
         </DialogContent>
       }
+      maxWidth={['90vw', '60vw', '500px', '800px']}
     >
       <Icon name={icon} />
     </DialogManager>

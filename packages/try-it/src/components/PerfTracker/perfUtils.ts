@@ -110,10 +110,15 @@ export class PerfTimings {
     return this._full
   }
 
-  entries(type = 'resource') {
+  entries(pattern = '.*', type = 'resource') {
     // https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEntry
-    if (this.supported)
-      return performance.getEntriesByType(type).map((p) => new LoadTimes(p))
+    if (this.supported) {
+      const ex = new RegExp(pattern, 'i')
+      return performance
+        .getEntriesByType(type)
+        .filter((p) => ex.test(p.name))
+        .map((p) => new LoadTimes(p))
+    }
     return []
   }
 

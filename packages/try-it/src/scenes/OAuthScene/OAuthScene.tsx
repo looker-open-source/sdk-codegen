@@ -25,10 +25,10 @@
  */
 
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { BrowserSession, Looker40SDK } from '@looker/sdk/lib/browser'
-import { tryItSDK } from '@looker/try-it'
 import { Spinner, Text } from '@looker/components'
-import { useHistory } from 'react-router'
+import { tryItSDK } from '../..'
 
 interface OAuthSceneProps {
   sdk?: Looker40SDK

@@ -23,6 +23,8 @@
  SOFTWARE.
 
  */
+
 export { TryIt, TryItInput, TryItCallback, TryItHttpMethod } from './TryIt'
 export { pathify, tryItSDK, TryItSettings } from './utils'
 export { MethodBadge } from './components'
+export { OAuthScene } from './scenes'

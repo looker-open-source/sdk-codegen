@@ -25,7 +25,7 @@
  */
 
 import React, { FC } from 'react'
-import Chart from 'react-google-charts'
+import { Chart } from 'react-google-charts'
 import { IResourceLoadTimes } from './perfUtils'
 
 interface PerfChartProps {
@@ -83,13 +83,14 @@ export const PerfChart: FC<PerfChartProps> = ({ loadTimes }) => {
       options={{
         showRowNumber: true,
         timeline: {
-          groupByRowLabel: true,
+          showRowLabel: false,
+          groupByRowLabel: false,
         },
+        avoidOverlappingGridLines: false,
       }}
       chartType="Timeline"
       loader={<div>Loading Chart</div>}
       data={data}
-      rootProps={{ 'data-testid': '3' }}
     />
   )
 }

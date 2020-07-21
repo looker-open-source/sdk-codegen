@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC, useState } from 'react'
+import React, { BaseSyntheticEvent, FC, useState } from 'react'
 import {
   ActionList,
   ActionListColumns,
@@ -32,7 +32,8 @@ import {
   ActionListItemColumn,
   doDefaultActionListSort,
   Heading,
-  Text,
+  Space,
+  Button,
 } from '@looker/components'
 import { PerfTimings } from './perfUtils'
 import { PerfChart } from './PerfChart'
@@ -63,6 +64,7 @@ const perfColumns: ActionListColumns = [
 export const PerfTracker: FC<PerfTrackerProps> = ({
   perf = new PerfTimings(),
 }) => {
+  // const apiServer = getStorage(TryItConfigKey)
   const [data, setData] = useState(perf.entries())
 
   const [columns, setColumns] = useState(perfColumns)
@@ -83,6 +85,11 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
   // const indicator = (
   //   <Icon name="ChartTimeline" color="key" size={24} marginRight="small" />
   // )
+
+  const handleClear = (_: BaseSyntheticEvent) => {
+    perf.clear()
+    setData([])
+  }
 
   const items = data.map((item, index) => {
     // const actions = (
@@ -118,9 +125,12 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
 
   return (
     <>
-      <Heading>
-        <Text>Resource Load Times</Text>
-      </Heading>
+      <Space>
+        <Heading>Resource Load Times</Heading>
+        <Button iconAfter="Trash" color="critical" onClick={handleClear}>
+          Clear
+        </Button>
+      </Space>
       <>
         {!perf.supported && 'Not supported in this browser'}
         {items.length && (

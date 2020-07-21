@@ -64,11 +64,7 @@ const storageOptions = [
   { label: 'Local', value: 'local' },
 ]
 
-export const ConfigForm: FC<ConfigFormProps> = ({
-  title,
-  dialogue = false,
-  setHasConfig,
-}) => {
+export const ConfigForm: FC<ConfigFormProps> = ({ title, setHasConfig }) => {
   // See https://codesandbox.io/s/youthful-surf-0g27j?file=/src/index.tsx for a prototype from Luke
   // TODO see about useReducer to clean this up a bit more
   title = title || 'TryIt Configuration'
@@ -189,18 +185,19 @@ export const ConfigForm: FC<ConfigFormProps> = ({
           inline
           required
         />
-        {!dialogue && (
-          <>
-            <Button
-              onClick={handleFormSubmit}
-              disabled={Object.keys(validationMessages).length > 0}
-            >
-              Save
-            </Button>
-            <Button onClick={handleRemove}>Remove</Button>
-          </>
-        )}
       </Form>
+      <>
+        <Button
+          onClick={handleFormSubmit}
+          iconAfter="Check"
+          disabled={Object.keys(validationMessages).length > 0}
+        >
+          Save
+        </Button>
+        <Button onClick={handleRemove} iconAfter="Trash" color="critical">
+          Remove
+        </Button>
+      </>
     </>
   )
 }
