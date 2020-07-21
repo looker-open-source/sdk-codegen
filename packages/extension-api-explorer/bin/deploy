@@ -19,7 +19,7 @@ path_to_bundle=$(pwd)"/dist/bundle.js"
 cd ../../..
 if [ -d "extension-api-explorer" ]
 then
-  cd extension-api-explorer && git branch --set-upstream-to=origin/master && git pull
+  cd extension-api-explorer && git branch --set-upstream-to=origin/master && git pull || exit 1
 else
   echo "extension-api-explorer clone not found, cloning."
   git clone https://github.com/looker-open-source/extension-api-explorer.git || exit 1
