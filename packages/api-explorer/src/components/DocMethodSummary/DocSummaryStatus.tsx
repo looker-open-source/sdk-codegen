@@ -34,7 +34,7 @@ interface DocSummaryStatusProps {
 }
 
 export const DocSummaryStatus: FC<DocSummaryStatusProps> = ({ method }) => (
-  <Tooltip content={<>{pickTooltipContent(method.status)}</>}>
+  <Tooltip content={pickTooltipContent(method.status)}>
     {pickStatus(method.status)}
   </Tooltip>
 )
