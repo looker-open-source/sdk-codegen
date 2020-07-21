@@ -105,7 +105,7 @@ describe('Search', () => {
     expect(search).toHaveProperty('placeholder', 'No search criteria selected.')
   })
 
-  test('search settings show all criteria', async () => {
+  test.skip('search settings show all criteria', async () => {
     renderWithSearchAndRouter(
       withThemeProvider(<Search api={api} specKey={'3.1'} />)
     )
