@@ -105,6 +105,7 @@ export const PerfTracker: FC<PerfTrackerProps> = ({ perf }) => {
       columns: sortedColumns,
       data: sortedData,
     } = doDefaultActionListSort(data, columns, id, sortDirection)
+    // @ts-ignore
     setData(sortedData)
     setColumns(sortedColumns)
   }
@@ -116,7 +117,7 @@ export const PerfTracker: FC<PerfTrackerProps> = ({ perf }) => {
     const actions = (
       <>
         <ActionListItemAction onClick={() => alert(`${item.name} selected!`)}>
-          Select Cheese
+          Details
         </ActionListItemAction>
       </>
     )
@@ -161,6 +162,7 @@ export const PerfTracker: FC<PerfTrackerProps> = ({ perf }) => {
             {items}
           </ActionList>
         )}
+        {perf.supported && !items.length && 'No performance data is loaded'}
       </>
     </>
   )
