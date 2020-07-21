@@ -29,16 +29,16 @@ import {
   ActionList,
   ActionListColumns,
   ActionListItem,
-  ActionListItemAction,
   ActionListItemColumn,
   doDefaultActionListSort,
   Heading,
   Text,
 } from '@looker/components'
 import { PerfTimings } from './perfUtils'
+import { PerfChart } from './PerfChart'
 
 interface PerfTrackerProps {
-  perf: PerfTimings
+  perf?: PerfTimings
 }
 
 const perfColumns: ActionListColumns = [
@@ -49,53 +49,20 @@ const perfColumns: ActionListColumns = [
     title: 'Name',
     type: 'string',
     sortDirection: 'asc',
-    // widthPercent: 20,
+    widthPercent: 50,
   },
   {
     canSort: true,
     id: 'duration',
     title: 'Duration',
     type: 'number',
-    // widthPercent: 5,
-  },
-  {
-    canSort: true,
-    id: 'redirect',
-    title: 'Redirect',
-    type: 'number',
-    // widthPercent: 5,
-  },
-  {
-    canSort: true,
-    id: 'domainLookup',
-    title: 'Domain Lookup',
-    type: 'number',
-    // widthPercent: 5,
-  },
-  {
-    canSort: true,
-    id: 'connect',
-    title: 'Connect',
-    type: 'number',
-    // widthPercent: 5,
-  },
-  {
-    canSort: true,
-    id: 'secureConnection',
-    title: 'Secure Connection',
-    type: 'number',
-    // widthPercent: 5,
-  },
-  {
-    canSort: true,
-    id: 'responseTime',
-    title: 'Response Time',
-    type: 'number',
-    // widthPercent: 5,
+    widthPercent: 50,
   },
 ]
 
-export const PerfTracker: FC<PerfTrackerProps> = ({ perf }) => {
+export const PerfTracker: FC<PerfTrackerProps> = ({
+  perf = new PerfTimings(),
+}) => {
   const [data, setData] = useState(perf.entries())
 
   const [columns, setColumns] = useState(perfColumns)
@@ -113,14 +80,18 @@ export const PerfTracker: FC<PerfTrackerProps> = ({ perf }) => {
   // const [data] = useState(perf.entries())
   // const [columns] = useState(perfColumns)
 
+  // const indicator = (
+  //   <Icon name="ChartTimeline" color="key" size={24} marginRight="small" />
+  // )
+
   const items = data.map((item, index) => {
-    const actions = (
-      <>
-        <ActionListItemAction onClick={() => alert(`${item.name} selected!`)}>
-          Details
-        </ActionListItemAction>
-      </>
-    )
+    // const actions = (
+    //   <>
+    //     <ActionListItemAction onClick={() => alert(`${item.name} selected!`)}>
+    //       Details
+    //     </ActionListItemAction>
+    //   </>
+    // )
 
     const id = `${item.name}.${index}`
     return (
@@ -128,23 +99,18 @@ export const PerfTracker: FC<PerfTrackerProps> = ({ perf }) => {
         id={id}
         key={id}
         onClick={() => alert(`${id}`)}
-        actions={actions}
+        // actions={actions}
       >
-        <ActionListItemColumn>{item.name}</ActionListItemColumn>
-        <ActionListItemColumn>{item.duration}</ActionListItemColumn>
-        <ActionListItemColumn>{item.redirect}</ActionListItemColumn>
-        <ActionListItemColumn>{item.domainLookup}</ActionListItemColumn>
-        <ActionListItemColumn>{item.connect}</ActionListItemColumn>
-        <ActionListItemColumn>{item.secureConnection}</ActionListItemColumn>
-        <ActionListItemColumn>{item.responseTime}</ActionListItemColumn>
         <ActionListItemColumn>
-          {item.fetchUntilResponseEnd}
+          <Heading as="h5" mb="0" pt="0">
+            {item.name}
+          </Heading>
         </ActionListItemColumn>
-        <ActionListItemColumn>
-          {item.requestUntilResponseEnd}
-        </ActionListItemColumn>
-        <ActionListItemColumn>
-          {item.startUntilResponseEnd}
+        <ActionListItemColumn
+          detail={<PerfChart loadTimes={item} />}
+          // indicator={indicator}
+        >
+          {item.duration}
         </ActionListItemColumn>
       </ActionListItem>
     )

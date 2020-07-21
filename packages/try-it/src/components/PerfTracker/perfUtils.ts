@@ -42,13 +42,13 @@ export interface IResourceLoadTimes {
 }
 
 export class LoadTimes implements IResourceLoadTimes {
-  connect = 0
-  domainLookup = 0
-  fetchUntilResponseEnd = 0
   redirect = 0
-  requestUntilResponseEnd = 0
-  responseTime = 0
+  domainLookup = 0
+  connect = 0
   secureConnection = 0
+  responseTime = 0
+  fetchUntilResponseEnd = 0
+  requestUntilResponseEnd = 0
   startUntilResponseEnd = 0
 
   constructor(public entry: PerformanceEntry) {
@@ -56,9 +56,9 @@ export class LoadTimes implements IResourceLoadTimes {
       // https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming
       // Either a `PerformanceResourceTiming` or `PerformanceTiming` instance
       const resource = entry as PerformanceResourceTiming
-      this.redirect = resource.redirectStart - resource.redirectEnd
-      this.domainLookup = resource.domainLookupStart - resource.domainLookupEnd
-      this.connect = resource.connectStart - resource.connectEnd
+      this.redirect = resource.redirectEnd - resource.redirectStart
+      this.domainLookup = resource.domainLookupEnd - resource.domainLookupStart
+      this.connect = resource.connectEnd - resource.connectStart
       if (resource.secureConnectionStart > 0)
         this.secureConnection =
           resource.connectEnd - resource.secureConnectionStart
@@ -112,7 +112,7 @@ export class PerfTimings {
 
   entries(type = 'resource') {
     // https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEntry
-    if (!this.supported)
+    if (this.supported)
       return performance.getEntriesByType(type).map((p) => new LoadTimes(p))
     return []
   }
