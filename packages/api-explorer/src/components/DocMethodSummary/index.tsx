@@ -24,3 +24,4 @@
 
  */
 export { DocMethodSummary } from './DocMethodSummary'
+export { pickTooltipContent } from './utils'

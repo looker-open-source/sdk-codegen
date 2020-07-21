@@ -24,10 +24,15 @@
 
  */
 
-import { Icon, Text } from '@looker/components'
+import {
+  Icon,
+  Text,
+  Popover,
+  PopoverContent,
+  FieldCheckbox,
+} from '@looker/components'
 import { SearchCriterion } from '@looker/sdk-codegen'
 import React, { useContext, FC, BaseSyntheticEvent } from 'react'
-import { Popover, PopoverContent, FieldCheckbox } from '@looker/components'
 
 import { setCriteria } from '../../reducers'
 import { SearchContext } from '../../context'
@@ -63,7 +68,6 @@ export const SearchCriteriaSelector: FC = () => {
             ))}
         </PopoverContent>
       }
-      placement="right"
     >
       <Icon name="Filter" size="small" />
     </Popover>
