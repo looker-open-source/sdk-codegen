@@ -84,7 +84,7 @@ export const PerfChart: FC<PerfChartProps> = ({ loadTimes }) => {
         showRowNumber: true,
         timeline: {
           showRowLabel: false,
-          groupByRowLabel: false,
+          groupByRowLabel: true,
         },
         avoidOverlappingGridLines: false,
       }}
