@@ -34,10 +34,7 @@ export interface DocPrimaryResponseProps {
 export const DocPrimaryResponse: FC<DocPrimaryResponseProps> = ({
   response,
 }) => (
-  <Tooltip
-    content={`${response.description} ${response.mediaType}`}
-    placement="bottom"
-  >
+  <Tooltip content={`${response.description} ${response.mediaType}`}>
     <span>{response.type.name}</span>
   </Tooltip>
 )

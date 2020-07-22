@@ -60,7 +60,7 @@ describe('ApiSpecSelector', () => {
         specDispatch={specDispatch}
       />
     )
-    userEvent.click(screen.getByTitle('Caret Down'))
+    userEvent.click(screen.getByRole('textbox'))
     await waitFor(() => {
       expect(screen.getAllByRole('option')).toHaveLength(
         Object.keys(specs).length
@@ -78,7 +78,7 @@ describe('ApiSpecSelector', () => {
         />
       )
     )
-    userEvent.click(screen.getByTitle('Caret Down'))
+    userEvent.click(screen.getByRole('textbox'))
     userEvent.click(screen.getByRole('option', { name: '3.0 (stable)' }))
     expect(specDispatch).toHaveBeenCalledTimes(1)
     expect(specDispatch).toHaveBeenCalledWith({

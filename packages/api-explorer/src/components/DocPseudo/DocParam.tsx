@@ -32,10 +32,7 @@ export interface DocArgProps {
 }
 
 export const DocParam: FC<DocArgProps> = ({ parameter }) => (
-  <Tooltip
-    content={`${parameter.type.name} ${parameter.description}`}
-    placement="bottom"
-  >
+  <Tooltip content={`${parameter.type.name} ${parameter.description}`}>
     <span>{parameter.required ? parameter.name : `[${parameter.name}]`}</span>
   </Tooltip>
 )

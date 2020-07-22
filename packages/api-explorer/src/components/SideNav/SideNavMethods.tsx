@@ -79,7 +79,7 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
                     <MethodBadge
                       textAlign="center"
                       compact
-                      httpMethod={method.httpMethod}
+                      type={method.httpMethod}
                     >
                       {method.httpMethod.toUpperCase()}
                     </MethodBadge>

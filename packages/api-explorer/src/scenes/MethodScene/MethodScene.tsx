@@ -25,14 +25,9 @@
  */
 
 import React, { FC } from 'react'
-import { Flex, Space, Text } from '@looker/components'
+import { Space, Text } from '@looker/components'
 import { useParams } from 'react-router-dom'
-import {
-  MethodBadge,
-  TryIt,
-  TryItCallback,
-  TryItHttpMethod,
-} from '@looker/try-it'
+import { TryIt, TryItCallback, TryItHttpMethod } from '@looker/try-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 import { Looker40SDK } from '@looker/sdk/lib/browser'
 
@@ -42,6 +37,7 @@ import {
   DocRateLimited,
   DocReferences,
   DocSDKs,
+  DocStatus,
   DocTitle,
 } from '../../components'
 import { DocResponse, DocOperation } from './components'
@@ -69,13 +65,9 @@ export const MethodScene: FC<DocMethodProps> = ({
 
   return (
     <>
-      <Flex>
-        <MethodBadge httpMethod={method.status} titleStatus>
-          {method.status.toUpperCase()}
-        </MethodBadge>
-      </Flex>
       <DocTitle>{method.summary}</DocTitle>
       <Space mb="xlarge" gap="small">
+        <DocStatus method={method} />
         <DocActivityType method={method} />
         <DocRateLimited method={method} />
       </Space>

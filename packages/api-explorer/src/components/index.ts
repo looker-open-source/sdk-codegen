@@ -32,10 +32,10 @@ export { DocPseudo } from './DocPseudo'
 export { DocRateLimited } from './DocRateLimited'
 export { DocReferences } from './DocReferences'
 export { DocSDKs } from './DocSDKs'
+export { DocStatus } from './DocStatus'
 export { DocTitle } from './DocTitle'
 export {
   HeaderWrapper,
-  HEADER_HEIGHT,
   Main,
   PageLayout,
   SideNavDivider,
