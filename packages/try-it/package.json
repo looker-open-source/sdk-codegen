@@ -19,7 +19,8 @@
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "watch": "yarn lerna exec --scope @looker/try-it --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "devDependencies": {
     "@looker/components-test-utils": "^0.7.36",
