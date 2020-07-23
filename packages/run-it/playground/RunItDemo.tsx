@@ -27,12 +27,19 @@
 import React, { FC, useState } from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 import { ApiModel } from '@looker/sdk-codegen'
-import { ComponentsProvider, Select, Space } from '@looker/components'
-import { RunIt, RunItHttpMethod } from '../src/RunIt'
+import {
+  ComponentsProvider,
+  Select,
+  Space,
+  Card,
+  Flex,
+} from '@looker/components'
+import { RunIt, RunItHttpMethod } from '../src'
+
 import { specs } from '../../api-explorer/src/test-data'
 import { createInputs } from '../../api-explorer/src/scenes/MethodScene/utils'
-import { OAuthScene } from '../src/scenes/OAuthScene/OAuthScene'
-import { runItSDK } from '../src/utils/RunItSDK'
+import { OAuthScene } from '../src/scenes/OAuthScene'
+import { runItSDK } from '../src/utils'
 
 export const RunItDemo: FC = () => {
   const specKey = '4.0'
@@ -57,25 +64,35 @@ export const RunItDemo: FC = () => {
   return (
     <ComponentsProvider>
       <BrowserRouter>
-        <Space>
-          <span>Method to try:</span>
-          <Select
-            autoResize
-            placeholder="Select the method to try ..."
-            options={options}
-            listLayout={{ width: 'auto' }}
-            onChange={handleSelection}
-          />
-        </Space>
-        <RunIt
-          specKey={specKey}
-          inputs={inputs}
-          httpMethod={method.httpMethod as RunItHttpMethod}
-          endpoint={method.endpoint}
-        />
-        <Route path="/oauth">
-          <OAuthScene sdk={runItSDK} />
-        </Route>
+        <Flex
+          justifyContent="center"
+          minHeight="100vh"
+          minWidth="100vw"
+          backgroundColor="palette.purple500"
+          p={['medium', 'xxlarge']}
+        >
+          <Card raised minWidth="75%" maxWidth={600} p={['medium', 'xlarge']}>
+            <Space>
+              <span>Method to run:</span>
+              <Select
+                autoResize
+                placeholder="Select the method to run ..."
+                options={options}
+                listLayout={{ width: 'auto' }}
+                onChange={handleSelection}
+              />
+            </Space>
+            <RunIt
+              specKey={specKey}
+              inputs={inputs}
+              httpMethod={method.httpMethod as RunItHttpMethod}
+              endpoint={method.endpoint}
+            />
+            <Route path="/oauth">
+              <OAuthScene sdk={runItSDK} />
+            </Route>
+          </Card>
+        </Flex>
       </BrowserRouter>
     </ComponentsProvider>
   )
