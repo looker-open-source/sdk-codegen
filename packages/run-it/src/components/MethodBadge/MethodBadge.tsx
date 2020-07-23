@@ -45,18 +45,19 @@ interface MethodBadgeProps
   extends CompatibleHTMLProps<HTMLDivElement>,
     MinWidthProps,
     TypographyProps {
-  httpMethod: HttpMethod | MethodStatus | string
+  /** Determines background color */
+  type: HttpMethod | MethodStatus | string
   compact?: boolean
   titleStatus?: boolean
 }
 
 /**
- * Intent names to display the correct color for the badge based on the HTTP Method.
+ * Intent names to display the correct color for the badge based on the HTTP method or method status.
  */
 type ApixIntentNames = IntentNames | 'key'
 
-export const intentForStatus = (method: HttpMethod | MethodStatus | string) => {
-  switch (method) {
+export const pickBadgeIntent = (type: HttpMethod | MethodStatus | string) => {
+  switch (type) {
     case 'DELETE':
     case 'deprecated':
       return 'critical'
@@ -88,10 +89,10 @@ export const MethodBadge = styled.div<MethodBadgeProps>`
   ${typography}
   ${minWidth}
 
-  ${({ httpMethod }) => cssForIntent(intentForStatus(httpMethod))};
+  ${({ type }) => cssForIntent(pickBadgeIntent(type))};
 
-  background: ${({ httpMethod, titleStatus, theme: { colors } }) =>
-    titleStatus ? colors.ui1 : intentUIBlend(intentForStatus(httpMethod), 1)};
+  background: ${({ type, titleStatus, theme: { colors } }) =>
+    titleStatus ? colors.ui1 : intentUIBlend(pickBadgeIntent(type), 1)};
   border-radius: ${({ theme: { radii } }) => radii.medium};
 
   /** NOTE: This is below minimum accessibility threshold font-size */

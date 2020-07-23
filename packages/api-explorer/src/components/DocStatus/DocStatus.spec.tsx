@@ -23,34 +23,22 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { Code, Tooltip, Badge } from '@looker/components'
-import { IMethod } from '@looker/sdk-codegen'
+import React from 'react'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { screen, fireEvent, waitFor } from '@testing-library/react'
 
-interface DocActivityTypeProps {
-  method: IMethod
-}
-export const DocActivityType: FC<DocActivityTypeProps> = ({ method }) => (
-  <>
-    {method.activityType === 'db_query' && (
-      <>
-        <Code color="palette.charcoal500">{'db_query'}</Code>
-        <Tooltip
-          textAlign="left"
-          content={
-            <>
-              Call volume for this endpoint counts toward the "db_query" API
-              activity category.
-            </>
-          }
-        >
-          <span>
-            <Badge intent="neutral" fontWeight="light">
-              $
-            </Badge>
-          </span>
-        </Tooltip>
-      </>
-    )}
-  </>
-)
+import { api } from '../../test-data'
+import { DocStatus } from './DocStatus'
+
+describe('DocStatus', () => {
+  test('it renders a badge with the status and a tooltip on hover', async () => {
+    renderWithTheme(<DocStatus method={api.methods.create_dashboard} />)
+    const badge = screen.getByText('BETA')
+    fireEvent.mouseOver(badge)
+    await waitFor(() => {
+      expect(screen.getByRole('tooltip')).toHaveTextContent(
+        'This beta endpoint is under development and subject to change.'
+      )
+    })
+  })
+})

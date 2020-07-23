@@ -23,27 +23,9 @@
  SOFTWARE.
 
  */
-import { renderWithTheme } from '@looker/components-test-utils'
-import { screen } from '@testing-library/react'
-
-import { pickStatus, pickTooltipContent } from './utils'
+import { pickTooltipContent } from './utils'
 
 describe('DocMethodSummary utils', () => {
-  test.each`
-    status            | expectedTitle
-    ${'beta'}         | ${'Warning'}
-    ${'experimental'} | ${'Beaker'}
-    ${'deprecated'}   | ${'Error'}
-    ${'stable'}       | ${'Circle Check'}
-    ${'undocumented'} | ${'Circle Info'}
-  `(
-    'pickStatus returns an icon with $expectedTitle title',
-    ({ status, expectedTitle }) => {
-      renderWithTheme(pickStatus(status))
-      expect(screen.getByTitle(expectedTitle)).toBeInTheDocument()
-    }
-  )
-
   test.each`
     status            | expected
     ${'beta'}         | ${'This beta endpoint is under development and subject to change.'}

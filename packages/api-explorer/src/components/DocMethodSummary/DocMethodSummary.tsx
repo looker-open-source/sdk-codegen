@@ -43,7 +43,7 @@ export const DocMethodSummary: FC<DocMethodSummaryProps> = ({ method }) => {
       <CardContent>
         <Space align="start" between>
           <MethodBadge
-            httpMethod={method.httpMethod}
+            type={method.httpMethod}
             textAlign="center"
             minWidth="3.7625rem"
           >

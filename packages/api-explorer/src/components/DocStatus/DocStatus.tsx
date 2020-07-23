@@ -24,33 +24,23 @@
 
  */
 import React, { FC } from 'react'
-import { Code, Tooltip, Badge } from '@looker/components'
+import { Tooltip } from '@looker/components'
+import { MethodBadge } from '@looker/run-it'
 import { IMethod } from '@looker/sdk-codegen'
 
-interface DocActivityTypeProps {
+import { pickTooltipContent } from '../DocMethodSummary'
+
+interface DocStatusProps {
   method: IMethod
 }
-export const DocActivityType: FC<DocActivityTypeProps> = ({ method }) => (
-  <>
-    {method.activityType === 'db_query' && (
-      <>
-        <Code color="palette.charcoal500">{'db_query'}</Code>
-        <Tooltip
-          textAlign="left"
-          content={
-            <>
-              Call volume for this endpoint counts toward the "db_query" API
-              activity category.
-            </>
-          }
-        >
-          <span>
-            <Badge intent="neutral" fontWeight="light">
-              $
-            </Badge>
-          </span>
-        </Tooltip>
-      </>
-    )}
-  </>
+
+/**
+ * Renders a status badge with a tooltip
+ */
+export const DocStatus: FC<DocStatusProps> = ({ method }) => (
+  <Tooltip content={pickTooltipContent(method.status)}>
+    <MethodBadge type={method.status} titleStatus>
+      {method.status.toLocaleUpperCase()}
+    </MethodBadge>
+  </Tooltip>
 )

@@ -36,18 +36,13 @@ interface DocOperationProps {
 
 export const DocOperation: FC<DocOperationProps> = ({ method }) => (
   <SpaceVertical align="start" mb="xlarge" gap="xsmall">
-    <MethodBadge httpMethod={method.httpMethod}>
-      <Flex alignItems="center">
-        <Text fontSize="xsmall" fontWeight="semiBold" mr="xxsmall">
-          SDK:
-        </Text>
-        <DocPseudo method={method} />
-      </Flex>
+    <MethodBadge type={method.httpMethod}>
+      <DocPseudo method={method} />
     </MethodBadge>
-    <MethodBadge httpMethod={method.httpMethod}>
+    <MethodBadge type={method.httpMethod}>
       <Flex alignItems="center">
         <Text fontSize="xsmall" fontWeight="semiBold" mr="xxsmall">
-          {method.httpMethod}:
+          {method.httpMethod}
         </Text>
         <Code fontSize="small" fontWeight="normal">
           {method.endpoint}

@@ -39,6 +39,10 @@ import {
 import { MethodBadge } from '@looker/run-it'
 import { ApixHeading } from '../common'
 
+/**
+ * Defines all Api Explorer styles
+ */
+
 export const HEADER_HEIGHT = '66px'
 
 export const HeaderWrapper = styled(Flex).attrs({
