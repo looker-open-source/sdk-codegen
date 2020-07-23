@@ -84,14 +84,6 @@ export const PerfChart: FC<PerfChartProps> = ({ loadTimes }) => {
       <Chart
         width={'100%'}
         height={'350px'}
-        options={{
-          showRowNumber: true,
-          timeline: {
-            showRowLabel: false,
-            groupByRowLabel: true,
-          },
-          avoidOverlappingGridLines: false,
-        }}
         chartType="Timeline"
         loader={<div>Loading Chart</div>}
         data={data}
