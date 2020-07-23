@@ -117,6 +117,20 @@ const metric = (value: number, description: string) => (
     <Metric value={value} description={`${description} (${value} ms)`} />
   </>
 )
+
+const urlColumn = (value: string) => {
+  const url = new URL(value)
+  const path = `${url.pathname}${url.search}`
+  return (
+    <>
+      <Tooltip content={value} placement="right" textAlign="left">
+        <Heading as="h5" mb="0" pt="0" truncate>
+          {path}
+        </Heading>
+      </Tooltip>
+    </>
+  )
+}
 /**
  * Generates PerfTable rows from an array of resource load times
  * @param data A array of resource load times
@@ -130,13 +144,7 @@ export const createTableRows = (
     const id = `${item.name}.${index}`
     return (
       <ActionListItem id={id} key={id} onClick={onSelect.bind(null, item)}>
-        <ActionListItemColumn>
-          <Tooltip content={item.name} placement="right" textAlign="left">
-            <Heading as="h5" mb="0" pt="0" truncate>
-              {item.name}
-            </Heading>
-          </Tooltip>
-        </ActionListItemColumn>
+        <ActionListItemColumn>{urlColumn(item.name)}</ActionListItemColumn>
         <ActionListItemColumn>
           {metric(
             item.domainLookup,

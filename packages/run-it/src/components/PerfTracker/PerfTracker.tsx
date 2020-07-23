@@ -31,6 +31,8 @@ import {
   Space,
   Button,
   SpaceVertical,
+  ButtonTransparent,
+  FieldRadioGroup,
 } from '@looker/components'
 
 import { getStorage, RunItConfigKey } from '../ConfigForm'
@@ -43,7 +45,8 @@ interface PerfTrackerProps {
   perf?: PerfTimings
 }
 
-const perfFilter = () => {
+const perfFilter = (all = false) => {
+  if (all) return '.*'
   const storage = getStorage(RunItConfigKey)
   if (!storage.value) return '.*'
   const config = JSON.parse(storage.value)
@@ -51,12 +54,18 @@ const perfFilter = () => {
   return `${url.protocol}//${url.hostname}.*`
 }
 
+const filterOptions = [
+  { label: 'API calls', value: 'api' },
+  { label: 'All calls', value: 'all' },
+]
+
 export const PerfTracker: FC<PerfTrackerProps> = ({
   perf = new PerfTimings(),
 }) => {
   // TODO provide option to filter only traffic to the API server
   // TODO UI option to filter by url pattern
-  const [filter] = useState(perfFilter())
+  const [filterOption, setFilterOption] = useState('api')
+  const [filter, setFilter] = useState(perfFilter())
   const [data, setData] = useState<LoadTimes[]>(perf.entries(filter))
   const [columns, setColumns] = useState(tableColumns)
   const [timings, setTimings] = useState(data.length > 0 ? data[0] : undefined)
@@ -75,15 +84,41 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
     setData([])
     setTimings(undefined)
   }
+
+  const handleRefresh = (_: BaseSyntheticEvent) => {
+    const pf = perfFilter()
+    setFilter(pf)
+    setData(perf.entries(pf))
+  }
+
+  const handleFilterChange = (value: string) => {
+    setFilterOption(value)
+    const pf = perfFilter(value === 'all')
+    setFilter(pf)
+    setData(perf.entries(pf))
+  }
+
   const handleSelect = (item: LoadTimes) => setTimings(item)
 
   return (
     <>
       <Space mb="large">
-        <Heading>Resource Load Times</Heading>
+        <Heading>Resource Load Times for {filter}</Heading>
         <Button iconAfter="Trash" color="critical" onClick={handleClear}>
           Clear
         </Button>
+        <ButtonTransparent iconAfter="Refresh" onClick={handleRefresh}>
+          Refresh
+        </ButtonTransparent>
+        <FieldRadioGroup
+          description="Performance result filtering"
+          label="Show"
+          name="filtering"
+          options={filterOptions}
+          defaultValue={filterOption}
+          onChange={handleFilterChange}
+          inline
+        />
       </Space>
       <>
         {!perf.supported &&
