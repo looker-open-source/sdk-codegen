@@ -38,7 +38,7 @@ import { RunIt, RunItHttpMethod } from '../src'
 
 import { specs } from '../../api-explorer/src/test-data'
 import { createInputs } from '../../api-explorer/src/scenes/MethodScene/utils'
-import { OAuthScene } from '../src/scenes/OAuthScene'
+import { OAuthScene } from '../src/scenes'
 import { runItSDK } from '../src/utils'
 
 export const RunItDemo: FC = () => {
