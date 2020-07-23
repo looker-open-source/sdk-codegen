@@ -26,6 +26,6 @@
 
 import React from 'react'
 import { render } from 'react-dom'
-import { TryItDemo } from './TryItDemo'
+import { RunItDemo } from './RunItDemo'
 
-render(<TryItDemo />, document.getElementById('container'))
+render(<RunItDemo />, document.getElementById('container'))
