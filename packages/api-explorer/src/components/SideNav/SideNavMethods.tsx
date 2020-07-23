@@ -28,7 +28,7 @@ import React, { FC, useContext, useState } from 'react'
 import { Accordion, AccordionContent, Space } from '@looker/components'
 import { MethodList } from '@looker/sdk-codegen'
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
-import { MethodBadge } from '@looker/try-it'
+import { MethodBadge } from '@looker/run-it'
 
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'

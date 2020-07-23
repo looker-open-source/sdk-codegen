@@ -26,7 +26,7 @@
 import React, { FC } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { ApiModel } from '@looker/sdk-codegen'
-import { TryItCallback, OAuthScene } from '@looker/try-it'
+import { RunItCallback, OAuthScene } from '@looker/run-it'
 
 import { Looker40SDK } from '@looker/sdk/lib/browser'
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
@@ -34,14 +34,14 @@ import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
 interface AppRouterProps {
   api: ApiModel
   specKey: string
-  tryItCallback?: TryItCallback
+  runItCallback?: RunItCallback
   sdk?: Looker40SDK
 }
 
 export const AppRouter: FC<AppRouterProps> = ({
   specKey,
   api,
-  tryItCallback,
+  runItCallback,
   sdk,
 }) => (
   <Switch>
@@ -56,7 +56,7 @@ export const AppRouter: FC<AppRouterProps> = ({
       <TagScene api={api} />
     </Route>
     <Route path="/:specKey/methods/:methodTag/:methodName">
-      <MethodScene api={api} tryItCallback={tryItCallback} />
+      <MethodScene api={api} runItCallback={runItCallback} />
     </Route>
     <Route path="/:specKey/types/:typeName">
       <TypeScene api={api} />

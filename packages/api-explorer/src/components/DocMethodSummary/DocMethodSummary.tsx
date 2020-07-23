@@ -26,7 +26,7 @@
 import React, { FC } from 'react'
 import { CardContent, Flex, Space, Text } from '@looker/components'
 import { IMethod } from '@looker/sdk-codegen'
-import { MethodBadge } from '@looker/try-it'
+import { MethodBadge } from '@looker/run-it'
 
 import { SummaryCard } from '../ExplorerStyle'
 import { ApixHeading } from '../common'

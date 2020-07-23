@@ -33,7 +33,7 @@ import {
   ExtensionContext,
   ExtensionContextData,
 } from '@looker/extension-sdk-react'
-import { TryItCallback, pathify } from '@looker/try-it'
+import { RunItCallback, pathify } from '@looker/run-it'
 import { IRawResponse } from '@looker/sdk/lib/browser'
 
 const specs: ApiExplorerProps = {
@@ -60,10 +60,10 @@ const specs: ApiExplorerProps = {
 export const ApiExplorerProvider: FC = () => {
   const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
   const { core40SDK } = useContext<ExtensionContextData>(ExtensionContext)
-  let tryItCallback: TryItCallback | undefined
+  let runItCallback: RunItCallback | undefined
 
   if (match && match.params.specKey) {
-    tryItCallback = async (
+    runItCallback = async (
       _specKey,
       httpMethod,
       path,
@@ -82,5 +82,5 @@ export const ApiExplorerProvider: FC = () => {
     }
   }
 
-  return <ApiExplorer {...specs} tryItCallback={tryItCallback} />
+  return <ApiExplorer {...specs} runItCallback={runItCallback} />
 }
