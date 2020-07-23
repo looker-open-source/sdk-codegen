@@ -41,7 +41,19 @@ export interface IResourceLoadTimes {
   startUntilResponseEnd: number
 }
 
-const diff = (end: number, start: number) => end - start
+/**
+ * Rounds a number to 3 decimal places
+ */
+export const perfRound = (num: number) =>
+  Math.round((num + Number.EPSILON) * 10000) / 10000
+
+/**
+ * Round and scale (if needed) the difference in performance metrics
+ * @param end of high precision timer metric
+ * @param start of high precision timer metric
+ * @returns rounded difference of end - start
+ */
+const diff = (end: number, start: number) => perfRound(end - start)
 
 export class LoadTimes implements IResourceLoadTimes {
   redirect = 0

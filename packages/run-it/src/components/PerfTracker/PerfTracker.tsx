@@ -47,7 +47,8 @@ const perfFilter = () => {
   const storage = getStorage(RunItConfigKey)
   if (!storage.value) return '.*'
   const config = JSON.parse(storage.value)
-  return `${config.base_url}.*`
+  const url = new URL(config.base_url)
+  return `${url.protocol}//${url.hostname}.*`
 }
 
 export const PerfTracker: FC<PerfTrackerProps> = ({
@@ -98,7 +99,7 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
             />
           </SpaceVertical>
         )}
-        {!data.length && 'No performance data is loaded'}
+        {data.length < 1 && 'No performance data is loaded'}
       </>
     </>
   )

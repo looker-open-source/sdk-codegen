@@ -26,7 +26,7 @@
 
 import React, { FC } from 'react'
 import { Chart } from 'react-google-charts'
-import { Heading } from '@looker/components'
+import { Heading, Space, Tooltip } from '@looker/components'
 import { IResourceLoadTimes } from './perfUtils'
 
 interface PerfChartProps {
@@ -77,10 +77,34 @@ const chartData = (times: IResourceLoadTimes) => {
 }
 
 export const PerfChart: FC<PerfChartProps> = ({ loadTimes }) => {
+  const entry = loadTimes.entry as PerformanceResourceTiming
   const data = chartData(loadTimes)
   return (
     <>
       <Heading as="h4">{loadTimes.name}</Heading>
+      <Space>
+        <Tooltip
+          content="The size (in octets) of the fetched resource. The size includes the response header fields plus the response payload body"
+          placement="right"
+          textAlign="left"
+        >
+          <span>Transfer size: {entry.transferSize}</span>
+        </Tooltip>
+        <Tooltip
+          content="The size (in octets) received from the fetch (HTTP or cache), of the payload body, before removing any applied content-codings"
+          placement="right"
+          textAlign="left"
+        >
+          <span>Encoded body size: {entry.encodedBodySize}</span>
+        </Tooltip>
+        <Tooltip
+          content="The size (in octets) received from the fetch (HTTP or cache) of the message body, after removing any applied content-codings"
+          placement="right"
+          textAlign="left"
+        >
+          <span>Decoded body size: {entry.decodedBodySize}</span>
+        </Tooltip>
+      </Space>
       <Chart
         width={'100%'}
         height={'350px'}

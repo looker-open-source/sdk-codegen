@@ -23,14 +23,15 @@
  SOFTWARE.
 
  */
-import React from 'react'
+import React, { FC } from 'react'
 import {
   ActionListColumns,
   ActionListItem,
   ActionListItemColumn,
   Heading,
+  Tooltip,
 } from '@looker/components'
-import { LoadTimes } from './perfUtils'
+import { LoadTimes, perfRound } from './perfUtils'
 
 /** An array of columns defining the header of PerfTable */
 export const tableColumns: ActionListColumns = [
@@ -41,13 +42,6 @@ export const tableColumns: ActionListColumns = [
     title: 'URL',
     type: 'string',
     widthPercent: 18,
-  },
-  {
-    canSort: true,
-    id: 'duration',
-    title: 'Duration',
-    type: 'number',
-    widthPercent: 10,
   },
   {
     canSort: true,
@@ -98,14 +92,31 @@ export const tableColumns: ActionListColumns = [
     type: 'number',
     widthPercent: 8.8,
   },
+  {
+    canSort: true,
+    id: 'duration',
+    title: 'Duration',
+    type: 'number',
+    widthPercent: 10,
+  },
 ]
 
-/**
- * Rounds a number to 3 decimal places
- */
-export const round = (num: number) =>
-  Math.round((num + Number.EPSILON) * 10000) / 10000
+interface MetricProps {
+  value: number
+  description: string
+}
 
+const Metric: FC<MetricProps> = ({ value, description }) => (
+  <Tooltip placement="right" textAlign="left" content={<>{description}</>}>
+    <span>{value}</span>
+  </Tooltip>
+)
+
+const metric = (value: number, description: string) => (
+  <>
+    <Metric value={value} description={`${description} (${value} ms)`} />
+  </>
+)
 /**
  * Generates PerfTable rows from an array of resource load times
  * @param data A array of resource load times
@@ -120,25 +131,59 @@ export const createTableRows = (
     return (
       <ActionListItem id={id} key={id} onClick={onSelect.bind(null, item)}>
         <ActionListItemColumn>
-          <Heading as="h5" mb="0" pt="0" truncate>
-            {item.name}
-          </Heading>
-        </ActionListItemColumn>
-        <ActionListItemColumn>{round(item.duration)}</ActionListItemColumn>
-        <ActionListItemColumn>{round(item.domainLookup)}</ActionListItemColumn>
-        <ActionListItemColumn>{round(item.connect)}</ActionListItemColumn>
-        <ActionListItemColumn>
-          {round(item.secureConnection)}
-        </ActionListItemColumn>
-        <ActionListItemColumn>{round(item.responseTime)}</ActionListItemColumn>
-        <ActionListItemColumn>
-          {round(item.fetchUntilResponseEnd)}
+          <Tooltip content={item.name} placement="right" textAlign="left">
+            <Heading as="h5" mb="0" pt="0" truncate>
+              {item.name}
+            </Heading>
+          </Tooltip>
         </ActionListItemColumn>
         <ActionListItemColumn>
-          {round(item.requestUntilResponseEnd)}
+          {metric(
+            item.domainLookup,
+            'Immediately before the browser starts the domain name lookup until it ends'
+          )}
         </ActionListItemColumn>
         <ActionListItemColumn>
-          {round(item.startUntilResponseEnd)}
+          {metric(
+            item.connect,
+            'Immediately before the browser starts to establish the connection to the server to retrieve the resource until the connection is established.'
+          )}
+        </ActionListItemColumn>
+        <ActionListItemColumn>
+          {metric(
+            item.secureConnection,
+            'Immediately before the browser starts the handshake process to secure the current connection until the connection ends. 0 if not a secure connection.'
+          )}
+        </ActionListItemColumn>
+        <ActionListItemColumn>
+          {metric(
+            item.responseTime,
+            'Immediately after the browser receives the first byte of the response from the server until the response ends.'
+          )}
+        </ActionListItemColumn>
+        <ActionListItemColumn>
+          {metric(
+            item.fetchUntilResponseEnd,
+            'Immediately before the browser starts to fetch the resource until the response ends'
+          )}
+        </ActionListItemColumn>
+        <ActionListItemColumn>
+          {metric(
+            item.requestUntilResponseEnd,
+            'Immediately after the browser receives the first byte of the response from the server until the response ends'
+          )}
+        </ActionListItemColumn>
+        <ActionListItemColumn>
+          {metric(
+            item.startUntilResponseEnd,
+            'Immediately before the browser starts requesting the resource from the server'
+          )}
+        </ActionListItemColumn>
+        <ActionListItemColumn>
+          {metric(
+            perfRound(item.duration),
+            'Total time of the request and response'
+          )}
         </ActionListItemColumn>
       </ActionListItem>
     )
