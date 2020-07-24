@@ -50,12 +50,17 @@ export const SearchResults: FC<SearchResultsProps> = ({
   specKey,
 }) => {
   const methods = allMethods(tags)
-  const methodMatches = Object.entries(methods).length > 0
-  const typeMatches = Object.entries(types).length > 0
+  const methodMatches = Object.entries(methods).length
+  const typeMatches = Object.entries(types).length
 
   return (
     <ComboboxList closeOnSelect={true}>
       {!methodMatches && !typeMatches && <ListItem>No matches found.</ListItem>}
+      {(methodMatches || typeMatches) && (
+        <ListItem>
+          {methodMatches} methods and {typeMatches} types found
+        </ListItem>
+      )}
       {methodMatches && <MethodResults specKey={specKey} tags={tags} />}
       {typeMatches && <TypeResults specKey={specKey} types={types} />}
     </ComboboxList>
