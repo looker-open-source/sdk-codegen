@@ -27,8 +27,15 @@ import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import { screen } from '@testing-library/react'
 
+import { codeGenerators } from '@looker/sdk-codegen'
 import { api } from '../../test-data'
 import { DocSDKs } from './DocSDKs'
+
+const languages = codeGenerators
+  .filter((g) => g.factory !== undefined)
+  .map((g) => g.label || g.language)
+
+const pattern = new RegExp(`${languages.join('|')}`)
 
 describe('DocSDKs', () => {
   test.each([
@@ -40,9 +47,9 @@ describe('DocSDKs', () => {
       renderWithTheme(<DocSDKs api={api} {...props} />)
       expect(
         screen.getAllByRole('button', {
-          name: /Kotlin|Python|Swift|TypeScript|CSharp/,
+          name: pattern,
         })
-      ).toHaveLength(5)
+      ).toHaveLength(languages.length)
     }
   )
 })
