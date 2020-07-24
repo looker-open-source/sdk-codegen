@@ -23,8 +23,35 @@
  SOFTWARE.
 
  */
-import { IMethod } from '@looker/sdk-codegen'
+import {
+  IMethod,
+  ApiModel,
+  KeyedCollection,
+  CodeGen,
+} from '@looker/sdk-codegen'
 import { clone } from 'lodash'
+import { Languages } from '@looker/sdk-codegen-scripts'
+
+enum languageMap {
+  typescript = 'TypeScript',
+  kotlin = 'Kotlin',
+  python = 'Python',
+  csharp = 'C#',
+}
+
+/**
+ * Returns a collection of generators for all supported (non legacy) languages
+ * @param api Api spec
+ */
+export const getGenerators = (api: ApiModel): KeyedCollection<CodeGen> => {
+  const generators = {}
+  Languages.filter((x) => x.factory !== undefined && !!x.legacy).forEach(
+    (gen) => {
+      languageMap[gen.language] = gen.factory!(api)
+    }
+  )
+  return generators
+}
 
 /**
  * Given a method create a copy and remove its description

@@ -34,20 +34,11 @@ import {
   TabPanels,
   useTabs,
 } from '@looker/components'
-import {
-  PythonGen,
-  TypescriptGen,
-  KotlinGen,
-  SwiftGen,
-  IMethod,
-  IType,
-  ApiModel,
-  CSharpGen,
-} from '@looker/sdk-codegen'
+import { IMethod, IType, ApiModel } from '@looker/sdk-codegen'
 
 import { ApixHeading } from '../common'
 import { DocCode } from '../DocCode'
-import { noComment } from './utils'
+import { getGenerators, noComment } from './utils'
 
 interface LanguageSDKProps {
   /** API spec */
@@ -63,13 +54,7 @@ interface LanguageSDKProps {
  */
 export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
   const tabs = useTabs()
-  const generators = {
-    Kotlin: new KotlinGen(api),
-    Python: new PythonGen(api),
-    Swift: new SwiftGen(api),
-    TypeScript: new TypescriptGen(api),
-    CSharp: new CSharpGen(api),
-  }
+  const generators = getGenerators(api)
   const [item] = useState(method ? noComment(method) : type!)
 
   return (
