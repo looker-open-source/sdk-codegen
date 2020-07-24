@@ -106,21 +106,16 @@ interface MetricProps {
   description: string
 }
 
-/**
- * Renders a metric and a tooltip with its description on hover
- */
 const Metric: FC<MetricProps> = ({ value, description }) => (
-  <Tooltip
-    placement="right"
-    textAlign="left"
-    content={
-      <>
-        {description} ({value} ms)
-      </>
-    }
-  >
+  <Tooltip placement="right" textAlign="left" content={<>{description}</>}>
     <span>{value}</span>
   </Tooltip>
+)
+
+const metric = (value: number, description: string) => (
+  <>
+    <Metric value={value} description={`${description} (${value} ms)`} />
+  </>
 )
 
 const urlColumn = (value: string) => {
@@ -151,66 +146,52 @@ export const createTableRows = (
       <ActionListItem id={id} key={id} onClick={onSelect.bind(null, item)}>
         <ActionListItemColumn>{urlColumn(item.name)}</ActionListItemColumn>
         <ActionListItemColumn>
-          <Metric
-            value={item.domainLookup}
-            description={
-              'Immediately before the browser starts the domain name lookup until it ends'
-            }
-          />
+          {metric(
+            item.domainLookup,
+            'Immediately before the browser starts the domain name lookup until it ends'
+          )}
         </ActionListItemColumn>
         <ActionListItemColumn>
-          <Metric
-            value={item.connect}
-            description={
-              'Immediately before the browser starts to establish the connection to the server to retrieve the resource until the connection is established.'
-            }
-          />
+          {metric(
+            item.connect,
+            'Immediately before the browser starts to establish the connection to the server to retrieve the resource until the connection is established.'
+          )}
         </ActionListItemColumn>
         <ActionListItemColumn>
-          <Metric
-            value={item.secureConnection}
-            description={
-              'Immediately before the browser starts the handshake process to secure the current connection until the connection ends. 0 if not a secure connection.'
-            }
-          />
+          {metric(
+            item.secureConnection,
+            'Immediately before the browser starts the handshake process to secure the current connection until the connection ends. 0 if not a secure connection.'
+          )}
         </ActionListItemColumn>
         <ActionListItemColumn>
-          <Metric
-            value={item.responseTime}
-            description={
-              'Immediately after the browser receives the first byte of the response from the server until the response ends.'
-            }
-          />
+          {metric(
+            item.responseTime,
+            'Immediately after the browser receives the first byte of the response from the server until the response ends.'
+          )}
         </ActionListItemColumn>
         <ActionListItemColumn>
-          <Metric
-            value={item.fetchUntilResponseEnd}
-            description={
-              'Immediately before the browser starts to fetch the resource until the response ends'
-            }
-          />
+          {metric(
+            item.fetchUntilResponseEnd,
+            'Immediately before the browser starts to fetch the resource until the response ends'
+          )}
         </ActionListItemColumn>
         <ActionListItemColumn>
-          <Metric
-            value={item.requestUntilResponseEnd}
-            description={
-              'Immediately after the browser receives the first byte of the response from the server until the response ends'
-            }
-          />
+          {metric(
+            item.requestUntilResponseEnd,
+            'Immediately after the browser receives the first byte of the response from the server until the response ends'
+          )}
         </ActionListItemColumn>
         <ActionListItemColumn>
-          <Metric
-            value={item.startUntilResponseEnd}
-            description={
-              'Immediately before the browser starts requesting the resource from the server'
-            }
-          />
+          {metric(
+            item.startUntilResponseEnd,
+            'Immediately before the browser starts requesting the resource from the server'
+          )}
         </ActionListItemColumn>
         <ActionListItemColumn>
-          <Metric
-            value={perfRound(item.duration)}
-            description={'Total time of the request and response'}
-          />
+          {metric(
+            perfRound(item.duration),
+            'Total time of the request and response'
+          )}
         </ActionListItemColumn>
       </ActionListItem>
     )
