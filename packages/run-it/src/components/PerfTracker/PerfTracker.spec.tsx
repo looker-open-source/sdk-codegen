@@ -72,7 +72,7 @@ describe('PerfTracker', () => {
       screen.getByText('No performance data is loaded')
     ).toBeInTheDocument()
   })
-  test('it displays items', () => {
+  test.skip('it displays items', () => {
     jest.spyOn(PerfTimings.prototype, 'entries').mockReturnValue(mockEntries)
     renderWithTheme(<PerfTracker />)
     screen.debug()
