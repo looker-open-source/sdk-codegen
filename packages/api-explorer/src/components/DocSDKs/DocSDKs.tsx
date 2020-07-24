@@ -42,6 +42,7 @@ import {
   IMethod,
   IType,
   ApiModel,
+  CSharpGen,
 } from '@looker/sdk-codegen'
 
 import { ApixHeading } from '../common'
@@ -49,21 +50,26 @@ import { DocCode } from '../DocCode'
 import { noComment } from './utils'
 
 interface LanguageSDKProps {
+  /** API spec */
   api: ApiModel
+  /** An SDK method */
   method?: IMethod
+  /** An SDK type */
   type?: IType
 }
 
+/**
+ * Given a method or a type, it renders its SDK declaration in all supported languages.
+ */
 export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
   const tabs = useTabs()
   const generators = {
     Kotlin: new KotlinGen(api),
     Python: new PythonGen(api),
     Swift: new SwiftGen(api),
-    Typescript: new TypescriptGen(api),
+    TypeScript: new TypescriptGen(api),
+    CSharp: new CSharpGen(api),
   }
-
-  const languageKey = () => (method ? method.name : type!.name)
 
   return (
     <Box py="large">
@@ -72,7 +78,7 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
       </SpaceVertical>
       <TabList {...tabs}>
         {Object.keys(generators).map((language) => (
-          <Tab key={`${languageKey()}.${language}`}>{language}</Tab>
+          <Tab key={language}>{language}</Tab>
         ))}
       </TabList>
       <TabPanels {...tabs} pt="0">
@@ -81,7 +87,7 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
             ? gen.declareMethod('', noComment(api, method))
             : gen.declareType('', type!)
           return (
-            <TabPanel key={`${languageKey()}.${language}`}>
+            <TabPanel key={language}>
               <DocCode language={language} code={code} />
             </TabPanel>
           )

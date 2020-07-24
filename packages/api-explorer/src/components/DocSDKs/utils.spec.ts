@@ -23,23 +23,14 @@
  SOFTWARE.
 
  */
-import { IApiModel, IMethod, Method } from '@looker/sdk-codegen'
-import * as OAS from 'openapi3-ts'
+import { api } from '../../test-data'
+import { noComment } from './utils'
 
-/**
- * Given a method create a copy and remove its description
- * @param spec An ApiModel instance
- * @param method An SDK method
- */
-export const noComment = (spec: IApiModel, method: IMethod): Method => {
-  const clone = new Method(
-    spec,
-    method.httpMethod,
-    method.endpoint,
-    method.schema as OAS.OperationObject,
-    method.params,
-    method.responses
-  )
-  clone.description = ''
-  return clone
-}
+describe('DocSDKs utils', () => {
+  test('noComment removes method comments', () => {
+    const original = api.methods.query
+    expect(original.description).not.toHaveLength(0)
+    const actual = noComment(api, original)
+    expect(actual.description).toHaveLength(0)
+  })
+})

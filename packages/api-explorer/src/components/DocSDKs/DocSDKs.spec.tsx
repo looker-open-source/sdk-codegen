@@ -23,23 +23,26 @@
  SOFTWARE.
 
  */
-import { IApiModel, IMethod, Method } from '@looker/sdk-codegen'
-import * as OAS from 'openapi3-ts'
+import React from 'react'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { screen } from '@testing-library/react'
 
-/**
- * Given a method create a copy and remove its description
- * @param spec An ApiModel instance
- * @param method An SDK method
- */
-export const noComment = (spec: IApiModel, method: IMethod): Method => {
-  const clone = new Method(
-    spec,
-    method.httpMethod,
-    method.endpoint,
-    method.schema as OAS.OperationObject,
-    method.params,
-    method.responses
+import { api } from '../../test-data'
+import { DocSDKs } from './DocSDKs'
+
+describe('DocSDKs', () => {
+  test.each([
+    ['method', { method: api.methods.run_look }],
+    ['type', { type: api.types.Look }],
+  ])(
+    'it renders an SDK %s declaration for all supported languages',
+    (_, props) => {
+      renderWithTheme(<DocSDKs api={api} {...props} />)
+      expect(
+        screen.getAllByRole('button', {
+          name: /Kotlin|Python|Swift|TypeScript|CSharp/,
+        })
+      ).toHaveLength(5)
+    }
   )
-  clone.description = ''
-  return clone
-}
+})
