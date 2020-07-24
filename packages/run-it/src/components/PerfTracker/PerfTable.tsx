@@ -23,7 +23,34 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { MethodScene } from './MethodScene'
-export { TypeScene } from './TypeScene'
-export { TagScene } from './TagScene'
+import React, { FC } from 'react'
+import { ActionList, ActionListColumns } from '@looker/components'
+
+import { LoadTimes } from './perfUtils'
+import { createTableRows } from './perfTableUtils'
+
+interface PerfTableProps {
+  /** An array defining the table header */
+  columns: ActionListColumns
+  /** An array of performance load times */
+  data: LoadTimes[]
+  /** A handler for sorting data by a column */
+  onSort: (id: string, sortDirection: 'asc' | 'desc') => void
+  /** A row select action handler */
+  onSelect: (item: LoadTimes) => void
+}
+
+/**
+ * Creates a sortable table from an array of performance load times. Each row corresponds to a resource and clicking it
+ * generates its performance chart.
+ */
+export const PerfTable: FC<PerfTableProps> = ({
+  columns,
+  data,
+  onSort,
+  onSelect,
+}) => (
+  <ActionList onSort={onSort} columns={columns}>
+    {createTableRows(data, onSelect)}
+  </ActionList>
+)

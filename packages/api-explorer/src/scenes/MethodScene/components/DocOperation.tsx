@@ -26,7 +26,7 @@
 import React, { FC } from 'react'
 import { IMethod } from '@looker/sdk-codegen'
 import { Code, Flex, SpaceVertical, Text } from '@looker/components'
-import { MethodBadge } from '@looker/try-it'
+import { MethodBadge } from '@looker/run-it'
 
 import { DocPseudo } from '../../../components'
 

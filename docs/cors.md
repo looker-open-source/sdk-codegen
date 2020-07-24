@@ -14,8 +14,8 @@ Included in this repository are scripts and source code that hopefully reduce th
 
 - [OAuth application registration](/packages/api-explorer/scripts/register.ts) is a Node script that can create and update an OAuth app configuration
 - a sample OAuth application configuration file [`appconfig.json`](/packages/api-explorer/scripts/appconfig.json) has the configuration for the stand-alone [API Explorer](/packages/api-explorer) in this repository
-- a working [`readConfig` override](/packages/try-it/src/components/TryItSDK.ts) provides the values required by `OAuthSession`
-- a working React-based [OAuth handler](/packages/api-explorer/src/scenes/OAuthScene) processes OAuth authentications and "logs in" the SDK
+- a working [`readConfig` override](/packages/run-it/src/utils/RunItSDK.ts) provides the values required by `OAuthSession`
+- a working React-based [OAuth handler](/packages/run-it/src/scenes/OAuthScene) processes OAuth authentications and "logs in" the SDK
 
 ## SDK support
 
@@ -29,7 +29,7 @@ Because the OAuth workflow redirects the browser page to the Looker instance to 
 - `looker_url` is the url of the Looker application server, typically on port `9999` and **not** the API server, typically on port `19999`.
 - `redirect_uri` is the web application page that receives OAuth responses from the looker server, and **must match the `redirect_uri` used for the OAuth application registration**.
 
-The code below is from the [TryIt readConfig() override](/packages/try-it/src/components/TryItSDK.ts):
+The code below is from the [RunIt readConfig() override](/packages/run-it/src/utils/RunItSDK.ts):
 
 ```ts
   readConfig(_section?: string): IApiSection {
@@ -79,6 +79,6 @@ Therefore, `OAuthSession.login()` has three different branches:
 
 Because the OAuth `code` is retrieved from the current browser url, the final `OAuthSession.login()` must be called directly from the `redirect_uri` page.
 
-[OAuthScene.tsx](/packages/api-explorer/src/scenes/OAuthScene/OAuthScene.tsx) shows how the `returnUrl` can be captured and used to go back to the original browser location requiring authentication.
+[OAuthScene.tsx](/packages/run-it/src/scenes/OAuthScene/OAuthScene.tsx) shows how the `returnUrl` can be captured and used to go back to the original browser location requiring authentication.
 
 **NOTE**: `OAuthSession.activeToken` is **not** saved in `sessionStorage` so it will disappear if the browser page reloads. That's why `history.push()` is used to relocate the browser page for the React application. The `returnUrl` in `sessionStorage` is a relative URI for this same reason.

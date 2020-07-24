@@ -897,7 +897,7 @@ describe('sdkModels', () => {
       it('search for word', () => {
         let actual = apiTestModel.search('\\bdashboard\\b', modelAndTypeNames)
         let methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(6)
+        expect(Object.entries(methods).length).toEqual(18)
         expect(Object.entries(actual.types).length).toEqual(1)
         actual = apiTestModel.search('\\bdashboardbase\\b', modelAndTypeNames)
         methods = allMethods(actual.tags)
@@ -933,7 +933,8 @@ describe('sdkModels', () => {
 
       it('just model names', () => {
         const actual = apiTestModel.search('\\bdashboard\\b', modelNames)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(1)
+        const methods = allMethods(actual.tags)
+        expect(Object.entries(methods).length).toEqual(16)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
 

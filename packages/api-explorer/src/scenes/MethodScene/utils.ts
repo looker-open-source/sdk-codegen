@@ -34,7 +34,7 @@ import {
   IType,
   IMethod,
 } from '@looker/sdk-codegen'
-import { TryItInput } from '@looker/try-it'
+import { RunItInput } from '@looker/run-it'
 
 // TODO: use potential equivalent from sdk-codegen, confirm formats
 export const getTypeDefault = (type: string) => {
@@ -99,7 +99,7 @@ const createSampleBody = (spec: IApiModel, type: IType) => {
 export const createInputs = (
   spec: IApiModel,
   method: IMethod
-): TryItInput[] => {
+): RunItInput[] => {
   return method.allParams.map((param) => ({
     name: param.name,
     location: param.location,

@@ -27,7 +27,7 @@
 import React, { FC } from 'react'
 import { Space, Text } from '@looker/components'
 import { useParams } from 'react-router-dom'
-import { TryIt, TryItCallback, TryItHttpMethod } from '@looker/try-it'
+import { RunIt, RunItCallback, RunItHttpMethod } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 import { Looker40SDK } from '@looker/sdk/lib/browser'
 
@@ -45,7 +45,7 @@ import { createInputs } from './utils'
 
 interface DocMethodProps {
   api: ApiModel
-  tryItCallback?: TryItCallback
+  runItCallback?: RunItCallback
   sdk?: Looker40SDK
 }
 
@@ -56,7 +56,7 @@ interface DocMethodParams {
 
 export const MethodScene: FC<DocMethodProps> = ({
   api,
-  tryItCallback,
+  runItCallback,
   sdk,
 }) => {
   const { methodName, specKey } = useParams<DocMethodParams>()
@@ -81,12 +81,12 @@ export const MethodScene: FC<DocMethodProps> = ({
         </Space>
       )}
       {method.responses && <DocResponse responses={method.responses} />}
-      <TryIt
+      <RunIt
         specKey={specKey}
         inputs={createInputs(api, method)}
-        httpMethod={method.httpMethod as TryItHttpMethod}
+        httpMethod={method.httpMethod as RunItHttpMethod}
         endpoint={method.endpoint}
-        tryItCallback={tryItCallback}
+        tryItCallback={runItCallback}
         sdk={sdk}
       />
     </>

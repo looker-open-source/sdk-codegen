@@ -23,7 +23,14 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { MethodScene } from './MethodScene'
-export { TypeScene } from './TypeScene'
-export { TagScene } from './TagScene'
+
+export { ConfigDialog } from './ConfigDialog'
+export { ConfigForm } from './ConfigForm'
+export {
+  getStorage,
+  setStorage,
+  removeStorage,
+  validateUrl,
+  validLocation,
+  RunItConfigKey,
+} from './configUtils'

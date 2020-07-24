@@ -23,7 +23,9 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { MethodScene } from './MethodScene'
-export { TypeScene } from './TypeScene'
-export { TagScene } from './TagScene'
+export { runItSDK, sdkNeedsConfig, RunItSettings } from './RunItSDK'
+export {
+  createRequestParams,
+  defaultRunItCallback,
+  pathify,
+} from './requestUtils'

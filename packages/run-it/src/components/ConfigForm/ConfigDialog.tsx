@@ -23,7 +23,41 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { MethodScene } from './MethodScene'
-export { TypeScene } from './TypeScene'
-export { TagScene } from './TagScene'
+
+import React, { Dispatch, FC } from 'react'
+import {
+  DialogManager,
+  DialogContent,
+  Icon,
+  IconNames,
+  useToggle,
+} from '@looker/components'
+import { ConfigForm } from './ConfigForm'
+
+interface ConfigDialogProps {
+  /** Icon to use for config dialog */
+  icon?: IconNames
+  /** A set state callback fn used to set a hasConfig flag indicating whether OAuth config details are present */
+  setHasConfig?: Dispatch<boolean>
+}
+
+export const ConfigDialog: FC<ConfigDialogProps> = ({
+  icon = 'GearOutline',
+  setHasConfig,
+}) => {
+  const { value, setOff } = useToggle()
+  return (
+    <DialogManager
+      isOpen={value}
+      onClose={() => setOff()}
+      content={
+        <DialogContent>
+          <ConfigForm setHasConfig={setHasConfig} />
+        </DialogContent>
+      }
+      maxWidth={['90vw', '60vw', '500px', '800px']}
+    >
+      <Icon name={icon} />
+    </DialogManager>
+  )
+}

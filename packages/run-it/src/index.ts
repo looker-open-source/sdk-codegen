@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { MethodScene } from './MethodScene'
-export { TypeScene } from './TypeScene'
-export { TagScene } from './TagScene'
+
+export { RunIt, RunItInput, RunItCallback, RunItHttpMethod } from './RunIt'
+export { pathify, runItSDK, RunItSettings } from './utils'
+export { MethodBadge } from './components'
+export { OAuthScene } from './scenes'
