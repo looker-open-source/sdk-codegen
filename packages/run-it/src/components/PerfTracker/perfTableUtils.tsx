@@ -106,6 +106,9 @@ interface MetricProps {
   description: string
 }
 
+/**
+ * Renders a metric with its description in a tooltip
+ */
 const Metric: FC<MetricProps> = ({ value, description }) => (
   <Tooltip placement="right" textAlign="left" content={<>{description}</>}>
     <span>{value}</span>
