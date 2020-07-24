@@ -27,6 +27,7 @@
 import React, { FC, useContext } from 'react'
 import AceEditor from 'react-ace'
 
+import { findGenerator } from '@looker/sdk-codegen'
 import { SearchContext } from '../../context/search'
 import { highlightSourceCode } from './utils'
 
@@ -61,6 +62,8 @@ export const DocCode: FC<DocCodeProps> = ({
   fontSize = 16,
   width = 'auto',
 }) => {
+  const gen = findGenerator(language)
+  language = gen ? gen.language.toLocaleLowerCase() : json
   const {
     searchSettings: { pattern },
   } = useContext(SearchContext)
@@ -68,7 +71,7 @@ export const DocCode: FC<DocCodeProps> = ({
 
   return (
     <AceEditor
-      mode={language ? language.toLowerCase() : 'json'}
+      mode={language}
       name={language}
       fontSize={fontSize}
       readOnly={true}

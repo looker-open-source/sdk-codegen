@@ -26,93 +26,13 @@
 
 import config from 'config'
 import {
-  PythonGen,
-  ICodeGen,
   ApiModel,
+  codeGenerators,
+  getCodeGenerator,
+  ICodeGen,
   IVersionInfo,
-  SwiftGen,
-  KotlinGen,
-  TypescriptGen,
-  CSharpGen,
 } from '@looker/sdk-codegen'
 import { quit } from './nodeUtils'
-
-export interface IGeneratorSpec {
-  /** name of language SDK to generate */
-  language: string
-  /** path name for legacy generator output. Defaults to language */
-  path?: string
-  /** code generator constructor */
-  factory?: (api: ApiModel, versions?: IVersionInfo) => ICodeGen
-  /** options for the legacy code generator */
-  options?: string
-  /** name of the legacy language generator */
-  legacy?: string // legacy language tag
-}
-
-// To disable generation of any language specification, you can just comment it out
-export const Languages: Array<IGeneratorSpec> = [
-  {
-    factory: (api: ApiModel, versions?: IVersionInfo) =>
-      new CSharpGen(api, versions),
-    language: 'csharp',
-    legacy: 'csharp',
-    options: '-papiPackage=Looker -ppackageName=looker',
-  },
-  {
-    factory: undefined,
-    language: 'go',
-    legacy: 'go',
-    options: '-papiPackage=Looker -ppackageName=looker',
-  },
-  {
-    factory: (api: ApiModel, versions?: IVersionInfo) =>
-      new KotlinGen(api, versions),
-    language: 'kotlin',
-  },
-  {
-    factory: (api: ApiModel, versions?: IVersionInfo) =>
-      new SwiftGen(api, versions),
-    language: 'swift',
-  },
-  // {
-  //   language: 'php',
-  //   legacy: 'php',
-  //   options: '-papiPackage=Looker -ppackageName=looker'
-  // },
-  {
-    factory: (api: ApiModel, versions?: IVersionInfo) =>
-      new PythonGen(api, versions),
-    language: 'python',
-  },
-  {
-    factory: (api: ApiModel, versions?: IVersionInfo) =>
-      new TypescriptGen(api, versions),
-    language: 'typescript',
-  },
-  // {
-  //   language: 'r',
-  //   legacy: 'r'
-  //   options: '-papiPackage=Looker -ppackageName=looker'
-  // },
-  // {
-  //   language: 'ruby',
-  //   options: '-papiPackage=Looker -ppackageName=looker'
-  // },
-  // {
-  //   language: 'rust',
-  //   options: '-papiPackage=Looker -ppackageName=looker'
-  // },
-  // {
-  //   language: 'typescript-node',
-  //   path: 'ts_node',
-  //   options: '-papiPackage=Looker -ppackageName=looker'
-  // },
-  // {
-  //   language: 'typescript-fetch',
-  //   options: '-papiPackage=looker -ppackageName=looker'
-  // },
-]
 
 /**
  * constructs a language generator by name
@@ -121,48 +41,37 @@ export const Languages: Array<IGeneratorSpec> = [
  *
  * See the `config` folder in this package for more sample config files
  *
- * @param format name of language to generate
+ * @param language name or alias of code language to generate
  * @param api API specification
  * @param versions version info to use for stamping the agentTag
  * @returns either an ICodeGen implementation or undefined
  */
-export const getFormatter = (
-  format: string,
+export const getGenerator = (
+  language: string,
   api: ApiModel,
   versions?: IVersionInfo
 ): ICodeGen | undefined => {
-  format = format.toLocaleLowerCase()
-  // Convenience alias
-  if (format === 'c#') format = 'csharp'
-  const generators = Languages.filter((x) => x.factory !== undefined)
-  const language = generators.find(
-    (item) => item.language.toLowerCase() === format.toLowerCase()
-  )
-  if (!language) {
-    const langs = generators.map((item) => item.language)
+  const gen = getCodeGenerator(language, api, versions)
+  if (!gen) {
+    const langs = codeGenerators.map((item) => item.language)
     quit(
-      `"${format}" is not a recognized language. Supported languages are: all, ${langs.join(
+      `"${language}" is not a recognized language. Supported languages are: all, ${langs.join(
         ', '
       )}`
     )
+    // TS doesn't know quit() exits the program
+    return undefined
   }
-  if (language && language.factory) {
-    const gen = language.factory(api, versions)
-    if (config.has(format)) {
-      const overrides = config.get<ICodeGen>(format)
-      // Spread operator loses class functions
-      // gen = { ...gen, ...overrides }
-      Object.keys(overrides).forEach((key) => {
-        if (key in gen) {
-          gen[key] = overrides[key]
-        }
-      })
-    }
-    return gen
-  }
-  return undefined
-}
 
-export const legacyLanguages = (): Array<IGeneratorSpec> => {
-  return Languages.filter((x) => !!x.legacy)
+  if (config.has(language)) {
+    const overrides = config.get<ICodeGen>(language)
+    // Spread operator loses class functions
+    // gen = { ...gen, ...overrides }
+    Object.keys(overrides).forEach((key) => {
+      if (key in gen) {
+        gen[key] = overrides[key]
+      }
+    })
+  }
+  return gen
 }
