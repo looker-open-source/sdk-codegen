@@ -134,6 +134,7 @@ const urlColumn = (value: string) => {
     </>
   )
 }
+
 /**
  * Generates PerfTable rows from an array of resource load times
  * @param data A array of resource load times
