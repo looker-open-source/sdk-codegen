@@ -124,7 +124,7 @@ class OAuthSession(override val apiSettings: ApiSettings, override val transport
 
     override fun getToken(): AuthToken {
         if (!this.isAuthenticated()) {
-            if (this.activeToken().refreshToken?.isNotEmpty()!!) {
+            if (this.activeToken().refreshToken?.isNotEmpty() == true) {
                 val config = this.apiSettings.readConfig()
                 // fetch the token
                 this.requestToken(mapOf(

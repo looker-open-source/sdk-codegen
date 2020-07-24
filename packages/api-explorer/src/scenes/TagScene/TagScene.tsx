@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { ApiModel } from '@looker/sdk-codegen'
 import { useParams, NavLink, useHistory } from 'react-router-dom'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
@@ -48,11 +48,16 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
     history.push('/methods')
   }
   const methods = api.tags[methodTag]
-  const tag = Object.values(api.spec?.tags!).find(
+  const tag = Object.values(api.spec.tags!).find(
     (tag) => tag.name === methodTag
   )!
   const operations = getOperations(methods)
   const [value, setValue] = useState('ALL')
+
+  useEffect(() => {
+    /** Reset ButtonToggle value on route change */
+    setValue('ALL')
+  }, [methodTag])
 
   return (
     <>

@@ -17,10 +17,11 @@
   },
   "scripts": {
     "test": "jest",
+    "build": "tsc && webpack --config webpack.prod.config.js",
     "develop": "webpack-dev-server --https --disable-host-check --config webpack.dev.config.js",
-    "package": "tsc && webpack --config webpack.prod.config.js",
     "docs": "typedoc --mode file --out docs",
-    "register": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' scripts/register.ts"
+    "register": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' scripts/register.ts",
+    "watch": "yarn lerna exec --scope @looker/api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "devDependencies": {
     "@looker/components-test-utils": "^0.7.36",

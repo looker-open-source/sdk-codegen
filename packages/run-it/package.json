@@ -20,7 +20,8 @@
   },
   "scripts": {
     "play": "webpack-dev-server --https --disable-host-check --config webpack.dev.config.js --entry ./playground/index.tsx",
-    "test": "jest"
+    "test": "jest",
+    "watch": "yarn lerna exec --scope @looker/run-it --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "devDependencies": {
     "@looker/components-test-utils": "^0.7.36",

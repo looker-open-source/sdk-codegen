@@ -23,15 +23,26 @@
  SOFTWARE.
 
  */
-import { IMethod } from '@looker/sdk-codegen'
-import { clone } from 'lodash'
+import React from 'react'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { screen } from '@testing-library/react'
 
-/**
- * Given a method create a copy and remove its description
- * @param method An SDK method
- */
-export const noComment = (method: IMethod): IMethod => {
-  const copy = clone(method)
-  copy.description = ''
-  return copy
-}
+import { api } from '../../test-data'
+import { DocSDKs } from './DocSDKs'
+
+describe('DocSDKs', () => {
+  test.each([
+    ['method', { method: api.methods.run_look }],
+    ['type', { type: api.types.Look }],
+  ])(
+    'it renders an SDK %s declaration for all supported languages',
+    (_, props) => {
+      renderWithTheme(<DocSDKs api={api} {...props} />)
+      expect(
+        screen.getAllByRole('button', {
+          name: /Kotlin|Python|Swift|TypeScript|CSharp/,
+        })
+      ).toHaveLength(5)
+    }
+  )
+})
