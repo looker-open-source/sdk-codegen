@@ -23,23 +23,15 @@
  SOFTWARE.
 
  */
-import { IApiModel, IMethod, Method } from '@looker/sdk-codegen'
-import * as OAS from 'openapi3-ts'
+import { IMethod } from '@looker/sdk-codegen'
+import { clone } from 'lodash'
 
 /**
  * Given a method create a copy and remove its description
- * @param spec An ApiModel instance
  * @param method An SDK method
  */
-export const noComment = (spec: IApiModel, method: IMethod): Method => {
-  const clone = new Method(
-    spec,
-    method.httpMethod,
-    method.endpoint,
-    method.schema as OAS.OperationObject,
-    method.params,
-    method.responses
-  )
-  clone.description = ''
-  return clone
+export const noComment = (method: IMethod): IMethod => {
+  const copy = clone(method)
+  copy.description = ''
+  return copy
 }

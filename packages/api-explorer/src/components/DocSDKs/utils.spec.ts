@@ -30,7 +30,7 @@ describe('DocSDKs utils', () => {
   test('noComment removes method comments', () => {
     const original = api.methods.query
     expect(original.description).not.toHaveLength(0)
-    const actual = noComment(api, original)
+    const actual = noComment(original)
     expect(actual.description).toHaveLength(0)
   })
 })

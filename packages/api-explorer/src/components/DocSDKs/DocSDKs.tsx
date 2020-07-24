@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import {
   Box,
   SpaceVertical,
@@ -70,6 +70,7 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
     TypeScript: new TypescriptGen(api),
     CSharp: new CSharpGen(api),
   }
+  const [item] = useState(method ? noComment(method) : type!)
 
   return (
     <Box py="large">
@@ -84,8 +85,8 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
       <TabPanels {...tabs} pt="0">
         {Object.entries(generators).map(([language, gen]) => {
           const code = method
-            ? gen.declareMethod('', noComment(api, method))
-            : gen.declareType('', type!)
+            ? gen.declareMethod('', item as IMethod)
+            : gen.declareType('', item as IType)
           return (
             <TabPanel key={language}>
               <DocCode language={language} code={code} />
