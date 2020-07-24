@@ -33,6 +33,8 @@ import { highlightSourceCode } from './utils'
 // TODO Use webpack resolver instead.
 /* eslint-disable  @typescript-eslint/ban-ts-ignore,@typescript-eslint/no-unused-vars,@typescript-eslint/no-var-requires,import/no-extraneous-dependencies */
 // @ts-ignore
+const csharp = require('ace-builds/src-noconflict/mode-csharp')
+// @ts-ignore
 const python = require('ace-builds/src-noconflict/mode-python')
 // @ts-ignore
 const typescript = require('ace-builds/src-noconflict/mode-typescript')

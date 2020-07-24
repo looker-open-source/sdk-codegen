@@ -28,7 +28,7 @@
 
 import * as fs from 'fs'
 import { danger, log } from '@looker/sdk-codegen-utils'
-import { IVersionInfo, ICodeGen } from '@looker/sdk-codegen'
+import { IVersionInfo, ICodeGen, codeGenerators } from '@looker/sdk-codegen'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import {
   fetchLookerVersion,
@@ -41,9 +41,9 @@ import {
   StreamGenerator,
   TypeGenerator,
 } from './sdkGenerator'
-import { getFormatter, Languages } from './languages'
 import { FilesFormatter } from './reformatter'
 import { isDirSync, quit } from './nodeUtils'
+import { getGenerator } from './languages'
 
 const apiVersions = (props: any) => {
   const versions = props.api_versions ?? '3.1,4.0'
@@ -75,9 +75,9 @@ const writeFile = (fileName: string, content: string): string => {
 }
 ;(async () => {
   const args = process.argv.slice(2)
-  let languages = Languages.filter((l) => l.factory !== undefined).map(
-    (l) => l.language
-  )
+  let languages = codeGenerators
+    .filter((l) => l.factory !== undefined)
+    .map((l) => l.language)
   if (args.length > 0) {
     if (args.toString().toLowerCase() !== 'all') {
       languages = []
@@ -126,7 +126,7 @@ const writeFile = (fileName: string, content: string): string => {
         const oasFile = await logConvertSpec(name, p, lookerVersions)
         log(`Using specification ${oasFile} for code generation`)
         const apiModel = specFromFile(oasFile)
-        const gen = getFormatter(language, apiModel, versions)
+        const gen = getGenerator(language, apiModel, versions)
         if (!gen) {
           danger(`${language} does not have a code generator defined`)
           continue

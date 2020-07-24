@@ -27,7 +27,10 @@
  */
 
 import { log } from '@looker/sdk-codegen-utils'
-import { IGeneratorSpec as LanguageSpec, legacyLanguages } from './languages'
+import {
+  IGeneratorSpec as LanguageSpec,
+  legacyLanguages,
+} from '@looker/sdk-codegen'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { quit, run } from './nodeUtils'
 import { fetchLookerVersions, logConvertSpec } from './fetchSpec'

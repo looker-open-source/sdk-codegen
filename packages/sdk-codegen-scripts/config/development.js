@@ -39,7 +39,7 @@ module.exports = {
 
   or, use NODE_CONFIG as described in https://github.com/lorenwest/node-config/wiki/Command-Line-Overrides
 
-  Overrides must use the language name from `languages.ts` as the key
+  Overrides must use the language name from `/packages/sdk-codegen/src/codeGenerators.ts` as the key
 
   Only top-level properties as implemented in the relevant code generator can be changed.
   See ICodegen for the standard list.
@@ -49,7 +49,7 @@ module.exports = {
   The `typescript` section declared below is an example that uses exactly the same values as the default typescript
   generator to demonstrate how generation attributes can be overridden after the generator is initialized.
 
-  getFormatter() in languages.ts processes these configuration values
+  getGenerator() in `../src/languages.ts` processes these configuration values
 
   */
   typescript: {

@@ -30,27 +30,20 @@ import {
   CodeGen,
 } from '@looker/sdk-codegen'
 import { clone } from 'lodash'
-import { Languages } from '@looker/sdk-codegen-scripts'
-
-enum languageMap {
-  typescript = 'TypeScript',
-  kotlin = 'Kotlin',
-  python = 'Python',
-  csharp = 'C#',
-}
+import { codeGenerators } from '@looker/sdk-codegen'
 
 /**
  * Returns a collection of generators for all supported (non legacy) languages
  * @param api Api spec
  */
 export const getGenerators = (api: ApiModel): KeyedCollection<CodeGen> => {
-  const generators = {}
-  Languages.filter((x) => x.factory !== undefined && !!x.legacy).forEach(
-    (gen) => {
-      languageMap[gen.language] = gen.factory!(api)
-    }
-  )
-  return generators
+  const codeGens = {}
+  codeGenerators
+    .filter((x) => x.factory !== undefined)
+    .forEach((gen) => {
+      codeGens[gen.label || gen.language] = gen.factory!(api)
+    })
+  return codeGens
 }
 
 /**
