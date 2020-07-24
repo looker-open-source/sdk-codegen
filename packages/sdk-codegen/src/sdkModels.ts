@@ -277,7 +277,7 @@ export const SearchAll: SearchCriteria = new Set([
 export const CriteriaToSet = (criteria: string[]): SearchCriteria => {
   const result: SearchCriteria = new Set()
   criteria.forEach((name) =>
-    result.add(SearchCriterion[name.toLowerCase() as SearchCriterionTerm])
+    result.add(SearchCriterion[name as SearchCriterionTerm])
   )
   return result
 }
@@ -1734,7 +1734,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   tags: TagList = {}
 
   constructor(public readonly spec: OAS.OpenAPIObject) {
-    [
+    ;[
       'string',
       'integer',
       'int64',
@@ -2099,14 +2099,12 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   private load(): void {
     if (this.spec?.components?.schemas) {
-      Object.entries(this.spec.components.schemas).forEach(
-        ([name, schema]) => {
-          const t = new Type(schema, name)
-          // types[n] and corresponding refs[ref] MUST reference the same type instance!
-          this.types[name] = t
-          this.refs[`#/components/schemas/${name}`] = t
-        }
-      )
+      Object.entries(this.spec.components.schemas).forEach(([name, schema]) => {
+        const t = new Type(schema, name)
+        // types[n] and corresponding refs[ref] MUST reference the same type instance!
+        this.types[name] = t
+        this.refs[`#/components/schemas/${name}`] = t
+      })
       Object.keys(this.spec.components.schemas).forEach((name) => {
         ;(this.resolveType(name) as Type).load(this)
       })
