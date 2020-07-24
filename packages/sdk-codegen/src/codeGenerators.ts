@@ -51,35 +51,6 @@ export interface IGeneratorSpec {
 export const Generators: Array<IGeneratorSpec> = [
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>
-      new CSharpGen(api, versions),
-    language: 'csharp',
-    label: 'C#',
-    legacy: 'csharp',
-    options: '-papiPackage=Looker -ppackageName=looker',
-  },
-  {
-    factory: undefined,
-    language: 'Go',
-    legacy: 'go',
-    options: '-papiPackage=Looker -ppackageName=looker',
-  },
-  {
-    factory: (api: ApiModel, versions?: IVersionInfo) =>
-      new KotlinGen(api, versions),
-    language: 'Kotlin',
-  },
-  {
-    factory: (api: ApiModel, versions?: IVersionInfo) =>
-      new SwiftGen(api, versions),
-    language: 'Swift',
-  },
-  // {
-  //   language: 'php',
-  //   legacy: 'php',
-  //   options: '-papiPackage=Looker -ppackageName=looker'
-  // },
-  {
-    factory: (api: ApiModel, versions?: IVersionInfo) =>
       new PythonGen(api, versions),
     language: 'Python',
   },
@@ -88,6 +59,35 @@ export const Generators: Array<IGeneratorSpec> = [
       new TypescriptGen(api, versions),
     language: 'Typescript',
   },
+  {
+    factory: (api: ApiModel, versions?: IVersionInfo) =>
+      new KotlinGen(api, versions),
+    language: 'Kotlin',
+  },
+  {
+    factory: (api: ApiModel, versions?: IVersionInfo) =>
+      new CSharpGen(api, versions),
+    language: 'csharp',
+    label: 'C#',
+    legacy: 'csharp',
+    options: '-papiPackage=Looker -ppackageName=looker',
+  },
+  {
+    factory: (api: ApiModel, versions?: IVersionInfo) =>
+      new SwiftGen(api, versions),
+    language: 'Swift',
+  },
+  {
+    factory: undefined,
+    language: 'Go',
+    legacy: 'go',
+    options: '-papiPackage=Looker -ppackageName=looker',
+  },
+  // {
+  //   language: 'php',
+  //   legacy: 'php',
+  //   options: '-papiPackage=Looker -ppackageName=looker'
+  // },
   // {
   //   language: 'R',
   //   legacy: 'r'

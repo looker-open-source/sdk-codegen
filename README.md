@@ -183,7 +183,7 @@ This command will start a local web server that allows you to browse and search 
 
 To generate a language currently not supported by Looker's SDK code generator with the OpenAPI generator:
 
-- configure the desired language in [`codeGenerators.ts`](packages/sdk-codegen/src/codeGenerators.ts). Currently, only C# is defined for the legacy language generator, and we now have a prototype Look# SDK that can be used instead of the legacy C# generator.
+- configure the desired language in [`codeGenerators.ts`](packages/sdk-codegen/src/codeGenerators.ts). Currently, only Go and C# have legacy language generation configured, and we now have a prototype Look# SDK that can be used instead of the legacy C# generator.
 
 - the legacy generator defaults to using the API 4.0 specification, which is more accurate for strongly typed languages. To use API 3.1, put `api_version=3.1` in the `Looker` section of your `looker.ini`
 
