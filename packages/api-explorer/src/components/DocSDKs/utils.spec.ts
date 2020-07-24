@@ -23,15 +23,14 @@
  SOFTWARE.
 
  */
-import { IMethod } from '@looker/sdk-codegen'
-import { clone } from 'lodash'
+import { api } from '../../test-data'
+import { noComment } from './utils'
 
-/**
- * Given a method create a copy and remove its description
- * @param method An SDK method
- */
-export const noComment = (method: IMethod): IMethod => {
-  const copy = clone(method)
-  copy.description = ''
-  return copy
-}
+describe('DocSDKs utils', () => {
+  test('noComment removes method comments', () => {
+    const original = api.methods.query
+    expect(original.description).not.toHaveLength(0)
+    const actual = noComment(original)
+    expect(actual.description).toHaveLength(0)
+  })
+})
