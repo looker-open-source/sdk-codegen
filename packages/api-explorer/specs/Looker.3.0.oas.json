@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "version": "3.0.0",
-    "x-looker-release-version": "7.9.0",
+    "x-looker-release-version": "7.13.0",
     "title": "Looker API 3.0 (Legacy) Reference",
     "description": "### 3.0 Legacy API\n\nLooker API 3.0 is stable and will continue to be supported for the foreseeable future.\nNo new features will be added to API 3.0; all new development (Looker features and\ndev tools) will appear in API 4.0 only.\n\n",
     "contact": {
@@ -918,7 +918,7 @@
         "tags": ["Query"],
         "operationId": "run_url_encoded_query",
         "summary": "Run Url Encoded Query",
-        "description": "### Run an URL encoded query.\n\nThis requires the caller to encode the specifiers for the query into the URL query part using\nLooker-specific syntax as explained below.\n\nGenerally, you would want to use one of the methods that takes the parameters as json in the POST body\nfor creating and/or running queries. This method exists for cases where one really needs to encode the\nparameters into the URL of a single 'GET' request. This matches the way that the Looker UI formats\n'explore' URLs etc.\n\nThe parameters here are very similar to the json body formatting except that the filter syntax is\ntricky. Unfortunately, this format makes this method not currently callible via the 'Try it out!' button\nin this documentation page. But, this is callable  when creating URLs manually or when using the Looker SDK.\n\nHere is an example inline query URL:\n\n```\nhttps://looker.mycompany.com:19999/api/3.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles\n```\n\nWhen invoking this endpoint with the Ruby SDK, pass the query parameter parts as a hash. The hash to match the above would look like:\n\n```ruby\nquery_params =\n{\n  :fields => \"category.name,inventory_items.days_in_inventory_tier,products.count\",\n  :\"f[category.name]\" => \"socks\",\n  :sorts => \"products.count desc 0\",\n  :limit => \"500\",\n  :query_timezone => \"America/Los_Angeles\"\n}\nresponse = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)\n\n```\n\nAgain, it is generally easier to use the variant of this method that passes the full query in the POST body.\nThis method is available for cases where other alternatives won't fit the need.\n\nSupported formats:\n\n| result_format | Description\n| :-----------: | :--- |\n| json | Plain json\n| json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query\n| csv | Comma separated values with a header\n| txt | Tab separated values with a header\n| html | Simple html\n| md | Simple markdown\n| xlsx | MS Excel spreadsheet\n| sql | Returns the generated SQL rather than running the query\n| png | A PNG image of the visualization of the query\n| jpg | A JPG image of the visualization of the query\n\n\n",
+        "description": "### Run an URL encoded query.\n\nThis requires the caller to encode the specifiers for the query into the URL query part using\nLooker-specific syntax as explained below.\n\nGenerally, you would want to use one of the methods that takes the parameters as json in the POST body\nfor creating and/or running queries. This method exists for cases where one really needs to encode the\nparameters into the URL of a single 'GET' request. This matches the way that the Looker UI formats\n'explore' URLs etc.\n\nThe parameters here are very similar to the json body formatting except that the filter syntax is\ntricky. Unfortunately, this format makes this method not currently callable via the 'Try it out!' button\nin this documentation page. But, this is callable when creating URLs manually or when using the Looker SDK.\n\nHere is an example inline query URL:\n\n```\nhttps://looker.mycompany.com:19999/api/3.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles\n```\n\nWhen invoking this endpoint with the Ruby SDK, pass the query parameter parts as a hash. The hash to match the above would look like:\n\n```ruby\nquery_params =\n{\n  :fields => \"category.name,inventory_items.days_in_inventory_tier,products.count\",\n  :\"f[category.name]\" => \"socks\",\n  :sorts => \"products.count desc 0\",\n  :limit => \"500\",\n  :query_timezone => \"America/Los_Angeles\"\n}\nresponse = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)\n\n```\n\nAgain, it is generally easier to use the variant of this method that passes the full query in the POST body.\nThis method is available for cases where other alternatives won't fit the need.\n\nSupported formats:\n\n| result_format | Description\n| :-----------: | :--- |\n| json | Plain json\n| json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query\n| csv | Comma separated values with a header\n| txt | Tab separated values with a header\n| html | Simple html\n| md | Simple markdown\n| xlsx | MS Excel spreadsheet\n| sql | Returns the generated SQL rather than running the query\n| png | A PNG image of the visualization of the query\n| jpg | A JPG image of the visualization of the query\n\n\n",
         "parameters": [
           {
             "name": "model_name",
@@ -15932,7 +15932,7 @@
       }
     }
   },
-  "servers": [{ "url": "https://localhost:19999/api/3.0" }],
+  "servers": [{ "url": "https://self-signed.looker.com:19999/api/3.0" }],
   "components": {
     "requestBodies": {
       "LookmlModel": {
@@ -16998,7 +16998,7 @@
           "permission_type": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": ["view", "edit"],
+            "enum": ["view", "edit"],
             "description": "Type of permission: \"view\" or \"edit\" Valid values are: \"view\", \"edit\".",
             "nullable": true
           },
@@ -19663,7 +19663,7 @@
             "type": "array",
             "items": { "type": "string" },
             "readOnly": true,
-            "x-looker-values": [
+            "enum": [
               "txt",
               "csv",
               "inline_json",
@@ -19685,7 +19685,7 @@
             "type": "array",
             "items": { "type": "string" },
             "readOnly": true,
-            "x-looker-values": ["cell", "query", "dashboard"],
+            "enum": ["cell", "query", "dashboard"],
             "description": "A list of action types the integration supports. Valid values are: \"cell\", \"query\", \"dashboard\".",
             "nullable": false
           },
@@ -19693,7 +19693,7 @@
             "type": "array",
             "items": { "type": "string" },
             "readOnly": true,
-            "x-looker-values": ["formatted", "unformatted"],
+            "enum": ["formatted", "unformatted"],
             "description": "A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: \"formatted\", \"unformatted\".",
             "nullable": false
           },
@@ -19701,7 +19701,7 @@
             "type": "array",
             "items": { "type": "string" },
             "readOnly": true,
-            "x-looker-values": ["apply", "noapply"],
+            "enum": ["apply", "noapply"],
             "description": "A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: \"apply\", \"noapply\".",
             "nullable": false
           },
@@ -19709,7 +19709,7 @@
             "type": "array",
             "items": { "type": "string" },
             "readOnly": true,
-            "x-looker-values": ["push", "url"],
+            "enum": ["push", "url"],
             "description": "A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: \"push\", \"url\".",
             "nullable": false
           },
@@ -21517,8 +21517,8 @@
           "align": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": ["left", "right"],
-            "description": "The appropriate horizontal text alignment the values of this field shoud be displayed in. Valid values are: \"left\", \"right\".",
+            "enum": ["left", "right"],
+            "description": "The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: \"left\", \"right\".",
             "nullable": false
           },
           "can_filter": {
@@ -21530,7 +21530,7 @@
           "category": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": ["parameter", "filter", "measure", "dimension"],
+            "enum": ["parameter", "filter", "measure", "dimension"],
             "description": "Field category Valid values are: \"parameter\", \"filter\", \"measure\", \"dimension\".",
             "nullable": true
           },
@@ -21576,7 +21576,7 @@
           "fill_style": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": ["enumeration", "range"],
+            "enum": ["enumeration", "range"],
             "description": "The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: \"enumeration\", \"range\".",
             "nullable": true
           },
@@ -21788,7 +21788,7 @@
             "type": "array",
             "items": { "type": "string" },
             "readOnly": true,
-            "x-looker-values": [
+            "enum": [
               "advanced_filter_string",
               "advanced_filter_number",
               "advanced_filter_datetime",
@@ -21829,7 +21829,7 @@
           "week_start_day": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": [
+            "enum": [
               "monday",
               "tuesday",
               "wednesday",
@@ -21871,17 +21871,18 @@
           "name": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": [
+            "enum": [
               "day",
               "hour",
               "minute",
               "second",
               "millisecond",
               "microsecond",
+              "week",
               "month",
               "year"
             ],
-            "description": "The type of time interval this field represents a grouping of. Valid values are: \"day\", \"hour\", \"minute\", \"second\", \"millisecond\", \"microsecond\", \"month\", \"year\".",
+            "description": "The type of time interval this field represents a grouping of. Valid values are: \"day\", \"hour\", \"minute\", \"second\", \"millisecond\", \"microsecond\", \"week\", \"month\", \"year\".",
             "nullable": false
           },
           "count": {
@@ -21952,7 +21953,7 @@
           "format": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": ["topojson", "vector_tile_region"],
+            "enum": ["topojson", "vector_tile_region"],
             "description": "Specifies the data format of the region information. Valid values are: \"topojson\", \"vector_tile_region\".",
             "nullable": false
           },
@@ -22863,7 +22864,7 @@
           },
           "git_application_server_http_scheme": {
             "type": "string",
-            "x-looker-values": ["http", "https"],
+            "enum": ["http", "https"],
             "description": "Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: \"http\", \"https\".",
             "nullable": true
           },
@@ -22881,18 +22882,13 @@
           },
           "pull_request_mode": {
             "type": "string",
-            "x-looker-values": ["off", "links", "recommended", "required"],
+            "enum": ["off", "links", "recommended", "required"],
             "description": "The git pull request policy for this project. Valid values are: \"off\", \"links\", \"recommended\", \"required\".",
             "nullable": false
           },
           "validation_required": {
             "type": "boolean",
             "description": "Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository",
-            "nullable": false
-          },
-          "folders_enabled": {
-            "type": "boolean",
-            "description": "If true, folders are enabled for this project",
             "nullable": false
           },
           "git_release_mgmt_enabled": {
@@ -23116,7 +23112,7 @@
           "dependency_status": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": [
+            "enum": [
               "lock_optional",
               "lock_required",
               "lock_error",
@@ -23312,7 +23308,7 @@
           },
           "result_format": {
             "type": "string",
-            "x-looker-values": [
+            "enum": [
               "inline_json",
               "json",
               "json_detail",
@@ -25218,27 +25214,6 @@
             "format": "uri",
             "readOnly": true,
             "description": "Url for swagger.json for this version",
-            "nullable": true
-          },
-          "openapi_url": {
-            "type": "string",
-            "format": "uri",
-            "readOnly": true,
-            "description": "Url for openapi.json for this version",
-            "nullable": true
-          },
-          "swagger_min_url": {
-            "type": "string",
-            "format": "uri",
-            "readOnly": true,
-            "description": "Url for minified swagger.json for this version",
-            "nullable": true
-          },
-          "openapi_min_url": {
-            "type": "string",
-            "format": "uri",
-            "readOnly": true,
-            "description": "Url for minified openapi.json for this version",
             "nullable": true
           }
         },
