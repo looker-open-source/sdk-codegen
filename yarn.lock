@@ -2146,6 +2146,17 @@
     styled-system "^5.1.5"
     uuid "^8.1.0"
 
+"@looker/design-tokens@0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-0.9.1.tgz#0770224beb30b02fa9f7ae3e75cf325e1e9968aa"
+  integrity sha512-Ql3OwsISumMWClpCC7xImQQST8MiLG+9H/Nbk/Kd7rvHU6ziKC6W9GIaZ3GUMzbesBm2iemzp4vRMERD7EAFwQ==
+  dependencies:
+    "@styled-system/props" "^5.1.5"
+    "@types/styled-system" "^5.1.9"
+    lodash "^4.17.15"
+    polished "^3.6.5"
+    styled-system "^5.1.5"
+
 "@looker/design-tokens@^0.9.6":
   version "0.9.6"
   resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-0.9.6.tgz#f53fc2b9d83c6fef362d78fe0d392050618679fe"
