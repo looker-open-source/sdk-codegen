@@ -93,6 +93,7 @@ export const MethodBadge = styled.div<MethodBadgeProps>`
 
   background: ${({ type, titleStatus, theme: { colors } }) =>
     titleStatus ? colors.ui1 : intentUIBlend(pickBadgeIntent(type), 1)};
+  border: 1px solid transparent;
   border-radius: ${({ theme: { radii } }) => radii.medium};
 
   /** NOTE: This is below minimum accessibility threshold font-size */
