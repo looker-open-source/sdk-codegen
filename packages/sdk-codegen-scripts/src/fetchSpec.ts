@@ -364,6 +364,7 @@ export const getVersionInfo = async (
   }
   return undefined
 }
+
 /**
  * Fetch (if needed) and convert a Swagger API specification to OpenAPI
  * @param {string} name base name of the target file
