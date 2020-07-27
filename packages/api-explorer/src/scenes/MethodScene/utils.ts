@@ -35,6 +35,7 @@ import {
   IMethod,
   IProperty,
   IMethodResponse,
+  KeyedCollection,
 } from '@looker/sdk-codegen'
 import { RunItInput } from '@looker/run-it'
 
@@ -124,56 +125,36 @@ export const createInputs = (spec: IApiModel, method: IMethod): RunItInput[] =>
   }))
 
 /**
- * Given a list of properties names, check if they exist in the source and copy them to the destination
- * @param source A source object
- * @param destination A destination object
- * @param propNames A list of property names
- */
-const conditionalAdd = (
-  source: object,
-  destination: object,
-  propNames: string[]
-) => {
-  for (const prop in propNames) {
-    if (prop in source && source[prop]) destination[prop] = source[prop]
-  }
-  return destination
-}
-
-/**
  * Omit unwanted properties from a given property object
  * @param val Property object
  */
-export const cleanProperty = (val: IProperty) => ({
-  name: val.name,
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  type: cleanType(val.type) as IType,
-  ...conditionalAdd(val, {}, [
-    'description',
-    'readOnly',
-    'required',
-    'nullable',
-    'deprecated',
-    'values',
-  ]),
-})
+const cleanProperty = (val: IProperty) => {
+  if (val.type.customType) {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    return cleanType(val.type).properties
+  }
+  return val.type.name
+}
+
+interface CleanType {
+  name: string
+  description: string
+  properties: KeyedCollection<any>
+}
 
 /**
  * Omit unwanted metadata from a given type object
  * @param val Type object
  */
-export const cleanType = (val: IType) => {
+const cleanType = (val: IType): CleanType => {
   const result = {
     name: val.name,
     description: val.description,
+    properties: {},
   }
   if (!isEmpty(val.properties)) {
-    // eslint-disable-next-line dot-notation
-    result['properties'] = {}
     Object.entries(val.properties).forEach(
-      ([name, property]) =>
-        // eslint-disable-next-line dot-notation
-        (result['properties'][name] = cleanProperty(property))
+      ([name, property]) => (result.properties[name] = cleanProperty(property))
     )
   }
   return result
@@ -189,8 +170,8 @@ export const copyAndCleanResponse = (val: IMethodResponse) => {
     case 'HashType':
     case 'DelimArrayType':
     case 'EnumType':
-      return cleanType(cloneDeep(val.type.elementType!))
+      return cleanType(cloneDeep(val.type.elementType!)).properties
     default:
-      return cleanType(cloneDeep(val.type))
+      return cleanType(cloneDeep(val.type)).properties
   }
 }
