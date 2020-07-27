@@ -104,8 +104,8 @@ const createBoolItem = (
  * @param required Form item's required flag
  * @param type Form item's type
  * @param placeholder Form item's placeholder
- * @param handleChange A callback function that updates parent's component state
- * when form item value changes
+ * @param handleChange A callback function that updates parent's component state when form item value changes
+ * @param requestContent A state object containing the values of all form items
  * @returns A form item
  */
 const createItem = (
@@ -114,7 +114,8 @@ const createItem = (
   required: boolean,
   type: string,
   placeholder: string,
-  handleChange: (e: BaseSyntheticEvent) => void
+  handleChange: (e: BaseSyntheticEvent) => void,
+  requestContent: RunItValues
 ) => (
   <div key={name}>
     <FieldText
@@ -124,6 +125,7 @@ const createItem = (
       required={required}
       placeholder={`${placeholder} ${description || name}`}
       type={inputTextType(type)}
+      value={name in requestContent ? requestContent[name] : ''}
       onChange={handleChange}
       width="100%"
     />
@@ -133,8 +135,10 @@ const createItem = (
 /**
  * Creates a simple form item
  * @param input An object describing the form item
- * @param handleChange A callback function for updating the parent component's
- * requestContent state with text/number/email/password item changes
+ * @param handleChange A callback function for updating the parent component's requestContent state with
+ * text/email/password item changes
+ * @param handleNumberChange A callback function for updating the parent component's requestContent state with number
+ * item changes
  * @param handleBoolChange A callback function for updating the parent
  * component's requestContent state with bool item changes
  * @param handleDateChange A callback function for updating the parent
@@ -168,7 +172,8 @@ export const createSimpleItem = (
         input.required,
         'number',
         '(number)',
-        handleNumberChange
+        handleNumberChange,
+        requestContent
       )
     case 'string':
     case 'hostname':
@@ -182,7 +187,8 @@ export const createSimpleItem = (
         input.required,
         'string',
         '(string)',
-        handleChange
+        handleChange,
+        requestContent
       )
     case 'email':
     case 'password':
@@ -192,7 +198,8 @@ export const createSimpleItem = (
         input.required,
         input.type,
         '(string)',
-        handleChange
+        handleChange,
+        requestContent
       )
     case 'datetime':
       return createDateItem(input.name, handleDateChange, requestContent)

@@ -57,6 +57,8 @@ interface ConfigFormProps {
   dialogue?: boolean
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
+  /** A callback for closing the parent dialog for when the form is rendered within dialog */
+  handleClose?: () => void
 }
 
 const storageOptions = [
@@ -64,7 +66,11 @@ const storageOptions = [
   { label: 'Local', value: 'local' },
 ]
 
-export const ConfigForm: FC<ConfigFormProps> = ({ title, setHasConfig }) => {
+export const ConfigForm: FC<ConfigFormProps> = ({
+  title,
+  setHasConfig,
+  handleClose,
+}) => {
   // See https://codesandbox.io/s/youthful-surf-0g27j?file=/src/index.tsx for a prototype from Luke
   // TODO see about useReducer to clean this up a bit more
   title = title || 'RunIt Configuration'
@@ -98,6 +104,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({ title, setHasConfig }) => {
       fields.location
     )
     if (setHasConfig) setHasConfig(true)
+    if (handleClose) handleClose()
   }
 
   const handleRemove = (e: BaseSyntheticEvent) => {
