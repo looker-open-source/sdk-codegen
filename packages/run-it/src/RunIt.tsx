@@ -40,7 +40,15 @@ import {
 } from '@looker/components'
 import { IRawResponse, Looker40SDK } from '@looker/sdk/lib/browser'
 
-import { RequestForm, ShowResponse, ConfigForm } from './components'
+import {
+  RequestForm,
+  ShowResponse,
+  ConfigForm,
+  getStorage,
+  setStorage,
+  RunItValuesKey,
+  removeStorage,
+} from './components'
 import {
   createRequestParams,
   defaultRunItCallback,
@@ -121,7 +129,7 @@ interface TryItProps {
   /** Request path with path params in curly braces e.g. /looks/{look_id}/run/{result_format} */
   endpoint: string
   /** A optional HTTP request provider to override the default Looker browser SDK request provider */
-  tryItCallback?: RunItCallback
+  runItCallback?: RunItCallback
   sdk?: Looker40SDK
 }
 
@@ -136,10 +144,18 @@ export const RunIt: FC<TryItProps> = ({
   inputs,
   httpMethod,
   endpoint,
-  tryItCallback,
+  runItCallback,
   sdk = runItSDK,
 }) => {
-  const [requestContent, setRequestContent] = useState({})
+  const storage = getStorage(RunItValuesKey)
+  let requestValues = {}
+  let autoSubmit = false
+  if (storage.value) {
+    requestValues = JSON.parse(storage.value)
+    removeStorage(RunItValuesKey)
+    autoSubmit = true
+  }
+  const [requestContent, setRequestContent] = useState(requestValues)
   const [activePathParams, setActivePathParams] = useState(undefined)
   const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] = useState<ResponseContent>(
@@ -147,17 +163,22 @@ export const RunIt: FC<TryItProps> = ({
   )
   const tabs = useTabs()
   const configIsNeeded = sdkNeedsConfig(sdk)
-  const settings = sdk?.authSession.settings as RunItSettings
+  const settings = sdk.authSession.settings as RunItSettings
   const perf = new PerfTimings()
   const [hasConfig, setHasConfig] = useState<boolean>(
     !configIsNeeded || settings.authIsConfigured()
   )
 
-  // TODO: Make jest stop complaining when using the ?? syntax below
-  const callback = tryItCallback || defaultRunItCallback
+  const callback = runItCallback || defaultRunItCallback
 
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
+    /** When OAuth flow is starting */
+    if (configIsNeeded && !sdk.authSession.isAuthenticated()) {
+      setStorage(RunItValuesKey, JSON.stringify(requestContent))
+      await sdk.authSession.login()
+    }
+
     const [pathParams, queryParams, body] = createRequestParams(
       inputs,
       requestContent
@@ -201,6 +222,7 @@ export const RunIt: FC<TryItProps> = ({
               setRequestContent={setRequestContent}
               handleSubmit={handleSubmit}
               setHasConfig={setHasConfig}
+              autoSubmit={autoSubmit}
             />
           )}
           {!hasConfig && <ConfigForm setHasConfig={setHasConfig} />}

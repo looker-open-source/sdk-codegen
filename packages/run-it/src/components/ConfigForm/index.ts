@@ -33,4 +33,5 @@ export {
   validateUrl,
   validLocation,
   RunItConfigKey,
+  RunItValuesKey,
 } from './configUtils'

@@ -24,7 +24,13 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
+import React, {
+  BaseSyntheticEvent,
+  FC,
+  Dispatch,
+  useRef,
+  useEffect,
+} from 'react'
 import { Button, Form, Space, ButtonTransparent } from '@looker/components'
 
 import { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
@@ -50,6 +56,7 @@ interface RequestFormProps {
   setRequestContent: Dispatch<{ [key: string]: any }>
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
+  autoSubmit?: boolean
 }
 
 /**
@@ -63,6 +70,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   requestContent,
   setRequestContent,
   setHasConfig,
+  autoSubmit = false,
 }) => {
   const handleBoolChange = (e: BaseSyntheticEvent) => {
     setRequestContent({ ...requestContent, [e.target.name]: e.target.checked })
@@ -93,6 +101,12 @@ export const RequestForm: FC<RequestFormProps> = ({
     setRequestContent({})
   }
 
+  const submitRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (autoSubmit) submitRef && submitRef.current.click()
+  }, [autoSubmit])
+
   return (
     <Form onSubmit={handleSubmit}>
       {inputs.map((input) =>
@@ -110,7 +124,7 @@ export const RequestForm: FC<RequestFormProps> = ({
       {httpMethod !== 'GET' && showDataChangeWarning()}
       <Space>
         <ButtonTransparent onClick={handleClear}>Clear</ButtonTransparent>
-        <Button>Run</Button>
+        <Button ref={submitRef}>Run</Button>
         {setHasConfig && <ConfigDialog setHasConfig={setHasConfig} />}
       </Space>
     </Form>

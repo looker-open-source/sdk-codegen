@@ -35,4 +35,5 @@ export {
   validateUrl,
   validLocation,
   RunItConfigKey,
+  RunItValuesKey,
 } from './ConfigForm'

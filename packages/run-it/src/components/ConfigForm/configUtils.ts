@@ -26,6 +26,8 @@
 
 export const RunItConfigKey = 'RunItConfig'
 
+export const RunItValuesKey = 'RunItValues'
+
 export type StorageLocation = 'session' | 'local'
 
 export interface IStorageValue {
