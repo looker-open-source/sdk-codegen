@@ -25,12 +25,79 @@
  */
 
 import { api } from '../../test-data'
-import { copyAndCleanResponse } from './utils'
+import { copyAndCleanResponse, createInputs } from './utils'
 
-describe('Response model utils', () => {
-  test('copyAndCleanResponse works', () => {
-    const orig = api.methods.run_look.primaryResponse
-    const actual = copyAndCleanResponse(orig)
-    expect(actual)
+describe('MethodScene utils', () => {
+  describe('response utils', () => {
+    test('copyAndCleanResponse works', () => {
+      const orig = api.methods.run_look.primaryResponse
+      const actual = copyAndCleanResponse(orig)
+      expect(actual)
+    })
+  })
+
+  describe('run-it utils', () => {
+    test('createInputs works with various param types', () => {
+      const method = api.methods.run_inline_query
+      const actual = createInputs(api, method)
+      expect(actual).toHaveLength(method.allParams.length)
+
+      expect(actual).toEqual(
+        expect.arrayContaining([
+          /** Boolean param */
+          {
+            name: 'cache',
+            location: 'query',
+            type: 'boolean',
+            required: false,
+            description: 'Get results from cache if available.',
+          },
+          /** Number param */
+          {
+            name: 'limit',
+            location: 'query',
+            type: 'int64',
+            required: false,
+            description: expect.any(String),
+          },
+          /** String param */
+          {
+            name: 'result_format',
+            location: 'path',
+            type: 'string',
+            required: true,
+            description: 'Format of result',
+          },
+          /** Body param */
+          {
+            name: 'body',
+            location: 'body',
+            type: expect.objectContaining({
+              model: '',
+              view: '',
+              fields: [],
+              pivots: [],
+              fill_fields: [],
+              filters: {},
+              filter_expression: '',
+              sorts: [],
+              limit: '',
+              column_limit: '',
+              total: false,
+              row_total: '',
+              subtotals: [],
+              vis_config: {},
+              filter_config: {},
+              visible_ui_sections: '',
+              dynamic_fields: '',
+              client_id: '',
+              query_timezone: '',
+            }),
+            required: true,
+            description: '',
+          },
+        ])
+      )
+    })
   })
 })
