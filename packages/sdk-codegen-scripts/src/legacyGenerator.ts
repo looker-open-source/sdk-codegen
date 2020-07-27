@@ -76,7 +76,7 @@ const generate = async (
 }
 
 /**
- * generate all languages for the specified configuration
+ * Generate all languages for the specified configuration
  * @param {string} name configuration name
  * @param {ISDKConfigProps} props SDK configuration properties
  * @returns {Promise<any[]>} generation promises
