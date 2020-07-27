@@ -90,7 +90,6 @@ export const registerOAuthApp = async (
     app = await sdk.ok(sdk.update_oauth_client_app(guid, appInfo))
     console.log(`Updated ${guid} settings`)
     console.debug({ app })
-    return result
   } catch (e) {
     try {
       const app = await sdk.ok(sdk.register_oauth_client_app(guid, appInfo))
