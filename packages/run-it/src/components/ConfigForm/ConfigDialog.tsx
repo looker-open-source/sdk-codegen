@@ -26,11 +26,11 @@
 
 import React, { Dispatch, FC } from 'react'
 import {
-  DialogManager,
+  Dialog,
   DialogContent,
-  Icon,
   IconNames,
   useToggle,
+  IconButton,
 } from '@looker/components'
 import { ConfigForm } from './ConfigForm'
 
@@ -45,19 +45,19 @@ export const ConfigDialog: FC<ConfigDialogProps> = ({
   icon = 'GearOutline',
   setHasConfig,
 }) => {
-  const { value, setOff } = useToggle()
+  const { value, setOff, setOn } = useToggle()
   return (
-    <DialogManager
-      isOpen={value}
-      onClose={() => setOff()}
-      content={
+    <>
+      <Dialog
+        isOpen={value}
+        onClose={setOff}
+        maxWidth={['90vw', '60vw', '500px', '800px']}
+      >
         <DialogContent>
-          <ConfigForm setHasConfig={setHasConfig} />
+          <ConfigForm setHasConfig={setHasConfig} handleClose={setOff} />
         </DialogContent>
-      }
-      maxWidth={['90vw', '60vw', '500px', '800px']}
-    >
-      <Icon name={icon} />
-    </DialogManager>
+      </Dialog>
+      <IconButton label="Settings" color="key" icon={icon} onClick={setOn} />
+    </>
   )
 }

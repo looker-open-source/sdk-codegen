@@ -25,7 +25,7 @@
  */
 
 import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
-import { Button, Form, Space } from '@looker/components'
+import { Button, Form, Space, ButtonTransparent } from '@looker/components'
 
 import { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
 import { ConfigDialog } from '../ConfigForm'
@@ -88,6 +88,11 @@ export const RequestForm: FC<RequestFormProps> = ({
     setRequestContent({ ...requestContent, [name]: value })
   }
 
+  const handleClear = (e: BaseSyntheticEvent) => {
+    e.preventDefault()
+    setRequestContent({})
+  }
+
   return (
     <Form onSubmit={handleSubmit}>
       {inputs.map((input) =>
@@ -104,6 +109,7 @@ export const RequestForm: FC<RequestFormProps> = ({
       )}
       {httpMethod !== 'GET' && showDataChangeWarning()}
       <Space>
+        <ButtonTransparent onClick={handleClear}>Clear</ButtonTransparent>
         <Button>Run</Button>
         {setHasConfig && <ConfigDialog setHasConfig={setHasConfig} />}
       </Space>
