@@ -147,16 +147,9 @@ export const RunIt: FC<TryItProps> = ({
   runItCallback,
   sdk = runItSDK,
 }) => {
-  const storage = getStorage(RunItValuesKey)
-  let requestValues = {}
-  let autoSubmit = false
-  if (storage.value) {
-    requestValues = JSON.parse(storage.value)
-    removeStorage(RunItValuesKey)
-    autoSubmit = true
-  }
-  const [requestContent, setRequestContent] = useState(requestValues)
+  const [requestContent, setRequestContent] = useState({})
   const [activePathParams, setActivePathParams] = useState(undefined)
+  const [autoSubmit, setAutoSubmit] = useState(false)
   const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] = useState<ResponseContent>(
     undefined
@@ -171,12 +164,29 @@ export const RunIt: FC<TryItProps> = ({
 
   const callback = runItCallback || defaultRunItCallback
 
+  useEffect(() => {
+    const storage = getStorage(RunItValuesKey)
+    let requestValues = {}
+    if (storage.value) {
+      requestValues = JSON.parse(storage.value)
+      removeStorage(RunItValuesKey)
+      setAutoSubmit(true)
+    }
+
+    setRequestContent(requestValues)
+    return function cleanup() {
+      setAutoSubmit(false)
+    }
+  })
+
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
     /** When OAuth flow is starting */
     if (configIsNeeded && !sdk.authSession.isAuthenticated()) {
       setStorage(RunItValuesKey, JSON.stringify(requestContent))
       await sdk.authSession.login()
+    } else {
+      removeStorage(RunItValuesKey)
     }
 
     const [pathParams, queryParams, body] = createRequestParams(

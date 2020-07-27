@@ -105,7 +105,7 @@ export const RequestForm: FC<RequestFormProps> = ({
 
   useEffect(() => {
     if (autoSubmit) submitRef && submitRef.current.click()
-  }, [autoSubmit])
+  })
 
   return (
     <Form onSubmit={handleSubmit}>
