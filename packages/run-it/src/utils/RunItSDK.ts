@@ -31,6 +31,7 @@ import {
   IApiSettings,
   Looker40SDK,
   LookerBrowserSDK,
+  lookerVersion,
 } from '@looker/sdk/lib/browser'
 import { getStorage, RunItConfigKey } from '../components'
 
@@ -38,7 +39,7 @@ import { getStorage, RunItConfigKey } from '../components'
 const settings = {
   ...DefaultSettings(),
   base_url: 'https://self-signed.looker.com:19999',
-  agentTag: 'RunIt',
+  agentTag: `RunIt ${lookerVersion}.4.0`,
 } as IApiSettings
 
 /***
