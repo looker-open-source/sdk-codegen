@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "4.0.7.9",
-    "x-looker-release-version": "7.9.0",
+    "version": "4.0.7.13",
+    "x-looker-release-version": "7.13.0",
     "title": "Looker API 4.0 (Experimental) Reference",
     "description": "\nWelcome to the future! This is an early preview of our next-generation Looker API 4.0.\nAPI 4.0 runs alongside APIs 3.1 and 3.0. We've tagged 4.0 as \"experimental\" to reflect\nthat we have more work planned for API 4.0 which may include breaking changes.\nPlease pardon our dust while we remodel a few rooms!\n\n### In This Release\n\nWe're spinning up this new API 4.0 version so that we can make adjustments to our API\nfunctions, parameters, and response types to fix bugs and inconsistencies. These changes\nfall outside the bounds of non-breaking additive changes we can make to our stable API 3.1.\n\nOne benefit of these type adjustments in API 4.0 is dramatically better support for strongly\ntyped languages like TypeScript, Kotlin, Java, and more. Looker is also creating client SDKs\nto call the Looker API from these and other languages. These client SDKs will be available\nas pre-built packages for download from public repositories such as npmjs.org, RubyGems.org,\nPyPi.org. If you use an IDE for software development, you will soon be able to install a\nLooker SDK for your programming language with the click of a button!\n\nWhile API 3.1 is still the defacto Looker API (\"current\", \"stable\", \"default\", etc), the bulk\nof our development activity will gradually shift to API 4.0.\n\n",
     "contact": {
@@ -32,6 +32,7 @@
     { "name": "Datagroup", "description": "Manage Datagroups" },
     { "name": "Folder", "description": "Manage Folders" },
     { "name": "Group", "description": "Manage Groups" },
+    { "name": "Homepage", "description": "Manage Homepage" },
     { "name": "Integration", "description": "Manage Integrations" },
     { "name": "Look", "description": "Run and Manage Looks" },
     { "name": "LookmlModel", "description": "Manage LookML Models" },
@@ -919,7 +920,7 @@
         "tags": ["Query"],
         "operationId": "run_url_encoded_query",
         "summary": "Run Url Encoded Query",
-        "description": "### Run an URL encoded query.\n\nThis requires the caller to encode the specifiers for the query into the URL query part using\nLooker-specific syntax as explained below.\n\nGenerally, you would want to use one of the methods that takes the parameters as json in the POST body\nfor creating and/or running queries. This method exists for cases where one really needs to encode the\nparameters into the URL of a single 'GET' request. This matches the way that the Looker UI formats\n'explore' URLs etc.\n\nThe parameters here are very similar to the json body formatting except that the filter syntax is\ntricky. Unfortunately, this format makes this method not currently callible via the 'Try it out!' button\nin this documentation page. But, this is callable  when creating URLs manually or when using the Looker SDK.\n\nHere is an example inline query URL:\n\n```\nhttps://looker.mycompany.com:19999/api/3.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles\n```\n\nWhen invoking this endpoint with the Ruby SDK, pass the query parameter parts as a hash. The hash to match the above would look like:\n\n```ruby\nquery_params =\n{\n  :fields => \"category.name,inventory_items.days_in_inventory_tier,products.count\",\n  :\"f[category.name]\" => \"socks\",\n  :sorts => \"products.count desc 0\",\n  :limit => \"500\",\n  :query_timezone => \"America/Los_Angeles\"\n}\nresponse = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)\n\n```\n\nAgain, it is generally easier to use the variant of this method that passes the full query in the POST body.\nThis method is available for cases where other alternatives won't fit the need.\n\nSupported formats:\n\n| result_format | Description\n| :-----------: | :--- |\n| json | Plain json\n| json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query\n| csv | Comma separated values with a header\n| txt | Tab separated values with a header\n| html | Simple html\n| md | Simple markdown\n| xlsx | MS Excel spreadsheet\n| sql | Returns the generated SQL rather than running the query\n| png | A PNG image of the visualization of the query\n| jpg | A JPG image of the visualization of the query\n\n\n",
+        "description": "### Run an URL encoded query.\n\nThis requires the caller to encode the specifiers for the query into the URL query part using\nLooker-specific syntax as explained below.\n\nGenerally, you would want to use one of the methods that takes the parameters as json in the POST body\nfor creating and/or running queries. This method exists for cases where one really needs to encode the\nparameters into the URL of a single 'GET' request. This matches the way that the Looker UI formats\n'explore' URLs etc.\n\nThe parameters here are very similar to the json body formatting except that the filter syntax is\ntricky. Unfortunately, this format makes this method not currently callable via the 'Try it out!' button\nin this documentation page. But, this is callable when creating URLs manually or when using the Looker SDK.\n\nHere is an example inline query URL:\n\n```\nhttps://looker.mycompany.com:19999/api/3.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles\n```\n\nWhen invoking this endpoint with the Ruby SDK, pass the query parameter parts as a hash. The hash to match the above would look like:\n\n```ruby\nquery_params =\n{\n  :fields => \"category.name,inventory_items.days_in_inventory_tier,products.count\",\n  :\"f[category.name]\" => \"socks\",\n  :sorts => \"products.count desc 0\",\n  :limit => \"500\",\n  :query_timezone => \"America/Los_Angeles\"\n}\nresponse = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)\n\n```\n\nAgain, it is generally easier to use the variant of this method that passes the full query in the POST body.\nThis method is available for cases where other alternatives won't fit the need.\n\nSupported formats:\n\n| result_format | Description\n| :-----------: | :--- |\n| json | Plain json\n| json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query\n| csv | Comma separated values with a header\n| txt | Tab separated values with a header\n| html | Simple html\n| md | Simple markdown\n| xlsx | MS Excel spreadsheet\n| sql | Returns the generated SQL rather than running the query\n| png | A PNG image of the visualization of the query\n| jpg | A JPG image of the visualization of the query\n\n\n",
         "parameters": [
           {
             "name": "model_name",
@@ -1740,14 +1741,14 @@
         "tags": ["Command"],
         "operationId": "create_command",
         "summary": "Create a custom command",
-        "description": "### Create a new command.\n# Required fields: [:name, :linked_content_id, :linked_content_type]\n#\n",
+        "description": "### Create a new command.\n# Required fields: [:name, :linked_content_id, :linked_content_type]\n# `linked_content_type` must be one of [\"dashboard\", \"lookml_dashboard\"]\n#\n",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": { "$ref": "#/components/schemas/Command" }
             }
           },
-          "description": "Command",
+          "description": "Writable command parameters",
           "required": true
         },
         "responses": {
@@ -1775,14 +1776,6 @@
               }
             }
           },
-          "405": {
-            "description": "Resource Can't Be Modified",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Error" }
-              }
-            }
-          },
           "409": {
             "description": "Resource Already Exists",
             "content": {
@@ -1796,6 +1789,196 @@
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      },
+      "get": {
+        "tags": ["Command"],
+        "operationId": "get_all_commands",
+        "summary": "Get All Commands",
+        "description": "### Get All Commands.\n",
+        "parameters": [
+          {
+            "name": "content_id",
+            "in": "query",
+            "description": "Id of the associated content. This must be accompanied with content_type.",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "content_type",
+            "in": "query",
+            "description": "Type of the associated content. This must be accompanied with content_id.",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of results to return.",
+            "required": false,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Commands",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Command" }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "405": {
+            "description": "Resource Can't Be Modified",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/commands/{command_id}": {
+      "patch": {
+        "tags": ["Command"],
+        "operationId": "update_command",
+        "summary": "Update a custom command",
+        "description": "### Update an existing custom command.\n# Optional fields: ['name', 'description']\n#\n",
+        "parameters": [
+          {
+            "name": "command_id",
+            "in": "path",
+            "description": "ID of a command",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateCommand" }
+            }
+          },
+          "description": "Re-writable command parameters",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The command is updated.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Command" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      },
+      "delete": {
+        "tags": ["Command"],
+        "operationId": "delete_command",
+        "summary": "Delete a custom command",
+        "description": "### Delete an existing custom command.\n",
+        "parameters": [
+          {
+            "name": "command_id",
+            "in": "path",
+            "description": "ID of a command",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "The command is deleted." },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "405": {
+            "description": "Resource Can't Be Modified",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
               }
             }
           },
@@ -6521,7 +6704,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/GroupSearch" }
+                  "items": { "$ref": "#/components/schemas/Group" }
                 }
               }
             }
@@ -6544,6 +6727,117 @@
           }
         },
         "x-looker-status": "stable",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/groups/search/with_roles": {
+      "get": {
+        "tags": ["Group"],
+        "operationId": "search_groups_with_roles",
+        "summary": "Search Groups with Roles",
+        "description": "### Search groups include roles\n\nReturns all group records that match the given search criteria, and attaches any associated roles.\n\nIf multiple search params are given and `filter_or` is FALSE or not specified,\nsearch params are combined in a logical AND operation.\nOnly rows that match *all* search param criteria will be returned.\n\nIf `filter_or` is TRUE, multiple search params are combined in a logical OR operation.\nResults will include rows that match **any** of the search criteria.\n\nString search params use case-insensitive matching.\nString search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.\nexample=\"dan%\" will match \"danger\" and \"Danzig\" but not \"David\"\nexample=\"D_m%\" will match \"Damage\" and \"dump\"\n\nInteger search params can accept a single value or a comma separated list of values. The multiple\nvalues will be combined under a logical OR operation - results will match at least one of\nthe given values.\n\nMost search params can accept \"IS NULL\" and \"NOT NULL\" as special expressions to match\nor exclude (respectively) rows where the column is null.\n\nBoolean search params accept only \"true\" and \"false\" as values.\n\n",
+        "parameters": [
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Requested fields.",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of results to return (used with `offset`).",
+            "required": false,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of results to skip before returning any (used with `limit`).",
+            "required": false,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "sorts",
+            "in": "query",
+            "description": "Fields to sort by.",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "filter_or",
+            "in": "query",
+            "description": "Combine given search criteria in a boolean OR expression",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Match group id.",
+            "required": false,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Match group name.",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "external_group_id",
+            "in": "query",
+            "description": "Match group external_group_id.",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "externally_managed",
+            "in": "query",
+            "description": "Match group externally_managed.",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "externally_orphaned",
+            "in": "query",
+            "description": "Match group externally_orphaned.",
+            "required": false,
+            "schema": { "type": "boolean" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Group",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/GroupSearch" }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -7918,6 +8212,54 @@
           },
           "429": {
             "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/primary_homepage_sections": {
+      "get": {
+        "tags": ["Homepage"],
+        "operationId": "all_primary_homepage_sections",
+        "summary": "Get All Primary homepage sections",
+        "description": "### Get information about the primary homepage's sections.\n",
+        "parameters": [
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Requested fields.",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Primary homepage section",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/HomepageSection" }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/Error" }
@@ -10993,6 +11335,491 @@
         "x-looker-activity-type": "non_query"
       }
     },
+    "/oauth_client_apps": {
+      "get": {
+        "tags": ["Auth"],
+        "operationId": "all_oauth_client_apps",
+        "summary": "Get All OAuth Client Apps",
+        "description": "### List All OAuth Client Apps\n\nLists all applications registered to use OAuth2 login with this Looker instance, including\nenabled and disabled apps.\n\nResults are filtered to include only the apps that the caller (current user)\nhas permission to see.\n",
+        "parameters": [
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Requested fields.",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OAuth Client App",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/OauthClientApp" }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/oauth_client_apps/{client_guid}": {
+      "get": {
+        "tags": ["Auth"],
+        "operationId": "oauth_client_app",
+        "summary": "Get OAuth Client App",
+        "description": "### Get Oauth Client App\n\nReturns the registered app client with matching client_guid.\n",
+        "parameters": [
+          {
+            "name": "client_guid",
+            "in": "path",
+            "description": "The unique id of this application",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Requested fields.",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OAuth Client App",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OauthClientApp" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      },
+      "delete": {
+        "tags": ["Auth"],
+        "operationId": "delete_oauth_client_app",
+        "summary": "Delete OAuth Client App",
+        "description": "### Delete OAuth Client App\n\nDeletes the registration info of the app with the matching client_guid.\nAll active sessions and tokens issued for this app will immediately become invalid.\n\n### Note: this deletion cannot be undone.\n",
+        "parameters": [
+          {
+            "name": "client_guid",
+            "in": "path",
+            "description": "The unique id of this application",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted.",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      },
+      "post": {
+        "tags": ["Auth"],
+        "operationId": "register_oauth_client_app",
+        "summary": "Register OAuth App",
+        "description": "### Register an OAuth2 Client App\n\nRegisters details identifying an external web app or native app as an OAuth2 login client of the Looker instance.\nThe app registration must provide a unique client_guid and redirect_uri that the app will present\nin OAuth login requests. If the client_guid and redirect_uri parameters in the login request do not match\nthe app details registered with the Looker instance, the request is assumed to be a forgery and is rejected.\n",
+        "parameters": [
+          {
+            "name": "client_guid",
+            "in": "path",
+            "description": "The unique id of this application",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Requested fields.",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/OauthClientApp",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OAuth Client App",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OauthClientApp" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "409": {
+            "description": "Resource Already Exists",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      },
+      "patch": {
+        "tags": ["Auth"],
+        "operationId": "update_oauth_client_app",
+        "summary": "Update OAuth App",
+        "description": "### Update OAuth2 Client App Details\n\nModifies the details a previously registered OAuth2 login client app.\n",
+        "parameters": [
+          {
+            "name": "client_guid",
+            "in": "path",
+            "description": "The unique id of this application",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Requested fields.",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/OauthClientApp",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OAuth Client App",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OauthClientApp" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/oauth_client_apps/{client_guid}/tokens": {
+      "delete": {
+        "tags": ["Auth"],
+        "operationId": "invalidate_tokens",
+        "summary": "Invalidate Tokens",
+        "description": "### Invalidate All Issued Tokens\n\nImmediately invalidates all auth codes, sessions, access tokens and refresh tokens issued for\nthis app for ALL USERS of this app.\n",
+        "parameters": [
+          {
+            "name": "client_guid",
+            "in": "path",
+            "description": "The unique id of the application",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted.",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/oauth_client_apps/{client_guid}/users/{user_id}": {
+      "post": {
+        "tags": ["Auth"],
+        "operationId": "activate_app_user",
+        "summary": "Activate OAuth App User",
+        "description": "### Activate an app for a user\n\nActivates a user for a given oauth client app. This indicates the user has been informed that\nthe app will have access to the user's looker data, and that the user has accepted and allowed\nthe app to use their Looker account.\n\nActivating a user for an app that the user is already activated with returns a success response.\n",
+        "parameters": [
+          {
+            "name": "client_guid",
+            "in": "path",
+            "description": "The unique id of this application",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "The id of the user to enable use of this app",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Requested fields.",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OAuth Client App",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "204": { "description": "Deleted" },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      },
+      "delete": {
+        "tags": ["Auth"],
+        "operationId": "deactivate_app_user",
+        "summary": "Deactivate OAuth App User",
+        "description": "### Deactivate an app for a user\n\nDeactivate a user for a given oauth client app. All tokens issued to the app for\nthis user will be invalid immediately. Before the user can use the app with their\nLooker account, the user will have to read and accept an account use disclosure statement for the app.\n\nAdmin users can deactivate other users, but non-admin users can only deactivate themselves.\n\nAs with most REST DELETE operations, this endpoint does not return an error if the indicated\nresource (app or user) does not exist or has already been deactivated.\n",
+        "parameters": [
+          {
+            "name": "client_guid",
+            "in": "path",
+            "description": "The unique id of this application",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "The id of the user to enable use of this app",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Requested fields.",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted.",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
     "/oidc_config": {
       "get": {
         "tags": ["Auth"],
@@ -11778,6 +12605,82 @@
           }
         },
         "x-looker-status": "stable",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/projects/{project_id}/deploy_ref_to_production": {
+      "post": {
+        "tags": ["Project"],
+        "operationId": "deploy_ref_to_production",
+        "summary": "Deploy Remote Branch or Ref to Production",
+        "description": "### Deploy a Remote Branch or Ref to Production\n\nGit must have been configured and deploy permission required.\n\nDeploy is a one/two step process\n1. If this is the first deploy of this project, create the production project with git repository.\n2. Pull the branch or ref into the production project.\n\nCan only specify either a branch or a ref.\n\n",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "description": "Id of project",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "description": "Branch to deploy to production",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "ref",
+            "in": "query",
+            "description": "Ref to deploy to production",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "204": {
+            "description": "Returns 204 if project was successfully deployed to production, otherwise 400 with an error message"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -17181,6 +18084,666 @@
         "x-looker-activity-type": "non_query"
       }
     },
+    "/ssh_servers": {
+      "get": {
+        "tags": ["Connection"],
+        "operationId": "all_ssh_servers",
+        "summary": "Get All SSH Servers",
+        "description": "### Get information about all SSH Servers.\n",
+        "parameters": [
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Requested fields.",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SSH Server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/SshServer" }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      },
+      "post": {
+        "tags": ["Connection"],
+        "operationId": "create_ssh_server",
+        "summary": "Create SSH Server",
+        "description": "### Create an SSH Server.\n",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/SshServer",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "SSH Server",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SshServer" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "409": {
+            "description": "Resource Already Exists",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/ssh_server/{ssh_server_id}": {
+      "get": {
+        "tags": ["Connection"],
+        "operationId": "ssh_server",
+        "summary": "Get SSH Server",
+        "description": "### Get information about an SSH Server.\n",
+        "parameters": [
+          {
+            "name": "ssh_server_id",
+            "in": "path",
+            "description": "Id of SSH Server",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SSH Server",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SshServer" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      },
+      "patch": {
+        "tags": ["Connection"],
+        "operationId": "update_ssh_server",
+        "summary": "Update SSH Server",
+        "description": "### Update an SSH Server.\n",
+        "parameters": [
+          {
+            "name": "ssh_server_id",
+            "in": "path",
+            "description": "Id of SSH Server",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/SshServer",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "SSH Server",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SshServer" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      },
+      "delete": {
+        "tags": ["Connection"],
+        "operationId": "delete_ssh_server",
+        "summary": "Delete SSH Server",
+        "description": "### Delete an SSH Server.\n",
+        "parameters": [
+          {
+            "name": "ssh_server_id",
+            "in": "path",
+            "description": "Id of SSH Server",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted.",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/ssh_server/{ssh_server_id}/test": {
+      "get": {
+        "tags": ["Connection"],
+        "operationId": "test_ssh_server",
+        "summary": "Test SSH Server",
+        "description": "### Test the SSH Server\n",
+        "parameters": [
+          {
+            "name": "ssh_server_id",
+            "in": "path",
+            "description": "Id of SSH Server",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test SSH Server",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SshServer" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/ssh_tunnels": {
+      "get": {
+        "tags": ["Connection"],
+        "operationId": "all_ssh_tunnels",
+        "summary": "Get All SSH Tunnels",
+        "description": "### Get information about all SSH Tunnels.\n",
+        "parameters": [
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Requested fields.",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SSH Tunnel",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/SshTunnel" }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      },
+      "post": {
+        "tags": ["Connection"],
+        "operationId": "create_ssh_tunnel",
+        "summary": "Create SSH Tunnel",
+        "description": "### Create an SSH Tunnel\n",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/SshTunnel",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "SSH Tunnel",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SshTunnel" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "409": {
+            "description": "Resource Already Exists",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/ssh_tunnel/{ssh_tunnel_id}": {
+      "get": {
+        "tags": ["Connection"],
+        "operationId": "ssh_tunnel",
+        "summary": "Get SSH Tunnel",
+        "description": "### Get information about an SSH Tunnel.\n",
+        "parameters": [
+          {
+            "name": "ssh_tunnel_id",
+            "in": "path",
+            "description": "Id of SSH Tunnel",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SSH Tunnel",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SshTunnel" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      },
+      "patch": {
+        "tags": ["Connection"],
+        "operationId": "update_ssh_tunnel",
+        "summary": "Update SSH Tunnel",
+        "description": "### Update an SSH Tunnel\n",
+        "parameters": [
+          {
+            "name": "ssh_tunnel_id",
+            "in": "path",
+            "description": "Id of SSH Tunnel",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/SshTunnel",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "SSH Tunnel",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SshTunnel" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      },
+      "delete": {
+        "tags": ["Connection"],
+        "operationId": "delete_ssh_tunnel",
+        "summary": "Delete SSH Tunnel",
+        "description": "### Delete an SSH Tunnel\n",
+        "parameters": [
+          {
+            "name": "ssh_tunnel_id",
+            "in": "path",
+            "description": "Id of SSH Tunnel",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted.",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/ssh_tunnel/{ssh_tunnel_id}/test": {
+      "get": {
+        "tags": ["Connection"],
+        "operationId": "test_ssh_tunnel",
+        "summary": "Test SSH Tunnel",
+        "description": "### Test the SSH Tunnel\n",
+        "parameters": [
+          {
+            "name": "ssh_tunnel_id",
+            "in": "path",
+            "description": "Id of SSH Tunnel",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test SSH Tunnel",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SshTunnel" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/ssh_public_key": {
+      "get": {
+        "tags": ["Connection"],
+        "operationId": "ssh_public_key",
+        "summary": "Get SSH Public Key",
+        "description": "### Get the SSH public key\n\nGet the public key created for this instance to identify itself to a remote SSH server.\n",
+        "responses": {
+          "200": {
+            "description": "SSH Public Key",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SshPublicKey" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
     "/user_attributes": {
       "get": {
         "tags": ["UserAttribute"],
@@ -20397,6 +21960,58 @@
         "x-looker-activity-type": "non_query"
       }
     },
+    "/users/{user_id}/credentials_email/send_password_reset": {
+      "post": {
+        "tags": ["User"],
+        "operationId": "send_user_credentials_email_password_reset",
+        "summary": "Send Password Reset Token",
+        "description": "### Send a password reset token.\nThis will send a password reset email to the user. If a password reset token does not already exist\nfor this user, it will create one and then send it.\nIf the user has not yet set up their account, it will send a setup email to the user.\nThe URL sent in the email is expressed as the 'password_reset_url' of the user's email/password credential object.\nPassword reset URLs will expire in 60 minutes.\nThis method can be called with an empty body.\n",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "Id of user",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Requested fields.",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "email/password credential",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CredentialsEmail" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
     "/vector_thumbnail/{type}/{resource_id}": {
       "get": {
         "tags": ["Content"],
@@ -20692,7 +22307,7 @@
       }
     }
   },
-  "servers": [{ "url": "https://localhost:19999/api/4.0" }],
+  "servers": [{ "url": "https://self-signed.looker.com:19999/api/4.0" }],
   "components": {
     "requestBodies": {
       "ColorCollection": {
@@ -20702,6 +22317,15 @@
           }
         },
         "description": "ColorCollection",
+        "required": true
+      },
+      "OauthClientApp": {
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/OauthClientApp" }
+          }
+        },
+        "description": "OAuth Client App",
         "required": true
       },
       "LookmlModel": {
@@ -20783,6 +22407,15 @@
           }
         },
         "description": "Board Item",
+        "required": true
+      },
+      "SshServer": {
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/SshServer" }
+          }
+        },
+        "description": "SSH Server",
         "required": true
       },
       "Theme": {
@@ -20901,6 +22534,15 @@
         },
         "description": "Role",
         "required": true
+      },
+      "SshTunnel": {
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/SshTunnel" }
+          }
+        },
+        "description": "SSH Tunnel",
+        "required": true
       }
     },
     "schemas": {
@@ -21002,6 +22644,258 @@
             "format": "int64",
             "readOnly": true,
             "description": "Id of User",
+            "nullable": true
+          }
+        },
+        "x-looker-status": "beta"
+      },
+      "HomepageSection": {
+        "properties": {
+          "can": {
+            "type": "object",
+            "additionalProperties": { "type": "boolean" },
+            "readOnly": true,
+            "description": "Operations the current user is able to perform on this object",
+            "nullable": false
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Time at which this section was created.",
+            "nullable": true
+          },
+          "deleted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Time at which this section was deleted.",
+            "nullable": true
+          },
+          "detail_url": {
+            "type": "string",
+            "readOnly": true,
+            "description": "A URL pointing to a page showing further information about the content in the section.",
+            "nullable": true
+          },
+          "homepage_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Id reference to parent homepage",
+            "nullable": true
+          },
+          "homepage_items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/HomepageItem" },
+            "readOnly": true,
+            "description": "Items in the homepage section",
+            "nullable": true
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true,
+            "description": "Unique Id",
+            "nullable": false
+          },
+          "is_header": {
+            "type": "boolean",
+            "readOnly": true,
+            "description": "Is this a header section (has no items)",
+            "nullable": false
+          },
+          "item_order": {
+            "type": "array",
+            "items": { "type": "integer", "format": "int64" },
+            "description": "ids of the homepage items in the order they should be displayed",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "description": "Name of row",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Time at which this section was last updated.",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the content found in this section.",
+            "nullable": true
+          }
+        },
+        "x-looker-status": "beta"
+      },
+      "HomepageItem": {
+        "properties": {
+          "can": {
+            "type": "object",
+            "additionalProperties": { "type": "boolean" },
+            "readOnly": true,
+            "description": "Operations the current user is able to perform on this object",
+            "nullable": false
+          },
+          "content_created_by": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Name of user who created the content this item is based on",
+            "nullable": true
+          },
+          "content_favorite_id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true,
+            "description": "Content favorite id associated with the item this content is based on",
+            "nullable": true
+          },
+          "content_metadata_id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true,
+            "description": "Content metadata id associated with the item this content is based on",
+            "nullable": true
+          },
+          "content_updated_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Last time the content that this item is based on was updated",
+            "nullable": true
+          },
+          "custom_description": {
+            "type": "string",
+            "description": "Custom description entered by the user, if present",
+            "nullable": true
+          },
+          "custom_image_data_base64": {
+            "type": "string",
+            "x-looker-write-only": true,
+            "description": "(Write-Only) base64 encoded image data",
+            "nullable": true
+          },
+          "custom_image_url": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Custom image_url entered by the user, if present",
+            "nullable": true
+          },
+          "custom_title": {
+            "type": "string",
+            "description": "Custom title entered by the user, if present",
+            "nullable": true
+          },
+          "custom_url": {
+            "type": "string",
+            "description": "Custom url entered by the user, if present",
+            "nullable": true
+          },
+          "dashboard_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Dashboard to base this item on",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The actual description for display",
+            "nullable": true
+          },
+          "favorite_count": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true,
+            "description": "Number of times content has been favorited, if present",
+            "nullable": true
+          },
+          "homepage_section_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Associated Homepage Section",
+            "nullable": true
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true,
+            "description": "Unique Id",
+            "nullable": false
+          },
+          "image_url": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The actual image_url for display",
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The container folder name of the content",
+            "nullable": true
+          },
+          "look_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Look to base this item on",
+            "nullable": true
+          },
+          "lookml_dashboard_id": {
+            "type": "string",
+            "description": "LookML Dashboard to base this item on",
+            "nullable": true
+          },
+          "order": {
+            "type": "integer",
+            "format": "int64",
+            "description": "An arbitrary integer representing the sort order within the section",
+            "nullable": true
+          },
+          "section_fetch_time": {
+            "type": "number",
+            "format": "float",
+            "readOnly": true,
+            "description": "Number of seconds it took to fetch the section this item is in",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The actual title for display",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The actual url for display",
+            "nullable": true
+          },
+          "use_custom_description": {
+            "type": "boolean",
+            "description": "Whether the custom description should be used instead of the content description, if the item is associated with content",
+            "nullable": false
+          },
+          "use_custom_image": {
+            "type": "boolean",
+            "description": "Whether the custom image should be used instead of the content image, if the item is associated with content",
+            "nullable": false
+          },
+          "use_custom_title": {
+            "type": "boolean",
+            "description": "Whether the custom title should be used instead of the content title, if the item is associated with content",
+            "nullable": false
+          },
+          "use_custom_url": {
+            "type": "boolean",
+            "description": "Whether the custom url should be used instead of the content url, if the item is associated with content",
+            "nullable": false
+          },
+          "view_count": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true,
+            "description": "Number of times content has been viewed, if present",
             "nullable": true
           }
         },
@@ -21563,9 +23457,24 @@
           },
           "linked_content_type": {
             "type": "string",
-            "x-looker-values": ["dashboard", "lookml_dashboard"],
+            "enum": ["dashboard", "lookml_dashboard"],
             "description": "Name of the command Valid values are: \"dashboard\", \"lookml_dashboard\".",
             "nullable": false
+          }
+        },
+        "x-looker-status": "beta"
+      },
+      "UpdateCommand": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the command",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the command",
+            "nullable": true
           }
         },
         "x-looker-status": "beta"
@@ -21641,7 +23550,7 @@
           "permission_type": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": ["view", "edit"],
+            "enum": ["view", "edit"],
             "description": "Type of permission: \"view\" or \"edit\" Valid values are: \"view\", \"edit\".",
             "nullable": true
           },
@@ -21781,6 +23690,13 @@
             "description": "The number of scheduled plans validated",
             "nullable": true
           },
+          "total_alerts_validated": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true,
+            "description": "The number of alerts validated",
+            "nullable": true
+          },
           "total_explores_validated": {
             "type": "integer",
             "format": "int64",
@@ -21805,6 +23721,13 @@
           },
           "scheduled_plan": {
             "$ref": "#/components/schemas/ContentValidationScheduledPlan"
+          },
+          "alert": { "$ref": "#/components/schemas/ContentValidationAlert" },
+          "lookml_dashboard": {
+            "$ref": "#/components/schemas/ContentValidationLookMLDashboard"
+          },
+          "lookml_dashboard_element": {
+            "$ref": "#/components/schemas/ContentValidationLookMLDashboardElement"
           },
           "errors": {
             "type": "array",
@@ -22059,6 +23982,72 @@
             "readOnly": true,
             "description": "Unique Id",
             "nullable": false
+          }
+        },
+        "x-looker-status": "beta"
+      },
+      "ContentValidationAlert": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the alert",
+            "nullable": false
+          },
+          "lookml_dashboard_id": {
+            "type": "string",
+            "description": "ID of the LookML dashboard associated with the alert",
+            "nullable": true
+          },
+          "lookml_link_id": {
+            "type": "string",
+            "description": "ID of the LookML dashboard element associated with the alert",
+            "nullable": true
+          },
+          "custom_title": {
+            "type": "string",
+            "description": "An optional, user-defined title for the alert",
+            "nullable": true
+          }
+        },
+        "x-looker-status": "beta"
+      },
+      "ContentValidationLookMLDashboard": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "readOnly": true,
+            "description": "ID of the LookML Dashboard",
+            "nullable": false
+          },
+          "title": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Title of the LookML Dashboard",
+            "nullable": true
+          },
+          "space_id": {
+            "type": "string",
+            "readOnly": true,
+            "description": "ID of Space",
+            "nullable": true
+          }
+        },
+        "x-looker-status": "beta"
+      },
+      "ContentValidationLookMLDashboardElement": {
+        "properties": {
+          "lookml_link_id": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Link ID of the LookML Dashboard Element",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Title of the LookML Dashboard Element",
+            "nullable": true
           }
         },
         "x-looker-status": "beta"
@@ -23902,6 +25891,12 @@
             "description": "Is this connection created and managed by Looker",
             "nullable": false
           },
+          "tunnel_id": {
+            "type": "string",
+            "description": "The Id of the ssh tunnel this connection uses",
+            "x-looker-undocumented": false,
+            "nullable": true
+          },
           "pdt_concurrency": {
             "type": "integer",
             "format": "int64",
@@ -24965,11 +26960,10 @@
             "items": { "$ref": "#/components/schemas/Role" },
             "readOnly": true,
             "description": "Roles assigned to group",
-            "x-looker-undocumented": false,
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "GroupIdForGroupUserInclusion": {
         "properties": {
@@ -25133,7 +27127,7 @@
             "type": "array",
             "items": { "type": "string" },
             "readOnly": true,
-            "x-looker-values": [
+            "enum": [
               "txt",
               "csv",
               "inline_json",
@@ -25155,7 +27149,7 @@
             "type": "array",
             "items": { "type": "string" },
             "readOnly": true,
-            "x-looker-values": ["cell", "query", "dashboard"],
+            "enum": ["cell", "query", "dashboard"],
             "description": "A list of action types the integration supports. Valid values are: \"cell\", \"query\", \"dashboard\".",
             "nullable": false
           },
@@ -25163,7 +27157,7 @@
             "type": "array",
             "items": { "type": "string" },
             "readOnly": true,
-            "x-looker-values": ["formatted", "unformatted"],
+            "enum": ["formatted", "unformatted"],
             "description": "A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: \"formatted\", \"unformatted\".",
             "nullable": false
           },
@@ -25171,7 +27165,7 @@
             "type": "array",
             "items": { "type": "string" },
             "readOnly": true,
-            "x-looker-values": ["apply", "noapply"],
+            "enum": ["apply", "noapply"],
             "description": "A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: \"apply\", \"noapply\".",
             "nullable": false
           },
@@ -25179,7 +27173,7 @@
             "type": "array",
             "items": { "type": "string" },
             "readOnly": true,
-            "x-looker-values": ["push", "url"],
+            "enum": ["push", "url"],
             "description": "A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: \"push\", \"url\".",
             "nullable": false
           },
@@ -26690,6 +28684,13 @@
             "description": "Label",
             "nullable": true
           },
+          "title": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Explore title",
+            "x-looker-undocumented": false,
+            "nullable": true
+          },
           "scopes": {
             "type": "array",
             "items": { "type": "string" },
@@ -27083,8 +29084,8 @@
           "align": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": ["left", "right"],
-            "description": "The appropriate horizontal text alignment the values of this field shoud be displayed in. Valid values are: \"left\", \"right\".",
+            "enum": ["left", "right"],
+            "description": "The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: \"left\", \"right\".",
             "nullable": false
           },
           "can_filter": {
@@ -27096,7 +29097,7 @@
           "category": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": ["parameter", "filter", "measure", "dimension"],
+            "enum": ["parameter", "filter", "measure", "dimension"],
             "description": "Field category Valid values are: \"parameter\", \"filter\", \"measure\", \"dimension\".",
             "nullable": true
           },
@@ -27142,7 +29143,7 @@
           "fill_style": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": ["enumeration", "range"],
+            "enum": ["enumeration", "range"],
             "description": "The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: \"enumeration\", \"range\".",
             "nullable": true
           },
@@ -27354,7 +29355,7 @@
             "type": "array",
             "items": { "type": "string" },
             "readOnly": true,
-            "x-looker-values": [
+            "enum": [
               "advanced_filter_string",
               "advanced_filter_number",
               "advanced_filter_datetime",
@@ -27395,7 +29396,7 @@
           "week_start_day": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": [
+            "enum": [
               "monday",
               "tuesday",
               "wednesday",
@@ -27444,17 +29445,18 @@
           "name": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": [
+            "enum": [
               "day",
               "hour",
               "minute",
               "second",
               "millisecond",
               "microsecond",
+              "week",
               "month",
               "year"
             ],
-            "description": "The type of time interval this field represents a grouping of. Valid values are: \"day\", \"hour\", \"minute\", \"second\", \"millisecond\", \"microsecond\", \"month\", \"year\".",
+            "description": "The type of time interval this field represents a grouping of. Valid values are: \"day\", \"hour\", \"minute\", \"second\", \"millisecond\", \"microsecond\", \"week\", \"month\", \"year\".",
             "nullable": false
           },
           "count": {
@@ -27525,7 +29527,7 @@
           "format": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": ["topojson", "vector_tile_region"],
+            "enum": ["topojson", "vector_tile_region"],
             "description": "Specifies the data format of the region information. Valid values are: \"topojson\", \"vector_tile_region\".",
             "nullable": false
           },
@@ -27971,6 +29973,64 @@
           }
         },
         "x-looker-status": "stable"
+      },
+      "OauthClientApp": {
+        "properties": {
+          "can": {
+            "type": "object",
+            "additionalProperties": { "type": "boolean" },
+            "readOnly": true,
+            "description": "Operations the current user is able to perform on this object",
+            "nullable": false
+          },
+          "client_guid": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The globally unique id of this application",
+            "nullable": false
+          },
+          "redirect_uri": {
+            "type": "string",
+            "description": "The uri with which this application will receive an auth code by browser redirect.",
+            "nullable": false
+          },
+          "display_name": {
+            "type": "string",
+            "description": "The application's display name",
+            "nullable": false
+          },
+          "description": {
+            "type": "string",
+            "description": "A description of the application that will be displayed to users",
+            "nullable": false
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.",
+            "nullable": false
+          },
+          "group_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance",
+            "nullable": true
+          },
+          "tokens_invalid_before": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "All auth codes, access tokens, and refresh tokens issued for this application prior to this date-time for ALL USERS will be invalid.",
+            "nullable": false
+          },
+          "activated_users": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/UserPublic" },
+            "readOnly": true,
+            "description": "All users who have been activated to use this app",
+            "nullable": false
+          }
+        },
+        "x-looker-status": "beta"
       },
       "OIDCConfig": {
         "properties": {
@@ -28515,7 +30575,7 @@
           },
           "git_application_server_http_scheme": {
             "type": "string",
-            "x-looker-values": ["http", "https"],
+            "enum": ["http", "https"],
             "description": "Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: \"http\", \"https\".",
             "nullable": true
           },
@@ -28533,18 +30593,13 @@
           },
           "pull_request_mode": {
             "type": "string",
-            "x-looker-values": ["off", "links", "recommended", "required"],
+            "enum": ["off", "links", "recommended", "required"],
             "description": "The git pull request policy for this project. Valid values are: \"off\", \"links\", \"recommended\", \"required\".",
             "nullable": false
           },
           "validation_required": {
             "type": "boolean",
             "description": "Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository",
-            "nullable": false
-          },
-          "folders_enabled": {
-            "type": "boolean",
-            "description": "If true, folders are enabled for this project",
             "nullable": false
           },
           "git_release_mgmt_enabled": {
@@ -28773,7 +30828,7 @@
           "dependency_status": {
             "type": "string",
             "readOnly": true,
-            "x-looker-values": [
+            "enum": [
               "lock_optional",
               "lock_required",
               "lock_error",
@@ -28962,7 +31017,7 @@
           },
           "result_format": {
             "type": "string",
-            "x-looker-values": [
+            "enum": [
               "inline_json",
               "json",
               "json_detail",
@@ -30627,6 +32682,144 @@
         },
         "x-looker-status": "stable"
       },
+      "SshPublicKey": {
+        "properties": {
+          "public_key": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The SSH public key created for this instance",
+            "nullable": false
+          }
+        },
+        "x-looker-status": "beta"
+      },
+      "SshServer": {
+        "properties": {
+          "ssh_server_id": {
+            "type": "string",
+            "readOnly": true,
+            "description": "A unique id used to identify this SSH Server",
+            "nullable": false
+          },
+          "ssh_server_name": {
+            "type": "string",
+            "description": "The name to identify this SSH Server",
+            "nullable": false
+          },
+          "ssh_server_host": {
+            "type": "string",
+            "description": "The hostname or ip address of the SSH Server",
+            "nullable": false
+          },
+          "ssh_server_port": {
+            "type": "integer",
+            "format": "int64",
+            "description": "The port to connect to on the SSH Server",
+            "nullable": false
+          },
+          "ssh_server_user": {
+            "type": "string",
+            "description": "The username used to connect to the SSH Server",
+            "nullable": false
+          },
+          "finger_print": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The md5 fingerprint used to identify the SSH Server",
+            "nullable": false
+          },
+          "sha_finger_print": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The SHA fingerprint used to identify the SSH Server",
+            "nullable": false
+          },
+          "public_key": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The SSH public key created for this instance",
+            "nullable": false
+          },
+          "status": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The current connection status to this SSH Server",
+            "nullable": false
+          }
+        },
+        "x-looker-status": "beta"
+      },
+      "SshTunnel": {
+        "properties": {
+          "tunnel_id": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Unique ID for the tunnel",
+            "nullable": false
+          },
+          "ssh_server_id": {
+            "type": "string",
+            "description": "SSH Server ID",
+            "nullable": false
+          },
+          "ssh_server_name": {
+            "type": "string",
+            "readOnly": true,
+            "description": "SSH Server name",
+            "nullable": false
+          },
+          "ssh_server_host": {
+            "type": "string",
+            "readOnly": true,
+            "description": "SSH Server Hostname or IP Address",
+            "nullable": false
+          },
+          "ssh_server_port": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true,
+            "description": "SSH Server port",
+            "nullable": false
+          },
+          "ssh_server_user": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Username used to connect to the SSH Server",
+            "nullable": false
+          },
+          "last_attempt": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Time of last connect attempt",
+            "nullable": false
+          },
+          "local_host_port": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true,
+            "description": "Localhost Port used by the Looker instance to connect to the remote DB",
+            "nullable": false
+          },
+          "database_host": {
+            "type": "string",
+            "description": "Hostname or IP Address of the Database Server",
+            "nullable": false
+          },
+          "database_port": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Port that the Database Server is listening on",
+            "nullable": false
+          },
+          "status": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Current connection status for this Tunnel",
+            "nullable": false
+          }
+        },
+        "x-looker-status": "beta"
+      },
       "ThemeSettings": {
         "properties": {
           "background_color": {
@@ -31320,27 +33513,6 @@
             "format": "uri",
             "readOnly": true,
             "description": "Url for swagger.json for this version",
-            "nullable": true
-          },
-          "openapi_url": {
-            "type": "string",
-            "format": "uri",
-            "readOnly": true,
-            "description": "Url for openapi.json for this version",
-            "nullable": true
-          },
-          "swagger_min_url": {
-            "type": "string",
-            "format": "uri",
-            "readOnly": true,
-            "description": "Url for minified swagger.json for this version",
-            "nullable": true
-          },
-          "openapi_min_url": {
-            "type": "string",
-            "format": "uri",
-            "readOnly": true,
-            "description": "Url for minified openapi.json for this version",
             "nullable": true
           }
         },

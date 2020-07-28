@@ -26,17 +26,8 @@
 
  */
 
-import { runConfig } from './legacyGenerator'
-import { SDKConfig } from './sdkConfig'
-import { quit } from './nodeUtils'
+import { updateSpecs } from './utils'
 ;(async () => {
-  try {
-    const config = SDKConfig()
-    // Look for the Looker config section and only run that one
-    const name = 'Looker'
-    const props = config[name]
-    await runConfig(name, props)
-  } catch (e) {
-    quit(e)
-  }
+  console.warn('Did you `yarn wipe` in the root to clear the old spec files?')
+  await updateSpecs()
 })()
