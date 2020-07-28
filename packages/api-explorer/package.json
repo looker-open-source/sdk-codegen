@@ -18,7 +18,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc && webpack --config webpack.prod.config.js",
-    "develop": "webpack-dev-server --https --disable-host-check --config webpack.dev.config.js",
+    "develop": "webpack-dev-server --disable-host-check --config webpack.dev.config.js",
     "docs": "typedoc --mode file --out docs",
     "register": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' scripts/register.ts",
     "refresh": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' scripts/refresh_specs.ts",

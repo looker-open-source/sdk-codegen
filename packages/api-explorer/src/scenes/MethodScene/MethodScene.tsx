@@ -25,7 +25,7 @@
  */
 
 import React, { FC, useContext } from 'react'
-import { Space, Text } from '@looker/components'
+import { Space, Text, Grid, useToggle, ButtonOutline } from '@looker/components'
 import { useParams } from 'react-router-dom'
 import { RunIt, RunItHttpMethod, RunItContext } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
@@ -57,32 +57,40 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
   const { methodName, specKey } = useParams<DocMethodParams>()
   const method = api.methods[methodName]
   const seeTypes = typeRefs(api, method.customTypes)
+  const { value, toggle } = useToggle()
 
   return (
-    <>
-      <DocTitle>{method.summary}</DocTitle>
-      <Space mb="xlarge" gap="small">
-        <DocStatus method={method} />
-        <DocActivityType method={method} />
-        <DocRateLimited method={method} />
-      </Space>
-      <DocOperation method={method} />
-      <DocMarkdown source={method.description} specKey={specKey} />
-      <DocSDKs api={api} method={method} />
-      {seeTypes.length > 0 && (
-        <Space mb="large" gap="xsmall">
-          <Text>Referenced types:</Text>
-          <DocReferences items={seeTypes} api={api} specKey={specKey} />
+    <Grid columns={2}>
+      <div>
+        <DocTitle>
+          {method.summary}
+          <ButtonOutline onClick={toggle}>Run It</ButtonOutline>
+        </DocTitle>
+        <Space mb="xlarge" gap="small">
+          <DocStatus method={method} />
+          <DocActivityType method={method} />
+          <DocRateLimited method={method} />
         </Space>
-      )}
-      {method.responses && <DocResponses responses={method.responses} />}
-      {sdk && (
-        <RunIt
-          inputs={createInputs(api, method)}
-          httpMethod={method.httpMethod as RunItHttpMethod}
-          endpoint={method.endpoint}
-        />
-      )}
-    </>
+        <DocOperation method={method} />
+        <DocMarkdown source={method.description} specKey={specKey} />
+        <DocSDKs api={api} method={method} />
+        {seeTypes.length > 0 && (
+          <Space mb="large" gap="xsmall">
+            <Text>Referenced types:</Text>
+            <DocReferences items={seeTypes} api={api} specKey={specKey} />
+          </Space>
+        )}
+        {method.responses && <DocResponses responses={method.responses} />}
+      </div>
+      <div>
+        {sdk && (
+          <RunIt
+            inputs={createInputs(api, method)}
+            httpMethod={method.httpMethod as RunItHttpMethod}
+            endpoint={method.endpoint}
+          />
+        )}
+      </div>
+    </Grid>
   )
 }
