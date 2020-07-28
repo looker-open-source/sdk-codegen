@@ -86,7 +86,7 @@ export const MethodScene: FC<DocMethodProps> = ({
         inputs={createInputs(api, method)}
         httpMethod={method.httpMethod as RunItHttpMethod}
         endpoint={method.endpoint}
-        tryItCallback={runItCallback}
+        runItCallback={runItCallback}
         sdk={sdk}
       />
     </>

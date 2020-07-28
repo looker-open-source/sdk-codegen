@@ -33,7 +33,7 @@ import { RunIt, RunItInput } from './RunIt'
 import { testTextResponse } from './test-data'
 import { runItSDK } from './utils'
 
-describe('TryIt', () => {
+describe('RunIt', () => {
   const inputs: RunItInput[] = [
     {
       name: 'result_format',
@@ -117,19 +117,19 @@ describe('TryIt', () => {
   })
 
   test('custom try it request callback overrides default', async () => {
-    const customTryItCallback = jest.fn().mockResolvedValue(testTextResponse)
+    const customRunItCallback = jest.fn().mockResolvedValue(testTextResponse)
     renderWithTheme(
       <RunIt
         specKey={'3.1'}
         inputs={inputs}
         httpMethod={'POST'}
         endpoint={'/run_query/{result_format}'}
-        tryItCallback={customTryItCallback}
+        runItCallback={customRunItCallback}
       />
     )
     userEvent.click(screen.getByRole('button', { name: 'Try It' }))
     await waitFor(() => {
-      expect(customTryItCallback).toHaveBeenCalled()
+      expect(customRunItCallback).toHaveBeenCalled()
       expect(
         screen.queryByText(testTextResponse.body.toString())
       ).toBeInTheDocument()

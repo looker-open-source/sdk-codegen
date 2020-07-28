@@ -89,7 +89,7 @@ export interface RunItCallback {
   ): Promise<IRawResponse>
 }
 
-type TryItInputType =
+type RunItInputType =
   | 'boolean'
   | 'int64'
   | 'integer'
@@ -105,21 +105,21 @@ type TryItInputType =
   | 'password'
   | 'datetime'
 
-type TryItInputLocation = 'body' | 'path' | 'query' | 'header' | 'cookie'
+type RunItInputLocation = 'body' | 'path' | 'query' | 'header' | 'cookie'
 
 /**
  * A RunIt input type describing a single REST request's parameter or a structure
  */
 export interface RunItInput {
   name: string
-  location: TryItInputLocation
-  /** A TryItInputType or a structure */
-  type: TryItInputType | any
+  location: RunItInputLocation
+  /** A RunItInputType or a structure */
+  type: RunItInputType | any
   required: boolean
   description: string
 }
 
-interface TryItProps {
+interface RunItProps {
   /** API version to Try */
   specKey: string
   /** An array of parameters associated with a given endpoint */
@@ -139,7 +139,7 @@ type ResponseContent = IRawResponse | undefined
  * Given an array of inputs, an HTTP method, an endpoint and an api version (specKey) it renders a REST request form
  * which on submit performs a REST request and renders the response with the appropriate MIME type handler
  */
-export const RunIt: FC<TryItProps> = ({
+export const RunIt: FC<RunItProps> = ({
   specKey,
   inputs,
   httpMethod,
@@ -177,7 +177,7 @@ export const RunIt: FC<TryItProps> = ({
     return function cleanup() {
       setAutoSubmit(false)
     }
-  })
+  }, [])
 
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()

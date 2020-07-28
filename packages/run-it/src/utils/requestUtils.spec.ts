@@ -125,7 +125,7 @@ describe('createRequestParams', () => {
   })
 })
 
-describe('defaultTryItCallback', () => {
+describe('defaultRunItCallback', () => {
   test('it makes a request', async () => {
     const spy = jest
       .spyOn(runItSDK.authSession.transport, 'rawRequest')

@@ -29,7 +29,7 @@ import React, {
   FC,
   Dispatch,
   useRef,
-  useEffect,
+  useLayoutEffect,
 } from 'react'
 import { Button, Form, Space, ButtonTransparent } from '@looker/components'
 
@@ -103,8 +103,14 @@ export const RequestForm: FC<RequestFormProps> = ({
 
   const submitRef = useRef<HTMLButtonElement>(null)
 
-  useEffect(() => {
-    if (autoSubmit) submitRef && submitRef.current.click()
+  useLayoutEffect(() => {
+    // TODO fix this mess
+    // eslint-disable-next-line no-unused-expressions
+    if (autoSubmit && submitRef) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
+      submitRef?.current.click()
+    }
   })
 
   return (
