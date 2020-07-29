@@ -291,6 +291,17 @@ ${this.hooks.join('\n')}
     return `${indent}self.${propName} = ${propName}`
   }
 
+  declareType(indent: string, type: IType) {
+    let decl = super.declareType(indent, type)
+    if (type instanceof EnumType) {
+      const invalid =
+        'invalid_api_enum_value = "invalid_api_enum_value"' +
+        `\n\n\n${type.name}.__new__ = model.safe_enum__new__`
+      decl += `\n${this.bumper(indent)}${invalid}`
+    }
+    return decl
+  }
+
   typeProperties(type: IType) {
     return Object.values(type.requiredProperties).concat(
       Object.values(type.optionalProperties)
