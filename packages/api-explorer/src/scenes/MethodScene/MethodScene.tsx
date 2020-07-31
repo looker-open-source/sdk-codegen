@@ -36,11 +36,12 @@ import {
   DocMarkdown,
   DocRateLimited,
   DocReferences,
+  DocResponses,
   DocSDKs,
   DocStatus,
   DocTitle,
 } from '../../components'
-import { DocResponse, DocOperation } from './components'
+import { DocOperation } from './components'
 import { createInputs } from './utils'
 
 interface DocMethodProps {
@@ -80,7 +81,7 @@ export const MethodScene: FC<DocMethodProps> = ({
           <DocReferences items={seeTypes} api={api} specKey={specKey} />
         </Space>
       )}
-      {method.responses && <DocResponse responses={method.responses} />}
+      {method.responses && <DocResponses responses={method.responses} />}
       <RunIt
         specKey={specKey}
         inputs={createInputs(api, method)}
