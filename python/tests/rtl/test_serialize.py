@@ -47,6 +47,10 @@ class Enum1(enum.Enum):
     """
 
     entry1 = "entry1"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+Enum1.__new__ = ml.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -175,6 +179,10 @@ class Enum2(enum.Enum):
     """
 
     entry2 = "entry2"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+Enum2.__new__ = ml.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -432,3 +440,27 @@ def test_serialize_explict_null():
         }
     ).encode("utf-8")
     assert sr.serialize(model) == expected
+
+
+def test_safe_enum_deserialization():
+    data = copy.deepcopy(MODEL_DATA)
+    data["enum1"] = "not an Enum1 member!"
+    data["enum2"] = ""
+    model = Model(
+        enum1=Enum1.invalid_api_enum_value,
+        model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        enum2=Enum2.invalid_api_enum_value,
+        model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
+        list_enum1=[Enum1.entry1],
+        list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
+        opt_enum1=Enum1.entry1,
+        opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        id=1,
+        name="my-name",
+        class_="model-name",
+        finally_=[1, 2, 3],
+    )
+    assert (
+        sr.deserialize(data=json.dumps(data), structure=Model, converter=converter)
+        == model
+    )

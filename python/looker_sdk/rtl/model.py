@@ -35,6 +35,20 @@ class Model:
     """
 
 
+def safe_enum__new__(cls, value):
+    """Handle out-of-spec enum values returned by API.
+
+    This is achieved by overriding the __new__ method to return
+    `invalid_api_enum_value` (defined on each subclass) when an
+    unexpected value for the enum is returned by the API.
+    """
+    if not isinstance(value, str):
+        return super().__new__(cls, value)
+    else:
+        vals = {v.value: v for v in cls.__members__.values()}
+        return vals.get(value, cls.invalid_api_enum_value)
+
+
 T = TypeVar("T")
 
 

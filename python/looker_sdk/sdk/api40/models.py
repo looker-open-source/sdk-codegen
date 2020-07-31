@@ -79,6 +79,10 @@ class Align(enum.Enum):
 
     left = "left"
     right = "right"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+Align.__new__ = model.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -406,6 +410,10 @@ class Category(enum.Enum):
     filter = "filter"
     measure = "measure"
     dimension = "dimension"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+Category.__new__ = model.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -2835,6 +2843,10 @@ class DependencyStatus(enum.Enum):
     lock_required = "lock_required"
     lock_error = "lock_error"
     install_none = "install_none"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+DependencyStatus.__new__ = model.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -3184,6 +3196,10 @@ class FillStyle(enum.Enum):
 
     enumeration = "enumeration"
     range = "range"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+FillStyle.__new__ = model.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -3356,6 +3372,10 @@ class Format(enum.Enum):
 
     topojson = "topojson"
     vector_tile_region = "vector_tile_region"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+Format.__new__ = model.safe_enum__new__
 
 
 class GitApplicationServerHttpScheme(enum.Enum):
@@ -3366,6 +3386,10 @@ class GitApplicationServerHttpScheme(enum.Enum):
 
     http = "http"
     https = "https"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+GitApplicationServerHttpScheme.__new__ = model.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -4482,6 +4506,10 @@ class LinkedContentType(enum.Enum):
 
     dashboard = "dashboard"
     lookml_dashboard = "lookml_dashboard"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+LinkedContentType.__new__ = model.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -6071,6 +6099,10 @@ class Name(enum.Enum):
     week = "week"
     month = "month"
     year = "year"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+Name.__new__ = model.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -6494,6 +6526,10 @@ class PermissionType(enum.Enum):
 
     view = "view"
     edit = "edit"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+PermissionType.__new__ = model.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -6820,6 +6856,10 @@ class PullRequestMode(enum.Enum):
     links = "links"
     recommended = "recommended"
     required = "required"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+PullRequestMode.__new__ = model.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -7178,6 +7218,10 @@ class ResultFormat(enum.Enum):
     txt = "txt"
     xlsx = "xlsx"
     gsxml = "gsxml"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+ResultFormat.__new__ = model.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -8308,6 +8352,10 @@ class SupportedActionTypes(enum.Enum):
     cell = "cell"
     query = "query"
     dashboard = "dashboard"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+SupportedActionTypes.__new__ = model.safe_enum__new__
 
 
 class SupportedDownloadSettings(enum.Enum):
@@ -8318,6 +8366,10 @@ class SupportedDownloadSettings(enum.Enum):
 
     push = "push"
     url = "url"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+SupportedDownloadSettings.__new__ = model.safe_enum__new__
 
 
 class SupportedFormats(enum.Enum):
@@ -8339,6 +8391,10 @@ class SupportedFormats(enum.Enum):
     assembled_pdf = "assembled_pdf"
     wysiwyg_png = "wysiwyg_png"
     csv_zip = "csv_zip"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+SupportedFormats.__new__ = model.safe_enum__new__
 
 
 class SupportedFormattings(enum.Enum):
@@ -8349,6 +8405,10 @@ class SupportedFormattings(enum.Enum):
 
     formatted = "formatted"
     unformatted = "unformatted"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+SupportedFormattings.__new__ = model.safe_enum__new__
 
 
 class SupportedVisualizationFormattings(enum.Enum):
@@ -8359,6 +8419,10 @@ class SupportedVisualizationFormattings(enum.Enum):
 
     apply = "apply"
     noapply = "noapply"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+SupportedVisualizationFormattings.__new__ = model.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -8767,6 +8831,10 @@ class UserAttributeFilterTypes(enum.Enum):
     relative_url = "relative_url"
     yesno = "yesno"
     zipcode = "zipcode"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+UserAttributeFilterTypes.__new__ = model.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -9028,6 +9096,10 @@ class WeekStartDay(enum.Enum):
     friday = "friday"
     saturday = "saturday"
     sunday = "sunday"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+WeekStartDay.__new__ = model.safe_enum__new__
 
 
 @attr.s(auto_attribs=True, init=False)
