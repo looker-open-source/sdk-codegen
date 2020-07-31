@@ -27,59 +27,41 @@
 import React, { FC } from 'react'
 import {
   Box,
-  MessageBar,
   SpaceVertical,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
-  Table,
-  TableHead,
-  TableRow,
   useTabs,
 } from '@looker/components'
 import { IMethodResponse } from '@looker/sdk-codegen'
 
-import { ApixHeading, DocCode } from '../../../components'
-import { copyAndCleanResponse } from '../utils'
+import { ApixHeading } from '../common'
+import { DocResponseTypes } from './DocResponseTypes'
+import { buildResponseTree } from './utils'
 
-interface DocResponseProps {
+interface DocResponsesProps {
   responses: IMethodResponse[]
 }
 
-export const DocResponse: FC<DocResponseProps> = ({ responses }) => {
+export const DocResponses: FC<DocResponsesProps> = ({ responses }) => {
   const tabs = useTabs()
+  const responseTree = buildResponseTree(responses)
 
   return (
     <Box pt="large" pb="xxlarge">
       <SpaceVertical mb="medium">
-        <ApixHeading as="h2">Responses</ApixHeading>
+        <ApixHeading as="h2">Response Models</ApixHeading>
       </SpaceVertical>
       <TabList {...tabs}>
-        {responses.map((response, index) => (
-          <Tab
-            key={index}
-          >{`${response.statusCode}:${response.description}`}</Tab>
+        {Object.keys(responseTree).map((statusCode, index) => (
+          <Tab key={index}>{statusCode}</Tab>
         ))}
       </TabList>
       <TabPanels {...tabs} pt="0">
-        {responses.map((response, index) => (
+        {Object.values(responseTree).map((responses, index) => (
           <TabPanel key={index}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <SpaceVertical py="small">
-                    <MessageBar intent="inform">
-                      {response.statusCode}: {response.description}{' '}
-                      {response.mediaType}
-                    </MessageBar>
-                  </SpaceVertical>
-                </TableRow>
-              </TableHead>
-            </Table>
-            <DocCode
-              code={JSON.stringify(copyAndCleanResponse(response), null, 2)}
-            />
+            <DocResponseTypes responses={responses} />
           </TabPanel>
         ))}
       </TabPanels>

@@ -24,4 +24,3 @@
 
  */
 export { DocOperation } from './DocOperation'
-export { DocResponse } from './DocResponse'
