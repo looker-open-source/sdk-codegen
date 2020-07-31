@@ -48,8 +48,8 @@ extension String {
     }
 }
 
-struct Constants {
-    static let lookerVersion = "7.12"
+public struct Constants {
+    static let lookerVersion = "7.13"
     static let apiVersion = "4.0"
     static let defaultApiVersion = "4.0" // Swift requires API 4.0
     static let sdkVersion = #"\#(apiVersion).\#(lookerVersion)"#
@@ -79,15 +79,15 @@ struct Constants {
 }
 
 /// Homogeneous generic Dictionary with String keys
-typealias StringDictionary<Value> = Dictionary<String, Value>
+public typealias StringDictionary<Value> = Dictionary<String, Value>
 
 /// Heterogeneous Dictionary with String keys
-typealias ValueDictionary<K: Hashable, V> = Dictionary<K, V>
+public typealias ValueDictionary<K: Hashable, V> = Dictionary<K, V>
 
-typealias Values = [String: Any?]
+public typealias Values = [String: Any?]
 
 /// Extension for converting a `String` to `Bool`
-extension String {
+public extension String {
     var bool: Bool? {
         switch self.lowercased() {
         case "true", "t", "yes", "y", "1":
@@ -107,9 +107,9 @@ extension String {
 //struct Voidable : SDKModel {
 //}
 
-typealias Voidable = String
+public typealias Voidable = String
 
-func unquote(_ value: String?) -> String? {
+public func unquote(_ value: String?) -> String? {
     guard let v = value else { return value }
     let first = v.first
     if (first == "'" || first == "\"" || first == "`") {
@@ -121,23 +121,23 @@ func unquote(_ value: String?) -> String? {
     return v
 }
 
-func isTrue(_ value: String?) -> Bool {
+public func isTrue(_ value: String?) -> Bool {
     guard let val = value else { return false }
     return val.bool == true
 }
 
-func isFalse(_ value: String?) -> Bool {
+public func isFalse(_ value: String?) -> Bool {
     guard let val = value else { return false }
     return val.bool == false
 }
 
-func defaultBool(_ value: String?, _ defaultVal: Bool = false) -> Bool {
+public func defaultBool(_ value: String?, _ defaultVal: Bool = false) -> Bool {
     if isTrue(value) { return true }
     if isFalse(value) { return false }
     return defaultVal
 }
 
-func envVar(_ name: String, _ defaultVal: String? = nil) -> String? {
+public func envVar(_ name: String, _ defaultVal: String? = nil) -> String? {
     if let val = unquote(ProcessInfo.processInfo.environment[name]) {
         return val
     } else {
@@ -145,13 +145,13 @@ func envVar(_ name: String, _ defaultVal: String? = nil) -> String? {
     }
 }
 
-func isOptional(_ value: Any) -> Bool {
+public func isOptional(_ value: Any) -> Bool {
     let mirror = Mirror(reflecting: value)
     let style = mirror.displayStyle
     return style == .optional
 }
 
-func unwrap(_ any:Any) -> Any? {
+public func unwrap(_ any:Any) -> Any? {
 
     let mi = Mirror(reflecting: any)
     if mi.displayStyle != .optional {
@@ -164,7 +164,7 @@ func unwrap(_ any:Any) -> Any? {
 
 }
 
-extension StringProtocol {
+public extension StringProtocol {
     subscript(bounds: CountableClosedRange<Int>) -> SubSequence {
         let start = index(startIndex, offsetBy: bounds.lowerBound)
         let end = index(start, offsetBy: bounds.count)
@@ -178,7 +178,7 @@ extension StringProtocol {
     }
 }
 
-extension Array where Element: LosslessStringConvertible {
+public extension Array where Element: LosslessStringConvertible {
     func toString(_ separator: String = ",", _ prefix: String = "", _ suffix: String = "") -> String {
         var result = ""
         let skip = separator.count
@@ -189,10 +189,10 @@ extension Array where Element: LosslessStringConvertible {
 }
 
 /// TODO figure out the best way to deserialize URIs.
-typealias URI = String
+public typealias URI = String
 
 /// TODO create type that supports `separator=","` and `prefix=""` and `suffix=""`
-typealias DelimArray<T> = Array<T>
+public typealias DelimArray<T> = Array<T>
 
 // TODO: UTC date routines from this code. Are they necessary?
 // https://stackoverflow.com/a/28016692/74137
@@ -255,20 +255,20 @@ typealias DelimArray<T> = Array<T>
 //}
 
 /// YYYYMMDD date representation to Date
-func SToD(_ dateString: String) -> Date? {
+public func SToD(_ dateString: String) -> Date? {
     let formatter = DateFormatter()
     formatter.dateFormat = "YYYYMMDD"
     return formatter.date(from: dateString)
 }
 
 /// Date to string YYYYMMDD representation
-func DToS(_ date: Date) -> String {
+public func DToS(_ date: Date) -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "YYYYMMDD"
     return formatter.string(from: date)
 }
 
-struct Safe {
-    static let Dashboard = "content_favorite_id,content_metadata_id,description,hidden,id,model,query_timezone,readonly,refresh_interval,created_at,title,user_id,background_color,dashboard_layouts,delete,deleted_at,deleter_id,edit_uri,favorite_count,last_accessed_at,last_viewed_at,load_configuration,lookml_link_id,show_filters_bar,show_title,slug,space_id,folder_id,text_tile_text_color,tile_background_color,tile_text_color,title_color,view_count,settings,can"
-
-}
+//public struct Safe {
+//    static let Dashboard = "content_favorite_id,content_metadata_id,description,hidden,id,model,query_timezone,readonly,refresh_interval,created_at,title,user_id,background_color,dashboard_layouts,delete,deleted_at,deleter_id,edit_uri,favorite_count,last_accessed_at,last_viewed_at,load_configuration,lookml_link_id,show_filters_bar,show_title,slug,space_id,folder_id,text_tile_text_color,tile_background_color,tile_text_color,title_color,view_count,settings,can"
+//
+//}

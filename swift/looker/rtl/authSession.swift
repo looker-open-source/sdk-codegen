@@ -24,7 +24,7 @@
 
 import Foundation
 
-protocol IAuthSession: IAuthorizer {
+public protocol IAuthSession: IAuthorizer {
     var sudoId: String { get set }
     func getToken() throws -> AuthToken
     func isSudo() -> Bool
@@ -33,14 +33,14 @@ protocol IAuthSession: IAuthorizer {
 }
 
 @available(OSX 10.15, *)
-class AuthSession: IAuthSession {
+open class AuthSession: IAuthSession {
     private var apiPath = ""
     var _authToken = AuthToken()
     var _sudoToken = AuthToken()
-    var sudoId: String = ""
-    var settings: IApiSettings
-    var transport: ITransport
-    var activeToken: AuthToken {
+    public var sudoId: String = ""
+    public var settings: IApiSettings
+    public var transport: ITransport
+    public var activeToken: AuthToken {
         get {
             if (!self._sudoToken.access_token.isEmpty) {
                 return self._sudoToken
@@ -55,7 +55,7 @@ class AuthSession: IAuthSession {
         self.apiPath = "/api/\(settings.api_version!)"
     }
     
-    func getToken() throws -> AuthToken {
+   open func getToken() throws -> AuthToken {
         if (!self.isAuthenticated()) {
             // this is currently a synchronous call so unblocking
             return self.login()
@@ -63,28 +63,28 @@ class AuthSession: IAuthSession {
         return self.activeToken
     }
     
-    func isSudo() -> Bool {
+    open func isSudo() -> Bool {
         return ((!self.sudoId.isEmpty) && self._sudoToken.isActive())
     }
     
-    func login(_ sudoId: String = "") -> AuthToken {
+    open func login(_ sudoId: String = "") -> AuthToken {
         if (sudoId != self.sudoId || !self.isAuthenticated()) {
             _ = try? self._login(sudoId)
         }
         return self.activeToken
     }
     
-    func reset() {
+    open func reset() {
         self.sudoId = ""
         self._authToken.reset()
         self._sudoToken.reset()
     }
     
-    func isAuthenticated() -> Bool {
+    open func isAuthenticated() -> Bool {
         return self.activeToken.isActive()
     }
     
-    func authenticate(_ props: URLRequest) throws -> URLRequest {
+    open func authenticate(_ props: URLRequest) throws -> URLRequest {
         let token = try self.getToken()
         var updated = props
         if (token.isActive()) {
@@ -93,7 +93,7 @@ class AuthSession: IAuthSession {
         return updated
     }
     
-    func logout() -> Bool {
+    open func logout() -> Bool {
         var result = false
         if (self.isAuthenticated()) {
             result = self._logout()
@@ -101,7 +101,7 @@ class AuthSession: IAuthSession {
         return result
     }
     
-    func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
+    open func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
         switch response {
         case .success(let response):
             return response

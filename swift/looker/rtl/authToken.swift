@@ -24,7 +24,7 @@
 
 import Foundation
 
-protocol AccessTokenProtocol {
+public protocol AccessTokenProtocol {
     var access_token: String { get set }
     var token_type: String { get set }
     var expires_in: Int64 { get set }
@@ -37,13 +37,13 @@ protocol AccessTokenProtocol {
 //  var expires_in: Int
 //}
 
-struct AuthToken: AccessTokenProtocol, Codable {
+public struct AuthToken: AccessTokenProtocol, Codable {
     /// Lag time is 10 seconds
     static let lagTime = 10
-    var access_token: String = ""
-    var token_type: String = ""
-    var expires_in: Int64 = 0
-    var refresh_token: String = ""
+    public var access_token: String = ""
+    public var token_type: String = ""
+    public var expires_in: Int64 = 0
+    public var refresh_token: String = ""
     
     private var expiresAt: Date?
     
@@ -54,19 +54,19 @@ struct AuthToken: AccessTokenProtocol, Codable {
     }
     
     // true if the authentication token is set and has not timed without
-    func isActive() -> Bool {
+    public func isActive() -> Bool {
         if (self.access_token == "" || self.expires_in == 0) { return false }
         guard let expiresAt = self.expiresAt else { return false }
         return expiresAt > Date()
     }
     
-    static func expiryDate(_ inSeconds: Int) -> Date {
+    public static func expiryDate(_ inSeconds: Int) -> Date {
         let interval = inSeconds > 0 ? inSeconds - lagTime : -lagTime
         return Date.init(timeIntervalSinceNow: TimeInterval(interval))
     }
     
     // Assign the token and set its expiration
-    mutating func setToken(_ token: AccessToken) -> Self {
+    public mutating func setToken(_ token: AccessToken) -> Self {
         self.access_token = token.access_token!
         self.token_type = token.token_type!
         self.expires_in = token.expires_in!
@@ -78,7 +78,7 @@ struct AuthToken: AccessTokenProtocol, Codable {
         return self
     }
     
-    mutating func reset() {
+    public mutating func reset() {
         self.access_token = ""
         self.expires_in = 0
     }
