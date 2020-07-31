@@ -24,7 +24,6 @@
 
  */
 
-import { omit } from 'lodash'
 import {
   ArrayType,
   DelimArrayType,
@@ -36,8 +35,12 @@ import {
 } from '@looker/sdk-codegen'
 import { RunItInput } from '@looker/run-it'
 
-// TODO: use potential equivalent from sdk-codegen, confirm formats
-export const getTypeDefault = (type: string) => {
+/**
+ * Return a default value for a given type name
+ * @param type A type name
+ */
+const getTypeDefault = (type: string) => {
+  // TODO: use potential equivalent from sdk-codegen, confirm formats
   switch (type) {
     case 'boolean':
       return false
@@ -66,6 +69,11 @@ export const getTypeDefault = (type: string) => {
   }
 }
 
+/**
+ * Given a type object reduce it to its writeable intrinsic and/or custom type properties and their default values
+ * @param spec Api spec
+ * @param type A type object
+ */
 const createSampleBody = (spec: IApiModel, type: IType) => {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   const getSampleValue = (type: IType) => {
@@ -75,7 +83,6 @@ const createSampleBody = (spec: IApiModel, type: IType) => {
         ? [recurse(spec.types[type.customType])]
         : getTypeDefault(type.name)
     if (type instanceof HashType)
-      // TODO: populate Hash[] types
       return type.customType ? recurse(spec.types[type.customType]) : {}
     if (type instanceof DelimArrayType) return ''
 
@@ -96,11 +103,13 @@ const createSampleBody = (spec: IApiModel, type: IType) => {
   return recurse(type)
 }
 
-export const createInputs = (
-  spec: IApiModel,
-  method: IMethod
-): RunItInput[] => {
-  return method.allParams.map((param) => ({
+/**
+ * Given an SDK method create and return an array of inputs for the run-it form
+ * @param spec Api spec
+ * @param method A method object
+ */
+export const createInputs = (spec: IApiModel, method: IMethod): RunItInput[] =>
+  method.allParams.map((param) => ({
     name: param.name,
     location: param.location,
     type:
@@ -110,31 +119,3 @@ export const createInputs = (
     required: param.required,
     description: param.description,
   }))
-}
-
-export const responsePropsToOmit = [
-  'properties',
-  'methodRefs',
-  'refs',
-  'customType',
-  'customTypes',
-  'refCount',
-  'types',
-  'schema',
-]
-
-const cleanResponse = (val: object) => {
-  val = omit(val, responsePropsToOmit)
-  Object.keys(val).forEach((key) => {
-    const v = val[key]
-    if (v instanceof Object) {
-      val[key] = cleanResponse(v)
-    }
-  })
-  return val
-}
-
-export const copyAndCleanResponse = (val: object) => {
-  const copy = { ...val }
-  return cleanResponse(copy)
-}
