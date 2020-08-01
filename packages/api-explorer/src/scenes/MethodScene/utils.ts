@@ -24,7 +24,6 @@
 
  */
 
-import { cloneDeep, isEmpty } from 'lodash'
 import {
   ArrayType,
   DelimArrayType,
@@ -33,9 +32,6 @@ import {
   IntrinsicType,
   IType,
   IMethod,
-  IProperty,
-  IMethodResponse,
-  KeyedCollection,
 } from '@looker/sdk-codegen'
 import { RunItInput } from '@looker/run-it'
 
@@ -123,55 +119,3 @@ export const createInputs = (spec: IApiModel, method: IMethod): RunItInput[] =>
     required: param.required,
     description: param.description,
   }))
-
-/**
- * Omit unwanted properties from a given property object
- * @param val Property object
- */
-const cleanProperty = (val: IProperty) => {
-  if (val.type.customType) {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    return cleanType(val.type).properties
-  }
-  return val.type.name
-}
-
-interface CleanType {
-  name: string
-  description: string
-  properties: KeyedCollection<any>
-}
-
-/**
- * Omit unwanted metadata from a given type object
- * @param val Type object
- */
-const cleanType = (val: IType): CleanType => {
-  const result = {
-    name: val.name,
-    description: val.description,
-    properties: {},
-  }
-  if (!isEmpty(val.properties)) {
-    Object.entries(val.properties).forEach(
-      ([name, property]) => (result.properties[name] = cleanProperty(property))
-    )
-  }
-  return result
-}
-
-/**
- * Given a response object, return a copy stripped of unwanted metadata
- * @param val A method response object
- */
-export const copyAndCleanResponse = (val: IMethodResponse) => {
-  switch (val.type.className) {
-    case 'ArrayType':
-    case 'HashType':
-    case 'DelimArrayType':
-    case 'EnumType':
-      return cleanType(cloneDeep(val.type.elementType!)).properties
-    default:
-      return cleanType(cloneDeep(val.type)).properties
-  }
-}

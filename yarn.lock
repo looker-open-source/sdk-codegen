@@ -2110,30 +2110,30 @@
     debug "^2.2.0"
     es6-promise "^4.2.5"
 
-"@looker/components-providers@^0.9.6":
-  version "0.9.6"
-  resolved "https://registry.yarnpkg.com/@looker/components-providers/-/components-providers-0.9.6.tgz#dc0617129be70412f6db32065e24a2c75427e923"
-  integrity sha512-2S1+zMVALUvTUmmfxjvLgpz+QeIzICt0rEJifUd+HIcX1F0n5zECOoVnUN1Hl2Xs6R20kYG7mURR/QgcOOCakA==
+"@looker/components-providers@^0.9.7":
+  version "0.9.7"
+  resolved "https://registry.yarnpkg.com/@looker/components-providers/-/components-providers-0.9.7.tgz#e694e0dd2c112ef6b6d7400688581dc4fe76cf03"
+  integrity sha512-InHmMUUnXIvlSGPwK1ruIl/MH4S0lFyCFAgORV6LHOyHm4ukSxQFQlUiW8dM8yntogValZDsBqZXlj8wT0tXXA==
   dependencies:
-    "@looker/design-tokens" "^0.9.6"
+    "@looker/design-tokens" "^0.9.7"
 
 "@looker/components-test-utils@^0.7.36":
   version "0.7.36"
   resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-0.7.36.tgz#2de68473d728b61f11fd744cfe8dbe2dae190e2f"
   integrity sha512-eT6EGgNnCwlBeZ3QYuKq/Mq+n1JataHVD9by3ONv7LrS1bpPg3Rhmdzg8MWoSPrXNj96fMsmvCjkKk6+mfT3yA==
 
-"@looker/components@^0.9.6":
-  version "0.9.6"
-  resolved "https://registry.yarnpkg.com/@looker/components/-/components-0.9.6.tgz#cc04df8a9a1e18b372a3eea02a26a601912c18ae"
-  integrity sha512-mHYlz3cuy0lTkIKW4SFzrYkWFX2fiBjb/Bn6a39WAhyOoItaL8hMlxf2E6bWf60puVaZS4toSISb1iPl5r6KcQ==
+"@looker/components@^0.9.7":
+  version "0.9.7"
+  resolved "https://registry.yarnpkg.com/@looker/components/-/components-0.9.7.tgz#c1b304bb34fbbcfbb60169c12e284cba26645a59"
+  integrity sha512-aY7L9e9vX1MuHvLiD3mIBW+uIi978/qaMJmFHAS3aD7IRWGMECGhINGSCO2ziTU35CQTZzNOwxZm/bFoqcn4Jw==
   dependencies:
-    "@looker/components-providers" "^0.9.6"
-    "@looker/design-tokens" "^0.9.6"
-    "@looker/icons" "^0.9.6"
+    "@looker/components-providers" "^0.9.7"
+    "@looker/design-tokens" "^0.9.7"
+    "@looker/icons" "^0.9.7"
     "@popperjs/core" "^2.4.4"
     d3-color "^1.4.1"
     d3-hsv "^0.1.0"
-    date-fns "^2.14.0"
+    date-fns "^2.15.0"
     date-fns-tz "^1.0.10"
     focus-trap "^5.1.0"
     lodash "^4.17.19"
@@ -2157,10 +2157,10 @@
     polished "^3.6.5"
     styled-system "^5.1.5"
 
-"@looker/design-tokens@^0.9.6":
-  version "0.9.6"
-  resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-0.9.6.tgz#f53fc2b9d83c6fef362d78fe0d392050618679fe"
-  integrity sha512-cgXS8xFtncSkoAXrEAiHUGYWTsPO8L22woDPuSfDvajyFfuZztq+EINRyyXB1ZUOAXRtFc2b1SoCT96h7Uqg/g==
+"@looker/design-tokens@^0.9.7":
+  version "0.9.7"
+  resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-0.9.7.tgz#ad07adb59072064b965c3c6430fce9fe8eefb2e1"
+  integrity sha512-7k+09fYVAEDnjeNdmndIlu24gZo9qYihYCtmhzY1W3Ob84VKh/EWESNVNG334yCZ0N8IQu6phUwrQHEVCFW/Qg==
   dependencies:
     "@styled-system/props" "^5.1.5"
     "@types/styled-system" "^5.1.9"
@@ -2210,10 +2210,10 @@
     deepmerge "^4.2.2"
     semver "^6.3.0"
 
-"@looker/icons@^0.9.6":
-  version "0.9.6"
-  resolved "https://registry.yarnpkg.com/@looker/icons/-/icons-0.9.6.tgz#0558612980e3236d6f34284789ba8c30c5ee5a98"
-  integrity sha512-KmP1wGvFtqTdgM4YeKz4ybZ1cygkOKmAvKaYmmwabW5XlHvjEjc7aGd05QZa00z6HpxelnkjXjYc4O58VLqxPw==
+"@looker/icons@^0.9.7":
+  version "0.9.7"
+  resolved "https://registry.yarnpkg.com/@looker/icons/-/icons-0.9.7.tgz#9531d7430e11a8ac64fca803b36112dba4d633ef"
+  integrity sha512-gKoZIGBuHgt/bwWseoYSKCI/R2PrjHTePMGBnBm/qQA4d9pKYZSr5Mx8hAH7qXobRmSjWHWo+EruXY1EosBuFw==
 
 "@looker/prettier-config@^1.0.15":
   version "1.0.15"
@@ -5332,7 +5332,7 @@ date-fns-tz@^1.0.10:
   resolved "https://registry.yarnpkg.com/date-fns-tz/-/date-fns-tz-1.0.10.tgz#30fef0038f80534fddd8e133a6b8ca55ba313748"
   integrity sha512-cHQAz0/9uDABaUNDM80Mj1FL4ODlxs1xEY4b0DQuAooO2UdNKvDkNbV8ogLnxLbv02Ru1HXFcot0pVvDRBgptg==
 
-date-fns@^2.14.0:
+date-fns@^2.15.0:
   version "2.15.0"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.15.0.tgz#424de6b3778e4e69d3ff27046ec136af58ae5d5f"
   integrity sha512-ZCPzAMJZn3rNUvvQIMlXhDr4A+Ar07eLeGsGREoWU19a3Pqf5oYa+ccd+B3F6XVtQY6HANMFdOQ8A+ipFnvJdQ==

@@ -672,7 +672,11 @@ class PermissionType(enum.Enum):
 
     """
     view = "view"
-    edit = "edit"`
+    edit = "edit"
+    invalid_api_enum_value = "invalid_api_enum_value"
+
+
+PermissionType.__new__ = model.safe_enum__new__`
       expect(actual).toEqual(expected)
     })
 
