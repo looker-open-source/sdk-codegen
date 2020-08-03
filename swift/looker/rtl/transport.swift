@@ -26,12 +26,12 @@
 
 import Foundation
 
-let agentTag = "Swift-SDK \(Constants.sdkVersion)"
+public let agentTag = "Swift-SDK \(Constants.sdkVersion)"
 
 /**
  * ResponseMode for an HTTP request - either binary or "string"
  */
-enum ResponseMode {
+public enum ResponseMode {
     case binary, string, unknown
 }
 
@@ -59,14 +59,14 @@ let applicationJsonPattern = try? NSRegularExpression(Constants.applicationJson)
  * Default request timeout
  * @type {number} default request timeout is 120 seconds, or two minutes
  */
-let defaultTimeout = 120
+public let defaultTimeout = 120
 
-let defaultApiVersion = "4.0"
+public let defaultApiVersion = "4.0"
 
 /**
  * Recognized HTTP methods
  */
-enum HttpMethod: String {
+public enum HttpMethod: String {
     case GET = "GET"
     case POST = "POST"
     case PUT = "PUT"
@@ -77,10 +77,10 @@ enum HttpMethod: String {
 }
 
 // TODO implement these stubs
-typealias Headers = Any
-typealias Agent = Any
+public typealias Headers = Any
+public typealias Agent = Any
 
-protocol ITransport {
+public protocol ITransport {
     @available(OSX 10.15, *)
     func request<TSuccess: Codable, TError: Codable>(
         _ method: HttpMethod,
@@ -93,7 +93,7 @@ protocol ITransport {
 }
 
 /** A successful SDK call. */
-protocol ISDKSuccessResponse {
+public protocol ISDKSuccessResponse {
     associatedtype T
     /** Whether the SDK call was successful. */
     var ok: Bool { get set } // true
@@ -102,7 +102,7 @@ protocol ISDKSuccessResponse {
 }
 
 /** An erroring SDK call. */
-protocol ISDKErrorResponse {
+public protocol ISDKErrorResponse {
     associatedtype T
     /** Whether the SDK call was successful. */
     var ok: Bool { get set } // false
@@ -110,17 +110,17 @@ protocol ISDKErrorResponse {
     var error: T { get set}
 }
 
-protocol ISDKError: LocalizedError {
+public protocol ISDKError: LocalizedError {
     var code: Int {get set }
     var message: String? { get set }
     var documentation_url: String? { get set }
 }
 
 /// Common ancestor for all error responses
-struct SDKError: ISDKError, Codable {
-    var code: Int = 0
-    var message : String?
-    var documentation_url: String?
+public struct SDKError: ISDKError, Codable {
+    public var code: Int = 0
+    public var message : String?
+    public var documentation_url: String?
     private var reason: String?
     private var suggestion: String?
     private var help: String?
@@ -135,29 +135,29 @@ struct SDKError: ISDKError, Codable {
     }
 
     /// A localized message describing the error
-    var errorDescription: String? { get { return self.message } }
+    public var errorDescription: String? { get { return self.message } }
 
     /// A localized message describing the reason for the failure.
-    var failureReason: String? { get { return self.reason } }
+    public var failureReason: String? { get { return self.reason } }
 
     /// A localized message describing how one might recover from the failure.
-    var recoverySuggestion: String? { get { return self.suggestion } }
+    public var recoverySuggestion: String? { get { return self.suggestion } }
 
     /// A localized message providing "help" text if the user requests help.
-    var helpAnchor: String? { get { return self.help } }
+    public var helpAnchor: String? { get { return self.help } }
 }
 
 /// For deserializating JSON into SDK structures
 /// This could remain the same as simply `Codable`, but this abstraction is introduced for future extensibility
-protocol SDKModel: Codable {
+public protocol SDKModel: Codable {
 }
 
-enum SDKResponse<TSuccess, TError> where TError: ISDKError {
+public enum SDKResponse<TSuccess, TError> where TError: ISDKError {
     case success(TSuccess)
     case error(TError)
 }
 
-func SDKOk(_ response: SDKResponse<Any, SDKError>) throws -> Any {
+public func SDKOk(_ response: SDKResponse<Any, SDKError>) throws -> Any {
     switch response {
     case .success(let response):
         return response
@@ -171,7 +171,7 @@ func SDKOk(_ response: SDKResponse<Any, SDKError>) throws -> Any {
 }
 
 /** Generic http request property collection */
-protocol IRequestInit {
+public protocol IRequestInit {
     /** body of request. optional */
     var body: Any? { get set }
     /** headers for request. optional */
@@ -193,12 +193,12 @@ protocol IRequestInit {
     var timeout: Int? { get set }
 }
 
-typealias Authenticator = (_ req: URLRequest) -> URLRequest
+public typealias Authenticator = (_ req: URLRequest) -> URLRequest
 
 /**
  * Base authorization interface
  */
-protocol IAuthorizer {
+public protocol IAuthorizer {
     var settings: IApiSettings { get set }
     var transport: ITransport { get set }
 
@@ -216,7 +216,7 @@ protocol IAuthorizer {
 //}
 
 /** Interface for API transport values */
-protocol ITransportSettings {
+public protocol ITransportSettings {
     /** base URL of host address */
     var base_url: String? { get set }
     /** api version */
@@ -232,19 +232,19 @@ protocol ITransportSettings {
 }
 
 /// Returns `True` if `contentType` is charset utf-8
-func isMimeUtf8(_ contentType: String) -> Bool {
+public func isMimeUtf8(_ contentType: String) -> Bool {
     return charsetUtf8Pattern?.matches(contentType) ?? false
 }
 
 /// Returns `True` if `contentType` is JSON
-func isMimeJson(_ contentType: String) -> Bool {
+public func isMimeJson(_ contentType: String) -> Bool {
     return applicationJsonPattern?.matches(contentType) ?? false
 }
 
 /// Is the content type binary or "string"?
 /// @param {String} contentType
 /// @returns {ResponseMode.binary | ResponseMode.string | ResponseMode.unknown}
-func responseMode(_ contentType: String) -> ResponseMode {
+public func responseMode(_ contentType: String) -> ResponseMode {
     if (contentPatternString!.matches(contentType)) {
         return ResponseMode.string
     }
@@ -255,7 +255,7 @@ func responseMode(_ contentType: String) -> ResponseMode {
 }
 
 // Remove all "optional" possibly nil values from the dictionary
-func notAnOption(_ values: Values) -> ValueDictionary<String, Any> {
+public func notAnOption(_ values: Values) -> ValueDictionary<String, Any> {
     var result = ValueDictionary<String, Any>()
     for (key, optional) in values {
         if let un = optional {
@@ -291,7 +291,7 @@ extension String {
 }
 
 // Convert any value to its Query Param equivalent
-func encodeParam(_ value: Any?) -> String {
+public func encodeParam(_ value: Any?) -> String {
     var encoded = ""
     if let val = value {
         switch (val) {
@@ -347,7 +347,7 @@ func encodeParam(_ value: Any?) -> String {
     return encoded.encodeUri()
 }
 
-func encodeParams(_ params: Values?) -> String {
+public func encodeParams(_ params: Values?) -> String {
     var result = ""
     if let up = params {
         // Strip out any values that may be assigned that are nil.
@@ -371,7 +371,7 @@ func encodeParams(_ params: Values?) -> String {
  @param params optional collection of query parameters to encode and append to the path
 
  */
-func addQueryParams(_ path: String, _ params: Values?) -> String {
+public func addQueryParams(_ path: String, _ params: Values?) -> String {
     if (params == nil || params?.count == 0) {
         return path
     }

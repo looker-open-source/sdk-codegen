@@ -166,7 +166,7 @@ export class SwiftGen extends CodeGen {
 import Foundation
 
 @available(OSX 10.15, *)
-class ${this.packageName}: APIMethods {
+open class ${this.packageName}: APIMethods {
 
 ${this.indentStr}lazy var stream = ${this.packageName}Stream(authSession)
 `
@@ -179,7 +179,7 @@ ${this.indentStr}lazy var stream = ${this.packageName}Stream(authSession)
 import Foundation
 
 @available(OSX 10.15, *)
-class ${this.packageName}Stream: APIMethods {
+open class ${this.packageName}Stream: APIMethods {
 `
   }
 
@@ -255,7 +255,7 @@ import Foundation
     const type = this.typeMap(property.type)
     return (
       this.commentHeader(indent, this.describeProperty(property)) +
-      `${indent}var ${this.reserve(property.name)}: ${type.name}${optional}`
+      `${indent}public var ${this.reserve(property.name)}: ${type.name}${optional}`
     )
   }
 
@@ -316,7 +316,7 @@ import Foundation
       headComment += `\n\n**Note**: Binary content is returned by this method.\n`
     }
     const header =
-      this.commentHeader(indent, headComment) + `${indent}func ${method.name}(`
+      this.commentHeader(indent, headComment) + `${indent}public func ${method.name}(`
 
     return (
       header +
@@ -392,6 +392,7 @@ import Foundation
   typeSignature(indent: string, type: IType) {
     const recursive = type.isRecursive()
     let typeName = recursive ? 'class' : 'struct'
+    const access = recursive ? 'open' : 'public'
     let baseClass = 'SDKModel'
     const isEnum = type instanceof EnumType
     if (isEnum) {
@@ -409,7 +410,7 @@ import Foundation
     const mapped = this.typeMap(type)
     return (
       this.commentHeader(indent, type.description + needClass) +
-      `${indent}${typeName} ${mapped.name}: ${baseClass} {\n${keys}`
+      `${indent}${access} ${typeName} ${mapped.name}: ${baseClass} {\n${keys}`
     )
   }
 

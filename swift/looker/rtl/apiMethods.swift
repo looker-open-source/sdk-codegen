@@ -25,9 +25,9 @@
 import Foundation
 
 @available(OSX 10.15, *)
-class APIMethods {
-    var authSession: IAuthorizer
-    var encoder = JSONEncoder()
+open class APIMethods {
+    public var authSession: IAuthorizer
+    public var encoder = JSONEncoder()
     
     init(_ authSession: IAuthorizer) {
         self.authSession = authSession
@@ -37,7 +37,7 @@ class APIMethods {
         return try! encoder.encode(value)
     }
     
-    func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
+    public func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
         switch response {
         case .success(let response):
             return response
@@ -53,7 +53,7 @@ class APIMethods {
         }
     }
     
-    func authRequest<TSuccess: Codable, TError: Codable>(
+    public func authRequest<TSuccess: Codable, TError: Codable>(
         _ method: HttpMethod,
         _ path: String,
         _ queryParams: Values?,

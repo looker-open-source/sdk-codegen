@@ -33,2546 +33,2546 @@
 
 import Foundation
 
-struct AccessToken: SDKModel {
+public struct AccessToken: SDKModel {
     /**
      * Access Token used for API calls (read-only)
      */
-    var access_token: String?
+    public var access_token: String?
     /**
      * Type of Token (read-only)
      */
-    var token_type: String?
+    public var token_type: String?
     /**
      * Number of seconds before the token expires (read-only)
      */
-    var expires_in: Int64?
+    public var expires_in: Int64?
     /**
      * Refresh token which can be used to obtain a new access token (read-only)
      */
-    var refresh_token: String?
+    public var refresh_token: String?
 }
 
 /**
  * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
  */
-enum Align: String, Codable {
+public enum Align: String, Codable {
     case left = "left"
     case right = "right"
 }
 
-struct ApiSession: SDKModel {
+public struct ApiSession: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * The id of active workspace for this session
      */
-    var workspace_id: String?
+    public var workspace_id: String?
     /**
      * The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)
      */
-    var sudo_user_id: Int64?
+    public var sudo_user_id: Int64?
 }
 
-struct ApiVersion: SDKModel {
+public struct ApiVersion: SDKModel {
     /**
      * Current Looker release version number (read-only)
      */
-    var looker_release_version: String?
-    var current_version: ApiVersionElement?
+    public var looker_release_version: String?
+    public var current_version: ApiVersionElement?
     /**
      * Array of versions supported by this Looker instance (read-only)
      */
-    var supported_versions: [ApiVersionElement]?
+    public var supported_versions: [ApiVersionElement]?
 }
 
-struct ApiVersionElement: SDKModel {
+public struct ApiVersionElement: SDKModel {
     /**
      * Version number as it appears in '/api/xxx/' urls (read-only)
      */
-    var version: String?
+    public var version: String?
     /**
      * Full version number including minor version (read-only)
      */
-    var full_version: String?
+    public var full_version: String?
     /**
      * Status of this version (read-only)
      */
-    var status: String?
+    public var status: String?
     /**
      * Url for swagger.json for this version (read-only)
      */
-    var swagger_url: URI?
+    public var swagger_url: URI?
 }
 
-struct BackupConfiguration: SDKModel {
+public struct BackupConfiguration: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Type of backup: looker-s3 or custom-s3
      */
-    var type: String?
+    public var type: String?
     /**
      * Name of bucket for custom-s3 backups
      */
-    var custom_s3_bucket: String?
+    public var custom_s3_bucket: String?
     /**
      * Name of region where the bucket is located
      */
-    var custom_s3_bucket_region: String?
+    public var custom_s3_bucket_region: String?
     /**
      * (Write-Only) AWS S3 key used for custom-s3 backups
      */
-    var custom_s3_key: String?
+    public var custom_s3_key: String?
     /**
      * (Write-Only) AWS S3 secret used for custom-s3 backups
      */
-    var custom_s3_secret: String?
+    public var custom_s3_secret: String?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct Board: SDKModel {
+public struct Board: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Id of associated content_metadata record (read-only)
      */
-    var content_metadata_id: Int64?
+    public var content_metadata_id: Int64?
     /**
      * Date of board creation (read-only)
      */
-    var created_at: Date?
+    public var created_at: Date?
     /**
      * Date of board deletion
      */
-    var deleted_at: Date?
+    public var deleted_at: Date?
     /**
      * Description of the board
      */
-    var description: String?
+    public var description: String?
     /**
      * Sections of the board (read-only)
      */
-    var board_sections: [BoardSection]?
+    public var board_sections: [BoardSection]?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * ids of the board sections in the order they should be displayed
      */
-    var section_order: [Int64]?
+    public var section_order: [Int64]?
     /**
      * Title of the board
      */
-    var title: String?
+    public var title: String?
     /**
      * Date of last board update (read-only)
      */
-    var updated_at: Date?
+    public var updated_at: Date?
     /**
      * User id of board creator (read-only)
      */
-    var user_id: Int64?
+    public var user_id: Int64?
     /**
      * Whether the board is the primary homepage or not (read-only)
      */
-    var primary_homepage: Bool?
+    public var primary_homepage: Bool?
 }
 
-struct BoardItem: SDKModel {
+public struct BoardItem: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Name of user who created the content this item is based on (read-only)
      */
-    var content_created_by: String?
+    public var content_created_by: String?
     /**
      * Content favorite id associated with the item this content is based on (read-only)
      */
-    var content_favorite_id: Int64?
+    public var content_favorite_id: Int64?
     /**
      * Content metadata id associated with the item this content is based on (read-only)
      */
-    var content_metadata_id: Int64?
+    public var content_metadata_id: Int64?
     /**
      * Last time the content that this item is based on was updated (read-only)
      */
-    var content_updated_at: String?
+    public var content_updated_at: String?
     /**
      * Dashboard to base this item on
      */
-    var dashboard_id: Int64?
+    public var dashboard_id: Int64?
     /**
      * The actual description for display (read-only)
      */
-    var description: String?
+    public var description: String?
     /**
      * Number of times content has been favorited, if present (read-only)
      */
-    var favorite_count: Int64?
+    public var favorite_count: Int64?
     /**
      * Associated Board Section
      */
-    var board_section_id: Int64?
+    public var board_section_id: Int64?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * The container folder name of the content (read-only)
      */
-    var location: String?
+    public var location: String?
     /**
      * Look to base this item on
      */
-    var look_id: Int64?
+    public var look_id: Int64?
     /**
      * LookML Dashboard to base this item on
      */
-    var lookml_dashboard_id: String?
+    public var lookml_dashboard_id: String?
     /**
      * An arbitrary integer representing the sort order within the section
      */
-    var order: Int64?
+    public var order: Int64?
     /**
      * The actual title for display (read-only)
      */
-    var title: String?
+    public var title: String?
     /**
      * Relative url for the associated content (read-only)
      */
-    var url: String?
+    public var url: String?
     /**
      * Number of times content has been viewed, if present (read-only)
      */
-    var view_count: Int64?
+    public var view_count: Int64?
 }
 
-struct BoardSection: SDKModel {
+public struct BoardSection: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Time at which this section was created. (read-only)
      */
-    var created_at: Date?
+    public var created_at: Date?
     /**
      * Time at which this section was deleted.
      */
-    var deleted_at: Date?
+    public var deleted_at: Date?
     /**
      * Description of the content found in this section.
      */
-    var description: String?
+    public var description: String?
     /**
      * Id reference to parent board
      */
-    var board_id: Int64?
+    public var board_id: Int64?
     /**
      * Items in the board section (read-only)
      */
-    var board_items: [BoardItem]?
+    public var board_items: [BoardItem]?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * ids of the board items in the order they should be displayed
      */
-    var item_order: [Int64]?
+    public var item_order: [Int64]?
     /**
      * Name of row
      */
-    var title: String?
+    public var title: String?
     /**
      * Time at which this section was last updated. (read-only)
      */
-    var updated_at: Date?
+    public var updated_at: Date?
 }
 
 /**
  * Field category Valid values are: "parameter", "filter", "measure", "dimension".
  */
-enum Category: String, Codable {
+public enum Category: String, Codable {
     case parameter = "parameter"
     case filter = "filter"
     case measure = "measure"
     case dimension = "dimension"
 }
 
-struct ColorCollection: SDKModel {
+public struct ColorCollection: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Label of color collection
      */
-    var label: String?
+    public var label: String?
     /**
      * Array of categorical palette definitions
      */
-    var categoricalPalettes: [DiscretePalette]?
+    public var categoricalPalettes: [DiscretePalette]?
     /**
      * Array of discrete palette definitions
      */
-    var sequentialPalettes: [ContinuousPalette]?
+    public var sequentialPalettes: [ContinuousPalette]?
     /**
      * Array of diverging palette definitions
      */
-    var divergingPalettes: [ContinuousPalette]?
+    public var divergingPalettes: [ContinuousPalette]?
 }
 
-struct ColorStop: SDKModel {
+public struct ColorStop: SDKModel {
     /**
      * CSS color string
      */
-    var color: String?
+    public var color: String?
     /**
      * Offset in continuous palette (0 to 100)
      */
-    var offset: Int64?
+    public var offset: Int64?
 }
 
-struct Command: SDKModel {
+public struct Command: SDKModel {
     /**
      * Id of the command record (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Id of the command author (read-only)
      */
-    var author_id: Int64?
+    public var author_id: Int64?
     /**
      * Name of the command
      */
-    var name: String?
+    public var name: String?
     /**
      * Description of the command
      */
-    var description: String?
+    public var description: String?
     /**
      * Id of the content associated with the command
      */
-    var linked_content_id: String?
+    public var linked_content_id: String?
     /**
      * Name of the command Valid values are: "dashboard", "lookml_dashboard".
      */
-    var linked_content_type: LinkedContentType?
+    public var linked_content_type: LinkedContentType?
 }
 
-struct ContentFavorite: SDKModel {
+public struct ContentFavorite: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * User Id which owns this ContentFavorite
      */
-    var user_id: Int64?
+    public var user_id: Int64?
     /**
      * Content Metadata Id associated with this ContentFavorite
      */
-    var content_metadata_id: Int64?
+    public var content_metadata_id: Int64?
     /**
      * Id of a look (read-only)
      */
-    var look_id: Int64?
+    public var look_id: Int64?
     /**
      * Id of a dashboard (read-only)
      */
-    var dashboard_id: Int64?
-    var look: LookBasic?
-    var dashboard: DashboardBase?
+    public var dashboard_id: Int64?
+    public var look: LookBasic?
+    public var dashboard: DashboardBase?
     /**
      * Id of a board (read-only)
      */
-    var board_id: Int64?
+    public var board_id: Int64?
 }
 
-struct ContentMeta: SDKModel {
+public struct ContentMeta: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Name or title of underlying content (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Id of Parent Content (read-only)
      */
-    var parent_id: Int64?
+    public var parent_id: Int64?
     /**
      * Id of associated dashboard when content_type is "dashboard" (read-only)
      */
-    var dashboard_id: String?
+    public var dashboard_id: String?
     /**
      * Id of associated look when content_type is "look" (read-only)
      */
-    var look_id: Int64?
+    public var look_id: Int64?
     /**
      * Id of associated folder when content_type is "space" (read-only)
      */
-    var folder_id: String?
+    public var folder_id: String?
     /**
      * Content Type ("dashboard", "look", or "folder") (read-only)
      */
-    var content_type: String?
+    public var content_type: String?
     /**
      * Whether content inherits its access levels from parent
      */
-    var inherits: Bool?
+    public var inherits: Bool?
     /**
      * Id of Inherited Content (read-only)
      */
-    var inheriting_id: Int64?
+    public var inheriting_id: Int64?
     /**
      * Content Slug (read-only)
      */
-    var slug: String?
+    public var slug: String?
 }
 
-struct ContentMetaGroupUser: SDKModel {
+public struct ContentMetaGroupUser: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Id of associated Content Metadata (read-only)
      */
-    var content_metadata_id: String?
+    public var content_metadata_id: String?
     /**
      * Type of permission: "view" or "edit" Valid values are: "view", "edit". (read-only)
      */
-    var permission_type: PermissionType?
+    public var permission_type: PermissionType?
     /**
      * ID of associated group (read-only)
      */
-    var group_id: Int64?
+    public var group_id: Int64?
     /**
      * ID of associated user (read-only)
      */
-    var user_id: Int64?
+    public var user_id: Int64?
 }
 
-struct ContentValidation: SDKModel {
+public struct ContentValidation: SDKModel {
     /**
      * A list of content errors (read-only)
      */
-    var content_with_errors: [ContentValidatorError]?
+    public var content_with_errors: [ContentValidatorError]?
     /**
      * Duration of content validation in seconds (read-only)
      */
-    var computation_time: Float?
+    public var computation_time: Float?
     /**
      * The number of looks validated (read-only)
      */
-    var total_looks_validated: Int64?
+    public var total_looks_validated: Int64?
     /**
      * The number of dashboard elements validated (read-only)
      */
-    var total_dashboard_elements_validated: Int64?
+    public var total_dashboard_elements_validated: Int64?
     /**
      * The number of dashboard filters validated (read-only)
      */
-    var total_dashboard_filters_validated: Int64?
+    public var total_dashboard_filters_validated: Int64?
     /**
      * The number of scheduled plans validated (read-only)
      */
-    var total_scheduled_plans_validated: Int64?
+    public var total_scheduled_plans_validated: Int64?
     /**
      * The number of explores used across all content validated (read-only)
      */
-    var total_explores_validated: Int64?
+    public var total_explores_validated: Int64?
 }
 
-struct ContentValidationDashboard: SDKModel {
+public struct ContentValidationDashboard: SDKModel {
     /**
      * Description
      */
-    var description: String?
+    public var description: String?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
-    var folder: ContentValidationFolder?
+    public var id: String?
+    public var folder: ContentValidationFolder?
     /**
      * Dashboard Title
      */
-    var title: String?
+    public var title: String?
 }
 
-struct ContentValidationDashboardElement: SDKModel {
+public struct ContentValidationDashboardElement: SDKModel {
     /**
      * Text tile body text
      */
-    var body_text: String?
+    public var body_text: String?
     /**
      * Id of Dashboard
      */
-    var dashboard_id: String?
+    public var dashboard_id: String?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Id Of Look
      */
-    var look_id: String?
+    public var look_id: String?
     /**
      * Note Display
      */
-    var note_display: String?
+    public var note_display: String?
     /**
      * Note State
      */
-    var note_state: String?
+    public var note_state: String?
     /**
      * Note Text
      */
-    var note_text: String?
+    public var note_text: String?
     /**
      * Note Text as Html (read-only)
      */
-    var note_text_as_html: String?
+    public var note_text_as_html: String?
     /**
      * Id Of Query
      */
-    var query_id: Int64?
+    public var query_id: Int64?
     /**
      * Text tile subtitle text
      */
-    var subtitle_text: String?
+    public var subtitle_text: String?
     /**
      * Title of dashboard element
      */
-    var title: String?
+    public var title: String?
     /**
      * Whether title is hidden
      */
-    var title_hidden: Bool?
+    public var title_hidden: Bool?
     /**
      * Text tile title
      */
-    var title_text: String?
+    public var title_text: String?
     /**
      * Type
      */
-    var type: String?
+    public var type: String?
 }
 
-struct ContentValidationDashboardFilter: SDKModel {
+public struct ContentValidationDashboardFilter: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Id of Dashboard (read-only)
      */
-    var dashboard_id: String?
+    public var dashboard_id: String?
     /**
      * Name of filter
      */
-    var name: String?
+    public var name: String?
     /**
      * Title of filter
      */
-    var title: String?
+    public var title: String?
     /**
      * Type of filter: one of date, number, string, or field
      */
-    var type: String?
+    public var type: String?
     /**
      * Default value of filter
      */
-    var default_value: String?
+    public var default_value: String?
     /**
      * Model of filter (required if type = field)
      */
-    var model: String?
+    public var model: String?
     /**
      * Explore of filter (required if type = field)
      */
-    var explore: String?
+    public var explore: String?
     /**
      * Dimension of filter (required if type = field)
      */
-    var dimension: String?
+    public var dimension: String?
 }
 
-struct ContentValidationError: SDKModel {
+public struct ContentValidationError: SDKModel {
     /**
      * Error message (read-only)
      */
-    var message: String?
+    public var message: String?
     /**
      * Name of the field involved in the error (read-only)
      */
-    var field_name: String?
+    public var field_name: String?
     /**
      * Name of the model involved in the error (read-only)
      */
-    var model_name: String?
+    public var model_name: String?
     /**
      * Name of the explore involved in the error (read-only)
      */
-    var explore_name: String?
+    public var explore_name: String?
     /**
      * Whether this validation error is removable (read-only)
      */
-    var removable: Bool?
+    public var removable: Bool?
 }
 
-struct ContentValidationFolder: SDKModel {
+public struct ContentValidationFolder: SDKModel {
     /**
      * Unique Name
      */
-    var name: String
+    public var name: String
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
 }
 
-struct ContentValidationLook: SDKModel {
+public struct ContentValidationLook: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Look Title
      */
-    var title: String?
-    var folder: ContentValidationFolder?
+    public var title: String?
+    public var folder: ContentValidationFolder?
 }
 
-struct ContentValidationScheduledPlan: SDKModel {
+public struct ContentValidationScheduledPlan: SDKModel {
     /**
      * Name of this scheduled plan
      */
-    var name: String?
+    public var name: String?
     /**
      * Id of a look
      */
-    var look_id: Int64?
+    public var look_id: Int64?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
 }
 
-struct ContentValidatorError: SDKModel {
-    var look: ContentValidationLook?
-    var dashboard: ContentValidationDashboard?
-    var dashboard_element: ContentValidationDashboardElement?
-    var dashboard_filter: ContentValidationDashboardFilter?
-    var scheduled_plan: ContentValidationScheduledPlan?
+public struct ContentValidatorError: SDKModel {
+    public var look: ContentValidationLook?
+    public var dashboard: ContentValidationDashboard?
+    public var dashboard_element: ContentValidationDashboardElement?
+    public var dashboard_filter: ContentValidationDashboardFilter?
+    public var scheduled_plan: ContentValidationScheduledPlan?
     /**
      * A list of errors found for this piece of content (read-only)
      */
-    var errors: [ContentValidationError]?
+    public var errors: [ContentValidationError]?
     /**
      * An id unique to this piece of content for this validation run (read-only)
      */
-    var id: String?
+    public var id: String?
 }
 
-struct ContentView: SDKModel {
+public struct ContentView: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Id of viewed Look (read-only)
      */
-    var look_id: Int64?
+    public var look_id: Int64?
     /**
      * Id of the viewed Dashboard (read-only)
      */
-    var dashboard_id: Int64?
+    public var dashboard_id: Int64?
     /**
      * Content metadata id of the Look or Dashboard (read-only)
      */
-    var content_metadata_id: Int64?
+    public var content_metadata_id: Int64?
     /**
      * Id of user content was viewed by (read-only)
      */
-    var user_id: Int64?
+    public var user_id: Int64?
     /**
      * Id of group content was viewed by (read-only)
      */
-    var group_id: Int64?
+    public var group_id: Int64?
     /**
      * Number of times piece of content was viewed (read-only)
      */
-    var view_count: Int64?
+    public var view_count: Int64?
     /**
      * Number of times piece of content was favorited (read-only)
      */
-    var favorite_count: Int64?
+    public var favorite_count: Int64?
     /**
      * Date the piece of content was last viewed (read-only)
      */
-    var last_viewed_at: String?
+    public var last_viewed_at: String?
     /**
      * Week start date for the view and favorite count during that given week (read-only)
      */
-    var start_of_week_date: String?
+    public var start_of_week_date: String?
 }
 
-struct ContinuousPalette: SDKModel {
+public struct ContinuousPalette: SDKModel {
     /**
      * Unique identity string (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Label for palette
      */
-    var label: String?
+    public var label: String?
     /**
      * Type of palette
      */
-    var type: String?
+    public var type: String?
     /**
      * Array of ColorStops in the palette
      */
-    var stops: [ColorStop]?
+    public var stops: [ColorStop]?
 }
 
-struct CreateDashboardFilter: SDKModel {
+public struct CreateDashboardFilter: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Id of Dashboard
      */
-    var dashboard_id: String
+    public var dashboard_id: String
     /**
      * Name of filter
      */
-    var name: String
+    public var name: String
     /**
      * Title of filter
      */
-    var title: String
+    public var title: String
     /**
      * Type of filter: one of date, number, string, or field
      */
-    var type: String
+    public var type: String
     /**
      * Default value of filter
      */
-    var default_value: String?
+    public var default_value: String?
     /**
      * Model of filter (required if type = field)
      */
-    var model: String?
+    public var model: String?
     /**
      * Explore of filter (required if type = field)
      */
-    var explore: String?
+    public var explore: String?
     /**
      * Dimension of filter (required if type = field)
      */
-    var dimension: String?
+    public var dimension: String?
     /**
      * Field information (read-only)
      */
-    var field: StringDictionary<AnyCodable>?
+    public var field: StringDictionary<AnyCodable>?
     /**
      * Display order of this filter relative to other filters
      */
-    var row: Int64?
+    public var row: Int64?
     /**
      * Array of listeners for faceted filters
      */
-    var listens_to_filters: [String]?
+    public var listens_to_filters: [String]?
     /**
      * Whether the filter allows multiple filter values
      */
-    var allow_multiple_values: Bool?
+    public var allow_multiple_values: Bool?
     /**
      * Whether the filter requires a value to run the dashboard
      */
-    var `required`: Bool?
+    public var `required`: Bool?
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
-    var ui_config: StringDictionary<AnyCodable>?
+    public var ui_config: StringDictionary<AnyCodable>?
 }
 
-struct CreateDashboardRenderTask: SDKModel {
+public struct CreateDashboardRenderTask: SDKModel {
     /**
      * Filter values to apply to the dashboard queries, in URL query format
      */
-    var dashboard_filters: String?
+    public var dashboard_filters: String?
     /**
      * Dashboard layout style: single_column or tiled
      */
-    var dashboard_style: String?
+    public var dashboard_style: String?
 }
 
-struct CreateFolder: SDKModel {
+public struct CreateFolder: SDKModel {
     /**
      * Unique Name
      */
-    var name: String
+    public var name: String
     /**
      * Id of Parent. If the parent id is null, this is a root-level entry
      */
-    var parent_id: String
+    public var parent_id: String
 }
 
-struct CreateQueryTask: SDKModel {
+public struct CreateQueryTask: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Id of query to run
      */
-    var query_id: Int64
+    public var query_id: Int64
     /**
      * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
      */
-    var result_format: ResultFormat
+    public var result_format: ResultFormat
     /**
      * Source of query task
      */
-    var source: String?
+    public var source: String?
     /**
      * Create the task but defer execution
      */
-    var deferred: Bool?
+    public var deferred: Bool?
     /**
      * Id of look associated with query.
      */
-    var look_id: Int64?
+    public var look_id: Int64?
     /**
      * Id of dashboard associated with query.
      */
-    var dashboard_id: String?
+    public var dashboard_id: String?
 }
 
-struct CredentialsApi3: SDKModel {
+public struct CredentialsApi3: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * API key client_id (read-only)
      */
-    var client_id: String?
+    public var client_id: String?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
-    var created_at: String?
+    public var created_at: String?
     /**
      * Has this credential been disabled? (read-only)
      */
-    var is_disabled: Bool?
+    public var is_disabled: Bool?
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var type: String?
+    public var type: String?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct CredentialsEmail: SDKModel {
+public struct CredentialsEmail: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
-    var created_at: String?
+    public var created_at: String?
     /**
      * EMail address used for user login
      */
-    var email: String?
+    public var email: String?
     /**
      * Force the user to change their password upon their next login
      */
-    var forced_password_reset_at_next_login: Bool?
+    public var forced_password_reset_at_next_login: Bool?
     /**
      * Has this credential been disabled? (read-only)
      */
-    var is_disabled: Bool?
+    public var is_disabled: Bool?
     /**
      * Timestamp for most recent login using credential (read-only)
      */
-    var logged_in_at: String?
+    public var logged_in_at: String?
     /**
      * Url with one-time use secret token that the user can use to reset password (read-only)
      */
-    var password_reset_url: String?
+    public var password_reset_url: String?
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var type: String?
+    public var type: String?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
     /**
      * Link to get this user (read-only)
      */
-    var user_url: URI?
+    public var user_url: URI?
 }
 
-struct CredentialsEmbed: SDKModel {
+public struct CredentialsEmbed: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
-    var created_at: String?
+    public var created_at: String?
     /**
      * Embedder's id for a group to which this user was added during the most recent login (read-only)
      */
-    var external_group_id: String?
+    public var external_group_id: String?
     /**
      * Embedder's unique id for the user (read-only)
      */
-    var external_user_id: String?
+    public var external_user_id: String?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Has this credential been disabled? (read-only)
      */
-    var is_disabled: Bool?
+    public var is_disabled: Bool?
     /**
      * Timestamp for most recent login using credential (read-only)
      */
-    var logged_in_at: String?
+    public var logged_in_at: String?
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var type: String?
+    public var type: String?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct CredentialsGoogle: SDKModel {
+public struct CredentialsGoogle: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
-    var created_at: String?
+    public var created_at: String?
     /**
      * Google domain (read-only)
      */
-    var domain: String?
+    public var domain: String?
     /**
      * EMail address (read-only)
      */
-    var email: String?
+    public var email: String?
     /**
      * Google's Unique ID for this user (read-only)
      */
-    var google_user_id: String?
+    public var google_user_id: String?
     /**
      * Has this credential been disabled? (read-only)
      */
-    var is_disabled: Bool?
+    public var is_disabled: Bool?
     /**
      * Timestamp for most recent login using credential (read-only)
      */
-    var logged_in_at: String?
+    public var logged_in_at: String?
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var type: String?
+    public var type: String?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct CredentialsLDAP: SDKModel {
+public struct CredentialsLDAP: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
-    var created_at: String?
+    public var created_at: String?
     /**
      * EMail address (read-only)
      */
-    var email: String?
+    public var email: String?
     /**
      * Has this credential been disabled? (read-only)
      */
-    var is_disabled: Bool?
+    public var is_disabled: Bool?
     /**
      * LDAP Distinguished name for this user (as-of the last login) (read-only)
      */
-    var ldap_dn: String?
+    public var ldap_dn: String?
     /**
      * LDAP Unique ID for this user (read-only)
      */
-    var ldap_id: String?
+    public var ldap_id: String?
     /**
      * Timestamp for most recent login using credential (read-only)
      */
-    var logged_in_at: String?
+    public var logged_in_at: String?
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var type: String?
+    public var type: String?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct CredentialsLookerOpenid: SDKModel {
+public struct CredentialsLookerOpenid: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
-    var created_at: String?
+    public var created_at: String?
     /**
      * EMail address used for user login (read-only)
      */
-    var email: String?
+    public var email: String?
     /**
      * Has this credential been disabled? (read-only)
      */
-    var is_disabled: Bool?
+    public var is_disabled: Bool?
     /**
      * Timestamp for most recent login using credential (read-only)
      */
-    var logged_in_at: String?
+    public var logged_in_at: String?
     /**
      * IP address of client for most recent login using credential (read-only)
      */
-    var logged_in_ip: String?
+    public var logged_in_ip: String?
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var type: String?
+    public var type: String?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
     /**
      * Link to get this user (read-only)
      */
-    var user_url: URI?
+    public var user_url: URI?
 }
 
-struct CredentialsOIDC: SDKModel {
+public struct CredentialsOIDC: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
-    var created_at: String?
+    public var created_at: String?
     /**
      * EMail address (read-only)
      */
-    var email: String?
+    public var email: String?
     /**
      * Has this credential been disabled? (read-only)
      */
-    var is_disabled: Bool?
+    public var is_disabled: Bool?
     /**
      * Timestamp for most recent login using credential (read-only)
      */
-    var logged_in_at: String?
+    public var logged_in_at: String?
     /**
      * OIDC OP's Unique ID for this user (read-only)
      */
-    var oidc_user_id: String?
+    public var oidc_user_id: String?
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var type: String?
+    public var type: String?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct CredentialsSaml: SDKModel {
+public struct CredentialsSaml: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
-    var created_at: String?
+    public var created_at: String?
     /**
      * EMail address (read-only)
      */
-    var email: String?
+    public var email: String?
     /**
      * Has this credential been disabled? (read-only)
      */
-    var is_disabled: Bool?
+    public var is_disabled: Bool?
     /**
      * Timestamp for most recent login using credential (read-only)
      */
-    var logged_in_at: String?
+    public var logged_in_at: String?
     /**
      * Saml IdP's Unique ID for this user (read-only)
      */
-    var saml_user_id: String?
+    public var saml_user_id: String?
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var type: String?
+    public var type: String?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct CredentialsTotp: SDKModel {
+public struct CredentialsTotp: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Timestamp for the creation of this credential (read-only)
      */
-    var created_at: String?
+    public var created_at: String?
     /**
      * Has this credential been disabled? (read-only)
      */
-    var is_disabled: Bool?
+    public var is_disabled: Bool?
     /**
      * Short name for the type of this kind of credential (read-only)
      */
-    var type: String?
+    public var type: String?
     /**
      * User has verified (read-only)
      */
-    var verified: Bool?
+    public var verified: Bool?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct CustomWelcomeEmail: SDKModel {
+public struct CustomWelcomeEmail: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * If true, custom email content will replace the default body of welcome emails
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
      */
-    var content: String?
+    public var content: String?
     /**
      * The text to appear in the email subject line.
      */
-    var subject: String?
+    public var subject: String?
     /**
      * The text to appear in the header line of the email body.
      */
-    var header: String?
+    public var header: String?
 }
 
-struct Dashboard: SDKModel {
+public struct Dashboard: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Content Favorite Id (read-only)
      */
-    var content_favorite_id: Int64?
+    public var content_favorite_id: Int64?
     /**
      * Id of content metadata (read-only)
      */
-    var content_metadata_id: Int64?
+    public var content_metadata_id: Int64?
     /**
      * Description
      */
-    var description: String?
+    public var description: String?
     /**
      * Is Hidden
      */
-    var hidden: Bool?
+    public var hidden: Bool?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
-    var model: LookModel?
+    public var id: String?
+    public var model: LookModel?
     /**
      * Timezone in which the Dashboard will run by default.
      */
-    var query_timezone: String?
+    public var query_timezone: String?
     /**
      * Is Read-only (read-only)
      */
-    var readonly: Bool?
+    public var readonly: Bool?
     /**
      * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
      */
-    var refresh_interval: String?
+    public var refresh_interval: String?
     /**
      * Refresh Interval in milliseconds (read-only)
      */
-    var refresh_interval_to_i: Int64?
-    var folder: FolderBase?
+    public var refresh_interval_to_i: Int64?
+    public var folder: FolderBase?
     /**
      * Dashboard Title
      */
-    var title: String?
+    public var title: String?
     /**
      * Id of User (read-only)
      */
-    var user_id: Int64?
+    public var user_id: Int64?
     /**
      * Background color
      */
-    var background_color: String?
+    public var background_color: String?
     /**
      * Time that the Dashboard was created. (read-only)
      */
-    var created_at: Date?
+    public var created_at: Date?
     /**
      * Enables crossfiltering in dashboards - only available in dashboards-next (beta)
      */
-    var crossfilter_enabled: Bool?
+    public var crossfilter_enabled: Bool?
     /**
      * Elements (read-only)
      */
-    var dashboard_elements: [DashboardElement]?
+    public var dashboard_elements: [DashboardElement]?
     /**
      * Filters (read-only)
      */
-    var dashboard_filters: [DashboardFilter]?
+    public var dashboard_filters: [DashboardFilter]?
     /**
      * Layouts (read-only)
      */
-    var dashboard_layouts: [DashboardLayout]?
+    public var dashboard_layouts: [DashboardLayout]?
     /**
      * Whether or not a dashboard is 'soft' deleted.
      */
-    var deleted: Bool?
+    public var deleted: Bool?
     /**
      * Time that the Dashboard was 'soft' deleted. (read-only)
      */
-    var deleted_at: Date?
+    public var deleted_at: Date?
     /**
      * Id of User that 'soft' deleted the dashboard. (read-only)
      */
-    var deleter_id: Int64?
+    public var deleter_id: Int64?
     /**
      * Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)
      */
-    var edit_uri: URI?
+    public var edit_uri: URI?
     /**
      * Number of times favorited (read-only)
      */
-    var favorite_count: Int64?
+    public var favorite_count: Int64?
     /**
      * Time the dashboard was last accessed (read-only)
      */
-    var last_accessed_at: Date?
+    public var last_accessed_at: Date?
     /**
      * Time last viewed in the Looker web UI (read-only)
      */
-    var last_viewed_at: Date?
+    public var last_viewed_at: Date?
     /**
      * configuration option that governs how dashboard loading will happen.
      */
-    var load_configuration: String?
+    public var load_configuration: String?
     /**
      * Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
      */
-    var lookml_link_id: String?
+    public var lookml_link_id: String?
     /**
      * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
      */
-    var show_filters_bar: Bool?
+    public var show_filters_bar: Bool?
     /**
      * Show title
      */
-    var show_title: Bool?
+    public var show_title: Bool?
     /**
      * Content Metadata Slug
      */
-    var slug: String?
+    public var slug: String?
     /**
      * Id of folder
      */
-    var folder_id: String?
+    public var folder_id: String?
     /**
      * Color of text on text tiles
      */
-    var text_tile_text_color: String?
+    public var text_tile_text_color: String?
     /**
      * Tile background color
      */
-    var tile_background_color: String?
+    public var tile_background_color: String?
     /**
      * Tile text color
      */
-    var tile_text_color: String?
+    public var tile_text_color: String?
     /**
      * Title color
      */
-    var title_color: String?
+    public var title_color: String?
     /**
      * Number of times viewed in the Looker web UI (read-only)
      */
-    var view_count: Int64?
-    var appearance: DashboardAppearance?
+    public var view_count: Int64?
+    public var appearance: DashboardAppearance?
     /**
      * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
      */
-    var preferred_viewer: String?
+    public var preferred_viewer: String?
 }
 
-struct DashboardAggregateTableLookml: SDKModel {
+public struct DashboardAggregateTableLookml: SDKModel {
     /**
      * Dashboard Id (read-only)
      */
-    var dashboard_id: String?
+    public var dashboard_id: String?
     /**
      * Aggregate Table LookML (read-only)
      */
-    var aggregate_table_lookml: String?
+    public var aggregate_table_lookml: String?
 }
 
-struct DashboardAppearance: SDKModel {
+public struct DashboardAppearance: SDKModel {
     /**
      * Page margin (side) width
      */
-    var page_side_margins: Int64?
+    public var page_side_margins: Int64?
     /**
      * Background color for the dashboard
      */
-    var page_background_color: String?
+    public var page_background_color: String?
     /**
      * Title alignment on dashboard tiles
      */
-    var tile_title_alignment: String?
+    public var tile_title_alignment: String?
     /**
      * Space between tiles
      */
-    var tile_space_between: Int64?
+    public var tile_space_between: Int64?
     /**
      * Background color for tiles
      */
-    var tile_background_color: String?
+    public var tile_background_color: String?
     /**
      * Tile shadow on/off
      */
-    var tile_shadow: Bool?
+    public var tile_shadow: Bool?
     /**
      * Key color
      */
-    var key_color: String?
+    public var key_color: String?
 }
 
-struct DashboardBase: SDKModel {
+public struct DashboardBase: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Content Favorite Id (read-only)
      */
-    var content_favorite_id: Int64?
+    public var content_favorite_id: Int64?
     /**
      * Id of content metadata (read-only)
      */
-    var content_metadata_id: Int64?
+    public var content_metadata_id: Int64?
     /**
      * Description (read-only)
      */
-    var description: String?
+    public var description: String?
     /**
      * Is Hidden (read-only)
      */
-    var hidden: Bool?
+    public var hidden: Bool?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
-    var model: LookModel?
+    public var id: String?
+    public var model: LookModel?
     /**
      * Timezone in which the Dashboard will run by default. (read-only)
      */
-    var query_timezone: String?
+    public var query_timezone: String?
     /**
      * Is Read-only (read-only)
      */
-    var readonly: Bool?
+    public var readonly: Bool?
     /**
      * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds. (read-only)
      */
-    var refresh_interval: String?
+    public var refresh_interval: String?
     /**
      * Refresh Interval in milliseconds (read-only)
      */
-    var refresh_interval_to_i: Int64?
-    var folder: FolderBase?
+    public var refresh_interval_to_i: Int64?
+    public var folder: FolderBase?
     /**
      * Dashboard Title (read-only)
      */
-    var title: String?
+    public var title: String?
     /**
      * Id of User (read-only)
      */
-    var user_id: Int64?
+    public var user_id: Int64?
 }
 
-struct DashboardElement: SDKModel {
+public struct DashboardElement: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Text tile body text
      */
-    var body_text: String?
+    public var body_text: String?
     /**
      * Text tile body text as Html (read-only)
      */
-    var body_text_as_html: String?
+    public var body_text_as_html: String?
     /**
      * Id of Dashboard
      */
-    var dashboard_id: String?
+    public var dashboard_id: String?
     /**
      * Relative path of URI of LookML file to edit the dashboard element (LookML dashboard only). (read-only)
      */
-    var edit_uri: URI?
+    public var edit_uri: URI?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
-    var look: LookWithQuery?
+    public var id: String?
+    public var look: LookWithQuery?
     /**
      * Id Of Look
      */
-    var look_id: String?
+    public var look_id: String?
     /**
      * LookML link ID (read-only)
      */
-    var lookml_link_id: String?
+    public var lookml_link_id: String?
     /**
      * ID of merge result
      */
-    var merge_result_id: String?
+    public var merge_result_id: String?
     /**
      * Note Display
      */
-    var note_display: String?
+    public var note_display: String?
     /**
      * Note State
      */
-    var note_state: String?
+    public var note_state: String?
     /**
      * Note Text
      */
-    var note_text: String?
+    public var note_text: String?
     /**
      * Note Text as Html (read-only)
      */
-    var note_text_as_html: String?
-    var query: Query?
+    public var note_text_as_html: String?
+    public var query: Query?
     /**
      * Id Of Query
      */
-    var query_id: Int64?
+    public var query_id: Int64?
     /**
      * Refresh Interval
      */
-    var refresh_interval: String?
+    public var refresh_interval: String?
     /**
      * Refresh Interval as integer (read-only)
      */
-    var refresh_interval_to_i: Int64?
-    var result_maker: ResultMakerWithIdVisConfigAndDynamicFields?
+    public var refresh_interval_to_i: Int64?
+    public var result_maker: ResultMakerWithIdVisConfigAndDynamicFields?
     /**
      * ID of the ResultMakerLookup entry.
      */
-    var result_maker_id: Int64?
+    public var result_maker_id: Int64?
     /**
      * Text tile subtitle text
      */
-    var subtitle_text: String?
+    public var subtitle_text: String?
     /**
      * Title of dashboard element
      */
-    var title: String?
+    public var title: String?
     /**
      * Whether title is hidden
      */
-    var title_hidden: Bool?
+    public var title_hidden: Bool?
     /**
      * Text tile title
      */
-    var title_text: String?
+    public var title_text: String?
     /**
      * Type
      */
-    var type: String?
+    public var type: String?
     /**
      * Count of Alerts associated to a dashboard element (read-only)
      */
-    var alert_count: Int64?
+    public var alert_count: Int64?
     /**
      * Text tile title text as Html (read-only)
      */
-    var title_text_as_html: String?
+    public var title_text_as_html: String?
     /**
      * Text tile subtitle text as Html (read-only)
      */
-    var subtitle_text_as_html: String?
+    public var subtitle_text_as_html: String?
 }
 
-struct DashboardFilter: SDKModel {
+public struct DashboardFilter: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Id of Dashboard (read-only)
      */
-    var dashboard_id: String?
+    public var dashboard_id: String?
     /**
      * Name of filter
      */
-    var name: String?
+    public var name: String?
     /**
      * Title of filter
      */
-    var title: String?
+    public var title: String?
     /**
      * Type of filter: one of date, number, string, or field
      */
-    var type: String?
+    public var type: String?
     /**
      * Default value of filter
      */
-    var default_value: String?
+    public var default_value: String?
     /**
      * Model of filter (required if type = field)
      */
-    var model: String?
+    public var model: String?
     /**
      * Explore of filter (required if type = field)
      */
-    var explore: String?
+    public var explore: String?
     /**
      * Dimension of filter (required if type = field)
      */
-    var dimension: String?
+    public var dimension: String?
     /**
      * Field information (read-only)
      */
-    var field: StringDictionary<AnyCodable>?
+    public var field: StringDictionary<AnyCodable>?
     /**
      * Display order of this filter relative to other filters
      */
-    var row: Int64?
+    public var row: Int64?
     /**
      * Array of listeners for faceted filters
      */
-    var listens_to_filters: [String]?
+    public var listens_to_filters: [String]?
     /**
      * Whether the filter allows multiple filter values
      */
-    var allow_multiple_values: Bool?
+    public var allow_multiple_values: Bool?
     /**
      * Whether the filter requires a value to run the dashboard
      */
-    var `required`: Bool?
+    public var `required`: Bool?
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
-    var ui_config: StringDictionary<AnyCodable>?
+    public var ui_config: StringDictionary<AnyCodable>?
 }
 
-struct DashboardLayout: SDKModel {
+public struct DashboardLayout: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Id of Dashboard
      */
-    var dashboard_id: String?
+    public var dashboard_id: String?
     /**
      * Type
      */
-    var type: String?
+    public var type: String?
     /**
      * Is Active
      */
-    var active: Bool?
+    public var active: Bool?
     /**
      * Column Width
      */
-    var column_width: Int64?
+    public var column_width: Int64?
     /**
      * Width
      */
-    var width: Int64?
+    public var width: Int64?
     /**
      * Whether or not the dashboard layout is deleted. (read-only)
      */
-    var deleted: Bool?
+    public var deleted: Bool?
     /**
      * Title extracted from the dashboard this layout represents. (read-only)
      */
-    var dashboard_title: String?
+    public var dashboard_title: String?
     /**
      * Components (read-only)
      */
-    var dashboard_layout_components: [DashboardLayoutComponent]?
+    public var dashboard_layout_components: [DashboardLayoutComponent]?
 }
 
-struct DashboardLayoutComponent: SDKModel {
+public struct DashboardLayoutComponent: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Id of Dashboard Layout
      */
-    var dashboard_layout_id: String?
+    public var dashboard_layout_id: String?
     /**
      * Id Of Dashboard Element
      */
-    var dashboard_element_id: String?
+    public var dashboard_element_id: String?
     /**
      * Row
      */
-    var row: Int64?
+    public var row: Int64?
     /**
      * Column
      */
-    var column: Int64?
+    public var column: Int64?
     /**
      * Width
      */
-    var width: Int64?
+    public var width: Int64?
     /**
      * Height
      */
-    var height: Int64?
+    public var height: Int64?
     /**
      * Whether or not the dashboard layout component is deleted (read-only)
      */
-    var deleted: Bool?
+    public var deleted: Bool?
     /**
      * Dashboard element title, extracted from the Dashboard Element. (read-only)
      */
-    var element_title: String?
+    public var element_title: String?
     /**
      * Whether or not the dashboard element title is displayed. (read-only)
      */
-    var element_title_hidden: Bool?
+    public var element_title_hidden: Bool?
     /**
      * Visualization type, extracted from a query's vis_config (read-only)
      */
-    var vis_type: String?
+    public var vis_type: String?
 }
 
-struct DashboardLookml: SDKModel {
+public struct DashboardLookml: SDKModel {
     /**
      * Id of Dashboard (read-only)
      */
-    var dashboard_id: String?
+    public var dashboard_id: String?
     /**
      * lookml of UDD (read-only)
      */
-    var lookml: String?
+    public var lookml: String?
 }
 
-struct DataActionForm: SDKModel {
-    var state: DataActionUserState?
+public struct DataActionForm: SDKModel {
+    public var state: DataActionUserState?
     /**
      * Array of form fields. (read-only)
      */
-    var fields: [DataActionFormField]?
+    public var fields: [DataActionFormField]?
 }
 
-struct DataActionFormField: SDKModel {
+public struct DataActionFormField: SDKModel {
     /**
      * Name (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Human-readable label (read-only)
      */
-    var label: String?
+    public var label: String?
     /**
      * Description of field (read-only)
      */
-    var description: String?
+    public var description: String?
     /**
      * Type of field. (read-only)
      */
-    var type: String?
+    public var type: String?
     /**
      * Default value of the field. (read-only)
      */
-    var `default`: String?
+    public var `default`: String?
     /**
      * The URL for an oauth link, if type is 'oauth_link'. (read-only)
      */
-    var oauth_url: String?
+    public var oauth_url: String?
     /**
      * Whether or not a field supports interactive forms. (read-only)
      */
-    var interactive: Bool?
+    public var interactive: Bool?
     /**
      * Whether or not the field is required. This is a user-interface hint. A user interface displaying this form should not submit it without a value for this field. The action server must also perform this validation. (read-only)
      */
-    var `required`: Bool?
+    public var `required`: Bool?
     /**
      * If the form type is 'select', a list of options to be selected from. (read-only)
      */
-    var options: [DataActionFormSelectOption]?
+    public var options: [DataActionFormSelectOption]?
 }
 
-struct DataActionFormSelectOption: SDKModel {
+public struct DataActionFormSelectOption: SDKModel {
     /**
      * Name (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Human-readable label (read-only)
      */
-    var label: String?
+    public var label: String?
 }
 
-struct DataActionRequest: SDKModel {
+public struct DataActionRequest: SDKModel {
     /**
      * The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.
      */
-    var action: StringDictionary<AnyCodable>?
+    public var action: StringDictionary<AnyCodable>?
     /**
      * User input for any form values the data action might use.
      */
-    var form_values: StringDictionary<AnyCodable>?
+    public var form_values: StringDictionary<AnyCodable>?
 }
 
-struct DataActionResponse: SDKModel {
+public struct DataActionResponse: SDKModel {
     /**
      * ID of the webhook event that sent this data action. In some error conditions, this may be null. (read-only)
      */
-    var webhook_id: String?
+    public var webhook_id: String?
     /**
      * Whether the data action was successful. (read-only)
      */
-    var success: Bool?
+    public var success: Bool?
     /**
      * When true, indicates that the client should refresh (rerun) the source query because the data may have been changed by the action. (read-only)
      */
-    var refresh_query: Bool?
-    var validation_errors: ValidationError?
+    public var refresh_query: Bool?
+    public var validation_errors: ValidationError?
     /**
      * Optional message returned by the data action server describing the state of the action that took place. This can be used to implement custom failure messages. If a failure is related to a particular form field, the server should send back a validation error instead. The Looker web UI does not currently display any message if the action indicates 'success', but may do so in the future. (read-only)
      */
-    var message: String?
+    public var message: String?
 }
 
-struct DataActionUserState: SDKModel {
+public struct DataActionUserState: SDKModel {
     /**
      * User state data (read-only)
      */
-    var data: String?
+    public var data: String?
     /**
      * Time in seconds until the state needs to be refreshed (read-only)
      */
-    var refresh_time: Int64?
+    public var refresh_time: Int64?
 }
 
-struct Datagroup: SDKModel {
+public struct Datagroup: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * UNIX timestamp at which this entry was created. (read-only)
      */
-    var created_at: Int64?
+    public var created_at: Int64?
     /**
      * Unique ID of the datagroup (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Name of the model containing the datagroup. Unique when combined with name. (read-only)
      */
-    var model_name: String?
+    public var model_name: String?
     /**
      * Name of the datagroup. Unique when combined with model_name. (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
      */
-    var stale_before: Int64?
+    public var stale_before: Int64?
     /**
      * UNIX timestamp at which this entry trigger was last checked. (read-only)
      */
-    var trigger_check_at: Int64?
+    public var trigger_check_at: Int64?
     /**
      * The message returned with the error of the last trigger check. (read-only)
      */
-    var trigger_error: String?
+    public var trigger_error: String?
     /**
      * The value of the trigger when last checked. (read-only)
      */
-    var trigger_value: String?
+    public var trigger_value: String?
     /**
      * UNIX timestamp at which this entry became triggered. Cannot be in the future.
      */
-    var triggered_at: Int64?
+    public var triggered_at: Int64?
 }
 
-struct DBConnection: SDKModel {
+public struct DBConnection: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Name of the connection. Also used as the unique identifier
      */
-    var name: String?
-    var dialect: Dialect?
+    public var name: String?
+    public var dialect: Dialect?
     /**
      * SQL Runner snippets for this connection (read-only)
      */
-    var snippets: [Snippet]?
+    public var snippets: [Snippet]?
     /**
      * Host name/address of server
      */
-    var host: String?
+    public var host: String?
     /**
      * Port number on server
      */
-    var port: Int64?
+    public var port: Int64?
     /**
      * Username for server authentication
      */
-    var username: String?
+    public var username: String?
     /**
      * (Write-Only) Password for server authentication
      */
-    var password: String?
+    public var password: String?
     /**
      * Whether the connection uses OAuth for authentication. (read-only)
      */
-    var uses_oauth: Bool?
+    public var uses_oauth: Bool?
     /**
      * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
      */
-    var certificate: String?
+    public var certificate: String?
     /**
      * (Write-Only) Certificate keyfile type - .json or .p12
      */
-    var file_type: String?
+    public var file_type: String?
     /**
      * Database name
      */
-    var database: String?
+    public var database: String?
     /**
      * Time zone of database
      */
-    var db_timezone: String?
+    public var db_timezone: String?
     /**
      * Timezone to use in queries
      */
-    var query_timezone: String?
+    public var query_timezone: String?
     /**
      * Scheme name
      */
-    var schema: String?
+    public var schema: String?
     /**
      * Maximum number of concurrent connection to use
      */
-    var max_connections: Int64?
+    public var max_connections: Int64?
     /**
      * Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
      */
-    var max_billing_gigabytes: String?
+    public var max_billing_gigabytes: String?
     /**
      * Use SSL/TLS when connecting to server
      */
-    var ssl: Bool?
+    public var ssl: Bool?
     /**
      * Verify the SSL
      */
-    var verify_ssl: Bool?
+    public var verify_ssl: Bool?
     /**
      * Name of temporary database (if used)
      */
-    var tmp_db_name: String?
+    public var tmp_db_name: String?
     /**
      * Additional params to add to JDBC connection string
      */
-    var jdbc_additional_params: String?
+    public var jdbc_additional_params: String?
     /**
      * Connection Pool Timeout, in seconds
      */
-    var pool_timeout: Int64?
+    public var pool_timeout: Int64?
     /**
      * (Read/Write) SQL Dialect name
      */
-    var dialect_name: String?
+    public var dialect_name: String?
     /**
      * Creation date for this connection (read-only)
      */
-    var created_at: String?
+    public var created_at: String?
     /**
      * Id of user who last modified this connection configuration (read-only)
      */
-    var user_id: String?
+    public var user_id: String?
     /**
      * Is this an example connection? (read-only)
      */
-    var example: Bool?
+    public var example: Bool?
     /**
      * (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
      */
-    var user_db_credentials: Bool?
+    public var user_db_credentials: Bool?
     /**
      * Fields whose values map to user attribute names
      */
-    var user_attribute_fields: [String]?
+    public var user_attribute_fields: [String]?
     /**
      * Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
      */
-    var maintenance_cron: String?
+    public var maintenance_cron: String?
     /**
      * Unix timestamp at start of last completed PDT trigger check process (read-only)
      */
-    var last_regen_at: String?
+    public var last_regen_at: String?
     /**
      * Unix timestamp at start of last completed PDT reap process (read-only)
      */
-    var last_reap_at: String?
+    public var last_reap_at: String?
     /**
      * Precache tables in the SQL Runner
      */
-    var sql_runner_precache_tables: Bool?
+    public var sql_runner_precache_tables: Bool?
     /**
      * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
      */
-    var after_connect_statements: String?
-    var pdt_context_override: DBConnectionOverride?
+    public var after_connect_statements: String?
+    public var pdt_context_override: DBConnectionOverride?
     /**
      * Is this connection created and managed by Looker (read-only)
      */
-    var managed: Bool?
+    public var managed: Bool?
     /**
      * The Id of the ssh tunnel this connection uses
      */
-    var tunnel_id: String?
+    public var tunnel_id: String?
     /**
      * Maximum number of threads to use to build PDTs in parallel
      */
-    var pdt_concurrency: Int64?
+    public var pdt_concurrency: Int64?
     /**
      * When disable_context_comment is true comment will not be added to SQL
      */
-    var disable_context_comment: Bool?
+    public var disable_context_comment: Bool?
 }
 
-struct DBConnectionBase: SDKModel {
+public struct DBConnectionBase: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Name of the connection. Also used as the unique identifier (read-only)
      */
-    var name: String?
-    var dialect: Dialect?
+    public var name: String?
+    public var dialect: Dialect?
     /**
      * SQL Runner snippets for this connection (read-only)
      */
-    var snippets: [Snippet]?
+    public var snippets: [Snippet]?
 }
 
-struct DBConnectionOverride: SDKModel {
+public struct DBConnectionOverride: SDKModel {
     /**
      * Context in which to override (`pdt` is the only allowed value)
      */
-    var context: String?
+    public var context: String?
     /**
      * Host name/address of server
      */
-    var host: String?
+    public var host: String?
     /**
      * Port number on server
      */
-    var port: String?
+    public var port: String?
     /**
      * Username for server authentication
      */
-    var username: String?
+    public var username: String?
     /**
      * (Write-Only) Password for server authentication
      */
-    var password: String?
+    public var password: String?
     /**
      * Whether or not the password is overridden in this context (read-only)
      */
-    var has_password: Bool?
+    public var has_password: Bool?
     /**
      * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
      */
-    var certificate: String?
+    public var certificate: String?
     /**
      * (Write-Only) Certificate keyfile type - .json or .p12
      */
-    var file_type: String?
+    public var file_type: String?
     /**
      * Database name
      */
-    var database: String?
+    public var database: String?
     /**
      * Scheme name
      */
-    var schema: String?
+    public var schema: String?
     /**
      * Additional params to add to JDBC connection string
      */
-    var jdbc_additional_params: String?
+    public var jdbc_additional_params: String?
     /**
      * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
      */
-    var after_connect_statements: String?
+    public var after_connect_statements: String?
 }
 
-struct DBConnectionTestResult: SDKModel {
+public struct DBConnectionTestResult: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * JDBC connection string. (only populated in the 'connect' test) (read-only)
      */
-    var connection_string: String?
+    public var connection_string: String?
     /**
      * Result message of test (read-only)
      */
-    var message: String?
+    public var message: String?
     /**
      * Name of test (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Result code of test (read-only)
      */
-    var status: String?
+    public var status: String?
 }
 
-struct DelegateOauthTest: SDKModel {
+public struct DelegateOauthTest: SDKModel {
     /**
      * Delegate Oauth Connection Name (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * The ID of the installation target. For Slack, this would be workspace id. (read-only)
      */
-    var installation_target_id: String?
+    public var installation_target_id: String?
     /**
      * Installation ID (read-only)
      */
-    var installation_id: Int64?
+    public var installation_id: Int64?
     /**
      * Whether or not the test was successful (read-only)
      */
-    var success: Bool?
+    public var success: Bool?
 }
 
 /**
  * Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none".
  */
-enum DependencyStatus: String, Codable {
+public enum DependencyStatus: String, Codable {
     case lock_optional = "lock_optional"
     case lock_required = "lock_required"
     case lock_error = "lock_error"
     case install_none = "install_none"
 }
 
-struct Dialect: SDKModel {
+public struct Dialect: SDKModel {
     /**
      * The name of the dialect (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * The human-readable label of the connection (read-only)
      */
-    var label: String?
+    public var label: String?
     /**
      * Whether the dialect supports query cost estimates (read-only)
      */
-    var supports_cost_estimate: Bool?
+    public var supports_cost_estimate: Bool?
     /**
      * PDT index columns (read-only)
      */
-    var persistent_table_indexes: String?
+    public var persistent_table_indexes: String?
     /**
      * PDT sortkey columns (read-only)
      */
-    var persistent_table_sortkeys: String?
+    public var persistent_table_sortkeys: String?
     /**
      * PDT distkey column (read-only)
      */
-    var persistent_table_distkey: String?
+    public var persistent_table_distkey: String?
     /**
      * Suports streaming results (read-only)
      */
-    var supports_streaming: Bool?
+    public var supports_streaming: Bool?
     /**
      * Should SQL Runner snippets automatically be run (read-only)
      */
-    var automatically_run_sql_runner_snippets: Bool?
+    public var automatically_run_sql_runner_snippets: Bool?
     /**
      * Array of names of the tests that can be run on a connection using this dialect (read-only)
      */
-    var connection_tests: [String]?
+    public var connection_tests: [String]?
     /**
      * Is supported with the inducer (i.e. generate from sql) (read-only)
      */
-    var supports_inducer: Bool?
+    public var supports_inducer: Bool?
     /**
      * Can multiple databases be accessed from a connection using this dialect (read-only)
      */
-    var supports_multiple_databases: Bool?
+    public var supports_multiple_databases: Bool?
     /**
      * Whether the dialect supports allowing Looker to build persistent derived tables (read-only)
      */
-    var supports_persistent_derived_tables: Bool?
+    public var supports_persistent_derived_tables: Bool?
     /**
      * Does the database have client SSL support settable through the JDBC string explicitly? (read-only)
      */
-    var has_ssl_support: Bool?
+    public var has_ssl_support: Bool?
 }
 
-struct DialectInfo: SDKModel {
+public struct DialectInfo: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Default number max connections (read-only)
      */
-    var default_max_connections: String?
+    public var default_max_connections: String?
     /**
      * Default port number (read-only)
      */
-    var default_port: String?
+    public var default_port: String?
     /**
      * Is the supporting driver installed (read-only)
      */
-    var installed: Bool?
+    public var installed: Bool?
     /**
      * The human-readable label of the connection (read-only)
      */
-    var label: String?
+    public var label: String?
     /**
      * What the dialect calls the equivalent of a normal SQL table (read-only)
      */
-    var label_for_database_equivalent: String?
+    public var label_for_database_equivalent: String?
     /**
      * The name of the dialect (read-only)
      */
-    var name: String?
-    var supported_options: DialectInfoOptions?
+    public var name: String?
+    public var supported_options: DialectInfoOptions?
 }
 
-struct DialectInfoOptions: SDKModel {
+public struct DialectInfoOptions: SDKModel {
     /**
      * Has additional params support (read-only)
      */
-    var additional_params: Bool?
+    public var additional_params: Bool?
     /**
      * Has auth support (read-only)
      */
-    var auth: Bool?
+    public var auth: Bool?
     /**
      * Has host support (read-only)
      */
-    var host: Bool?
+    public var host: Bool?
     /**
      * Has support for a service account (read-only)
      */
-    var oauth_credentials: Bool?
+    public var oauth_credentials: Bool?
     /**
      * Has project name support (read-only)
      */
-    var project_name: Bool?
+    public var project_name: Bool?
     /**
      * Has schema support (read-only)
      */
-    var schema: Bool?
+    public var schema: Bool?
     /**
      * Has SSL support (read-only)
      */
-    var ssl: Bool?
+    public var ssl: Bool?
     /**
      * Has timezone support (read-only)
      */
-    var timezone: Bool?
+    public var timezone: Bool?
     /**
      * Has tmp table support (read-only)
      */
-    var tmp_table: Bool?
+    public var tmp_table: Bool?
     /**
      * Username is required (read-only)
      */
-    var username_required: Bool?
+    public var username_required: Bool?
 }
 
-struct DigestEmails: SDKModel {
+public struct DigestEmails: SDKModel {
     /**
      * Whether or not digest emails are enabled
      */
-    var is_enabled: Bool?
+    public var is_enabled: Bool?
 }
 
-struct DigestEmailSend: SDKModel {
+public struct DigestEmailSend: SDKModel {
     /**
      * True if content was successfully generated and delivered
      */
-    var configuration_delivered: Bool?
+    public var configuration_delivered: Bool?
 }
 
-struct DiscretePalette: SDKModel {
+public struct DiscretePalette: SDKModel {
     /**
      * Unique identity string (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Label for palette
      */
-    var label: String?
+    public var label: String?
     /**
      * Type of palette
      */
-    var type: String?
+    public var type: String?
     /**
      * Array of colors in the palette
      */
-    var colors: [String]?
+    public var colors: [String]?
 }
 
-struct EmbedParams: SDKModel {
+public struct EmbedParams: SDKModel {
     /**
      * The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
      */
-    var target_url: URI
+    public var target_url: URI
     /**
      * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
      */
-    var session_length: Int64?
+    public var session_length: Int64?
     /**
      * When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
      */
-    var force_logout_login: Bool?
+    public var force_logout_login: Bool?
 }
 
-struct EmbedSsoParams: SDKModel {
+public struct EmbedSsoParams: SDKModel {
     /**
      * The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
      */
-    var target_url: URI
+    public var target_url: URI
     /**
      * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
      */
-    var session_length: Int64?
+    public var session_length: Int64?
     /**
      * When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
      */
-    var force_logout_login: Bool?
+    public var force_logout_login: Bool?
     /**
      * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
      */
-    var external_user_id: String?
+    public var external_user_id: String?
     /**
      * First name of the embed user. Defaults to 'Embed' if not specified
      */
-    var first_name: String?
+    public var first_name: String?
     /**
      * Last name of the embed user. Defaults to 'User' if not specified
      */
-    var last_name: String?
+    public var last_name: String?
     /**
      * Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
      */
-    var user_timezone: String?
+    public var user_timezone: String?
     /**
      * List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.
      */
-    var permissions: [String]?
+    public var permissions: [String]?
     /**
      * List of model names that the embed user may access
      */
-    var models: [String]?
+    public var models: [String]?
     /**
      * List of Looker group ids in which to enroll the embed user
      */
-    var group_ids: [Int64]?
+    public var group_ids: [Int64]?
     /**
      * A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
      */
-    var external_group_id: Int64?
+    public var external_group_id: Int64?
     /**
      * A dictionary of name-value pairs associating a Looker user attribute name with a value.
      */
-    var user_attributes: StringDictionary<AnyCodable>?
+    public var user_attributes: StringDictionary<AnyCodable>?
     /**
      * Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
      */
-    var secret_id: Int64?
+    public var secret_id: Int64?
 }
 
-struct EmbedUrlResponse: SDKModel {
+public struct EmbedUrlResponse: SDKModel {
     /**
      * The embed URL. Any modification to this string will make the URL unusable. (read-only)
      */
-    var url: String?
+    public var url: String?
 }
 
-struct LkError: SDKModel {
+public struct LkError: SDKModel {
     /**
      * Error details (read-only)
      */
-    var message: String
+    public var message: String
     /**
      * Documentation link (read-only)
      */
-    var documentation_url: URI
+    public var documentation_url: URI
 }
 
 /**
  * The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range".
  */
-enum FillStyle: String, Codable {
+public enum FillStyle: String, Codable {
     case enumeration = "enumeration"
     case range = "range"
 }
 
-struct Folder: SDKModel {
+public struct Folder: SDKModel {
     /**
      * Unique Name
      */
-    var name: String
+    public var name: String
     /**
      * Id of Parent. If the parent id is null, this is a root-level entry
      */
-    var parent_id: String?
+    public var parent_id: String?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Id of content metadata (read-only)
      */
-    var content_metadata_id: Int64?
+    public var content_metadata_id: Int64?
     /**
      * Time the space was created (read-only)
      */
-    var created_at: Date?
+    public var created_at: Date?
     /**
      * User Id of Creator (read-only)
      */
-    var creator_id: Int64?
+    public var creator_id: Int64?
     /**
      * Children Count (read-only)
      */
-    var child_count: Int64?
+    public var child_count: Int64?
     /**
      * Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)
      */
-    var external_id: String?
+    public var external_id: String?
     /**
      * Folder is an embed folder (read-only)
      */
-    var is_embed: Bool?
+    public var is_embed: Bool?
     /**
      * Folder is the root embed shared folder (read-only)
      */
-    var is_embed_shared_root: Bool?
+    public var is_embed_shared_root: Bool?
     /**
      * Folder is the root embed users folder (read-only)
      */
-    var is_embed_users_root: Bool?
+    public var is_embed_users_root: Bool?
     /**
      * Folder is a user's personal folder (read-only)
      */
-    var is_personal: Bool?
+    public var is_personal: Bool?
     /**
      * Folder is descendant of a user's personal folder (read-only)
      */
-    var is_personal_descendant: Bool?
+    public var is_personal_descendant: Bool?
     /**
      * Folder is the root shared folder (read-only)
      */
-    var is_shared_root: Bool?
+    public var is_shared_root: Bool?
     /**
      * Folder is the root user folder (read-only)
      */
-    var is_users_root: Bool?
+    public var is_users_root: Bool?
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Dashboards (read-only)
      */
-    var dashboards: [DashboardBase]?
+    public var dashboards: [DashboardBase]?
     /**
      * Looks (read-only)
      */
-    var looks: [LookWithDashboards]?
+    public var looks: [LookWithDashboards]?
 }
 
-struct FolderBase: SDKModel {
+public struct FolderBase: SDKModel {
     /**
      * Unique Name
      */
-    var name: String
+    public var name: String
     /**
      * Id of Parent. If the parent id is null, this is a root-level entry
      */
-    var parent_id: String?
+    public var parent_id: String?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Id of content metadata (read-only)
      */
-    var content_metadata_id: Int64?
+    public var content_metadata_id: Int64?
     /**
      * Time the folder was created (read-only)
      */
-    var created_at: Date?
+    public var created_at: Date?
     /**
      * User Id of Creator (read-only)
      */
-    var creator_id: Int64?
+    public var creator_id: Int64?
     /**
      * Children Count (read-only)
      */
-    var child_count: Int64?
+    public var child_count: Int64?
     /**
      * Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)
      */
-    var external_id: String?
+    public var external_id: String?
     /**
      * Folder is an embed folder (read-only)
      */
-    var is_embed: Bool?
+    public var is_embed: Bool?
     /**
      * Folder is the root embed shared folder (read-only)
      */
-    var is_embed_shared_root: Bool?
+    public var is_embed_shared_root: Bool?
     /**
      * Folder is the root embed users folder (read-only)
      */
-    var is_embed_users_root: Bool?
+    public var is_embed_users_root: Bool?
     /**
      * Folder is a user's personal folder (read-only)
      */
-    var is_personal: Bool?
+    public var is_personal: Bool?
     /**
      * Folder is descendant of a user's personal folder (read-only)
      */
-    var is_personal_descendant: Bool?
+    public var is_personal_descendant: Bool?
     /**
      * Folder is the root shared folder (read-only)
      */
-    var is_shared_root: Bool?
+    public var is_shared_root: Bool?
     /**
      * Folder is the root user folder (read-only)
      */
-    var is_users_root: Bool?
+    public var is_users_root: Bool?
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
 }
 
 /**
  * Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region".
  */
-enum Format: String, Codable {
+public enum Format: String, Codable {
     case topojson = "topojson"
     case vector_tile_region = "vector_tile_region"
 }
@@ -2580,2135 +2580,2135 @@ enum Format: String, Codable {
 /**
  * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
  */
-enum GitApplicationServerHttpScheme: String, Codable {
+public enum GitApplicationServerHttpScheme: String, Codable {
     case http = "http"
     case https = "https"
 }
 
-struct GitBranch: SDKModel {
+public struct GitBranch: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * The short name on the local. Updating `name` results in `git checkout <new_name>`
      */
-    var name: String?
+    public var name: String?
     /**
      * The name of the remote (read-only)
      */
-    var remote: String?
+    public var remote: String?
     /**
      * The short name on the remote (read-only)
      */
-    var remote_name: String?
+    public var remote_name: String?
     /**
      * Name of error (read-only)
      */
-    var error: String?
+    public var error: String?
     /**
      * Message describing an error if present (read-only)
      */
-    var message: String?
+    public var message: String?
     /**
      * Name of the owner of a personal branch (read-only)
      */
-    var owner_name: String?
+    public var owner_name: String?
     /**
      * Whether or not this branch is readonly (read-only)
      */
-    var readonly: Bool?
+    public var readonly: Bool?
     /**
      * Whether or not this branch is a personal branch - readonly for all developers except the owner (read-only)
      */
-    var personal: Bool?
+    public var personal: Bool?
     /**
      * Whether or not a local ref exists for the branch (read-only)
      */
-    var is_local: Bool?
+    public var is_local: Bool?
     /**
      * Whether or not a remote ref exists for the branch (read-only)
      */
-    var is_remote: Bool?
+    public var is_remote: Bool?
     /**
      * Whether or not this is the production branch (read-only)
      */
-    var is_production: Bool?
+    public var is_production: Bool?
     /**
      * Number of commits the local branch is ahead of the remote (read-only)
      */
-    var ahead_count: Int64?
+    public var ahead_count: Int64?
     /**
      * Number of commits the local branch is behind the remote (read-only)
      */
-    var behind_count: Int64?
+    public var behind_count: Int64?
     /**
      * UNIX timestamp at which this branch was last committed. (read-only)
      */
-    var commit_at: Int64?
+    public var commit_at: Int64?
     /**
      * The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
      */
-    var ref: String?
+    public var ref: String?
     /**
      * The resolved ref of this branch remote. (read-only)
      */
-    var remote_ref: String?
+    public var remote_ref: String?
 }
 
-struct GitConnectionTest: SDKModel {
+public struct GitConnectionTest: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Human readable string describing the test (read-only)
      */
-    var description: String?
+    public var description: String?
     /**
      * A short string, uniquely naming this test (read-only)
      */
-    var id: String?
+    public var id: String?
 }
 
-struct GitConnectionTestResult: SDKModel {
+public struct GitConnectionTestResult: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * A short string, uniquely naming this test (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Additional data from the test (read-only)
      */
-    var message: String?
+    public var message: String?
     /**
      * Either 'pass' or 'fail' (read-only)
      */
-    var status: String?
+    public var status: String?
 }
 
-struct GitStatus: SDKModel {
+public struct GitStatus: SDKModel {
     /**
      * Git action: add, delete, etc (read-only)
      */
-    var action: String?
+    public var action: String?
     /**
      * When true, changes to the local file conflict with the remote repository (read-only)
      */
-    var conflict: Bool?
+    public var conflict: Bool?
     /**
      * When true, the file can be reverted to an earlier state (read-only)
      */
-    var revertable: Bool?
+    public var revertable: Bool?
     /**
      * Git description of the action (read-only)
      */
-    var text: String?
+    public var text: String?
 }
 
-struct LkGroup: SDKModel {
+public struct LkGroup: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Group can be used in content access controls
      */
-    var can_add_to_content_metadata: Bool?
+    public var can_add_to_content_metadata: Bool?
     /**
      * Currently logged in user is group member (read-only)
      */
-    var contains_current_user: Bool?
+    public var contains_current_user: Bool?
     /**
      * External Id group if embed group (read-only)
      */
-    var external_group_id: String?
+    public var external_group_id: String?
     /**
      * Group membership controlled outside of Looker (read-only)
      */
-    var externally_managed: Bool?
+    public var externally_managed: Bool?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * New users are added to this group by default (read-only)
      */
-    var include_by_default: Bool?
+    public var include_by_default: Bool?
     /**
      * Name of group
      */
-    var name: String?
+    public var name: String?
     /**
      * Number of users included in this group (read-only)
      */
-    var user_count: Int64?
+    public var user_count: Int64?
 }
 
-struct GroupIdForGroupInclusion: SDKModel {
+public struct GroupIdForGroupInclusion: SDKModel {
     /**
      * Id of group (read-only)
      */
-    var group_id: Int64?
+    public var group_id: Int64?
 }
 
-struct GroupIdForGroupUserInclusion: SDKModel {
+public struct GroupIdForGroupUserInclusion: SDKModel {
     /**
      * Id of user (read-only)
      */
-    var user_id: Int64?
+    public var user_id: Int64?
 }
 
-struct GroupSearch: SDKModel {
+public struct GroupSearch: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Group can be used in content access controls
      */
-    var can_add_to_content_metadata: Bool?
+    public var can_add_to_content_metadata: Bool?
     /**
      * Currently logged in user is group member (read-only)
      */
-    var contains_current_user: Bool?
+    public var contains_current_user: Bool?
     /**
      * External Id group if embed group (read-only)
      */
-    var external_group_id: String?
+    public var external_group_id: String?
     /**
      * Group membership controlled outside of Looker (read-only)
      */
-    var externally_managed: Bool?
+    public var externally_managed: Bool?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * New users are added to this group by default (read-only)
      */
-    var include_by_default: Bool?
+    public var include_by_default: Bool?
     /**
      * Name of group
      */
-    var name: String?
+    public var name: String?
     /**
      * Number of users included in this group (read-only)
      */
-    var user_count: Int64?
+    public var user_count: Int64?
     /**
      * Roles assigned to group (read-only)
      */
-    var roles: [Role]?
+    public var roles: [Role]?
 }
 
-struct ImportedProject: SDKModel {
+public struct ImportedProject: SDKModel {
     /**
      * Dependency name (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Url for a remote dependency (read-only)
      */
-    var url: String?
+    public var url: String?
     /**
      * Ref for a remote dependency (read-only)
      */
-    var ref: String?
+    public var ref: String?
     /**
      * Flag signifying if a dependency is remote or local (read-only)
      */
-    var is_remote: Bool?
+    public var is_remote: Bool?
 }
 
-struct Integration: SDKModel {
+public struct Integration: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * ID of the integration. (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * ID of the integration hub. (read-only)
      */
-    var integration_hub_id: Int64?
+    public var integration_hub_id: Int64?
     /**
      * Label for the integration. (read-only)
      */
-    var label: String?
+    public var label: String?
     /**
      * Description of the integration. (read-only)
      */
-    var description: String?
+    public var description: String?
     /**
      * Whether the integration is available to users.
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * Array of params for the integration.
      */
-    var params: [IntegrationParam]?
+    public var params: [IntegrationParam]?
     /**
      * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
      */
-    var supported_formats: SupportedFormats?
+    public var supported_formats: SupportedFormats?
     /**
      * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)
      */
-    var supported_action_types: SupportedActionTypes?
+    public var supported_action_types: SupportedActionTypes?
     /**
      * A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (read-only)
      */
-    var supported_formattings: SupportedFormattings?
+    public var supported_formattings: SupportedFormattings?
     /**
      * A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (read-only)
      */
-    var supported_visualization_formattings: SupportedVisualizationFormattings?
+    public var supported_visualization_formattings: SupportedVisualizationFormattings?
     /**
      * A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (read-only)
      */
-    var supported_download_settings: SupportedDownloadSettings?
+    public var supported_download_settings: SupportedDownloadSettings?
     /**
      * URL to an icon for the integration. (read-only)
      */
-    var icon_url: String?
+    public var icon_url: String?
     /**
      * Whether the integration uses oauth. (read-only)
      */
-    var uses_oauth: Bool?
+    public var uses_oauth: Bool?
     /**
      * A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required. (read-only)
      */
-    var required_fields: [IntegrationRequiredField]?
+    public var required_fields: [IntegrationRequiredField]?
     /**
      * Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)
      */
-    var delegate_oauth: Bool?
+    public var delegate_oauth: Bool?
     /**
      * Whether the integration is available to users.
      */
-    var installed_delegate_oauth_targets: [Int64]?
+    public var installed_delegate_oauth_targets: [Int64]?
 }
 
-struct IntegrationHub: SDKModel {
+public struct IntegrationHub: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * ID of the hub. (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * URL of the hub.
      */
-    var url: String?
+    public var url: String?
     /**
      * Label of the hub. (read-only)
      */
-    var label: String?
+    public var label: String?
     /**
      * Whether this hub is a first-party integration hub operated by Looker. (read-only)
      */
-    var official: Bool?
+    public var official: Bool?
     /**
      * An error message, present if the integration hub metadata could not be fetched. If this is present, the integration hub is unusable. (read-only)
      */
-    var fetch_error_message: String?
+    public var fetch_error_message: String?
     /**
      * (Write-Only) An authorization key that will be sent to the integration hub on every request.
      */
-    var authorization_token: String?
+    public var authorization_token: String?
     /**
      * Whether the authorization_token is set for the hub. (read-only)
      */
-    var has_authorization_token: Bool?
+    public var has_authorization_token: Bool?
     /**
      * Whether the legal agreement message has been signed by the user. This only matters if legal_agreement_required is true. (read-only)
      */
-    var legal_agreement_signed: Bool?
+    public var legal_agreement_signed: Bool?
     /**
      * Whether the legal terms for the integration hub are required before use. (read-only)
      */
-    var legal_agreement_required: Bool?
+    public var legal_agreement_required: Bool?
     /**
      * The legal agreement text for this integration hub. (read-only)
      */
-    var legal_agreement_text: String?
+    public var legal_agreement_text: String?
 }
 
-struct IntegrationParam: SDKModel {
+public struct IntegrationParam: SDKModel {
     /**
      * Name of the parameter.
      */
-    var name: String?
+    public var name: String?
     /**
      * Label of the parameter. (read-only)
      */
-    var label: String?
+    public var label: String?
     /**
      * Short description of the parameter. (read-only)
      */
-    var description: String?
+    public var description: String?
     /**
      * Whether the parameter is required to be set to use the destination. If unspecified, this defaults to false. (read-only)
      */
-    var `required`: Bool?
+    public var `required`: Bool?
     /**
      * Whether the parameter has a value set. (read-only)
      */
-    var has_value: Bool?
+    public var has_value: Bool?
     /**
      * The current value of the parameter. Always null if the value is sensitive. When writing, null values will be ignored. Set the value to an empty string to clear it.
      */
-    var value: String?
+    public var value: String?
     /**
      * When present, the param's value comes from this user attribute instead of the 'value' parameter. Set to null to use the 'value'.
      */
-    var user_attribute_name: String?
+    public var user_attribute_name: String?
     /**
      * Whether the parameter contains sensitive data like API credentials. If unspecified, this defaults to true. (read-only)
      */
-    var sensitive: Bool?
+    public var sensitive: Bool?
     /**
      * When true, this parameter must be assigned to a user attribute in the admin panel (instead of a constant value), and that value may be updated by the user as part of the integration flow. (read-only)
      */
-    var per_user: Bool?
+    public var per_user: Bool?
     /**
      * When present, the param represents the oauth url the user will be taken to. (read-only)
      */
-    var delegate_oauth_url: String?
+    public var delegate_oauth_url: String?
 }
 
-struct IntegrationRequiredField: SDKModel {
+public struct IntegrationRequiredField: SDKModel {
     /**
      * Matches a field that has this tag. (read-only)
      */
-    var tag: String?
+    public var tag: String?
     /**
      * If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)
      */
-    var any_tag: [String]?
+    public var any_tag: [String]?
     /**
      * If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)
      */
-    var all_tags: [String]?
+    public var all_tags: [String]?
 }
 
-struct IntegrationTestResult: SDKModel {
+public struct IntegrationTestResult: SDKModel {
     /**
      * Whether or not the test was successful (read-only)
      */
-    var success: Bool?
+    public var success: Bool?
     /**
      * A message representing the results of the test. (read-only)
      */
-    var message: String?
+    public var message: String?
     /**
      * An array of connection test result for delegate oauth actions. (read-only)
      */
-    var delegate_oauth_result: [DelegateOauthTest]?
+    public var delegate_oauth_result: [DelegateOauthTest]?
 }
 
-struct InternalHelpResources: SDKModel {
+public struct InternalHelpResources: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
      */
-    var enabled: Bool?
+    public var enabled: Bool?
 }
 
-struct InternalHelpResourcesContent: SDKModel {
+public struct InternalHelpResourcesContent: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Text to display in the help menu item which will display the internal help resources
      */
-    var organization_name: String?
+    public var organization_name: String?
     /**
      * Content to be displayed in the internal help resources page/modal
      */
-    var markdown_content: String?
+    public var markdown_content: String?
 }
 
-struct LDAPConfig: SDKModel {
+public struct LDAPConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
-    var alternate_email_login_allowed: Bool?
+    public var alternate_email_login_allowed: Bool?
     /**
      * (Write-Only)  Password for the LDAP account used to access the LDAP server
      */
-    var auth_password: String?
+    public var auth_password: String?
     /**
      * Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
      */
-    var auth_requires_role: Bool?
+    public var auth_requires_role: Bool?
     /**
      * Distinguished name of LDAP account used to access the LDAP server
      */
-    var auth_username: String?
+    public var auth_username: String?
     /**
      * LDAP server hostname
      */
-    var connection_host: String?
+    public var connection_host: String?
     /**
      * LDAP host port
      */
-    var connection_port: String?
+    public var connection_port: String?
     /**
      * Use Transport Layer Security
      */
-    var connection_tls: Bool?
+    public var connection_tls: Bool?
     /**
      * Do not verify peer when using TLS
      */
-    var connection_tls_no_verify: Bool?
+    public var connection_tls_no_verify: Bool?
     /**
      * (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
      */
-    var default_new_user_group_ids: [Int64]?
+    public var default_new_user_group_ids: [Int64]?
     /**
      * (Read-only) Groups that will be applied to new users the first time they login via LDAP (read-only)
      */
-    var default_new_user_groups: [LkGroup]?
+    public var default_new_user_groups: [LkGroup]?
     /**
      * (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
      */
-    var default_new_user_role_ids: [Int64]?
+    public var default_new_user_role_ids: [Int64]?
     /**
      * (Read-only) Roles that will be applied to new users the first time they login via LDAP (read-only)
      */
-    var default_new_user_roles: [Role]?
+    public var default_new_user_roles: [Role]?
     /**
      * Enable/Disable LDAP authentication for the server
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.
      */
-    var force_no_page: Bool?
+    public var force_no_page: Bool?
     /**
      * (Read-only) Array of mappings between LDAP Groups and Looker Roles (read-only)
      */
-    var groups: [LDAPGroupRead]?
+    public var groups: [LDAPGroupRead]?
     /**
      * Base dn for finding groups in LDAP searches
      */
-    var groups_base_dn: String?
+    public var groups_base_dn: String?
     /**
      * Identifier for a strategy for how Looker will search for groups in the LDAP server
      */
-    var groups_finder_type: String?
+    public var groups_finder_type: String?
     /**
      * LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
      */
-    var groups_member_attribute: String?
+    public var groups_member_attribute: String?
     /**
      * Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
      */
-    var groups_objectclasses: String?
+    public var groups_objectclasses: String?
     /**
      * LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
      */
-    var groups_user_attribute: String?
+    public var groups_user_attribute: String?
     /**
      * (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
      */
-    var groups_with_role_ids: [LDAPGroupWrite]?
+    public var groups_with_role_ids: [LDAPGroupWrite]?
     /**
      * (Read-only) Has the password been set for the LDAP account used to access the LDAP server (read-only)
      */
-    var has_auth_password: Bool?
+    public var has_auth_password: Bool?
     /**
      * Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
      */
-    var merge_new_users_by_email: Bool?
+    public var merge_new_users_by_email: Bool?
     /**
      * When this config was last modified (read-only)
      */
-    var modified_at: String?
+    public var modified_at: String?
     /**
      * User id of user who last modified this config (read-only)
      */
-    var modified_by: String?
+    public var modified_by: String?
     /**
      * Set user roles in Looker based on groups from LDAP
      */
-    var set_roles_from_groups: Bool?
+    public var set_roles_from_groups: Bool?
     /**
      * (Write-Only)  Test LDAP user password. For ldap tests only.
      */
-    var test_ldap_password: String?
+    public var test_ldap_password: String?
     /**
      * (Write-Only)  Test LDAP user login id. For ldap tests only.
      */
-    var test_ldap_user: String?
+    public var test_ldap_user: String?
     /**
      * Name of user record attributes used to indicate email address field
      */
-    var user_attribute_map_email: String?
+    public var user_attribute_map_email: String?
     /**
      * Name of user record attributes used to indicate first name
      */
-    var user_attribute_map_first_name: String?
+    public var user_attribute_map_first_name: String?
     /**
      * Name of user record attributes used to indicate last name
      */
-    var user_attribute_map_last_name: String?
+    public var user_attribute_map_last_name: String?
     /**
      * Name of user record attributes used to indicate unique record id
      */
-    var user_attribute_map_ldap_id: String?
+    public var user_attribute_map_ldap_id: String?
     /**
      * (Read-only) Array of mappings between LDAP User Attributes and Looker User Attributes (read-only)
      */
-    var user_attributes: [LDAPUserAttributeRead]?
+    public var user_attributes: [LDAPUserAttributeRead]?
     /**
      * (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
      */
-    var user_attributes_with_ids: [LDAPUserAttributeWrite]?
+    public var user_attributes_with_ids: [LDAPUserAttributeWrite]?
     /**
      * Distinguished name of LDAP node used as the base for user searches
      */
-    var user_bind_base_dn: String?
+    public var user_bind_base_dn: String?
     /**
      * (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
      */
-    var user_custom_filter: String?
+    public var user_custom_filter: String?
     /**
      * Name(s) of user record attributes used for matching user login id (comma separated list)
      */
-    var user_id_attribute_names: String?
+    public var user_id_attribute_names: String?
     /**
      * (Optional) Name of user record objectclass used for finding user during login id
      */
-    var user_objectclass: String?
+    public var user_objectclass: String?
     /**
      * Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
      */
-    var allow_normal_group_membership: Bool?
+    public var allow_normal_group_membership: Bool?
     /**
      * LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
      */
-    var allow_roles_from_normal_groups: Bool?
+    public var allow_roles_from_normal_groups: Bool?
     /**
      * Allows roles to be directly assigned to LDAP auth'd users.
      */
-    var allow_direct_roles: Bool?
+    public var allow_direct_roles: Bool?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct LDAPConfigTestIssue: SDKModel {
+public struct LDAPConfigTestIssue: SDKModel {
     /**
      * Severity of the issue. Error or Warning (read-only)
      */
-    var severity: String?
+    public var severity: String?
     /**
      * Message describing the issue (read-only)
      */
-    var message: String?
+    public var message: String?
 }
 
-struct LDAPConfigTestResult: SDKModel {
+public struct LDAPConfigTestResult: SDKModel {
     /**
      * Additional details for error cases (read-only)
      */
-    var details: String?
+    public var details: String?
     /**
      * Array of issues/considerations about the result (read-only)
      */
-    var issues: [LDAPConfigTestIssue]?
+    public var issues: [LDAPConfigTestIssue]?
     /**
      * Short human readable test about the result (read-only)
      */
-    var message: String?
+    public var message: String?
     /**
      * Test status code: always 'success' or 'error' (read-only)
      */
-    var status: String?
+    public var status: String?
     /**
      * A more detailed trace of incremental results during auth tests (read-only)
      */
-    var trace: String?
-    var user: LDAPUser?
+    public var trace: String?
+    public var user: LDAPUser?
     /**
      * Link to ldap config (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct LDAPGroupRead: SDKModel {
+public struct LDAPGroupRead: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Unique Id of group in Looker (read-only)
      */
-    var looker_group_id: Int64?
+    public var looker_group_id: Int64?
     /**
      * Name of group in Looker (read-only)
      */
-    var looker_group_name: String?
+    public var looker_group_name: String?
     /**
      * Name of group in LDAP (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Looker Roles (read-only)
      */
-    var roles: [Role]?
+    public var roles: [Role]?
     /**
      * Link to ldap config (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct LDAPGroupWrite: SDKModel {
+public struct LDAPGroupWrite: SDKModel {
     /**
      * Unique Id
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Unique Id of group in Looker (read-only)
      */
-    var looker_group_id: Int64?
+    public var looker_group_id: Int64?
     /**
      * Name of group in Looker
      */
-    var looker_group_name: String?
+    public var looker_group_name: String?
     /**
      * Name of group in LDAP
      */
-    var name: String?
+    public var name: String?
     /**
      * Looker Role Ids
      */
-    var role_ids: [Int64]?
+    public var role_ids: [Int64]?
     /**
      * Link to ldap config (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct LDAPUser: SDKModel {
+public struct LDAPUser: SDKModel {
     /**
      * Array of user's email addresses and aliases for use in migration (read-only)
      */
-    var all_emails: [String]?
+    public var all_emails: [String]?
     /**
      * Dictionary of user's attributes (name/value) (read-only)
      */
-    var attributes: StringDictionary<AnyCodable>?
+    public var attributes: StringDictionary<AnyCodable>?
     /**
      * Primary email address (read-only)
      */
-    var email: String?
+    public var email: String?
     /**
      * First name (read-only)
      */
-    var first_name: String?
+    public var first_name: String?
     /**
      * Array of user's groups (group names only) (read-only)
      */
-    var groups: [String]?
+    public var groups: [String]?
     /**
      * Last Name (read-only)
      */
-    var last_name: String?
+    public var last_name: String?
     /**
      * LDAP's distinguished name for the user record (read-only)
      */
-    var ldap_dn: String?
+    public var ldap_dn: String?
     /**
      * LDAP's Unique ID for the user (read-only)
      */
-    var ldap_id: String?
+    public var ldap_id: String?
     /**
      * Array of user's roles (role names only) (read-only)
      */
-    var roles: [String]?
+    public var roles: [String]?
     /**
      * Link to ldap config (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct LDAPUserAttributeRead: SDKModel {
+public struct LDAPUserAttributeRead: SDKModel {
     /**
      * Name of User Attribute in LDAP (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Required to be in LDAP assertion for login to be allowed to succeed (read-only)
      */
-    var `required`: Bool?
+    public var `required`: Bool?
     /**
      * Looker User Attributes (read-only)
      */
-    var user_attributes: [UserAttribute]?
+    public var user_attributes: [UserAttribute]?
     /**
      * Link to ldap config (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct LDAPUserAttributeWrite: SDKModel {
+public struct LDAPUserAttributeWrite: SDKModel {
     /**
      * Name of User Attribute in LDAP
      */
-    var name: String?
+    public var name: String?
     /**
      * Required to be in LDAP assertion for login to be allowed to succeed
      */
-    var `required`: Bool?
+    public var `required`: Bool?
     /**
      * Looker User Attribute Ids
      */
-    var user_attribute_ids: [Int64]?
+    public var user_attribute_ids: [Int64]?
     /**
      * Link to ldap config (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct LegacyFeature: SDKModel {
+public struct LegacyFeature: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Name (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Description (read-only)
      */
-    var description: String?
+    public var description: String?
     /**
      * Whether this feature has been enabled by a user
      */
-    var enabled_locally: Bool?
+    public var enabled_locally: Bool?
     /**
      * Whether this feature is currently enabled (read-only)
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * Looker version where this feature became a legacy feature (read-only)
      */
-    var disallowed_as_of_version: String?
+    public var disallowed_as_of_version: String?
     /**
      * Looker version where this feature will be automatically disabled (read-only)
      */
-    var disable_on_upgrade_to_version: String?
+    public var disable_on_upgrade_to_version: String?
     /**
      * Future Looker version where this feature will be removed (read-only)
      */
-    var end_of_life_version: String?
+    public var end_of_life_version: String?
     /**
      * URL for documentation about this feature (read-only)
      */
-    var documentation_url: String?
+    public var documentation_url: String?
     /**
      * Approximate date that this feature will be automatically disabled. (read-only)
      */
-    var approximate_disable_date: Date?
+    public var approximate_disable_date: Date?
     /**
      * Approximate date that this feature will be removed. (read-only)
      */
-    var approximate_end_of_life_date: Date?
+    public var approximate_end_of_life_date: Date?
     /**
      * Whether this legacy feature may have been automatically disabled when upgrading to the current version. (read-only)
      */
-    var has_disabled_on_upgrade: Bool?
+    public var has_disabled_on_upgrade: Bool?
 }
 
 /**
  * Name of the command Valid values are: "dashboard", "lookml_dashboard".
  */
-enum LinkedContentType: String, Codable {
+public enum LinkedContentType: String, Codable {
     case dashboard = "dashboard"
     case lookml_dashboard = "lookml_dashboard"
 }
 
-struct LkLocale: SDKModel {
+public struct LkLocale: SDKModel {
     /**
      * Code for Locale (read-only)
      */
-    var code: String?
+    public var code: String?
     /**
      * Name of Locale in its own language (read-only)
      */
-    var native_name: String?
+    public var native_name: String?
     /**
      * Name of Locale in English (read-only)
      */
-    var english_name: String?
+    public var english_name: String?
 }
 
-struct LocalizationSettings: SDKModel {
+public struct LocalizationSettings: SDKModel {
     /**
      * Default locale for localization (read-only)
      */
-    var default_locale: String?
+    public var default_locale: String?
     /**
      * Localization level - strict or permissive (read-only)
      */
-    var localization_level: String?
+    public var localization_level: String?
 }
 
-struct Look: SDKModel {
+public struct Look: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Id of content metadata (read-only)
      */
-    var content_metadata_id: Int64?
+    public var content_metadata_id: Int64?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Look Title
      */
-    var title: String?
+    public var title: String?
     /**
      * User Id
      */
-    var user_id: Int64?
+    public var user_id: Int64?
     /**
      * Content Favorite Id (read-only)
      */
-    var content_favorite_id: Int64?
+    public var content_favorite_id: Int64?
     /**
      * Time that the Look was created. (read-only)
      */
-    var created_at: Date?
+    public var created_at: Date?
     /**
      * Whether or not a look is 'soft' deleted.
      */
-    var deleted: Bool?
+    public var deleted: Bool?
     /**
      * Time that the Look was deleted. (read-only)
      */
-    var deleted_at: Date?
+    public var deleted_at: Date?
     /**
      * Id of User that deleted the look. (read-only)
      */
-    var deleter_id: Int64?
+    public var deleter_id: Int64?
     /**
      * Description
      */
-    var description: String?
+    public var description: String?
     /**
      * Embed Url (read-only)
      */
-    var embed_url: String?
+    public var embed_url: String?
     /**
      * Excel File Url (read-only)
      */
-    var excel_file_url: String?
+    public var excel_file_url: String?
     /**
      * Number of times favorited (read-only)
      */
-    var favorite_count: Int64?
+    public var favorite_count: Int64?
     /**
      * Google Spreadsheet Formula (read-only)
      */
-    var google_spreadsheet_formula: String?
+    public var google_spreadsheet_formula: String?
     /**
      * Image Embed Url (read-only)
      */
-    var image_embed_url: String?
+    public var image_embed_url: String?
     /**
      * auto-run query when Look viewed
      */
-    var is_run_on_load: Bool?
+    public var is_run_on_load: Bool?
     /**
      * Time that the Look was last accessed by any user (read-only)
      */
-    var last_accessed_at: Date?
+    public var last_accessed_at: Date?
     /**
      * Id of User that last updated the look. (read-only)
      */
-    var last_updater_id: Int64?
+    public var last_updater_id: Int64?
     /**
      * Time last viewed in the Looker web UI (read-only)
      */
-    var last_viewed_at: Date?
-    var model: LookModel?
+    public var last_viewed_at: Date?
+    public var model: LookModel?
     /**
      * Is Public
      */
-    var `public`: Bool?
+    public var `public`: Bool?
     /**
      * Public Slug (read-only)
      */
-    var public_slug: String?
+    public var public_slug: String?
     /**
      * Public Url (read-only)
      */
-    var public_url: String?
+    public var public_url: String?
     /**
      * Query Id
      */
-    var query_id: Int64?
+    public var query_id: Int64?
     /**
      * Short Url (read-only)
      */
-    var short_url: String?
-    var folder: FolderBase?
+    public var short_url: String?
+    public var folder: FolderBase?
     /**
      * Folder Id
      */
-    var folder_id: String?
+    public var folder_id: String?
     /**
      * Time that the Look was updated. (read-only)
      */
-    var updated_at: Date?
+    public var updated_at: Date?
     /**
      * Number of times viewed in the Looker web UI (read-only)
      */
-    var view_count: Int64?
+    public var view_count: Int64?
 }
 
-struct LookBasic: SDKModel {
+public struct LookBasic: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Id of content metadata (read-only)
      */
-    var content_metadata_id: Int64?
+    public var content_metadata_id: Int64?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Look Title (read-only)
      */
-    var title: String?
+    public var title: String?
     /**
      * User Id
      */
-    var user_id: Int64?
+    public var user_id: Int64?
 }
 
-struct LookmlModel: SDKModel {
+public struct LookmlModel: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Array of names of connections this model is allowed to use
      */
-    var allowed_db_connection_names: [String]?
+    public var allowed_db_connection_names: [String]?
     /**
      * Array of explores (if has_content) (read-only)
      */
-    var explores: [LookmlModelNavExplore]?
+    public var explores: [LookmlModelNavExplore]?
     /**
      * Does this model declaration have have lookml content? (read-only)
      */
-    var has_content: Bool?
+    public var has_content: Bool?
     /**
      * UI-friendly name for this model (read-only)
      */
-    var label: String?
+    public var label: String?
     /**
      * Name of the model. Also used as the unique identifier
      */
-    var name: String?
+    public var name: String?
     /**
      * Name of project containing the model
      */
-    var project_name: String?
+    public var project_name: String?
     /**
      * Is this model allowed to use all current and future connections
      */
-    var unlimited_db_connections: Bool?
+    public var unlimited_db_connections: Bool?
 }
 
-struct LookmlModelExplore: SDKModel {
+public struct LookmlModelExplore: SDKModel {
     /**
      * Fully qualified explore name (model name plus explore name) (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Explore name (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Description (read-only)
      */
-    var description: String?
+    public var description: String?
     /**
      * Label (read-only)
      */
-    var label: String?
+    public var label: String?
     /**
      * Scopes (read-only)
      */
-    var scopes: [String]?
+    public var scopes: [String]?
     /**
      * Can Total (read-only)
      */
-    var can_total: Bool?
+    public var can_total: Bool?
     /**
      * Can Develop LookML (read-only)
      */
-    var can_develop: Bool?
+    public var can_develop: Bool?
     /**
      * Can See LookML (read-only)
      */
-    var can_see_lookml: Bool?
+    public var can_see_lookml: Bool?
     /**
      * A URL linking to the definition of this explore in the LookML IDE. (read-only)
      */
-    var lookml_link: String?
+    public var lookml_link: String?
     /**
      * Can Save (read-only)
      */
-    var can_save: Bool?
+    public var can_save: Bool?
     /**
      * Can Explain (read-only)
      */
-    var can_explain: Bool?
+    public var can_explain: Bool?
     /**
      * Can pivot in the DB (read-only)
      */
-    var can_pivot_in_db: Bool?
+    public var can_pivot_in_db: Bool?
     /**
      * Can use subtotals (read-only)
      */
-    var can_subtotal: Bool?
+    public var can_subtotal: Bool?
     /**
      * Has timezone support (read-only)
      */
-    var has_timezone_support: Bool?
+    public var has_timezone_support: Bool?
     /**
      * Cost estimates supported (read-only)
      */
-    var supports_cost_estimate: Bool?
+    public var supports_cost_estimate: Bool?
     /**
      * Connection name (read-only)
      */
-    var connection_name: String?
+    public var connection_name: String?
     /**
      * How nulls are sorted, possible values are "low", "high", "first" and "last" (read-only)
      */
-    var null_sort_treatment: String?
+    public var null_sort_treatment: String?
     /**
      * List of model source files (read-only)
      */
-    var files: [String]?
+    public var files: [String]?
     /**
      * Primary source_file file (read-only)
      */
-    var source_file: String?
+    public var source_file: String?
     /**
      * Name of project (read-only)
      */
-    var project_name: String?
+    public var project_name: String?
     /**
      * Name of model (read-only)
      */
-    var model_name: String?
+    public var model_name: String?
     /**
      * Name of view (read-only)
      */
-    var view_name: String?
+    public var view_name: String?
     /**
      * Is hidden (read-only)
      */
-    var hidden: Bool?
+    public var hidden: Bool?
     /**
      * A sql_table_name expression that defines what sql table the view/explore maps onto. Example: "prod_orders2 AS orders" in a view named orders. (read-only)
      */
-    var sql_table_name: String?
+    public var sql_table_name: String?
     /**
      * (DEPRECATED) Array of access filter field names (read-only)
      */
-    var access_filter_fields: [String]?
+    public var access_filter_fields: [String]?
     /**
      * Access filters (read-only)
      */
-    var access_filters: [LookmlModelExploreAccessFilter]?
+    public var access_filters: [LookmlModelExploreAccessFilter]?
     /**
      * Aliases (read-only)
      */
-    var aliases: [LookmlModelExploreAlias]?
+    public var aliases: [LookmlModelExploreAlias]?
     /**
      * Always filter (read-only)
      */
-    var always_filter: [LookmlModelExploreAlwaysFilter]?
+    public var always_filter: [LookmlModelExploreAlwaysFilter]?
     /**
      * Conditionally filter (read-only)
      */
-    var conditionally_filter: [LookmlModelExploreConditionallyFilter]?
+    public var conditionally_filter: [LookmlModelExploreConditionallyFilter]?
     /**
      * Array of index fields (read-only)
      */
-    var index_fields: [String]?
+    public var index_fields: [String]?
     /**
      * Sets (read-only)
      */
-    var sets: [LookmlModelExploreSet]?
+    public var sets: [LookmlModelExploreSet]?
     /**
      * An array of arbitrary string tags provided in the model for this explore. (read-only)
      */
-    var tags: [String]?
+    public var tags: [String]?
     /**
      * Errors (read-only)
      */
-    var errors: [LookmlModelExploreError]?
-    var fields: LookmlModelExploreFieldset?
+    public var errors: [LookmlModelExploreError]?
+    public var fields: LookmlModelExploreFieldset?
     /**
      * Views joined into this explore (read-only)
      */
-    var joins: [LookmlModelExploreJoins]?
+    public var joins: [LookmlModelExploreJoins]?
     /**
      * Label used to group explores in the navigation menus (read-only)
      */
-    var group_label: String?
+    public var group_label: String?
     /**
      * An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type. (read-only)
      */
-    var supported_measure_types: [LookmlModelExploreSupportedMeasureType]?
+    public var supported_measure_types: [LookmlModelExploreSupportedMeasureType]?
 }
 
-struct LookmlModelExploreAccessFilter: SDKModel {
+public struct LookmlModelExploreAccessFilter: SDKModel {
     /**
      * Field to be filtered (read-only)
      */
-    var field: String?
+    public var field: String?
     /**
      * User attribute name (read-only)
      */
-    var user_attribute: String?
+    public var user_attribute: String?
 }
 
-struct LookmlModelExploreAlias: SDKModel {
+public struct LookmlModelExploreAlias: SDKModel {
     /**
      * Name (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Value (read-only)
      */
-    var value: String?
+    public var value: String?
 }
 
-struct LookmlModelExploreAlwaysFilter: SDKModel {
+public struct LookmlModelExploreAlwaysFilter: SDKModel {
     /**
      * Name (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Value (read-only)
      */
-    var value: String?
+    public var value: String?
 }
 
-struct LookmlModelExploreConditionallyFilter: SDKModel {
+public struct LookmlModelExploreConditionallyFilter: SDKModel {
     /**
      * Name (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Value (read-only)
      */
-    var value: String?
+    public var value: String?
 }
 
-struct LookmlModelExploreError: SDKModel {
+public struct LookmlModelExploreError: SDKModel {
     /**
      * Error Message (read-only)
      */
-    var message: String?
+    public var message: String?
     /**
      * Details (read-only)
      */
-    var details: AnyCodable?
+    public var details: AnyCodable?
     /**
      * Error source location (read-only)
      */
-    var error_pos: String?
+    public var error_pos: String?
     /**
      * Is this a field error (read-only)
      */
-    var field_error: Bool?
+    public var field_error: Bool?
 }
 
-struct LookmlModelExploreField: SDKModel {
+public struct LookmlModelExploreField: SDKModel {
     /**
      * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (read-only)
      */
-    var align: Align?
+    public var align: Align?
     /**
      * Whether it's possible to filter on this field. (read-only)
      */
-    var can_filter: Bool?
+    public var can_filter: Bool?
     /**
      * Field category Valid values are: "parameter", "filter", "measure", "dimension". (read-only)
      */
-    var category: Category?
+    public var category: Category?
     /**
      * The default value that this field uses when filtering. Null if there is no default value. (read-only)
      */
-    var default_filter_value: String?
+    public var default_filter_value: String?
     /**
      * Description (read-only)
      */
-    var description: String?
+    public var description: String?
     /**
      * An array enumerating all the possible values that this field can contain. When null, there is no limit to the set of possible values this field can contain. (read-only)
      */
-    var enumerations: [LookmlModelExploreFieldEnumeration]?
+    public var enumerations: [LookmlModelExploreFieldEnumeration]?
     /**
      * An error message indicating a problem with the definition of this field. If there are no errors, this will be null. (read-only)
      */
-    var error: String?
+    public var error: String?
     /**
      * A label creating a grouping of fields. All fields with this label should be presented together when displayed in a UI. (read-only)
      */
-    var field_group_label: String?
+    public var field_group_label: String?
     /**
      * When presented in a field group via field_group_label, a shorter name of the field to be displayed in that context. (read-only)
      */
-    var field_group_variant: String?
+    public var field_group_variant: String?
     /**
      * The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (read-only)
      */
-    var fill_style: FillStyle?
+    public var fill_style: FillStyle?
     /**
      * An offset (in months) from the calendar start month to the fiscal start month defined in the LookML model this field belongs to. (read-only)
      */
-    var fiscal_month_offset: Int64?
+    public var fiscal_month_offset: Int64?
     /**
      * Whether this field has a set of allowed_values specified in LookML. (read-only)
      */
-    var has_allowed_values: Bool?
+    public var has_allowed_values: Bool?
     /**
      * Whether this field should be hidden from the user interface. (read-only)
      */
-    var hidden: Bool?
+    public var hidden: Bool?
     /**
      * Whether this field is a filter. (read-only)
      */
-    var is_filter: Bool?
+    public var is_filter: Bool?
     /**
      * Whether this field represents a fiscal time value. (read-only)
      */
-    var is_fiscal: Bool?
+    public var is_fiscal: Bool?
     /**
      * Whether this field is of a type that represents a numeric value. (read-only)
      */
-    var is_numeric: Bool?
+    public var is_numeric: Bool?
     /**
      * Whether this field is of a type that represents a time value. (read-only)
      */
-    var is_timeframe: Bool?
+    public var is_timeframe: Bool?
     /**
      * Whether this field can be time filtered. (read-only)
      */
-    var can_time_filter: Bool?
-    var time_interval: LookmlModelExploreFieldTimeInterval?
+    public var can_time_filter: Bool?
+    public var time_interval: LookmlModelExploreFieldTimeInterval?
     /**
      * Fully-qualified human-readable label of the field. (read-only)
      */
-    var label: String?
+    public var label: String?
     /**
      * The name of the parameter that will provide a parameterized label for this field, if available in the current context. (read-only)
      */
-    var label_from_parameter: String?
+    public var label_from_parameter: String?
     /**
      * The human-readable label of the field, without the view label. (read-only)
      */
-    var label_short: String?
+    public var label_short: String?
     /**
      * A URL linking to the definition of this field in the LookML IDE. (read-only)
      */
-    var lookml_link: String?
-    var map_layer: LookmlModelExploreFieldMapLayer?
+    public var lookml_link: String?
+    public var map_layer: LookmlModelExploreFieldMapLayer?
     /**
      * Whether this field is a measure. (read-only)
      */
-    var measure: Bool?
+    public var measure: Bool?
     /**
      * Fully-qualified name of the field. (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * If yes, the field will not be localized with the user attribute number_format. Defaults to no (read-only)
      */
-    var strict_value_format: Bool?
+    public var strict_value_format: Bool?
     /**
      * Whether this field is a parameter. (read-only)
      */
-    var parameter: Bool?
+    public var parameter: Bool?
     /**
      * Whether this field can be removed from a query. (read-only)
      */
-    var permanent: Bool?
+    public var permanent: Bool?
     /**
      * Whether or not the field represents a primary key. (read-only)
      */
-    var primary_key: Bool?
+    public var primary_key: Bool?
     /**
      * The name of the project this field is defined in. (read-only)
      */
-    var project_name: String?
+    public var project_name: String?
     /**
      * When true, it's not possible to re-sort this field's values without re-running the SQL query, due to database logic that affects the sort. (read-only)
      */
-    var requires_refresh_on_sort: Bool?
+    public var requires_refresh_on_sort: Bool?
     /**
      * The LookML scope this field belongs to. The scope is typically the field's view. (read-only)
      */
-    var scope: String?
+    public var scope: String?
     /**
      * Whether this field can be sorted. (read-only)
      */
-    var sortable: Bool?
+    public var sortable: Bool?
     /**
      * The path portion of source_file_path. (read-only)
      */
-    var source_file: String?
+    public var source_file: String?
     /**
      * The fully-qualified path of the project file this field is defined in. (read-only)
      */
-    var source_file_path: String?
+    public var source_file_path: String?
     /**
      * SQL expression as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model. (read-only)
      */
-    var sql: String?
+    public var sql: String?
     /**
      * An array of conditions and values that make up a SQL Case expression, as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model. (read-only)
      */
-    var sql_case: [LookmlModelExploreFieldSqlCase]?
+    public var sql_case: [LookmlModelExploreFieldSqlCase]?
     /**
      * The name of the dimension to base suggest queries from. (read-only)
      */
-    var suggest_dimension: String?
+    public var suggest_dimension: String?
     /**
      * The name of the explore to base suggest queries from. (read-only)
      */
-    var suggest_explore: String?
+    public var suggest_explore: String?
     /**
      * Whether or not suggestions are possible for this field. (read-only)
      */
-    var suggestable: Bool?
+    public var suggestable: Bool?
     /**
      * If available, a list of suggestions for this field. For most fields, a suggest query is a more appropriate way to get an up-to-date list of suggestions. Or use enumerations to list all the possible values. (read-only)
      */
-    var suggestions: [String]?
+    public var suggestions: [String]?
     /**
      * An array of arbitrary string tags provided in the model for this field. (read-only)
      */
-    var tags: [String]?
+    public var tags: [String]?
     /**
      * The LookML type of the field. (read-only)
      */
-    var type: String?
+    public var type: String?
     /**
      * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
      */
-    var user_attribute_filter_types: UserAttributeFilterTypes?
+    public var user_attribute_filter_types: UserAttributeFilterTypes?
     /**
      * If specified, the LookML value format string for formatting values of this field. (read-only)
      */
-    var value_format: String?
+    public var value_format: String?
     /**
      * The name of the view this field belongs to. (read-only)
      */
-    var view: String?
+    public var view: String?
     /**
      * The human-readable label of the view the field belongs to. (read-only)
      */
-    var view_label: String?
+    public var view_label: String?
     /**
      * Whether this field was specified in "dynamic_fields" and is not part of the model. (read-only)
      */
-    var `dynamic`: Bool?
+    public var `dynamic`: Bool?
     /**
      * The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (read-only)
      */
-    var week_start_day: WeekStartDay?
+    public var week_start_day: WeekStartDay?
     /**
      * The number of times this field has been used in queries (read-only)
      */
-    var times_used: Int64?
+    public var times_used: Int64?
 }
 
-struct LookmlModelExploreFieldEnumeration: SDKModel {
+public struct LookmlModelExploreFieldEnumeration: SDKModel {
     /**
      * Label (read-only)
      */
-    var label: String?
+    public var label: String?
     /**
      * Value (read-only)
      */
-    var value: AnyCodable?
+    public var value: AnyCodable?
 }
 
-struct LookmlModelExploreFieldMapLayer: SDKModel {
+public struct LookmlModelExploreFieldMapLayer: SDKModel {
     /**
      * URL to the map layer resource. (read-only)
      */
-    var url: String?
+    public var url: String?
     /**
      * Name of the map layer, as defined in LookML. (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Specifies the name of the TopoJSON object that the map layer references. If not specified, use the first object.. (read-only)
      */
-    var feature_key: String?
+    public var feature_key: String?
     /**
      * Selects which property from the TopoJSON data to plot against. TopoJSON supports arbitrary metadata for each region. When null, the first matching property should be used. (read-only)
      */
-    var property_key: String?
+    public var property_key: String?
     /**
      * Which property from the TopoJSON data to use to label the region. When null, property_key should be used. (read-only)
      */
-    var property_label_key: String?
+    public var property_label_key: String?
     /**
      * The preferred geographic projection of the map layer when displayed in a visualization that supports multiple geographic projections. (read-only)
      */
-    var projection: String?
+    public var projection: String?
     /**
      * Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (read-only)
      */
-    var format: Format?
+    public var format: Format?
     /**
      * Specifies the URL to a JSON file that defines the geographic extents of each region available in the map layer. This data is used to automatically center the map on the available data for visualization purposes. The JSON file must be a JSON object where the keys are the mapping value of the feature (as specified by property_key) and the values are arrays of four numbers representing the west longitude, south latitude, east longitude, and north latitude extents of the region. The object must include a key for every possible value of property_key. (read-only)
      */
-    var extents_json_url: String?
+    public var extents_json_url: String?
     /**
      * The minimum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)
      */
-    var max_zoom_level: Int64?
+    public var max_zoom_level: Int64?
     /**
      * The maximum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)
      */
-    var min_zoom_level: Int64?
+    public var min_zoom_level: Int64?
 }
 
-struct LookmlModelExploreFieldset: SDKModel {
+public struct LookmlModelExploreFieldset: SDKModel {
     /**
      * Array of dimensions (read-only)
      */
-    var dimensions: [LookmlModelExploreField]?
+    public var dimensions: [LookmlModelExploreField]?
     /**
      * Array of measures (read-only)
      */
-    var measures: [LookmlModelExploreField]?
+    public var measures: [LookmlModelExploreField]?
     /**
      * Array of filters (read-only)
      */
-    var filters: [LookmlModelExploreField]?
+    public var filters: [LookmlModelExploreField]?
     /**
      * Array of parameters (read-only)
      */
-    var parameters: [LookmlModelExploreField]?
+    public var parameters: [LookmlModelExploreField]?
 }
 
-struct LookmlModelExploreFieldSqlCase: SDKModel {
+public struct LookmlModelExploreFieldSqlCase: SDKModel {
     /**
      * SQL Case label value (read-only)
      */
-    var value: String?
+    public var value: String?
     /**
      * SQL Case condition expression (read-only)
      */
-    var condition: String?
+    public var condition: String?
 }
 
-struct LookmlModelExploreFieldTimeInterval: SDKModel {
+public struct LookmlModelExploreFieldTimeInterval: SDKModel {
     /**
      * The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "year". (read-only)
      */
-    var name: Name?
+    public var name: Name?
     /**
      * The number of intervals this field represents a grouping of. (read-only)
      */
-    var count: Int64?
+    public var count: Int64?
 }
 
-struct LookmlModelExploreJoins: SDKModel {
+public struct LookmlModelExploreJoins: SDKModel {
     /**
      * Name of this join (and name of the view to join) (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Fields referenced by the join (read-only)
      */
-    var dependent_fields: [String]?
+    public var dependent_fields: [String]?
     /**
      * Fields of the joined view to pull into this explore (read-only)
      */
-    var fields: [String]?
+    public var fields: [String]?
     /**
      * Name of the dimension in this explore whose value is in the primary key of the joined view (read-only)
      */
-    var foreign_key: String?
+    public var foreign_key: String?
     /**
      * Name of view to join (read-only)
      */
-    var from: String?
+    public var from: String?
     /**
      * Specifies whether all queries must use an outer join (read-only)
      */
-    var outer_only: Bool?
+    public var outer_only: Bool?
     /**
      * many_to_one, one_to_one, one_to_many, many_to_many (read-only)
      */
-    var relationship: String?
+    public var relationship: String?
     /**
      * Names of joins that must always be included in SQL queries (read-only)
      */
-    var required_joins: [String]?
+    public var required_joins: [String]?
     /**
      * SQL expression that produces a foreign key (read-only)
      */
-    var sql_foreign_key: String?
+    public var sql_foreign_key: String?
     /**
      * SQL ON expression describing the join condition (read-only)
      */
-    var sql_on: String?
+    public var sql_on: String?
     /**
      * SQL table name to join (read-only)
      */
-    var sql_table_name: String?
+    public var sql_table_name: String?
     /**
      * The join type: left_outer, full_outer, inner, or cross (read-only)
      */
-    var type: String?
+    public var type: String?
     /**
      * Label to display in UI selectors (read-only)
      */
-    var view_label: String?
+    public var view_label: String?
 }
 
-struct LookmlModelExploreSet: SDKModel {
+public struct LookmlModelExploreSet: SDKModel {
     /**
      * Name (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Value set (read-only)
      */
-    var value: [String]?
+    public var value: [String]?
 }
 
-struct LookmlModelExploreSupportedMeasureType: SDKModel {
+public struct LookmlModelExploreSupportedMeasureType: SDKModel {
     /**
      * (read-only)
      */
-    var dimension_type: String?
+    public var dimension_type: String?
     /**
      * (read-only)
      */
-    var measure_types: [String]?
+    public var measure_types: [String]?
 }
 
-struct LookmlModelNavExplore: SDKModel {
+public struct LookmlModelNavExplore: SDKModel {
     /**
      * Name of the explore (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Description for the explore (read-only)
      */
-    var description: String?
+    public var description: String?
     /**
      * Label for the explore (read-only)
      */
-    var label: String?
+    public var label: String?
     /**
      * Is this explore marked as hidden (read-only)
      */
-    var hidden: Bool?
+    public var hidden: Bool?
     /**
      * Label used to group explores in the navigation menus (read-only)
      */
-    var group_label: String?
+    public var group_label: String?
 }
 
-struct LookmlTest: SDKModel {
+public struct LookmlTest: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Name of model containing this test. (read-only)
      */
-    var model_name: String?
+    public var model_name: String?
     /**
      * Name of this test. (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Name of the explore this test runs a query against (read-only)
      */
-    var explore_name: String?
+    public var explore_name: String?
     /**
      * The url parameters that can be used to reproduce this test's query on an explore. (read-only)
      */
-    var query_url_params: String?
+    public var query_url_params: String?
     /**
      * Name of the LookML file containing this test. (read-only)
      */
-    var file: String?
+    public var file: String?
     /**
      * Line number of this test in LookML. (read-only)
      */
-    var line: Int64?
+    public var line: Int64?
 }
 
-struct LookmlTestResult: SDKModel {
+public struct LookmlTestResult: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Name of model containing this test. (read-only)
      */
-    var model_name: String?
+    public var model_name: String?
     /**
      * Name of this test. (read-only)
      */
-    var test_name: String?
+    public var test_name: String?
     /**
      * Number of assertions in this test (read-only)
      */
-    var assertions_count: Int64?
+    public var assertions_count: Int64?
     /**
      * Number of assertions passed in this test (read-only)
      */
-    var assertions_failed: Int64?
+    public var assertions_failed: Int64?
     /**
      * A list of any errors encountered by the test. (read-only)
      */
-    var errors: [ProjectError]?
+    public var errors: [ProjectError]?
     /**
      * A list of any warnings encountered by the test. (read-only)
      */
-    var warnings: [ProjectError]?
+    public var warnings: [ProjectError]?
     /**
      * True if this test passsed without errors. (read-only)
      */
-    var success: Bool?
+    public var success: Bool?
 }
 
-struct LookModel: SDKModel {
+public struct LookModel: SDKModel {
     /**
      * Model Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Model Label (read-only)
      */
-    var label: String?
+    public var label: String?
 }
 
-struct LookWithDashboards: SDKModel {
+public struct LookWithDashboards: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Id of content metadata (read-only)
      */
-    var content_metadata_id: Int64?
+    public var content_metadata_id: Int64?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Look Title
      */
-    var title: String?
+    public var title: String?
     /**
      * User Id
      */
-    var user_id: Int64?
+    public var user_id: Int64?
     /**
      * Content Favorite Id (read-only)
      */
-    var content_favorite_id: Int64?
+    public var content_favorite_id: Int64?
     /**
      * Time that the Look was created. (read-only)
      */
-    var created_at: Date?
+    public var created_at: Date?
     /**
      * Whether or not a look is 'soft' deleted.
      */
-    var deleted: Bool?
+    public var deleted: Bool?
     /**
      * Time that the Look was deleted. (read-only)
      */
-    var deleted_at: Date?
+    public var deleted_at: Date?
     /**
      * Id of User that deleted the look. (read-only)
      */
-    var deleter_id: Int64?
+    public var deleter_id: Int64?
     /**
      * Description
      */
-    var description: String?
+    public var description: String?
     /**
      * Embed Url (read-only)
      */
-    var embed_url: String?
+    public var embed_url: String?
     /**
      * Excel File Url (read-only)
      */
-    var excel_file_url: String?
+    public var excel_file_url: String?
     /**
      * Number of times favorited (read-only)
      */
-    var favorite_count: Int64?
+    public var favorite_count: Int64?
     /**
      * Google Spreadsheet Formula (read-only)
      */
-    var google_spreadsheet_formula: String?
+    public var google_spreadsheet_formula: String?
     /**
      * Image Embed Url (read-only)
      */
-    var image_embed_url: String?
+    public var image_embed_url: String?
     /**
      * auto-run query when Look viewed
      */
-    var is_run_on_load: Bool?
+    public var is_run_on_load: Bool?
     /**
      * Time that the Look was last accessed by any user (read-only)
      */
-    var last_accessed_at: Date?
+    public var last_accessed_at: Date?
     /**
      * Id of User that last updated the look. (read-only)
      */
-    var last_updater_id: Int64?
+    public var last_updater_id: Int64?
     /**
      * Time last viewed in the Looker web UI (read-only)
      */
-    var last_viewed_at: Date?
-    var model: LookModel?
+    public var last_viewed_at: Date?
+    public var model: LookModel?
     /**
      * Is Public
      */
-    var `public`: Bool?
+    public var `public`: Bool?
     /**
      * Public Slug (read-only)
      */
-    var public_slug: String?
+    public var public_slug: String?
     /**
      * Public Url (read-only)
      */
-    var public_url: String?
+    public var public_url: String?
     /**
      * Query Id
      */
-    var query_id: Int64?
+    public var query_id: Int64?
     /**
      * Short Url (read-only)
      */
-    var short_url: String?
-    var folder: FolderBase?
+    public var short_url: String?
+    public var folder: FolderBase?
     /**
      * Folder Id
      */
-    var folder_id: String?
+    public var folder_id: String?
     /**
      * Time that the Look was updated. (read-only)
      */
-    var updated_at: Date?
+    public var updated_at: Date?
     /**
      * Number of times viewed in the Looker web UI (read-only)
      */
-    var view_count: Int64?
+    public var view_count: Int64?
     /**
      * Dashboards (read-only)
      */
-    var dashboards: [DashboardBase]?
+    public var dashboards: [DashboardBase]?
 }
 
-struct LookWithQuery: SDKModel {
+public struct LookWithQuery: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Id of content metadata (read-only)
      */
-    var content_metadata_id: Int64?
+    public var content_metadata_id: Int64?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Look Title
      */
-    var title: String?
+    public var title: String?
     /**
      * User Id
      */
-    var user_id: Int64?
+    public var user_id: Int64?
     /**
      * Content Favorite Id (read-only)
      */
-    var content_favorite_id: Int64?
+    public var content_favorite_id: Int64?
     /**
      * Time that the Look was created. (read-only)
      */
-    var created_at: Date?
+    public var created_at: Date?
     /**
      * Whether or not a look is 'soft' deleted.
      */
-    var deleted: Bool?
+    public var deleted: Bool?
     /**
      * Time that the Look was deleted. (read-only)
      */
-    var deleted_at: Date?
+    public var deleted_at: Date?
     /**
      * Id of User that deleted the look. (read-only)
      */
-    var deleter_id: Int64?
+    public var deleter_id: Int64?
     /**
      * Description
      */
-    var description: String?
+    public var description: String?
     /**
      * Embed Url (read-only)
      */
-    var embed_url: String?
+    public var embed_url: String?
     /**
      * Excel File Url (read-only)
      */
-    var excel_file_url: String?
+    public var excel_file_url: String?
     /**
      * Number of times favorited (read-only)
      */
-    var favorite_count: Int64?
+    public var favorite_count: Int64?
     /**
      * Google Spreadsheet Formula (read-only)
      */
-    var google_spreadsheet_formula: String?
+    public var google_spreadsheet_formula: String?
     /**
      * Image Embed Url (read-only)
      */
-    var image_embed_url: String?
+    public var image_embed_url: String?
     /**
      * auto-run query when Look viewed
      */
-    var is_run_on_load: Bool?
+    public var is_run_on_load: Bool?
     /**
      * Time that the Look was last accessed by any user (read-only)
      */
-    var last_accessed_at: Date?
+    public var last_accessed_at: Date?
     /**
      * Id of User that last updated the look. (read-only)
      */
-    var last_updater_id: Int64?
+    public var last_updater_id: Int64?
     /**
      * Time last viewed in the Looker web UI (read-only)
      */
-    var last_viewed_at: Date?
-    var model: LookModel?
+    public var last_viewed_at: Date?
+    public var model: LookModel?
     /**
      * Is Public
      */
-    var `public`: Bool?
+    public var `public`: Bool?
     /**
      * Public Slug (read-only)
      */
-    var public_slug: String?
+    public var public_slug: String?
     /**
      * Public Url (read-only)
      */
-    var public_url: String?
+    public var public_url: String?
     /**
      * Query Id
      */
-    var query_id: Int64?
+    public var query_id: Int64?
     /**
      * Short Url (read-only)
      */
-    var short_url: String?
-    var folder: FolderBase?
+    public var short_url: String?
+    public var folder: FolderBase?
     /**
      * Folder Id
      */
-    var folder_id: String?
+    public var folder_id: String?
     /**
      * Time that the Look was updated. (read-only)
      */
-    var updated_at: Date?
+    public var updated_at: Date?
     /**
      * Number of times viewed in the Looker web UI (read-only)
      */
-    var view_count: Int64?
-    var query: Query?
+    public var view_count: Int64?
+    public var query: Query?
     /**
      * Url (read-only)
      */
-    var url: String?
+    public var url: String?
 }
 
-struct Manifest: SDKModel {
+public struct Manifest: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Manifest project name (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Imports for a project (read-only)
      */
-    var imports: [ImportedProject]?
-    var localization_settings: LocalizationSettings?
+    public var imports: [ImportedProject]?
+    public var localization_settings: LocalizationSettings?
 }
 
-struct MergeFields: SDKModel {
+public struct MergeFields: SDKModel {
     /**
      * Field name to map onto in the merged results
      */
-    var field_name: String?
+    public var field_name: String?
     /**
      * Field name from the source query
      */
-    var source_field_name: String?
+    public var source_field_name: String?
 }
 
-struct MergeQuery: SDKModel {
+public struct MergeQuery: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Column Limit
      */
-    var column_limit: String?
+    public var column_limit: String?
     /**
      * Dynamic Fields
      */
-    var dynamic_fields: String?
+    public var dynamic_fields: String?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Pivots
      */
-    var pivots: [String]?
+    public var pivots: [String]?
     /**
      * Unique to get results (read-only)
      */
-    var result_maker_id: Int64?
+    public var result_maker_id: Int64?
     /**
      * Sorts
      */
-    var sorts: [String]?
+    public var sorts: [String]?
     /**
      * Source Queries defining the results to be merged.
      */
-    var source_queries: [MergeQuerySourceQuery]?
+    public var source_queries: [MergeQuerySourceQuery]?
     /**
      * Total
      */
-    var total: Bool?
+    public var total: Bool?
     /**
      * Visualization Config
      */
-    var vis_config: StringDictionary<AnyCodable>?
+    public var vis_config: StringDictionary<AnyCodable>?
 }
 
-struct MergeQuerySourceQuery: SDKModel {
+public struct MergeQuerySourceQuery: SDKModel {
     /**
      * An array defining which fields of the source query are mapped onto fields of the merge query
      */
-    var merge_fields: [MergeFields]?
+    public var merge_fields: [MergeFields]?
     /**
      * Display name
      */
-    var name: String?
+    public var name: String?
     /**
      * Id of the query to merge
      */
-    var query_id: Int64?
+    public var query_id: Int64?
 }
 
-struct ModelSet: SDKModel {
+public struct ModelSet: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * (read-only)
      */
-    var all_access: Bool?
+    public var all_access: Bool?
     /**
      * (read-only)
      */
-    var built_in: Bool?
+    public var built_in: Bool?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
-    var models: [String]?
+    public var id: Int64?
+    public var models: [String]?
     /**
      * Name of ModelSet
      */
-    var name: String?
+    public var name: String?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct ModelsNotValidated: SDKModel {
+public struct ModelsNotValidated: SDKModel {
     /**
      * Model name (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Project file (read-only)
      */
-    var project_file_id: String?
+    public var project_file_id: String?
 }
 
 /**
  * The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "year".
  */
-enum Name: String, Codable {
+public enum Name: String, Codable {
     case day = "day"
     case hour = "hour"
     case minute = "minute"
@@ -4720,889 +4720,889 @@ enum Name: String, Codable {
     case year = "year"
 }
 
-struct OauthClientApp: SDKModel {
+public struct OauthClientApp: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * The globally unique id of this application (read-only)
      */
-    var client_guid: String?
+    public var client_guid: String?
     /**
      * The uri with which this application will receive an auth code by browser redirect.
      */
-    var redirect_uri: String?
+    public var redirect_uri: String?
     /**
      * The application's display name
      */
-    var display_name: String?
+    public var display_name: String?
     /**
      * A description of the application that will be displayed to users
      */
-    var description: String?
+    public var description: String?
     /**
      * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
      */
-    var group_id: Int64?
+    public var group_id: Int64?
     /**
      * All auth codes, access tokens, and refresh tokens issued for this application prior to this date-time for ALL USERS will be invalid. (read-only)
      */
-    var tokens_invalid_before: Date?
+    public var tokens_invalid_before: Date?
     /**
      * All users who have been activated to use this app (read-only)
      */
-    var activated_users: [UserPublic]?
+    public var activated_users: [UserPublic]?
 }
 
-struct OIDCConfig: SDKModel {
+public struct OIDCConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
-    var alternate_email_login_allowed: Bool?
+    public var alternate_email_login_allowed: Bool?
     /**
      * OpenID Provider Audience
      */
-    var audience: String?
+    public var audience: String?
     /**
      * Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
      */
-    var auth_requires_role: Bool?
+    public var auth_requires_role: Bool?
     /**
      * OpenID Provider Authorization Url
      */
-    var authorization_endpoint: URI?
+    public var authorization_endpoint: URI?
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
      */
-    var default_new_user_group_ids: [Int64]?
+    public var default_new_user_group_ids: [Int64]?
     /**
      * (Read-only) Groups that will be applied to new users the first time they login via OIDC (read-only)
      */
-    var default_new_user_groups: [LkGroup]?
+    public var default_new_user_groups: [LkGroup]?
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
      */
-    var default_new_user_role_ids: [Int64]?
+    public var default_new_user_role_ids: [Int64]?
     /**
      * (Read-only) Roles that will be applied to new users the first time they login via OIDC (read-only)
      */
-    var default_new_user_roles: [Role]?
+    public var default_new_user_roles: [Role]?
     /**
      * Enable/Disable OIDC authentication for the server
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * (Read-only) Array of mappings between OIDC Groups and Looker Roles (read-only)
      */
-    var groups: [OIDCGroupRead]?
+    public var groups: [OIDCGroupRead]?
     /**
      * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
      */
-    var groups_attribute: String?
+    public var groups_attribute: String?
     /**
      * (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
      */
-    var groups_with_role_ids: [OIDCGroupWrite]?
+    public var groups_with_role_ids: [OIDCGroupWrite]?
     /**
      * Relying Party Identifier (provided by OpenID Provider)
      */
-    var identifier: String?
+    public var identifier: String?
     /**
      * OpenID Provider Issuer
      */
-    var issuer: String?
+    public var issuer: String?
     /**
      * When this config was last modified (read-only)
      */
-    var modified_at: Date?
+    public var modified_at: Date?
     /**
      * User id of user who last modified this config (read-only)
      */
-    var modified_by: Int64?
+    public var modified_by: Int64?
     /**
      * Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
      */
-    var new_user_migration_types: String?
+    public var new_user_migration_types: String?
     /**
      * Array of scopes to request.
      */
-    var scopes: [String]?
+    public var scopes: [String]?
     /**
      * (Write-Only) Relying Party Secret (provided by OpenID Provider)
      */
-    var secret: String?
+    public var secret: String?
     /**
      * Set user roles in Looker based on groups from OIDC
      */
-    var set_roles_from_groups: Bool?
+    public var set_roles_from_groups: Bool?
     /**
      * Slug to identify configurations that are created in order to run a OIDC config test (read-only)
      */
-    var test_slug: String?
+    public var test_slug: String?
     /**
      * OpenID Provider Token Url
      */
-    var token_endpoint: String?
+    public var token_endpoint: String?
     /**
      * Name of user record attributes used to indicate email address field
      */
-    var user_attribute_map_email: String?
+    public var user_attribute_map_email: String?
     /**
      * Name of user record attributes used to indicate first name
      */
-    var user_attribute_map_first_name: String?
+    public var user_attribute_map_first_name: String?
     /**
      * Name of user record attributes used to indicate last name
      */
-    var user_attribute_map_last_name: String?
+    public var user_attribute_map_last_name: String?
     /**
      * (Read-only) Array of mappings between OIDC User Attributes and Looker User Attributes (read-only)
      */
-    var user_attributes: [OIDCUserAttributeRead]?
+    public var user_attributes: [OIDCUserAttributeRead]?
     /**
      * (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
      */
-    var user_attributes_with_ids: [OIDCUserAttributeWrite]?
+    public var user_attributes_with_ids: [OIDCUserAttributeWrite]?
     /**
      * OpenID Provider User Information Url
      */
-    var userinfo_endpoint: URI?
+    public var userinfo_endpoint: URI?
     /**
      * Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
      */
-    var allow_normal_group_membership: Bool?
+    public var allow_normal_group_membership: Bool?
     /**
      * OIDC auth'd users will inherit roles from non-reflected Looker groups.
      */
-    var allow_roles_from_normal_groups: Bool?
+    public var allow_roles_from_normal_groups: Bool?
     /**
      * Allows roles to be directly assigned to OIDC auth'd users.
      */
-    var allow_direct_roles: Bool?
+    public var allow_direct_roles: Bool?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct OIDCGroupRead: SDKModel {
+public struct OIDCGroupRead: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Unique Id of group in Looker (read-only)
      */
-    var looker_group_id: Int64?
+    public var looker_group_id: Int64?
     /**
      * Name of group in Looker (read-only)
      */
-    var looker_group_name: String?
+    public var looker_group_name: String?
     /**
      * Name of group in OIDC (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Looker Roles (read-only)
      */
-    var roles: [Role]?
+    public var roles: [Role]?
 }
 
-struct OIDCGroupWrite: SDKModel {
+public struct OIDCGroupWrite: SDKModel {
     /**
      * Unique Id
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Unique Id of group in Looker (read-only)
      */
-    var looker_group_id: Int64?
+    public var looker_group_id: Int64?
     /**
      * Name of group in Looker
      */
-    var looker_group_name: String?
+    public var looker_group_name: String?
     /**
      * Name of group in OIDC
      */
-    var name: String?
+    public var name: String?
     /**
      * Looker Role Ids
      */
-    var role_ids: [Int64]?
+    public var role_ids: [Int64]?
 }
 
-struct OIDCUserAttributeRead: SDKModel {
+public struct OIDCUserAttributeRead: SDKModel {
     /**
      * Name of User Attribute in OIDC (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Required to be in OIDC assertion for login to be allowed to succeed (read-only)
      */
-    var `required`: Bool?
+    public var `required`: Bool?
     /**
      * Looker User Attributes (read-only)
      */
-    var user_attributes: [UserAttribute]?
+    public var user_attributes: [UserAttribute]?
 }
 
-struct OIDCUserAttributeWrite: SDKModel {
+public struct OIDCUserAttributeWrite: SDKModel {
     /**
      * Name of User Attribute in OIDC
      */
-    var name: String?
+    public var name: String?
     /**
      * Required to be in OIDC assertion for login to be allowed to succeed
      */
-    var `required`: Bool?
+    public var `required`: Bool?
     /**
      * Looker User Attribute Ids
      */
-    var user_attribute_ids: [Int64]?
+    public var user_attribute_ids: [Int64]?
 }
 
-struct PasswordConfig: SDKModel {
+public struct PasswordConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Minimum number of characters required for a new password.  Must be between 7 and 100
      */
-    var min_length: Int64?
+    public var min_length: Int64?
     /**
      * Require at least one numeric character
      */
-    var require_numeric: Bool?
+    public var require_numeric: Bool?
     /**
      * Require at least one uppercase and one lowercase letter
      */
-    var require_upperlower: Bool?
+    public var require_upperlower: Bool?
     /**
      * Require at least one special character
      */
-    var require_special: Bool?
+    public var require_special: Bool?
 }
 
-struct Permission: SDKModel {
+public struct Permission: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Permission symbol (read-only)
      */
-    var permission: String?
+    public var permission: String?
     /**
      * Dependency parent symbol (read-only)
      */
-    var parent: String?
+    public var parent: String?
     /**
      * Description (read-only)
      */
-    var description: String?
+    public var description: String?
 }
 
-struct PermissionSet: SDKModel {
+public struct PermissionSet: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * (read-only)
      */
-    var all_access: Bool?
+    public var all_access: Bool?
     /**
      * (read-only)
      */
-    var built_in: Bool?
+    public var built_in: Bool?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Name of PermissionSet
      */
-    var name: String?
-    var permissions: [String]?
+    public var name: String?
+    public var permissions: [String]?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
 /**
  * Type of permission: "view" or "edit" Valid values are: "view", "edit".
  */
-enum PermissionType: String, Codable {
+public enum PermissionType: String, Codable {
     case view = "view"
     case edit = "edit"
 }
 
-struct Project: SDKModel {
+public struct Project: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Project Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Project display name
      */
-    var name: String?
+    public var name: String?
     /**
      * If true the project is configured with a git repository (read-only)
      */
-    var uses_git: Bool?
+    public var uses_git: Bool?
     /**
      * Git remote repository url
      */
-    var git_remote_url: String?
+    public var git_remote_url: String?
     /**
      * Git username for HTTPS authentication. (For production only, if using user attributes.)
      */
-    var git_username: String?
+    public var git_username: String?
     /**
      * (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
      */
-    var git_password: String?
+    public var git_password: String?
     /**
      * User attribute name for username in per-user HTTPS authentication.
      */
-    var git_username_user_attribute: String?
+    public var git_username_user_attribute: String?
     /**
      * User attribute name for password in per-user HTTPS authentication.
      */
-    var git_password_user_attribute: String?
+    public var git_password_user_attribute: String?
     /**
      * Name of the git service provider
      */
-    var git_service_name: String?
+    public var git_service_name: String?
     /**
      * Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
      */
-    var git_application_server_http_port: Int64?
+    public var git_application_server_http_port: Int64?
     /**
      * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
      */
-    var git_application_server_http_scheme: GitApplicationServerHttpScheme?
+    public var git_application_server_http_scheme: GitApplicationServerHttpScheme?
     /**
      * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
      */
-    var deploy_secret: String?
+    public var deploy_secret: String?
     /**
      * (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
      */
-    var unset_deploy_secret: Bool?
+    public var unset_deploy_secret: Bool?
     /**
      * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
      */
-    var pull_request_mode: PullRequestMode?
+    public var pull_request_mode: PullRequestMode?
     /**
      * Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
      */
-    var validation_required: Bool?
+    public var validation_required: Bool?
     /**
      * If true, advanced git release management is enabled for this project
      */
-    var git_release_mgmt_enabled: Bool?
+    public var git_release_mgmt_enabled: Bool?
     /**
      * Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
      */
-    var allow_warnings: Bool?
+    public var allow_warnings: Bool?
     /**
      * If true the project is an example project and cannot be modified (read-only)
      */
-    var is_example: Bool?
+    public var is_example: Bool?
     /**
      * Status of dependencies in your manifest & lockfile
      */
-    var dependency_status: String?
+    public var dependency_status: String?
 }
 
-struct ProjectError: SDKModel {
+public struct ProjectError: SDKModel {
     /**
      * A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)
      */
-    var code: String?
+    public var code: String?
     /**
      * Severity: fatal, error, warning, info, success (read-only)
      */
-    var severity: String?
+    public var severity: String?
     /**
      * Error classification: syntax, deprecation, model_configuration, etc (read-only)
      */
-    var kind: String?
+    public var kind: String?
     /**
      * Error message which may contain information such as dashboard or model names that may be considered sensitive in some use cases. Avoid storing or sending this message outside of Looker (read-only)
      */
-    var message: String?
+    public var message: String?
     /**
      * The field associated with this error (read-only)
      */
-    var field_name: String?
+    public var field_name: String?
     /**
      * Name of the file containing this error (read-only)
      */
-    var file_path: String?
+    public var file_path: String?
     /**
      * Line number in the file of this error (read-only)
      */
-    var line_number: Int64?
+    public var line_number: Int64?
     /**
      * The model associated with this error (read-only)
      */
-    var model_id: String?
+    public var model_id: String?
     /**
      * The explore associated with this error (read-only)
      */
-    var explore: String?
+    public var explore: String?
     /**
      * A link to Looker documentation about this error (read-only)
      */
-    var help_url: String?
+    public var help_url: String?
     /**
      * Error parameters (read-only)
      */
-    var params: StringDictionary<AnyCodable>?
+    public var params: StringDictionary<AnyCodable>?
     /**
      * A version of the error message that does not contain potentially sensitive information. Suitable for situations in which messages are stored or sent to consumers outside of Looker, such as external logs. Sanitized messages will display "(?)" where sensitive information would appear in the corresponding non-sanitized message (read-only)
      */
-    var sanitized_message: String?
+    public var sanitized_message: String?
 }
 
-struct ProjectFile: SDKModel {
+public struct ProjectFile: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * An opaque token uniquely identifying a file within a project. Avoid parsing or decomposing the text of this token. This token is stable within a Looker release but may change between Looker releases (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Path, file name, and extension of the file relative to the project root directory (read-only)
      */
-    var path: String?
+    public var path: String?
     /**
      * Display name (read-only)
      */
-    var title: String?
+    public var title: String?
     /**
      * File type: model, view, etc (read-only)
      */
-    var type: String?
+    public var type: String?
     /**
      * The extension of the file: .view.lkml, .model.lkml, etc (read-only)
      */
-    var `extension`: String?
+    public var `extension`: String?
     /**
      * File mime type (read-only)
      */
-    var mime_type: String?
+    public var mime_type: String?
     /**
      * State of editability for the file. (read-only)
      */
-    var editable: Bool?
-    var git_status: GitStatus?
+    public var editable: Bool?
+    public var git_status: GitStatus?
 }
 
-struct ProjectValidation: SDKModel {
+public struct ProjectValidation: SDKModel {
     /**
      * A list of project errors (read-only)
      */
-    var errors: [ProjectError]?
+    public var errors: [ProjectError]?
     /**
      * A hash value computed from the project's current state (read-only)
      */
-    var project_digest: String?
+    public var project_digest: String?
     /**
      * A list of models which were not fully validated (read-only)
      */
-    var models_not_validated: [ModelsNotValidated]?
+    public var models_not_validated: [ModelsNotValidated]?
     /**
      * Duration of project validation in seconds (read-only)
      */
-    var computation_time: Float?
+    public var computation_time: Float?
 }
 
-struct ProjectValidationCache: SDKModel {
+public struct ProjectValidationCache: SDKModel {
     /**
      * A list of project errors (read-only)
      */
-    var errors: [ProjectError]?
+    public var errors: [ProjectError]?
     /**
      * A hash value computed from the project's current state (read-only)
      */
-    var project_digest: String?
+    public var project_digest: String?
     /**
      * A list of models which were not fully validated (read-only)
      */
-    var models_not_validated: [ModelsNotValidated]?
+    public var models_not_validated: [ModelsNotValidated]?
     /**
      * Duration of project validation in seconds (read-only)
      */
-    var computation_time: Float?
+    public var computation_time: Float?
     /**
      * If true, the cached project validation results are no longer accurate because the project has changed since the cached results were calculated (read-only)
      */
-    var stale: Bool?
+    public var stale: Bool?
 }
 
-struct ProjectWorkspace: SDKModel {
+public struct ProjectWorkspace: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * The id of the project (read-only)
      */
-    var project_id: String?
+    public var project_id: String?
     /**
      * The id of the local workspace containing the project files (read-only)
      */
-    var workspace_id: String?
+    public var workspace_id: String?
     /**
      * The status of the local git directory (read-only)
      */
-    var git_status: String?
+    public var git_status: String?
     /**
      * Git head revision name (read-only)
      */
-    var git_head: String?
+    public var git_head: String?
     /**
      * Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (read-only)
      */
-    var dependency_status: DependencyStatus?
-    var git_branch: GitBranch?
+    public var dependency_status: DependencyStatus?
+    public var git_branch: GitBranch?
     /**
      * The lookml syntax used by all files in this project (read-only)
      */
-    var lookml_type: String?
+    public var lookml_type: String?
 }
 
 /**
  * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
  */
-enum PullRequestMode: String, Codable {
+public enum PullRequestMode: String, Codable {
     case off = "off"
     case links = "links"
     case recommended = "recommended"
     case required = "required"
 }
 
-struct Query: SDKModel {
+public struct Query: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Model
      */
-    var model: String
+    public var model: String
     /**
      * Explore Name
      */
-    var view: String
+    public var view: String
     /**
      * Fields
      */
-    var fields: [String]?
+    public var fields: [String]?
     /**
      * Pivots
      */
-    var pivots: [String]?
+    public var pivots: [String]?
     /**
      * Fill Fields
      */
-    var fill_fields: [String]?
+    public var fill_fields: [String]?
     /**
      * Filters
      */
-    var filters: StringDictionary<AnyCodable>?
+    public var filters: StringDictionary<AnyCodable>?
     /**
      * Filter Expression
      */
-    var filter_expression: String?
+    public var filter_expression: String?
     /**
      * Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
      */
-    var sorts: [String]?
+    public var sorts: [String]?
     /**
      * Limit
      */
-    var limit: String?
+    public var limit: String?
     /**
      * Column Limit
      */
-    var column_limit: String?
+    public var column_limit: String?
     /**
      * Total
      */
-    var total: Bool?
+    public var total: Bool?
     /**
      * Raw Total
      */
-    var row_total: String?
+    public var row_total: String?
     /**
      * Fields on which to run subtotals
      */
-    var subtotals: [String]?
+    public var subtotals: [String]?
     /**
      * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
      */
-    var vis_config: StringDictionary<AnyCodable>?
+    public var vis_config: StringDictionary<AnyCodable>?
     /**
      * The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
      */
-    var filter_config: StringDictionary<AnyCodable>?
+    public var filter_config: StringDictionary<AnyCodable>?
     /**
      * Visible UI Sections
      */
-    var visible_ui_sections: String?
+    public var visible_ui_sections: String?
     /**
      * Slug (read-only)
      */
-    var slug: String?
+    public var slug: String?
     /**
      * Dynamic Fields
      */
-    var dynamic_fields: String?
+    public var dynamic_fields: String?
     /**
      * Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
      */
-    var client_id: String?
+    public var client_id: String?
     /**
      * Share Url (read-only)
      */
-    var share_url: String?
+    public var share_url: String?
     /**
      * Expanded Share Url (read-only)
      */
-    var expanded_share_url: String?
+    public var expanded_share_url: String?
     /**
      * Expanded Url (read-only)
      */
-    var url: String?
+    public var url: String?
     /**
      * Query Timezone
      */
-    var query_timezone: String?
+    public var query_timezone: String?
     /**
      * Has Table Calculations (read-only)
      */
-    var has_table_calculations: Bool?
+    public var has_table_calculations: Bool?
 }
 
-struct QueryTask: SDKModel {
+public struct QueryTask: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Id of query
      */
-    var query_id: Int64?
-    var query: Query?
+    public var query_id: Int64?
+    public var query: Query?
     /**
      * whether or not to generate links in the query response.
      */
-    var generate_links: Bool?
+    public var generate_links: Bool?
     /**
      * Use production models to run query (even is user is in dev mode).
      */
-    var force_production: Bool?
+    public var force_production: Bool?
     /**
      * Prefix to use for drill links.
      */
-    var path_prefix: String?
+    public var path_prefix: String?
     /**
      * Whether or not to use the cache
      */
-    var cache: Bool?
+    public var cache: Bool?
     /**
      * Whether or not to run table calculations on the server
      */
-    var server_table_calcs: Bool?
+    public var server_table_calcs: Bool?
     /**
      * Retrieve any results from cache even if the results have expired.
      */
-    var cache_only: Bool?
+    public var cache_only: Bool?
     /**
      * cache key used to cache query. (read-only)
      */
-    var cache_key: String?
+    public var cache_key: String?
     /**
      * Status of query task.
      */
-    var status: String?
+    public var status: String?
     /**
      * Source of query task.
      */
-    var source: String?
+    public var source: String?
     /**
      * Runtime of prior queries. (read-only)
      */
-    var runtime: Float?
+    public var runtime: Float?
     /**
      * Rebuild PDTS used in query.
      */
-    var rebuild_pdts: Bool?
+    public var rebuild_pdts: Bool?
     /**
      * Source of the results of the query. (read-only)
      */
-    var result_source: String?
+    public var result_source: String?
     /**
      * Id of look associated with query.
      */
-    var look_id: Int64?
+    public var look_id: Int64?
     /**
      * Id of dashboard associated with query.
      */
-    var dashboard_id: String?
+    public var dashboard_id: String?
     /**
      * The data format of the query results. (read-only)
      */
-    var result_format: String?
+    public var result_format: String?
 }
 
-struct RenderTask: SDKModel {
+public struct RenderTask: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Date/Time render task was created (read-only)
      */
-    var created_at: String?
+    public var created_at: String?
     /**
      * Filter values to apply to the dashboard queries, in URL query format (read-only)
      */
-    var dashboard_filters: String?
+    public var dashboard_filters: String?
     /**
      * Id of dashboard to render (read-only)
      */
-    var dashboard_id: Int64?
+    public var dashboard_id: Int64?
     /**
      * Dashboard layout style: single_column or tiled (read-only)
      */
-    var dashboard_style: String?
+    public var dashboard_style: String?
     /**
      * Date/Time render task was completed (read-only)
      */
-    var finalized_at: String?
+    public var finalized_at: String?
     /**
      * Output height in pixels. Flowed layouts may ignore this value. (read-only)
      */
-    var height: Int64?
+    public var height: Int64?
     /**
      * Id of this render task (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Id of look to render (read-only)
      */
-    var look_id: Int64?
+    public var look_id: Int64?
     /**
      * Id of lookml dashboard to render (read-only)
      */
-    var lookml_dashboard_id: String?
+    public var lookml_dashboard_id: String?
     /**
      * Id of query to render (read-only)
      */
-    var query_id: Int64?
+    public var query_id: Int64?
     /**
      * Number of seconds elapsed running queries (read-only)
      */
-    var query_runtime: Double?
+    public var query_runtime: Double?
     /**
      * Number of seconds elapsed rendering data (read-only)
      */
-    var render_runtime: Double?
+    public var render_runtime: Double?
     /**
      * Output format: pdf, png, or jpg (read-only)
      */
-    var result_format: String?
+    public var result_format: String?
     /**
      * Total seconds elapsed for render task (read-only)
      */
-    var runtime: Double?
+    public var runtime: Double?
     /**
      * Render task status: enqueued_for_query, querying, enqueued_for_render, rendering, success, failure (read-only)
      */
-    var status: String?
+    public var status: String?
     /**
      * Additional information about the current status (read-only)
      */
-    var status_detail: String?
+    public var status_detail: String?
     /**
      * The user account permissions in which the render task will execute (read-only)
      */
-    var user_id: Int64?
+    public var user_id: Int64?
     /**
      * Output width in pixels (read-only)
      */
-    var width: Int64?
+    public var width: Int64?
 }
 
-struct RepositoryCredential: SDKModel {
+public struct RepositoryCredential: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * Root project Id (read-only)
      */
-    var root_project_id: String?
+    public var root_project_id: String?
     /**
      * Git remote repository url (read-only)
      */
-    var remote_url: String?
+    public var remote_url: String?
     /**
      * Git username for HTTPS authentication.
      */
-    var git_username: String?
+    public var git_username: String?
     /**
      * (Write-Only) Git password for HTTPS authentication.
      */
-    var git_password: String?
+    public var git_password: String?
     /**
      * Public deploy key for SSH authentication.
      */
-    var ssh_public_key: String?
+    public var ssh_public_key: String?
     /**
      * Whether the credentials have been configured for the Git Repository. (read-only)
      */
-    var is_configured: Bool?
+    public var is_configured: Bool?
 }
 
 /**
  * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
  */
-enum ResultFormat: String, Codable {
+public enum ResultFormat: String, Codable {
     case inline_json = "inline_json"
     case json = "json"
     case json_detail = "json_detail"
@@ -5615,891 +5615,891 @@ enum ResultFormat: String, Codable {
     case gsxml = "gsxml"
 }
 
-struct ResultMakerFilterables: SDKModel {
+public struct ResultMakerFilterables: SDKModel {
     /**
      * The model this filterable comes from (used for field suggestions). (read-only)
      */
-    var model: String?
+    public var model: String?
     /**
      * The view this filterable comes from (used for field suggestions). (read-only)
      */
-    var view: String?
+    public var view: String?
     /**
      * The name of the filterable thing (Query or Merged Results). (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * array of dashboard_filter_name: and field: objects. (read-only)
      */
-    var listen: [ResultMakerFilterablesListen]?
+    public var listen: [ResultMakerFilterablesListen]?
 }
 
-struct ResultMakerFilterablesListen: SDKModel {
+public struct ResultMakerFilterablesListen: SDKModel {
     /**
      * The name of a dashboard filter to listen to.
      */
-    var dashboard_filter_name: String?
+    public var dashboard_filter_name: String?
     /**
      * The name of the field in the filterable to filter with the value of the dashboard filter.
      */
-    var field: String?
+    public var field: String?
 }
 
-struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
+public struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
     /**
      * Unique Id. (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * JSON string of dynamic field information. (read-only)
      */
-    var dynamic_fields: String?
+    public var dynamic_fields: String?
     /**
      * array of items that can be filtered and information about them. (read-only)
      */
-    var filterables: [ResultMakerFilterables]?
+    public var filterables: [ResultMakerFilterables]?
     /**
      * Sorts of the constituent Look, Query, or Merge Query (read-only)
      */
-    var sorts: [String]?
+    public var sorts: [String]?
     /**
      * ID of merge result if this is a merge_result. (read-only)
      */
-    var merge_result_id: String?
+    public var merge_result_id: String?
     /**
      * Total of the constituent Look, Query, or Merge Query (read-only)
      */
-    var total: Bool?
+    public var total: Bool?
     /**
      * ID of query if this is a query. (read-only)
      */
-    var query_id: Int64?
+    public var query_id: Int64?
     /**
      * ID of SQL Query if this is a SQL Runner Query (read-only)
      */
-    var sql_query_id: String?
-    var query: Query?
+    public var sql_query_id: String?
+    public var query: Query?
     /**
      * Vis config of the constituent Query, or Merge Query. (read-only)
      */
-    var vis_config: StringDictionary<AnyCodable>?
+    public var vis_config: StringDictionary<AnyCodable>?
 }
 
-struct Role: SDKModel {
+public struct Role: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Name of Role
      */
-    var name: String?
-    var permission_set: PermissionSet?
+    public var name: String?
+    public var permission_set: PermissionSet?
     /**
      * (Write-Only) Id of permission set
      */
-    var permission_set_id: Int64?
-    var model_set: ModelSet?
+    public var permission_set_id: Int64?
+    public var model_set: ModelSet?
     /**
      * (Write-Only) Id of model set
      */
-    var model_set_id: Int64?
+    public var model_set_id: Int64?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
     /**
      * Link to get list of users with this role (read-only)
      */
-    var users_url: URI?
+    public var users_url: URI?
 }
 
-struct RunningQueries: SDKModel {
+public struct RunningQueries: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
-    var user: UserPublic?
-    var query: Query?
-    var sql_query: SqlQuery?
-    var look: LookBasic?
+    public var id: Int64?
+    public var user: UserPublic?
+    public var query: Query?
+    public var sql_query: SqlQuery?
+    public var look: LookBasic?
     /**
      * Date/Time Query was initiated (read-only)
      */
-    var created_at: String?
+    public var created_at: String?
     /**
      * Date/Time Query was completed (read-only)
      */
-    var completed_at: String?
+    public var completed_at: String?
     /**
      * Query Id (read-only)
      */
-    var query_id: String?
+    public var query_id: String?
     /**
      * Source (look, dashboard, queryrunner, explore, etc.) (read-only)
      */
-    var source: String?
+    public var source: String?
     /**
      * Node Id (read-only)
      */
-    var node_id: String?
+    public var node_id: String?
     /**
      * Slug (read-only)
      */
-    var slug: String?
+    public var slug: String?
     /**
      * ID of a Query Task (read-only)
      */
-    var query_task_id: String?
+    public var query_task_id: String?
     /**
      * Cache Key (read-only)
      */
-    var cache_key: String?
+    public var cache_key: String?
     /**
      * Connection (read-only)
      */
-    var connection_name: String?
+    public var connection_name: String?
     /**
      * Dialect (read-only)
      */
-    var dialect: String?
+    public var dialect: String?
     /**
      * Connection ID (read-only)
      */
-    var connection_id: String?
+    public var connection_id: String?
     /**
      * Additional Information(Error message or verbose status) (read-only)
      */
-    var message: String?
+    public var message: String?
     /**
      * Status description (read-only)
      */
-    var status: String?
+    public var status: String?
     /**
      * Number of seconds elapsed running the Query (read-only)
      */
-    var runtime: Double?
+    public var runtime: Double?
     /**
      * SQL text of the query as run (read-only)
      */
-    var sql: String?
+    public var sql: String?
 }
 
-struct SamlConfig: SDKModel {
+public struct SamlConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Enable/Disable Saml authentication for the server
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * Identity Provider Certificate (provided by IdP)
      */
-    var idp_cert: String?
+    public var idp_cert: String?
     /**
      * Identity Provider Url (provided by IdP)
      */
-    var idp_url: String?
+    public var idp_url: String?
     /**
      * Identity Provider Issuer (provided by IdP)
      */
-    var idp_issuer: String?
+    public var idp_issuer: String?
     /**
      * Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
      */
-    var idp_audience: String?
+    public var idp_audience: String?
     /**
      * Count of seconds of clock drift to allow when validating timestamps of assertions.
      */
-    var allowed_clock_drift: Int64?
+    public var allowed_clock_drift: Int64?
     /**
      * Name of user record attributes used to indicate email address field
      */
-    var user_attribute_map_email: String?
+    public var user_attribute_map_email: String?
     /**
      * Name of user record attributes used to indicate first name
      */
-    var user_attribute_map_first_name: String?
+    public var user_attribute_map_first_name: String?
     /**
      * Name of user record attributes used to indicate last name
      */
-    var user_attribute_map_last_name: String?
+    public var user_attribute_map_last_name: String?
     /**
      * Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
      */
-    var new_user_migration_types: String?
+    public var new_user_migration_types: String?
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
-    var alternate_email_login_allowed: Bool?
+    public var alternate_email_login_allowed: Bool?
     /**
      * Slug to identify configurations that are created in order to run a Saml config test (read-only)
      */
-    var test_slug: String?
+    public var test_slug: String?
     /**
      * When this config was last modified (read-only)
      */
-    var modified_at: String?
+    public var modified_at: String?
     /**
      * User id of user who last modified this config (read-only)
      */
-    var modified_by: String?
+    public var modified_by: String?
     /**
      * (Read-only) Roles that will be applied to new users the first time they login via Saml (read-only)
      */
-    var default_new_user_roles: [Role]?
+    public var default_new_user_roles: [Role]?
     /**
      * (Read-only) Groups that will be applied to new users the first time they login via Saml (read-only)
      */
-    var default_new_user_groups: [LkGroup]?
+    public var default_new_user_groups: [LkGroup]?
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
      */
-    var default_new_user_role_ids: [Int64]?
+    public var default_new_user_role_ids: [Int64]?
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
      */
-    var default_new_user_group_ids: [Int64]?
+    public var default_new_user_group_ids: [Int64]?
     /**
      * Set user roles in Looker based on groups from Saml
      */
-    var set_roles_from_groups: Bool?
+    public var set_roles_from_groups: Bool?
     /**
      * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
      */
-    var groups_attribute: String?
+    public var groups_attribute: String?
     /**
      * (Read-only) Array of mappings between Saml Groups and Looker Roles (read-only)
      */
-    var groups: [SamlGroupRead]?
+    public var groups: [SamlGroupRead]?
     /**
      * (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
      */
-    var groups_with_role_ids: [SamlGroupWrite]?
+    public var groups_with_role_ids: [SamlGroupWrite]?
     /**
      * Users will not be allowed to login at all unless a role for them is found in Saml if set to true
      */
-    var auth_requires_role: Bool?
+    public var auth_requires_role: Bool?
     /**
      * (Read-only) Array of mappings between Saml User Attributes and Looker User Attributes (read-only)
      */
-    var user_attributes: [SamlUserAttributeRead]?
+    public var user_attributes: [SamlUserAttributeRead]?
     /**
      * (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
      */
-    var user_attributes_with_ids: [SamlUserAttributeWrite]?
+    public var user_attributes_with_ids: [SamlUserAttributeWrite]?
     /**
      * Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
      */
-    var groups_finder_type: String?
+    public var groups_finder_type: String?
     /**
      * Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
      */
-    var groups_member_value: String?
+    public var groups_member_value: String?
     /**
      * Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
      */
-    var bypass_login_page: Bool?
+    public var bypass_login_page: Bool?
     /**
      * Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
      */
-    var allow_normal_group_membership: Bool?
+    public var allow_normal_group_membership: Bool?
     /**
      * SAML auth'd users will inherit roles from non-reflected Looker groups.
      */
-    var allow_roles_from_normal_groups: Bool?
+    public var allow_roles_from_normal_groups: Bool?
     /**
      * Allows roles to be directly assigned to SAML auth'd users.
      */
-    var allow_direct_roles: Bool?
+    public var allow_direct_roles: Bool?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct SamlGroupRead: SDKModel {
+public struct SamlGroupRead: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Unique Id of group in Looker (read-only)
      */
-    var looker_group_id: Int64?
+    public var looker_group_id: Int64?
     /**
      * Name of group in Looker (read-only)
      */
-    var looker_group_name: String?
+    public var looker_group_name: String?
     /**
      * Name of group in Saml (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Looker Roles (read-only)
      */
-    var roles: [Role]?
+    public var roles: [Role]?
     /**
      * Link to saml config (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct SamlGroupWrite: SDKModel {
+public struct SamlGroupWrite: SDKModel {
     /**
      * Unique Id
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Unique Id of group in Looker (read-only)
      */
-    var looker_group_id: Int64?
+    public var looker_group_id: Int64?
     /**
      * Name of group in Looker
      */
-    var looker_group_name: String?
+    public var looker_group_name: String?
     /**
      * Name of group in Saml
      */
-    var name: String?
+    public var name: String?
     /**
      * Looker Role Ids
      */
-    var role_ids: [Int64]?
+    public var role_ids: [Int64]?
     /**
      * Link to saml config (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct SamlMetadataParseResult: SDKModel {
+public struct SamlMetadataParseResult: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Identify Provider Issuer (read-only)
      */
-    var idp_issuer: String?
+    public var idp_issuer: String?
     /**
      * Identify Provider Url (read-only)
      */
-    var idp_url: String?
+    public var idp_url: String?
     /**
      * Identify Provider Certificate (read-only)
      */
-    var idp_cert: String?
+    public var idp_cert: String?
 }
 
-struct SamlUserAttributeRead: SDKModel {
+public struct SamlUserAttributeRead: SDKModel {
     /**
      * Name of User Attribute in Saml (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Required to be in Saml assertion for login to be allowed to succeed (read-only)
      */
-    var `required`: Bool?
+    public var `required`: Bool?
     /**
      * Looker User Attributes (read-only)
      */
-    var user_attributes: [UserAttribute]?
+    public var user_attributes: [UserAttribute]?
     /**
      * Link to saml config (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct SamlUserAttributeWrite: SDKModel {
+public struct SamlUserAttributeWrite: SDKModel {
     /**
      * Name of User Attribute in Saml
      */
-    var name: String?
+    public var name: String?
     /**
      * Required to be in Saml assertion for login to be allowed to succeed
      */
-    var `required`: Bool?
+    public var `required`: Bool?
     /**
      * Looker User Attribute Ids
      */
-    var user_attribute_ids: [Int64]?
+    public var user_attribute_ids: [Int64]?
     /**
      * Link to saml config (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct ScheduledPlan: SDKModel {
+public struct ScheduledPlan: SDKModel {
     /**
      * Name of this scheduled plan
      */
-    var name: String?
+    public var name: String?
     /**
      * User Id which owns this scheduled plan
      */
-    var user_id: Int64?
+    public var user_id: Int64?
     /**
      * Whether schedule is run as recipient (only applicable for email recipients)
      */
-    var run_as_recipient: Bool?
+    public var run_as_recipient: Bool?
     /**
      * Whether the ScheduledPlan is enabled
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * Id of a look
      */
-    var look_id: Int64?
+    public var look_id: Int64?
     /**
      * Id of a dashboard
      */
-    var dashboard_id: Int64?
+    public var dashboard_id: Int64?
     /**
      * Id of a LookML dashboard
      */
-    var lookml_dashboard_id: String?
+    public var lookml_dashboard_id: String?
     /**
      * Query string to run look or dashboard with
      */
-    var filters_string: String?
+    public var filters_string: String?
     /**
      * (DEPRECATED) Alias for filters_string field
      */
-    var dashboard_filters: String?
+    public var dashboard_filters: String?
     /**
      * Delivery should occur if running the dashboard or look returns results
      */
-    var require_results: Bool?
+    public var require_results: Bool?
     /**
      * Delivery should occur if the dashboard look does not return results
      */
-    var require_no_results: Bool?
+    public var require_no_results: Bool?
     /**
      * Delivery should occur if data have changed since the last run
      */
-    var require_change: Bool?
+    public var require_change: Bool?
     /**
      * Will run an unlimited query and send all results.
      */
-    var send_all_results: Bool?
+    public var send_all_results: Bool?
     /**
      * Vixie-Style crontab specification when to run
      */
-    var crontab: String?
+    public var crontab: String?
     /**
      * Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
      */
-    var datagroup: String?
+    public var datagroup: String?
     /**
      * Timezone for interpreting the specified crontab (default is Looker instance timezone)
      */
-    var timezone: String?
+    public var timezone: String?
     /**
      * Query id
      */
-    var query_id: String?
+    public var query_id: String?
     /**
      * Scheduled plan destinations
      */
-    var scheduled_plan_destination: [ScheduledPlanDestination]?
+    public var scheduled_plan_destination: [ScheduledPlanDestination]?
     /**
      * Whether the plan in question should only be run once (usually for testing)
      */
-    var run_once: Bool?
+    public var run_once: Bool?
     /**
      * Whether links back to Looker should be included in this ScheduledPlan
      */
-    var include_links: Bool?
+    public var include_links: Bool?
     /**
      * The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
      */
-    var pdf_paper_size: String?
+    public var pdf_paper_size: String?
     /**
      * Whether the PDF should be formatted for landscape orientation
      */
-    var pdf_landscape: Bool?
+    public var pdf_landscape: Bool?
     /**
      * Whether this schedule is in an embed context or not
      */
-    var embed: Bool?
+    public var embed: Bool?
     /**
      * Color scheme of the dashboard if applicable
      */
-    var color_theme: String?
+    public var color_theme: String?
     /**
      * Whether or not to expand table vis to full length
      */
-    var long_tables: Bool?
+    public var long_tables: Bool?
     /**
      * The pixel width at which we render the inline table visualizations
      */
-    var inline_table_width: Int64?
+    public var inline_table_width: Int64?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Date and time when ScheduledPlan was created (read-only)
      */
-    var created_at: Date?
+    public var created_at: Date?
     /**
      * Date and time when ScheduledPlan was last updated (read-only)
      */
-    var updated_at: Date?
+    public var updated_at: Date?
     /**
      * Title (read-only)
      */
-    var title: String?
-    var user: UserPublic?
+    public var title: String?
+    public var user: UserPublic?
     /**
      * When the ScheduledPlan will next run (null if running once) (read-only)
      */
-    var next_run_at: Date?
+    public var next_run_at: Date?
     /**
      * When the ScheduledPlan was last run (read-only)
      */
-    var last_run_at: Date?
+    public var last_run_at: Date?
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
 }
 
-struct ScheduledPlanDestination: SDKModel {
+public struct ScheduledPlanDestination: SDKModel {
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Id of a scheduled plan you own
      */
-    var scheduled_plan_id: Int64?
+    public var scheduled_plan_id: Int64?
     /**
      * The data format to send to the given destination. Supported formats vary by destination, but include: "txt", "csv", "inline_json", "json", "json_detail", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png"
      */
-    var format: String?
+    public var format: String?
     /**
      * Are values formatted? (containing currency symbols, digit separators, etc.
      */
-    var apply_formatting: Bool?
+    public var apply_formatting: Bool?
     /**
      * Whether visualization options are applied to the results.
      */
-    var apply_vis: Bool?
+    public var apply_vis: Bool?
     /**
      * Address for recipient. For email e.g. 'user@example.com'. For webhooks e.g. 'https://domain/path'. For Amazon S3 e.g. 's3://bucket-name/path/'. For SFTP e.g. 'sftp://host-name/path/'.
      */
-    var address: String?
+    public var address: String?
     /**
      * Whether the recipient is a Looker user on the current instance (only applicable for email recipients) (read-only)
      */
-    var looker_recipient: Bool?
+    public var looker_recipient: Bool?
     /**
      * Type of the address ('email', 'webhook', 's3', or 'sftp')
      */
-    var type: String?
+    public var type: String?
     /**
      * JSON object containing parameters for external scheduling. For Amazon S3, this requires keys and values for access_key_id and region. For SFTP, this requires a key and value for username.
      */
-    var parameters: String?
+    public var parameters: String?
     /**
      * (Write-Only) JSON object containing secret parameters for external scheduling. For Amazon S3, this requires a key and value for secret_access_key. For SFTP, this requires a key and value for password.
      */
-    var secret_parameters: String?
+    public var secret_parameters: String?
     /**
      * Optional message to be included in scheduled emails
      */
-    var message: String?
+    public var message: String?
 }
 
-struct Session: SDKModel {
+public struct Session: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * IP address of user when this session was initiated (read-only)
      */
-    var ip_address: String?
+    public var ip_address: String?
     /**
      * User's browser type (read-only)
      */
-    var browser: String?
+    public var browser: String?
     /**
      * User's Operating System (read-only)
      */
-    var operating_system: String?
+    public var operating_system: String?
     /**
      * City component of user location (derived from IP address) (read-only)
      */
-    var city: String?
+    public var city: String?
     /**
      * State component of user location (derived from IP address) (read-only)
      */
-    var state: String?
+    public var state: String?
     /**
      * Country component of user location (derived from IP address) (read-only)
      */
-    var country: String?
+    public var country: String?
     /**
      * Type of credentials used for logging in this session (read-only)
      */
-    var credentials_type: String?
+    public var credentials_type: String?
     /**
      * Time when this session was last extended by the user (read-only)
      */
-    var extended_at: String?
+    public var extended_at: String?
     /**
      * Number of times this session was extended (read-only)
      */
-    var extended_count: Int64?
+    public var extended_count: Int64?
     /**
      * Actual user in the case when this session represents one user sudo'ing as another (read-only)
      */
-    var sudo_user_id: Int64?
+    public var sudo_user_id: Int64?
     /**
      * Time when this session was initiated (read-only)
      */
-    var created_at: String?
+    public var created_at: String?
     /**
      * Time when this session will expire (read-only)
      */
-    var expires_at: String?
+    public var expires_at: String?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct SessionConfig: SDKModel {
+public struct SessionConfig: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Allow users to have persistent sessions when they login
      */
-    var allow_persistent_sessions: Bool?
+    public var allow_persistent_sessions: Bool?
     /**
      * Number of minutes for user sessions.  Must be between 5 and 43200
      */
-    var session_minutes: Int64?
+    public var session_minutes: Int64?
     /**
      * Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
      */
-    var unlimited_sessions_per_user: Bool?
+    public var unlimited_sessions_per_user: Bool?
     /**
      * Enforce session logout for sessions that are inactive for 15 minutes.
      */
-    var use_inactivity_based_logout: Bool?
+    public var use_inactivity_based_logout: Bool?
     /**
      * Track location of session when user logs in.
      */
-    var track_session_location: Bool?
+    public var track_session_location: Bool?
 }
 
-struct Snippet: SDKModel {
+public struct Snippet: SDKModel {
     /**
      * Name of the snippet (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Label of the snippet (read-only)
      */
-    var label: String?
+    public var label: String?
     /**
      * SQL text of the snippet (read-only)
      */
-    var sql: String?
+    public var sql: String?
 }
 
-struct SqlQuery: SDKModel {
+public struct SqlQuery: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * The identifier of the SQL query (read-only)
      */
-    var slug: String?
+    public var slug: String?
     /**
      * Number of seconds this query took to run the most recent time it was run (read-only)
      */
-    var last_runtime: Float?
+    public var last_runtime: Float?
     /**
      * Number of times this query has been run (read-only)
      */
-    var run_count: Int64?
+    public var run_count: Int64?
     /**
      * Maximum number of rows this query will display on the SQL Runner page (read-only)
      */
-    var browser_limit: Int64?
+    public var browser_limit: Int64?
     /**
      * SQL query text (read-only)
      */
-    var sql: String?
+    public var sql: String?
     /**
      * The most recent time this query was run (read-only)
      */
-    var last_run_at: String?
-    var connection: DBConnectionBase?
+    public var last_run_at: String?
+    public var connection: DBConnectionBase?
     /**
      * Model name this query uses (read-only)
      */
-    var model_name: String?
-    var creator: UserPublic?
+    public var model_name: String?
+    public var creator: UserPublic?
     /**
      * Explore page URL for this SQL query (read-only)
      */
-    var explore_url: String?
+    public var explore_url: String?
     /**
      * Should this query be rendered as plain text (read-only)
      */
-    var plaintext: Bool?
+    public var plaintext: Bool?
     /**
      * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
      */
-    var vis_config: StringDictionary<AnyCodable>?
+    public var vis_config: StringDictionary<AnyCodable>?
     /**
      * ID of the ResultMakerLookup entry.
      */
-    var result_maker_id: Int64?
+    public var result_maker_id: Int64?
 }
 
-struct SqlQueryCreate: SDKModel {
+public struct SqlQueryCreate: SDKModel {
     /**
      * Name of the db connection on which to run this query
      */
-    var connection_name: String?
+    public var connection_name: String?
     /**
      * (DEPRECATED) Use `connection_name` instead
      */
-    var connection_id: String?
+    public var connection_id: String?
     /**
      * Name of LookML Model (this or `connection_id` required)
      */
-    var model_name: String?
+    public var model_name: String?
     /**
      * SQL query
      */
-    var sql: String?
+    public var sql: String?
     /**
      * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
      */
-    var vis_config: StringDictionary<AnyCodable>?
+    public var vis_config: StringDictionary<AnyCodable>?
 }
 
-struct SshPublicKey: SDKModel {
+public struct SshPublicKey: SDKModel {
     /**
      * The SSH public key created for this instance (read-only)
      */
-    var public_key: String?
+    public var public_key: String?
 }
 
-struct SshServer: SDKModel {
+public struct SshServer: SDKModel {
     /**
      * A unique id used to identify this SSH Server (read-only)
      */
-    var ssh_server_id: String?
+    public var ssh_server_id: String?
     /**
      * The name to identify this SSH Server
      */
-    var ssh_server_name: String?
+    public var ssh_server_name: String?
     /**
      * The hostname or ip address of the SSH Server
      */
-    var ssh_server_host: String?
+    public var ssh_server_host: String?
     /**
      * The port to connect to on the SSH Server
      */
-    var ssh_server_port: Int64?
+    public var ssh_server_port: Int64?
     /**
      * The username used to connect to the SSH Server
      */
-    var ssh_server_user: String?
+    public var ssh_server_user: String?
     /**
      * The md5 fingerprint used to identify the SSH Server (read-only)
      */
-    var finger_print: String?
+    public var finger_print: String?
     /**
      * The SHA fingerprint used to identify the SSH Server (read-only)
      */
-    var sha_finger_print: String?
+    public var sha_finger_print: String?
     /**
      * The SSH public key created for this instance (read-only)
      */
-    var public_key: String?
+    public var public_key: String?
     /**
      * The current connection status to this SSH Server (read-only)
      */
-    var status: String?
+    public var status: String?
 }
 
-struct SshTunnel: SDKModel {
+public struct SshTunnel: SDKModel {
     /**
      * Unique ID for the tunnel (read-only)
      */
-    var tunnel_id: String?
+    public var tunnel_id: String?
     /**
      * SSH Server ID
      */
-    var ssh_server_id: String?
+    public var ssh_server_id: String?
     /**
      * SSH Server name (read-only)
      */
-    var ssh_server_name: String?
+    public var ssh_server_name: String?
     /**
      * SSH Server Hostname or IP Address (read-only)
      */
-    var ssh_server_host: String?
+    public var ssh_server_host: String?
     /**
      * SSH Server port (read-only)
      */
-    var ssh_server_port: Int64?
+    public var ssh_server_port: Int64?
     /**
      * Username used to connect to the SSH Server (read-only)
      */
-    var ssh_server_user: String?
+    public var ssh_server_user: String?
     /**
      * Time of last connect attempt (read-only)
      */
-    var last_attempt: String?
+    public var last_attempt: String?
     /**
      * Localhost Port used by the Looker instance to connect to the remote DB (read-only)
      */
-    var local_host_port: Int64?
+    public var local_host_port: Int64?
     /**
      * Hostname or IP Address of the Database Server
      */
-    var database_host: String?
+    public var database_host: String?
     /**
      * Port that the Database Server is listening on
      */
-    var database_port: Int64?
+    public var database_port: Int64?
     /**
      * Current connection status for this Tunnel (read-only)
      */
-    var status: String?
+    public var status: String?
 }
 
 /**
  * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard".
  */
-enum SupportedActionTypes: String, Codable {
+public enum SupportedActionTypes: String, Codable {
     case cell = "cell"
     case query = "query"
     case dashboard = "dashboard"
@@ -6508,7 +6508,7 @@ enum SupportedActionTypes: String, Codable {
 /**
  * A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url".
  */
-enum SupportedDownloadSettings: String, Codable {
+public enum SupportedDownloadSettings: String, Codable {
     case push = "push"
     case url = "url"
 }
@@ -6516,7 +6516,7 @@ enum SupportedDownloadSettings: String, Codable {
 /**
  * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip".
  */
-enum SupportedFormats: String, Codable {
+public enum SupportedFormats: String, Codable {
     case txt = "txt"
     case csv = "csv"
     case inline_json = "inline_json"
@@ -6535,7 +6535,7 @@ enum SupportedFormats: String, Codable {
 /**
  * A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted".
  */
-enum SupportedFormattings: String, Codable {
+public enum SupportedFormattings: String, Codable {
     case formatted = "formatted"
     case unformatted = "unformatted"
 }
@@ -6543,320 +6543,320 @@ enum SupportedFormattings: String, Codable {
 /**
  * A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply".
  */
-enum SupportedVisualizationFormattings: String, Codable {
+public enum SupportedVisualizationFormattings: String, Codable {
     case apply = "apply"
     case noapply = "noapply"
 }
 
-struct Theme: SDKModel {
+public struct Theme: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Timestamp for when this theme becomes active. Null=always
      */
-    var begin_at: Date?
+    public var begin_at: Date?
     /**
      * Timestamp for when this theme expires. Null=never
      */
-    var end_at: Date?
+    public var end_at: Date?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Name of theme. Can only be alphanumeric and underscores.
      */
-    var name: String?
-    var settings: ThemeSettings?
+    public var name: String?
+    public var settings: ThemeSettings?
 }
 
-struct ThemeSettings: SDKModel {
+public struct ThemeSettings: SDKModel {
     /**
      * Default background color
      */
-    var background_color: String?
+    public var background_color: String?
     /**
      * Base font size for scaling fonts
      */
-    var base_font_size: String?
+    public var base_font_size: String?
     /**
      * Optional. ID of color collection to use with the theme. Use an empty string for none.
      */
-    var color_collection_id: String?
+    public var color_collection_id: String?
     /**
      * Default font color
      */
-    var font_color: String?
+    public var font_color: String?
     /**
      * Primary font family
      */
-    var font_family: String?
+    public var font_family: String?
     /**
      * Source specification for font
      */
-    var font_source: String?
+    public var font_source: String?
     /**
      * Info button color
      */
-    var info_button_color: String?
+    public var info_button_color: String?
     /**
      * Primary button color
      */
-    var primary_button_color: String?
+    public var primary_button_color: String?
     /**
      * Toggle to show filters. Defaults to true.
      */
-    var show_filters_bar: Bool?
+    public var show_filters_bar: Bool?
     /**
      * Toggle to show the title. Defaults to true.
      */
-    var show_title: Bool?
+    public var show_title: Bool?
     /**
      * Text color for text tiles
      */
-    var text_tile_text_color: String?
+    public var text_tile_text_color: String?
     /**
      * Background color for tiles
      */
-    var tile_background_color: String?
+    public var tile_background_color: String?
     /**
      * Text color for tiles
      */
-    var tile_text_color: String?
+    public var tile_text_color: String?
     /**
      * Color for titles
      */
-    var title_color: String?
+    public var title_color: String?
     /**
      * Warning button color
      */
-    var warn_button_color: String?
+    public var warn_button_color: String?
     /**
      * The text alignment of tile titles (New Dashboards)
      */
-    var tile_title_alignment: String?
+    public var tile_title_alignment: String?
     /**
      * Toggles the tile shadow (New Dashboards)
      */
-    var tile_shadow: Bool?
+    public var tile_shadow: Bool?
 }
 
-struct Timezone: SDKModel {
+public struct Timezone: SDKModel {
     /**
      * Timezone (read-only)
      */
-    var value: String?
+    public var value: String?
     /**
      * Description of timezone (read-only)
      */
-    var label: String?
+    public var label: String?
     /**
      * Timezone group (e.g Common, Other, etc.) (read-only)
      */
-    var group: String?
+    public var group: String?
 }
 
-struct UpdateCommand: SDKModel {
+public struct UpdateCommand: SDKModel {
     /**
      * Name of the command
      */
-    var name: String?
+    public var name: String?
     /**
      * Description of the command
      */
-    var description: String?
+    public var description: String?
 }
 
-struct UpdateFolder: SDKModel {
+public struct UpdateFolder: SDKModel {
     /**
      * Unique Name
      */
-    var name: String?
+    public var name: String?
     /**
      * Id of Parent. If the parent id is null, this is a root-level entry
      */
-    var parent_id: String?
+    public var parent_id: String?
 }
 
-struct User: SDKModel {
+public struct User: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * URL for the avatar image (may be generic) (read-only)
      */
-    var avatar_url: URI?
+    public var avatar_url: URI?
     /**
      * URL for the avatar image (may be generic), does not specify size (read-only)
      */
-    var avatar_url_without_sizing: URI?
+    public var avatar_url_without_sizing: URI?
     /**
      * API 3 credentials (read-only)
      */
-    var credentials_api3: [CredentialsApi3]?
-    var credentials_email: CredentialsEmail?
+    public var credentials_api3: [CredentialsApi3]?
+    public var credentials_email: CredentialsEmail?
     /**
      * Embed credentials (read-only)
      */
-    var credentials_embed: [CredentialsEmbed]?
-    var credentials_google: CredentialsGoogle?
-    var credentials_ldap: CredentialsLDAP?
-    var credentials_looker_openid: CredentialsLookerOpenid?
-    var credentials_oidc: CredentialsOIDC?
-    var credentials_saml: CredentialsSaml?
-    var credentials_totp: CredentialsTotp?
+    public var credentials_embed: [CredentialsEmbed]?
+    public var credentials_google: CredentialsGoogle?
+    public var credentials_ldap: CredentialsLDAP?
+    public var credentials_looker_openid: CredentialsLookerOpenid?
+    public var credentials_oidc: CredentialsOIDC?
+    public var credentials_saml: CredentialsSaml?
+    public var credentials_totp: CredentialsTotp?
     /**
      * Full name for display (available only if both first_name and last_name are set) (read-only)
      */
-    var display_name: String?
+    public var display_name: String?
     /**
      * EMail address (read-only)
      */
-    var email: String?
+    public var email: String?
     /**
      * (Embed only) ID of user's group space based on the external_group_id optionally specified during embed user login (read-only)
      */
-    var embed_group_space_id: Int64?
+    public var embed_group_space_id: Int64?
     /**
      * First name
      */
-    var first_name: String?
+    public var first_name: String?
     /**
      * Array of ids of the groups for this user (read-only)
      */
-    var group_ids: [Int64]?
+    public var group_ids: [Int64]?
     /**
      * ID string for user's home folder
      */
-    var home_folder_id: String?
+    public var home_folder_id: String?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Account has been disabled
      */
-    var is_disabled: Bool?
+    public var is_disabled: Bool?
     /**
      * Last name
      */
-    var last_name: String?
+    public var last_name: String?
     /**
      * User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
      */
-    var locale: String?
+    public var locale: String?
     /**
      * Array of strings representing the Looker versions that this user has used (this only goes back as far as '3.54.0') (read-only)
      */
-    var looker_versions: [String]?
+    public var looker_versions: [String]?
     /**
      * User's dev workspace has been checked for presence of applicable production projects
      */
-    var models_dir_validated: Bool?
+    public var models_dir_validated: Bool?
     /**
      * ID of user's personal folder (read-only)
      */
-    var personal_folder_id: Int64?
+    public var personal_folder_id: Int64?
     /**
      * User is identified as an employee of Looker (read-only)
      */
-    var presumed_looker_employee: Bool?
+    public var presumed_looker_employee: Bool?
     /**
      * Array of ids of the roles for this user (read-only)
      */
-    var role_ids: [Int64]?
+    public var role_ids: [Int64]?
     /**
      * Active sessions (read-only)
      */
-    var sessions: [Session]?
+    public var sessions: [Session]?
     /**
      * Per user dictionary of undocumented state information owned by the Looker UI.
      */
-    var ui_state: StringDictionary<AnyCodable>?
+    public var ui_state: StringDictionary<AnyCodable>?
     /**
      * User is identified as an employee of Looker who has been verified via Looker corporate authentication (read-only)
      */
-    var verified_looker_employee: Bool?
+    public var verified_looker_employee: Bool?
     /**
      * User's roles are managed by an external directory like SAML or LDAP and can not be changed directly. (read-only)
      */
-    var roles_externally_managed: Bool?
+    public var roles_externally_managed: Bool?
     /**
      * User can be directly assigned a role. (read-only)
      */
-    var allow_direct_roles: Bool?
+    public var allow_direct_roles: Bool?
     /**
      * User can be a direct member of a normal Looker group. (read-only)
      */
-    var allow_normal_group_membership: Bool?
+    public var allow_normal_group_membership: Bool?
     /**
      * User can inherit roles from a normal Looker group. (read-only)
      */
-    var allow_roles_from_normal_groups: Bool?
+    public var allow_roles_from_normal_groups: Bool?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct UserAttribute: SDKModel {
+public struct UserAttribute: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Name of user attribute
      */
-    var name: String?
+    public var name: String?
     /**
      * Human-friendly label for user attribute
      */
-    var label: String?
+    public var label: String?
     /**
      * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
      */
-    var type: String?
+    public var type: String?
     /**
      * Default value for when no value is set on the user
      */
-    var default_value: String?
+    public var default_value: String?
     /**
      * Attribute is a system default (read-only)
      */
-    var is_system: Bool?
+    public var is_system: Bool?
     /**
      * Attribute is permanent and cannot be deleted (read-only)
      */
-    var is_permanent: Bool?
+    public var is_permanent: Bool?
     /**
      * If true, users will not be able to view values of this attribute
      */
-    var value_is_hidden: Bool?
+    public var value_is_hidden: Bool?
     /**
      * Non-admin users can see the values of their attributes and use them in filters
      */
-    var user_can_view: Bool?
+    public var user_can_view: Bool?
     /**
      * Users can change the value of this attribute for themselves
      */
-    var user_can_edit: Bool?
+    public var user_can_edit: Bool?
     /**
      * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
      */
-    var hidden_value_domain_whitelist: String?
+    public var hidden_value_domain_whitelist: String?
 }
 
 /**
  * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode".
  */
-enum UserAttributeFilterTypes: String, Codable {
+public enum UserAttributeFilterTypes: String, Codable {
     case advanced_filter_string = "advanced_filter_string"
     case advanced_filter_number = "advanced_filter_number"
     case advanced_filter_datetime = "advanced_filter_datetime"
@@ -6868,196 +6868,196 @@ enum UserAttributeFilterTypes: String, Codable {
     case zipcode = "zipcode"
 }
 
-struct UserAttributeGroupValue: SDKModel {
+public struct UserAttributeGroupValue: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id of this group-attribute relation (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Id of group (read-only)
      */
-    var group_id: Int64?
+    public var group_id: Int64?
     /**
      * Id of user attribute (read-only)
      */
-    var user_attribute_id: Int64?
+    public var user_attribute_id: Int64?
     /**
      * If true, the "value" field will be null, because the attribute settings block access to this value (read-only)
      */
-    var value_is_hidden: Bool?
+    public var value_is_hidden: Bool?
     /**
      * Precedence for resolving value for user (read-only)
      */
-    var rank: Int64?
+    public var rank: Int64?
     /**
      * Value of user attribute for group (read-only)
      */
-    var value: String?
+    public var value: String?
 }
 
-struct UserAttributeWithValue: SDKModel {
+public struct UserAttributeWithValue: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Name of user attribute (read-only)
      */
-    var name: String?
+    public var name: String?
     /**
      * Human-friendly label for user attribute (read-only)
      */
-    var label: String?
+    public var label: String?
     /**
      * Precedence for setting value on user (lowest wins) (read-only)
      */
-    var rank: Int64?
+    public var rank: Int64?
     /**
      * Value of attribute for user
      */
-    var value: String?
+    public var value: String?
     /**
      * Id of User (read-only)
      */
-    var user_id: Int64?
+    public var user_id: Int64?
     /**
      * Can the user set this value (read-only)
      */
-    var user_can_edit: Bool?
+    public var user_can_edit: Bool?
     /**
      * If true, the "value" field will be null, because the attribute settings block access to this value (read-only)
      */
-    var value_is_hidden: Bool?
+    public var value_is_hidden: Bool?
     /**
      * Id of User Attribute (read-only)
      */
-    var user_attribute_id: Int64?
+    public var user_attribute_id: Int64?
     /**
      * How user got this value for this attribute (read-only)
      */
-    var source: String?
+    public var source: String?
     /**
      * If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
      */
-    var hidden_value_domain_whitelist: String?
+    public var hidden_value_domain_whitelist: String?
 }
 
-struct UserLoginLockout: SDKModel {
+public struct UserLoginLockout: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Hash of user's client id (read-only)
      */
-    var key: String?
+    public var key: String?
     /**
      * Authentication method for login failures (read-only)
      */
-    var auth_type: String?
+    public var auth_type: String?
     /**
      * IP address of most recent failed attempt (read-only)
      */
-    var ip: String?
+    public var ip: String?
     /**
      * User ID (read-only)
      */
-    var user_id: Int64?
+    public var user_id: Int64?
     /**
      * Remote ID of user if using LDAP (read-only)
      */
-    var remote_id: String?
+    public var remote_id: String?
     /**
      * User's name (read-only)
      */
-    var full_name: String?
+    public var full_name: String?
     /**
      * Email address associated with the user's account (read-only)
      */
-    var email: String?
+    public var email: String?
     /**
      * Number of failures that triggered the lockout (read-only)
      */
-    var fail_count: Int64?
+    public var fail_count: Int64?
     /**
      * Time when lockout was triggered (read-only)
      */
-    var lockout_at: Date?
+    public var lockout_at: Date?
 }
 
-struct UserPublic: SDKModel {
+public struct UserPublic: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * First Name (read-only)
      */
-    var first_name: String?
+    public var first_name: String?
     /**
      * Last Name (read-only)
      */
-    var last_name: String?
+    public var last_name: String?
     /**
      * Full name for display (available only if both first_name and last_name are set) (read-only)
      */
-    var display_name: String?
+    public var display_name: String?
     /**
      * URL for the avatar image (may be generic) (read-only)
      */
-    var avatar_url: URI?
+    public var avatar_url: URI?
     /**
      * Link to get this item (read-only)
      */
-    var url: URI?
+    public var url: URI?
 }
 
-struct ValidationError: SDKModel {
+public struct ValidationError: SDKModel {
     /**
      * Error details (read-only)
      */
-    var message: String
+    public var message: String
     /**
      * Error detail array (read-only)
      */
-    var errors: [ValidationErrorDetail]?
+    public var errors: [ValidationErrorDetail]?
     /**
      * Documentation link (read-only)
      */
-    var documentation_url: URI
+    public var documentation_url: URI
 }
 
-struct ValidationErrorDetail: SDKModel {
+public struct ValidationErrorDetail: SDKModel {
     /**
      * Field with error (read-only)
      */
-    var field: String?
+    public var field: String?
     /**
      * Error code (read-only)
      */
-    var code: String?
+    public var code: String?
     /**
      * Error info message (read-only)
      */
-    var message: String?
+    public var message: String?
     /**
      * Documentation link (read-only)
      */
-    var documentation_url: URI
+    public var documentation_url: URI
 }
 
 /**
  * The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday".
  */
-enum WeekStartDay: String, Codable {
+public enum WeekStartDay: String, Codable {
     case monday = "monday"
     case tuesday = "tuesday"
     case wednesday = "wednesday"
@@ -7067,2075 +7067,2075 @@ enum WeekStartDay: String, Codable {
     case sunday = "sunday"
 }
 
-struct WelcomeEmailTest: SDKModel {
+public struct WelcomeEmailTest: SDKModel {
     /**
      * The content that would be sent in the body of a custom welcome email
      */
-    var content: String?
+    public var content: String?
     /**
      * The subject that would be sent for the custom welcome email
      */
-    var subject: String?
+    public var subject: String?
     /**
      * The header that would be sent in the body of a custom welcome email
      */
-    var header: String?
+    public var header: String?
 }
 
-struct WhitelabelConfiguration: SDKModel {
+public struct WhitelabelConfiguration: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * Unique Id (read-only)
      */
-    var id: Int64?
+    public var id: Int64?
     /**
      * Customer logo image. Expected base64 encoded data (write-only)
      */
-    var logo_file: String?
+    public var logo_file: String?
     /**
      * Logo image url (read-only) (read-only)
      */
-    var logo_url: String?
+    public var logo_url: String?
     /**
      * Custom favicon image. Expected base64 encoded data (write-only)
      */
-    var favicon_file: String?
+    public var favicon_file: String?
     /**
      * Favicon image url (read-only) (read-only)
      */
-    var favicon_url: String?
+    public var favicon_url: String?
     /**
      * Default page title
      */
-    var default_title: String?
+    public var default_title: String?
     /**
      * Boolean to toggle showing help menus
      */
-    var show_help_menu: Bool?
+    public var show_help_menu: Bool?
     /**
      * Boolean to toggle showing docs
      */
-    var show_docs: Bool?
+    public var show_docs: Bool?
     /**
      * Boolean to toggle showing email subscription options.
      */
-    var show_email_sub_options: Bool?
+    public var show_email_sub_options: Bool?
     /**
      * Boolean to toggle mentions of Looker in emails
      */
-    var allow_looker_mentions: Bool?
+    public var allow_looker_mentions: Bool?
     /**
      * Boolean to toggle links to Looker in emails
      */
-    var allow_looker_links: Bool?
+    public var allow_looker_links: Bool?
     /**
      * Allow subject line and email heading customization in customized emails”
      */
-    var custom_welcome_email_advanced: Bool?
+    public var custom_welcome_email_advanced: Bool?
     /**
      * Remove the word Looker from appearing in the account setup page
      */
-    var setup_mentions: Bool?
+    public var setup_mentions: Bool?
     /**
      * Remove Looker logo from Alerts
      */
-    var alerts_logo: Bool?
+    public var alerts_logo: Bool?
     /**
      * Remove Looker links from Alerts
      */
-    var alerts_links: Bool?
+    public var alerts_links: Bool?
     /**
      * Remove Looker mentions in home folder page when you don’t have any items saved
      */
-    var folders_mentions: Bool?
+    public var folders_mentions: Bool?
 }
 
-struct Workspace: SDKModel {
+public struct Workspace: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
-    var can: StringDictionary<Bool>?
+    public var can: StringDictionary<Bool>?
     /**
      * The unique id of this user workspace. Predefined workspace ids include "production" and "dev" (read-only)
      */
-    var id: String?
+    public var id: String?
     /**
      * The local state of each project in the workspace (read-only)
      */
-    var projects: [Project]?
+    public var projects: [Project]?
 }
 
 /**
  * Dynamically generated writeable type for ApiSession removes properties:
  * can, sudo_user_id
  */
-struct WriteApiSession: SDKModel {
+public struct WriteApiSession: SDKModel {
     /**
      * The id of active workspace for this session
      */
-    var workspace_id: String?
+    public var workspace_id: String?
 }
 
 /**
  * Dynamically generated writeable type for BackupConfiguration removes properties:
  * can, url
  */
-struct WriteBackupConfiguration: SDKModel {
+public struct WriteBackupConfiguration: SDKModel {
     /**
      * Type of backup: looker-s3 or custom-s3
      */
-    var type: String?
+    public var type: String?
     /**
      * Name of bucket for custom-s3 backups
      */
-    var custom_s3_bucket: String?
+    public var custom_s3_bucket: String?
     /**
      * Name of region where the bucket is located
      */
-    var custom_s3_bucket_region: String?
+    public var custom_s3_bucket_region: String?
     /**
      * (Write-Only) AWS S3 key used for custom-s3 backups
      */
-    var custom_s3_key: String?
+    public var custom_s3_key: String?
     /**
      * (Write-Only) AWS S3 secret used for custom-s3 backups
      */
-    var custom_s3_secret: String?
+    public var custom_s3_secret: String?
 }
 
 /**
  * Dynamically generated writeable type for Board removes properties:
  * can, content_metadata_id, created_at, board_sections, id, updated_at, user_id, primary_homepage
  */
-struct WriteBoard: SDKModel {
+public struct WriteBoard: SDKModel {
     /**
      * Date of board deletion
      */
-    var deleted_at: Date?
+    public var deleted_at: Date?
     /**
      * Description of the board
      */
-    var description: String?
+    public var description: String?
     /**
      * ids of the board sections in the order they should be displayed
      */
-    var section_order: [Int64]?
+    public var section_order: [Int64]?
     /**
      * Title of the board
      */
-    var title: String?
+    public var title: String?
 }
 
 /**
  * Dynamically generated writeable type for BoardItem removes properties:
  * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, location, title, url, view_count
  */
-struct WriteBoardItem: SDKModel {
+public struct WriteBoardItem: SDKModel {
     /**
      * Dashboard to base this item on
      */
-    var dashboard_id: Int64?
+    public var dashboard_id: Int64?
     /**
      * Associated Board Section
      */
-    var board_section_id: Int64?
+    public var board_section_id: Int64?
     /**
      * Look to base this item on
      */
-    var look_id: Int64?
+    public var look_id: Int64?
     /**
      * LookML Dashboard to base this item on
      */
-    var lookml_dashboard_id: String?
+    public var lookml_dashboard_id: String?
     /**
      * An arbitrary integer representing the sort order within the section
      */
-    var order: Int64?
+    public var order: Int64?
 }
 
 /**
  * Dynamically generated writeable type for BoardSection removes properties:
  * can, created_at, board_items, id, updated_at
  */
-struct WriteBoardSection: SDKModel {
+public struct WriteBoardSection: SDKModel {
     /**
      * Time at which this section was deleted.
      */
-    var deleted_at: Date?
+    public var deleted_at: Date?
     /**
      * Description of the content found in this section.
      */
-    var description: String?
+    public var description: String?
     /**
      * Id reference to parent board
      */
-    var board_id: Int64?
+    public var board_id: Int64?
     /**
      * ids of the board items in the order they should be displayed
      */
-    var item_order: [Int64]?
+    public var item_order: [Int64]?
     /**
      * Name of row
      */
-    var title: String?
+    public var title: String?
 }
 
 /**
  * Dynamically generated writeable type for ColorCollection removes properties:
  * id
  */
-struct WriteColorCollection: SDKModel {
+public struct WriteColorCollection: SDKModel {
     /**
      * Label of color collection
      */
-    var label: String?
+    public var label: String?
     /**
      * Array of categorical palette definitions
      */
-    var categoricalPalettes: [DiscretePalette]?
+    public var categoricalPalettes: [DiscretePalette]?
     /**
      * Array of discrete palette definitions
      */
-    var sequentialPalettes: [ContinuousPalette]?
+    public var sequentialPalettes: [ContinuousPalette]?
     /**
      * Array of diverging palette definitions
      */
-    var divergingPalettes: [ContinuousPalette]?
+    public var divergingPalettes: [ContinuousPalette]?
 }
 
 /**
  * Dynamically generated writeable type for Command removes properties:
  * id, author_id
  */
-struct WriteCommand: SDKModel {
+public struct WriteCommand: SDKModel {
     /**
      * Name of the command
      */
-    var name: String?
+    public var name: String?
     /**
      * Description of the command
      */
-    var description: String?
+    public var description: String?
     /**
      * Id of the content associated with the command
      */
-    var linked_content_id: String?
+    public var linked_content_id: String?
     /**
      * Name of the command Valid values are: "dashboard", "lookml_dashboard".
      */
-    var linked_content_type: LinkedContentType?
+    public var linked_content_type: LinkedContentType?
 }
 
 /**
  * Dynamically generated writeable type for ContentFavorite removes properties:
  * id, look_id, dashboard_id, board_id
  */
-struct WriteContentFavorite: SDKModel {
+public struct WriteContentFavorite: SDKModel {
     /**
      * User Id which owns this ContentFavorite
      */
-    var user_id: Int64?
+    public var user_id: Int64?
     /**
      * Content Metadata Id associated with this ContentFavorite
      */
-    var content_metadata_id: Int64?
-    var look: WriteLookBasic?
-    var dashboard: WriteDashboardBase?
+    public var content_metadata_id: Int64?
+    public var look: WriteLookBasic?
+    public var dashboard: WriteDashboardBase?
 }
 
 /**
  * Dynamically generated writeable type for ContentMeta removes properties:
  * can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug
  */
-struct WriteContentMeta: SDKModel {
+public struct WriteContentMeta: SDKModel {
     /**
      * Whether content inherits its access levels from parent
      */
-    var inherits: Bool?
+    public var inherits: Bool?
 }
 
 /**
  * Dynamically generated writeable type for CreateDashboardFilter removes properties:
  * id, field
  */
-struct WriteCreateDashboardFilter: SDKModel {
+public struct WriteCreateDashboardFilter: SDKModel {
     /**
      * Id of Dashboard
      */
-    var dashboard_id: String
+    public var dashboard_id: String
     /**
      * Name of filter
      */
-    var name: String
+    public var name: String
     /**
      * Title of filter
      */
-    var title: String
+    public var title: String
     /**
      * Type of filter: one of date, number, string, or field
      */
-    var type: String
+    public var type: String
     /**
      * Default value of filter
      */
-    var default_value: String?
+    public var default_value: String?
     /**
      * Model of filter (required if type = field)
      */
-    var model: String?
+    public var model: String?
     /**
      * Explore of filter (required if type = field)
      */
-    var explore: String?
+    public var explore: String?
     /**
      * Dimension of filter (required if type = field)
      */
-    var dimension: String?
+    public var dimension: String?
     /**
      * Display order of this filter relative to other filters
      */
-    var row: Int64?
+    public var row: Int64?
     /**
      * Array of listeners for faceted filters
      */
-    var listens_to_filters: [String]?
+    public var listens_to_filters: [String]?
     /**
      * Whether the filter allows multiple filter values
      */
-    var allow_multiple_values: Bool?
+    public var allow_multiple_values: Bool?
     /**
      * Whether the filter requires a value to run the dashboard
      */
-    var `required`: Bool?
+    public var `required`: Bool?
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
-    var ui_config: StringDictionary<AnyCodable>?
+    public var ui_config: StringDictionary<AnyCodable>?
 }
 
 /**
  * Dynamically generated writeable type for CreateQueryTask removes properties:
  * can
  */
-struct WriteCreateQueryTask: SDKModel {
+public struct WriteCreateQueryTask: SDKModel {
     /**
      * Id of query to run
      */
-    var query_id: Int64
+    public var query_id: Int64
     /**
      * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
      */
-    var result_format: ResultFormat
+    public var result_format: ResultFormat
     /**
      * Source of query task
      */
-    var source: String?
+    public var source: String?
     /**
      * Create the task but defer execution
      */
-    var deferred: Bool?
+    public var deferred: Bool?
     /**
      * Id of look associated with query.
      */
-    var look_id: Int64?
+    public var look_id: Int64?
     /**
      * Id of dashboard associated with query.
      */
-    var dashboard_id: String?
+    public var dashboard_id: String?
 }
 
 /**
  * Dynamically generated writeable type for CredentialsEmail removes properties:
  * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
  */
-struct WriteCredentialsEmail: SDKModel {
+public struct WriteCredentialsEmail: SDKModel {
     /**
      * EMail address used for user login
      */
-    var email: String?
+    public var email: String?
     /**
      * Force the user to change their password upon their next login
      */
-    var forced_password_reset_at_next_login: Bool?
+    public var forced_password_reset_at_next_login: Bool?
 }
 
 /**
  * Dynamically generated writeable type for CustomWelcomeEmail removes properties:
  * can
  */
-struct WriteCustomWelcomeEmail: SDKModel {
+public struct WriteCustomWelcomeEmail: SDKModel {
     /**
      * If true, custom email content will replace the default body of welcome emails
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
      */
-    var content: String?
+    public var content: String?
     /**
      * The text to appear in the email subject line.
      */
-    var subject: String?
+    public var subject: String?
     /**
      * The text to appear in the header line of the email body.
      */
-    var header: String?
+    public var header: String?
 }
 
 /**
  * Dynamically generated writeable type for Dashboard removes properties:
  * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
  */
-struct WriteDashboard: SDKModel {
+public struct WriteDashboard: SDKModel {
     /**
      * Description
      */
-    var description: String?
+    public var description: String?
     /**
      * Is Hidden
      */
-    var hidden: Bool?
+    public var hidden: Bool?
     /**
      * Timezone in which the Dashboard will run by default.
      */
-    var query_timezone: String?
+    public var query_timezone: String?
     /**
      * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
      */
-    var refresh_interval: String?
-    var folder: WriteFolderBase?
+    public var refresh_interval: String?
+    public var folder: WriteFolderBase?
     /**
      * Dashboard Title
      */
-    var title: String?
+    public var title: String?
     /**
      * Background color
      */
-    var background_color: String?
+    public var background_color: String?
     /**
      * Enables crossfiltering in dashboards - only available in dashboards-next (beta)
      */
-    var crossfilter_enabled: Bool?
+    public var crossfilter_enabled: Bool?
     /**
      * Whether or not a dashboard is 'soft' deleted.
      */
-    var deleted: Bool?
+    public var deleted: Bool?
     /**
      * configuration option that governs how dashboard loading will happen.
      */
-    var load_configuration: String?
+    public var load_configuration: String?
     /**
      * Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
      */
-    var lookml_link_id: String?
+    public var lookml_link_id: String?
     /**
      * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
      */
-    var show_filters_bar: Bool?
+    public var show_filters_bar: Bool?
     /**
      * Show title
      */
-    var show_title: Bool?
+    public var show_title: Bool?
     /**
      * Content Metadata Slug
      */
-    var slug: String?
+    public var slug: String?
     /**
      * Id of folder
      */
-    var folder_id: String?
+    public var folder_id: String?
     /**
      * Color of text on text tiles
      */
-    var text_tile_text_color: String?
+    public var text_tile_text_color: String?
     /**
      * Tile background color
      */
-    var tile_background_color: String?
+    public var tile_background_color: String?
     /**
      * Tile text color
      */
-    var tile_text_color: String?
+    public var tile_text_color: String?
     /**
      * Title color
      */
-    var title_color: String?
-    var appearance: DashboardAppearance?
+    public var title_color: String?
+    public var appearance: DashboardAppearance?
     /**
      * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
      */
-    var preferred_viewer: String?
+    public var preferred_viewer: String?
 }
 
 /**
  * Dynamically generated writeable type for DashboardBase removes properties:
  * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id
  */
-struct WriteDashboardBase: SDKModel {
-    var folder: WriteFolderBase?
+public struct WriteDashboardBase: SDKModel {
+    public var folder: WriteFolderBase?
 }
 
 /**
  * Dynamically generated writeable type for DashboardElement removes properties:
  * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
  */
-struct WriteDashboardElement: SDKModel {
+public struct WriteDashboardElement: SDKModel {
     /**
      * Text tile body text
      */
-    var body_text: String?
+    public var body_text: String?
     /**
      * Id of Dashboard
      */
-    var dashboard_id: String?
-    var look: WriteLookWithQuery?
+    public var dashboard_id: String?
+    public var look: WriteLookWithQuery?
     /**
      * Id Of Look
      */
-    var look_id: String?
+    public var look_id: String?
     /**
      * ID of merge result
      */
-    var merge_result_id: String?
+    public var merge_result_id: String?
     /**
      * Note Display
      */
-    var note_display: String?
+    public var note_display: String?
     /**
      * Note State
      */
-    var note_state: String?
+    public var note_state: String?
     /**
      * Note Text
      */
-    var note_text: String?
-    var query: WriteQuery?
+    public var note_text: String?
+    public var query: WriteQuery?
     /**
      * Id Of Query
      */
-    var query_id: Int64?
+    public var query_id: Int64?
     /**
      * Refresh Interval
      */
-    var refresh_interval: String?
-    var result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields?
+    public var refresh_interval: String?
+    public var result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields?
     /**
      * ID of the ResultMakerLookup entry.
      */
-    var result_maker_id: Int64?
+    public var result_maker_id: Int64?
     /**
      * Text tile subtitle text
      */
-    var subtitle_text: String?
+    public var subtitle_text: String?
     /**
      * Title of dashboard element
      */
-    var title: String?
+    public var title: String?
     /**
      * Whether title is hidden
      */
-    var title_hidden: Bool?
+    public var title_hidden: Bool?
     /**
      * Text tile title
      */
-    var title_text: String?
+    public var title_text: String?
     /**
      * Type
      */
-    var type: String?
+    public var type: String?
 }
 
 /**
  * Dynamically generated writeable type for DashboardFilter removes properties:
  * can, id, dashboard_id, field
  */
-struct WriteDashboardFilter: SDKModel {
+public struct WriteDashboardFilter: SDKModel {
     /**
      * Name of filter
      */
-    var name: String?
+    public var name: String?
     /**
      * Title of filter
      */
-    var title: String?
+    public var title: String?
     /**
      * Type of filter: one of date, number, string, or field
      */
-    var type: String?
+    public var type: String?
     /**
      * Default value of filter
      */
-    var default_value: String?
+    public var default_value: String?
     /**
      * Model of filter (required if type = field)
      */
-    var model: String?
+    public var model: String?
     /**
      * Explore of filter (required if type = field)
      */
-    var explore: String?
+    public var explore: String?
     /**
      * Dimension of filter (required if type = field)
      */
-    var dimension: String?
+    public var dimension: String?
     /**
      * Display order of this filter relative to other filters
      */
-    var row: Int64?
+    public var row: Int64?
     /**
      * Array of listeners for faceted filters
      */
-    var listens_to_filters: [String]?
+    public var listens_to_filters: [String]?
     /**
      * Whether the filter allows multiple filter values
      */
-    var allow_multiple_values: Bool?
+    public var allow_multiple_values: Bool?
     /**
      * Whether the filter requires a value to run the dashboard
      */
-    var `required`: Bool?
+    public var `required`: Bool?
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
-    var ui_config: StringDictionary<AnyCodable>?
+    public var ui_config: StringDictionary<AnyCodable>?
 }
 
 /**
  * Dynamically generated writeable type for DashboardLayout removes properties:
  * can, id, deleted, dashboard_title, dashboard_layout_components
  */
-struct WriteDashboardLayout: SDKModel {
+public struct WriteDashboardLayout: SDKModel {
     /**
      * Id of Dashboard
      */
-    var dashboard_id: String?
+    public var dashboard_id: String?
     /**
      * Type
      */
-    var type: String?
+    public var type: String?
     /**
      * Is Active
      */
-    var active: Bool?
+    public var active: Bool?
     /**
      * Column Width
      */
-    var column_width: Int64?
+    public var column_width: Int64?
     /**
      * Width
      */
-    var width: Int64?
+    public var width: Int64?
 }
 
 /**
  * Dynamically generated writeable type for DashboardLayoutComponent removes properties:
  * can, id, deleted, element_title, element_title_hidden, vis_type
  */
-struct WriteDashboardLayoutComponent: SDKModel {
+public struct WriteDashboardLayoutComponent: SDKModel {
     /**
      * Id of Dashboard Layout
      */
-    var dashboard_layout_id: String?
+    public var dashboard_layout_id: String?
     /**
      * Id Of Dashboard Element
      */
-    var dashboard_element_id: String?
+    public var dashboard_element_id: String?
     /**
      * Row
      */
-    var row: Int64?
+    public var row: Int64?
     /**
      * Column
      */
-    var column: Int64?
+    public var column: Int64?
     /**
      * Width
      */
-    var width: Int64?
+    public var width: Int64?
     /**
      * Height
      */
-    var height: Int64?
+    public var height: Int64?
 }
 
 /**
  * Dynamically generated writeable type for Datagroup removes properties:
  * can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
  */
-struct WriteDatagroup: SDKModel {
+public struct WriteDatagroup: SDKModel {
     /**
      * UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
      */
-    var stale_before: Int64?
+    public var stale_before: Int64?
     /**
      * UNIX timestamp at which this entry became triggered. Cannot be in the future.
      */
-    var triggered_at: Int64?
+    public var triggered_at: Int64?
 }
 
 /**
  * Dynamically generated writeable type for DBConnection removes properties:
  * can, dialect, snippets, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
  */
-struct WriteDBConnection: SDKModel {
+public struct WriteDBConnection: SDKModel {
     /**
      * Name of the connection. Also used as the unique identifier
      */
-    var name: String?
+    public var name: String?
     /**
      * Host name/address of server
      */
-    var host: String?
+    public var host: String?
     /**
      * Port number on server
      */
-    var port: Int64?
+    public var port: Int64?
     /**
      * Username for server authentication
      */
-    var username: String?
+    public var username: String?
     /**
      * (Write-Only) Password for server authentication
      */
-    var password: String?
+    public var password: String?
     /**
      * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
      */
-    var certificate: String?
+    public var certificate: String?
     /**
      * (Write-Only) Certificate keyfile type - .json or .p12
      */
-    var file_type: String?
+    public var file_type: String?
     /**
      * Database name
      */
-    var database: String?
+    public var database: String?
     /**
      * Time zone of database
      */
-    var db_timezone: String?
+    public var db_timezone: String?
     /**
      * Timezone to use in queries
      */
-    var query_timezone: String?
+    public var query_timezone: String?
     /**
      * Scheme name
      */
-    var schema: String?
+    public var schema: String?
     /**
      * Maximum number of concurrent connection to use
      */
-    var max_connections: Int64?
+    public var max_connections: Int64?
     /**
      * Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
      */
-    var max_billing_gigabytes: String?
+    public var max_billing_gigabytes: String?
     /**
      * Use SSL/TLS when connecting to server
      */
-    var ssl: Bool?
+    public var ssl: Bool?
     /**
      * Verify the SSL
      */
-    var verify_ssl: Bool?
+    public var verify_ssl: Bool?
     /**
      * Name of temporary database (if used)
      */
-    var tmp_db_name: String?
+    public var tmp_db_name: String?
     /**
      * Additional params to add to JDBC connection string
      */
-    var jdbc_additional_params: String?
+    public var jdbc_additional_params: String?
     /**
      * Connection Pool Timeout, in seconds
      */
-    var pool_timeout: Int64?
+    public var pool_timeout: Int64?
     /**
      * (Read/Write) SQL Dialect name
      */
-    var dialect_name: String?
+    public var dialect_name: String?
     /**
      * (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
      */
-    var user_db_credentials: Bool?
+    public var user_db_credentials: Bool?
     /**
      * Fields whose values map to user attribute names
      */
-    var user_attribute_fields: [String]?
+    public var user_attribute_fields: [String]?
     /**
      * Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
      */
-    var maintenance_cron: String?
+    public var maintenance_cron: String?
     /**
      * Precache tables in the SQL Runner
      */
-    var sql_runner_precache_tables: Bool?
+    public var sql_runner_precache_tables: Bool?
     /**
      * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
      */
-    var after_connect_statements: String?
-    var pdt_context_override: WriteDBConnectionOverride?
+    public var after_connect_statements: String?
+    public var pdt_context_override: WriteDBConnectionOverride?
     /**
      * The Id of the ssh tunnel this connection uses
      */
-    var tunnel_id: String?
+    public var tunnel_id: String?
     /**
      * Maximum number of threads to use to build PDTs in parallel
      */
-    var pdt_concurrency: Int64?
+    public var pdt_concurrency: Int64?
     /**
      * When disable_context_comment is true comment will not be added to SQL
      */
-    var disable_context_comment: Bool?
+    public var disable_context_comment: Bool?
 }
 
 /**
  * Dynamically generated writeable type for DBConnectionOverride removes properties:
  * has_password
  */
-struct WriteDBConnectionOverride: SDKModel {
+public struct WriteDBConnectionOverride: SDKModel {
     /**
      * Context in which to override (`pdt` is the only allowed value)
      */
-    var context: String?
+    public var context: String?
     /**
      * Host name/address of server
      */
-    var host: String?
+    public var host: String?
     /**
      * Port number on server
      */
-    var port: String?
+    public var port: String?
     /**
      * Username for server authentication
      */
-    var username: String?
+    public var username: String?
     /**
      * (Write-Only) Password for server authentication
      */
-    var password: String?
+    public var password: String?
     /**
      * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
      */
-    var certificate: String?
+    public var certificate: String?
     /**
      * (Write-Only) Certificate keyfile type - .json or .p12
      */
-    var file_type: String?
+    public var file_type: String?
     /**
      * Database name
      */
-    var database: String?
+    public var database: String?
     /**
      * Scheme name
      */
-    var schema: String?
+    public var schema: String?
     /**
      * Additional params to add to JDBC connection string
      */
-    var jdbc_additional_params: String?
+    public var jdbc_additional_params: String?
     /**
      * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
      */
-    var after_connect_statements: String?
+    public var after_connect_statements: String?
 }
 
 /**
  * Dynamically generated writeable type for FolderBase removes properties:
  * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
  */
-struct WriteFolderBase: SDKModel {
+public struct WriteFolderBase: SDKModel {
     /**
      * Unique Name
      */
-    var name: String
+    public var name: String
     /**
      * Id of Parent. If the parent id is null, this is a root-level entry
      */
-    var parent_id: String?
+    public var parent_id: String?
 }
 
 /**
  * Dynamically generated writeable type for GitBranch removes properties:
  * can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
  */
-struct WriteGitBranch: SDKModel {
+public struct WriteGitBranch: SDKModel {
     /**
      * The short name on the local. Updating `name` results in `git checkout <new_name>`
      */
-    var name: String?
+    public var name: String?
     /**
      * The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
      */
-    var ref: String?
+    public var ref: String?
 }
 
 /**
  * Dynamically generated writeable type for Group removes properties:
  * can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
  */
-struct WriteGroup: SDKModel {
+public struct WriteGroup: SDKModel {
     /**
      * Group can be used in content access controls
      */
-    var can_add_to_content_metadata: Bool?
+    public var can_add_to_content_metadata: Bool?
     /**
      * Name of group
      */
-    var name: String?
+    public var name: String?
 }
 
 /**
  * Dynamically generated writeable type for Integration removes properties:
  * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
  */
-struct WriteIntegration: SDKModel {
+public struct WriteIntegration: SDKModel {
     /**
      * Whether the integration is available to users.
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * Array of params for the integration.
      */
-    var params: [IntegrationParam]?
+    public var params: [IntegrationParam]?
     /**
      * Whether the integration is available to users.
      */
-    var installed_delegate_oauth_targets: [Int64]?
+    public var installed_delegate_oauth_targets: [Int64]?
 }
 
 /**
  * Dynamically generated writeable type for IntegrationHub removes properties:
  * can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
  */
-struct WriteIntegrationHub: SDKModel {
+public struct WriteIntegrationHub: SDKModel {
     /**
      * URL of the hub.
      */
-    var url: String?
+    public var url: String?
     /**
      * (Write-Only) An authorization key that will be sent to the integration hub on every request.
      */
-    var authorization_token: String?
+    public var authorization_token: String?
 }
 
 /**
  * Dynamically generated writeable type for InternalHelpResources removes properties:
  * can
  */
-struct WriteInternalHelpResources: SDKModel {
+public struct WriteInternalHelpResources: SDKModel {
     /**
      * If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
      */
-    var enabled: Bool?
+    public var enabled: Bool?
 }
 
 /**
  * Dynamically generated writeable type for InternalHelpResourcesContent removes properties:
  * can
  */
-struct WriteInternalHelpResourcesContent: SDKModel {
+public struct WriteInternalHelpResourcesContent: SDKModel {
     /**
      * Text to display in the help menu item which will display the internal help resources
      */
-    var organization_name: String?
+    public var organization_name: String?
     /**
      * Content to be displayed in the internal help resources page/modal
      */
-    var markdown_content: String?
+    public var markdown_content: String?
 }
 
 /**
  * Dynamically generated writeable type for LDAPConfig removes properties:
  * can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
  */
-struct WriteLDAPConfig: SDKModel {
+public struct WriteLDAPConfig: SDKModel {
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
-    var alternate_email_login_allowed: Bool?
+    public var alternate_email_login_allowed: Bool?
     /**
      * (Write-Only)  Password for the LDAP account used to access the LDAP server
      */
-    var auth_password: String?
+    public var auth_password: String?
     /**
      * Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
      */
-    var auth_requires_role: Bool?
+    public var auth_requires_role: Bool?
     /**
      * Distinguished name of LDAP account used to access the LDAP server
      */
-    var auth_username: String?
+    public var auth_username: String?
     /**
      * LDAP server hostname
      */
-    var connection_host: String?
+    public var connection_host: String?
     /**
      * LDAP host port
      */
-    var connection_port: String?
+    public var connection_port: String?
     /**
      * Use Transport Layer Security
      */
-    var connection_tls: Bool?
+    public var connection_tls: Bool?
     /**
      * Do not verify peer when using TLS
      */
-    var connection_tls_no_verify: Bool?
+    public var connection_tls_no_verify: Bool?
     /**
      * (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
      */
-    var default_new_user_group_ids: [Int64]?
+    public var default_new_user_group_ids: [Int64]?
     /**
      * (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
      */
-    var default_new_user_role_ids: [Int64]?
+    public var default_new_user_role_ids: [Int64]?
     /**
      * Enable/Disable LDAP authentication for the server
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.
      */
-    var force_no_page: Bool?
+    public var force_no_page: Bool?
     /**
      * Base dn for finding groups in LDAP searches
      */
-    var groups_base_dn: String?
+    public var groups_base_dn: String?
     /**
      * Identifier for a strategy for how Looker will search for groups in the LDAP server
      */
-    var groups_finder_type: String?
+    public var groups_finder_type: String?
     /**
      * LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
      */
-    var groups_member_attribute: String?
+    public var groups_member_attribute: String?
     /**
      * Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
      */
-    var groups_objectclasses: String?
+    public var groups_objectclasses: String?
     /**
      * LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
      */
-    var groups_user_attribute: String?
+    public var groups_user_attribute: String?
     /**
      * (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
      */
-    var groups_with_role_ids: [LDAPGroupWrite]?
+    public var groups_with_role_ids: [LDAPGroupWrite]?
     /**
      * Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
      */
-    var merge_new_users_by_email: Bool?
+    public var merge_new_users_by_email: Bool?
     /**
      * Set user roles in Looker based on groups from LDAP
      */
-    var set_roles_from_groups: Bool?
+    public var set_roles_from_groups: Bool?
     /**
      * (Write-Only)  Test LDAP user password. For ldap tests only.
      */
-    var test_ldap_password: String?
+    public var test_ldap_password: String?
     /**
      * (Write-Only)  Test LDAP user login id. For ldap tests only.
      */
-    var test_ldap_user: String?
+    public var test_ldap_user: String?
     /**
      * Name of user record attributes used to indicate email address field
      */
-    var user_attribute_map_email: String?
+    public var user_attribute_map_email: String?
     /**
      * Name of user record attributes used to indicate first name
      */
-    var user_attribute_map_first_name: String?
+    public var user_attribute_map_first_name: String?
     /**
      * Name of user record attributes used to indicate last name
      */
-    var user_attribute_map_last_name: String?
+    public var user_attribute_map_last_name: String?
     /**
      * Name of user record attributes used to indicate unique record id
      */
-    var user_attribute_map_ldap_id: String?
+    public var user_attribute_map_ldap_id: String?
     /**
      * (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
      */
-    var user_attributes_with_ids: [LDAPUserAttributeWrite]?
+    public var user_attributes_with_ids: [LDAPUserAttributeWrite]?
     /**
      * Distinguished name of LDAP node used as the base for user searches
      */
-    var user_bind_base_dn: String?
+    public var user_bind_base_dn: String?
     /**
      * (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
      */
-    var user_custom_filter: String?
+    public var user_custom_filter: String?
     /**
      * Name(s) of user record attributes used for matching user login id (comma separated list)
      */
-    var user_id_attribute_names: String?
+    public var user_id_attribute_names: String?
     /**
      * (Optional) Name of user record objectclass used for finding user during login id
      */
-    var user_objectclass: String?
+    public var user_objectclass: String?
     /**
      * Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
      */
-    var allow_normal_group_membership: Bool?
+    public var allow_normal_group_membership: Bool?
     /**
      * LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
      */
-    var allow_roles_from_normal_groups: Bool?
+    public var allow_roles_from_normal_groups: Bool?
     /**
      * Allows roles to be directly assigned to LDAP auth'd users.
      */
-    var allow_direct_roles: Bool?
+    public var allow_direct_roles: Bool?
 }
 
 /**
  * Dynamically generated writeable type for LegacyFeature removes properties:
  * can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
  */
-struct WriteLegacyFeature: SDKModel {
+public struct WriteLegacyFeature: SDKModel {
     /**
      * Whether this feature has been enabled by a user
      */
-    var enabled_locally: Bool?
+    public var enabled_locally: Bool?
 }
 
 /**
  * Dynamically generated writeable type for LookBasic removes properties:
  * can, content_metadata_id, id, title
  */
-struct WriteLookBasic: SDKModel {
+public struct WriteLookBasic: SDKModel {
     /**
      * User Id
      */
-    var user_id: Int64?
+    public var user_id: Int64?
 }
 
 /**
  * Dynamically generated writeable type for LookmlModel removes properties:
  * can, explores, has_content, label
  */
-struct WriteLookmlModel: SDKModel {
+public struct WriteLookmlModel: SDKModel {
     /**
      * Array of names of connections this model is allowed to use
      */
-    var allowed_db_connection_names: [String]?
+    public var allowed_db_connection_names: [String]?
     /**
      * Name of the model. Also used as the unique identifier
      */
-    var name: String?
+    public var name: String?
     /**
      * Name of project containing the model
      */
-    var project_name: String?
+    public var project_name: String?
     /**
      * Is this model allowed to use all current and future connections
      */
-    var unlimited_db_connections: Bool?
+    public var unlimited_db_connections: Bool?
 }
 
 /**
  * Dynamically generated writeable type for LookWithQuery removes properties:
  * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
  */
-struct WriteLookWithQuery: SDKModel {
+public struct WriteLookWithQuery: SDKModel {
     /**
      * Look Title
      */
-    var title: String?
+    public var title: String?
     /**
      * User Id
      */
-    var user_id: Int64?
+    public var user_id: Int64?
     /**
      * Whether or not a look is 'soft' deleted.
      */
-    var deleted: Bool?
+    public var deleted: Bool?
     /**
      * Description
      */
-    var description: String?
+    public var description: String?
     /**
      * auto-run query when Look viewed
      */
-    var is_run_on_load: Bool?
+    public var is_run_on_load: Bool?
     /**
      * Is Public
      */
-    var `public`: Bool?
+    public var `public`: Bool?
     /**
      * Query Id
      */
-    var query_id: Int64?
-    var folder: WriteFolderBase?
+    public var query_id: Int64?
+    public var folder: WriteFolderBase?
     /**
      * Folder Id
      */
-    var folder_id: String?
-    var query: WriteQuery?
+    public var folder_id: String?
+    public var query: WriteQuery?
 }
 
 /**
  * Dynamically generated writeable type for MergeQuery removes properties:
  * can, id, result_maker_id
  */
-struct WriteMergeQuery: SDKModel {
+public struct WriteMergeQuery: SDKModel {
     /**
      * Column Limit
      */
-    var column_limit: String?
+    public var column_limit: String?
     /**
      * Dynamic Fields
      */
-    var dynamic_fields: String?
+    public var dynamic_fields: String?
     /**
      * Pivots
      */
-    var pivots: [String]?
+    public var pivots: [String]?
     /**
      * Sorts
      */
-    var sorts: [String]?
+    public var sorts: [String]?
     /**
      * Source Queries defining the results to be merged.
      */
-    var source_queries: [MergeQuerySourceQuery]?
+    public var source_queries: [MergeQuerySourceQuery]?
     /**
      * Total
      */
-    var total: Bool?
+    public var total: Bool?
     /**
      * Visualization Config
      */
-    var vis_config: StringDictionary<AnyCodable>?
+    public var vis_config: StringDictionary<AnyCodable>?
 }
 
 /**
  * Dynamically generated writeable type for ModelSet removes properties:
  * can, all_access, built_in, id, url
  */
-struct WriteModelSet: SDKModel {
-    var models: [String]?
+public struct WriteModelSet: SDKModel {
+    public var models: [String]?
     /**
      * Name of ModelSet
      */
-    var name: String?
+    public var name: String?
 }
 
 /**
  * Dynamically generated writeable type for OauthClientApp removes properties:
  * can, client_guid, tokens_invalid_before, activated_users
  */
-struct WriteOauthClientApp: SDKModel {
+public struct WriteOauthClientApp: SDKModel {
     /**
      * The uri with which this application will receive an auth code by browser redirect.
      */
-    var redirect_uri: String?
+    public var redirect_uri: String?
     /**
      * The application's display name
      */
-    var display_name: String?
+    public var display_name: String?
     /**
      * A description of the application that will be displayed to users
      */
-    var description: String?
+    public var description: String?
     /**
      * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
      */
-    var group_id: Int64?
+    public var group_id: Int64?
 }
 
 /**
  * Dynamically generated writeable type for OIDCConfig removes properties:
  * can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
  */
-struct WriteOIDCConfig: SDKModel {
+public struct WriteOIDCConfig: SDKModel {
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
-    var alternate_email_login_allowed: Bool?
+    public var alternate_email_login_allowed: Bool?
     /**
      * OpenID Provider Audience
      */
-    var audience: String?
+    public var audience: String?
     /**
      * Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
      */
-    var auth_requires_role: Bool?
+    public var auth_requires_role: Bool?
     /**
      * OpenID Provider Authorization Url
      */
-    var authorization_endpoint: URI?
+    public var authorization_endpoint: URI?
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
      */
-    var default_new_user_group_ids: [Int64]?
+    public var default_new_user_group_ids: [Int64]?
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
      */
-    var default_new_user_role_ids: [Int64]?
+    public var default_new_user_role_ids: [Int64]?
     /**
      * Enable/Disable OIDC authentication for the server
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
      */
-    var groups_attribute: String?
+    public var groups_attribute: String?
     /**
      * (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
      */
-    var groups_with_role_ids: [OIDCGroupWrite]?
+    public var groups_with_role_ids: [OIDCGroupWrite]?
     /**
      * Relying Party Identifier (provided by OpenID Provider)
      */
-    var identifier: String?
+    public var identifier: String?
     /**
      * OpenID Provider Issuer
      */
-    var issuer: String?
+    public var issuer: String?
     /**
      * Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
      */
-    var new_user_migration_types: String?
+    public var new_user_migration_types: String?
     /**
      * Array of scopes to request.
      */
-    var scopes: [String]?
+    public var scopes: [String]?
     /**
      * (Write-Only) Relying Party Secret (provided by OpenID Provider)
      */
-    var secret: String?
+    public var secret: String?
     /**
      * Set user roles in Looker based on groups from OIDC
      */
-    var set_roles_from_groups: Bool?
+    public var set_roles_from_groups: Bool?
     /**
      * OpenID Provider Token Url
      */
-    var token_endpoint: String?
+    public var token_endpoint: String?
     /**
      * Name of user record attributes used to indicate email address field
      */
-    var user_attribute_map_email: String?
+    public var user_attribute_map_email: String?
     /**
      * Name of user record attributes used to indicate first name
      */
-    var user_attribute_map_first_name: String?
+    public var user_attribute_map_first_name: String?
     /**
      * Name of user record attributes used to indicate last name
      */
-    var user_attribute_map_last_name: String?
+    public var user_attribute_map_last_name: String?
     /**
      * (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
      */
-    var user_attributes_with_ids: [OIDCUserAttributeWrite]?
+    public var user_attributes_with_ids: [OIDCUserAttributeWrite]?
     /**
      * OpenID Provider User Information Url
      */
-    var userinfo_endpoint: URI?
+    public var userinfo_endpoint: URI?
     /**
      * Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
      */
-    var allow_normal_group_membership: Bool?
+    public var allow_normal_group_membership: Bool?
     /**
      * OIDC auth'd users will inherit roles from non-reflected Looker groups.
      */
-    var allow_roles_from_normal_groups: Bool?
+    public var allow_roles_from_normal_groups: Bool?
     /**
      * Allows roles to be directly assigned to OIDC auth'd users.
      */
-    var allow_direct_roles: Bool?
+    public var allow_direct_roles: Bool?
 }
 
 /**
  * Dynamically generated writeable type for PasswordConfig removes properties:
  * can
  */
-struct WritePasswordConfig: SDKModel {
+public struct WritePasswordConfig: SDKModel {
     /**
      * Minimum number of characters required for a new password.  Must be between 7 and 100
      */
-    var min_length: Int64?
+    public var min_length: Int64?
     /**
      * Require at least one numeric character
      */
-    var require_numeric: Bool?
+    public var require_numeric: Bool?
     /**
      * Require at least one uppercase and one lowercase letter
      */
-    var require_upperlower: Bool?
+    public var require_upperlower: Bool?
     /**
      * Require at least one special character
      */
-    var require_special: Bool?
+    public var require_special: Bool?
 }
 
 /**
  * Dynamically generated writeable type for PermissionSet removes properties:
  * can, all_access, built_in, id, url
  */
-struct WritePermissionSet: SDKModel {
+public struct WritePermissionSet: SDKModel {
     /**
      * Name of PermissionSet
      */
-    var name: String?
-    var permissions: [String]?
+    public var name: String?
+    public var permissions: [String]?
 }
 
 /**
  * Dynamically generated writeable type for Project removes properties:
  * can, id, uses_git, is_example
  */
-struct WriteProject: SDKModel {
+public struct WriteProject: SDKModel {
     /**
      * Project display name
      */
-    var name: String?
+    public var name: String?
     /**
      * Git remote repository url
      */
-    var git_remote_url: String?
+    public var git_remote_url: String?
     /**
      * Git username for HTTPS authentication. (For production only, if using user attributes.)
      */
-    var git_username: String?
+    public var git_username: String?
     /**
      * (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
      */
-    var git_password: String?
+    public var git_password: String?
     /**
      * User attribute name for username in per-user HTTPS authentication.
      */
-    var git_username_user_attribute: String?
+    public var git_username_user_attribute: String?
     /**
      * User attribute name for password in per-user HTTPS authentication.
      */
-    var git_password_user_attribute: String?
+    public var git_password_user_attribute: String?
     /**
      * Name of the git service provider
      */
-    var git_service_name: String?
+    public var git_service_name: String?
     /**
      * Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
      */
-    var git_application_server_http_port: Int64?
+    public var git_application_server_http_port: Int64?
     /**
      * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
      */
-    var git_application_server_http_scheme: GitApplicationServerHttpScheme?
+    public var git_application_server_http_scheme: GitApplicationServerHttpScheme?
     /**
      * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
      */
-    var deploy_secret: String?
+    public var deploy_secret: String?
     /**
      * (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
      */
-    var unset_deploy_secret: Bool?
+    public var unset_deploy_secret: Bool?
     /**
      * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
      */
-    var pull_request_mode: PullRequestMode?
+    public var pull_request_mode: PullRequestMode?
     /**
      * Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
      */
-    var validation_required: Bool?
+    public var validation_required: Bool?
     /**
      * If true, advanced git release management is enabled for this project
      */
-    var git_release_mgmt_enabled: Bool?
+    public var git_release_mgmt_enabled: Bool?
     /**
      * Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
      */
-    var allow_warnings: Bool?
+    public var allow_warnings: Bool?
     /**
      * Status of dependencies in your manifest & lockfile
      */
-    var dependency_status: String?
+    public var dependency_status: String?
 }
 
 /**
  * Dynamically generated writeable type for Query removes properties:
  * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
  */
-struct WriteQuery: SDKModel {
+public struct WriteQuery: SDKModel {
     /**
      * Model
      */
-    var model: String
+    public var model: String
     /**
      * Explore Name
      */
-    var view: String
+    public var view: String
     /**
      * Fields
      */
-    var fields: [String]?
+    public var fields: [String]?
     /**
      * Pivots
      */
-    var pivots: [String]?
+    public var pivots: [String]?
     /**
      * Fill Fields
      */
-    var fill_fields: [String]?
+    public var fill_fields: [String]?
     /**
      * Filters
      */
-    var filters: StringDictionary<AnyCodable>?
+    public var filters: StringDictionary<AnyCodable>?
     /**
      * Filter Expression
      */
-    var filter_expression: String?
+    public var filter_expression: String?
     /**
      * Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
      */
-    var sorts: [String]?
+    public var sorts: [String]?
     /**
      * Limit
      */
-    var limit: String?
+    public var limit: String?
     /**
      * Column Limit
      */
-    var column_limit: String?
+    public var column_limit: String?
     /**
      * Total
      */
-    var total: Bool?
+    public var total: Bool?
     /**
      * Raw Total
      */
-    var row_total: String?
+    public var row_total: String?
     /**
      * Fields on which to run subtotals
      */
-    var subtotals: [String]?
+    public var subtotals: [String]?
     /**
      * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
      */
-    var vis_config: StringDictionary<AnyCodable>?
+    public var vis_config: StringDictionary<AnyCodable>?
     /**
      * The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
      */
-    var filter_config: StringDictionary<AnyCodable>?
+    public var filter_config: StringDictionary<AnyCodable>?
     /**
      * Visible UI Sections
      */
-    var visible_ui_sections: String?
+    public var visible_ui_sections: String?
     /**
      * Dynamic Fields
      */
-    var dynamic_fields: String?
+    public var dynamic_fields: String?
     /**
      * Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
      */
-    var client_id: String?
+    public var client_id: String?
     /**
      * Query Timezone
      */
-    var query_timezone: String?
+    public var query_timezone: String?
 }
 
 /**
  * Dynamically generated writeable type for RepositoryCredential removes properties:
  * can, id, root_project_id, remote_url, is_configured
  */
-struct WriteRepositoryCredential: SDKModel {
+public struct WriteRepositoryCredential: SDKModel {
     /**
      * Git username for HTTPS authentication.
      */
-    var git_username: String?
+    public var git_username: String?
     /**
      * (Write-Only) Git password for HTTPS authentication.
      */
-    var git_password: String?
+    public var git_password: String?
     /**
      * Public deploy key for SSH authentication.
      */
-    var ssh_public_key: String?
+    public var ssh_public_key: String?
 }
 
 /**
  * Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes properties:
  * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
  */
-struct WriteResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
-    var query: WriteQuery?
+public struct WriteResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
+    public var query: WriteQuery?
 }
 
 /**
  * Dynamically generated writeable type for Role removes properties:
  * can, id, url, users_url
  */
-struct WriteRole: SDKModel {
+public struct WriteRole: SDKModel {
     /**
      * Name of Role
      */
-    var name: String?
-    var permission_set: WritePermissionSet?
+    public var name: String?
+    public var permission_set: WritePermissionSet?
     /**
      * (Write-Only) Id of permission set
      */
-    var permission_set_id: Int64?
-    var model_set: WriteModelSet?
+    public var permission_set_id: Int64?
+    public var model_set: WriteModelSet?
     /**
      * (Write-Only) Id of model set
      */
-    var model_set_id: Int64?
+    public var model_set_id: Int64?
 }
 
 /**
  * Dynamically generated writeable type for SamlConfig removes properties:
  * can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
  */
-struct WriteSamlConfig: SDKModel {
+public struct WriteSamlConfig: SDKModel {
     /**
      * Enable/Disable Saml authentication for the server
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * Identity Provider Certificate (provided by IdP)
      */
-    var idp_cert: String?
+    public var idp_cert: String?
     /**
      * Identity Provider Url (provided by IdP)
      */
-    var idp_url: String?
+    public var idp_url: String?
     /**
      * Identity Provider Issuer (provided by IdP)
      */
-    var idp_issuer: String?
+    public var idp_issuer: String?
     /**
      * Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
      */
-    var idp_audience: String?
+    public var idp_audience: String?
     /**
      * Count of seconds of clock drift to allow when validating timestamps of assertions.
      */
-    var allowed_clock_drift: Int64?
+    public var allowed_clock_drift: Int64?
     /**
      * Name of user record attributes used to indicate email address field
      */
-    var user_attribute_map_email: String?
+    public var user_attribute_map_email: String?
     /**
      * Name of user record attributes used to indicate first name
      */
-    var user_attribute_map_first_name: String?
+    public var user_attribute_map_first_name: String?
     /**
      * Name of user record attributes used to indicate last name
      */
-    var user_attribute_map_last_name: String?
+    public var user_attribute_map_last_name: String?
     /**
      * Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
      */
-    var new_user_migration_types: String?
+    public var new_user_migration_types: String?
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
-    var alternate_email_login_allowed: Bool?
+    public var alternate_email_login_allowed: Bool?
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
      */
-    var default_new_user_role_ids: [Int64]?
+    public var default_new_user_role_ids: [Int64]?
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
      */
-    var default_new_user_group_ids: [Int64]?
+    public var default_new_user_group_ids: [Int64]?
     /**
      * Set user roles in Looker based on groups from Saml
      */
-    var set_roles_from_groups: Bool?
+    public var set_roles_from_groups: Bool?
     /**
      * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
      */
-    var groups_attribute: String?
+    public var groups_attribute: String?
     /**
      * (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
      */
-    var groups_with_role_ids: [SamlGroupWrite]?
+    public var groups_with_role_ids: [SamlGroupWrite]?
     /**
      * Users will not be allowed to login at all unless a role for them is found in Saml if set to true
      */
-    var auth_requires_role: Bool?
+    public var auth_requires_role: Bool?
     /**
      * (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
      */
-    var user_attributes_with_ids: [SamlUserAttributeWrite]?
+    public var user_attributes_with_ids: [SamlUserAttributeWrite]?
     /**
      * Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
      */
-    var groups_finder_type: String?
+    public var groups_finder_type: String?
     /**
      * Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
      */
-    var groups_member_value: String?
+    public var groups_member_value: String?
     /**
      * Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
      */
-    var bypass_login_page: Bool?
+    public var bypass_login_page: Bool?
     /**
      * Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
      */
-    var allow_normal_group_membership: Bool?
+    public var allow_normal_group_membership: Bool?
     /**
      * SAML auth'd users will inherit roles from non-reflected Looker groups.
      */
-    var allow_roles_from_normal_groups: Bool?
+    public var allow_roles_from_normal_groups: Bool?
     /**
      * Allows roles to be directly assigned to SAML auth'd users.
      */
-    var allow_direct_roles: Bool?
+    public var allow_direct_roles: Bool?
 }
 
 /**
  * Dynamically generated writeable type for ScheduledPlan removes properties:
  * id, created_at, updated_at, title, user, next_run_at, last_run_at, can
  */
-struct WriteScheduledPlan: SDKModel {
+public struct WriteScheduledPlan: SDKModel {
     /**
      * Name of this scheduled plan
      */
-    var name: String?
+    public var name: String?
     /**
      * User Id which owns this scheduled plan
      */
-    var user_id: Int64?
+    public var user_id: Int64?
     /**
      * Whether schedule is run as recipient (only applicable for email recipients)
      */
-    var run_as_recipient: Bool?
+    public var run_as_recipient: Bool?
     /**
      * Whether the ScheduledPlan is enabled
      */
-    var enabled: Bool?
+    public var enabled: Bool?
     /**
      * Id of a look
      */
-    var look_id: Int64?
+    public var look_id: Int64?
     /**
      * Id of a dashboard
      */
-    var dashboard_id: Int64?
+    public var dashboard_id: Int64?
     /**
      * Id of a LookML dashboard
      */
-    var lookml_dashboard_id: String?
+    public var lookml_dashboard_id: String?
     /**
      * Query string to run look or dashboard with
      */
-    var filters_string: String?
+    public var filters_string: String?
     /**
      * (DEPRECATED) Alias for filters_string field
      */
-    var dashboard_filters: String?
+    public var dashboard_filters: String?
     /**
      * Delivery should occur if running the dashboard or look returns results
      */
-    var require_results: Bool?
+    public var require_results: Bool?
     /**
      * Delivery should occur if the dashboard look does not return results
      */
-    var require_no_results: Bool?
+    public var require_no_results: Bool?
     /**
      * Delivery should occur if data have changed since the last run
      */
-    var require_change: Bool?
+    public var require_change: Bool?
     /**
      * Will run an unlimited query and send all results.
      */
-    var send_all_results: Bool?
+    public var send_all_results: Bool?
     /**
      * Vixie-Style crontab specification when to run
      */
-    var crontab: String?
+    public var crontab: String?
     /**
      * Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
      */
-    var datagroup: String?
+    public var datagroup: String?
     /**
      * Timezone for interpreting the specified crontab (default is Looker instance timezone)
      */
-    var timezone: String?
+    public var timezone: String?
     /**
      * Query id
      */
-    var query_id: String?
+    public var query_id: String?
     /**
      * Scheduled plan destinations
      */
-    var scheduled_plan_destination: [ScheduledPlanDestination]?
+    public var scheduled_plan_destination: [ScheduledPlanDestination]?
     /**
      * Whether the plan in question should only be run once (usually for testing)
      */
-    var run_once: Bool?
+    public var run_once: Bool?
     /**
      * Whether links back to Looker should be included in this ScheduledPlan
      */
-    var include_links: Bool?
+    public var include_links: Bool?
     /**
      * The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
      */
-    var pdf_paper_size: String?
+    public var pdf_paper_size: String?
     /**
      * Whether the PDF should be formatted for landscape orientation
      */
-    var pdf_landscape: Bool?
+    public var pdf_landscape: Bool?
     /**
      * Whether this schedule is in an embed context or not
      */
-    var embed: Bool?
+    public var embed: Bool?
     /**
      * Color scheme of the dashboard if applicable
      */
-    var color_theme: String?
+    public var color_theme: String?
     /**
      * Whether or not to expand table vis to full length
      */
-    var long_tables: Bool?
+    public var long_tables: Bool?
     /**
      * The pixel width at which we render the inline table visualizations
      */
-    var inline_table_width: Int64?
+    public var inline_table_width: Int64?
 }
 
 /**
  * Dynamically generated writeable type for SessionConfig removes properties:
  * can
  */
-struct WriteSessionConfig: SDKModel {
+public struct WriteSessionConfig: SDKModel {
     /**
      * Allow users to have persistent sessions when they login
      */
-    var allow_persistent_sessions: Bool?
+    public var allow_persistent_sessions: Bool?
     /**
      * Number of minutes for user sessions.  Must be between 5 and 43200
      */
-    var session_minutes: Int64?
+    public var session_minutes: Int64?
     /**
      * Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
      */
-    var unlimited_sessions_per_user: Bool?
+    public var unlimited_sessions_per_user: Bool?
     /**
      * Enforce session logout for sessions that are inactive for 15 minutes.
      */
-    var use_inactivity_based_logout: Bool?
+    public var use_inactivity_based_logout: Bool?
     /**
      * Track location of session when user logs in.
      */
-    var track_session_location: Bool?
+    public var track_session_location: Bool?
 }
 
 /**
  * Dynamically generated writeable type for SshServer removes properties:
  * ssh_server_id, finger_print, sha_finger_print, public_key, status
  */
-struct WriteSshServer: SDKModel {
+public struct WriteSshServer: SDKModel {
     /**
      * The name to identify this SSH Server
      */
-    var ssh_server_name: String?
+    public var ssh_server_name: String?
     /**
      * The hostname or ip address of the SSH Server
      */
-    var ssh_server_host: String?
+    public var ssh_server_host: String?
     /**
      * The port to connect to on the SSH Server
      */
-    var ssh_server_port: Int64?
+    public var ssh_server_port: Int64?
     /**
      * The username used to connect to the SSH Server
      */
-    var ssh_server_user: String?
+    public var ssh_server_user: String?
 }
 
 /**
  * Dynamically generated writeable type for SshTunnel removes properties:
  * tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, local_host_port, status
  */
-struct WriteSshTunnel: SDKModel {
+public struct WriteSshTunnel: SDKModel {
     /**
      * SSH Server ID
      */
-    var ssh_server_id: String?
+    public var ssh_server_id: String?
     /**
      * Hostname or IP Address of the Database Server
      */
-    var database_host: String?
+    public var database_host: String?
     /**
      * Port that the Database Server is listening on
      */
-    var database_port: Int64?
+    public var database_port: Int64?
 }
 
 /**
  * Dynamically generated writeable type for Theme removes properties:
  * can, id
  */
-struct WriteTheme: SDKModel {
+public struct WriteTheme: SDKModel {
     /**
      * Timestamp for when this theme becomes active. Null=always
      */
-    var begin_at: Date?
+    public var begin_at: Date?
     /**
      * Timestamp for when this theme expires. Null=never
      */
-    var end_at: Date?
+    public var end_at: Date?
     /**
      * Name of theme. Can only be alphanumeric and underscores.
      */
-    var name: String?
-    var settings: ThemeSettings?
+    public var name: String?
+    public var settings: ThemeSettings?
 }
 
 /**
  * Dynamically generated writeable type for User removes properties:
  * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
  */
-struct WriteUser: SDKModel {
-    var credentials_email: WriteCredentialsEmail?
+public struct WriteUser: SDKModel {
+    public var credentials_email: WriteCredentialsEmail?
     /**
      * First name
      */
-    var first_name: String?
+    public var first_name: String?
     /**
      * ID string for user's home folder
      */
-    var home_folder_id: String?
+    public var home_folder_id: String?
     /**
      * Account has been disabled
      */
-    var is_disabled: Bool?
+    public var is_disabled: Bool?
     /**
      * Last name
      */
-    var last_name: String?
+    public var last_name: String?
     /**
      * User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
      */
-    var locale: String?
+    public var locale: String?
     /**
      * User's dev workspace has been checked for presence of applicable production projects
      */
-    var models_dir_validated: Bool?
+    public var models_dir_validated: Bool?
     /**
      * Per user dictionary of undocumented state information owned by the Looker UI.
      */
-    var ui_state: StringDictionary<AnyCodable>?
+    public var ui_state: StringDictionary<AnyCodable>?
 }
 
 /**
  * Dynamically generated writeable type for UserAttribute removes properties:
  * can, id, is_system, is_permanent
  */
-struct WriteUserAttribute: SDKModel {
+public struct WriteUserAttribute: SDKModel {
     /**
      * Name of user attribute
      */
-    var name: String?
+    public var name: String?
     /**
      * Human-friendly label for user attribute
      */
-    var label: String?
+    public var label: String?
     /**
      * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
      */
-    var type: String?
+    public var type: String?
     /**
      * Default value for when no value is set on the user
      */
-    var default_value: String?
+    public var default_value: String?
     /**
      * If true, users will not be able to view values of this attribute
      */
-    var value_is_hidden: Bool?
+    public var value_is_hidden: Bool?
     /**
      * Non-admin users can see the values of their attributes and use them in filters
      */
-    var user_can_view: Bool?
+    public var user_can_view: Bool?
     /**
      * Users can change the value of this attribute for themselves
      */
-    var user_can_edit: Bool?
+    public var user_can_edit: Bool?
     /**
      * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
      */
-    var hidden_value_domain_whitelist: String?
+    public var hidden_value_domain_whitelist: String?
 }
 
 /**
  * Dynamically generated writeable type for UserAttributeWithValue removes properties:
  * can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
  */
-struct WriteUserAttributeWithValue: SDKModel {
+public struct WriteUserAttributeWithValue: SDKModel {
     /**
      * Value of attribute for user
      */
-    var value: String?
+    public var value: String?
 }
 
 /**
  * Dynamically generated writeable type for WhitelabelConfiguration removes properties:
  * can, id, logo_url, favicon_url
  */
-struct WriteWhitelabelConfiguration: SDKModel {
+public struct WriteWhitelabelConfiguration: SDKModel {
     /**
      * Customer logo image. Expected base64 encoded data (write-only)
      */
-    var logo_file: String?
+    public var logo_file: String?
     /**
      * Custom favicon image. Expected base64 encoded data (write-only)
      */
-    var favicon_file: String?
+    public var favicon_file: String?
     /**
      * Default page title
      */
-    var default_title: String?
+    public var default_title: String?
     /**
      * Boolean to toggle showing help menus
      */
-    var show_help_menu: Bool?
+    public var show_help_menu: Bool?
     /**
      * Boolean to toggle showing docs
      */
-    var show_docs: Bool?
+    public var show_docs: Bool?
     /**
      * Boolean to toggle showing email subscription options.
      */
-    var show_email_sub_options: Bool?
+    public var show_email_sub_options: Bool?
     /**
      * Boolean to toggle mentions of Looker in emails
      */
-    var allow_looker_mentions: Bool?
+    public var allow_looker_mentions: Bool?
     /**
      * Boolean to toggle links to Looker in emails
      */
-    var allow_looker_links: Bool?
+    public var allow_looker_links: Bool?
     /**
      * Allow subject line and email heading customization in customized emails”
      */
-    var custom_welcome_email_advanced: Bool?
+    public var custom_welcome_email_advanced: Bool?
     /**
      * Remove the word Looker from appearing in the account setup page
      */
-    var setup_mentions: Bool?
+    public var setup_mentions: Bool?
     /**
      * Remove Looker logo from Alerts
      */
-    var alerts_logo: Bool?
+    public var alerts_logo: Bool?
     /**
      * Remove Looker links from Alerts
      */
-    var alerts_links: Bool?
+    public var alerts_links: Bool?
     /**
      * Remove Looker mentions in home folder page when you don’t have any items saved
      */
-    var folders_mentions: Bool?
+    public var folders_mentions: Bool?
 }
 

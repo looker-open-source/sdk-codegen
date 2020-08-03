@@ -22,42 +22,42 @@
  * THE SOFTWARE.
  */
 
-let strLookerBaseUrl = "\(Constants.environmentPrefix)_BASE_URL"
-let strLookerApiVersion = "\(Constants.environmentPrefix)_API_VERSION"
-let strLookerVerifySsl = "\(Constants.environmentPrefix)_VERIFY_SSL"
-let strLookerTimeout = "\(Constants.environmentPrefix)_TIMEOUT"
-let strLookerClientId = "\(Constants.environmentPrefix)_CLIENT_ID"
-let strLookerClientSecret = "\(Constants.environmentPrefix)_CLIENT_SECRET"
-let strBadConfiguration = """
+public let strLookerBaseUrl = "\(Constants.environmentPrefix)_BASE_URL"
+public let strLookerApiVersion = "\(Constants.environmentPrefix)_API_VERSION"
+public let strLookerVerifySsl = "\(Constants.environmentPrefix)_VERIFY_SSL"
+public let strLookerTimeout = "\(Constants.environmentPrefix)_TIMEOUT"
+public let strLookerClientId = "\(Constants.environmentPrefix)_CLIENT_ID"
+public let strLookerClientSecret = "\(Constants.environmentPrefix)_CLIENT_SECRET"
+public let strBadConfiguration = """
 \(agentTag) configuration error:
 Missing required configuration values like base_url and api_version
 """
 
-protocol IApiSettings: ITransportSettings {
+public protocol IApiSettings: ITransportSettings {
     func isConfigured() -> Bool
     func readConfig(_ section: String?) -> IApiSection
 }
 
-typealias IApiSection = SectionConfig
+public typealias IApiSection = SectionConfig
 
 /**
  * default the runtime configuration settings
  * @constructor
  *
  */
-struct DefaultSettings : IApiSettings {
-    func isConfigured() -> Bool {
+public struct DefaultSettings : IApiSettings {
+    public func isConfigured() -> Bool {
         return false
     }
-    func readConfig(_ section: String? = nil) -> IApiSection {
+    public func readConfig(_ section: String? = nil) -> IApiSection {
         return [:]
     }
-    var base_url: String? = ""
-    var api_version: String? = defaultApiVersion
-    var verify_ssl: Bool? = true
-    var timeout: Int? = defaultTimeout
-    var headers: Headers?
-    var encoding: String?
+    public var base_url: String? = ""
+    public var api_version: String? = defaultApiVersion
+    public var verify_ssl: Bool? = true
+    public var timeout: Int? = defaultTimeout
+    public var headers: Headers?
+    public var encoding: String?
 }
 
 /**
@@ -72,7 +72,7 @@ struct DefaultSettings : IApiSettings {
  *  - <environmentPrefix>_VERIFY_SSL
  *  - <environmentPrefix>_TIMEOUT
  */
-func ValueSettings(_ values: StringDictionary<String>) -> IApiSettings {
+public func ValueSettings(_ values: StringDictionary<String>) -> IApiSettings {
     var defaults = DefaultSettings()
     defaults.api_version = unquote(values[strLookerApiVersion]) ?? defaults.api_version
     defaults.base_url = unquote(values[strLookerBaseUrl]) ?? defaults.base_url
@@ -88,17 +88,17 @@ func ValueSettings(_ values: StringDictionary<String>) -> IApiSettings {
  *
  * .ini Configuration initializer
  */
-struct ApiSettings: IApiSettings {
-    func readConfig(_ section: String? = nil) -> IApiSection {
+public struct ApiSettings: IApiSettings {
+    public func readConfig(_ section: String? = nil) -> IApiSection {
         return [:]
     }
     
-    var base_url: String?
-    var api_version: String?
-    var verify_ssl: Bool?
-    var timeout: Int?
-    var headers: Headers?
-    var encoding: String?
+    public var base_url: String?
+    public var api_version: String?
+    public var verify_ssl: Bool?
+    public var timeout: Int?
+    public var headers: Headers?
+    public var encoding: String?
     
     init() { }
     
@@ -116,7 +116,7 @@ struct ApiSettings: IApiSettings {
         }
     }
     
-    func isConfigured() -> Bool {
+    public func isConfigured() -> Bool {
         return (self.base_url != "" && self.api_version != "")
     }
 }
