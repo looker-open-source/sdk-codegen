@@ -26,15 +26,15 @@
 
 import Foundation
 
-typealias SectionConfig = [String: String]
-typealias Config = [String: SectionConfig]
+public typealias SectionConfig = [String: String]
+public typealias Config = [String: SectionConfig]
 
-func trim(_ s: String) -> String {
+public func trim(_ s: String) -> String {
     let whitespaces = CharacterSet(charactersIn: " \n\r\t")
     return s.trimmingCharacters(in: whitespaces)
 }
 
-func stripComment(_ line: String) -> String {
+public func stripComment(_ line: String) -> String {
     let parts = line.split(
         separator: "#",
         maxSplits: 1,
@@ -45,14 +45,14 @@ func stripComment(_ line: String) -> String {
     return ""
 }
 
-func parseSectionHeader(_ line: String) -> String {
+public func parseSectionHeader(_ line: String) -> String {
     let from = line.index(after: line.startIndex)
     let to = line.index(before: line.endIndex)
     let range = from..<to
     return String(line[range])
 }
 
-func parseLine(_ line: String) -> (String, String)? {
+public func parseLine(_ line: String) -> (String, String)? {
     let parts = stripComment(line).split(separator: "=", maxSplits: 1)
     if parts.count == 2 {
         let k = trim(String(parts[0]))
@@ -62,7 +62,7 @@ func parseLine(_ line: String) -> (String, String)? {
     return nil
 }
 
-func parseConfig(_ filename : String) -> Config {
+public func parseConfig(_ filename : String) -> Config {
     let f = try! String(contentsOfFile: filename)
     var config = Config()
     var currentSectionName = "Looker"
@@ -79,8 +79,8 @@ func parseConfig(_ filename : String) -> Config {
     return config
 }
 
-class ApiConfig: IApiSettings {
-    func readConfig(_ section: String? = nil) -> IApiSection {
+public class ApiConfig: IApiSettings {
+    public func readConfig(_ section: String? = nil) -> IApiSection {
         if (self.fileName == "") {
             // No config file to read
             return [:]
@@ -89,21 +89,16 @@ class ApiConfig: IApiSettings {
         return config[section ?? self.section] ?? [:]
     }
     
-    func isConfigured() -> Bool {
+    public func isConfigured() -> Bool {
         return (base_url != "" && api_version != "")
     }
     
-    var base_url: String?
-    
-    var api_version: String?
-    
-    var headers: Headers?
-    
-    var verify_ssl: Bool?
-    
-    var timeout: Int?
-    
-    var encoding: String?
+    public var base_url: String?
+    public var api_version: String?
+    public var headers: Headers?
+    public var verify_ssl: Bool?
+    public var timeout: Int?
+    public var encoding: String?
     
     private var fileName = ""
     private var section = "Looker"
@@ -153,7 +148,7 @@ class ApiConfig: IApiSettings {
         self.encoding = values?["encoding"] ?? defaults.encoding
     }
     
-    func assign(_ values: IApiSettings) {
+    public func assign(_ values: IApiSettings) {
         let defaults = DefaultSettings()
         self.base_url = unquote(values.base_url) ?? defaults.base_url
         self.api_version = unquote(values.api_version) ?? defaults.api_version

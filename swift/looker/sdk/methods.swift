@@ -34,7 +34,7 @@
 import Foundation
 
 @available(OSX 10.15, *)
-class LookerSDK: APIMethods {
+open class LookerSDK: APIMethods {
 
     lazy var stream = LookerSDKStream(authSession)
 
@@ -72,7 +72,7 @@ class LookerSDK: APIMethods {
      *
      * POST /login -> AccessToken
      */
-    func login(
+    public func login(
         /**
          * @param {String} client_id client_id part of API3 Key.
          */
@@ -108,7 +108,7 @@ class LookerSDK: APIMethods {
      *
      * POST /login/{user_id} -> AccessToken
      */
-    func login_user(
+    public func login_user(
         /**
          * @param {Int64} user_id Id of user.
          */
@@ -130,14 +130,14 @@ class LookerSDK: APIMethods {
      *
      * DELETE /logout -> String
      */
-    func logout(
+    public func logout(
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let result: SDKResponse<String, SDKError> = self.delete("/logout", nil, nil, options)
         return result
     }
 
-    // MARK -
+
 
     // MARK Auth: Manage User Authentication Configuration
 
@@ -179,7 +179,7 @@ class LookerSDK: APIMethods {
      *
      * POST /embed/sso_url -> EmbedUrlResponse
      */
-    func create_sso_embed_url(
+    public func create_sso_embed_url(
         /**
          * @param {EmbedSsoParams} body
          */
@@ -213,7 +213,7 @@ class LookerSDK: APIMethods {
      *
      * POST /embed/token_url/me -> EmbedUrlResponse
      */
-    func create_embed_url_as_me(
+    public func create_embed_url_as_me(
         /**
          * @param {EmbedParams} body
          */
@@ -244,7 +244,7 @@ class LookerSDK: APIMethods {
      *
      * GET /ldap_config -> LDAPConfig
      */
-    func ldap_config(
+    public func ldap_config(
         options: ITransportSettings? = nil
     ) -> SDKResponse<LDAPConfig, SDKError> {
         let result: SDKResponse<LDAPConfig, SDKError> = self.get("/ldap_config", nil, nil, options)
@@ -266,7 +266,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /ldap_config -> LDAPConfig
      */
-    func update_ldap_config(
+    public func update_ldap_config(
         /**
          * @param {WriteLDAPConfig} body
          */
@@ -299,7 +299,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /ldap_config/test_connection -> LDAPConfigTestResult
      */
-    func test_ldap_config_connection(
+    public func test_ldap_config_connection(
         /**
          * @param {WriteLDAPConfig} body
          */
@@ -334,7 +334,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /ldap_config/test_auth -> LDAPConfigTestResult
      */
-    func test_ldap_config_auth(
+    public func test_ldap_config_auth(
         /**
          * @param {WriteLDAPConfig} body
          */
@@ -358,7 +358,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /ldap_config/test_user_info -> LDAPConfigTestResult
      */
-    func test_ldap_config_user_info(
+    public func test_ldap_config_user_info(
         /**
          * @param {WriteLDAPConfig} body
          */
@@ -382,7 +382,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /ldap_config/test_user_auth -> LDAPConfigTestResult
      */
-    func test_ldap_config_user_auth(
+    public func test_ldap_config_user_auth(
         /**
          * @param {WriteLDAPConfig} body
          */
@@ -404,7 +404,7 @@ class LookerSDK: APIMethods {
      *
      * GET /oauth_client_apps -> [OauthClientApp]
      */
-    func all_oauth_client_apps(
+    public func all_oauth_client_apps(
         /**
          * @param {String} fields Requested fields.
          */
@@ -423,7 +423,7 @@ class LookerSDK: APIMethods {
      *
      * GET /oauth_client_apps/{client_guid} -> OauthClientApp
      */
-    func oauth_client_app(
+    public func oauth_client_app(
         /**
          * @param {String} client_guid The unique id of this application
          */
@@ -450,7 +450,7 @@ class LookerSDK: APIMethods {
      *
      * POST /oauth_client_apps/{client_guid} -> OauthClientApp
      */
-    func register_oauth_client_app(
+    public func register_oauth_client_app(
         /**
          * @param {String} client_guid The unique id of this application
          */
@@ -478,7 +478,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /oauth_client_apps/{client_guid} -> OauthClientApp
      */
-    func update_oauth_client_app(
+    public func update_oauth_client_app(
         /**
          * @param {String} client_guid The unique id of this application
          */
@@ -509,7 +509,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /oauth_client_apps/{client_guid} -> String
      */
-    func delete_oauth_client_app(
+    public func delete_oauth_client_app(
         /**
          * @param {String} client_guid The unique id of this application
          */
@@ -529,7 +529,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /oauth_client_apps/{client_guid}/tokens -> String
      */
-    func invalidate_tokens(
+    public func invalidate_tokens(
         /**
          * @param {String} client_guid The unique id of the application
          */
@@ -552,7 +552,7 @@ class LookerSDK: APIMethods {
      *
      * POST /oauth_client_apps/{client_guid}/users/{user_id} -> String
      */
-    func activate_app_user(
+    public func activate_app_user(
         /**
          * @param {String} client_guid The unique id of this application
          */
@@ -588,7 +588,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /oauth_client_apps/{client_guid}/users/{user_id} -> String
      */
-    func deactivate_app_user(
+    public func deactivate_app_user(
         /**
          * @param {String} client_guid The unique id of this application
          */
@@ -626,7 +626,7 @@ class LookerSDK: APIMethods {
      *
      * GET /oidc_config -> OIDCConfig
      */
-    func oidc_config(
+    public func oidc_config(
         options: ITransportSettings? = nil
     ) -> SDKResponse<OIDCConfig, SDKError> {
         let result: SDKResponse<OIDCConfig, SDKError> = self.get("/oidc_config", nil, nil, options)
@@ -646,7 +646,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /oidc_config -> OIDCConfig
      */
-    func update_oidc_config(
+    public func update_oidc_config(
         /**
          * @param {WriteOIDCConfig} body
          */
@@ -662,7 +662,7 @@ class LookerSDK: APIMethods {
      *
      * GET /oidc_test_configs/{test_slug} -> OIDCConfig
      */
-    func oidc_test_config(
+    public func oidc_test_config(
         /**
          * @param {String} test_slug Slug of test config
          */
@@ -679,7 +679,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /oidc_test_configs/{test_slug} -> String
      */
-    func delete_oidc_test_config(
+    public func delete_oidc_test_config(
         /**
          * @param {String} test_slug Slug of test config
          */
@@ -696,7 +696,7 @@ class LookerSDK: APIMethods {
      *
      * POST /oidc_test_configs -> OIDCConfig
      */
-    func create_oidc_test_config(
+    public func create_oidc_test_config(
         /**
          * @param {WriteOIDCConfig} body
          */
@@ -712,7 +712,7 @@ class LookerSDK: APIMethods {
      *
      * GET /password_config -> PasswordConfig
      */
-    func password_config(
+    public func password_config(
         options: ITransportSettings? = nil
     ) -> SDKResponse<PasswordConfig, SDKError> {
         let result: SDKResponse<PasswordConfig, SDKError> = self.get("/password_config", nil, nil, options)
@@ -724,7 +724,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /password_config -> PasswordConfig
      */
-    func update_password_config(
+    public func update_password_config(
         /**
          * @param {WritePasswordConfig} body
          */
@@ -740,7 +740,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /password_config/force_password_reset_at_next_login_for_all_users -> String
      */
-    func force_password_reset_at_next_login_for_all_users(
+    public func force_password_reset_at_next_login_for_all_users(
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let result: SDKResponse<String, SDKError> = self.put("/password_config/force_password_reset_at_next_login_for_all_users", nil, nil, options)
@@ -763,7 +763,7 @@ class LookerSDK: APIMethods {
      *
      * GET /saml_config -> SamlConfig
      */
-    func saml_config(
+    public func saml_config(
         options: ITransportSettings? = nil
     ) -> SDKResponse<SamlConfig, SDKError> {
         let result: SDKResponse<SamlConfig, SDKError> = self.get("/saml_config", nil, nil, options)
@@ -783,7 +783,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /saml_config -> SamlConfig
      */
-    func update_saml_config(
+    public func update_saml_config(
         /**
          * @param {WriteSamlConfig} body
          */
@@ -799,7 +799,7 @@ class LookerSDK: APIMethods {
      *
      * GET /saml_test_configs/{test_slug} -> SamlConfig
      */
-    func saml_test_config(
+    public func saml_test_config(
         /**
          * @param {String} test_slug Slug of test config
          */
@@ -816,7 +816,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /saml_test_configs/{test_slug} -> String
      */
-    func delete_saml_test_config(
+    public func delete_saml_test_config(
         /**
          * @param {String} test_slug Slug of test config
          */
@@ -833,7 +833,7 @@ class LookerSDK: APIMethods {
      *
      * POST /saml_test_configs -> SamlConfig
      */
-    func create_saml_test_config(
+    public func create_saml_test_config(
         /**
          * @param {WriteSamlConfig} body
          */
@@ -849,7 +849,7 @@ class LookerSDK: APIMethods {
      *
      * POST /parse_saml_idp_metadata -> SamlMetadataParseResult
      */
-    func parse_saml_idp_metadata(
+    public func parse_saml_idp_metadata(
         /**
          * @param {String} body
          */
@@ -867,7 +867,7 @@ class LookerSDK: APIMethods {
      *
      * POST /fetch_and_parse_saml_idp_metadata -> SamlMetadataParseResult
      */
-    func fetch_and_parse_saml_idp_metadata(
+    public func fetch_and_parse_saml_idp_metadata(
         /**
          * @param {String} body
          */
@@ -883,7 +883,7 @@ class LookerSDK: APIMethods {
      *
      * GET /session_config -> SessionConfig
      */
-    func session_config(
+    public func session_config(
         options: ITransportSettings? = nil
     ) -> SDKResponse<SessionConfig, SDKError> {
         let result: SDKResponse<SessionConfig, SDKError> = self.get("/session_config", nil, nil, options)
@@ -895,7 +895,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /session_config -> SessionConfig
      */
-    func update_session_config(
+    public func update_session_config(
         /**
          * @param {WriteSessionConfig} body
          */
@@ -911,7 +911,7 @@ class LookerSDK: APIMethods {
      *
      * GET /user_login_lockouts -> [UserLoginLockout]
      */
-    func all_user_login_lockouts(
+    public func all_user_login_lockouts(
         /**
          * @param {String} fields Include only these fields in the response
          */
@@ -928,7 +928,7 @@ class LookerSDK: APIMethods {
      *
      * GET /user_login_lockouts/search -> [UserLoginLockout]
      */
-    func search_user_login_lockouts(
+    public func search_user_login_lockouts(
         /**
          * @param {String} fields Include only these fields in the response
          */
@@ -977,7 +977,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /user_login_lockout/{key} -> String
      */
-    func delete_user_login_lockout(
+    public func delete_user_login_lockout(
         /**
          * @param {String} key The key associated with the locked user
          */
@@ -989,7 +989,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Board: Manage Boards
 
@@ -998,7 +998,7 @@ class LookerSDK: APIMethods {
      *
      * GET /boards -> [Board]
      */
-    func all_boards(
+    public func all_boards(
         /**
          * @param {String} fields Requested fields.
          */
@@ -1015,7 +1015,7 @@ class LookerSDK: APIMethods {
      *
      * POST /boards -> Board
      */
-    func create_board(
+    public func create_board(
         /**
          * @param {WriteBoard} body
          */
@@ -1057,7 +1057,7 @@ class LookerSDK: APIMethods {
      *
      * GET /boards/search -> [Board]
      */
-    func search_boards(
+    public func search_boards(
         /**
          * @param {String} title Matches board title.
          */
@@ -1122,7 +1122,7 @@ class LookerSDK: APIMethods {
      *
      * GET /boards/{board_id} -> Board
      */
-    func board(
+    public func board(
         /**
          * @param {Int64} board_id Id of board
          */
@@ -1144,7 +1144,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /boards/{board_id} -> Board
      */
-    func update_board(
+    public func update_board(
         /**
          * @param {Int64} board_id Id of board
          */
@@ -1170,7 +1170,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /boards/{board_id} -> String
      */
-    func delete_board(
+    public func delete_board(
         /**
          * @param {Int64} board_id Id of board
          */
@@ -1187,7 +1187,7 @@ class LookerSDK: APIMethods {
      *
      * GET /board_items -> [BoardItem]
      */
-    func all_board_items(
+    public func all_board_items(
         /**
          * @param {String} fields Requested fields.
          */
@@ -1212,7 +1212,7 @@ class LookerSDK: APIMethods {
      *
      * POST /board_items -> BoardItem
      */
-    func create_board_item(
+    public func create_board_item(
         /**
          * @param {WriteBoardItem} body
          */
@@ -1233,7 +1233,7 @@ class LookerSDK: APIMethods {
      *
      * GET /board_items/{board_item_id} -> BoardItem
      */
-    func board_item(
+    public func board_item(
         /**
          * @param {Int64} board_item_id Id of board item
          */
@@ -1255,7 +1255,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /board_items/{board_item_id} -> BoardItem
      */
-    func update_board_item(
+    public func update_board_item(
         /**
          * @param {Int64} board_item_id Id of board item
          */
@@ -1281,7 +1281,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /board_items/{board_item_id} -> String
      */
-    func delete_board_item(
+    public func delete_board_item(
         /**
          * @param {Int64} board_item_id Id of board_item
          */
@@ -1298,7 +1298,7 @@ class LookerSDK: APIMethods {
      *
      * GET /board_sections -> [BoardSection]
      */
-    func all_board_sections(
+    public func all_board_sections(
         /**
          * @param {String} fields Requested fields.
          */
@@ -1319,7 +1319,7 @@ class LookerSDK: APIMethods {
      *
      * POST /board_sections -> BoardSection
      */
-    func create_board_section(
+    public func create_board_section(
         /**
          * @param {WriteBoardSection} body
          */
@@ -1340,7 +1340,7 @@ class LookerSDK: APIMethods {
      *
      * GET /board_sections/{board_section_id} -> BoardSection
      */
-    func board_section(
+    public func board_section(
         /**
          * @param {Int64} board_section_id Id of board section
          */
@@ -1362,7 +1362,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /board_sections/{board_section_id} -> BoardSection
      */
-    func update_board_section(
+    public func update_board_section(
         /**
          * @param {Int64} board_section_id Id of board section
          */
@@ -1388,7 +1388,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /board_sections/{board_section_id} -> String
      */
-    func delete_board_section(
+    public func delete_board_section(
         /**
          * @param {Int64} board_section_id Id of board section
          */
@@ -1400,7 +1400,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK ColorCollection: Manage Color Collections
 
@@ -1416,7 +1416,7 @@ class LookerSDK: APIMethods {
      *
      * GET /color_collections -> [ColorCollection]
      */
-    func all_color_collections(
+    public func all_color_collections(
         /**
          * @param {String} fields Requested fields.
          */
@@ -1441,7 +1441,7 @@ class LookerSDK: APIMethods {
      *
      * POST /color_collections -> ColorCollection
      */
-    func create_color_collection(
+    public func create_color_collection(
         /**
          * @param {WriteColorCollection} body
          */
@@ -1462,7 +1462,7 @@ class LookerSDK: APIMethods {
      *
      * GET /color_collections/custom -> [ColorCollection]
      */
-    func color_collections_custom(
+    public func color_collections_custom(
         /**
          * @param {String} fields Requested fields.
          */
@@ -1484,7 +1484,7 @@ class LookerSDK: APIMethods {
      *
      * GET /color_collections/standard -> [ColorCollection]
      */
-    func color_collections_standard(
+    public func color_collections_standard(
         /**
          * @param {String} fields Requested fields.
          */
@@ -1505,7 +1505,7 @@ class LookerSDK: APIMethods {
      *
      * GET /color_collections/default -> ColorCollection
      */
-    func default_color_collection(
+    public func default_color_collection(
         options: ITransportSettings? = nil
     ) -> SDKResponse<ColorCollection, SDKError> {
         let result: SDKResponse<ColorCollection, SDKError> = self.get("/color_collections/default", nil, nil, options)
@@ -1520,7 +1520,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /color_collections/default -> ColorCollection
      */
-    func set_default_color_collection(
+    public func set_default_color_collection(
         /**
          * @param {String} collection_id ID of color collection to set as default
          */
@@ -1546,7 +1546,7 @@ class LookerSDK: APIMethods {
      *
      * GET /color_collections/{collection_id} -> ColorCollection
      */
-    func color_collection(
+    public func color_collection(
         /**
          * @param {String} collection_id Id of Color Collection
          */
@@ -1569,7 +1569,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /color_collections/{collection_id} -> ColorCollection
      */
-    func update_color_collection(
+    public func update_color_collection(
         /**
          * @param {String} collection_id Id of Custom Color Collection
          */
@@ -1597,7 +1597,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /color_collections/{collection_id} -> String
      */
-    func delete_color_collection(
+    public func delete_color_collection(
         /**
          * @param {String} collection_id Id of Color Collection
          */
@@ -1609,7 +1609,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Command: Manage Commands
 
@@ -1618,7 +1618,7 @@ class LookerSDK: APIMethods {
      *
      * GET /commands -> [Command]
      */
-    func get_all_commands(
+    public func get_all_commands(
         /**
          * @param {String} content_id Id of the associated content. This must be accompanied with content_type.
          */
@@ -1646,7 +1646,7 @@ class LookerSDK: APIMethods {
      *
      * POST /commands -> Command
      */
-    func create_command(
+    public func create_command(
         /**
          * @param {WriteCommand} body
          */
@@ -1664,7 +1664,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /commands/{command_id} -> Command
      */
-    func update_command(
+    public func update_command(
         /**
          * @param {Int64} command_id ID of a command
          */
@@ -1685,7 +1685,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /commands/{command_id} -> Voidable
      */
-    func delete_command(
+    public func delete_command(
         /**
          * @param {Int64} command_id ID of a command
          */
@@ -1697,7 +1697,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Config: Manage General Configuration
 
@@ -1706,7 +1706,7 @@ class LookerSDK: APIMethods {
      *
      * GET /cloud_storage -> BackupConfiguration
      */
-    func cloud_storage_configuration(
+    public func cloud_storage_configuration(
         options: ITransportSettings? = nil
     ) -> SDKResponse<BackupConfiguration, SDKError> {
         let result: SDKResponse<BackupConfiguration, SDKError> = self.get("/cloud_storage", nil, nil, options)
@@ -1718,7 +1718,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /cloud_storage -> BackupConfiguration
      */
-    func update_cloud_storage_configuration(
+    public func update_cloud_storage_configuration(
         /**
          * @param {WriteBackupConfiguration} body
          */
@@ -1734,7 +1734,7 @@ class LookerSDK: APIMethods {
      *
      * GET /custom_welcome_email -> CustomWelcomeEmail
      */
-    func custom_welcome_email(
+    public func custom_welcome_email(
         options: ITransportSettings? = nil
     ) -> SDKResponse<CustomWelcomeEmail, SDKError> {
         let result: SDKResponse<CustomWelcomeEmail, SDKError> = self.get("/custom_welcome_email", nil, nil, options)
@@ -1746,7 +1746,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /custom_welcome_email -> CustomWelcomeEmail
      */
-    func update_custom_welcome_email(
+    public func update_custom_welcome_email(
         /**
          * @param {WriteCustomWelcomeEmail} body
          */
@@ -1767,7 +1767,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /custom_welcome_email_test -> WelcomeEmailTest
      */
-    func update_custom_welcome_email_test(
+    public func update_custom_welcome_email_test(
         /**
          * @param {WelcomeEmailTest} body
          */
@@ -1783,7 +1783,7 @@ class LookerSDK: APIMethods {
      *
      * GET /digest_emails_enabled -> DigestEmails
      */
-    func digest_emails_enabled(
+    public func digest_emails_enabled(
         options: ITransportSettings? = nil
     ) -> SDKResponse<DigestEmails, SDKError> {
         let result: SDKResponse<DigestEmails, SDKError> = self.get("/digest_emails_enabled", nil, nil, options)
@@ -1795,7 +1795,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /digest_emails_enabled -> DigestEmails
      */
-    func update_digest_emails_enabled(
+    public func update_digest_emails_enabled(
         /**
          * @param {DigestEmails} body
          */
@@ -1813,7 +1813,7 @@ class LookerSDK: APIMethods {
      *
      * POST /digest_email_send -> DigestEmailSend
      */
-    func create_digest_email_send(
+    public func create_digest_email_send(
         options: ITransportSettings? = nil
     ) -> SDKResponse<DigestEmailSend, SDKError> {
         let result: SDKResponse<DigestEmailSend, SDKError> = self.post("/digest_email_send", nil, nil, options)
@@ -1825,7 +1825,7 @@ class LookerSDK: APIMethods {
      *
      * GET /internal_help_resources_content -> InternalHelpResourcesContent
      */
-    func internal_help_resources_content(
+    public func internal_help_resources_content(
         options: ITransportSettings? = nil
     ) -> SDKResponse<InternalHelpResourcesContent, SDKError> {
         let result: SDKResponse<InternalHelpResourcesContent, SDKError> = self.get("/internal_help_resources_content", nil, nil, options)
@@ -1837,7 +1837,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /internal_help_resources_content -> InternalHelpResourcesContent
      */
-    func update_internal_help_resources_content(
+    public func update_internal_help_resources_content(
         /**
          * @param {WriteInternalHelpResourcesContent} body
          */
@@ -1853,7 +1853,7 @@ class LookerSDK: APIMethods {
      *
      * GET /internal_help_resources_enabled -> InternalHelpResources
      */
-    func internal_help_resources(
+    public func internal_help_resources(
         options: ITransportSettings? = nil
     ) -> SDKResponse<InternalHelpResources, SDKError> {
         let result: SDKResponse<InternalHelpResources, SDKError> = self.get("/internal_help_resources_enabled", nil, nil, options)
@@ -1865,7 +1865,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /internal_help_resources -> InternalHelpResources
      */
-    func update_internal_help_resources(
+    public func update_internal_help_resources(
         /**
          * @param {WriteInternalHelpResources} body
          */
@@ -1881,7 +1881,7 @@ class LookerSDK: APIMethods {
      *
      * GET /legacy_features -> [LegacyFeature]
      */
-    func all_legacy_features(
+    public func all_legacy_features(
         options: ITransportSettings? = nil
     ) -> SDKResponse<[LegacyFeature], SDKError> {
         let result: SDKResponse<[LegacyFeature], SDKError> = self.get("/legacy_features", nil, nil, options)
@@ -1893,7 +1893,7 @@ class LookerSDK: APIMethods {
      *
      * GET /legacy_features/{legacy_feature_id} -> LegacyFeature
      */
-    func legacy_feature(
+    public func legacy_feature(
         /**
          * @param {String} legacy_feature_id id of legacy feature
          */
@@ -1910,7 +1910,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /legacy_features/{legacy_feature_id} -> LegacyFeature
      */
-    func update_legacy_feature(
+    public func update_legacy_feature(
         /**
          * @param {String} legacy_feature_id id of legacy feature
          */
@@ -1931,7 +1931,7 @@ class LookerSDK: APIMethods {
      *
      * GET /locales -> [LkLocale]
      */
-    func all_locales(
+    public func all_locales(
         options: ITransportSettings? = nil
     ) -> SDKResponse<[LkLocale], SDKError> {
         let result: SDKResponse<[LkLocale], SDKError> = self.get("/locales", nil, nil, options)
@@ -1943,7 +1943,7 @@ class LookerSDK: APIMethods {
      *
      * GET /timezones -> [Timezone]
      */
-    func all_timezones(
+    public func all_timezones(
         options: ITransportSettings? = nil
     ) -> SDKResponse<[Timezone], SDKError> {
         let result: SDKResponse<[Timezone], SDKError> = self.get("/timezones", nil, nil, options)
@@ -1955,7 +1955,7 @@ class LookerSDK: APIMethods {
      *
      * GET /versions -> ApiVersion
      */
-    func versions(
+    public func versions(
         /**
          * @param {String} fields Requested fields.
          */
@@ -1973,7 +1973,7 @@ class LookerSDK: APIMethods {
      *
      * GET /whitelabel_configuration -> WhitelabelConfiguration
      */
-    func whitelabel_configuration(
+    public func whitelabel_configuration(
         /**
          * @param {String} fields Requested fields.
          */
@@ -1990,7 +1990,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /whitelabel_configuration -> WhitelabelConfiguration
      */
-    func update_whitelabel_configuration(
+    public func update_whitelabel_configuration(
         /**
          * @param {WriteWhitelabelConfiguration} body
          */
@@ -2001,7 +2001,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Connection: Manage Database Connections
 
@@ -2010,7 +2010,7 @@ class LookerSDK: APIMethods {
      *
      * GET /connections -> [DBConnection]
      */
-    func all_connections(
+    public func all_connections(
         /**
          * @param {String} fields Requested fields.
          */
@@ -2027,7 +2027,7 @@ class LookerSDK: APIMethods {
      *
      * POST /connections -> DBConnection
      */
-    func create_connection(
+    public func create_connection(
         /**
          * @param {WriteDBConnection} body
          */
@@ -2043,7 +2043,7 @@ class LookerSDK: APIMethods {
      *
      * GET /connections/{connection_name} -> DBConnection
      */
-    func connection(
+    public func connection(
         /**
          * @param {String} connection_name Name of connection
          */
@@ -2065,7 +2065,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /connections/{connection_name} -> DBConnection
      */
-    func update_connection(
+    public func update_connection(
         /**
          * @param {String} connection_name Name of connection
          */
@@ -2086,7 +2086,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /connections/{connection_name} -> String
      */
-    func delete_connection(
+    public func delete_connection(
         /**
          * @param {String} connection_name Name of connection
          */
@@ -2103,7 +2103,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /connections/{connection_name}/connection_override/{override_context} -> String
      */
-    func delete_connection_override(
+    public func delete_connection_override(
         /**
          * @param {String} connection_name Name of connection
          */
@@ -2132,7 +2132,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /connections/{connection_name}/test -> [DBConnectionTestResult]
      */
-    func test_connection(
+    public func test_connection(
         /**
          * @param {String} connection_name Name of connection
          */
@@ -2161,7 +2161,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /connections/test -> [DBConnectionTestResult]
      */
-    func test_connection_config(
+    public func test_connection_config(
         /**
          * @param {WriteDBConnection} body
          */
@@ -2182,7 +2182,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dialect_info -> [DialectInfo]
      */
-    func all_dialect_infos(
+    public func all_dialect_infos(
         /**
          * @param {String} fields Requested fields.
          */
@@ -2199,7 +2199,7 @@ class LookerSDK: APIMethods {
      *
      * GET /ssh_servers -> [SshServer]
      */
-    func all_ssh_servers(
+    public func all_ssh_servers(
         /**
          * @param {String} fields Requested fields.
          */
@@ -2216,7 +2216,7 @@ class LookerSDK: APIMethods {
      *
      * POST /ssh_servers -> SshServer
      */
-    func create_ssh_server(
+    public func create_ssh_server(
         /**
          * @param {WriteSshServer} body
          */
@@ -2232,7 +2232,7 @@ class LookerSDK: APIMethods {
      *
      * GET /ssh_server/{ssh_server_id} -> SshServer
      */
-    func ssh_server(
+    public func ssh_server(
         /**
          * @param {String} ssh_server_id Id of SSH Server
          */
@@ -2249,7 +2249,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /ssh_server/{ssh_server_id} -> SshServer
      */
-    func update_ssh_server(
+    public func update_ssh_server(
         /**
          * @param {String} ssh_server_id Id of SSH Server
          */
@@ -2270,7 +2270,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /ssh_server/{ssh_server_id} -> String
      */
-    func delete_ssh_server(
+    public func delete_ssh_server(
         /**
          * @param {String} ssh_server_id Id of SSH Server
          */
@@ -2287,7 +2287,7 @@ class LookerSDK: APIMethods {
      *
      * GET /ssh_server/{ssh_server_id}/test -> SshServer
      */
-    func test_ssh_server(
+    public func test_ssh_server(
         /**
          * @param {String} ssh_server_id Id of SSH Server
          */
@@ -2304,7 +2304,7 @@ class LookerSDK: APIMethods {
      *
      * GET /ssh_tunnels -> [SshTunnel]
      */
-    func all_ssh_tunnels(
+    public func all_ssh_tunnels(
         /**
          * @param {String} fields Requested fields.
          */
@@ -2321,7 +2321,7 @@ class LookerSDK: APIMethods {
      *
      * POST /ssh_tunnels -> SshTunnel
      */
-    func create_ssh_tunnel(
+    public func create_ssh_tunnel(
         /**
          * @param {WriteSshTunnel} body
          */
@@ -2337,7 +2337,7 @@ class LookerSDK: APIMethods {
      *
      * GET /ssh_tunnel/{ssh_tunnel_id} -> SshTunnel
      */
-    func ssh_tunnel(
+    public func ssh_tunnel(
         /**
          * @param {String} ssh_tunnel_id Id of SSH Tunnel
          */
@@ -2354,7 +2354,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /ssh_tunnel/{ssh_tunnel_id} -> SshTunnel
      */
-    func update_ssh_tunnel(
+    public func update_ssh_tunnel(
         /**
          * @param {String} ssh_tunnel_id Id of SSH Tunnel
          */
@@ -2375,7 +2375,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /ssh_tunnel/{ssh_tunnel_id} -> String
      */
-    func delete_ssh_tunnel(
+    public func delete_ssh_tunnel(
         /**
          * @param {String} ssh_tunnel_id Id of SSH Tunnel
          */
@@ -2392,7 +2392,7 @@ class LookerSDK: APIMethods {
      *
      * GET /ssh_tunnel/{ssh_tunnel_id}/test -> SshTunnel
      */
-    func test_ssh_tunnel(
+    public func test_ssh_tunnel(
         /**
          * @param {String} ssh_tunnel_id Id of SSH Tunnel
          */
@@ -2411,14 +2411,14 @@ class LookerSDK: APIMethods {
      *
      * GET /ssh_public_key -> SshPublicKey
      */
-    func ssh_public_key(
+    public func ssh_public_key(
         options: ITransportSettings? = nil
     ) -> SDKResponse<SshPublicKey, SDKError> {
         let result: SDKResponse<SshPublicKey, SDKError> = self.get("/ssh_public_key", nil, nil, options)
         return result
     }
 
-    // MARK -
+
 
     // MARK Content: Manage Content
 
@@ -2448,7 +2448,7 @@ class LookerSDK: APIMethods {
      *
      * GET /content_favorite/search -> [ContentFavorite]
      */
-    func search_content_favorites(
+    public func search_content_favorites(
         /**
          * @param {Int64} id Match content favorite id(s)
          */
@@ -2505,7 +2505,7 @@ class LookerSDK: APIMethods {
      *
      * GET /content_favorite/{content_favorite_id} -> ContentFavorite
      */
-    func content_favorite(
+    public func content_favorite(
         /**
          * @param {Int64} content_favorite_id Id of favorite content
          */
@@ -2527,7 +2527,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /content_favorite/{content_favorite_id} -> String
      */
-    func delete_content_favorite(
+    public func delete_content_favorite(
         /**
          * @param {Int64} content_favorite_id Id of favorite content
          */
@@ -2544,7 +2544,7 @@ class LookerSDK: APIMethods {
      *
      * POST /content_favorite -> ContentFavorite
      */
-    func create_content_favorite(
+    public func create_content_favorite(
         /**
          * @param {WriteContentFavorite} body
          */
@@ -2560,7 +2560,7 @@ class LookerSDK: APIMethods {
      *
      * GET /content_metadata -> [ContentMeta]
      */
-    func all_content_metadatas(
+    public func all_content_metadatas(
         /**
          * @param {Int64} parent_id Parent space of content.
          */
@@ -2581,7 +2581,7 @@ class LookerSDK: APIMethods {
      *
      * GET /content_metadata/{content_metadata_id} -> ContentMeta
      */
-    func content_metadata(
+    public func content_metadata(
         /**
          * @param {Int64} content_metadata_id Id of content metadata
          */
@@ -2603,7 +2603,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /content_metadata/{content_metadata_id} -> ContentMeta
      */
-    func update_content_metadata(
+    public func update_content_metadata(
         /**
          * @param {Int64} content_metadata_id Id of content metadata
          */
@@ -2624,7 +2624,7 @@ class LookerSDK: APIMethods {
      *
      * GET /content_metadata_access -> [ContentMetaGroupUser]
      */
-    func all_content_metadata_accesses(
+    public func all_content_metadata_accesses(
         /**
          * @param {Int64} content_metadata_id Id of content metadata
          */
@@ -2645,7 +2645,7 @@ class LookerSDK: APIMethods {
      *
      * POST /content_metadata_access -> ContentMetaGroupUser
      */
-    func create_content_metadata_access(
+    public func create_content_metadata_access(
         /**
          * @param {ContentMetaGroupUser} body
          */
@@ -2666,7 +2666,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /content_metadata_access/{content_metadata_access_id} -> ContentMetaGroupUser
      */
-    func update_content_metadata_access(
+    public func update_content_metadata_access(
         /**
          * @param {String} content_metadata_access_id Id of content metadata access
          */
@@ -2687,7 +2687,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /content_metadata_access/{content_metadata_access_id} -> String
      */
-    func delete_content_metadata_access(
+    public func delete_content_metadata_access(
         /**
          * @param {Int64} content_metadata_access_id Id of content metadata access
          */
@@ -2707,7 +2707,7 @@ class LookerSDK: APIMethods {
      *
      * GET /content_validation -> ContentValidation
      */
-    func content_validation(
+    public func content_validation(
         /**
          * @param {String} fields Requested fields.
          */
@@ -2745,7 +2745,7 @@ class LookerSDK: APIMethods {
      *
      * GET /content_view/search -> [ContentView]
      */
-    func search_content_views(
+    public func search_content_views(
         /**
          * @param {String} view_count Match view count
          */
@@ -2813,7 +2813,7 @@ class LookerSDK: APIMethods {
      *
      * GET /vector_thumbnail/{type}/{resource_id} -> String
      */
-    func vector_thumbnail(
+    public func vector_thumbnail(
         /**
          * @param {String} type Either dashboard or look
          */
@@ -2835,7 +2835,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Dashboard: Manage Dashboards
 
@@ -2850,7 +2850,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dashboards -> [DashboardBase]
      */
-    func all_dashboards(
+    public func all_dashboards(
         /**
          * @param {String} fields Requested fields.
          */
@@ -2880,7 +2880,7 @@ class LookerSDK: APIMethods {
      *
      * POST /dashboards -> Dashboard
      */
-    func create_dashboard(
+    public func create_dashboard(
         /**
          * @param {WriteDashboard} body
          */
@@ -2924,7 +2924,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dashboards/search -> [Dashboard]
      */
-    func search_dashboards(
+    public func search_dashboards(
         /**
          * @param {String} id Match dashboard id.
          */
@@ -3024,7 +3024,7 @@ class LookerSDK: APIMethods {
      *
      * POST /dashboards/{lookml_dashboard_id}/import/{space_id} -> Dashboard
      */
-    func import_lookml_dashboard(
+    public func import_lookml_dashboard(
         /**
          * @param {String} lookml_dashboard_id Id of LookML dashboard
          */
@@ -3063,7 +3063,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /dashboards/{lookml_dashboard_id}/sync -> [Int64]
      */
-    func sync_lookml_dashboard(
+    public func sync_lookml_dashboard(
         /**
          * @param {String} lookml_dashboard_id Id of LookML dashboard, in the form 'model::dashboardname'
          */
@@ -3095,7 +3095,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dashboards/{dashboard_id} -> Dashboard
      */
-    func dashboard(
+    public func dashboard(
         /**
          * @param {String} dashboard_id Id of dashboard
          */
@@ -3126,7 +3126,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /dashboards/{dashboard_id} -> Dashboard
      */
-    func update_dashboard(
+    public func update_dashboard(
         /**
          * @param {String} dashboard_id Id of dashboard
          */
@@ -3153,7 +3153,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /dashboards/{dashboard_id} -> String
      */
-    func delete_dashboard(
+    public func delete_dashboard(
         /**
          * @param {String} dashboard_id Id of dashboard
          */
@@ -3172,7 +3172,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dashboards/aggregate_table_lookml/{dashboard_id} -> DashboardAggregateTableLookml
      */
-    func dashboard_aggregate_table_lookml(
+    public func dashboard_aggregate_table_lookml(
         /**
          * @param {String} dashboard_id Id of dashboard
          */
@@ -3191,7 +3191,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dashboards/lookml/{dashboard_id} -> DashboardLookml
      */
-    func dashboard_lookml(
+    public func dashboard_lookml(
         /**
          * @param {String} dashboard_id Id of dashboard
          */
@@ -3231,7 +3231,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dashboard_elements/search -> [DashboardElement]
      */
-    func search_dashboard_elements(
+    public func search_dashboard_elements(
         /**
          * @param {Int64} dashboard_id Select elements that refer to a given dashboard id
          */
@@ -3272,7 +3272,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dashboard_elements/{dashboard_element_id} -> DashboardElement
      */
-    func dashboard_element(
+    public func dashboard_element(
         /**
          * @param {String} dashboard_element_id Id of dashboard element
          */
@@ -3294,7 +3294,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /dashboard_elements/{dashboard_element_id} -> DashboardElement
      */
-    func update_dashboard_element(
+    public func update_dashboard_element(
         /**
          * @param {String} dashboard_element_id Id of dashboard element
          */
@@ -3320,7 +3320,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /dashboard_elements/{dashboard_element_id} -> String
      */
-    func delete_dashboard_element(
+    public func delete_dashboard_element(
         /**
          * @param {String} dashboard_element_id Id of dashboard element
          */
@@ -3337,7 +3337,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dashboards/{dashboard_id}/dashboard_elements -> [DashboardElement]
      */
-    func dashboard_dashboard_elements(
+    public func dashboard_dashboard_elements(
         /**
          * @param {String} dashboard_id Id of dashboard
          */
@@ -3359,7 +3359,7 @@ class LookerSDK: APIMethods {
      *
      * POST /dashboard_elements -> DashboardElement
      */
-    func create_dashboard_element(
+    public func create_dashboard_element(
         /**
          * @param {WriteDashboardElement} body
          */
@@ -3380,7 +3380,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
      */
-    func dashboard_filter(
+    public func dashboard_filter(
         /**
          * @param {String} dashboard_filter_id Id of dashboard filters
          */
@@ -3402,7 +3402,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
      */
-    func update_dashboard_filter(
+    public func update_dashboard_filter(
         /**
          * @param {String} dashboard_filter_id Id of dashboard filter
          */
@@ -3428,7 +3428,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /dashboard_filters/{dashboard_filter_id} -> String
      */
-    func delete_dashboard_filter(
+    public func delete_dashboard_filter(
         /**
          * @param {String} dashboard_filter_id Id of dashboard filter
          */
@@ -3445,7 +3445,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dashboards/{dashboard_id}/dashboard_filters -> [DashboardFilter]
      */
-    func dashboard_dashboard_filters(
+    public func dashboard_dashboard_filters(
         /**
          * @param {String} dashboard_id Id of dashboard
          */
@@ -3467,7 +3467,7 @@ class LookerSDK: APIMethods {
      *
      * POST /dashboard_filters -> DashboardFilter
      */
-    func create_dashboard_filter(
+    public func create_dashboard_filter(
         /**
          * @param {WriteCreateDashboardFilter} body
          */
@@ -3488,7 +3488,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
      */
-    func dashboard_layout_component(
+    public func dashboard_layout_component(
         /**
          * @param {String} dashboard_layout_component_id Id of dashboard layout component
          */
@@ -3510,7 +3510,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
      */
-    func update_dashboard_layout_component(
+    public func update_dashboard_layout_component(
         /**
          * @param {String} dashboard_layout_component_id Id of dashboard layout component
          */
@@ -3536,7 +3536,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components -> [DashboardLayoutComponent]
      */
-    func dashboard_layout_dashboard_layout_components(
+    public func dashboard_layout_dashboard_layout_components(
         /**
          * @param {String} dashboard_layout_id Id of dashboard layout component
          */
@@ -3558,7 +3558,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
      */
-    func dashboard_layout(
+    public func dashboard_layout(
         /**
          * @param {String} dashboard_layout_id Id of dashboard layouts
          */
@@ -3580,7 +3580,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
      */
-    func update_dashboard_layout(
+    public func update_dashboard_layout(
         /**
          * @param {String} dashboard_layout_id Id of dashboard layout
          */
@@ -3606,7 +3606,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /dashboard_layouts/{dashboard_layout_id} -> String
      */
-    func delete_dashboard_layout(
+    public func delete_dashboard_layout(
         /**
          * @param {String} dashboard_layout_id Id of dashboard layout
          */
@@ -3623,7 +3623,7 @@ class LookerSDK: APIMethods {
      *
      * GET /dashboards/{dashboard_id}/dashboard_layouts -> [DashboardLayout]
      */
-    func dashboard_dashboard_layouts(
+    public func dashboard_dashboard_layouts(
         /**
          * @param {String} dashboard_id Id of dashboard
          */
@@ -3645,7 +3645,7 @@ class LookerSDK: APIMethods {
      *
      * POST /dashboard_layouts -> DashboardLayout
      */
-    func create_dashboard_layout(
+    public func create_dashboard_layout(
         /**
          * @param {WriteDashboardLayout} body
          */
@@ -3661,7 +3661,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK DataAction: Run Data Actions
 
@@ -3670,7 +3670,7 @@ class LookerSDK: APIMethods {
      *
      * POST /data_actions -> DataActionResponse
      */
-    func perform_data_action(
+    public func perform_data_action(
         /**
          * @param {DataActionRequest} body
          */
@@ -3686,7 +3686,7 @@ class LookerSDK: APIMethods {
      *
      * POST /data_actions/form -> DataActionForm
      */
-    func fetch_remote_data_action_form(
+    public func fetch_remote_data_action_form(
         /**
          * @param {StringDictionary<AnyCodable>} body
          */
@@ -3697,7 +3697,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Datagroup: Manage Datagroups
 
@@ -3706,7 +3706,7 @@ class LookerSDK: APIMethods {
      *
      * GET /datagroups -> [Datagroup]
      */
-    func all_datagroups(
+    public func all_datagroups(
         options: ITransportSettings? = nil
     ) -> SDKResponse<[Datagroup], SDKError> {
         let result: SDKResponse<[Datagroup], SDKError> = self.get("/datagroups", nil, nil, options)
@@ -3718,7 +3718,7 @@ class LookerSDK: APIMethods {
      *
      * GET /datagroups/{datagroup_id} -> Datagroup
      */
-    func datagroup(
+    public func datagroup(
         /**
          * @param {Int64} datagroup_id ID of datagroup.
          */
@@ -3735,7 +3735,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /datagroups/{datagroup_id} -> Datagroup
      */
-    func update_datagroup(
+    public func update_datagroup(
         /**
          * @param {Int64} datagroup_id ID of datagroup.
          */
@@ -3751,7 +3751,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Folder: Manage Folders
 
@@ -3760,7 +3760,7 @@ class LookerSDK: APIMethods {
      *
      * GET /folders/search -> [Folder]
      */
-    func search_folders(
+    public func search_folders(
         /**
          * @param {String} fields Requested fields.
          */
@@ -3817,7 +3817,7 @@ class LookerSDK: APIMethods {
      *
      * GET /folders/{folder_id} -> Folder
      */
-    func folder(
+    public func folder(
         /**
          * @param {String} folder_id Id of folder
          */
@@ -3839,7 +3839,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /folders/{folder_id} -> Folder
      */
-    func update_folder(
+    public func update_folder(
         /**
          * @param {String} folder_id Id of folder
          */
@@ -3861,7 +3861,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /folders/{folder_id} -> String
      */
-    func delete_folder(
+    public func delete_folder(
         /**
          * @param {String} folder_id Id of folder
          */
@@ -3878,7 +3878,7 @@ class LookerSDK: APIMethods {
      *
      * GET /folders -> [Folder]
      */
-    func all_folders(
+    public func all_folders(
         /**
          * @param {String} fields Requested fields.
          */
@@ -3898,7 +3898,7 @@ class LookerSDK: APIMethods {
      *
      * POST /folders -> Folder
      */
-    func create_folder(
+    public func create_folder(
         /**
          * @param {CreateFolder} body
          */
@@ -3914,7 +3914,7 @@ class LookerSDK: APIMethods {
      *
      * GET /folders/{folder_id}/children -> [Folder]
      */
-    func folder_children(
+    public func folder_children(
         /**
          * @param {String} folder_id Id of folder
          */
@@ -3948,7 +3948,7 @@ class LookerSDK: APIMethods {
      *
      * GET /folders/{folder_id}/children/search -> [Folder]
      */
-    func folder_children_search(
+    public func folder_children_search(
         /**
          * @param {String} folder_id Id of folder
          */
@@ -3978,7 +3978,7 @@ class LookerSDK: APIMethods {
      *
      * GET /folders/{folder_id}/parent -> Folder
      */
-    func folder_parent(
+    public func folder_parent(
         /**
          * @param {String} folder_id Id of folder
          */
@@ -4000,7 +4000,7 @@ class LookerSDK: APIMethods {
      *
      * GET /folders/{folder_id}/ancestors -> [Folder]
      */
-    func folder_ancestors(
+    public func folder_ancestors(
         /**
          * @param {String} folder_id Id of folder
          */
@@ -4022,7 +4022,7 @@ class LookerSDK: APIMethods {
      *
      * GET /folders/{folder_id}/looks -> [LookWithQuery]
      */
-    func folder_looks(
+    public func folder_looks(
         /**
          * @param {String} folder_id Id of folder
          */
@@ -4044,7 +4044,7 @@ class LookerSDK: APIMethods {
      *
      * GET /folders/{folder_id}/dashboards -> [Dashboard]
      */
-    func folder_dashboards(
+    public func folder_dashboards(
         /**
          * @param {String} folder_id Id of folder
          */
@@ -4061,7 +4061,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Group: Manage Groups
 
@@ -4070,7 +4070,7 @@ class LookerSDK: APIMethods {
      *
      * GET /groups -> [LkGroup]
      */
-    func all_groups(
+    public func all_groups(
         /**
          * @param {String} fields Requested fields.
          */
@@ -4111,7 +4111,7 @@ class LookerSDK: APIMethods {
      *
      * POST /groups -> LkGroup
      */
-    func create_group(
+    public func create_group(
         /**
          * @param {WriteGroup} body
          */
@@ -4155,7 +4155,7 @@ class LookerSDK: APIMethods {
      *
      * GET /groups/search -> [LkGroup]
      */
-    func search_groups(
+    public func search_groups(
         /**
          * @param {String} fields Requested fields.
          */
@@ -4231,7 +4231,7 @@ class LookerSDK: APIMethods {
      *
      * GET /groups/search/with_roles -> [GroupSearch]
      */
-    func search_groups_with_roles(
+    public func search_groups_with_roles(
         /**
          * @param {String} fields Requested fields.
          */
@@ -4284,7 +4284,7 @@ class LookerSDK: APIMethods {
      *
      * GET /groups/{group_id} -> LkGroup
      */
-    func group(
+    public func group(
         /**
          * @param {Int64} group_id Id of group
          */
@@ -4306,7 +4306,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /groups/{group_id} -> LkGroup
      */
-    func update_group(
+    public func update_group(
         /**
          * @param {Int64} group_id Id of group
          */
@@ -4332,7 +4332,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /groups/{group_id} -> String
      */
-    func delete_group(
+    public func delete_group(
         /**
          * @param {Int64} group_id Id of group
          */
@@ -4349,7 +4349,7 @@ class LookerSDK: APIMethods {
      *
      * GET /groups/{group_id}/groups -> [LkGroup]
      */
-    func all_group_groups(
+    public func all_group_groups(
         /**
          * @param {Int64} group_id Id of group
          */
@@ -4371,7 +4371,7 @@ class LookerSDK: APIMethods {
      *
      * POST /groups/{group_id}/groups -> LkGroup
      */
-    func add_group_group(
+    public func add_group_group(
         /**
          * @param {Int64} group_id Id of group
          */
@@ -4392,7 +4392,7 @@ class LookerSDK: APIMethods {
      *
      * GET /groups/{group_id}/users -> [User]
      */
-    func all_group_users(
+    public func all_group_users(
         /**
          * @param {Int64} group_id Id of group
          */
@@ -4426,7 +4426,7 @@ class LookerSDK: APIMethods {
      *
      * POST /groups/{group_id}/users -> User
      */
-    func add_group_user(
+    public func add_group_user(
         /**
          * @param {Int64} group_id Id of group
          */
@@ -4447,7 +4447,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /groups/{group_id}/users/{user_id} -> Voidable
      */
-    func delete_group_user(
+    public func delete_group_user(
         /**
          * @param {Int64} group_id Id of group
          */
@@ -4469,7 +4469,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /groups/{group_id}/groups/{deleting_group_id} -> Voidable
      */
-    func delete_group_from_group(
+    public func delete_group_from_group(
         /**
          * @param {Int64} group_id Id of group
          */
@@ -4493,7 +4493,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> UserAttributeGroupValue
      */
-    func update_user_attribute_group_value(
+    public func update_user_attribute_group_value(
         /**
          * @param {Int64} group_id Id of group
          */
@@ -4519,7 +4519,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /groups/{group_id}/attribute_values/{user_attribute_id} -> Voidable
      */
-    func delete_user_attribute_group_value(
+    public func delete_user_attribute_group_value(
         /**
          * @param {Int64} group_id Id of group
          */
@@ -4536,7 +4536,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Integration: Manage Integrations
 
@@ -4545,7 +4545,7 @@ class LookerSDK: APIMethods {
      *
      * GET /integration_hubs -> [IntegrationHub]
      */
-    func all_integration_hubs(
+    public func all_integration_hubs(
         /**
          * @param {String} fields Requested fields.
          */
@@ -4564,7 +4564,7 @@ class LookerSDK: APIMethods {
      *
      * POST /integration_hubs -> IntegrationHub
      */
-    func create_integration_hub(
+    public func create_integration_hub(
         /**
          * @param {WriteIntegrationHub} body
          */
@@ -4585,7 +4585,7 @@ class LookerSDK: APIMethods {
      *
      * GET /integration_hubs/{integration_hub_id} -> IntegrationHub
      */
-    func integration_hub(
+    public func integration_hub(
         /**
          * @param {Int64} integration_hub_id Id of Integration Hub
          */
@@ -4609,7 +4609,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /integration_hubs/{integration_hub_id} -> IntegrationHub
      */
-    func update_integration_hub(
+    public func update_integration_hub(
         /**
          * @param {Int64} integration_hub_id Id of Integration Hub
          */
@@ -4635,7 +4635,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /integration_hubs/{integration_hub_id} -> String
      */
-    func delete_integration_hub(
+    public func delete_integration_hub(
         /**
          * @param {Int64} integration_hub_id Id of integration_hub
          */
@@ -4652,7 +4652,7 @@ class LookerSDK: APIMethods {
      *
      * POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> IntegrationHub
      */
-    func accept_integration_hub_legal_agreement(
+    public func accept_integration_hub_legal_agreement(
         /**
          * @param {Int64} integration_hub_id Id of integration_hub
          */
@@ -4669,7 +4669,7 @@ class LookerSDK: APIMethods {
      *
      * GET /integrations -> [Integration]
      */
-    func all_integrations(
+    public func all_integrations(
         /**
          * @param {String} fields Requested fields.
          */
@@ -4690,7 +4690,7 @@ class LookerSDK: APIMethods {
      *
      * GET /integrations/{integration_id} -> Integration
      */
-    func integration(
+    public func integration(
         /**
          * @param {String} integration_id Id of integration
          */
@@ -4712,7 +4712,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /integrations/{integration_id} -> Integration
      */
-    func update_integration(
+    public func update_integration(
         /**
          * @param {String} integration_id Id of integration
          */
@@ -4738,7 +4738,7 @@ class LookerSDK: APIMethods {
      *
      * POST /integrations/{integration_id}/form -> DataActionForm
      */
-    func fetch_integration_form(
+    public func fetch_integration_form(
         /**
          * @param {String} integration_id Id of integration
          */
@@ -4755,7 +4755,7 @@ class LookerSDK: APIMethods {
      *
      * POST /integrations/{integration_id}/test -> IntegrationTestResult
      */
-    func test_integration(
+    public func test_integration(
         /**
          * @param {String} integration_id Id of integration
          */
@@ -4767,7 +4767,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Look: Run and Manage Looks
 
@@ -4782,7 +4782,7 @@ class LookerSDK: APIMethods {
      *
      * GET /looks -> [Look]
      */
-    func all_looks(
+    public func all_looks(
         /**
          * @param {String} fields Requested fields.
          */
@@ -4805,7 +4805,7 @@ class LookerSDK: APIMethods {
      *
      * POST /looks -> LookWithQuery
      */
-    func create_look(
+    public func create_look(
         /**
          * @param {WriteLookWithQuery} body
          */
@@ -4852,7 +4852,7 @@ class LookerSDK: APIMethods {
      *
      * GET /looks/search -> [Look]
      */
-    func search_looks(
+    public func search_looks(
         /**
          * @param {String} id Match look id.
          */
@@ -4939,7 +4939,7 @@ class LookerSDK: APIMethods {
      *
      * GET /looks/{look_id} -> LookWithQuery
      */
-    func look(
+    public func look(
         /**
          * @param {Int64} look_id Id of look
          */
@@ -4980,7 +4980,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /looks/{look_id} -> LookWithQuery
      */
-    func update_look(
+    public func update_look(
         /**
          * @param {Int64} look_id Id of look
          */
@@ -5012,7 +5012,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /looks/{look_id} -> String
      */
-    func delete_look(
+    public func delete_look(
         /**
          * @param {Int64} look_id Id of look
          */
@@ -5048,7 +5048,7 @@ class LookerSDK: APIMethods {
      *
      * **Note**: Binary content may be returned by this method.
      */
-    func run_look(
+    public func run_look(
         /**
          * @param {Int64} look_id Id of look
          */
@@ -5114,7 +5114,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK LookmlModel: Manage LookML Models
 
@@ -5123,7 +5123,7 @@ class LookerSDK: APIMethods {
      *
      * GET /lookml_models -> [LookmlModel]
      */
-    func all_lookml_models(
+    public func all_lookml_models(
         /**
          * @param {String} fields Requested fields.
          */
@@ -5140,7 +5140,7 @@ class LookerSDK: APIMethods {
      *
      * POST /lookml_models -> LookmlModel
      */
-    func create_lookml_model(
+    public func create_lookml_model(
         /**
          * @param {WriteLookmlModel} body
          */
@@ -5156,7 +5156,7 @@ class LookerSDK: APIMethods {
      *
      * GET /lookml_models/{lookml_model_name} -> LookmlModel
      */
-    func lookml_model(
+    public func lookml_model(
         /**
          * @param {String} lookml_model_name Name of lookml model.
          */
@@ -5178,7 +5178,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /lookml_models/{lookml_model_name} -> LookmlModel
      */
-    func update_lookml_model(
+    public func update_lookml_model(
         /**
          * @param {String} lookml_model_name Name of lookml model.
          */
@@ -5199,7 +5199,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /lookml_models/{lookml_model_name} -> String
      */
-    func delete_lookml_model(
+    public func delete_lookml_model(
         /**
          * @param {String} lookml_model_name Name of lookml model.
          */
@@ -5216,7 +5216,7 @@ class LookerSDK: APIMethods {
      *
      * GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> LookmlModelExplore
      */
-    func lookml_model_explore(
+    public func lookml_model_explore(
         /**
          * @param {String} lookml_model_name Name of lookml model.
          */
@@ -5238,7 +5238,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Project: Manage Projects
 
@@ -5253,7 +5253,7 @@ class LookerSDK: APIMethods {
      *
      * POST /projects/{project_id}/manifest/lock_all -> String
      */
-    func lock_all(
+    public func lock_all(
         /**
          * @param {String} project_id Id of project
          */
@@ -5277,7 +5277,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{project_id}/git_branches -> [GitBranch]
      */
-    func all_git_branches(
+    public func all_git_branches(
         /**
          * @param {String} project_id Project Id
          */
@@ -5296,7 +5296,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{project_id}/git_branch -> GitBranch
      */
-    func git_branch(
+    public func git_branch(
         /**
          * @param {String} project_id Project Id
          */
@@ -5321,7 +5321,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /projects/{project_id}/git_branch -> GitBranch
      */
-    func update_git_branch(
+    public func update_git_branch(
         /**
          * @param {String} project_id Project Id
          */
@@ -5349,7 +5349,7 @@ class LookerSDK: APIMethods {
      *
      * POST /projects/{project_id}/git_branch -> GitBranch
      */
-    func create_git_branch(
+    public func create_git_branch(
         /**
          * @param {String} project_id Project Id
          */
@@ -5372,7 +5372,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{project_id}/git_branch/{branch_name} -> GitBranch
      */
-    func find_git_branch(
+    public func find_git_branch(
         /**
          * @param {String} project_id Project Id
          */
@@ -5396,7 +5396,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /projects/{project_id}/git_branch/{branch_name} -> String
      */
-    func delete_git_branch(
+    public func delete_git_branch(
         /**
          * @param {String} project_id Project Id
          */
@@ -5426,7 +5426,7 @@ class LookerSDK: APIMethods {
      *
      * POST /projects/{project_id}/deploy_ref_to_production -> String
      */
-    func deploy_ref_to_production(
+    public func deploy_ref_to_production(
         /**
          * @param {String} project_id Id of project
          */
@@ -5463,7 +5463,7 @@ class LookerSDK: APIMethods {
      *
      * POST /projects/{project_id}/deploy_to_production -> String
      */
-    func deploy_to_production(
+    public func deploy_to_production(
         /**
          * @param {String} project_id Id of project
          */
@@ -5482,7 +5482,7 @@ class LookerSDK: APIMethods {
      *
      * POST /projects/{project_id}/reset_to_production -> String
      */
-    func reset_project_to_production(
+    public func reset_project_to_production(
         /**
          * @param {String} project_id Id of project
          */
@@ -5501,7 +5501,7 @@ class LookerSDK: APIMethods {
      *
      * POST /projects/{project_id}/reset_to_remote -> String
      */
-    func reset_project_to_remote(
+    public func reset_project_to_remote(
         /**
          * @param {String} project_id Id of project
          */
@@ -5520,7 +5520,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects -> [Project]
      */
-    func all_projects(
+    public func all_projects(
         /**
          * @param {String} fields Requested fields
          */
@@ -5543,7 +5543,7 @@ class LookerSDK: APIMethods {
      *
      * POST /projects -> Project
      */
-    func create_project(
+    public func create_project(
         /**
          * @param {WriteProject} body
          */
@@ -5561,7 +5561,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{project_id} -> Project
      */
-    func project(
+    public func project(
         /**
          * @param {String} project_id Project Id
          */
@@ -5604,7 +5604,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /projects/{project_id} -> Project
      */
-    func update_project(
+    public func update_project(
         /**
          * @param {String} project_id Project Id
          */
@@ -5632,7 +5632,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{project_id}/manifest -> Manifest
      */
-    func manifest(
+    public func manifest(
         /**
          * @param {String} project_id Project Id
          */
@@ -5651,7 +5651,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{project_id}/git/deploy_key -> String
      */
-    func git_deploy_key(
+    public func git_deploy_key(
         /**
          * @param {String} project_id Project Id
          */
@@ -5676,7 +5676,7 @@ class LookerSDK: APIMethods {
      *
      * POST /projects/{project_id}/git/deploy_key -> String
      */
-    func create_git_deploy_key(
+    public func create_git_deploy_key(
         /**
          * @param {String} project_id Project Id
          */
@@ -5704,7 +5704,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{project_id}/validate -> ProjectValidationCache
      */
-    func project_validation_results(
+    public func project_validation_results(
         /**
          * @param {String} project_id Project Id
          */
@@ -5734,7 +5734,7 @@ class LookerSDK: APIMethods {
      *
      * POST /projects/{project_id}/validate -> ProjectValidation
      */
-    func validate_project(
+    public func validate_project(
         /**
          * @param {String} project_id Project Id
          */
@@ -5758,7 +5758,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{project_id}/current_workspace -> ProjectWorkspace
      */
-    func project_workspace(
+    public func project_workspace(
         /**
          * @param {String} project_id Project Id
          */
@@ -5782,7 +5782,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{project_id}/files -> [ProjectFile]
      */
-    func all_project_files(
+    public func all_project_files(
         /**
          * @param {String} project_id Project Id
          */
@@ -5806,7 +5806,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{project_id}/files/file -> ProjectFile
      */
-    func project_file(
+    public func project_file(
         /**
          * @param {String} project_id Project Id
          */
@@ -5841,7 +5841,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{project_id}/git_connection_tests -> [GitConnectionTest]
      */
-    func all_git_connection_tests(
+    public func all_git_connection_tests(
         /**
          * @param {String} project_id Project Id
          */
@@ -5869,7 +5869,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{project_id}/git_connection_tests/{test_id} -> GitConnectionTestResult
      */
-    func run_git_connection_test(
+    public func run_git_connection_test(
         /**
          * @param {String} project_id Project Id
          */
@@ -5900,7 +5900,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{project_id}/lookml_tests -> [LookmlTest]
      */
-    func all_lookml_tests(
+    public func all_lookml_tests(
         /**
          * @param {String} project_id Project Id
          */
@@ -5924,7 +5924,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{project_id}/lookml_tests/run -> [LookmlTestResult]
      */
-    func run_lookml_test(
+    public func run_lookml_test(
         /**
          * @param {String} project_id Project Id
          */
@@ -5959,7 +5959,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /projects/{root_project_id}/credential/{credential_id} -> RepositoryCredential
      */
-    func update_repository_credential(
+    public func update_repository_credential(
         /**
          * @param {String} root_project_id Root Project Id
          */
@@ -5990,7 +5990,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /projects/{root_project_id}/credential/{credential_id} -> String
      */
-    func delete_repository_credential(
+    public func delete_repository_credential(
         /**
          * @param {String} root_project_id Root Project Id
          */
@@ -6014,7 +6014,7 @@ class LookerSDK: APIMethods {
      *
      * GET /projects/{root_project_id}/credentials -> [RepositoryCredential]
      */
-    func get_all_repository_credentials(
+    public func get_all_repository_credentials(
         /**
          * @param {String} root_project_id Root Project Id
          */
@@ -6026,7 +6026,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Query: Run and Manage Queries
 
@@ -6040,7 +6040,7 @@ class LookerSDK: APIMethods {
      *
      * POST /query_tasks -> QueryTask
      */
-    func create_query_task(
+    public func create_query_task(
         /**
          * @param {WriteCreateQueryTask} body
          */
@@ -6115,7 +6115,7 @@ class LookerSDK: APIMethods {
      *
      * GET /query_tasks/multi_results -> StringDictionary<AnyCodable>
      */
-    func query_task_multi_results(
+    public func query_task_multi_results(
         /**
          * @param {DelimArray<String>} query_task_ids List of Query Task IDs
          */
@@ -6138,7 +6138,7 @@ class LookerSDK: APIMethods {
      *
      * GET /query_tasks/{query_task_id} -> QueryTask
      */
-    func query_task(
+    public func query_task(
         /**
          * @param {String} query_task_id ID of the Query Task
          */
@@ -6182,7 +6182,7 @@ class LookerSDK: APIMethods {
      *
      * GET /query_tasks/{query_task_id}/results -> String
      */
-    func query_task_results(
+    public func query_task_results(
         /**
          * @param {String} query_task_id ID of the Query Task
          */
@@ -6215,7 +6215,7 @@ class LookerSDK: APIMethods {
      *
      * GET /queries/{query_id} -> Query
      */
-    func query(
+    public func query(
         /**
          * @param {Int64} query_id Id of query
          */
@@ -6253,7 +6253,7 @@ class LookerSDK: APIMethods {
      *
      * GET /queries/slug/{slug} -> Query
      */
-    func query_for_slug(
+    public func query_for_slug(
         /**
          * @param {String} slug Slug of query
          */
@@ -6282,7 +6282,7 @@ class LookerSDK: APIMethods {
      *
      * POST /queries -> Query
      */
-    func create_query(
+    public func create_query(
         /**
          * @param {WriteQuery} body
          */
@@ -6325,7 +6325,7 @@ class LookerSDK: APIMethods {
      *
      * **Note**: Binary content may be returned by this method.
      */
-    func run_query(
+    public func run_query(
         /**
          * @param {Int64} query_id Id of query
          */
@@ -6447,7 +6447,7 @@ class LookerSDK: APIMethods {
      *
      * **Note**: Binary content may be returned by this method.
      */
-    func run_inline_query(
+    public func run_inline_query(
         /**
          * @param {String} result_format Format of result
          */
@@ -6570,7 +6570,7 @@ class LookerSDK: APIMethods {
      *
      * **Note**: Binary content may be returned by this method.
      */
-    func run_url_encoded_query(
+    public func run_url_encoded_query(
         /**
          * @param {String} model_name Model name
          */
@@ -6599,7 +6599,7 @@ class LookerSDK: APIMethods {
      *
      * GET /merge_queries/{merge_query_id} -> MergeQuery
      */
-    func merge_query(
+    public func merge_query(
         /**
          * @param {String} merge_query_id Merge Query Id
          */
@@ -6637,7 +6637,7 @@ class LookerSDK: APIMethods {
      *
      * POST /merge_queries -> MergeQuery
      */
-    func create_merge_query(
+    public func create_merge_query(
         /**
          * @param {WriteMergeQuery} body
          */
@@ -6658,7 +6658,7 @@ class LookerSDK: APIMethods {
      *
      * GET /running_queries -> [RunningQueries]
      */
-    func all_running_queries(
+    public func all_running_queries(
         options: ITransportSettings? = nil
     ) -> SDKResponse<[RunningQueries], SDKError> {
         let result: SDKResponse<[RunningQueries], SDKError> = self.get("/running_queries", nil, nil, options)
@@ -6670,7 +6670,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /running_queries/{query_task_id} -> String
      */
-    func kill_query(
+    public func kill_query(
         /**
          * @param {String} query_task_id Query task id.
          */
@@ -6687,7 +6687,7 @@ class LookerSDK: APIMethods {
      *
      * GET /sql_queries/{slug} -> SqlQuery
      */
-    func sql_query(
+    public func sql_query(
         /**
          * @param {String} slug slug of query
          */
@@ -6706,7 +6706,7 @@ class LookerSDK: APIMethods {
      *
      * POST /sql_queries -> SqlQuery
      */
-    func create_sql_query(
+    public func create_sql_query(
         /**
          * @param {SqlQueryCreate} body
          */
@@ -6724,7 +6724,7 @@ class LookerSDK: APIMethods {
      *
      * **Note**: Binary content may be returned by this method.
      */
-    func run_sql_query(
+    public func run_sql_query(
         /**
          * @param {String} slug slug of query
          */
@@ -6746,7 +6746,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK RenderTask: Manage Render Tasks
 
@@ -6759,7 +6759,7 @@ class LookerSDK: APIMethods {
      *
      * POST /render_tasks/looks/{look_id}/{result_format} -> RenderTask
      */
-    func create_look_render_task(
+    public func create_look_render_task(
         /**
          * @param {Int64} look_id Id of look to render
          */
@@ -6798,7 +6798,7 @@ class LookerSDK: APIMethods {
      *
      * POST /render_tasks/queries/{query_id}/{result_format} -> RenderTask
      */
-    func create_query_render_task(
+    public func create_query_render_task(
         /**
          * @param {Int64} query_id Id of the query to render
          */
@@ -6837,7 +6837,7 @@ class LookerSDK: APIMethods {
      *
      * POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> RenderTask
      */
-    func create_dashboard_render_task(
+    public func create_dashboard_render_task(
         /**
          * @param {String} dashboard_id Id of dashboard to render. The ID can be a LookML dashboard also.
          */
@@ -6892,7 +6892,7 @@ class LookerSDK: APIMethods {
      *
      * GET /render_tasks/{render_task_id} -> RenderTask
      */
-    func render_task(
+    public func render_task(
         /**
          * @param {String} render_task_id Id of render task
          */
@@ -6932,7 +6932,7 @@ class LookerSDK: APIMethods {
      *
      * **Note**: Binary content is returned by this method.
      */
-    func render_task_results(
+    public func render_task_results(
         /**
          * @param {String} render_task_id Id of render task
          */
@@ -6944,7 +6944,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Role: Manage Roles
 
@@ -6974,7 +6974,7 @@ class LookerSDK: APIMethods {
      *
      * GET /model_sets/search -> [ModelSet]
      */
-    func search_model_sets(
+    public func search_model_sets(
         /**
          * @param {String} fields Requested fields.
          */
@@ -7023,7 +7023,7 @@ class LookerSDK: APIMethods {
      *
      * GET /model_sets/{model_set_id} -> ModelSet
      */
-    func model_set(
+    public func model_set(
         /**
          * @param {Int64} model_set_id Id of model set
          */
@@ -7045,7 +7045,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /model_sets/{model_set_id} -> ModelSet
      */
-    func update_model_set(
+    public func update_model_set(
         /**
          * @param {Int64} model_set_id id of model set
          */
@@ -7066,7 +7066,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /model_sets/{model_set_id} -> String
      */
-    func delete_model_set(
+    public func delete_model_set(
         /**
          * @param {Int64} model_set_id id of model set
          */
@@ -7083,7 +7083,7 @@ class LookerSDK: APIMethods {
      *
      * GET /model_sets -> [ModelSet]
      */
-    func all_model_sets(
+    public func all_model_sets(
         /**
          * @param {String} fields Requested fields.
          */
@@ -7100,7 +7100,7 @@ class LookerSDK: APIMethods {
      *
      * POST /model_sets -> ModelSet
      */
-    func create_model_set(
+    public func create_model_set(
         /**
          * @param {WriteModelSet} body
          */
@@ -7116,7 +7116,7 @@ class LookerSDK: APIMethods {
      *
      * GET /permissions -> [Permission]
      */
-    func all_permissions(
+    public func all_permissions(
         options: ITransportSettings? = nil
     ) -> SDKResponse<[Permission], SDKError> {
         let result: SDKResponse<[Permission], SDKError> = self.get("/permissions", nil, nil, options)
@@ -7149,7 +7149,7 @@ class LookerSDK: APIMethods {
      *
      * GET /permission_sets/search -> [PermissionSet]
      */
-    func search_permission_sets(
+    public func search_permission_sets(
         /**
          * @param {String} fields Requested fields.
          */
@@ -7198,7 +7198,7 @@ class LookerSDK: APIMethods {
      *
      * GET /permission_sets/{permission_set_id} -> PermissionSet
      */
-    func permission_set(
+    public func permission_set(
         /**
          * @param {Int64} permission_set_id Id of permission set
          */
@@ -7220,7 +7220,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /permission_sets/{permission_set_id} -> PermissionSet
      */
-    func update_permission_set(
+    public func update_permission_set(
         /**
          * @param {Int64} permission_set_id id of permission set
          */
@@ -7241,7 +7241,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /permission_sets/{permission_set_id} -> String
      */
-    func delete_permission_set(
+    public func delete_permission_set(
         /**
          * @param {Int64} permission_set_id Id of permission set
          */
@@ -7258,7 +7258,7 @@ class LookerSDK: APIMethods {
      *
      * GET /permission_sets -> [PermissionSet]
      */
-    func all_permission_sets(
+    public func all_permission_sets(
         /**
          * @param {String} fields Requested fields.
          */
@@ -7275,7 +7275,7 @@ class LookerSDK: APIMethods {
      *
      * POST /permission_sets -> PermissionSet
      */
-    func create_permission_set(
+    public func create_permission_set(
         /**
          * @param {WritePermissionSet} body
          */
@@ -7291,7 +7291,7 @@ class LookerSDK: APIMethods {
      *
      * GET /roles -> [Role]
      */
-    func all_roles(
+    public func all_roles(
         /**
          * @param {String} fields Requested fields.
          */
@@ -7312,7 +7312,7 @@ class LookerSDK: APIMethods {
      *
      * POST /roles -> Role
      */
-    func create_role(
+    public func create_role(
         /**
          * @param {WriteRole} body
          */
@@ -7351,7 +7351,7 @@ class LookerSDK: APIMethods {
      *
      * GET /roles/search -> [Role]
      */
-    func search_roles(
+    public func search_roles(
         /**
          * @param {String} fields Requested fields.
          */
@@ -7396,7 +7396,7 @@ class LookerSDK: APIMethods {
      *
      * GET /roles/{role_id} -> Role
      */
-    func role(
+    public func role(
         /**
          * @param {Int64} role_id id of role
          */
@@ -7413,7 +7413,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /roles/{role_id} -> Role
      */
-    func update_role(
+    public func update_role(
         /**
          * @param {Int64} role_id id of role
          */
@@ -7434,7 +7434,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /roles/{role_id} -> String
      */
-    func delete_role(
+    public func delete_role(
         /**
          * @param {Int64} role_id id of role
          */
@@ -7451,7 +7451,7 @@ class LookerSDK: APIMethods {
      *
      * GET /roles/{role_id}/groups -> [LkGroup]
      */
-    func role_groups(
+    public func role_groups(
         /**
          * @param {Int64} role_id id of role
          */
@@ -7473,7 +7473,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /roles/{role_id}/groups -> [LkGroup]
      */
-    func set_role_groups(
+    public func set_role_groups(
         /**
          * @param {Int64} role_id Id of Role
          */
@@ -7494,7 +7494,7 @@ class LookerSDK: APIMethods {
      *
      * GET /roles/{role_id}/users -> [User]
      */
-    func role_users(
+    public func role_users(
         /**
          * @param {Int64} role_id id of user
          */
@@ -7520,7 +7520,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /roles/{role_id}/users -> [User]
      */
-    func set_role_users(
+    public func set_role_users(
         /**
          * @param {Int64} role_id id of role
          */
@@ -7536,7 +7536,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK ScheduledPlan: Manage Scheduled Plans
 
@@ -7547,7 +7547,7 @@ class LookerSDK: APIMethods {
      *
      * GET /scheduled_plans/space/{space_id} -> [ScheduledPlan]
      */
-    func scheduled_plans_for_space(
+    public func scheduled_plans_for_space(
         /**
          * @param {Int64} space_id Space Id
          */
@@ -7571,7 +7571,7 @@ class LookerSDK: APIMethods {
      *
      * GET /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
      */
-    func scheduled_plan(
+    public func scheduled_plan(
         /**
          * @param {Int64} scheduled_plan_id Scheduled Plan Id
          */
@@ -7634,7 +7634,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
      */
-    func update_scheduled_plan(
+    public func update_scheduled_plan(
         /**
          * @param {Int64} scheduled_plan_id Scheduled Plan Id
          */
@@ -7659,7 +7659,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /scheduled_plans/{scheduled_plan_id} -> String
      */
-    func delete_scheduled_plan(
+    public func delete_scheduled_plan(
         /**
          * @param {Int64} scheduled_plan_id Scheduled Plan Id
          */
@@ -7686,7 +7686,7 @@ class LookerSDK: APIMethods {
      *
      * GET /scheduled_plans -> [ScheduledPlan]
      */
-    func all_scheduled_plans(
+    public func all_scheduled_plans(
         /**
          * @param {Int64} user_id Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.
          */
@@ -7768,7 +7768,7 @@ class LookerSDK: APIMethods {
      *
      * POST /scheduled_plans -> ScheduledPlan
      */
-    func create_scheduled_plan(
+    public func create_scheduled_plan(
         /**
          * @param {WriteScheduledPlan} body
          */
@@ -7820,7 +7820,7 @@ class LookerSDK: APIMethods {
      *
      * POST /scheduled_plans/run_once -> ScheduledPlan
      */
-    func scheduled_plan_run_once(
+    public func scheduled_plan_run_once(
         /**
          * @param {WriteScheduledPlan} body
          */
@@ -7846,7 +7846,7 @@ class LookerSDK: APIMethods {
      *
      * GET /scheduled_plans/look/{look_id} -> [ScheduledPlan]
      */
-    func scheduled_plans_for_look(
+    public func scheduled_plans_for_look(
         /**
          * @param {Int64} look_id Look Id
          */
@@ -7886,7 +7886,7 @@ class LookerSDK: APIMethods {
      *
      * GET /scheduled_plans/dashboard/{dashboard_id} -> [ScheduledPlan]
      */
-    func scheduled_plans_for_dashboard(
+    public func scheduled_plans_for_dashboard(
         /**
          * @param {Int64} dashboard_id Dashboard Id
          */
@@ -7926,7 +7926,7 @@ class LookerSDK: APIMethods {
      *
      * GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id} -> [ScheduledPlan]
      */
-    func scheduled_plans_for_lookml_dashboard(
+    public func scheduled_plans_for_lookml_dashboard(
         /**
          * @param {Int64} lookml_dashboard_id LookML Dashboard Id
          */
@@ -8002,7 +8002,7 @@ class LookerSDK: APIMethods {
      *
      * POST /scheduled_plans/{scheduled_plan_id}/run_once -> ScheduledPlan
      */
-    func scheduled_plan_run_once_by_id(
+    public func scheduled_plan_run_once_by_id(
         /**
          * @param {Int64} scheduled_plan_id Id of schedule plan to copy and run
          */
@@ -8018,7 +8018,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Session: Session Information
 
@@ -8029,7 +8029,7 @@ class LookerSDK: APIMethods {
      *
      * GET /session -> ApiSession
      */
-    func session(
+    public func session(
         options: ITransportSettings? = nil
     ) -> SDKResponse<ApiSession, SDKError> {
         let result: SDKResponse<ApiSession, SDKError> = self.get("/session", nil, nil, options)
@@ -8060,7 +8060,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /session -> ApiSession
      */
-    func update_session(
+    public func update_session(
         /**
          * @param {WriteApiSession} body
          */
@@ -8071,7 +8071,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Theme: Manage Themes
 
@@ -8086,7 +8086,7 @@ class LookerSDK: APIMethods {
      *
      * GET /themes -> [Theme]
      */
-    func all_themes(
+    public func all_themes(
         /**
          * @param {String} fields Requested fields.
          */
@@ -8117,7 +8117,7 @@ class LookerSDK: APIMethods {
      *
      * POST /themes -> Theme
      */
-    func create_theme(
+    public func create_theme(
         /**
          * @param {WriteTheme} body
          */
@@ -8170,7 +8170,7 @@ class LookerSDK: APIMethods {
      *
      * GET /themes/search -> [Theme]
      */
-    func search_themes(
+    public func search_themes(
         /**
          * @param {Int64} id Match theme id.
          */
@@ -8225,7 +8225,7 @@ class LookerSDK: APIMethods {
      *
      * GET /themes/default -> Theme
      */
-    func default_theme(
+    public func default_theme(
         /**
          * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
          */
@@ -8252,7 +8252,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /themes/default -> Theme
      */
-    func set_default_theme(
+    public func set_default_theme(
         /**
          * @param {String} name Name of theme to set as default
          */
@@ -8277,7 +8277,7 @@ class LookerSDK: APIMethods {
      *
      * GET /themes/active -> [Theme]
      */
-    func active_themes(
+    public func active_themes(
         /**
          * @param {String} name Name of theme
          */
@@ -8307,7 +8307,7 @@ class LookerSDK: APIMethods {
      *
      * GET /themes/theme_or_default -> Theme
      */
-    func theme_or_default(
+    public func theme_or_default(
         /**
          * @param {String} name Name of theme
          */
@@ -8334,7 +8334,7 @@ class LookerSDK: APIMethods {
      *
      * POST /themes/validate -> ValidationError
      */
-    func validate_theme(
+    public func validate_theme(
         /**
          * @param {WriteTheme} body
          */
@@ -8354,7 +8354,7 @@ class LookerSDK: APIMethods {
      *
      * GET /themes/{theme_id} -> Theme
      */
-    func theme(
+    public func theme(
         /**
          * @param {Int64} theme_id Id of theme
          */
@@ -8378,7 +8378,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /themes/{theme_id} -> Theme
      */
-    func update_theme(
+    public func update_theme(
         /**
          * @param {Int64} theme_id Id of theme
          */
@@ -8407,7 +8407,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /themes/{theme_id} -> String
      */
-    func delete_theme(
+    public func delete_theme(
         /**
          * @param {String} theme_id Id of theme
          */
@@ -8419,7 +8419,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK User: Manage Users
 
@@ -8428,7 +8428,7 @@ class LookerSDK: APIMethods {
      *
      * GET /user -> User
      */
-    func me(
+    public func me(
         /**
          * @param {String} fields Requested fields.
          */
@@ -8445,7 +8445,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users -> [User]
      */
-    func all_users(
+    public func all_users(
         /**
          * @param {String} fields Requested fields.
          */
@@ -8478,7 +8478,7 @@ class LookerSDK: APIMethods {
      *
      * POST /users -> User
      */
-    func create_user(
+    public func create_user(
         /**
          * @param {WriteUser} body
          */
@@ -8528,7 +8528,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/search -> [User]
      */
-    func search_users(
+    public func search_users(
         /**
          * @param {String} fields Include only these fields in the response
          */
@@ -8598,7 +8598,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/search/names/{pattern} -> [User]
      */
-    func search_users_names(
+    public func search_users_names(
         /**
          * @param {String} pattern Pattern to match
          */
@@ -8660,7 +8660,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id} -> User
      */
-    func user(
+    public func user(
         /**
          * @param {Int64} user_id Id of user
          */
@@ -8682,7 +8682,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /users/{user_id} -> User
      */
-    func update_user(
+    public func update_user(
         /**
          * @param {Int64} user_id Id of user
          */
@@ -8710,7 +8710,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /users/{user_id} -> String
      */
-    func delete_user(
+    public func delete_user(
         /**
          * @param {Int64} user_id Id of user
          */
@@ -8754,7 +8754,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/credential/{credential_type}/{credential_id} -> User
      */
-    func user_for_credential(
+    public func user_for_credential(
         /**
          * @param {String} credential_type Type name of credential
          */
@@ -8781,7 +8781,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/credentials_email -> CredentialsEmail
      */
-    func user_credentials_email(
+    public func user_credentials_email(
         /**
          * @param {Int64} user_id id of user
          */
@@ -8803,7 +8803,7 @@ class LookerSDK: APIMethods {
      *
      * POST /users/{user_id}/credentials_email -> CredentialsEmail
      */
-    func create_user_credentials_email(
+    public func create_user_credentials_email(
         /**
          * @param {Int64} user_id id of user
          */
@@ -8829,7 +8829,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /users/{user_id}/credentials_email -> CredentialsEmail
      */
-    func update_user_credentials_email(
+    public func update_user_credentials_email(
         /**
          * @param {Int64} user_id id of user
          */
@@ -8855,7 +8855,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /users/{user_id}/credentials_email -> String
      */
-    func delete_user_credentials_email(
+    public func delete_user_credentials_email(
         /**
          * @param {Int64} user_id id of user
          */
@@ -8872,7 +8872,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/credentials_totp -> CredentialsTotp
      */
-    func user_credentials_totp(
+    public func user_credentials_totp(
         /**
          * @param {Int64} user_id id of user
          */
@@ -8894,7 +8894,7 @@ class LookerSDK: APIMethods {
      *
      * POST /users/{user_id}/credentials_totp -> CredentialsTotp
      */
-    func create_user_credentials_totp(
+    public func create_user_credentials_totp(
         /**
          * @param {Int64} user_id id of user
          */
@@ -8920,7 +8920,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /users/{user_id}/credentials_totp -> String
      */
-    func delete_user_credentials_totp(
+    public func delete_user_credentials_totp(
         /**
          * @param {Int64} user_id id of user
          */
@@ -8937,7 +8937,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/credentials_ldap -> CredentialsLDAP
      */
-    func user_credentials_ldap(
+    public func user_credentials_ldap(
         /**
          * @param {Int64} user_id id of user
          */
@@ -8959,7 +8959,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /users/{user_id}/credentials_ldap -> String
      */
-    func delete_user_credentials_ldap(
+    public func delete_user_credentials_ldap(
         /**
          * @param {Int64} user_id id of user
          */
@@ -8976,7 +8976,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/credentials_google -> CredentialsGoogle
      */
-    func user_credentials_google(
+    public func user_credentials_google(
         /**
          * @param {Int64} user_id id of user
          */
@@ -8998,7 +8998,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /users/{user_id}/credentials_google -> String
      */
-    func delete_user_credentials_google(
+    public func delete_user_credentials_google(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9015,7 +9015,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/credentials_saml -> CredentialsSaml
      */
-    func user_credentials_saml(
+    public func user_credentials_saml(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9037,7 +9037,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /users/{user_id}/credentials_saml -> String
      */
-    func delete_user_credentials_saml(
+    public func delete_user_credentials_saml(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9054,7 +9054,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
      */
-    func user_credentials_oidc(
+    public func user_credentials_oidc(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9076,7 +9076,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /users/{user_id}/credentials_oidc -> String
      */
-    func delete_user_credentials_oidc(
+    public func delete_user_credentials_oidc(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9093,7 +9093,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
      */
-    func user_credentials_api3(
+    public func user_credentials_api3(
         /**
          * @param {Int64} user_id Id of user
          */
@@ -9120,7 +9120,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> String
      */
-    func delete_user_credentials_api3(
+    public func delete_user_credentials_api3(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9142,7 +9142,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/credentials_api3 -> [CredentialsApi3]
      */
-    func all_user_credentials_api3s(
+    public func all_user_credentials_api3s(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9164,7 +9164,7 @@ class LookerSDK: APIMethods {
      *
      * POST /users/{user_id}/credentials_api3 -> CredentialsApi3
      */
-    func create_user_credentials_api3(
+    public func create_user_credentials_api3(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9190,7 +9190,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
      */
-    func user_credentials_embed(
+    public func user_credentials_embed(
         /**
          * @param {Int64} user_id Id of user
          */
@@ -9217,7 +9217,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> String
      */
-    func delete_user_credentials_embed(
+    public func delete_user_credentials_embed(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9239,7 +9239,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/credentials_embed -> [CredentialsEmbed]
      */
-    func all_user_credentials_embeds(
+    public func all_user_credentials_embeds(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9261,7 +9261,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/credentials_looker_openid -> CredentialsLookerOpenid
      */
-    func user_credentials_looker_openid(
+    public func user_credentials_looker_openid(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9283,7 +9283,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /users/{user_id}/credentials_looker_openid -> String
      */
-    func delete_user_credentials_looker_openid(
+    public func delete_user_credentials_looker_openid(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9300,7 +9300,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/sessions/{session_id} -> Session
      */
-    func user_session(
+    public func user_session(
         /**
          * @param {Int64} user_id Id of user
          */
@@ -9327,7 +9327,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /users/{user_id}/sessions/{session_id} -> String
      */
-    func delete_user_session(
+    public func delete_user_session(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9349,7 +9349,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/sessions -> [Session]
      */
-    func all_user_sessions(
+    public func all_user_sessions(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9379,7 +9379,7 @@ class LookerSDK: APIMethods {
      *
      * POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
      */
-    func create_user_credentials_email_password_reset(
+    public func create_user_credentials_email_password_reset(
         /**
          * @param {Int64} user_id Id of user
          */
@@ -9405,7 +9405,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/roles -> [Role]
      */
-    func user_roles(
+    public func user_roles(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9431,7 +9431,7 @@ class LookerSDK: APIMethods {
      *
      * PUT /users/{user_id}/roles -> [Role]
      */
-    func set_user_roles(
+    public func set_user_roles(
         /**
          * @param {Int64} user_id id of user
          */
@@ -9472,7 +9472,7 @@ class LookerSDK: APIMethods {
      *
      * GET /users/{user_id}/attribute_values -> [UserAttributeWithValue]
      */
-    func user_attribute_user_values(
+    public func user_attribute_user_values(
         /**
          * @param {Int64} user_id Id of user
          */
@@ -9508,7 +9508,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /users/{user_id}/attribute_values/{user_attribute_id} -> UserAttributeWithValue
      */
-    func set_user_attribute_user_value(
+    public func set_user_attribute_user_value(
         /**
          * @param {Int64} user_id Id of user
          */
@@ -9539,7 +9539,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /users/{user_id}/attribute_values/{user_attribute_id} -> Voidable
      */
-    func delete_user_attribute_user_value(
+    public func delete_user_attribute_user_value(
         /**
          * @param {Int64} user_id Id of user
          */
@@ -9556,7 +9556,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK UserAttribute: Manage User Attributes
 
@@ -9565,7 +9565,7 @@ class LookerSDK: APIMethods {
      *
      * GET /user_attributes -> [UserAttribute]
      */
-    func all_user_attributes(
+    public func all_user_attributes(
         /**
          * @param {String} fields Requested fields.
          */
@@ -9595,7 +9595,7 @@ class LookerSDK: APIMethods {
      *
      * POST /user_attributes -> UserAttribute
      */
-    func create_user_attribute(
+    public func create_user_attribute(
         /**
          * @param {WriteUserAttribute} body
          */
@@ -9616,7 +9616,7 @@ class LookerSDK: APIMethods {
      *
      * GET /user_attributes/{user_attribute_id} -> UserAttribute
      */
-    func user_attribute(
+    public func user_attribute(
         /**
          * @param {Int64} user_attribute_id Id of user attribute
          */
@@ -9638,7 +9638,7 @@ class LookerSDK: APIMethods {
      *
      * PATCH /user_attributes/{user_attribute_id} -> UserAttribute
      */
-    func update_user_attribute(
+    public func update_user_attribute(
         /**
          * @param {Int64} user_attribute_id Id of user attribute
          */
@@ -9664,7 +9664,7 @@ class LookerSDK: APIMethods {
      *
      * DELETE /user_attributes/{user_attribute_id} -> String
      */
-    func delete_user_attribute(
+    public func delete_user_attribute(
         /**
          * @param {Int64} user_attribute_id Id of user_attribute
          */
@@ -9687,7 +9687,7 @@ class LookerSDK: APIMethods {
      *
      * GET /user_attributes/{user_attribute_id}/group_values -> [UserAttributeGroupValue]
      */
-    func all_user_attribute_group_values(
+    public func all_user_attribute_group_values(
         /**
          * @param {Int64} user_attribute_id Id of user attribute
          */
@@ -9728,7 +9728,7 @@ class LookerSDK: APIMethods {
      *
      * POST /user_attributes/{user_attribute_id}/group_values -> [UserAttributeGroupValue]
      */
-    func set_user_attribute_group_values(
+    public func set_user_attribute_group_values(
         /**
          * @param {Int64} user_attribute_id Id of user attribute
          */
@@ -9744,7 +9744,7 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
     // MARK Workspace: Manage Workspaces
 
@@ -9755,7 +9755,7 @@ class LookerSDK: APIMethods {
      *
      * GET /workspaces -> [Workspace]
      */
-    func all_workspaces(
+    public func all_workspaces(
         options: ITransportSettings? = nil
     ) -> SDKResponse<[Workspace], SDKError> {
         let result: SDKResponse<[Workspace], SDKError> = self.get("/workspaces", nil, nil, options)
@@ -9795,7 +9795,7 @@ class LookerSDK: APIMethods {
      *
      * GET /workspaces/{workspace_id} -> Workspace
      */
-    func workspace(
+    public func workspace(
         /**
          * @param {String} workspace_id Id of the workspace
          */
@@ -9807,6 +9807,6 @@ class LookerSDK: APIMethods {
         return result
     }
 
-    // MARK -
+
 
 }
