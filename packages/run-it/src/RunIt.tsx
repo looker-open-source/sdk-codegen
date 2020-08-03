@@ -177,7 +177,7 @@ export const RunIt: FC<RunItProps> = ({
     return function cleanup() {
       setAutoSubmit(false)
     }
-  }, [])
+  }, [autoSubmit])
 
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
@@ -187,6 +187,7 @@ export const RunIt: FC<RunItProps> = ({
       await sdk.authSession.login()
     } else {
       removeStorage(RunItValuesKey)
+      setAutoSubmit(false)
     }
 
     const [pathParams, queryParams, body] = createRequestParams(

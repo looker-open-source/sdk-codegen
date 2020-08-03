@@ -25,17 +25,9 @@
  */
 
 import { api } from '../../test-data'
-import { copyAndCleanResponse, createInputs } from './utils'
+import { createInputs } from './utils'
 
 describe('MethodScene utils', () => {
-  describe('response utils', () => {
-    test('copyAndCleanResponse works', () => {
-      const orig = api.methods.run_look.primaryResponse
-      const actual = copyAndCleanResponse(orig)
-      expect(actual)
-    })
-  })
-
   describe('run-it utils', () => {
     test('createInputs works with various param types', () => {
       const method = api.methods.run_inline_query
