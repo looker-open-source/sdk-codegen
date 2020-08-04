@@ -153,9 +153,9 @@ export const RunIt: FC<RunItProps> = ({
     !configIsNeeded || settings.authIsConfigured()
   )
 
-  /* This check is only relevant when the component loads due to redirect away from the app for OAuth, 
-  so no need for state */
-  const needsAuth = configIsNeeded && !sdk?.authSession.isAuthenticated()
+  const [needsAuth, setNeedsAuth] = useState<boolean>(
+    configIsNeeded && !sdk?.authSession.isAuthenticated()
+  )
 
   const callback = runItCallback || defaultRunItCallback
 
@@ -184,6 +184,10 @@ export const RunIt: FC<RunItProps> = ({
   useEffect(() => {
     setLoading(!responseContent)
   }, [responseContent])
+
+  useEffect(() => {
+    setNeedsAuth(configIsNeeded && !sdk?.authSession.isAuthenticated())
+  }, [needsAuth])
 
   return (
     <Box>

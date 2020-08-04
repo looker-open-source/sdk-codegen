@@ -80,6 +80,8 @@ export class RunItSettings extends ApiSettings {
     }
 
     const { base_url, looker_url } = config
+    /* update base_url to the dynamically determined value for standard transport requests */
+    this.base_url = base_url
     return {
       ...super.readConfig(_section),
       ...{
