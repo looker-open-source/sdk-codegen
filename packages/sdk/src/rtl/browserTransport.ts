@@ -73,6 +73,19 @@ export class BrowserCryptoHash implements ICryptoHash {
       .join('')
   }
 
+  safeBase64(u8: Uint8Array) {
+    const rawBase64 = btoa(String.fromCharCode(...u8))
+    return rawBase64.replace(/\+/g, '-').replace(/\//g, '_')
+  }
+
+  fromBase64(str: string) {
+    return atob(str)
+      .split('')
+      .map(function(c) {
+        return c.charCodeAt(0)
+      })
+  }
+
   secureRandom(byteCount: number): string {
     const bytes = new Uint8Array(byteCount)
     window.crypto.getRandomValues(bytes)
@@ -82,7 +95,7 @@ export class BrowserCryptoHash implements ICryptoHash {
   async sha256Hash(message: string): Promise<string> {
     const msgUint8 = new TextEncoder().encode(message)
     const hashBuffer = await window.crypto.subtle.digest('SHA-256', msgUint8)
-    return this.arrayToHex(new Uint8Array(hashBuffer))
+    return this.safeBase64(new Uint8Array(hashBuffer))
   }
 }
 
@@ -172,7 +185,7 @@ export class BrowserTransport extends BaseTransport {
     const headers: IRequestHeaders = { [LookerAppId]: agentTag }
     if (options && options.headers) {
       Object.keys(options.headers).forEach((key) => {
-        headers[key] = options!.headers![key]
+        headers[key] = options.headers[key]
       })
     }
 

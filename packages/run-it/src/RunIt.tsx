@@ -40,15 +40,7 @@ import {
 } from '@looker/components'
 import { IRawResponse, Looker40SDK } from '@looker/sdk/lib/browser'
 
-import {
-  RequestForm,
-  ShowResponse,
-  ConfigForm,
-  getStorage,
-  setStorage,
-  RunItValuesKey,
-  removeStorage,
-} from './components'
+import { RequestForm, ShowResponse, ConfigForm, LoginForm } from './components'
 import {
   createRequestParams,
   defaultRunItCallback,
@@ -148,47 +140,27 @@ export const RunIt: FC<RunItProps> = ({
   sdk = runItSDK,
 }) => {
   const [requestContent, setRequestContent] = useState({})
-  const [activePathParams, setActivePathParams] = useState(undefined)
-  const [autoSubmit, setAutoSubmit] = useState(false)
+  const [activePathParams, setActivePathParams] = useState({})
   const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] = useState<ResponseContent>(
     undefined
   )
   const tabs = useTabs()
   const configIsNeeded = sdkNeedsConfig(sdk)
-  const settings = sdk.authSession.settings as RunItSettings
+  const settings = sdk?.authSession.settings as RunItSettings
   const perf = new PerfTimings()
   const [hasConfig, setHasConfig] = useState<boolean>(
     !configIsNeeded || settings.authIsConfigured()
   )
 
+  /* This check is only relevant when the component loads due to redirect away from the app for OAuth, 
+  so no need for state */
+  const needsAuth = configIsNeeded && !sdk?.authSession.isAuthenticated()
+
   const callback = runItCallback || defaultRunItCallback
-
-  useEffect(() => {
-    const storage = getStorage(RunItValuesKey)
-    let requestValues = {}
-    if (storage.value) {
-      requestValues = JSON.parse(storage.value)
-      removeStorage(RunItValuesKey)
-      setAutoSubmit(true)
-    }
-
-    setRequestContent(requestValues)
-    return function cleanup() {
-      setAutoSubmit(false)
-    }
-  }, [autoSubmit])
 
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
-    /** When OAuth flow is starting */
-    if (configIsNeeded && !sdk.authSession.isAuthenticated()) {
-      setStorage(RunItValuesKey, JSON.stringify(requestContent))
-      await sdk.authSession.login()
-    } else {
-      removeStorage(RunItValuesKey)
-      setAutoSubmit(false)
-    }
 
     const [pathParams, queryParams, body] = createRequestParams(
       inputs,
@@ -225,7 +197,7 @@ export const RunIt: FC<RunItProps> = ({
       </TabList>
       <TabPanels {...tabs}>
         <TabPanel key="request">
-          {hasConfig && (
+          {!needsAuth && hasConfig && (
             <RequestForm
               httpMethod={httpMethod}
               inputs={inputs}
@@ -233,10 +205,10 @@ export const RunIt: FC<RunItProps> = ({
               setRequestContent={setRequestContent}
               handleSubmit={handleSubmit}
               setHasConfig={setHasConfig}
-              autoSubmit={autoSubmit}
             />
           )}
           {!hasConfig && <ConfigForm setHasConfig={setHasConfig} />}
+          {needsAuth && <LoginForm sdk={sdk} setHasConfig={setHasConfig} />}
         </TabPanel>
         <TabPanel key="response">
           {loading && (

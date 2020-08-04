@@ -43,7 +43,8 @@ import {
   Values,
   IRequestHeaders,
   LookerAppId,
-  IRawResponse, agentPrefix,
+  IRawResponse,
+  agentPrefix,
 } from './transport'
 import { BaseTransport } from './baseTransport'
 import { ICryptoHash } from './cryptoHash'
