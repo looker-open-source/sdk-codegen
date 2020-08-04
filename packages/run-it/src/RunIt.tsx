@@ -139,6 +139,8 @@ export const RunIt: FC<RunItProps> = ({
   runItCallback,
   sdk = runItSDK,
 }) => {
+  // Ensure sdk passed in as undefined gets assigned to the default
+  if (!sdk) sdk = runItSDK
   const [requestContent, setRequestContent] = useState({})
   const [activePathParams, setActivePathParams] = useState({})
   const [loading, setLoading] = useState(false)
@@ -147,14 +149,14 @@ export const RunIt: FC<RunItProps> = ({
   )
   const tabs = useTabs()
   const configIsNeeded = sdkNeedsConfig(sdk)
-  const settings = sdk?.authSession.settings as RunItSettings
+  const settings = sdk.authSession.settings as RunItSettings
   const perf = new PerfTimings()
   const [hasConfig, setHasConfig] = useState<boolean>(
     !configIsNeeded || settings.authIsConfigured()
   )
 
   const [needsAuth, setNeedsAuth] = useState<boolean>(
-    configIsNeeded && !sdk?.authSession.isAuthenticated()
+    configIsNeeded && !sdk.authSession.isAuthenticated()
   )
 
   const callback = runItCallback || defaultRunItCallback
@@ -184,10 +186,6 @@ export const RunIt: FC<RunItProps> = ({
   useEffect(() => {
     setLoading(!responseContent)
   }, [responseContent])
-
-  useEffect(() => {
-    setNeedsAuth(configIsNeeded && !sdk?.authSession.isAuthenticated())
-  }, [needsAuth])
 
   return (
     <Box>
