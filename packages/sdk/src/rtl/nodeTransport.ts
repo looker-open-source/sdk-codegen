@@ -45,6 +45,7 @@ import {
   LookerAppId,
   IRawResponse,
   agentPrefix,
+  safeBase64,
 } from './transport'
 import { BaseTransport } from './baseTransport'
 import { ICryptoHash } from './cryptoHash'
@@ -58,7 +59,7 @@ export class NodeCryptoHash implements ICryptoHash {
   async sha256Hash(message: string): Promise<string> {
     const hash = nodeCrypto.createHash('sha256')
     hash.update(message)
-    return Promise.resolve(hash.digest('hex'))
+    return Promise.resolve(safeBase64(new Uint8Array(hash.digest())))
   }
 }
 

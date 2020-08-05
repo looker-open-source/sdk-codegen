@@ -40,6 +40,7 @@ import {
   IRawResponse,
   responseMode,
   ResponseMode,
+  safeBase64,
 } from './transport'
 import { BaseTransport } from './baseTransport'
 import { lookerVersion } from './constants'
@@ -73,11 +74,6 @@ export class BrowserCryptoHash implements ICryptoHash {
       .join('')
   }
 
-  safeBase64(u8: Uint8Array) {
-    const rawBase64 = btoa(String.fromCharCode(...u8))
-    return rawBase64.replace(/\+/g, '-').replace(/\//g, '_')
-  }
-
   fromBase64(str: string) {
     return atob(str)
       .split('')
@@ -95,7 +91,7 @@ export class BrowserCryptoHash implements ICryptoHash {
   async sha256Hash(message: string): Promise<string> {
     const msgUint8 = new TextEncoder().encode(message)
     const hashBuffer = await window.crypto.subtle.digest('SHA-256', msgUint8)
-    return this.safeBase64(new Uint8Array(hashBuffer))
+    return safeBase64(new Uint8Array(hashBuffer))
   }
 }
 

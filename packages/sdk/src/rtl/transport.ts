@@ -483,3 +483,12 @@ export async function sdkOk<TSuccess, TError>(
     throw sdkError(result)
   }
 }
+
+/**
+ * Converts a byte array to a "URL safe" base64 string
+ * @param u8 byte array to convert
+ */
+export function safeBase64(u8: Uint8Array) {
+  const rawBase64 = btoa(String.fromCharCode(...u8))
+  return rawBase64.replace(/\+/g, '-').replace(/\//g, '_')
+}
