@@ -155,7 +155,7 @@ export const RunIt: FC<RunItProps> = ({
     !configIsNeeded || settings.authIsConfigured()
   )
 
-  const [needsAuth, setNeedsAuth] = useState<boolean>(
+  const [needsAuth] = useState<boolean>(
     configIsNeeded && !sdk.authSession.isAuthenticated()
   )
 

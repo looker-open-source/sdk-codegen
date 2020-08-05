@@ -180,8 +180,8 @@ export class BrowserTransport extends BaseTransport {
     options = options ? { ...this.options, ...options } : this.options
     const headers: IRequestHeaders = { [LookerAppId]: agentTag }
     if (options && options.headers) {
-      Object.keys(options.headers).forEach((key) => {
-        headers[key] = options.headers[key]
+      Object.entries(options.headers).forEach(([key, val]) => {
+        headers[key] = val
       })
     }
 

@@ -31,9 +31,11 @@ import userEvent from '@testing-library/user-event'
 
 import { RunIt, RunItInput } from './RunIt'
 import { testTextResponse } from './test-data'
-import { runItSDK } from './utils'
+import { runItSDK, RunItSettings } from './utils'
 
+// TODO add tests for a) no config and b) config but need login
 describe('RunIt', () => {
+  const runCaption = 'Run'
   const inputs: RunItInput[] = [
     {
       name: 'result_format',
@@ -70,7 +72,16 @@ describe('RunIt', () => {
     },
   ]
 
+  beforeEach(() => {
+    jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(true)
+    jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
+      base_url: 'https://foo:19999',
+      looker_url: 'https://foo:9999',
+    })
+  })
+
   test('it renders endpoint, request and response tabs, and form inputs', () => {
+    // TODO need to figure out how to mock hasConfig of RunIt
     renderWithTheme(
       <RunIt
         specKey={'3.1'}
@@ -98,7 +109,6 @@ describe('RunIt', () => {
     const defaultRequestCallback = jest
       .spyOn(runItSDK.authSession.transport, 'rawRequest')
       .mockResolvedValueOnce(testTextResponse)
-    jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(true)
     renderWithTheme(
       <RunIt
         specKey={'3.1'}
@@ -107,7 +117,7 @@ describe('RunIt', () => {
         endpoint={'/run_query/{result_format}'}
       />
     )
-    userEvent.click(screen.getByRole('button', { name: 'Try It' }))
+    userEvent.click(screen.getByRole('button', { name: runCaption }))
     await waitFor(() => {
       expect(defaultRequestCallback).toHaveBeenCalled()
       expect(
@@ -116,7 +126,7 @@ describe('RunIt', () => {
     })
   })
 
-  test('custom try it request callback overrides default', async () => {
+  test('custom run request callback overrides default', async () => {
     const customRunItCallback = jest.fn().mockResolvedValue(testTextResponse)
     renderWithTheme(
       <RunIt
@@ -127,7 +137,7 @@ describe('RunIt', () => {
         runItCallback={customRunItCallback}
       />
     )
-    userEvent.click(screen.getByRole('button', { name: 'Try It' }))
+    userEvent.click(screen.getByRole('button', { name: runCaption }))
     await waitFor(() => {
       expect(customRunItCallback).toHaveBeenCalled()
       expect(

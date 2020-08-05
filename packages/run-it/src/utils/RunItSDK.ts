@@ -52,7 +52,7 @@ export class RunItSettings extends ApiSettings {
     super(settings)
   }
 
-  private getStoredConfig() {
+  getStoredConfig() {
     const storage = getStorage(RunItConfigKey)
     let config = { base_url: '', looker_url: '' }
     if (storage.value) {

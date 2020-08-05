@@ -32,6 +32,7 @@ import userEvent from '@testing-library/user-event'
 import { RequestForm } from './RequestForm'
 
 describe('RequestForm', () => {
+  const run = 'Run'
   const requestContent = {}
   const setRequestContent = jest.fn()
   const handleSubmit = jest.fn()
@@ -60,7 +61,7 @@ describe('RequestForm', () => {
     ).toBeInTheDocument()
     /** Warning checkbox should only be rendered for operations that modify data */
     expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Try It' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: run })).toBeInTheDocument()
   })
 
   test('interacting with a boolean simple item changes the request content', () => {
@@ -166,7 +167,7 @@ describe('RequestForm', () => {
     // TODO: make complex items requirable. i.e. expect(input).toBeRequired() should pass
     userEvent.type(input, 'content')
     expect(setRequestContent).toHaveBeenCalled()
-    userEvent.click(screen.getByRole('button', { name: 'Try It' }))
+    userEvent.click(screen.getByRole('button', { name: run }))
     expect(handleSubmit).toHaveBeenCalledTimes(1)
   })
 })
