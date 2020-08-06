@@ -24,34 +24,34 @@
 
  */
 
-import React, { FC } from 'react'
-import { ActionList, ActionListColumns } from '@looker/components'
+import React from 'react'
+import { screen } from '@testing-library/react'
+import { renderWithTheme } from '@looker/components-test-utils'
+// import { runItSDK, RunItSettings } from '../../utils'
+import { LoginForm } from './LoginForm'
 
-import { LoadTimes } from './perfUtils'
-import { createTableRows } from './perfTableUtils'
+describe('LoginForm', () => {
+  // https://testing-library.com/docs/guide-which-query
 
-interface PerfTableProps {
-  /** An array defining the table header */
-  columns: ActionListColumns
-  /** An array of performance load times */
-  data: LoadTimes[]
-  /** A handler for sorting data by a column */
-  onSort: (id: string, sortDirection: 'asc' | 'desc') => void
-  /** A row select action handler */
-  onSelect: (item: LoadTimes) => void
-}
+  beforeEach(() => {
+    // jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(false)
+    // jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
+    //   base_url: '',
+    //   looker_url: '',
+    // })
+  })
 
-/**
- * Creates a sortable table from an array of performance load times. Each row corresponds to a resource and clicking it
- * generates its performance chart.
- */
-export const PerfTable: FC<PerfTableProps> = ({
-  columns,
-  data,
-  onSort,
-  onSelect,
-}) => (
-  <ActionList onSort={onSort} columns={columns}>
-    {createTableRows(data, onSelect)}
-  </ActionList>
-)
+  test('it creates a login form', async () => {
+    renderWithTheme(<LoginForm />)
+    const title = screen.getByRole('heading') as HTMLHeadingElement
+    expect(title).toHaveTextContent('OAuth Login')
+    expect(
+      await screen.findByText(/OAuth authentication is already configured/)
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', {
+        name: 'Login',
+      })
+    ).toBeInTheDocument()
+  })
+})

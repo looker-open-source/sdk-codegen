@@ -28,7 +28,6 @@ import { IAccessToken } from '../sdk/4.0/models'
 import { BrowserSession } from './browserSession'
 import { IApiSettings } from './apiSettings'
 import { IRequestProps, ITransport } from './transport'
-import { AuthSession } from './authSession'
 import { AuthToken } from './authToken'
 import { MockOauthSettings } from './oauthSession.spec'
 
@@ -48,31 +47,46 @@ class BrowserSessionMock extends BrowserSession {
     super(settings, transport)
   }
 
+  async login() {
+    return await this.getToken()
+  }
+
+  async logout() {
+    this.activeToken = new AuthToken()
+    return true
+  }
+
   async getToken() {
-    return Promise.resolve(new AuthToken(mockToken))
+    this.activeToken = new AuthToken(mockToken)
+    return Promise.resolve(this.activeToken)
   }
 }
 
 describe('Browser session', () => {
   it('initialization', async () => {
     const mock = new BrowserSessionMock(settings)
-    await expect(mock.login()).rejects.toEqual(AuthSession.TBD)
-    expect(mock.isAuthenticated()).toEqual(false)
+    const token = await mock.login()
+    expect(token.access_token).toEqual(mockToken.access_token)
+    expect(token.expires_in).toEqual(mockToken.expires_in)
+    expect(token.token_type).toEqual(mockToken.token_type)
+    expect(mock.isAuthenticated()).toEqual(true)
     expect(mock.isSudo()).toEqual(false)
     const logout = await mock.logout()
-    expect(logout).toEqual(false)
+    expect(logout).toEqual(true)
   })
 
   it('getToken is mocked', async () => {
     const mock = new BrowserSessionMock(settings)
     const token = await mock.getToken()
-    expect(token).toEqual(mockToken)
+    expect(token.access_token).toEqual(mockToken.access_token)
+    expect(token.expires_in).toEqual(mockToken.expires_in)
+    expect(token.token_type).toEqual(mockToken.token_type)
   })
 
   it('authenticate causes authentication', async () => {
     const mock = new BrowserSessionMock(settings)
     expect(mock.isAuthenticated()).toEqual(false)
-    const props = await mock.authenticate({} as IRequestProps)
+    const props = await mock.authenticate({ headers: {} } as IRequestProps)
     expect(mock.isAuthenticated()).toEqual(true)
     expect(props.mode).toEqual('cors')
     expect(props.headers.Authorization).toEqual('Bearer mocked')

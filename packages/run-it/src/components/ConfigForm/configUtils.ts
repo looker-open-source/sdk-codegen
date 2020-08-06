@@ -95,8 +95,9 @@ export const removeStorage = (key: string) => {
 export const validateUrl = (url: string) => {
   try {
     const result = new URL(url)
-    if (result.pathname !== '/' || result.search) return result.origin
-    return url
+    return result.origin
+    // if (result.pathname !== '/' || result.search) return result.origin
+    // return url
   } catch {
     return ''
   }

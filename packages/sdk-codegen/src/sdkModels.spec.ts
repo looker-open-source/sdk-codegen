@@ -27,32 +27,32 @@
 import * as OAS from 'openapi3-ts'
 import { TestConfig } from './testUtils'
 import {
+  ApiModel,
   ArrayType,
+  camelCase,
   CriteriaToSet,
   DelimArrayType,
+  EnumType,
+  firstCase,
+  IEnumType,
   IMethod,
   IMethodResponse,
   IntrinsicType,
-  TagList,
+  isSpecialName,
   IType,
+  KeyedCollection,
   keyValues,
+  mayQuote,
   Method,
   methodRefs,
+  safeName,
+  SearchAll,
   SearchCriterion,
   SearchCriterionTerm,
   SetToCriteria,
-  typeRefs,
-  EnumType,
-  IEnumType,
-  mayQuote,
-  ApiModel,
+  TagList,
   titleCase,
-  camelCase,
-  firstCase,
-  isSpecialName,
-  safeName,
-  SearchAll,
-  KeyedCollection,
+  typeRefs,
 } from './sdkModels'
 
 const config = TestConfig()
@@ -1007,13 +1007,9 @@ describe('sdkModels', () => {
         expect(actual).toEqual(expected)
       })
 
-      it('criteria is case insensitive', () => {
-        const expected = new Set([
-          SearchCriterion.method,
-          SearchCriterion.type,
-          SearchCriterion.name,
-        ])
-        const values = ['Method', 'Type', 'name']
+      it('criteria is case sensitive', () => {
+        const expected = new Set([SearchCriterion.method, SearchCriterion.name])
+        const values = ['method', 'Type', 'name']
         const names = values as SearchCriterionTerm[]
         const actual = CriteriaToSet(names)
         expect(actual).toEqual(expected)

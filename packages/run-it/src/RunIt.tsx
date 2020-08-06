@@ -210,7 +210,9 @@ export const RunIt: FC<RunItProps> = ({
             />
           )}
           {!hasConfig && <ConfigForm setHasConfig={setHasConfig} />}
-          {needsAuth && <LoginForm sdk={sdk} setHasConfig={setHasConfig} />}
+          {hasConfig && needsAuth && (
+            <LoginForm sdk={sdk} setHasConfig={setHasConfig} />
+          )}
         </TabPanel>
         <TabPanel key="response">
           {loading && (

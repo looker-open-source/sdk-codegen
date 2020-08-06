@@ -35,7 +35,7 @@ import { runItSDK, RunItSettings } from './utils'
 
 // TODO add tests for a) no config and b) config but need login
 describe('RunIt', () => {
-  const runCaption = 'Run'
+  const run = 'Run'
   const inputs: RunItInput[] = [
     {
       name: 'result_format',
@@ -72,77 +72,132 @@ describe('RunIt', () => {
     },
   ]
 
-  beforeEach(() => {
-    jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(true)
-    jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
-      base_url: 'https://foo:19999',
-      looker_url: 'https://foo:9999',
+  describe('configured and authenticated', () => {
+    beforeEach(() => {
+      jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(true)
+      jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
+        base_url: 'https://foo:19999',
+        looker_url: 'https://foo:9999',
+      })
+    })
+
+    test('it renders endpoint, request and response tabs, and form inputs', () => {
+      renderWithTheme(
+        <RunIt
+          specKey={'3.1'}
+          inputs={inputs}
+          httpMethod={'POST'}
+          endpoint={'/run_query/{result_format}'}
+        />
+      )
+      expect(screen.getByRole('heading')).toHaveTextContent(
+        'POST /run_query/{result_format}'
+      )
+      expect(
+        screen.getByRole('button', { name: 'Request' })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: 'Response' })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('textbox', { name: 'result_format' })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('spinbutton', { name: 'limit' })
+      ).toBeInTheDocument()
+      expect(screen.getByRole('switch', { name: 'cache' })).toBeInTheDocument()
+      expect(screen.getByText('body')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: run })).toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Login' })).toBeNull()
+      expect(screen.queryByRole('button', { name: 'Remove' })).toBeNull()
+    })
+
+    test('the form submit handler invokes the request callback on submit', async () => {
+      const defaultRequestCallback = jest
+        .spyOn(runItSDK.authSession.transport, 'rawRequest')
+        .mockResolvedValueOnce(testTextResponse)
+      renderWithTheme(
+        <RunIt
+          specKey={'3.1'}
+          inputs={inputs}
+          httpMethod={'POST'}
+          endpoint={'/run_query/{result_format}'}
+        />
+      )
+      userEvent.click(screen.getByRole('button', { name: run }))
+      await waitFor(() => {
+        expect(defaultRequestCallback).toHaveBeenCalled()
+        expect(
+          screen.queryByText(testTextResponse.body.toString())
+        ).toBeInTheDocument()
+      })
+    })
+
+    test('custom run request callback overrides default', async () => {
+      const customRunItCallback = jest.fn().mockResolvedValue(testTextResponse)
+      renderWithTheme(
+        <RunIt
+          specKey={'3.1'}
+          inputs={inputs}
+          httpMethod={'POST'}
+          endpoint={'/run_query/{result_format}'}
+          runItCallback={customRunItCallback}
+        />
+      )
+      userEvent.click(screen.getByRole('button', { name: run }))
+      await waitFor(() => {
+        expect(customRunItCallback).toHaveBeenCalled()
+        expect(
+          screen.queryByText(testTextResponse.body.toString())
+        ).toBeInTheDocument()
+      })
     })
   })
 
-  test('it renders endpoint, request and response tabs, and form inputs', () => {
-    // TODO need to figure out how to mock hasConfig of RunIt
-    renderWithTheme(
-      <RunIt
-        specKey={'3.1'}
-        inputs={inputs}
-        httpMethod={'POST'}
-        endpoint={'/run_query/{result_format}'}
-      />
-    )
-    expect(screen.getByRole('heading')).toHaveTextContent(
-      'POST /run_query/{result_format}'
-    )
-    expect(screen.getByRole('button', { name: 'Request' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Response' })).toBeInTheDocument()
-    expect(
-      screen.getByRole('textbox', { name: 'result_format' })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('spinbutton', { name: 'limit' })
-    ).toBeInTheDocument()
-    expect(screen.getByRole('switch', { name: 'cache' })).toBeInTheDocument()
-    expect(screen.getByText('body')).toBeInTheDocument()
-  })
+  describe('not configured or authenticated', () => {
+    beforeEach(() => {
+      jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(false)
+      jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
+        base_url: '',
+        looker_url: '',
+      })
+    })
 
-  test('the form submit handler invokes the request callback on submit', async () => {
-    const defaultRequestCallback = jest
-      .spyOn(runItSDK.authSession.transport, 'rawRequest')
-      .mockResolvedValueOnce(testTextResponse)
-    renderWithTheme(
-      <RunIt
-        specKey={'3.1'}
-        inputs={inputs}
-        httpMethod={'POST'}
-        endpoint={'/run_query/{result_format}'}
-      />
-    )
-    userEvent.click(screen.getByRole('button', { name: runCaption }))
-    await waitFor(() => {
-      expect(defaultRequestCallback).toHaveBeenCalled()
-      expect(
-        screen.queryByText(testTextResponse.body.toString())
-      ).toBeInTheDocument()
+    test('it renders ConfigForm', () => {
+      renderWithTheme(
+        <RunIt
+          specKey={'3.1'}
+          inputs={inputs}
+          httpMethod={'POST'}
+          endpoint={'/run_query/{result_format}'}
+        />
+      )
+      expect(screen.getByRole('button', { name: 'Remove' })).toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: run })).toBeNull()
+      expect(screen.queryByRole('button', { name: 'Login' })).toBeNull()
     })
   })
+  describe('configured but not authenticated', () => {
+    beforeEach(() => {
+      jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(false)
+      jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
+        base_url: 'https://foo:19999',
+        looker_url: 'https://foo:9999',
+      })
+    })
 
-  test('custom run request callback overrides default', async () => {
-    const customRunItCallback = jest.fn().mockResolvedValue(testTextResponse)
-    renderWithTheme(
-      <RunIt
-        specKey={'3.1'}
-        inputs={inputs}
-        httpMethod={'POST'}
-        endpoint={'/run_query/{result_format}'}
-        runItCallback={customRunItCallback}
-      />
-    )
-    userEvent.click(screen.getByRole('button', { name: runCaption }))
-    await waitFor(() => {
-      expect(customRunItCallback).toHaveBeenCalled()
-      expect(
-        screen.queryByText(testTextResponse.body.toString())
-      ).toBeInTheDocument()
+    test('it renders LoginForm', () => {
+      renderWithTheme(
+        <RunIt
+          specKey={'3.1'}
+          inputs={inputs}
+          httpMethod={'POST'}
+          endpoint={'/run_query/{result_format}'}
+        />
+      )
+      expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Remove' })).toBeNull()
+      expect(screen.queryByRole('button', { name: run })).toBeNull()
     })
   })
 })
