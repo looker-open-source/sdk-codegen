@@ -27,19 +27,10 @@
 import React from 'react'
 import { screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
-// import { runItSDK, RunItSettings } from '../../utils'
 import { LoginForm } from './LoginForm'
 
 describe('LoginForm', () => {
   // https://testing-library.com/docs/guide-which-query
-
-  beforeEach(() => {
-    // jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(false)
-    // jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
-    //   base_url: '',
-    //   looker_url: '',
-    // })
-  })
 
   test('it creates a login form', async () => {
     renderWithTheme(<LoginForm />)

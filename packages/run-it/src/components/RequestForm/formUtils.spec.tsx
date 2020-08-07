@@ -105,12 +105,6 @@ describe('Simple Items', () => {
   ) => {
     await userEvent.type(input, value.toString())
     await waitFor(() => {
-      if (input.value !== value.toString()) {
-        const v1 = input.value
-        const v2 = value.toString()
-        console.debug({ v1, v2 })
-        screen.debug(input)
-      }
       expect(handler).toHaveBeenCalled()
       expect(input).toHaveValue(value)
     })

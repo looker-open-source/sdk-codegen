@@ -31,8 +31,6 @@ import { runItSDK } from '../../utils'
 import { ConfigDialog } from '../ConfigForm'
 
 interface LoginFormProps {
-  /** title of the login form. Defaults to 'OAuth Login' */
-  title?: string
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
   /** SDK to use for login. Defaults to the `runItSDK` */
@@ -40,7 +38,6 @@ interface LoginFormProps {
 }
 
 export const LoginForm: FC<LoginFormProps> = ({
-  title = 'OAuth Login',
   sdk = runItSDK,
   setHasConfig,
 }) => {
@@ -53,7 +50,7 @@ export const LoginForm: FC<LoginFormProps> = ({
   return (
     <>
       <Heading>
-        <Text>{title}</Text>
+        <Text>OAuth Login</Text>
       </Heading>
       <Paragraph>
         OAuth authentication is already configured, but the browser session is

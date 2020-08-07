@@ -331,22 +331,6 @@ describe('LookerNodeSDK', () => {
   // }
 
   describe('retrieves collections', () => {
-    // beforeAll(async () => {
-    //   const title = 'SDK Look'
-    //   const sdk = new LookerSDK(session)
-    //   const looks = await sdk.ok(sdk.search_looks({ title: title }))
-    //   if (!looks || looks.length < 1) {
-    //     const look = await sdk.ok(
-    //       sdk.create_look({
-    //         title: title,
-    //         description: 'A sample look created by the SDK integration tests',
-    //         query: simpleQuery(),
-    //       })
-    //     )
-    //     console.info(`Created look ${look.id}:${look.title} for SDK testing`)
-    //   }
-    // })
-
     it('search_looks returns looks', async () => {
       const sdk = new LookerSDK(session)
       const actual = await sdk.ok(sdk.search_looks({}))

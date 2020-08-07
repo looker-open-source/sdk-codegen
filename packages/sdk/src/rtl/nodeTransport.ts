@@ -59,7 +59,7 @@ export class NodeCryptoHash implements ICryptoHash {
   async sha256Hash(message: string): Promise<string> {
     const hash = nodeCrypto.createHash('sha256')
     hash.update(message)
-    return Promise.resolve(safeBase64(new Uint8Array(hash.digest())))
+    return safeBase64(new Uint8Array(hash.digest()))
   }
 }
 
