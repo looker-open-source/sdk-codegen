@@ -33,7 +33,6 @@ try:
 except ImportError:
     from typing import _ForwardRef as ForwardRef  # type: ignore
 
-# from .. import attr
 import attr
 import cattr
 import pytest  # type: ignore
@@ -47,10 +46,12 @@ class Enum1(enum.Enum):
     """
 
     entry1 = "entry1"
+    entry2 = "entry2"
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-Enum1.__new__ = ml.safe_enum__new__
+# ignore mypy: "Cannot assign to a method"
+Enum1.__new__ = ml.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -136,6 +137,10 @@ class Model(ml.Model):
         "finally_": Optional[Sequence[int]],
     }
 
+    # store context so that base class can eval "Enum1" instance from
+    # ForwardRef("Enum1") annotation for __setitem__
+    __global_context = globals()
+
     def __init__(
         self,
         *,
@@ -182,7 +187,8 @@ class Enum2(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-Enum2.__new__ = ml.safe_enum__new__
+# ignore mypy: "Cannot assign to a method"
+Enum2.__new__ = ml.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -230,7 +236,263 @@ MODEL_DATA = {
 }
 
 
-def test_deserialize_single():
+@pytest.fixture
+def bm():
+    return Model(
+        enum1=Enum1.entry1,
+        model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        enum2=Enum2.entry2,
+        model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
+        list_enum1=[Enum1.entry1],
+        list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
+        opt_enum1=Enum1.entry1,
+        opt_model_no_refs1=None,
+        id=1,
+        name="my-name",
+        class_="model-name",
+        finally_=[1, 2, 3],
+    )
+
+
+def test_dict_getitem_simple(bm):
+    assert bm["id"] == bm.id
+    assert bm["name"] == bm.name
+    assert bm["class"] == bm.class_
+    assert bm["finally"] == bm.finally_
+    with pytest.raises(KeyError):
+        bm["class_"]
+    with pytest.raises(KeyError):
+        bm["finally_"]
+
+
+def test_dict_getitem_child(bm):
+    assert bm["model_no_refs1"] == ModelNoRefs1(name1="model_no_refs1_name")
+    assert bm["model_no_refs1"] is bm.model_no_refs1
+    assert bm["model_no_refs1"]["name1"] == "model_no_refs1_name"
+    assert bm["list_model_no_refs1"][0] == ModelNoRefs1(name1="model_no_refs1_name")
+    assert bm["list_model_no_refs1"][0] is bm.list_model_no_refs1[0]
+    assert bm["list_model_no_refs1"][0]["name1"] == "model_no_refs1_name"
+    with pytest.raises(KeyError):
+        bm["opt_model_no_refs1"]
+    with pytest.raises(KeyError):
+        bm["no_such_prop"]
+
+
+def test_dict_getitem_enum(bm):
+    assert bm["enum1"] == "entry1"
+
+
+def test_dict_setitem_simple(bm):
+    bm["id"] = 2
+    assert bm["id"] == 2
+    assert bm.id == 2
+    bm["name"] = "some-name"
+    assert bm["name"] == "some-name"
+    assert bm.name == "some-name"
+    bm["class"] = "some-class"
+    assert bm["class"] == "some-class"
+    assert bm.class_ == "some-class"
+    bm["finally"] = [4, 5, 6]
+    assert bm["finally"] == [4, 5, 6]
+    assert bm["finally"] is bm.finally_
+    with pytest.raises(AttributeError) as exc:
+        bm["foobar"] = 5
+    assert str(exc.value) == "'Model' object has no attribute 'foobar'"
+
+
+def test_dict_setitem_child(bm):
+    bm["model_no_refs1"]["name1"] = "model_no_refs1_another_name"
+    assert bm["model_no_refs1"]["name1"] == "model_no_refs1_another_name"
+
+    # creating new children from dictionaries instantiates a new child model
+    # object from that dict but does not maintain a reference.
+    child_dict = {"name1": "I used a dictionary"}
+    bm["model_no_refs1"] = child_dict
+    assert bm["model_no_refs1"] == ModelNoRefs1(name1="I used a dictionary")
+    assert bm.model_no_refs1 is not child_dict
+    bm["model_no_refs1"]["name1"] = "I'm not a reference to child_dict"
+    assert child_dict["name1"] != "I'm not a reference to child_dict"
+    assert child_dict["name1"] == "I used a dictionary"
+
+
+def test_dict_setitem_enum(bm):
+    bm["enum1"] = "entry2"
+    assert bm["enum1"] == "entry2"
+    # it's really still an Enum1 member under the hood
+    assert bm.enum1 == Enum1.entry2
+    with pytest.raises(ValueError) as exc:
+        bm["enum1"] = "foobar"
+    assert str(exc.value) == (
+        "Invalid value 'foobar' for 'Model.enum1'. Valid values are ['entry1', 'entry2']"
+    )
+    with pytest.raises(ValueError) as exc:
+        bm["enum1"] = Enum1.entry1  # can't use a real Enum with dict
+    assert str(exc.value) == (
+        "Invalid value 'Enum1.entry1' for 'Model.enum1'. Valid values are "
+        "['entry1', 'entry2']"
+    )
+
+
+def test_dict_delitem(bm):
+    del bm["id"]
+    assert bm.id is None
+    with pytest.raises(KeyError):
+        bm["id"]
+    del bm["class"]
+    assert bm.class_ is None
+    with pytest.raises(KeyError):
+        bm["class"]
+    with pytest.raises(KeyError):
+        del bm["no-such-key"]
+
+
+def test_dict_iter(bm):
+    keys = [
+        "enum1",
+        "model_no_refs1",
+        "enum2",
+        "model_no_refs2",
+        "list_enum1",
+        "list_model_no_refs1",
+        "opt_enum1",
+        "id",
+        "name",
+        "class",
+        "finally",
+    ]
+    for k in bm:
+        keys.remove(k)
+    assert keys == []
+
+
+def test_dict_contains(bm):
+    assert "id" in bm
+    assert "foobar" not in bm
+    assert "finally_" not in bm
+    assert "finally" in bm
+
+
+def test_dict_keys(bm):
+    assert list(bm.keys()) == [
+        "enum1",
+        "model_no_refs1",
+        "enum2",
+        "model_no_refs2",
+        "list_enum1",
+        "list_model_no_refs1",
+        "opt_enum1",
+        "id",
+        "name",
+        "class",
+        "finally",
+    ]
+
+
+def test_dict_items(bm):
+    assert list(bm.items()) == [
+        ("enum1", "entry1"),
+        ("model_no_refs1", {"name1": "model_no_refs1_name"}),
+        ("enum2", "entry2"),
+        ("model_no_refs2", {"name2": "model_no_refs2_name"}),
+        ("list_enum1", ["entry1"]),
+        ("list_model_no_refs1", [{"name1": "model_no_refs1_name"}]),
+        ("opt_enum1", "entry1"),
+        ("id", 1),
+        ("name", "my-name"),
+        ("class", "model-name"),
+        ("finally", [1, 2, 3]),
+    ]
+
+
+def test_dict_values(bm):
+    assert list(bm.values()) == [
+        "entry1",
+        {"name1": "model_no_refs1_name"},
+        "entry2",
+        {"name2": "model_no_refs2_name"},
+        ["entry1"],
+        [{"name1": "model_no_refs1_name"}],
+        "entry1",
+        1,
+        "my-name",
+        "model-name",
+        [1, 2, 3],
+    ]
+
+
+def test_dict_get(bm):
+    assert bm.get("id") == bm.id
+    assert bm.get("id", 5000) == bm.id
+    assert bm.get("not-a-key") is None
+    assert bm.get("not-a-key", "default-value") == "default-value"
+    assert bm.get("model_no_refs1") is bm["model_no_refs1"]
+    assert bm["model_no_refs1"].get("name1") == "model_no_refs1_name"
+    assert bm["model_no_refs1"].get("name1", "default-name") == "model_no_refs1_name"
+    assert bm["model_no_refs1"].get("name2") is None
+    assert bm["model_no_refs1"].get("name2", "default-name") == "default-name"
+
+
+def test_dict_pop(bm):
+    assert bm.pop("id") == 1
+    assert bm.id is None
+    with pytest.raises(KeyError):
+        bm["id"]
+
+    assert bm.pop("name", "default-name") == "my-name"
+    assert bm.name is None
+    with pytest.raises(KeyError):
+        bm["name"]
+
+    assert bm.pop("no-name", "default-name") == "default-name"
+
+    assert bm.pop("class") == "model-name"
+    assert bm.class_ is None
+    with pytest.raises(KeyError):
+        bm["class"]
+
+
+def test_dict_popitem(bm):
+    with pytest.raises(NotImplementedError):
+        bm.popitem()
+
+
+def test_dict_clear(bm):
+    with pytest.raises(NotImplementedError):
+        bm.popitem()
+
+
+def test_dict_update(bm):
+    bm.update(
+        {
+            "id": 2,
+            "name": "new-name",
+            "class": "new-class",
+            "model_no_refs1": {"name1": "new-name1"},
+        }
+    )
+    assert bm["id"] == 2
+    assert bm["name"] == "new-name"
+    assert bm["class"] == "new-class"
+    assert bm["model_no_refs1"]["name1"] == "new-name1"
+
+
+def test_dict_setdefault(bm):
+    bm.setdefault("id", 2)
+    assert bm["id"] == 1
+    del bm["id"]
+    bm.setdefault("id", 2)
+    assert bm["id"] == 2
+
+    with pytest.raises(AttributeError):
+        bm.setdefault("foobar", 5)
+
+
+def test_dict_copy(bm):
+    with pytest.raises(NotImplementedError):
+        bm.copy()
+
+
+def test_deserialize_single() -> None:
     """Deserialize functionality
 
     Should handle python reserved keywords as well as attempting to

@@ -21,11 +21,16 @@ def test_crud_user(sdk: mtds.Looker40SDK):
 
     # Create user
     user = sdk.create_user(
-        ml.WriteUser(first_name="John", last_name="Doe", is_disabled=False, locale="fr")
+        ml.WriteUser(
+            first_name="Rudolphontronix",
+            last_name="Doe",
+            is_disabled=False,
+            locale="fr",
+        )
     )
     assert isinstance(user, ml.User)
     assert isinstance(user.id, int)
-    assert user.first_name == "John"
+    assert user.first_name == "Rudolphontronix"
     assert user.last_name == "Doe"
     assert not user.is_disabled
     assert user.locale == "fr"
@@ -34,18 +39,18 @@ def test_crud_user(sdk: mtds.Looker40SDK):
     user_id = user.id
     sdk.login_user(user_id)
     user = sdk.me()
-    assert user.first_name == "John"
+    assert user.first_name == "Rudolphontronix"
     assert user.last_name == "Doe"
     sdk.logout()
     user = sdk.me()
-    assert user.first_name != "John"
+    assert user.first_name != "Rudolphontronix"
     assert user.last_name != "Doe"
 
     # Update user and check fields we didn't intend to change didn't change
     update_user = ml.WriteUser(is_disabled=True, locale="uk")
     sdk.update_user(user_id, update_user)
     user = sdk.user(user_id)
-    assert user.first_name == "John"
+    assert user.first_name == "Rudolphontronix"
     assert user.last_name == "Doe"
     assert user.locale == "uk"
     assert user.is_disabled
@@ -67,6 +72,62 @@ def test_crud_user(sdk: mtds.Looker40SDK):
     user = sdk.user(user_id)
     assert isinstance(user.credentials_email, ml.CredentialsEmail)
     assert user.credentials_email.email == "john.doe@looker.com"
+
+    # Delete user
+    resp = sdk.delete_user(user_id)
+    assert resp == ""
+
+
+def test_crud_user_dict(sdk):  # no typing
+    """Test creating, retrieving, updating and deleting a user."""
+
+    # Create user
+    new_user = sdk.create_user(
+        dict(
+            first_name="Rudolphontronix",
+            last_name="Doe",
+            is_disabled=False,
+            locale="fr",
+        )
+    )
+    assert new_user["first_name"] == "Rudolphontronix"
+    assert new_user["last_name"] == "Doe"
+    assert not new_user["is_disabled"]
+    assert new_user["locale"] == "fr"
+
+    # sudo checks
+    user_id = new_user["id"]
+    sdk.login_user(user_id)
+    sudo_user = sdk.me()
+    assert sudo_user["first_name"] == "Rudolphontronix"
+    assert sudo_user["last_name"] == "Doe"
+    sdk.logout()
+    me_user = sdk.me()
+    assert me_user["first_name"] != "Rudolphontronix"
+    assert me_user["last_name"] != "Doe"
+
+    # Update user and check fields we didn't intend to change didn't change
+    new_user["is_disabled"] = True
+    new_user["locale"] = "uk"
+    # sdk.update_user(user_id, update_user)
+    sdk.update_user(user_id, new_user)
+    updated_user = sdk.user(user_id)
+    assert updated_user["first_name"] == "Rudolphontronix"
+    assert updated_user["last_name"] == "Doe"
+    assert updated_user["locale"] == "uk"
+    assert updated_user["is_disabled"]
+
+    update_user = dict(first_name=None)
+    update_user["last_name"] = None
+    sdk.update_user(user_id, update_user)
+    user = sdk.user(user_id)
+    assert user["first_name"] == ""
+    assert user["last_name"] == ""
+
+    # Try adding email creds
+    sdk.create_user_credentials_email(user_id, dict(email="john.doe@looker.com"))
+    user = sdk.user(user_id)
+    assert user["credentials_email"]["email"] == "john.doe@looker.com"
 
     # Delete user
     resp = sdk.delete_user(user_id)

@@ -8442,8 +8442,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.User:
         """Create User"""
-        if body:
-            assert isinstance(body, models.WriteUser)
         response = self.post(
             f"/users",
             models.User,
@@ -8634,7 +8632,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.User:
         """Update User"""
-        assert isinstance(body, models.WriteUser)
         response = self.patch(
             f"/users/{user_id}",
             models.User,

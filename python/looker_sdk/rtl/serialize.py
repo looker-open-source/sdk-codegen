@@ -33,7 +33,6 @@ from typing import (
     MutableMapping,
     Sequence,
     Type,
-    TypeVar,
     Union,
 )
 

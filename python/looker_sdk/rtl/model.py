@@ -24,7 +24,16 @@
 """
 
 import collections
+import enum
+import keyword
 from typing import Any, cast, Iterable, Sequence, Optional, TypeVar
+
+try:
+    from typing import ForwardRef  # type: ignore
+except ImportError:
+    from typing import _ForwardRef as ForwardRef  # type: ignore
+
+import cattr
 
 
 EXPLICIT_NULL = cast(Any, "EXPLICIT_NULL")  # type:ignore
@@ -34,6 +43,124 @@ class Model:
     """Base model for all generated models.
     """
 
+    def _key_to_attr(self, key):
+        """Appends the trailing _ to python reserved words.
+        """
+        if key[-1] == "_":
+            raise KeyError(key)
+        if key in keyword.kwlist:
+            key = f"{key}_"
+        return key
+
+    def __getitem__(self, key):
+        key = self._key_to_attr(key)
+        try:
+            ret = getattr(self, key)
+        except AttributeError:
+            raise KeyError(key)
+
+        if isinstance(ret, enum.Enum):
+            ret = ret.value
+        if ret is None:
+            raise KeyError(key)
+        return ret
+
+    def __setitem__(self, key, value):
+        key = self._key_to_attr(key)
+        if not hasattr(self, key):
+            raise AttributeError(
+                f"'{self.__class__.__name__}' object has no attribute '{key}'"
+            )
+        annotation = self.__annotations__[key]
+        if isinstance(annotation, ForwardRef):
+            actual_type = eval(
+                annotation.__forward_arg__, self.__global_context, locals()
+            )
+            if isinstance(actual_type, enum.EnumMeta):
+
+                # untyped because mypy really doesn't like this enum internals stuff
+                def err(val):
+                    valid = []
+                    for v in actual_type.__members__.values():
+                        if v.value != "invalid_api_enum_value":
+                            valid.append(v.value)
+                    return (
+                        f"Invalid value '{val}' for "  # type: ignore
+                        f"'{self.__class__.__name__}.{key}'. Valid values are "
+                        f"{valid}"  # type: ignore
+                    )
+
+                if isinstance(value, actual_type):
+                    raise ValueError(err(value))
+                enum_member = actual_type(value)
+                if enum_member.value == "invalid_api_enum_value":
+                    raise ValueError(err(value))
+                value = enum_member
+            elif issubclass(actual_type, Model):
+                value = cattr.structure(value, actual_type)
+
+        return setattr(self, key, value)
+
+    def __delitem__(self, key):
+        self[key]  # validates key
+        setattr(self, self._key_to_attr(key), None)
+
+    def __iter__(self):
+        return iter(cattr.unstructure(self))
+
+    def __len__(self):
+        return len(cattr.unstructure(self))
+
+    def __contains__(self, key):
+        return key in cattr.unstructure(self)
+
+    def keys(self):
+        return cattr.unstructure(self).keys()
+
+    def items(self):
+        return cattr.unstructure(self).items()
+
+    def values(self):
+        return cattr.unstructure(self).values()
+
+    def get(self, key, default=None):
+        try:
+            return self[key]
+        except KeyError:
+            return default
+
+    def pop(self, key, default=None):
+        ret = self.get(key, default)
+        if key in self:
+            del self[key]
+        return ret
+
+    def popitem(self):
+        raise NotImplementedError()
+
+    def clear(self):
+        raise NotImplementedError()
+
+    def update(self, iterable=None, **kwargs):
+        if iterable:
+            has_keys = getattr(iterable, "keys", None)
+            if callable(has_keys):
+                for k in iterable:
+                    self[k] = iterable[k]
+            else:
+                for k, v in iterable:
+                    self[k] = v
+        for k in kwargs:
+            self[k] = kwargs[k]
+
+    def setdefault(self, key, default=None):
+        if key not in self:
+            self[key] = default
+        return self[key]
+
+    def copy(self):
+        raise NotImplementedError()
+
 
 def safe_enum__new__(cls, value):
     """Handle out-of-spec enum values returned by API.
@@ -42,7 +169,7 @@ def safe_enum__new__(cls, value):
     `invalid_api_enum_value` (defined on each subclass) when an
     unexpected value for the enum is returned by the API.
     """
-    if not isinstance(value, str):
+    if not isinstance(value, (str, int, bool)):
         return super().__new__(cls, value)
     else:
         vals = {v.value: v for v in cls.__members__.values()}
