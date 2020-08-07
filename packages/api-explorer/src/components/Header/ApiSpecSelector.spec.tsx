@@ -24,7 +24,7 @@
 
  */
 import React from 'react'
-import { screen, waitFor } from '@testing-library/react'
+import { act, screen, waitFor } from '@testing-library/react'
 import {
   renderWithTheme,
   withThemeProvider,
@@ -68,7 +68,7 @@ describe('ApiSpecSelector', () => {
     })
   })
 
-  test('it fires a SELECT_SPEC action when another spec is selected', () => {
+  test('it fires a SELECT_SPEC action when another spec is selected', async () => {
     renderWithRouter(
       withThemeProvider(
         <ApiSpecSelector
@@ -78,13 +78,20 @@ describe('ApiSpecSelector', () => {
         />
       )
     )
-    userEvent.click(screen.getByRole('textbox'))
-    userEvent.click(screen.getByRole('option', { name: '3.0 (stable)' }))
-    expect(specDispatch).toHaveBeenCalledTimes(1)
-    expect(specDispatch).toHaveBeenCalledWith({
-      type: 'SELECT_SPEC',
-      key: '3.0',
-      payload: specs,
+
+    await act(async () => {
+      await userEvent.click(screen.getByRole('textbox'))
+      await userEvent.click(
+        screen.getByRole('option', { name: '3.0 (stable)' })
+      )
+      await waitFor(() => {
+        expect(specDispatch).toHaveBeenCalledTimes(1)
+        expect(specDispatch).toHaveBeenCalledWith({
+          type: 'SELECT_SPEC',
+          key: '3.0',
+          payload: specs,
+        })
+      })
     })
   })
 })

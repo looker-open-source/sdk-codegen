@@ -276,9 +276,11 @@ export const SearchAll: SearchCriteria = new Set([
 
 export const CriteriaToSet = (criteria: string[]): SearchCriteria => {
   const result: SearchCriteria = new Set()
-  criteria.forEach((name) =>
-    result.add(SearchCriterion[name as SearchCriterionTerm])
-  )
+  criteria.forEach((name) => {
+    const val = SearchCriterion[name as SearchCriterionTerm]
+    if (val !== undefined)
+      result.add(SearchCriterion[name as SearchCriterionTerm])
+  })
   return result
 }
 

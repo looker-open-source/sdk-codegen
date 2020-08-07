@@ -63,16 +63,23 @@ export class OAuthSession extends AuthSession {
       'base_url',
       'looker_url',
     ]
-    const creds = { ...this.settings, ...this.settings.readConfig() }
+    const config = { ...this.settings, ...this.settings.readConfig() }
 
     keys.forEach((key) => {
-      const value = creds[key]
+      const value = config[key]
       if (!value) {
         throw sdkError({
           message: `Missing required configuration setting: '${key}'`,
         })
       }
     })
+  }
+
+  /**
+   * merge the dynamically defined configuration values with the initial settings
+   */
+  readConfig() {
+    return { ...this.settings, ...this.settings.readConfig() }
   }
 
   /**
@@ -165,7 +172,7 @@ export class OAuthSession extends AuthSession {
             )
           )
         }
-        await this.redeemAuthCode(code!)
+        await this.redeemAuthCode(code)
       }
       return await this.getToken()
     }
@@ -175,7 +182,8 @@ export class OAuthSession extends AuthSession {
   private async requestToken(
     body: IAuthCodeGrantTypeParams | IRefreshTokenGrantTypeParams
   ) {
-    const url = new URL(this.settings.base_url)
+    const config = this.readConfig()
+    const url = new URL(config.base_url)
     // replace the entire path of the base_url because this
     // auth endpoint is independent of API version
     url.pathname = '/api/token'
@@ -200,7 +208,7 @@ export class OAuthSession extends AuthSession {
   ): Promise<string> {
     this.code_verifier = this.crypto.secureRandom(32)
     const code_challenge = await this.crypto.sha256Hash(this.code_verifier)
-    const config = this.settings.readConfig()
+    const config = this.readConfig()
     const params: Record<string, string> = {
       client_id: config.client_id,
       code_challenge: code_challenge,
@@ -218,7 +226,7 @@ export class OAuthSession extends AuthSession {
 
   redeemAuthCodeBody(authCode: string, codeVerifier?: string) {
     const verifier = codeVerifier || this.code_verifier || ''
-    const config = this.settings.readConfig()
+    const config = this.readConfig()
     return {
       client_id: config.client_id,
       code: authCode,
@@ -245,7 +253,7 @@ export class OAuthSession extends AuthSession {
   async getToken() {
     if (!this.isAuthenticated()) {
       if (this.activeToken.refresh_token) {
-        const config = this.settings.readConfig()
+        const config = this.readConfig()
         await this.requestToken({
           client_id: config.client_id,
           grant_type: 'refresh_token',

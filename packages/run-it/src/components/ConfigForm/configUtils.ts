@@ -26,6 +26,8 @@
 
 export const RunItConfigKey = 'RunItConfig'
 
+export const RunItValuesKey = 'RunItValues'
+
 export type StorageLocation = 'session' | 'local'
 
 export interface IStorageValue {
@@ -93,8 +95,8 @@ export const removeStorage = (key: string) => {
 export const validateUrl = (url: string) => {
   try {
     const result = new URL(url)
-    if (result.pathname !== '/' || result.search) return result.origin
-    return url
+    if (url.endsWith(':')) return url
+    return result.origin
   } catch {
     return ''
   }

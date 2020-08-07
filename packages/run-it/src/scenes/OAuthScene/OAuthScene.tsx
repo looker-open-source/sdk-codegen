@@ -42,36 +42,35 @@ export const OAuthScene: React.FC<OAuthSceneProps> = ({ sdk }) => {
   const auth = sdk.authSession as BrowserSession
 
   /** capture the stored return URL before `OAuthSession.login()` clears it */
-  const newUrl = auth.returnUrl || `/`
+  const oldUrl = auth.returnUrl || `/`
 
-  useEffect(() => {
-    async function login() {
-      try {
-        await auth.login()
-      } catch (err) {
-        console.error(err)
-      }
-    }
-
+  async function mayLogin() {
     if (!auth.isAuthenticated()) {
-      login()
-        .then()
-        .catch((e) => console.error(e))
+      await auth.login()
     }
     setLoading(false)
-    history.push(newUrl)
-  }, [auth, history, newUrl])
+  }
 
-  // TODO display OAuth login completed with a click to redirect, and redirect automatically after 3 seconds or so?
-  // TODO Or just show "OAuth login completed" as a disappearing banner on the redirected page?
+  useEffect(() => {
+    mayLogin()
+      .then((res) => {
+        if (!auth.isAuthenticated()) {
+          console.error(`Authentication failed ${res}`)
+        }
+        history.push(oldUrl)
+      })
+      .catch((err) => {
+        console.error(err)
+        history.push(oldUrl)
+      })
+  }, [auth, history])
+
   return (
     <>
       {loading && (
         <>
           <Spinner />
-          <Text>
-            Establishing OAuth session before redirecting to {newUrl} ...
-          </Text>
+          <Text>Returning to {oldUrl} after OAuth login ...</Text>
         </>
       )}
     </>

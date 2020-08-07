@@ -40,7 +40,7 @@ import {
 } from '@looker/components'
 import { IRawResponse, Looker40SDK } from '@looker/sdk/lib/browser'
 
-import { RequestForm, ShowResponse, ConfigForm } from './components'
+import { RequestForm, ShowResponse, ConfigForm, LoginForm } from './components'
 import {
   createRequestParams,
   defaultRunItCallback,
@@ -81,7 +81,7 @@ export interface RunItCallback {
   ): Promise<IRawResponse>
 }
 
-type TryItInputType =
+type RunItInputType =
   | 'boolean'
   | 'int64'
   | 'integer'
@@ -97,21 +97,21 @@ type TryItInputType =
   | 'password'
   | 'datetime'
 
-type TryItInputLocation = 'body' | 'path' | 'query' | 'header' | 'cookie'
+type RunItInputLocation = 'body' | 'path' | 'query' | 'header' | 'cookie'
 
 /**
  * A RunIt input type describing a single REST request's parameter or a structure
  */
 export interface RunItInput {
   name: string
-  location: TryItInputLocation
-  /** A TryItInputType or a structure */
-  type: TryItInputType | any
+  location: RunItInputLocation
+  /** A RunItInputType or a structure */
+  type: RunItInputType | any
   required: boolean
   description: string
 }
 
-interface TryItProps {
+interface RunItProps {
   /** API version to Try */
   specKey: string
   /** An array of parameters associated with a given endpoint */
@@ -121,7 +121,7 @@ interface TryItProps {
   /** Request path with path params in curly braces e.g. /looks/{look_id}/run/{result_format} */
   endpoint: string
   /** A optional HTTP request provider to override the default Looker browser SDK request provider */
-  tryItCallback?: RunItCallback
+  runItCallback?: RunItCallback
   sdk?: Looker40SDK
 }
 
@@ -131,33 +131,39 @@ type ResponseContent = IRawResponse | undefined
  * Given an array of inputs, an HTTP method, an endpoint and an api version (specKey) it renders a REST request form
  * which on submit performs a REST request and renders the response with the appropriate MIME type handler
  */
-export const RunIt: FC<TryItProps> = ({
+export const RunIt: FC<RunItProps> = ({
   specKey,
   inputs,
   httpMethod,
   endpoint,
-  tryItCallback,
+  runItCallback,
   sdk = runItSDK,
 }) => {
+  // Ensure sdk passed in as undefined gets assigned to the default
+  if (!sdk) sdk = runItSDK
   const [requestContent, setRequestContent] = useState({})
-  const [activePathParams, setActivePathParams] = useState(undefined)
+  const [activePathParams, setActivePathParams] = useState({})
   const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] = useState<ResponseContent>(
     undefined
   )
   const tabs = useTabs()
   const configIsNeeded = sdkNeedsConfig(sdk)
-  const settings = sdk?.authSession.settings as RunItSettings
+  const settings = sdk.authSession.settings as RunItSettings
   const perf = new PerfTimings()
   const [hasConfig, setHasConfig] = useState<boolean>(
     !configIsNeeded || settings.authIsConfigured()
   )
 
-  // TODO: Make jest stop complaining when using the ?? syntax below
-  const callback = tryItCallback || defaultRunItCallback
+  const [needsAuth] = useState<boolean>(
+    configIsNeeded && !sdk.authSession.isAuthenticated()
+  )
+
+  const callback = runItCallback || defaultRunItCallback
 
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
+
     const [pathParams, queryParams, body] = createRequestParams(
       inputs,
       requestContent
@@ -193,7 +199,7 @@ export const RunIt: FC<TryItProps> = ({
       </TabList>
       <TabPanels {...tabs}>
         <TabPanel key="request">
-          {hasConfig && (
+          {!needsAuth && hasConfig && (
             <RequestForm
               httpMethod={httpMethod}
               inputs={inputs}
@@ -204,6 +210,9 @@ export const RunIt: FC<TryItProps> = ({
             />
           )}
           {!hasConfig && <ConfigForm setHasConfig={setHasConfig} />}
+          {hasConfig && needsAuth && (
+            <LoginForm sdk={sdk} setHasConfig={setHasConfig} />
+          )}
         </TabPanel>
         <TabPanel key="response">
           {loading && (

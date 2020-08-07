@@ -89,9 +89,7 @@ describe('NodeTransport', () => {
       const hasher = new NodeCryptoHash()
       const message = 'The quick brown fox jumped over the lazy dog.'
       const hash = await hasher.sha256Hash(message)
-      expect(hash).toEqual(
-        '68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483'
-      )
+      expect(hash).toEqual('aLEoK5HeLAVMNmKcuN1EfxLwltPjxYeXjcIkhERjNIM=')
     })
   })
 })

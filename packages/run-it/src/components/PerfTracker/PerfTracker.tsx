@@ -62,7 +62,6 @@ const filterOptions = [
 export const PerfTracker: FC<PerfTrackerProps> = ({
   perf = new PerfTimings(),
 }) => {
-  // TODO provide option to filter only traffic to the API server
   // TODO UI option to filter by url pattern
   const [filterOption, setFilterOption] = useState('api')
   const [filter, setFilter] = useState(perfFilter())

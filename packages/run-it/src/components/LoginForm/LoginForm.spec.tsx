@@ -24,14 +24,25 @@
 
  */
 
-export { ConfigDialog } from './ConfigDialog'
-export { ConfigForm } from './ConfigForm'
-export {
-  getStorage,
-  setStorage,
-  removeStorage,
-  validateUrl,
-  validLocation,
-  RunItConfigKey,
-  RunItValuesKey,
-} from './configUtils'
+import React from 'react'
+import { screen } from '@testing-library/react'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { LoginForm } from './LoginForm'
+
+describe('LoginForm', () => {
+  // https://testing-library.com/docs/guide-which-query
+
+  test('it creates a login form', async () => {
+    renderWithTheme(<LoginForm />)
+    const title = screen.getByRole('heading') as HTMLHeadingElement
+    expect(title).toHaveTextContent('OAuth Login')
+    expect(
+      await screen.findByText(/OAuth authentication is already configured/)
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', {
+        name: 'Login',
+      })
+    ).toBeInTheDocument()
+  })
+})

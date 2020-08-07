@@ -32,7 +32,7 @@ import { IResourceLoadTimes, LoadTimes, PerfTimings } from './perfUtils'
 
 const mockEntries: IResourceLoadTimes[] = [
   new LoadTimes({
-    name: 'one',
+    name: 'http://f/1',
     duration: 50,
     redirectStart: 1,
     redirectEnd: 2,
@@ -48,7 +48,7 @@ const mockEntries: IResourceLoadTimes[] = [
     startTime: 12,
   } as PerformanceResourceTiming),
   new LoadTimes({
-    name: 'two',
+    name: 'http://f/2',
     duration: 100,
     redirectStart: 21,
     redirectEnd: 22,
@@ -67,14 +67,23 @@ const mockEntries: IResourceLoadTimes[] = [
 
 describe('PerfTracker', () => {
   test('it initializes to no data', () => {
+    jest.spyOn(PerfTimings.prototype, 'entries').mockReturnValue([])
     renderWithTheme(<PerfTracker />)
     expect(
       screen.getByText('No performance data is loaded')
     ).toBeInTheDocument()
   })
-  test.skip('it displays items', () => {
+  test('it displays items', () => {
     jest.spyOn(PerfTimings.prototype, 'entries').mockReturnValue(mockEntries)
     renderWithTheme(<PerfTracker />)
-    screen.debug()
+    expect(screen.getByText(/Resource Load Times/i)).toBeInTheDocument()
+
+    // check the full url of the first item is shown in PerfChart
+    expect(screen.getByText(mockEntries[0].name)).toBeInTheDocument()
+
+    // Check the partial url is in PerfTable
+    const url = new URL(mockEntries[1].name)
+    const path = `${url.pathname}${url.search}`
+    expect(screen.getByText(path)).toBeInTheDocument()
   })
 })

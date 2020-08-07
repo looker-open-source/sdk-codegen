@@ -40,6 +40,7 @@ import {
   IRawResponse,
   responseMode,
   ResponseMode,
+  safeBase64,
 } from './transport'
 import { BaseTransport } from './baseTransport'
 import { lookerVersion } from './constants'
@@ -73,6 +74,14 @@ export class BrowserCryptoHash implements ICryptoHash {
       .join('')
   }
 
+  fromBase64(str: string) {
+    return atob(str)
+      .split('')
+      .map(function(c) {
+        return c.charCodeAt(0)
+      })
+  }
+
   secureRandom(byteCount: number): string {
     const bytes = new Uint8Array(byteCount)
     window.crypto.getRandomValues(bytes)
@@ -82,7 +91,7 @@ export class BrowserCryptoHash implements ICryptoHash {
   async sha256Hash(message: string): Promise<string> {
     const msgUint8 = new TextEncoder().encode(message)
     const hashBuffer = await window.crypto.subtle.digest('SHA-256', msgUint8)
-    return this.arrayToHex(new Uint8Array(hashBuffer))
+    return safeBase64(new Uint8Array(hashBuffer))
   }
 }
 
@@ -171,8 +180,8 @@ export class BrowserTransport extends BaseTransport {
     options = options ? { ...this.options, ...options } : this.options
     const headers: IRequestHeaders = { [LookerAppId]: agentTag }
     if (options && options.headers) {
-      Object.keys(options.headers).forEach((key) => {
-        headers[key] = options!.headers![key]
+      Object.entries(options.headers).forEach(([key, val]) => {
+        headers[key] = val
       })
     }
 

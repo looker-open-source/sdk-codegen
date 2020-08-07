@@ -56,7 +56,7 @@ import { LookerNodeSDK } from '../rtl/nodeSdk'
 
 const config = TestConfig()
 const users: Partial<IUser>[] = config.testData.users
-const queries: Partial<IQuery>[] = config.testData.queries
+const queries: Partial<IQuery>[] = config.testData.queries_system_activity
 const dashboards: any[] = config.testData.dashboards
 const emailDomain = '@foo.com'
 const testTimeout = 36000000 // 1 hour
@@ -321,6 +321,15 @@ describe('LookerNodeSDK', () => {
     )
   })
 
+  // const simpleQuery = (): IWriteQuery => {
+  //   return {
+  //     model: 'system__activity',
+  //     view: 'dashboard',
+  //     fields: ['dashboard.id', 'dashboard.title', 'dashboard.count'],
+  //     limit: '100',
+  //   }
+  // }
+
   describe('retrieves collections', () => {
     it('search_looks returns looks', async () => {
       const sdk = new LookerSDK(session)
@@ -349,20 +358,20 @@ describe('LookerNodeSDK', () => {
       expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     })
 
-    it('search_looks fields filter', async () => {
+    it('search_looks fields and title', async () => {
       const sdk = new LookerSDK(session)
       const actual = await sdk.ok(
         sdk.search_looks({
           fields: 'id,title',
-          title: 'Order%',
+          title: 'An SDK%',
         })
       )
       expect(actual).toBeDefined()
-      expect(actual.length).toBeGreaterThan(1)
+      expect(actual.length).toBeGreaterThanOrEqual(1)
       const look = actual[0]
       expect(look.id).toBeDefined()
       expect(look.title).toBeDefined()
-      expect(look.title).toContain('Order')
+      expect(look.title).toContain('SDK')
       expect(look.description).not.toBeDefined()
       await sdk.authSession.logout()
       expect(sdk.authSession.isAuthenticated()).toBeFalsy()
@@ -568,35 +577,40 @@ describe('LookerNodeSDK', () => {
           const limit = q.limit ? parseInt(q.limit, 10) : 10
           const request = createQueryRequest(q, limit)
           const query = await sdk.ok(sdk.create_query(request))
-          const sql = await sdk.ok(
-            sdk.run_query({ query_id: query.id!, result_format: 'sql' })
-          )
-          expect(sql).toContain('SELECT')
-          if (query.fields) {
-            query.fields.forEach((field) => {
-              expect(sql).toContain(field)
-            })
-          }
-
-          const json = await sdk.ok(
-            sdk.run_query({ query_id: query.id!, result_format: 'json' })
-          )
-          const csv = await sdk.ok(
-            sdk.run_query({ query_id: query.id!, result_format: 'csv' })
-          )
           expect(query).toBeDefined()
           expect(query.id).toBeDefined()
           expect(query.id).toBeGreaterThan(0)
-          expect(json).toBeDefined()
-          expect(json.length).toEqual(limit)
-          const row = json[0] as any
-          if (query.fields) {
-            query.fields.forEach((field) => {
-              expect(field in row).toBeTruthy()
-            })
+          if (query && query.id) {
+            const sql = await sdk.ok(
+              sdk.run_query({ query_id: query.id, result_format: 'sql' })
+            )
+            expect(sql).toContain('SELECT')
+            if (query.fields) {
+              query.fields.forEach((field) => {
+                expect(sql).toContain(field)
+              })
+            }
+
+            const json = await sdk.ok(
+              sdk.run_query({ query_id: query.id, result_format: 'json' })
+            )
+            const csv = await sdk.ok(
+              sdk.run_query({ query_id: query.id, result_format: 'csv' })
+            )
+            expect(json).toBeDefined()
+            expect(json.length).toBeGreaterThan(0)
+            expect(json.length).toBeLessThanOrEqual(limit)
+            const row = json[0] as any
+            if (query.fields) {
+              query.fields.forEach((field) => {
+                expect(field in row).toBeTruthy()
+              })
+            }
+            expect(csv).toBeDefined()
+            const matches = (csv.match(/\n/g) || []).length
+            expect(matches).toBeGreaterThan(0)
+            expect(matches).toBeLessThanOrEqual(limit + 1)
           }
-          expect(csv).toBeDefined()
-          expect((csv.match(/\n/g) || []).length).toEqual(limit + 1)
         }
         await sdk.authSession.logout()
         expect(sdk.authSession.isAuthenticated()).toBeFalsy()
@@ -638,7 +652,8 @@ describe('LookerNodeSDK', () => {
           }
           const json = await sdk.ok(sdk.run_inline_query(request))
           expect(json).toBeDefined()
-          expect(json.length).toEqual(limit)
+          expect(json.length).toBeGreaterThan(0)
+          expect(json.length).toBeLessThanOrEqual(limit)
           const row = json[0] as any
           if (q.fields) {
             q.fields.forEach((field: string) => {
@@ -649,7 +664,9 @@ describe('LookerNodeSDK', () => {
           const csv = await sdk.ok(sdk.run_inline_query(request))
           expect(csv).toBeDefined()
           // Check the number of rows returned from the CSV response
-          expect((csv.match(/\n/g) || []).length).toEqual(limit + 1)
+          const matches = (csv.match(/\n/g) || []).length
+          expect(matches).toBeGreaterThan(0)
+          expect(matches).toBeLessThanOrEqual(limit + 1)
           if (!streamed) {
             // Only test the first query for streaming support to avoid redundant long processes
             streamed = true

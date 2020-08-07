@@ -31,6 +31,7 @@ import {
   IApiSettings,
   Looker40SDK,
   LookerBrowserSDK,
+  lookerVersion,
 } from '@looker/sdk/lib/browser'
 import { getStorage, RunItConfigKey } from '../components'
 
@@ -38,7 +39,7 @@ import { getStorage, RunItConfigKey } from '../components'
 const settings = {
   ...DefaultSettings(),
   base_url: 'https://self-signed.looker.com:19999',
-  agentTag: 'RunIt',
+  agentTag: `RunIt ${lookerVersion}.4.0`,
 } as IApiSettings
 
 /***
@@ -51,27 +52,24 @@ export class RunItSettings extends ApiSettings {
     super(settings)
   }
 
-  private getStorage() {
-    return getStorage(RunItConfigKey)
+  getStoredConfig() {
+    const storage = getStorage(RunItConfigKey)
+    let config = { base_url: '', looker_url: '' }
+    if (storage.value) {
+      config = JSON.parse(storage.value)
+    }
+    return config
   }
 
   authIsConfigured(): boolean {
-    const storage = this.getStorage()
-    if (storage.value) {
-      const config = JSON.parse(storage.value)
-      return config.base_url && config.looker_url
-    }
-    return false
+    const config = this.getStoredConfig()
+    return config.base_url !== '' && config.looker_url !== ''
   }
 
   readConfig(_section?: string): IApiSection {
     // Read server url values from storage
-    const storage = this.getStorage()
-    // Init to empty object because Typescript/IntelliJ complains otherwise
-    let config = { base_url: '', looker_url: '' }
-    if (storage.value) {
-      config = JSON.parse(storage.value)
-    } else {
+    let config = this.getStoredConfig()
+    if (!this.authIsConfigured()) {
       // derive Looker server URL from base_url
       const url = new URL(this.base_url)
       const authServer = `${url.protocol}//${url.hostname}`
@@ -82,11 +80,13 @@ export class RunItSettings extends ApiSettings {
     }
 
     const { base_url, looker_url } = config
+    /* update base_url to the dynamically determined value for standard transport requests */
+    this.base_url = base_url
     return {
       ...super.readConfig(_section),
       ...{
         base_url,
-        looker_url: looker_url,
+        looker_url,
         client_id: 'looker.api-explorer',
         redirect_uri: `${window.location.origin}/oauth`,
       },
@@ -98,5 +98,5 @@ export class RunItSettings extends ApiSettings {
 export const runItSDK = LookerBrowserSDK.init40(new RunItSettings(settings))
 
 /** Is this a stand-alone version of Run-It that needs server and auth configuration? */
-export const sdkNeedsConfig = (sdk: Looker40SDK) =>
-  sdk.authSession.settings instanceof RunItSettings
+export const sdkNeedsConfig = (sdk: Looker40SDK | undefined) =>
+  sdk?.authSession.settings instanceof RunItSettings
