@@ -33,7 +33,6 @@ import React, {
 } from 'react'
 import {
   Button,
-  FieldRadioGroup,
   Fieldset,
   FieldText,
   Form,
@@ -42,13 +41,11 @@ import {
   ValidationMessages,
 } from '@looker/components'
 import {
-  StorageLocation,
   getStorage,
   removeStorage,
   setStorage,
   RunItConfigKey,
   validateUrl,
-  validLocation,
 } from './configUtils'
 
 interface ConfigFormProps {
@@ -60,11 +57,6 @@ interface ConfigFormProps {
   /** A callback for closing the parent dialog for when the form is rendered within dialog */
   handleClose?: () => void
 }
-
-const storageOptions = [
-  { label: 'Session', value: 'session' },
-  { label: 'Local', value: 'local' },
-]
 
 export const ConfigForm: FC<ConfigFormProps> = ({
   title,
@@ -78,14 +70,12 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   // get configuration from storage, or default it
   const storage = getStorage(RunItConfigKey)
   let config = { base_url: '', looker_url: '' }
-  const location = storage.location
   if (storage.value) config = JSON.parse(storage.value)
   const { base_url, looker_url } = config
 
   const [fields, setFields] = useState({
     baseUrl: base_url,
     lookerUrl: looker_url,
-    location: location,
   })
 
   const [validationMessages, setValidationMessages] = useState<
@@ -101,7 +91,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         base_url: fields.baseUrl,
         looker_url: fields.lookerUrl,
       }),
-      fields.location
+      // Always store in local storage
+      'local'
     )
     if (setHasConfig) setHasConfig(true)
     if (handleClose) handleClose()
@@ -140,25 +131,6 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     setValidationMessages(newValidationMessages)
   }
 
-  const handleLocationChange = (location: string) => {
-    const name = 'location'
-    const newValidationMessages = { ...validationMessages }
-
-    if (validLocation(location)) {
-      const newFields = { ...fields }
-      newFields.location = location as StorageLocation
-      setFields(newFields)
-      delete newValidationMessages[name]
-    } else {
-      newValidationMessages[name] = {
-        message: `${location} is must be either 'session' or 'local'}`,
-        type: 'error',
-      }
-    }
-
-    setValidationMessages(newValidationMessages)
-  }
-
   return (
     <>
       <Heading>
@@ -183,16 +155,6 @@ export const ConfigForm: FC<ConfigFormProps> = ({
             onChange={handleUrlChange}
           />
         </Fieldset>
-        <FieldRadioGroup
-          description="Configuration storage location"
-          label="Save to"
-          name="location"
-          options={storageOptions}
-          defaultValue={fields.location}
-          onChange={handleLocationChange}
-          inline
-          required
-        />
       </Form>
       <>
         <Button

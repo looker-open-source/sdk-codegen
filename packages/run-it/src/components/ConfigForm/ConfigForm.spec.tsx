@@ -60,18 +60,6 @@ describe('ConfigForm', () => {
     expect(authUrl).toBeInTheDocument()
     expect(authUrl).toHaveValue('')
 
-    const session = screen.getByRole('radio', {
-      name: /session/i,
-    }) as HTMLInputElement
-    expect(session).toBeInTheDocument()
-    expect(session).toBeChecked()
-
-    const local = screen.getByRole('radio', {
-      name: /local/i,
-    }) as HTMLInputElement
-    expect(local).toBeInTheDocument()
-    expect(local).not.toBeChecked()
-
     expect(
       screen.getByRole('button', {
         name: 'Save',
@@ -143,7 +131,7 @@ describe('ConfigForm', () => {
     await userEvent.click(save)
     await waitFor(() => {
       const storage = getStorage(RunItConfigKey)
-      expect(storage.location).toEqual('session')
+      expect(storage.location).toEqual('local')
       expect(JSON.parse(storage.value)).toEqual({
         base_url: 'https://foo:199',
         looker_url: 'https://foo:99',
@@ -162,44 +150,6 @@ describe('ConfigForm', () => {
     renderWithTheme(<ConfigForm title="New title" />)
     const title = screen.getByRole('heading') as HTMLHeadingElement
     expect(title.textContent).toEqual('New title')
-  })
-
-  test('it gets config from session storage', async () => {
-    setStorage(
-      RunItConfigKey,
-      JSON.stringify({
-        base_url: 'http://base',
-        looker_url: 'http://looker',
-      })
-    )
-
-    renderWithTheme(<ConfigForm />)
-    const title = screen.getByRole('heading') as HTMLHeadingElement
-    expect(title).toHaveTextContent('RunIt Configuration')
-
-    const apiUrl = screen.getByRole('textbox', {
-      name: /API server url/i,
-    }) as HTMLInputElement
-    expect(apiUrl).toBeInTheDocument()
-    expect(apiUrl).toHaveValue('http://base')
-
-    const authUrl = screen.getByRole('textbox', {
-      name: /Auth server Url/i,
-    }) as HTMLInputElement
-    expect(authUrl).toBeInTheDocument()
-    expect(authUrl).toHaveValue('http://looker')
-
-    const session = screen.getByRole('radio', {
-      name: /session/i,
-    }) as HTMLInputElement
-    expect(session).toBeInTheDocument()
-    expect(session).toBeChecked()
-
-    const local = screen.getByRole('radio', {
-      name: /local/i,
-    }) as HTMLInputElement
-    expect(local).toBeInTheDocument()
-    expect(local).not.toBeChecked()
   })
 
   test('it gets config from local storage', async () => {
@@ -228,25 +178,12 @@ describe('ConfigForm', () => {
     expect(authUrl).toBeInTheDocument()
     expect(authUrl).toHaveValue('http://local')
 
-    const session = screen.getByRole('radio', {
-      name: /session/i,
-    }) as HTMLInputElement
-    expect(session).toBeInTheDocument()
-    expect(session).not.toBeChecked()
-
-    const local = screen.getByRole('radio', {
-      name: /local/i,
-    }) as HTMLInputElement
-    expect(local).toBeInTheDocument()
-    expect(local).toBeChecked()
-
     fireEvent.change(apiUrl, { target: { value: apiUrl.value } })
     await waitFor(() => {
       const button = screen.getByRole('button', {
         name: 'Save',
       }) as HTMLButtonElement
       expect(button).toBeInTheDocument()
-      // expect(button).not.toBeEnabled()
     })
   })
 })
