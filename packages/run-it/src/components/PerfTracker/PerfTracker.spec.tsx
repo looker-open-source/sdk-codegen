@@ -28,9 +28,9 @@ import { screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import React from 'react'
 import { PerfTracker } from './PerfTracker'
-import { IResourceLoadTimes, LoadTimes, PerfTimings } from './perfUtils'
+import { LoadTimes, PerfTimings } from './perfUtils'
 
-const mockEntries: IResourceLoadTimes[] = [
+const mockEntries: LoadTimes[] = [
   new LoadTimes({
     name: 'http://f/1',
     duration: 50,
@@ -76,7 +76,7 @@ describe('PerfTracker', () => {
   test('it displays items', () => {
     jest.spyOn(PerfTimings.prototype, 'entries').mockReturnValue(mockEntries)
     renderWithTheme(<PerfTracker />)
-    expect(screen.getByText(/Resource Load Times/i)).toBeInTheDocument()
+    expect(screen.getByText(/Load Times/i)).toBeInTheDocument()
 
     // check the full url of the first item is shown in PerfChart
     expect(screen.getByText(mockEntries[0].name)).toBeInTheDocument()
