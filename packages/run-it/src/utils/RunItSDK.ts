@@ -26,6 +26,7 @@
 
 import {
   ApiSettings,
+  BrowserTransport,
   DefaultSettings,
   IApiSection,
   IApiSettings,
@@ -94,8 +95,14 @@ export class RunItSettings extends ApiSettings {
   }
 }
 
+const perfSDK = (settings: Partial<IApiSettings>) => {
+  const sdk = LookerBrowserSDK.init40(new RunItSettings(settings))
+  BrowserTransport.trackPerformance = true
+  return sdk
+}
+
 /** Initialized stand-alone API test runner */
-export const runItSDK = LookerBrowserSDK.init40(new RunItSettings(settings))
+export const runItSDK = perfSDK(settings)
 
 /** Is this a stand-alone version of Run-It that needs server and auth configuration? */
 export const sdkNeedsConfig = (sdk: Looker40SDK | undefined) =>

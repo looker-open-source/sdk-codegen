@@ -46,119 +46,6 @@ import { BaseTransport } from './baseTransport'
 import { lookerVersion } from './constants'
 import { ICryptoHash } from './cryptoHash'
 
-/** Does this browser have the necessary performance APIs? */
-const performs =
-  performance &&
-  performance.mark !== undefined &&
-  performance.measure !== undefined
-
-const startMark = 'A'
-const endMark = 'B'
-
-/**
- * Create a performance mark
- * @param name to use as prefix of mark. Use `markName()` to determine the name
- * @param tag tag to use to distinguish mark
- */
-const mark = (name: string, tag: string) => {
-  if (performs) {
-    performance.mark(`${name}-${tag}`)
-  }
-}
-
-/**
- * Create a unique name for the performance metric of the url based on its start time
- * @param url metric to find
- *
- * Uses the last entry of the matching metric to create the name for the tracker so
- * post processing can use it to merge into the main resource tracker
- *
- */
-const markName = (url: string) => {
-  if (!performs) return url
-
-  const entries = performance.getEntriesByName(url, 'resource')
-  if (entries.length > 0) {
-    const last = entries[entries.length - 1]
-    return `${url}-${last.startTime}`
-  }
-  return url
-}
-
-/**
- * Mark the start of a performance measure
- * @param name to use as prefix of mark. Use `markName()` to determine the name
- */
-const markStart = (name: string) => {
-  mark(name, startMark)
-}
-
-/**
- * Remove entry if it exists
- * @param name to remove
- * @param type to match
- */
-const removePerf = (name: string, type: string) => {
-  if (performance.getEntriesByName(name, type).length !== 0) {
-    // prevent duplicate measures
-    performance.clearMarks(name)
-  }
-}
-
-/**
- * Mark the end of a performance measure
- * @param url to find starting mark which doesn't have a resource entry yet
- * @param name to use as prefix of mark. Use `markName()` to determine the name
- *
- * Also creates the start/end performance measure
- */
-const markEnd = (url: string, name: string) => {
-  if (performs) {
-    const end = `${name}-${endMark}`
-    removePerf(end, 'mark')
-    mark(name, endMark)
-    let start = `${name}-${startMark}`
-    if (performance.getEntriesByName(start, 'mark').length === 0) {
-      start = `${url}-${startMark}`
-    }
-    removePerf(name, 'measure')
-    performance.measure(`${name}`, start, end)
-  }
-}
-
-/**
- * Process the response based on content type
- * @param res response to process
- * @param markName name of mark to track
- */
-async function parseResponse(res: IRawResponse, markName: string) {
-  if (res.contentType.match(/application\/json/g)) {
-    try {
-      const result = JSON.parse(await res.body)
-      markEnd(res.url, markName)
-      return result
-    } catch (error) {
-      markEnd(res.url, markName)
-      return Promise.reject(error)
-    }
-  } else if (
-    res.contentType === 'text' ||
-    res.contentType.startsWith('text/')
-  ) {
-    const result = res.body.toString()
-    markEnd(res.url, markName)
-    return result
-  } else {
-    try {
-      markEnd(res.url, markName)
-      return res.body
-    } catch (error) {
-      markEnd(res.url, markName)
-      return Promise.reject(error)
-    }
-  }
-}
-
 export class BrowserCryptoHash implements ICryptoHash {
   arrayToHex(array: Uint8Array): string {
     return Array.from(array)
@@ -192,6 +79,106 @@ export class BrowserTransport extends BaseTransport {
     super(options)
   }
 
+  /** Does this browser have the necessary performance APIs? */
+  static supportsPerformance() {
+    return (
+      performance &&
+      performance.mark !== undefined &&
+      performance.measure !== undefined
+    )
+  }
+
+  private static _trackPerf = false
+
+  public static get trackPerformance() {
+    return this._trackPerf
+  }
+
+  public static set trackPerformance(value: boolean) {
+    this._trackPerf = value && BrowserTransport.supportsPerformance()
+  }
+
+  static startMark = 'A'
+  static endMark = 'B'
+
+  /**
+   * Create a performance mark
+   * @param name to use as prefix of mark. Use `markName()` to determine the name
+   * @param tag tag to use to distinguish mark
+   */
+  static mark(name: string, tag: string) {
+    if (this.trackPerformance) {
+      const mark = `${name}-${tag}`
+      performance.mark(mark)
+      console.debug(`Marked ${mark}`)
+    }
+  }
+
+  /**
+   * Create a unique name for the performance metric of the url based on its start time
+   * @param url metric to find
+   *
+   * Uses the last entry of the matching metric to create the name for the tracker so
+   * post processing can use it to merge into the main resource tracker
+   *
+   */
+  static markName(url: string) {
+    if (!this._trackPerf) return url
+
+    const entries = performance.getEntriesByName(url, 'resource')
+    if (entries.length > 0) {
+      const last = entries[entries.length - 1]
+      return `${url}-${last.startTime}`
+    }
+    return url
+  }
+
+  /**
+   * Mark the start of a performance measure
+   * @param name to use as prefix of mark. Use `markName()` to determine the name
+   */
+  static markStart(name: string) {
+    BrowserTransport.mark(name, BrowserTransport.startMark)
+  }
+
+  /**
+   * Remove entry if it exists
+   * @param name to remove
+   * @param type to match
+   */
+  static removePerf(name: string, type: string) {
+    if (!this.trackPerformance) return
+    if (performance.getEntriesByName(name, type).length !== 0) {
+      // prevent duplicate measures
+      performance.clearMarks(name)
+    }
+  }
+
+  /**
+   * Mark the end of a performance measure
+   * @param url to find starting mark which doesn't have a resource entry yet
+   * @param name to use as prefix of mark. Use `markName()` to determine the name
+   *
+   * Also creates the start/end performance measure
+   */
+  static markEnd(url: string, name: string) {
+    if (this.trackPerformance) {
+      const end = `${name}-${BrowserTransport.endMark}`
+      BrowserTransport.removePerf(end, 'mark')
+      BrowserTransport.mark(name, BrowserTransport.endMark)
+      let start = `${name}-${BrowserTransport.startMark}`
+      if (performance.getEntriesByName(start, 'mark').length === 0) {
+        start = `${url}-${BrowserTransport.startMark}`
+      }
+      BrowserTransport.removePerf(name, 'measure')
+      performance.measure(`${name}`, start, end)
+      // Marks have been processed into a measure, so remove them
+      performance.clearMarks(start)
+      performance.clearMarks(end)
+      console.debug(`Measured ${name} from ${start} to ${end}`)
+    }
+  }
+
   async rawRequest(
     method: HttpMethod,
     path: string,
@@ -217,12 +204,18 @@ export class BrowserTransport extends BaseTransport {
     const res = await req
 
     // Start tracking the time it takes to convert the response
-    markStart(markName(requestPath))
+    BrowserTransport.markStart(BrowserTransport.markName(requestPath))
     const contentType = String(res.headers.get('content-type'))
     const mode = responseMode(contentType)
     const responseBody =
       mode === ResponseMode.binary ? await res.blob() : await res.text()
-    markEnd(requestPath, markName(requestPath))
+    if (!('fromRequest' in options)) {
+      // Request will markEnd, so don't mark the end here
+      BrowserTransport.markEnd(
+        requestPath,
+        BrowserTransport.markName(requestPath)
+      )
+    }
     return {
       url: requestPath,
       body: responseBody,
@@ -242,6 +235,9 @@ export class BrowserTransport extends BaseTransport {
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
     try {
+      if (BrowserTransport.trackPerformance) {
+        options = { ...options, ...{ fromRequest: true } }
+      }
       const res = await this.rawRequest(
         method,
         path,
@@ -250,7 +246,11 @@ export class BrowserTransport extends BaseTransport {
         authenticator,
         options
       )
-      const parsed = await parseResponse(res, markName(res.url))
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      const parsed = await parseResponse(
+        res,
+        BrowserTransport.markName(res.url)
+      )
       if (this.ok(res)) {
         return { ok: true, value: parsed }
       } else {
@@ -392,5 +392,38 @@ export class BrowserTransport extends BaseTransport {
     const results = await Promise.all([returnPromise, streamPromise])
     return results[0]
     */
+  }
+}
+
+/**
+ * Process the response based on content type
+ * @param res response to process
+ * @param markName name of mark to track
+ */
+async function parseResponse(res: IRawResponse, markName: string) {
+  if (res.contentType.match(/application\/json/g)) {
+    try {
+      const result = JSON.parse(await res.body)
+      BrowserTransport.markEnd(res.url, markName)
+      return result
+    } catch (error) {
+      BrowserTransport.markEnd(res.url, markName)
+      return Promise.reject(error)
+    }
+  } else if (
+    res.contentType === 'text' ||
+    res.contentType.startsWith('text/')
+  ) {
+    const result = res.body.toString()
+    BrowserTransport.markEnd(res.url, markName)
+    return result
+  } else {
+    try {
+      BrowserTransport.markEnd(res.url, markName)
+      return res.body
+    } catch (error) {
+      BrowserTransport.markEnd(res.url, markName)
+      return Promise.reject(error)
+    }
   }
 }
