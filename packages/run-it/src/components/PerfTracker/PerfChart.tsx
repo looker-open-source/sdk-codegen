@@ -40,8 +40,8 @@ const chartItem = (list: any[], desc: string, start: number, end: number) => {
   return list
 }
 
-const chartData = (times: IResourceLoadTimes) => {
-  const item = times.entry as PerformanceResourceTiming
+const chartData = (timings: IResourceLoadTimes) => {
+  const item = timings.entry as PerformanceResourceTiming
   const result = [
     [
       { type: 'string', id: 'Metric' },
@@ -73,6 +73,7 @@ const chartData = (times: IResourceLoadTimes) => {
     item.responseEnd
   )
   chartItem(result, 'startUntilResponseEnd', item.startTime, item.responseEnd)
+  chartItem(result, 'processDuration', timings.processStart, timings.processEnd)
   return result
 }
 
@@ -84,25 +85,25 @@ export const PerfChart: FC<PerfChartProps> = ({ loadTimes }) => {
       <Heading as="h4">{loadTimes.name}</Heading>
       <Space>
         <Tooltip
-          content="The size (in octets) of the fetched resource. The size includes the response header fields plus the response payload body"
+          content={`The size (${entry.transferSize} octets) of the fetched resource. The size includes the response header fields plus the response payload body`}
           placement="right"
           textAlign="left"
         >
-          <span>Transfer size: {entry.transferSize}</span>
+          <span>Transfer: {entry.transferSize}</span>
         </Tooltip>
         <Tooltip
-          content="The size (in octets) received from the fetch (HTTP or cache), of the payload body, before removing any applied content-codings"
+          content={`The size (${entry.encodedBodySize} octets) received from the fetch (HTTP or cache), of the payload body, before removing any applied content-codings`}
           placement="right"
           textAlign="left"
         >
-          <span>Encoded body size: {entry.encodedBodySize}</span>
+          <span>Encoded body: {entry.encodedBodySize}</span>
         </Tooltip>
         <Tooltip
-          content="The size (in octets) received from the fetch (HTTP or cache) of the message body, after removing any applied content-codings"
+          content={`The size (${entry.decodedBodySize} octets) received from the fetch (HTTP or cache) of the message body, after removing any applied content-codings`}
           placement="right"
           textAlign="left"
         >
-          <span>Decoded body size: {entry.decodedBodySize}</span>
+          <span>Decoded body: {entry.decodedBodySize}</span>
         </Tooltip>
       </Space>
       <Chart

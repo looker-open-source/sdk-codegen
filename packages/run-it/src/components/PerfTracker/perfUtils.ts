@@ -39,6 +39,9 @@ export interface IResourceLoadTimes {
   fetchUntilResponseEnd: number
   requestUntilResponseEnd: number
   startUntilResponseEnd: number
+  processStart: number
+  processEnd: number
+  processDuration: number
 }
 
 /**
@@ -56,6 +59,7 @@ export const perfRound = (num: number) =>
 const diff = (end: number, start: number) => perfRound(end - start)
 
 export class LoadTimes implements IResourceLoadTimes {
+  duration = 0
   redirect = 0
   domainLookup = 0
   connect = 0
@@ -64,6 +68,9 @@ export class LoadTimes implements IResourceLoadTimes {
   fetchUntilResponseEnd = 0
   requestUntilResponseEnd = 0
   startUntilResponseEnd = 0
+  processStart = 0
+  processEnd = 0
+  processDuration = 0
 
   constructor(public entry: PerformanceEntry) {
     if ('redirectStart' in entry) {
@@ -97,11 +104,26 @@ export class LoadTimes implements IResourceLoadTimes {
           resource.responseEnd,
           resource.startTime
         )
+      this.calcProcessTime()
     }
   }
 
-  get duration() {
-    return this.entry.duration
+  private calcProcessTime() {
+    this.duration = this.entry.duration
+    if (performance.getEntriesByName !== undefined) {
+      const entries = performance.getEntriesByName(
+        `${this.name}-${this.entry.startTime}`,
+        'measure'
+      )
+      if (entries.length > 0) {
+        const measure = entries[entries.length - 1] as PerformanceMeasure
+        const resource = this.entry as PerformanceResourceTiming
+        this.processStart = resource.connectEnd
+        this.processEnd = resource.connectEnd + measure.duration
+        this.processDuration = measure.duration
+        this.duration += measure.duration
+      }
+    }
   }
 
   get name() {
@@ -130,9 +152,10 @@ export class PerfTimings {
 
   clear() {
     if (!this.supported) return false
-    if (typeof performance.clearResourceTimings !== 'function')
-      throw new Error('Clearing resource timings is not supported')
-    performance.clearResourceTimings()
+    if (performance.clearResourceTimings !== undefined)
+      performance.clearResourceTimings()
+    if (performance.clearMarks !== undefined) performance.clearMarks()
+    if (performance.clearMeasures !== undefined) performance.clearMeasures()
     this._full = this.entries().length === 0
     return this._full
   }
@@ -156,7 +179,7 @@ export class PerfTimings {
   set bufferSize(value) {
     if (
       this.supported &&
-      typeof performance.setResourceTimingBufferSize === 'function'
+      typeof performance.setResourceTimingBufferSize !== undefined
     ) {
       this._bufferSize = value
       performance.setResourceTimingBufferSize(value)

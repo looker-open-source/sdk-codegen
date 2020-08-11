@@ -41,63 +41,70 @@ export const tableColumns: ActionListColumns = [
     primaryKey: true,
     title: 'URL',
     type: 'string',
-    widthPercent: 18,
+    widthPercent: 15,
   },
   {
     canSort: true,
     id: 'domainLookup',
     title: 'Domain',
     type: 'number',
-    widthPercent: 10,
+    widthPercent: 8,
   },
   {
     canSort: true,
     id: 'connect',
     title: 'Connect',
     type: 'number',
-    widthPercent: 10,
+    widthPercent: 8,
   },
   {
     canSort: true,
     id: 'secureConnection',
     title: 'Secure',
     type: 'number',
-    widthPercent: 9.5,
+    widthPercent: 8,
   },
   {
     canSort: true,
     id: 'responseTime',
     title: 'Response',
     type: 'number',
-    widthPercent: 10.5,
+    widthPercent: 8,
   },
   {
     canSort: true,
     id: 'fetchUntilResponseEnd',
     title: 'Fetch',
     type: 'number',
-    widthPercent: 10,
+    widthPercent: 8,
   },
   {
     canSort: true,
     id: 'requestUntilResponseEnd',
     title: 'Request',
     type: 'number',
-    widthPercent: 10,
+    widthPercent: 8,
   },
   {
     canSort: true,
     id: 'startUntilResponseEnd',
     title: 'Start',
     type: 'number',
-    widthPercent: 8.8,
+    widthPercent: 8,
+  },
+  {
+    canSort: true,
+    id: 'processDuration',
+    title: 'Processing',
+    type: 'number',
+    widthPercent: 8,
   },
   {
     canSort: true,
     id: 'duration',
     title: 'Duration',
     type: 'number',
-    widthPercent: 10,
+    widthPercent: 8,
   },
 ]
 
@@ -189,6 +196,12 @@ export const createTableRows = (
           {metric(
             item.startUntilResponseEnd,
             'Immediately before the browser starts requesting the resource from the server'
+          )}
+        </ActionListItemColumn>
+        <ActionListItemColumn>
+          {metric(
+            perfRound(item.processDuration),
+            'Total time to process the payload'
           )}
         </ActionListItemColumn>
         <ActionListItemColumn>

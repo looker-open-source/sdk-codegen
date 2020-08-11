@@ -24,15 +24,16 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, useState } from 'react'
+import React, { BaseSyntheticEvent, FC, useEffect, useState } from 'react'
 import {
   doDefaultActionListSort,
   Heading,
-  Space,
-  Button,
+  FlexItem,
+  IconButton,
   SpaceVertical,
-  ButtonTransparent,
-  FieldRadioGroup,
+  FieldToggleSwitch,
+  Flex,
+  Spinner,
 } from '@looker/components'
 
 import { getStorage, RunItConfigKey } from '../ConfigForm'
@@ -54,16 +55,12 @@ const perfFilter = (all = false) => {
   return `${url.protocol}//${url.hostname}.*`
 }
 
-const filterOptions = [
-  { label: 'API calls', value: 'api' },
-  { label: 'All calls', value: 'all' },
-]
-
 export const PerfTracker: FC<PerfTrackerProps> = ({
   perf = new PerfTimings(),
 }) => {
   // TODO UI option to filter by url pattern
-  const [filterOption, setFilterOption] = useState('api')
+  const [loading, setLoading] = useState(false)
+  const [showAll, setShowAll] = useState(false)
   const [filter, setFilter] = useState(perfFilter())
   const [data, setData] = useState<LoadTimes[]>(perf.entries(filter))
   const [columns, setColumns] = useState(tableColumns)
@@ -79,46 +76,71 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
   }
 
   const handleClear = (_: BaseSyntheticEvent) => {
+    setLoading(true)
     perf.clear()
     setData([])
     setTimings(undefined)
   }
 
   const handleRefresh = (_: BaseSyntheticEvent) => {
-    const pf = perfFilter()
+    setLoading(true)
+    const pf = perfFilter(showAll)
     setFilter(pf)
     setData(perf.entries(pf))
   }
 
-  const handleFilterChange = (value: string) => {
-    setFilterOption(value)
-    const pf = perfFilter(value === 'all')
+  const handleFilterChange = (e: BaseSyntheticEvent) => {
+    setLoading(true)
+    const all = e.target.checked
+    setShowAll(all)
+    const pf = perfFilter(all)
     setFilter(pf)
     setData(perf.entries(pf))
   }
+
+  useEffect(() => {
+    setLoading(false)
+  }, [data])
 
   const handleSelect = (item: LoadTimes) => setTimings(item)
 
   return (
     <>
-      <Space mb="large">
-        <Heading>Resource Load Times for {filter}</Heading>
-        <Button iconAfter="Trash" color="critical" onClick={handleClear}>
-          Clear
-        </Button>
-        <ButtonTransparent iconAfter="Refresh" onClick={handleRefresh}>
-          Refresh
-        </ButtonTransparent>
-        <FieldRadioGroup
-          description="Performance result filtering"
-          label="Show"
-          name="filtering"
-          options={filterOptions}
-          defaultValue={filterOption}
-          onChange={handleFilterChange}
-          inline
-        />
-      </Space>
+      <Heading>Load Times for {filter}</Heading>
+      <Flex>
+        <FlexItem>
+          <IconButton
+            icon="Trash"
+            onClick={handleClear}
+            label="Clear the performance queue"
+          />
+        </FlexItem>
+        <FlexItem>
+          <IconButton
+            icon="Refresh"
+            onClick={handleRefresh}
+            label="Refresh the performance queue"
+          />
+        </FlexItem>
+        <FlexItem>
+          <FieldToggleSwitch
+            name="filtering"
+            label="Show All"
+            onChange={handleFilterChange}
+            on={showAll}
+          />
+        </FlexItem>
+        <FlexItem>
+          {loading && (
+            <>
+              <Flex>
+                <Spinner />
+                Loading ...
+              </Flex>
+            </>
+          )}
+        </FlexItem>
+      </Flex>
       <>
         {!perf.supported &&
           'Performance timing is not supported in this browser'}

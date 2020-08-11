@@ -170,6 +170,8 @@ export enum StatusCode {
 export interface IRawResponse {
   /** ok is `true` if the response is successful, `false` otherwise */
   ok: boolean
+  /** HTTP request url */
+  url: string
   /** HTTP response code */
   statusCode: number
   /** HTTP response status message text */

@@ -59,7 +59,7 @@ const ShowText = (response: IRawResponse) => (
  * @returns Image content
  */
 const imageContent = (response: IRawResponse) => {
-  let content
+  let content = ''
   if (response.body instanceof Blob) {
     content = URL.createObjectURL(response.body)
   } else {

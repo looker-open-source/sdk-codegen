@@ -135,7 +135,11 @@
       "@typescript-eslint/camelcase": "off",
       "@typescript-eslint/interface-name-prefix": "off",
       "@typescript-eslint/no-unused-vars": [
-        "warn", {"args": "all", "argsIgnorePattern": "^_"}
+        "warn",
+        {
+          "args": "all",
+          "argsIgnorePattern": "^_"
+        }
       ],
       "sort-keys-fix/sort-keys-fix": "off",
       "no-useless-constructor": "off",
