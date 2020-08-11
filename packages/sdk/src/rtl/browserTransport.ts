@@ -105,13 +105,15 @@ export class BrowserTransport extends BaseTransport {
    * Create a performance mark
    * @param name to use as prefix of mark. Use `markName()` to determine the name
    * @param tag tag to use to distinguish mark
+   * @returns the name of the mark used, or '' if not marked
    */
   static mark(name: string, tag: string) {
     if (this.trackPerformance) {
       const mark = `${name}-${tag}`
       performance.mark(mark)
-      console.debug(`Marked ${mark}`)
+      return mark
     }
+    return ''
   }
 
   /**
@@ -123,7 +125,7 @@ export class BrowserTransport extends BaseTransport {
    *
    */
   static markName(url: string) {
-    if (!this._trackPerf) return url
+    if (!this.trackPerformance) return ''
 
     const entries = performance.getEntriesByName(url, 'resource')
     if (entries.length > 0) {
@@ -138,45 +140,30 @@ export class BrowserTransport extends BaseTransport {
    * @param name to use as prefix of mark. Use `markName()` to determine the name
    */
   static markStart(name: string) {
-    BrowserTransport.mark(name, BrowserTransport.startMark)
-  }
-
-  /**
-   * Remove entry if it exists
-   * @param name to remove
-   * @param type to match
-   */
-  static removePerf(name: string, type: string) {
-    if (!this.trackPerformance) return
-    if (performance.getEntriesByName(name, type).length !== 0) {
-      // prevent duplicate measures
-      performance.clearMarks(name)
-    }
+    return BrowserTransport.mark(name, BrowserTransport.startMark)
   }
 
   /**
    * Mark the end of a performance measure
    * @param url to find starting mark which doesn't have a resource entry yet
-   * @param name to use as prefix of mark. Use `markName()` to determine the name
+   * @param startName name of the start mark
    *
-   * Also creates the start/end performance measure
+   * Creates the start/end performance measure
+   *
+   * @returns the name of the performance measure
    */
-  static markEnd(url: string, name: string) {
+  static markEnd(url: string, startName: string) {
     if (this.trackPerformance) {
-      const end = `${name}-${BrowserTransport.endMark}`
-      BrowserTransport.removePerf(end, 'mark')
-      BrowserTransport.mark(name, BrowserTransport.endMark)
-      let start = `${name}-${BrowserTransport.startMark}`
-      if (performance.getEntriesByName(start, 'mark').length === 0) {
-        start = `${url}-${BrowserTransport.startMark}`
-      }
-      BrowserTransport.removePerf(name, 'measure')
-      performance.measure(`${name}`, start, end)
+      // Find the resource entry and use it to create the measure name
+      const measureName = this.markName(url)
+      const end = BrowserTransport.mark(measureName, BrowserTransport.endMark)
+      performance.measure(measureName, startName, end)
       // Marks have been processed into a measure, so remove them
-      performance.clearMarks(start)
+      performance.clearMarks(startName)
       performance.clearMarks(end)
-      console.debug(`Measured ${name} from ${start} to ${end}`)
+      return measureName
     }
+    return ''
   }
 
   async rawRequest(
@@ -204,17 +191,16 @@ export class BrowserTransport extends BaseTransport {
     const res = await req
 
     // Start tracking the time it takes to convert the response
-    BrowserTransport.markStart(BrowserTransport.markName(requestPath))
+    const started = BrowserTransport.markStart(
+      BrowserTransport.markName(requestPath)
+    )
     const contentType = String(res.headers.get('content-type'))
     const mode = responseMode(contentType)
     const responseBody =
       mode === ResponseMode.binary ? await res.blob() : await res.text()
     if (!('fromRequest' in options)) {
       // Request will markEnd, so don't mark the end here
-      BrowserTransport.markEnd(
-        requestPath,
-        BrowserTransport.markName(requestPath)
-      )
+      BrowserTransport.markEnd(requestPath, started)
     }
     return {
       url: requestPath,
@@ -223,6 +209,7 @@ export class BrowserTransport extends BaseTransport {
       ok: true,
       statusCode: res.status,
       statusMessage: res.statusText,
+      startMark: started,
     }
   }
 
@@ -247,10 +234,7 @@ export class BrowserTransport extends BaseTransport {
         options
       )
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      const parsed = await parseResponse(
-        res,
-        BrowserTransport.markName(res.url)
-      )
+      const parsed = await parseResponse(res)
       if (this.ok(res)) {
         return { ok: true, value: parsed }
       } else {
@@ -398,16 +382,16 @@ export class BrowserTransport extends BaseTransport {
 /**
  * Process the response based on content type
  * @param res response to process
- * @param markName name of mark to track
  */
-async function parseResponse(res: IRawResponse, markName: string) {
+async function parseResponse(res: IRawResponse) {
+  const perfMark = res.startMark || ''
   if (res.contentType.match(/application\/json/g)) {
     try {
       const result = JSON.parse(await res.body)
-      BrowserTransport.markEnd(res.url, markName)
+      BrowserTransport.markEnd(res.url, perfMark)
       return result
     } catch (error) {
-      BrowserTransport.markEnd(res.url, markName)
+      BrowserTransport.markEnd(res.url, perfMark)
       return Promise.reject(error)
     }
   } else if (
@@ -415,14 +399,14 @@ async function parseResponse(res: IRawResponse, markName: string) {
     res.contentType.startsWith('text/')
   ) {
     const result = res.body.toString()
-    BrowserTransport.markEnd(res.url, markName)
+    BrowserTransport.markEnd(res.url, perfMark)
     return result
   } else {
     try {
-      BrowserTransport.markEnd(res.url, markName)
+      BrowserTransport.markEnd(res.url, perfMark)
       return res.body
     } catch (error) {
-      BrowserTransport.markEnd(res.url, markName)
+      BrowserTransport.markEnd(res.url, perfMark)
       return Promise.reject(error)
     }
   }
