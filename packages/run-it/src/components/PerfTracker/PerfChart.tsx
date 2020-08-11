@@ -27,6 +27,7 @@
 import React, { FC } from 'react'
 import { Chart } from 'react-google-charts'
 import { Heading, Space, Tooltip } from '@looker/components'
+import { Loading } from '../Loading'
 import { IResourceLoadTimes } from './perfUtils'
 
 interface PerfChartProps {
@@ -108,10 +109,13 @@ export const PerfChart: FC<PerfChartProps> = ({ loadTimes }) => {
       </Space>
       <Chart
         width={'100%'}
-        height={'350px'}
+        height={`${8 * 41 + 10}px`}
         chartType="Timeline"
-        loader={<div>Loading Chart</div>}
+        loader={<Loading loading={true} />}
         data={data}
+        options={{
+          hAxis: { ticks: [] },
+        }}
       />
     </>
   )

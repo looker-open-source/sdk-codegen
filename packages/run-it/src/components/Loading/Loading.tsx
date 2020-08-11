@@ -24,18 +24,24 @@
 
  */
 
-export { RequestForm } from './RequestForm'
-export { ShowResponse } from './ShowResponse'
-export { MethodBadge } from './MethodBadge'
-export {
-  ConfigForm,
-  getStorage,
-  setStorage,
-  removeStorage,
-  validateUrl,
-  validLocation,
-  RunItConfigKey,
-  RunItValuesKey,
-} from './ConfigForm'
-export { LoginForm } from './LoginForm'
-export { Loading } from './Loading'
+import React, { FC } from 'react'
+import { Flex, Spinner } from '@looker/components'
+
+interface LoadingProps {
+  loading: boolean
+  message?: string
+}
+
+export const Loading: FC<LoadingProps> = ({
+  loading,
+  message = 'Loading ...',
+}) => (
+  <>
+    {loading && (
+      <Flex>
+        <Spinner />
+        {message}
+      </Flex>
+    )}
+  </>
+)

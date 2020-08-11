@@ -139,10 +139,10 @@ export class LoadTimes implements IResourceLoadTimes {
 export class PerfTimings {
   private _full = false
   private _bufferSize = 0
-  supported: boolean
+  public static supported = performance !== undefined
+
   constructor() {
-    this.supported = performance !== undefined
-    if (this.supported) {
+    if (PerfTimings.supported) {
       performance.onresourcetimingbufferfull = (_ev) => (this._full = true)
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/setResourceTimingBufferSize
       // says the buffer size should be at least 150, but I don't know if we need to set it
@@ -151,7 +151,7 @@ export class PerfTimings {
   }
 
   clear() {
-    if (!this.supported) return false
+    if (!PerfTimings.supported) return false
     if (performance.clearResourceTimings !== undefined)
       performance.clearResourceTimings()
     if (performance.clearMarks !== undefined) performance.clearMarks()
@@ -162,7 +162,7 @@ export class PerfTimings {
 
   entries(pattern = '.*', type = 'resource') {
     // https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEntry
-    if (this.supported) {
+    if (PerfTimings.supported) {
       const ex = new RegExp(pattern, 'i')
       return performance
         .getEntriesByType(type)
@@ -178,7 +178,7 @@ export class PerfTimings {
 
   set bufferSize(value) {
     if (
-      this.supported &&
+      PerfTimings.supported &&
       typeof performance.setResourceTimingBufferSize !== undefined
     ) {
       this._bufferSize = value

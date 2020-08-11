@@ -32,6 +32,7 @@ import userEvent from '@testing-library/user-event'
 import { RunIt, RunItInput } from './RunIt'
 import { testTextResponse } from './test-data'
 import { runItSDK, RunItSettings } from './utils'
+import { PerfTimings } from './components/PerfTracker/perfUtils'
 
 describe('RunIt', () => {
   const run = 'Run'
@@ -193,6 +194,24 @@ describe('RunIt', () => {
       expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument()
       expect(screen.queryByRole('button', { name: 'Remove' })).toBeNull()
       expect(screen.queryByRole('button', { name: run })).toBeNull()
+    })
+  })
+  describe('performance tab', () => {
+    const supported = PerfTimings.supported
+    afterAll(() => {
+      PerfTimings.supported = supported
+    })
+    test('shows the performance tab if performance is supported', () => {
+      PerfTimings.supported = true
+      expect(
+        screen.queryByRole('tab', { name: 'Performance' })
+      ).not.toBeInTheDocument()
+    })
+    test('hides the performance tab if performance is not supported', () => {
+      PerfTimings.supported = false
+      expect(
+        screen.queryByRole('tab', { name: 'Performance' })
+      ).not.toBeInTheDocument()
     })
   })
 })

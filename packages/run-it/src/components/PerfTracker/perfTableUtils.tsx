@@ -33,6 +33,9 @@ import {
 } from '@looker/components'
 import { LoadTimes, perfRound } from './perfUtils'
 
+const urlWidth = 13
+const numWidth = (100 - urlWidth) / 9 + 1
+
 /** An array of columns defining the header of PerfTable */
 export const tableColumns: ActionListColumns = [
   {
@@ -41,70 +44,70 @@ export const tableColumns: ActionListColumns = [
     primaryKey: true,
     title: 'URL',
     type: 'string',
-    widthPercent: 15,
+    widthPercent: urlWidth,
   },
   {
     canSort: true,
     id: 'domainLookup',
     title: 'Domain',
     type: 'number',
-    widthPercent: 8,
+    widthPercent: numWidth,
   },
   {
     canSort: true,
     id: 'connect',
     title: 'Connect',
     type: 'number',
-    widthPercent: 8,
+    widthPercent: numWidth,
   },
   {
     canSort: true,
     id: 'secureConnection',
     title: 'Secure',
     type: 'number',
-    widthPercent: 8,
+    widthPercent: numWidth,
   },
   {
     canSort: true,
     id: 'responseTime',
     title: 'Response',
     type: 'number',
-    widthPercent: 8,
+    widthPercent: numWidth,
   },
   {
     canSort: true,
     id: 'fetchUntilResponseEnd',
     title: 'Fetch',
     type: 'number',
-    widthPercent: 8,
+    widthPercent: numWidth,
   },
   {
     canSort: true,
     id: 'requestUntilResponseEnd',
     title: 'Request',
     type: 'number',
-    widthPercent: 8,
+    widthPercent: numWidth,
   },
   {
     canSort: true,
     id: 'startUntilResponseEnd',
     title: 'Start',
     type: 'number',
-    widthPercent: 8,
+    widthPercent: numWidth,
   },
   {
     canSort: true,
     id: 'processDuration',
     title: 'Processing',
     type: 'number',
-    widthPercent: 8,
+    widthPercent: numWidth,
   },
   {
     canSort: true,
     id: 'duration',
     title: 'Duration',
     type: 'number',
-    widthPercent: 8,
+    widthPercent: numWidth,
   },
 ]
 
@@ -127,6 +130,19 @@ const metric = (value: number, description: string) => (
     <Metric value={value} description={`${description} (${value} ms)`} />
   </>
 )
+
+// TODO get this work for trimming left side of url
+// const TruncateLeft = styled.div<TooltipProps>`
+//   /* Standard CSS ellipsis */
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   // width: 200px;
+//
+//   /* Beginning of string */
+//   direction: rtl;
+//   text-align: left;
+// `
 
 const urlColumn = (value: string) => {
   const url = new URL(value)

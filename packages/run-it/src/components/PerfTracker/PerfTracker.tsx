@@ -33,10 +33,10 @@ import {
   SpaceVertical,
   FieldToggleSwitch,
   Flex,
-  Spinner,
 } from '@looker/components'
 
 import { getStorage, RunItConfigKey } from '../ConfigForm'
+import { Loading } from '../Loading'
 import { PerfTimings, LoadTimes } from './perfUtils'
 import { PerfChart } from './PerfChart'
 import { PerfTable } from './PerfTable'
@@ -82,13 +82,6 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
     setTimings(undefined)
   }
 
-  const handleRefresh = (_: BaseSyntheticEvent) => {
-    setLoading(true)
-    const pf = perfFilter(showAll)
-    setFilter(pf)
-    setData(perf.entries(pf))
-  }
-
   const handleFilterChange = (e: BaseSyntheticEvent) => {
     setLoading(true)
     const all = e.target.checked
@@ -116,13 +109,6 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
           />
         </FlexItem>
         <FlexItem>
-          <IconButton
-            icon="Refresh"
-            onClick={handleRefresh}
-            label="Refresh the performance queue"
-          />
-        </FlexItem>
-        <FlexItem>
           <FieldToggleSwitch
             name="filtering"
             label="Show All"
@@ -131,20 +117,13 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
           />
         </FlexItem>
         <FlexItem>
-          {loading && (
-            <>
-              <Flex>
-                <Spinner />
-                Loading ...
-              </Flex>
-            </>
-          )}
+          <Loading loading={loading} />
         </FlexItem>
       </Flex>
       <>
-        {!perf.supported &&
+        {!PerfTimings.supported &&
           'Performance timing is not supported in this browser'}
-        {perf.supported && timings && (
+        {PerfTimings.supported && !!timings && (
           <SpaceVertical gap="small">
             <PerfChart loadTimes={timings} />
             <PerfTable
