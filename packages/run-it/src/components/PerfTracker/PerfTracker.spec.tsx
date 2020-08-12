@@ -85,5 +85,34 @@ describe('PerfTracker', () => {
     const url = new URL(mockEntries[1].name)
     const path = `${url.pathname}${url.search}`
     expect(screen.getByText(path)).toBeInTheDocument()
+    expect(screen.queryByText('No performance data is loaded')).toBeNull()
+    expect(
+      screen.queryByText('Performance timing is not supported in this browser')
+    ).toBeNull()
+  })
+  test('shows a "no data" message with performance but no entries', () => {
+    jest.spyOn(PerfTimings.prototype, 'entries').mockReturnValue([])
+    PerfTimings.supported = true
+    renderWithTheme(<PerfTracker />)
+    expect(screen.queryByText('No performance data is loaded')).toBeDefined()
+    expect(
+      screen.queryByText('Performance timing is not supported in this browser')
+    ).toBeNull()
+  })
+  describe('performance support', () => {
+    const supported = PerfTimings.supported
+    afterAll(() => {
+      PerfTimings.supported = supported
+    })
+    test('shows a "not supported" message with no performance', () => {
+      PerfTimings.supported = false
+      renderWithTheme(<PerfTracker />)
+      expect(
+        screen.queryByText(
+          'Performance timing is not supported in this browser'
+        )
+      ).toBeDefined()
+      expect(screen.queryByText('No performance data is loaded')).toBeNull()
+    })
   })
 })

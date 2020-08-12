@@ -231,13 +231,9 @@ export const RunIt: FC<RunItProps> = ({
             />
           )}
         </TabPanel>
-        <>
-          {PerfTimings.supported && (
-            <TabPanel key="performance">
-              <PerfTracker perf={perf} />
-            </TabPanel>
-          )}
-        </>
+        <TabPanel key="performance">
+          <PerfTracker perf={perf} />
+        </TabPanel>
       </TabPanels>
     </Box>
   )

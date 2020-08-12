@@ -134,7 +134,9 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
             />
           </SpaceVertical>
         )}
-        {data.length < 1 && 'No performance data is loaded'}
+        {PerfTimings.supported &&
+          data.length < 1 &&
+          'No performance data is loaded'}
       </>
     </>
   )
