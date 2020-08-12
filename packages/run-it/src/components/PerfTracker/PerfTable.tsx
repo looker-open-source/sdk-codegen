@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { ActionList } from '@looker/components'
 
 import { LoadTimes } from './perfUtils'
@@ -51,10 +51,19 @@ export const PerfTable: FC<PerfTableProps> = ({
   onSelect,
   showAllColumns = false,
 }) => {
-  const columns = perfTableColumns(showAllColumns)
+  const [columns, setColumns] = useState(perfTableColumns(showAllColumns))
+  const [rows, setRows] = useState(
+    createTableRows(data, onSelect, showAllColumns)
+  )
+  useEffect(() => {
+    setColumns(perfTableColumns(showAllColumns))
+  }, [showAllColumns])
+  useEffect(() => {
+    setRows(createTableRows(data, onSelect, showAllColumns))
+  }, [data, onSelect, showAllColumns])
   return (
     <ActionList onSort={onSort} columns={columns}>
-      {createTableRows(data, onSelect, showAllColumns)}
+      {rows}
     </ActionList>
   )
 }
