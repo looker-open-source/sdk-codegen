@@ -8,7 +8,7 @@ NAME = "looker_sdk"
 VERSION = "0.1.3b14"
 REQUIRES = [
     "requests >= 2.22",
-    "attrs",
+    "attrs >= 18.2.0",
     "cattrs >= 1.0.0",
     "python-dateutil;python_version<'3.7'",
     "typing-extensions;python_version<'3.8'",
