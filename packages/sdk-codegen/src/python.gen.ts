@@ -454,32 +454,6 @@ ${this.hooks.join('\n')}
     return encodings
   }
 
-  bodyParamsTypeAssertions(indent: string, method: IMethod): string {
-    const bodyParams = method.bodyParams
-    const bump = indent + this.indentStr
-    let assertions = ''
-    if (bodyParams.length > 0) {
-      for (const param of bodyParams) {
-        if (param.location === strBody) {
-          const conditionStr = param.required
-            ? ''
-            : `${indent}if ${param.name}:\n${bump}`
-          const type = this.writeableType(param.type, method) || param.type
-          let bodyType = this.typeMapMethods(type).name
-          if (bodyType.startsWith('Sequence')) {
-            bodyType = 'Sequence'
-          } else if (bodyType.startsWith('MutableMapping')) {
-            bodyType = 'MutableMapping'
-          } else if (bodyType.startsWith('models.DelimSequence')) {
-            bodyType = 'models.DelimSequence'
-          }
-          assertions += `${conditionStr}${indent}assert isinstance(${param.name}, ${bodyType})\n`
-        }
-      }
-    }
-    return assertions
-  }
-
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
 
@@ -496,7 +470,6 @@ ${this.hooks.join('\n')}
       this.methodSignature(indent, method) +
       this.summary(bump, method.summary) +
       this.encodePathParams(bump, method) +
-      this.bodyParamsTypeAssertions(bump, method) +
       this.httpCall(bump, method)
     )
   }

@@ -16,17 +16,26 @@ def sdk(sdk31) -> mtds.Looker31SDK:
     return sdk31
 
 
+TEST_FIRST_NAME = "Rudolphontronix"
+TEST_LAST_NAME = "Doe"
+
+
 def test_crud_user(sdk: mtds.Looker31SDK):
     """Test creating, retrieving, updating and deleting a user."""
 
     # Create user
     user = sdk.create_user(
-        ml.WriteUser(first_name="John", last_name="Doe", is_disabled=False, locale="fr")
+        ml.WriteUser(
+            first_name=TEST_FIRST_NAME,
+            last_name=TEST_LAST_NAME,
+            is_disabled=False,
+            locale="fr",
+        )
     )
     assert isinstance(user, ml.User)
     assert isinstance(user.id, int)
-    assert user.first_name == "John"
-    assert user.last_name == "Doe"
+    assert user.first_name == TEST_FIRST_NAME
+    assert user.last_name == TEST_LAST_NAME
     assert not user.is_disabled
     assert user.locale == "fr"
 
@@ -34,19 +43,19 @@ def test_crud_user(sdk: mtds.Looker31SDK):
     user_id = user.id
     sdk.login_user(user_id)
     user = sdk.me()
-    assert user.first_name == "John"
-    assert user.last_name == "Doe"
+    assert user.first_name == TEST_FIRST_NAME
+    assert user.last_name == TEST_LAST_NAME
     sdk.logout()
     user = sdk.me()
-    assert user.first_name != "John"
-    assert user.last_name != "Doe"
+    assert user.first_name != TEST_FIRST_NAME
+    assert user.last_name != TEST_LAST_NAME
 
     # Update user and check fields we didn't intend to change didn't change
     update_user = ml.WriteUser(is_disabled=True, locale="uk")
     sdk.update_user(user_id, update_user)
     user = sdk.user(user_id)
-    assert user.first_name == "John"
-    assert user.last_name == "Doe"
+    assert user.first_name == TEST_FIRST_NAME
+    assert user.last_name == TEST_LAST_NAME
     assert user.locale == "uk"
     assert user.is_disabled
 

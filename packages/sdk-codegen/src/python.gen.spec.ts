@@ -331,13 +331,6 @@ def run_url_encoded_query(
   })
 
   describe('method body', () => {
-    it('asserts type of required input body params', () => {
-      const method = apiTestModel.methods.run_inline_query
-      const expected = `assert isinstance(body, models.WriteQuery)\n`
-      const actual = gen.bodyParamsTypeAssertions('', method)
-      expect(actual).toEqual(expected)
-    })
-
     it('encodes string path params', () => {
       const method = apiTestModel.methods.run_url_encoded_query
       const expected = `model_name = self.encode_path_param(model_name)
@@ -353,35 +346,6 @@ result_format = self.encode_path_param(result_format)
       // should NOT escape look_id (int)
       const expected = 'result_format = self.encode_path_param(result_format)\n'
       const actual = gen.encodePathParams('', method)
-      expect(actual).toEqual(expected)
-    })
-
-    it('asserts type of optional body params', () => {
-      const method = apiTestModel.methods.import_lookml_dashboard
-      const expected = `if body:
-    assert isinstance(body, models.WriteDashboard)
-`
-      const actual = gen.bodyParamsTypeAssertions('', method)
-      expect(actual).toEqual(expected)
-    })
-
-    it('body type assertions have generic subscripts stripped away', () => {
-      const sequenceBodyMethod = apiTestModel.methods.set_role_groups
-      let expected = `assert isinstance(body, Sequence)\n`
-      let actual = gen.bodyParamsTypeAssertions('', sequenceBodyMethod)
-      expect(actual).toEqual(expected)
-
-      const mutableMappingBodyMethod =
-        apiTestModel.methods.fetch_remote_data_action_form
-      expected = `assert isinstance(body, MutableMapping)\n`
-      actual = gen.bodyParamsTypeAssertions('', mutableMappingBodyMethod)
-      expect(actual).toEqual(expected)
-    })
-
-    it('does not assert type of query/path params', () => {
-      const method = apiTestModel.methods.lookml_model_explore
-      const expected = ''
-      const actual = gen.bodyParamsTypeAssertions('', method)
       expect(actual).toEqual(expected)
     })
 
