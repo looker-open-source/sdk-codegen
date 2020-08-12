@@ -40,10 +40,11 @@ import { Loading } from '../Loading'
 import { PerfTimings, LoadTimes } from './perfUtils'
 import { PerfChart } from './PerfChart'
 import { PerfTable } from './PerfTable'
-import { tableColumns } from './perfTableUtils'
+import { perfTableColumns } from './perfTableUtils'
 
 interface PerfTrackerProps {
   perf?: PerfTimings
+  showAllColumns?: boolean
 }
 
 const perfFilter = (all = false) => {
@@ -57,13 +58,14 @@ const perfFilter = (all = false) => {
 
 export const PerfTracker: FC<PerfTrackerProps> = ({
   perf = new PerfTimings(),
+  showAllColumns = false,
 }) => {
   // TODO UI option to filter by url pattern
   const [loading, setLoading] = useState(false)
   const [showAll, setShowAll] = useState(false)
   const [filter, setFilter] = useState(perfFilter())
   const [data, setData] = useState<LoadTimes[]>(perf.entries(filter))
-  const [columns, setColumns] = useState(tableColumns)
+  const [columns, setColumns] = useState(perfTableColumns(showAllColumns))
   const [timings, setTimings] = useState(data.length > 0 ? data[0] : undefined)
 
   const handleSort = (id: string, sortDirection: 'asc' | 'desc') => {
@@ -127,10 +129,10 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
           <SpaceVertical gap="small">
             <PerfChart loadTimes={timings} />
             <PerfTable
-              columns={columns}
               data={data}
               onSort={handleSort}
               onSelect={handleSelect}
+              showAllColumns={showAllColumns}
             />
           </SpaceVertical>
         )}
