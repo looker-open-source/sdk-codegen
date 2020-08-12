@@ -26,7 +26,6 @@
 
 import React, { BaseSyntheticEvent, FC, useEffect, useState } from 'react'
 import {
-  doDefaultActionListSort,
   Heading,
   FlexItem,
   IconButton,
@@ -40,7 +39,6 @@ import { Loading } from '../Loading'
 import { PerfTimings, LoadTimes } from './perfUtils'
 import { PerfChart } from './PerfChart'
 import { PerfTable } from './PerfTable'
-import { perfTableColumns } from './perfTableUtils'
 
 interface PerfTrackerProps {
   perf?: PerfTimings
@@ -65,17 +63,7 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
   const [showAll, setShowAll] = useState(false)
   const [filter, setFilter] = useState(perfFilter())
   const [data, setData] = useState<LoadTimes[]>(perf.entries(filter))
-  const [columns, setColumns] = useState(perfTableColumns(showAllColumns))
   const [timings, setTimings] = useState(data.length > 0 ? data[0] : undefined)
-
-  const handleSort = (id: string, sortDirection: 'asc' | 'desc') => {
-    const {
-      columns: sortedColumns,
-      data: sortedData,
-    } = doDefaultActionListSort(data, columns, id, sortDirection)
-    setData(sortedData as LoadTimes[])
-    setColumns(sortedColumns)
-  }
 
   const handleClear = (_: BaseSyntheticEvent) => {
     setLoading(true)
@@ -130,7 +118,6 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
             <PerfChart loadTimes={timings} />
             <PerfTable
               data={data}
-              onSort={handleSort}
               onSelect={handleSelect}
               showAllColumns={showAllColumns}
             />

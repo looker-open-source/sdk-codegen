@@ -30,7 +30,6 @@ import React from 'react'
 import { mockPerfEntries } from './PerfTracker.spec'
 import { PerfTable } from './PerfTable'
 
-const mockSort = jest.fn()
 const mockSelect = jest.fn()
 
 describe('PerfTable', () => {
@@ -39,7 +38,6 @@ describe('PerfTable', () => {
       <PerfTable
         showAllColumns={true}
         onSelect={mockSelect}
-        onSort={mockSort}
         data={mockPerfEntries}
       />
     )
@@ -53,13 +51,7 @@ describe('PerfTable', () => {
     expect(screen.getByText(path)).toBeInTheDocument()
   })
   test('it skips some columns by default', () => {
-    renderWithTheme(
-      <PerfTable
-        onSelect={mockSelect}
-        onSort={mockSort}
-        data={mockPerfEntries}
-      />
-    )
+    renderWithTheme(<PerfTable onSelect={mockSelect} data={mockPerfEntries} />)
     expect(screen.queryByText(/Domain/i)).toBeNull()
     expect(screen.queryByText(/Connect/i)).toBeNull()
     expect(screen.queryByText(/Secure/i)).toBeNull()

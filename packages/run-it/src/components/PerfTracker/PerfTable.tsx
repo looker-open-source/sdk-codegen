@@ -25,7 +25,7 @@
  */
 
 import React, { FC, useEffect, useState } from 'react'
-import { ActionList } from '@looker/components'
+import { ActionList, doDefaultActionListSort } from '@looker/components'
 
 import { LoadTimes } from './perfUtils'
 import { createTableRows, perfTableColumns } from './perfTableUtils'
@@ -33,8 +33,6 @@ import { createTableRows, perfTableColumns } from './perfTableUtils'
 interface PerfTableProps {
   /** An array of performance load times */
   data: LoadTimes[]
-  /** A handler for sorting data by a column */
-  onSort: (id: string, sortDirection: 'asc' | 'desc') => void
   /** A row select action handler */
   onSelect: (item: LoadTimes) => void
   /** Show all columns, or just "important" ones */
@@ -47,7 +45,6 @@ interface PerfTableProps {
  */
 export const PerfTable: FC<PerfTableProps> = ({
   data,
-  onSort,
   onSelect,
   showAllColumns = false,
 }) => {
@@ -55,6 +52,17 @@ export const PerfTable: FC<PerfTableProps> = ({
   const [rows, setRows] = useState(
     createTableRows(data, onSelect, showAllColumns)
   )
+  const handleSort = (id: string, sortDirection: 'asc' | 'desc') => {
+    const {
+      columns: sortedColumns,
+      data: sortedData,
+    } = doDefaultActionListSort(data, columns, id, sortDirection)
+    setRows(
+      createTableRows(sortedData as LoadTimes[], onSelect, showAllColumns)
+    )
+    setColumns(sortedColumns)
+  }
+
   useEffect(() => {
     setColumns(perfTableColumns(showAllColumns))
   }, [showAllColumns])
@@ -62,7 +70,7 @@ export const PerfTable: FC<PerfTableProps> = ({
     setRows(createTableRows(data, onSelect, showAllColumns))
   }, [data, onSelect, showAllColumns])
   return (
-    <ActionList onSort={onSort} columns={columns}>
+    <ActionList onSort={handleSort} columns={columns}>
       {rows}
     </ActionList>
   )
