@@ -101,7 +101,7 @@ fun hexStr(bytes: ByteArray): String {
 }
 
 @ExperimentalUnsignedTypes
-class OAuthSession(override val apiSettings: ApiSettings, override val transport: Transport = Transport(apiSettings))
+class OAuthSession(override val apiSettings: ConfigurationProvider, override val transport: Transport = Transport(apiSettings))
     : AuthSession(apiSettings, transport) {
     private var random = SecureRandom()
     private var codeVerifier: String = ""

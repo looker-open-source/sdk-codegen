@@ -27,7 +27,7 @@ package com.looker.rtl
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.http.Parameters
 
-open class AuthSession(open val apiSettings: ApiSettings,
+open class AuthSession(open val apiSettings: ConfigurationProvider,
                        open val transport: Transport = Transport(apiSettings)) {
 
     var authToken: AuthToken = AuthToken()

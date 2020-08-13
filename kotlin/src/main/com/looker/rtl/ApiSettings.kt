@@ -41,21 +41,43 @@ fun apiConfig(contents: String): ApiSections {
     return ret
 }
 
-open class ApiSettingsIniFile(var filename: String = "./looker.ini",
-                              section: String = "") : ApiSettings(File(filename).readText(), section) {
-    override fun readConfig(): Map<String, String> {
-        val file = File(filename)
-        if (!file.exists()) return mapOf()
-        val contents = File(filename).readText()
-        val config = apiConfig(contents)
-        section = if (!section.isBlank()) section else config.keys.first()
-        return config[section] ?: mapOf()
-    }
-}
-
-
 // TODO why no @JvmOverloads here?
-open class ApiSettings(contents: String, var section: String = "") : ConfigurationProvider {
+// This takes a function returning a map so that the fromIniFile constructor
+// may lazily load the file data and not store the full, parsed file map in
+// memory long term.
+open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : ConfigurationProvider {
+
+    companion object {
+        fun fromIniFile(filename: String = "./looker.ini", section: String = "") : ConfigurationProvider {
+            return ApiSettings({
+                val file = File(filename)
+                if (!file.exists()) {
+                    mapOf()
+                } else {
+                    val contents = file.readText()
+                    val config = apiConfig(contents)
+                    val selectedSection = if (!section.isBlank()) section else config.keys.first()
+                    config[selectedSection] ?: mapOf()
+                }
+            })
+        }
+
+        fun fromIniText(contents: String, section: String = "") : ConfigurationProvider {
+            val config = apiConfig(contents)
+            val first_section = if (!section.isBlank()) section else config.keys.first()
+
+            val settings = config[first_section]
+            if (settings.isNullOrEmpty()) {
+                throw Error("No section named '$first_section' was found")
+            }
+
+            return ApiSettings({ settings })
+        }
+
+        fun fromMap(config: Map<String, String>) : ConfigurationProvider {
+            return ApiSettings({ config })
+        }
+    }
 
     override var baseUrl: String = ""
     override var apiVersion: String = DEFAULT_API_VERSION
@@ -64,31 +86,22 @@ open class ApiSettings(contents: String, var section: String = "") : Configurati
     override var headers: Map<String, String> = mapOf()
 
     init {
-        val config = apiConfig(contents)
-        section = if (!section.isBlank()) section else config.keys.first()
+        val settings = rawReadConfig();
 
-        if (config[section].isNullOrEmpty()) {
-            throw Error("No section named '$section' was found")
+        // Only replace the current values if new values are provided
+        settings["base_url"].let { value ->
+            baseUrl = unQuote(value ?: baseUrl)
         }
 
-        config[section]?.let { settings ->
+        settings["api_version"].let { value ->
+            apiVersion = unQuote(value ?: apiVersion)
+        }
 
-            // Only replace the current values if new values are provided
-            settings["base_url"].let { value ->
-                baseUrl = unQuote(value ?: baseUrl)
-            }
-
-            settings["api_version"].let { value ->
-                apiVersion = unQuote(value ?: apiVersion)
-            }
-
-            settings["verify_ssl"].let { value ->
-                verifySSL = asBoolean(value) ?: verifySSL
-            }
-            settings["timeout"].let { value ->
-                timeout = if (value !== null) value.toInt() else timeout
-            }
-
+        settings["verify_ssl"].let { value ->
+            verifySSL = asBoolean(value) ?: verifySSL
+        }
+        settings["timeout"].let { value ->
+            timeout = if (value !== null) value.toInt() else timeout
         }
     }
 
@@ -97,14 +110,14 @@ open class ApiSettings(contents: String, var section: String = "") : Configurati
     }
 
     override fun readConfig(): Map<String, String> {
-        // Default implementation only knows its own properties
-        return mapOf(
+        // Merge any provided settings with the calculated values for the TransportOptions
+        return rawReadConfig().plus(mapOf(
                 "base_url" to baseUrl,
                 "api_version" to apiVersion,
                 "verify_ssl" to verifySSL.toString(),
                 "timeout" to timeout.toString(),
                 "headers" to headers.toString()
-        )
+        ))
     }
 
 
