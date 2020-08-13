@@ -147,6 +147,26 @@ export const PerfChart: FC<PerfChartProps> = ({ loadTimes }) => {
         chartType="Timeline"
         loader={<Loading loading={true} />}
         data={data}
+        chartEvents={[
+          {
+            eventName: 'ready',
+            callback: ({ chartWrapper }) => {
+              const container = document.getElementById(
+                chartWrapper.getContainerId()
+              )
+              if (container) {
+                const labels = container.getElementsByTagName('text')
+                for (let n = 0; n < labels.length; n++) {
+                  const textEl = labels.item(n)
+                  console.log(textEl)
+                  if (textEl && parseInt(textEl.innerHTML, 10) > -1) {
+                    textEl.innerHTML = ''
+                  }
+                }
+              }
+            },
+          },
+        ]}
       />
     </>
   )
