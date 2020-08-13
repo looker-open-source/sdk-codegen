@@ -158,7 +158,7 @@ export const PerfChart: FC<PerfChartProps> = ({ loadTimes }) => {
                 const labels = container.getElementsByTagName('text')
                 for (let n = 0; n < labels.length; n++) {
                   const textEl = labels.item(n)
-                  console.log(textEl)
+                  // clear any numeric ticks at the bottom of the chart
                   if (textEl && parseInt(textEl.innerHTML, 10) > -1) {
                     textEl.innerHTML = ''
                   }
