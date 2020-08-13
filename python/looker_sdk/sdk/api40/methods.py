@@ -90,7 +90,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.EmbedUrlResponse:
         """Create SSO Embed Url"""
-        assert isinstance(body, models.EmbedSsoParams)
         response = self.post(
             f"/embed/sso_url",
             models.EmbedUrlResponse,
@@ -127,7 +126,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.EmbedUrlResponse:
         """Create Embed Url"""
-        assert isinstance(body, models.EmbedParams)
         response = self.post(
             f"/embed/token_url/me",
             models.EmbedUrlResponse,
@@ -184,7 +182,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.LDAPConfig:
         """Update LDAP Configuration"""
-        assert isinstance(body, models.WriteLDAPConfig)
         response = self.patch(
             f"/ldap_config",
             models.LDAPConfig,
@@ -220,7 +217,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.LDAPConfigTestResult:
         """Test LDAP Connection"""
-        assert isinstance(body, models.WriteLDAPConfig)
         response = self.put(
             f"/ldap_config/test_connection",
             models.LDAPConfigTestResult,
@@ -258,7 +254,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.LDAPConfigTestResult:
         """Test LDAP Auth"""
-        assert isinstance(body, models.WriteLDAPConfig)
         response = self.put(
             f"/ldap_config/test_auth",
             models.LDAPConfigTestResult,
@@ -285,7 +280,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.LDAPConfigTestResult:
         """Test LDAP User Info"""
-        assert isinstance(body, models.WriteLDAPConfig)
         response = self.put(
             f"/ldap_config/test_user_info",
             models.LDAPConfigTestResult,
@@ -312,7 +306,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.LDAPConfigTestResult:
         """Test LDAP User Auth"""
-        assert isinstance(body, models.WriteLDAPConfig)
         response = self.put(
             f"/ldap_config/test_user_auth",
             models.LDAPConfigTestResult,
@@ -390,7 +383,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.OauthClientApp:
         """Register OAuth App"""
         client_guid = self.encode_path_param(client_guid)
-        assert isinstance(body, models.WriteOauthClientApp)
         response = self.post(
             f"/oauth_client_apps/{client_guid}",
             models.OauthClientApp,
@@ -417,7 +409,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.OauthClientApp:
         """Update OAuth App"""
         client_guid = self.encode_path_param(client_guid)
-        assert isinstance(body, models.WriteOauthClientApp)
         response = self.patch(
             f"/oauth_client_apps/{client_guid}",
             models.OauthClientApp,
@@ -578,7 +569,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.OIDCConfig:
         """Update OIDC Configuration"""
-        assert isinstance(body, models.WriteOIDCConfig)
         response = self.patch(
             f"/oidc_config",
             models.OIDCConfig,
@@ -633,7 +623,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.OIDCConfig:
         """Create OIDC Test Configuration"""
-        assert isinstance(body, models.WriteOIDCConfig)
         response = self.post(
             f"/oidc_test_configs",
             models.OIDCConfig,
@@ -667,7 +656,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.PasswordConfig:
         """Update Password Config"""
-        assert isinstance(body, models.WritePasswordConfig)
         response = self.patch(
             f"/password_config",
             models.PasswordConfig,
@@ -733,7 +721,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.SamlConfig:
         """Update SAML Configuration"""
-        assert isinstance(body, models.WriteSamlConfig)
         response = self.patch(
             f"/saml_config",
             models.SamlConfig,
@@ -788,7 +775,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.SamlConfig:
         """Create SAML Test Configuration"""
-        assert isinstance(body, models.WriteSamlConfig)
         response = self.post(
             f"/saml_test_configs",
             models.SamlConfig,
@@ -807,7 +793,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.SamlMetadataParseResult:
         """Parse SAML IdP XML"""
-        assert isinstance(body, str)
         response = self.post(
             f"/parse_saml_idp_metadata",
             models.SamlMetadataParseResult,
@@ -828,7 +813,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.SamlMetadataParseResult:
         """Parse SAML IdP Url"""
-        assert isinstance(body, str)
         response = self.post(
             f"/fetch_and_parse_saml_idp_metadata",
             models.SamlMetadataParseResult,
@@ -862,7 +846,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.SessionConfig:
         """Update Session Config"""
-        assert isinstance(body, models.WriteSessionConfig)
         response = self.patch(
             f"/session_config",
             models.SessionConfig,
@@ -987,7 +970,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Board:
         """Create Board"""
-        assert isinstance(body, models.WriteBoard)
         response = self.post(
             f"/boards",
             models.Board,
@@ -1110,7 +1092,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Board:
         """Update Board"""
-        assert isinstance(body, models.WriteBoard)
         response = self.patch(
             f"/boards/{board_id}",
             models.Board,
@@ -1175,7 +1156,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.BoardItem:
         """Create Board Item"""
-        assert isinstance(body, models.WriteBoardItem)
         response = self.post(
             f"/board_items",
             models.BoardItem,
@@ -1220,7 +1200,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.BoardItem:
         """Update Board Item"""
-        assert isinstance(body, models.WriteBoardItem)
         response = self.patch(
             f"/board_items/{board_item_id}",
             models.BoardItem,
@@ -1279,7 +1258,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.BoardSection:
         """Create Board section"""
-        assert isinstance(body, models.WriteBoardSection)
         response = self.post(
             f"/board_sections",
             models.BoardSection,
@@ -1324,7 +1302,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.BoardSection:
         """Update Board section"""
-        assert isinstance(body, models.WriteBoardSection)
         response = self.patch(
             f"/board_sections/{board_section_id}",
             models.BoardSection,
@@ -1400,7 +1377,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ColorCollection:
         """Create ColorCollection"""
-        assert isinstance(body, models.WriteColorCollection)
         response = self.post(
             f"/color_collections",
             models.ColorCollection,
@@ -1543,7 +1519,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.ColorCollection:
         """Update Custom Color collection"""
         collection_id = self.encode_path_param(collection_id)
-        assert isinstance(body, models.WriteColorCollection)
         response = self.patch(
             f"/color_collections/{collection_id}",
             models.ColorCollection,
@@ -1622,7 +1597,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Command:
         """Create a custom command"""
-        assert isinstance(body, models.WriteCommand)
         response = self.post(
             f"/commands", models.Command, body=body, transport_options=transport_options
         )
@@ -1642,7 +1616,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Command:
         """Update a custom command"""
-        assert isinstance(body, models.UpdateCommand)
         response = self.patch(
             f"/commands/{command_id}",
             models.Command,
@@ -1696,7 +1669,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.BackupConfiguration:
         """Update Cloud Storage"""
-        assert isinstance(body, models.WriteBackupConfiguration)
         response = self.patch(
             f"/cloud_storage",
             models.BackupConfiguration,
@@ -1732,7 +1704,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.CustomWelcomeEmail:
         """Update Custom Welcome Email Content"""
-        assert isinstance(body, models.WriteCustomWelcomeEmail)
         response = self.patch(
             f"/custom_welcome_email",
             models.CustomWelcomeEmail,
@@ -1752,7 +1723,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.WelcomeEmailTest:
         """Send a test welcome email to the currently logged in user with the supplied content """
-        assert isinstance(body, models.WelcomeEmailTest)
         response = self.put(
             f"/custom_welcome_email_test",
             models.WelcomeEmailTest,
@@ -1786,7 +1756,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DigestEmails:
         """Update Digest_emails"""
-        assert isinstance(body, models.DigestEmails)
         response = self.patch(
             f"/digest_emails_enabled",
             models.DigestEmails,
@@ -1837,7 +1806,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.InternalHelpResourcesContent:
         """Update internal help resources content"""
-        assert isinstance(body, models.WriteInternalHelpResourcesContent)
         response = self.patch(
             f"/internal_help_resources_content",
             models.InternalHelpResourcesContent,
@@ -1871,7 +1839,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.InternalHelpResources:
         """Update internal help resources configuration"""
-        assert isinstance(body, models.WriteInternalHelpResources)
         response = self.patch(
             f"/internal_help_resources",
             models.InternalHelpResources,
@@ -1927,7 +1894,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.LegacyFeature:
         """Update Legacy Feature"""
         legacy_feature_id = self.encode_path_param(legacy_feature_id)
-        assert isinstance(body, models.WriteLegacyFeature)
         response = self.patch(
             f"/legacy_features/{legacy_feature_id}",
             models.LegacyFeature,
@@ -2013,7 +1979,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.WhitelabelConfiguration:
         """Update Whitelabel configuration"""
-        assert isinstance(body, models.WriteWhitelabelConfiguration)
         response = self.put(
             f"/whitelabel_configuration",
             models.WhitelabelConfiguration,
@@ -2055,7 +2020,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DBConnection:
         """Create Connection"""
-        assert isinstance(body, models.WriteDBConnection)
         response = self.post(
             f"/connections",
             models.DBConnection,
@@ -2099,7 +2063,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.DBConnection:
         """Update Connection"""
         connection_name = self.encode_path_param(connection_name)
-        assert isinstance(body, models.WriteDBConnection)
         response = self.patch(
             f"/connections/{connection_name}",
             models.DBConnection,
@@ -2195,7 +2158,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.DBConnectionTestResult]:
         """Test Connection Configuration"""
-        assert isinstance(body, models.WriteDBConnection)
         response = self.put(
             f"/connections/test",
             Sequence[models.DBConnectionTestResult],
@@ -2253,7 +2215,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.SshServer:
         """Create SSH Server"""
-        assert isinstance(body, models.WriteSshServer)
         response = self.post(
             f"/ssh_servers",
             models.SshServer,
@@ -2294,7 +2255,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.SshServer:
         """Update SSH Server"""
         ssh_server_id = self.encode_path_param(ssh_server_id)
-        assert isinstance(body, models.WriteSshServer)
         response = self.patch(
             f"/ssh_server/{ssh_server_id}",
             models.SshServer,
@@ -2368,7 +2328,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.SshTunnel:
         """Create SSH Tunnel"""
-        assert isinstance(body, models.WriteSshTunnel)
         response = self.post(
             f"/ssh_tunnels",
             models.SshTunnel,
@@ -2409,7 +2368,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.SshTunnel:
         """Update SSH Tunnel"""
         ssh_tunnel_id = self.encode_path_param(ssh_tunnel_id)
-        assert isinstance(body, models.WriteSshTunnel)
         response = self.patch(
             f"/ssh_tunnel/{ssh_tunnel_id}",
             models.SshTunnel,
@@ -2594,7 +2552,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ContentFavorite:
         """Create Favorite Content"""
-        assert isinstance(body, models.WriteContentFavorite)
         response = self.post(
             f"/content_favorite",
             models.ContentFavorite,
@@ -2657,7 +2614,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ContentMeta:
         """Update Content Metadata"""
-        assert isinstance(body, models.WriteContentMeta)
         response = self.patch(
             f"/content_metadata/{content_metadata_id}",
             models.ContentMeta,
@@ -2699,7 +2655,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ContentMetaGroupUser:
         """Create Content Metadata Access"""
-        assert isinstance(body, models.ContentMetaGroupUser)
         response = self.post(
             f"/content_metadata_access",
             models.ContentMetaGroupUser,
@@ -2724,7 +2679,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.ContentMetaGroupUser:
         """Update Content Metadata Access"""
         content_metadata_access_id = self.encode_path_param(content_metadata_access_id)
-        assert isinstance(body, models.ContentMetaGroupUser)
         response = self.put(
             f"/content_metadata_access/{content_metadata_access_id}",
             models.ContentMetaGroupUser,
@@ -2931,7 +2885,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Dashboard:
         """Create Dashboard"""
-        assert isinstance(body, models.WriteDashboard)
         response = self.post(
             f"/dashboards",
             models.Dashboard,
@@ -3072,8 +3025,6 @@ class Looker40SDK(api_methods.APIMethods):
         """Import LookML Dashboard"""
         lookml_dashboard_id = self.encode_path_param(lookml_dashboard_id)
         space_id = self.encode_path_param(space_id)
-        if body:
-            assert isinstance(body, models.WriteDashboard)
         response = self.post(
             f"/dashboards/{lookml_dashboard_id}/import/{space_id}",
             models.Dashboard,
@@ -3106,7 +3057,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> Sequence[int]:
         """Sync LookML Dashboard"""
         lookml_dashboard_id = self.encode_path_param(lookml_dashboard_id)
-        assert isinstance(body, models.WriteDashboard)
         response = self.patch(
             f"/dashboards/{lookml_dashboard_id}/sync",
             Sequence[int],
@@ -3166,7 +3116,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.Dashboard:
         """Update Dashboard"""
         dashboard_id = self.encode_path_param(dashboard_id)
-        assert isinstance(body, models.WriteDashboard)
         response = self.patch(
             f"/dashboards/{dashboard_id}",
             models.Dashboard,
@@ -3339,7 +3288,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.DashboardElement:
         """Update DashboardElement"""
         dashboard_element_id = self.encode_path_param(dashboard_element_id)
-        assert isinstance(body, models.WriteDashboardElement)
         response = self.patch(
             f"/dashboard_elements/{dashboard_element_id}",
             models.DashboardElement,
@@ -3402,7 +3350,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DashboardElement:
         """Create DashboardElement"""
-        assert isinstance(body, models.WriteDashboardElement)
         response = self.post(
             f"/dashboard_elements",
             models.DashboardElement,
@@ -3449,7 +3396,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.DashboardFilter:
         """Update Dashboard Filter"""
         dashboard_filter_id = self.encode_path_param(dashboard_filter_id)
-        assert isinstance(body, models.WriteDashboardFilter)
         response = self.patch(
             f"/dashboard_filters/{dashboard_filter_id}",
             models.DashboardFilter,
@@ -3512,7 +3458,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DashboardFilter:
         """Create Dashboard Filter"""
-        assert isinstance(body, models.WriteCreateDashboardFilter)
         response = self.post(
             f"/dashboard_filters",
             models.DashboardFilter,
@@ -3563,7 +3508,6 @@ class Looker40SDK(api_methods.APIMethods):
         dashboard_layout_component_id = self.encode_path_param(
             dashboard_layout_component_id
         )
-        assert isinstance(body, models.WriteDashboardLayoutComponent)
         response = self.patch(
             f"/dashboard_layout_components/{dashboard_layout_component_id}",
             models.DashboardLayoutComponent,
@@ -3632,7 +3576,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.DashboardLayout:
         """Update DashboardLayout"""
         dashboard_layout_id = self.encode_path_param(dashboard_layout_id)
-        assert isinstance(body, models.WriteDashboardLayout)
         response = self.patch(
             f"/dashboard_layouts/{dashboard_layout_id}",
             models.DashboardLayout,
@@ -3695,7 +3638,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DashboardLayout:
         """Create DashboardLayout"""
-        assert isinstance(body, models.WriteDashboardLayout)
         response = self.post(
             f"/dashboard_layouts",
             models.DashboardLayout,
@@ -3719,7 +3661,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DataActionResponse:
         """Send a Data Action"""
-        assert isinstance(body, models.DataActionRequest)
         response = self.post(
             f"/data_actions",
             models.DataActionResponse,
@@ -3738,7 +3679,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.DataActionForm:
         """Fetch Remote Data Action Form"""
-        assert isinstance(body, MutableMapping)
         response = self.post(
             f"/data_actions/form",
             models.DataActionForm,
@@ -3796,7 +3736,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Datagroup:
         """Update Datagroup"""
-        assert isinstance(body, models.WriteDatagroup)
         response = self.patch(
             f"/datagroups/{datagroup_id}",
             models.Datagroup,
@@ -3895,7 +3834,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.Folder:
         """Update Folder"""
         folder_id = self.encode_path_param(folder_id)
-        assert isinstance(body, models.UpdateFolder)
         response = self.patch(
             f"/folders/{folder_id}",
             models.Folder,
@@ -3954,7 +3892,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Folder:
         """Create Folder"""
-        assert isinstance(body, models.CreateFolder)
         response = self.post(
             f"/folders", models.Folder, body=body, transport_options=transport_options
         )
@@ -4162,7 +4099,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Group:
         """Create Group"""
-        assert isinstance(body, models.WriteGroup)
         response = self.post(
             f"/groups",
             models.Group,
@@ -4349,7 +4285,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Group:
         """Update Group"""
-        assert isinstance(body, models.WriteGroup)
         response = self.patch(
             f"/groups/{group_id}",
             models.Group,
@@ -4408,7 +4343,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Group:
         """Add a Group to Group"""
-        assert isinstance(body, models.GroupIdForGroupInclusion)
         response = self.post(
             f"/groups/{group_id}/groups",
             models.Group,
@@ -4461,7 +4395,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.User:
         """Add a User to Group"""
-        assert isinstance(body, models.GroupIdForGroupUserInclusion)
         response = self.post(
             f"/groups/{group_id}/users",
             models.User,
@@ -4526,7 +4459,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.UserAttributeGroupValue:
         """Set User Attribute Group Value"""
-        assert isinstance(body, models.UserAttributeGroupValue)
         response = self.patch(
             f"/groups/{group_id}/attribute_values/{user_attribute_id}",
             models.UserAttributeGroupValue,
@@ -4592,7 +4524,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.IntegrationHub:
         """Create Integration Hub"""
-        assert isinstance(body, models.WriteIntegrationHub)
         response = self.post(
             f"/integration_hubs",
             models.IntegrationHub,
@@ -4639,7 +4570,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.IntegrationHub:
         """Update Integration Hub"""
-        assert isinstance(body, models.WriteIntegrationHub)
         response = self.patch(
             f"/integration_hubs/{integration_hub_id}",
             models.IntegrationHub,
@@ -4743,7 +4673,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.Integration:
         """Update Integration"""
         integration_id = self.encode_path_param(integration_id)
-        assert isinstance(body, models.WriteIntegration)
         response = self.patch(
             f"/integrations/{integration_id}",
             models.Integration,
@@ -4838,7 +4767,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.LookWithQuery:
         """Create Look"""
-        assert isinstance(body, models.WriteLookWithQuery)
         response = self.post(
             f"/looks",
             models.LookWithQuery,
@@ -5002,7 +4930,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.LookWithQuery:
         """Update Look"""
-        assert isinstance(body, models.WriteLookWithQuery)
         response = self.patch(
             f"/looks/{look_id}",
             models.LookWithQuery,
@@ -5143,7 +5070,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.LookmlModel:
         """Create LookML Model"""
-        assert isinstance(body, models.WriteLookmlModel)
         response = self.post(
             f"/lookml_models",
             models.LookmlModel,
@@ -5187,7 +5113,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.LookmlModel:
         """Update LookML Model"""
         lookml_model_name = self.encode_path_param(lookml_model_name)
-        assert isinstance(body, models.WriteLookmlModel)
         response = self.patch(
             f"/lookml_models/{lookml_model_name}",
             models.LookmlModel,
@@ -5335,7 +5260,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.GitBranch:
         """Update Project Git Branch"""
         project_id = self.encode_path_param(project_id)
-        assert isinstance(body, models.WriteGitBranch)
         response = self.put(
             f"/projects/{project_id}/git_branch",
             models.GitBranch,
@@ -5364,7 +5288,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.GitBranch:
         """Checkout New Git Branch"""
         project_id = self.encode_path_param(project_id)
-        assert isinstance(body, models.WriteGitBranch)
         response = self.post(
             f"/projects/{project_id}/git_branch",
             models.GitBranch,
@@ -5562,7 +5485,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Project:
         """Create Project"""
-        assert isinstance(body, models.WriteProject)
         response = self.post(
             f"/projects", models.Project, body=body, transport_options=transport_options
         )
@@ -5628,7 +5550,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> models.Project:
         """Update Project"""
         project_id = self.encode_path_param(project_id)
-        assert isinstance(body, models.WriteProject)
         response = self.patch(
             f"/projects/{project_id}",
             models.Project,
@@ -5981,7 +5902,6 @@ class Looker40SDK(api_methods.APIMethods):
         """Create Repository Credential"""
         root_project_id = self.encode_path_param(root_project_id)
         credential_id = self.encode_path_param(credential_id)
-        assert isinstance(body, models.WriteRepositoryCredential)
         response = self.put(
             f"/projects/{root_project_id}/credential/{credential_id}",
             models.RepositoryCredential,
@@ -6083,7 +6003,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.QueryTask:
         """Run Query Async"""
-        assert isinstance(body, models.WriteCreateQueryTask)
         response = self.post(
             f"/query_tasks",
             models.QueryTask,
@@ -6295,7 +6214,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Query:
         """Create Query"""
-        assert isinstance(body, models.WriteQuery)
         response = self.post(
             f"/queries",
             models.Query,
@@ -6470,7 +6388,6 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> Union[str, bytes]:
         """Run Inline Query"""
         result_format = self.encode_path_param(result_format)
-        assert isinstance(body, models.WriteQuery)
         response = self.post(
             f"/queries/run/{result_format}",
             Union[str, bytes],  # type: ignore
@@ -6621,8 +6538,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.MergeQuery:
         """Create Merge Query"""
-        if body:
-            assert isinstance(body, models.WriteMergeQuery)
         response = self.post(
             f"/merge_queries",
             models.MergeQuery,
@@ -6695,7 +6610,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.SqlQuery:
         """Create SQL Runner Query"""
-        assert isinstance(body, models.SqlQueryCreate)
         response = self.post(
             f"/sql_queries",
             models.SqlQuery,
@@ -6829,7 +6743,6 @@ class Looker40SDK(api_methods.APIMethods):
         """Create Dashboard Render Task"""
         dashboard_id = self.encode_path_param(dashboard_id)
         result_format = self.encode_path_param(result_format)
-        assert isinstance(body, models.CreateDashboardRenderTask)
         response = self.post(
             f"/render_tasks/dashboards/{dashboard_id}/{result_format}",
             models.RenderTask,
@@ -7010,7 +6923,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ModelSet:
         """Update Model Set"""
-        assert isinstance(body, models.WriteModelSet)
         response = self.patch(
             f"/model_sets/{model_set_id}",
             models.ModelSet,
@@ -7064,7 +6976,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ModelSet:
         """Create Model Set"""
-        assert isinstance(body, models.WriteModelSet)
         response = self.post(
             f"/model_sets",
             models.ModelSet,
@@ -7187,7 +7098,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.PermissionSet:
         """Update Permission Set"""
-        assert isinstance(body, models.WritePermissionSet)
         response = self.patch(
             f"/permission_sets/{permission_set_id}",
             models.PermissionSet,
@@ -7243,7 +7153,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.PermissionSet:
         """Create Permission Set"""
-        assert isinstance(body, models.WritePermissionSet)
         response = self.post(
             f"/permission_sets",
             models.PermissionSet,
@@ -7283,7 +7192,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Role:
         """Create Role"""
-        assert isinstance(body, models.WriteRole)
         response = self.post(
             f"/roles", models.Role, body=body, transport_options=transport_options
         )
@@ -7382,7 +7290,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Role:
         """Update Role"""
-        assert isinstance(body, models.WriteRole)
         response = self.patch(
             f"/roles/{role_id}",
             models.Role,
@@ -7440,7 +7347,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.Group]:
         """Update Role Groups"""
-        assert isinstance(body, Sequence)
         response = self.put(
             f"/roles/{role_id}/groups",
             Sequence[models.Group],
@@ -7487,7 +7393,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.User]:
         """Update Role Users"""
-        assert isinstance(body, Sequence)
         response = self.put(
             f"/roles/{role_id}/users",
             Sequence[models.User],
@@ -7599,7 +7504,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ScheduledPlan:
         """Update Scheduled Plan"""
-        assert isinstance(body, models.WriteScheduledPlan)
         response = self.patch(
             f"/scheduled_plans/{scheduled_plan_id}",
             models.ScheduledPlan,
@@ -7730,7 +7634,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ScheduledPlan:
         """Create Scheduled Plan"""
-        assert isinstance(body, models.WriteScheduledPlan)
         response = self.post(
             f"/scheduled_plans",
             models.ScheduledPlan,
@@ -7785,7 +7688,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ScheduledPlan:
         """Run Scheduled Plan Once"""
-        assert isinstance(body, models.WriteScheduledPlan)
         response = self.post(
             f"/scheduled_plans/run_once",
             models.ScheduledPlan,
@@ -7957,8 +7859,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ScheduledPlan:
         """Run Scheduled Plan Once by Id"""
-        if body:
-            assert isinstance(body, models.WriteScheduledPlan)
         response = self.post(
             f"/scheduled_plans/{scheduled_plan_id}/run_once",
             models.ScheduledPlan,
@@ -8015,7 +7915,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ApiSession:
         """Update Session"""
-        assert isinstance(body, models.WriteApiSession)
         response = self.patch(
             f"/session",
             models.ApiSession,
@@ -8077,7 +7976,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Theme:
         """Create Theme"""
-        assert isinstance(body, models.WriteTheme)
         response = self.post(
             f"/themes", models.Theme, body=body, transport_options=transport_options
         )
@@ -8292,7 +8190,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.ValidationError:
         """Validate Theme"""
-        assert isinstance(body, models.WriteTheme)
         response = self.post(
             f"/themes/validate",
             models.ValidationError,
@@ -8340,7 +8237,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.Theme:
         """Update Theme"""
-        assert isinstance(body, models.WriteTheme)
         response = self.patch(
             f"/themes/{theme_id}",
             models.Theme,
@@ -8442,8 +8338,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.User:
         """Create User"""
-        if body:
-            assert isinstance(body, models.WriteUser)
         response = self.post(
             f"/users",
             models.User,
@@ -8634,7 +8528,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.User:
         """Update User"""
-        assert isinstance(body, models.WriteUser)
         response = self.patch(
             f"/users/{user_id}",
             models.User,
@@ -8749,7 +8642,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.CredentialsEmail:
         """Create Email/Password Credential"""
-        assert isinstance(body, models.WriteCredentialsEmail)
         response = self.post(
             f"/users/{user_id}/credentials_email",
             models.CredentialsEmail,
@@ -8773,7 +8665,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.CredentialsEmail:
         """Update Email/Password Credential"""
-        assert isinstance(body, models.WriteCredentialsEmail)
         response = self.patch(
             f"/users/{user_id}/credentials_email",
             models.CredentialsEmail,
@@ -8836,8 +8727,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.CredentialsTotp:
         """Create Two-Factor Credential"""
-        if body:
-            assert isinstance(body, models.CredentialsTotp)
         response = self.post(
             f"/users/{user_id}/credentials_totp",
             models.CredentialsTotp,
@@ -9099,8 +8988,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.CredentialsApi3:
         """Create API 3 Credential"""
-        if body:
-            assert isinstance(body, models.CredentialsApi3)
         response = self.post(
             f"/users/{user_id}/credentials_api3",
             models.CredentialsApi3,
@@ -9348,7 +9235,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.Role]:
         """Set User Roles"""
-        assert isinstance(body, Sequence)
         response = self.put(
             f"/users/{user_id}/roles",
             Sequence[models.Role],
@@ -9421,7 +9307,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.UserAttributeWithValue:
         """Set User Attribute User Value"""
-        assert isinstance(body, models.WriteUserAttributeWithValue)
         response = self.patch(
             f"/users/{user_id}/attribute_values/{user_attribute_id}",
             models.UserAttributeWithValue,
@@ -9501,7 +9386,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.UserAttribute:
         """Create User Attribute"""
-        assert isinstance(body, models.WriteUserAttribute)
         response = self.post(
             f"/user_attributes",
             models.UserAttribute,
@@ -9546,7 +9430,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> models.UserAttribute:
         """Update User Attribute"""
-        assert isinstance(body, models.WriteUserAttribute)
         response = self.patch(
             f"/user_attributes/{user_attribute_id}",
             models.UserAttribute,
@@ -9632,7 +9515,6 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.UserAttributeGroupValue]:
         """Set User Attribute Group Values"""
-        assert isinstance(body, Sequence)
         response = self.post(
             f"/user_attributes/{user_attribute_id}/group_values",
             Sequence[models.UserAttributeGroupValue],
