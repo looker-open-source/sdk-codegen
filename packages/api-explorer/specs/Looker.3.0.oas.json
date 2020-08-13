@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "version": "3.0.0",
-    "x-looker-release-version": "7.13.0",
+    "x-looker-release-version": "7.15.0",
     "title": "Looker API 3.0 (Legacy) Reference",
     "description": "### 3.0 Legacy API\n\nLooker API 3.0 is stable and will continue to be supported for the foreseeable future.\nNo new features will be added to API 3.0; all new development (Looker features and\ndev tools) will appear in API 4.0 only.\n\n",
     "contact": {
@@ -10,10 +10,7 @@
       "email": "support@looker.com",
       "url": "https://looker.com"
     },
-    "license": {
-      "name": "EULA",
-      "url": "https://self-signed.looker.com:9999/eula"
-    }
+    "license": { "name": "EULA", "url": "http://localhost:9999/eula" }
   },
   "tags": [
     { "name": "ApiAuth", "description": "API Authentication" },
@@ -3436,6 +3433,14 @@
               }
             }
           },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
           "429": {
             "description": "Too Many Requests",
             "content": {
@@ -5863,6 +5868,18 @@
             "schema": { "type": "integer", "format": "int64" }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": { "type": "string" }
+              }
+            }
+          },
+          "description": "Integration Form Request",
+          "required": false
+        },
         "responses": {
           "200": {
             "description": "Data Action Form",
@@ -15932,7 +15949,7 @@
       }
     }
   },
-  "servers": [{ "url": "https://self-signed.looker.com:19999/api/3.0" }],
+  "servers": [{ "url": "http://kaster.c.googlers.com:19999/api/3.0" }],
   "components": {
     "requestBodies": {
       "LookmlModel": {
@@ -21746,6 +21763,15 @@
             "description": "An array of conditions and values that make up a SQL Case expression, as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model.",
             "nullable": true
           },
+          "filters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LookmlModelExploreFieldMeasureFilters"
+            },
+            "readOnly": true,
+            "description": "Array of filter conditions defined for the measure in LookML.",
+            "nullable": true
+          },
           "suggest_dimension": {
             "type": "string",
             "readOnly": true,
@@ -21907,6 +21933,23 @@
             "type": "string",
             "readOnly": true,
             "description": "SQL Case condition expression",
+            "nullable": true
+          }
+        },
+        "x-looker-status": "stable"
+      },
+      "LookmlModelExploreFieldMeasureFilters": {
+        "properties": {
+          "field": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Filter field name",
+            "nullable": true
+          },
+          "condition": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Filter condition value",
             "nullable": true
           }
         },

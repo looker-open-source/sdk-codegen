@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "4.0.7.13",
-    "x-looker-release-version": "7.13.0",
+    "version": "4.0.7.15",
+    "x-looker-release-version": "7.15.0",
     "title": "Looker API 4.0 (Experimental) Reference",
     "description": "\nWelcome to the future! This is an early preview of our next-generation Looker API 4.0.\nAPI 4.0 runs alongside APIs 3.1 and 3.0. We've tagged 4.0 as \"experimental\" to reflect\nthat we have more work planned for API 4.0 which may include breaking changes.\nPlease pardon our dust while we remodel a few rooms!\n\n### In This Release\n\nWe're spinning up this new API 4.0 version so that we can make adjustments to our API\nfunctions, parameters, and response types to fix bugs and inconsistencies. These changes\nfall outside the bounds of non-breaking additive changes we can make to our stable API 3.1.\n\nOne benefit of these type adjustments in API 4.0 is dramatically better support for strongly\ntyped languages like TypeScript, Kotlin, Java, and more. Looker is also creating client SDKs\nto call the Looker API from these and other languages. These client SDKs will be available\nas pre-built packages for download from public repositories such as npmjs.org, RubyGems.org,\nPyPi.org. If you use an IDE for software development, you will soon be able to install a\nLooker SDK for your programming language with the click of a button!\n\nWhile API 3.1 is still the defacto Looker API (\"current\", \"stable\", \"default\", etc), the bulk\nof our development activity will gradually shift to API 4.0.\n\n",
     "contact": {
@@ -10,10 +10,7 @@
       "email": "support@looker.com",
       "url": "https://looker.com"
     },
-    "license": {
-      "name": "EULA",
-      "url": "https://self-signed.looker.com:9999/eula"
-    }
+    "license": { "name": "EULA", "url": "http://localhost:9999/eula" }
   },
   "tags": [
     { "name": "ApiAuth", "description": "API Authentication" },
@@ -2703,6 +2700,91 @@
         },
         "x-looker-status": "beta",
         "x-looker-activity-type": "non_query"
+      }
+    },
+    "/content_thumbnail/{type}/{resource_id}": {
+      "get": {
+        "tags": ["Content"],
+        "operationId": "content_thumbnail",
+        "summary": "Get Content Thumbnail",
+        "description": "### Get an image representing the contents of a dashboard or look.\n\nThe returned thumbnail is an abstract representation of the contents of a dashbord or look and does not\nreflect the actual data displayed in the respective visualizations.\n",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "Either dashboard or look",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "resource_id",
+            "in": "path",
+            "description": "ID of the dashboard or look to render",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "reload",
+            "in": "query",
+            "description": "Whether or not to refresh the rendered image with the latest content",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "A value of png produces a thumbnail in PNG format instead of SVG",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "width",
+            "in": "query",
+            "description": "The width of the image if format is supplied",
+            "required": false,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "height",
+            "in": "query",
+            "description": "The height of the image if format is supplied",
+            "required": false,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content thumbnail",
+            "content": {
+              "image/svg+xml": { "schema": { "type": "string" } },
+              "image/png": { "schema": { "type": "string" } }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "image/svg+xml": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              },
+              "image/png": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "image/svg+xml": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              },
+              "image/png": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "db_query"
       }
     },
     "/content_validation": {
@@ -5641,6 +5723,14 @@
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
               }
             }
           },
@@ -9110,6 +9200,18 @@
             "schema": { "type": "string" }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": { "type": "string" }
+              }
+            }
+          },
+          "description": "Integration Form Request",
+          "required": false
+        },
         "responses": {
           "200": {
             "description": "Data Action Form",
@@ -22017,7 +22119,7 @@
         "tags": ["Content"],
         "operationId": "vector_thumbnail",
         "summary": "Get Vector Thumbnail",
-        "description": "### Get a vector image representing the contents of a dashboard or look.\n\nThe returned thumbnail is an abstract representation of the contents of a dashbord or look and does not\nreflect the actual data displayed in the respective visualizations.\n",
+        "description": "### Get a vector image representing the contents of a dashboard or look.\n\n# DEPRECATED:  Use [content_thumbnail()](#!/Content/content_thumbnail)\n\nThe returned thumbnail is an abstract representation of the contents of a dashbord or look and does not\nreflect the actual data displayed in the respective visualizations.\n",
         "parameters": [
           {
             "name": "type",
@@ -22063,7 +22165,8 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -22307,7 +22410,7 @@
       }
     }
   },
-  "servers": [{ "url": "https://self-signed.looker.com:19999/api/4.0" }],
+  "servers": [{ "url": "http://kaster.c.googlers.com:19999/api/4.0" }],
   "components": {
     "requestBodies": {
       "ColorCollection": {
@@ -29313,6 +29416,15 @@
             "description": "An array of conditions and values that make up a SQL Case expression, as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model.",
             "nullable": true
           },
+          "filters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LookmlModelExploreFieldMeasureFilters"
+            },
+            "readOnly": true,
+            "description": "Array of filter conditions defined for the measure in LookML.",
+            "nullable": true
+          },
           "suggest_dimension": {
             "type": "string",
             "readOnly": true,
@@ -29481,6 +29593,23 @@
             "type": "string",
             "readOnly": true,
             "description": "SQL Case condition expression",
+            "nullable": true
+          }
+        },
+        "x-looker-status": "stable"
+      },
+      "LookmlModelExploreFieldMeasureFilters": {
+        "properties": {
+          "field": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Filter field name",
+            "nullable": true
+          },
+          "condition": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Filter condition value",
             "nullable": true
           }
         },

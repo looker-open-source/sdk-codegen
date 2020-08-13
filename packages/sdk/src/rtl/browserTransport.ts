@@ -81,11 +81,7 @@ export class BrowserTransport extends BaseTransport {
 
   /** Does this browser have the necessary performance APIs? */
   static supportsPerformance() {
-    return (
-      performance &&
-      performance.mark !== undefined &&
-      performance.measure !== undefined
-    )
+    return !!(performance && performance.mark && performance.measure)
   }
 
   private static _trackPerf = false

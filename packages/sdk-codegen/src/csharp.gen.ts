@@ -288,7 +288,8 @@ namespace Looker.SDK.API${this.apiRef}
     const args = method.allParams // get the params in signature order
     if (args && args.length > 0)
       args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
-    const fragment = params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
+    const fragment =
+      params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
     const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
     const bits = this.genericBits(method)
     const header =

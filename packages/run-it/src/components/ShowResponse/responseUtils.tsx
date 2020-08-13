@@ -68,16 +68,15 @@ const imageContent = (response: IRawResponse) => {
   return content
 }
 
-/**
- * A handler for image type responses
- */
+/** A handler for image type responses */
 const ShowImage = (response: IRawResponse) => (
-  <img src={imageContent(response)} />
+  <img
+    src={imageContent(response)}
+    alt={`${response.url} returned ${response.contentType}`}
+  />
 )
 
-/**
- * A handler for HTTP type responses
- */
+/** A handler for HTTP type responses */
 const ShowHTML = (response: IRawResponse) => (
   <CodeStructure language={'html'} code={response.body.toString()} />
 )
@@ -120,6 +119,13 @@ export const responseHandlers: Responder[] = [
     isRecognized: (contentType) => RegExp(/text\/html/g).test(contentType),
     component: (response) => ShowHTML(response),
   },
+  // SVG would normally be considered a "string" because of the xml tag, so it must be checked before text
+  {
+    label: 'img',
+    isRecognized: (contentType) =>
+      RegExp(/image\/(png|jpg|jpeg|svg\+xml)/).test(contentType),
+    component: (response) => ShowImage(response),
+  },
   {
     label: 'text',
     isRecognized: (contentType) =>
@@ -128,14 +134,20 @@ export const responseHandlers: Responder[] = [
     component: (response) => ShowText(response),
   },
   {
-    label: 'img',
-    isRecognized: (contentType) =>
-      RegExp(/image\/(png|jpg|jpeg)/).test(contentType),
-    component: (response) => ShowImage(response),
-  },
-  {
     label: 'unknown',
     isRecognized: (contentType: string) => !!contentType,
     component: (response) => ShowUnknown(response),
   },
 ]
+
+/** find the response handler or return the default */
+export const pickResponseHandler = (response: IRawResponse) => {
+  let result = responseHandlers[responseHandlers.length - 1]
+  for (const handler of responseHandlers) {
+    if (handler.isRecognized(response.contentType)) {
+      result = handler
+      break
+    }
+  }
+  return result
+}

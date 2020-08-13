@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import { CSharpGen } from './csharp.gen'
 import { TestConfig } from './testUtils'
 
@@ -51,7 +52,6 @@ describe('c# generator', () => {
 `
     expect(actual).toEqual(expected)
   })
-
 
   describe('summarizes', () => {
     it('one line', () => {

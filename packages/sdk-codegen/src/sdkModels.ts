@@ -680,7 +680,7 @@ export class Parameter extends SchemadSymbol implements IParameter {
     type: IType,
     owner = ''
   ) {
-    super(param.name!, type, type.schema, owner)
+    super(param.name || '', type, type.schema, owner)
     this.description = param.description || ''
     if ('in' in param) {
       this.location = param.in
@@ -1414,13 +1414,12 @@ export class Type implements IType {
 
   private filterRequiredProps(required: boolean) {
     const filteredProps: PropertyList = {}
-    for (const key in this.properties) {
-      const prop = this.properties[key]
+    Object.entries(this.properties).forEach(([key, prop]) => {
       const condition = required ? prop.required : !prop.required
       if (condition) {
         filteredProps[key] = prop
       }
-    }
+    })
     return filteredProps
   }
 

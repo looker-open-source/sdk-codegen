@@ -47,8 +47,8 @@ const chartData = (timings: IResourceLoadTimes) => {
     [
       { type: 'string', id: 'Metric' },
       { type: 'string', role: 'tooltip' },
-      { type: 'date', id: 'Start' },
-      { type: 'date', id: 'End' },
+      { type: 'number', id: 'Start' },
+      { type: 'number', id: 'End' },
     ],
   ]
   chartItem(result, 'redirect', item.redirectStart, item.redirectEnd)

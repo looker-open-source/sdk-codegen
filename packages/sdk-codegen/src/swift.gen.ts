@@ -255,7 +255,9 @@ import Foundation
     const type = this.typeMap(property.type)
     return (
       this.commentHeader(indent, this.describeProperty(property)) +
-      `${indent}public var ${this.reserve(property.name)}: ${type.name}${optional}`
+      `${indent}public var ${this.reserve(property.name)}: ${
+        type.name
+      }${optional}`
     )
   }
 
@@ -316,7 +318,8 @@ import Foundation
       headComment += `\n\n**Note**: Binary content is returned by this method.\n`
     }
     const header =
-      this.commentHeader(indent, headComment) + `${indent}public func ${method.name}(`
+      this.commentHeader(indent, headComment) +
+      `${indent}public func ${method.name}(`
 
     return (
       header +
