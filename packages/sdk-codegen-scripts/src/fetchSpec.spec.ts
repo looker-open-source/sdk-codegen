@@ -61,7 +61,9 @@ describe('fetch operations', () => {
   })
 
   it('gets lookerVersion with supplied versions', async () => {
-    const actual = await fetchLookerVersion(props, {looker_release_version: '7.10.0'})
+    const actual = await fetchLookerVersion(props, {
+      looker_release_version: '7.10.0',
+    })
     expect(actual).toEqual('7.10')
   })
 

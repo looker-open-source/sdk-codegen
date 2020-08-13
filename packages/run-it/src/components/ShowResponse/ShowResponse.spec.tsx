@@ -55,9 +55,21 @@ test('it renders html responses', () => {
   expect(screen.getByRole('textbox', { name: '' })).toBeInTheDocument()
 })
 
-test('it renders image responses', () => {
+test('it renders png responses', () => {
   render(<ShowResponse response={testImageResponse()} />)
   expect(screen.getByText('200: image/png')).toBeInTheDocument()
+  expect(screen.getByRole('img')).toBeInTheDocument()
+})
+
+test('it renders jpg responses', () => {
+  render(<ShowResponse response={testImageResponse('image/jpeg')} />)
+  expect(screen.getByText('200: image/jpeg')).toBeInTheDocument()
+  expect(screen.getByRole('img')).toBeInTheDocument()
+})
+
+test('it renders svg responses', () => {
+  render(<ShowResponse response={testImageResponse('image/svg+xml')} />)
+  expect(screen.getByText('200: image/svg+xml')).toBeInTheDocument()
   expect(screen.getByRole('img')).toBeInTheDocument()
 })
 

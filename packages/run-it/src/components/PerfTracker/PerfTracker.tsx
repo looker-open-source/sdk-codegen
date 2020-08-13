@@ -24,25 +24,25 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, useState } from 'react'
+import React, { BaseSyntheticEvent, FC, useEffect, useState } from 'react'
 import {
-  doDefaultActionListSort,
   Heading,
-  Space,
-  Button,
+  FlexItem,
+  IconButton,
   SpaceVertical,
-  ButtonTransparent,
-  FieldRadioGroup,
+  FieldToggleSwitch,
+  Flex,
 } from '@looker/components'
 
 import { getStorage, RunItConfigKey } from '../ConfigForm'
+import { Loading } from '../Loading'
 import { PerfTimings, LoadTimes } from './perfUtils'
 import { PerfChart } from './PerfChart'
 import { PerfTable } from './PerfTable'
-import { tableColumns } from './perfTableUtils'
 
 interface PerfTrackerProps {
   perf?: PerfTimings
+  showAllColumns?: boolean
 }
 
 const perfFilter = (all = false) => {
@@ -54,86 +54,78 @@ const perfFilter = (all = false) => {
   return `${url.protocol}//${url.hostname}.*`
 }
 
-const filterOptions = [
-  { label: 'API calls', value: 'api' },
-  { label: 'All calls', value: 'all' },
-]
-
 export const PerfTracker: FC<PerfTrackerProps> = ({
   perf = new PerfTimings(),
+  showAllColumns = false,
 }) => {
   // TODO UI option to filter by url pattern
-  const [filterOption, setFilterOption] = useState('api')
+  const [loading, setLoading] = useState(false)
+  const [showAll, setShowAll] = useState(false)
   const [filter, setFilter] = useState(perfFilter())
   const [data, setData] = useState<LoadTimes[]>(perf.entries(filter))
-  const [columns, setColumns] = useState(tableColumns)
   const [timings, setTimings] = useState(data.length > 0 ? data[0] : undefined)
 
-  const handleSort = (id: string, sortDirection: 'asc' | 'desc') => {
-    const {
-      columns: sortedColumns,
-      data: sortedData,
-    } = doDefaultActionListSort(data, columns, id, sortDirection)
-    setData(sortedData as LoadTimes[])
-    setColumns(sortedColumns)
-  }
-
   const handleClear = (_: BaseSyntheticEvent) => {
+    setLoading(true)
     perf.clear()
     setData([])
     setTimings(undefined)
   }
 
-  const handleRefresh = (_: BaseSyntheticEvent) => {
-    const pf = perfFilter()
+  const handleFilterChange = (e: BaseSyntheticEvent) => {
+    setLoading(true)
+    const all = e.target.checked
+    setShowAll(all)
+    const pf = perfFilter(all)
     setFilter(pf)
     setData(perf.entries(pf))
   }
 
-  const handleFilterChange = (value: string) => {
-    setFilterOption(value)
-    const pf = perfFilter(value === 'all')
-    setFilter(pf)
-    setData(perf.entries(pf))
-  }
+  useEffect(() => {
+    setLoading(false)
+  }, [data])
 
   const handleSelect = (item: LoadTimes) => setTimings(item)
 
   return (
     <>
-      <Space mb="large">
-        <Heading>Resource Load Times for {filter}</Heading>
-        <Button iconAfter="Trash" color="critical" onClick={handleClear}>
-          Clear
-        </Button>
-        <ButtonTransparent iconAfter="Refresh" onClick={handleRefresh}>
-          Refresh
-        </ButtonTransparent>
-        <FieldRadioGroup
-          description="Performance result filtering"
-          label="Show"
-          name="filtering"
-          options={filterOptions}
-          defaultValue={filterOption}
-          onChange={handleFilterChange}
-          inline
-        />
-      </Space>
+      <Heading>Load Times for {filter}</Heading>
+      <Flex>
+        <FlexItem>
+          <IconButton
+            icon="Trash"
+            onClick={handleClear}
+            label="Clear the performance queue"
+          />
+        </FlexItem>
+        <FlexItem>
+          <FieldToggleSwitch
+            name="filtering"
+            label="Show All"
+            onChange={handleFilterChange}
+            on={showAll}
+          />
+        </FlexItem>
+        <FlexItem>
+          <Loading loading={loading} />
+        </FlexItem>
+      </Flex>
       <>
-        {!perf.supported &&
+        {!PerfTimings.supported &&
           'Performance timing is not supported in this browser'}
-        {perf.supported && timings && (
+        {PerfTimings.supported && !!timings && (
           <SpaceVertical gap="small">
             <PerfChart loadTimes={timings} />
             <PerfTable
-              columns={columns}
               data={data}
-              onSort={handleSort}
               onSelect={handleSelect}
+              showAllColumns={showAllColumns}
             />
           </SpaceVertical>
         )}
-        {data.length < 1 && 'No performance data is loaded'}
+        {PerfTimings.supported &&
+          data.length < 1 &&
+          'No performance data is loaded'}
       </>
     </>
   )

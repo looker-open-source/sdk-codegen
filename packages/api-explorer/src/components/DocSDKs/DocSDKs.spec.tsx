@@ -46,7 +46,7 @@ describe('DocSDKs', () => {
     (_, props) => {
       renderWithTheme(<DocSDKs api={api} {...props} />)
       expect(
-        screen.getAllByRole('button', {
+        screen.getAllByRole('tab', {
           name: pattern,
         })
       ).toHaveLength(languages.length)

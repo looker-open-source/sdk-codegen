@@ -170,6 +170,8 @@ export enum StatusCode {
 export interface IRawResponse {
   /** ok is `true` if the response is successful, `false` otherwise */
   ok: boolean
+  /** HTTP request url */
+  url: string
   /** HTTP response code */
   statusCode: number
   /** HTTP response status message text */
@@ -178,6 +180,8 @@ export interface IRawResponse {
   contentType: string
   /** The body of the HTTP response, without any additional processing */
   body: any
+  /** Optional performance tracking starting mark name */
+  startMark?: string
 }
 
 /**

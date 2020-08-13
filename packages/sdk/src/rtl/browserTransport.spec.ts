@@ -24,18 +24,19 @@
 
  */
 
-export { RequestForm } from './RequestForm'
-export { ShowResponse } from './ShowResponse'
-export { MethodBadge } from './MethodBadge'
-export {
-  ConfigForm,
-  getStorage,
-  setStorage,
-  removeStorage,
-  validateUrl,
-  validLocation,
-  RunItConfigKey,
-  RunItValuesKey,
-} from './ConfigForm'
-export { LoginForm } from './LoginForm'
-export { Loading } from './Loading'
+import { BrowserTransport } from './browserTransport'
+
+describe('BrowserTransport', () => {
+  it('cannot track performance if performance is not supported', () => {
+    jest.spyOn(BrowserTransport, 'supportsPerformance').mockReturnValue(false)
+    BrowserTransport.trackPerformance = true
+    expect(BrowserTransport.trackPerformance).toEqual(false)
+  })
+  it('can track performance if performance is supported', () => {
+    jest.spyOn(BrowserTransport, 'supportsPerformance').mockReturnValue(true)
+    BrowserTransport.trackPerformance = true
+    expect(BrowserTransport.trackPerformance).toEqual(true)
+    BrowserTransport.trackPerformance = false
+    expect(BrowserTransport.trackPerformance).toEqual(false)
+  })
+})

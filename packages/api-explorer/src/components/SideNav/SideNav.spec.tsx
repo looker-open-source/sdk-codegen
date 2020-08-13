@@ -46,7 +46,7 @@ describe('SideNav', () => {
     renderWithRouter(
       withThemeProvider(<SideNav api={testApi} specKey={'3.1'} />)
     )
-    const tabs = screen.getAllByRole('button', {
+    const tabs = screen.getAllByRole('tab', {
       name: /^Methods|Types$/,
     })
     expect(tabs).toHaveLength(2)
@@ -61,7 +61,7 @@ describe('SideNav', () => {
       screen.queryAllByRole('link', { name: allTypesPattern })
     ).toHaveLength(0)
 
-    userEvent.click(screen.getByRole('button', { name: /^Types$/ }))
+    userEvent.click(screen.getByRole('tab', { name: /^Types$/ }))
 
     expect(screen.queryAllByText(allTagsPattern)).toHaveLength(0)
     expect(screen.getAllByRole('link', { name: allTypesPattern })).toHaveLength(

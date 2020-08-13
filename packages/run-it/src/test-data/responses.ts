@@ -24,7 +24,10 @@
 
  */
 
-export const testJsonResponse = {
+import { IRawResponse } from '@looker/sdk/lib/browser'
+
+export const testJsonResponse: IRawResponse = {
+  url: 'https://some/json/data',
   contentType: 'application/json',
   ok: true,
   statusCode: 200,
@@ -32,7 +35,8 @@ export const testJsonResponse = {
   body: Buffer.from('[{"key1": "value1" }]'),
 }
 
-export const testTextResponse = {
+export const testTextResponse: IRawResponse = {
+  url: 'https://some/text/data',
   contentType: 'text/plain;charset=utf-8',
   ok: true,
   statusCode: 200,
@@ -40,7 +44,8 @@ export const testTextResponse = {
   body: Buffer.from('some text data'),
 }
 
-export const testHtmlResponse = {
+export const testHtmlResponse: IRawResponse = {
+  url: `https://some/html`,
   contentType: 'text/html;charset=utf-8',
   ok: true,
   statusCode: 200,
@@ -53,7 +58,8 @@ export const testHtmlResponse = {
   ),
 }
 
-export const testImageResponse = (contentType = 'image/png') => ({
+export const testImageResponse = (contentType = 'image/png'): IRawResponse => ({
+  url: `http://${contentType}`,
   contentType,
   ok: true,
   statusCode: 200,
@@ -61,7 +67,8 @@ export const testImageResponse = (contentType = 'image/png') => ({
   body: Buffer.from('some image data'),
 })
 
-export const testUnknownResponse = {
+export const testUnknownResponse: IRawResponse = {
+  url: 'http://bogus',
   contentType: 'bogus',
   ok: true,
   statusCode: 200,
@@ -69,7 +76,8 @@ export const testUnknownResponse = {
   body: Buffer.from('some data'),
 }
 
-export const testErrorResponse = {
+export const testErrorResponse: IRawResponse = {
+  url: 'http://error',
   body: Buffer.from(
     '{"message": "Not found", "documentation_url": "http://docs.looker.com"}'
   ),

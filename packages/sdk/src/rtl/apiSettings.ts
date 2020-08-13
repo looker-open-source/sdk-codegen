@@ -144,6 +144,8 @@ export class ApiSettings implements IApiSettings {
       'timeout' in settings
         ? parseInt(unquote(settings.timeout?.toString()), 10)
         : this.timeout
+    if ('agentTag' in settings && settings.agentTag)
+      this.agentTag = settings.agentTag
     if (!this.isConfigured()) {
       throw new Error(strBadConfiguration)
     }

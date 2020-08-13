@@ -46,7 +46,12 @@ export class APIMethods {
   ) {
     this.authSession = authSession
     this.apiVersion = apiVersion
-    this.authSession.settings.agentTag = `${agentPrefix} ${lookerVersion}.${this.apiVersion}`
+    if (
+      !('agentTag' in authSession.settings && authSession.settings.agentTag)
+    ) {
+      // Initialize agentTag if it's not already explicitly set
+      authSession.settings.agentTag = `${agentPrefix} ${lookerVersion}.${this.apiVersion}`
+    }
     this.apiPath =
       authSession.settings.base_url === ''
         ? ''

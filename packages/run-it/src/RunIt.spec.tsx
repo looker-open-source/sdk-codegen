@@ -33,7 +33,6 @@ import { RunIt, RunItInput } from './RunIt'
 import { testTextResponse } from './test-data'
 import { runItSDK, RunItSettings } from './utils'
 
-// TODO add tests for a) no config and b) config but need login
 describe('RunIt', () => {
   const run = 'Run'
   const inputs: RunItInput[] = [
@@ -93,12 +92,8 @@ describe('RunIt', () => {
       expect(screen.getByRole('heading')).toHaveTextContent(
         'POST /run_query/{result_format}'
       )
-      expect(
-        screen.getByRole('button', { name: 'Request' })
-      ).toBeInTheDocument()
-      expect(
-        screen.getByRole('button', { name: 'Response' })
-      ).toBeInTheDocument()
+      expect(screen.getByRole('tab', { name: 'Request' })).toBeInTheDocument()
+      expect(screen.getByRole('tab', { name: 'Response' })).toBeInTheDocument()
       expect(
         screen.getByRole('textbox', { name: 'result_format' })
       ).toBeInTheDocument()

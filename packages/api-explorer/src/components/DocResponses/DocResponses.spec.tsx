@@ -42,12 +42,12 @@ describe('DocResponses', () => {
     const responseTree = buildResponseTree(responses)
     const expectedRespStatuses = Object.keys(responseTree)
     expect(
-      screen.getAllByRole('button', {
+      screen.getAllByRole('tab', {
         name: new RegExp(`${expectedRespStatuses.join('|')}`),
       })
     ).toHaveLength(expectedRespStatuses.length)
 
-    userEvent.click(screen.getByRole('button', { name: '200: Look' }))
+    userEvent.click(screen.getByRole('tab', { name: '200: Look' }))
     const successRespTypes = Object.keys(responseTree['200: Look'])
     await waitFor(() => {
       expect(

@@ -35,12 +35,16 @@ import {
   Text,
   Heading,
   Box,
-  Spinner,
-  Flex,
 } from '@looker/components'
 import { IRawResponse, Looker40SDK } from '@looker/sdk/lib/browser'
 
-import { RequestForm, ShowResponse, ConfigForm, LoginForm } from './components'
+import {
+  RequestForm,
+  ShowResponse,
+  ConfigForm,
+  LoginForm,
+  Loading,
+} from './components'
 import {
   createRequestParams,
   defaultRunItCallback,
@@ -215,14 +219,10 @@ export const RunIt: FC<RunItProps> = ({
           )}
         </TabPanel>
         <TabPanel key="response">
-          {loading && (
-            <>
-              <Flex>
-                <Spinner />
-                {`${httpMethod} ${pathify(endpoint, activePathParams)}`}
-              </Flex>
-            </>
-          )}
+          <Loading
+            loading={loading}
+            message={`${httpMethod} ${pathify(endpoint, activePathParams)}`}
+          />
           {responseContent && (
             <ShowResponse
               response={responseContent}

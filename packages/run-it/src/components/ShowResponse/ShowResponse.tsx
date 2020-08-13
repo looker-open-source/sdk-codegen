@@ -25,11 +25,10 @@
  */
 
 import React, { FC } from 'react'
-import { last } from 'lodash'
 import { Heading } from '@looker/components'
 import { IRawResponse } from '@looker/sdk/lib/browser'
 
-import { responseHandlers } from './responseUtils'
+import { pickResponseHandler } from './responseUtils'
 
 interface ShowResponseProps {
   /** A basic HTTP response for "raw" HTTP requests */
@@ -48,13 +47,7 @@ export const ShowResponse: FC<ShowResponseProps> = ({
   verb,
   path,
 }) => {
-  let pickedHandler = last(responseHandlers)
-  for (const handler of responseHandlers) {
-    if (handler.isRecognized(response.contentType)) {
-      pickedHandler = handler
-      break
-    }
-  }
+  const pickedHandler = pickResponseHandler(response)
 
   // TODO make a badge for the verb.
   // Once we are satisfied with the badge in the api-explorer package it should be moved here

@@ -24,21 +24,19 @@
 
  */
 
-import React, { FC } from 'react'
-import { ActionList, ActionListColumns } from '@looker/components'
+import React, { FC, useEffect, useState } from 'react'
+import { ActionList, doDefaultActionListSort } from '@looker/components'
 
 import { LoadTimes } from './perfUtils'
-import { createTableRows } from './perfTableUtils'
+import { createTableRows, perfTableColumns } from './perfTableUtils'
 
 interface PerfTableProps {
-  /** An array defining the table header */
-  columns: ActionListColumns
   /** An array of performance load times */
   data: LoadTimes[]
-  /** A handler for sorting data by a column */
-  onSort: (id: string, sortDirection: 'asc' | 'desc') => void
   /** A row select action handler */
   onSelect: (item: LoadTimes) => void
+  /** Show all columns, or just "important" ones */
+  showAllColumns?: boolean
 }
 
 /**
@@ -46,12 +44,34 @@ interface PerfTableProps {
  * generates its performance chart.
  */
 export const PerfTable: FC<PerfTableProps> = ({
-  columns,
   data,
-  onSort,
   onSelect,
-}) => (
-  <ActionList onSort={onSort} columns={columns}>
-    {createTableRows(data, onSelect)}
-  </ActionList>
-)
+  showAllColumns = false,
+}) => {
+  const [columns, setColumns] = useState(perfTableColumns(showAllColumns))
+  const [rows, setRows] = useState(
+    createTableRows(data, onSelect, showAllColumns)
+  )
+  const handleSort = (id: string, sortDirection: 'asc' | 'desc') => {
+    const {
+      columns: sortedColumns,
+      data: sortedData,
+    } = doDefaultActionListSort(data, columns, id, sortDirection)
+    setRows(
+      createTableRows(sortedData as LoadTimes[], onSelect, showAllColumns)
+    )
+    setColumns(sortedColumns)
+  }
+
+  useEffect(() => {
+    setColumns(perfTableColumns(showAllColumns))
+  }, [showAllColumns])
+  useEffect(() => {
+    setRows(createTableRows(data, onSelect, showAllColumns))
+  }, [data, onSelect, showAllColumns])
+  return (
+    <ActionList onSort={handleSort} columns={columns}>
+      {rows}
+    </ActionList>
+  )
+}

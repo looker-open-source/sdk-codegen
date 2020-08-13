@@ -27,8 +27,8 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { BrowserSession, Looker40SDK } from '@looker/sdk/lib/browser'
-import { Spinner, Text } from '@looker/components'
 import { runItSDK } from '../..'
+import { Loading } from '../../components'
 
 interface OAuthSceneProps {
   sdk?: Looker40SDK
@@ -66,13 +66,9 @@ export const OAuthScene: React.FC<OAuthSceneProps> = ({ sdk }) => {
   }, [auth, history])
 
   return (
-    <>
-      {loading && (
-        <>
-          <Spinner />
-          <Text>Returning to {oldUrl} after OAuth login ...</Text>
-        </>
-      )}
-    </>
+    <Loading
+      loading={loading}
+      message={`Returning to ${oldUrl} after OAuth login ...`}
+    />
   )
 }

@@ -24,18 +24,32 @@
 
  */
 
-export { RequestForm } from './RequestForm'
-export { ShowResponse } from './ShowResponse'
-export { MethodBadge } from './MethodBadge'
-export {
-  ConfigForm,
-  getStorage,
-  setStorage,
-  removeStorage,
-  validateUrl,
-  validLocation,
-  RunItConfigKey,
-  RunItValuesKey,
-} from './ConfigForm'
-export { LoginForm } from './LoginForm'
-export { Loading } from './Loading'
+import {
+  DefaultSettings,
+  IApiSettings,
+  LookerBrowserSDK,
+  lookerVersion,
+} from '@looker/sdk/lib/browser'
+import { RunItSettings } from './RunItSDK'
+
+const settings = {
+  ...DefaultSettings(),
+  base_url: 'https://self-signed.looker.com:19999',
+  agentTag: `RunIt ${lookerVersion}.4.0`,
+} as IApiSettings
+
+const runItSettings = new RunItSettings(settings)
+
+describe('RunItSDK', () => {
+  describe('RunItSettings', () => {
+    test('settings keep agentTag', () => {
+      expect(runItSettings.agentTag).toEqual(`RunIt ${lookerVersion}.4.0`)
+    })
+  })
+  test('sdk keeps agentTag', () => {
+    const actual = LookerBrowserSDK.init40(runItSettings)
+    expect(actual.authSession.settings.agentTag).toEqual(
+      `RunIt ${lookerVersion}.4.0`
+    )
+  })
+})

@@ -28,9 +28,9 @@ import { screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import React from 'react'
 import { PerfTracker } from './PerfTracker'
-import { IResourceLoadTimes, LoadTimes, PerfTimings } from './perfUtils'
+import { LoadTimes, PerfTimings } from './perfUtils'
 
-const mockEntries: IResourceLoadTimes[] = [
+export const mockPerfEntries: LoadTimes[] = [
   new LoadTimes({
     name: 'http://f/1',
     duration: 50,
@@ -74,16 +74,47 @@ describe('PerfTracker', () => {
     ).toBeInTheDocument()
   })
   test('it displays items', () => {
-    jest.spyOn(PerfTimings.prototype, 'entries').mockReturnValue(mockEntries)
+    jest
+      .spyOn(PerfTimings.prototype, 'entries')
+      .mockReturnValue(mockPerfEntries)
     renderWithTheme(<PerfTracker />)
-    expect(screen.getByText(/Resource Load Times/i)).toBeInTheDocument()
+    expect(screen.getByText(/Load Times/i)).toBeInTheDocument()
 
     // check the full url of the first item is shown in PerfChart
-    expect(screen.getByText(mockEntries[0].name)).toBeInTheDocument()
+    expect(screen.getByText(mockPerfEntries[0].name)).toBeInTheDocument()
 
     // Check the partial url is in PerfTable
-    const url = new URL(mockEntries[1].name)
+    const url = new URL(mockPerfEntries[1].name)
     const path = `${url.pathname}${url.search}`
     expect(screen.getByText(path)).toBeInTheDocument()
+    expect(screen.queryByText('No performance data is loaded')).toBeNull()
+    expect(
+      screen.queryByText('Performance timing is not supported in this browser')
+    ).toBeNull()
+  })
+  test('shows a "no data" message with performance but no entries', () => {
+    jest.spyOn(PerfTimings.prototype, 'entries').mockReturnValue([])
+    PerfTimings.supported = true
+    renderWithTheme(<PerfTracker />)
+    expect(screen.queryByText('No performance data is loaded')).toBeDefined()
+    expect(
+      screen.queryByText('Performance timing is not supported in this browser')
+    ).toBeNull()
+  })
+  describe('performance support', () => {
+    const supported = PerfTimings.supported
+    afterAll(() => {
+      PerfTimings.supported = supported
+    })
+    test('shows a "not supported" message with no performance', () => {
+      PerfTimings.supported = false
+      renderWithTheme(<PerfTracker />)
+      expect(
+        screen.queryByText(
+          'Performance timing is not supported in this browser'
+        )
+      ).toBeDefined()
+      expect(screen.queryByText('No performance data is loaded')).toBeNull()
+    })
   })
 })

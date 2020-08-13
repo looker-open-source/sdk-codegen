@@ -27,6 +27,7 @@
 import React, { FC } from 'react'
 import { Chart } from 'react-google-charts'
 import { Heading, Space, Tooltip } from '@looker/components'
+import { Loading } from '../Loading'
 import { IResourceLoadTimes } from './perfUtils'
 
 interface PerfChartProps {
@@ -35,44 +36,79 @@ interface PerfChartProps {
 }
 
 // https://react-google-charts.com/timeline-chart#putting-bars-on-one-row
-const chartItem = (list: any[], desc: string, start: number, end: number) => {
-  if (start > 0) list.push([desc, desc, start, end])
+const chartItem = (
+  list: any[],
+  desc: string,
+  offset: number,
+  start: number,
+  end: number
+) => {
+  if (start > 0) list.push([desc, desc, start - offset, end - offset])
   return list
 }
 
-const chartData = (times: IResourceLoadTimes) => {
-  const item = times.entry as PerformanceResourceTiming
+const chartData = (timings: IResourceLoadTimes) => {
+  const item = timings.entry as PerformanceResourceTiming
+  const offset = item.startTime
   const result = [
     [
       { type: 'string', id: 'Metric' },
       { type: 'string', role: 'tooltip' },
-      { type: 'date', id: 'Start' },
-      { type: 'date', id: 'End' },
+      { type: 'number', id: 'Start' },
+      { type: 'number', id: 'End' },
     ],
   ]
-  chartItem(result, 'redirect', item.redirectStart, item.redirectEnd)
+  chartItem(result, 'redirect', offset, item.redirectStart, item.redirectEnd)
   chartItem(
     result,
     'domainLookup',
+    offset,
     item.domainLookupStart,
     item.domainLookupEnd
   )
-  chartItem(result, 'connect', item.connectStart, item.connectEnd)
+  chartItem(result, 'connect', offset, item.connectStart, item.connectEnd)
   chartItem(
     result,
     'secureConnection',
+    offset,
     item.secureConnectionStart,
     item.connectEnd
   )
-  chartItem(result, 'responseTime', item.responseStart, item.responseEnd)
-  chartItem(result, 'fetchUntilResponseEnd', item.fetchStart, item.responseEnd)
+  chartItem(
+    result,
+    'responseTime',
+    offset,
+    item.responseStart,
+    item.responseEnd
+  )
+  chartItem(
+    result,
+    'fetchUntilResponseEnd',
+    offset,
+    item.fetchStart,
+    item.responseEnd
+  )
   chartItem(
     result,
     'requestUntilResponseEnd',
+    offset,
     item.requestStart,
     item.responseEnd
   )
-  chartItem(result, 'startUntilResponseEnd', item.startTime, item.responseEnd)
+  chartItem(
+    result,
+    'startUntilResponseEnd',
+    offset,
+    item.startTime,
+    item.responseEnd
+  )
+  chartItem(
+    result,
+    'processDuration',
+    offset,
+    timings.processStart,
+    timings.processEnd
+  )
   return result
 }
 
@@ -84,33 +120,53 @@ export const PerfChart: FC<PerfChartProps> = ({ loadTimes }) => {
       <Heading as="h4">{loadTimes.name}</Heading>
       <Space>
         <Tooltip
-          content="The size (in octets) of the fetched resource. The size includes the response header fields plus the response payload body"
+          content={`The size (${entry.transferSize} octets) of the fetched resource. The size includes the response header fields plus the response payload body`}
           placement="right"
           textAlign="left"
         >
-          <span>Transfer size: {entry.transferSize}</span>
+          <span>Transfer: {entry.transferSize}</span>
         </Tooltip>
         <Tooltip
-          content="The size (in octets) received from the fetch (HTTP or cache), of the payload body, before removing any applied content-codings"
+          content={`The size (${entry.encodedBodySize} octets) received from the fetch (HTTP or cache), of the payload body, before removing any applied content-codings`}
           placement="right"
           textAlign="left"
         >
-          <span>Encoded body size: {entry.encodedBodySize}</span>
+          <span>Encoded body: {entry.encodedBodySize}</span>
         </Tooltip>
         <Tooltip
-          content="The size (in octets) received from the fetch (HTTP or cache) of the message body, after removing any applied content-codings"
+          content={`The size (${entry.decodedBodySize} octets) received from the fetch (HTTP or cache) of the message body, after removing any applied content-codings`}
           placement="right"
           textAlign="left"
         >
-          <span>Decoded body size: {entry.decodedBodySize}</span>
+          <span>Decoded body: {entry.decodedBodySize}</span>
         </Tooltip>
       </Space>
       <Chart
         width={'100%'}
-        height={'350px'}
+        height={`${8 * 41 + 15}px`}
         chartType="Timeline"
-        loader={<div>Loading Chart</div>}
+        loader={<Loading loading={true} />}
         data={data}
+        chartEvents={[
+          {
+            eventName: 'ready',
+            callback: ({ chartWrapper }) => {
+              const container = document.getElementById(
+                chartWrapper.getContainerId()
+              )
+              if (container) {
+                const labels = container.getElementsByTagName('text')
+                for (let n = 0; n < labels.length; n++) {
+                  const textEl = labels.item(n)
+                  // clear any numeric ticks at the bottom of the chart
+                  if (textEl && parseInt(textEl.innerHTML, 10) > -1) {
+                    textEl.innerHTML = ''
+                  }
+                }
+              }
+            },
+          },
+        ]}
       />
     </>
   )
