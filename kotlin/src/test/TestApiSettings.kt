@@ -1,4 +1,5 @@
 import com.looker.rtl.ApiSettings
+import com.looker.rtl.ApiSettingsIniText
 import com.looker.rtl.DEFAULT_TIMEOUT
 import com.looker.rtl.AuthSession
 import org.junit.Test
@@ -17,7 +18,7 @@ base_url='https://my.looker.com:19999'
 val mockId = "IdOverride"
 val mockSecret = "SecretOverride"
 
-class MockSettings(contents: String) : ApiSettings(contents) {
+class MockSettings(contents: String) : ApiSettingsIniText(contents) {
     override fun readConfig(): Map<String, String> {
         return mapOf(
                 "base_url" to baseUrl,
@@ -33,7 +34,7 @@ class MockSettings(contents: String) : ApiSettings(contents) {
 class TestApiSettings {
     @Test
     fun testApiSettingsDefaults() {
-        val settings = ApiSettings(bareMinimum)
+        val settings = ApiSettingsIniText(bareMinimum)
         val config = settings.readConfig()
         assertEquals(settings.baseUrl, "https://my.looker.com:19999", "Base URL is read")
         assertEquals(settings.verifySSL, true)
@@ -44,7 +45,7 @@ class TestApiSettings {
 
     @Test
     fun testApiSettingsQuotes() {
-        val settings = ApiSettings(quotedMinimum)
+        val settings = ApiSettingsIniText(quotedMinimum)
         assertEquals(settings.baseUrl, "https://my.looker.com:19999", "Base URL has no quotes")
         assertEquals(settings.verifySSL, true)
         assertEquals(settings.timeout, DEFAULT_TIMEOUT)

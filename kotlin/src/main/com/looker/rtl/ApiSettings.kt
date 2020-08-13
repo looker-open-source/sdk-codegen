@@ -41,8 +41,10 @@ fun apiConfig(contents: String): ApiSections {
     return ret
 }
 
+interface ApiSettings : ConfigurationProvider {}
+
 open class ApiSettingsIniFile(var filename: String = "./looker.ini",
-                              section: String = "") : ApiSettings(File(filename).readText(), section) {
+                              section: String = "") : ApiSettingsIniText(File(filename).readText(), section) {
     override fun readConfig(): Map<String, String> {
         val file = File(filename)
         if (!file.exists()) return mapOf()
@@ -55,7 +57,7 @@ open class ApiSettingsIniFile(var filename: String = "./looker.ini",
 
 
 // TODO why no @JvmOverloads here?
-open class ApiSettings(contents: String, var section: String = "") : ConfigurationProvider {
+open class ApiSettingsIniText(contents: String, var section: String = "") : ApiSettings, ConfigurationProvider {
 
     override var baseUrl: String = ""
     override var apiVersion: String = DEFAULT_API_VERSION
