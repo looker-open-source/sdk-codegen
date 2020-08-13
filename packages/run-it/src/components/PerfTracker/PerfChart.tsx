@@ -36,13 +36,20 @@ interface PerfChartProps {
 }
 
 // https://react-google-charts.com/timeline-chart#putting-bars-on-one-row
-const chartItem = (list: any[], desc: string, start: number, end: number) => {
-  if (start > 0) list.push([desc, desc, start, end])
+const chartItem = (
+  list: any[],
+  desc: string,
+  offset: number,
+  start: number,
+  end: number
+) => {
+  if (start > 0) list.push([desc, desc, start - offset, end - offset])
   return list
 }
 
 const chartData = (timings: IResourceLoadTimes) => {
   const item = timings.entry as PerformanceResourceTiming
+  const offset = item.startTime
   const result = [
     [
       { type: 'string', id: 'Metric' },
@@ -51,30 +58,57 @@ const chartData = (timings: IResourceLoadTimes) => {
       { type: 'number', id: 'End' },
     ],
   ]
-  chartItem(result, 'redirect', item.redirectStart, item.redirectEnd)
+  chartItem(result, 'redirect', offset, item.redirectStart, item.redirectEnd)
   chartItem(
     result,
     'domainLookup',
+    offset,
     item.domainLookupStart,
     item.domainLookupEnd
   )
-  chartItem(result, 'connect', item.connectStart, item.connectEnd)
+  chartItem(result, 'connect', offset, item.connectStart, item.connectEnd)
   chartItem(
     result,
     'secureConnection',
+    offset,
     item.secureConnectionStart,
     item.connectEnd
   )
-  chartItem(result, 'responseTime', item.responseStart, item.responseEnd)
-  chartItem(result, 'fetchUntilResponseEnd', item.fetchStart, item.responseEnd)
+  chartItem(
+    result,
+    'responseTime',
+    offset,
+    item.responseStart,
+    item.responseEnd
+  )
+  chartItem(
+    result,
+    'fetchUntilResponseEnd',
+    offset,
+    item.fetchStart,
+    item.responseEnd
+  )
   chartItem(
     result,
     'requestUntilResponseEnd',
+    offset,
     item.requestStart,
     item.responseEnd
   )
-  chartItem(result, 'startUntilResponseEnd', item.startTime, item.responseEnd)
-  chartItem(result, 'processDuration', timings.processStart, timings.processEnd)
+  chartItem(
+    result,
+    'startUntilResponseEnd',
+    offset,
+    item.startTime,
+    item.responseEnd
+  )
+  chartItem(
+    result,
+    'processDuration',
+    offset,
+    timings.processStart,
+    timings.processEnd
+  )
   return result
 }
 
@@ -109,13 +143,10 @@ export const PerfChart: FC<PerfChartProps> = ({ loadTimes }) => {
       </Space>
       <Chart
         width={'100%'}
-        height={`${8 * 41 + 10}px`}
+        height={`${8 * 41 + 15}px`}
         chartType="Timeline"
         loader={<Loading loading={true} />}
         data={data}
-        options={{
-          hAxis: { ticks: [] },
-        }}
       />
     </>
   )

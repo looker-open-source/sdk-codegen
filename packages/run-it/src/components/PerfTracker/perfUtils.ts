@@ -118,8 +118,8 @@ export class LoadTimes implements IResourceLoadTimes {
       if (entries.length > 0) {
         const measure = entries[entries.length - 1] as PerformanceMeasure
         const resource = this.entry as PerformanceResourceTiming
-        this.processStart = resource.connectEnd
-        this.processEnd = resource.connectEnd + measure.duration
+        this.processStart = resource.responseEnd
+        this.processEnd = resource.responseEnd + measure.duration
         this.processDuration = measure.duration
         this.duration += measure.duration
       }
