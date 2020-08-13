@@ -111,11 +111,11 @@ typealias Authenticator = (init: RequestSettings) -> RequestSettings
 fun defaultAuthenticator(requestSettings: RequestSettings): RequestSettings = requestSettings
 
 interface TransportOptions {
-    var baseUrl: String
-    var apiVersion: String
-    var verifySSL: Boolean
-    var timeout: Int
-    var headers: Map<String, String>
+    val baseUrl: String
+    val apiVersion: String
+    val verifySSL: Boolean
+    val timeout: Int
+    val headers: Map<String, String>
 }
 
 interface ConfigurationProvider : TransportOptions {
