@@ -35,57 +35,57 @@ export interface IStorageValue {
   value: string
 }
 
-/**
- * Tries to get the value saved with `key` from either session or local storage
- *
- * If no value is saved with that key, the default response returns
- *  `{ location: 'session', value: defaultValue }`
- *
- * @param key storage key
- * @param defaultValue to retrieve. Defaults to ''
- * @returns the location where the key was found, and its value
- */
-export const getStorage = (key: string, defaultValue = ''): IStorageValue => {
-  let value = sessionStorage.getItem(key)
-  if (value) {
-    return {
-      location: 'session',
-      value,
-    }
-  }
-  value = localStorage.getItem(key)
-  if (value) {
-    return {
-      location: 'local',
-      value,
-    }
-  }
-  return {
-    location: 'session',
-    value: defaultValue,
-  }
-}
+// /**
+//  * Tries to get the value saved with `key` from either session or local storage
+//  *
+//  * If no value is saved with that key, the default response returns
+//  *  `{ location: 'session', value: defaultValue }`
+//  *
+//  * @param key storage key
+//  * @param defaultValue to retrieve. Defaults to ''
+//  * @returns the location where the key was found, and its value
+//  */
+// export const getStorage = (key: string, defaultValue = ''): IStorageValue => {
+//   let value = sessionStorage.getItem(key)
+//   if (value) {
+//     return {
+//       location: 'session',
+//       value,
+//     }
+//   }
+//   value = localStorage.getItem(key)
+//   if (value) {
+//     return {
+//       location: 'local',
+//       value,
+//     }
+//   }
+//   return {
+//     location: 'session',
+//     value: defaultValue,
+//   }
+// }
 
-export const setStorage = (
-  key: string,
-  value: string,
-  location: StorageLocation = 'session'
-): string => {
-  switch (location.toLocaleLowerCase()) {
-    case 'local':
-      localStorage.setItem(key, value)
-      break
-    case 'session':
-      sessionStorage.setItem(key, value)
-      break
-  }
-  return value
-}
+// export const setStorage = (
+//   key: string,
+//   value: string,
+//   location: StorageLocation = 'session'
+// ): string => {
+//   switch (location.toLocaleLowerCase()) {
+//     case 'local':
+//       localStorage.setItem(key, value)
+//       break
+//     case 'session':
+//       sessionStorage.setItem(key, value)
+//       break
+//   }
+//   return value
+// }
 
-export const removeStorage = (key: string) => {
-  localStorage.removeItem(key)
-  sessionStorage.removeItem(key)
-}
+// export const removeStorage = (key: string) => {
+//   localStorage.removeItem(key)
+//   sessionStorage.removeItem(key)
+// }
 
 /**
  * Validates URL and standardizes it

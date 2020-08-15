@@ -27,9 +27,9 @@
 import React, { FC, useReducer, useState } from 'react'
 import { ComponentsProvider } from '@looker/components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
-import { RunItCallback } from '@looker/run-it'
+import { RunItCallback, RunItConfigurator } from '@looker/run-it'
 
-import { SearchContext } from './context'
+import { SearchContext, ExplorerContext } from './context'
 import {
   Header,
   Main,
@@ -45,6 +45,7 @@ import {
   defaultSearchState,
 } from './reducers'
 import { AppRouter } from './routes'
+import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
 
 export interface SpecItem {
   status: 'current' | 'deprecated' | 'experimental' | 'stable'
@@ -56,12 +57,21 @@ export interface SpecItem {
 
 export type SpecItems = KeyedCollection<SpecItem>
 
+export interface RuntimeEnvironment extends RunItConfigurator {}
+
 export interface ApiExplorerProps {
   runItCallback?: RunItCallback
   specs: SpecItems
+  runtimeEnvironment: RuntimeEnvironment
+  sdk?: Looker31SDK | Looker40SDK
 }
 
-const ApiExplorer: FC<ApiExplorerProps> = ({ specs, runItCallback }) => {
+const ApiExplorer: FC<ApiExplorerProps> = ({
+  specs,
+  runItCallback,
+  runtimeEnvironment,
+  sdk,
+}) => {
   const [spec, specDispatch] = useReducer(
     specReducer,
     initDefaultSpecState(specs)
@@ -76,27 +86,32 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs, runItCallback }) => {
     setSideNavOpen(!isSideNavOpen)
   }
 
+  // TODO consider merging ExplorerContext and SearchContext
+
   return (
     <ComponentsProvider>
-      <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
-        <Header specs={specs} spec={spec} specDispatch={specDispatch} />
-        <PageLayout open={isSideNavOpen}>
-          {isSideNavOpen && <SideNav api={spec.api} specKey={spec.key} />}
-          <SideNavDivider open={isSideNavOpen}>
-            <SideNavToggle
-              onClick={handleSideNavToggle}
-              isOpen={isSideNavOpen}
-            />
-          </SideNavDivider>
-          <Main>
-            <AppRouter
-              api={spec.api}
-              specKey={spec.key}
-              runItCallback={runItCallback}
-            />
-          </Main>
-        </PageLayout>
-      </SearchContext.Provider>
+      <ExplorerContext.Provider value={{ runtimeEnvironment }}>
+        <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
+          <Header specs={specs} spec={spec} specDispatch={specDispatch} />
+          <PageLayout open={isSideNavOpen}>
+            {isSideNavOpen && <SideNav api={spec.api} specKey={spec.key} />}
+            <SideNavDivider open={isSideNavOpen}>
+              <SideNavToggle
+                onClick={handleSideNavToggle}
+                isOpen={isSideNavOpen}
+              />
+            </SideNavDivider>
+            <Main>
+              <AppRouter
+                api={spec.api}
+                specKey={spec.key}
+                runItCallback={runItCallback}
+                sdk={sdk}
+              />
+            </Main>
+          </PageLayout>
+        </SearchContext.Provider>
+      </ExplorerContext.Provider>
     </ComponentsProvider>
   )
 }

@@ -23,19 +23,20 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { ApiModel } from '@looker/sdk-codegen'
 import { RunItCallback, OAuthScene } from '@looker/run-it'
 
-import { Looker40SDK } from '@looker/sdk/lib/browser'
+import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
+import { ExplorerContext, ExplorerContextProps } from '../context'
 
 interface AppRouterProps {
   api: ApiModel
   specKey: string
   runItCallback?: RunItCallback
-  sdk?: Looker40SDK
+  sdk?: Looker31SDK | Looker40SDK
 }
 
 export const AppRouter: FC<AppRouterProps> = ({
@@ -43,23 +44,28 @@ export const AppRouter: FC<AppRouterProps> = ({
   api,
   runItCallback,
   sdk,
-}) => (
-  <Switch>
-    <Redirect from="/" to={`/${specKey}/`} exact />
-    <Route path="/oauth">
-      <OAuthScene sdk={sdk} />
-    </Route>
-    <Route path="/:specKey/(methods|types)?" exact>
-      <HomeScene api={api} />
-    </Route>
-    <Route path="/:specKey/methods/:methodTag" exact>
-      <TagScene api={api} />
-    </Route>
-    <Route path="/:specKey/methods/:methodTag/:methodName">
-      <MethodScene api={api} runItCallback={runItCallback} />
-    </Route>
-    <Route path="/:specKey/types/:typeName">
-      <TypeScene api={api} />
-    </Route>
-  </Switch>
-)
+}) => {
+  const { runtimeEnvironment } = useContext<ExplorerContextProps>(
+    ExplorerContext
+  )
+  return (
+    <Switch>
+      <Redirect from="/" to={`/${specKey}/`} exact />
+      <Route path="/oauth">
+        <OAuthScene sdk={sdk} configurator={runtimeEnvironment} />
+      </Route>
+      <Route path="/:specKey/(methods|types)?" exact>
+        <HomeScene api={api} />
+      </Route>
+      <Route path="/:specKey/methods/:methodTag" exact>
+        <TagScene api={api} />
+      </Route>
+      <Route path="/:specKey/methods/:methodTag/:methodName">
+        <MethodScene api={api} runItCallback={runItCallback} sdk={sdk} />
+      </Route>
+      <Route path="/:specKey/types/:typeName">
+        <TypeScene api={api} />
+      </Route>
+    </Switch>
+  )
+}

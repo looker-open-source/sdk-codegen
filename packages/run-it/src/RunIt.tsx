@@ -36,7 +36,7 @@ import {
   Heading,
   Box,
 } from '@looker/components'
-import { IRawResponse, Looker40SDK } from '@looker/sdk/lib/browser'
+import { IRawResponse, Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
 
 import {
   RequestForm,
@@ -50,7 +50,7 @@ import {
   defaultRunItCallback,
   pathify,
   sdkNeedsConfig,
-  runItSDK,
+  initRunItSdk,
   RunItSettings,
 } from './utils'
 import { PerfTracker } from './components/PerfTracker/PerfTracker'
@@ -115,6 +115,19 @@ export interface RunItInput {
   description: string
 }
 
+export type StorageLocation = 'session' | 'local'
+
+export interface IStorageValue {
+  location: StorageLocation
+  value: string
+}
+
+export interface RunItConfigurator {
+  getStorage: (key: string, defaultValue?: string) => IStorageValue
+  setStorage(key: string, value: string, location: 'local' | 'session'): string
+  removeStorage(key: string): void
+}
+
 interface RunItProps {
   /** API version to Try */
   specKey: string
@@ -126,7 +139,8 @@ interface RunItProps {
   endpoint: string
   /** A optional HTTP request provider to override the default Looker browser SDK request provider */
   runItCallback?: RunItCallback
-  sdk?: Looker40SDK
+  sdk?: Looker40SDK | Looker31SDK
+  configurator: RunItConfigurator
 }
 
 type ResponseContent = IRawResponse | undefined
@@ -141,27 +155,39 @@ export const RunIt: FC<RunItProps> = ({
   httpMethod,
   endpoint,
   runItCallback,
-  sdk = runItSDK,
+  sdk,
+  configurator,
 }) => {
-  // Ensure sdk passed in as undefined gets assigned to the default
-  if (!sdk) sdk = runItSDK
+  const [runSdk, setRunSdk] = useState<Looker40SDK>()
   const [requestContent, setRequestContent] = useState({})
   const [activePathParams, setActivePathParams] = useState({})
   const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] = useState<ResponseContent>(
     undefined
   )
+  const [hasConfig, setHasConfig] = useState<boolean>(true)
+  const [needsAuth, setNeedsAuth] = useState<boolean>(true)
   const tabs = useTabs()
-  const configIsNeeded = sdkNeedsConfig(sdk)
-  const settings = sdk.authSession.settings as RunItSettings
-  const perf = new PerfTimings()
-  const [hasConfig, setHasConfig] = useState<boolean>(
-    !configIsNeeded || settings.authIsConfigured()
-  )
 
-  const [needsAuth] = useState<boolean>(
-    configIsNeeded && !sdk.authSession.isAuthenticated()
-  )
+  const perf = new PerfTimings()
+
+  useEffect(() => {
+    console.log('>>> sdk', sdk)
+    if (!sdk) {
+      setRunSdk(initRunItSdk(configurator))
+    } else {
+      setRunSdk(sdk as Looker40SDK)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (runSdk) {
+      const settings = runSdk.authSession.settings as RunItSettings
+      const configIsNeeded = sdkNeedsConfig(runSdk)
+      setHasConfig(!configIsNeeded || settings.authIsConfigured())
+      setNeedsAuth(configIsNeeded && !runSdk.authSession.isAuthenticated())
+    }
+  }, [runSdk])
 
   const callback = runItCallback || defaultRunItCallback
 
@@ -211,11 +237,21 @@ export const RunIt: FC<RunItProps> = ({
               setRequestContent={setRequestContent}
               handleSubmit={handleSubmit}
               setHasConfig={setHasConfig}
+              configurator={configurator}
             />
           )}
-          {!hasConfig && <ConfigForm setHasConfig={setHasConfig} />}
+          {!hasConfig && (
+            <ConfigForm
+              setHasConfig={setHasConfig}
+              configurator={configurator}
+            />
+          )}
           {hasConfig && needsAuth && (
-            <LoginForm sdk={sdk} setHasConfig={setHasConfig} />
+            <LoginForm
+              sdk={runSdk}
+              setHasConfig={setHasConfig}
+              configurator={configurator}
+            />
           )}
         </TabPanel>
         <TabPanel key="response">
@@ -232,7 +268,7 @@ export const RunIt: FC<RunItProps> = ({
           )}
         </TabPanel>
         <TabPanel key="performance">
-          <PerfTracker perf={perf} />
+          <PerfTracker perf={perf} configurator={configurator} />
         </TabPanel>
       </TabPanels>
     </Box>

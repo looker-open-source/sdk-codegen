@@ -24,7 +24,14 @@
 
  */
 
-export { RunIt, RunItInput, RunItCallback, RunItHttpMethod } from './RunIt'
-export { pathify, runItSDK, RunItSettings } from './utils'
+export {
+  RunIt,
+  RunItInput,
+  RunItCallback,
+  RunItHttpMethod,
+  RunItConfigurator,
+  IStorageValue,
+} from './RunIt'
+export { pathify, runItSDK, RunItSettings, initRunItSdk } from './utils'
 export { MethodBadge } from './components'
 export { OAuthScene } from './scenes'

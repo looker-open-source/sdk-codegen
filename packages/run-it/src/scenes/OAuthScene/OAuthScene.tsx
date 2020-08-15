@@ -26,43 +26,72 @@
 
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { BrowserSession, Looker40SDK } from '@looker/sdk/lib/browser'
-import { runItSDK } from '../..'
+import {
+  BrowserSession,
+  Looker40SDK,
+  Looker31SDK,
+} from '@looker/sdk/lib/browser'
+import { RunItConfigurator, initRunItSdk } from '../..'
 import { Loading } from '../../components'
 
 interface OAuthSceneProps {
-  sdk?: Looker40SDK
+  sdk?: Looker31SDK | Looker40SDK
+  configurator: RunItConfigurator
 }
 
-export const OAuthScene: React.FC<OAuthSceneProps> = ({ sdk }) => {
+export const OAuthScene: React.FC<OAuthSceneProps> = ({
+  sdk,
+  configurator,
+}) => {
+  const [runSdk, setRunSdk] = useState<Looker40SDK>()
   const [loading, setLoading] = useState(true)
+  const [auth, setAuth] = useState<BrowserSession>()
+  const [oldUrl, setOldUrl] = useState<string>()
   const history = useHistory()
-  // Default to the OAuth/CORS sdk implementation
-  if (!sdk) sdk = runItSDK
-  const auth = sdk.authSession as BrowserSession
 
-  /** capture the stored return URL before `OAuthSession.login()` clears it */
-  const oldUrl = auth.returnUrl || `/`
+  useEffect(() => {
+    if (!sdk) {
+      setRunSdk(initRunItSdk(configurator) as Looker40SDK)
+    } else {
+      setRunSdk(sdk as Looker40SDK)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (runSdk) {
+      setAuth(runSdk.authSession as BrowserSession)
+      /** capture the stored return URL before `OAuthSession.login()` clears it */
+      setOldUrl((runSdk.authSession as BrowserSession).returnUrl || `/`)
+    }
+  }, [runSdk])
 
   async function mayLogin() {
-    if (!auth.isAuthenticated()) {
-      await auth.login()
+    if (auth) {
+      if (!auth.isAuthenticated()) {
+        await auth.login()
+      }
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   useEffect(() => {
-    mayLogin()
-      .then((res) => {
-        if (!auth.isAuthenticated()) {
-          console.error(`Authentication failed ${res}`)
-        }
-        history.push(oldUrl)
-      })
-      .catch((err) => {
-        console.error(err)
-        history.push(oldUrl)
-      })
+    if (auth) {
+      mayLogin()
+        .then((res) => {
+          if (!auth.isAuthenticated()) {
+            console.error(`Authentication failed ${res}`)
+          }
+          if (oldUrl) {
+            history.push(oldUrl)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          if (oldUrl) {
+            history.push(oldUrl)
+          }
+        })
+    }
   }, [auth, history])
 
   return (

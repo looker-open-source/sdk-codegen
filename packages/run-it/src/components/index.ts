@@ -29,9 +29,9 @@ export { ShowResponse } from './ShowResponse'
 export { MethodBadge } from './MethodBadge'
 export {
   ConfigForm,
-  getStorage,
-  setStorage,
-  removeStorage,
+  // getStorage,
+  // setStorage,
+  // removeStorage,
   validateUrl,
   validLocation,
   RunItConfigKey,

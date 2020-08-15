@@ -34,6 +34,7 @@ import {
   createComplexItem,
   showDataChangeWarning,
 } from './formUtils'
+import { RunItConfigurator } from '../../RunIt'
 
 /**
  * Properties required by RequestForm
@@ -50,6 +51,7 @@ interface RequestFormProps {
   setRequestContent: Dispatch<{ [key: string]: any }>
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
+  configurator: RunItConfigurator
 }
 
 /**
@@ -63,6 +65,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   requestContent,
   setRequestContent,
   setHasConfig,
+  configurator,
 }) => {
   const handleBoolChange = (e: BaseSyntheticEvent) => {
     setRequestContent({ ...requestContent, [e.target.name]: e.target.checked })
@@ -111,7 +114,12 @@ export const RequestForm: FC<RequestFormProps> = ({
       <Space>
         <ButtonTransparent onClick={handleClear}>Clear</ButtonTransparent>
         <Button>Run</Button>
-        {setHasConfig && <ConfigDialog setHasConfig={setHasConfig} />}
+        {setHasConfig && (
+          <ConfigDialog
+            setHasConfig={setHasConfig}
+            configurator={configurator}
+          />
+        )}
       </Space>
     </Form>
   )

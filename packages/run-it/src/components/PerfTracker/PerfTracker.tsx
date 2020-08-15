@@ -34,7 +34,8 @@ import {
   Flex,
 } from '@looker/components'
 
-import { getStorage, RunItConfigKey } from '../ConfigForm'
+import { RunItConfigurator } from '../../RunIt'
+import { RunItConfigKey } from '../ConfigForm'
 import { Loading } from '../Loading'
 import { PerfTimings, LoadTimes } from './perfUtils'
 import { PerfChart } from './PerfChart'
@@ -43,11 +44,12 @@ import { PerfTable } from './PerfTable'
 interface PerfTrackerProps {
   perf?: PerfTimings
   showAllColumns?: boolean
+  configurator: RunItConfigurator
 }
 
-const perfFilter = (all = false) => {
+const perfFilter = (configurator: RunItConfigurator, all = false) => {
   if (all) return '.*'
-  const storage = getStorage(RunItConfigKey)
+  const storage = configurator.getStorage(RunItConfigKey)
   if (!storage.value) return '.*'
   const config = JSON.parse(storage.value)
   const url = new URL(config.base_url)
@@ -57,11 +59,12 @@ const perfFilter = (all = false) => {
 export const PerfTracker: FC<PerfTrackerProps> = ({
   perf = new PerfTimings(),
   showAllColumns = false,
+  configurator,
 }) => {
   // TODO UI option to filter by url pattern
   const [loading, setLoading] = useState(false)
   const [showAll, setShowAll] = useState(false)
-  const [filter, setFilter] = useState(perfFilter())
+  const [filter, setFilter] = useState(perfFilter(configurator))
   const [data, setData] = useState<LoadTimes[]>(perf.entries(filter))
   const [timings, setTimings] = useState(data.length > 0 ? data[0] : undefined)
 
