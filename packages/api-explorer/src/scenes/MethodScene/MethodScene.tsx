@@ -27,10 +27,8 @@
 import React, { FC, useContext } from 'react'
 import { Space, Text } from '@looker/components'
 import { useParams } from 'react-router-dom'
-import { RunIt, RunItCallback, RunItHttpMethod } from '@looker/run-it'
+import { RunIt, RunItHttpMethod, RunItContext } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
-import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
-import { ExplorerContext, ExplorerContextProps } from '../../context'
 
 import {
   DocActivityType,
@@ -47,8 +45,6 @@ import { createInputs } from './utils'
 
 interface DocMethodProps {
   api: ApiModel
-  runItCallback?: RunItCallback
-  sdk?: Looker40SDK | Looker31SDK
 }
 
 interface DocMethodParams {
@@ -56,14 +52,8 @@ interface DocMethodParams {
   specKey: string
 }
 
-export const MethodScene: FC<DocMethodProps> = ({
-  api,
-  runItCallback,
-  sdk,
-}) => {
-  const { runtimeEnvironment } = useContext<ExplorerContextProps>(
-    ExplorerContext
-  )
+export const MethodScene: FC<DocMethodProps> = ({ api }) => {
+  const { sdk } = useContext(RunItContext)
   const { methodName, specKey } = useParams<DocMethodParams>()
   const method = api.methods[methodName]
   const seeTypes = typeRefs(api, method.customTypes)
@@ -86,15 +76,13 @@ export const MethodScene: FC<DocMethodProps> = ({
         </Space>
       )}
       {method.responses && <DocResponses responses={method.responses} />}
-      <RunIt
-        specKey={specKey}
-        inputs={createInputs(api, method)}
-        httpMethod={method.httpMethod as RunItHttpMethod}
-        endpoint={method.endpoint}
-        runItCallback={runItCallback}
-        sdk={sdk}
-        configurator={runtimeEnvironment}
-      />
+      {sdk && (
+        <RunIt
+          inputs={createInputs(api, method)}
+          httpMethod={method.httpMethod as RunItHttpMethod}
+          endpoint={method.endpoint}
+        />
+      )}
     </>
   )
 }

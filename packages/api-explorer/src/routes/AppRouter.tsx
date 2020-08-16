@@ -26,34 +26,27 @@
 import React, { FC, useContext } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { ApiModel } from '@looker/sdk-codegen'
-import { RunItCallback, OAuthScene } from '@looker/run-it'
+import { OAuthScene, RunItContext } from '@looker/run-it'
 
-import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
+import { Looker40SDK } from '@looker/sdk/lib/browser'
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
-import { ExplorerContext, ExplorerContextProps } from '../context'
 
 interface AppRouterProps {
   api: ApiModel
   specKey: string
-  runItCallback?: RunItCallback
-  sdk?: Looker31SDK | Looker40SDK
 }
 
-export const AppRouter: FC<AppRouterProps> = ({
-  specKey,
-  api,
-  runItCallback,
-  sdk,
-}) => {
-  const { runtimeEnvironment } = useContext<ExplorerContextProps>(
-    ExplorerContext
-  )
+export const AppRouter: FC<AppRouterProps> = ({ specKey, api }) => {
+  const { sdk } = useContext(RunItContext)
+  const maybeOauth = sdk && sdk instanceof Looker40SDK
   return (
     <Switch>
       <Redirect from="/" to={`/${specKey}/`} exact />
-      <Route path="/oauth">
-        <OAuthScene sdk={sdk} configurator={runtimeEnvironment} />
-      </Route>
+      {maybeOauth && (
+        <Route path="/oauth">
+          <OAuthScene />
+        </Route>
+      )}
       <Route path="/:specKey/(methods|types)?" exact>
         <HomeScene api={api} />
       </Route>
@@ -61,7 +54,7 @@ export const AppRouter: FC<AppRouterProps> = ({
         <TagScene api={api} />
       </Route>
       <Route path="/:specKey/methods/:methodTag/:methodName">
-        <MethodScene api={api} runItCallback={runItCallback} sdk={sdk} />
+        <MethodScene api={api} />
       </Route>
       <Route path="/:specKey/types/:typeName">
         <TypeScene api={api} />

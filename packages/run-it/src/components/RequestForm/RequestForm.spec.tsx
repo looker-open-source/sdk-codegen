@@ -30,6 +30,7 @@ import { fireEvent, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { RequestForm } from './RequestForm'
+import { defaultConfigurator } from '../ConfigForm'
 
 describe('RequestForm', () => {
   const run = 'Run'
@@ -40,6 +41,7 @@ describe('RequestForm', () => {
   test('it creates a form with a simple item and a submit button', () => {
     renderWithTheme(
       <RequestForm
+        configurator={defaultConfigurator}
         inputs={[
           {
             name: 'user_id',
@@ -67,6 +69,7 @@ describe('RequestForm', () => {
   test('interacting with a boolean simple item changes the request content', () => {
     renderWithTheme(
       <RequestForm
+        configurator={defaultConfigurator}
         inputs={[
           {
             name: 'boolean_item',
@@ -91,6 +94,7 @@ describe('RequestForm', () => {
   test('interactive with a number simple item changes the request content', () => {
     renderWithTheme(
       <RequestForm
+        configurator={defaultConfigurator}
         inputs={[
           {
             name: 'number_item',
@@ -115,6 +119,7 @@ describe('RequestForm', () => {
   test('interacting with a text simple item changes the request content', () => {
     renderWithTheme(
       <RequestForm
+        configurator={defaultConfigurator}
         inputs={[
           {
             name: 'text_item',
@@ -142,6 +147,7 @@ describe('RequestForm', () => {
     const handleSubmit = jest.fn((e) => e.preventDefault())
     renderWithTheme(
       <RequestForm
+        configurator={defaultConfigurator}
         inputs={[
           {
             name: 'body',

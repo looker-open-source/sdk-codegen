@@ -22,17 +22,38 @@
  * THE SOFTWARE.
  */
 
-import { createContext } from 'react'
-import { RuntimeEnvironment } from '../../ApiExplorer'
+import React, { createContext, ReactElement } from 'react'
+import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
+import { RunItConfigurator } from './components'
 
-export interface ExplorerContextProps {
-  runtimeEnvironment: RuntimeEnvironment
+export interface RunItContextProps {
+  basePath: string
+  sdk?: Looker40SDK | Looker31SDK | undefined
+  configurator: RunItConfigurator
 }
 
-export const defaultExplorerContextValue: ExplorerContextProps = {
-  runtimeEnvironment: {} as RuntimeEnvironment,
+export interface RunItProviderProps extends RunItContextProps {
+  children: ReactElement<any> | ReactElement[]
 }
 
-export const ExplorerContext = createContext<ExplorerContextProps>(
-  defaultExplorerContextValue
+const defaultRunItContextValue: RunItContextProps = {
+  basePath: '',
+  configurator: {} as RunItConfigurator,
+}
+
+export const RunItContext = createContext<RunItContextProps>(
+  defaultRunItContextValue
 )
+
+export const RunItProvider: React.FC<RunItProviderProps> = ({
+  children,
+  sdk,
+  basePath,
+  configurator,
+}) => {
+  return (
+    <RunItContext.Provider value={{ sdk, configurator, basePath }}>
+      {children}
+    </RunItContext.Provider>
+  )
+}

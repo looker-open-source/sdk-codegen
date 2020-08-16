@@ -28,13 +28,12 @@ import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
 import { Button, Form, Space, ButtonTransparent } from '@looker/components'
 
 import { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
-import { ConfigDialog } from '../ConfigForm'
+import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
 import {
   createSimpleItem,
   createComplexItem,
   showDataChangeWarning,
 } from './formUtils'
-import { RunItConfigurator } from '../../RunIt'
 
 /**
  * Properties required by RequestForm

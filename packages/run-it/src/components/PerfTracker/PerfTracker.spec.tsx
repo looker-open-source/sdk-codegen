@@ -29,6 +29,7 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import React from 'react'
 import { PerfTracker } from './PerfTracker'
 import { LoadTimes, PerfTimings } from './perfUtils'
+import { defaultConfigurator } from '../ConfigForm'
 
 export const mockPerfEntries: LoadTimes[] = [
   new LoadTimes({
@@ -68,7 +69,7 @@ export const mockPerfEntries: LoadTimes[] = [
 describe('PerfTracker', () => {
   test('it initializes to no data', () => {
     jest.spyOn(PerfTimings.prototype, 'entries').mockReturnValue([])
-    renderWithTheme(<PerfTracker />)
+    renderWithTheme(<PerfTracker configurator={defaultConfigurator} />)
     expect(
       screen.getByText('No performance data is loaded')
     ).toBeInTheDocument()
@@ -77,7 +78,7 @@ describe('PerfTracker', () => {
     jest
       .spyOn(PerfTimings.prototype, 'entries')
       .mockReturnValue(mockPerfEntries)
-    renderWithTheme(<PerfTracker />)
+    renderWithTheme(<PerfTracker configurator={defaultConfigurator} />)
     expect(screen.getByText(/Load Times/i)).toBeInTheDocument()
 
     // check the full url of the first item is shown in PerfChart
@@ -95,7 +96,7 @@ describe('PerfTracker', () => {
   test('shows a "no data" message with performance but no entries', () => {
     jest.spyOn(PerfTimings.prototype, 'entries').mockReturnValue([])
     PerfTimings.supported = true
-    renderWithTheme(<PerfTracker />)
+    renderWithTheme(<PerfTracker configurator={defaultConfigurator} />)
     expect(screen.queryByText('No performance data is loaded')).toBeDefined()
     expect(
       screen.queryByText('Performance timing is not supported in this browser')
@@ -108,7 +109,7 @@ describe('PerfTracker', () => {
     })
     test('shows a "not supported" message with no performance', () => {
       PerfTimings.supported = false
-      renderWithTheme(<PerfTracker />)
+      renderWithTheme(<PerfTracker configurator={defaultConfigurator} />)
       expect(
         screen.queryByText(
           'Performance timing is not supported in this browser'

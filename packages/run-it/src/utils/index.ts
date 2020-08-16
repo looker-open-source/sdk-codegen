@@ -29,8 +29,4 @@ export {
   RunItSettings,
   initRunItSdk,
 } from './RunItSDK'
-export {
-  createRequestParams,
-  defaultRunItCallback,
-  pathify,
-} from './requestUtils'
+export { createRequestParams, runRequest, pathify } from './requestUtils'

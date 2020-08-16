@@ -28,8 +28,7 @@ import React, { BaseSyntheticEvent, Dispatch, FC } from 'react'
 import { Looker40SDK } from '@looker/sdk/lib/browser'
 import { Button, Heading, Text, Paragraph, Space } from '@looker/components'
 import { runItSDK } from '../../utils'
-import { ConfigDialog } from '../ConfigForm'
-import { RunItConfigurator } from '../../RunIt'
+import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
 
 interface LoginFormProps {
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */

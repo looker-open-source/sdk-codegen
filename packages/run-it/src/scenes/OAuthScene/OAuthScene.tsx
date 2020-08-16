@@ -24,46 +24,31 @@
 
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import {
-  BrowserSession,
-  Looker40SDK,
-  Looker31SDK,
-} from '@looker/sdk/lib/browser'
-import { RunItConfigurator, initRunItSdk } from '../..'
+import { BrowserSession, Looker40SDK } from '@looker/sdk/lib/browser'
+import { RunItContext } from '../..'
 import { Loading } from '../../components'
 
-interface OAuthSceneProps {
-  sdk?: Looker31SDK | Looker40SDK
-  configurator: RunItConfigurator
-}
+interface OAuthSceneProps {}
 
-export const OAuthScene: React.FC<OAuthSceneProps> = ({
-  sdk,
-  configurator,
-}) => {
-  const [runSdk, setRunSdk] = useState<Looker40SDK>()
+export const OAuthScene: React.FC<OAuthSceneProps> = ({}) => {
   const [loading, setLoading] = useState(true)
   const [auth, setAuth] = useState<BrowserSession>()
   const [oldUrl, setOldUrl] = useState<string>()
   const history = useHistory()
+  const { sdk } = useContext(RunItContext)
 
   useEffect(() => {
-    if (!sdk) {
-      setRunSdk(initRunItSdk(configurator) as Looker40SDK)
-    } else {
-      setRunSdk(sdk as Looker40SDK)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (runSdk) {
-      setAuth(runSdk.authSession as BrowserSession)
+    if (sdk && sdk instanceof Looker40SDK) {
+      setAuth(sdk.authSession as BrowserSession)
       /** capture the stored return URL before `OAuthSession.login()` clears it */
-      setOldUrl((runSdk.authSession as BrowserSession).returnUrl || `/`)
+      setOldUrl((sdk.authSession as BrowserSession).returnUrl || `/`)
+    } else {
+      setAuth(undefined)
+      setOldUrl(undefined)
     }
-  }, [runSdk])
+  }, [sdk])
 
   async function mayLogin() {
     if (auth) {
@@ -93,6 +78,9 @@ export const OAuthScene: React.FC<OAuthSceneProps> = ({
         })
     }
   }, [auth, history])
+
+  // No LookerSDK40 not Oauth for you
+  if (!(sdk && sdk instanceof Looker40SDK)) return <></>
 
   return (
     <Loading

@@ -24,7 +24,13 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, useState, useEffect } from 'react'
+import React, {
+  BaseSyntheticEvent,
+  FC,
+  useContext,
+  useState,
+  useEffect,
+} from 'react'
 import {
   TabList,
   useTabs,
@@ -36,8 +42,7 @@ import {
   Heading,
   Box,
 } from '@looker/components'
-import { IRawResponse, Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
-
+import { IRawResponse, Looker40SDK } from '@looker/sdk/lib/browser'
 import {
   RequestForm,
   ShowResponse,
@@ -47,14 +52,14 @@ import {
 } from './components'
 import {
   createRequestParams,
-  defaultRunItCallback,
+  runRequest,
   pathify,
   sdkNeedsConfig,
-  initRunItSdk,
   RunItSettings,
 } from './utils'
 import { PerfTracker } from './components/PerfTracker/PerfTracker'
 import { PerfTimings } from './components/PerfTracker/perfUtils'
+import { RunItContext } from '.'
 
 export type RunItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
 
@@ -62,28 +67,6 @@ export type RunItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
  * Generic collection
  */
 export type RunItValues = { [key: string]: any }
-
-/**
- * HTTP request callback function type for fully downloaded raw HTTP responses
- */
-export interface RunItCallback {
-  /**
-   * @param specKey  API version to use for the request
-   * @param httpMethod Method of HTTP request
-   * @param path Data for the body of the request
-   * @param pathParams A collection of path parameters to pass as part of the URL
-   * @param queryParams A collection of query parameters to pass as part of the URL
-   * @param body
-   */
-  (
-    specKey: string,
-    httpMethod: RunItHttpMethod,
-    path: string,
-    pathParams: RunItValues,
-    queryParams: RunItValues,
-    body: any
-  ): Promise<IRawResponse>
-}
 
 type RunItInputType =
   | 'boolean'
@@ -122,25 +105,13 @@ export interface IStorageValue {
   value: string
 }
 
-export interface RunItConfigurator {
-  getStorage: (key: string, defaultValue?: string) => IStorageValue
-  setStorage(key: string, value: string, location: 'local' | 'session'): string
-  removeStorage(key: string): void
-}
-
 interface RunItProps {
-  /** API version to Try */
-  specKey: string
   /** An array of parameters associated with a given endpoint */
   inputs: RunItInput[]
   /** HTTP Method */
   httpMethod: RunItHttpMethod
   /** Request path with path params in curly braces e.g. /looks/{look_id}/run/{result_format} */
   endpoint: string
-  /** A optional HTTP request provider to override the default Looker browser SDK request provider */
-  runItCallback?: RunItCallback
-  sdk?: Looker40SDK | Looker31SDK
-  configurator: RunItConfigurator
 }
 
 type ResponseContent = IRawResponse | undefined
@@ -149,16 +120,9 @@ type ResponseContent = IRawResponse | undefined
  * Given an array of inputs, an HTTP method, an endpoint and an api version (specKey) it renders a REST request form
  * which on submit performs a REST request and renders the response with the appropriate MIME type handler
  */
-export const RunIt: FC<RunItProps> = ({
-  specKey,
-  inputs,
-  httpMethod,
-  endpoint,
-  runItCallback,
-  sdk,
-  configurator,
-}) => {
-  const [runSdk, setRunSdk] = useState<Looker40SDK>()
+export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
+  const { sdk, configurator, basePath } = useContext(RunItContext)
+
   const [requestContent, setRequestContent] = useState({})
   const [activePathParams, setActivePathParams] = useState({})
   const [loading, setLoading] = useState(false)
@@ -172,24 +136,16 @@ export const RunIt: FC<RunItProps> = ({
   const perf = new PerfTimings()
 
   useEffect(() => {
-    console.log('>>> sdk', sdk)
-    if (!sdk) {
-      setRunSdk(initRunItSdk(configurator))
-    } else {
-      setRunSdk(sdk as Looker40SDK)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (runSdk) {
-      const settings = runSdk.authSession.settings as RunItSettings
-      const configIsNeeded = sdkNeedsConfig(runSdk)
+    if (sdk && sdk instanceof Looker40SDK) {
+      const settings = sdk.authSession.settings as RunItSettings
+      const configIsNeeded = sdkNeedsConfig(sdk)
       setHasConfig(!configIsNeeded || settings.authIsConfigured())
-      setNeedsAuth(configIsNeeded && !runSdk.authSession.isAuthenticated())
+      setNeedsAuth(configIsNeeded && !sdk.authSession.isAuthenticated())
+    } else {
+      setHasConfig(true)
+      setNeedsAuth(false)
     }
-  }, [runSdk])
-
-  const callback = runItCallback || defaultRunItCallback
+  }, [sdk])
 
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
@@ -200,22 +156,28 @@ export const RunIt: FC<RunItProps> = ({
     )
     setActivePathParams(pathParams)
     tabs.onSelectTab(1)
-    setLoading(true)
-    setResponseContent(
-      await callback(
-        specKey,
-        httpMethod,
-        endpoint,
-        pathParams,
-        queryParams,
-        body
+    if (sdk) {
+      setLoading(true)
+      setResponseContent(
+        await runRequest(
+          sdk,
+          basePath,
+          httpMethod,
+          endpoint,
+          pathParams,
+          queryParams,
+          body
+        )
       )
-    )
+    }
   }
 
   useEffect(() => {
     setLoading(!responseContent)
   }, [responseContent])
+
+  // No SDK, no RunIt for you!
+  if (!sdk) return <></>
 
   return (
     <Box>
@@ -248,7 +210,7 @@ export const RunIt: FC<RunItProps> = ({
           )}
           {hasConfig && needsAuth && (
             <LoginForm
-              sdk={runSdk}
+              sdk={sdk as Looker40SDK}
               setHasConfig={setHasConfig}
               configurator={configurator}
             />

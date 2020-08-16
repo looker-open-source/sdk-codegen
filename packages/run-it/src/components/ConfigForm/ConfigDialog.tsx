@@ -32,8 +32,7 @@ import {
   useToggle,
   IconButton,
 } from '@looker/components'
-import { ConfigForm } from './ConfigForm'
-import { RunItConfigurator } from '../../RunIt'
+import { ConfigForm, RunItConfigurator } from '.'
 
 interface ConfigDialogProps {
   /** Icon to use for config dialog */

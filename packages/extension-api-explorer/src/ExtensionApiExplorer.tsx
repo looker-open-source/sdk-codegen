@@ -25,18 +25,13 @@
  */
 
 import React, { FC, useContext } from 'react'
-import ApiExplorer, {
-  SpecItems,
-  RuntimeEnvironment,
-} from '@looker/api-explorer/src/ApiExplorer'
-import { IStorageValue } from '@looker/run-it'
+import ApiExplorer, { SpecItems } from '@looker/api-explorer/src/ApiExplorer'
+import { IStorageValue, RunItProvider, RunItConfigurator } from '@looker/run-it'
 import { useRouteMatch } from 'react-router-dom'
 import {
   ExtensionContext,
   ExtensionContextData,
 } from '@looker/extension-sdk-react'
-import { RunItCallback, pathify } from '@looker/run-it'
-import { IRawResponse } from '@looker/sdk/lib/browser'
 
 const specs: SpecItems = {
   '3.0': {
@@ -58,10 +53,10 @@ const specs: SpecItems = {
 }
 
 // TODO move into its own file
-class ExtensionRuntimeEnvironment implements RuntimeEnvironment {
+class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}
   getStorage(key: string, defaultValue = ''): IStorageValue {
-    let value = this.storage[key]
+    const value = this.storage[key]
     if (value) {
       return {
         location: 'session',
@@ -84,39 +79,24 @@ class ExtensionRuntimeEnvironment implements RuntimeEnvironment {
   }
 }
 
+const configurator = new ExtensionConfigurator()
+
 export const ExtensionApiExplorer: FC = () => {
   const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
-  const { core40SDK } = useContext<ExtensionContextData>(ExtensionContext)
-  let runItCallback: RunItCallback | undefined
+  const { core40SDK, core31SDK } = useContext<ExtensionContextData>(
+    ExtensionContext
+  )
 
-  if (match && match.params.specKey) {
-    // TODO runitCallback can probably be eliminated because SDK is being passed down.
-    // TODO need to pass down correct SDK based upon the spec
-    runItCallback = async (
-      _specKey,
-      httpMethod,
-      path,
-      pathParams,
-      queryParams,
-      body
-    ): Promise<IRawResponse> => {
-      const url = pathify(path, pathParams)
-      const resp = await core40SDK.authSession.transport.rawRequest(
-        httpMethod,
-        url,
-        queryParams,
-        body
-      )
-      return resp
-    }
+  let chosenSdk
+  if (match?.params.specKey === '3.1') {
+    chosenSdk = core31SDK
+  } else if (match?.params.specKey === '4.0') {
+    chosenSdk = core40SDK
   }
 
   return (
-    <ApiExplorer
-      specs={specs}
-      runItCallback={runItCallback}
-      runtimeEnvironment={new ExtensionRuntimeEnvironment()}
-      sdk={core40SDK}
-    />
+    <RunItProvider sdk={chosenSdk} configurator={configurator} basePath="">
+      <ApiExplorer specs={specs} />
+    </RunItProvider>
   )
 }

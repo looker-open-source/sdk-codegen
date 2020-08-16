@@ -25,71 +25,39 @@
  */
 
 import React, { FC } from 'react'
-import ApiExplorer, { SpecItems, RuntimeEnvironment } from './ApiExplorer'
-import { IStorageValue } from '@looker/run-it'
+import { useRouteMatch } from 'react-router-dom'
+import {
+  RunItProvider,
+  defaultConfigurator,
+  initRunItSdk,
+} from '@looker/run-it'
+import { Looker40SDK } from '@looker/sdk/lib/node'
+import ApiExplorer, { SpecItems } from './ApiExplorer'
 
 export interface StandloneApiExplorerProps {
   specs: SpecItems
 }
 
-// TODO ExtensionApiExplorer passes in a runit callback. This should do the same.
-// Basically all logic related to run it should be driven by the high level components
-// wrapping API explorer. Not sure runit callback is a great name, perhaps just
-// pass in the SDK (extension passes in extension SDK, standalone passes in Browser SDK)
-// might need some additional flag to indicate that authentication is required.
-
-// TODO move into its own file and probably completely refactor. This is just an example
-class StandaloneRuntimeEnvironment implements RuntimeEnvironment {
-  getStorage(key: string, defaultValue = ''): IStorageValue {
-    let value = sessionStorage.getItem(key)
-    if (value) {
-      return {
-        location: 'session',
-        value,
-      }
-    }
-    value = localStorage.getItem(key)
-    if (value) {
-      return {
-        location: 'local',
-        value,
-      }
-    }
-    return {
-      location: 'session',
-      value: defaultValue,
-    }
-  }
-
-  setStorage(
-    key: string,
-    value: string,
-    location: 'local' | 'session' = 'session'
-  ): string {
-    switch (location.toLocaleLowerCase()) {
-      case 'local':
-        localStorage.setItem(key, value)
-        break
-      case 'session':
-        sessionStorage.setItem(key, value)
-        break
-    }
-    return value
-  }
-
-  removeStorage(key: string) {
-    localStorage.removeItem(key)
-    sessionStorage.removeItem(key)
-  }
-}
-
 export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
   specs,
 }) => {
+  const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
+  const specKey = match?.params.specKey || ''
+  // Check explicitly for specs 3.0 and 3.1 as run it is not supported.
+  // This is done as the return from OAUTH does not provide a spec key
+  // but an SDK is needed.
+  const chosenSdk: Looker40SDK | undefined =
+    specKey === '3.0' || specKey === '3.1'
+      ? undefined
+      : initRunItSdk(defaultConfigurator)
+
   return (
-    <ApiExplorer
-      specs={specs}
-      runtimeEnvironment={new StandaloneRuntimeEnvironment()}
-    />
+    <RunItProvider
+      sdk={chosenSdk}
+      configurator={defaultConfigurator}
+      basePath="/api/4.0"
+    >
+      <ApiExplorer specs={specs} />
+    </RunItProvider>
   )
 }

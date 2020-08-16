@@ -35,57 +35,58 @@ export interface IStorageValue {
   value: string
 }
 
-// /**
-//  * Tries to get the value saved with `key` from either session or local storage
-//  *
-//  * If no value is saved with that key, the default response returns
-//  *  `{ location: 'session', value: defaultValue }`
-//  *
-//  * @param key storage key
-//  * @param defaultValue to retrieve. Defaults to ''
-//  * @returns the location where the key was found, and its value
-//  */
-// export const getStorage = (key: string, defaultValue = ''): IStorageValue => {
-//   let value = sessionStorage.getItem(key)
-//   if (value) {
-//     return {
-//       location: 'session',
-//       value,
-//     }
-//   }
-//   value = localStorage.getItem(key)
-//   if (value) {
-//     return {
-//       location: 'local',
-//       value,
-//     }
-//   }
-//   return {
-//     location: 'session',
-//     value: defaultValue,
-//   }
-// }
+export interface RunItConfigurator {
+  getStorage: (key: string, defaultValue?: string) => IStorageValue
+  setStorage(key: string, value: string, location: 'local' | 'session'): string
+  removeStorage(key: string): void
+}
 
-// export const setStorage = (
-//   key: string,
-//   value: string,
-//   location: StorageLocation = 'session'
-// ): string => {
-//   switch (location.toLocaleLowerCase()) {
-//     case 'local':
-//       localStorage.setItem(key, value)
-//       break
-//     case 'session':
-//       sessionStorage.setItem(key, value)
-//       break
-//   }
-//   return value
-// }
+// TODO move into its own file and probably completely refactor. This is just an example
+class StandaloneConfigurator implements RunItConfigurator {
+  getStorage(key: string, defaultValue = ''): IStorageValue {
+    let value = sessionStorage.getItem(key)
+    if (value) {
+      return {
+        location: 'session',
+        value,
+      }
+    }
+    value = localStorage.getItem(key)
+    if (value) {
+      return {
+        location: 'local',
+        value,
+      }
+    }
+    return {
+      location: 'session',
+      value: defaultValue,
+    }
+  }
 
-// export const removeStorage = (key: string) => {
-//   localStorage.removeItem(key)
-//   sessionStorage.removeItem(key)
-// }
+  setStorage(
+    key: string,
+    value: string,
+    location: 'local' | 'session' = 'session'
+  ): string {
+    switch (location.toLocaleLowerCase()) {
+      case 'local':
+        localStorage.setItem(key, value)
+        break
+      case 'session':
+        sessionStorage.setItem(key, value)
+        break
+    }
+    return value
+  }
+
+  removeStorage(key: string) {
+    localStorage.removeItem(key)
+    sessionStorage.removeItem(key)
+  }
+}
+
+export const defaultConfigurator = new StandaloneConfigurator()
 
 /**
  * Validates URL and standardizes it

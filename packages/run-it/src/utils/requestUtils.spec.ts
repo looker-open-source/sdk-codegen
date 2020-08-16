@@ -25,11 +25,7 @@
  */
 import { RunItInput } from '../RunIt'
 import { testJsonResponse } from '../test-data'
-import {
-  createRequestParams,
-  pathify,
-  defaultRunItCallback,
-} from './requestUtils'
+import { createRequestParams, pathify, runRequest } from './requestUtils'
 import { runItSDK } from './RunItSDK'
 
 describe('pathify', () => {
@@ -132,8 +128,9 @@ describe('defaultRunItCallback', () => {
       .mockResolvedValueOnce(testJsonResponse)
     jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(true)
 
-    const resp = await defaultRunItCallback(
-      '3.1',
+    const resp = await runRequest(
+      runItSDK,
+      '/api/3.1',
       'POST',
       '/queries/run/{result_format}',
       { result_format: 'json' },

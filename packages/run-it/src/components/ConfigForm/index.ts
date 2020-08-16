@@ -27,9 +27,8 @@
 export { ConfigDialog } from './ConfigDialog'
 export { ConfigForm } from './ConfigForm'
 export {
-  // getStorage,
-  // setStorage,
-  // removeStorage,
+  RunItConfigurator,
+  defaultConfigurator,
   validateUrl,
   validLocation,
   RunItConfigKey,

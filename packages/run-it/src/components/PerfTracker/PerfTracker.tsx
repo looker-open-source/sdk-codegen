@@ -34,8 +34,7 @@ import {
   Flex,
 } from '@looker/components'
 
-import { RunItConfigurator } from '../../RunIt'
-import { RunItConfigKey } from '../ConfigForm'
+import { RunItConfigKey, RunItConfigurator } from '../ConfigForm'
 import { Loading } from '../Loading'
 import { PerfTimings, LoadTimes } from './perfUtils'
 import { PerfChart } from './PerfChart'

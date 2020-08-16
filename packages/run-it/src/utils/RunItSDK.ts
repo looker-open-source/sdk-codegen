@@ -34,8 +34,7 @@ import {
   LookerBrowserSDK,
   lookerVersion,
 } from '@looker/sdk/lib/browser'
-import { RunItConfigKey } from '../components'
-import { RunItConfigurator } from '../RunIt'
+import { RunItConfigKey, RunItConfigurator } from '../components'
 
 // https://docs.looker.com/reference/api-and-integration/api-cors
 const settings = {

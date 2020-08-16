@@ -40,8 +40,7 @@ import {
   Text,
   ValidationMessages,
 } from '@looker/components'
-import { RunItConfigKey, validateUrl } from './configUtils'
-import { RunItConfigurator } from '../../RunIt'
+import { RunItConfigKey, validateUrl, RunItConfigurator } from './configUtils'
 
 interface ConfigFormProps {
   /** Title for the config form */
