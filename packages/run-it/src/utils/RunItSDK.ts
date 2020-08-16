@@ -111,7 +111,7 @@ const perfSDK = (
 
 // TODO the runItSdk should be created by the StandaloneApiExplorer and the ExtensionApiExplorer
 // and passed into runit. Once that is done this goes away
-/** Istand-alone API test runner */
+/** stand-alone API test runner */
 export let runItSDK: Looker40SDK
 // And this which sucks
 export const initRunItSdk = (configurator: RunItConfigurator) => {

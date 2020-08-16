@@ -31,7 +31,10 @@ import userEvent from '@testing-library/user-event'
 
 import { RunIt, RunItInput } from './RunIt'
 import { testTextResponse } from './test-data'
-import { runItSDK, RunItSettings } from './utils'
+import { initRunItSdk, RunItSettings } from './utils'
+import { StandaloneConfigurator } from './components/ConfigForm/configUtils'
+
+const sdk = initRunItSdk(new StandaloneConfigurator())
 
 describe('RunIt', () => {
   const run = 'Run'
@@ -73,7 +76,7 @@ describe('RunIt', () => {
 
   describe('configured and authenticated', () => {
     beforeEach(() => {
-      jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(true)
+      jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(true)
       jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
         base_url: 'https://foo:19999',
         looker_url: 'https://foo:9999',
@@ -108,7 +111,7 @@ describe('RunIt', () => {
 
     test('the form submit handler invokes the request callback on submit', async () => {
       const defaultRequestCallback = jest
-        .spyOn(runItSDK.authSession.transport, 'rawRequest')
+        .spyOn(sdk.authSession.transport, 'rawRequest')
         .mockResolvedValueOnce(testTextResponse)
       renderWithTheme(
         <RunIt
@@ -148,7 +151,7 @@ describe('RunIt', () => {
 
   describe('not configured or authenticated', () => {
     beforeEach(() => {
-      jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(false)
+      jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(false)
       jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
         base_url: '',
         looker_url: '',
@@ -170,7 +173,7 @@ describe('RunIt', () => {
   })
   describe('configured but not authenticated', () => {
     beforeEach(() => {
-      jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(false)
+      jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(false)
       jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
         base_url: 'https://foo:19999',
         looker_url: 'https://foo:9999',

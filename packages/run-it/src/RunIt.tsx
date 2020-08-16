@@ -49,6 +49,7 @@ import {
   ConfigForm,
   LoginForm,
   Loading,
+  RunItConfigurator,
 } from './components'
 import {
   createRequestParams,
@@ -105,6 +106,37 @@ export interface IStorageValue {
   value: string
 }
 
+interface PerfTabPanelProps {
+  perf: PerfTimings
+  /** Is this running in an extension? */
+  isExtension: boolean
+  /** Configuration provider */
+  configurator: RunItConfigurator
+}
+
+export const PerfTabPanel: FC<PerfTabPanelProps> = ({
+  perf,
+  isExtension,
+  configurator,
+}) => {
+  if (isExtension) return <></>
+  return (
+    <TabPanel key="performance">
+      <PerfTracker perf={perf} configurator={configurator} />
+    </TabPanel>
+  )
+}
+
+interface PerfTabProps {
+  /** Is this running in an extension? */
+  isExtension: boolean
+}
+
+export const PerfTab: FC<PerfTabProps> = ({ isExtension }) => {
+  if (isExtension) return <></>
+  return <Tab key="performance">Performance</Tab>
+}
+
 interface RunItProps {
   /** An array of parameters associated with a given endpoint */
   inputs: RunItInput[]
@@ -132,13 +164,14 @@ export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
   const [hasConfig, setHasConfig] = useState<boolean>(true)
   const [needsAuth, setNeedsAuth] = useState<boolean>(true)
   const tabs = useTabs()
+  let configIsNeeded = false
 
   const perf = new PerfTimings()
 
   useEffect(() => {
     if (sdk && sdk instanceof Looker40SDK) {
       const settings = sdk.authSession.settings as RunItSettings
-      const configIsNeeded = sdkNeedsConfig(sdk)
+      configIsNeeded = sdkNeedsConfig(sdk)
       setHasConfig(!configIsNeeded || settings.authIsConfigured())
       setNeedsAuth(configIsNeeded && !sdk.authSession.isAuthenticated())
     } else {
@@ -187,7 +220,7 @@ export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
       <TabList {...tabs}>
         <Tab key="request">Request</Tab>
         <Tab key="response">Response</Tab>
-        <Tab key="performance">Performance</Tab>
+        <PerfTab isExtension={!configIsNeeded} />
       </TabList>
       <TabPanels {...tabs}>
         <TabPanel key="request">
@@ -229,9 +262,11 @@ export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
             />
           )}
         </TabPanel>
-        <TabPanel key="performance">
-          <PerfTracker perf={perf} configurator={configurator} />
-        </TabPanel>
+        <PerfTabPanel
+          perf={perf}
+          isExtension={!configIsNeeded}
+          configurator={configurator}
+        />
       </TabPanels>
     </Box>
   )

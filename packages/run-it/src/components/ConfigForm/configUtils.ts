@@ -42,7 +42,7 @@ export interface RunItConfigurator {
 }
 
 // TODO move into its own file and probably completely refactor. This is just an example
-class StandaloneConfigurator implements RunItConfigurator {
+export class StandaloneConfigurator implements RunItConfigurator {
   getStorage(key: string, defaultValue = ''): IStorageValue {
     let value = sessionStorage.getItem(key)
     if (value) {
