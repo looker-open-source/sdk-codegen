@@ -13,7 +13,7 @@ echo "Rebuilding all packages"
 yarn build
 
 echo "Creating extension-api-explorer production bundle"
-cd packages/extension-api-explorer && yarn package
+cd packages/extension-api-explorer && yarn bundle
 path_to_bundle=$(pwd)"/dist/bundle.js"
 
 cd ../../..
