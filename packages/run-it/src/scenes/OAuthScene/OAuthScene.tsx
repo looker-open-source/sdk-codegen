@@ -79,7 +79,7 @@ export const OAuthScene: React.FC<OAuthSceneProps> = ({}) => {
     }
   }, [auth, history])
 
-  // No LookerSDK40 not Oauth for you
+  // No LookerSDK40 no OAuth for you
   if (!(sdk && sdk instanceof Looker40SDK)) return <></>
 
   return (
