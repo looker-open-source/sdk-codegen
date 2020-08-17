@@ -28,10 +28,9 @@ export { RequestForm } from './RequestForm'
 export { ShowResponse } from './ShowResponse'
 export { MethodBadge } from './MethodBadge'
 export {
+  defaultConfigurator,
   ConfigForm,
-  getStorage,
-  setStorage,
-  removeStorage,
+  RunItConfigurator,
   validateUrl,
   validLocation,
   RunItConfigKey,

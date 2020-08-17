@@ -23,9 +23,10 @@
  SOFTWARE.
 
  */
-export { runItSDK, sdkNeedsConfig, RunItSettings } from './RunItSDK'
 export {
-  createRequestParams,
-  defaultRunItCallback,
-  pathify,
-} from './requestUtils'
+  runItSDK,
+  sdkNeedsConfig,
+  RunItSettings,
+  initRunItSdk,
+} from './RunItSDK'
+export { createRequestParams, runRequest, pathify } from './requestUtils'

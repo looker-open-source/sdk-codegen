@@ -29,13 +29,20 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { RunIt, RunItInput } from './RunIt'
+import { RunIt, RunItHttpMethod, RunItInput } from './RunIt'
 import { testTextResponse } from './test-data'
-import { runItSDK, RunItSettings } from './utils'
+import { initRunItSdk, RunItSettings } from './utils'
+import {
+  defaultConfigurator,
+  StandaloneConfigurator,
+} from './components/ConfigForm/configUtils'
+import { RunItProvider } from './RunItProvider'
+
+const sdk = initRunItSdk(new StandaloneConfigurator())
 
 describe('RunIt', () => {
   const run = 'Run'
-  const inputs: RunItInput[] = [
+  const runItInputs: RunItInput[] = [
     {
       name: 'result_format',
       location: 'path',
@@ -71,9 +78,25 @@ describe('RunIt', () => {
     },
   ]
 
+  const renderRunIt = (
+    inputs = runItInputs,
+    method: RunItHttpMethod = 'POST',
+    endpoint = '/run_query/{result_format}'
+  ) => {
+    renderWithTheme(
+      <RunItProvider
+        sdk={sdk}
+        configurator={defaultConfigurator}
+        basePath="/api/4.0"
+      >
+        <RunIt inputs={inputs} httpMethod={method} endpoint={endpoint} />
+      </RunItProvider>
+    )
+  }
+
   describe('configured and authenticated', () => {
     beforeEach(() => {
-      jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(true)
+      jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(true)
       jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
         base_url: 'https://foo:19999',
         looker_url: 'https://foo:9999',
@@ -81,14 +104,7 @@ describe('RunIt', () => {
     })
 
     test('it renders endpoint, request and response tabs, and form inputs', () => {
-      renderWithTheme(
-        <RunIt
-          specKey={'3.1'}
-          inputs={inputs}
-          httpMethod={'POST'}
-          endpoint={'/run_query/{result_format}'}
-        />
-      )
+      renderRunIt()
       expect(screen.getByRole('heading')).toHaveTextContent(
         'POST /run_query/{result_format}'
       )
@@ -109,39 +125,12 @@ describe('RunIt', () => {
 
     test('the form submit handler invokes the request callback on submit', async () => {
       const defaultRequestCallback = jest
-        .spyOn(runItSDK.authSession.transport, 'rawRequest')
+        .spyOn(sdk.authSession.transport, 'rawRequest')
         .mockResolvedValueOnce(testTextResponse)
-      renderWithTheme(
-        <RunIt
-          specKey={'3.1'}
-          inputs={inputs}
-          httpMethod={'POST'}
-          endpoint={'/run_query/{result_format}'}
-        />
-      )
+      renderRunIt()
       userEvent.click(screen.getByRole('button', { name: run }))
       await waitFor(() => {
         expect(defaultRequestCallback).toHaveBeenCalled()
-        expect(
-          screen.queryByText(testTextResponse.body.toString())
-        ).toBeInTheDocument()
-      })
-    })
-
-    test('custom run request callback overrides default', async () => {
-      const customRunItCallback = jest.fn().mockResolvedValue(testTextResponse)
-      renderWithTheme(
-        <RunIt
-          specKey={'3.1'}
-          inputs={inputs}
-          httpMethod={'POST'}
-          endpoint={'/run_query/{result_format}'}
-          runItCallback={customRunItCallback}
-        />
-      )
-      userEvent.click(screen.getByRole('button', { name: run }))
-      await waitFor(() => {
-        expect(customRunItCallback).toHaveBeenCalled()
         expect(
           screen.queryByText(testTextResponse.body.toString())
         ).toBeInTheDocument()
@@ -151,7 +140,7 @@ describe('RunIt', () => {
 
   describe('not configured or authenticated', () => {
     beforeEach(() => {
-      jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(false)
+      jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(false)
       jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
         base_url: '',
         looker_url: '',
@@ -159,14 +148,7 @@ describe('RunIt', () => {
     })
 
     test('it renders ConfigForm', () => {
-      renderWithTheme(
-        <RunIt
-          specKey={'3.1'}
-          inputs={inputs}
-          httpMethod={'POST'}
-          endpoint={'/run_query/{result_format}'}
-        />
-      )
+      renderRunIt()
       expect(screen.getByRole('button', { name: 'Remove' })).toBeInTheDocument()
       expect(screen.queryByRole('button', { name: run })).toBeNull()
       expect(screen.queryByRole('button', { name: 'Login' })).toBeNull()
@@ -174,7 +156,7 @@ describe('RunIt', () => {
   })
   describe('configured but not authenticated', () => {
     beforeEach(() => {
-      jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(false)
+      jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(false)
       jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
         base_url: 'https://foo:19999',
         looker_url: 'https://foo:9999',
@@ -182,14 +164,7 @@ describe('RunIt', () => {
     })
 
     test('it renders LoginForm', () => {
-      renderWithTheme(
-        <RunIt
-          specKey={'3.1'}
-          inputs={inputs}
-          httpMethod={'POST'}
-          endpoint={'/run_query/{result_format}'}
-        />
-      )
+      renderRunIt()
       expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument()
       expect(screen.queryByRole('button', { name: 'Remove' })).toBeNull()
       expect(screen.queryByRole('button', { name: run })).toBeNull()

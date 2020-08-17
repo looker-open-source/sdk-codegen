@@ -24,46 +24,40 @@
 
  */
 
-import React, { Dispatch, FC } from 'react'
+import React, { FC } from 'react'
+import { useRouteMatch } from 'react-router-dom'
 import {
-  Dialog,
-  DialogContent,
-  IconNames,
-  useToggle,
-  IconButton,
-} from '@looker/components'
-import { ConfigForm, RunItConfigurator } from '.'
+  RunItProvider,
+  defaultConfigurator,
+  initRunItSdk,
+} from '@looker/run-it'
+import { Looker40SDK } from '@looker/sdk/lib/node'
+import ApiExplorer, { SpecItems } from './ApiExplorer'
 
-interface ConfigDialogProps {
-  /** Icon to use for config dialog */
-  icon?: IconNames
-  /** A set state callback fn used to set a hasConfig flag indicating whether OAuth config details are present */
-  setHasConfig?: Dispatch<boolean>
-  configurator: RunItConfigurator
+export interface StandloneApiExplorerProps {
+  specs: SpecItems
 }
 
-export const ConfigDialog: FC<ConfigDialogProps> = ({
-  icon = 'GearOutline',
-  setHasConfig,
-  configurator,
+export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
+  specs,
 }) => {
-  const { value, setOff, setOn } = useToggle()
+  const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
+  const specKey = match?.params.specKey || ''
+  // Check explicitly for specs 3.0 and 3.1 as run it is not supported.
+  // This is done as the return from OAUTH does not provide a spec key
+  // but an SDK is needed.
+  const chosenSdk: Looker40SDK | undefined =
+    specKey === '3.0' || specKey === '3.1'
+      ? undefined
+      : initRunItSdk(defaultConfigurator)
+
   return (
-    <>
-      <Dialog
-        isOpen={value}
-        onClose={setOff}
-        maxWidth={['90vw', '60vw', '500px', '800px']}
-      >
-        <DialogContent>
-          <ConfigForm
-            setHasConfig={setHasConfig}
-            handleClose={setOff}
-            configurator={configurator}
-          />
-        </DialogContent>
-      </Dialog>
-      <IconButton label="Settings" color="key" icon={icon} onClick={setOn} />
-    </>
+    <RunItProvider
+      sdk={chosenSdk}
+      configurator={defaultConfigurator}
+      basePath="/api/4.0"
+    >
+      <ApiExplorer specs={specs} />
+    </RunItProvider>
   )
 }

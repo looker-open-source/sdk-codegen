@@ -24,7 +24,7 @@
 
  */
 
-import { IRawResponse } from '@looker/sdk/lib/browser'
+import { IRawResponse, Looker31SDK, Looker40SDK } from '@looker/sdk/lib/browser'
 
 import { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
 import { runItSDK } from './RunItSDK'
@@ -91,25 +91,27 @@ export const createRequestParams = (
 
 /**
  * Makes an http request using the SDK browser transport rawRequest method
- * @param specKey API version to Run
+ * @param basePath base path for the URL. For standalone this includes the specKey. Empty for extension.
  * @param httpMethod Request operation
  * @param endpoint Request path with path params in curly braces e.g. /queries/{query_id}/run/{result_format}
  * @param pathParams Collection of path params
  * @param queryParams Collection of query params
  * @param body Collection of body params
  */
-export const defaultRunItCallback = async (
-  specKey: string,
+export const runRequest = async (
+  sdk: Looker31SDK | Looker40SDK,
+  basePath: string,
   httpMethod: RunItHttpMethod,
   endpoint: string,
   pathParams: RunItValues,
   queryParams: RunItValues,
   body: any
 ): Promise<IRawResponse> => {
-  if (!runItSDK.authSession.isAuthenticated())
-    await runItSDK.ok(runItSDK.authSession.login())
-  const url = `/api/${specKey}${pathify(endpoint, pathParams)}`
-  return await runItSDK.authSession.transport.rawRequest(
+  if (!sdk.authSession.isAuthenticated()) {
+    await sdk.ok(runItSDK.authSession.login())
+  }
+  const url = `${basePath}${pathify(endpoint, pathParams)}`
+  return await sdk.authSession.transport.rawRequest(
     httpMethod,
     url,
     queryParams,

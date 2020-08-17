@@ -25,12 +25,11 @@
  */
 import { RunItInput } from '../RunIt'
 import { testJsonResponse } from '../test-data'
-import {
-  createRequestParams,
-  pathify,
-  defaultRunItCallback,
-} from './requestUtils'
-import { runItSDK } from './RunItSDK'
+import { StandaloneConfigurator } from '../components/ConfigForm/configUtils'
+import { createRequestParams, pathify, runRequest } from './requestUtils'
+import { initRunItSdk } from './RunItSDK'
+
+const sdk = initRunItSdk(new StandaloneConfigurator())
 
 describe('pathify', () => {
   test('it returns unchanged path if no path params are specified', () => {
@@ -128,12 +127,13 @@ describe('createRequestParams', () => {
 describe('defaultRunItCallback', () => {
   test('it makes a request', async () => {
     const spy = jest
-      .spyOn(runItSDK.authSession.transport, 'rawRequest')
+      .spyOn(sdk.authSession.transport, 'rawRequest')
       .mockResolvedValueOnce(testJsonResponse)
-    jest.spyOn(runItSDK.authSession, 'isAuthenticated').mockReturnValue(true)
+    jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(true)
 
-    const resp = await defaultRunItCallback(
-      '3.1',
+    const resp = await runRequest(
+      sdk,
+      '/api/3.1',
       'POST',
       '/queries/run/{result_format}',
       { result_format: 'json' },

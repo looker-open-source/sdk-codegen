@@ -28,7 +28,7 @@ import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
 import { Button, Form, Space, ButtonTransparent } from '@looker/components'
 
 import { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
-import { ConfigDialog } from '../ConfigForm'
+import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
 import {
   createSimpleItem,
   createComplexItem,
@@ -50,6 +50,7 @@ interface RequestFormProps {
   setRequestContent: Dispatch<{ [key: string]: any }>
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
+  configurator: RunItConfigurator
 }
 
 /**
@@ -63,6 +64,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   requestContent,
   setRequestContent,
   setHasConfig,
+  configurator,
 }) => {
   const handleBoolChange = (e: BaseSyntheticEvent) => {
     setRequestContent({ ...requestContent, [e.target.name]: e.target.checked })
@@ -111,7 +113,12 @@ export const RequestForm: FC<RequestFormProps> = ({
       <Space>
         <ButtonTransparent onClick={handleClear}>Clear</ButtonTransparent>
         <Button>Run</Button>
-        {setHasConfig && <ConfigDialog setHasConfig={setHasConfig} />}
+        {setHasConfig && (
+          <ConfigDialog
+            setHasConfig={setHasConfig}
+            configurator={configurator}
+          />
+        )}
       </Space>
     </Form>
   )

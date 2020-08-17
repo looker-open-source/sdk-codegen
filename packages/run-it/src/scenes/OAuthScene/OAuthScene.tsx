@@ -24,46 +24,63 @@
 
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { BrowserSession, Looker40SDK } from '@looker/sdk/lib/browser'
-import { runItSDK } from '../..'
+import { RunItContext } from '../..'
 import { Loading } from '../../components'
 
-interface OAuthSceneProps {
-  sdk?: Looker40SDK
-}
+interface OAuthSceneProps {}
 
-export const OAuthScene: React.FC<OAuthSceneProps> = ({ sdk }) => {
+export const OAuthScene: FC<OAuthSceneProps> = ({}) => {
   const [loading, setLoading] = useState(true)
+  const [auth, setAuth] = useState<BrowserSession>()
+  const [oldUrl, setOldUrl] = useState<string>()
   const history = useHistory()
-  // Default to the OAuth/CORS sdk implementation
-  if (!sdk) sdk = runItSDK
-  const auth = sdk.authSession as BrowserSession
+  const { sdk } = useContext(RunItContext)
 
-  /** capture the stored return URL before `OAuthSession.login()` clears it */
-  const oldUrl = auth.returnUrl || `/`
+  useEffect(() => {
+    if (sdk && sdk instanceof Looker40SDK) {
+      setAuth(sdk.authSession as BrowserSession)
+      /** capture the stored return URL before `OAuthSession.login()` clears it */
+      setOldUrl((sdk.authSession as BrowserSession).returnUrl || `/`)
+    } else {
+      setAuth(undefined)
+      setOldUrl(undefined)
+    }
+  }, [sdk])
 
   async function mayLogin() {
-    if (!auth.isAuthenticated()) {
-      await auth.login()
+    if (auth) {
+      if (!auth.isAuthenticated()) {
+        await auth.login()
+      }
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   useEffect(() => {
-    mayLogin()
-      .then((res) => {
-        if (!auth.isAuthenticated()) {
-          console.error(`Authentication failed ${res}`)
-        }
-        history.push(oldUrl)
-      })
-      .catch((err) => {
-        console.error(err)
-        history.push(oldUrl)
-      })
+    if (auth) {
+      mayLogin()
+        .then((res) => {
+          if (!auth.isAuthenticated()) {
+            console.error(`Authentication failed ${res}`)
+          }
+          if (oldUrl) {
+            history.push(oldUrl)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          if (oldUrl) {
+            history.push(oldUrl)
+          }
+        })
+    }
   }, [auth, history])
+
+  // No LookerSDK40 no OAuth for you
+  if (!(sdk && sdk instanceof Looker40SDK)) return <></>
 
   return (
     <Loading

@@ -24,46 +24,38 @@
 
  */
 
-import React, { Dispatch, FC } from 'react'
-import {
-  Dialog,
-  DialogContent,
-  IconNames,
-  useToggle,
-  IconButton,
-} from '@looker/components'
-import { ConfigForm, RunItConfigurator } from '.'
+import React, { createContext, FC, ReactElement } from 'react'
+import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
+import { RunItConfigurator } from './components'
 
-interface ConfigDialogProps {
-  /** Icon to use for config dialog */
-  icon?: IconNames
-  /** A set state callback fn used to set a hasConfig flag indicating whether OAuth config details are present */
-  setHasConfig?: Dispatch<boolean>
+export interface RunItContextProps {
+  basePath: string
+  sdk?: Looker40SDK | Looker31SDK | undefined
   configurator: RunItConfigurator
 }
 
-export const ConfigDialog: FC<ConfigDialogProps> = ({
-  icon = 'GearOutline',
-  setHasConfig,
+export interface RunItProviderProps extends RunItContextProps {
+  children: ReactElement<any> | ReactElement[]
+}
+
+const defaultRunItContextValue: RunItContextProps = {
+  basePath: '',
+  configurator: {} as RunItConfigurator,
+}
+
+export const RunItContext = createContext<RunItContextProps>(
+  defaultRunItContextValue
+)
+
+export const RunItProvider: FC<RunItProviderProps> = ({
+  children,
+  sdk,
+  basePath,
   configurator,
 }) => {
-  const { value, setOff, setOn } = useToggle()
   return (
-    <>
-      <Dialog
-        isOpen={value}
-        onClose={setOff}
-        maxWidth={['90vw', '60vw', '500px', '800px']}
-      >
-        <DialogContent>
-          <ConfigForm
-            setHasConfig={setHasConfig}
-            handleClose={setOff}
-            configurator={configurator}
-          />
-        </DialogContent>
-      </Dialog>
-      <IconButton label="Settings" color="key" icon={icon} onClick={setOn} />
-    </>
+    <RunItContext.Provider value={{ sdk, configurator, basePath }}>
+      {children}
+    </RunItContext.Provider>
   )
 }

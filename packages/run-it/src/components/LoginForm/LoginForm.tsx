@@ -28,18 +28,20 @@ import React, { BaseSyntheticEvent, Dispatch, FC } from 'react'
 import { Looker40SDK } from '@looker/sdk/lib/browser'
 import { Button, Heading, Text, Paragraph, Space } from '@looker/components'
 import { runItSDK } from '../../utils'
-import { ConfigDialog } from '../ConfigForm'
+import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
 
 interface LoginFormProps {
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
   /** SDK to use for login. Defaults to the `runItSDK` */
   sdk?: Looker40SDK
+  configurator: RunItConfigurator
 }
 
 export const LoginForm: FC<LoginFormProps> = ({
   sdk = runItSDK,
   setHasConfig,
+  configurator,
 }) => {
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
@@ -58,7 +60,12 @@ export const LoginForm: FC<LoginFormProps> = ({
       </Paragraph>
       <Space>
         <Button onClick={handleSubmit}>Login</Button>
-        {setHasConfig && <ConfigDialog setHasConfig={setHasConfig} />}
+        {setHasConfig && (
+          <ConfigDialog
+            setHasConfig={setHasConfig}
+            configurator={configurator}
+          />
+        )}
       </Space>
     </>
   )

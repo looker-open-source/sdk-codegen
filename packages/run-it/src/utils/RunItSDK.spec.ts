@@ -31,6 +31,7 @@ import {
   lookerVersion,
 } from '@looker/sdk/lib/browser'
 import { RunItSettings } from './RunItSDK'
+import { defaultConfigurator } from '..'
 
 const settings = {
   ...DefaultSettings(),
@@ -38,7 +39,7 @@ const settings = {
   agentTag: `RunIt ${lookerVersion}.4.0`,
 } as IApiSettings
 
-const runItSettings = new RunItSettings(settings)
+const runItSettings = new RunItSettings(settings, defaultConfigurator)
 
 describe('RunItSDK', () => {
   describe('RunItSettings', () => {

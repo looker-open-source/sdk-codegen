@@ -28,12 +28,13 @@ import React from 'react'
 import { screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import { LoginForm } from './LoginForm'
+import { defaultConfigurator } from '..'
 
 describe('LoginForm', () => {
   // https://testing-library.com/docs/guide-which-query
 
   test('it creates a login form', async () => {
-    renderWithTheme(<LoginForm />)
+    renderWithTheme(<LoginForm configurator={defaultConfigurator} />)
     const title = screen.getByRole('heading') as HTMLHeadingElement
     expect(title).toHaveTextContent('OAuth Login')
     expect(

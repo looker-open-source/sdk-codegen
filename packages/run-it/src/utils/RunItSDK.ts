@@ -34,7 +34,7 @@ import {
   LookerBrowserSDK,
   lookerVersion,
 } from '@looker/sdk/lib/browser'
-import { getStorage, RunItConfigKey } from '../components'
+import { RunItConfigKey, RunItConfigurator } from '../components'
 
 // https://docs.looker.com/reference/api-and-integration/api-cors
 const settings = {
@@ -49,12 +49,17 @@ const settings = {
  * @class RunItSettings
  */
 export class RunItSettings extends ApiSettings {
-  constructor(settings: Partial<IApiSettings>) {
+  configurator: RunItConfigurator
+  constructor(
+    settings: Partial<IApiSettings>,
+    configurator: RunItConfigurator
+  ) {
     super(settings)
+    this.configurator = configurator
   }
 
   getStoredConfig() {
-    const storage = getStorage(RunItConfigKey)
+    const storage = this.configurator.getStorage(RunItConfigKey)
     let config = { base_url: '', looker_url: '' }
     if (storage.value) {
       config = JSON.parse(storage.value)
@@ -95,14 +100,26 @@ export class RunItSettings extends ApiSettings {
   }
 }
 
-const perfSDK = (settings: Partial<IApiSettings>) => {
-  const sdk = LookerBrowserSDK.init40(new RunItSettings(settings))
+const perfSDK = (
+  settings: Partial<IApiSettings>,
+  configurator: RunItConfigurator
+) => {
+  const sdk = LookerBrowserSDK.init40(new RunItSettings(settings, configurator))
   BrowserTransport.trackPerformance = true
   return sdk
 }
 
-/** Initialized stand-alone API test runner */
-export const runItSDK = perfSDK(settings)
+// TODO the runItSdk should be created by the StandaloneApiExplorer and the ExtensionApiExplorer
+// and passed into runit. Once that is done this goes away
+/** stand-alone API test runner */
+export let runItSDK: Looker40SDK
+// And this which sucks
+export const initRunItSdk = (configurator: RunItConfigurator) => {
+  if (!runItSDK) {
+    runItSDK = perfSDK(settings, configurator)
+  }
+  return runItSDK
+}
 
 /** Is this a stand-alone version of Run-It that needs server and auth configuration? */
 export const sdkNeedsConfig = (sdk: Looker40SDK | undefined) =>

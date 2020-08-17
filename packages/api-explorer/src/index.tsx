@@ -28,32 +28,31 @@ import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 
-import ApiExplorer, { ApiExplorerProps } from './ApiExplorer'
+import { SpecItems } from './ApiExplorer'
+import { StandaloneApiExplorer } from './StandaloneApiExplorer'
 
-const specs: ApiExplorerProps = {
-  specs: {
-    '3.0': {
-      status: 'stable',
-      specURL: 'https://self-signed.looker.com:19999/api/3.0/swagger.json',
-      specContent: require('../specs/Looker.3.0.oas.json'),
-    },
-    '3.1': {
-      status: 'current',
-      specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
-      specContent: require('../specs/Looker.3.1.oas.json'),
-    },
-    '4.0': {
-      status: 'experimental',
-      isDefault: true,
-      specURL: 'https://self-signed.looker.com:19999/api/4.0/swagger.json',
-      specContent: require('../specs/Looker.4.0.oas.json'),
-    },
+const specs: SpecItems = {
+  '3.0': {
+    status: 'stable',
+    specURL: 'https://self-signed.looker.com:19999/api/3.0/swagger.json',
+    specContent: require('../specs/Looker.3.0.oas.json'),
+  },
+  '3.1': {
+    status: 'current',
+    specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
+    specContent: require('../specs/Looker.3.1.oas.json'),
+  },
+  '4.0': {
+    status: 'experimental',
+    isDefault: true,
+    specURL: 'https://self-signed.looker.com:19999/api/4.0/swagger.json',
+    specContent: require('../specs/Looker.4.0.oas.json'),
   },
 }
 
 ReactDOM.render(
   <Router>
-    <ApiExplorer {...specs} />
+    <StandaloneApiExplorer specs={specs} />
   </Router>,
   document.getElementById('container')
 )

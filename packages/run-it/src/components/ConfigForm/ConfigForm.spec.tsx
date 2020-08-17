@@ -28,23 +28,17 @@ import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
-import {
-  getStorage,
-  removeStorage,
-  setStorage,
-  RunItConfigKey,
-} from './configUtils'
-import { ConfigForm } from './ConfigForm'
+import { ConfigForm, defaultConfigurator, RunItConfigKey } from '.'
 
 describe('ConfigForm', () => {
   // https://testing-library.com/docs/guide-which-query
 
   beforeEach(() => {
-    removeStorage(RunItConfigKey)
+    defaultConfigurator.removeStorage(RunItConfigKey)
   })
 
   test('it creates an empty config form without stored config', async () => {
-    renderWithTheme(<ConfigForm />)
+    renderWithTheme(<ConfigForm configurator={defaultConfigurator} />)
     const title = screen.getByRole('heading') as HTMLHeadingElement
     expect(title).toHaveTextContent('RunIt Configuration')
 
@@ -73,7 +67,7 @@ describe('ConfigForm', () => {
   })
 
   test('it disables and enable save for bad and good urls', async () => {
-    renderWithTheme(<ConfigForm />)
+    renderWithTheme(<ConfigForm configurator={defaultConfigurator} />)
     const apiUrl = screen.getByRole('textbox', {
       name: /API server url/i,
     }) as HTMLInputElement
@@ -103,7 +97,7 @@ describe('ConfigForm', () => {
   })
 
   test('it saves and clears storage', async () => {
-    renderWithTheme(<ConfigForm />)
+    renderWithTheme(<ConfigForm configurator={defaultConfigurator} />)
     const apiUrl = screen.getByRole('textbox', {
       name: /API server url/i,
     }) as HTMLInputElement
@@ -130,7 +124,7 @@ describe('ConfigForm', () => {
     await userEvent.type(authUrl, 'https://foo:99')
     await userEvent.click(save)
     await waitFor(() => {
-      const storage = getStorage(RunItConfigKey)
+      const storage = defaultConfigurator.getStorage(RunItConfigKey)
       expect(storage.location).toEqual('local')
       expect(JSON.parse(storage.value)).toEqual({
         base_url: 'https://foo:199',
@@ -140,20 +134,22 @@ describe('ConfigForm', () => {
 
     await userEvent.click(remove)
     await waitFor(() => {
-      const storage = getStorage(RunItConfigKey)
+      const storage = defaultConfigurator.getStorage(RunItConfigKey)
       expect(storage.location).toEqual('session')
       expect(storage.value).toEqual('')
     })
   })
 
   test('it can have a custom tile', () => {
-    renderWithTheme(<ConfigForm title="New title" />)
+    renderWithTheme(
+      <ConfigForm title="New title" configurator={defaultConfigurator} />
+    )
     const title = screen.getByRole('heading') as HTMLHeadingElement
     expect(title.textContent).toEqual('New title')
   })
 
   test('it gets config from local storage', async () => {
-    setStorage(
+    defaultConfigurator.setStorage(
       RunItConfigKey,
       JSON.stringify({
         base_url: 'http://locb',
@@ -162,7 +158,7 @@ describe('ConfigForm', () => {
       'local'
     )
 
-    renderWithTheme(<ConfigForm />)
+    renderWithTheme(<ConfigForm configurator={defaultConfigurator} />)
     const title = screen.getByRole('heading') as HTMLHeadingElement
     expect(title).toHaveTextContent('RunIt Configuration')
 

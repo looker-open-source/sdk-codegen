@@ -27,8 +27,8 @@
 import React, { FC, useReducer, useState } from 'react'
 import { ComponentsProvider } from '@looker/components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
-import { RunItCallback } from '@looker/run-it'
 
+import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
 import { SearchContext } from './context'
 import {
   Header,
@@ -57,11 +57,11 @@ export interface SpecItem {
 export type SpecItems = KeyedCollection<SpecItem>
 
 export interface ApiExplorerProps {
-  runItCallback?: RunItCallback
   specs: SpecItems
+  sdk?: Looker31SDK | Looker40SDK
 }
 
-const ApiExplorer: FC<ApiExplorerProps> = ({ specs, runItCallback }) => {
+const ApiExplorer: FC<ApiExplorerProps> = ({ specs }) => {
   const [spec, specDispatch] = useReducer(
     specReducer,
     initDefaultSpecState(specs)
@@ -89,11 +89,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs, runItCallback }) => {
             />
           </SideNavDivider>
           <Main>
-            <AppRouter
-              api={spec.api}
-              specKey={spec.key}
-              runItCallback={runItCallback}
-            />
+            <AppRouter api={spec.api} specKey={spec.key} />
           </Main>
         </PageLayout>
       </SearchContext.Provider>

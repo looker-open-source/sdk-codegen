@@ -24,42 +24,36 @@
 
  */
 
-import {
-  getStorage,
-  removeStorage,
-  setStorage,
-  RunItConfigKey,
-  validateUrl,
-} from './configUtils'
+import { defaultConfigurator, RunItConfigKey, validateUrl } from './configUtils'
 
 describe('configUtils', () => {
   describe('storage', () => {
     const testConfig = 'Try it config values'
     beforeEach(() => {
-      removeStorage(RunItConfigKey)
+      defaultConfigurator.removeStorage(RunItConfigKey)
     })
 
     afterEach(() => {
-      removeStorage(RunItConfigKey)
+      defaultConfigurator.removeStorage(RunItConfigKey)
     })
 
     test('it saves config values to sessionStorage by default', () => {
-      setStorage(RunItConfigKey, testConfig)
-      const actual = getStorage(RunItConfigKey)
+      defaultConfigurator.setStorage(RunItConfigKey, testConfig)
+      const actual = defaultConfigurator.getStorage(RunItConfigKey)
       expect(actual).toEqual({ location: 'session', value: testConfig })
     })
 
     test('it reads config values from localStorage if they are not in sessionStorage', () => {
-      setStorage(RunItConfigKey, testConfig, 'local')
-      const actual = getStorage(RunItConfigKey)
+      defaultConfigurator.setStorage(RunItConfigKey, testConfig, 'local')
+      const actual = defaultConfigurator.getStorage(RunItConfigKey)
       expect(actual).toEqual({ location: 'local', value: testConfig })
     })
 
     test('removeConfig clears both session and local storage', () => {
-      setStorage(RunItConfigKey, testConfig, 'local')
-      setStorage(RunItConfigKey, testConfig, 'session')
-      removeStorage(RunItConfigKey)
-      const actual = getStorage(RunItConfigKey)
+      defaultConfigurator.setStorage(RunItConfigKey, testConfig, 'local')
+      defaultConfigurator.setStorage(RunItConfigKey, testConfig, 'session')
+      defaultConfigurator.removeStorage(RunItConfigKey)
+      const actual = defaultConfigurator.getStorage(RunItConfigKey)
       expect(actual).toEqual({ location: 'session', value: '' })
     })
   })

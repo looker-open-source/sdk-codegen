@@ -40,13 +40,7 @@ import {
   Text,
   ValidationMessages,
 } from '@looker/components'
-import {
-  getStorage,
-  removeStorage,
-  setStorage,
-  RunItConfigKey,
-  validateUrl,
-} from './configUtils'
+import { RunItConfigKey, validateUrl, RunItConfigurator } from './configUtils'
 
 interface ConfigFormProps {
   /** Title for the config form */
@@ -56,19 +50,21 @@ interface ConfigFormProps {
   setHasConfig?: Dispatch<boolean>
   /** A callback for closing the parent dialog for when the form is rendered within dialog */
   handleClose?: () => void
+  configurator: RunItConfigurator
 }
 
 export const ConfigForm: FC<ConfigFormProps> = ({
   title,
   setHasConfig,
   handleClose,
+  configurator,
 }) => {
   // See https://codesandbox.io/s/youthful-surf-0g27j?file=/src/index.tsx for a prototype from Luke
   // TODO see about useReducer to clean this up a bit more
   title = title || 'RunIt Configuration'
 
   // get configuration from storage, or default it
-  const storage = getStorage(RunItConfigKey)
+  const storage = configurator.getStorage(RunItConfigKey)
   let config = { base_url: '', looker_url: '' }
   if (storage.value) config = JSON.parse(storage.value)
   const { base_url, looker_url } = config
@@ -84,8 +80,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
 
   const handleSubmit = (e: BaseSyntheticEvent) => {
     e.preventDefault()
-    removeStorage(RunItConfigKey)
-    setStorage(
+    configurator.removeStorage(RunItConfigKey)
+    configurator.setStorage(
       RunItConfigKey,
       JSON.stringify({
         base_url: fields.baseUrl,
@@ -100,7 +96,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
 
   const handleRemove = (e: BaseSyntheticEvent) => {
     e.preventDefault()
-    removeStorage(RunItConfigKey)
+    configurator.removeStorage(RunItConfigKey)
     if (setHasConfig) setHasConfig(false)
   }
 
