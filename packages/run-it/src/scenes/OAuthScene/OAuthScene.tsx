@@ -24,7 +24,7 @@
 
  */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { BrowserSession, Looker40SDK } from '@looker/sdk/lib/browser'
 import { RunItContext } from '../..'
