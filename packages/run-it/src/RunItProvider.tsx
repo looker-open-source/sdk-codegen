@@ -47,7 +47,7 @@ export const RunItContext = createContext<RunItContextProps>(
   defaultRunItContextValue
 )
 
-export const RunItProvider: React.FC<RunItProviderProps> = ({
+export const RunItProvider: FC<RunItProviderProps> = ({
   children,
   sdk,
   basePath,
