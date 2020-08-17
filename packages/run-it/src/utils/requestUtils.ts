@@ -91,8 +91,7 @@ export const createRequestParams = (
 
 /**
  * Makes an http request using the SDK browser transport rawRequest method
- * @param basePath base path for the URL. For standalone this includes the specKey. For extension basePath is
- *                 is empty
+ * @param basePath base path for the URL. For standalone this includes the specKey. Empty for extension.
  * @param httpMethod Request operation
  * @param endpoint Request path with path params in curly braces e.g. /queries/{query_id}/run/{result_format}
  * @param pathParams Collection of path params
