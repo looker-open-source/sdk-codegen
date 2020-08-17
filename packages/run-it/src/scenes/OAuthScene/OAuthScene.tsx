@@ -32,7 +32,7 @@ import { Loading } from '../../components'
 
 interface OAuthSceneProps {}
 
-export const OAuthScene: React.FC<OAuthSceneProps> = ({}) => {
+export const OAuthScene: FC<OAuthSceneProps> = ({}) => {
   const [loading, setLoading] = useState(true)
   const [auth, setAuth] = useState<BrowserSession>()
   const [oldUrl, setOldUrl] = useState<string>()
