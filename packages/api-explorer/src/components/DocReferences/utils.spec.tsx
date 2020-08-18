@@ -23,37 +23,19 @@
  SOFTWARE.
 
  */
+import { api } from '../../test-data'
+import { buildPath } from './utils'
 
-import React, { FC } from 'react'
-import { typeRefs, methodRefs, ApiModel } from '@looker/sdk-codegen'
-import { useParams } from 'react-router-dom'
+describe('DocReferences utils', () => {
+  describe('buildPath', () => {
+    test('given a method it builds a method path', () => {
+      const path = buildPath(api, api.methods.create_dashboard, '3.1')
+      expect(path).toEqual('/3.1/methods/Dashboard/create_dashboard')
+    })
 
-import { DocReferences, DocSDKs } from '../../components'
-
-interface DocTypeProps {
-  api: ApiModel
-}
-
-interface DocTypeParams {
-  specKey: string
-  typeName: string
-}
-
-export const TypeScene: FC<DocTypeProps> = ({ api }) => {
-  const { specKey, typeName } = useParams<DocTypeParams>()
-  const type = api.types[typeName]
-  const seeTypes = typeRefs(api, type.customTypes)
-  const seeMethods = methodRefs(api, type.methodRefs)
-
-  return (
-    <>
-      <DocReferences
-        seeTypes={seeTypes}
-        seeMethods={seeMethods}
-        api={api}
-        specKey={specKey}
-      />
-      <DocSDKs type={type} api={api} />
-    </>
-  )
-}
+    test('given a type it creates a type path', () => {
+      const path = buildPath(api, api.types.Dashboard, '3.1')
+      expect(path).toEqual('/3.1/types/Dashboard')
+    })
+  })
+})

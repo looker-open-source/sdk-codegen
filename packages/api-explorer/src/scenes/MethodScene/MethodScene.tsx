@@ -25,7 +25,7 @@
  */
 
 import React, { FC, useContext } from 'react'
-import { Space, Text, useToggle, FlexItem, Flex } from '@looker/components'
+import { Space, useToggle, FlexItem, Flex } from '@looker/components'
 import { useParams } from 'react-router-dom'
 import { RunIt, RunItHttpMethod, RunItContext } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
@@ -80,17 +80,15 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
           <DocRateLimited method={method} />
         </Space>
         <DocOperation method={method} />
-        <CollapserCard label={'Toggle Documentation'} heading={method.summary}>
+        <CollapserCard
+          heading={method.summary}
+          label={'Toggle method documentation'}
+        >
           <DocMarkdown source={method.description} specKey={specKey} />
         </CollapserCard>
         <DocSDKs api={api} method={method} />
-        {seeTypes.length > 0 && (
-          <Space mb="large" gap="xsmall">
-            <Text>Referenced types:</Text>
-            <DocReferences items={seeTypes} api={api} specKey={specKey} />
-          </Space>
-        )}
-        {method.responses && <DocResponses responses={method.responses} />}
+        <DocReferences seeTypes={seeTypes} api={api} specKey={specKey} />
+        <DocResponses responses={method.responses} />
       </FlexItem>
       {sdk && value && (
         <FlexItem flex="1">

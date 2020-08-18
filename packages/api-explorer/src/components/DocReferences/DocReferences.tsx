@@ -25,39 +25,49 @@
  */
 
 import React, { FC, useContext } from 'react'
-import { Box } from '@looker/components'
 import { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
-import { Link } from 'react-router-dom'
 
-import { highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
-import { buildPath } from './utils'
+import { CollapserCard } from '../Collapser'
+import { DocReferenceItems } from './utils'
 
 interface DocReferencesProps {
-  items: (IMethod | IType)[]
+  seeTypes: IType[]
+  seeMethods?: IMethod[]
   specKey: string
   api: ApiModel
 }
 
 export const DocReferences: FC<DocReferencesProps> = ({
-  items,
+  seeTypes,
   specKey,
   api,
+  seeMethods = [],
 }) => {
   const {
     searchSettings: { pattern },
   } = useContext(SearchContext)
 
+  if (seeTypes.length === 0 && seeMethods.length === 0) return <></>
+
   return (
-    <Box>
-      {items.map((item, index) => (
-        <span className="doc-link" key={item.name}>
-          {index ? ', ' : ''}
-          <Link to={buildPath(api, item, specKey)}>
-            {highlightHTML(pattern, item.name)}
-          </Link>
-        </span>
-      ))}
-    </Box>
+    <CollapserCard heading={'References'} label={'Toggle References'}>
+      <>
+        {DocReferenceItems(
+          'Referenced Types:',
+          seeTypes,
+          api,
+          specKey,
+          pattern
+        )}
+        {DocReferenceItems(
+          'Used by methods:',
+          seeMethods,
+          api,
+          specKey,
+          pattern
+        )}
+      </>
+    </CollapserCard>
   )
 }

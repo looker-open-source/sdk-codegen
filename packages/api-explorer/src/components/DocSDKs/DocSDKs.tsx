@@ -25,14 +25,7 @@
  */
 
 import React, { FC, useState } from 'react'
-import {
-  Box,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  useTabs,
-} from '@looker/components'
+import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
 import { IMethod, IType, ApiModel } from '@looker/sdk-codegen'
 
 import { DocCode } from '../DocCode'
@@ -57,31 +50,29 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
   const [item] = useState(method ? noComment(method) : type!)
 
   return (
-    <Box py="large">
-      <CollapserCard
-        heading={'Language SDK declarations'}
-        label={'Toggle SDK declarations'}
-      >
-        <>
-          <TabList {...tabs}>
-            {Object.keys(generators).map((language) => (
-              <Tab key={language}>{language}</Tab>
-            ))}
-          </TabList>
-          <TabPanels {...tabs} pt="0">
-            {Object.entries(generators).map(([language, gen]) => {
-              const code = method
-                ? gen.declareMethod('', item as IMethod)
-                : gen.declareType('', item as IType)
-              return (
-                <TabPanel key={language}>
-                  <DocCode language={language} code={code} />
-                </TabPanel>
-              )
-            })}
-          </TabPanels>
-        </>
-      </CollapserCard>
-    </Box>
+    <CollapserCard
+      heading={'Language SDK declarations'}
+      label={'Toggle SDK declarations'}
+    >
+      <>
+        <TabList {...tabs}>
+          {Object.keys(generators).map((language) => (
+            <Tab key={language}>{language}</Tab>
+          ))}
+        </TabList>
+        <TabPanels {...tabs} pt="0">
+          {Object.entries(generators).map(([language, gen]) => {
+            const code = method
+              ? gen.declareMethod('', item as IMethod)
+              : gen.declareType('', item as IType)
+            return (
+              <TabPanel key={language}>
+                <DocCode language={language} code={code} />
+              </TabPanel>
+            )
+          })}
+        </TabPanels>
+      </>
+    </CollapserCard>
   )
 }

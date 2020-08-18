@@ -25,14 +25,7 @@
  */
 
 import React, { FC } from 'react'
-import {
-  Box,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  useTabs,
-} from '@looker/components'
+import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
 import { IMethodResponse } from '@looker/sdk-codegen'
 
 import { CollapserCard } from '../Collapser'
@@ -45,29 +38,27 @@ interface DocResponsesProps {
 
 export const DocResponses: FC<DocResponsesProps> = ({ responses }) => {
   const tabs = useTabs()
+
+  if (responses.length === 0) return <></>
+
   const responseTree = buildResponseTree(responses)
 
   return (
-    <Box pt="large" pb="xxlarge">
-      <CollapserCard
-        heading={'Response Models'}
-        label={'Toggle Response Models'}
-      >
-        <>
-          <TabList {...tabs}>
-            {Object.keys(responseTree).map((statusCode, index) => (
-              <Tab key={index}>{statusCode}</Tab>
-            ))}
-          </TabList>
-          <TabPanels {...tabs} pt="0">
-            {Object.values(responseTree).map((responses, index) => (
-              <TabPanel key={index}>
-                <DocResponseTypes responses={responses} />
-              </TabPanel>
-            ))}
-          </TabPanels>
-        </>
-      </CollapserCard>
-    </Box>
+    <CollapserCard heading={'Response Models'} label={'Toggle Response Models'}>
+      <>
+        <TabList {...tabs}>
+          {Object.keys(responseTree).map((statusCode, index) => (
+            <Tab key={index}>{statusCode}</Tab>
+          ))}
+        </TabList>
+        <TabPanels {...tabs} pt="0">
+          {Object.values(responseTree).map((responses, index) => (
+            <TabPanel key={index}>
+              <DocResponseTypes responses={responses} />
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </>
+    </CollapserCard>
   )
 }
