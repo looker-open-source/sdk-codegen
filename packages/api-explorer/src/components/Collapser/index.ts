@@ -23,27 +23,4 @@
  SOFTWARE.
 
  */
-
-import React, { FC } from 'react'
-
-import { SideNavToggleWrapper } from '../ExplorerStyle'
-import { Collapser } from '../Collapser'
-
-interface SideNavToggleProps {
-  isOpen: boolean
-  onClick: () => void
-}
-
-export const SideNavToggle: FC<SideNavToggleProps> = ({ isOpen, onClick }) => {
-  return (
-    <SideNavToggleWrapper>
-      <Collapser
-        isOpen={isOpen}
-        onClick={onClick}
-        openIcon="CaretLeft"
-        closeIcon="CaretRight"
-        label="Toggle Sidebar"
-      />
-    </SideNavToggleWrapper>
-  )
-}
+export { Collapser } from './Collapser'

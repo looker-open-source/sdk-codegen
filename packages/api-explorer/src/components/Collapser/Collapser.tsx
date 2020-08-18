@@ -23,27 +23,35 @@
  SOFTWARE.
 
  */
-
 import React, { FC } from 'react'
+import { IconButton, IconNames } from '@looker/components'
 
-import { SideNavToggleWrapper } from '../ExplorerStyle'
-import { Collapser } from '../Collapser'
-
-interface SideNavToggleProps {
+interface CollapserProps {
   isOpen: boolean
   onClick: () => void
+  openIcon: IconNames
+  closeIcon: IconNames
+  label: string
 }
 
-export const SideNavToggle: FC<SideNavToggleProps> = ({ isOpen, onClick }) => {
+export const Collapser: FC<CollapserProps> = ({
+  isOpen,
+  onClick,
+  openIcon,
+  closeIcon,
+  label,
+}) => {
+  const iconName: IconNames = isOpen ? openIcon : closeIcon
+
   return (
-    <SideNavToggleWrapper>
-      <Collapser
-        isOpen={isOpen}
-        onClick={onClick}
-        openIcon="CaretLeft"
-        closeIcon="CaretRight"
-        label="Toggle Sidebar"
-      />
-    </SideNavToggleWrapper>
+    <IconButton
+      shape="round"
+      icon={iconName}
+      onClick={onClick}
+      label={label}
+      tooltipDisabled
+      size="small"
+      outline
+    />
   )
 }

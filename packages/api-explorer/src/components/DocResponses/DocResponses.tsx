@@ -27,12 +27,14 @@
 import React, { FC } from 'react'
 import {
   Box,
+  Icon,
   SpaceVertical,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   useTabs,
+  useToggle,
 } from '@looker/components'
 import { IMethodResponse } from '@looker/sdk-codegen'
 
@@ -47,24 +49,32 @@ interface DocResponsesProps {
 export const DocResponses: FC<DocResponsesProps> = ({ responses }) => {
   const tabs = useTabs()
   const responseTree = buildResponseTree(responses)
+  const { value, toggle } = useToggle(true)
 
   return (
     <Box pt="large" pb="xxlarge">
       <SpaceVertical mb="medium">
-        <ApixHeading as="h2">Response Models</ApixHeading>
+        <ApixHeading as="h2" onClick={toggle}>
+          <Icon name={value ? 'CaretUp' : 'CaretDown'} />
+          Response Models
+        </ApixHeading>
       </SpaceVertical>
-      <TabList {...tabs}>
-        {Object.keys(responseTree).map((statusCode, index) => (
-          <Tab key={index}>{statusCode}</Tab>
-        ))}
-      </TabList>
-      <TabPanels {...tabs} pt="0">
-        {Object.values(responseTree).map((responses, index) => (
-          <TabPanel key={index}>
-            <DocResponseTypes responses={responses} />
-          </TabPanel>
-        ))}
-      </TabPanels>
+      {value && (
+        <>
+          <TabList {...tabs}>
+            {Object.keys(responseTree).map((statusCode, index) => (
+              <Tab key={index}>{statusCode}</Tab>
+            ))}
+          </TabList>
+          <TabPanels {...tabs} pt="0">
+            {Object.values(responseTree).map((responses, index) => (
+              <TabPanel key={index}>
+                <DocResponseTypes responses={responses} />
+              </TabPanel>
+            ))}
+          </TabPanels>
+        </>
+      )}
     </Box>
   )
 }

@@ -2194,7 +2194,7 @@
   resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-0.7.36.tgz#2de68473d728b61f11fd744cfe8dbe2dae190e2f"
   integrity sha512-eT6EGgNnCwlBeZ3QYuKq/Mq+n1JataHVD9by3ONv7LrS1bpPg3Rhmdzg8MWoSPrXNj96fMsmvCjkKk6+mfT3yA==
 
-"@looker/components@^0.9.7":
+"@looker/components@^0.9.11":
   version "0.9.11"
   resolved "https://registry.yarnpkg.com/@looker/components/-/components-0.9.11.tgz#99d6a28f149100b123edd37ae9d46a86e3f92569"
   integrity sha512-ZT6CQjDCqpveFIA3wtonVp1UnTwxEPCC0JDB0r+r9ovzyN4KLIW+GPD9puD8ywkynSdEUy862Ir89/yK4lNO4g==
@@ -2219,18 +2219,7 @@
     styled-system "^5.1.5"
     uuid "^8.1.0"
 
-"@looker/design-tokens@0.9.1":
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-0.9.1.tgz#0770224beb30b02fa9f7ae3e75cf325e1e9968aa"
-  integrity sha512-Ql3OwsISumMWClpCC7xImQQST8MiLG+9H/Nbk/Kd7rvHU6ziKC6W9GIaZ3GUMzbesBm2iemzp4vRMERD7EAFwQ==
-  dependencies:
-    "@styled-system/props" "^5.1.5"
-    "@types/styled-system" "^5.1.9"
-    lodash "^4.17.15"
-    polished "^3.6.5"
-    styled-system "^5.1.5"
-
-"@looker/design-tokens@^0.9.10":
+"@looker/design-tokens@0.9.10", "@looker/design-tokens@^0.9.10":
   version "0.9.10"
   resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-0.9.10.tgz#064f934743054fcc36b2440114c1969d4ff13245"
   integrity sha512-M7LCugizztNHyze3cojexSOSp3F1cfjY8ojKTFxWFupvbpiIHYI+EvjyLub5bajlOMZveMFzgTkBS2PtExSO5A==

@@ -25,21 +25,13 @@
  */
 
 import React, { FC, useContext } from 'react'
-import {
-  Space,
-  Text,
-  Grid,
-  useToggle,
-  ButtonOutline,
-  Box,
-  FlexItem,
-  Flex,
-} from '@looker/components'
+import { Space, Text, useToggle, FlexItem, Flex } from '@looker/components'
 import { useParams } from 'react-router-dom'
 import { RunIt, RunItHttpMethod, RunItContext } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 
 import {
+  Collapser,
   DocActivityType,
   DocMarkdown,
   DocRateLimited,
@@ -70,11 +62,17 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
 
   return (
     <Flex>
-      <FlexItem mr="large">
-        <DocTitle>
-          {method.summary}
-          <ButtonOutline onClick={toggle}>Run It</ButtonOutline>
-        </DocTitle>
+      <FlexItem mr="large" flex={`2 1 auto`}>
+        <Space between>
+          <DocTitle>{method.summary}</DocTitle>
+          <Collapser
+            isOpen={value}
+            onClick={toggle}
+            openIcon={'CaretLeft'}
+            closeIcon={'CaretRight'}
+            label={'Toggle RunIt'}
+          />
+        </Space>
         <Space mb="xlarge" gap="small">
           <DocStatus method={method} />
           <DocActivityType method={method} />
@@ -91,17 +89,15 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         )}
         {method.responses && <DocResponses responses={method.responses} />}
       </FlexItem>
-      <FlexItem>
-        <Box>
-          {sdk && (
-            <RunIt
-              inputs={createInputs(api, method)}
-              httpMethod={method.httpMethod as RunItHttpMethod}
-              endpoint={method.endpoint}
-            />
-          )}
-        </Box>
-      </FlexItem>
+      {sdk && value && (
+        <FlexItem flex="1">
+          <RunIt
+            inputs={createInputs(api, method)}
+            httpMethod={method.httpMethod as RunItHttpMethod}
+            endpoint={method.endpoint}
+          />
+        </FlexItem>
+      )}
     </Flex>
   )
 }
