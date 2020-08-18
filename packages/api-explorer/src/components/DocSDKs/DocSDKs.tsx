@@ -35,8 +35,8 @@ import {
 } from '@looker/components'
 import { IMethod, IType, ApiModel } from '@looker/sdk-codegen'
 
-import { ApixHeading } from '../common'
 import { DocCode } from '../DocCode'
+import { CollapserCard } from '../Collapser'
 import { getGenerators, noComment } from './utils'
 
 interface LanguageSDKProps {
@@ -58,26 +58,30 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
 
   return (
     <Box py="large">
-      <ApixHeading mb="large" as="h2">
-        Language SDK declarations
-      </ApixHeading>
-      <TabList {...tabs}>
-        {Object.keys(generators).map((language) => (
-          <Tab key={language}>{language}</Tab>
-        ))}
-      </TabList>
-      <TabPanels {...tabs} pt="0">
-        {Object.entries(generators).map(([language, gen]) => {
-          const code = method
-            ? gen.declareMethod('', item as IMethod)
-            : gen.declareType('', item as IType)
-          return (
-            <TabPanel key={language}>
-              <DocCode language={language} code={code} />
-            </TabPanel>
-          )
-        })}
-      </TabPanels>
+      <CollapserCard
+        heading={'Language SDK declarations'}
+        label={'Toggle SDK declarations'}
+      >
+        <>
+          <TabList {...tabs}>
+            {Object.keys(generators).map((language) => (
+              <Tab key={language}>{language}</Tab>
+            ))}
+          </TabList>
+          <TabPanels {...tabs} pt="0">
+            {Object.entries(generators).map(([language, gen]) => {
+              const code = method
+                ? gen.declareMethod('', item as IMethod)
+                : gen.declareType('', item as IType)
+              return (
+                <TabPanel key={language}>
+                  <DocCode language={language} code={code} />
+                </TabPanel>
+              )
+            })}
+          </TabPanels>
+        </>
+      </CollapserCard>
     </Box>
   )
 }

@@ -68,8 +68,8 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
           <Collapser
             isOpen={value}
             onClick={toggle}
-            openIcon={'CaretLeft'}
-            closeIcon={'CaretRight'}
+            openIcon={'CaretRight'}
+            closeIcon={'CaretLeft'}
             label={'Toggle RunIt'}
           />
         </Space>

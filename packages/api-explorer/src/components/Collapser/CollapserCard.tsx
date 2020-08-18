@@ -23,5 +23,37 @@
  SOFTWARE.
 
  */
-export { Collapser } from './Collapser'
-export { CollapserCard } from './CollapserCard'
+import React, { FC, ReactElement } from 'react'
+import { useToggle, Space } from '@looker/components'
+import { ApixHeading } from '../common'
+import { Collapser } from './Collapser'
+
+interface CollapserCardProps {
+  heading: string
+  children: ReactElement
+  label: string
+}
+
+export const CollapserCard: FC<CollapserCardProps> = ({
+  heading,
+  children,
+  label,
+}) => {
+  const { value, toggle } = useToggle(true)
+
+  return (
+    <>
+      <Space gap="xsmall">
+        <Collapser
+          isOpen={value}
+          onClick={toggle}
+          openIcon={'CaretUp'}
+          closeIcon={'CaretDown'}
+          label={label}
+        />
+        <ApixHeading as="h2">{heading}</ApixHeading>
+      </Space>
+      {value && children}
+    </>
+  )
+}

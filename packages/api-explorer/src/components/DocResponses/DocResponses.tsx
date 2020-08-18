@@ -27,18 +27,15 @@
 import React, { FC } from 'react'
 import {
   Box,
-  Icon,
-  SpaceVertical,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   useTabs,
-  useToggle,
 } from '@looker/components'
 import { IMethodResponse } from '@looker/sdk-codegen'
 
-import { ApixHeading } from '../common'
+import { CollapserCard } from '../Collapser'
 import { DocResponseTypes } from './DocResponseTypes'
 import { buildResponseTree } from './utils'
 
@@ -49,17 +46,13 @@ interface DocResponsesProps {
 export const DocResponses: FC<DocResponsesProps> = ({ responses }) => {
   const tabs = useTabs()
   const responseTree = buildResponseTree(responses)
-  const { value, toggle } = useToggle(true)
 
   return (
     <Box pt="large" pb="xxlarge">
-      <SpaceVertical mb="medium">
-        <ApixHeading as="h2" onClick={toggle}>
-          <Icon name={value ? 'CaretUp' : 'CaretDown'} />
-          Response Models
-        </ApixHeading>
-      </SpaceVertical>
-      {value && (
+      <CollapserCard
+        heading={'Response Models'}
+        label={'Toggle Response Models'}
+      >
         <>
           <TabList {...tabs}>
             {Object.keys(responseTree).map((statusCode, index) => (
@@ -74,7 +67,7 @@ export const DocResponses: FC<DocResponsesProps> = ({ responses }) => {
             ))}
           </TabPanels>
         </>
-      )}
+      </CollapserCard>
     </Box>
   )
 }
