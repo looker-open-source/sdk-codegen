@@ -27,7 +27,6 @@
 import React, { FC, useState } from 'react'
 import {
   Box,
-  SpaceVertical,
   Tab,
   TabList,
   TabPanel,
@@ -59,9 +58,9 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
 
   return (
     <Box py="large">
-      <SpaceVertical mb="medium">
-        <ApixHeading as="h2">Language SDK declarations</ApixHeading>
-      </SpaceVertical>
+      <ApixHeading mb="large" as="h2">
+        Language SDK declarations
+      </ApixHeading>
       <TabList {...tabs}>
         {Object.keys(generators).map((language) => (
           <Tab key={language}>{language}</Tab>

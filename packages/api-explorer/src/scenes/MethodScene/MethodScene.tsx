@@ -25,7 +25,16 @@
  */
 
 import React, { FC, useContext } from 'react'
-import { Space, Text, Grid, useToggle, ButtonOutline } from '@looker/components'
+import {
+  Space,
+  Text,
+  Grid,
+  useToggle,
+  ButtonOutline,
+  Box,
+  FlexItem,
+  Flex,
+} from '@looker/components'
 import { useParams } from 'react-router-dom'
 import { RunIt, RunItHttpMethod, RunItContext } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
@@ -60,8 +69,8 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
   const { value, toggle } = useToggle()
 
   return (
-    <Grid columns={2}>
-      <div>
+    <Flex>
+      <FlexItem mr="large">
         <DocTitle>
           {method.summary}
           <ButtonOutline onClick={toggle}>Run It</ButtonOutline>
@@ -81,16 +90,18 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
           </Space>
         )}
         {method.responses && <DocResponses responses={method.responses} />}
-      </div>
-      <div>
-        {sdk && (
-          <RunIt
-            inputs={createInputs(api, method)}
-            httpMethod={method.httpMethod as RunItHttpMethod}
-            endpoint={method.endpoint}
-          />
-        )}
-      </div>
-    </Grid>
+      </FlexItem>
+      <FlexItem>
+        <Box>
+          {sdk && (
+            <RunIt
+              inputs={createInputs(api, method)}
+              httpMethod={method.httpMethod as RunItHttpMethod}
+              endpoint={method.endpoint}
+            />
+          )}
+        </Box>
+      </FlexItem>
+    </Flex>
   )
 }
