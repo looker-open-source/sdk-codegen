@@ -34,6 +34,9 @@ interface CollapserCardProps {
   label: string
 }
 
+/**
+ * Render a collapsable header and children
+ */
 export const CollapserCard: FC<CollapserCardProps> = ({
   heading,
   children,
