@@ -76,13 +76,9 @@ class TestAuthSession {
     @test
     fun testSha256() {
         val session = OAuthSession(settings, Transport(testSettings))
-        val rosettaCode = "Rosetta code"
-        val rosettaHash = "764faf5c61ac315f1497f9dfa542713965b785e5cc2f707d6468d7d1124cdfcf"
-        var hash = session.sha256hash(rosettaCode)
-        assertEquals(rosettaHash, hash, "Rosetta code should match")
         val message = "The quick brown fox jumped over the lazy dog."
-        hash = session.sha256hash(message)
-        assertEquals("68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483", hash, "Quick brown fox should match")
+        val hash = session.sha256hash(message)
+        assertEquals("aLEoK5HeLAVMNmKcuN1EfxLwltPjxYeXjcIkhERjNIM=", hash, "Quick brown fox should match")
     }
 
     @test
