@@ -63,7 +63,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
 
   return (
     <Flex>
-      <FlexItem mr="large" flex={`2 1 auto`}>
+      <FlexItem mr="large" flex="1">
         <Space between>
           <DocTitle>{method.summary}</DocTitle>
           <Collapser
