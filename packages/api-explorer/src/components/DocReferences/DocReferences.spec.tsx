@@ -1,5 +1,31 @@
+/*
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+ */
 import React from 'react'
 import { methodRefs, typeRefs } from '@looker/sdk-codegen'
+import { withThemeProvider } from '@looker/components-test-utils'
 import { screen } from '@testing-library/react'
 
 import { renderWithSearchAndRouter } from '../../test-utils'
@@ -7,41 +33,46 @@ import { api } from '../../test-data'
 import { DocReferences } from './DocReferences'
 
 describe('DocReferences', () => {
-  test('it renders type references', () => {
-    const refs = typeRefs(api, api.types.Dashboard.customTypes)
+  test('it renders method and type references', () => {
+    const seeTypes = typeRefs(api, api.types.Dashboard.customTypes)
+    const seeMethods = methodRefs(api, api.types.Dashboard.methodRefs)
     renderWithSearchAndRouter(
-      <DocReferences items={refs} specKey={'3.1'} api={api} />
+      withThemeProvider(
+        <DocReferences
+          seeTypes={seeTypes}
+          seeMethods={seeMethods}
+          specKey={'3.1'}
+          api={api}
+        />
+      )
     )
-    const foundRefs = screen.getAllByRole('link')
-    expect(foundRefs.length).toEqual(refs.length)
-    expect(foundRefs[0]).toHaveAttribute('href', `/3.1/types/${refs[0].name}`)
-  })
-
-  test('it renders method references', () => {
-    const refs = methodRefs(api, api.types.Dashboard.methodRefs)
-    renderWithSearchAndRouter(
-      <DocReferences items={refs} specKey={'3.1'} api={api} />
+    expect(screen.getAllByRole('link')).toHaveLength(
+      seeTypes.length + seeMethods.length
     )
-    const foundRefs = screen.getAllByRole('link')
-    expect(foundRefs.length).toEqual(refs.length)
-    expect(foundRefs[0]).toHaveAttribute(
+    expect(screen.getByText(seeTypes[0].name).closest('a')).toHaveAttribute(
       'href',
-      `/3.1/methods/Dashboard/${refs[0].name}`
+      `/3.1/types/${seeTypes[0].name}`
+    )
+    expect(screen.getByText(seeMethods[0].name).closest('a')).toHaveAttribute(
+      'href',
+      `/3.1/methods/Dashboard/${seeMethods[0].name}`
     )
   })
 
   test('it highlights text matching search pattern', () => {
-    const ref = api.methods.create_dashboard
     const highlightPattern = 'dash'
     renderWithSearchAndRouter(
-      <DocReferences items={[ref]} specKey={'3.1'} api={api} />,
+      withThemeProvider(
+        <DocReferences
+          seeTypes={[api.types.Dashboard]}
+          specKey={'3.1'}
+          api={api}
+        />
+      ),
       highlightPattern
     )
     const foundRef = screen.getByRole('link')
-    expect(foundRef).toContainHTML('create_<span class="hi">dash</span>board')
-    expect(foundRef).toHaveAttribute(
-      'href',
-      '/3.1/methods/Dashboard/create_dashboard'
-    )
+    expect(foundRef).toContainHTML('<span class="hi">Dash</span>board')
+    expect(foundRef).toHaveAttribute('href', '/3.1/types/Dashboard')
   })
 })
