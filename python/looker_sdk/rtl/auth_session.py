@@ -223,7 +223,7 @@ class AuthSession:
 
 class CryptoHash:
     def secure_random(self, byte_count: int) -> str:
-        return secrets.token_hex()
+        return secrets.token_urlsafe(byte_count)
 
     def sha256_hash(self, message: str) -> str:
         value = hashlib.sha256()
