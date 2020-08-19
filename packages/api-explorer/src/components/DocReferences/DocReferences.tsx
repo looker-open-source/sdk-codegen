@@ -38,6 +38,9 @@ interface DocReferencesProps {
   api: ApiModel
 }
 
+/**
+ * It renders links to the given types and/or methods references
+ */
 export const DocReferences: FC<DocReferencesProps> = ({
   seeTypes,
   specKey,

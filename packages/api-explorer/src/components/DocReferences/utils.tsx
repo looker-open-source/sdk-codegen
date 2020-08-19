@@ -64,6 +64,9 @@ export const buildPath = (
   return path
 }
 
+/**
+ * Renders a heading and links to all item types
+ */
 export const DocReferenceItems = (
   heading: string,
   items: (IType | IMethod)[],

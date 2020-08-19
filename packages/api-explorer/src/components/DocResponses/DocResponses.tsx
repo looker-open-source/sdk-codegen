@@ -36,6 +36,9 @@ interface DocResponsesProps {
   responses: IMethodResponse[]
 }
 
+/**
+ * Renders a tab list and tab panels for different method response types
+ */
 export const DocResponses: FC<DocResponsesProps> = ({ responses }) => {
   const tabs = useTabs()
 

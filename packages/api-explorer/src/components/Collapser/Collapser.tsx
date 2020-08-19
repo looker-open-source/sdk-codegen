@@ -27,13 +27,21 @@ import React, { FC } from 'react'
 import { IconButton, IconNames } from '@looker/components'
 
 interface CollapserProps {
+  /** State */
   isOpen: boolean
+  /** State handler */
   onClick: () => void
+  /** Icon to use when collapsed */
   openIcon: IconNames
+  /** Icon to use when expanded */
   closeIcon: IconNames
+  /** Icon label shown on hover */
   label: string
 }
 
+/**
+ * Renders an icon for collapsing a vertical drawer
+ */
 export const Collapser: FC<CollapserProps> = ({
   isOpen,
   onClick,
