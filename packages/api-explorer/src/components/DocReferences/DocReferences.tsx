@@ -51,7 +51,7 @@ export const DocReferences: FC<DocReferencesProps> = ({
   if (seeTypes.length === 0 && seeMethods.length === 0) return <></>
 
   return (
-    <CollapserCard heading={'References'} label={'Toggle References'}>
+    <CollapserCard heading="References">
       <>
         {DocReferenceItems(
           'Referenced Types:',

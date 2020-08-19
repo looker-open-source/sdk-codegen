@@ -41,7 +41,6 @@ import {
   DocStatus,
   DocTitle,
 } from '../../components'
-import { CollapserCard } from '../../components/Collapser'
 import { DocOperation } from './components'
 import { createInputs } from './utils'
 
@@ -80,12 +79,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
           <DocRateLimited method={method} />
         </Space>
         <DocOperation method={method} />
-        <CollapserCard
-          heading={method.summary}
-          label={'Toggle method documentation'}
-        >
-          <DocMarkdown source={method.description} specKey={specKey} />
-        </CollapserCard>
+        <DocMarkdown source={method.description} specKey={specKey} />
         <DocSDKs api={api} method={method} />
         <DocReferences seeTypes={seeTypes} api={api} specKey={specKey} />
         <DocResponses responses={method.responses} />

@@ -44,7 +44,7 @@ export const DocResponses: FC<DocResponsesProps> = ({ responses }) => {
   const responseTree = buildResponseTree(responses)
 
   return (
-    <CollapserCard heading={'Response Models'} label={'Toggle Response Models'}>
+    <CollapserCard heading="Response Models">
       <>
         <TabList {...tabs}>
           {Object.keys(responseTree).map((statusCode, index) => (
