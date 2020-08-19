@@ -100,9 +100,9 @@ public struct ApiSettings: IApiSettings {
     public var headers: Headers?
     public var encoding: String?
     
-    init() { }
+    public init() { }
     
-    init(_ settings: IApiSettings) throws {
+    public init(_ settings: IApiSettings) throws {
         let defaults = DefaultSettings()
         // coerce types to declared types since some paths could have non-conforming settings values
         self.base_url = unquote(settings.base_url) ?? defaults.base_url

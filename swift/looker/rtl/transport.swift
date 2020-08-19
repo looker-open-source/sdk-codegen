@@ -125,8 +125,8 @@ public struct SDKError: ISDKError, Codable {
     private var suggestion: String?
     private var help: String?
 
-    init() { }
-    init(_ message: String, code: Int = 0, documentation_url: String? = "", reason: String? = "", suggestion: String? = "", help: String? = "") {
+    public init() { }
+    public init(_ message: String, code: Int = 0, documentation_url: String? = "", reason: String? = "", suggestion: String? = "", help: String? = "") {
         self.code = code
         self.message = message
         self.reason = reason

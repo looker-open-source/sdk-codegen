@@ -41,7 +41,7 @@ class authSessionTests: XCTestCase {
         let session = OAuthSession(settings, xp)
         let message = "The quick brown fox jumped over the lazy dog."
         let hash = session.sha256Hash(message)
-        XCTAssertEqual("68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483", hash)
+        XCTAssertEqual("aLEoK5HeLAVMNmKcuN1EfxLwltPjxYeXjcIkhERjNIM", hash)
     }
     
     func testRedemptionBody() {

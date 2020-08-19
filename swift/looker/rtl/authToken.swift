@@ -47,9 +47,9 @@ public struct AuthToken: AccessTokenProtocol, Codable {
     
     private var expiresAt: Date?
     
-    init() { }
+    public init() { }
     
-    init(_ token: AccessToken) {
+    public init(_ token: AccessToken) {
         self = self.setToken(token)
     }
     

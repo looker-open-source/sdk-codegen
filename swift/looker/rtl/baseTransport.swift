@@ -24,11 +24,11 @@
 
 import Foundation
 
-struct RequestResponse {
+public struct RequestResponse {
     var data: Data?
     var response: URLResponse?
     var error: SDKError?
-    init(_ data: Data?, _ response: URLResponse?, _ error: SDKError?) {
+    public init(_ data: Data?, _ response: URLResponse?, _ error: SDKError?) {
         self.data = data
         self.response = response
         self.error = error
@@ -38,18 +38,18 @@ struct RequestResponse {
 
 // some good tips here https://www.swiftbysundell.com/articles/constructing-urls-in-swift/
 @available(OSX 10.12, *)
-class BaseTransport : ITransport  {
+open class BaseTransport : ITransport  {
     public static var debugging = false
     let session = URLSession.shared // TODO Should this be something else like `configuration: .default`? or ephemeral?
     var apiPath = ""
     var options: ITransportSettings
 
-    init(_ options: ITransportSettings) {
+    public init(_ options: ITransportSettings) {
         self.options = options
         self.apiPath = "\(options.base_url!)/api/\(options.api_version!)"
     }
 
-    func request<TSuccess: Codable, TError: Codable> (
+    open func request<TSuccess: Codable, TError: Codable> (
         _ method: HttpMethod,
         _ path: String,
         _ queryParams: Values?,
@@ -71,7 +71,7 @@ class BaseTransport : ITransport  {
         return result
     }
 
-    func plainRequest(
+    open func plainRequest(
         _ method: HttpMethod,
         _ path: String,
         _ queryParams: Values?,
@@ -173,7 +173,7 @@ class BaseTransport : ITransport  {
 }
 
 @available(OSX 10.12, *)
-func processResponse<TSuccess: Codable, TError: Codable> (_ response: RequestResponse) -> SDKResponse<TSuccess,TError> {
+public func processResponse<TSuccess: Codable, TError: Codable> (_ response: RequestResponse) -> SDKResponse<TSuccess,TError> {
     if let error = response.error {
         return SDKResponse.error((error as? TError)!)
     }
