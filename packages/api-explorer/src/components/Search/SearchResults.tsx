@@ -24,18 +24,16 @@
 
  */
 import React, { FC } from 'react'
-import { IMethod, ISearchResult, TagList } from '@looker/sdk-codegen'
+import { ISearchResult, TagList } from '@looker/sdk-codegen'
 import { ComboboxList, ListItem } from '@looker/components'
 
 import { TypeResults } from './TypeResults'
 import { MethodResults } from './MethodResults'
 
-const allMethods = (tags: TagList): Array<IMethod> => {
-  const result: Array<IMethod> = []
+const countMethods = (tags: TagList) => {
+  let result = 0
   Object.values(tags).forEach((methods) => {
-    Object.values(methods).forEach((method) => {
-      result.push(method)
-    })
+    result += Object.entries(methods).length
   })
   return result
 }
@@ -49,8 +47,7 @@ export const SearchResults: FC<SearchResultsProps> = ({
   types,
   specKey,
 }) => {
-  const methods = allMethods(tags)
-  const methodMatches = Object.entries(methods).length
+  const methodMatches = countMethods(tags)
   const typeMatches = Object.entries(types).length
 
   return (
