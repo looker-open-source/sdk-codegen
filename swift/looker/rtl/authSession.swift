@@ -49,7 +49,7 @@ open class AuthSession: IAuthSession {
         }
     }
     
-    init(_ settings: IApiSettings, _ transport: ITransport? = nil) {
+    public init(_ settings: IApiSettings, _ transport: ITransport? = nil) {
         self.settings = settings
         self.transport = transport ?? BaseTransport(settings)
         self.apiPath = "/api/\(settings.api_version!)"

@@ -79,7 +79,7 @@ public func parseConfig(_ filename : String) -> Config {
     return config
 }
 
-public class ApiConfig: IApiSettings {
+open class ApiConfig: IApiSettings {
     public func readConfig(_ section: String? = nil) -> IApiSection {
         if (self.fileName == "") {
             // No config file to read
@@ -103,16 +103,16 @@ public class ApiConfig: IApiSettings {
     private var fileName = ""
     private var section = "Looker"
     
-    init() {
+    public init() {
         self.assign(DefaultSettings())
     }
     
-    init(_ settings: IApiSettings) {
+    public init(_ settings: IApiSettings) {
         self.assign(settings)
     }
     
     /// Get SDK settings from a configuration file with environment variable overrides
-    init(_ fileName: String = "", _ section: String = "Looker") throws {
+    public init(_ fileName: String = "", _ section: String = "Looker") throws {
         let fm = FileManager.default
         if (fileName == "") {
             // Default file name to looker.ini?

@@ -29,7 +29,7 @@ open class APIMethods {
     public var authSession: IAuthorizer
     public var encoder = JSONEncoder()
     
-    init(_ authSession: IAuthorizer) {
+    public init(_ authSession: IAuthorizer) {
         self.authSession = authSession
     }
     
@@ -37,7 +37,7 @@ open class APIMethods {
         return try! encoder.encode(value)
     }
     
-    public func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
+    open func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
         switch response {
         case .success(let response):
             return response
@@ -53,7 +53,7 @@ open class APIMethods {
         }
     }
     
-    public func authRequest<TSuccess: Codable, TError: Codable>(
+    open func authRequest<TSuccess: Codable, TError: Codable>(
         _ method: HttpMethod,
         _ path: String,
         _ queryParams: Values?,
@@ -79,7 +79,7 @@ open class APIMethods {
     }
     
     /** Make a GET request */
-    func get<TSuccess: Codable, TError: Codable>(
+    open func get<TSuccess: Codable, TError: Codable>(
         _ path: String,
         _ queryParams: Values?,
         _ body: Any?,
@@ -95,7 +95,7 @@ open class APIMethods {
     }
     
     /** Make a HEAD request */
-    func head<TSuccess: Codable, TError: Codable>(
+    open func head<TSuccess: Codable, TError: Codable>(
         _ path: String,
         _ queryParams: Values?,
         _ body: Any?,
@@ -111,7 +111,7 @@ open class APIMethods {
     }
     
     /** Make a DELETE request */
-    func delete<TSuccess: Codable, TError: Codable>(
+    open func delete<TSuccess: Codable, TError: Codable>(
         _ path: String,
         _ queryParams: Values?,
         _ body: Any?,
@@ -127,7 +127,7 @@ open class APIMethods {
     }
     
     /** Make a POST request */
-    func post<TSuccess: Codable, TError: Codable>(
+    open func post<TSuccess: Codable, TError: Codable>(
         _ path: String,
         _ queryParams: Values?,
         _ body: Any?,
@@ -143,7 +143,7 @@ open class APIMethods {
     }
     
     /** Make a PUT request */
-    func put<TSuccess: Codable, TError: Codable>(
+    open func put<TSuccess: Codable, TError: Codable>(
         _ path: String,
         _ queryParams: Values?,
         _ body: Any?,
@@ -159,7 +159,7 @@ open class APIMethods {
     }
     
     /** Make a PATCH request */
-    func patch<TSuccess: Codable, TError: Codable>(
+    open func patch<TSuccess: Codable, TError: Codable>(
         _ path: String,
         _ queryParams: Values?,
         _ body: Any?,

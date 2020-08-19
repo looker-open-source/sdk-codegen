@@ -27,77 +27,10 @@ package com.looker.rtl
 import com.looker.sdk.AccessToken
 import java.security.MessageDigest
 import java.security.SecureRandom
-import kotlin.experimental.and
+import java.util.Base64
 
-// https://stackoverflow.com/a/52225984/74137
-// TODO performance comparison of these two methods
-@ExperimentalUnsignedTypes
-fun ByteArray.toHexStr() = asUByteArray().joinToString("") { it.toString(16).padStart(2, '0') }
-
-// Adapted from https://www.samclarke.com/kotlin-hash-strings/
-
-fun String.md5(): String {
-    return hashString(this, "MD5")
-}
-
-fun String.sha512(): String {
-    return hashString(this, "SHA-512")
-}
-
-fun String.sha256(): String {
-    return hashString(this, "SHA-256")
-}
-
-fun String.sha1(): String {
-    return hashString(this, "SHA-1")
-}
-
-fun hashString(input: ByteArray, digester: MessageDigest): String {
-    val HEX_CHARS = "0123456789abcdef"
-    val bytes = digester
-            .digest(input)
-    val result = StringBuilder(bytes.size * 2)
-
-    bytes.forEach {
-        val i = it.toInt()
-        result.append(HEX_CHARS[i shr 4 and 0x0f])
-        result.append(HEX_CHARS[i and 0x0f])
-    }
-
-    return result.toString()
-}
-
-fun hashString(input: ByteArray, type: String): String {
-    val digester = MessageDigest.getInstance(type)
-    return hashString(input, digester)
-}
-
-/**
- * Supported algorithms on Android:
- *
- * Algorithm	Supported API Levels
- * MD5          1+
- * SHA-1	    1+
- * SHA-224	    1-8,22+
- * SHA-256	    1+
- * SHA-384	    1+
- * SHA-512	    1+
- */
-fun hashString(input: String, type: String): String {
-    return hashString(input.toByteArray(), type)
-}
-
-private val hexArray = "0123456789abcdef".toCharArray()
-
-fun hexStr(bytes: ByteArray): String {
-    val hexChars = CharArray(bytes.size * 2)
-    for (j in bytes.indices) {
-        val v = (bytes[j] and 0xFF.toByte()).toInt()
-
-        hexChars[j * 2] = hexArray[v ushr 4]
-        hexChars[j * 2 + 1] = hexArray[v and 0x0F]
-    }
-    return String(hexChars)
+fun base64UrlEncode(bytes: ByteArray): String {
+    return Base64.getUrlEncoder().encodeToString(bytes)
 }
 
 @ExperimentalUnsignedTypes
@@ -142,7 +75,7 @@ class OAuthSession(override val apiSettings: ConfigurationProvider, override val
      * Generate an OAuth2 authCode request URL
      */
     fun createAuthCodeRequestUrl(scope: String, state: String): String {
-        this.codeVerifier = this.secureRandom(32).toHexStr()
+        this.codeVerifier = base64UrlEncode(this.secureRandom(32))
         val codeChallenge = this.sha256hash(this.codeVerifier)
         val config = this.apiSettings.readConfig()
         val lookerUrl = config["looker_url"]
@@ -160,14 +93,13 @@ class OAuthSession(override val apiSettings: ConfigurationProvider, override val
     fun redeemAuthCodeBody(authCode: String, codeVerifier: String? = null): Map<String, String> {
         val verifier = codeVerifier?: this.codeVerifier
         val config = this.apiSettings.readConfig()
-        val map = mapOf(
+        return mapOf(
                 "grant_type" to "authorization_code",
                 "code" to authCode,
                 "code_verifier" to verifier,
                 "client_id" to (config["client_id"] ?: error("")),
                 "redirect_uri" to (config["redirect_uri"] ?: error(""))
         )
-        return map
     }
 
     fun redeemAuthCode(authCode: String, codeVerifier: String? = null): AuthToken {
@@ -181,7 +113,8 @@ class OAuthSession(override val apiSettings: ConfigurationProvider, override val
     }
 
     fun sha256hash(value: ByteArray): String {
-        return hashString(value, messageDigest)
+        val bytes = messageDigest.digest(value)
+        return base64UrlEncode(bytes)
     }
 
     fun sha256hash(value: String): String {

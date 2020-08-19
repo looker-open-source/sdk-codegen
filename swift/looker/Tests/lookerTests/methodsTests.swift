@@ -97,7 +97,7 @@ class methodsTests: XCTestCase {
         XCTAssertNotNil(me)
         _ = sdk.authSession.logout()
     }
-    
+        
     func testUserSearch() {
         let list = try? sdk.ok(sdk.search_users(
             first_name:"%",

@@ -25,7 +25,7 @@
 import Foundation
 import CryptoKit
 
-// from https://stackoverflow.com/a/57255549/74137
+// partly from https://stackoverflow.com/a/57255549/74137
 @available(OSX 10.15, *)
 extension Digest {
     var bytes: [UInt8] { Array(makeIterator()) }
@@ -33,9 +33,12 @@ extension Digest {
     var hexStr: String {
         bytes.map { String(format: "%02x", $0) }.joined()
     }
+    var base64Url: String {
+         data.base64Url()
+     }
 }
 
-// from https://stackoverflow.com/a/40089462/74137
+// partly from https://stackoverflow.com/a/40089462/74137
 extension Data {
     struct HexEncodingOptions: OptionSet {
         let rawValue: Int
@@ -52,17 +55,24 @@ extension Data {
         }
         return String(utf16CodeUnits: chars, count: chars.count)
     }
+    
+    func base64Url() -> String {
+        return base64EncodedString()
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "=", with: "")
+    }
 }
 
 @available(OSX 10.15, *)
-class OAuthSession: AuthSession {
+open class OAuthSession: AuthSession {
     var code_verifier: String = ""
 
-    override init(_ settings: IApiSettings, _ transport: ITransport? = nil) {
+    public override init(_ settings: IApiSettings, _ transport: ITransport? = nil) {
         super.init(settings, transport)
     }
 
-    func requestToken(_ body: Values) throws -> AuthToken {
+    open func requestToken(_ body: Values) throws -> AuthToken {
         let response : SDKResponse<AccessToken, SDKError> = self.transport.request(
             HttpMethod.POST,
             "/api/token",
@@ -81,7 +91,7 @@ class OAuthSession: AuthSession {
         }
     }
 
-    override func getToken() throws -> AuthToken {
+    open override func getToken() throws -> AuthToken {
         if (!self.isAuthenticated()) {
             if (!self.activeToken.refresh_token.isEmpty) {
                 let config = self.settings.readConfig(nil)
@@ -100,8 +110,8 @@ class OAuthSession: AuthSession {
     /*
      Generate an OAuth2 authCode request URL
      */
-    func createAuthCodeRequestUrl(scope: String, state: String) throws -> String {
-        self.code_verifier = try! self.secureRandom(32).hexStr()
+    public func createAuthCodeRequestUrl(scope: String, state: String) throws -> String {
+        self.code_verifier = try! self.secureRandom(32).base64Url()
         let code_challenge = self.sha256Hash(self.code_verifier)
         let config = self.settings.readConfig(nil)
         let looker_url = config["looker_url"]!
@@ -129,7 +139,7 @@ class OAuthSession: AuthSession {
         ]
     }
 
-    func redeemAuthCode(_ authCode: String, _ code_verifier: String? = nil) throws -> AuthToken {
+    public func redeemAuthCode(_ authCode: String, _ code_verifier: String? = nil) throws -> AuthToken {
         return try self.requestToken(redeemAuthCodeBody(authCode, code_verifier))
     }
 
@@ -146,7 +156,7 @@ class OAuthSession: AuthSession {
     }
 
     public func sha256Hash(_ data: Data) -> String {
-        return SHA256.hash(data: data).hexStr
+        return SHA256.hash(data: data).base64Url
     }
 
     public func sha256Hash(_ value: String) -> String {
