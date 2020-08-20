@@ -78,7 +78,7 @@ class modelsTests: XCTestCase {
         }
 
         /// positional initializer
-        public convenience init(_ name: String, id: String? = nil) {
+        public init(_ name: String, id: String? = nil) {
             self.init(name: name, id: id)
         }
     }
