@@ -46,5 +46,51 @@ class modelsTests: XCTestCase {
         XCTAssertEqual(actual.target_url, "http://foo")
         XCTAssertEqual(actual.session_length, 20)
     }
+    
+    public class ClassInit: SDKModel {
+        public var name: String
+        public var id: String?
+
+        public init(name: String, id: String? = nil) {
+            self.name = name
+            self.id = id
+        }
+        
+        public convenience init(_ name: String, id: String? = nil) {
+            self.init(name: name, id: id)
+        }
+    }
+    
+    public struct StructInit: SDKModel {
+        public var name: String
+        public var id: String?
+
+        public init(name: String, id: String? = nil) {
+            self.name = name
+            self.id = id
+        }
+        
+        public init(_ name: String, id: String? = nil) {
+            self.init(name: name, id: id)
+        }
+        
+    }
+    
+    func testBothPositionalAndNamed() {
+        let name = "one"
+        let id = "id"
+        var testClass = ClassInit(name, id: id)
+        XCTAssertEqual(testClass.name, name)
+        XCTAssertEqual(testClass.id, id)
+        testClass = ClassInit(name: name, id: id)
+        XCTAssertEqual(testClass.name, name)
+        XCTAssertEqual(testClass.id, id)
+        var testStruct = StructInit(name, id: id)
+        XCTAssertEqual(testStruct.name, name)
+        XCTAssertEqual(testStruct.id, id)
+        testStruct = StructInit(name: name, id: id)
+        XCTAssertEqual(testStruct.name, name)
+        XCTAssertEqual(testStruct.id, id)
+    }
 
 }

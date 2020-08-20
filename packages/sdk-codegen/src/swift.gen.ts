@@ -293,21 +293,31 @@ import Foundation
     indent = this.bumper(indent)
     const bump = this.bumper(indent)
     const args: string[] = []
+    const posArgs: string[] = []
     const inits: string[] = []
+    const posInits: string[] = []
     this.typeProperties(type).forEach((prop) => {
       const propName = this.reserve(prop.name)
       args.push(this.declareConstructorArg('', prop))
+      posArgs.push(this.declarePositionalArg('', prop))
       inits.push(`${bump}${this.it(propName)} = ${propName}`)
+      posInits.push(`${propName}: ${propName}`)
     })
-    return (
-      `\n\n${indent}public init(` +
+    const namedInit =
+      `${indent}public init(` +
       `${args.join(this.argDelimiter)}) {\n` +
       inits.join('\n') +
-      `\n${indent}}\n`
-    )
+      `\n${indent}}`
+    const posInit =
+      `${indent}public init(` +
+      `${posArgs.join(this.argDelimiter)}) {\n` +
+      `${bump}${this.it('init')}(${posInits.join(', ')}` +
+      `\n${indent}}`
+
+    return `\n\n${namedInit}\n\n${posInit}\n`
   }
 
-  declareConstructorArg(indent: string, property: IProperty) {
+  declarePositionalArg(indent: string, property: IProperty) {
     const mappedType = this.typeMap(property.type)
     let propType: string
     let line = '_ '
@@ -319,6 +329,18 @@ import Foundation
     }
     const propName = this.reserve(property.name)
     return `${indent}${line}${propName}: ${propType}`
+  }
+
+  declareConstructorArg(indent: string, property: IProperty) {
+    const mappedType = this.typeMap(property.type)
+    let propType: string
+    if (property.required) {
+      propType = mappedType.name
+    } else {
+      propType = `${mappedType.name}? = ${this.nullStr}`
+    }
+    const propName = this.reserve(property.name)
+    return `${indent}${propName}: ${propType}`
   }
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {

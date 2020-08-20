@@ -109,8 +109,8 @@ class methodsTests: XCTestCase {
     
     func testEnumSerialization() {
         var task = WriteCreateQueryTask(
-            1,
-            ResultFormat.inline_json,
+            query_id: 1,
+            result_format: ResultFormat.inline_json,
             source: "local"
         )
         var json = try! serialize(task)
