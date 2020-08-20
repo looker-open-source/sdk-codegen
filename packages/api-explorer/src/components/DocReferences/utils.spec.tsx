@@ -23,20 +23,19 @@
  SOFTWARE.
 
  */
+import { api } from '../../test-data'
+import { buildPath } from './utils'
 
-import { useState, useEffect } from 'react'
+describe('DocReferences utils', () => {
+  describe('buildPath', () => {
+    test('given a method it builds a method path', () => {
+      const path = buildPath(api, api.methods.create_dashboard, '3.1')
+      expect(path).toEqual('/3.1/methods/Dashboard/create_dashboard')
+    })
 
-export const useDebounce = (value: any, delay: number) => {
-  const [debouncedValue, setDebouncedValue] = useState()
-  useEffect(() => {
-    // Update debounced value only once delay has been elapsed
-    const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
-    // Reset the timeout on receiving a new keyword
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [value])
-  return debouncedValue
-}
+    test('given a type it creates a type path', () => {
+      const path = buildPath(api, api.types.Dashboard, '3.1')
+      expect(path).toEqual('/3.1/types/Dashboard')
+    })
+  })
+})

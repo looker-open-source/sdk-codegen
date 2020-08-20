@@ -25,12 +25,13 @@
  */
 
 import React, { FC, useContext } from 'react'
-import { Space, Text } from '@looker/components'
+import { Space, useToggle, FlexItem, Flex } from '@looker/components'
 import { useParams } from 'react-router-dom'
 import { RunIt, RunItHttpMethod, RunItContext } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 
 import {
+  Collapser,
   DocActivityType,
   DocMarkdown,
   DocRateLimited,
@@ -57,32 +58,41 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
   const { methodName, specKey } = useParams<DocMethodParams>()
   const method = api.methods[methodName]
   const seeTypes = typeRefs(api, method.customTypes)
+  const { value, toggle } = useToggle()
 
   return (
-    <>
-      <DocTitle>{method.summary}</DocTitle>
-      <Space mb="xlarge" gap="small">
-        <DocStatus method={method} />
-        <DocActivityType method={method} />
-        <DocRateLimited method={method} />
-      </Space>
-      <DocOperation method={method} />
-      <DocMarkdown source={method.description} specKey={specKey} />
-      <DocSDKs api={api} method={method} />
-      {seeTypes.length > 0 && (
-        <Space mb="large" gap="xsmall">
-          <Text>Referenced types:</Text>
-          <DocReferences items={seeTypes} api={api} specKey={specKey} />
+    <Flex>
+      <FlexItem mr="large" flex="1">
+        <Space between>
+          <DocTitle>{method.summary}</DocTitle>
+          <Collapser
+            isOpen={value}
+            onClick={toggle}
+            openIcon={'CaretRight'}
+            closeIcon={'CaretLeft'}
+            label={'Toggle RunIt'}
+          />
         </Space>
+        <Space mb="xlarge" gap="small">
+          <DocStatus method={method} />
+          <DocActivityType method={method} />
+          <DocRateLimited method={method} />
+        </Space>
+        <DocOperation method={method} />
+        <DocMarkdown source={method.description} specKey={specKey} />
+        <DocSDKs api={api} method={method} />
+        <DocReferences seeTypes={seeTypes} api={api} specKey={specKey} />
+        <DocResponses responses={method.responses} />
+      </FlexItem>
+      {sdk && value && (
+        <FlexItem flex="1">
+          <RunIt
+            inputs={createInputs(api, method)}
+            httpMethod={method.httpMethod as RunItHttpMethod}
+            endpoint={method.endpoint}
+          />
+        </FlexItem>
       )}
-      {method.responses && <DocResponses responses={method.responses} />}
-      {sdk && (
-        <RunIt
-          inputs={createInputs(api, method)}
-          httpMethod={method.httpMethod as RunItHttpMethod}
-          endpoint={method.endpoint}
-        />
-      )}
-    </>
+    </Flex>
   )
 }

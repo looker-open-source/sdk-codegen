@@ -24,6 +24,7 @@
 
  */
 export { ApixHeading } from './common'
+export { Collapser } from './Collapser'
 export { DocActivityType } from './DocActivityType'
 export { DocCode } from './DocCode'
 export { DocMethodSummary } from './DocMethodSummary'

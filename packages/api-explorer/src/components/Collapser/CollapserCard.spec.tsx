@@ -23,20 +23,28 @@
  SOFTWARE.
 
  */
+import React from 'react'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { Text } from '@looker/components'
+import { screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
-import { useState, useEffect } from 'react'
+import { CollapserCard } from './CollapserCard'
 
-export const useDebounce = (value: any, delay: number) => {
-  const [debouncedValue, setDebouncedValue] = useState()
-  useEffect(() => {
-    // Update debounced value only once delay has been elapsed
-    const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
-    // Reset the timeout on receiving a new keyword
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [value])
-  return debouncedValue
-}
+describe('CollapserCard', () => {
+  test('it renders heading, children and collapses', async () => {
+    const heading = 'Foo'
+    const childText = 'Bar'
+    renderWithTheme(
+      <CollapserCard heading={heading}>
+        <Text>{childText}</Text>
+      </CollapserCard>
+    )
+    const header = screen.getByText(heading)
+    expect(screen.getByText(childText)).toBeInTheDocument()
+    await userEvent.click(header)
+    await waitFor(() => {
+      expect(screen.queryByText(childText)).not.toBeInTheDocument()
+    })
+  })
+})

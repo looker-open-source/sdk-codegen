@@ -25,18 +25,10 @@
  */
 
 import React, { FC } from 'react'
-import {
-  Box,
-  SpaceVertical,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  useTabs,
-} from '@looker/components'
+import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
 import { IMethodResponse } from '@looker/sdk-codegen'
 
-import { ApixHeading } from '../common'
+import { CollapserCard } from '../Collapser'
 import { DocResponseTypes } from './DocResponseTypes'
 import { buildResponseTree } from './utils'
 
@@ -44,27 +36,32 @@ interface DocResponsesProps {
   responses: IMethodResponse[]
 }
 
+/**
+ * Renders a tab list and tab panels for different method response types
+ */
 export const DocResponses: FC<DocResponsesProps> = ({ responses }) => {
   const tabs = useTabs()
+
+  if (responses.length === 0) return <></>
+
   const responseTree = buildResponseTree(responses)
 
   return (
-    <Box pt="large" pb="xxlarge">
-      <SpaceVertical mb="medium">
-        <ApixHeading as="h2">Response Models</ApixHeading>
-      </SpaceVertical>
-      <TabList {...tabs}>
-        {Object.keys(responseTree).map((statusCode, index) => (
-          <Tab key={index}>{statusCode}</Tab>
-        ))}
-      </TabList>
-      <TabPanels {...tabs} pt="0">
-        {Object.values(responseTree).map((responses, index) => (
-          <TabPanel key={index}>
-            <DocResponseTypes responses={responses} />
-          </TabPanel>
-        ))}
-      </TabPanels>
-    </Box>
+    <CollapserCard heading="Response Models">
+      <>
+        <TabList {...tabs}>
+          {Object.keys(responseTree).map((statusCode, index) => (
+            <Tab key={index}>{statusCode}</Tab>
+          ))}
+        </TabList>
+        <TabPanels {...tabs} pt="0">
+          {Object.values(responseTree).map((responses, index) => (
+            <TabPanel key={index}>
+              <DocResponseTypes responses={responses} />
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </>
+    </CollapserCard>
   )
 }

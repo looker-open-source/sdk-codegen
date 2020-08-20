@@ -59,6 +59,7 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
   const debouncedPattern = useDebounce(pattern, 250)
   const [error, setError] = useState('')
   const [searchResults, setSearchResults] = useState<SearchResult>(undefined)
+  const searchCriteria = CriteriaToSet(searchSettings.criteria)
 
   const handleInputChange = (event: BaseSyntheticEvent) => {
     setSearchPattern(event.currentTarget.value)
@@ -78,7 +79,6 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
   useEffect(() => {
     let results
     if (debouncedPattern) {
-      const searchCriteria = CriteriaToSet(searchSettings.criteria)
       results = api.search(pattern, searchCriteria)
     }
     results && results.message.includes('Error')

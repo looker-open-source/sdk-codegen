@@ -23,20 +23,35 @@
  SOFTWARE.
 
  */
+import React, { FC, ReactElement } from 'react'
+import {
+  useToggle,
+  Accordion,
+  AccordionDisclosure,
+  AccordionContent,
+} from '@looker/components'
+import { ApixHeading } from '../common'
 
-import { useState, useEffect } from 'react'
+interface CollapserCardProps {
+  heading: string
+  children: ReactElement
+}
 
-export const useDebounce = (value: any, delay: number) => {
-  const [debouncedValue, setDebouncedValue] = useState()
-  useEffect(() => {
-    // Update debounced value only once delay has been elapsed
-    const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
-    // Reset the timeout on receiving a new keyword
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [value])
-  return debouncedValue
+/**
+ * Render a collapsable header and children
+ */
+export const CollapserCard: FC<CollapserCardProps> = ({
+  heading,
+  children,
+}) => {
+  const { value, toggle } = useToggle(true)
+
+  return (
+    <Accordion indicatorPosition="left" isOpen={value} toggleOpen={toggle}>
+      <AccordionDisclosure>
+        <ApixHeading as="h2">{heading}</ApixHeading>
+      </AccordionDisclosure>
+      <AccordionContent>{children}</AccordionContent>
+    </Accordion>
+  )
 }

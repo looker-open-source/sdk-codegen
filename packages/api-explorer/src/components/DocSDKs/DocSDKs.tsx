@@ -25,19 +25,11 @@
  */
 
 import React, { FC, useState } from 'react'
-import {
-  Box,
-  SpaceVertical,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  useTabs,
-} from '@looker/components'
+import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
 import { IMethod, IType, ApiModel } from '@looker/sdk-codegen'
 
-import { ApixHeading } from '../common'
 import { DocCode } from '../DocCode'
+import { CollapserCard } from '../Collapser'
 import { getGenerators, noComment } from './utils'
 
 interface LanguageSDKProps {
@@ -58,27 +50,26 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
   const [item] = useState(method ? noComment(method) : type!)
 
   return (
-    <Box py="large">
-      <SpaceVertical mb="medium">
-        <ApixHeading as="h2">Language SDK declarations</ApixHeading>
-      </SpaceVertical>
-      <TabList {...tabs}>
-        {Object.keys(generators).map((language) => (
-          <Tab key={language}>{language}</Tab>
-        ))}
-      </TabList>
-      <TabPanels {...tabs} pt="0">
-        {Object.entries(generators).map(([language, gen]) => {
-          const code = method
-            ? gen.declareMethod('', item as IMethod)
-            : gen.declareType('', item as IType)
-          return (
-            <TabPanel key={language}>
-              <DocCode language={language} code={code} />
-            </TabPanel>
-          )
-        })}
-      </TabPanels>
-    </Box>
+    <CollapserCard heading="Language SDK declarations">
+      <>
+        <TabList {...tabs}>
+          {Object.keys(generators).map((language) => (
+            <Tab key={language}>{language}</Tab>
+          ))}
+        </TabList>
+        <TabPanels {...tabs} pt="0">
+          {Object.entries(generators).map(([language, gen]) => {
+            const code = method
+              ? gen.declareMethod('', item as IMethod)
+              : gen.declareType('', item as IType)
+            return (
+              <TabPanel key={language}>
+                <DocCode language={language} code={code} />
+              </TabPanel>
+            )
+          })}
+        </TabPanels>
+      </>
+    </CollapserCard>
   )
 }

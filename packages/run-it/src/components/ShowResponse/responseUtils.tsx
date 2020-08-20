@@ -53,28 +53,22 @@ const ShowText = (response: IRawResponse) => (
   </pre>
 )
 
-/**
- * Get image content from response
- * @param response Basic HTTP response type
- * @returns Image content
- */
-const imageContent = (response: IRawResponse) => {
-  let content = ''
+/** A handler for image type responses */
+const ShowImage = (response: IRawResponse) => {
+  let content: string
   if (response.body instanceof Blob) {
-    content = URL.createObjectURL(response.body)
+    content = URL.createObjectURL(response.body).toString()
   } else {
     content = `data:${response.contentType};base64,${btoa(response.body)}`
   }
-  return content
-}
 
-/** A handler for image type responses */
-const ShowImage = (response: IRawResponse) => (
-  <img
-    src={imageContent(response)}
-    alt={`${response.url} returned ${response.contentType}`}
-  />
-)
+  return (
+    <img
+      src={content}
+      alt={`${response.url} returned ${response.contentType}`}
+    />
+  )
+}
 
 /** A handler for HTTP type responses */
 const ShowHTML = (response: IRawResponse) => (

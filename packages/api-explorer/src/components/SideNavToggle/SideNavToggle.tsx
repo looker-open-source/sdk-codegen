@@ -25,9 +25,9 @@
  */
 
 import React, { FC } from 'react'
-import { IconButton, IconNames } from '@looker/components'
 
 import { SideNavToggleWrapper } from '../ExplorerStyle'
+import { Collapser } from '../Collapser'
 
 interface SideNavToggleProps {
   isOpen: boolean
@@ -35,18 +35,14 @@ interface SideNavToggleProps {
 }
 
 export const SideNavToggle: FC<SideNavToggleProps> = ({ isOpen, onClick }) => {
-  const iconName: IconNames = isOpen ? 'CaretLeft' : 'CaretRight'
-
   return (
     <SideNavToggleWrapper>
-      <IconButton
-        shape="round"
-        icon={iconName}
+      <Collapser
+        isOpen={isOpen}
         onClick={onClick}
+        openIcon="CaretLeft"
+        closeIcon="CaretRight"
         label="Toggle Sidebar"
-        tooltipDisabled
-        size="small"
-        outline
       />
     </SideNavToggleWrapper>
   )

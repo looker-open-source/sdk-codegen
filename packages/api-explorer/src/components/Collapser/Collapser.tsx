@@ -23,20 +23,43 @@
  SOFTWARE.
 
  */
+import React, { FC } from 'react'
+import { IconButton, IconNames } from '@looker/components'
 
-import { useState, useEffect } from 'react'
+interface CollapserProps {
+  /** State */
+  isOpen: boolean
+  /** State handler */
+  onClick: () => void
+  /** Icon to use when collapsed */
+  openIcon: IconNames
+  /** Icon to use when expanded */
+  closeIcon: IconNames
+  /** Icon label shown on hover */
+  label: string
+}
 
-export const useDebounce = (value: any, delay: number) => {
-  const [debouncedValue, setDebouncedValue] = useState()
-  useEffect(() => {
-    // Update debounced value only once delay has been elapsed
-    const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
-    // Reset the timeout on receiving a new keyword
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [value])
-  return debouncedValue
+/**
+ * Renders an icon for collapsing a vertical drawer
+ */
+export const Collapser: FC<CollapserProps> = ({
+  isOpen,
+  onClick,
+  openIcon,
+  closeIcon,
+  label,
+}) => {
+  const iconName: IconNames = isOpen ? openIcon : closeIcon
+
+  return (
+    <IconButton
+      shape="round"
+      icon={iconName}
+      onClick={onClick}
+      label={label}
+      tooltipDisabled
+      size="small"
+      outline
+    />
+  )
 }

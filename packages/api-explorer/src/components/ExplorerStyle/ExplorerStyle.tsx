@@ -177,7 +177,7 @@ export const PageLayout = styled.div<SideNavStyleProps>`
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: ${({ open }) =>
-    open ? '20rem 0 50rem' : '1.5rem 0 50rem'};
+    open ? '20rem 0 auto' : '1.5rem 0 auto'};
   grid-template-areas: 'sidebar divider main';
   position: relative;
 
