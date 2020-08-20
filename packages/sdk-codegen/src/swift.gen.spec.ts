@@ -91,4 +91,14 @@ public enum PermissionType: String, Codable {
       expect(actual).toEqual(expected)
     })
   })
+
+  describe('constructor', () => {
+    it('generates public inits', () => {
+      const type = apiTestModel.types.EmbedParams
+      const actual = gen.declareType(indent, type)
+      const expected = `
+`
+      expect(actual).toEqual(expected)
+    })
+  })
 })

@@ -288,6 +288,40 @@ import Foundation
     )
   }
 
+  construct(indent: string, type: IType) {
+    if (type instanceof EnumType) return ''
+    indent = this.bumper(indent)
+    const bump = this.bumper(indent)
+    const args: string[] = []
+    const inits: string[] = []
+    this.typeProperties(type).forEach((prop) => {
+      const propName = this.reserve(prop.name)
+      args.push(this.declareConstructorArg('', prop))
+      inits.push(`${bump}${this.it(propName)} = ${propName}`)
+    })
+    return (
+      `\n\n${indent}public init() {}` +
+      `\n\n${indent}public init(` +
+      `${args.join(this.argDelimiter)}) {\n` +
+      inits.join('\n') +
+      `\n${indent}}\n`
+    )
+  }
+
+  declareConstructorArg(indent: string, property: IProperty) {
+    const mappedType = this.typeMap(property.type)
+    let propType: string
+    let line = '_ '
+    if (property.required) {
+      propType = mappedType.name
+    } else {
+      line = ''
+      propType = `${mappedType.name}? = ${this.nullStr}`
+    }
+    const propName = this.reserve(property.name)
+    return `${indent}${line}${propName}: ${propType}`
+  }
+
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
     const type = this.typeMap(method.type)
     const resultType = streamer ? 'Data' : type.name
