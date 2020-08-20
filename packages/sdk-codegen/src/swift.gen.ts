@@ -311,7 +311,7 @@ import Foundation
     const posInit =
       `${indent}public init(` +
       `${posArgs.join(this.argDelimiter)}) {\n` +
-      `${bump}${this.it('init')}(${posInits.join(', ')}` +
+      `${bump}${this.it('init')}(${posInits.join(', ')})` +
       `\n${indent}}`
 
     return `\n\n${namedInit}\n\n${posInit}\n`

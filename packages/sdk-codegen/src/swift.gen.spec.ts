@@ -94,6 +94,10 @@ public enum PermissionType: String, Codable {
         self.computation_time = computation_time
     }
 
+    public init(project_name: String? = nil, project_digest: String? = nil, computation_time: Float? = nil) {
+        self.init(project_name: project_name, project_digest: project_digest, computation_time: computation_time)
+    }
+
 }`
       expect(actual).toEqual(expected)
     })
@@ -117,10 +121,14 @@ public enum PermissionType: String, Codable {
      */
     public var force_logout_login: Bool?
 
-    public init(_ target_url: URI, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
+    public init(target_url: URI, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
         self.target_url = target_url
         self.session_length = session_length
         self.force_logout_login = force_logout_login
+    }
+
+    public init(_ target_url: URI, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
+        self.init(target_url: target_url, session_length: session_length, force_logout_login: force_logout_login)
     }
 
 }`
