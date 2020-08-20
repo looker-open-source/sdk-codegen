@@ -26,16 +26,16 @@ class methodsTests: XCTestCase {
     
     func simpleQuery() -> WriteQuery {
         return WriteQuery(
-            model: "system__activity",
-            view: "dashboard",
+            "system__activity",
+            "dashboard",
             fields: ["dashboard.id", "dashboard.title", "dashboard.count"],
             limit: "100")
     }
     
     func countQuery() -> WriteQuery {
         return WriteQuery(
-            model: "system__activity",
-            view: "dashboard",
+            "system__activity",
+            "dashboard",
             fields: ["dashboard.count"],
             limit: "100"
         )
@@ -109,8 +109,8 @@ class methodsTests: XCTestCase {
     
     func testEnumSerialization() {
         var task = WriteCreateQueryTask(
-            query_id: 1,
-            result_format: ResultFormat.inline_json,
+            1,
+            ResultFormat.inline_json,
             source: "local"
         )
         var json = try! serialize(task)
@@ -120,8 +120,8 @@ class methodsTests: XCTestCase {
         XCTAssertEqual(task.source, actual.source)
         XCTAssertEqual(task.query_id, actual.query_id)
         task = WriteCreateQueryTask(
-            query_id: 1,
-            result_format: ResultFormat.csv,
+            1,
+            ResultFormat.csv,
             source: "local"
         )
         json = try! serialize(task)

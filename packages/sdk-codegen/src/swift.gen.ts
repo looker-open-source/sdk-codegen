@@ -300,7 +300,6 @@ import Foundation
       inits.push(`${bump}${this.it(propName)} = ${propName}`)
     })
     return (
-      `\n\n${indent}public init() {}` +
       `\n\n${indent}public init(` +
       `${args.join(this.argDelimiter)}) {\n` +
       inits.join('\n') +
