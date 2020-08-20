@@ -296,7 +296,8 @@ import Foundation
     const posArgs: string[] = []
     const inits: string[] = []
     const posInits: string[] = []
-    this.typeProperties(type).forEach((prop) => {
+    const props = this.typeProperties(type)
+    props.forEach((prop) => {
       const propName = this.reserve(prop.name)
       args.push(this.declareConstructorArg('', prop))
       posArgs.push(this.declarePositionalArg('', prop))
@@ -308,13 +309,15 @@ import Foundation
       `${args.join(this.argDelimiter)}) {\n` +
       inits.join('\n') +
       `\n${indent}}`
-    const posInit =
-      `${indent}public init(` +
-      `${posArgs.join(this.argDelimiter)}) {\n` +
-      `${bump}${this.it('init')}(${posInits.join(', ')})` +
-      `\n${indent}}`
-
-    return `\n\n${namedInit}\n\n${posInit}\n`
+    let posInit = ''
+    if (props.some((p) => p.required)) {
+      posInit =
+        `\n${indent}public init(` +
+        `${posArgs.join(this.argDelimiter)}) {\n` +
+        `${bump}${this.it('init')}(${posInits.join(', ')})` +
+        `\n${indent}}\n`
+    }
+    return `\n\n${namedInit}\n${posInit}`
   }
 
   declarePositionalArg(indent: string, property: IProperty) {
