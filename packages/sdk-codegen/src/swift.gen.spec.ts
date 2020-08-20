@@ -94,17 +94,13 @@ public enum PermissionType: String, Codable {
         self.computation_time = computation_time
     }
 
-    public init(project_name: String? = nil, project_digest: String? = nil, computation_time: Float? = nil) {
-        self.init(project_name: project_name, project_digest: project_digest, computation_time: computation_time)
-    }
-
 }`
       expect(actual).toEqual(expected)
     })
   })
 
   describe('constructor', () => {
-    it('generates public inits with required args', () => {
+    it('generates public inits with required/positional and optional args', () => {
       const type = apiTestModel.types.EmbedParams
       const actual = gen.declareType(indent, type)
       const expected = `public struct EmbedParams: SDKModel {
@@ -129,6 +125,27 @@ public enum PermissionType: String, Codable {
 
     public init(_ target_url: URI, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
         self.init(target_url: target_url, session_length: session_length, force_logout_login: force_logout_login)
+    }
+
+}`
+      expect(actual).toEqual(expected)
+    })
+    it('generates one init for no required/positional args', () => {
+      const type = apiTestModel.types.ColorStop
+      const actual = gen.declareType(indent, type)
+      const expected = `public struct ColorStop: SDKModel {
+    /**
+     * CSS color string
+     */
+    public var color: String?
+    /**
+     * Offset in continuous palette (0 to 100)
+     */
+    public var offset: Int64?
+
+    public init(color: String? = nil, offset: Int64? = nil) {
+        self.color = color
+        self.offset = offset
     }
 
 }`
