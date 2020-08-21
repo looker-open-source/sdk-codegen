@@ -74,6 +74,71 @@ let me = try? sdk.ok(sdk.me())
 /// continue making SDK calls
 ```
 
+### SDK model type initialization
+
+All SDK model types can be initialized with named parameters. A `public init(...)` is generated for every SDK model type (either a `struct` or a `class`). 
+If an SDK type has all optional properties, this is the only constructor generated.
+
+For types with any required properties, the code generator also produces a positional constructor.
+The `class` type's positional constructor has the syntax `public convenience init(...)`, but `struct` types do not have `convenience` init methods. 
+
+This sample code from [modelsTests.swift](Tests/lookerTests/modelsTests.swift) shows both constructor patterns for both a `class` and a `struct`:
+
+```swift
+public class ClassInit: SDKModel {
+    /// required property
+    public var name: String
+    /// optional property
+    public var id: String?
+
+    // named parameter initializer
+    public init(name: String, id: String? = nil) {
+        self.name = name
+        self.id = id
+    }
+
+    /// positional initializer
+    public convenience init(_ name: String, id: String? = nil) {
+        self.init(name: name, id: id)
+    }
+}
+
+public struct StructInit: SDKModel {
+    /// required property
+    public var name: String
+    /// optional property
+    public var id: String?
+
+    // named parameter initializer
+    public init(name: String, id: String? = nil) {
+        self.name = name
+        self.id = id
+    }
+
+    /// positional initializer
+    public init(_ name: String, id: String? = nil) {
+        self.init(name: name, id: id)
+    }
+}
+
+func testBothPositionalAndNamed() {
+    let name = "one"
+    let id = "id"
+    var testClass = ClassInit(name, id: id) // positional
+    XCTAssertEqual(testClass.name, name)
+    XCTAssertEqual(testClass.id, id)
+    testClass = ClassInit(name: name, id: id) // named
+    XCTAssertEqual(testClass.name, name)
+    XCTAssertEqual(testClass.id, id)
+    var testStruct = StructInit(name, id: id) // positional
+    XCTAssertEqual(testStruct.name, name)
+    XCTAssertEqual(testStruct.id, id)
+    testStruct = StructInit(name: name, id: id) // named 
+    XCTAssertEqual(testStruct.name, name)
+    XCTAssertEqual(testStruct.id, id)
+}
+```
+
 ### More examples
 
 Additional Swift SDK usage examples may be found in the [SDK Examples repository](https://github.com/looker-open-source/sdk-examples/tree/master/swift).

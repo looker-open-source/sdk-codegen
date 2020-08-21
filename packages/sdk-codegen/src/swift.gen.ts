@@ -288,6 +288,64 @@ import Foundation
     )
   }
 
+  construct(indent: string, type: IType) {
+    if (type instanceof EnumType) return ''
+    indent = this.bumper(indent)
+    const bump = this.bumper(indent)
+    const args: string[] = []
+    const posArgs: string[] = []
+    const inits: string[] = []
+    const posInits: string[] = []
+    const props = this.typeProperties(type)
+    props.forEach((prop) => {
+      const propName = this.reserve(prop.name)
+      args.push(this.declareConstructorArg('', prop))
+      posArgs.push(this.declarePositionalArg('', prop))
+      inits.push(`${bump}${this.it(propName)} = ${propName}`)
+      posInits.push(`${propName}: ${propName}`)
+    })
+    const namedInit =
+      `${indent}public init(` +
+      `${args.join(this.argDelimiter)}) {\n` +
+      inits.join('\n') +
+      `\n${indent}}`
+    let posInit = ''
+    if (props.some((p) => p.required)) {
+      posInit =
+        `\n${indent}public init(` +
+        `${posArgs.join(this.argDelimiter)}) {\n` +
+        `${bump}${this.it('init')}(${posInits.join(', ')})` +
+        `\n${indent}}\n`
+    }
+    return `\n\n${namedInit}\n${posInit}`
+  }
+
+  declarePositionalArg(indent: string, property: IProperty) {
+    const mappedType = this.typeMap(property.type)
+    let propType: string
+    let line = '_ '
+    if (property.required) {
+      propType = mappedType.name
+    } else {
+      line = ''
+      propType = `${mappedType.name}? = ${this.nullStr}`
+    }
+    const propName = this.reserve(property.name)
+    return `${indent}${line}${propName}: ${propType}`
+  }
+
+  declareConstructorArg(indent: string, property: IProperty) {
+    const mappedType = this.typeMap(property.type)
+    let propType: string
+    if (property.required) {
+      propType = mappedType.name
+    } else {
+      propType = `${mappedType.name}? = ${this.nullStr}`
+    }
+    const propName = this.reserve(property.name)
+    return `${indent}${propName}: ${propType}`
+  }
+
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
     const type = this.typeMap(method.type)
     const resultType = streamer ? 'Data' : type.name
