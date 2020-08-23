@@ -201,6 +201,65 @@ class TypescriptFormatter extends BaseFormatter {
     )
   }
 }
+
+class DartFormatter extends BaseFormatter {
+  constructor() {
+    super('Dart')
+  }
+
+  errorMessage = 'dartfmt command not found. have dart tools been installed?'
+
+  reformat(files: string[]): string {
+    const pipEnvExists = run(
+      'command',
+      ['-v', 'dartfmt'],
+      this.errorMessage,
+      true
+    )
+    if (pipEnvExists.includes('dartfmt')) {
+      files.forEach((f) => {
+        run('dartfmt', [f, '-w'], `Failed to format ${f}`)
+      })
+      return success(files)
+    } else {
+      return danger(this.errorMessage)
+    }
+  }
+
+  versionStamp(gen: ICodeGen) {
+    if (gen.versions && gen.versions.lookerVersion) {
+      const stampFile = gen.fileName('rtl/constants')
+      if (!isFileSync(stampFile)) {
+        warn(`${stampFile} was not found. Skipping version update.`)
+      }
+      let content = readFileSync(stampFile)
+      const lookerPattern = /lookerVersion = ['"].*['"]/i
+      const apiPattern = /\bapiVersion = ['"].*['"]/i
+      const envPattern = /environmentPrefix = ['"].*['"]/i
+      content = content.replace(
+        lookerPattern,
+        `lookerVersion = '${gen.versions.lookerVersion}'`
+      )
+      content = content.replace(
+        apiPattern,
+        `apiVersion = '${gen.versions.apiVersion}'`
+      )
+      content = content.replace(
+        envPattern,
+        `environmentPrefix = '${gen.environmentPrefix}'`
+      )
+      writeFile(stampFile, content)
+      return success(
+        `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
+      )
+    }
+
+    return warn(
+      'Version information was not retrieved. Skipping Typescript SDK version updating.'
+    )
+  }
+}
+
 class KotlinFormatter extends BaseFormatter {
   // TODO Kotlin formatter
   constructor() {
@@ -328,6 +387,7 @@ const fileFormatters: IFormatters = {
   '.py': new PythonFormatter(),
   '.swift': new SwiftFormatter(),
   '.ts': new TypescriptFormatter(),
+  '.dart': new DartFormatter(),
 }
 
 export class FilesFormatter {

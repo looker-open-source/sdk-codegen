@@ -30,6 +30,7 @@ import { CSharpGen } from './csharp.gen'
 import { KotlinGen } from './kotlin.gen'
 import { SwiftGen } from './swift.gen'
 import { PythonGen } from './python.gen'
+import { DartGen } from './dart.gen'
 import { TypescriptGen } from './typescript.gen'
 
 export interface IGeneratorSpec {
@@ -76,6 +77,11 @@ export const Generators: Array<IGeneratorSpec> = [
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new SwiftGen(api, versions),
     language: 'Swift',
+  },
+  {
+    factory: (api: ApiModel, versions?: IVersionInfo) =>
+      new DartGen(api, versions),
+    language: 'Dart',
   },
   {
     factory: undefined,
