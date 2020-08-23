@@ -1,1 +1,5 @@
+# Do not track dart tooling
 looker_sdk/.dart_tool
+
+# Override base gitignore to track dart lib
+!looker_sdk/lib/*
