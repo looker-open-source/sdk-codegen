@@ -1,0 +1,29 @@
+{
+  "name": "@looker/extension-template-helloworld",
+  "version": "1.0.0",
+  "description": "Looker Extension SDK Hello World TypeScript Demo",
+  "main": "dist/bundle.js",
+  "license": "MIT",
+  "scripts": {
+    "bundle": "tsc && webpack --config webpack.prod.config.js",
+    "start": "webpack-dev-server --hot --disable-host-check --port 8080 --config webpack.dev.config.js"
+  },
+  "dependencies": {
+    "@looker/api-explorer": "^0.1.0-alpha",
+    "@looker/components": "^0.9.11",
+    "@looker/extension-sdk": "^0.10.0",
+    "@looker/extension-sdk-react": "^0.6.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-hot-loader": "^4.12.21"
+  },
+  "resolutions": {
+    "typescript": "3.8.2"
+  },
+  "devDependencies": {
+    "@looker/components-test-utils": "^0.9.10",
+    "@testing-library/react": "^10.4.9",
+    "@types/react": "^16.9.46",
+    "@types/react-dom": "^16.9.8"
+  }
+}

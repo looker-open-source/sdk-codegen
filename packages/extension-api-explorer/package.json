@@ -1,7 +1,7 @@
 {
   "name": "@looker/extension-api-explorer",
   "version": "1.0.0",
-  "description": "Looker API Explorer extension version  ",
+  "description": "Looker API Explorer extension version",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
