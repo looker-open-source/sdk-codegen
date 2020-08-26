@@ -36,7 +36,7 @@ import Foundation
 @available(OSX 10.15, *)
 open class LookerSDK: APIMethods {
 
-    lazy var stream = LookerSDKStream(authSession)
+    public lazy var stream = LookerSDKStream(authSession)
 
     // MARK ApiAuth: API Authentication
 
