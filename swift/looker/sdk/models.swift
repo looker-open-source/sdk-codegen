@@ -1168,13 +1168,13 @@ public struct CreateDashboardFilter: SDKModel {
     /**
      * Whether the filter requires a value to run the dashboard
      */
-    public var `required`: Bool?
+    public var required: Bool?
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
     public var ui_config: StringDictionary<AnyCodable>?
 
-    public init(id: String? = nil, dashboard_id: String, name: String, title: String, type: String, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, field: StringDictionary<AnyCodable>? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, `required`: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
+    public init(id: String? = nil, dashboard_id: String, name: String, title: String, type: String, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, field: StringDictionary<AnyCodable>? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, required: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
         self.id = id
         self.dashboard_id = dashboard_id
         self.name = name
@@ -1188,12 +1188,12 @@ public struct CreateDashboardFilter: SDKModel {
         self.row = row
         self.listens_to_filters = listens_to_filters
         self.allow_multiple_values = allow_multiple_values
-        self.`required` = `required`
+        self.required = required
         self.ui_config = ui_config
     }
 
-    public init(id: String? = nil, _ dashboard_id: String, _ name: String, _ title: String, _ type: String, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, field: StringDictionary<AnyCodable>? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, `required`: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
-        self.init(id: id, dashboard_id: dashboard_id, name: name, title: title, type: type, default_value: default_value, model: model, explore: explore, dimension: dimension, field: field, row: row, listens_to_filters: listens_to_filters, allow_multiple_values: allow_multiple_values, `required`: `required`, ui_config: ui_config)
+    public init(id: String? = nil, _ dashboard_id: String, _ name: String, _ title: String, _ type: String, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, field: StringDictionary<AnyCodable>? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, required: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
+        self.init(id: id, dashboard_id: dashboard_id, name: name, title: title, type: type, default_value: default_value, model: model, explore: explore, dimension: dimension, field: field, row: row, listens_to_filters: listens_to_filters, allow_multiple_values: allow_multiple_values, required: required, ui_config: ui_config)
     }
 
 }
@@ -2278,13 +2278,13 @@ public struct DashboardFilter: SDKModel {
     /**
      * Whether the filter requires a value to run the dashboard
      */
-    public var `required`: Bool?
+    public var required: Bool?
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
     public var ui_config: StringDictionary<AnyCodable>?
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_id: String? = nil, name: String? = nil, title: String? = nil, type: String? = nil, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, field: StringDictionary<AnyCodable>? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, `required`: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_id: String? = nil, name: String? = nil, title: String? = nil, type: String? = nil, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, field: StringDictionary<AnyCodable>? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, required: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
         self.can = can
         self.id = id
         self.dashboard_id = dashboard_id
@@ -2299,7 +2299,7 @@ public struct DashboardFilter: SDKModel {
         self.row = row
         self.listens_to_filters = listens_to_filters
         self.allow_multiple_values = allow_multiple_values
-        self.`required` = `required`
+        self.required = required
         self.ui_config = ui_config
     }
 
@@ -2492,13 +2492,13 @@ public struct DataActionFormField: SDKModel {
     /**
      * Whether or not the field is required. This is a user-interface hint. A user interface displaying this form should not submit it without a value for this field. The action server must also perform this validation. (read-only)
      */
-    public var `required`: Bool?
+    public var required: Bool?
     /**
      * If the form type is 'select', a list of options to be selected from. (read-only)
      */
     public var options: [DataActionFormSelectOption]?
 
-    public init(name: String? = nil, label: String? = nil, description: String? = nil, type: String? = nil, `default`: String? = nil, oauth_url: String? = nil, interactive: Bool? = nil, `required`: Bool? = nil, options: [DataActionFormSelectOption]? = nil) {
+    public init(name: String? = nil, label: String? = nil, description: String? = nil, type: String? = nil, `default`: String? = nil, oauth_url: String? = nil, interactive: Bool? = nil, required: Bool? = nil, options: [DataActionFormSelectOption]? = nil) {
         self.name = name
         self.label = label
         self.description = description
@@ -2506,7 +2506,7 @@ public struct DataActionFormField: SDKModel {
         self.`default` = `default`
         self.oauth_url = oauth_url
         self.interactive = interactive
-        self.`required` = `required`
+        self.required = required
         self.options = options
     }
 
@@ -4297,7 +4297,7 @@ public struct IntegrationParam: SDKModel {
     /**
      * Whether the parameter is required to be set to use the destination. If unspecified, this defaults to false. (read-only)
      */
-    public var `required`: Bool?
+    public var required: Bool?
     /**
      * Whether the parameter has a value set. (read-only)
      */
@@ -4323,11 +4323,11 @@ public struct IntegrationParam: SDKModel {
      */
     public var delegate_oauth_url: String?
 
-    public init(name: String? = nil, label: String? = nil, description: String? = nil, `required`: Bool? = nil, has_value: Bool? = nil, value: String? = nil, user_attribute_name: String? = nil, sensitive: Bool? = nil, per_user: Bool? = nil, delegate_oauth_url: String? = nil) {
+    public init(name: String? = nil, label: String? = nil, description: String? = nil, required: Bool? = nil, has_value: Bool? = nil, value: String? = nil, user_attribute_name: String? = nil, sensitive: Bool? = nil, per_user: Bool? = nil, delegate_oauth_url: String? = nil) {
         self.name = name
         self.label = label
         self.description = description
-        self.`required` = `required`
+        self.required = required
         self.has_value = has_value
         self.value = value
         self.user_attribute_name = user_attribute_name
@@ -4838,7 +4838,7 @@ public struct LDAPUserAttributeRead: SDKModel {
     /**
      * Required to be in LDAP assertion for login to be allowed to succeed (read-only)
      */
-    public var `required`: Bool?
+    public var required: Bool?
     /**
      * Looker User Attributes (read-only)
      */
@@ -4848,9 +4848,9 @@ public struct LDAPUserAttributeRead: SDKModel {
      */
     public var url: URI?
 
-    public init(name: String? = nil, `required`: Bool? = nil, user_attributes: [UserAttribute]? = nil, url: URI? = nil) {
+    public init(name: String? = nil, required: Bool? = nil, user_attributes: [UserAttribute]? = nil, url: URI? = nil) {
         self.name = name
-        self.`required` = `required`
+        self.required = required
         self.user_attributes = user_attributes
         self.url = url
     }
@@ -4865,7 +4865,7 @@ public struct LDAPUserAttributeWrite: SDKModel {
     /**
      * Required to be in LDAP assertion for login to be allowed to succeed
      */
-    public var `required`: Bool?
+    public var required: Bool?
     /**
      * Looker User Attribute Ids
      */
@@ -4875,9 +4875,9 @@ public struct LDAPUserAttributeWrite: SDKModel {
      */
     public var url: URI?
 
-    public init(name: String? = nil, `required`: Bool? = nil, user_attribute_ids: [Int64]? = nil, url: URI? = nil) {
+    public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil, url: URI? = nil) {
         self.name = name
-        self.`required` = `required`
+        self.required = required
         self.user_attribute_ids = user_attribute_ids
         self.url = url
     }
@@ -6980,15 +6980,15 @@ public struct OIDCUserAttributeRead: SDKModel {
     /**
      * Required to be in OIDC assertion for login to be allowed to succeed (read-only)
      */
-    public var `required`: Bool?
+    public var required: Bool?
     /**
      * Looker User Attributes (read-only)
      */
     public var user_attributes: [UserAttribute]?
 
-    public init(name: String? = nil, `required`: Bool? = nil, user_attributes: [UserAttribute]? = nil) {
+    public init(name: String? = nil, required: Bool? = nil, user_attributes: [UserAttribute]? = nil) {
         self.name = name
-        self.`required` = `required`
+        self.required = required
         self.user_attributes = user_attributes
     }
 
@@ -7002,15 +7002,15 @@ public struct OIDCUserAttributeWrite: SDKModel {
     /**
      * Required to be in OIDC assertion for login to be allowed to succeed
      */
-    public var `required`: Bool?
+    public var required: Bool?
     /**
      * Looker User Attribute Ids
      */
     public var user_attribute_ids: [Int64]?
 
-    public init(name: String? = nil, `required`: Bool? = nil, user_attribute_ids: [Int64]? = nil) {
+    public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil) {
         self.name = name
-        self.`required` = `required`
+        self.required = required
         self.user_attribute_ids = user_attribute_ids
     }
 
@@ -8388,7 +8388,7 @@ public struct SamlUserAttributeRead: SDKModel {
     /**
      * Required to be in Saml assertion for login to be allowed to succeed (read-only)
      */
-    public var `required`: Bool?
+    public var required: Bool?
     /**
      * Looker User Attributes (read-only)
      */
@@ -8398,9 +8398,9 @@ public struct SamlUserAttributeRead: SDKModel {
      */
     public var url: URI?
 
-    public init(name: String? = nil, `required`: Bool? = nil, user_attributes: [UserAttribute]? = nil, url: URI? = nil) {
+    public init(name: String? = nil, required: Bool? = nil, user_attributes: [UserAttribute]? = nil, url: URI? = nil) {
         self.name = name
-        self.`required` = `required`
+        self.required = required
         self.user_attributes = user_attributes
         self.url = url
     }
@@ -8415,7 +8415,7 @@ public struct SamlUserAttributeWrite: SDKModel {
     /**
      * Required to be in Saml assertion for login to be allowed to succeed
      */
-    public var `required`: Bool?
+    public var required: Bool?
     /**
      * Looker User Attribute Ids
      */
@@ -8425,9 +8425,9 @@ public struct SamlUserAttributeWrite: SDKModel {
      */
     public var url: URI?
 
-    public init(name: String? = nil, `required`: Bool? = nil, user_attribute_ids: [Int64]? = nil, url: URI? = nil) {
+    public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil, url: URI? = nil) {
         self.name = name
-        self.`required` = `required`
+        self.required = required
         self.user_attribute_ids = user_attribute_ids
         self.url = url
     }
@@ -10236,13 +10236,13 @@ public struct WriteCreateDashboardFilter: SDKModel {
     /**
      * Whether the filter requires a value to run the dashboard
      */
-    public var `required`: Bool?
+    public var required: Bool?
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
     public var ui_config: StringDictionary<AnyCodable>?
 
-    public init(dashboard_id: String, name: String, title: String, type: String, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, `required`: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
+    public init(dashboard_id: String, name: String, title: String, type: String, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, required: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
         self.dashboard_id = dashboard_id
         self.name = name
         self.title = title
@@ -10254,12 +10254,12 @@ public struct WriteCreateDashboardFilter: SDKModel {
         self.row = row
         self.listens_to_filters = listens_to_filters
         self.allow_multiple_values = allow_multiple_values
-        self.`required` = `required`
+        self.required = required
         self.ui_config = ui_config
     }
 
-    public init(_ dashboard_id: String, _ name: String, _ title: String, _ type: String, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, `required`: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
-        self.init(dashboard_id: dashboard_id, name: name, title: title, type: type, default_value: default_value, model: model, explore: explore, dimension: dimension, row: row, listens_to_filters: listens_to_filters, allow_multiple_values: allow_multiple_values, `required`: `required`, ui_config: ui_config)
+    public init(_ dashboard_id: String, _ name: String, _ title: String, _ type: String, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, required: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
+        self.init(dashboard_id: dashboard_id, name: name, title: title, type: type, default_value: default_value, model: model, explore: explore, dimension: dimension, row: row, listens_to_filters: listens_to_filters, allow_multiple_values: allow_multiple_values, required: required, ui_config: ui_config)
     }
 
 }
@@ -10624,13 +10624,13 @@ public struct WriteDashboardFilter: SDKModel {
     /**
      * Whether the filter requires a value to run the dashboard
      */
-    public var `required`: Bool?
+    public var required: Bool?
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
     public var ui_config: StringDictionary<AnyCodable>?
 
-    public init(name: String? = nil, title: String? = nil, type: String? = nil, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, `required`: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
+    public init(name: String? = nil, title: String? = nil, type: String? = nil, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, required: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
         self.name = name
         self.title = title
         self.type = type
@@ -10641,7 +10641,7 @@ public struct WriteDashboardFilter: SDKModel {
         self.row = row
         self.listens_to_filters = listens_to_filters
         self.allow_multiple_values = allow_multiple_values
-        self.`required` = `required`
+        self.required = required
         self.ui_config = ui_config
     }
 

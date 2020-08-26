@@ -146,7 +146,7 @@ export class SwiftGen extends CodeGen {
     'precedence',
     'prefix',
     'Protocol',
-    'required',
+    // 'required', removing this from the list because Swift complains about it being escaped
     'right',
     'set',
     'Type',
@@ -168,7 +168,7 @@ import Foundation
 @available(OSX 10.15, *)
 open class ${this.packageName}: APIMethods {
 
-${this.indentStr}lazy var stream = ${this.packageName}Stream(authSession)
+${this.indentStr}public lazy var stream = ${this.packageName}Stream(authSession)
 `
   }
 
