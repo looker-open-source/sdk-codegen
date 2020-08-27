@@ -25,7 +25,7 @@
  */
 
 export const defaultApiVersion = '3.1'
-export const lookerVersion = '7.12'
+export const lookerVersion = '7.14'
 export const apiVersion = '4.0'
 export const sdkVersion = `${apiVersion}.${lookerVersion}`
 export const environmentPrefix = 'LOOKERSDK'
