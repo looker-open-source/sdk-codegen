@@ -31,6 +31,7 @@ import {
   ResponseMode,
   responseMode,
   StatusCode,
+  Values,
 } from '@looker/sdk/lib/browser'
 import { IVersionInfo } from './codeGen'
 
@@ -2381,6 +2382,13 @@ export interface ICodeGen {
    * @returns {string}
    */
   requestTypeName(method: IMethod): string
+
+  /**
+   * Generate the SDK calling syntax for the method with the provided inputs
+   * @param method to convert to SDK call
+   * @param inputs to assign to parameters of the method
+   */
+  makeTheCall(method: IMethod, inputs: Values): string
 
   /**
    * Returns the WriteType if the passed type has any readOnly properties or types

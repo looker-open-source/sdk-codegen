@@ -25,6 +25,7 @@
  */
 
 import { commentBlock } from '@looker/sdk-codegen-utils'
+import { Values } from '@looker/sdk'
 import {
   Arg,
   ICodeGen,
@@ -145,6 +146,8 @@ export abstract class CodeGen implements ICodeGen {
   abstract methodSignature(indent: string, method: IMethod): string
 
   abstract declareMethod(indent: string, method: IMethod): string
+
+  abstract makeTheCall(method: IMethod, inputs: Values): string
 
   abstract encodePathParams(indent: string, method: IMethod): string
 
