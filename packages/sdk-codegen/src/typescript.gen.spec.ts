@@ -24,6 +24,7 @@
 
  */
 
+import { IWriteLookWithQuery } from '@looker/sdk/lib/sdk/4.0/models'
 import { TestConfig } from './testUtils'
 import { TypescriptGen } from './typescript.gen'
 import { EnumType, titleCase } from './sdkModels'
@@ -95,6 +96,64 @@ width: number`)
  * @param {DelimArray<string>} query_task_ids List of Query Task IDs
  */
 query_task_ids: DelimArray<string>`)
+    })
+  })
+
+  describe('makeTheCall', () => {
+    const fields = 'id,user_id,title,description'
+    it('with no params params', () => {
+      const inputs = {}
+      const method = apiTestModel.methods.run_look
+      const actual = gen.makeTheCall(method, inputs)
+      const expected = 'let response = await sdk.ok(sdk.run_look())'
+      expect(actual).toEqual(expected)
+    })
+
+    it('with simple params', () => {
+      const inputs = { look_id: 17, fields }
+      const method = apiTestModel.methods.look
+      const actual = gen.makeTheCall(method, inputs)
+      const expected = `let response = await sdk.ok(sdk.look(17, '${fields}'))`
+      expect(actual).toEqual(expected)
+    })
+
+    it('with a body param', () => {
+      const body: IWriteLookWithQuery = {
+        title: 'test title',
+        description: 'gen test',
+        query: {
+          model: 'the_look',
+          view: 'users',
+          total: true,
+        },
+      }
+      const inputs = { look_id: 17, body, fields }
+      const method = apiTestModel.methods.update_look
+      const actual = gen.makeTheCall(method, inputs)
+      const expected = `let response = await sdk.ok(sdk.update_look(17, 
+  {
+    title: 'test title',
+    description: 'gen test',
+    query: 
+    {
+      model: 'the_look',
+      view: 'users',
+      total: true
+    }
+  }, 'id,user_id,title,description'))`
+      expect(actual).toEqual(expected)
+    })
+
+    it('with request params', () => {
+      const inputs = { look_id: 17, result_format: 'png' }
+      const method = apiTestModel.methods.run_look
+      const actual = gen.makeTheCall(method, inputs)
+      const expected = `let response = await sdk.ok(sdk.run_look(
+  {
+    look_id: 17,
+    result_format: 'png'
+  }))`
+      expect(actual).toEqual(expected)
     })
   })
 

@@ -27,6 +27,7 @@
 import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
+  ArgValues,
   EnumType,
   IMappedType,
   IMethod,
@@ -205,6 +206,65 @@ export interface IDictionary<T> {
       `${indent}${this.reserve(param.name)}${pOpt}: ${mapped.name}` +
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
+  }
+
+  argValue(
+    indent: string,
+    arg: IParameter | IProperty,
+    inputs: ArgValues
+  ): string {
+    // TODO handle required positional arguments that are not provided
+    if (!(arg.name in inputs)) return ''
+    const val = inputs[arg.name]
+    if (!arg.type.intrinsic) {
+      return this.assignType(this.bumper(indent), arg.type, val)
+    }
+    const type = this.typeMap(arg.type)
+    if (type.format) return type.format(val)
+    return val.toString()
+  }
+
+  /**
+   * Maps input values into type
+   * @param indent starting indent level
+   * @param type that receives assignments
+   * @param inputs to assign to type
+   */
+  assignType(indent: string, type: IType, inputs: ArgValues): string {
+    // TODO array types
+    // TODO Enum types
+    // TODO Hash types
+    // TODO DelimArray types
+    const args: string[] = []
+    Object.values(type.properties).forEach((p) => {
+      const v = this.argValue(indent, p, inputs)
+      if (v) args.push(`${p.name}: ${v}`)
+    })
+    if (args.length === 0) return '{}'
+    const bump = this.bumper(indent)
+    const nl = `,\n${bump}`
+    return `\n${indent}{\n${bump}${args.join(nl)}\n${indent}}`
+  }
+
+  assignParams(method: IMethod, inputs: ArgValues): string {
+    const args: string[] = []
+    if (Object.keys(inputs).length > 0) {
+      const requestType = this.api.getRequestType(method)
+      if (requestType) {
+        return this.assignType(this.indentStr, requestType, inputs)
+      }
+      method.allParams.forEach((p) => {
+        const v = this.argValue('', p, inputs)
+        if (v !== '') args.push(v)
+      })
+    }
+    return args.join(this.argDelimiter)
+  }
+
+  makeTheCall(method: IMethod, inputs: ArgValues): string {
+    const resp = `let response = await sdk.ok(sdk.${method.name}(`
+    const args = this.assignParams(method, inputs)
+    return `${resp}${args}))`
   }
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
@@ -460,6 +520,7 @@ export interface IDictionary<T> {
     super.typeMap(type)
     const mt = ''
 
+    const asString = (v: any) => `'${v}'`
     const tsTypes: Record<string, IMappedType> = {
       any: { default: mt, name: 'any' },
       boolean: { default: mt, name: 'boolean' },
@@ -474,11 +535,11 @@ export interface IDictionary<T> {
       integer: { default: mt, name: 'number' },
       number: { default: mt, name: 'number' },
       object: { default: mt, name: 'any' },
-      password: { default: mt, name: 'Password' },
-      string: { default: mt, name: 'string' },
-      uri: { default: mt, name: 'Url' },
-      url: { default: mt, name: 'Url' },
-      void: { default: mt, name: 'void' },
+      password: { default: mt, name: 'Password', format: asString },
+      string: { default: mt, name: 'string', format: asString },
+      uri: { default: mt, name: 'Url', format: asString },
+      url: { default: mt, name: 'Url', format: asString },
+      void: { default: mt, name: 'void', format: (_: any) => '' },
     }
 
     if (type.elementType) {

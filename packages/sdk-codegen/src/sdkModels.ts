@@ -31,7 +31,6 @@ import {
   ResponseMode,
   responseMode,
   StatusCode,
-  Values,
 } from '@looker/sdk/lib/browser'
 import { IVersionInfo } from './codeGen'
 
@@ -69,6 +68,11 @@ export const isSpecialName = (name: string) => {
   const result = simpleName.test(name)
   return !result
 }
+
+/**
+ * Argument values passed into functions like makeTheCall
+ */
+export type ArgValues = { [key: string]: any }
 
 /**
  * convert string to a safe variable name
@@ -2272,9 +2276,13 @@ export class ApiModel implements ISymbolTable, IApiModel {
   }
 }
 
+/**
+ * Language-specific type mapping
+ */
 export interface IMappedType {
   name: string
   default: string
+  format?: (value: any) => string
   optional?: string
 }
 
@@ -2384,11 +2392,38 @@ export interface ICodeGen {
   requestTypeName(method: IMethod): string
 
   /**
+   * Generate the assignment value of an argument for this language
+   * @param indent code indentation
+   * @param arg parameter or property to receive value
+   * @param inputs values to find assignment in
+   */
+  argValue(
+    indent: string,
+    arg: IParameter | IProperty,
+    inputs: ArgValues
+  ): string
+
+  /**
+   * Maps input values into type
+   * @param indent starting indent level
+   * @param type that receives assignments
+   * @param inputs to assign to type
+   */
+  assignType(indent: string, type: IType, inputs: ArgValues): string
+
+  /**
+   * Generate assignment statement for parameters of a method
+   * @param method to assign values to
+   * @param inputs to assign to method parameters
+   */
+  assignParams(method: IMethod, inputs: ArgValues): string
+
+  /**
    * Generate the SDK calling syntax for the method with the provided inputs
    * @param method to convert to SDK call
    * @param inputs to assign to parameters of the method
    */
-  makeTheCall(method: IMethod, inputs: Values): string
+  makeTheCall(method: IMethod, inputs: ArgValues): string
 
   /**
    * Returns the WriteType if the passed type has any readOnly properties or types

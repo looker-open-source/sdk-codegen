@@ -25,7 +25,6 @@
  */
 
 import { commentBlock } from '@looker/sdk-codegen-utils'
-import { Values } from '@looker/sdk'
 import {
   Arg,
   ICodeGen,
@@ -38,6 +37,7 @@ import {
   EnumType,
   EnumValueType,
   mayQuote,
+  ArgValues,
 } from './sdkModels'
 
 export interface IVersionInfo {
@@ -147,7 +147,7 @@ export abstract class CodeGen implements ICodeGen {
 
   abstract declareMethod(indent: string, method: IMethod): string
 
-  abstract makeTheCall(method: IMethod, inputs: Values): string
+  abstract makeTheCall(method: IMethod, inputs: ArgValues): string
 
   abstract encodePathParams(indent: string, method: IMethod): string
 
