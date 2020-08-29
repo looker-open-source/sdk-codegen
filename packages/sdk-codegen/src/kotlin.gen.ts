@@ -29,7 +29,6 @@ import {
   Arg,
   EnumType,
   EnumValueType,
-  IMappedType,
   IMethod,
   IParameter,
   IProperty,
@@ -37,7 +36,7 @@ import {
   mayQuote,
   strBody,
 } from './sdkModels'
-import { CodeGen } from './codeGen'
+import { IMappedType, CodeGen } from './codeGen'
 
 export class KotlinGen extends CodeGen {
   codePath = './kotlin/src/main/com/'

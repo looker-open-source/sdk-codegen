@@ -29,7 +29,6 @@ import {
   Arg,
   ArgValues,
   EnumType,
-  IMappedType,
   IMethod,
   IParameter,
   IProperty,
@@ -37,7 +36,7 @@ import {
   IType,
   strBody,
 } from './sdkModels'
-import { CodeGen } from './codeGen'
+import { CodeAssignment, CodeGen, IMappedType } from './codeGen'
 
 /**
  * TypeScript code generator
@@ -208,59 +207,6 @@ export interface IDictionary<T> {
     )
   }
 
-  argValue(
-    indent: string,
-    arg: IParameter | IProperty,
-    inputs: ArgValues
-  ): string {
-    // TODO handle required positional arguments that are not provided
-    if (!(arg.name in inputs)) return ''
-    const val = inputs[arg.name]
-    if (!arg.type.intrinsic) {
-      return this.assignType(this.bumper(indent), arg.type, val)
-    }
-    const type = this.typeMap(arg.type)
-    if (type.format) return type.format(val)
-    return val.toString()
-  }
-
-  /**
-   * Maps input values into type
-   * @param indent starting indent level
-   * @param type that receives assignments
-   * @param inputs to assign to type
-   */
-  assignType(indent: string, type: IType, inputs: ArgValues): string {
-    // TODO array types
-    // TODO Enum types
-    // TODO Hash types
-    // TODO DelimArray types
-    const args: string[] = []
-    Object.values(type.properties).forEach((p) => {
-      const v = this.argValue(indent, p, inputs)
-      if (v) args.push(`${p.name}: ${v}`)
-    })
-    if (args.length === 0) return '{}'
-    const bump = this.bumper(indent)
-    const nl = `,\n${bump}`
-    return `\n${indent}{\n${bump}${args.join(nl)}\n${indent}}`
-  }
-
-  assignParams(method: IMethod, inputs: ArgValues): string {
-    const args: string[] = []
-    if (Object.keys(inputs).length > 0) {
-      const requestType = this.api.getRequestType(method)
-      if (requestType) {
-        return this.assignType(this.indentStr, requestType, inputs)
-      }
-      method.allParams.forEach((p) => {
-        const v = this.argValue('', p, inputs)
-        if (v !== '') args.push(v)
-      })
-    }
-    return args.join(this.argDelimiter)
-  }
-
   makeTheCall(method: IMethod, inputs: ArgValues): string {
     const resp = `let response = await sdk.ok(sdk.${method.name}(`
     const args = this.assignParams(method, inputs)
@@ -273,7 +219,7 @@ export interface IDictionary<T> {
     let headComment =
       (head ? `${head}\n\n` : '') +
       `${method.httpMethod} ${method.endpoint} -> ${mapped.name}`
-    let fragment = ''
+    let fragment: string
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
 
@@ -520,7 +466,7 @@ export interface IDictionary<T> {
     super.typeMap(type)
     const mt = ''
 
-    const asString = (v: any) => `'${v}'`
+    const asString: CodeAssignment = (_, v) => `'${v}'`
     const tsTypes: Record<string, IMappedType> = {
       any: { default: mt, name: 'any' },
       boolean: { default: mt, name: 'boolean' },
@@ -535,11 +481,11 @@ export interface IDictionary<T> {
       integer: { default: mt, name: 'number' },
       number: { default: mt, name: 'number' },
       object: { default: mt, name: 'any' },
-      password: { default: mt, name: 'Password', format: asString },
-      string: { default: mt, name: 'string', format: asString },
-      uri: { default: mt, name: 'Url', format: asString },
-      url: { default: mt, name: 'Url', format: asString },
-      void: { default: mt, name: 'void', format: (_: any) => '' },
+      password: { default: mt, name: 'Password', asVal: asString },
+      string: { default: mt, name: 'string', asVal: asString },
+      uri: { default: mt, name: 'Url', asVal: asString },
+      url: { default: mt, name: 'Url', asVal: asString },
+      void: { default: mt, name: 'void', asVal: (_i, _v: any) => '' },
     }
 
     if (type.elementType) {
@@ -547,13 +493,29 @@ export interface IDictionary<T> {
       const map = this.typeMap(type.elementType)
       switch (type.className) {
         case 'ArrayType':
-          return { default: '[]', name: `${map.name}[]` }
+          return {
+            default: '[]',
+            name: `${map.name}[]`,
+            asVal: (indent, v) => this.arrayValue(indent, type, v),
+          }
         case 'HashType':
-          return { default: '{}', name: `IDictionary<${map.name}>` }
+          return {
+            default: '{}',
+            name: `IDictionary<${map.name}>`,
+            asVal: (indent, value) => this.hashValue(indent, value),
+          }
         case 'DelimArrayType':
-          return { default: '', name: `DelimArray<${map.name}>` }
+          return {
+            default: '',
+            name: `DelimArray<${map.name}>`,
+            asVal: (_, v) => `new DelimArray<${map.name}>([${v}])`,
+          }
         case 'EnumType':
-          return { default: '', name: this.typeName(type) }
+          return {
+            default: '',
+            name: this.typeName(type),
+            asVal: (_, v) => `${type.name}.${v}`,
+          }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
