@@ -105,28 +105,28 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
   }, [])
 
   return (
-      <Combobox
-        onChange={handleSelectOrClear}
-        value={{ value: pattern }}
-        width="100%"
-      >
-        <ComboboxInput
-          autoFocus
-          autoComplete={false}
-          disabled={!searchSettings.criteria.length}
-          isClearable
-          onChange={handleInputChange}
-          placeholder={
-            searchSettings.criteria.length
-              ? `Searching in ${searchSettings.criteria.join(', ')}.`
-              : `No search criteria selected.`
-          }
-          ref={inputRef}
-        />
-        {error && <SearchError error={error} />}
-        {!error && searchResults && (
-          <SearchResults {...searchResults} specKey={specKey} />
-        )}
-      </Combobox>
+    <Combobox
+      onChange={handleSelectOrClear}
+      value={{ value: pattern }}
+      width="100%"
+    >
+      <ComboboxInput
+        autoFocus
+        autoComplete={false}
+        disabled={!searchSettings.criteria.length}
+        isClearable
+        onChange={handleInputChange}
+        placeholder={
+          searchSettings.criteria.length
+            ? `Searching in ${searchSettings.criteria.join(', ')}.`
+            : `No search criteria selected.`
+        }
+        ref={inputRef}
+      />
+      {error && <SearchError error={error} />}
+      {!error && searchResults && (
+        <SearchResults {...searchResults} specKey={specKey} />
+      )}
+    </Combobox>
   )
 }
