@@ -57,20 +57,22 @@ export const DocReferences: FC<DocReferencesProps> = ({
   return (
     <Box mb="xlarge">
       <CollapserCard heading="References">
-        {DocReferenceItems(
-          'Referenced Types:',
-          seeTypes,
-          api,
-          specKey,
-          pattern
-        )}
-        {DocReferenceItems(
-          'Used by methods:',
-          seeMethods,
-          api,
-          specKey,
-          pattern
-        )}
+        <>
+          {DocReferenceItems(
+            'Referenced Types:',
+            seeTypes,
+            api,
+            specKey,
+            pattern
+          )}
+          {DocReferenceItems(
+            'Used by methods:',
+            seeMethods,
+            api,
+            specKey,
+            pattern
+          )}
+        </>
       </CollapserCard>
     </Box>
   )

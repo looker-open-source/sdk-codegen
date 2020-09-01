@@ -56,18 +56,20 @@ export const DocResponses: FC<DocResponsesProps> = ({ responses }) => {
   return (
     <Box mb="xlarge">
       <CollapserCard heading="Response Models">
-        <TabList {...tabs}>
-          {Object.keys(responseTree).map((statusCode, index) => (
-            <Tab key={index}>{statusCode}</Tab>
-          ))}
-        </TabList>
-        <TabPanels {...tabs} pt="0">
-          {Object.values(responseTree).map((responses, index) => (
-            <TabPanel key={index}>
-              <DocResponseTypes responses={responses} />
-            </TabPanel>
-          ))}
-        </TabPanels>
+        <>
+          <TabList {...tabs}>
+            {Object.keys(responseTree).map((statusCode, index) => (
+              <Tab key={index}>{statusCode}</Tab>
+            ))}
+          </TabList>
+          <TabPanels {...tabs} pt="0">
+            {Object.values(responseTree).map((responses, index) => (
+              <TabPanel key={index}>
+                <DocResponseTypes responses={responses} />
+              </TabPanel>
+            ))}
+          </TabPanels>
+        </>
       </CollapserCard>
     </Box>
   )

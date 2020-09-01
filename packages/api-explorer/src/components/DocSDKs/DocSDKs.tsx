@@ -59,23 +59,25 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
   return (
     <Box mb="xlarge">
       <CollapserCard heading="Language SDK declarations">
-        <TabList {...tabs}>
-          {Object.keys(generators).map((language) => (
-            <Tab key={language}>{language}</Tab>
-          ))}
-        </TabList>
-        <TabPanels {...tabs} pt="0">
-          {Object.entries(generators).map(([language, gen]) => {
-            const code = method
-              ? gen.declareMethod('', item as IMethod)
-              : gen.declareType('', item as IType)
-            return (
-              <TabPanel key={language}>
-                <DocCode language={language} code={code} />
-              </TabPanel>
-            )
-          })}
-        </TabPanels>
+        <>
+          <TabList {...tabs}>
+            {Object.keys(generators).map((language) => (
+              <Tab key={language}>{language}</Tab>
+            ))}
+          </TabList>
+          <TabPanels {...tabs} pt="0">
+            {Object.entries(generators).map(([language, gen]) => {
+              const code = method
+                ? gen.declareMethod('', item as IMethod)
+                : gen.declareType('', item as IType)
+              return (
+                <TabPanel key={language}>
+                  <DocCode language={language} code={code} />
+                </TabPanel>
+              )
+            })}
+          </TabPanels>
+        </>
       </CollapserCard>
     </Box>
   )
