@@ -116,11 +116,7 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
         disabled={!searchSettings.criteria.length}
         isClearable
         onChange={handleInputChange}
-        placeholder={
-          searchSettings.criteria.length
-            ? `Searching in ${searchSettings.criteria.join(', ')}.`
-            : `No search criteria selected.`
-        }
+        placeholder="Press '/' to start searching."
         ref={inputRef}
       />
       {error && <SearchError error={error} />}
