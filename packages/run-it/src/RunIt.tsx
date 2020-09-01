@@ -37,9 +37,9 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  Badge,
   Text,
   Heading,
+  Space,
 } from '@looker/components'
 import { IRawResponse, Looker40SDK } from '@looker/sdk/lib/browser'
 import {
@@ -50,6 +50,7 @@ import {
   Loading,
   RunItConfigurator,
   RunItWrapper,
+  MethodBadge,
 } from './components'
 import {
   createRequestParams,
@@ -215,7 +216,12 @@ export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
   return (
     <RunItWrapper>
       <Heading>
-        <Badge>{httpMethod}</Badge> <Text>{endpoint}</Text>
+        <Space>
+          <MethodBadge textAlign="center" compact type={httpMethod}>
+            {httpMethod}
+          </MethodBadge>
+          <Text>{endpoint}</Text>
+        </Space>
       </Heading>
       <TabList {...tabs}>
         <Tab key="request">Request</Tab>
