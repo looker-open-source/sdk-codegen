@@ -154,14 +154,15 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       </Form>
       <>
         <Button
-          iconAfter="Check"
+          iconBefore="Check"
           disabled={Object.keys(validationMessages).length > 0}
           // TODO maybe validationMessages is breaking the submit?
           onClick={handleSubmit}
+          mr="small"
         >
           Save
         </Button>
-        <Button onClick={handleRemove} iconAfter="Trash" color="critical">
+        <Button onClick={handleRemove} iconBefore="Trash" color="critical">
           Remove
         </Button>
       </>

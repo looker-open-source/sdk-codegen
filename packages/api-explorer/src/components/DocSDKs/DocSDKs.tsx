@@ -25,7 +25,14 @@
  */
 
 import React, { FC, useState } from 'react'
-import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
+import {
+  Box,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  useTabs,
+} from '@looker/components'
 import { IMethod, IType, ApiModel } from '@looker/sdk-codegen'
 
 import { DocCode } from '../DocCode'
@@ -50,8 +57,8 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
   const [item] = useState(method ? noComment(method) : type!)
 
   return (
-    <CollapserCard heading="Language SDK declarations">
-      <>
+    <Box mb="xlarge">
+      <CollapserCard heading="Language SDK declarations">
         <TabList {...tabs}>
           {Object.keys(generators).map((language) => (
             <Tab key={language}>{language}</Tab>
@@ -69,7 +76,7 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
             )
           })}
         </TabPanels>
-      </>
-    </CollapserCard>
+      </CollapserCard>
+    </Box>
   )
 }

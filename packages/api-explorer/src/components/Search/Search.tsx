@@ -35,7 +35,6 @@ import React, {
 import {
   Combobox,
   ComboboxInput,
-  Space,
   ComboboxOptionObject,
 } from '@looker/components'
 import { CriteriaToSet, IApiModel, ISearchResult } from '@looker/sdk-codegen'
@@ -106,32 +105,28 @@ export const Search: FC<SearchProps> = ({ api, specKey }) => {
   }, [])
 
   return (
-    <>
-      <Space>
-        <Combobox
-          width="100%"
-          onChange={handleSelectOrClear}
-          value={{ value: pattern }}
-        >
-          <ComboboxInput
-            autoFocus
-            autoComplete={false}
-            disabled={!searchSettings.criteria.length}
-            isClearable
-            onChange={handleInputChange}
-            placeholder={
-              searchSettings.criteria.length
-                ? `Searching in ${searchSettings.criteria.join(', ')}.`
-                : `No search criteria selected.`
-            }
-            ref={inputRef}
-          />
-          {error && <SearchError error={error} />}
-          {!error && searchResults && (
-            <SearchResults {...searchResults} specKey={specKey} />
-          )}
-        </Combobox>
-      </Space>
-    </>
+      <Combobox
+        onChange={handleSelectOrClear}
+        value={{ value: pattern }}
+        width="100%"
+      >
+        <ComboboxInput
+          autoFocus
+          autoComplete={false}
+          disabled={!searchSettings.criteria.length}
+          isClearable
+          onChange={handleInputChange}
+          placeholder={
+            searchSettings.criteria.length
+              ? `Searching in ${searchSettings.criteria.join(', ')}.`
+              : `No search criteria selected.`
+          }
+          ref={inputRef}
+        />
+        {error && <SearchError error={error} />}
+        {!error && searchResults && (
+          <SearchResults {...searchResults} specKey={specKey} />
+        )}
+      </Combobox>
   )
 }

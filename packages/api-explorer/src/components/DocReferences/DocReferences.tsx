@@ -25,6 +25,7 @@
  */
 
 import React, { FC, useContext } from 'react'
+import { Box } from '@looker/components'
 import { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
 
 import { SearchContext } from '../../context'
@@ -54,8 +55,8 @@ export const DocReferences: FC<DocReferencesProps> = ({
   if (seeTypes.length === 0 && seeMethods.length === 0) return <></>
 
   return (
-    <CollapserCard heading="References">
-      <>
+    <Box mb="xlarge">
+      <CollapserCard heading="References">
         {DocReferenceItems(
           'Referenced Types:',
           seeTypes,
@@ -70,7 +71,7 @@ export const DocReferences: FC<DocReferencesProps> = ({
           specKey,
           pattern
         )}
-      </>
-    </CollapserCard>
+      </CollapserCard>
+    </Box>
   )
 }

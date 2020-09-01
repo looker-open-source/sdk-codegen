@@ -36,5 +36,6 @@ export {
   defaultConfigurator,
   MethodBadge,
   RunItConfigurator,
+  RunItWrapper,
 } from './components'
 export { OAuthScene } from './scenes'

@@ -208,6 +208,7 @@ export const PageLayout = styled.div<SideNavStyleProps>`
 
 export const SummaryCard = styled(Card)`
   border-color: ${({ theme }) => theme.colors.ui2};
+  max-width: 50rem;
 `
 
 export const StatusBeta = styled(Flex)`

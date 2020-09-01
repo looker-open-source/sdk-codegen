@@ -27,3 +27,13 @@
 /**
  * Defines all RunIt styles
  */
+import styled from 'styled-components'
+import { Box } from '@looker/components'
+
+export const RunItWrapper = styled(Box)`
+  background-color: ${({ theme }) => theme.colors.ui5};
+  color: ${({ theme }) => theme.colors.onInverse};
+`
+RunItWrapper.defaultProps = {
+  p: 'large',
+}

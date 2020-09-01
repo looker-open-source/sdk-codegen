@@ -25,12 +25,11 @@
  */
 
 import React, { FC, Dispatch } from 'react'
-import { FieldSelect } from '@looker/components'
+import { Select } from '@looker/components'
 import { useHistory } from 'react-router-dom'
 
 import { SpecItems } from '../../ApiExplorer'
-import { SpecAction, SpecState } from '../../reducers'
-import { selectSpec } from '../../reducers'
+import { SpecAction, SpecState, selectSpec } from '../../reducers'
 
 interface ApiSpecSelectorProps {
   specs: SpecItems
@@ -55,15 +54,6 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
   }
 
   return (
-    <FieldSelect
-      defaultValue={spec.key}
-      options={options}
-      aria-label="Version"
-      label="Version"
-      mb="0"
-      mr="large"
-      onChange={handleChange}
-      inline
-    />
+    <Select defaultValue={spec.key} options={options} onChange={handleChange} />
   )
 }

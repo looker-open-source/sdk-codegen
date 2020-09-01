@@ -44,23 +44,29 @@ interface HeaderProps {
 
 export const Header: FC<HeaderProps> = ({ specs, spec, specDispatch }) => (
   <HeaderWrapper>
-    <FlexItem align-items="center">
-      <ApixHeading fontSize="xxlarge">
-        <NavLink to={`/${spec.key}`}>
-          <Space gap="small">
-            <Logo />
-            <Text color="key" fontSize="xlarge" fontWeight="light">
-              API Explorer
-            </Text>
-          </Space>
-        </NavLink>
-      </ApixHeading>
-    </FlexItem>
-    <FlexItem width="50%">
-      <Search api={spec.api} specKey={spec.key} />
-    </FlexItem>
-    <FlexItem>
-      <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
-    </FlexItem>
+    <Space between>
+      <FlexItem flex="0 0 20rem" pr="large">
+        <ApixHeading fontSize="xxlarge">
+          <NavLink to={`/${spec.key}`}>
+            <Space gap="small">
+              <Logo />
+              <Text color="key" fontSize="xlarge" fontWeight="light">
+                API Explorer
+              </Text>
+            </Space>
+          </NavLink>
+        </ApixHeading>
+      </FlexItem>
+      <FlexItem flex="1" px="large">
+        <Search api={spec.api} specKey={spec.key} />
+      </FlexItem>
+      <FlexItem flexBasis="20rem" pl="large">
+        <ApiSpecSelector
+          specs={specs}
+          spec={spec}
+          specDispatch={specDispatch}
+        />
+      </FlexItem>
+    </Space>
   </HeaderWrapper>
 )

@@ -61,7 +61,7 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
 
   return (
     <Box paddingTop="small">
-      <TabList {...tabs}>
+      <TabList {...tabs} distribute>
         <Tab>Methods</Tab>
         <Tab>Types</Tab>
       </TabList>

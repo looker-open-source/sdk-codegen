@@ -40,7 +40,6 @@ import {
   Badge,
   Text,
   Heading,
-  Box,
 } from '@looker/components'
 import { IRawResponse, Looker40SDK } from '@looker/sdk/lib/browser'
 import {
@@ -50,6 +49,7 @@ import {
   LoginForm,
   Loading,
   RunItConfigurator,
+  RunItWrapper,
 } from './components'
 import {
   createRequestParams,
@@ -213,7 +213,7 @@ export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
   if (!sdk) return <></>
 
   return (
-    <Box>
+    <RunItWrapper>
       <Heading>
         <Badge>{httpMethod}</Badge> <Text>{endpoint}</Text>
       </Heading>
@@ -268,6 +268,6 @@ export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
           configurator={configurator}
         />
       </TabPanels>
-    </Box>
+    </RunItWrapper>
   )
 }

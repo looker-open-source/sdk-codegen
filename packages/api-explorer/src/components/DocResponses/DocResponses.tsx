@@ -25,7 +25,14 @@
  */
 
 import React, { FC } from 'react'
-import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
+import {
+  Box,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  useTabs,
+} from '@looker/components'
 import { IMethodResponse } from '@looker/sdk-codegen'
 
 import { CollapserCard } from '../Collapser'
@@ -47,8 +54,8 @@ export const DocResponses: FC<DocResponsesProps> = ({ responses }) => {
   const responseTree = buildResponseTree(responses)
 
   return (
-    <CollapserCard heading="Response Models">
-      <>
+    <Box mb="xlarge">
+      <CollapserCard heading="Response Models">
         <TabList {...tabs}>
           {Object.keys(responseTree).map((statusCode, index) => (
             <Tab key={index}>{statusCode}</Tab>
@@ -61,7 +68,7 @@ export const DocResponses: FC<DocResponsesProps> = ({ responses }) => {
             </TabPanel>
           ))}
         </TabPanels>
-      </>
-    </CollapserCard>
+      </CollapserCard>
+    </Box>
   )
 }
