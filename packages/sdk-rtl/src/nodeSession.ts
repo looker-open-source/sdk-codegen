@@ -24,7 +24,7 @@
 
  */
 
-import { IError } from '../sdk/4.0/models'
+import { IError } from '@looker/sdk/src/sdk/4.0/models'
 import {
   IRequestProps,
   ITransport,

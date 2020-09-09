@@ -24,7 +24,7 @@
 
  */
 
-import { IAccessToken } from '../sdk/4.0/models'
+import { IAccessToken } from '@looker/sdk/src/sdk/4.0/models'
 import { BrowserSession } from './browserSession'
 import { IApiSettings } from './apiSettings'
 import { IRequestProps, ITransport } from './transport'

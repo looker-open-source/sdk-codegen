@@ -25,7 +25,7 @@
  */
 
 import { Readable } from 'readable-stream'
-import { Looker31SDK } from '../sdk/3.1/methods'
+import { Looker31SDK } from '@looker/sdk/src/sdk/3.1/methods'
 import { DefaultSettings, IApiSettings } from './apiSettings'
 import { ExtensionSession } from './extensionSession'
 import { ExtensionTransport } from './extensionTransport'
