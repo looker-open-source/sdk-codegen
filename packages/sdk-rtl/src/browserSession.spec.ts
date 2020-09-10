@@ -24,14 +24,11 @@
 
  */
 
-import {
-  IRequestProps,
-  ITransport,
-  AuthToken,
-  IApiSettings,
-} from '@looker/sdk-rtl/lib/browser'
-import { MockOauthSettings } from '../../sdk-rtl/src/oauthSession.spec'
-import { IAccessToken } from './sdk/4.0/models'
+import { AuthToken } from './authToken'
+import { IApiSettings } from './apiSettings'
+import { ITransport, IRequestProps } from './transport'
+import { IAccessToken } from './authSession'
+import { MockOauthSettings } from './oauthSession.spec'
 import { BrowserSession } from './browserSession'
 
 const mockToken: IAccessToken = {
