@@ -24,7 +24,7 @@
 
  */
 
-import { commentBlock, warn } from '@looker/sdk-codegen-utils'
+import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
   ICodeGen,

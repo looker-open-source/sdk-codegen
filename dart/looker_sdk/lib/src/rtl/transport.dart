@@ -16,12 +16,15 @@ class SDKResponse<T> {
   int _statusCode;
   String _statusText;
 
-  SDKResponse.createFromHttpResponse(http.Response response, [T result]) {
+  SDKResponse.createFromHttpResponse(http.Response response,
+      [Function<T>() create]) {
     var statusCode = response.statusCode;
     var statusText = response.reasonPhrase;
     var responseBody = jsonDecode(response.body);
     print('Response status: ${statusCode}');
-    print('Response body: ${responseBody}');
+    // print('Response body: ${responseBody}');
+    print('Response body is Map: ${responseBody is Map}');
+    print('Response body is List: ${responseBody is List}');
     _ok = statusCode >= 200 && statusCode <= 299;
     _statusCode = statusCode;
     _statusText = statusText;
@@ -66,7 +69,8 @@ class Transport {
       [Map queryParams,
       Map body,
       Map<String, String> headers,
-      T responseInstance]) async {
+      // T responseInstance,
+      Function<T>() create]) async {
     print(">>>>> invoke $path");
     switch (method) {
       case HttpMethod.get:

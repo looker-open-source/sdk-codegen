@@ -24,7 +24,7 @@
 
  */
 
-import { commentBlock, warn } from '@looker/sdk-codegen-utils'
+import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
   EnumType,
@@ -420,7 +420,7 @@ class ${this.sdkClassName()}Stream extends APIMethods {
 
   httpCall(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
-    const type = this.typeMap(method.type)
+    // const type = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     // TODO don't currently need these for Kotlin
