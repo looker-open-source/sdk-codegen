@@ -91,7 +91,7 @@ export class ${this.packageName} extends APIMethods {
   streamsPrologue(_indent: string): string {
     return `
 import { Readable } from 'readable-stream'
-import { APIMethods, IAuthSession, ITransportSettings, encodeParam } from '@looker/sdk-rtl/lib/browser'
+import { APIMethods, IAuthSession, DelimArray, ITransportSettings, encodeParam } from '@looker/sdk-rtl/lib/browser'
 /**
  * ${this.warnEditing()}
  *
@@ -111,8 +111,7 @@ export class ${this.packageName}Stream extends APIMethods {
 
   modelsPrologue(_indent: string) {
     return `
-import { DelimArray } from '../../rtl/delimArray'
-import { Url } from '../../rtl/constants'
+import { DelimArray, Url } from '@looker/sdk-rtl/lib/browser'
 
 /*
  * ${this.warnEditing()}
