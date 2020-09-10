@@ -24,50 +24,16 @@
 
  */
 
-import { Readable } from 'readable-stream'
-import { Looker31SDK } from '@looker/sdk/src/sdk/3.1/methods'
-import { DefaultSettings, IApiSettings } from './apiSettings'
-import { ExtensionSession } from './extensionSession'
-import { ExtensionTransport } from './extensionTransport'
 import {
-  Authenticator,
-  HttpMethod,
-  IRawResponse,
-  ITransportSettings,
-  Values,
-} from './transport'
-import { APIMethods } from './apiMethods'
-import { IAuthSession } from './authSession'
-
-export interface IHostConnection {
-  rawRequest(
-    httpMethod: string,
-    path: string,
-    body?: any,
-    params?: any,
-    authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>
-  ): Promise<IRawResponse>
-
-  request(
-    httpMethod: string,
-    path: string,
-    body?: any,
-    params?: any,
-    authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>
-  ): Promise<any>
-
-  stream<T>(
-    callback: (readable: Readable) => Promise<T>,
-    method: HttpMethod,
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>
-  ): Promise<T>
-}
+  DefaultSettings,
+  IApiSettings,
+  APIMethods,
+  IAuthSession,
+  IHostConnection,
+  ExtensionSession,
+  ExtensionTransport,
+} from '@looker/sdk-rtl/lib/browser'
+import { Looker31SDK } from './sdk/3.1/methods'
 
 export class LookerExtensionSDK {
   /**
