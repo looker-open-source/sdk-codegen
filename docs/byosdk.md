@@ -356,7 +356,7 @@ When an SDK supports significantly different runtime behavior, use a different `
 For example, the Typescript SDK has:
 
 - [`CSRFSession`](/packages/sdk-rtl/src/CSRFSession.ts) for browser-based same-origin usage
-- [`BrowserSession`](/packages/sdk-rtl/src/browserSession.ts) for browser-based CORS usage
+- [`BrowserSession`](/packages/sdk/src/browserSession.ts) for browser-based CORS usage
 - [`NodeSession`](/packages/sdk-rtl/src/nodeSession.ts) for node-based usage
 - [`OAuthSession`](/packages/sdk-rtl/src/oauthSession.ts) for OAuth2-based usage
 - [`ProxySession`](/packages/sdk-rtl/src/proxySession.ts) for proxy-based usage

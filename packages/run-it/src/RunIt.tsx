@@ -42,7 +42,8 @@ import {
   Heading,
   Box,
 } from '@looker/components'
-import { IRawResponse, Looker40SDK } from '@looker/sdk/lib/browser'
+import { Looker40SDK } from '@looker/sdk/lib/browser'
+import { IRawResponse } from '@looker/sdk-rtl/lib/browser'
 import {
   RequestForm,
   ShowResponse,

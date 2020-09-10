@@ -24,7 +24,6 @@
 
  */
 
-import { IError } from '@looker/sdk/src/sdk/4.0/models'
 import {
   IRequestProps,
   ITransport,
@@ -39,32 +38,12 @@ import {
   strLookerClientId,
   strLookerClientSecret,
 } from './apiSettings'
-import { AuthSession } from './authSession'
+import { AuthSession, IAccessToken, IError } from './authSession'
 import { defaultApiVersion } from './constants'
 import { getenv } from './nodeSettings'
 
 const strPost: HttpMethod = 'POST'
 const strDelete: HttpMethod = 'DELETE'
-
-/**
- * Same as the Looker API access token object
- * Re-declared here to be independent of model generation
- */
-interface IAccessToken {
-  /**
-   * Access Token used for API calls
-   */
-  access_token?: string
-  /**
-   * Type of token
-   */
-  token_type?: string
-
-  /**
-   * Number of seconds before the token expires
-   */
-  expires_in?: number
-}
 
 export class NodeSession extends AuthSession {
   private readonly apiPath: string = ''

@@ -28,7 +28,7 @@ import {
   IRawResponse,
   ResponseMode,
   responseMode,
-} from '@looker/sdk/lib/browser'
+} from '@looker/sdk-rtl/lib/browser'
 import { Paragraph } from '@looker/components'
 
 import { CodeStructure } from '../CodeStructure'

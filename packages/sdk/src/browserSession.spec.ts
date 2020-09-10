@@ -30,7 +30,7 @@ import {
   AuthToken,
   IApiSettings,
 } from '@looker/sdk-rtl/lib/browser'
-import { MockOauthSettings } from '@looker/sdk-rtl/src/oauthSession.spec'
+import { MockOauthSettings } from '../../sdk-rtl/src/oauthSession.spec'
 import { IAccessToken } from './sdk/4.0/models'
 import { BrowserSession } from './browserSession'
 

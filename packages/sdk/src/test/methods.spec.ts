@@ -26,8 +26,22 @@
 
 import * as fs from 'fs'
 import { Readable } from 'readable-stream'
-import { TestConfig } from '../testUtils'
-import { NodeSession } from '../rtl/nodeSession'
+import {
+  ApiConfig,
+  NodeSettings,
+  NodeSettingsIniFile,
+  DelimArray,
+  boolDefault,
+  strLookerBaseUrl,
+  strLookerClientId,
+  strLookerClientSecret,
+  strLookerTimeout,
+  strLookerVerifySsl,
+  defaultTimeout,
+  NodeSession,
+} from '@looker/sdk-rtl'
+import { TestConfig } from '../../../sdk-rtl/src/testUtils'
+import { LookerNodeSDK } from '../nodeSdk'
 import { Looker40SDK as LookerSDK } from '../sdk/4.0/methods'
 import {
   ICreateQueryTask,
@@ -37,22 +51,6 @@ import {
   IWriteQuery,
   ResultFormat,
 } from '../sdk/4.0/models'
-import {
-  ApiConfig,
-  NodeSettings,
-  NodeSettingsIniFile,
-} from '../rtl/nodeSettings'
-import { DelimArray } from '../rtl/delimArray'
-import { boolDefault } from '../rtl/constants'
-import {
-  strLookerBaseUrl,
-  strLookerClientId,
-  strLookerClientSecret,
-  strLookerTimeout,
-  strLookerVerifySsl,
-} from '../rtl/apiSettings'
-import { defaultTimeout } from '../rtl/transport'
-import { LookerNodeSDK } from '../rtl/nodeSdk'
 
 const config = TestConfig()
 const users: Partial<IUser>[] = config.testData.users

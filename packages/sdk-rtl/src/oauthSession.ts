@@ -24,8 +24,7 @@
 
  */
 
-import { IAccessToken, IError } from '@looker/sdk/src'
-import { AuthSession } from './authSession'
+import { AuthSession, IAccessToken, IError } from './authSession'
 import { agentPrefix, IRequestProps, sdkError } from './transport'
 import { AuthToken } from './authToken'
 import { ICryptoHash } from './cryptoHash'
