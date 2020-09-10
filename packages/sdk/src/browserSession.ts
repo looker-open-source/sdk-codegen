@@ -24,11 +24,15 @@
 
  */
 
-import { BrowserTransport } from './browserTransport'
-import { ITransport, IRequestProps, LookerAppId } from './transport'
-import { IApiSettings } from './apiSettings'
-import { OAuthSession } from './oauthSession'
-import { BrowserServices } from './browserServices'
+import {
+  ITransport,
+  IRequestProps,
+  LookerAppId,
+  IApiSettings,
+  BrowserTransport,
+  OAuthSession,
+  BrowserServices,
+} from '@looker/sdk-rtl/lib/browser'
 
 /**
  * An AuthSession class intended for use with CORS requests
