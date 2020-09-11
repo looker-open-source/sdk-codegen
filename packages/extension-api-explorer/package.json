@@ -4,6 +4,7 @@
   "description": "Looker API Explorer extension version  ",
   "main": "index.js",
   "license": "MIT",
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/extension-api-explorer",
   "scripts": {
     "bundle": "tsc && webpack --config webpack.prod.config.js",
     "deploy": "bin/deploy",

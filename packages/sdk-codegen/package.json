@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
-  "homepage": "https://github.com/looker-open-source/sdk-codegen/",
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/sdk-codegen",
   "keywords": [
     "Looker",
     "SDK",
