@@ -23,58 +23,62 @@
  SOFTWARE.
 
  */
-import { Looker31SDK } from '../sdk/3.1/methods'
-import { Looker40SDK } from '../sdk/4.0/methods'
-import { BrowserTransport } from './browserTransport'
-import { ITransport } from './transport'
-import { DefaultSettings, IApiSettings } from './apiSettings'
-import { IAuthSession } from './authSession'
-import { BrowserSession } from './browserSession'
 
-export const BrowserSettings = (): IApiSettings => {
-  const settings = DefaultSettings()
-  settings.base_url = `${document.location.hostname}:19999`
-  return settings
-}
+import {
+  ITransport,
+  NodeSettingsIniFile,
+  NodeSession,
+  NodeTransport,
+  IApiSettings,
+  IAuthSession,
+} from '@looker/sdk-rtl'
+import { Looker31SDK } from './sdk/3.1/methods'
+import { Looker40SDK } from './sdk/4.0/methods'
 
-export class LookerBrowserSDK {
+/**
+ * @class LookerNodeSDK
+ *
+ * Simple factory for the Node version of the Looker SDK. Provides default connectivity for SDK methods
+ *
+ */
+export class LookerNodeSDK {
   /**
    * Creates a [[Looker31SDK]] object.
    *
-   * @param settings Defaults to the settings for the Browser
+   * @param settings Defaults to the settings from LookerIni
    *
-   * @param transport Defaults to a `BrowserTransport` object
+   * @param transport Defaults to a `NodeTransport` object
    *
-   * @param session Defaults to `BrowserSession` which uses OAuth authentication flow and CORS requests
+   * @param session Defaults to `NodeSession` which logs in the user
    */
   static init31(
     settings?: IApiSettings,
     transport?: ITransport,
     session?: IAuthSession
   ) {
-    settings = settings || BrowserSettings()
-    transport = transport || new BrowserTransport(settings)
-    session = session || new BrowserSession(settings, transport)
+    settings = settings || new NodeSettingsIniFile('looker.ini')
+    transport = transport || new NodeTransport(settings)
+    session = session || new NodeSession(settings, transport)
     return new Looker31SDK(session)
   }
 
   /**
    * Creates a [[Looker40SDK]] object.
    *
-   * @param settings Defaults to the settings for the Browser
+   * @param settings Defaults to the settings from LookerIni
    *
-   * @param transport Defaults to a `BrowserTransport` object
+   * @param transport Defaults to a `NodeTransport` object
    *
-   * @param session Defaults to `BrowserSession` which uses OAuth authentication flow and CORS requests
+   * @param session Defaults to `NodeSession` which logs in the user
    */
   static init40(
     settings?: IApiSettings,
     transport?: ITransport,
     session?: IAuthSession
   ) {
-    settings = settings || BrowserSettings()
-    transport = transport || new BrowserTransport(settings)
-    session = session || new BrowserSession(settings, transport)
+    settings = settings || new NodeSettingsIniFile('looker.ini')
+    transport = transport || new NodeTransport(settings)
+    session = session ?? new NodeSession(settings, transport)
     return new Looker40SDK(session)
   }
 }

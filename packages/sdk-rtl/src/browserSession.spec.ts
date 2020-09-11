@@ -24,12 +24,12 @@
 
  */
 
-import { IAccessToken } from '../sdk/4.0/models'
-import { BrowserSession } from './browserSession'
-import { IApiSettings } from './apiSettings'
-import { IRequestProps, ITransport } from './transport'
 import { AuthToken } from './authToken'
+import { IApiSettings } from './apiSettings'
+import { ITransport, IRequestProps } from './transport'
+import { IAccessToken } from './authSession'
 import { MockOauthSettings } from './oauthSession.spec'
+import { BrowserSession } from './browserSession'
 
 const mockToken: IAccessToken = {
   access_token: 'mocked',

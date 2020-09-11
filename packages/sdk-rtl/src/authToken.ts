@@ -24,7 +24,7 @@
 
  */
 
-import { IAccessToken } from '../sdk/4.0/models'
+import { IAccessToken } from './authSession'
 
 export class AuthToken implements IAccessToken {
   /** set the server response lag time to 10 seconds */

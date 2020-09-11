@@ -24,16 +24,15 @@
 
  */
 
+import { Looker40SDK, LookerBrowserSDK } from '@looker/sdk/lib/browser'
 import {
   ApiSettings,
   BrowserTransport,
   DefaultSettings,
   IApiSection,
   IApiSettings,
-  Looker40SDK,
-  LookerBrowserSDK,
   lookerVersion,
-} from '@looker/sdk/lib/browser'
+} from '@looker/sdk-rtl/lib/browser'
 import { RunItConfigKey, RunItConfigurator } from '../components'
 
 // https://docs.looker.com/reference/api-and-integration/api-cors

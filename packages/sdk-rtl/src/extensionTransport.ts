@@ -24,14 +24,46 @@
 
  */
 
+import { Readable } from 'readable-stream'
 import {
+  Authenticator,
+  Values,
   SDKResponse,
   ITransport,
   ITransportSettings,
   HttpMethod,
   IRawResponse,
 } from './transport'
-import { IHostConnection } from './extensionSdk'
+
+export interface IHostConnection {
+  rawRequest(
+    httpMethod: string,
+    path: string,
+    body?: any,
+    params?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  ): Promise<IRawResponse>
+
+  request(
+    httpMethod: string,
+    path: string,
+    body?: any,
+    params?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  ): Promise<any>
+
+  stream<T>(
+    callback: (readable: Readable) => Promise<T>,
+    method: HttpMethod,
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  ): Promise<T>
+}
 
 export class ExtensionTransport implements ITransport {
   constructor(

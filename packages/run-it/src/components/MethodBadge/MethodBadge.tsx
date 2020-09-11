@@ -32,7 +32,7 @@ import {
   typography,
   TypographyProps,
 } from '@looker/design-tokens'
-import { HttpMethod } from '@looker/sdk/src'
+import { HttpMethod } from '@looker/sdk-rtl/lib/browser'
 import styled, { css } from 'styled-components'
 import { MinWidthProps, minWidth } from 'styled-system'
 

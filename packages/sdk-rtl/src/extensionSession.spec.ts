@@ -26,8 +26,7 @@
 
 import { DefaultSettings } from './apiSettings'
 import { ExtensionSession } from './extensionSession'
-import { ExtensionTransport } from './extensionTransport'
-import { IHostConnection } from './extensionSdk'
+import { ExtensionTransport, IHostConnection } from './extensionTransport'
 
 describe('ExtensionSession', () => {
   let session: ExtensionSession

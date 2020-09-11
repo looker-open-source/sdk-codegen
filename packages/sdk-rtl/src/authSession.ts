@@ -26,6 +26,45 @@
 
 import { IRequestProps, ITransport, sdkError, SDKResponse } from './transport'
 import { IApiSettings } from './apiSettings'
+import { Url } from './constants'
+
+/**
+ * Same as the Looker API access token object
+ * Re-declared here to be independent of model generation
+ */
+export interface IAccessToken {
+  /**
+   * Access Token used for API calls (read-only)
+   */
+  access_token?: string
+  /**
+   * Type of Token (read-only)
+   */
+  token_type?: string
+  /**
+   * Number of seconds before the token expires (read-only)
+   */
+  expires_in?: number
+  /**
+   * Refresh token which can be used to obtain a new access token (read-only)
+   */
+  refresh_token?: string
+}
+
+/**
+ * Same as the Looker API error object
+ * Re-declared here to be independent of model generation
+ */
+export interface IError {
+  /**
+   * Error details (read-only)
+   */
+  message: string
+  /**
+   * Documentation link (read-only)
+   */
+  documentation_url: Url
+}
 
 /**
  * Basic authorization session interface for most API authentication scenarios

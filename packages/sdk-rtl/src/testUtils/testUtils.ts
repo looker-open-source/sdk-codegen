@@ -25,7 +25,7 @@
  */
 
 import * as fs from 'fs'
-import { ApiConfig } from '../'
+import { ApiConfig } from '../nodeSettings'
 
 interface IKeyAny {
   [key: string]: any

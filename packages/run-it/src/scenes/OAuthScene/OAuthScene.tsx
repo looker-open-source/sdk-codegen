@@ -26,13 +26,12 @@
 
 import React, { FC, useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { BrowserSession, Looker40SDK } from '@looker/sdk/lib/browser'
+import { Looker40SDK } from '@looker/sdk/lib/browser'
+import { BrowserSession } from '@looker/sdk-rtl/lib/browser'
 import { RunItContext } from '../..'
 import { Loading } from '../../components'
 
-interface OAuthSceneProps {}
-
-export const OAuthScene: FC<OAuthSceneProps> = ({}) => {
+export const OAuthScene: FC = () => {
   const [loading, setLoading] = useState(true)
   const [auth, setAuth] = useState<BrowserSession>()
   const [oldUrl, setOldUrl] = useState<string>()
