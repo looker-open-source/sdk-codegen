@@ -170,7 +170,7 @@ class TypescriptFormatter extends BaseFormatter {
 
   versionStamp(gen: ICodeGen) {
     if (gen.versions && gen.versions.lookerVersion) {
-      const stampFile = gen.fileName('../../sdk-rtl/src/constants')
+      const stampFile = gen.fileName('@looker/sdk-rtl/src/constants')
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
