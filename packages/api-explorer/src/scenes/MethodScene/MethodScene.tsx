@@ -25,13 +25,20 @@
  */
 
 import React, { FC, useContext } from 'react'
-import { Space, useToggle, FlexItem, Flex } from '@looker/components'
+import {
+  Space,
+  useToggle,
+  ButtonOutline,
+  Button,
+  ComponentsProvider,
+} from '@looker/components'
+import { ThemeContext } from 'styled-components'
+
 import { useParams } from 'react-router-dom'
 import { RunIt, RunItHttpMethod, RunItContext } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 
 import {
-  Collapser,
   DocActivityType,
   DocMarkdown,
   DocRateLimited,
@@ -41,6 +48,7 @@ import {
   DocStatus,
   DocTitle,
 } from '../../components'
+import { Layout, Section, Aside } from '../../components/Layout'
 import { DocOperation } from './components'
 import { createInputs } from './utils'
 
@@ -60,18 +68,25 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
   const seeTypes = typeRefs(api, method.customTypes)
   const { value, toggle } = useToggle()
 
+  const { colors } = useContext(ThemeContext)
+
+  const RunItButton = value ? Button : ButtonOutline
+  const runItToggle = (
+    <RunItButton
+      color={value ? 'key' : 'neutral'}
+      iconBefore="Beaker"
+      onClick={toggle}
+    >
+      Run It
+    </RunItButton>
+  )
+
   return (
-    <Flex>
-      <FlexItem mr="large" flex="1">
+    <Layout hasAside>
+      <Section>
         <Space between>
           <DocTitle>{method.summary}</DocTitle>
-          <Collapser
-            isOpen={value}
-            onClick={toggle}
-            openIcon={'CaretRight'}
-            closeIcon={'CaretLeft'}
-            label={'Toggle RunIt'}
-          />
+          {runItToggle}
         </Space>
         <Space mb="xlarge" gap="small">
           <DocStatus method={method} />
@@ -83,16 +98,21 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         <DocSDKs api={api} method={method} />
         <DocReferences seeTypes={seeTypes} api={api} specKey={specKey} />
         <DocResponses responses={method.responses} />
-      </FlexItem>
+      </Section>
       {sdk && value && (
-        <FlexItem flex="1">
-          <RunIt
-            inputs={createInputs(api, method)}
-            httpMethod={method.httpMethod as RunItHttpMethod}
-            endpoint={method.endpoint}
-          />
-        </FlexItem>
+        <ComponentsProvider
+          globalStyle={false}
+          coreColors={{ background: colors.text, text: colors.background }}
+        >
+          <Aside width="24rem" bg="background" py="large">
+            <RunIt
+              inputs={createInputs(api, method)}
+              httpMethod={method.httpMethod as RunItHttpMethod}
+              endpoint={method.endpoint}
+            />
+          </Aside>
+        </ComponentsProvider>
       )}
-    </Flex>
+    </Layout>
   )
 }

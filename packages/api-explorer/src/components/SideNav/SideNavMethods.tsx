@@ -25,28 +25,35 @@
  */
 
 import React, { FC, useContext, useState } from 'react'
-import { Accordion, AccordionContent, Space } from '@looker/components'
+import styled from 'styled-components'
+import {
+  Accordion,
+  Icon,
+  AccordionDisclosure,
+  AccordionContent,
+  List,
+  Heading,
+} from '@looker/components'
 import { MethodList } from '@looker/sdk-codegen'
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
 import { MethodBadge } from '@looker/run-it'
 
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
-import { ApixHeading } from '../common'
-import {
-  SideNavDisclosure,
-  SideNavContent,
-  SideNavList,
-  SideNavListItem,
-} from '../ExplorerStyle'
 
 interface MethodsProps {
+  className?: string
   methods: MethodList
   tag: string
   specKey: string
 }
 
-export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
+const SideNavMethodsLayout: FC<MethodsProps> = ({
+  className,
+  methods,
+  tag,
+  specKey,
+}) => {
   const {
     searchSettings: { pattern },
   } = useContext(SearchContext)
@@ -65,40 +72,91 @@ export const SideNavMethods: FC<MethodsProps> = ({ methods, tag, specKey }) => {
   }
 
   return (
-    <Accordion isOpen={isOpen} toggleOpen={handleOpen}>
-      <SideNavDisclosure isOpen={isOpen}>
-        {highlightHTML(pattern, tag)}
-      </SideNavDisclosure>
+    <Accordion isOpen={isOpen} toggleOpen={handleOpen} className={className}>
+      <AccordionDisclosure>{highlightHTML(pattern, tag)}</AccordionDisclosure>
       <AccordionContent>
-        <SideNavContent>
-          <SideNavList>
-            {Object.values(methods).map((method) => (
-              <SideNavListItem key={method.name}>
-                <NavLink to={buildMethodPath(specKey, tag, method.name)}>
-                  <Space gap="xsmall">
-                    <MethodBadge
-                      textAlign="center"
-                      compact
-                      type={method.httpMethod}
-                    >
-                      {method.httpMethod.toUpperCase()}
-                    </MethodBadge>
-                    <ApixHeading
-                      as="h5"
-                      mb="0"
-                      pt="0"
-                      fontWeight="normal"
-                      truncate
-                    >
-                      {highlightHTML(pattern, method.summary)}
-                    </ApixHeading>
-                  </Space>
-                </NavLink>
-              </SideNavListItem>
-            ))}
-          </SideNavList>
-        </SideNavContent>
+        <List>
+          {Object.values(methods).map((method) => (
+            <NavLink
+              key={method.name}
+              to={buildMethodPath(specKey, tag, method.name)}
+            >
+              <li>
+                <MethodBadge
+                  textAlign="center"
+                  compact
+                  type={method.httpMethod}
+                >
+                  {method.httpMethod.toUpperCase()}
+                </MethodBadge>
+                <Heading as="h5" truncate>
+                  {highlightHTML(pattern, method.summary)}
+                </Heading>
+              </li>
+            </NavLink>
+          ))}
+        </List>
       </AccordionContent>
     </Accordion>
   )
 }
+
+/* color: ${({ isOpen, theme }) => isOpen && theme.colors.key}; */
+
+export const SideNavMethods = styled(SideNavMethodsLayout)`
+  ${AccordionDisclosure} {
+    padding-left: ${({ theme }) => theme.space.large};
+    padding-right: ${({ theme }) => theme.space.large};
+
+    ${Icon} {
+      color: ${({ isOpen, theme }) => (isOpen ? theme.colors.key : 'inherit')};
+    }
+
+    &:hover,
+    &:focus {
+      color: ${({ theme }) => theme.colors.key};
+    }
+
+    &[aria-expanded='true'] {
+      color: ${({ theme }) => theme.colors.key};
+    }
+  }
+
+  ${AccordionContent} {
+    padding: ${({
+      theme: {
+        space: { xxsmall, large },
+      },
+    }) => `${xxsmall} ${large}`};
+  }
+
+  ${List} {
+    border-left: dashed 1px ${({ theme }) => theme.colors.ui2};
+    padding: ${({ theme }) => theme.space.xxsmall};
+    padding-right: 0;
+  }
+
+  li {
+    display: flex;
+    border-radius: ${({ theme: { radii } }) => radii.medium};
+    padding: ${({ theme }) => theme.space.xsmall};
+
+    ${MethodBadge} {
+      margin-right: ${({ theme }) => theme.space.small};
+    }
+
+    &:hover,
+    &:focus,
+    &.active {
+      background-color: ${({ theme }) => theme.colors.ui1};
+
+      ${MethodBadge} {
+        border: solid 1px ${({ theme }) => theme.colors.ui2};
+      }
+    }
+  }
+
+  [aria-current] ${Heading} {
+    font-weight: ${({ theme }) => theme.fontWeights.semiBold};
+  }
+`

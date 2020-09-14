@@ -27,17 +27,10 @@
 import React, { FC, useReducer, useState } from 'react'
 import { ComponentsProvider } from '@looker/components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
-
 import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
 import { SearchContext } from './context'
-import {
-  Header,
-  Main,
-  PageLayout,
-  SideNav,
-  SideNavToggle,
-  SideNavDivider,
-} from './components'
+import { GlobalStyles, Header as AppHeader, SideNav } from './components'
+import { Aside, Header, Layout, Page } from './components/Layout'
 import {
   specReducer,
   initDefaultSpecState,
@@ -71,27 +64,31 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs }) => {
     defaultSearchState
   )
 
-  const [isSideNavOpen, setSideNavOpen] = useState(true)
-  const handleSideNavToggle = () => {
-    setSideNavOpen(!isSideNavOpen)
-  }
+  const [hasNavigation, setHasNavigation] = useState(true)
+  const toggleNavigation = () => setHasNavigation(!hasNavigation)
 
   return (
     <ComponentsProvider>
+      <GlobalStyles />
       <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
-        <Header specs={specs} spec={spec} specDispatch={specDispatch} />
-        <PageLayout open={isSideNavOpen}>
-          {isSideNavOpen && <SideNav api={spec.api} specKey={spec.key} />}
-          <SideNavDivider open={isSideNavOpen}>
-            <SideNavToggle
-              onClick={handleSideNavToggle}
-              isOpen={isSideNavOpen}
+        <Page>
+          <Header height="4rem">
+            <AppHeader
+              specs={specs}
+              spec={spec}
+              specDispatch={specDispatch}
+              toggleNavigation={toggleNavigation}
             />
-          </SideNavDivider>
-          <Main>
+          </Header>
+          <Layout hasAside>
+            {hasNavigation && (
+              <Aside width="20rem">
+                <SideNav api={spec.api} specKey={spec.key} />
+              </Aside>
+            )}
             <AppRouter api={spec.api} specKey={spec.key} />
-          </Main>
-        </PageLayout>
+          </Layout>
+        </Page>
       </SearchContext.Provider>
     </ComponentsProvider>
   )

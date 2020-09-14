@@ -37,7 +37,6 @@ import {
   FieldText,
   Form,
   Heading,
-  Text,
   ValidationMessages,
 } from '@looker/components'
 import { RunItConfigKey, validateUrl, RunItConfigurator } from './configUtils'
@@ -129,9 +128,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
 
   return (
     <>
-      <Heading>
-        <Text>{title}</Text>
-      </Heading>
+      <Heading>{title}</Heading>
       <Form onSubmit={handleSubmit} validationMessages={validationMessages}>
         <Fieldset legend="Server locations">
           <FieldText

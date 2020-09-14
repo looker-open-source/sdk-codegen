@@ -23,5 +23,5 @@
  SOFTWARE.
 
  */
-export { Collapser } from './Collapser'
+
 export { CollapserCard } from './CollapserCard'
