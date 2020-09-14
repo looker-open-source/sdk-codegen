@@ -24,12 +24,8 @@
 
  */
 
-import {
-  Looker40SDK,
-  Looker31SDK,
-  NodeSession,
-  NodeSettingsIniFile,
-} from '@looker/sdk'
+import { Looker40SDK, Looker31SDK } from '@looker/sdk'
+import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-rtl'
 
 /**
  *

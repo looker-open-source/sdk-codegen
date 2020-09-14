@@ -23,12 +23,8 @@
  SOFTWARE.
 
  */
-import {
-  LookerNodeSDK,
-  NodeSettings,
-  IApiSettings,
-  IApiSection,
-} from '@looker/sdk'
+import { LookerNodeSDK } from '@looker/sdk'
+import { NodeSettings, IApiSettings, IApiSection } from '@looker/sdk-rtl'
 
 /**
  * @class CustomConfigReader

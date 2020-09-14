@@ -27,12 +27,11 @@
 import * as fs from 'fs'
 import { Readable } from 'stream'
 import {
-  NodeSettingsIniFile,
-  NodeSession,
   Looker40SDK as LookerSDK,
   IDashboardElement,
   IRequestRunQuery,
 } from '@looker/sdk'
+import { NodeSettingsIniFile, NodeSession } from '@looker/sdk-rtl'
 import { getDashboard, getDashboardTile, waitForRender } from './utils'
 
 /**
@@ -109,7 +108,7 @@ const renderTile = async (
   )
 
   if (!task || !task.id) {
-    throw `Could not create a render task for ${tile.title}`
+    throw new Error(`Could not create a render task for ${tile.title}`)
   }
 
   const result = await waitForRender(sdk, task.id!)
@@ -195,7 +194,7 @@ const downloadTile = async (
 ;(async () => {
   const { dashboardTitle, tileTitle, outputFormat } = getParams()
   if (!dashboardTitle || !tileTitle) {
-    console.warn('Please provide: <dashboardTitle> <titeTitle> [<ouputFormat>]')
+    console.warn('Please provide: <dashboardTitle> <tileTitle> [<ouputFormat>]')
     console.warn(
       '  outputFormat defaults to "png". Many other formats are also supported. Refer to the run_query documentation for options.'
     )

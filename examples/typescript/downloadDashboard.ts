@@ -26,12 +26,11 @@
 
 import * as fs from 'fs'
 import {
-  NodeSettingsIniFile,
-  NodeSession,
   Looker40SDK as LookerSDK,
   IDashboard,
   IRequestCreateDashboardRenderTask,
 } from '@looker/sdk'
+import { NodeSettingsIniFile, NodeSession } from '@looker/sdk-rtl'
 import { getDashboard, waitForRender } from './utils'
 
 /**
