@@ -28,7 +28,7 @@ import { Looker40SDK, Looker31SDK, NodeSession, NodeSettingsIniFile } from '@loo
  *
  * @type {string} Local configuration file name, one directory above
  */
-const localConfig = '../looker.ini'
+const localConfig = '../../looker.ini'
 const settings = new NodeSettingsIniFile(localConfig, "Looker")
 const session = new NodeSession(settings)
 const sdk = new Looker40SDK(session)

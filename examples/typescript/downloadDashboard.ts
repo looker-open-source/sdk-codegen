@@ -36,7 +36,7 @@ import { getDashboard, waitForRender } from './utils'
  *
  * @type {string} Local configuration file name, one directory above
  */
-const localConfig = '../looker.ini'
+const localConfig = '../../looker.ini'
 
 /**
  *

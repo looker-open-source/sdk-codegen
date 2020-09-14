@@ -6,7 +6,7 @@ from looker_sdk import error, models
 
 import sdk_exceptions
 
-sdk = looker_sdk.init31("../looker.ini")
+sdk = looker_sdk.init31("../../looker.ini")
 
 
 def main():

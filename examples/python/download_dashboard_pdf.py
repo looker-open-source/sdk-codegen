@@ -10,7 +10,7 @@ from looker_sdk import models
 
 import sdk_exceptions
 
-sdk = looker_sdk.init31("../looker.ini")
+sdk = looker_sdk.init31("../../looker.ini")
 
 
 def main():

@@ -6,7 +6,7 @@ from looker_sdk import models
 from looker_sdk.rtl import transport
 
 
-sdk = looker_sdk.init31("../looker.ini")
+sdk = looker_sdk.init31("../../looker.ini")
 
 
 def get_dashboard(title: str):

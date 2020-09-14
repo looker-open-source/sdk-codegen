@@ -37,7 +37,7 @@ import { Readable } from 'stream'
  *
  * @type {string} Local configuration file name, one directory above
  */
-const localConfig = '../looker.ini'
+const localConfig = '../../looker.ini'
 
 /**
  *
