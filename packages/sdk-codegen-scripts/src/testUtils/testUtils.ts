@@ -25,8 +25,7 @@
  */
 
 import * as fs from 'fs'
-import { IApiSection } from '@looker/sdk/lib/browser'
-import { IApiConfig, ApiConfig } from '@looker/sdk/lib/node'
+import { IApiConfig, ApiConfig, IApiSection } from '@looker/sdk-rtl'
 import { ApiModel } from '@looker/sdk-codegen'
 import * as Models from '@looker/sdk-codegen'
 

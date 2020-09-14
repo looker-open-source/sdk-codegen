@@ -68,15 +68,11 @@ export class TypescriptGen extends CodeGen {
   methodsPrologue(_indent: string) {
     // TODO get the rtl path alias to work correctly in all scenarios! !!
     return `
-import { APIMethods } from '../../rtl/apiMethods'
-import { IAuthSession } from '../../rtl/authSession'
-import { ITransportSettings, encodeParam } from '../../rtl/transport'
+import { APIMethods, DelimArray, IAuthSession, ITransportSettings, encodeParam } from '@looker/sdk-rtl/lib/browser'
 /**
  * ${this.warnEditing()}
  *
- * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
  */
-import { DelimArray } from '../../rtl/delimArray'
 import { ${this.packageName}Stream } from './streams'
 import { IDictionary, ${this.typeNames().join(', ')} } from './models'
 
@@ -95,15 +91,11 @@ export class ${this.packageName} extends APIMethods {
   streamsPrologue(_indent: string): string {
     return `
 import { Readable } from 'readable-stream'
-import { APIMethods } from '../../rtl/apiMethods'
-import { IAuthSession } from '../../rtl/authSession'
-import { ITransportSettings, encodeParam } from '../../rtl/transport'
+import { APIMethods, IAuthSession, DelimArray, ITransportSettings, encodeParam } from '@looker/sdk-rtl/lib/browser'
 /**
  * ${this.warnEditing()}
  *
- * DelimArray is primarily used as a self-documenting format for csv-formatted array parameters
  */
-import { DelimArray } from '../../rtl/delimArray'
 import { IDictionary, ${this.typeNames(false).join(', ')} } from './models'
 
 export class ${this.packageName}Stream extends APIMethods {
@@ -119,8 +111,7 @@ export class ${this.packageName}Stream extends APIMethods {
 
   modelsPrologue(_indent: string) {
     return `
-import { DelimArray } from '../../rtl/delimArray'
-import { Url } from '../../rtl/constants'
+import { DelimArray, Url } from '@looker/sdk-rtl/lib/browser'
 
 /*
  * ${this.warnEditing()}
