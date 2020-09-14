@@ -219,7 +219,7 @@ export const RegisterScene: React.FC<{path: string}> = () => {
       <Divider my="large" />
       <Heading mb="medium">Registration</Heading>
       <GoogleLogin
-        clientId="280777447286-iigstshu4o2tnkp5fjucrd3nvq03g5hs.apps.googleusercontent.com"
+        clientId="get this from a configuration setting"
         onSuccess={responseGoogle}
         onFailure={responseGoogle}
         cookiePolicy={'single_host_origin'}
