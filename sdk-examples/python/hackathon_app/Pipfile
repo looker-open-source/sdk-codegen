@@ -1,0 +1,30 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+black = "*"
+mypy = "*"
+flask = "*"
+pudb = "*"
+ptipython = "*"
+pytest = "*"
+
+[packages]
+looker-sdk = "*"
+flask-wtf = "*"
+google-api-python-client = "*"
+google-auth = "*"
+python-json-logger = "*"
+click = "*"
+sendgrid = "*"
+cryptography = "*"
+typing-extensions = "*"
+
+[requires]
+python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
