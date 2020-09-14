@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Looker SDK examples in Typescript/Javascript",
     "main": "index.ts",
-    "repository": "https://github.com/looker-open-source/sdk-examples/tree/master/typescript",
+    "repository": "https://github.com/looker-open-source/sdk-codegen/tree/master/examples/typescript",
     "author": "Looker",
     "license": "MIT",
     "private": false,

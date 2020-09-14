@@ -1,37 +1,39 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
+import * as fs from 'fs'
+import { Readable } from 'stream'
 import {
   NodeSettingsIniFile,
   NodeSession,
   Looker40SDK as LookerSDK,
   IDashboardElement,
-  IRequestRunQuery
+  IRequestRunQuery,
 } from '@looker/sdk'
-import * as fs from 'fs'
 import { getDashboard, getDashboardTile, waitForRender } from './utils'
-import { Readable } from 'stream'
 
 /**
  *
@@ -68,7 +70,7 @@ const getParams = () => {
       process.argv.length > offset + 1 ? process.argv[offset + 1] : '',
     tileTitle: process.argv.length > offset + 2 ? process.argv[offset + 2] : '',
     outputFormat:
-      process.argv.length > offset + 3 ? process.argv[offset + 3] : 'png'
+      process.argv.length > offset + 3 ? process.argv[offset + 3] : 'png',
   }
 }
 
@@ -79,7 +81,7 @@ const getParams = () => {
  */
 const isRenderable = (format: string) => {
   format = format.toLowerCase()
-  return format == 'png' || format == 'jpg'
+  return format === 'png' || format === 'jpg'
 }
 
 /**
@@ -98,10 +100,10 @@ const renderTile = async (
   sdk: LookerSDK,
   tile: IDashboardElement,
   format: string,
-  width: number = 640,
-  height: number = 480
+  width = 640,
+  height = 480
 ) => {
-  let fileName = undefined
+  let fileName
   const task = await sdk.ok(
     sdk.create_query_render_task(tile.query_id!, format, width, height)
   )
@@ -113,7 +115,7 @@ const renderTile = async (
   const result = await waitForRender(sdk, task.id!)
   if (result) {
     fileName = `${tile.title}.${format}`
-    fs.writeFile(fileName, result, 'binary', err => {
+    fs.writeFile(fileName, result, 'binary', (err) => {
       if (err) {
         fileName = undefined // no file was created
         throw err
@@ -135,13 +137,13 @@ const downloadTileAs = async (
   tile: IDashboardElement,
   format: string
 ) => {
-  let fileName = undefined
+  let fileName
   fileName = `${tile.title}.${format}`
 
   const writer = fs.createWriteStream(fileName)
   const request: IRequestRunQuery = {
     result_format: format,
-    query_id: tile.query_id!
+    query_id: tile.query_id!,
     // apply_formatting: true,
     // apply_vis: true
   }
@@ -172,7 +174,7 @@ const downloadTile = async (
   tile: IDashboardElement,
   format: string
 ) => {
-  let fileName = undefined
+  let fileName
   if (!tile.query_id) {
     console.error(`Tile ${tile.title} does not have a query`)
     return
