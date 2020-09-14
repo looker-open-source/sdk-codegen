@@ -1,25 +1,27 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 import { Looker40SDK as LookerSDK, IDashboard, IRenderTask } from '@looker/sdk'
@@ -31,11 +33,11 @@ import { Looker40SDK as LookerSDK, IDashboard, IRenderTask } from '@looker/sdk'
  * @returns {Promise<IDashboard>} the matched dashboard
  */
 export const getDashboard = async (sdk: LookerSDK, title: string) => {
-  const [dash] = await sdk.ok(sdk.search_dashboards({title}))
+  const [dash] = await sdk.ok(sdk.search_dashboards({ title }))
   if (!dash) {
     console.warn(`No dashboard titled "${title}" was found`)
-    const all = await sdk.ok(sdk.all_dashboards("id,title"))
-    const titles = all.map(t => `${t.id}:${t.title}`)
+    const all = await sdk.ok(sdk.all_dashboards('id,title'))
+    const titles = all.map((t) => `${t.id}:${t.title}`)
     console.log(`Available dashboards are:\n${titles.join('\n')}\n`)
   }
   return dash
@@ -50,13 +52,15 @@ export const getDashboard = async (sdk: LookerSDK, title: string) => {
 export const getDashboardTile = (dash: IDashboard, title: string) => {
   title = title.toLowerCase()
   if (!dash.dashboard_elements) return undefined
-  const [tile]= dash.dashboard_elements.filter(t => String(t.title).toLowerCase() === title)
+  const [tile] = dash.dashboard_elements.filter(
+    (t) => String(t.title).toLowerCase() === title
+  )
   if (!tile) {
     console.warn(`No tile titled "${title}" found on Dashboard "${dash.title}"`)
     const tiles = dash.dashboard_elements
-      .filter(t => typeof t.query_id == 'number')
-      .map(t => t.title)
-    console.log(`Available tiles with queries are:\n${tiles.join("\n")}\n`)
+      .filter((t) => typeof t.query_id === 'number')
+      .map((t) => t.title)
+    console.log(`Available tiles with queries are:\n${tiles.join('\n')}\n`)
   }
   return tile
 }
@@ -67,7 +71,7 @@ export const getDashboardTile = (dash: IDashboard, title: string) => {
  * @returns {Promise<unknown>} promise timeout
  */
 export const sleep = async (ms: number) => {
-  return new Promise(resolve  =>{
+  return new Promise((resolve) => {
     setTimeout(resolve, ms)
   })
 }
@@ -86,7 +90,7 @@ export type ProgressTicker = (
  * @param {string | IRenderTask} message Message to output or render task poll (if failed)
  */
 const defaultProgress = (elapsed: number, message: string | IRenderTask) => {
-  if (typeof message == 'string') {
+  if (typeof message === 'string') {
     if (elapsed >= 0) {
       console.log(`${elapsed} seconds elapsed ${message}`)
     } else {
@@ -95,9 +99,9 @@ const defaultProgress = (elapsed: number, message: string | IRenderTask) => {
   } else {
     // expected to be a poll if we got here
     const poll = message as IRenderTask
-    if (poll.status == 'failure') {
+    if (poll.status === 'failure') {
       console.error('Render failed. Details:')
-      console.error({poll})
+      console.error({ poll })
       const err = new Error()
       err.message = `${poll.status}: ${poll.status_detail} for ${poll.result_format} render by User ID ${poll.user_id}`
       throw err
@@ -117,7 +121,7 @@ export const waitForRender = async (
   sdk: LookerSDK,
   taskId: string,
   progressTick: ProgressTicker = defaultProgress,
-  pause: number = 0.5
+  pause = 0.5
 ) => {
   // poll the render task until it completes
   let elapsed = 0.0
@@ -132,7 +136,7 @@ export const waitForRender = async (
       break
     }
     await sleep(delay)
-    progressTick(elapsed += pause, '')
+    progressTick((elapsed += pause), '')
   }
   return await sdk.ok(sdk.render_task_results(taskId))
 }
