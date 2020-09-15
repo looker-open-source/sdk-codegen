@@ -25,7 +25,6 @@
   "scripts": {
     "docs": "typedoc --mode file --out docs",
     "watch": "yarn lerna exec --scope @looker/sdk-codegen-scripts --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
-
   },
   "dependencies": {
     "@looker/sdk": "^0.3.4-beta.1",
