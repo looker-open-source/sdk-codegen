@@ -23,34 +23,29 @@
  SOFTWARE.
 
  */
+import React, { FC } from 'react'
+import { TabList, Tab, TabPanels, TabPanel, useTabs } from '@looker/components'
+import { ApiModel, IMethod } from '@looker/sdk-codegen'
 
-import React, { FC, useState } from 'react'
-import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
-import { IMethod, IType, ApiModel } from '@looker/sdk-codegen'
-
-import { DocCode } from '../DocCode'
 import { CollapserCard } from '../Collapser'
-import { getGenerators, noComment } from './utils'
+import { getGenerators } from '../DocSDKs'
+import { DocExamples } from './DocExamples'
 
-interface LanguageSDKProps {
-  /** API spec */
+interface DocExamplesProps {
   api: ApiModel
-  /** An SDK method */
-  method?: IMethod
-  /** An SDK type */
-  type?: IType
+  method: IMethod
 }
 
 /**
- * Given a method or a type, it renders its SDK declaration in all supported languages.
+ *  Given an SDK method, searches the examples index for its usages in various languages and renders
+ *  links to the source files
  */
-export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
+export const DocSdkUsage: FC<DocExamplesProps> = ({ api, method }) => {
   const tabs = useTabs()
   const generators = getGenerators(api)
-  const [item] = useState(method ? noComment(method) : type!)
 
   return (
-    <CollapserCard heading="SDK declarations">
+    <CollapserCard heading="SDK Examples">
       <>
         <TabList {...tabs}>
           {Object.keys(generators).map((language) => (
@@ -58,16 +53,14 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
           ))}
         </TabList>
         <TabPanels {...tabs} pt="0">
-          {Object.entries(generators).map(([language, gen]) => {
-            const code = method
-              ? gen.declareMethod('', item as IMethod)
-              : gen.declareType('', item as IType)
-            return (
-              <TabPanel key={language}>
-                <DocCode language={language} code={code} />
-              </TabPanel>
-            )
-          })}
+          {Object.entries(generators).map(([language, gen]) => (
+            <TabPanel key={language}>
+              <DocExamples
+                language={language}
+                operationId={method.operationId}
+              />
+            </TabPanel>
+          ))}
         </TabPanels>
       </>
     </CollapserCard>
