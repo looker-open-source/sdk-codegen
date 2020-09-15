@@ -28,7 +28,7 @@ import { Link } from '@looker/components'
 import { IFileCall } from '@looker/sdk-codegen-scripts/lib/miner'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const index = require('../../../../../examples/index.json').nuggets
+const index = require('../../../../../examples/motherlode.json').nuggets
 
 interface DocExamplesProps {
   /** Language example should be in */
@@ -67,13 +67,13 @@ interface IExample extends IFileCall {}
 const findExamples = (language: string, operationId: string): IExample[] => {
   const allMethodExamples = index[operationId]
   const ext = getLanguageExtension(language)
-  let matchingExamples
+  let matches
 
   if (allMethodExamples && ext) {
-    matchingExamples = allMethodExamples.calls[ext]
+    matches = allMethodExamples.calls[ext]
   }
 
-  return matchingExamples
+  return matches
 }
 
 // TODO: asynchronously fetch index at first render. Report if not available in this component

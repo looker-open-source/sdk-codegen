@@ -45,7 +45,7 @@ export const DocSdkUsage: FC<DocExamplesProps> = ({ api, method }) => {
   const generators = getGenerators(api)
 
   return (
-    <CollapserCard heading="SDK Language Examples">
+    <CollapserCard heading="SDK Examples">
       <>
         <TabList {...tabs}>
           {Object.keys(generators).map((language) => (

@@ -50,7 +50,7 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
   const [item] = useState(method ? noComment(method) : type!)
 
   return (
-    <CollapserCard heading="Language SDK declarations">
+    <CollapserCard heading="SDK declarations">
       <>
         <TabList {...tabs}>
           {Object.keys(generators).map((language) => (
