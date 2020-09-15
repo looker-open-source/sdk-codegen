@@ -38,6 +38,7 @@ import {
   DocReferences,
   DocResponses,
   DocSDKs,
+  DocSdkUsage,
   DocStatus,
   DocTitle,
 } from '../../components'
@@ -81,6 +82,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         <DocOperation method={method} />
         <DocMarkdown source={method.description} specKey={specKey} />
         <DocSDKs api={api} method={method} />
+        <DocSdkUsage api={api} method={method} />
         <DocReferences seeTypes={seeTypes} api={api} specKey={specKey} />
         <DocResponses responses={method.responses} />
       </FlexItem>
