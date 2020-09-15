@@ -27,7 +27,7 @@
 import path from 'path'
 import { CodeMiner, getAllFiles, getCodeFiles, Miner, SDKCalls } from './miner'
 
-describe('miner', () => {
+describe('example mining', () => {
   const sourcePath = path.join(__dirname, '/../../../examples')
   const exampleFile = (fileName: string) => path.join(sourcePath, '/', fileName)
 
@@ -108,6 +108,21 @@ describe('miner', () => {
   })
 
   describe('Miner', () => {
+    describe('relate', () => {
+      it('relates to subdirectory', () => {
+        const source = '/a/b/c/d/examples'
+        const full = '/a/b/c/d/examples/python/foo.py'
+        const actual = Miner.relate(source, full)
+        expect(actual).toEqual('examples/python/foo.py')
+      })
+      it('relates to parent directory', () => {
+        const source = '/a/b/c/d/examples'
+        const full = '/a/b/c/examples/python/foo.py'
+        const actual = Miner.relate(source, full)
+        expect(actual).toEqual('../examples/python/foo.py')
+      })
+    })
+
     it('processes', () => {
       const miner = new Miner(sourcePath)
       const actual = miner.motherLode

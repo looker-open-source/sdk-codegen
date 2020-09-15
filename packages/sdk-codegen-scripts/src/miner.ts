@@ -53,8 +53,6 @@ export interface ISummary {
 }
 
 export interface IFileCall {
-  /** TODO commit hash. I think we may not need it here at all. */
-  hash?: string
   /** relative file name */
   sourceFile: string
   /** line number for source code call */
@@ -223,6 +221,30 @@ export class Miner {
   }
 
   addCall(ext: string, fileName: string, call: ISDKCall | ISummary) {
+    function addFileCall(nugget: INugget) {
+      // Extension is key for language
+      let fileCalls = nugget.calls[ext]
+      if (!fileCalls) {
+        fileCalls = []
+      }
+      const sdkCall = call as ISDKCall
+      const fileCall: IFileCall = {
+        sourceFile: fileName,
+        column: sdkCall.column,
+        line: sdkCall.line,
+      }
+      if (
+        !fileCalls.find(
+          (f) =>
+            f.line === fileCall.line &&
+            f.column === fileCall.column &&
+            f.sourceFile === fileCall.sourceFile
+        )
+      )
+        fileCalls.push(fileCall)
+      nugget.calls[ext] = fileCalls
+    }
+
     if ('summary' in call) {
       const s = call as ISummary
       this.summaries[s.sourceFile] = s.summary
@@ -231,20 +253,21 @@ export class Miner {
       if (!nugget) {
         nugget = { operationId: call.operationId, calls: {} }
       }
-      // Extension is key for language
-      let fileCalls = nugget.calls[ext]
-      if (!fileCalls) {
-        fileCalls = []
-      }
-      fileCalls.push({
-        sourceFile: fileName,
-        column: call.column,
-        line: call.line,
-        hash: getCommitHash(),
-      })
-      nugget.calls[ext] = fileCalls
+      addFileCall(nugget)
       this.nuggets[nugget.operationId] = nugget
     }
+  }
+
+  /**
+   * Derive relative path, retaining last directory
+   * @param sourcePath original file search path
+   * @param fileName fully qualified name of found file
+   *
+   * @example `Miner.relate('/a/b/c/', '/a/b/c/d.txt')` returns '/c/d.txt'
+   */
+  public static relate(sourcePath: string, fileName: string) {
+    const lastPath = path.basename(sourcePath)
+    return path.join(lastPath, '/', path.relative(sourcePath, fileName))
   }
 
   processFile(fileName: string) {
@@ -252,9 +275,10 @@ export class Miner {
     if (ext in fileMiners) {
       const coder = fileMiners[ext]
       const calls = coder.mineFile(fileName)
-      calls.forEach((call: ISDKCall | ISummary) =>
-        this.addCall(ext, fileName, call)
-      )
+      calls.forEach((call: ISDKCall | ISummary) => {
+        const relFile = Miner.relate(this.sourcePath, fileName)
+        this.addCall(ext, relFile, call)
+      })
     } else {
       warn(`${fileName} cannot be mined`)
     }
