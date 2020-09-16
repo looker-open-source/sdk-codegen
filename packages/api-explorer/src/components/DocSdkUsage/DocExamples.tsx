@@ -114,7 +114,7 @@ export const DocExamples: FC<DocExamplesProps> = ({
         <List>
           {examples.map((example, index) => (
             <ListItem key={index}>
-              <Tooltip content={example.tooltip}>
+              <Tooltip content={example.tooltip} placement="right">
                 <Link href={example.permalink}>{example.description}</Link>
               </Tooltip>
             </ListItem>
