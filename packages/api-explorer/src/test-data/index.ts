@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { specState } from './data'
+export { api, specs, specState } from './specs'

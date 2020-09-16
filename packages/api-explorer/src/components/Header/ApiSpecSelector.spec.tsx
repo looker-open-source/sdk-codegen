@@ -82,13 +82,13 @@ describe('ApiSpecSelector', () => {
     await act(async () => {
       await userEvent.click(screen.getByRole('textbox'))
       await userEvent.click(
-        screen.getByRole('option', { name: '3.0 (stable)' })
+        screen.getByRole('option', { name: '3.1 (current)' })
       )
       await waitFor(() => {
         expect(specDispatch).toHaveBeenCalledTimes(1)
         expect(specDispatch).toHaveBeenCalledWith({
           type: 'SELECT_SPEC',
-          key: '3.0',
+          key: '3.1',
           payload: specs,
         })
       })
