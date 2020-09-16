@@ -23,20 +23,18 @@
  SOFTWARE.
 
  */
+import * as fs from 'fs'
+import { IMine } from '@looker/sdk-codegen'
 
-import { createContext, Dispatch } from 'react'
-import { SearchState, SearchAction, defaultSearchState } from '../../reducers'
+import { findExamples } from './DocExamples'
 
-interface SearchContextProps {
-  searchSettings: SearchState
-  setSearchSettings: Dispatch<SearchAction>
-}
+// TODO: fix test
+describe.skip('DocExamples utils', () => {
+  const file = fs.readFileSync('../../../../../examples/motherlode.json')
+  const lode: IMine = JSON.parse(JSON.stringify(file))
 
-export const defaultSearchContextValue: SearchContextProps = {
-  searchSettings: defaultSearchState,
-  setSearchSettings: () => undefined,
-}
-
-export const SearchContext = createContext<SearchContextProps>(
-  defaultSearchContextValue
-)
+  test('findExamples finds examples', () => {
+    const actual = findExamples(lode, 'csharp', 'me')
+    expect(actual).toBeDefined()
+  })
+})

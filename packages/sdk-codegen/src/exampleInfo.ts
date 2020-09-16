@@ -45,6 +45,8 @@ export interface IExampleLink {
   description: string
   /** permalink to file and line number */
   permalink: string
+  /** text to show on hover */
+  tooltip: string
 }
 
 export type SDKCalls = ISDKCall[]
@@ -127,7 +129,7 @@ export const summarize = (lode: IMine, call: IFileCall): string => {
     return lode.summaries[call.sourceFile].summary
   }
   // Default to file name if no summary is found
-  return `${call.line}: ${call.sourceFile}`
+  return call.sourceFile
 }
 
 /**
@@ -144,5 +146,6 @@ export const exampleLink = (lode: IMine, call: IFileCall): IExampleLink => {
       call.line
     ),
     description: summarize(lode, call),
+    tooltip: `${call.sourceFile} line ${call.line}`,
   }
 }

@@ -148,6 +148,7 @@ export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
       setHasConfig(!configIsNeeded || settings.authIsConfigured())
       setNeedsAuth(configIsNeeded && !sdk.authSession.isAuthenticated())
     } else {
+      setIsExtension(true)
       setHasConfig(true)
       setNeedsAuth(false)
     }

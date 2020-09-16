@@ -23,12 +23,18 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { Link, Text } from '@looker/components'
-import { exampleLink, IExampleLink, IFileCall } from '@looker/sdk-codegen'
+import React, { FC, useContext } from 'react'
+import { List, Link, Text, Tooltip, ListItem } from '@looker/components'
+import {
+  exampleLink,
+  IExampleLink,
+  IFileCall,
+  IMine,
+} from '@looker/sdk-codegen'
+import { LodeContext } from '../../context'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const lode = require('../../../../../examples/motherlode.json')
+// const lode = require('../../../../../examples/motherlode.json')
 
 interface DocExamplesProps {
   /** Language example should be in */
@@ -63,10 +69,12 @@ const getLanguageExtension = (language: string) => {
 
 /**
  * Searches for examples containing operationId usages in the given language
+ * @param lode All example data
  * @param language Language example should be in
  * @param operationId Method's operationId to search for
  */
-const findExamples = (
+export const findExamples = (
+  lode: IMine,
   language: string,
   operationId: string
 ): IExampleLink[] => {
@@ -77,11 +85,15 @@ const findExamples = (
   if (allMethodExamples && ext) {
     const calls = allMethodExamples.calls[ext]
     if (calls) {
-      calls.forEach((call: IFileCall) => links.push(exampleLink(lode, call)))
+      calls.forEach((call: IFileCall) => {
+        const link = exampleLink(lode, call)
+        if (link) {
+          links.push(exampleLink(lode, call))
+        }
+      })
     }
   }
-
-  return links
+  return links.sort((a, b) => a.permalink.localeCompare(b.permalink))
 }
 
 // TODO: asynchronously fetch index at first render. Report if not available in this component
@@ -93,17 +105,23 @@ export const DocExamples: FC<DocExamplesProps> = ({
   language,
   operationId,
 }) => {
-  const examples = findExamples(language, operationId)
+  const lode = useContext(LodeContext)
+  const examples = findExamples(lode, language, operationId)
 
   return (
     <>
-      {examples &&
-        examples.length > 0 &&
-        examples.map((example, index) => (
-          <li key={index}>
-            <Link href={example.permalink}>{example.description}</Link>
-          </li>
-        ))}
+      {examples && examples.length > 0 && (
+        <List>
+          {examples.map((example, index) => (
+            <ListItem key={index}>
+              <Tooltip content={example.tooltip}>
+                <Link href={example.permalink}>{example.description}</Link>
+              </Tooltip>
+            </ListItem>
+          ))}
+        </List>
+      )}
+
       {(!examples || examples.length === 0) && (
         <>
           <Text>

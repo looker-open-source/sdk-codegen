@@ -24,19 +24,12 @@
 
  */
 
-import { createContext, Dispatch } from 'react'
-import { SearchState, SearchAction, defaultSearchState } from '../../reducers'
+const fetchLode = async (lodeUrl: string) => fetch(lodeUrl, { mode: 'cors' })
 
-interface SearchContextProps {
-  searchSettings: SearchState
-  setSearchSettings: Dispatch<SearchAction>
+export const getLoded = async (lodeUrl: string) => {
+  const resp = await fetchLode(lodeUrl)
+  const body = await resp.text()
+  if (body) {
+    return JSON.parse(body)
+  }
 }
-
-export const defaultSearchContextValue: SearchContextProps = {
-  searchSettings: defaultSearchState,
-  setSearchSettings: () => undefined,
-}
-
-export const SearchContext = createContext<SearchContextProps>(
-  defaultSearchContextValue
-)
