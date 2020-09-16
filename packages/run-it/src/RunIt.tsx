@@ -274,7 +274,7 @@ export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
           configurator={configurator}
         />
         <TabPanel key="makeTheCall">
-          <SdkCalls api={api} method={method} inputs={inputs} />
+          <SdkCalls api={api} method={method} inputs={requestContent} />
         </TabPanel>
       </TabPanels>
     </Box>
